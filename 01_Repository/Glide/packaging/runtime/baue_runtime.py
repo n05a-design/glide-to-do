@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native Tcl/Tk-9.1-Runtime und passende CPython-Erweiterung im eigenen Ziel.
 
 Benötigt lokale, unveränderte Git-Quellen an den festgelegten Pins sowie den

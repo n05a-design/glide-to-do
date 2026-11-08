@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.30.0: Modernisierung, Pinnwand-Board, Ordner, Planung und Pixel-Werkstatt."""
 import base64
 import copy

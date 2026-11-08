@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Werkzeugtests für den Datenschutzschritt; keine App, keine Nutzerdaten."""
 
 import importlib.util

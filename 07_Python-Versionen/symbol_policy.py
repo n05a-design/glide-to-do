@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lesbare Oberflächenzeichen aus der tatsächlichen UI-Schrift, ohne Tk.
 
 Die UI liefert eine Abdeckungsprüfung für normale und fette Schnitte.

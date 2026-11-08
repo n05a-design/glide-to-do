@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Sicherungen inventarisieren, filtern und eindeutig auswählen, ohne Inhalte zu öffnen."""
 import os
 from pathlib import Path

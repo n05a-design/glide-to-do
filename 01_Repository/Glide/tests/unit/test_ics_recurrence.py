@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Übliche Serien und ausdrücklich abgewiesene Regelteile, ohne Tk."""
 from datetime import date
 import unittest

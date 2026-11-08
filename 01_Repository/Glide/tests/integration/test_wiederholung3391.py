@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Fehlerbehebung 3.39.1 (FP-00): Wiederholungen richtig erfassen und austauschen.
 
 Über echte Einstiege: Eingabezeile mit Chipzeile, Anlegen, Rückgängig, ICS-Ausgabe

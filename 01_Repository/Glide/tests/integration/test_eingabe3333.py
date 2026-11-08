@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.33.3 (G01): deutsche Schnelleingabe mit Feldchips über echte Tasten-, Klick- und Dialogwege."""
 import importlib.machinery
 import importlib.util

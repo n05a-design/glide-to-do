@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lesende Nebenansicht im Inspektorbereich ohne Tk (E-U2 A, D55, 23.10.2026).
 
 Die Nebenansicht zeigt einen zweiten Inhalt – Liste, Seite oder Notiz – neben

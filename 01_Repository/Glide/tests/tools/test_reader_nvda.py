@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Test-Synthesizerfall und verpflichtende tatsächliche Sprache ohne NVDA/GUI."""
 import json
 from pathlib import Path

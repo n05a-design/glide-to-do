@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-04: Originale, Flächen-Undo, alte ausgelieferte Fassung und Bedienwege."""
 import argparse
 import copy

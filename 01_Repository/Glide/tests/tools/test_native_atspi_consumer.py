@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Die beobachtete PyGObject-Namenskollision ohne GUI/gi nachstellen."""
 import unittest
 

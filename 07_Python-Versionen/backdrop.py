@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Hintergrundverläufe für Glide: Mesh, Aurora, Körnung und Pixelraster.
 
 Reine Standardbibliothek, ohne Tk: Das Modul rechnet RGB-Bytes und kodiert sie

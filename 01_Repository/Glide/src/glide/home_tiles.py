@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Startseitenkacheln ohne Tk: Bestand, Standard, Sichtbarkeit und die zusammengeführte Kachel „Heute“."""
 
 # (Schlüssel, Titel, Gewicht im Raster, volle Breite, Teil des Standards)

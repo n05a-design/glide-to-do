@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mindestlaufzeit prüfen, bevor Glide geladen wird (AB08 seit 3.33.20).
 
 Bewusst in einfacher Syntax ohne neuere Sprachmittel: Die Datei muss auch ein

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.33.5 (G02, D13): Eisenhower als Gruppierung im Board und in der Liste – echte Auswahl, Ablegen, Undo."""
 import importlib.machinery
 import importlib.util

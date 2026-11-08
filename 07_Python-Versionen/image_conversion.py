@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Begrenzte Bildkonversion ohne Tk: Dateicache, Abbruch und ein Worker (WA-26)."""
 from collections import OrderedDict, deque
 from dataclasses import dataclass, field

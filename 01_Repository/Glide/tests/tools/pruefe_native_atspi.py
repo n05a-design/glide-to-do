@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Externer AT-SPI-Verbraucher einer eigenen Linux-CI-Testinstanz.
 
 Mit dem System-Python samt gi/Atspi starten, getrennt vom Python/Tk der App.

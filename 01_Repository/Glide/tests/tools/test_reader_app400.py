@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Reader-Diagnose vor dem ersten Inspektor und bei späteren Fehlern, ohne Tk."""
 from types import SimpleNamespace
 import unittest

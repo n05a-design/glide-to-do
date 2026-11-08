@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ergebnisvertrag der Editorübernahme ohne Tk (WA-29, Befund A35)."""
 from pathlib import Path
 import sys

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tatsächliche Orca-Sprache und Tastatur im eigenen vergänglichen Linux-CI.
 
 Nur SPEECH OUTPUT aus dem Orca-Prozess zählt; Tk/spd-say-Ausgabe zählt nicht.

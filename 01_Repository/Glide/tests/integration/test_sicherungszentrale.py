@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Sicherungsübersicht, sichere Dateiauswahl und vorhandene Restorewege über echte Tk-Dialoge."""
 import argparse
 import copy

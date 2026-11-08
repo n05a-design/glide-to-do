@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Erzeugt den „Rundgang“: je eine Liste, Notiz, Seite und Zeichnung (27.09.2026).
 
 Kein Test, sondern ein Werkzeug. Der Nutzer wünschte sich Probedaten, die je

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echter Start, Freigabe, Undo und Restore mit ausschließlich künstlichen Daten."""
 import argparse
 import copy

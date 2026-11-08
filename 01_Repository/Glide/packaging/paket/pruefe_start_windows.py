@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte native Startprobe: ACL-Sperre ausschließlich auf einem Hosted-CI-Runner.
 
 Vor jeder Sperre werden die ACLs gesichert, im finally-Zweig exakt restauriert

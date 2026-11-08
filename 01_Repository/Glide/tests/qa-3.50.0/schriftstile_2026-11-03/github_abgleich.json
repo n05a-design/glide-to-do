@@ -1,0 +1,45 @@
+{
+  "main_commit": "c352d2c0dc031b85ee59fc4fa69e71d460e80dcd",
+  "run_id": 41630270158,
+  "run_number": 243,
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41630270158",
+  "linux": {
+    "job_id": 125899283324,
+    "suite": "test_features322",
+    "assertion": "hoehe_leer == arbeitsflaeche.CARD_MIN_HEIGHT",
+    "ist": 99,
+    "soll": 96,
+    "identisch_mit_bekanntem_befund": true,
+    "uebersprungene_schritte": 89
+  },
+  "windows": {
+    "job_id": 125901814056,
+    "suite": "test_aufgaben3380",
+    "assertion": "('Seiten', 131, '15 Prozent überschritten')",
+    "ist": 131,
+    "obergrenze": 130,
+    "identisch_mit_bekanntem_befund": true,
+    "uebersprungene_schritte": 33
+  },
+  "kalibrierung": "Zwei passend rote Defektproben; weitere positive Basissuiten durch frühen Linux-Abbruch nicht belegt. Gesamtstatus bleibt korrekt rot.",
+  "mac_paket_run": {
+    "id": 41630270275,
+    "conclusion": "success",
+    "stand": "main c352d2c0, nicht der neue lokale Kandidat"
+  },
+  "lokaler_kandidat": "3ceac5dd",
+  "reparatur_commit": "2fd35ba0",
+  "app_sha256": "271379e7eb9700e7b72a8ebfc6c1722f96b487c73ac58a2b12e425ed4da7e6cc",
+  "vorhandene_schriftvalidierung": "Quellhash aktuell verifiziert, 19/19 lokale Grundstufenschritte grün, vier Stile mit Neustart und Layout-/Glyphenwegen grün",
+  "push_auftrag": "Ausdrücklich am 03.11.2026 erteilt, Branch codex/glide-3.50-schriftvalidierung-20261103; kein main-Merge oder Release",
+  "neue_remote_matrix": "Start erst nach Push; noch kein grüner Endnachweis",
+  "transport_grundstufe": {
+    "exitcode": 0,
+    "lieferstand_streng": true,
+    "schritte": 19,
+    "werkzeugtests": 242,
+    "werkzeug_skip": 1,
+    "fachtests_je_lauf": 1122,
+    "fachtestlaeufe": 2
+  }
+}

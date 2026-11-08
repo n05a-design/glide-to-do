@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.24: Navigation, Pinnwand, Anzeige, Startansicht und Rückmeldungen.
 
 Jeder Abschnitt trägt die Nummer des Auftragspunkts, den er nachweist.

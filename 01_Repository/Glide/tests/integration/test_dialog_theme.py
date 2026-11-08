@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Isolierte Tk-Prüfung: Hilfe, Hinweise und verschachtelte Rückfragen."""
 
 import ast

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Prüft die Standangaben aller aktiven Markdown-Dokumente gegen VERSION.
 
 Warum es dieses Werkzeug gibt: Sieben Dokumente standen zwei Versionssprünge
@@ -24,7 +25,9 @@ Regeln:
 
 R1  Ein fortgeschriebenes Dokument trägt mindestens eine Standangabe, die die
     Version aus `VERSION` nennt. Das erzwingt, dass Datum und Version an
-    derselben Stelle stehen und beim Fortschreiben beide mitgehen.
+    derselben Stelle stehen und beim Fortschreiben beide mitgehen. D74 erlaubt
+    nur den beiden öffentlichen README-Einstiegen stattdessen Datum plus
+    maßgeblichen VERSION-Link; ausdrücklich alte Angaben bleiben Fehler.
 R2  Nennt eine Standangabe eine andere Version, muss derselbe Satz auch die
     aktuelle nennen. So bleibt Herkunft erlaubt („erhoben auf Grundlage von
     3.14.0"), eine allein stehende überholte Angabe nicht.
@@ -464,10 +467,20 @@ def datei_pruefen(befund: Befund, kurz: str, text: str) -> None:
 
     einstieg_pruefen(befund, kurz, titel, text)
 
-    # R1: mindestens eine Standzeile mit der aktuellen Version.
+    # R1: aktuelle Version; D74 erlaubt nur den beiden öffentlichen README-
+    # Einstiegen stattdessen einen maßgeblichen VERSION-Verweis samt Datum.
+    # Explizit alte Versionen bleiben unter R1/R2 rot, auch neben einem Link.
     passend = [nr for nr, _z, werte in standzeilen
                if any(als_tupel(w) == als_tupel(befund.version) for w in werte)]
-    if not passend:
+    referenzziele = {
+        "README.md": ("VERSION", "01_Repository/Glide/VERSION"),
+        "01_Repository/Glide/README.md": ("VERSION",),
+    }.get(kurz, ())
+    datiert = any(re.search(r"\b\d{2}\.\d{2}\.\d{4}\b", zeile) for _nr, zeile, _v in standzeilen)
+    versionsreferenz = (datiert and not any(werte for _nr, _z, werte in standzeilen)
+                       and any(re.search(r"\[[^\]]+\]\(" + re.escape(ziel) + r"\)", text)
+                               for ziel in referenzziele))
+    if not passend and not versionsreferenz:
         if not standzeilen:
             befund.melden(kurz, 1, f"keine Standangabe; erwartet wird eine Zeile mit "
                                    f"Glide {befund.version} (R1)")

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Readerausgabe und Eingabeisolation ohne installierten Orca-Prozess."""
 import os
 from pathlib import Path

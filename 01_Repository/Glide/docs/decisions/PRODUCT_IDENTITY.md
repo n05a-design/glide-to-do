@@ -13,7 +13,7 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Technischer Langname | Glide – Aufgaben und Listen; vorhandene Fenster-/Export-/Paketbezeichnung | `APP_PRODUCT_NAME`, unverändert |
-| Öffentliche Beschreibung | Glide – Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
+| Öffentliche Beschreibung | Glide – Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72/D74, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
 | Softwarelizenz | Mozilla Public License 2.0 (`MPL-2.0`), kommerzielle Nutzung nach Bedingungen zulässig | [kanonischer Lizenztext](../../../../LICENSE), D72 |
 | App-Version | 3.50.7 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |

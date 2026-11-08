@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Quellvertrag und Plattformauswahl für eigenständige Entwicklungspakete, ohne Tk."""
 import ast
 import hashlib

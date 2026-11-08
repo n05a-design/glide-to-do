@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P03/E01: tatsächlicher Startseiten-Neuaufbau und Einstellungen, isoliert.
 
 Unprofilierte Erst-/Folgeserien mit identischen künstlichen Daten. --profil

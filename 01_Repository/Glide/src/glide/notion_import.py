@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ausdrücklich gewählte Notion-Seiten ohne Tk und ohne Bestandsmutation planen."""
 import copy
 from dataclasses import dataclass

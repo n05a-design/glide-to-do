@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ergebnisvertrag der Editorübernahme ohne Tk (WA-29, Befund A35).
 
 `ListApp.flush_rich_note` übernimmt vor Navigation, Export und Ende den

@@ -1,8 +1,8 @@
-# Glide-System V1.2
+# Glide-System V1.3
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.3 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.2` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.3` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.2 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.3** | 08.11.2026 | Steps-Übernahmevertrag und Übergabefolge; 20 technische Systemfähigkeiten direkt in der Featureübersicht, drei ergänzte Bestandspakete für Prozesse, Start/Konfiguration und OS-Integration; SPDX-Dateihinweise, Paket-BOM und native Mac-Prüfplatzvorbereitung samt Tests; aktuelle Kopplungs-/Prüfgrenzen. Keine neuen App-Funktionen. | App 3.50.7, Format 26 |
 | **V1.2** | 08.11.2026 | Root-Lebensdauer mit eigener/fremder Tcl-Auftragsprüfung; sichtbare D66-Unterzeile statt leerem Metadatenlabel geprüft; Pinnwandleistenabstände nach tatsächlicher Linux-Breite; Prüffolge stoppt auch bei unbehandelten Tk-/Tcl-Fehlern trotz Exitcode 0; native Mac-Vollprüfung manuell auslösbar. Pflichtmatrix weiterhin offen. | App 3.50.7, Format 26 |
 | **V1.1** | 08.11.2026 | MPL-Paketnachweise und neue Seitenleisten-/Neustart-/Farbprüfung für 3.50.7; Testkatalog um `test_project_license.py` ergänzt. Native Gesamtfreigabe weiterhin offen. | App 3.50.7, Format 26 |
 | **V1.0** | 08.11.2026 | Erstes konsolidiertes Systemregister: 94 Python-Quelldateien, 127 Features, 22 Bausteinpakete, 25 datierte Risiken, 305 Test-/Werkzeugdateien und 16 Leitlinien; Übernahme der technischen Details aus der bisherigen Architekturtabelle; zentrale System-und-Modulpflege | Unabhängig von Glide-App-Version `3.50.6` |
@@ -23,12 +24,12 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.2 · Aufgabenformat 26 · Ei
 | Bestandteil | Einträge | Pflege |
 |---|---:|---|
 | Python-Quelldateien | 94 | 93 Laufzeitdateien und `drawing_prototype.pyw` als separater Prototyp |
-| Features | 127 | Dokumentiertes Verhalten, teilweise heuristische Modulzuordnung |
-| Bausteinpakete | 22 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
+| Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
+| Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 306 | Einschließlich Katalog- und Projektlizenzprüfung; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 309 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
-**Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege).
+**Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
 ## 1. Python-Module
 
@@ -391,7 +392,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F125 | **Eine Aktionszeile / responsive Steuerung** | Pinnwandleiste mit Gruppierung, schmaler Titelbreite und Menüs; Linux bei großem Font noch rot | app.pyw, ui_design.py | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F125 | **Eine Aktionszeile / responsive Steuerung** | Pinnwandleiste mit Gruppierung, schmaler Titelbreite und Menüs; gemessene Breiten und konsistente 4-px-Abstände mit 16-px-Gruppentrenner | app.pyw, ui_design.py | Ursprüngliches Linux-Rot und Reparatur getrennt belegt; Windows-Nachtest 1.250 Knopfprüfungen auf a4c34b8 grün; neue native Endmatrix offen |
 
 ### Tastatur & Sicherheit
 
@@ -403,13 +404,40 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F127 | **Unterzeile unter Titel** | View-Kennzahlen unter dem Kopf in eigener Zeile; Windows CI-Geometriefall aktuell rot | view_metrics.py, app.pyw | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F127 | **Unterzeile unter Titel** | Sichtbare View-Kennzahlen unter dem sichtbaren Titel; leere ungepackte Labels sind kein Messgegenstand | view_metrics.py, app.pyw | D66 unverändert; 18 Titelkonfigurationen und gezielte Kernprüfung im Reparaturstand grün; native Endmatrix offen |
+
+### Technische Systemfähigkeiten für Folgeprojekte
+
+Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquellen sind im Testkatalog benannt; ein grüner Glide-Test ist kein unabhängiger Steps-Paketnachweis. Übernahmebedingungen und Restprüfungen stehen in Abschnitt 9.
+
+| ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
+|---|---|---|---|---|
+| F128 | **Speicherkoordinator mit Commitgrenze** | Vorbereitung, Vorsicherung, Schreiben und Folgeaktionen mit getrenntem Fehlerstatus | persistence.py, save_result.py | B05; Aufruferadapter und Fehler vor/nach Commit prüfen |
+| F129 | **Schreibbesitz und Speicherzustand** | Exklusiver Besitz, Größenbudget, Fehlermeldung und Retry | data_lock.py, storage_health.py, app.pyw | B05; eigene Pfade/Tokens; Mehrprozess- und Windows-Handleprüfung |
+| F130 | **Wiederanlauf und unveränderliche Sicherungsquelle** | Sitzungsstand, geschützte Snapshots und Wiederherstellungsentscheidung | session_guard.py, backup_snapshot.py | B05/B06; eigenes Datenmodell; Abbruch und Neustart mit künstlichen Daten |
+| F131 | **Format- und Migrationsschutz** | Versionierte Daten, Vorsicherung und Schreibschutz bei fremder Formatstufe | schema_backups.py, load_phases.py, app.pyw | B06/B24; Steps-Format bewusst definieren, keine automatische Glide-Migration |
+| F132 | **Erhalt unbekannter gültiger Einstellungen** | Additive Zusatzfelder bleiben im erlaubten Umfang erhalten | settings_compat.py | B24; eigene Normalisierung und Roundtrip-Grenzen |
+| F133 | **Begrenzte externe Eingaben** | ZIP-/JSON-/Pfad-, Mengen- und Tiefenprüfung vor Übernahme | notion_archive.py, attachment_paths.py, app.pyw | B07; Traversal, Größen/Tiefe, ungültige IDs und Abbruch prüfen |
+| F134 | **Quellzuordnung und Reimportvergleich** | Herkunft behalten, Konflikte und neue Zuordnung statt stiller Überschreibung | source_metadata.py, notion_reimport.py, exchange_patch.py | B07/B22; eigenes ID-/Konfliktmodell; kein pauschaler verlustfreier Rundlauf |
+| F135 | **Widget- und Callback-Lebensdauer** | Timer, Bindungen, Bild-/Fensterhosts und eigene Interpreter beim Abbau freigeben | motion.py, accessibility_bindings.py, app.pyw | B03/B09; Root/Unterfenster, fremder Interpreter, Neustart und Worker prüfen |
+| F136 | **Logo-/Icon-Erzeugung** | SVG-Pfade, Flächendeckung, geglättete Rasterung und PNG-Ausgabe | logo.py, logo_raster.py, svg_geometry.py | B02; Algorithmus adaptieren, Steps-Master/Markenrechte separat |
+| F137 | **Abbrechbare Medienverarbeitung** | Konversion, Vorschaubildcache und Rückmeldung im Hauptthread | image_conversion.py, image_preview.py, preview_tools.py | B08; OS-Werkzeuge, Dateihandles und Tk-Bildhosts nativ prüfen |
+| F138 | **Begrenzte Rendering-Caches** | Stabile IDs, Host-Lebensdauer, durchgangsbezogene Projektionen und gebündelte Layouts | render_retention.py, view_metrics.py, app.pyw | B01/B18; vollständige Invalidierung bei Undo, Schrift, Inhalt und Design |
+| F139 | **Diagnostik und Fehlerklassifikation** | Laufzeit-/Prozesskontext, Ladephasen und Speicherfehler getrennt protokollieren | runtime_diagnostics.py, load_phases.py, storage_health.py | B21; Reporter/Datenschutz adaptieren; WA-41-Ursachenfrage bleibt offen |
+| F140 | **Isolierte Prüfungen mit Integritätswächter** | Synthetische Daten, Eingabe-Fingerprints, Timeout, Stackbeleg und Folgestopp | tests/tools/pruefablauf.py, tests/tools/pruefen.py | B10; neues Repository und neue Prüfbefehle; rote Gegenprobe |
+| F141 | **Prüfphasen und native Regression** | Grundstufe, Vollmodus, UI-/Geometrieverträge und Defektgegenproben | tests/tools/ci_grundstufe.py, tests/integration/, .github/workflows/ | B10; eigener finaler Commit je Plattform; Fehler trotz Exitcode 0 bleiben rot |
+| F142 | **Nachvollziehbare Python-/Paketlieferung** | Quell-/Ressourcenabgleich, Runtimepins, Hashes und isolierter Paketstart | scripts/pflege/abgleich_07.py, packaging/paket/, packaging/runtime/ | B10; feste Glide-Namen/Quell-URL adaptieren; native Bauten separat |
+| F143 | **Lizenz- und Ressourcenprovenienz** | MPL-Text, zugehöriger Git-Quellstand, Fremdlizenzen und Font-/Vendorherkunft | packaging/paket/project_license.py, resources/, vendor/ | B10/B02; keine Übertragung von Marken- oder Fremdrechten; vollständige SBOM gesondert |
+| F144 | **Versionierte System-und-Modulpflege** | Ein vollständiger Katalog mit Datei-/Testinventar, stabilen IDs und eigener Version | GLIDE_SYSTEM_VERSION, tests/tools/test_glide_system.py | B23; aktuelles Inventar automatisch prüfen, kein zweites Register |
+| F145 | **Bewahrung und Ablagepflege** | Versionierte Nachweise, Manifeste, feste Git-Verweise und Größenprüfung | tests/tools/ablagegroesse.py, scripts/pflege/ablage_kuerzen.py | B23; Schutzauftrag vor Altersregel; keine persönliche oder historische Ablage ungeprüft kürzen |
+| F146 | **Start- und Laufzeitprüfung** | Python-/Tk-Mindestversion, Bootstrap und Bytecodecache außerhalb des Programms | runtime_check.py, glide_start.py | B24; neutraler Direktstart noch offen (WA-49), eigene Datenpfade vor Import |
+| F147 | **Architektur-, Design- und Übergabeverträge** | Kanonische Quellen, D17-Fachlogik, zentrale UI-Rollen, getrennte Abnahmeachsen | AGENTS.md, docs/02_ARCHITECTURE.md, docs/DESIGN_RICHTLINIEN.md, Übergabe | B23; konkrete Glide-Produktentscheidungen für Steps auswählen und neu bestätigen |
 
 <!-- GLIDE-SYSTEM:FEATURES-END -->
 
 ## 3. Wiederverwendbare Bausteine
 
-22 mögliche Bausteinpakete. **Keine** davon ist ohne eigene Isolationstests, explizite Importschnittstelle, Ressourcen-/Lizenzprüfung und Integrationstest für Steps freigegeben.
+25 mögliche Bausteinpakete. **Keines** davon ist ohne eigene Isolationstests, explizite Importschnittstelle, Ressourcen-/Lizenzprüfung und Integrationstest für Steps freigegeben. Auch Prozesse und Regeln sind wiederverwendbarer Bestand, keine automatisch ausgelieferten Bibliotheken.
 
 <!-- GLIDE-SYSTEM:PACKAGES-START -->
 
@@ -437,6 +465,10 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | B20 | Pixel Drawing Toolkit | drawing.py, drawing_image.py, animation.py, animation_export.py | Teilweise | Tk-Bildspeicher, Zellen, Format und Dateiendungen getrennt | Nicht isoliert als Steps-Paket abgenommen | P2 | https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/src/glide/README.md |
 | B21 | Debug & Health Kit | runtime_diagnostics.py, storage_health.py, load_phases.py | Kandidaten | Datenschutz, Reporter, Grenzen und Fehlertypen in Steps-Kontext prüfen | Nicht isoliert als Steps-Paket abgenommen | P2 | https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/src/glide/README.md |
 | B22 | Exchange/Notion Adapter | notion_archive.py, notion_import.py, notion_reimport.py, notion_hierarchy.py | Teilweise | Sicherer Parser getrennt von Glide-Hierarchie/ID-Neuvergabe | Nicht isoliert als Steps-Paket abgenommen | P2 | https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/src/glide/README.md |
+
+| B23 | Projektverträge und Übergabe | AGENTS.md, docs/DOKUMENTENPFLEGE.md, docs/DESIGN_RICHTLINIEN.md, Entwicklungsplan, Übergabe | Prozesse / Regeln | Zuständige Quellen und begründete Produktentscheidungen auf Steps übertragen; historische Belege bewahren | Kein eigenständiges Template ausgeliefert | P1 |
+| B24 | Start und Konfiguration | runtime_check.py, glide_start.py, settings_compat.py, release_notes.py | Teilweise | Produkt-/Daten-/Cachepfade, Runtimeprüfung und Erstinitialisierung explizit machen; WA-49 offen | Nicht isoliert als Steps-Paket abgenommen | P1 |
+| B25 | Betriebssystemintegration | app.pyw (Mitteilungen, Fenster, externe Öffnung), vendor/tkinterdnd2 | Plattformadapter | Fähigkeiten, App-ID und optionale Fremdkomponenten projektspezifisch anbinden | Native Steps-Prüfung erforderlich | P2 |
 
 <!-- GLIDE-SYSTEM:PACKAGES-END -->
 
@@ -809,6 +841,10 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | T306 | [`test_project_license.py`](../../tests/tools/test_project_license.py) | MPL-Originalbytes, fester Quellcommit und Ablehnung veränderter/fremder Paketquellen |
 
+| T307 | [`macos_desktop.py`](../../tests/tools/macos_desktop.py) | Nativen CI-Bildschirmmodus für die Lebensdauer der Kindprüfung halten; tatsächlicher Mac-Lauf separat nachweisen |
+| T308 | [`test_macos_desktop.py`](../../tests/tools/test_macos_desktop.py) | Modusauswahl, fehlende Höhe und Schutz persönlicher Rechner ohne OS-Änderung prüfen |
+| T309 | [`test_sbom.py`](../../tests/tools/test_sbom.py) | CycloneDX-Lizenz-/Bauinventar, fehlende/mehrdeutige Belege und nachträgliche Abweichung prüfen; kein vollständiger transitiver Laufzeitgraph |
+
 <!-- GLIDE-SYSTEM:TESTS-END -->
 
 ## 6. Leitlinien
@@ -858,3 +894,59 @@ Dieses Register wird **bei jeder relevanten Code-, Feature-, Test- oder Paketän
 - **Daten:** Lokale Ablage außerhalb des Installationsordners; synthetische Tests unter `GLIDE_DATA_DIR`, keine Tests mit tatsächlichen Nutzer-/OneDrive-Daten.
 - **Python-Lieferung:** [`abgleich_07.py`](../../scripts/pflege/abgleich_07.py) und die [Paketierung](../../packaging/README.md) prüfen Module, Ressourcen und Prüfsummen.
 - **Verbindliche Quellen:** [Architektur](../../docs/02_ARCHITECTURE.md) · [Funktionen](../../docs/20_FUNKTIONEN.md) · [Daten/Migration](../../docs/06_DATA_BACKUP_MIGRATION.md) · [QA](../../docs/07_QA_BERICHT.md) · [Dokumentenpflege](../../docs/DOKUMENTENPFLEGE.md).
+
+## 9. Grundlage für Steps und weitere Projekte
+
+Auftrag vom 08.11.2026: die vorhandene Arbeit als nachvollziehbare Grundlage für Folgeprojekte aufbereiten. **Steps ist hier ein vorbereitetes Folgeprojekt, kein bereits angelegtes Repository, ausgeliefertes Template oder unabhängig freigegebenes Framework.** Die vollständigen Modul-, Feature- und Testbestände bleiben in den Registern oben; dieser Abschnitt beschreibt den Übernahmeweg.
+
+### Tatsächliche Architektur und Auswahl
+
+Das statische AST-Inventar vom 08.11.2026 zählt 94 Quelldateien, davon 88 ohne direkten `tkinter`-Import. Das ist kein Beweis für vollständige Entkopplung: übergebene Funktionen, Datenmodelle, Pfade und Ressourcen können weiterhin Glide voraussetzen. `app.pyw` umfasst im zweiten Reparaturkandidaten 68.933 Zeilen und `ListApp` 1.863 direkte Methoden. Neue isolierte Fachlogik folgt D17; ein neuer Verzeichnisname oder eine neue Produktmarke beseitigt diese Kopplungen nicht.
+
+| Übernahmeart | Geeigneter Einstieg | Was für Steps nachzuweisen ist |
+|---|---|---|
+| Regeln und Algorithmen | Bestehende Tk-freie Module mit ihren Unit-Tests, etwa `motion`, `render_retention`, `persistence` oder `view_definition` | Vollständige lokale Importkette, Datenvertrag, Fehlerfälle und Tests unter neuem Projektpfad; kein Rückimport der Glide-App |
+| Adaptergebundene Bausteine | Navigation, Ansichtsprojektionen, Speicherkoordinator, Medienworker, Semantik | Eigene IDs und Datenmodelle, übergebene Aktionen/Reporter, Zeitquelle, Widgethost und Ressourcen; echter Integrationsweg zusätzlich zum Unit-Test |
+| In `ListApp` integrierte Oberfläche | Fenster, Dialoge, Komponenten, Styles, Inspektor, Haupt-/Nebenansicht | Begrenzten bestehenden Einstieg übertragen; alle Zustandseigentümer und Abbauwege mitnehmen. Keine pauschale Freigabe der gesamten Klasse als Bibliothek |
+| Prozesse und Werkzeuge | Prüfphasen, Gegenproben, Dokumentenpflege, Bau-/Startnachweise und Übergaberegeln | Projektpfade und feste Glide-Annahmen vor der ersten Ausführung prüfen; keine automatische Übernahme von Freigaben, Signaturen oder Produktivdaten |
+
+### Übernahmevertrag der bestehenden Pakete
+
+| Paketbezug | Bereits nutzbarer Bestand | Abhängigkeit / Glide-Kopplung | Gezielte Übernahmeprüfung |
+|---|---|---|---|
+| B01 / B03 | Light/Dark/Systemerkennung, Designpaare, Themen-/Rollenfarben, Kontrast, Schriften, Layoutskalen | Reine Berechnung und Anwendung auf Widgets sind verschieden; Systemadapter, echte Schriftmetriken und Tk-Interpreter beachten | Alle gewählten Designs/Schriften; Mindest- und große Fenster; Schrift-/Designwechsel und Neustart; Kontrast und volle Knopfbeschriftung |
+| B02 | SVG-Geometrie, geglättete Rasterung, PNG-Erzeugung, App-/Fensterlogo-Logik | `svg_geometry` importiert `brand`; Masterdateien, Markenfarben und Produktname sind Glide-spezifisch | Eigene Steps-Master/Farben, kleine Icongrößen, transparente Innenräume, DPI und native Paketicons; Rechte der Ressourcen getrennt |
+| B03 / B19 | Fenstergeometrie, Kompaktmodus, Haupt-/Nebenansicht, Navigationshistorie | Reine Geometrieregellogik liegt in `compact_mode`; konkrete Fenster-/Fokus-/Dialogsteuerung in `app.pyw` | Internen/externalen Fokus, verlorenes Loslassen, Escape, Root-/Unterfensterabbau, getrennte Tcl-Interpreter, Rückkehr und gemerkte Lage |
+| B04 / B13 | Aktionskennungen, durchsuchbare Menüs, Suchnormalisierung, Sperrgründe | `action_menu` nutzt `content_search`; native Menüeinträge und Ziel-IDs werden über Adapter ausgeführt | Dieselbe Aktion über Menü, Palette und Tastatur; deaktivierte Aktion mit Begründung; kein doppelter Befehlsbestand |
+| B05 | Speicherplan und explizite Commit-/Fehlergrenze | `persistence` nutzt `save_result`; Lock, Snapshot, Serialisierung und UI-Folgen liefert der Aufrufer | Fehler vor/nach Commit unterscheiden; Schreibschutz und voller Datenträger; unveränderte Daten/Stapel bei gescheitertem Schreiben |
+| B05 / B21 | Schreibbesitz, Wiederanlauf und Speicherzustand | `session_guard` nutzt `backup_snapshot`, `data_lock`, `storage_health`; Pfade, Tokens und Wiederherstellungsdaten gehören zum Projekt | Zwei Prozesse, fremder/verlorener Lock, Abbruch/Cleanup, Größenbudget, Wiederherstellung aus künstlichen Daten; WA-41 nicht als gelöst übernehmen |
+| B06 / B17 | Vorsicherung, unveränderliche Snapshots, Backupkatalog, Vergleich und Anhangsrestore | Glide-Formate, Quellzuordnungen und Datenpfade müssen explizit adaptiert werden | Migration nur nach Sicherung; Export/Import/Restore und Neustart; Pfadgrenzen, Dubletten, Abbruch und Teilfehler |
+| B07 / B22 | Begrenztes ZIP-/JSON-/Markdown-Einlesen, Importplanung, Reimportkonflikte, lesbare Exporte | Sichere Eingangsparser und Zielfachmodell trennen; kein Exportformat pauschal als verlustfreien Rundlauf ausgeben | Traversal, absolute Pfade, ZIP-Bomben, Größen/Tiefe/IDs, fremde Versionen, Quellzuordnung und Konflikte |
+| B08 | Konversion, Vorschaudienst, Cache, Abbruch und Rückmeldung im Hauptthread | `image_conversion` nutzt `preview_tools`; Tk-Bilder gehören zum Interpreter, externe OS-Werkzeuge bleiben optional | Fehlendes Werkzeug, ungewöhnliche Pfade, Worker-Abbruch, Dateihandle-Freigabe und Wechsel des Bildhosts |
+| B09 | Rollen, Namen, Werte, Zustände und Widget-Lebensdauer | Native Semantikadapter und Tk-Versionen unterscheiden sich; automatische Proben ersetzen keine Readerkette | Tastatur/Fokus und native Rollen pro Plattform; menschliche/Reader-Abnahme nur nach tatsächlichem Lauf |
+| B11 / B12 / B14 | Datum/Zeit, Serienregeln, Kalenderdateien, Fokus-/Zeitlogik und Planung | Fachfelder und Zeitquelle sind austauschbar zu machen; wiederkehrende Aufgaben sind Glide-Domäne | Sommerzeit, Zeitzonen, Tageswechsel, lange Serien, Abbruch/Neustart und tatsächliche Mutation/Undo |
+| B15 / B16 / B18 | Dokumentblöcke, Kontextübernahme, Rückgängig/Wiederholen, Schutzumbauten, Dashboardprojektionen | Schema, Item-IDs, Flush-/Mutationsgrenzen; kein zweiter Speicher- oder Ereignisweg | Ungültiger Editor, speichernder Kontextwechsel, Undo ersetzt Objekte, unveränderliche Projektion und Mehrfachaktionen |
+| B20 | Pixel-Zellmodell, Zeichnungsformate, Raster-/Vektorausgabe, Frames und Spritesheetdaten | Zellmodell/Exporter, Tk-Bildadapter und Editor getrennt betrachten; Prototyp ist kein Lieferbestand | Importgrenzen, Farbe/Transparenz, Framezeiten, Ressourcenfreigabe und tatsächliche Exportdatei |
+| B10 / B21 | Debugging, Fehlerklassifikation, Laufzeit-/Prozessbelege, Integritätswächter, Gegenproben und Messwerkzeuge | Pfade, Kommandoziele, persönliche Diagnoseeingänge und Plattformvoraussetzungen sind projektspezifisch | Rote Gegenprobe, Timeout/Folgestopp, unveränderte Eingaben, Datenschutz sowie Median/p95 mit identischen synthetischen Daten |
+| B10 | Python-Abgleich, native Runtime-/Paketbauten, Hashes, Lizenz- und isolierte Startnachweise | Buildskripte und Quelllizenzhelfer enthalten Glide-Pfade/-Namen/-Repository-URL; Python-Lieferung und eigenständiges Paket sind getrennt | Frischer Bau pro Plattform; Start bei gesperrter externer Bauumgebung; zugehöriger erreichbarer Quellcommit, Original-Lizenzen und Artefakthashes |
+| B23 | Architektur-/Designverträge, ein kanonischer Aufgabenplan, Abnahme und Übergabe | Konkrete Glide-Entscheidungen sind keine automatische Steps-Produktentscheidung | Gültige Regeln auswählen, Herkunft/Abweichung festhalten, offene Aufgaben mit Fertigkriterium und verantwortlicher Entscheidung |
+| B24 | Startprüfung, Settings-Kompatibilität, Versions-/Formatpflege und Neuerungskatalog | Modulimport von `app.pyw` hat Seiteneffekte; Direktstart ist noch nicht vollständig neutralisiert (WA-49) | Eigene Daten-/Cachepfade vor Import, Runtimeprüfung vor Datenzugriff, keine Glide-Ordner/Dateizuordnungen verändern |
+| B25 | Systemmitteilungen, Fenster-/Taskleistenintegration, Dateiziehen und externe Öffnungsadapter | OS-Fähigkeiten und optionale Fremdbibliotheken; Nachrichtenzustellung setzt laufende App voraus | Gewünschte Plattformen nativ, fehlende Fähigkeit verständlich behandeln; keine implizite Netzwerk-/Kontofunktion |
+
+### Vor der Abzweigung und erster Steps-Commit
+
+1. **Quellbasis festhalten:** tatsächlich geprüften Glide-Commit, Systemversion, MPL-/Fremdcodebestand und aktuelle QA-Grenzen im Steps-Einstieg nennen. Ein Versionslabel oder Merge ersetzt den Prüfbeleg nicht. Lokale Diagnoseeingänge, Stashes, Nutzerdaten und alte Bauordner gehören nicht pauschal in den neuen Git-Baum.
+2. **Identitäten trennen:** Projekt-/Paketname, Python-Einstieg, Repository-/Quell-URL, Bundle-/App-ID, Icons, Dateiendungen, Versionskonstante und Downloadtexte bewusst festlegen. Einen fremden Bundle-Identifier nicht erfinden. Glide-Namen nicht global in historischen Nachweisen und Fremdlizenzen ersetzen.
+3. **Ablagen isolieren:** eigener Daten-, Cache-, Log-, Lock-, Recovery- und Backupordner; eigener Testisolationsmechanismus; keine automatische Öffnung oder Migration des Glide-Produktivbestands. Nur synthetische Muster übernehmen.
+4. **Fachumfang wählen:** zunächst die benötigten Pakete auswählen und ihre vollständigen Import-/Ressourcenketten übernehmen. Die oben katalogisierten Funktionen sind Auswahlmaterial, keine beschlossene Steps-Featureliste.
+5. **Verträge mitnehmen:** Speicher-/Fehlerschutz, Editorübernahme, stabile IDs, Cacheinvalidierung, Dialog-/Fokus-/Callback-Lebensdauer und zentrale Designrollen gehören zur jeweiligen Funktion; nicht erst die sichtbaren Widgets kopieren und die Schutzwege weglassen.
+6. **Prüfbasis neu aufbauen:** reine Fachtests, echter UI-/Mutationseinstieg, Gegenprobe, Import/Export/Undo/Neustart, die gewählten Design-/Fensterzustände und native Zielplattformen. Geerbte Glide-Tests erhalten ihre Herkunft; Steps-Ergebnisse brauchen eigene Commits und Protokolle.
+7. **Bau und Übergabe:** Quell-/Python-Abgleich, feste Abhängigkeitspins, Lizenz-/Quellbezug, Paket-/Dateihashes und isolierter nativer Start; Signierung/Notarisierung und Veröffentlichung sind eigene Freigaben. Keine alten Glide-Pakete umbenennen.
+
+### Prüf- und Optimierungsrest vor einer Framework-Freigabe
+
+**Keine pauschale Framework-Freigabe.** Noch fehlen unabhängige Steps-Isolationstests und ein vollständiger neutraler Start-/Konfigurationsvertrag. Physische DPI-/Mehrmonitor- und menschliche Gesamtprüfung bleiben eigene Nachweise; Reader ist für Glide bewusst bis Bedarf zurückgestellt, für Steps muss die Entscheidung zum gewünschten Publikum passen. Die aktiven technischen Aufgaben stehen ausschließlich im [Entwicklungsplan](../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
+
+WA-32/39 (UI-/Themegrenzen), WA-36 (gemessene Speicher-/Renderkosten), WA-49 (explizite Laufzeitumgebung) und WA-50 (Modulbudget) sind die wesentlichen Entkopplungsreste. Die vorhandenen begrenzten Caches und zusammengefassten Layoutaufträge sind weiter nutzbar, brauchen vollständige Invalidierung für Steps. WA-41 bleibt eine getrennte ungeklärte Ursachenfrage; eine grüne andere Maschine identifiziert keinen Hardwarefehler. WA-46 ist durch den neuen CycloneDX-1.6-Erzeuger samt Eingangsabgleich teilweise umgesetzt; Umfang ist der geprüfte Lizenz-/Baubestand. Native Zuordnung und vollständige transitive Beziehungen bleiben offen, ausdrücklich als `incomplete` markiert.
+
+Für Performance gilt weiterhin der [Architekturvertrag](../../docs/02_ARCHITECTURE.md#4-performance-regeln): identische synthetische Eingaben, Aufwärmlauf, unprofilierte Wiederholungen mit Median/p95; Profiling nur zur Ursachenbestimmung. Aus der Dateigröße oder einem Tk-freien Import folgt kein Geschwindigkeitsgewinn. Ein neuer Adapter oder ein aufgeteilter Quelltext darf erst nach Verhalten-/Fehler-/Undo- und Messvergleich als Verbesserung bezeichnet werden.

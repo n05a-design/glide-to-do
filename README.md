@@ -6,11 +6,10 @@
 
 <p align="center">
   <strong>Aufgaben planen. Ideen verbinden. Selbst gestalten.</strong><br>
-  Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde deine Aufgaben mit Seiten und Notizen, plane deinen Tag und gestalte deine Ideen.
+  Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde deine Aufgaben mit Seiten und Notizen, plane deinen Tag und gestalte deine Ideen.
 </p>
 
 <p align="center">
-  <img alt="Version 3.50.7" src="https://img.shields.io/badge/Version-3.50.7-9E4AC8">
   <img alt="Windows, macOS, Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
   <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Glide-Prüfung" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
@@ -28,10 +27,10 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/glide-3.50.5-heute-dunkel.png">
-  <img alt="Glide 3.50.5: Heute mit nächster Aufgabe, verspäteten Aufgaben, Tagesplan und Fälligkeiten" src="01_Repository/Glide/assets/marketing/glide-3.50.5-heute.png">
+  <img alt="Heute mit nächster Aufgabe, verspäteten Aufgaben, Tagesplan und Fälligkeiten" src="01_Repository/Glide/assets/marketing/glide-3.50.5-heute.png">
 </picture>
 
-<p align="center"><sub>Glide 3.50.5 unter Windows mit dem künstlichen <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a>, aufgenommen am 06.11.2026. Hell oder dunkel folgt deiner GitHub-Darstellung.</sub></p>
+<p align="center"><sub>Windows-Aufnahmen mit dem künstlichen <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> vom 06.11.2026; <a href="01_Repository/Glide/docs/07_QA_BERICHT.md">Quellstand und Prüfgrenzen</a>. Hell oder dunkel folgt deiner GitHub-Darstellung.</sub></p>
 
 ## Warum Glide?
 
@@ -117,12 +116,12 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 
 | Startweg | Verfügbarkeit | Nächster Schritt |
 |---|---|---|
-| **Python-Fassung 3.50.7** | Im Repository enthalten, Python 3.14 mit Tk erforderlich | `python3 07_Python-Versionen/Schnellstart.pyw` ausführen |
-| **Windows x64** | Entwicklungsartefakt 3.50.5 aus Actions; Paket für den aktuellen 3.50.7-Stand noch offen | [Prüfläufe und Artefakte](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) und [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md) prüfen |
-| **macOS Apple Silicon** | Lokaler 3.50.6-Bau auf einem früheren Apphash belegt; kein öffentliches 3.50.7-Downloadpaket bestätigt | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
-| **Linux** | Python-Startweg; kein eigenständiges 3.50.7-Paket belegt | Repository mit Python und Tk starten |
+| **Python-Fassung** | Im Repository enthalten, Python 3.14 mit Tk erforderlich | `python3 07_Python-Versionen/Schnellstart.pyw` ausführen |
+| **Windows x64** | Native Entwicklungsbauten; Zuordnung zum aktuellen Quellstand im Liefernachweis | [Prüfläufe und Artefakte](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) und [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md) prüfen |
+| **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
+| **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Es gibt beim Abgleich am 07.11.2026 noch **keinen öffentlichen GitHub-Release**. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
+Es gibt beim Abgleich am 08.11.2026 noch **keinen öffentlichen GitHub-Release**. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -156,14 +155,16 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 08.11.2026
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 
-3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**; der aktuelle Quellstand ist 3.50.7 mit Produkt-/Lizenzabgleich und Seitenleistenkorrektur auf Basis von PR #69 (Bilder oben zeigen 3.50.5). Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
+Quellstand, automatisierte Prüfungen und native Pakete sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) getrennt nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
 
 - [Quellcode und Entwicklung](01_Repository/Glide/README.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Markt und Vorbilder](00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md)
+- [Technischer Quellstand](01_Repository/Glide/VERSION)
 - [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Backups](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md)
+- [Glide-System und wiederverwendbare Bestandteile](01_Repository/Glide/src/glide/README.md) · [Übernahmegrundlage für Steps und weitere Projekte](01_Repository/Glide/src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte)
 - [Sicherheitsrichtlinie](SECURITY.md) · [Technische Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) · [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md)
 
 ## Lizenz
@@ -172,6 +173,6 @@ Glides Projektcode steht unter der **Mozilla Public License 2.0 (`MPL-2.0`)**. M
 
 ## In English
 
-**Glide is a desktop planner for tasks, day planning, pinboards and pixel drawings.** Connect tasks with pages and notes, plan your day and create your own visual material. The same task can appear in several views while keeping one original. Your work is saved in your chosen data folder, with automatic backups and readable exports.
+**Glide is a desktop planner for projects, tasks, day planning, pinboards and pixel drawings.** Connect tasks with pages and notes, plan your day and create your own visual material. The same task can appear in several views while keeping one original. Your work is saved in your chosen data folder, with automatic backups and readable exports.
 
-The project code is available under [MPL-2.0](LICENSE). The Python delivery is version 3.50.7; native packages and platform acceptance have separate evidence in the [QA report](01_Repository/Glide/docs/07_QA_BERICHT.md). Public release downloads await owner approval.
+The project code is available under [MPL-2.0](LICENSE). Source, Python delivery, native packages and platform acceptance have separate evidence in the [QA report](01_Repository/Glide/docs/07_QA_BERICHT.md). Public release downloads await owner approval.

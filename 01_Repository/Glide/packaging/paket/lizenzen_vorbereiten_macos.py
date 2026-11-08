@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Geprüften Mac-Lizenzbestand für die tatsächliche Baulaufzeit bereitstellen.
 
 Die eingecheckten Originaltexte gelten für ihre belegten Komponentenversionen.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Werkzeugtest der Altbestandteilprüfung (D66, menschliche Abnahme 07.11.2026)."""
 from pathlib import Path
 import sys

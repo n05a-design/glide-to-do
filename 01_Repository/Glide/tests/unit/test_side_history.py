@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Flüchtiger Nebenansichtsverlauf mit Positionszustand und aktuellen Zielen."""
 from pathlib import Path
 import sys

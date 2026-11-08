@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """MPL-Original und zugänglichen Quellstand für neue Binärpakete beilegen."""
 import hashlib
 from pathlib import Path
@@ -17,7 +18,7 @@ def stage_project_license(repo, destination, source=None):
     if source is not None and Path(source).resolve() != repo / "src/glide":
         raise ValueError("Paketquelle muss dem erfassten Repository-Quellbaum entsprechen.")
     root = repo.parents[1]
-    paths = ["LICENSE", "01_Repository/Glide/LICENSE.md",
+    paths = ["LICENSE", "01_Repository/Glide/LICENSE.md", "01_Repository/Glide/VERSION",
              "01_Repository/Glide/src/glide", "01_Repository/Glide/packaging"]
     def git(*args):
         return subprocess.check_output(["git", "-C", str(root), *args],
@@ -25,7 +26,8 @@ def stage_project_license(repo, destination, source=None):
     revision = git("rev-parse", "HEAD")
     if git("status", "--porcelain", "--untracked-files=all", "--", *paths):
         raise ValueError("Paketquellen oder Lizenzhinweise sind nicht im Git-Commit gesichert.")
-    terms = (root / "LICENSE").read_bytes()
+    # Git-Originalbytes statt plattformabhängiger Checkout-Zeilenenden.
+    terms = subprocess.check_output(["git", "-C", str(root), "show", "HEAD:LICENSE"], timeout=30)
     if not terms.startswith(b"Mozilla Public License Version 2.0") or b"Exhibit A" not in terms:
         raise ValueError("Vollständige MPL-2.0-Originaldatei fehlt.")
     url = f"{SOURCE_REPOSITORY}/tree/{revision}"
@@ -41,10 +43,12 @@ def stage_project_license(repo, destination, source=None):
         "Namens- und Markenrechte werden durch die MPL nicht eingeräumt.\n"
     )
     files = {"Glide-MPL-2.0.txt": terms,
-             "Glide-Lizenzstatus.md": (repo / "LICENSE.md").read_bytes(),
+             "Glide-Lizenzstatus.md": subprocess.check_output(
+                 ["git", "-C", str(root), "show", "HEAD:01_Repository/Glide/LICENSE.md"], timeout=30),
              "Glide-Quellcode.txt": notice.encode("utf-8")}
     destination.mkdir(parents=True, exist_ok=True)
     for name, data in files.items():
         (destination / name).write_bytes(data)
-    return dict(name="Glide", version="MPL-2.0", source=url,
+    return dict(name="Glide", version=(repo / "VERSION").read_text(encoding="utf-8").strip(),
+                license="MPL-2.0", source=url,
                 files={name: hashlib.sha256(data).hexdigest() for name, data in files.items()})

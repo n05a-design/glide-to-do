@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Logo, Lupe und Programmsymbol (Auftrag vom 29.09.2026).
 
 - Das Logo kommt aus den SVG-Mastern in `resources/logo` und trägt die

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Künstliche Tk-9.1-Fixture und externer AT-SPI-Verbraucher im Hosted-CI."""
 import argparse
 import json

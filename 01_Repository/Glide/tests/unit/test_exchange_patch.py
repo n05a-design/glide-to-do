@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """KI-Austausch Stufe 2 (G24): Kontextpaket, Änderungsvorschlag, Konflikte – ohne Oberfläche."""
 import copy
 from pathlib import Path

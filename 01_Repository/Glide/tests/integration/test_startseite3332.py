@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.33.2: Startseite „Ruhig“ (D12), eigene Auswahl, Zurücksetzen und Aufbaukosten über echte Wege."""
 import importlib.machinery
 import importlib.util

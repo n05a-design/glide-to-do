@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Typregel und verständliche Rückfrage für aktive Anhänge, ohne Tk."""
 from pathlib import PurePath
 import os

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Heute-/Nächste-Aufgabe-Kacheln über explizite Daten und UI-Operationen.
 
 Kein Zugriff auf ListApp, Tk oder persistente Daten. Der Host liefert die

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Optionale Tageshinweise mit dauerhaften Zustellkennungen, ohne Tk.
 
 Der Aufrufer sammelt fällige Hinweise nur bei laufender Anwendung, speichert

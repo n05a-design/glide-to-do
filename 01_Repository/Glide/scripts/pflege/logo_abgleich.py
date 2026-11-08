@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Neue Logo-Master unverändert verteilen und alle Raster-/Paketsymbole erzeugen.
 
 Aufruf aus 01_Repository/Glide mit Tk 9: python -B scripts/pflege/logo_abgleich.py

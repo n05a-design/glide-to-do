@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Additive Einstellungsfelder erhalten; bekannte Felder weiter streng prüfen (WA-09).
 
 Keine Auswertung unbekannter Inhalte und kein Ersatz für ein Format-Tor bei

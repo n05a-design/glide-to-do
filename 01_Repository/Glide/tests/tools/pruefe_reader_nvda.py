@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tatsächliche NVDA-Sprache bei Tastaturbedienung der künstlichen Glide-App."""
 import argparse
 from datetime import date

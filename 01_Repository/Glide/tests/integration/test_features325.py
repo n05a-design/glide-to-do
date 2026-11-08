@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.25: Übersichtlichkeit, Hierarchie und eine minimalistische Oberfläche.
 
 Jeder Abschnitt trägt die Nummer des Auftragspunkts, den er nachweist.

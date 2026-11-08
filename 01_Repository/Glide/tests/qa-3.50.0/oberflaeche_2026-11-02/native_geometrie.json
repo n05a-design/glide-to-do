@@ -1,0 +1,213 @@
+{
+  "measurements": [
+    {
+      "theme": "light",
+      "font_size": "mittel",
+      "width": 860,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "mittel",
+      "width": 860,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "mittel",
+      "width": 1280,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "mittel",
+      "width": 1280,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "gross",
+      "width": 860,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "gross",
+      "width": 860,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "gross",
+      "width": 1280,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "light",
+      "font_size": "gross",
+      "width": 1280,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 22,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "mittel",
+      "width": 860,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "mittel",
+      "width": 860,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "mittel",
+      "width": 1280,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "mittel",
+      "width": 1280,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "gross",
+      "width": 860,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "gross",
+      "width": 860,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "gross",
+      "width": 1280,
+      "full_width": false,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    },
+    {
+      "theme": "dark",
+      "font_size": "gross",
+      "width": 1280,
+      "full_width": true,
+      "dx": 0,
+      "dy": 0,
+      "title_size": 23,
+      "main_title_size": 22
+    }
+  ],
+  "glyphs": {
+    "list": {
+      "text": "☷",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    },
+    "table": {
+      "text": "⊞",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    },
+    "board": {
+      "text": "▨",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    },
+    "calendar": {
+      "text": "▦",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    },
+    "overdue": {
+      "text": "△",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    },
+    "overflow": {
+      "text": "⋯",
+      "font": "DejaVu Sans",
+      "actual": [
+        "DejaVu Sans"
+      ]
+    }
+  },
+  "runtime": {
+    "python": "3.14.5",
+    "tk": "9.1.0"
+  },
+  "callback_errors": []
+}

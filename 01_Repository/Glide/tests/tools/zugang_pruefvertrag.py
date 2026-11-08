@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Verbindliche native Kernprüfung ab Glide 4, ohne Tk-/App-Import."""
 import re
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Quellenzustand mit dem zuletzt übernommenen und dem lokalen Stand vergleichen.
 
 Aus diesem Modul folgt niemals eine automatische Bestandsänderung. Selbst

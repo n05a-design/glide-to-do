@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Ruhige Oberfläche 3.33.21: N01 und folgende Aufgaben über echte Einstiege.
 
 N01: Einstellung „Automatisch hell/dunkel nach System“ merkt das Paar des

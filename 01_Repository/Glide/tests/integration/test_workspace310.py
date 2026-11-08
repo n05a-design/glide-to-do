@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Reiter/Pinnwand: Objektidentität, Persistenz, Mutationen und reale Tk-Ereignisse."""
 import copy
 import importlib.machinery

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tk-Start und auf macOS die tatsächliche Mausisolierung eigener QA-Fenster prüfen."""
 import os
 import sys

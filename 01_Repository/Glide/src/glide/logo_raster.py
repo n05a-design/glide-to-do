@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Geglättete transparente Logo-Flächen und PNG-Ausgabe, ohne Tk.
 
 Die freigegebenen Konturen verwenden die Gerade-Ungerade-Füllregel.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.28: Tagebuch, responsive Hierarchie und funktionale UI-Politur."""
 import importlib.machinery
 import importlib.util

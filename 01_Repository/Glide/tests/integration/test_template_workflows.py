@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Trackpad, vollständige Vorlagen, Abbruch, Migration und portable Rundläufe."""
 import base64
 import copy

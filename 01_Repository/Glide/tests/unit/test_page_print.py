@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Druckseite einer Seite mit eingebetteten Bildern (B4) ohne Oberfläche."""
 from pathlib import Path
 import sys

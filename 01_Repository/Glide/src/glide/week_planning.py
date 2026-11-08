@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wochenbilanz und freie Zeitfenster aus derselben Tagesbilanz, ohne Tk."""
 from datetime import date, timedelta
 import planning

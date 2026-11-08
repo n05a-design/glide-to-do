@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """U10/U19: Titel, Unterzeile, Quellen und bestehende Bedienbindungen.
 
 --observe erfasst den Ausgangsstand ohne neue Anforderungen; Bilder zeigen

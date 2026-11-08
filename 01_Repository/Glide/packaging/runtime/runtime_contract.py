@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Feste Quellen und ABI-Verträge der eigenen Tcl/Tk-9.1-Laufzeit."""
 from pathlib import Path
 import re

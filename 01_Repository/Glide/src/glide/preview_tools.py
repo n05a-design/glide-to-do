@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Systemwerkzeuge für Bildvorschauen unter Linux, ohne Tk (N08 seit 3.34.0).
 
 Glide bringt keine Bildbibliothek mit. Unter Linux liest Tk nur PNG, GIF, PPM

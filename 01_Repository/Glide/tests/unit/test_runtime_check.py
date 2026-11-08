@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mindestlaufzeit (AB08) ohne Oberfläche."""
 import ast
 from pathlib import Path

@@ -1,8 +1,28 @@
 # Glide – Übergabe an eine neue Sitzung
 
+## Aktueller Einstieg: CI-Abschluss und Steps-Grundlage (08.11.2026)
+
+Maßgeblich ist der Branch `codex/glide-3.50.7-main-validierung`, [Entwurfs-PR #71](https://github.com/n05a-design/glide-to-do/pull/71), direkt von Main `d7e017f001e5c069eeb98a0f5302577966ac4098` nach den integrierten PRs #69 und #70. Gesicherter zweiter Reparaturcommit `a4c34b86ad22554c39905b25b0a46cb5b6ccef1d`; nachfolgende System-/Lizenz-/Dokumentänderungen bekommen einen eigenen Prüf-/Commitbeleg. Zielversion 3.50.7, Format 26. Kein Merge, Tag oder Release durch diesen Auftrag.
+
+| Achse | Tatsächlicher Stand / nächster Schritt |
+|---|---|
+| CI und Oberfläche | `a4c34b8`: strenge Windows-Grundstufe 19/19; 265 Werkzeugtests (1 Skip), zweimal 1.155 Fachtests; sechs gezielte native Nachtests ohne unbehandelte Callbackfehler. GitHub-Grundstufe grün, neue Linux-/Windows-Vollmatrix separat verfolgen. Root-Abbau, D66-Unterzeilentexte und Leistenabstände repariert; keine Gesamtfreigabe daraus ableiten. |
+| Mac | Nativer eigenständiger Bau und isolierter Start auf `11bc6ae` belegt, TAR/DMG samt MPL-Beigaben geprüft. Neue native Vollprüfung auf `a4c34b8` erreicht `test_ui_followup36`, scheitert an angeforderten 960 gegenüber erhaltenen 700 Punkten Fensterhöhe. CI-Desktopwerkzeug mit Modusprüfung vorbereitet; neue native Ausführung erforderlich. Alter Symbolbefund dadurch noch nicht geprüft. |
+| System und Wiederverwendung | [Glide-System](../01_Repository/Glide/src/glide/README.md): 94 Quelldateien, 147 Featureeinträge einschließlich 20 technischen Systemfähigkeiten, 25 Bestandspakete. [Steps-Übernahmevertrag](../01_Repository/Glide/src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte) mit Abhängigkeiten, Kopplungen, Übernahmefolge und Prüfgrenzen. Kein neues Repository und kein unabhängig freigegebenes Framework. |
+| Lizenz und öffentlicher Text | MPL-2.0 entschieden; SPDX-Dateihinweise für eigene aktive Python-Bestandteile, Lizenz-/Appversion getrennt und Git-Originalbytes im Paketerzeuger vorbereitet. Fremdcode, Schriften und historische Quellen bleiben unangetastet. Öffentliche Beschreibung mit „Projekte“ beibehalten, genehmigte 15 Topics erneut gesetzt und zurückgelesen. Aktive Beta-/Erstversionswerbung und allgemeine Versionsbotschaften entfernt; technische Versionen/Provenienz bleiben. |
+| Historische Nachweise | Vorbereitete Alterskürzung zurückgenommen: 225 Main-Dateien mit identischen Git-Blobs wiederhergestellt. QA-Erststand/Fixture ausdrücklich geschützt. Ursprüngliche OneDrive-Arbeitskopie, Stashes, lokale Eingänge und Dumps bleiben unberührt. |
+| Performance | Neue isolierte Messungen auf `a4c34b8`, Python 3.14.7/Tk 9.1: Abhaken inkl. Speichern/Refresh median 54 ms bei 1.000 und 380 ms bei 10.000 Aufgaben. Mehrere Ansichtswechsel bei 1.000 Aufgaben 0,6–1,1 s; Profil zeigt Tk-Aufrufe/Layout und Baum-/Kachelaufbau als Ansatzpunkte. Kein behaupteter Vergleichsgewinn oder Architekturabschluss. |
+| Weiterer Abschluss | Neue Quell-/Python-/Versions-/Dokument-/Lizenzprüfungen, endgültige native Windows-/Linux-Matrix und aktuelle Pakete dem letzten Commit zuordnen. Mac, physische DPI/Mehrmonitor, menschliche Abnahme und Signierung separat. Alle Aufgaben und Entscheidungen allein im Plan §21.78/§21.79. |
+
+**Erste Steps-Sitzung:** Den tatsächlich abgeschlossenen Glide-Quellcommit und die Systemversion als Herkunft übernehmen, eigene Produkt-/Paket-/Daten-/Cache-/Lock-/Quell-URLs festlegen, benötigte Bestandspakete auswählen und mit ihren Schutz-/Prüfwegen übertragen. Keine produktiven Glide-Daten öffnen, keine alten Pakete umbenennen, keine geerbte Abnahme behaupten. Die offene Initialisierung WA-49 und die große `ListApp` bleiben konkrete Entkopplungsgrenzen. Namens-/Markenrechte sind durch die Code-Lizenz nicht erteilt.
+
+## Datierte Vorgeschichte des vorherigen Übergabeeinstiegs
+
+Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-/Metadatenzustände sind durch den aktuellen Einstieg oben fortgeschrieben und keine aktiven Ausführungsanweisungen.
+
 **Aktuelle Fortsetzung 08.11.2026:** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kalenderausgabe: Umfänge, Termine, Wiederholungen, Alarme, Format, Grenzen, Dialog."""
 import copy
 import importlib.machinery

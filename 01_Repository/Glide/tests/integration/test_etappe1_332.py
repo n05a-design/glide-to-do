@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Etappe 1 der Funktionsrecherche (3.32.0, 30.09.2026): schnelle Gewinne.
 
 - G16: Zeichnung als Symbol (ICO mit 16, 32, 48, 256 Pixeln), Grund wahlweise

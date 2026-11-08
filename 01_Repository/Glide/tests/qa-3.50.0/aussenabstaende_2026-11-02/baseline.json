@@ -1,0 +1,15 @@
+{
+  "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
+  "faelle": {
+    "gestaltung": {
+      "ok": true,
+      "befund": "219 Knopfprüfungen in fünf Konfigurationen ohne Befund",
+      "runtime": {
+        "python": "3.14.5",
+        "platform": "darwin",
+        "tk": "9.0.3"
+      }
+    }
+  },
+  "fehler": []
+}

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """System-und-Modulpflege: verbindliche Glide-System-Inventarprüfung.
 
 Kontrolliert tatsächliche Quelldateien und die benannten Unit-, Integrations- und
@@ -50,6 +51,20 @@ def actual_test_paths() -> set[str]:
 
 
 class SystemUndModulpflegeTests(unittest.TestCase):
+    def test_summary_counts_match_the_actual_registers(self):
+        document, parts = registry()
+        counts = {
+            "Python-Quelldateien": len(actual_source_modules()),
+            "Features": len(ROW.findall(parts["FEATURES"])),
+            "Bausteinpakete": len(ROW.findall(parts["PACKAGES"])),
+            "QA-/Architekturrisiken": len(ROW.findall(parts["RISKS"])),
+            "Test-/Werkzeugdateien": len(actual_test_paths()),
+        }
+        for label, count in counts.items():
+            self.assertRegex(document, r"(?m)^\| " + re.escape(label) + r" \| " + str(count) + r" \|", label)
+        app_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        self.assertIn(" · Glide " + app_version + " · Glide-System V", document.splitlines()[2])
+
     def test_bereiche_und_eindeutige_ids(self):
         document, sections_by_name = registry()
         version = (ROOT / "GLIDE_SYSTEM_VERSION").read_text(encoding="utf-8").strip()

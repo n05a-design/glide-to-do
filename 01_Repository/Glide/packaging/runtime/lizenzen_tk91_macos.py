@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Originalbelege aus exakt gepinnten Tcl/Tk-9.1-Quellen vorbereiten; kein Runtimebau."""
 import argparse
 import hashlib

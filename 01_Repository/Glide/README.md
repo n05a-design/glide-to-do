@@ -1,12 +1,14 @@
 # Glide – Desktop-Planer
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 08.11.2026 · Entwicklungsstand · Aufgabenformat 26
 
-Glide ist ein Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
+Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
-> **Projektstatus:** Quell-/Python-Stand **3.50.7**, Datenformat 26, auf Basis des offenen PR #69 (3.50.6). Aktuelle Prüfungen, native Paketstände und menschliche Abnahmen werden im [QA-Bericht](docs/07_QA_BERICHT.md) getrennt geführt. Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
+> **Projektstatus:** Entwicklung auf dem aktuellen Main nach den integrierten PRs #69 und #70; Abschlusskorrekturen im eigenen [Entwurfs-PR #71](https://github.com/n05a-design/glide-to-do/pull/71). Die technische Version steht in [`VERSION`](VERSION), das Datenformat bleibt 26. Aktuelle Prüfungen, native Paketstände und menschliche Abnahmen werden im [QA-Bericht](docs/07_QA_BERICHT.md) getrennt geführt. Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
 
 **Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md), eigenständig versioniert in [`GLIDE_SYSTEM_VERSION`](GLIDE_SYSTEM_VERSION) (Start **V1.0**) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege. Diese Katalogversion ist unabhängig von Glides Anwendungs- und Datenformatversion.
+
+Für Folgeprojekte wie Steps nennt der [Übernahmevertrag](src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte) die vorhandenen Grundlagen, Abhängigkeiten, Produktkopplungen, Prüfgrenzen und die erste Übergabefolge. Technische Systemfähigkeiten sind direkt in der dortigen Featureübersicht enthalten. Ein unabhängiges Framework ist daraus noch nicht abgenommen.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -18,7 +20,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Eigenständige Paketstände, Quellhashes und Verfügbarkeit werden im [aktuellen QA-/Liefernachweis](docs/07_QA_BERICHT.md) getrennt geführt: vorhandener Windows-Bau 3.50.5, lokaler Mac-Bau 3.50.6 vor späteren Quellkorrekturen, kein bestätigtes eigenständiges Linux-Paket. Der aktuelle Python-Stand ist 3.50.7 / Format 26. Ein frischer Clone enthält keine ignorierten lokalen Bauartefakte. Öffentliche Release-Downloads sind noch nicht freigegeben.
+Eigenständige Paketstände, Quellhashes und Verfügbarkeit werden im [aktuellen QA-/Liefernachweis](docs/07_QA_BERICHT.md) getrennt geführt. Native Entwicklungsbauten sind ihrem jeweiligen Quellcommit zugeordnet; ein bestätigtes eigenständiges Linux-Paket fehlt. Ein frischer Clone enthält keine ignorierten lokalen Bauartefakte. Öffentliche Release-Downloads sind noch nicht freigegeben.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 
@@ -39,7 +41,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.7/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll build/lokale-qa --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):

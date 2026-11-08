@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Durchsuchbare Seiten- und Blockaktionen ohne Tk (E-U3 A, D55, 23.10.2026).
 
 Seite und Block behalten ihre bisherigen Menüs. Die eingebettete Auswahl liest

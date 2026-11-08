@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eigene native MSAA-Identitäten über echte COM-Getter im Hosted-CI prüfen."""
 import argparse
 import json

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Drei Zustände unabhängig verändern und jede Übernahme ausdrücklich auswählen."""
 import copy
 from dataclasses import replace

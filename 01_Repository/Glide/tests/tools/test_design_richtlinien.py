@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Namens- und Verweisprüfung der Design Richtlinien (B20, 15.10.2026).
 
 Der aktive Gestaltungsskill heißt neutral `design-richtlinien` und verweist auf

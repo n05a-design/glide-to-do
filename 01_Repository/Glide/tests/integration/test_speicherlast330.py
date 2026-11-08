@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Belastungstest Speichern und Laden (Auftrag vom 29.09.2026, Punkt 5 der Prüfung vom 28.09.2026).
 
 Geprüft wird, was im Alltag selten, aber folgenreich ist:

@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 

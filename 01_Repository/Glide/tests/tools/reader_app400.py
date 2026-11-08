@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eigene vergängliche Glide-Instanz für tatsächliche Reader-Proben.
 
 Nur die Anfangsfixture wird vorbereitet. Danach bedient der Reader-Prüfplatz

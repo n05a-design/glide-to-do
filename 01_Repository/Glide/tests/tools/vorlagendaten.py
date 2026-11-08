@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Reproduzierbarer Vorlagenkatalog; ausschließlich temporäre Daten, keine GUI."""
 import base64
 from datetime import date, timedelta

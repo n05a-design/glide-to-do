@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mitgelieferte Textschriften und dauerhafte Stilzuordnung, ohne Tk.
 
 Einstellungen und späteres Onboarding verwenden dieselben Kennungen.

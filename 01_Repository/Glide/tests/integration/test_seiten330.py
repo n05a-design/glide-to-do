@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Seitenart „Seite“ und Ordnertypen (26.09.2026).
 
 - Markdown ↔ Seite: Überschriften, Listen, Aufgaben, Zitat, Code, Tabellen,

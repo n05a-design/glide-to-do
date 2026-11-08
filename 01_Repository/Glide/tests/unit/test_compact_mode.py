@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """E-U1 A: Geometrieregeln des Kompaktmodus (getrennte Fensterlagen, Mindestgröße)."""
 from pathlib import Path
 import sys

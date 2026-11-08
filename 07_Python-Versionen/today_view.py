@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Abschnitte der Ansicht „Heute“ ohne Tk (Entscheidung D14).
 
 „Heute“ ersetzt „Mein Tag“ und beantwortet eine Frage: was ist heute dran?

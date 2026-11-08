@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-06: lokale Aufträge für vorhandene Austauschverträge, ohne Tk oder Netz."""
 import copy
 import json

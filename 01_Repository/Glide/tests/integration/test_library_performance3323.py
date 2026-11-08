@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bibliothekskarten: Wiederverwendung, Invalidierung und native Bedienung.
 
 --measure JSON --app SNAPSHOT misst denselben isolierten Aufbau vor/nach.

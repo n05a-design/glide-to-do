@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte Format-25-Bestandsbrücke ohne Tk-Fenster, ausschließlich künstliche Daten."""
 import copy
 from contextlib import nullcontext

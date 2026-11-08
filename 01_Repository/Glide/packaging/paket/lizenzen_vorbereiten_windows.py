@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lizenz-Prüfbestand passend zur tatsächlich installierten Windows-Baulaufzeit.
 
 Läuft auf dem nativen Windows-Prüfstand (GitHub-Hosted-Runner) vor dem

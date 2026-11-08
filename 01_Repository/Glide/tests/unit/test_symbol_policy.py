@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import unittest
 from symbol_policy import resolve, TEXT_FALLBACKS, split_heading
 

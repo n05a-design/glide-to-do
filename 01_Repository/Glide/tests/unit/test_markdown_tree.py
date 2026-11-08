@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gesamtausgabe: Inhalte, Grenzen, unveränderte Quellen und atomarer Abschluss."""
 import copy
 import hashlib

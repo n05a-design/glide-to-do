@@ -1,6 +1,6 @@
 # Aktuelle startbare Python-Fassung
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand · Aufgabenformat 26 · Vorlagenformat 2
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26 · Vorlagenformat 2
 
 Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.50.7.pyw` und alle Begleitmodule/Ressourcen werden bytegleich zum Quellstand 3.50.7 abgeglichen. Enthalten sind die aus PR #69 übernommenen 3.50.6-Korrekturen, der aktuelle Produkt-/Lizenztext und die Korrektur der Schriftmessung für die neuen Seitenleistenhöhen. Vollständiger MPL-2.0-Text (`LICENSE`) und [Lizenzhinweise](LICENSE.md) gehören zur separaten Lieferung. Technische Programm-/Datenkennungen und Format 26 bleiben erhalten.
 

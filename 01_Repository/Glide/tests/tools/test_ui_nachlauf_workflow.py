@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native UI-Diagnose bleibt von Vollmatrix, Kalibrierung und Paketfreigabe getrennt."""
 from pathlib import Path
 import unittest

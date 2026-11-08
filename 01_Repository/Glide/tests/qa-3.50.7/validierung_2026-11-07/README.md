@@ -67,6 +67,8 @@ Kein neuer vollständiger 107-Suiten-/nativer Mac-Vollmatrixbeleg für 3.50.7. N
 
 ## Bewahrung und Ablage
 
+**Fortschreibung 08.11.2026:** Die unten beschriebene vorbereitete Alterskürzung ist im Endstand zurückgenommen, soweit sie 225 im aktuellen Main vorhandene historische Dateien betrifft. Originaldateien sind im Arbeitsbaum wieder vorhanden, alle Git-Blobs gegen `d7e017f` identisch geprüft. QA-Erststand und zugehörige Fixture sind ausdrücklich geschützt. [Bewahrungsnachtrag](bewahrung_nachtrag.json). Die folgende datierte Beschreibung sowie ZIP/Git-Nachweise dokumentieren den Zwischenstand und bleiben unverändert erhalten.
+
 Die vorhandene Sieben-Versionen-/Drei-Bildversionen-Regel verschiebt mit 3.50.7 die Grenzen. 226 alte reproduzierbare Dateien wurden vor der Kürzung gegen Git geprüft und zusätzlich in einem lokal CRC-/SHA-verifizierten ZIP bewahrt. `aufbewahrung.json` nennt jeden Pfad, Dateihash, Git-Blob und festen Quellverweis auf `13bcb66a`. 81 aktive Verweise wurden auf diese unveränderlichen Git-Nachweise umgestellt. Datierte Originale innerhalb der verbleibenden Versionen, ursprüngliche Nutzerbilder, Lizenzbasen und lokale Diagnoseeingänge wurden nicht umgeschrieben. Die ursprüngliche OneDrive-Arbeitskopie und ihre vier Stashes blieben unberührt.
 
 ## Marktbericht als separater Anhang

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """D55 (23.10.2026): Kompaktmodus (E-U1 A), Nebenansicht (E-U2 A) und Seitenbedienung (E-U3 A).
 
 Echte Tk-Wege mit künstlichen Daten: Tastenereignisse, Klicks auf Griff,

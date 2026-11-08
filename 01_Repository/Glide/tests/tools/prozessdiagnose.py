@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lesende Prüfplatzdiagnose; ein Verdacht ändert niemals das Prüfergebnis."""
 
 from __future__ import annotations

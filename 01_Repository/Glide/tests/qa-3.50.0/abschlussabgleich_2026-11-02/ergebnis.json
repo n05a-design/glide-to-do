@@ -1,0 +1,103 @@
+{
+  "datum": "2026-11-02",
+  "art": "Abschlussprüfung und Dokumentationspflege",
+  "audit_abgeschlossen": true,
+  "version": "3.50.0",
+  "source_commit": "55d2caff0293220bfe7de55cd9f903425194c109",
+  "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
+  "produktionscode_und_lieferungen_unveraendert": true,
+  "gewaehlte_350_nutzerfunktionen_implementiert_dokumentiert_geliefert": true,
+  "alle_appweiten_technikvorhaben_abgeschlossen": false,
+  "pruefungen": {
+    "ci_grundstufe_exitcode": 0,
+    "ci_schritte": 19,
+    "werkzeugtests": {
+      "gesamt": 238,
+      "skips": 3
+    },
+    "fachtests": {
+      "gesamt": 1112,
+      "skips": 1,
+      "laeufe": 2
+    },
+    "bereichspruefung_exitcode": 0,
+    "python_lieferdateien": 238,
+    "mac_paketdateien": 463,
+    "windows_paketdateien": 104,
+    "lieferabweichungen": 0,
+    "mac_codesign_exitcode": 0,
+    "stand_linkpruefung_nach_redaktionellem_nachlauf_exitcode": 0,
+    "git_diff_check_exitcode": 0
+  },
+  "vollmatrix": "Keine neue Gesamtmatrix ausgeführt; 941 historische Eingaben abgeglichen. Abweichend sind die unabhängige Testkorrektur 55d2caf und der reine Moduldocstring von standpruefung.py; übrige Unterschiede nur Zeilenenden.",
+  "remote_nachlauf": {
+    "run_id": 41465033321,
+    "source_commit": "55d2caf",
+    "retrieved_at_utc": "2026-11-02T14:57:51.085Z",
+    "jobs": [
+      {
+        "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "UI-Diagnose (Windows x64, Python 3.14)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Tk 9.1 und NVDA (Windows x64)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Tk 9.1, AT-SPI und Orca (Linux x64)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Vollprüfung (Linux/Xvfb, eigene Tk 9.1)",
+        "status": "in_progress",
+        "conclusion": null
+      }
+    ]
+  },
+  "offene_technische_vorhaben": [
+    "WA-32/39 appweite Design-/Komponenten-/Dialog-/Themeübertragung",
+    "WA-36 vertiefte Snapshot-/Schreib-/Renderoptimierung",
+    "WA-37/38/40 vollständige Caller-/Fehlerklassifikation",
+    "WA-44/45 geprüfte Übernahme neuerer Vendor-/Bauversionen",
+    "WA-46 CycloneDX-/SPDX-SBOM",
+    "WA-49 explizite Runtimeinitialisierung",
+    "WA-50 automatisches Qualitätsbudget",
+    "WA-41A/B Ursachenuntersuchung nur bei konkretem Befund"
+  ],
+  "menschliche_abnahme": "Sicht/Bedienung/Tastatur/DPI/Mehrmonitor offen; Reader nach D58 bis Bedarf zurückgestellt",
+  "nachweis_sha256": {
+    "README.md": "47fb7445554de752f75700fd7d3e6aeb5a99445e6e8e8c214165314875b20796",
+    "abhaengigkeiten.json": "1a1d65c8448e724bc3e4de61b7654605424d74400556b5e2e1240a31f2443ae4",
+    "bereichspruefung.json": "5f3ce11234124700b719d96844f84bd271f81dc40cc4750b54fc953a8a55afe9",
+    "github.json": "05903ad9e5a41dd9b4f85776906cac74289c945907d7ce8283008b3e48d439ea",
+    "grundstufe.json": "f625e76dba5a45cd5c63c77a7c0272f896e63f30f6f2191bc88b818dfd0a4e69",
+    "grundstufe_vorlauf.json": "c2860ed58764c88bad7e7a26d68876451c059e74cfe599b2ca764ee40cea5d9c",
+    "pruefabgleich.py": "a4f0f4843d70a560037b51c654b6420cae532da828529b07711a9a12c42a7c52",
+    "quell_lieferabgleich.json": "beb424dc21919896bbb55535712c256a8b0ada7be903b6bd2a1c06bbc24124e3"
+  },
+  "geaenderte_dokumente_sha256": {
+    "00_Arbeitsvorbereitung/Glide_Analyse.md": "a7dc0c1c175caf36b4629fdb3cf80417cc3cb7b73e6de6e34a2d9c7a1bdb9f55",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md": "367050309c048853fc62041e6a50a14b13dded357ebaf9e8937b92bee18edba0",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md": "9e7ac6f10340553a591777caba4624cbfa8cd33981b781aa84a0dabbf5622fc6",
+    "00_Arbeitsvorbereitung/README.md": "5d462dd6b413b51d44a6f9441cc9a45458da8a5ef87844a329fc6d80808514ec",
+    "01_Repository/Glide/CHANGELOG.md": "ecdf7eb3472a13dd7b5f3ebdedfdd9e85655a6526c5119847f8229dfc6d0b772",
+    "01_Repository/Glide/README.md": "35dce945b5e33fea41048cc410d523558dcf03280f6d44340835755b770f06f0",
+    "01_Repository/Glide/docs/00_INDEX.md": "19f413ff4de3e0086a8367b9a48fac749285504fe443379593ea56db3c98e353",
+    "01_Repository/Glide/docs/02_ARCHITECTURE.md": "65e94486373d1df9b6475f5d4ad7cf1c69c08eb92803f32e5a930c3797eb5e41",
+    "01_Repository/Glide/docs/05_QA_TESTPLAN.md": "d86e75a0e4b6a7d4f83c3ccda3cff35ad7cf949caf31d94ede2faae80d8a5881",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md": "bec0cada4ec5758ab11009f302ecbf7788b4731c8a86b6d51b0ba401510e0209",
+    "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md": "d8bd68869aa6b36a8fc38a28f714e3ac24b0d36417295c0c43d1f2e90ae93371",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md": "43c48c0691a95549a6390a9ab3ecf3e68280143ee6ae5947da3765641d893ad8",
+    "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md": "91ce4019f1cd752cb8df44c4948ce80bc594735c8af985212255167bcb721b77",
+    "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md": "8924d5260138a48b04e863336024e5561f5180b1b47cb72630a1d7cd4d4b4529",
+    "CLAUDE.md": "bec8d162e4d465e1ca00cae2b3e33d942abfcc9aaf047c897fff51f17ec6b778"
+  }
+}

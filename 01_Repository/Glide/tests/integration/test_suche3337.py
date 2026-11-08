@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """G14: Inhaltstreffer, Originalziele, echte Eingabe/Enter, Änderungen/Neustart.
 
 --app <Vorversion> erlaubt die Gegenprobe gegen den bisherigen Suchvertrag.

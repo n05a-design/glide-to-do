@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte native Setter und installierte Tcl-Klassenbindungen im eigenen Tk.
 
 Readerstatus wird nur in diesem künstlichen Interpreter für den Scriptvertrag

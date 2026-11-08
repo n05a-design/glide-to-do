@@ -1,0 +1,10 @@
+{
+  "datum": "2026-11-02",
+  "suite": "tests/integration/test_fortsetzung33311.py",
+  "stand": "55d2caf",
+  "python": "3.14.5",
+  "plattform": "darwin",
+  "daten": "suiteeigener temporaerer GLIDE_DATA_DIR",
+  "exitcode": 0,
+  "ergebnis": "P08b lokale Liste/Retry/Autosave/Undo/Reload, Aktions-ID/Editorfokus, U03/U07, WA-36-Listenumfang/Seitenleiste/Erinnerungen; 0 Differenzfaelle"
+}

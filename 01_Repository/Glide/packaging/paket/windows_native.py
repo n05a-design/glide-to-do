@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """PE-Architektur und interne DLL-Abhängigkeiten des nativen Windows-Pakets."""
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import hashlib

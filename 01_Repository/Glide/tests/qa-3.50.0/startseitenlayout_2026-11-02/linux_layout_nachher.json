@@ -1,0 +1,540 @@
+{
+  "configure_events": 35,
+  "widgets": [
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!buttonflow",
+      "count": 2,
+      "cls": "Frame",
+      "size": [
+        286,
+        138
+      ],
+      "requested": [
+        250,
+        138
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label2",
+      "count": 2,
+      "cls": "Label",
+      "size": [
+        286,
+        21
+      ],
+      "requested": [
+        14,
+        21
+      ],
+      "manager": "pack",
+      "text": "Eingeplant",
+      "wrap": 282
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label18",
+      "count": 2,
+      "cls": "Label",
+      "size": [
+        286,
+        61
+      ],
+      "requested": [
+        14,
+        61
+      ],
+      "manager": "pack",
+      "text": "1 eingeplant · 1 offen\n30 min geplant · 3 h 30 min frei von 4 h",
+      "wrap": 282
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label15",
+      "count": 2,
+      "cls": "Label",
+      "size": [
+        286,
+        42
+      ],
+      "requested": [
+        14,
+        42
+      ],
+      "manager": "pack",
+      "text": "Schreibgeschützt · Aufgaben lassen sich öffnen.",
+      "wrap": 282
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19",
+      "count": 2,
+      "cls": "Frame",
+      "size": [
+        286,
+        40
+      ],
+      "requested": [
+        255,
+        40
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label11",
+      "count": 2,
+      "cls": "Label",
+      "size": [
+        286,
+        21
+      ],
+      "requested": [
+        14,
+        21
+      ],
+      "manager": "pack",
+      "text": "An diesem Tag fällig",
+      "wrap": 282
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton27",
+      "count": 2,
+      "cls": "Canvas",
+      "size": [
+        286,
+        40
+      ],
+      "requested": [
+        201,
+        40
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton28",
+      "count": 2,
+      "cls": "Canvas",
+      "size": [
+        286,
+        40
+      ],
+      "requested": [
+        219,
+        40
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton29",
+      "count": 2,
+      "cls": "Canvas",
+      "size": [
+        286,
+        40
+      ],
+      "requested": [
+        187,
+        40
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19.!roundedbutton",
+      "count": 2,
+      "cls": "Canvas",
+      "size": [
+        286,
+        40
+      ],
+      "requested": [
+        255,
+        40
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame",
+      "count": 2,
+      "cls": "Frame",
+      "size": [
+        968,
+        602
+      ],
+      "requested": [
+        873,
+        602
+      ],
+      "manager": "canvas"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer",
+      "count": 2,
+      "cls": "Frame",
+      "size": [
+        322,
+        559
+      ],
+      "requested": [
+        291,
+        559
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!roundedsurface",
+      "count": 2,
+      "cls": "Canvas",
+      "size": [
+        322,
+        559
+      ],
+      "requested": [
+        393,
+        275
+      ],
+      "manager": "place"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame",
+      "count": 2,
+      "cls": "Frame",
+      "size": [
+        286,
+        529
+      ],
+      "requested": [
+        255,
+        529
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!buttonflow.!roundedbutton7",
+      "count": 1,
+      "cls": "Canvas",
+      "size": [
+        77,
+        40
+      ],
+      "requested": [
+        77,
+        40
+      ],
+      "manager": "grid"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame",
+      "count": 1,
+      "cls": "Frame",
+      "size": [
+        968,
+        30
+      ],
+      "requested": [
+        186,
+        30
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3",
+      "count": 1,
+      "cls": "Frame",
+      "size": [
+        968,
+        571
+      ],
+      "requested": [
+        873,
+        571
+      ],
+      "manager": "pack"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame3",
+      "count": 1,
+      "cls": "Frame",
+      "size": [
+        311,
+        1
+      ],
+      "requested": [
+        1,
+        1
+      ],
+      "manager": "grid"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame2",
+      "count": 1,
+      "cls": "Frame",
+      "size": [
+        311,
+        1
+      ],
+      "requested": [
+        1,
+        1
+      ],
+      "manager": "grid"
+    },
+    {
+      "widget": ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame",
+      "count": 1,
+      "cls": "Frame",
+      "size": [
+        322,
+        571
+      ],
+      "requested": [
+        291,
+        571
+      ],
+      "manager": "grid"
+    }
+  ],
+  "recent": [
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!buttonflow",
+      0,
+      32,
+      287,
+      138
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label2",
+      0,
+      174,
+      287,
+      21
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label18",
+      0,
+      198,
+      287,
+      61
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label15",
+      0,
+      265,
+      287,
+      42
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19",
+      0,
+      315,
+      287,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label11",
+      0,
+      367,
+      287,
+      21
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton27",
+      0,
+      394,
+      287,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton28",
+      0,
+      440,
+      287,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton29",
+      0,
+      486,
+      287,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!buttonflow.!roundedbutton7",
+      0,
+      95,
+      77,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19.!roundedbutton",
+      0,
+      0,
+      287,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame",
+      0,
+      0,
+      968,
+      517
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer",
+      0,
+      0,
+      323,
+      559
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame",
+      0,
+      0,
+      968,
+      602
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame",
+      0,
+      572,
+      968,
+      30
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3",
+      0,
+      1,
+      968,
+      571
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame3",
+      657,
+      0,
+      311,
+      1
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame2",
+      334,
+      0,
+      311,
+      1
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame",
+      0,
+      0,
+      322,
+      571
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!roundedsurface",
+      0,
+      0,
+      323,
+      559
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame",
+      18,
+      15,
+      287,
+      529
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer",
+      0,
+      0,
+      322,
+      559
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!roundedsurface",
+      0,
+      0,
+      322,
+      559
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame",
+      18,
+      15,
+      286,
+      529
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label",
+      0,
+      0,
+      286,
+      26
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!buttonflow",
+      0,
+      32,
+      286,
+      138
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label2",
+      0,
+      174,
+      286,
+      21
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label18",
+      0,
+      198,
+      286,
+      61
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label15",
+      0,
+      265,
+      286,
+      42
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19",
+      0,
+      315,
+      286,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!label11",
+      0,
+      367,
+      286,
+      21
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton27",
+      0,
+      394,
+      286,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton28",
+      0,
+      440,
+      286,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!roundedbutton29",
+      0,
+      486,
+      286,
+      40
+    ],
+    [
+      ".!frame.!frame2.!frame.!frame3.!canvas.!frame.!frame3.!frame.!naturalroundedcontainer.!frame.!frame19.!roundedbutton",
+      0,
+      0,
+      286,
+      40
+    ]
+  ]
+}

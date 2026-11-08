@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Vorab- und Abschlussvertrag des nativen Mac-Baulaufs, ohne GUI."""
 import argparse
 from collections import Counter

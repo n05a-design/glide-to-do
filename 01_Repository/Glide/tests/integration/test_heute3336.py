@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.33.6 (D14): „Heute“ und „Demnächst“ – Abschnitte, nächste Aufgabe, Tageswechsel, Modi, Wege."""
 import importlib.machinery
 import importlib.util

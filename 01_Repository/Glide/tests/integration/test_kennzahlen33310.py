@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P09b: Aufbaugrenzen, echte Undo-Bindung, Schrift-/Host- und Tageswechsel.
 
 --app für rote Gegenprobe; --baseline-app für unabhängige 3.33.9-Differenzprobe.

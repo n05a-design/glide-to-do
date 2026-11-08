@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mac-Baulauf vorab prüfen, ohne Laufzeitinstallation, Paketstart oder GUI."""
 import copy
 import hashlib

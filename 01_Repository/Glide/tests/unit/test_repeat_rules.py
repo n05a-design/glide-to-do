@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholungsregeln: Prüfen, Weiterrechnen, Überspringen (KO02) ohne Oberfläche."""
 from datetime import date
 from pathlib import Path

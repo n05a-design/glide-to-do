@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MPL-2.0
 """App-weiter Funktionsdurchlauf.
 
 Prüft nicht einzelne Funktionen, sondern die Wege durch die App: jede Ansicht,

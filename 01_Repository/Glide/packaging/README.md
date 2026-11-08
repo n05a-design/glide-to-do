@@ -1,6 +1,10 @@
 # Paketierung Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+**Lizenz-/Inventarnachtrag 08.11.2026:** Der gemeinsame Paketbauer erzeugt nach Prüfung aller Lizenzbelege zusätzlich `licenses/Glide.cdx.json` als CycloneDX-1.6-Inventar. Es erfasst Komponenten des tatsächlichen Lizenz-/Baubestands, Originalbelege samt SHA-256, die explizit belegte MPL-ID des Projekts und die Baulaufzeit. `sbom.validate_bom` gleicht die gelesene Ausgabe vollständig gegen den eingefrorenen Eingangsbestand ab; die BOM selbst gehört anschließend zu den gehashten Paket-/Startprüfdateien. Lizenzbeleg-Hashes werden ausdrücklich nicht als Binärhashes ausgegeben. Fremde SPDX-IDs und Abhängigkeiten werden nicht geraten.
+
+Der Umfang ist `pre-build`, einschließlich Bauhilfen, und `compositions.aggregate = incomplete`: kein behaupteter vollständiger transitiver Laufzeitgraph. Eine vollständige offizielle JSON-Schemaprobe mit jsonschema 4.26.0 bestand am 08.11.2026 für eine explizite MPL-Modellfixture und die unveränderte historische Mac-Lizenzbasis (23 Komponenten); Schemaquellen/Hashes und Aussagegrenzen im QA-Nachtrag. Dies ersetzt noch keinen neuen nativen Bau mit tatsächlich enthaltenem Inventar. WA-46 ist damit teilweise umgesetzt; die Zuordnung des finalen nativen Paketbestands und vollständige Abhängigkeitsbeziehungen bleiben gesondert zu prüfen.
+
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen](../tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 

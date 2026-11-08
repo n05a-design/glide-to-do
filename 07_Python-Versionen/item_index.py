@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kurzlebige ID-Auflösung für eine zusammenhängende Aktion, ohne Tk.
 
 Der Index hält Originalreferenzen. Nach Ereignis-/Dialoggrenzen, Undo oder

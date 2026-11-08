@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P09b: Datumssemantik, Tageswechsel und strukturierte Kennzahlen ohne Tk."""
 from datetime import date, datetime, timedelta
 import random

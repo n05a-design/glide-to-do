@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.30.0: Werkzeuge und Formate des Zeichenkerns ohne Tk."""
 
 from __future__ import annotations

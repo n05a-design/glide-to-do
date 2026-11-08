@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide-Wiederholung ↔ RRULE (FP-00, A28): gleiche Terminfolge in Glide und RFC-5545-Lesern."""
 import sys
 import unittest

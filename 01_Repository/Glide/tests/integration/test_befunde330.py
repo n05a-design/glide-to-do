@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Befunde der Rückmeldung vom 29.09.2026 (R1–R5, R7–R11, B3).
 
 - R11: Menüeinträge mit „…“ laufen erst nach dem Schließen des Menüs; Dialoge

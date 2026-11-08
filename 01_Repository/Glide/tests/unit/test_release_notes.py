@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Karte „Neu in …“ (N07) ohne Oberfläche."""
 from pathlib import Path
 import sys

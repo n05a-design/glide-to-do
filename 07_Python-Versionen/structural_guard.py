@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Transaktion des Bestandswächters ohne Tk (WA-27, Befund A32).
 
 `ListApp.guarded_structural_change` sichert zu, dass eine Umbauaktion keinen

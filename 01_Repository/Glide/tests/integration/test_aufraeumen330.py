@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aufräumen, Seitenbereich und Galerie (27.09.2026).
 
 - Kopfzeile nur mit Symbolen: ⌘ Aktionen, ✎ Schnellerfassung, ⍾ Benachrichtigungen.

@@ -1,0 +1,13 @@
+{
+  "exitcode": 0,
+  "commit": "6e4cff50c863fe99985886ac7009491f5044aed6",
+  "version": "3.50.0",
+  "archive_sha256": "2130cdd5c389f29ba53d36bb486973d99945352c6406271e6243377e9b5dcd3c",
+  "git_source_files_checked": 134,
+  "package_files_checked": 463,
+  "archive": {
+    "files": 463,
+    "symlinks": 30,
+    "modes_preserved": true
+  }
+}

@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
 
 Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Stabile Kennungen: Gruppen und Editorverhalten ohne Beschriftungsabhängigkeit."""
 from pathlib import Path
 import sys

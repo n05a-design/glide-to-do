@@ -1,0 +1,17 @@
+{
+  "source_app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "test_sha256": "98f48ebf4ae22e9e2556201a7adda755283f90b2c5bf3a464bfa16bdf79d0d9b",
+  "grund": "Alte Mindesthöhe 40 px widerspricht kleineren Titeln und B05-Grundlinie; App unverändert.",
+  "kriterium": "Tatsächliche Unterzeilen-Grundlinie ±2 px, Seitenverhältnis ±0.06, bestehende Flucht-/Farb-/Ansichts-/SVG-/Programmsymbolprüfungen erhalten; Startseite zusätzlich im Ansichtswechsel.",
+  "aktuelle_quelle": {
+    "ok": true,
+    "command": "test_logo330.py",
+    "exitcode": 0
+  },
+  "defektgegenprobe": {
+    "mutante": "Nur isolierte Kopie: Logo per pack um 4 px nach unten versetzt",
+    "erwarteter_exitcode": 1,
+    "befund": "AssertionError: Logo-Grundlinie",
+    "produktionsquelle_unveraendert": true
+  }
+}

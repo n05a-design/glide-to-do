@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Erzeugt den aktiven Showcase mit echten App-APIs in einem temporären Bestand.
 
 Originalbilder: tests/fixtures/showcase/bilder (unveränderte Inhaberdateien).

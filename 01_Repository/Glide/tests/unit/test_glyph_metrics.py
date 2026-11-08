@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten Schrift (B09)."""
 from pathlib import Path
 import sys

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Expliziter Ausgang einer Speicherung, unabhängig von Tk und Dateisystem."""
 from dataclasses import dataclass, replace
 

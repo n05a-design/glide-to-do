@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bildvorschauen für Galerie und Seiten mit den Mitteln von Tk 9 (27.09.2026).
 
 Glide bleibt ohne Bildbibliothek. Was Tk 9 selbst kann, reicht weit:

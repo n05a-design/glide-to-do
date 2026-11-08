@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unprofilierte Messung der Suche (P07): Eingabe in der Palette bis zur gezeichneten Trefferliste.
 
 Legt künstliche Daten an (Standard: 10.000 Punkte in 50 Listen mit

@@ -1,0 +1,17 @@
+{
+  "exitcode": 0,
+  "version": "3.50.0",
+  "resolved_target": "~/Applications/Glide.app",
+  "canonical": "build/macos/Glide.app (lokale Verknüpfung)",
+  "package_files_checked": 463,
+  "archive_modes_verified": true,
+  "local_mode_differences": [
+    {
+      "path": "Contents/Resources/_tk_data/images/pwrdLogo175.gif",
+      "archive_mode": "0o600",
+      "local_mode": "0o700"
+    }
+  ],
+  "signature": "Ad-hoc; aufgelöster Bundlepfad strikt geprüft",
+  "developer_id_and_notarization": "nicht vorhanden"
+}

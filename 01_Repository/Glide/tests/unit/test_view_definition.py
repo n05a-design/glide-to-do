@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import copy
 from datetime import date
 from pathlib import Path

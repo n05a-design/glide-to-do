@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.22: Checkliste, Tabelle, Aktionen, Pinnwand, Startseite und Farbmodi."""
 import copy
 import importlib.machinery

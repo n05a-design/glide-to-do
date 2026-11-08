@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lokaler Sitzungsnachweis und lesende Wiederanlaufprüfung ohne Tk.
 
 Dieser Nachweis ersetzt weder die Datensperre noch eine Sicherung. Ein

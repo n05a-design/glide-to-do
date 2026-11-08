@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bauziele, Header-ABI und echtes Linux-Backend ohne Compiler/GUI prüfen."""
 from pathlib import Path
 import sys

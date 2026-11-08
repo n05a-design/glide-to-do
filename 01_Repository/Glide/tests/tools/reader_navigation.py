@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aufgaben in flachen und durch Abschnittszeilen gegliederten Readerbäumen."""
 
 

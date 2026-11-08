@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Glide mit einem Aufruf prüfen; benötigt ausschließlich die Standardbibliothek.
 
 Schnell: Syntax, Versionen, Dokumentverweise, Fixtures, Zeitzone, alle Integrationssuiten und die Analysen.

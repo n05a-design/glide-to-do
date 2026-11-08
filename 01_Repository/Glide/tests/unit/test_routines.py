@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Routinen in „Heute“ (AU06) ohne Oberfläche."""
 from pathlib import Path
 import sys

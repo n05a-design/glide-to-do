@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Notion-Zuordnungen beim Lesen, Kopieren und Verlegen von Anhängen erhalten."""
 import copy
 import hashlib

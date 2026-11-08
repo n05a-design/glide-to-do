@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gegenproben zur WA-41-Einordnung ohne Last oder echte Speicherverletzung."""
 
 import contextlib

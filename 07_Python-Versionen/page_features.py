@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Live-Listen, Titelbilder und gefüllte Vorlagenvorschauen; ohne Tk (Format 23)."""
 import copy
 from bisect import bisect_left, bisect_right

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-40/47: begrenztes Lesen und Zustände ohne Tk."""
 import io
 import json

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Funktionaler Ausbau der drei bestehenden D57-Pakete ohne Tk."""
 import copy
 from dataclasses import replace

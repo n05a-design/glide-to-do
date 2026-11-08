@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lizenzzuordnung der tatsächlich analysierten Pakete, ohne Tk/Appimport."""
 from pathlib import Path, PurePosixPath
 import re

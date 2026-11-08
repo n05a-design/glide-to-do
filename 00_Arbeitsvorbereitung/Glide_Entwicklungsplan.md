@@ -6,7 +6,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 **Folgelauf #250, 04.11.2026:** Auf `5f99b8fa` ist der native Mac-Paketlauf #31 einschließlich isolierter Startprobe grün. Die Vollmatrix bleibt rot: Linux meldet drei Arbeitsmodi-Befunde (Symbolfläche, Serifenschriftalias, Unterzeilenhöhe), Windows einen Werkzeugumbruch. Kalibrierung unter Linux bestanden. Zweite Reparatur ergänzt explizite Kartenrolle der Symbolfläche, Fontconfig-Schnittnamen, feste Unterzeile und Höhenabgleich nach Werkzeugumbruch. Manueller `ui-nachlauf` prüft alle 45 Arbeitsmodi auf beiden nativen Plattformen in einer eigenen Laufgruppe; die normale Vollmatrix mit Kalibrierung und Pakettor bleibt verpflichtend. [Nachweis und tatsächliche Laufgrenzen](../01_Repository/Glide/tests/qa-3.50.2/ci247_2026-11-03/README.md).
 
@@ -2522,7 +2522,7 @@ Auftrag: vollständiger Abgleich der vorhandenen Dokumentation und von PR #69, b
 | WA-08 und zusätzliche Mehrwerte aus Markt §14/§15 | ◇ Zukunft / ungewählt | Bedarf und Umfang durch Inhaber auswählen; keine neue Featureimplementierung aus Recherche |
 | WA-32/39, WA-36, WA-37/38/40 | ◐ belegte technische Teilabschlüsse, kein vollständiger Architekturabschluss | Rest aus §21.44 bleibt; kein Rewrite im Validierungsauftrag |
 | WA-41A/B | ○ Ursachenfragen offen | Getrennte Diagnosespuren, Originaleingänge/Dumps bewahren; keine zusätzlichen Stress-/Hardwareänderungen |
-| WA-46 | ○ CycloneDX-/SPDX-SBOM-Erzeugungs-/Prüfweg fehlt | Tatsächliche Paketkomponenten inventarisieren; bestehende Hash-/Lizenzlisten sind keine fertige SBOM |
+| WA-46 | ◐ CycloneDX-1.6-Erzeugung und Eingangsprüfung im Paketbauer ergänzt (§21.79); offizieller Schemanachtest grün | Finalen nativen Bestand und vollständige transitive Beziehungen nachweisen; `pre-build`/`incomplete` bleibt bis dahin ausdrücklich |
 | WA-49/50 | ○ Initialisierung/Modulbudget nicht umgesetzt | Technischer Folgeauftrag, keine neue Abhängigkeit oder Architekturentscheidung |
 | I1/I3/I4/I6/I11 | ◐ beziehungsweise ○ nach Gegenstand | Inhaberangaben, öffentliche Signaturen/Notarisierung, professionelle Markenprüfung, native/menschliche Gesamtprüfung und Releasefreigabe bleiben eigene Tore |
 | Reader-Gesamtabnahme | ✕ bewusst bis Bedarf zurückgestellt (D58) | Nur bei dokumentiertem Auslöser reaktivieren; keine grüne Abnahme behaupten |
@@ -2552,6 +2552,24 @@ Der neue Gesamtauftrag hat technische Priorität. Basis `d7e017f001e5c069eeb98a0
 |---|---|---|
 | Sichere Basis und Übernahme | Main geprüft, ursprüngliche OneDrive-Arbeitsdateien nicht verändert; neuer Branch direkt von Main; Systemregister aus #70 erhalten | abgeschlossen, spätere Main-Drift vor PR prüfen |
 | Windows Kopfzeile / Lock-Cleanup | D66-Vertrag sichtbarer Titel weiter prüfen; Exception-sichere Testbereinigung über ExitStack vorbereitet | Gezielte Gegenprobe sowie Vollmodus Exitcode 0 auf finalem Commit |
-| Linux Pinnwandleiste / Kompakt | Aktuelle Originalfehler aus Lauf 42427354033 bestätigt, Ursachenreparatur offen | Native Gegenprobe und vollständige Pflichtmatrix Exitcode 0, keine Abschwächung |
+| Linux Pinnwandleiste / Kompakt | Kompakt auf `11bc6ae` nativ grün; tatsächlicher Leistenbedarf acht Pixel zu breit, konsistente Designtoken in `a4c34b8` repariert; dort neue Pflichtmatrix gestartet | Native Gegenprobe und vollständige Pflichtmatrix Exitcode 0, keine Abschwächung |
 | Lizenz, Marketing, Dokument-/Lieferabgleich | Vorbereitete Änderungen aus §21.77 übernommen; neue Main-Basis und Systemregister nachführen | Nach finalen Reparaturen strenge Grundstufe und echte Lieferprüfungen erneuern |
 | GitHub-Abschluss | Eigener PR gegen Main, kein Merge/Release | Pflichtchecks des tatsächlichen letzten Commits auswerten und Abschlussbericht |
+
+### 21.79 Glide-System als Grundlage für Steps (08.11.2026, D74)
+
+Der Inhaber möchte die bestehende Arbeit für ein Folgeprojekt Steps wiederverwenden: Architektur, Prozesse, Oberfläche/Design/Branding, Daten-/Austauschschutz, Prüfungen/Debugging, Bau, Bewahrung und Übergabe. Umsetzung dieses Auftrags ist der bestehende [Glide-System-Katalog](../01_Repository/Glide/src/glide/README.md), keine weitere Roadmap und kein neues Projekt. Technische Systemfähigkeiten sind direkt in dessen Featureübersicht aufgenommen (F128–F147); 25 Bestandspakete und der Übernahmevertrag benennen Abhängigkeiten, Produktkopplungen und neue Abnahmekriterien.
+
+| Gegenstand | Belegter Status | Rest / Abschlusskriterium |
+|---|---|---|
+| System-/Featureübersicht | ◐ 94 Quellmodule, 147 Featureeinträge, 25 Bestandspakete; Systemversion 1.3 vorbereitet; Bestands-/Zählprüfung fünf Fälle grün | Mit endgültigem Commit und neuer Grundstufe sichern; keine unabhängige Framework-Freigabe |
+| Steps-Übergabe | ◐ Übernahmefolge mit eigener Identität, Daten-/Cache-/Lock-/Quellpfaden, Paketauswahl und Schutz-/Prüfwegen dokumentiert | Tatsächliche Abzweigung erst im Folgeauftrag; Produktumfang/Markenidentität und Zielplattformen dort konkret festlegen |
+| Öffentlicher Text | ◐ Beta-/Erstversionswerbung und allgemeine Versionsbotschaften aus README/aktiven Standzeilen/Release-Erzeuger entfernt; „Projekte“ vereinheitlicht; genehmigte 15 Topics gesetzt und zurückgelesen | Quelltexte über PR; kein direkter Main-Merge. Technische Versionen und datierte Historie bleiben |
+| MPL-Integration | ◐ 445 Bestandsdateien und zwei neue eigene Prüfwerkzeuge mit SPDX-Hinweis, Lizenz-/Appversion getrennt; Original-Gitbytes, Versions-Dirtyguard und Lizenzprüfung ergänzt | Finale Liefer-/Paketprüfung auf gesichertem erreichbarem Commit; Beitrags-/Markenrechte nicht erfunden |
+| Historische Belege | ✓ 225 Main-Dateien wiederhergestellt, Git-Blobs identisch; QA-Erststand und Referenzfixture gegen Alterskürzung geschützt; 13 Ablageregeltests grün | Keine weitere Bereinigung im Audit; historische Zahlen/Originalrot erhalten |
+| Performance / WA-36 | ◐ Neue Messpunkte auf `a4c34b8`, Python 3.14.7/Tk 9.1, 1.000/10.000 künstliche Aufgaben und Ansichten; langsame Wechsel und Tk-/Layoutkosten belegt | Begrenzte Render-/Refreshoptimierung nur mit identischem unprofiliertem Vergleich und UI-/Fehler-/Undo-Nachweis; kein zugesagter Gewinn |
+| Entkopplung / WA-32/39/49/50 | ◐ 88/94 Quellen ohne direkten Tkinter-Import; Hauptintegration weiterhin 1.863 `ListApp`-Methoden im Reparaturstand | Imports, Modell-/Pfad-/Aktionseigentum und Host-Lebensdauer pro gewähltem Paket neutralisieren; keine ungefragte Großzerlegung |
+| Native Mac-Nachprüfung | ▶ Vollmodus auf `a4c34b8` erreicht Geometriefehler 960 angefordert / 700 erhalten | Prüfrunner-Modus mit aktuellem Werkzeug nativ nachweisen, danach unveränderte volle Assertions; alter Symbolbefund noch nicht erreicht |
+| Gesamtabschluss | ▶ PR #71, strenge Grundstufe auf `a4c34b8` 19/19; Linux-/Windows-Endmatrix weiter offen | Finale Pflichtmatrix, Lieferstand und tatsächliche Restentscheidungen auf letztem Commit; kein Merge/Release |
+
+WA-41A/B bleiben getrennte ungeklärte Ursachenfragen. **WA-46 jetzt ◐:** Der gemeinsame Paketbauer erzeugt ein CycloneDX-1.6-Inventar aus dem geprüften Lizenz-/Baubestand und prüft es gegen seine Eingänge; vier Fehler-/Drift-/Bestandsproben grün. Vollständige offizielle JSON-Schemaprobe für Modellfixture und historische Mac-Basis (23 Komponenten) grün. Finaler nativer Bestand und vollständige transitive Beziehungen bleiben offen; `pre-build`/`incomplete` vermeidet eine unbewiesene Vollständigkeitsbehauptung. Physische DPI-/Mehrmonitor- und menschliche Gesamtprüfung sowie I1/I3/I4/I11 behalten ihre eigenen Tore. Bestehende ungewählte Produktideen werden durch die Systemaufbereitung nicht zu Steps- oder Glide-Funktionen erklärt.

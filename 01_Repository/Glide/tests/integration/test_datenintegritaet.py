@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MPL-2.0
 """Datenintegritaet: Umbauaktionen duerfen keinen Punkt verlieren.
 
 Der Schwerpunkt liegt auf der Gruppenfunktion, weil dort ein Datenverlust

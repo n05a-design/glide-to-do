@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Windows-Vollprüfung in der Windows-Sandbox: Prüffenster auf dem zweiten Bildschirm (seit 23.10.2026).
 
 Unter Windows holen sich die Prüffenster den Vordergrund, nehmen Tastatur und

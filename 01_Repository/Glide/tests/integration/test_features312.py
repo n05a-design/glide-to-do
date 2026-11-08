@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """„Mein Tag“ seit 3.22: eine Ansicht über den Bearbeitungstag."""
 import copy
 import importlib.machinery

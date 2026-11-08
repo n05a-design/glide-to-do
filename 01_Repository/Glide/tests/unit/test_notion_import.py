@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gesamte Übernahmeplanung mit den echten Glide-Datenkonstruktoren, ohne Tk."""
 import copy
 import hashlib

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Größenbudget und Speicherzustand ohne Tk (WA-40/WA-47)."""
 import json
 import os

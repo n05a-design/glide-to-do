@@ -1,0 +1,124 @@
+[
+  {
+    "design": "light",
+    "kind": "list",
+    "own_icon": true,
+    "column": [
+      0,
+      194
+    ],
+    "image": [
+      23,
+      46
+    ],
+    "text_start": 47,
+    "shown": "Neue Seite mit eige…",
+    "gap": 8
+  },
+  {
+    "design": "light",
+    "kind": "list",
+    "own_icon": false,
+    "column": [
+      0,
+      194
+    ],
+    "image": null,
+    "text_start": 23,
+    "shown": "Ohne Symbol",
+    "gap": null
+  },
+  {
+    "design": "light",
+    "kind": "folder",
+    "own_icon": true,
+    "column": [
+      0,
+      194
+    ],
+    "image": [
+      23,
+      46
+    ],
+    "text_start": 47,
+    "shown": "Ordner mit eigenem…",
+    "gap": 8
+  },
+  {
+    "design": "light",
+    "kind": "list",
+    "own_icon": true,
+    "column": [
+      12,
+      182
+    ],
+    "image": [
+      35,
+      58
+    ],
+    "text_start": 59,
+    "shown": "Neue Seite mit eig…",
+    "gap": 8
+  },
+  {
+    "design": "dark",
+    "kind": "list",
+    "own_icon": true,
+    "column": [
+      0,
+      194
+    ],
+    "image": [
+      23,
+      46
+    ],
+    "text_start": 47,
+    "shown": "Neue Seite mit eige…",
+    "gap": 8
+  },
+  {
+    "design": "dark",
+    "kind": "list",
+    "own_icon": false,
+    "column": [
+      0,
+      194
+    ],
+    "image": null,
+    "text_start": 23,
+    "shown": "Ohne Symbol",
+    "gap": null
+  },
+  {
+    "design": "dark",
+    "kind": "folder",
+    "own_icon": true,
+    "column": [
+      0,
+      194
+    ],
+    "image": [
+      23,
+      46
+    ],
+    "text_start": 47,
+    "shown": "Ordner mit eigenem…",
+    "gap": 8
+  },
+  {
+    "design": "dark",
+    "kind": "list",
+    "own_icon": true,
+    "column": [
+      12,
+      182
+    ],
+    "image": [
+      35,
+      58
+    ],
+    "text_start": 59,
+    "shown": "Neue Seite mit eig…",
+    "gap": 8
+  }
+]

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kontrast: jeder dargestellte Text in jedem Design erreicht WCAG 2.2 AA.
 
 Grenzen: 4,5:1 für normale Schrift, 3:1 für große (ab 18 pt oder 14 pt fett).

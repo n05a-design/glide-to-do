@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kurze, unterbrechbare Übergänge; Uhr und Zeitplanung werden injiziert."""
 from dataclasses import dataclass
 from time import monotonic

@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -89,7 +89,7 @@ Ein öffentlicher GitHub-Release mit allgemeinem Vertriebsversprechen ist von ei
 
 Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber (D64); das berührt I11 (öffentlicher Auftritt), I2 (MPL-2.0 beschlossen; aktuelle Paket-/Quellhinweise prüfen) und, solange unsigniert, I3. Prüfschritte vor dem Veröffentlichen: Block „Release-Entwurf prüfen“ der [manuellen Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#e-nur-durch-den-inhaber). Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
 
-**Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des 3.50-Abschlusses. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
+**Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des aktuellen Projektabgleichs. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
 
 <a id="lizenzentwurf"></a>
 
@@ -125,15 +125,15 @@ Nach der Bestätigung: Produktregister mit Datum nachführen, Sicherheitskontakt
 
 ## Produktkommunikation
 
-**Verbindliche Richtung (D72):** Glide ist ein Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Die im Auftrag genannte Langfassung mit „Lokaler“ wird entsprechend der konkreten Branding-No-Gos in der öffentlichen Kurzfassung ohne dieses Attribut verwendet. Datenhaltung bleibt eine technische Produkteigenschaft. „Privat“, „ruhig“, Sprachzugehörigkeit und Fachbegriffe zur Nutzungsdatenerfassung sind keine Leitbotschaften. Speicherung wird positiv erklärt: Inhalte werden gespeichert und mit Sicherungen/Exporten aufbewahrt.
+**Verbindliche Richtung (D72/D74):** Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Projekte werden mit den vorhandenen Ordnern, Listen, Seiten und Verknüpfungen organisiert; ein zusätzlicher Projektdatentyp wird damit nicht behauptet. Datenhaltung bleibt eine technische Produkteigenschaft. „Privat“, „ruhig“, Sprachzugehörigkeit und Fachbegriffe zur Nutzungsdatenerfassung sind keine Leitbotschaften. Speicherung wird positiv erklärt: Inhalte werden gespeichert und mit Sicherungen/Exporten aufbewahrt. Auf Inhaberauftrag vom 08.11.2026 entfallen aktive Beta-/Erstversionswerbung und allgemeine Versionsserienbotschaften; technische Versions-/Paketzuordnung und datierte historische Nachweise bleiben erhalten.
 
 | Fundstelle | Text / Regel |
 |---|---|
 | Produktname / Kategorie | **Glide – Desktop-Planer** |
-| Hauptbeschreibung | **Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.** |
+| Hauptbeschreibung | **Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.** |
 | Kurze Unterzeile | Aufgaben planen. Ideen verbinden. Selbst gestalten. |
 | Ein Satz | Glide verbindet deine Aufgaben und Tagesplanung mit Seiten, Pinnwänden und eigenen Pixel-Zeichnungen. |
-| GitHub-Beschreibung, freigegeben und gesetzt | Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde Aufgaben mit Seiten und Notizen und gestalte deine Ideen. |
+| GitHub-Beschreibung, freigegeben und gesetzt | Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde Aufgaben mit Seiten und Notizen und gestalte deine Ideen. |
 | Englische Kurzfassung | Desktop planner for tasks, day planning, pinboards and pixel drawings. Connect tasks with pages and notes and create your own visual material. |
 | Ausführliche Beschreibung | Glide verbindet Aufgaben und Tagesplanung mit Seiten, Notizen und Pinnwänden. Du kannst denselben Aufgabenbestand in verschiedenen Ansichten bearbeiten, Aufwand und verfügbare Zeit gegenüberstellen und Vorschläge vor dem Übernehmen prüfen. In der Pixel-Werkstatt entstehen eigene Zeichnungen, Symbole und Bildfolgen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert; automatische Sicherungen und lesbare Exporte unterstützen die Weiterarbeit. |
 | Nutzen und Priorität | 1. Aufgaben im Kontext bearbeiten. 2. Den eigenen Tag planen. 3. Ideen sichtbar verbinden. 4. Eigene Zeichnungen weiterverwenden. 5. Arbeit aufbewahren und exportieren. |

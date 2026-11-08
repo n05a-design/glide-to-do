@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.12
+# SPDX-License-Identifier: MPL-2.0
 """Statische Analyse des Quelltexts – Befundliste ohne Ausführung.
 
 Erster von zwei Wegen. Dieser hier liest den Syntaxbaum und fragt: Was ist

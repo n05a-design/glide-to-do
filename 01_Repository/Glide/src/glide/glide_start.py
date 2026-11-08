@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Schnellstart für Glide: lädt die App als Modul und nutzt den Bytecode-Cache.
 
 Python übersetzt ein direkt gestartetes Skript bei jedem Start neu – bei Glide

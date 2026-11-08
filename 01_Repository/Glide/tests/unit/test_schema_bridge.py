@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte Bestandsnormalisierung ohne Tk-Fenster; nur künstliche Daten."""
 import copy
 import contextlib

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 from types import SimpleNamespace
 import sys
 from pathlib import Path

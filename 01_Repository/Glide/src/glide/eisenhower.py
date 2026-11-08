@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eisenhower-Einordnung ohne Tk (G02, Entscheidung D13).
 
 Keine eigene Ansicht, sondern eine Gruppierung „Dringlichkeit × Wichtigkeit“

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte native NSAccessibility-Getter/Aktionen im eigenen Tk-Prüfprozess.
 
 Kein Zugriff auf die Desktop-AX-Struktur oder fremde Prozesse. Ein grün

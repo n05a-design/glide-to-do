@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Atomarer Versionsschreibweg und begrenzte Aufbewahrung ohne Git-Indexänderung."""
 import ast
 import importlib.util

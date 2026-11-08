@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """UI-/UX-Feature-Paket vom 15.10.2026 (B01–B19): echte Tk-Wege mit künstlichen Daten.
 
 Jeder Fall prüft eine Abnahme aus `00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`

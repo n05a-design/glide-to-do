@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mac-Paketworkflow: Shell/Python-Syntax und begrenzte CI-Vertrauensgrenzen."""
 import ast
 import os
@@ -74,7 +75,7 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 7)
+        self.assertEqual(len(blocks), 8)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
@@ -86,9 +87,13 @@ class MacWorkflowTests(unittest.TestCase):
         self.assertRegex(self.source, r"vollpruefung:\n\s+description:.*\n\s+type: boolean\n\s+default: false")
         step = self.source.split("- name: Vollständige native macOS-Prüfung", 1)[1].split("      - name:", 1)[0]
         self.assertIn("github.event_name == 'workflow_dispatch' && inputs.vollpruefung", step)
-        self.assertIn('"$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll', step)
+        self.assertIn('"$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll --vordergrund', step)
+        self.assertIn('tests/tools/macos_desktop.py --breite 1920 --hoehe 1080', step)
+        self.assertIn('${{ runner.temp }}/glide-macos-desktop.json', self.source)
         self.assertIn('--protokoll "$RUNNER_TEMP/glide-macos-voll" --timeout 900', step)
         self.assertNotIn("continue-on-error", self.source)
+        self.assertIn("tests/integration/test_bedienung33316.py", self.source)
+        self.assertIn("steps.runtime_bau.outcome == 'success'", step)
         self.assertIn("${{ runner.temp }}/glide-macos-voll", self.source)
         self.assertLess(self.source.index("PYTHONPATH=%s"), self.source.index("- name: Vollständige native macOS-Prüfung"))
 

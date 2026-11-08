@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Sicherungsstände vergleichen (F-03) ohne Oberfläche und ohne Dateien."""
 import copy
 from pathlib import Path

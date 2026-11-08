@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """CI-Grundstufe (D09): schnelle Prüfungen, die auch unter Linux verlässlich gelten.
 
 Aufruf aus `01_Repository/Glide`:

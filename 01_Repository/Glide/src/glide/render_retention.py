@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lebensdauer und Abgleich wiederverwendbarer Ansichtsbausteine, ohne Tk.
 
 Fabriken und Widgets werden vom Aufrufer übergeben. Daten werden nach Inhalt

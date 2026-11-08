@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Windows-Lizenzherkunft: echte native Version statt bloßer Wortsuche."""
 from pathlib import Path
 import sys

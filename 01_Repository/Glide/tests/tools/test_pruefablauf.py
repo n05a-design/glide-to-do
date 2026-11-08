@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-42: echte kleine Kindprozesse; keine Glide-/Last-/Nutzerdatenprüfung."""
 import contextlib
 import io

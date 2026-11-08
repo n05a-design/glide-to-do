@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Planung: Datenmigration, gemeinsame Aktionen, Dialoge und Austausch."""
 import copy
 import csv

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aktive Typen und tatsächlichen Ablageort ohne erfundene Importherkunft bestimmen."""
 from pathlib import Path
 import sys

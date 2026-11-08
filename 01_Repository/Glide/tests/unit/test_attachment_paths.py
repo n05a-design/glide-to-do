@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import unittest
 from attachment_paths import validate_storage, storage_key
 import attachment_paths as paths

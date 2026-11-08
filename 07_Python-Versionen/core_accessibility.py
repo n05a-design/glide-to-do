@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Semantik des Aufgaben-Kernablaufs; Widgetadapter ohne Tk-Import."""
 from accessibility import Attributes, plain, task_value
 from accessibility_bindings import Binding, available

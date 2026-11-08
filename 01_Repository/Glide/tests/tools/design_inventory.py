@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """OB01: statische Abstandsbestandsaufnahme der Hauptansichten (keine Tk-Imports).
 
 Zählt Abstandsausdrücke und unterschiedliche auflösbare Werte. Direkte

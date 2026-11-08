@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Archivübernahme durch tatsächliche App-Speicher-/Undo-Wege, ohne Tk."""
 import copy
 import hashlib

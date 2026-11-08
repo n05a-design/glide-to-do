@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-02/1: unabhängige Referenztabellen, Formularvertrag und Vorschau."""
 import copy
 from datetime import date

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Regressionen aus den 14 UI-Rückmeldungen; ausschließlich isolierte Daten.
 
 Prüft echte Widgetgeometrie, Theme-Wechsel, Hover, Navigation und Hauptphasen.

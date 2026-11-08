@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.29.0: Zeichnung als eigene Listenart im produktiven Bestand (Format 19)."""
 import copy
 import importlib.machinery

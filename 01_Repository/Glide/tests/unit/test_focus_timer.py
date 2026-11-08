@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Pausen, Neustart, Rundung und Wiederaufnahme vorbereiteter Zeitbuchungen."""
 from datetime import datetime, timedelta, timezone
 from pathlib import Path

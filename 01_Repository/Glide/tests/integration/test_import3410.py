@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Notion und Einzelrestore: echte Vorschauen, Auswahl, Speicherung und Altleser."""
 import argparse
 import copy

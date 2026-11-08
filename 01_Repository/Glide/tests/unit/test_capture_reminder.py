@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Erinnerung in der Schnelleingabe (KO03) ohne Oberfläche."""
 from datetime import date
 from pathlib import Path

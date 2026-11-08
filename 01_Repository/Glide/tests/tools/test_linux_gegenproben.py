@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Werkzeugtests für die Linux-Defektgegenproben; keine App, keine Nutzerdaten."""
 
 from pathlib import Path

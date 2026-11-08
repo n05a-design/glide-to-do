@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Inhaltssuche ohne Tk, Datei-I/O oder dauerhaften Index (G14, erste Stufe)."""
 
 

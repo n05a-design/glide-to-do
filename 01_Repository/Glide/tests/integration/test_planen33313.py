@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """KO01/AU02: echte Menüs/Kürzel, mehrere Quellen, Undo und Kapazitätsanzeigen.
 
 --observe dokumentiert die Vorversion ohne neue Anforderungen. Bilder erfassen

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Stilzuordnung, Vorgabe und Kompatibilität ohne Tk oder Nutzdaten."""
 import unittest
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Seitenleiste vom 29.09.2026: Einklappen, Bereich „Notizen“, Ordner in allen Bereichen.
 
 - Ein Ordner mit der geöffneten Liste bleibt zu, wenn die Seitenleiste neu

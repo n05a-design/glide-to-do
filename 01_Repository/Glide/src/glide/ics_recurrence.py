@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Begrenzte übliche iCalendar-Serien nach RFC 5545 §3.3.10, ohne Tk.
 
 Tägliche, wöchentliche, monatliche und jährliche Datumsfolgen. Der Aufrufer

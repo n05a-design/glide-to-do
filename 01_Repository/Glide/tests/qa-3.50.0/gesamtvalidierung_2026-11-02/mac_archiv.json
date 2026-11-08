@@ -1,0 +1,17 @@
+{
+  "version": "3.50.0",
+  "app_source_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "archive": "build/macos/Kandidaten/Glide-3.50.0-validierung-20261102-macos-arm64.tar.gz",
+  "sha256": "cb347fac7b380b8034b43191136970ada72e5384b03e025f10d6965afc01ee21",
+  "validation": {
+    "files": 463,
+    "symlinks": 30,
+    "modes_preserved": true
+  },
+  "public_archive_unchanged": true,
+  "public_archive_sha256": "eca6548e82e0a47578df58892948d6439af35ef12a3f863b4bd62dda5262e200",
+  "native_build_proof": "../werkzeugzeile_2026-11-02/mac_bau.json",
+  "native_start_proof": "mac_start_installiert.json",
+  "release": false,
+  "signature": "Ad-hoc; Developer-ID/Notarisierung offen"
+}

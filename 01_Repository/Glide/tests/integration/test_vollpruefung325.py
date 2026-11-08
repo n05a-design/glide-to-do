@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Breitenprüfung: jede Ansicht, jedes Design, jede Menüaktion, jede Kachel.
 
 Punkt 1 (5. Prüfung, 3.25.0): „Die Dauer ist mir egal, ich möchte, dass alles

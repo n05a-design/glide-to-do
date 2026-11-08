@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Künstliche Notion-Archive: keine echten Exportinhalte und kein Dateiextrahieren."""
 import io
 import stat

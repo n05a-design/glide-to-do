@@ -1,5 +1,11 @@
 # Funktionen – Glide
 
+## Technische Grundlage für Folgeprojekte
+
+Glide enthält neben seinen sichtbaren Produktfunktionen wiederverwendbare Systemfähigkeiten. Sie stehen direkt in der [Featureübersicht des Glide-Systems, F128–F147](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte): Speicher-/Commitsteuerung, Schreibbesitz, Wiederanlauf und Sicherungen; Format-/Eingabevalidierung und Settings-Kompatibilität; Quellzuordnung und Reimport; Widget-/Callback-Lebensdauer; Logo-/Rastererzeugung und Medienworker; begrenzte Rendering-Caches; Diagnostik und isolierte Prüfungen mit Integritätswächter; native CI-, Bau-, Lizenz- und Liefernachweise; versionierte Systempflege, Bewahrung, Runtimeprüfung sowie Architektur-/Design-/Übergabeverträge.
+
+Die vollständige Modul-/Paketzuordnung wird ausschließlich im Glide-System gepflegt. Der dortige [Steps-Übernahmevertrag](../src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte) nennt Abhängigkeiten, Produktkopplungen und notwendige neue Prüfungen. Das ist vorhandener Bestand und Auswahlmaterial für Steps; es wurden weder neue App-Funktionen noch ein unabhängiges Framework oder Steps-Repository erstellt. Bestehende Light-/Dark-Designs, Themenfarben, responsive Fenster, Haupt-/Nebenansicht und Import-/Exportwege bleiben mit ihren aktuellen Bedienverträgen weiter unten beschrieben.
+
 **Titelabgleich 06.11.2026:** Neue Titel und tatsächliches Umbenennen bleiben auf 40 Zeichen begrenzt. Das gilt auch für vollständige Vorlagenpayloads, ausdrücklich neue Duplikate einschließlich Unteraufgaben, Vorlagenimport, manuell vergebene Galeriebildtitel und eigene Austauschaufträge. Automatisch gekürzte Aufgaben-/Vorlagen-/Galerietitel sichern das vollständige Original in Beschreibung bzw. Notiz, auch über erneutes Speichern/Laden. Bestehende unveränderte Titel, reine Metadatenänderungen, Sicherungswiederherstellung und Export erhalten ihre Originale. Eingabefelder und Speichereinstiege sichern dieselbe Regel; geänderte zu lange Auftragstitel werden mit Hinweis abgelehnt.
 
 ## Abnahmekorrekturen und Suchfelder 3.50.5 (05.11.2026)
@@ -591,7 +597,7 @@ Unter X11 und macOS (`aqua`) belegt Tk Strg+A/B/E/F/N/P, mit Umschalt erweiternd
 
 ## Produktbeschreibung und Softwarelizenz
 
-Die öffentliche Beschreibung lautet „Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen“; „Über Glide“ zeigt sie zusammen mit `MPL-2.0` und dem Quellcodebezug. Technische Produktkennungen bleiben unverändert. Textvarianten und Weitergabebedingungen stehen in [Veröffentlichung](10_VEROEFFENTLICHUNG.md#produktkommunikation), konkrete Prüfstände in [QA](07_QA_BERICHT.md).
+Die öffentliche Beschreibung lautet „Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen“; „Über Glide“ zeigt sie zusammen mit `MPL-2.0` und dem Quellcodebezug. Technische Produktkennungen bleiben unverändert. Textvarianten und Weitergabebedingungen stehen in [Veröffentlichung](10_VEROEFFENTLICHUNG.md#produktkommunikation), konkrete Prüfstände in [QA](07_QA_BERICHT.md).
 
 **Anhangskorrekturen im letzten Stand von PR #69 (`be379408`):** Größe und erstes MiB wählen nur Dublettenkandidaten; erst der vollständige Bytevergleich verwirft eine Datei. Bestandsumbenennungen schreiben vor dem Entfernen der Originale eine dauerhafte Zuordnung in `anhang_umbenennungen.json`. Die Seitenwiederherstellung kann darüber ältere Speicherpfade auflösen. Ohne erfolgreich gespeicherte Zuordnung bleiben Originaldateien erhalten. Pflicht: `test_attachment_paths`, Arbeitsmodi `anhangsnamen`. Diese Korrekturen liegen nach dem früheren nativen Mac-Paketbau und brauchen deshalb ihren eigenen Prüf-/Lieferbezug.
 

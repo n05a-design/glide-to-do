@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Zuordnung und Inhaltsgrenzen der vier Seitenleistenbereiche, ohne Tk."""
 SECTIONS = ('pages', 'lists', 'notes', 'drawings')
 TITLES = dict(zip(SECTIONS, ('Seiten', 'Listen', 'Notizen', 'Zeichnungen')))

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gemeinsamer Ladeweg für die Analysewerkzeuge vom 01.10.2026.
 
 Isoliert jede Probe in einem temporären Datenordner, *bevor* Glide importiert

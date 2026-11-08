@@ -1,5 +1,16 @@
 # Änderungsverlauf
 
+## System-, Lizenz- und Übergabenachtrag 08.11.2026
+
+- Glide-System eigenständig auf 1.3 erweitert: technische Systemfähigkeiten direkt in der Featureübersicht, 25 Bestandspakete, Schritte zur Übernahme für Steps und konkrete Kopplungs-/Prüfgrenzen. Bestehende Fach- und UI-Funktionen bleiben erhalten.
+- Eigene aktive Python-Quellen, Tests und Bau-/Pflegewerkzeuge mit MPL-SPDX-Dateihinweis; Lizenz-ID und App-Version im Paketerzeuger getrennt, Original-Gitbytes und ungesicherte Versionsänderungen abgesichert. Fremdcode und historische Nachweise behalten ihren Originalbestand.
+- Geprüfter Lizenz-/Baubestand wird zusätzlich als CycloneDX-1.6-Datei erzeugt, mit den Eingängen abgeglichen und in Paket-/Startprüfsummen aufgenommen; Umfang ausdrücklich pre-build/incomplete.
+- Mac-CI erhält ein begrenztes natives Bildschirmmodus-Werkzeug, das den Modus während der Kindprüfung hält, persönliche Rechner abweist und die Rücksetzung protokolliert. Native Bestätigung ausstehend.
+- Öffentliche Beschreibung mit Projekten vereinheitlicht; aktive Beta-/Erstversionswerbung und allgemeine Versionsbotschaften aus README/Erzeugern entfernt. Historische und technische Versionsbelege bleiben.
+- Standprüfung prüft für die beiden öffentlichen README-Einstiege alternativ Datum plus maßgeblichen VERSION-Verweis nach D74; fehlende/falsche Verweise und ausdrücklich alte Angaben bleiben durch Regressionen abgesichert.
+- Vorbereitete Alterskürzung zurückgenommen: 225 historische Main-Dateien mit identischen Git-Blobs bewahrt; konkreter QA-Erststand und Referenzfixture geschützt.
+- Neue Performance-Baseline für 1.000/10.000 synthetische Aufgaben und Ansichtswechsel dokumentiert; keine unbewiesene Beschleunigung oder Framework-Freigabe abgeleitet.
+
 ## Reparaturnachtrag 08.11.2026
 
 - Hauptfenster räumt beim tatsächlichen Root-Ende auch während des Kindabbaus neu angelegte Tcl-Aufträge auf; Unterfenster und fremde Interpreter bleiben aktiv. Neuer Regressionstest mit roter Gegenprobe.

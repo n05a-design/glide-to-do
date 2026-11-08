@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gleicht 07_Python-Versionen mit src/glide ab – ohne zu löschen – und prüft SHA-256.
 
 Aufruf: python3 scripts/pflege/abgleich_07.py

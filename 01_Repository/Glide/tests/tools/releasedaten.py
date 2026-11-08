@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Erzeugt und prüft die drei Arbeitslisten zur Releaseplanung von Glide.
 
 Aufruf: python tests/tools/releasedaten.py [--ziel PFAD] [--stichtag JJJJ-MM-TT]

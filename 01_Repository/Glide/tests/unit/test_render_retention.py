@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Differenzabgleich erhält Fokusziele und ersetzt veraltete Aktionen."""
 from pathlib import Path
 import sys

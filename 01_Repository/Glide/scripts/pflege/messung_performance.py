@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unprofilierter Vorher/Nachher-Vergleich mit identischen, isolierten Inhalten.
 
 --app erlaubt einen gesicherten Quellstand; --items auch 1000 oder 10000 Punkte.

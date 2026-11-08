@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Windows-Sandbox-Lauf (23.10.2026): Einfrieren, Konfiguration, Startskript, Bildschirmwahl.
 
 Die Windows-Schritte selbst (Sandbox starten, Fenster legen) brauchen echtes

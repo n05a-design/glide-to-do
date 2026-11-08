@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Quellwechsel, veraltete Ergebnisse und echte Arbeit ohne Tk-Hauptthread."""
 from datetime import date, timezone, timedelta
 from pathlib import Path

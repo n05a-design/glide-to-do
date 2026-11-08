@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lokale ICS-Belegzeiten ohne Aufgabenimport, Tk oder Datenmutation.
 
 RFC 5545 §§3.3.5/3.3.6/3.6.1/3.8.5: halb offene Enden, nominale

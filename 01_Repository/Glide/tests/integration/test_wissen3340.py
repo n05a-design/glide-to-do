@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Wissen und Seiten 3.34.0: B4, G14h, D-03, H-02r und N08 über echte Einstiege.
 
 B4: Bilder auf aufeinanderfolgenden Absätzen überlappen in keiner Umflusskombination;

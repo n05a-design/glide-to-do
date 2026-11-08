@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Prüfung auf Bedienelemente im Systemaltstil (D66, menschliche Abnahme 07.11.2026).
 
 Anlass: In der Live-Liste einer Seite stand noch eine native `ttk.Scrollbar`,

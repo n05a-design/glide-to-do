@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholte Prüf- und Messaufrufe je Bedienschritt zählen und Einsparung abschätzen.
 
 Aufruf (aus diesem Ordner):

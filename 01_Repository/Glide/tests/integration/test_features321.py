@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kalenderimport: Parser, Abbildung, Zeitzonen, Regeln, Duplikate, Ziele, Dialog."""
 import copy
 import importlib.machinery

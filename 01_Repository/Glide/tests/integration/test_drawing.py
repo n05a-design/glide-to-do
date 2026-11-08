@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Isolierte Vertragstests für das Zeichenmodell und Glide-SVG."""
 
 from __future__ import annotations

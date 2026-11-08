@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Quellenbindung durch tatsächliche portable Sicherungen/Restore, ohne Tk."""
 import copy
 import hashlib

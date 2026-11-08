@@ -10,7 +10,7 @@
 # grüner Vollmatrix und eigener Abnahme von Hand frei (D43, Tore I2/I3/I11).
 # Beide Pakete bleiben unsignierte Entwicklungsbauten (Mac nur Ad-hoc-Signatur).
 #
-# Auslösen:  git tag v3.50.5 <commit-auf-main> && git push origin v3.50.5
+# Auslösen ausschließlich nach Inhaberfreigabe: git tag v<VERSION> <commit-auf-main>
 # Erneut:    Actions › Glide-Release-Entwurf › Run workflow, Tag als Ref wählen.
 #            Ein vorhandener Entwurf wird ersetzt, ein veröffentlichter Release nie.
 name: Glide-Release-Entwurf
@@ -148,13 +148,13 @@ jobs:
           esac
           {
             printf '> **Entwurf – Prüfstand:** %s\n> Commit `%s`. Diesen Kasten vor dem Veröffentlichen entfernen.\n\n' "$stand" "$GITHUB_SHA"
-            printf '**Beta zum Testen.** Beide Pakete sind unsignierte Entwicklungsbauten und brauchen kein installiertes Python.\n\n'
+            printf '**Entwicklungsbauten.** Beide Pakete sind unsigniert und brauchen kein installiertes Python.\n\n'
             printf '## Herunterladen und starten\n\n'
             printf '| System | Datei | Start |\n|---|---|---|\n'
             printf '| Windows 10/11 (x64) | `Glide-%s-windows-x64.zip` | Entpacken, `Glide\\Glide.exe` starten. SmartScreen warnt, weil das Paket nicht signiert ist: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
             printf '| macOS (Apple Silicon) | `Glide-%s-macos-arm64.dmg` | Öffnen, Glide in „Programme“ ziehen. Beim ersten Start blockiert macOS die nicht notarisierte App: „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“. |\n\n' "$VERSION"
             printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
-            printf 'Glide verbindet Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert. Prüfstand und Grenzen: [QA-Bericht](https://github.com/%s/blob/%s/01_Repository/Glide/docs/07_QA_BERICHT.md).\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
+            printf 'Glide verbindet Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert. Prüfstand und Grenzen: [QA-Bericht](https://github.com/%s/blob/%s/01_Repository/Glide/docs/07_QA_BERICHT.md).\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '**Lizenz:** Glides Projektcode steht unter MPL-2.0, einschließlich kommerzieller Nutzung nach deren Bedingungen. Es gelten die [Lizenzhinweise](https://github.com/%s/blob/%s/01_Repository/Glide/LICENSE.md), die jedem Paket als `Glide-Lizenzstatus.md` zusammen mit `Glide-MPL-2.0.txt` und `Glide-Quellcode.txt` beiliegen.\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '## Neu in %s\n\n' "$VERSION"
             awk -v kopf="## $VERSION " 'index($0, kopf) == 1 { an = 1; next } an && /^## / { exit } an' 01_Repository/Glide/CHANGELOG.md
@@ -164,7 +164,7 @@ jobs:
         run: |
           set -eu
           tag="v$VERSION"
-          titel="Glide $VERSION – Beta zum Testen (unsigniert)"
+          titel="Glide $VERSION – Entwicklungsstand (unsigniert)"
           if gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json isDraft > "$RUNNER_TEMP/vorhanden.json" 2>/dev/null; then
             if [ "$(jq -r .isDraft "$RUNNER_TEMP/vorhanden.json")" != "true" ]; then
               echo "::error::Release $tag ist bereits veröffentlicht und wird nicht verändert"; exit 1

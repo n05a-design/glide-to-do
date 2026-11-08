@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bestandswächter-Transaktion ohne Tk (WA-27, Befund A32)."""
 from pathlib import Path
 import sys

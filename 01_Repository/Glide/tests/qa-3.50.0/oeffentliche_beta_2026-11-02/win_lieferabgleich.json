@@ -1,0 +1,30 @@
+{
+  "exitcode": 0,
+  "source_commit": "b2b54e7",
+  "workflow_run": 41438822957,
+  "version": "3.50.0",
+  "target": "windows-x64",
+  "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
+  "compiled_modules_checked": 92,
+  "compiled_modules_equal_commit": true,
+  "package_files": 104,
+  "zip_contents_equal_build_inventory": true,
+  "zip": "build/windows/Glide-3.50.0-windows-x64.zip",
+  "zip_sha256": "48828f13b81059a273353aabc75095f31d49833c88a0b004427ece86eb5a306f",
+  "glide_exe_sha256": "c0716a54039cf68e847f2074aa47bcbd51c48deeaccd2b8701efb57adb933858",
+  "runtime": {
+    "python": "3.14.7",
+    "tcl": "9.1.0",
+    "tk_compiled": "9.1",
+    "platform": "win32",
+    "machine": "x86_64",
+    "pyinstaller": "6.22.3"
+  },
+  "signature": "unsigniertes Windows-Entwicklungsartefakt",
+  "isolated_start_windows": {
+    "exitcode": 0,
+    "app_version": "3.50.0",
+    "tk": "9.1.0"
+  },
+  "previous_release_preserved": "build/windows/Archiv/Glide-3.45.0 und Glide-3.45.0-windows-x64.zip"
+}

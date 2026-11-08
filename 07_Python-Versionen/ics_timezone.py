@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Übliche eingebettete VTIMEZONE-Regeln ohne externe Laufzeitbibliothek.
 
 STANDARD/DAYLIGHT mit DTSTART, jährlicher RRULE und RDATE. Unbekannte

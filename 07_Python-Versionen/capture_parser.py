@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Deutsche Schnelleingabe ohne Tk (G01).
 
 Erkennt in einer Eingabezeile Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand,

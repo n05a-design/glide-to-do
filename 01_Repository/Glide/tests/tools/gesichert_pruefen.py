@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Allgemeiner lokaler Voll-/Laststarter mit unveränderlicher Prüfkopie.
 
     python -B tests/tools/gesichert_pruefen.py --art voll --timeout 900

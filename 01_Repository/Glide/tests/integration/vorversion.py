@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unveränderte Vorversion für Altleser-Proben finden – mit Blick auf die Aufbewahrung.
 
 Mehrere Suiten prüfen einen Formattor mit der unveränderten Vorversion aus

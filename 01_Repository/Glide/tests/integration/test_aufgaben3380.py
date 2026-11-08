@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gemeinsamer Inspektor, echte Feldklicks, Bewegung und tatsächliche Inhaltsfläche.
 
 Alle Fälle verwenden ausschließlich künstliche Daten und echte Tk-Widgets.

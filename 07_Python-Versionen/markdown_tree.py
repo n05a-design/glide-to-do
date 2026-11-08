@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lesbarer Gesamtexport (FP-07/1), ausschließlich Standardbibliothek und ohne Tk.
 
 Der fertige Zielordner entsteht erst durch Umbenennen eines vollständigen

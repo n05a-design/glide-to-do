@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Prüft die freigegebene Schriftzuordnung jedes tatsächlich gezeichneten Symbols.
 
 Warum das nötig ist: Tk misst und setzt mit der eingestellten Schrift. Fehlt

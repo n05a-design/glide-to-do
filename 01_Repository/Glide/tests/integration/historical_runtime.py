@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unveränderte Altleser samt passendem historischen Lieferbestand aus Git.
 
 Die Hauptdateien im Archiv haben absichtlich keine eigenen Begleitmodule.

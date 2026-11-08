@@ -13,7 +13,7 @@ body:
     attributes:
       label: Glide-Version
       description: Hilfe › Über Glide
-      placeholder: "3.50.5"
+      placeholder: "Versionsnummer aus Hilfe › Über Glide"
     validations:
       required: true
   - type: dropdown

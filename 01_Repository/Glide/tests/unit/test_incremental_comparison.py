@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P08b: gemerkte Vergleichswerte gegen unabhängigen Vollvergleich."""
 import copy
 from pathlib import Path

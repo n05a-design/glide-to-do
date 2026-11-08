@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Darstellungsregeln ohne Tk: Platz, Auslassung und unveränderte Skalen."""
 from pathlib import Path
 import sys

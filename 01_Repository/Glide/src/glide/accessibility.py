@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Deutsche Aufgabenwerte und Tk-9.1-Attribute ohne Import einer Tk-Laufzeit.
 
 Gesetzte Attribute sind kein Nachweis tatsächlicher Screenreader-Bedienung.

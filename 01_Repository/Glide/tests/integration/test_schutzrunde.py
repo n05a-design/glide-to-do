@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Schutzrunde WA-27 bis WA-30: Wächter, Laden, Editorübernahme, Datensperre.
 
 Die Fälle stammen aus den Proben der Standanalyse vom 18.10.2026 (A32, A34,

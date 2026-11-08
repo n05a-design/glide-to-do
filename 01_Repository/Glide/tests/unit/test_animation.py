@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bildfolgen mit echten Zellmodellen, Archiv-Rundlauf und PNG-Pixelvergleich."""
 import copy
 import json

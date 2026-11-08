@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholungsangaben ganz oder gar nicht (FP-00, A29): Ankertag, Wochentage, Hinweise."""
 import sys
 import unittest

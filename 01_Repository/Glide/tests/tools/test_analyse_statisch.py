@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Namenszählung bewahrt die bisherige lexikalische Bedeutung."""
 from pathlib import Path
 import re

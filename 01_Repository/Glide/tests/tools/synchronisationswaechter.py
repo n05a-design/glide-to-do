@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Wächter gegen Synchronisationskopien und stark geschrumpfte Hauptdokumente (W04).
 
 Anlass: Mit 3.33.8 gelangten aus der OneDrive-Arbeitskopie sechs Konfliktkopien

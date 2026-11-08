@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Werkzeugwahl für Bildvorschauen unter Linux (N08) ohne Oberfläche."""
 from pathlib import Path
 import struct

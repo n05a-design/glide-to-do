@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lokale Zeitzonen und mitgelieferte IANA-Daten ohne Zusatzbibliothek.
 
 ZoneInfo.from_file liest unveränderte TZif-Daten; CLDR ordnet Windows-Namen

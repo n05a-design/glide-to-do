@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-07/1: echter Menü-/Dialogweg, Showcase, Abbruch und Flush-Schranke."""
 import argparse
 import copy

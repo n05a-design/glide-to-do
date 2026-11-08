@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import unittest
 import svg_geometry as svg
 

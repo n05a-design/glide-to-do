@@ -1,0 +1,74 @@
+{
+  "source_commit": "55d2caff0293220bfe7de55cd9f903425194c109",
+  "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
+  "historical_matrix": {
+    "source_commit": "b2b54e7",
+    "checked": 941,
+    "raw_equal": 906,
+    "line_endings_only": [
+      ".claude/skills/design-richtlinien/LICENSE",
+      "00_Arbeitsvorbereitung/Featurepaket_UI_UX/screenshots.json",
+      "01_Repository/Glide/packaging/macos/baue_app.py",
+      "01_Repository/Glide/packaging/runtime/patches.json",
+      "01_Repository/Glide/packaging/windows/verknuepfung_anlegen.ps1",
+      "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+      "01_Repository/Glide/scripts/test/run_core_tests.ps1",
+      "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg",
+      "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg",
+      "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg",
+      "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg",
+      "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+      "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+      "01_Repository/Glide/src/glide/resources/timezones/provenance.json",
+      "01_Repository/Glide/src/glide/resources/timezones/windowsZones.xml",
+      "01_Repository/Glide/tests/fixtures/current_v24/reference_v24.json",
+      "01_Repository/Glide/tests/fixtures/current_v25/reference_v25.json",
+      "01_Repository/Glide/tests/fixtures/current_v26/reference_v26.json",
+      "01_Repository/Glide/tests/fixtures/wiederholungsregeln_fp02.json",
+      "01_Repository/Glide/tests/tools/pruefen.py",
+      "01_Repository/Glide/tests/tools/reader_nvda_lock.json",
+      "01_Repository/Glide/tests/tools/windows_sandbox.cmd",
+      "01_Repository/Glide/tests/tools/windows_vollpruefung.cmd",
+      "01_Repository/Glide/tests/tools/windows_vollpruefung.ps1",
+      "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.49.0.pyw",
+      "07_Python-Versionen/resources/logo/glide-app-icon-klein.svg",
+      "07_Python-Versionen/resources/logo/glide-app-icon.svg",
+      "07_Python-Versionen/resources/logo/glide-logo-klein.svg",
+      "07_Python-Versionen/resources/logo/glide-logo.svg",
+      "07_Python-Versionen/resources/timezones/LICENSE-CLDR.txt",
+      "07_Python-Versionen/resources/timezones/LICENSE-iana.txt",
+      "07_Python-Versionen/resources/timezones/provenance.json",
+      "07_Python-Versionen/resources/timezones/windowsZones.xml"
+    ],
+    "mismatches": [
+      {
+        "path": "01_Repository/Glide/tests/integration/test_fortsetzung33311.py",
+        "reason": "content_changed"
+      },
+      {
+        "path": "01_Repository/Glide/tests/tools/standpruefung.py",
+        "reason": "content_changed"
+      }
+    ]
+  },
+  "python_delivery": {
+    "checked": 238,
+    "mismatches": []
+  },
+  "packages": {
+    "mac": {
+      "files_checked": 463,
+      "mismatches": [],
+      "archive_sha256": "eca6548e82e0a47578df58892948d6439af35ef12a3f863b4bd62dda5262e200",
+      "archive_equal_delivery": true,
+      "version": "3.50.0",
+      "codesign_exitcode": 0
+    },
+    "win": {
+      "files_checked": 104,
+      "mismatches": [],
+      "archive_sha256": "48828f13b81059a273353aabc75095f31d49833c88a0b004427ece86eb5a306f",
+      "archive_equal_delivery": true
+    }
+  }
+}

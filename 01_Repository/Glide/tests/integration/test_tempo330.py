@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tempo beim Scrollen, gemessen gegen reines Tk (Befund R6, 29.09.2026).
 
 Absolute Zeiten hängen am Rechner. Deshalb misst die Suite zuerst, wie lange
