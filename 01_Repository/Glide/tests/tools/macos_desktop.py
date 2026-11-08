@@ -16,6 +16,7 @@ import plistlib
 from pathlib import Path
 import subprocess
 import sys
+import time
 
 
 def select_mode(modes, width, height):
@@ -56,30 +57,44 @@ def dock_workarea(evidence):
 
 
 def verify_workarea():
-    """Echte unveränderte Testfenstergröße prüfen, nicht aus dem Display ableiten."""
+    """Auf echte Arbeitsfläche warten; jeder Versuch öffnet einen neuen Tk-Prozess.
+
+    Der Dock startet asynchron. Tk 9.1 übernimmt NSScreen.visibleFrame beim
+    Öffnen des Displays in ext_data (tkMacOSXXStubs.c:TkMacOSXDisplayChanged).
+    Ein sofort gestarteter Interpreter kann damit alte Grenzen behalten.
+    Keine Maxsize-/Fenster-/Testgrenze wird künstlich vergrößert.
+    """
     script = """
 import json, time, tkinter as tk
 root = tk.Tk()
 try:
     root.geometry('1720x960+0+0')
-    deadline = time.monotonic() + 10
+    deadline = time.monotonic() + .5
     while True:
         root.update_idletasks(); root.update()
         actual = [root.winfo_width(), root.winfo_height()]
         if actual == [1720, 960] or time.monotonic() >= deadline:
             break
         time.sleep(.05)
-    print(json.dumps(dict(requested=[1720,960], actual=actual,
+    print(json.dumps(dict(requested=[1720,960], actual=actual, maxsize=list(root.maxsize()),
+                         screen=[root.winfo_screenwidth(),root.winfo_screenheight()],
                          tk=root.tk.call('info', 'patchlevel'))))
 finally:
     root.destroy()
 """
-    result = subprocess.run([sys.executable, "-B", "-c", script], check=True,
-                            capture_output=True, text=True, timeout=20)
-    proof = json.loads(result.stdout)
-    if result.stderr:
-        raise RuntimeError("Tk-Arbeitsflächenprobe meldet Fehler: " + result.stderr)
-    return proof
+    attempts = []
+    for index in range(10):
+        result = subprocess.run([sys.executable, "-B", "-c", script], check=True,
+                                capture_output=True, text=True, timeout=5)
+        proof = json.loads(result.stdout)
+        if result.stderr:
+            raise RuntimeError("Tk-Arbeitsflächenprobe meldet Fehler: " + result.stderr)
+        attempts.append(proof)
+        if proof["actual"] == [1720, 960]:
+            break
+        if index < 9:
+            time.sleep(.25)
+    return dict(proof, attempts=attempts)
 
 
 def run(command, width, height, report):

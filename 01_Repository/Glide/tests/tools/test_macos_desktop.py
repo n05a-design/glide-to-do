@@ -34,8 +34,22 @@ class MacDesktopTests(unittest.TestCase):
 
     def test_workarea_reports_actual_geometry_instead_of_assuming_display_size(self):
         with patch.object(macos_desktop.subprocess, 'run', return_value=Mock(
-                stdout='{"requested":[1720,960],"actual":[1720,954],"tk":"9.1"}', stderr='')):
-            self.assertEqual(macos_desktop.verify_workarea()['actual'], [1720,954])
+                stdout='{"requested":[1720,960],"actual":[1720,954],"tk":"9.1"}', stderr='')), \
+                patch.object(macos_desktop.time, 'sleep'):
+            proof = macos_desktop.verify_workarea()
+            self.assertEqual(proof['actual'], [1720,954])
+            self.assertEqual(len(proof['attempts']), 10)
+
+    def test_stale_workarea_uses_a_new_tk_process_without_changing_geometry(self):
+        stale = Mock(stdout='{"requested":[1720,960],"actual":[1720,954],"maxsize":[1920,954]}',stderr='')
+        ready = Mock(stdout='{"requested":[1720,960],"actual":[1720,960],"maxsize":[1920,1034]}',stderr='')
+        with patch.object(macos_desktop.subprocess, 'run', side_effect=[stale,ready]) as execute, \
+                patch.object(macos_desktop.time, 'sleep'):
+            proof = macos_desktop.verify_workarea()
+        self.assertEqual(proof['actual'], [1720,960])
+        self.assertEqual(len(proof['attempts']),2)
+        self.assertEqual(execute.call_args_list[0].args,execute.call_args_list[1].args)
+        self.assertNotIn('root.maxsize(',execute.call_args_list[0].args[0][-1].replace('list(root.maxsize())',''))
 
     def test_smallest_usable_mode_meets_both_dimensions(self):
         modes = [dict(width=w, height=h, pixel_width=pw, pixel_height=ph, usable=u)

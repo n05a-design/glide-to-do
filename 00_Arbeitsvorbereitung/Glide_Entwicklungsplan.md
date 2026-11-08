@@ -2591,3 +2591,8 @@ Verbindlicher zusätzlicher Nutzerauftrag: lokalen Altbestand prüfen, entbehrli
 | Neue C:-Ablage | Offen, noch nicht erzeugt; bisherige Ablage erhalten | Grün + genehmigter Merge, endgültiger Main-SHA, geprüfter Archivbestand; frischer Checkout mit Versions-/Lizenz-/System-/Gitprüfung |
 
 Systemregister 1.4 führt die beiden neuen Gruppenwerkzeuge und die geänderten Prüfverträge. Performance bleibt mit identischen synthetischen Daten zu messen; dieser Nachlauf behebt ein belegtes Prüfprozessbudget und beansprucht keinen allgemeinen App-Geschwindigkeitsgewinn. WA-32/36/39/41/49/50 und menschliche/native Freigabetore bleiben gemäß ihren jeweiligen Abschlusskriterien bestehen. Kein Steps-Repository, Merge, Release oder veröffentlichter Download erzeugt.
+
+
+### 21.81 Begrenzte Mac-Prüfplatzdiagnose parallel zur unveränderten Pflichtmatrix (08.11.2026)
+
+Mac-Vollanforderung auf `17d268f` rot vor den Suiten: 954 statt 960 px trotz Dock-Ausblendung. Originalprotokolle/Rücksetzung erhalten. Getrennter Diagnosezweig prüft die anhand des verwendeten Tk-Codes begründete Hypothese eines zu früh erfassten Arbeitsflächenzustands: frische Tk-Probeprozesse mit tatsächlicher Größe, maximaler Größe und Bildschirmmaßen statt Warten im selben Interpreter. Keine Maxsize-Erhöhung und keine gelockerte Assertion. Sieben Werkzeugtests grün; nativ offen. Windows/Linux für PR #71 laufen auf demselben Commit weiter. Übernahme der Diagnosekorrektur erst nach tatsächlicher Auswertung; finale Pflichtmatrix weiterhin am letzten PR-Commit nachweisen. Kein Merge oder Release.

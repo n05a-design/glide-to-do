@@ -1,8 +1,8 @@
-# Glide-System V1.4
+# Glide-System V1.5
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.4 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.4` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.5` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.4 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.5** | 08.11.2026 | Mac-Prüfdesktop nach asynchronem Dock-Neustart mit frischen Tk-Prozessen prüfen; reale Größe und unveränderte maximale Fenstergröße je Versuch dokumentieren; Stale-/Bereit-Gegenprobe. Keine App- oder Geometrieassertion geändert. Native Bestätigung ausstehend. | App 3.50.7, Format 26 |
 | **V1.4** | 08.11.2026 | Neuerungskarte mit erreichbarem Abschluss am Kopf und erweiterter Geometriematrix; eindeutige ASCII-Ersatzrollen; vollständige serielle Arbeitsmodigruppen statt eines ausgeschöpften Gesamtbudgets; Mac-Arbeitsflächenprobe und ausnahmefeste Dock-Rücksetzung. Keine neue Produktfunktion; native Endmatrix erneut erforderlich. | App 3.50.7, Format 26 |
 | **V1.3** | 08.11.2026 | Steps-Übernahmevertrag und Übergabefolge; 20 technische Systemfähigkeiten direkt in der Featureübersicht, drei ergänzte Bestandspakete für Prozesse, Start/Konfiguration und OS-Integration; SPDX-Dateihinweise, Paket-BOM und native Mac-Prüfplatzvorbereitung samt Tests; aktuelle Kopplungs-/Prüfgrenzen. Keine neuen App-Funktionen. | App 3.50.7, Format 26 |
 | **V1.2** | 08.11.2026 | Root-Lebensdauer mit eigener/fremder Tcl-Auftragsprüfung; sichtbare D66-Unterzeile statt leerem Metadatenlabel geprüft; Pinnwandleistenabstände nach tatsächlicher Linux-Breite; Prüffolge stoppt auch bei unbehandelten Tk-/Tcl-Fehlern trotz Exitcode 0; native Mac-Vollprüfung manuell auslösbar. Pflichtmatrix weiterhin offen. | App 3.50.7, Format 26 |
@@ -842,8 +843,8 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 
 | T306 | [`test_project_license.py`](../../tests/tools/test_project_license.py) | MPL-Originalbytes, fester Quellcommit und Ablehnung veränderter/fremder Paketquellen |
 
-| T307 | [`macos_desktop.py`](../../tests/tools/macos_desktop.py) | Nativen CI-Bildschirmmodus halten, Dock-Einstellung zurücksetzen und tatsächliche 1720×960-Tk-Arbeitsfläche vor der Kindprüfung nachweisen; persönliche Macs ausgeschlossen |
-| T308 | [`test_macos_desktop.py`](../../tests/tools/test_macos_desktop.py) | Modusauswahl, fehlende Höhe, Schutz persönlicher Rechner und Wiederherstellung der Dock-Einstellung auch nach Testfehlern ohne echte OS-Änderung prüfen |
+| T307 | [`macos_desktop.py`](../../tests/tools/macos_desktop.py) | Nativen CI-Bildschirmmodus halten, Dock-Einstellung zurücksetzen und tatsächliche 1720×960-Tk-Arbeitsfläche mit frischen Probeprozessen nachweisen; alte Größenbegrenzung je Versuch dokumentieren; persönliche Macs ausgeschlossen |
+| T308 | [`test_macos_desktop.py`](../../tests/tools/test_macos_desktop.py) | Modusauswahl, fehlende Höhe, Schutz persönlicher Rechner, Dock-Rücksetzung nach Testfehlern und neue Probeprozesse nach veralteter Größenbegrenzung ohne echte OS-Änderung prüfen |
 | T309 | [`test_sbom.py`](../../tests/tools/test_sbom.py) | CycloneDX-Lizenz-/Bauinventar, fehlende/mehrdeutige Belege und nachträgliche Abweichung prüfen; kein vollständiger transitiver Laufzeitgraph |
 | T310 | [`arbeitsmodi_gruppen.py`](../../tests/tools/arbeitsmodi_gruppen.py) | Fünf verpflichtende serielle Gruppen aus demselben vollständigen Fallbestand; kein Tk-Import, keine zweite Fallliste, unveränderte 900-s-Wächter |
 | T311 | [`test_arbeitsmodi_gruppen.py`](../../tests/tools/test_arbeitsmodi_gruppen.py) | Alle implementierten Arbeitsmodifälle genau einmal und in Originalreihenfolge; fehlende/doppelte/verschobene Grenzen als Fehler |

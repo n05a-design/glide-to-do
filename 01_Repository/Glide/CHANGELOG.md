@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Mac-Prüfplatzdiagnose 08.11.2026
+
+- Tatsächliche Arbeitsfläche nach Desktop-/Dockwechsel mit frischen Tk-Prozessen prüfen; unveränderte Maximalgröße und Bildschirmmaße je Versuch als Diagnose sichern. Keine Änderung am App-Fenster oder den Geometrieassertions. Glide-System 1.5, native Bestätigung separat.
+
 ## CI- und Ablagenachtrag 08.11.2026
 
 - Windows-Befund auf `967f84f`: „Gelesen“ bei großer Schrift 3 px unter dem sichtbaren Bereich; Abschluss jetzt am Kopf der Neuerungskarte, ohne Texte oder Versionseinträge zu entfernen. 48 Konfigurationen aus vier Schriften, zwei Größen, drei Designs und zwei Fenstergrößen lokal grün.
