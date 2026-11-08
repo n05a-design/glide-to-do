@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Gestaltungstest-Nachlauf 08.11.2026
+
+- Aktiven Seiteneditor nach UI-Neuaufbau im Prüffall erneut auflösen; Seiteninhalt/Ziel und geöffnete Blockaktionen zusätzlich absichern. Deterministische Host-Ersetzung reproduziert den alten Fehler und bleibt als Regression enthalten; keine App-Änderung.
+
 ## Mac-Prüfplatzdiagnose 08.11.2026
 
 - Tatsächliche Arbeitsfläche nach Desktop-/Dockwechsel mit frischen Tk-Prozessen prüfen; unveränderte Maximalgröße und Bildschirmmaße je Versuch als Diagnose sichern. Keine Änderung am App-Fenster oder den Geometrieassertions. Glide-System 1.5, native Bestätigung separat.

@@ -1209,12 +1209,35 @@ def fall_gestaltung(lauf):
         editor.text.focus_force()
         editor.text.mark_set("insert", "3.0")
         editor.show_block_handle("insert", "focus")
+        seiteninhalt = editor.text.get("1.0", "end-1c")
         idle(lauf, 4)
+        if name == "hell_eng":
+            # Deterministische Lebensdauer-Gegenprobe: derselbe reguläre
+            # Neuaufbau wie bei ungültiger Themesignatur. Der alte Host muss
+            # wirklich verschwinden; der vollständige Knopfschutz folgt danach.
+            app._rich_note_signature = None
+            app.sync_rich_note_view()
+            idle(lauf, 4)
+            assert not editor.winfo_exists(), "Gegenprobe ersetzt den Seitenhost nicht"
         anzahl, funde = befunde_b15(lauf, f"{name} Seite")
         gesamt += anzahl
         befunde.extend(funde)
         bild(lauf.root, f"{name}_seite")
+        # _sync_rich_note_view ersetzt den Host bei geänderter Themesignatur.
+        # Nach Idle-/Mess-/Aufnahmeschritten bedient ein Nutzer den jetzt
+        # sichtbaren Editor, nicht die zuvor gespeicherte Widgetinstanz.
+        vorher = editor
+        editor = app.rich_note_editor
+        assert app.current_list()["id"] == seite["id"], (name, "Seitenziel verändert")
+        assert editor is not None and editor.winfo_exists() and editor.winfo_ismapped(), (name, "kein aktiver Seiteneditor")
+        assert editor.text.get("1.0", "end-1c") == seiteninhalt, (name, "Seiteninhalt beim Neuaufbau verändert")
+        lauf.editor_host_trace = getattr(lauf, "editor_host_trace", []) + [
+            dict(context=name,old_widget=str(vorher),active_widget=str(editor),content_preserved=True)]
+        editor.text.focus_force()
+        editor.text.mark_set("insert", "3.0")
         editor.show_block_actions()
+        idle(lauf, 4)
+        assert app.action_chooser_open(), (name, "Blockaktionen nicht geöffnet")
         bild(lauf.root, f"{name}_blockaktionen")
         app.close_action_chooser()
         if not kompakt:
@@ -5087,6 +5110,8 @@ def main():
                     ergebnis['faelle'][name]['runtime'] = getattr(lauf, 'runtime', {})
                     if hasattr(lauf, 'compact_trace'):
                         ergebnis['faelle'][name]['event_trace'] = lauf.compact_trace[-256:]
+                    if hasattr(lauf, 'editor_host_trace'):
+                        ergebnis['faelle'][name]['editor_host_trace'] = lauf.editor_host_trace
                     abbauen(lauf)
         faulthandler.cancel_dump_traceback_later()
         ergebnis["faelle"][name]["dauer_s"] = round(time.monotonic() - started, 3)

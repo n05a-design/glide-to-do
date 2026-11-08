@@ -2596,3 +2596,8 @@ Systemregister 1.4 führt die beiden neuen Gruppenwerkzeuge und die geänderten 
 ### 21.81 Begrenzte Mac-Prüfplatzdiagnose parallel zur unveränderten Pflichtmatrix (08.11.2026)
 
 Mac-Vollanforderung auf `17d268f` rot vor den Suiten: 954 statt 960 px trotz Dock-Ausblendung. Originalprotokolle/Rücksetzung erhalten. Getrennter Diagnosezweig prüft die anhand des verwendeten Tk-Codes begründete Hypothese eines zu früh erfassten Arbeitsflächenzustands: frische Tk-Probeprozesse mit tatsächlicher Größe, maximaler Größe und Bildschirmmaßen statt Warten im selben Interpreter. Keine Maxsize-Erhöhung und keine gelockerte Assertion. Sieben Werkzeugtests grün; nativ offen. Windows/Linux für PR #71 laufen auf demselben Commit weiter. Übernahme der Diagnosekorrektur erst nach tatsächlicher Auswertung; finale Pflichtmatrix weiterhin am letzten PR-Commit nachweisen. Kein Merge oder Release.
+
+
+### 21.82 Ausschließlich erster CI-Blocker bis zur stabilen Pflichtmatrix (08.11.2026)
+
+Nutzerpriorisierung: übrige Archiv-/Dokument-/Optimierungsarbeiten bis zur stabilen Pflichtmatrix zurückstellen. Linuxfehler `gestaltung` auf 17d268f gezielt durch Host-Ersetzung reproduziert, Prüffall auf aktuellen sichtbaren Editor korrigiert. 199 Knopfprüfungen/fünf Konfigurationen in der gezielten Gegenprobe grün; zusätzliche Inhalts-/Ziel-/Aktionsprüfung, keine App-Änderung oder abgeschwächte Assertion. Nächster Schritt: betroffenen nativen UI-Bereich bestätigen, erst danach Gesamtlauf. Systemregister 1.6 enthält die geänderte Prüfdefinition. Kein Merge/Release oder Austausch der C:-Ablage.

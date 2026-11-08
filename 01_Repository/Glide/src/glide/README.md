@@ -1,8 +1,8 @@
-# Glide-System V1.5
+# Glide-System V1.6
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.6 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.5` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.6` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.5 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.6** | 08.11.2026 | Gestaltungstest löst den sichtbaren Seiteneditor nach Layout-/Designwechsel neu auf; deterministische Host-Ersetzung, unveränderter Inhalt/Ziel und tatsächlich geöffnete Blockaktionen als Regression. Knopfschutz und alle fünf Konfigurationen bleiben erhalten. | App 3.50.7, Format 26 |
 | **V1.5** | 08.11.2026 | Mac-Prüfdesktop nach asynchronem Dock-Neustart mit frischen Tk-Prozessen prüfen; reale Größe und unveränderte maximale Fenstergröße je Versuch dokumentieren; Stale-/Bereit-Gegenprobe. Keine App- oder Geometrieassertion geändert. Native Bestätigung ausstehend. | App 3.50.7, Format 26 |
 | **V1.4** | 08.11.2026 | Neuerungskarte mit erreichbarem Abschluss am Kopf und erweiterter Geometriematrix; eindeutige ASCII-Ersatzrollen; vollständige serielle Arbeitsmodigruppen statt eines ausgeschöpften Gesamtbudgets; Mac-Arbeitsflächenprobe und ausnahmefeste Dock-Rücksetzung. Keine neue Produktfunktion; native Endmatrix erneut erforderlich. | App 3.50.7, Format 26 |
 | **V1.3** | 08.11.2026 | Steps-Übernahmevertrag und Übergabefolge; 20 technische Systemfähigkeiten direkt in der Featureübersicht, drei ergänzte Bestandspakete für Prozesse, Start/Konfiguration und OS-Integration; SPDX-Dateihinweise, Paket-BOM und native Mac-Prüfplatzvorbereitung samt Tests; aktuelle Kopplungs-/Prüfgrenzen. Keine neuen App-Funktionen. | App 3.50.7, Format 26 |

@@ -4022,5 +4022,143 @@
       "strict_python_delivery": true,
       "documentation_links": 343
     }
+  },
+  "editor_host_regression_2026_11_08": {
+    "base_commit": "17d268fc19e5d53d206c7d31ec4ceec2f73a6d6b",
+    "linux_job": 128789887282,
+    "source": "Nutzeranhang und originales GitHub-Jobprotokoll",
+    "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+    "product_changed": false,
+    "counterprobe_before": {
+      "gestaltung": {
+        "ok": false,
+        "befund": "Traceback (most recent call last):\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 5073, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1217, in fall_gestaltung\n    editor.show_block_actions()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 12249, in show_block_actions\n    x, y = self.text.winfo_rootx() + 40, self.text.winfo_rooty() + 40\n           ~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\tkinter\\__init__.py\", line 1350, in winfo_rootx\n    self.tk.call('winfo', 'rootx', self._w))\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_tkinter.TclError: bad window path name \".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2.!frame5.page_text\"\n",
+        "runtime": {
+          "python": "3.14.7",
+          "platform": "win32",
+          "tk": "9.1.0"
+        },
+        "dauer_s": 8.086,
+        "gestartet_unix": 1794156811.3136592
+      }
+    },
+    "counterprobe_after": {
+      "gestaltung": {
+        "ok": true,
+        "befund": "199 Knopfprüfungen in fünf Konfigurationen ohne Befund",
+        "runtime": {
+          "python": "3.14.7",
+          "platform": "win32",
+          "tk": "9.1.0"
+        },
+        "editor_host_trace": [
+          {
+            "context": "hell_eng",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+            "content_preserved": true
+          },
+          {
+            "context": "dunkel_breit",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+            "content_preserved": true
+          },
+          {
+            "context": "verlauf_breit",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+            "content_preserved": true
+          },
+          {
+            "context": "kompakt_hell",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor8",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor9",
+            "content_preserved": true
+          },
+          {
+            "context": "kompakt_verlauf",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor10",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor11",
+            "content_preserved": true
+          }
+        ],
+        "dauer_s": 21.542,
+        "gestartet_unix": 1794156914.0796533
+      }
+    },
+    "replacement_proof": {
+      "exitcode": 0,
+      "replacements": [
+        {
+          "context": "hell_eng Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+          "content_preserved": true
+        },
+        {
+          "context": "dunkel_breit Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "content_preserved": true
+        },
+        {
+          "context": "verlauf_breit Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_hell Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor8",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor9",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_verlauf Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor10",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor11",
+          "content_preserved": true
+        }
+      ]
+    },
+    "native_ui_pending": true,
+    "local_planung": {
+      "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+      "exitcode": 0,
+      "gestaltung_trace": [
+        {
+          "context": "hell_eng",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+          "content_preserved": true
+        },
+        {
+          "context": "dunkel_breit",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "content_preserved": true
+        },
+        {
+          "context": "verlauf_breit",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_hell",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_verlauf",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "content_preserved": true
+        }
+      ],
+      "cases": 13
+    }
   }
 }
