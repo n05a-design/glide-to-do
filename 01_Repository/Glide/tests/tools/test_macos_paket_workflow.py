@@ -74,13 +74,23 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 6)
+        self.assertEqual(len(blocks), 7)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
                 path.write_text(block, encoding="utf-8")
                 result = subprocess.run([executable, "-n", str(path)], capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_optional_full_qa_uses_native_runtime_and_preserves_evidence(self):
+        self.assertRegex(self.source, r"vollpruefung:\n\s+description:.*\n\s+type: boolean\n\s+default: false")
+        step = self.source.split("- name: Vollständige native macOS-Prüfung", 1)[1].split("      - name:", 1)[0]
+        self.assertIn("github.event_name == 'workflow_dispatch' && inputs.vollpruefung", step)
+        self.assertIn('"$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll', step)
+        self.assertIn('--protokoll "$RUNNER_TEMP/glide-macos-voll" --timeout 900', step)
+        self.assertNotIn("continue-on-error", self.source)
+        self.assertIn("${{ runner.temp }}/glide-macos-voll", self.source)
+        self.assertLess(self.source.index("PYTHONPATH=%s"), self.source.index("- name: Vollständige native macOS-Prüfung"))
 
     def test_dmg_is_built_from_checked_archive_and_compared_after_mount(self):
         step = self.source.split("- name: Geprüftes Archiv als DMG verpacken und Inhalt gegenprüfen", 1)[1].split("      - name:", 1)[0]

@@ -2544,6 +2544,8 @@ Auftrag: vollständiger Abgleich der vorhandenen Dokumentation und von PR #69, b
 
 ### 21.78 CI-Abschlussauftrag 3.50.7 auf Main (08.11.2026)
 
+**Reparaturfortsetzung:** `11bc6ae` ist in Draft-PR #71 gesichert. Grundstufe 19/19, Linux-Arbeitsmodi 61/62; Kompaktmodus und Seitenleistenmatrix dort grün. Neue Befunde: Linux-Pinnwandleiste acht Pixel zu breit; Windows-Titelprüfung misst ein leeres, ungepacktes Label statt sichtbarer Unterzeilentexte; während Root-Abbau neu erzeugte Tcl-Aufträge bleiben zurück. Gezielter Root-Test mit roter Gegenprobe ergänzt; keine Pflichtmatrix bereits grün. Der spätere Steps-Auftrag erweitert das vorhandene Systemregister und die Featureübersicht um Übernahmebedingungen/Prüflücken; kein neues Repository und kein Architekturumbau vor CI-Reparatur.
+
 Der neue Gesamtauftrag hat technische Priorität. Basis `d7e017f001e5c069eeb98a0f5302577966ac4098`, nach #69 und #70. Bisherige Codex-Arbeit ist als `f0c4442` gesichert und auf `codex/glide-3.50.7-main-validierung` übernommen (`1b58d1e`). Lizenz-/Marketingarbeit und frühere erfolgreiche Bereichsprüfungen werden weiterverwendet, nicht als aktuelle Vollabnahme ausgegeben.
 
 | Gegenstand | Status / nächster Schritt | Abschluss |

@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## Reparaturnachtrag 08.11.2026
+
+- Hauptfenster räumt beim tatsächlichen Root-Ende auch während des Kindabbaus neu angelegte Tcl-Aufträge auf; Unterfenster und fremde Interpreter bleiben aktiv. Neuer Regressionstest mit roter Gegenprobe.
+- Pinnwandleiste verwendet den zentralen 4-px-Abstand konsistent für Berechnung und Darstellung; 16-px-Gruppentrennung und alle Bedienelemente bleiben erhalten.
+- D66-Titelprüfung misst alle sichtbaren Unterzeilentexte statt eines gegebenenfalls ungepackten leeren Labels. Keine vergrößerte Toleranz; neue native Gesamtmatrix bleibt erforderlich.
+- Prüfwerkzeug stoppt auch bei unbehandelten Tk-/Tcl-Rückruffehlern trotz Exitcode 0 und bewahrt deren Ausgabe; Gegenprüfung mit echtem Kindprozess. Mac-Paketworkflow kann zusätzlich die vollständige native QA ausführen (manueller Parameter `vollpruefung`).
+
 ## 3.50.7 (08.11.2026) – Produktkommunikation, MPL-2.0 und Validierung
 
 - Öffentliche Beschreibung als Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen; positive Nutzen- und Speichertexte, aktualisierter Über-Glide-Text. Technische Kennungen unverändert.

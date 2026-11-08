@@ -4973,6 +4973,35 @@ def fall_markenkante(lauf):
     assert not befunde, befunde
     return f"{geprueft} Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante"
 
+def fall_fensterende3507(lauf):
+    """Root-Abbau leert eigene Tcl-Aufträge, nicht die anderer Fenster/Interpreter."""
+    root, app, tk = lauf.root, lauf.app, lauf.mod.tk
+    fremd = tk.Tk()
+    fremd.withdraw()
+    fremder_job = fremd.after(60000, lambda: None)
+    try:
+        kind = tk.Toplevel(root)
+        eigener_job = app._register_after(root.after(60000, lambda: None))
+        kind.destroy()
+        idle(lauf)
+        assert eigener_job in root.tk.splitlist(root.tk.call("after", "info")), "Kindfenster beendet Root-Aufträge"
+        assert not getattr(app, "_root_destroyed", False)
+        app.cancel_pending_callbacks()
+        app.finish_recovery_session()
+        app.release_data_lock()
+        # Echte Destroy-/Unmap-Bindungen bleiben aktiv. Sie können während
+        # des Abbaus neue Idle-Aufträge anlegen, nachdem oben schon geleert wurde.
+        root.destroy()
+        eigene_reste = root.tk.splitlist(root.tk.call("after", "info"))
+        assert not eigene_reste, ("Tcl-Aufträge nach Root-Ende", eigene_reste)
+        assert fremder_job in fremd.tk.splitlist(fremd.tk.call("after", "info")), "Fremder Interpreter verändert"
+        assert getattr(app, "_root_destroyed", False)
+    finally:
+        fremd.tk.call("after", "cancel", fremder_job)
+        fremd.destroy()
+    return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
+
+
 FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
@@ -4981,7 +5010,7 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "seitenleistenzeilen3507", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "seitenleistenzeilen3507", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350", "fensterende3507")
 
 
 def main():

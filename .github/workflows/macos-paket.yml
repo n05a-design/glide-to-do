@@ -1,4 +1,4 @@
-# Glide 3.50.0: nativer Mac-Bau mit eigener Tcl/Tk 9.1; Prüfung vor der Bereitstellung.
+# Glide: nativer Mac-Bau mit eigener Tcl/Tk 9.1; Prüfung vor der Bereitstellung.
 # Verifiziert am 26.10.2026:
 # https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job
 # macos-15 ist der Standard-arm64-Runner; macos-15-intel wäre eine andere Architektur.
@@ -11,6 +11,11 @@ name: Glide-Paket macOS arm64
 
 on:
   workflow_dispatch:
+    inputs:
+      vollpruefung:
+        description: 'Vor dem Paketbau die vollständige native QA ausführen'
+        type: boolean
+        default: false
   workflow_call:
   push:
     branches: ["main", "codex/**"]
@@ -103,6 +108,12 @@ jobs:
             --ziel "$RUNNER_TEMP/tk91-lizenzen"
           printf 'PYTHONPATH=%s\n' "$RUNNER_TEMP/tk91-runtime/python-extension" >> "$GITHUB_ENV"
 
+      - name: Vollständige native macOS-Prüfung
+        if: github.event_name == 'workflow_dispatch' && inputs.vollpruefung
+        run: |
+          "$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll \
+            --protokoll "$RUNNER_TEMP/glide-macos-voll" --timeout 900
+
       - name: Nativen Paketbau und Prozesssandbox-Startprüfung ausführen
         run: |
           sh packaging/paket/baue_und_pruefe_macos.sh \
@@ -170,6 +181,7 @@ jobs:
         with:
           name: paket-macos-arm64-belege
           path: |
+            ${{ runner.temp }}/glide-macos-voll
             ${{ runner.temp }}/tk91-runtime/runtime-bau.json
             ${{ runner.temp }}/glide-macos-runtime/*.json
             ${{ runner.temp }}/glide-macos-runtime/*.sha256

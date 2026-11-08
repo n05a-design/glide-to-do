@@ -1,8 +1,8 @@
-# Glide-System V1.1
+# Glide-System V1.2
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.1` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.2` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.1 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.2** | 08.11.2026 | Root-Lebensdauer mit eigener/fremder Tcl-Auftragsprüfung; sichtbare D66-Unterzeile statt leerem Metadatenlabel geprüft; Pinnwandleistenabstände nach tatsächlicher Linux-Breite; Prüffolge stoppt auch bei unbehandelten Tk-/Tcl-Fehlern trotz Exitcode 0; native Mac-Vollprüfung manuell auslösbar. Pflichtmatrix weiterhin offen. | App 3.50.7, Format 26 |
 | **V1.1** | 08.11.2026 | MPL-Paketnachweise und neue Seitenleisten-/Neustart-/Farbprüfung für 3.50.7; Testkatalog um `test_project_license.py` ergänzt. Native Gesamtfreigabe weiterhin offen. | App 3.50.7, Format 26 |
 | **V1.0** | 08.11.2026 | Erstes konsolidiertes Systemregister: 94 Python-Quelldateien, 127 Features, 22 Bausteinpakete, 25 datierte Risiken, 305 Test-/Werkzeugdateien und 16 Leitlinien; Übernahme der technischen Details aus der bisherigen Architekturtabelle; zentrale System-und-Modulpflege | Unabhängig von Glide-App-Version `3.50.6` |
 
@@ -25,7 +26,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.1 · Aufgabenformat 26 · Ei
 | Features | 127 | Dokumentiertes Verhalten, teilweise heuristische Modulzuordnung |
 | Bausteinpakete | 22 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 305 | 304 Bestandsdateien plus neuer Katalogprüftest; nicht bestandene Testfälle |
+| Test-/Werkzeugdateien | 306 | Einschließlich Katalog- und Projektlizenzprüfung; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege).
 

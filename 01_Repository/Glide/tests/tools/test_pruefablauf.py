@@ -182,6 +182,21 @@ suite.main()
         self.assertEqual(called, [])
         self.assertEqual([r['status'] for r in run.results], ['fehlgeschlagen','übersprungen'])
 
+    def test_zero_exit_with_uncaught_tcl_callback_error_stops_the_sequence(self):
+        logdir = self.root / "callback-log"
+        run = pruefen.Prueflauf(logdir, 30, waechter=self.guard)
+        error = 'invalid command name "123collapse_emptied_frames"'
+        command = [sys.executable, "-B", "-c", "import sys; print(" + repr(error) + ", file=sys.stderr)"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(run.prozess("abbau", command))
+            self.assertFalse(run.prozess("folge", [sys.executable, "-B", "-c", "pass"]))
+        self.assertEqual(run.results[0]["exitcode"], 0)
+        self.assertEqual(run.results[0]["callback_errors"], [error])
+        self.assertEqual(run.results[1]["status"], "übersprungen")
+        self.assertEqual(len(self.guard.rows), 1)
+        self.assertFalse(self.guard.rows[0]["passed"])
+        self.assertIn(error, (logdir / "abbau.log").read_text(encoding="utf-8"))
+
     def test_hint_does_not_stop_and_stays_a_hint(self):
         run = pruefen.Prueflauf(None, 10, waechter=self.guard)
         with contextlib.redirect_stdout(io.StringIO()):

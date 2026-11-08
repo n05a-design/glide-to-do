@@ -5825,8 +5825,9 @@ class ItemWorkspace:
         if self.mode == "board":
             aktionen = self.board_action_buttons(self.bar)
             schalter = self.board_controls(self.bar)
-            aktionsfluss = ButtonFlow(line, bg=app.theme["card"], gap=6)
-            schalterfluss = ButtonFlow(zeile2, bg=app.theme["card"], gap=6)
+            leistenabstand = glide_design.SPACING[4]
+            aktionsfluss = ButtonFlow(line, bg=app.theme["card"], gap=leistenabstand)
+            schalterfluss = ButtonFlow(zeile2, bg=app.theme["card"], gap=leistenabstand)
             # Nach den Zeilen erzeugt stehen sie ohnehin darüber; `raise` hält
             # das auch für „Reiter“ fest (`Canvas.lift` hebt nur Zeichenelemente).
             for button in aktionen + schalter + [overview]:
@@ -5871,12 +5872,12 @@ class ItemWorkspace:
                 # „Bearbeiten“ und „Verbinden“ weichen bei Mindestbreite
                 # zuerst; beide stehen auch unter „Aktionen“.
                 sichtbare_aktionen = list(aktionen)
-                if breite < sum(b.winfo_reqwidth() + 6 for b in aktionen) + 12 + (
+                if breite < sum(b.winfo_reqwidth() + leistenabstand for b in aktionen) + 16 - leistenabstand + (
                         zurueck.winfo_reqwidth() + 10 if zurueck is not None else 0):
                     sichtbare_aktionen = [b for b in aktionen if b.text not in ("Bearbeiten", "Verbinden")]
-                bedarf_aktionen = sum(b.winfo_reqwidth() + 6 for b in sichtbare_aktionen) + 12
-                bedarf_haupt = sum(b.winfo_reqwidth() + 6 for b in haupt)
-                bedarf_neben = sum(b.winfo_reqwidth() + 6 for b in zweitrangig)
+                bedarf_aktionen = sum(b.winfo_reqwidth() + leistenabstand for b in sichtbare_aktionen) + 16 - leistenabstand
+                bedarf_haupt = sum(b.winfo_reqwidth() + leistenabstand for b in haupt)
+                bedarf_neben = sum(b.winfo_reqwidth() + leistenabstand for b in zweitrangig)
                 bedarf_reiter = overview.winfo_reqwidth() + 8
                 bedarf_zurueck = zurueck.winfo_reqwidth() + 10 if zurueck is not None else 0
                 # Eine Zeile, solange neben den Aktionen wenigstens die
@@ -5924,9 +5925,9 @@ class ItemWorkspace:
                     else:
                         for index, knopf in enumerate(sichtbare_aktionen):
                             knopf.pack(in_=line, side="left",
-                                       padx=(0, 16 if index == len(sichtbare_aktionen) - 1 else 6))
+                                       padx=(0, 16 if index == len(sichtbare_aktionen) - 1 else leistenabstand))
                         for knopf in sichtbare_schalter:
-                            knopf.pack(in_=ziel, side="left", padx=(0, 6))
+                            knopf.pack(in_=ziel, side="left", padx=(0, leistenabstand))
                         if stufe < 2:
                             overview.pack(in_=ziel, side="left", padx=(2, 0))
                     if einzeilig:
@@ -45653,8 +45654,27 @@ class ListApp:
         self._empty_frame_job = None
         self._collapse_counts = {}
         self._collapse_ignore = set()
+        self._root_destroyed = False
+
+        def root_beendet(event):
+            if event.widget is not self.root:
+                return
+            # Destroy/Unmap der Kinder können NACH cancel_pending_callbacks
+            # weitere Idle-Aufträge erzeugen. Beim Destroy der Wurzel sind die
+            # Kinder weg, der eigene Tcl-Interpreter aber noch ansprechbar.
+            # Rohes Tcl-Cancel vermeidet Python-Callbackzugriffe auf tote Widgets.
+            self._root_destroyed = True
+            for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
+                self.root.tk.call("after", "cancel", job)
+            self._after_ids.clear()
+            self._empty_frame_job = None
+            self._emptied_parents.clear()
+
+        self.root.bind("<Destroy>", root_beendet, add="+")
 
         def merken(event):
+            if self._root_destroyed:
+                return
             widget = getattr(event, "widget", None)
             eltern = getattr(widget, "master", None)
             if not isinstance(eltern, tk.Frame) or isinstance(eltern, (tk.Tk, tk.Toplevel)):

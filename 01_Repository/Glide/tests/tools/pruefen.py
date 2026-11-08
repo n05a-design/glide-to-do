@@ -390,12 +390,17 @@ class Prueflauf:
             (self.logdir / f"{name}.log").write_text(output, encoding="utf-8")
         # Frühere Auditfassungen konnten Befunde trotz Exitcode 0 melden.
         has_findings = name == "audit_app" and re.search(r"(?m)^BEFUNDE\s*\([1-9]\d*\)", output)
-        ok = result.returncode == 0 and not has_findings and not (
+        callback_errors = re.findall(
+            r'(?m)^(?:invalid command name "[^"\r\n]+"|bgerror failed to handle background error\.|Exception in Tkinter callback)[^\r\n]*',
+            output)
+        reported_error = "Audit meldet Befunde" if has_findings else (
+            "Unbehandelte Tk-/Tcl-Rückruffehler" if callback_errors else None)
+        ok = result.returncode == 0 and not reported_error and not (
             self.waechter and self.waechter.stopped)
-        if has_findings and self.waechter:
+        if reported_error and self.waechter:
             self.waechter.stopped = True
             self.waechter.rows[-1]["passed"] = False
-            self.waechter.rows[-1]["error"] = "Audit meldet Befunde"
+            self.waechter.rows[-1]["error"] = reported_error
             self.waechter.report["stopped"] = True
             self.waechter.save()
         if not ok:
@@ -403,8 +408,10 @@ class Prueflauf:
         elif not self.logdir:
             print(output.rstrip(), flush=True)
         self.meldung(name, "ausgeführt" if ok else "fehlgeschlagen",
-                     f"Exitcode {result.returncode}" + ("; Audit meldet Befunde" if has_findings else ""))
+                     f"Exitcode {result.returncode}" + ("; " + reported_error if reported_error else ""))
         self.results[-1]["exitcode"] = result.returncode
+        if callback_errors:
+            self.results[-1]["callback_errors"] = callback_errors
         diagnosis = prozessdiagnose(name, result.returncode, output, kontext=self.systemkontext)
         if diagnosis:
             diagnosis.update({"start": started,
