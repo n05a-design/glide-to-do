@@ -1,5 +1,10 @@
 # Änderungsverlauf
 
+## Startseiten-Prüfsynchronisation 08.11.2026
+
+- Größen-/Scrollprüfung der ruhenden Startseite wartet auf das natürliche Ende der Aktionsfahnen statt pauschal 1,1 Sekunden. Reale Animation mit dreifach verzögerten Bildern als dauerhafte Regression; sämtliche Überdeckungsassertions bleiben erhalten.
+- Native Mac-Nachtests für Bedienung, Startseite und Altimport vor der vollständigen QA. Scheitert der gezielte Nachtest, startet kein teurer Gesamtlauf; der Workflow bleibt rot und sichert seine Protokolle.
+
 ## Native Mac-Prüfhistorie 08.11.2026
 
 - Für Altleser-/Migrationstests vollständige Git-Historie bereitstellen und die gepinnten Lieferdateien vor dem langen Vollmodus prüfen. Kein Altleser oder Migrationstest übersprungen.

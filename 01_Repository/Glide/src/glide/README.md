@@ -1,8 +1,8 @@
-# Glide-System V1.8
+# Glide-System V1.9
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.8 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.9 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.8` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.9` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.8 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.9** | 08.11.2026 | Ruhende Startseitengeometrie wartet begrenzt auf das tatsächliche Ende der Aktionsfahnen; verzögerte reale Animation als Regression. Native Mac-Nachtests für Bedienung, Startseite und Altimport vor dem unverändert vollständigen Prüflauf. | App 3.50.7, Format 26 |
 | **V1.8** | 08.11.2026 | Vollständige Git-Historie und frühe Prüfung gepinnter Altlieferungen für die native Mac-Vollprüfung; vorhandene Migrationsprüfungen bleiben vollständig. | App 3.50.7, Format 26 |
 | **V1.7** | 08.11.2026 | Windows-Fensterfarb-Retry gehört zum Hauptinterpreter; früher Dialogschluss hinterlässt keinen gelöschten Tcl-Befehl. Deterministische Dialogschluss-/Root-/Fremdinterpreterregression ergänzt. | App 3.50.7, Format 26 |
 | **V1.6** | 08.11.2026 | Gestaltungstest löst den sichtbaren Seiteneditor nach Layout-/Designwechsel neu auf; deterministische Host-Ersetzung, unveränderter Inhalt/Ziel und tatsächlich geöffnete Blockaktionen als Regression. Knopfschutz und alle fünf Konfigurationen bleiben erhalten. | App 3.50.7, Format 26 |
@@ -726,7 +727,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T196 | [`test_speicherlast330.py`](../../tests/integration/test_speicherlast330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T197 | [`test_speicherstatus.py`](../../tests/integration/test_speicherstatus.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T198 | [`test_speichervergleich3339.py`](../../tests/integration/test_speichervergleich3339.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T199 | [`test_startseite3332.py`](../../tests/integration/test_startseite3332.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T199 | [`test_startseite3332.py`](../../tests/integration/test_startseite3332.py) | Ruhende Geometrie nach natürlichem Ende der Fahnen; dreifach verzögerte reale Animationsbilder als Regression; vier Konfigurationen und sämtliche Knopfassertions bleiben |
 | T200 | [`test_suche3337.py`](../../tests/integration/test_suche3337.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T201 | [`test_tag3390.py`](../../tests/integration/test_tag3390.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T202 | [`test_tagpaket33314.py`](../../tests/integration/test_tagpaket33314.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
@@ -809,7 +810,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T274 | [`test_historical_runtime.py`](../../tests/tools/test_historical_runtime.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T275 | [`test_kandidat_starten.py`](../../tests/tools/test_kandidat_starten.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T276 | [`test_linux_gegenproben.py`](../../tests/tools/test_linux_gegenproben.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T277 | [`test_macos_paket_workflow.py`](../../tests/tools/test_macos_paket_workflow.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
+| T277 | [`test_macos_paket_workflow.py`](../../tests/tools/test_macos_paket_workflow.py) | Native Laufzeit, Altlieferungen, gezielte Bedien-/Startseiten-/Importprüfung vor Vollmodus und Belegsicherung |
 | T278 | [`test_native_atspi_consumer.py`](../../tests/tools/test_native_atspi_consumer.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T279 | [`test_paket_compiled_contract.py`](../../tests/tools/test_paket_compiled_contract.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T280 | [`test_paket_license_contract.py`](../../tests/tools/test_paket_license_contract.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |

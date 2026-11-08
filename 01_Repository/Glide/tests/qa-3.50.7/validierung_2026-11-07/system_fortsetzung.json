@@ -4240,5 +4240,33 @@
       ]
     },
     "final_native_matrix_pending": true
+  },
+  "startseite_wait_2026_11_08": {
+    "baseline_commit": "f3408de4ddc8a13f08147049b5c727d11fc9b983",
+    "native_failure_run": 42504338614,
+    "native_failure_job": 128804322780,
+    "contract": "ruhende Startseitengeometrie nach natürlichem Ende der Aktionsfahnen",
+    "counterprobe_before": {
+      "mode": "before",
+      "frame_delay_factor": 3,
+      "duration_s": 1.111,
+      "visible_banners": 1
+    },
+    "counterprobe_after": {
+      "mode": "after",
+      "frame_delay_factor": 3,
+      "duration_s": 1.755,
+      "visible_banners": 0
+    },
+    "local_startseite": {
+      "exitcode": 0,
+      "python": "3.14.7",
+      "tk": "9.1.0",
+      "button_checks": 459,
+      "delayed_real_frames_factor": 3,
+      "log_sha256": "35bdeb6c25d0873fe01d103a359d948f3029b2fd3b955fd0387c0c2323be6691"
+    },
+    "workflow_tests": 6,
+    "native_confirmation_pending": true
   }
 }

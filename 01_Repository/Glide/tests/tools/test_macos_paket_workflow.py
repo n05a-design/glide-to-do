@@ -98,6 +98,13 @@ class MacWorkflowTests(unittest.TestCase):
         focused = self.source.split('- name: Bekannten Mac-Bedienbefund gezielt nachprüfen',1)[1].split('      - name:',1)[0]
         self.assertIn('tests/tools/macos_desktop.py --breite 1920 --hoehe 1080', focused)
         self.assertIn('glide-macos-bedienung-desktop.json', focused)
+        self.assertIn('id: gezielte_pruefung', focused)
+        for name in ('startseite3332', 'import3410'):
+            self.assertIn(f'tests/integration/test_{name}.py', focused)
+        self.assertIn("steps.gezielte_pruefung.outcome == 'success'", step)
+        self.assertNotIn('always()', step)
+        for name in ('startseite', 'import'):
+            self.assertIn(f'${{{{ runner.temp }}}}/glide-macos-{name}.log', self.source)
         self.assertIn("steps.runtime_bau.outcome == 'success'", step)
         freeze = self.source.split('- name: Originalruntime und konkrete Bauquellen einfrieren',1)[1].split('      - name:',1)[0]
         self.assertIn('GLIDE_VOLLPRUEFUNG',freeze)

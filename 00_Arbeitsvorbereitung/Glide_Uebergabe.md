@@ -2,6 +2,8 @@
 
 ## Aktueller Einstieg: CI-Abschluss und Steps-Grundlage (08.11.2026)
 
+**Aktuelle CI-Fortsetzung:** Mac auf `f3408de`, Lauf 42504338614: Vollprüfung rot in `test_startseite3332`; „Erledigt!“-Fahne überlagert „Heute öffnen“ um 128 × 5 px. Der gültige Vertrag prüft die ruhende Ansicht, der Test wartete pauschal 1,1 s. Dreifach verzögerte Animationsbilder reproduzieren danach eine sichtbare Fahne; zustandsbezogenes Warten lässt sie natürlich enden (Gegenprobe 1,755 s, danach keine Fahne). Keine App-Änderung, künstliche Entfernung oder gelockerte Geometrieassertion. Dauerhafte verzögerte Regression ergänzt; vollständiger betroffener Startseitentest lokal mit Python 3.14.7/Tk 9.1 und 459 Knopfprüfungen grün, sechs Workflowtests grün. Frühe native Bedien-/Startseiten-/Altimport-Nachtests vor dem unveränderten Vollmodus; native Bestätigung des Nachtrags ausstehend. Die Pflichtmatrix auf dem unveränderten PR-Commit läuft separat weiter; Linux bereits grün. Systemregister 1.9. Die folgenden Achsen bewahren den davor gesicherten Übergabestand.
+
 Maßgeblich ist der Branch `codex/glide-3.50.7-main-validierung`, [Entwurfs-PR #71](https://github.com/n05a-design/glide-to-do/pull/71), direkt von Main `d7e017f001e5c069eeb98a0f5302577966ac4098` nach den integrierten PRs #69 und #70. Gesicherter System-/Lizenzcommit `967f84f44860456b885067b8aef5a6e76f641122`; die anschließende Reparaturrunde erhält einen eigenen Prüf-/Commitbeleg. Zielversion 3.50.7, Format 26. Kein Merge, Tag oder Release durch diesen Auftrag.
 
 | Achse | Tatsächlicher Stand / nächster Schritt |

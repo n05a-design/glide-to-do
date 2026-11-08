@@ -26,6 +26,24 @@ def descendants(widget):
     return result
 
 
+def wait_for_idle_celebrations(app, mod, idle):
+    """Vor der B15-Geometrie das tatsächliche Ende der Aktionsfahnen abwarten.
+
+    Tk-after-Zeiten sind Mindestabstände, keine Fertigstellungsgarantie.
+    Der begrenzte Wächter entfernt keine Fahne und verändert keine Animation.
+    """
+    deadline = time.monotonic() + 5
+    while True:
+        idle()
+        banners = [widget for widget in app.main_area.winfo_children()
+                   if isinstance(widget, mod.tk.Label)
+                   and str(widget.cget('text')).startswith(app.ICONS['check'] + '  ')]
+        if not banners:
+            return
+        assert time.monotonic() < deadline, 'Aktionsfahnen enden vor ruhender Geometrieprüfung nicht'
+        time.sleep(.02)
+
+
 def check_dashboard_lifetime(app, mod, idle):
     """WA-39: aktuelle Objekte, Archivgrenze und fehlerfester Renderkontext."""
     today = date.today()
@@ -229,10 +247,23 @@ def check_task_tile_actions(app, mod, idle, errors):
     # Geometrie der ruhenden Ansicht: vorhandene zeitlich begrenzte
     # Erledigungsfahnen natürlich auslaufen lassen und den Undo-Hinweis schließen.
     app.hide_undo_toast()
-    deadline = time.monotonic() + 1.1
-    while time.monotonic() < deadline:
-        idle()
-        time.sleep(.02)
+    native_after = root.after
+
+    def delayed_frames(delay, callback=None, *args):
+        # Deterministische Regression: reale Animationsbilder kommen später,
+        # wie bei ausgelasteter Ereignisschleife. Kein Widget wird entfernt.
+        closure = getattr(getattr(callback, '__code__', None), 'co_freevars', ())
+        if 'zeichnen' in closure:
+            delay *= 3
+        return native_after(delay, callback, *args)
+
+    with patch.object(root, 'after', side_effect=delayed_frames):
+        before = set(app.main_area.winfo_children())
+        app._draw_celebration(app.ICONS['check'] + '  Erledigt!')
+        generated = set(app.main_area.winfo_children()) - before
+        assert len(generated) == 1, 'Verzögerte Gegenprobe erzeugt keine Aktionsfahne'
+        wait_for_idle_celebrations(app, mod, idle)
+        assert all(not widget.winfo_exists() for widget in generated)
     configurations = [('light', '860x700', 'mittel', False), ('dark', '1280x800', 'gross', False),
                       ('glass_light', '860x700', 'gross', False), ('light', '480x560', 'gross', True)]
     count, evidence = 0, []

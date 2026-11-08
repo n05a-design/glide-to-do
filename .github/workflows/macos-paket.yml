@@ -120,14 +120,21 @@ jobs:
           printf 'PYTHONPATH=%s\n' "$RUNNER_TEMP/tk91-runtime/python-extension" >> "$GITHUB_ENV"
 
       - name: Bekannten Mac-Bedienbefund gezielt nachprüfen
+        id: gezielte_pruefung
         if: github.event_name == 'workflow_dispatch' && inputs.vollpruefung
         run: |
           "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
             --protokoll "$RUNNER_TEMP/glide-macos-bedienung-desktop.json" -- \
             "$MAC_PYTHON" -B tests/integration/test_bedienung33316.py > "$RUNNER_TEMP/glide-macos-bedienung.log" 2>&1
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-startseite-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_startseite3332.py > "$RUNNER_TEMP/glide-macos-startseite.log" 2>&1
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-import-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_import3410.py > "$RUNNER_TEMP/glide-macos-import.log" 2>&1
 
       - name: Vollständige native macOS-Prüfung
-        if: always() && !cancelled() && steps.runtime_bau.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.vollpruefung
+        if: success() && steps.runtime_bau.outcome == 'success' && steps.gezielte_pruefung.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.vollpruefung
         run: |
           "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
             --protokoll "$RUNNER_TEMP/glide-macos-desktop.json" -- \
@@ -205,6 +212,10 @@ jobs:
             ${{ runner.temp }}/glide-macos-desktop.json
             ${{ runner.temp }}/glide-macos-bedienung-desktop.json
             ${{ runner.temp }}/glide-macos-bedienung.log
+            ${{ runner.temp }}/glide-macos-startseite-desktop.json
+            ${{ runner.temp }}/glide-macos-startseite.log
+            ${{ runner.temp }}/glide-macos-import-desktop.json
+            ${{ runner.temp }}/glide-macos-import.log
             ${{ runner.temp }}/tk91-runtime/runtime-bau.json
             ${{ runner.temp }}/glide-macos-runtime/*.json
             ${{ runner.temp }}/glide-macos-runtime/*.sha256
