@@ -4160,5 +4160,62 @@
       ],
       "cases": 13
     }
+  },
+  "windows_dialog_retry_2026_11_08": {
+    "base_commit": "17d268fc19e5d53d206c7d31ec4ceec2f73a6d6b",
+    "job": 128795808927,
+    "before": {
+      "errors": [
+        "invalid command name \"1999103559296apply_or_retry\""
+      ],
+      "pending_before": [
+        "after#147"
+      ],
+      "pending_after": [
+        "after#147"
+      ],
+      "callback_errors": []
+    },
+    "after": {
+      "errors": [],
+      "pending_before": [
+        "after#147"
+      ],
+      "pending_after": [],
+      "callback_errors": []
+    },
+    "root_regression": {
+      "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+      "faelle": {
+        "fensterende3507": {
+          "ok": true,
+          "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.407,
+          "gestartet_unix": 1794157651.7397482
+        }
+      },
+      "fehler": [],
+      "gruppe": null,
+      "vorgesehene_faelle": [
+        "fensterende3507"
+      ],
+      "laufender_fall": null
+    },
+    "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+    "native_matrix_pending": true,
+    "local_core": {
+      "exitcode": 0,
+      "python": "3.14.7",
+      "tk": "9.1.0",
+      "log_sha256": "eac6769e8b9f6531f5d0571cc21c7bbc632e9dcba4bd8ae9d290a70bedcc4031",
+      "unhandled_callbacks": 0,
+      "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+      "python_delivery_identical": true
+    }
   }
 }

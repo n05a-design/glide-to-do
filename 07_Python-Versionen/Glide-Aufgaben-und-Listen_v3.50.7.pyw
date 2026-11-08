@@ -44611,7 +44611,11 @@ class ListApp:
 
         try:
             holder["id"] = self._register_after(
-                target.after(self.WINDOWS_CHROME_RETRY_DELAYS_MS[attempt], apply_or_retry)
+                # Der Aufruf gehört zum Hauptinterpreter. Ein geschlossenes
+                # Dialogfenster darf seinen Python-Tcl-Befehl nicht vor dem
+                # noch vorgemerkten Retry löschen; die Zielprüfung oben endet
+                # den Auftrag nach dem Dialogschluss ohne erneuten Versuch.
+                self.root.after(self.WINDOWS_CHROME_RETRY_DELAYS_MS[attempt], apply_or_retry)
             )
             target._glide_chrome_jobs.add(holder["id"])
         except tk.TclError:

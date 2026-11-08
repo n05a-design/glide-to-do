@@ -2601,3 +2601,5 @@ Mac-Vollanforderung auf `17d268f` rot vor den Suiten: 954 statt 960 px trotz Doc
 ### 21.82 Ausschließlich erster CI-Blocker bis zur stabilen Pflichtmatrix (08.11.2026)
 
 Nutzerpriorisierung: übrige Archiv-/Dokument-/Optimierungsarbeiten bis zur stabilen Pflichtmatrix zurückstellen. Linuxfehler `gestaltung` auf 17d268f gezielt durch Host-Ersetzung reproduziert, Prüffall auf aktuellen sichtbaren Editor korrigiert. 199 Knopfprüfungen/fünf Konfigurationen in der gezielten Gegenprobe grün; zusätzliche Inhalts-/Ziel-/Aktionsprüfung, keine App-Änderung oder abgeschwächte Assertion. Nächster Schritt: betroffenen nativen UI-Bereich bestätigen, erst danach Gesamtlauf. Systemregister 1.6 enthält die geänderte Prüfdefinition. Kein Merge/Release oder Austausch der C:-Ablage.
+
+Windows-Zusatzbefund derselben Runde: `test_glide` auf 17d268f/Job 128795808927 meldet ungefangenen Fensterfarb-Retry nach Dialogschluss. Deterministisch rot reproduziert; Timer-Eigentümer auf Hauptinterpreter korrigiert, Zielprüfung/Retryzeiten erhalten. Gegenprobe und Root-Endfall grün; Kernprüfung und native Endbestätigung getrennt nachweisen. Keine sonstige Umfangserweiterung.

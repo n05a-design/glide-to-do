@@ -5029,6 +5029,30 @@ def fall_fensterende3507(lauf):
         idle(lauf)
         assert eigener_job in root.tk.splitlist(root.tk.call("after", "info")), "Kindfenster beendet Root-Aufträge"
         assert not getattr(app, "_root_destroyed", False)
+        # Ein früher Dialogschluss während eines DWM-Retrys darf keinen
+        # gelöschten Tcl-Befehl zurücklassen. Auch ohne Windows-API prüfen;
+        # ausschließlich der native Farbauftrag wird durch False ersetzt.
+        chrome_errors = []
+        original_bgerror = bool(root.tk.call("info", "commands", "bgerror"))
+        if original_bgerror:
+            root.tk.call("rename", "bgerror", "_glide_original_bgerror")
+        root.tk.createcommand("bgerror", lambda message: chrome_errors.append(str(message)))
+        try:
+            dialog = tk.Toplevel(root)
+            with patch.object(lauf.mod, "IS_WINDOWS", True), \
+                    patch.object(app, "WINDOWS_CHROME_RETRY_DELAYS_MS", (0,)), \
+                    patch.object(app, "_apply_windows_chrome_theme", return_value=False):
+                app._schedule_windows_chrome_theme(dialog)
+                assert dialog._glide_chrome_jobs, "Gegenprobe plant keinen Farbauftrag"
+                dialog.destroy()
+                idle(lauf, 4)
+            assert not chrome_errors, ("Tcl-Fehler nach Dialogschluss", chrome_errors)
+            assert not dialog._glide_chrome_jobs, "Abgeschlossener Farbauftrag bleibt registriert"
+            assert eigener_job in root.tk.splitlist(root.tk.call("after", "info")), "Dialogschluss beendet fremden Root-Auftrag"
+        finally:
+            root.tk.deletecommand("bgerror")
+            if original_bgerror:
+                root.tk.call("rename", "_glide_original_bgerror", "bgerror")
         app.cancel_pending_callbacks()
         app.finish_recovery_session()
         app.release_data_lock()

@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Windows-Fensterfarb-Retry 08.11.2026
+
+- Farbauftrag am Hauptinterpreter registrieren, damit früher Dialogschluss keinen gelöschten Tcl-Rückruf hinterlässt. Zielprüfung und Retryzeiten bleiben erhalten; dauerhafte Dialogschluss-/Root-Lebensdauerregression ergänzt.
+
 ## Gestaltungstest-Nachlauf 08.11.2026
 
 - Aktiven Seiteneditor nach UI-Neuaufbau im Prüffall erneut auflösen; Seiteninhalt/Ziel und geöffnete Blockaktionen zusätzlich absichern. Deterministische Host-Ersetzung reproduziert den alten Fehler und bleibt als Regression enthalten; keine App-Änderung.
