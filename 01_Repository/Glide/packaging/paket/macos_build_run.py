@@ -30,6 +30,8 @@ def source_inventory(repo):
              for name, digest in manifest(repo / "src/glide", "macos-arm64").items()}
     extra = [repo / name for name in ("VERSION", "LICENSE.md", "requirements/build-macos.txt",
                                      "assets/icons/glide_macos_1024.png")]
+    # Die kanonische Projektlizenz liegt zwei Ebenen oberhalb des Quellbaums.
+    files["../../LICENSE"] = sha(repo.parents[1] / "LICENSE")
     extra += [path for path in (repo / "packaging").rglob("*")
               if path.is_file() and "__pycache__" not in path.parts]
     for path in extra:

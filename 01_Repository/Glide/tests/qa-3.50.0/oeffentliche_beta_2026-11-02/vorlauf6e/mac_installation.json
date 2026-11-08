@@ -1,9 +1,0 @@
-{
-  "exitcode": 0,
-  "version": "3.50.0",
-  "canonical": "build/macos/Glide.app",
-  "local_installation": "~/Applications/Glide.app",
-  "reason": "OneDrive setzt FinderInfo-Bundlemetadaten in Frameworks erneut; lokale native Installation außerhalb des Syncordners. Kanonischer Einstieg als Verknüpfung, unverändertes TAR im Lieferordner.",
-  "package_files_checked": 463,
-  "previous_macos": "build/macos/Archiv/Glide-3.49.0.app"
-}

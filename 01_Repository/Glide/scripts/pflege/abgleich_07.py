@@ -48,6 +48,10 @@ for alt in ZIEL.glob("Glide-Aufgaben-und-Listen_v*.pyw"):
         print("ins Archiv:", ziel.name)
 
 fehler = []
+for name, quelle in (("LICENSE", ABLAGE / "LICENSE"), ("LICENSE.md", ABLAGE / "01_Repository/Glide/LICENSE.md")):
+    copy_atomic(quelle, ZIEL / name)
+    if sha(quelle) != sha(ZIEL / name):
+        fehler.append(name)
 for quelle, name in DATEIEN.items():
     copy_atomic(SRC / quelle, ZIEL / name)
     if sha(SRC / quelle) != sha(ZIEL / name):

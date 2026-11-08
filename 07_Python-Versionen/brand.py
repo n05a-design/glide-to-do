@@ -2,3 +2,7 @@
 
 PURPLE = "#9E4AC8"
 YELLOW = "#FFDC0B"
+
+# Öffentlicher Beschreibungstext; technische Paket- und Datenkennungen bleiben stabil.
+DESCRIPTION = "Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen"
+LICENSE_ID = "MPL-2.0"

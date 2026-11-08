@@ -3540,6 +3540,76 @@ def fall_suchbreite3504(lauf):
     return f"{checks} Suchbreitenprüfungen: Inhaltskante statt Eigenbreite, Buch/Labels/Liste, leer/Suche/löschen, vier Design-/Schriftkombinationen, Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel; Folgeknöpfe ohne Überdeckung"
 
 
+def fall_seitenleistenzeilen3507(lauf):
+    """Reale Zeilenhöhen wachsen mit allen vier Schriften ohne vertikalen Beschnitt."""
+    lauf.showcase()
+    checks, rows = 0, 0
+    for index, schrift in enumerate(lauf.mod.glide_fonts.STYLES):
+        app = lauf.app
+        def schrift_waehlen(dialog, parent=None):
+            dialog.update_idletasks()
+            auswahl = next(feld for feld in knoepfe(dialog, lauf.mod.AppOptionMenu)
+                           if tuple(feld.options) == lauf.mod.glide_fonts.LABELS)
+            auswahl.menu.invoke(index)
+            idle(lauf)
+            speichern = next(knopf for knopf in knoepfe(dialog, lauf.mod.RoundedButton)
+                             if knopf.text == "Speichern")
+            speichern.command()
+        with patch.object(app, "run_modal", schrift_waehlen):
+            app.show_settings_dialog()
+        idle(lauf)
+        assert app.ui_font_family() == schrift.default_family, (schrift.label, app.ui_font_family())
+        for size in ("klein", "mittel", "gross"):
+            app.settings["ui_font_size"] = size
+            app.apply_ui_font()
+            for design in ("light", "dark"):
+                app.set_design(design)
+                for geometry in ("860x700", "1280x800"):
+                    app.settings.update(sidebar_visible=True, sidebar_narrow=False)
+                    app._apply_sidebar_visibility()
+                    lauf.root.geometry(geometry + "+20+20")
+                    idle(lauf, 4)
+                    context = (schrift.label, size, design, geometry)
+                    font_height = app.sidebar_row_font().metrics("linespace")
+                    for name, style, minimum, padding in (
+                            ("system_listbox", "System.Treeview", 28, 8),
+                            ("sidebar_listbox", "Sidebar.Treeview", 30, 10),
+                            ("notes_listbox", "Sidebar.Treeview", 30, 10),
+                            ("drawings_listbox", "Sidebar.Treeview", 30, 10)):
+                        tree = getattr(app, name, None)
+                        if tree is None or not tree.winfo_ismapped():
+                            continue
+                        assert app.style.tk is tree.tk, (context, "Stil gehört zu fremdem Tk-Interpreter")
+                        height = int(app.style.lookup(style, "rowheight"))
+                        assert height >= minimum and height >= font_height + padding, (context, name, height, font_height)
+                        for item in tree.get_children():
+                            box = tree.bbox(item)
+                            if box:
+                                assert box[3] == height, (context, name, box, height)
+                                rows += 1
+                    # Auch angeheftete Zeilen müssen nach dem Designwechsel lesbar bleiben.
+                    for _, pinned_row in app.pinned_sidebar_rows:
+                        text_role = "selection_text" if pinned_row.cget("bg") == app.theme["selection"] else "text"
+                        for label in pinned_row.winfo_children():
+                            assert label.cget("fg") == app.theme[text_role], (
+                                context, label.cget("text"), label.cget("fg"), app.theme[text_role])
+                    assert app.SIDEBAR_ROW_HEIGHT == 30 and app.SYSTEM_ROW_HEIGHT == 28
+                    assert app.SIDEBAR_LISTS_GAP == 18 and app.SIDEBAR_HEADER_BOTTOM_GAP == 0
+                    if lauf.capture and size == "gross" and geometry == "860x700":
+                        sys.path.insert(0, str(REPO / "tests/tools"))
+                        from releasedaten import save_windows_screenshot
+                        lauf.capture.mkdir(parents=True, exist_ok=True)
+                        save_windows_screenshot(lauf.root, lauf.capture / f"seitenleiste-{schrift.key}-{design}.png")
+                    checks += 1
+        lauf.neustart()
+        assert lauf.app.settings["ui_font_family"] == schrift.family
+        idle(lauf, 4)
+        for style in ("Sidebar.Treeview", "System.Treeview"):
+            assert int(lauf.app.style.lookup(style, "rowheight")) >= 28
+    assert checks == 48 and rows > checks, (checks, rows)
+    return f"{checks} Konfigurationen, {rows} sichtbare Zeilen: vier Schriften, drei Größen, hell/dunkel, Mindestbreite/breit; vier Neustarts, Mindesthöhen 30/28 und Schriftreserve, Bereichsabstände 18/0"
+
+
 def fall_seitenleistenabstand3504(lauf):
     """Die erste Hover-Zeile hat oben denselben Kartenabstand wie seitlich."""
     app = lauf.app
@@ -3603,7 +3673,8 @@ def fall_seitenleistenabstand3504(lauf):
     # den Abteilungen, kein Zusatzabstand unter der Abteilungsüberschrift.
     app = lauf.app
     hoehe = lambda stil: int(app.style.lookup(stil, "rowheight"))
-    assert hoehe("System.Treeview") < hoehe("Sidebar.Treeview") < 34, (hoehe("System.Treeview"), hoehe("Sidebar.Treeview"))
+    assert hoehe("System.Treeview") >= 28 and hoehe("Sidebar.Treeview") >= 30
+    assert hoehe("System.Treeview") < hoehe("Sidebar.Treeview"), (hoehe("System.Treeview"), hoehe("Sidebar.Treeview"))
     assert getattr(app, "SIDEBAR_LISTS_GAP", 0) >= 18 and getattr(app, "SIDEBAR_HEADER_BOTTOM_GAP", 2) == 0
     for name in ("lists_title_row", "notes_title_row", "drawings_title_row"):
         zeile = getattr(app, name, None)
@@ -4367,11 +4438,20 @@ def fall_anhangsnamen(lauf):
                                                  "Quellseite.md").to_document()
     app.lists.append(notion_seite)
     assert app.save_items()
-    lauf.neustart()
-    app, mod = lauf.app, lauf.mod
     meldungen = []
-    app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
-    warte(lauf, 1.2)
+    # Lauf.start schaltet Hinweise vor seinem ersten Leerlauf stumm; die
+    # 650-ms-Meldung kann schon dort laufen. Den echten Meldungserzeuger über
+    # die gesamte Start-/Leerlaufphase beobachten, nicht erst danach.
+    original_notice = lauf.mod.ListApp.show_attachment_name_notice
+    def notice_beobachten(instanz, *args, **kwargs):
+        with patch.object(instanz, "show_info",
+                          lambda titel, text, **k: meldungen.append((titel, text))):
+            return original_notice(instanz, *args, **kwargs)
+    with patch.object(lauf.mod.ListApp, "show_attachment_name_notice", notice_beobachten):
+        lauf.neustart()
+        app, mod = lauf.app, lauf.mod
+        app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
+        warte(lauf, 1.2)
     galerie = next(e for e in app.lists if e["id"] == galerie["id"])
     notion_neu = next(e for e in app.lists if e["id"] == notion_seite["id"])
     assert notion_neu["attachments"][0]["storage"] != notion_speicher, "Notion-Anhang nicht gekürzt"
@@ -4885,7 +4965,7 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "seitenleistenzeilen3507", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350")
 
 
 def main():

@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 import shutil
 import sys
+from project_license import stage_project_license
 
 BUILD = {'pyinstaller': 'PyInstaller', 'pyinstaller-hooks-contrib': 'PyInstaller-Hooks',
          'altgraph': 'altgraph', 'macholib': 'macholib', 'packaging': 'packaging',
@@ -75,8 +76,7 @@ def prepare(source, repo, destination, basis):
         for name in record['files']:
             shutil.copy2(basis / name, destination / name)
     # Projektbelege kommen aus genau dem anschließend gebauten Quellstand.
-    current = {'Glide-Lizenzstatus.md': repo / 'LICENSE.md',
-               'tkinterdnd2-LICENSE': source / 'vendor/tkinterdnd2/LICENSE',
+    current = {'tkinterdnd2-LICENSE': source / 'vendor/tkinterdnd2/LICENSE',
                'DejaVu-LICENSE': source / 'resources/fonts/LICENSE',
                'PixelifySans-OFL.txt': source / 'resources/fonts/OFL-PixelifySans.txt',
                'RobotoMono-OFL.txt': source / 'resources/fonts/OFL-RobotoMono.txt',
@@ -90,6 +90,10 @@ def prepare(source, repo, destination, basis):
     for record in document['components']:
         for name in record['files']:
             record['files'][name] = sha(destination / name)
+    # Die Basis ist ein unveränderter historischer Fremdcodebeleg. Nur der
+    # neu erzeugte Bestand erhält Glides heute geltende Lizenz und Quellen.
+    document['components'] = [record for record in document['components'] if record['name'] != 'Glide']
+    document['components'].append(stage_project_license(repo, destination, source))
     document.update(bauabhaengigkeiten=versions,
                     abnahme='Originalbelege und Baulaufzeit abgeglichen; native Paketzuordnung und Start separat.')
     (destination / 'manifest.json').write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

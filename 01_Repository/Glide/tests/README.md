@@ -1,8 +1,8 @@
 # Prüfungen für Glide
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
+Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
 
-Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
+Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 
 3.50 ergänzt Hintergrundfarben, volle Seitenleiste und Blockziehen. `test_arbeitsmodi.py` prüft insgesamt 47 Fälle (einschließlich `buchbreite3503` mit 64 Breitenprüfungen für volle/schmale/ausgeblendete Seitenleiste); der Betafall deckt zehn Designs, alle Hintergrundoptionen, drei Größen, echte Aufgaben und Bildanhänge, Speicherung/Neustart, Undo/Redo, Abbruch und Schreibschutz ab. Der Knopfschutz prüft zusätzlich sieben Ansichten und fünf Dialoge.
 
@@ -12,7 +12,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.6/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.7/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |

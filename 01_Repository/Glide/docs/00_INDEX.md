@@ -1,13 +1,13 @@
 # Dokumentationsindex
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 
 ## Einstieg nach Aufgabe
 
 - **Neue Sitzung und aktueller Stand:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](../AGENTS.md).
-- **Aufgaben und nächste Auswahl:** [einzige Roadmap, Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026).
+- **Aufgaben und nächste Auswahl:** [einzige Roadmap, Plan §21.77](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2177-validierung-produktkommunikation-und-mpl-20-07112026-d72d73).
 - **System-und-Modulpflege:** [Glide-System](../src/glide/README.md) – verbindliches vollständiges Modul-, Feature-, Baustein-, QA- und Testinventar; unabhängig versioniert über [`GLIDE_SYSTEM_VERSION`](../GLIDE_SYSTEM_VERSION) (Start V1.0), Änderungen samt Versionsverlauf im selben Commit.
 - **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
@@ -22,7 +22,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
 | [07 QA-Bericht](07_QA_BERICHT.md) | Quelle/Python 3.50.5, Abnahmekorrekturen und native Lieferstände getrennt, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
-| [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
+| [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben, Produktkommunikation und Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D71 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |

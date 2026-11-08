@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 07.11.2026 · App-Version 3.50.6 · Datenformat 26
+Stand 07.11.2026 · App-Version 3.50.7 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -12,16 +12,18 @@ ersetzt werden.
 | Feld | Stand | Beleg im Code |
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
-| Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.50.6 | `APP_VERSION`, `VERSION` |
+| Technischer Langname | Glide – Aufgaben und Listen; vorhandene Fenster-/Export-/Paketbezeichnung | `APP_PRODUCT_NAME`, unverändert |
+| Öffentliche Beschreibung | Glide – Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
+| Softwarelizenz | Mozilla Public License 2.0 (`MPL-2.0`), kommerzielle Nutzung nach Bedingungen zulässig | [kanonischer Lizenztext](../../../../LICENSE), D72 |
+| App-Version | 3.50.7 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
-| Prüflaufzeit | Lokale Prüfung: Windows x64/Python 3.14.7/eigene Tk 9.1.0; GitHub-main #246 auf 3.50.0 unter Linux/Windows rot. Frühere grüne native Pakete und neue lokale 3.50.2-Prüfung getrennt zuordnen | [Aktueller Audit-/QA-Bericht](../07_QA_BERICHT.md) |
+| Prüflaufzeit | Nach Commit und Plattform getrennt; neue Windows-Grundstufe auf PR #69, Mac-Originalnachweise und spätere Quellkorrekturen separat | [Aktueller QA-Bericht](../07_QA_BERICHT.md) |
 | Netzwerkzugriff | kein automatischer Datentransfer; bewusst angeklickte Links öffnen den Browser | lokale Datenhaltung, `webbrowser` |
 | Benutzerkonto | keines | keine Auth-Pfade |
-| Telemetrie | keine | keine Analytics-Aufrufe |
+| Automatischer Nutzungsdatentransfer | keiner im geprüften Quellstand | keine Analytics-Aufrufe |
 | Nutzerdaten Windows | `%APPDATA%\\Glide\\` bzw. gewählter Datenordner | `get_app_data_dir()`, `change_data_folder()` |
 | Nutzerdaten macOS | `~/Library/Application Support/Glide/` bzw. gewählter Datenordner | `get_app_data_dir()` |
 | Nutzerdaten Linux | `$XDG_DATA_HOME/Glide/` bzw. `~/.local/share/Glide/` | `get_app_data_dir()` |
@@ -41,7 +43,7 @@ ersetzt werden.
 | Max. Papierkorbeinträge | 200 | `MAX_TRASH_ENTRIES` |
 | Max. Ordnerverschachtelung | 5 Ebenen | `MAX_FOLDER_DEPTH` |
 | Materialoptik | abschaltbare getönte Flächen, Kanten und optionaler DWM-Aufruf | `active_theme`, `RoundedContainer` |
-| Mitgelieferte Schriften | DejaVu Sans TTF (vier Schnitte) und Pixelify Sans TTF (Regular, Bold; SIL OFL 1.1, nur Überschriften im Design „Pixel“), private Registrierung | `register_private_fonts`, `app_font`, `pixel_heading_family`, `resources/fonts/provenance.json` |
+| Mitgelieferte Schriften | Rubik, Roboto Mono, Playfair Display, Fraunces und Pixelify Sans (OFL); DejaVu als interner Symbolbegleiter (eigene Lizenz) | `font_catalog.py`, `resources/fonts/provenance.json` |
 | macOS Bundle Identifier | `de.shaye.glide` (Inhaberentscheidung 26.09.2026) | `APP_BUNDLE_ID`, `packaging/macos/baue_app.py` |
 | Windows AppUserModelID | `Shaye.Glide` (Inhaberentscheidung 26.09.2026) | `APP_USER_MODEL_ID`, `set_windows_app_user_model_id`, `packaging/windows/verknuepfung_anlegen.ps1` |
 | Beispielbestand zum Einlesen | Beispiel-, Rundgang- und Releasebackups unter `tests/fixtures/beispiele/` werden je Versionswechsel neu erzeugt und tragen seit 3.44.0 Format 26; ältere Releaseplanungen behalten ihr Format. Feste Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
@@ -55,8 +57,7 @@ ersetzt werden.
 | Support-E-Mail | mailme@shaye.de | Inhaber |
 | Website | Shaye.de | Inhaber |
 | Datenschutz-URL | offen | Inhaber, für beide Stores Pflicht |
-| Lizenzmodell | Entwurf: kostenlose private, nicht kommerzielle Nutzung ([Lizenzentwurf](../10_VEROEFFENTLICHUNG.md#lizenzentwurf)) | Veröffentlichung der Bedingungen noch offen |
-| Preis / Monetarisierung | Private Nutzung kostenlos; kommerzielle Nutzung nicht durch den Entwurf erlaubt | Entwicklungsauftrag 3.26.0 |
+| Preis / Monetarisierung | Angebote für Vertrieb oder Services offen; keine Einschränkung der durch MPL-2.0 eingeräumten Nutzungsrechte | Inhaber |
 | Vertriebsweg | zuerst Direktvertrieb (Website, Developer-ID-Signatur und Notarisierung, Windows-Installer); Stores später – entschieden 27.09.2026 | Inhaber |
 | Windows-Zielarchitektur | x64 – entschieden 27.09.2026 | Inhaber |
 | Inno Setup AppId | offen, einmalige GUID | einmalig erzeugen, danach nie ändern |

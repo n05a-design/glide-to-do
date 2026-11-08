@@ -1,9 +1,0 @@
-{
-  "exitcode": 1,
-  "grund": "Integritätsstopp nach während des Laufs geänderten standpruefung.py und test_standpruefung.py; App unverändert.",
-  "werkzeugtests_exitcode": 0,
-  "fachtests": 1114,
-  "fachtests_exitcode": 0,
-  "ohne_systemzeitzonen_exitcode": 0,
-  "abschluss_gruen": false
-}

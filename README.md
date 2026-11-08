@@ -5,15 +5,14 @@
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Dein Tag. Deine Gedanken. Dein eigener Arbeitsplatz.</strong><br>
-  Der ruhige, deutschsprachige Arbeitsplatz auf deinem Rechner, der aus Aufgaben, Seiten und Pinnwänden einen machbaren Tag macht – ohne Konto, ohne stille Umplanung und mit KI nur über Dateien, die du prüfst.
+  <strong>Aufgaben planen. Ideen verbinden. Selbst gestalten.</strong><br>
+  Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde deine Aufgaben mit Seiten und Notizen, plane deinen Tag und gestalte deine Ideen.
 </p>
 
 <p align="center">
-  <img alt="Version 3.50.6" src="https://img.shields.io/badge/Version-3.50.6-9E4AC8">
+  <img alt="Version 3.50.7" src="https://img.shields.io/badge/Version-3.50.7-9E4AC8">
   <img alt="Windows, macOS, Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
-  <img alt="Ohne Konto, ohne Telemetrie" src="https://img.shields.io/badge/ohne%20Konto-ohne%20Telemetrie-2E7D32">
-  <img alt="Sprache Deutsch" src="https://img.shields.io/badge/Sprache-Deutsch-FFDC0B">
+  <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
   <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Glide-Prüfung" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 </p>
 
@@ -36,11 +35,11 @@
 
 ## Warum Glide?
 
-- **Dein ganzer Bestand, immer und offline.** Glide speichert alles lokal auf deinem Rechner – kein Konto, keine Cloud, keine Telemetrie, keine Auswahl „für unterwegs“. Sicherungen, Rückgängig und ein lesbarer Export sind eingebaut.
-- **Eine Aufgabe, viele Orte.** Dieselbe Aufgabe steht auf einer Seite, in Heute und auf der Pinnwand. Wer sie an einer Stelle erledigt, erledigt sie überall – ohne Kopien und doppelte Pflege.
-- **Ein machbarer Tag statt einer endlosen Liste.** Bearbeitungstag und Fälligkeit sind getrennt, Kapazität und Aufwand werden sichtbar. „Tag entlasten“ zeigt vor dem Verschieben, was sich ändert – Glide plant nie still um.
-- **KI, wenn du willst – unter deiner Kontrolle.** Glide verbindet sich mit keinem KI-Dienst. Du gibst ein geprüftes Kontextpaket weiter und übernimmst Vorschläge erst nach dem Vergleich; ein Schritt zurück genügt.
-- **Feste Begriffe statt Baukasten.** Aufgabe, Seite, Notiz, Pinnwand und Zeichnung funktionieren sofort, ohne dass du zuerst ein eigenes System einrichten musst. Und weil Arbeit nicht nur Text ist, gehört eine Pixel-Werkstatt dazu.
+- **Aufgaben im Zusammenhang bearbeiten.** Eine Aufgabe auf einer Seite, in Heute und auf der Pinnwand bearbeiten: Änderungen gelten überall für dasselbe Original.
+- **Den Tag passend planen.** Bearbeitungstag, Fälligkeit, Aufwand und verfügbare Zeit getrennt sehen. „Tag entlasten“ zeigt die vorgeschlagene Änderung vor dem Übernehmen.
+- **Ideen mit der Arbeit verbinden.** Seiten, Notizen und Pinnwandkarten geben Aufgaben ihren Zusammenhang. Pixel-Zeichnungen werden eigene Symbole und Bilder für deine Inhalte.
+- **Die eigene Arbeit aufbewahren.** Inhalte werden in deinem gewählten Datenordner gespeichert. Automatische Sicherungen, Rückgängig und lesbare Exporte unterstützen die Weiterarbeit.
+- **Vorschläge selbst auswählen.** Der Dateiaustausch mit einem von dir gewählten KI-Werkzeug bietet Kontextvorschau und einen Vergleich, bevor du Änderungen übernimmst.
 
 ## Ein Blick hinein
 
@@ -100,37 +99,30 @@
 - **Anhänge und Zwischenablage:** Dateien über die Dateiauswahl oder per Ziehen hinzufügen, Bilder in der lokalen Vorschau ansehen und Inhalte aus der Zwischenablage übernehmen; eigene Daten und Anhänge bleiben unter deiner Kontrolle.
 - **Importieren und ausgeben:** TXT, CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und Glide-Seiten; Ausgabe auch als CSV und als vollständiger Markdown-Ordner. Druck und PDF über eine lokale Druckansicht.
 - **Vorlagen:** mitgelieferte und eigene Vorlagen, Vorschau vor dem Übernehmen, Aufgaben- und Ordnerstrukturen sowie passende Datumsverschiebung.
-- **Lokaler KI-Austausch:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.
+- **KI-Austausch über Dateien:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.
 - **Sichern und wiederherstellen:** atomare Speicherung, automatische Sicherungen bei Änderungen, Tagesstände, Voll-, Teil- und App-Backups. Sicherungen durchsuchen, Inhalte prüfen, vergleichen und einzelne Seiten wiederherstellen.
 - **Kontrolle behalten:** Papierkorb, Archiv, Rückgängig und Wiederholen, Änderungsverlauf, Speicherstatus, Schutz vor gleichzeitigem Schreiben zweier lokaler Instanzen und ein einsehbares Fehlerprotokoll. Nutzerdaten liegen außerhalb des Programmordners.
 
 Die [Funktionsübersicht](01_Repository/Glide/docs/20_FUNKTIONEN.md) beschreibt Bedienung und Grenzen. Diese Featureliste wird bei jeder Funktionsänderung mit dem Handbuch und den Neuerungen abgeglichen.
 
-## Was Glide bewusst nicht ist
+## Für deine Arbeit am Rechner
 
-Glide ist für eine Person am eigenen Rechner gedacht. Manches lässt Glide absichtlich weg – dafür gibt es gute andere Werkzeuge:
+Glide richtet sich an Menschen, die eigene Projekte und ihren Tag zusammen mit Notizen und visuellem Material organisieren. Du kannst Aufgaben erfassen, auf Seiten weiterdenken und Ideen auf Pinnwänden anordnen. Die Pixel-Werkstatt ergänzt diese Arbeit mit eigenen Zeichnungen und Symbolen.
 
-| Du brauchst … | Glide | Dann passt eher … |
-|---|---|---|
-| Gemeinsame Planung im Team, Zuweisungen, Kommentare | keine Teamfunktionen | Planner, Asana, Trello |
-| Dieselben Daten auf Handy und mehreren Geräten | keine eigene Synchronisierung, keine Mobil-App | Todoist, TickTick, Things |
-| Eigene Datenbanken, Formeln und frei definierbare Felder | feste Begriffe statt Baukasten | Notion, Obsidian Bases |
-| Eine KI, die deinen Kalender selbst umplant | keine eingebaute KI, keine stille Umplanung | Motion, Reclaim |
-
-Deine Daten dürfen in einem selbst gewählten Cloudordner liegen; Glide synchronisiert dabei selbst nichts. Erinnerungen erscheinen nur, solange Glide läuft.
+Der Schwerpunkt liegt auf persönlicher Desktop-Arbeit. Voraussetzungen und Grenzen, etwa Erinnerungen bei laufender App und die Nutzung eines Datenordners auf mehreren Geräten, stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 
 ## Loslegen
 
-Glide läuft unter **Windows, macOS und Linux**. Eigenständige Pakete bringen Python und Tcl/Tk mit; die Python-Fassung läuft auf allen drei Plattformen.
+Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkrete Prüf- und Paketstand ist je Plattform getrennt dokumentiert.
 
-| System | So startest du | Hinweis |
+| Startweg | Verfügbarkeit | Nächster Schritt |
 |---|---|---|
-| **Windows x64** | Unter [Releases](https://github.com/n05a-design/glide-to-do/releases) `Glide-<Version>-windows-x64.zip` laden (Prüfsumme daneben), entpacken und `Glide.exe` starten; SmartScreen: „Weitere Informationen › Trotzdem ausführen“. Entwicklungsstände weiter im Lauf [„Glide-Prüfung“](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) unter „Artifacts“. | unsignierte Beta |
-| **macOS Apple Silicon** | Unter [Releases](https://github.com/n05a-design/glide-to-do/releases) `Glide-<Version>-macos-arm64.dmg` laden (Prüfsumme daneben), Glide in „Programme“ ziehen; Gatekeeper: „Dennoch öffnen“. Entwicklungsstände im Lauf [„macOS-Paket“](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml). | unsignierte Beta |
-| **Linux und alle Systeme** | Repository herunterladen und mit Python 3.14 samt Tk starten: `python3 07_Python-Versionen/Schnellstart.pyw` | keine zusätzlichen pip-Pakete |
+| **Python-Fassung 3.50.7** | Im Repository enthalten, Python 3.14 mit Tk erforderlich | `python3 07_Python-Versionen/Schnellstart.pyw` ausführen |
+| **Windows x64** | Entwicklungsartefakt 3.50.5 aus Actions; Paket für den aktuellen 3.50.7-Stand noch offen | [Prüfläufe und Artefakte](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) und [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md) prüfen |
+| **macOS Apple Silicon** | Lokaler 3.50.6-Bau auf einem früheren Apphash belegt; kein öffentliches 3.50.7-Downloadpaket bestätigt | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
+| **Linux** | Python-Startweg; kein eigenständiges 3.50.7-Paket belegt | Repository mit Python und Tk starten |
 
-> [!NOTE]
-> Pakete stehen derzeit als Artefakte der GitHub-Prüfläufe bereit; zum Herunterladen ist eine GitHub-Anmeldung nötig. Weil sie noch nicht signiert sind, warnt Windows beim ersten Start („Weitere Informationen“ › „Trotzdem ausführen“) und macOS verlangt eine Freigabe unter Systemeinstellungen › Datenschutz & Sicherheit › „Dennoch öffnen“. Dateien, Prüfsummen und Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
+Es gibt beim Abgleich am 07.11.2026 noch **keinen öffentlichen GitHub-Release**. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -138,7 +130,7 @@ Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnell
 
 - Alles liegt in einem Datenordner außerhalb des Programmordners; Datei › „Wo liegen meine Daten?“ zeigt ihn, und du kannst ihn wechseln.
 - Glide speichert atomar, legt bei Änderungen automatische Sicherungen und Tagesstände an und schützt den Bestand vor zwei gleichzeitig schreibenden Glide-Fenstern.
-- Ohne Netzwerkverbindung: Glide überträgt nichts. Nur ein Link, den du anklickst, öffnet den Browser.
+- Der gewählte Datenordner enthält deine gespeicherten Inhalte und Anhänge. Links kannst du gezielt im Browser öffnen; eine selbst gewählte Cloudablage verwaltet deren Anbieter.
 - Ausstieg jederzeit: Der ganze Bestand lässt sich als lesbarer Markdown-Ordner ausgeben; Teil- und App-Sicherungen stellen Glide-Bestände wieder her.
 
 <details>
@@ -150,11 +142,9 @@ Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnell
 
 **Wie bekomme ich meine Notion-Inhalte hinein?** Datei › Importieren › Notion-Export (ZIP). Glide zeigt vorher, was übernommen wird und was verloren ginge, und hält das Originalarchiv als Anhang fest.
 
-**Gibt es eine englische Oberfläche?** Nein, Glide ist bewusst deutschsprachig.
+**Welche Bedienhilfen gibt es?** Glide bietet Tastaturwege, eine Befehlspalette, anpassbare Schriftgrößen und Kontrastdesigns. Eine vollständige native Tastatur- und Screenreader-Abnahme ist noch offen beziehungsweise zurückgestellt; der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nennt die geprüften Umfänge.
 
-**Ist Glide barrierefrei?** Glide ist vollständig per Tastatur bedienbar, misst den Textkontrast und bietet Kontrastdesigns. Eine Prüfung mit Screenreadern steht noch aus; deshalb versprechen wir sie nicht.
-
-**Was kostet Glide?** Eine allgemeine Lizenz ist noch nicht festgelegt; siehe [Lizenz](#lizenz).
+**Unter welcher Lizenz kann ich Glide nutzen?** Der Projektcode steht unter MPL-2.0, einschließlich kommerzieller Nutzung nach deren Bedingungen. Entscheidungen über spätere Vertriebs- und Serviceangebote stehen noch aus; siehe [Lizenz](#lizenz).
 
 </details>
 
@@ -166,11 +156,11 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 
-3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**; aktuell ist 3.50.6 mit den Korrekturen der menschlichen Abnahme am Mac vom 07.11.2026 (Bilder oben zeigen 3.50.5). Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
+3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**; der aktuelle Quellstand ist 3.50.7 mit Produkt-/Lizenzabgleich und Seitenleistenkorrektur auf Basis von PR #69 (Bilder oben zeigen 3.50.5). Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
 
 - [Quellcode und Entwicklung](01_Repository/Glide/README.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Markt und Vorbilder](00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md)
 - [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Backups](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md)
@@ -178,8 +168,10 @@ Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26
 
 ## Lizenz
 
-Das Repository ist öffentlich sichtbar. Eine allgemeine Softwarelizenz für Glide ist noch nicht festgelegt; Nutzungs-, Änderungs- und Weiterverteilungsrechte richten sich nach dem [Lizenzstatus](01_Repository/Glide/LICENSE.md). Mitgelieferte Drittkomponenten behalten ihre jeweiligen Lizenzen.
+Glides Projektcode steht unter der **Mozilla Public License 2.0 (`MPL-2.0`)**. Maßgeblich ist der vollständige [Lizenztext](LICENSE), ergänzt durch die [Hinweise zu Geltungsbereich und Weitergabe](01_Repository/Glide/LICENSE.md). Die Lizenz erlaubt auch kommerzielle Nutzung, Änderung und Weitergabe nach ihren Bedingungen. Drittkomponenten, Schriften und fremde Ressourcen behalten ihre jeweiligen Lizenzen. Markenrechte und spätere Vertriebsangebote werden gesondert behandelt.
 
 ## In English
 
-**Glide** is a calm, German-language desktop workspace for Windows, macOS and Linux. It combines tasks and day planning (separate work day and due date, capacity, focus timer), pages and notes with embedded real tasks, pinboards and a pixel-art workshop. Everything stays on your computer – no account, no cloud, no telemetry. AI is optional and only file-based: you export a reviewed context package and import suggested changes after a diff, with undo. The user interface is German only. Packages are currently unsigned development builds (see [Loslegen](#loslegen)); a general license has not been published yet.
+**Glide is a desktop planner for tasks, day planning, pinboards and pixel drawings.** Connect tasks with pages and notes, plan your day and create your own visual material. The same task can appear in several views while keeping one original. Your work is saved in your chosen data folder, with automatic backups and readable exports.
+
+The project code is available under [MPL-2.0](LICENSE). The Python delivery is version 3.50.7; native packages and platform acceptance have separate evidence in the [QA report](01_Repository/Glide/docs/07_QA_BERICHT.md). Public release downloads await owner approval.

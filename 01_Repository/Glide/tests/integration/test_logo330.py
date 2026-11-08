@@ -78,6 +78,9 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    about = app.about_text()
+    assert mod.glide_brand.DESCRIPTION in about and "MPL-2.0" in about
+    assert mod.APP_BUNDLE_ID == "de.shaye.glide" and mod.APP_USER_MODEL_ID == "Shaye.Glide"
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
     def ruhe(runden=10):

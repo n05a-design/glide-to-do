@@ -1,10 +1,10 @@
-# Glide – lokale Aufgaben, Notizen und Pinnwände
+# Glide – Desktop-Planer
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
+Glide ist ein Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
-> **Projektstatus:** Quell-/Python-Stand **3.50.5**; Abnahmekorrekturen umgesetzt, native 3.50.5-Pakete und menschliche Abnahme laufend, Aufgabenformat 26. Aktuelle Prüfungen, native Paketstände und offene menschliche Abnahmen stehen im [QA-Bericht](docs/07_QA_BERICHT.md). Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
+> **Projektstatus:** Quell-/Python-Stand **3.50.7**, Datenformat 26, auf Basis des offenen PR #69 (3.50.6). Aktuelle Prüfungen, native Paketstände und menschliche Abnahmen werden im [QA-Bericht](docs/07_QA_BERICHT.md) getrennt geführt. Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
 
 **Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md), eigenständig versioniert in [`GLIDE_SYSTEM_VERSION`](GLIDE_SYSTEM_VERSION) (Start **V1.0**) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege. Diese Katalogversion ist unabhängig von Glides Anwendungs- und Datenformatversion.
 
@@ -18,7 +18,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Eigenständige Pakete: Windows 3.50.5 unter `build/windows/Glide-3.50.5/Glide.exe` (GitHub-Bau, unsigniert, aus dem Vorstand `a4bfe4ed…` vor der Nacharbeit; Neubau auf `cb4a7aad…` offen); bisherige 3.50.0-Pakete: Windows unter `build/windows/Glide-3.50.0/Glide.exe`, macOS als `build/macos/Glide-3.50.0-macos-arm64.tar.gz` (ein natives Bundle entsteht erst durch Entpacken auf dem Mac). Die ursprünglichen öffentlichen Archive desselben Versionsnamens tragen den damaligen Stand; aktuelle UI-Nachläufe liegen getrennt unter `build/<Plattform>/Kandidaten`. Das Mac-TAR nativ entpacken, damit POSIX-Links und Dateimodi erhalten bleiben. Tatsächliche Bereitstellung und SHA-256 im [aktuellen QA-Nachweis](docs/07_QA_BERICHT.md). Die [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7) beschreibt den reproduzierbaren Bau.
+Eigenständige Paketstände, Quellhashes und Verfügbarkeit werden im [aktuellen QA-/Liefernachweis](docs/07_QA_BERICHT.md) getrennt geführt: vorhandener Windows-Bau 3.50.5, lokaler Mac-Bau 3.50.6 vor späteren Quellkorrekturen, kein bestätigtes eigenständiges Linux-Paket. Der aktuelle Python-Stand ist 3.50.7 / Format 26. Ein frischer Clone enthält keine ignorierten lokalen Bauartefakte. Öffentliche Release-Downloads sind noch nicht freigegeben.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 
@@ -39,7 +39,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.6/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.7/lokaler_lauf --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):
@@ -66,6 +66,6 @@ Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner L
 
 Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md); Entscheidungen und Arbeitsablauf stehen in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Änderungen müssen zum Datenmodell passen, Nutzerdaten schützen und mit den betroffenen Tests und der Dokumentation abgeschlossen werden.
 
-Für Glide ist noch keine öffentliche Softwarelizenz festgelegt; der Quelltext räumt derzeit keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein ([Lizenzstatus](LICENSE.md)).
+Der Projektcode steht unter **MPL-2.0**, einschließlich kommerzieller Nutzung nach den Lizenzbedingungen. [Vollständiger Lizenztext](../../LICENSE) und [Hinweise zu Drittkomponenten und Weitergabe](LICENSE.md).
 
 Logo-Master, Betriebssystem-/Vorschau-/Paketsymbole und künftige Aktualisierungsschritte: [zentrale Logo-Übersicht](../../20_Grafik_Master/README.md).

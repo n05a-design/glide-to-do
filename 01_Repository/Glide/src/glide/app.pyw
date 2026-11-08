@@ -129,6 +129,7 @@ import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
+import brand as glide_brand  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
 import home_dashboard as glide_home_dashboard  # noqa: E402
@@ -232,7 +233,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.50.6"
+APP_VERSION = "3.50.7"
 APP_RELEASE_NAME = "Erster öffentlicher Stand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -17625,7 +17626,8 @@ class ListApp:
             # häufig noch nicht. Nach jedem echten Mapping erneut anwenden.
             self.root.bind("<Map>", self._on_windows_window_map, add="+")
 
-        self.style = ttk.Style()
+        # Bind styles to this window's interpreter, including an in-process restart.
+        self.style = ttk.Style(self.root)
         try:
             self.style.theme_use("clam")
         except tk.TclError:
@@ -44326,7 +44328,7 @@ class ListApp:
             # Inhaberwunsch 07.11.2026: Zeilen etwas enger, Systemzeilen (Startseite
             # bis Papierkorb) noch etwas enger; bei großer Schrift wachsen sie mit.
             try:
-                zeile_schrift = self.measurement_font(self.sidebar_row_font()).metrics("linespace")
+                zeile_schrift = self.sidebar_row_font().metrics("linespace")
             except (tk.TclError, AttributeError, TypeError):
                 zeile_schrift = 20
             zeilenhoehen = {"Sidebar.Treeview": max(self.SIDEBAR_ROW_HEIGHT, zeile_schrift + 10),
@@ -44563,6 +44565,10 @@ class ListApp:
         navigation = getattr(self, "system_listbox", None)
         if isinstance(navigation, SystemNavigation):
             navigation.schedule_icons()
+        # Angeheftete Zeilen tragen eigene Auswahl- und Hoverfarben. Nach
+        # einem Designwechsel müssen auch Schrift und Hover das neue Design
+        # verwenden; der allgemeine Hintergrundabgleich genügt dafür nicht.
+        self.render_pinned_sidebar()
         self._schedule_windows_chrome_theme(self.root)
         self.rebuild_backdrop_menu()
         self.refresh_backdrop()
@@ -67913,17 +67919,20 @@ Labels, Termine und Metadaten."""
     def about_text(self):
         """Der Text von „Über Glide“ – eine Stelle für Fenster und Prüfung."""
         return (
-            f"{APP_PRODUCT_NAME}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
+            f"{APP_NAME} – {glide_brand.DESCRIPTION}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
             "Danke, dass du meine App benutzt.\n"
-            "Ich hoffe, Glide schenkt dir ein bisschen mehr Überblick und Ruhe. "
+            "Mit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. "
             "Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\n"
             "Warum mir Glide wichtig ist\n"
             "Ich wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\n"
             "Aufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\n"
-            "Deshalb ist Glide ein ruhiger, persönlicher Ort für das, was gerade zählt.\n\n"
+            "Glide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\n"
             "Shaye.de – mailme@shaye.de\n\n"
-            "Deine Listen und Einstellungen bleiben lokal auf diesem Gerät. Liegt die Ablage in "
-            "einem Cloudordner, arbeiten mehrere Geräte nacheinander auf demselben Bestand.\n"
+            f"Softwarelizenz: Mozilla Public License 2.0 ({glide_brand.LICENSE_ID}).\n"
+            "Quellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\n"
+            "Mitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\n"
+            "Deine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. "
+            "Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\n"
             f"Speicherort der Daten:\n{BASE_DIR}"
         )
 

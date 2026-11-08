@@ -3,8 +3,8 @@
 Läuft auf dem nativen Windows-Prüfstand (GitHub-Hosted-Runner) vor dem
 Paketbau. Versionen kommen aus der geladenen Laufzeit, Lizenztexte aus der
 Python-Installation, den Bauabhängigkeiten, dem Glide-Quellbestand und
-versionsgenau aus den Herkunftsrepositorien. Für Glide selbst wird keine
-Veröffentlichungslizenz gewählt; der vorhandene Statushinweis wird beigelegt.
+versionsgenau aus den Herkunftsrepositorien. Für Glide werden die beschlossene
+MPL-2.0, Hinweise und der zugehörige Git-Quellstand beigelegt.
 
 Aufruf: python -B lizenzen_vorbereiten_windows.py --quelle src/glide --repo 01_Repository/Glide --ziel <Ordner>
 """
@@ -24,6 +24,7 @@ import urllib.request
 
 from windows_license_sources import static_sources, toolkit_references, utf8proc_version
 from runtime_provenance import validate_runtime_proof
+from project_license import stage_project_license
 
 PIN = "6.22.3"
 BUILD = ("pyinstaller", "pyinstaller-hooks-contrib", "altgraph", "packaging", "setuptools", "pefile", "pywin32-ctypes")
@@ -210,8 +211,7 @@ def main():
     b.add("Zstandard", zstd, "https://github.com/facebook/zstd/tree/v" + zstd,
           [b.fetch("https://raw.githubusercontent.com/facebook/zstd/v" + zstd + "/LICENSE", "Zstandard-LICENSE.txt")])
 
-    b.add("Glide", "Entwicklungsstand; öffentliche Lizenz offen", "LICENSE.md",
-          [b.copy(repo / "LICENSE.md", "Glide-Lizenzstatus.md")])
+    b.components.append(stage_project_license(repo, b.ziel, source))
     b.add("tkinterdnd2", "0.6.3", "https://pypi.org/project/tkinterdnd2/0.6.3/",
           [b.copy(source / "vendor/tkinterdnd2/LICENSE", "tkinterdnd2-LICENSE")])
     tkdnd = (source / "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl").read_bytes().split(b"package require Tk", 1)[0]
