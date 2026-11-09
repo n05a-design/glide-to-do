@@ -1,8 +1,8 @@
-# Glide-System V1.11.1
+# Glide-System V1.12
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.11.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.12 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.11.1` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.12` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.11.1 · Aufgabenformat 26 ·
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.12** | 09.11.2026 | Aufgabenmarkierungen trennen gleiche Schriftattribute nach tatsächlichem Symbolpaar. Seitenleistenmatrix enthält deterministischen Ersatzzeichenwechsel. Native MacBook-Nachweise als eigener Prüfstrang. | App 3.50.7, Format 26 |
 | **V1.11.1** | 08.11.2026 | Prüfbezug präzisiert: lokaler strenger Abschluss und nativer Mac-Nachlauf auf 0e704f3 belegt; gemeinsame Schlussmatrix und ihre lebenden CI-Nachweise getrennt. Katalogbestand und Appcode unverändert. | App 3.50.7, Format 26 |
 | **V1.11** | 08.11.2026 | Kartenumbruch misst identische Texte je Aufruf nur einmal, ohne Cache über Schrift-/Interpreterwechsel. Gepaarte Tempoauswertung mit gleicher +10-%-Grenze und positiven/negativen Gegenproben; gezielter nativer Seitenkarten-/Arbeitsmodinachlauf vor Gesamtlauf. | App 3.50.7, Format 26 |
 | **V1.10** | 08.11.2026 | Kompaktfokus unter Cocoa mit echtem Wechsel zur Finder-App nachprüfen; tatsächlichen Fokusverlust und echtes Hauptfenster-FocusOut belegen. Einzeln auswählbarer nativer Nachtest vor Paketbau; Vollmodus behält sämtliche Prüfungen. | App 3.50.7, Format 26 |
@@ -649,7 +650,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T115 | [`start_font_probe.py`](../../tests/integration/start_font_probe.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T116 | [`test_animation3400.py`](../../tests/integration/test_animation3400.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T117 | [`test_ansichten.py`](../../tests/integration/test_ansichten.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T118 | [`test_arbeitsmodi.py`](../../tests/integration/test_arbeitsmodi.py) | 63 verpflichtende Fälle in fünf vollständigen Gruppen; Cocoa-Fokusfixture mit tatsächlichem App-Wechsel und echtem FocusOut. Native Grenzen im QA-Bericht |
+| T118 | [`test_arbeitsmodi.py`](../../tests/integration/test_arbeitsmodi.py) | 63 verpflichtende Fälle in fünf vollständigen Gruppen; Cocoa-Fokusfixture mit tatsächlichem App-Wechsel und echtem FocusOut. Seitenleistenmatrix umfasst den Wechsel der aufgelösten Aufgabenzeichen bei gleicher Schrift. Native Grenzen im QA-Bericht |
 | T119 | [`test_aufgaben3380.py`](../../tests/integration/test_aufgaben3380.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T120 | [`test_aufraeumen330.py`](../../tests/integration/test_aufraeumen330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T121 | [`test_auftraege.py`](../../tests/integration/test_auftraege.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |

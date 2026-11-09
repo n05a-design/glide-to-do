@@ -45652,7 +45652,9 @@ class ListApp:
         offen, fertig = self.ICONS["task_open"], self.ICONS[done_icon]
         try:
             schrift = self.measurement_font(font)
-            schluessel = (tuple(sorted(schrift.actual().items())), done_icon)
+            # Die Symbolauflösung kann bei gleichen Schriftattributen von
+            # Ersatztext auf ein Zeichen wechseln. Beide Texte bestimmen die Breite.
+            schluessel = (tuple(sorted(schrift.actual().items())), fertig, offen)
         except (tk.TclError, TypeError, ValueError):
             return fertig if done else offen
         cache = getattr(self, "_task_marker_cache", None)

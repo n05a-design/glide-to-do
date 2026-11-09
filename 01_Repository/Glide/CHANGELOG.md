@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Aufgabenmarkierungen beim Schriftwechsel 09.11.2026
+
+- Markierungen nach Schriftattributen und tatsächlich dargestelltem Zeichenpaar messen. Wechsel zwischen Ersatztext und Symbol lässt den Seiteneditor wieder korrekt aufbauen. Die Seitenleistenmatrix prüft den Übergang und den Rückwechsel.
+
 ## Prüfbeleg-Konsolidierung 08.11.2026
 
 - Strenge Grundstufe und nativen Mac-Seitenkarten-/63-Arbeitsmodinachlauf mit ihren tatsächlichen Commits dokumentiert; gemeinsamen Schlusslauf und lebende CI-Nachweise davon getrennt. Appcode und Pythonlieferung bleiben zum gezielt geprüften 0e704f3 bytegleich. Systemkatalog 1.11.1, App 3.50.7 / Format 26.

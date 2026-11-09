@@ -4446,5 +4446,35 @@
     },
     "common_final_commit_full_matrix": "pending; see PR71/checks with exact commit",
     "human_and_hardware_acceptance": "pending"
+  },
+  "macbook_marker_2026_11_09": {
+    "baseline_commit": "53116993b8806f8ffd83a1f8e1530c95691e8c5f",
+    "github_full_runs": [
+      42529699457,
+      42529694910,
+      42529765832
+    ],
+    "macbook_baseline": {
+      "passed": 4,
+      "cases": 5,
+      "failed": "seitenleistenzeilen3507",
+      "error": "KeyError('✓')",
+      "paired_card_timing_ratio": 0.950464243,
+      "python": "3.14.5",
+      "tk": "9.1.0",
+      "hardware": "MacBook Air M2"
+    },
+    "windows_counterprobe": {
+      "before_exitcode": 1,
+      "after_exitcode": 0,
+      "configurations": 48,
+      "visible_rows": 384,
+      "restarts": 4,
+      "logs_sha256": {
+        "macbook-marker-red.json": "b83782fc6a5053e333dffeb0277eed0d67a025f3075f4bdafd91373900f63797",
+        "macbook-marker-green.json": "313331eb6bbd55f1b743d7ad964e5f3fa0f5a6b03f5cdc46b523b87cb1378349"
+      }
+    },
+    "native_retest": "pending"
   }
 }

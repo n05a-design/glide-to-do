@@ -3598,6 +3598,15 @@ def fall_suchbreite3504(lauf):
 
 def fall_seitenleistenzeilen3507(lauf):
     """Reale Zeilenhöhen wachsen mit allen vier Schriften ohne vertikalen Beschnitt."""
+    app = lauf.app
+    font = lauf.mod.app_font(31, root=app.root)
+    filler = lauf.mod.glide_design.HAIR_SPACE
+    # Dieselbe Schrift kann nach der Symbolauflösung andere Aufgabenzeichen
+    # verwenden. Der MacBook-Befund wechselte von OK/[] zu ✓/□.
+    for done_mark, open_mark in (("OK", "[]"), ("✓", "□"), ("OK", "[]")):
+        with patch.dict(app.ICONS, check=done_mark, task_open=open_mark):
+            assert app.task_marker(True, font).rstrip(filler) == done_mark
+            assert app.task_marker(False, font).rstrip(filler) == open_mark
     lauf.showcase()
     checks, rows = 0, 0
     for index, schrift in enumerate(lauf.mod.glide_fonts.STYLES):
