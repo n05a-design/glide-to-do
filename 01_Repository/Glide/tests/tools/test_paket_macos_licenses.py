@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Portabler Aufruf und Bindung der Originalbelege an die Baulaufzeit."""
 import copy
 import hashlib

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tk-freie Datums- und Bestandsauswertung für bestehende Ansichten (P09b).
 
 Nur das Lesen identischer Datumszeichenketten wird dauerhaft gemerkt.

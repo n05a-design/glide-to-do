@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Datensperre `glide.lock` ohne Tk (WA-30, Befund A36).
 
 Die Sperre ist eine kleine JSON-Datei mit Rechner, Prozess, Kennung und

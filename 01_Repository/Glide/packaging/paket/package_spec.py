@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native PyInstaller-Spezifikation für die beiden gewählten Zielsysteme."""
 from pathlib import Path
 from package_sources import TARGETS

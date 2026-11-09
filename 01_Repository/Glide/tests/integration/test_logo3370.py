@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glättung, exakte Kleinbilder und Symbolabdeckung über echte UI-Einstiege.
 
 --app und --fall erlauben getrennte Gegenproben gegen die Vorversion.

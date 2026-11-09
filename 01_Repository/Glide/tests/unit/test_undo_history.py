@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholen nach Rückgängig: Stapelregeln ohne Tk (FP-01)."""
 from pathlib import Path
 import sys

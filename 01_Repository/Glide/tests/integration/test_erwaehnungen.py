@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-05: echte Tk-Einstiege, ein Undo, Neustart, Fehler und Aufklapptempo."""
 import argparse
 import contextlib

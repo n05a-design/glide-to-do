@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Filesystem- und DLL-eingebettete Tcl/Tk-Skriptpfade im eigenen Paket prüfen."""
 from pathlib import Path, PureWindowsPath
 import re

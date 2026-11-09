@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholungsregeln ohne Tk (Fachlogik nach D17, KO02 seit 3.33.20).
 
 Bis 3.33.19 lagen Prüfen und Weiterrechnen als Klassenmethoden in `ListApp`;

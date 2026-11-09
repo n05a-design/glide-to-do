@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Konversion, Workergrenzen und Abbruch ohne Tk oder echte Nutzerdaten."""
 from pathlib import Path
 import ast

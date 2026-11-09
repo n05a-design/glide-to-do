@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Tempo 3.33.19: P06r, P04, P03r und E01 über echte Einstiege.
 
 Prüft je Aktion höchstens einen Seitenleistenaufbau und einen geschriebenen

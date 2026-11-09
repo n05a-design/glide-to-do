@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ladeweg in zwei Phasen ohne Tk (WA-28, Befund A34).
 
 Bis 18.10.2026 lagen in `ListApp.load_items` Lesen, Normalisieren und der

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.12
+# SPDX-License-Identifier: MPL-2.0
 """Erzeugt ein Komplettbackup mit ausführlichen Beispieldaten.
 
 Kein Test, sondern ein Werkzeug. Es baut einen Bestand auf, wie ihn ein

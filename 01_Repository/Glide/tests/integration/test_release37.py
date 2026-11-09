@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.7: Scrollwege, Seitendetails und Containeranhänge, isoliert getestet."""
 import argparse
 import copy

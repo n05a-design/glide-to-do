@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Seitenübergreifende Tagesauswahl folgt frischen IDs, ohne Datenänderung."""
 from copy import deepcopy
 from pathlib import Path

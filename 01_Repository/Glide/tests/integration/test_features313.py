@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kompakte Tabellenansicht mit listenspezifischer Spaltenauswahl."""
 import copy
 import importlib.machinery

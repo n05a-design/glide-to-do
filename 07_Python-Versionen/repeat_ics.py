@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide-Wiederholungen ↔ iCalendar-RRULE ohne Tk (FP-00, A28).
 
 Glide klemmt Monats- und Jahresreihen am Monatsende: Eine Reihe ab dem 31.01.

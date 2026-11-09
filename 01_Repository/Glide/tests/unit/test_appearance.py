@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Erscheinungsbild „Automatisch (hell/dunkel)“ (N01) ohne Oberfläche."""
 from pathlib import Path
 import sys

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Schnellerfassung und gespeicherte Filter mit isoliertem Datenordner."""
 import copy
 import importlib.machinery

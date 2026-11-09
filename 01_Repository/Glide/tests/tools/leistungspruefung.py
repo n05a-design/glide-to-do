@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Reproduzierbare Tk-Messung mit synthetischen Daten; keine Nutzerdaten."""
 import argparse
 import importlib.machinery

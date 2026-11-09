@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Typisierte lokale Verweise und abgeleitete Rückverweise (Format 22), ohne Tk."""
 import re
 import copy

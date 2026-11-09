@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native Bibliothekspfade eines eigenen Mac-Pakets lesen, keine App ausführen."""
 from pathlib import Path
 import argparse,json,subprocess

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gemeinsame Gestaltungsskalen und reine Regeln für Titel und Herkunft.
 
 Vier Inhaltsstufen: Seitentitel, Abschnitt, Inhalt und Zusatzangabe.

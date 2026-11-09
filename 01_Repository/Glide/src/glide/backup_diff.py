@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Zwei Sicherungsstände vergleichen, ohne Tk und ohne Schreibzugriff (F-03 seit 3.35.0).
 
 Verglichen werden zwei bereits gelesene Datenstände (dasselbe JSON wie

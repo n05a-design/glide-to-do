@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Überlappungsfreie Belegzeit und Tageskapazität, ohne Tk oder Datenmutation."""
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta, timezone

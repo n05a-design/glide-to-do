@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Liste leeren: frische Bestätigung, Schreibbesitz, Speicherfehler und Undo."""
 import argparse
 import copy

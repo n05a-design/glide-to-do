@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Seitenkarten vor alten Pinnwand-Bereinigern schützen, ohne Tk (FP-04).
 
 Im RAM liegt die gemeinsame Pinnwand. Auf Platte enthält pinboards weiterhin

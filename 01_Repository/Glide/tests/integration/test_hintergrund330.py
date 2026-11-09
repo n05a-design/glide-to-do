@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Hintergrundverläufe (26.09.2026): Generator, Auswahl je Design, Einbau, Lesbarkeit.
 
 Glide legt auf Wunsch einen Mesh-, Aurora- oder Pixelverlauf hinter die

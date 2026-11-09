@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bytegenaue Formatsicherungen mit einem JSON-Parse je Dateistand, ohne Tk."""
 from datetime import datetime
 import hashlib

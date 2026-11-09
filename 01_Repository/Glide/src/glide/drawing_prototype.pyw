@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Isolierte Bedienprobe für Glides geplante Pixel-Zeichenfläche.
 
 Start: ``python3 src/glide/drawing_prototype.pyw``

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Öffnet den Quellstand (`src/glide`) mit dem Showcase in einem eigenen Prüfordner.
 
 Für Sicht- und Bedienabnahmen eines noch nicht gelieferten Kandidaten (seit

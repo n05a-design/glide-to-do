@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Prozess des echten X11-Eingabefokus, ausschließlich lesend für Reader-CI.
 
 Tk-Fenster bieten nicht immer _NET_WM_PID. XRes fragt stattdessen den

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Planungsinvarianten, Datumsgrenzen und Vorschau ohne Oberfläche."""
 import copy
 from datetime import date

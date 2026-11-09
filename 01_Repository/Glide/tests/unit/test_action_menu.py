@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """E-U3 A: Einträge, Filter, Abschnitte und Sperrgründe der durchsuchbaren Aktionen."""
 from pathlib import Path
 import sys

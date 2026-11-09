@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Lokale Pixelbildfolgen, Zeitachse und PNG-Ausgabe ohne Tk.
 
 Jeder Frame behält ein gewöhnliches DrawingModel samt seinem Zell-Undo.

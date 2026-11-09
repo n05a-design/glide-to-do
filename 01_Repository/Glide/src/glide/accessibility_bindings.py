@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native Semantik an die Lebensdauer eines Widgets binden; kein Tk-Import.
 
 Nach Map/Fokus/Selektion setzen Klassenbindungen eigene Standardwerte.

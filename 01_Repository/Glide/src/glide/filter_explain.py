@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bedingungen gespeicherter Filter prüfen und erklären, ohne Tk (D-03 seit 3.34.0).
 
 Ein gespeicherter Filter besteht aus Bedingungen: Liste, Quelle, Status,

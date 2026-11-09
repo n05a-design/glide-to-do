@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Grenzen einer Laufzeitsperre ausschließlich im vergänglichen Hosted-CI-Runner."""
 import errno
 from pathlib import Path, PureWindowsPath

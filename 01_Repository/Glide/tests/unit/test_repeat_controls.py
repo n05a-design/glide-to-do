@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-02 vollständig: Bezug, Pause, Restanzahl, Chips und Kalender-Rundweg."""
 import copy
 from datetime import date

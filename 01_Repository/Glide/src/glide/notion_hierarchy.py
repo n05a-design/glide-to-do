@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bestehende Glide-Ordner für die gewählten Notion-Unterseiten planen, ohne Tk."""
 from dataclasses import dataclass
 from notion_reimport import is_source_key

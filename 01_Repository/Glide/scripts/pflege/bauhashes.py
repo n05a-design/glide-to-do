@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bau-Pins erhalten und SHA-256 der nicht zurückgezogenen PyPI-Dateien erneuern."""
 import json
 from pathlib import Path

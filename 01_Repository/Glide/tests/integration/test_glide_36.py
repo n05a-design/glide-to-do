@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Gezielte 3.6.0-Prüfung für neue, plattformunabhängige Bausteine."""
 
 from __future__ import annotations
@@ -20,7 +21,7 @@ spec = importlib.util.spec_from_loader(loader.name, loader)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
-assert mod.APP_VERSION == "3.50.6"
+assert mod.APP_VERSION == "3.50.7"
 assert mod.moon_phase_info(date(2000, 1, 6))["percent"] == 0
 assert mod.moon_phase_info(date(2000, 1, 20))["percent"] > 90
 

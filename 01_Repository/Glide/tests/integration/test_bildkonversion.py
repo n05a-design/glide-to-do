@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-26: echte Renderwege mit blockiertem Konverter, Hostabbau und Retry.
 
 --app erlaubt die Gegenprobe mit der App vor der Umstellung. Alle Daten und

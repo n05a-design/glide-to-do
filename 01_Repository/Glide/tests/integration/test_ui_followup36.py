@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Vorlagenbreite, Jahreswerte und die Bestandsübersicht mit isolierten Daten."""
 import argparse
 import copy

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gespeicherte Filter prüfen und erklären (D-03) ohne Oberfläche."""
 from datetime import date
 from pathlib import Path

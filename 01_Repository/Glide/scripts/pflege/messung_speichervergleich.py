@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P08a: unprofilierte, abwechselnde Vergleichsmessung gegen einen Git-Stand.
 
 Kein Tk-Fenster, keine echten Daten. Gleiche synthetische Aufgaben mit stabilen

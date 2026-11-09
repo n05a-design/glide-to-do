@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gepinntes NVDA-Testwerkzeug ausschließlich im vergänglichen Hosted-Runner.
 
 Die unveränderten offiziellen Spy-Dateien erfassen NVDA-generierte Sprache.

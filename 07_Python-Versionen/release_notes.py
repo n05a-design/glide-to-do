@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Einmalige Karte „Neu in …“ nach einem Update, ohne Tk (N07 seit 3.33.20).
 
 Der Katalog nennt je Version höchstens fünf Neuerungen in einem Satz. Nach dem
@@ -19,6 +20,12 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.7": (
+        "Glide verbindet Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen als Desktop-Planer.",
+        "Über Glide zeigt die Produktbeschreibung, die MPL-2.0-Lizenz und den Bezug zum Quellcode.",
+        "Die separate Python-Fassung enthält den vollständigen Lizenztext und Hinweise zur Weitergabe.",
+        "Die Seitenleiste passt ihre Zeilenhöhe an die gewählte Schrift an und behält ihre Gestaltung auch nach einem Neustart.",
+    ),
     "3.50.6": (
         "Seiten zeigen ihren Titel nur noch im Kopf in der Themenfarbe; darunter steht jede Ansicht mit einer Unterzeile.",
         "Titelfelder zählen die freien Zeichen herunter, zu lange Anhangsnamen werden vor dem Speichern gekürzt.",

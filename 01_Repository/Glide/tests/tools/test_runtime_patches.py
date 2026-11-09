@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echter Patchlauf und verweigerte fremde/veränderte Eingaben ohne GUI."""
 import hashlib
 import json

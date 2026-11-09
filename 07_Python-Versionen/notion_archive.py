@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Begrenzte Notion-Markdown-/CSV-Archive lesen, ohne Entpacken oder Tk.
 
 ZIP-Pfade dienen ausschließlich als Archivkennungen, nie als lokale Pfade.

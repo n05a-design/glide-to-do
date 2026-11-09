@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-01 Wiederholen nach Rückgängig: echte Tastenwege, Bytevergleich des Bestands.
 
 Jeder Fall prüft eine Abnahme aus dem Entwicklungsplan (FP-01, Kriterien 1–5)

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gemeinsamer WA-42-Prüfwächter; ausschließlich künstliche Prozessdaten.
 
 Belege und Prüfdaten bleiben nach Fehlern erhalten. Ein gestoppter Lauf darf

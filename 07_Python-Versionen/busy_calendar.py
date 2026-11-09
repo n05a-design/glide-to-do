@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Begrenzte, ausdrücklich geladene ICS-Quelle und unveränderliche Zeitfenster.
 
 Dateizugriff erfolgt nur in read_source. expand_window eignet sich für einen

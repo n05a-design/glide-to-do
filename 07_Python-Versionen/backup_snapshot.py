@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unveränderliche Datei-Quelle zwischen Restorevorschau und Übernahme.
 
 Die bestehenden Glide-Schema- und Archivprüfer werden als Funktionen

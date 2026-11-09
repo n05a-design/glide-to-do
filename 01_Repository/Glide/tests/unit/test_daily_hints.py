@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Künstliche Uhr, Neustart, Sammelhinweise und ausdrückliche Nutzeraktionen."""
 import copy
 from datetime import datetime, timedelta, timezone

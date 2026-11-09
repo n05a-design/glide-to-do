@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Editorabbau: offene Timer enden, ungespeicherte Pixel überleben den Wechsel.
 
 --app erlaubt eine Gegenprobe. Keine echten Nutzerdaten, kein globaler Timerabbau

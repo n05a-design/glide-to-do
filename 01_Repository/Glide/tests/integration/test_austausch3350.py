@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Austausch (3.35.0): G24 KI-Austausch Stufe 2 und F-03 Sicherungen vergleichen.
 
 G24: „Für KI bereitstellen …“ schreibt mit Zweck „überarbeiten“ ein Kontextpaket der

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native Signaturgegenprobe auf vergänglichem Windows-CI, keine Systemänderung."""
 import argparse
 import hashlib

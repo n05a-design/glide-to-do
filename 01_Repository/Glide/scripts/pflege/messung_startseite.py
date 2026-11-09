@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unprofilierte Messung der Startseite (P03): Wechsel, Aktualisierung an Ort und Stelle, Widgetzahl.
 
 --kacheln alt zeigt die zwölf Standardkacheln bis 3.33.1, --kacheln d12 die sieben nach D12.

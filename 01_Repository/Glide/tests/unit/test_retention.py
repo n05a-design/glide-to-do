@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aufbewahrung: neue Dateien, fehlende Indexeinträge und Pfadgrenzen."""
 import importlib.util
 from pathlib import Path

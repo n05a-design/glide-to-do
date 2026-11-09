@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """NSAccessibility-Anbieter ausschließlich des eigenen Tk-Testinterpreters.
 
 Keine AX-Desktopinventur und kein Zugriff auf andere Prozesse/Fenster. Dies

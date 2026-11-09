@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kurzlebige Bestandsprojektion der Startseite, ohne Tk und ohne Mutation.
 
 Die Aufrufer liefern bereits nach Archivstatus gefilterte Listen und dieselben

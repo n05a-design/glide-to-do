@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-08",
+  "base_main": "d7e017f001e5c069eeb98a0f5302577966ac4098",
+  "branch": "codex/glide-3.50.7-main-validierung",
+  "inputs": {
+    "src/glide/app.pyw": "b78ab7c651ba594b2cdf7964e6a75b76d150315d5fd6ece645538a45682e89a2",
+    "tests/integration/test_glide.py": "f9fac426ec046fca391b9be9ae7d0f419febbc29f28e797c59c18e117381cb77",
+    "tests/integration/test_arbeitsmodi.py": "e1b931c159c708c32e7d7805e08f385935316ff4c16c415abe2636f3f4981b96",
+    "GLIDE_SYSTEM_VERSION": "d8bb74080a94aa97d78e90f9a656c6a75216e55736f53d5433a0812c5dbc2ec4",
+    "tests/tools/test_pruefablauf.py": "9d422b7ca83eae22d641401e988ff7f623e6a08783c423dbe3fac00a3b79cd01"
+  },
+  "targeted_windows": {
+    "core": 0,
+    "forced_assertion_cleanup": 0,
+    "kompakt": 0,
+    "external_focus_loss": 0,
+    "pinboard": {
+      "exitcode": 0,
+      "button_checks": 1248
+    }
+  },
+  "system_registry": {
+    "version": "1.1",
+    "checks": 4,
+    "exitcode": 0
+  },
+  "source_main_actions": 42427354033,
+  "full_windows": "ausstehend",
+  "full_linux": "ausstehend",
+  "human_acceptance": false,
+  "release": false,
+  "strict_ci": {
+    "exitcode": 0,
+    "steps": [
+      {
+        "name": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "standpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "attributpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "dublettenpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Tk-Voraussetzung",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Startprobe",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Lieferstand",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Fremdcode",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Datenschutz",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Ablagegröße",
+        "status": "ausgeführt"
+      },
+      {
+        "name": "Synchronisation",
+        "status": "ausgeführt"
+      }
+    ],
+    "tool_tests": 263,
+    "tool_skips": 1,
+    "unit_tests_per_run": 1155,
+    "unit_runs": 2,
+    "report_sha256": "ecb989241fc74828f3818888750314f39bc7563b417cfb5af60733f26f3f183b"
+  },
+  "metadata_readback": {
+    "description_includes_projects": true,
+    "topics_match_approved_list": false,
+    "topics_need_reconciliation": true
+  }
+}

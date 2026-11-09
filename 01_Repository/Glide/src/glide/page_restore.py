@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Selektive Seitenwiederherstellung planen, ohne Tk, Dateien oder Mutation.
 
 Eingaben sind bereits vollständig validierte Glide-Datenstände. Eine UI

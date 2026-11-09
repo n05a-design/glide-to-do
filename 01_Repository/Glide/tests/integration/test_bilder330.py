@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bilder in Seiten, Tk-9-Vorschauen, Systemmitteilungen, „/“-Befehle,
 wiederkehrende Checklisten und Tempo (27.09.2026).
 

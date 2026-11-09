@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Glide mit einem Aufruf prüfen; benötigt ausschließlich die Standardbibliothek.
 
 Schnell: Syntax, Versionen, Dokumentverweise, Fixtures, Zeitzone, alle Integrationssuiten und die Analysen.
@@ -26,6 +27,7 @@ import zipfile
 from zugang_pruefvertrag import native_zugangspruefung
 from pruefablauf import Pruefablauf
 from prozessdiagnose import prozessdiagnose, systemkontext
+from arbeitsmodi_gruppen import GRUPPEN, fallbestand, gruppen
 
 REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
@@ -390,12 +392,17 @@ class Prueflauf:
             (self.logdir / f"{name}.log").write_text(output, encoding="utf-8")
         # Frühere Auditfassungen konnten Befunde trotz Exitcode 0 melden.
         has_findings = name == "audit_app" and re.search(r"(?m)^BEFUNDE\s*\([1-9]\d*\)", output)
-        ok = result.returncode == 0 and not has_findings and not (
+        callback_errors = re.findall(
+            r'(?m)^(?:invalid command name "[^"\r\n]+"|bgerror failed to handle background error\.|Exception in Tkinter callback)[^\r\n]*',
+            output)
+        reported_error = "Audit meldet Befunde" if has_findings else (
+            "Unbehandelte Tk-/Tcl-Rückruffehler" if callback_errors else None)
+        ok = result.returncode == 0 and not reported_error and not (
             self.waechter and self.waechter.stopped)
-        if has_findings and self.waechter:
+        if reported_error and self.waechter:
             self.waechter.stopped = True
             self.waechter.rows[-1]["passed"] = False
-            self.waechter.rows[-1]["error"] = "Audit meldet Befunde"
+            self.waechter.rows[-1]["error"] = reported_error
             self.waechter.report["stopped"] = True
             self.waechter.save()
         if not ok:
@@ -403,8 +410,10 @@ class Prueflauf:
         elif not self.logdir:
             print(output.rstrip(), flush=True)
         self.meldung(name, "ausgeführt" if ok else "fehlgeschlagen",
-                     f"Exitcode {result.returncode}" + ("; Audit meldet Befunde" if has_findings else ""))
+                     f"Exitcode {result.returncode}" + ("; " + reported_error if reported_error else ""))
         self.results[-1]["exitcode"] = result.returncode
+        if callback_errors:
+            self.results[-1]["callback_errors"] = callback_errors
         diagnosis = prozessdiagnose(name, result.returncode, output, kontext=self.systemkontext)
         if diagnosis:
             diagnosis.update({"start": started,
@@ -579,8 +588,17 @@ def main():
                 command.append("--nativ")
             if logdir:
                 command.extend(["--report", str(logdir / "zugang-kern.json")])
-        if name == "test_arbeitsmodi.py" and logdir:
-            command.extend(["--report", str(logdir / "arbeitsmodi.json")])
+        if name == "test_arbeitsmodi.py":
+            # 967f84f: 62 Fälle verbrauchten schon 895,28 der 900 s, bevor der
+            # letzte Fall beginnen konnte. Alle Fälle bleiben verpflichtend;
+            # jede serielle Gruppe hat denselben Fehler-/Timeout-/Hashwächter.
+            gruppen(fallbestand(REPO / "tests/integration" / name))
+            for group in GRUPPEN:
+                grouped_command = command + ["--gruppe", group]
+                if logdir:
+                    grouped_command.extend(["--report", str(logdir / f"arbeitsmodi-{group}.json")])
+                run.prozess(f"test_arbeitsmodi_{group}", grouped_command, gui=True)
+            continue
         run.prozess(Path(name).stem, command, gui=True)
     run.prozess("Showcase", [sys.executable, str(REPO / "tests/tools/pruefe_showcase.py")], gui=True)
     for name in ANALYSEN:

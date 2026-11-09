@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wächter gegen Synchronisationskopien und geschrumpfte Hauptdokumente (W04); ohne Git, ohne App."""
 
 import unittest

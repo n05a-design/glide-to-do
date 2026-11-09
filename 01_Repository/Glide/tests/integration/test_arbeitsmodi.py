@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """D55 (23.10.2026): Kompaktmodus (E-U1 A), Nebenansicht (E-U2 A) und Seitenbedienung (E-U3 A).
 
 Echte Tk-Wege mit künstlichen Daten: Tastenereignisse, Klicks auf Griff,
@@ -22,6 +23,8 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO / "tests/tools"))
+from arbeitsmodi_gruppen import GRUPPEN, gruppen  # noqa: E402
 sys.path.insert(0, str(REPO / "tests/integration"))
 from test_uiux_paket import Lauf, knopf_befunde, knoepfe, sichtbarer_ausschnitt  # noqa: E402
 
@@ -1083,9 +1086,39 @@ def fall_kompakt_verlorenes_loslassen(lauf):
     app.entry.event_generate('<FocusOut>')
     idle(lauf)
     assert app._compact_shortcut_down, 'Interner Fokuswechsel verliert das Ereignispaar'
-    lauf.root.event_generate('<FocusOut>')
-    idle(lauf)
-    assert not app._compact_shortcut_down, compact_snapshot(lauf)
+    # Ein zweiter Tk-Interpreter ist unter Cocoa keine andere Anwendung.
+    # Dort die eingebaute Finder-App aktivieren; Fokusverlust weiterhin messen,
+    # nicht durch ein gefälschtes FocusOut oder einen Mock ersetzen.
+    ausserhalb = None
+    focus_out = []
+    binding = lauf.root.bind('<FocusOut>', lambda event: focus_out.append(str(event.widget)), add='+')
+    try:
+        if sys.platform == 'darwin':
+            subprocess.run(['/usr/bin/open', '-a', 'Finder'], check=True, timeout=10,
+                           capture_output=True, text=True)
+        else:
+            ausserhalb = lauf.mod.tk.Tk()
+            ausserhalb.geometry('180x100+30+30')
+            ausserhalb.update()
+            ausserhalb.focus_force()
+        deadline = time.monotonic() + 5
+        while lauf.root.focus_get() is not None and time.monotonic() < deadline:
+            idle(lauf, 2)
+            time.sleep(.02)
+        idle(lauf, 6)
+        lauf.compact_trace.append({'external_focus': 'Finder' if sys.platform == 'darwin' else 'Tk',
+                                   'focus_out': focus_out, 'after': compact_snapshot(lauf)})
+        assert lauf.root.focus_get() is None, compact_snapshot(lauf)
+        if sys.platform == 'darwin':
+            assert str(lauf.root) in focus_out, 'Kein echter Hauptfenster-FocusOut beim App-Wechsel'
+        else:
+            lauf.root.event_generate('<FocusOut>')
+        idle(lauf, 4)
+        assert not app._compact_shortcut_down, compact_snapshot(lauf)
+    finally:
+        lauf.root.unbind('<FocusOut>', binding)
+        if ausserhalb is not None:
+            ausserhalb.destroy()
     taste(lauf.root, '<Control-Shift-K>', lauf)
     assert app.compact_mode_active(), compact_snapshot(lauf)
     lauf.root.event_generate('<KeyRelease-k>')
@@ -1195,12 +1228,35 @@ def fall_gestaltung(lauf):
         editor.text.focus_force()
         editor.text.mark_set("insert", "3.0")
         editor.show_block_handle("insert", "focus")
+        seiteninhalt = editor.text.get("1.0", "end-1c")
         idle(lauf, 4)
+        if name == "hell_eng":
+            # Deterministische Lebensdauer-Gegenprobe: derselbe reguläre
+            # Neuaufbau wie bei ungültiger Themesignatur. Der alte Host muss
+            # wirklich verschwinden; der vollständige Knopfschutz folgt danach.
+            app._rich_note_signature = None
+            app.sync_rich_note_view()
+            idle(lauf, 4)
+            assert not editor.winfo_exists(), "Gegenprobe ersetzt den Seitenhost nicht"
         anzahl, funde = befunde_b15(lauf, f"{name} Seite")
         gesamt += anzahl
         befunde.extend(funde)
         bild(lauf.root, f"{name}_seite")
+        # _sync_rich_note_view ersetzt den Host bei geänderter Themesignatur.
+        # Nach Idle-/Mess-/Aufnahmeschritten bedient ein Nutzer den jetzt
+        # sichtbaren Editor, nicht die zuvor gespeicherte Widgetinstanz.
+        vorher = editor
+        editor = app.rich_note_editor
+        assert app.current_list()["id"] == seite["id"], (name, "Seitenziel verändert")
+        assert editor is not None and editor.winfo_exists() and editor.winfo_ismapped(), (name, "kein aktiver Seiteneditor")
+        assert editor.text.get("1.0", "end-1c") == seiteninhalt, (name, "Seiteninhalt beim Neuaufbau verändert")
+        lauf.editor_host_trace = getattr(lauf, "editor_host_trace", []) + [
+            dict(context=name,old_widget=str(vorher),active_widget=str(editor),content_preserved=True)]
+        editor.text.focus_force()
+        editor.text.mark_set("insert", "3.0")
         editor.show_block_actions()
+        idle(lauf, 4)
+        assert app.action_chooser_open(), (name, "Blockaktionen nicht geöffnet")
         bild(lauf.root, f"{name}_blockaktionen")
         app.close_action_chooser()
         if not kompakt:
@@ -3540,6 +3596,85 @@ def fall_suchbreite3504(lauf):
     return f"{checks} Suchbreitenprüfungen: Inhaltskante statt Eigenbreite, Buch/Labels/Liste, leer/Suche/löschen, vier Design-/Schriftkombinationen, Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel; Folgeknöpfe ohne Überdeckung"
 
 
+def fall_seitenleistenzeilen3507(lauf):
+    """Reale Zeilenhöhen wachsen mit allen vier Schriften ohne vertikalen Beschnitt."""
+    app = lauf.app
+    font = lauf.mod.app_font(31, root=app.root)
+    filler = lauf.mod.glide_design.HAIR_SPACE
+    # Dieselbe Schrift kann nach der Symbolauflösung andere Aufgabenzeichen
+    # verwenden. Der MacBook-Befund wechselte von OK/[] zu ✓/□.
+    for done_mark, open_mark in (("OK", "[]"), ("✓", "□"), ("OK", "[]")):
+        with patch.dict(app.ICONS, check=done_mark, task_open=open_mark):
+            assert app.task_marker(True, font).rstrip(filler) == done_mark
+            assert app.task_marker(False, font).rstrip(filler) == open_mark
+    lauf.showcase()
+    checks, rows = 0, 0
+    for index, schrift in enumerate(lauf.mod.glide_fonts.STYLES):
+        app = lauf.app
+        def schrift_waehlen(dialog, parent=None):
+            dialog.update_idletasks()
+            auswahl = next(feld for feld in knoepfe(dialog, lauf.mod.AppOptionMenu)
+                           if tuple(feld.options) == lauf.mod.glide_fonts.LABELS)
+            auswahl.menu.invoke(index)
+            idle(lauf)
+            speichern = next(knopf for knopf in knoepfe(dialog, lauf.mod.RoundedButton)
+                             if knopf.text == "Speichern")
+            speichern.command()
+        with patch.object(app, "run_modal", schrift_waehlen):
+            app.show_settings_dialog()
+        idle(lauf)
+        assert app.ui_font_family() == schrift.default_family, (schrift.label, app.ui_font_family())
+        for size in ("klein", "mittel", "gross"):
+            app.settings["ui_font_size"] = size
+            app.apply_ui_font()
+            for design in ("light", "dark"):
+                app.set_design(design)
+                for geometry in ("860x700", "1280x800"):
+                    app.settings.update(sidebar_visible=True, sidebar_narrow=False)
+                    app._apply_sidebar_visibility()
+                    lauf.root.geometry(geometry + "+20+20")
+                    idle(lauf, 4)
+                    context = (schrift.label, size, design, geometry)
+                    font_height = app.sidebar_row_font().metrics("linespace")
+                    for name, style, minimum, padding in (
+                            ("system_listbox", "System.Treeview", 28, 8),
+                            ("sidebar_listbox", "Sidebar.Treeview", 30, 10),
+                            ("notes_listbox", "Sidebar.Treeview", 30, 10),
+                            ("drawings_listbox", "Sidebar.Treeview", 30, 10)):
+                        tree = getattr(app, name, None)
+                        if tree is None or not tree.winfo_ismapped():
+                            continue
+                        assert app.style.tk is tree.tk, (context, "Stil gehört zu fremdem Tk-Interpreter")
+                        height = int(app.style.lookup(style, "rowheight"))
+                        assert height >= minimum and height >= font_height + padding, (context, name, height, font_height)
+                        for item in tree.get_children():
+                            box = tree.bbox(item)
+                            if box:
+                                assert box[3] == height, (context, name, box, height)
+                                rows += 1
+                    # Auch angeheftete Zeilen müssen nach dem Designwechsel lesbar bleiben.
+                    for _, pinned_row in app.pinned_sidebar_rows:
+                        text_role = "selection_text" if pinned_row.cget("bg") == app.theme["selection"] else "text"
+                        for label in pinned_row.winfo_children():
+                            assert label.cget("fg") == app.theme[text_role], (
+                                context, label.cget("text"), label.cget("fg"), app.theme[text_role])
+                    assert app.SIDEBAR_ROW_HEIGHT == 30 and app.SYSTEM_ROW_HEIGHT == 28
+                    assert app.SIDEBAR_LISTS_GAP == 18 and app.SIDEBAR_HEADER_BOTTOM_GAP == 0
+                    if lauf.capture and size == "gross" and geometry == "860x700":
+                        sys.path.insert(0, str(REPO / "tests/tools"))
+                        from releasedaten import save_windows_screenshot
+                        lauf.capture.mkdir(parents=True, exist_ok=True)
+                        save_windows_screenshot(lauf.root, lauf.capture / f"seitenleiste-{schrift.key}-{design}.png")
+                    checks += 1
+        lauf.neustart()
+        assert lauf.app.settings["ui_font_family"] == schrift.family
+        idle(lauf, 4)
+        for style in ("Sidebar.Treeview", "System.Treeview"):
+            assert int(lauf.app.style.lookup(style, "rowheight")) >= 28
+    assert checks == 48 and rows > checks, (checks, rows)
+    return f"{checks} Konfigurationen, {rows} sichtbare Zeilen: vier Schriften, drei Größen, hell/dunkel, Mindestbreite/breit; vier Neustarts, Mindesthöhen 30/28 und Schriftreserve, Bereichsabstände 18/0"
+
+
 def fall_seitenleistenabstand3504(lauf):
     """Die erste Hover-Zeile hat oben denselben Kartenabstand wie seitlich."""
     app = lauf.app
@@ -3603,7 +3738,8 @@ def fall_seitenleistenabstand3504(lauf):
     # den Abteilungen, kein Zusatzabstand unter der Abteilungsüberschrift.
     app = lauf.app
     hoehe = lambda stil: int(app.style.lookup(stil, "rowheight"))
-    assert hoehe("System.Treeview") < hoehe("Sidebar.Treeview") < 34, (hoehe("System.Treeview"), hoehe("Sidebar.Treeview"))
+    assert hoehe("System.Treeview") >= 28 and hoehe("Sidebar.Treeview") >= 30
+    assert hoehe("System.Treeview") < hoehe("Sidebar.Treeview"), (hoehe("System.Treeview"), hoehe("Sidebar.Treeview"))
     assert getattr(app, "SIDEBAR_LISTS_GAP", 0) >= 18 and getattr(app, "SIDEBAR_HEADER_BOTTOM_GAP", 2) == 0
     for name in ("lists_title_row", "notes_title_row", "drawings_title_row"):
         zeile = getattr(app, name, None)
@@ -4143,10 +4279,17 @@ def fall_neuerungen3(lauf):
     lauf.showcase()
     rn = mod.glide_release
     befund = []
-    for groesse in ("mittel", "gross"):
+    from itertools import product
+    for schrift, groesse, design, geometry in product(
+            mod.glide_fonts.STYLES, ("mittel", "gross"),
+            ("light", "dark", "pixel"), ("860x700", "1280x800")):
+        app.settings["ui_font_family"] = schrift.key
+        app._ui_font_family = None
+        assert app.ui_font_family() == schrift.default_family, (schrift.key, app.ui_font_family())
         app.settings["ui_font_size"] = groesse
         app.apply_ui_font()
-        lauf.root.geometry("1280x800+20+20")
+        app.set_design(design)
+        lauf.root.geometry(geometry + "+20+20")
         app.settings["release_notes_seen"] = rn.BEFORE_CATALOG
         app._settings_existed = True
         app._home_signature = None
@@ -4162,12 +4305,22 @@ def fall_neuerungen3(lauf):
         assert gelesen, "„Gelesen“ fehlt"
         unten = gelesen[0].winfo_rooty() + gelesen[0].winfo_height()
         sicht = app.home_canvas.winfo_rooty() + app.home_canvas.winfo_height()
-        befund.append(f"{groesse}: {len(versionen)} Versionen, Gelesen {'sichtbar' if unten <= sicht else f'{unten - sicht} px tiefer'}")
+        kontext = (schrift.key, groesse, design, geometry)
+        befund.append(kontext)
         assert unten <= sicht, ("„Gelesen“ erst nach Scrollen", groesse, unten, sicht)
+        assert gelesen[0].winfo_rooty() >= app.home_canvas.winfo_rooty(), kontext
+        assert gelesen[0].winfo_rootx() >= app.home_canvas.winfo_rootx(), kontext
+        assert gelesen[0].winfo_rootx() + gelesen[0].winfo_width() <= app.home_canvas.winfo_rootx() + app.home_canvas.winfo_width(), kontext
+        assert len([text for text in texte if text.startswith("• ")]) == sum(
+            len(points) for _, points in rn.notes_since(rn.BEFORE_CATALOG, mod.APP_VERSION)), ("Neuerungstext fehlt", kontext)
+        if lauf.capture and sys.platform == 'win32' and schrift.key == 'roboto_mono' and groesse == 'gross':
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / f'neuerungen_{design}_{geometry}.png')
         gelesen[0].command()
         idle(lauf, 6)
         assert app.settings["release_notes_seen"] == mod.APP_VERSION
-    return "; ".join(befund)
+    return f"{len(befund)} Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam"
 
 
 def warte(lauf, sekunden):
@@ -4367,11 +4520,20 @@ def fall_anhangsnamen(lauf):
                                                  "Quellseite.md").to_document()
     app.lists.append(notion_seite)
     assert app.save_items()
-    lauf.neustart()
-    app, mod = lauf.app, lauf.mod
     meldungen = []
-    app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
-    warte(lauf, 1.2)
+    # Lauf.start schaltet Hinweise vor seinem ersten Leerlauf stumm; die
+    # 650-ms-Meldung kann schon dort laufen. Den echten Meldungserzeuger über
+    # die gesamte Start-/Leerlaufphase beobachten, nicht erst danach.
+    original_notice = lauf.mod.ListApp.show_attachment_name_notice
+    def notice_beobachten(instanz, *args, **kwargs):
+        with patch.object(instanz, "show_info",
+                          lambda titel, text, **k: meldungen.append((titel, text))):
+            return original_notice(instanz, *args, **kwargs)
+    with patch.object(lauf.mod.ListApp, "show_attachment_name_notice", notice_beobachten):
+        lauf.neustart()
+        app, mod = lauf.app, lauf.mod
+        app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
+        warte(lauf, 1.2)
     galerie = next(e for e in app.lists if e["id"] == galerie["id"])
     notion_neu = next(e for e in app.lists if e["id"] == notion_seite["id"])
     assert notion_neu["attachments"][0]["storage"] != notion_speicher, "Notion-Anhang nicht gekürzt"
@@ -4603,7 +4765,12 @@ def fall_pinnwandleiste(lauf):
                         assert rand.winfo_width() >= feldschrift.measure(text) + 30, ("Gruppieren abgeschnitten", kontext, text)
                 # Höchstens eine Leistenzeile (Abnahme 07.11.2026): alle sichtbaren Leistenknöpfe auf einer Höhe.
                 if geometrie == "1720x900" and gruppe_zeilen_pruefen(app, mod):
-                    befunde.append(("Pinnwandleiste mehrzeilig", kontext, gruppe_zeilen_pruefen(app, mod)))
+                    breiten = [(knopf.text, knopf.winfo_reqwidth())
+                               for knopf in knoepfe(app.workspace.bar, mod.RoundedButton)
+                               if knopf.winfo_ismapped()]
+                    befunde.append(("Pinnwandleiste mehrzeilig", kontext,
+                                    gruppe_zeilen_pruefen(app, mod),
+                                    app.workspace.bar.winfo_width(), breiten))
                 anzahl, funde = befunde_b15(lauf, f"Pinnwand {kontext}")
                 befunde.extend(funde)
                 befunde.extend(auswahlfeld_befunde(lauf.root, mod, kontext))
@@ -4877,6 +5044,59 @@ def fall_markenkante(lauf):
     assert not befunde, befunde
     return f"{geprueft} Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante"
 
+def fall_fensterende3507(lauf):
+    """Root-Abbau leert eigene Tcl-Aufträge, nicht die anderer Fenster/Interpreter."""
+    root, app, tk = lauf.root, lauf.app, lauf.mod.tk
+    fremd = tk.Tk()
+    fremd.withdraw()
+    fremder_job = fremd.after(60000, lambda: None)
+    try:
+        kind = tk.Toplevel(root)
+        eigener_job = app._register_after(root.after(60000, lambda: None))
+        kind.destroy()
+        idle(lauf)
+        assert eigener_job in root.tk.splitlist(root.tk.call("after", "info")), "Kindfenster beendet Root-Aufträge"
+        assert not getattr(app, "_root_destroyed", False)
+        # Ein früher Dialogschluss während eines DWM-Retrys darf keinen
+        # gelöschten Tcl-Befehl zurücklassen. Auch ohne Windows-API prüfen;
+        # ausschließlich der native Farbauftrag wird durch False ersetzt.
+        chrome_errors = []
+        original_bgerror = bool(root.tk.call("info", "commands", "bgerror"))
+        if original_bgerror:
+            root.tk.call("rename", "bgerror", "_glide_original_bgerror")
+        root.tk.createcommand("bgerror", lambda message: chrome_errors.append(str(message)))
+        try:
+            dialog = tk.Toplevel(root)
+            with patch.object(lauf.mod, "IS_WINDOWS", True), \
+                    patch.object(app, "WINDOWS_CHROME_RETRY_DELAYS_MS", (0,)), \
+                    patch.object(app, "_apply_windows_chrome_theme", return_value=False):
+                app._schedule_windows_chrome_theme(dialog)
+                assert dialog._glide_chrome_jobs, "Gegenprobe plant keinen Farbauftrag"
+                dialog.destroy()
+                idle(lauf, 4)
+            assert not chrome_errors, ("Tcl-Fehler nach Dialogschluss", chrome_errors)
+            assert not dialog._glide_chrome_jobs, "Abgeschlossener Farbauftrag bleibt registriert"
+            assert eigener_job in root.tk.splitlist(root.tk.call("after", "info")), "Dialogschluss beendet fremden Root-Auftrag"
+        finally:
+            root.tk.deletecommand("bgerror")
+            if original_bgerror:
+                root.tk.call("rename", "_glide_original_bgerror", "bgerror")
+        app.cancel_pending_callbacks()
+        app.finish_recovery_session()
+        app.release_data_lock()
+        # Echte Destroy-/Unmap-Bindungen bleiben aktiv. Sie können während
+        # des Abbaus neue Idle-Aufträge anlegen, nachdem oben schon geleert wurde.
+        root.destroy()
+        eigene_reste = root.tk.splitlist(root.tk.call("after", "info"))
+        assert not eigene_reste, ("Tcl-Aufträge nach Root-Ende", eigene_reste)
+        assert fremder_job in fremd.tk.splitlist(fremd.tk.call("after", "info")), "Fremder Interpreter verändert"
+        assert getattr(app, "_root_destroyed", False)
+    finally:
+        fremd.tk.call("after", "cancel", fremder_job)
+        fremd.destroy()
+    return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
+
+
 FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
@@ -4885,17 +5105,21 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "seitenleistenzeilen3507", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350", "fensterende3507")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
-    parser.add_argument("--fall", choices=FAELLE + ("alle",), default="alle")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--fall", choices=FAELLE + ("alle",))
+    selection.add_argument("--gruppe", choices=GRUPPEN)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--capture", type=Path)
     args = parser.parse_args()
-    ergebnis = {"app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(), "faelle": {}, "fehler": []}
+    selected = gruppen(FAELLE)[args.gruppe] if args.gruppe else (FAELLE if args.fall in (None, "alle") else (args.fall,))
+    ergebnis = {"app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(), "faelle": {}, "fehler": [],
+                "gruppe": args.gruppe, "vorgesehene_faelle": selected}
 
     def bericht_sichern():
         if args.report:
@@ -4904,9 +5128,10 @@ def main():
             temporary.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             temporary.replace(args.report)
 
-    for name in (FAELLE if args.fall == "alle" else (args.fall,)):
+    for name in selected:
         started = time.monotonic()
-        ergebnis["laufender_fall"] = {"name": name, "phase": "setup"}
+        wall_started = time.time()
+        ergebnis["laufender_fall"] = {"name": name, "phase": "setup", "gestartet_unix": wall_started}
         bericht_sichern()
         print(f"START {name}", flush=True)
         # Diagnose ohne geändertes Zeitlimit oder abgefangene Testfehler.
@@ -4937,9 +5162,13 @@ def main():
                     ergebnis['faelle'][name]['runtime'] = getattr(lauf, 'runtime', {})
                     if hasattr(lauf, 'compact_trace'):
                         ergebnis['faelle'][name]['event_trace'] = lauf.compact_trace[-256:]
+                    if hasattr(lauf, 'editor_host_trace'):
+                        ergebnis['faelle'][name]['editor_host_trace'] = lauf.editor_host_trace
                     abbauen(lauf)
         faulthandler.cancel_dump_traceback_later()
         ergebnis["faelle"][name]["dauer_s"] = round(time.monotonic() - started, 3)
+        ergebnis["faelle"][name]["gestartet_unix"] = wall_started
+        print(f"ENDE {name}: {ergebnis['faelle'][name]['dauer_s']:.3f} s", flush=True)
         ergebnis["laufender_fall"] = None
         bericht_sichern()
     print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Vollständiges App-Backup: Rundlauf, Teilbereiche, Vorschau und Grenzen."""
 import copy
 import importlib.machinery

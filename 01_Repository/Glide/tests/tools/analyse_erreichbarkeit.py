@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.12
+# SPDX-License-Identifier: MPL-2.0
 """Erreichbarkeits- und Ähnlichkeitsanalyse – der zweite, unabhängige Weg.
 
 Während `analyse_statisch.py` fragt „wird dieser Name irgendwo genannt?",

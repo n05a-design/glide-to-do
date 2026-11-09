@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P03/E01: Teilabgleich, aktuelle Inhalte und wiederverwendbare Dialoge.
 
 Künstliche Daten, echte Mutations-/Modalwege. --app und --fall erlauben

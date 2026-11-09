@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Erklärbare Tagesauswahl: reine Berechnung, stabile Quellen, keine Mutation."""
 from datetime import date, timedelta
 import hashlib

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Pixelanimation: echte Editor-/Dialogwege, Schreibfehler und Altleserschutz."""
 import argparse
 import copy

@@ -1,6 +1,6 @@
 # Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer
 
-Stand 07.11.2026 · Glide 3.50.6 · entschieden vom Inhaber am 27.09.2026
+Stand 07.11.2026 · Glide 3.50.7 · entschieden vom Inhaber am 27.09.2026
 
 AGENTS.md, Regel 4: keine neue Laufzeitabhängigkeit ohne dokumentierte
 Entscheidung. Dies ist sie.
@@ -56,4 +56,4 @@ notieren, den Ordner `tkinterdnd2` samt `LICENSE` ersetzen,
 `provenance.json` fortschreiben, `test_bilder330` und
 `test_paketierung330` laufen lassen.
 
-**Aktualitätsprüfung 02.11.2026 (WA-44):** PyPI führt inzwischen [tkinterdnd2 0.7.0](https://pypi.org/project/tkinterdnd2/0.7.0/) vom 25.10.2026. Die geprüfte Lieferung enthält weiterhin 0.6.3. Vor einer Übernahme Wheel-/Bibliotheksinventar, geänderte Lade-/PyInstaller-Hookwege und Zielplattformen vergleichen, Herkunft/Hashes nachführen und beide nativen Pakete samt echter DnD-Probe prüfen. Eine grüne Integritätsprüfung der alten Fassung ersetzt diesen Upgrade-Nachweis nicht. [Abhängigkeitsabgleich](../../tests/qa-3.50.0/abschlussabgleich_2026-11-02/abhaengigkeiten.json).
+**Aktualitätsprüfung 02.11.2026 (WA-44):** PyPI führt inzwischen [tkinterdnd2 0.7.0](https://pypi.org/project/tkinterdnd2/0.7.0/) vom 25.10.2026. Die geprüfte Lieferung enthält weiterhin 0.6.3. Vor einer Übernahme Wheel-/Bibliotheksinventar, geänderte Lade-/PyInstaller-Hookwege und Zielplattformen vergleichen, Herkunft/Hashes nachführen und beide nativen Pakete samt echter DnD-Probe prüfen. Eine grüne Integritätsprüfung der alten Fassung ersetzt diesen Upgrade-Nachweis nicht. [Abhängigkeitsabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/abhaengigkeiten.json).

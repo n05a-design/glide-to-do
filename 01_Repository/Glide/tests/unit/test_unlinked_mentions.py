@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-05: erwartete Treffer/Fallen unabhängig von der Oberfläche."""
 import copy
 from pathlib import Path

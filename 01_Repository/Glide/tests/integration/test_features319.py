@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Änderungsverlauf: Migration, erfasste Vorgänge, Grenzen, Backups, Filter, Dialog."""
 import copy
 import importlib.machinery

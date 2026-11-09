@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kompression und Antworten vom 27.09.2026.
 
 - Titel von Listen, Seiten und Ordnern höchstens 40 Zeichen; zu lange Titel

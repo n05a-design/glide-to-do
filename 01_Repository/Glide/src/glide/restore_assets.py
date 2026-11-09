@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Anhänge für einen selektiven Restore neu ablegen; keine Bestandsmutation, kein Tk."""
 import copy
 from dataclasses import dataclass

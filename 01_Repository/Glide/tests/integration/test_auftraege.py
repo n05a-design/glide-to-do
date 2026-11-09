@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-06: fünf lokale Aufträge über Dialog, Datei, Kopierweg und alte Importer."""
 import argparse
 import copy

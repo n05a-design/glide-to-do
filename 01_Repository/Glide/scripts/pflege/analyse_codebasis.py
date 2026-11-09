@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Statische Durchsicht von app.pyw: Größen, wiederholte Texte, identische Funktionen, häufige Aufrufe.
 
 Aufruf: python3 scripts/pflege/analyse_codebasis.py

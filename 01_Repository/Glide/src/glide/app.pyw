@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import base64
 import calendar
 import colorsys
@@ -129,6 +130,7 @@ import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
+import brand as glide_brand  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
 import home_dashboard as glide_home_dashboard  # noqa: E402
@@ -232,8 +234,8 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.50.6"
-APP_RELEASE_NAME = "Erster öffentlicher Stand"
+APP_VERSION = "3.50.7"
+APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -5824,8 +5826,9 @@ class ItemWorkspace:
         if self.mode == "board":
             aktionen = self.board_action_buttons(self.bar)
             schalter = self.board_controls(self.bar)
-            aktionsfluss = ButtonFlow(line, bg=app.theme["card"], gap=6)
-            schalterfluss = ButtonFlow(zeile2, bg=app.theme["card"], gap=6)
+            leistenabstand = glide_design.SPACING[4]
+            aktionsfluss = ButtonFlow(line, bg=app.theme["card"], gap=leistenabstand)
+            schalterfluss = ButtonFlow(zeile2, bg=app.theme["card"], gap=leistenabstand)
             # Nach den Zeilen erzeugt stehen sie ohnehin darüber; `raise` hält
             # das auch für „Reiter“ fest (`Canvas.lift` hebt nur Zeichenelemente).
             for button in aktionen + schalter + [overview]:
@@ -5870,12 +5873,12 @@ class ItemWorkspace:
                 # „Bearbeiten“ und „Verbinden“ weichen bei Mindestbreite
                 # zuerst; beide stehen auch unter „Aktionen“.
                 sichtbare_aktionen = list(aktionen)
-                if breite < sum(b.winfo_reqwidth() + 6 for b in aktionen) + 12 + (
+                if breite < sum(b.winfo_reqwidth() + leistenabstand for b in aktionen) + 16 - leistenabstand + (
                         zurueck.winfo_reqwidth() + 10 if zurueck is not None else 0):
                     sichtbare_aktionen = [b for b in aktionen if b.text not in ("Bearbeiten", "Verbinden")]
-                bedarf_aktionen = sum(b.winfo_reqwidth() + 6 for b in sichtbare_aktionen) + 12
-                bedarf_haupt = sum(b.winfo_reqwidth() + 6 for b in haupt)
-                bedarf_neben = sum(b.winfo_reqwidth() + 6 for b in zweitrangig)
+                bedarf_aktionen = sum(b.winfo_reqwidth() + leistenabstand for b in sichtbare_aktionen) + 16 - leistenabstand
+                bedarf_haupt = sum(b.winfo_reqwidth() + leistenabstand for b in haupt)
+                bedarf_neben = sum(b.winfo_reqwidth() + leistenabstand for b in zweitrangig)
                 bedarf_reiter = overview.winfo_reqwidth() + 8
                 bedarf_zurueck = zurueck.winfo_reqwidth() + 10 if zurueck is not None else 0
                 # Eine Zeile, solange neben den Aktionen wenigstens die
@@ -5923,9 +5926,9 @@ class ItemWorkspace:
                     else:
                         for index, knopf in enumerate(sichtbare_aktionen):
                             knopf.pack(in_=line, side="left",
-                                       padx=(0, 16 if index == len(sichtbare_aktionen) - 1 else 6))
+                                       padx=(0, 16 if index == len(sichtbare_aktionen) - 1 else leistenabstand))
                         for knopf in sichtbare_schalter:
-                            knopf.pack(in_=ziel, side="left", padx=(0, 6))
+                            knopf.pack(in_=ziel, side="left", padx=(0, leistenabstand))
                         if stufe < 2:
                             overview.pack(in_=ziel, side="left", padx=(2, 0))
                     if einzeilig:
@@ -6702,7 +6705,7 @@ class ItemWorkspace:
                                     ("Verbinden", self.start_connect_mode, "muted"),
                                     ("Aktionen", self.show_board_actions_menu, "muted")):
             knoepfe.append(app._make_dialog_button(parent, text, befehl, farbe,
-                                                   width=schrift.measure(text) + 26, height=34))
+                                                   width=schrift.measure(text) + 16, height=34))
         return knoepfe
 
     def board_choice_button(self, parent, text, optionen, aktuell, setzen, hinweis, tooltip=None, name=None):
@@ -6732,7 +6735,7 @@ class ItemWorkspace:
             return menu
 
         knopf = app._make_dialog_button(parent, beschriftung, oeffnen, "muted",
-                                        width=schrift.measure(beschriftung) + 30, height=34)
+                                        width=schrift.measure(beschriftung) + 16, height=34)
         knopf.open_choices = oeffnen
         knopf.choices_menu = menue
         if name:
@@ -9003,10 +9006,20 @@ class ItemWorkspace:
 
     @staticmethod
     def truncate_lines(text, font, width, lines):
+        # Nur innerhalb dieses Aufrufs: keine alten Messwerte nach Schrift-,
+        # Skalierungs- oder Interpreterwechsel. Tk-Messungen für identische
+        # Zeilentexte bei Aufbau und Endkürzung nicht mehrfach ausführen.
+        measurements = {}
+
+        def measure(value):
+            if value not in measurements:
+                measurements[value] = font.measure(value)
+            return measurements[value]
+
         words, output, current = str(text).split(), [], ""
         for word in words:
             trial = (current + " " + word).strip()
-            if font.measure(trial) > width and current:
+            if measure(trial) > width and current:
                 output.append(current)
                 current = word
             else:
@@ -9017,8 +9030,8 @@ class ItemWorkspace:
         if not result:
             return ""
         for index, line in enumerate(result):
-            truncated = font.measure(line) > width or (index == lines-1 and len(output) > lines)
-            while line and font.measure(line + ("…" if truncated else "")) > width:
+            truncated = measure(line) > width or (index == lines-1 and len(output) > lines)
+            while line and measure(line + ("…" if truncated else "")) > width:
                 line = line[:-1]
             result[index] = line + ("…" if truncated else "")
         return "\n".join(result)
@@ -17625,7 +17638,8 @@ class ListApp:
             # häufig noch nicht. Nach jedem echten Mapping erneut anwenden.
             self.root.bind("<Map>", self._on_windows_window_map, add="+")
 
-        self.style = ttk.Style()
+        # Bind styles to this window's interpreter, including an in-process restart.
+        self.style = ttk.Style(self.root)
         try:
             self.style.theme_use("clam")
         except tk.TclError:
@@ -28933,7 +28947,7 @@ class ListApp:
             self._bind_home_wheel(widget)
             return widget
 
-        def card(parent, title=None, pad_y=None):
+        def card(parent, title=None, pad_y=None, heading_action=None):
             container = _ui.make(self.make_rounded_container,
                 parent,
                 fill_key="card",
@@ -28953,13 +28967,22 @@ class ListApp:
                 if isinstance(container, RoundedContainer):
                     container.itemconfigure(container._window_id, width=container.inner._home_build_width)
             _ui.pack(container, fill="x", pady=(glide_design.SPACING[0], self.HOME_CARD_GAP))
+            heading_parent = container.inner
+            if title and heading_action:
+                # D66: Abschluss am Kartenkopf bleibt auch bei drei längeren
+                # Versionsberichten und großer Schrift ohne Scrollen erreichbar.
+                heading_parent = _ui.make(tk.Frame, container.inner, bg=theme["card"])
+                _ui.pack(heading_parent, fill="x", pady=(0, glide_design.SPACING[6]))
+                caption, command, color = heading_action
+                action(heading_parent, caption, command, color, side="right", pady=0)
+                self._bind_home_wheel(heading_parent)
             if title and self.is_pixel_design():
                 # Pixel-Design: Der Kachelkopf ist eine Farbfläche; die Farben
                 # wechseln Blau, Gelb, Pink wie Bausteine.
                 farbe = theme[self.PIXEL_BLOCK_KEYS[pixel_block["n"] % len(self.PIXEL_BLOCK_KEYS)]]
                 pixel_block["n"] += 1
                 symbol, caption = glide_symbols.split_heading(title, self.ICONS)
-                head = _ui.make(tk.Frame, container.inner, bg=farbe)
+                head = _ui.make(tk.Frame, heading_parent, bg=farbe)
                 _ui.pack(head, fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
                 if symbol:
                     icon = _ui.make(tk.Label, head, retention_key="symbol", text=symbol,
@@ -28975,7 +28998,7 @@ class ListApp:
                 self._bind_home_wheel(head)
                 self._bind_home_wheel(kopf)
             elif title:
-                label(container.inner, title, 13, True)
+                label(heading_parent, title, 13, True)
             self._bind_home_wheel(container)
             self._bind_home_wheel(container.inner)
             return container.inner
@@ -29817,19 +29840,19 @@ class ListApp:
             self.save_settings()
             signatur = self.home_signature()
         if neuerungen:
-            neu_karte = card(kopfbereich, f"{self.ICONS['check']}  Neu in Glide {APP_VERSION}")
+            def gelesen():
+                self.settings.update(glide_release.remember_seen(self.settings, APP_VERSION))
+                self.save_settings()
+                self._home_scroll_to_top = True
+                self.refresh_home()
+            neu_karte = card(kopfbereich, f"{self.ICONS['check']}  Neu in Glide {APP_VERSION}",
+                             heading_action=("Gelesen", gelesen, "confirm"))
             for version, punkte in neuerungen:
                 if len(neuerungen) > 1:
                     label(neu_karte, f"Version {version}", 10, True, color="muted", pady=(glide_design.SPACING[4], glide_design.SPACING[2]))
                 for punkt in punkte:
                     label(neu_karte, f"• {punkt}", 10, pady=(glide_design.SPACING[0], glide_design.SPACING[2]))
 
-            def gelesen():
-                self.settings.update(glide_release.remember_seen(self.settings, APP_VERSION))
-                self.save_settings()
-                self._home_scroll_to_top = True
-                self.refresh_home()
-            action(neu_karte, "Gelesen", gelesen, "confirm", pady=(glide_design.SPACING[8], glide_design.SPACING[0]))
         for key in [k for k in sichtbar if k in breite_kacheln]:
             bauer[key](kopfbereich)
 
@@ -44326,7 +44349,7 @@ class ListApp:
             # Inhaberwunsch 07.11.2026: Zeilen etwas enger, Systemzeilen (Startseite
             # bis Papierkorb) noch etwas enger; bei großer Schrift wachsen sie mit.
             try:
-                zeile_schrift = self.measurement_font(self.sidebar_row_font()).metrics("linespace")
+                zeile_schrift = self.sidebar_row_font().metrics("linespace")
             except (tk.TclError, AttributeError, TypeError):
                 zeile_schrift = 20
             zeilenhoehen = {"Sidebar.Treeview": max(self.SIDEBAR_ROW_HEIGHT, zeile_schrift + 10),
@@ -44563,6 +44586,10 @@ class ListApp:
         navigation = getattr(self, "system_listbox", None)
         if isinstance(navigation, SystemNavigation):
             navigation.schedule_icons()
+        # Angeheftete Zeilen tragen eigene Auswahl- und Hoverfarben. Nach
+        # einem Designwechsel müssen auch Schrift und Hover das neue Design
+        # verwenden; der allgemeine Hintergrundabgleich genügt dafür nicht.
+        self.render_pinned_sidebar()
         self._schedule_windows_chrome_theme(self.root)
         self.rebuild_backdrop_menu()
         self.refresh_backdrop()
@@ -44594,7 +44621,11 @@ class ListApp:
 
         try:
             holder["id"] = self._register_after(
-                target.after(self.WINDOWS_CHROME_RETRY_DELAYS_MS[attempt], apply_or_retry)
+                # Der Aufruf gehört zum Hauptinterpreter. Ein geschlossenes
+                # Dialogfenster darf seinen Python-Tcl-Befehl nicht vor dem
+                # noch vorgemerkten Retry löschen; die Zielprüfung oben endet
+                # den Auftrag nach dem Dialogschluss ohne erneuten Versuch.
+                self.root.after(self.WINDOWS_CHROME_RETRY_DELAYS_MS[attempt], apply_or_retry)
             )
             target._glide_chrome_jobs.add(holder["id"])
         except tk.TclError:
@@ -45621,7 +45652,9 @@ class ListApp:
         offen, fertig = self.ICONS["task_open"], self.ICONS[done_icon]
         try:
             schrift = self.measurement_font(font)
-            schluessel = (tuple(sorted(schrift.actual().items())), done_icon)
+            # Die Symbolauflösung kann bei gleichen Schriftattributen von
+            # Ersatztext auf ein Zeichen wechseln. Beide Texte bestimmen die Breite.
+            schluessel = (tuple(sorted(schrift.actual().items())), fertig, offen)
         except (tk.TclError, TypeError, ValueError):
             return fertig if done else offen
         cache = getattr(self, "_task_marker_cache", None)
@@ -45647,8 +45680,27 @@ class ListApp:
         self._empty_frame_job = None
         self._collapse_counts = {}
         self._collapse_ignore = set()
+        self._root_destroyed = False
+
+        def root_beendet(event):
+            if event.widget is not self.root:
+                return
+            # Destroy/Unmap der Kinder können NACH cancel_pending_callbacks
+            # weitere Idle-Aufträge erzeugen. Beim Destroy der Wurzel sind die
+            # Kinder weg, der eigene Tcl-Interpreter aber noch ansprechbar.
+            # Rohes Tcl-Cancel vermeidet Python-Callbackzugriffe auf tote Widgets.
+            self._root_destroyed = True
+            for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
+                self.root.tk.call("after", "cancel", job)
+            self._after_ids.clear()
+            self._empty_frame_job = None
+            self._emptied_parents.clear()
+
+        self.root.bind("<Destroy>", root_beendet, add="+")
 
         def merken(event):
+            if self._root_destroyed:
+                return
             widget = getattr(event, "widget", None)
             eltern = getattr(widget, "master", None)
             if not isinstance(eltern, tk.Frame) or isinstance(eltern, (tk.Tk, tk.Toplevel)):
@@ -66254,9 +66306,14 @@ Labels, Termine und Metadaten."""
         self._compact_shortcut_down = False
 
     def reset_compact_shortcut_on_focus_out(self, event):
-        # Interner Fokuswechsel darf das laufende Ereignispaar nicht auftrennen.
+        # Eine Geometrieänderung kann unter X11 kurz FocusOut auslösen und
+        # den Fokus noch im selben Ereignisdurchgang zurückgeben. Erst danach
+        # zwischen externem Fokusverlust und Fensterumbau unterscheiden.
         if event.widget is self.root:
-            self.reset_compact_shortcut()
+            def nach_fokuswechsel():
+                if self.current_focus_widget() is None:
+                    self.reset_compact_shortcut()
+            self._register_after(self.root.after_idle(nach_fokuswechsel))
 
     def toggle_compact_mode(self, event=None):
         if getattr(self, "_compact", None):
@@ -67913,17 +67970,20 @@ Labels, Termine und Metadaten."""
     def about_text(self):
         """Der Text von „Über Glide“ – eine Stelle für Fenster und Prüfung."""
         return (
-            f"{APP_PRODUCT_NAME}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
+            f"{APP_NAME} – {glide_brand.DESCRIPTION}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
             "Danke, dass du meine App benutzt.\n"
-            "Ich hoffe, Glide schenkt dir ein bisschen mehr Überblick und Ruhe. "
+            "Mit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. "
             "Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\n"
             "Warum mir Glide wichtig ist\n"
             "Ich wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\n"
             "Aufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\n"
-            "Deshalb ist Glide ein ruhiger, persönlicher Ort für das, was gerade zählt.\n\n"
+            "Glide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\n"
             "Shaye.de – mailme@shaye.de\n\n"
-            "Deine Listen und Einstellungen bleiben lokal auf diesem Gerät. Liegt die Ablage in "
-            "einem Cloudordner, arbeiten mehrere Geräte nacheinander auf demselben Bestand.\n"
+            f"Softwarelizenz: Mozilla Public License 2.0 ({glide_brand.LICENSE_ID}).\n"
+            "Quellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\n"
+            "Mitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\n"
+            "Deine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. "
+            "Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\n"
             f"Speicherort der Daten:\n{BASE_DIR}"
         )
 

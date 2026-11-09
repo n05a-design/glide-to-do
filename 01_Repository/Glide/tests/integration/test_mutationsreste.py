@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-37/38/40: Dialoggrenzen, Speicherergebnis und genau ein Undo."""
 import argparse
 from datetime import date

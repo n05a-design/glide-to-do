@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aufgaben-Kernablauf mit künstlichen Daten und echten Tk-Widgets.
 
 Attribut- und Tastaturprüfungen sind keine Screenreader-Abnahme. --nativ

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kapazität und Tagesplanung: Rechenregeln, Ansicht, Aktionen und Dialoge."""
 import copy
 import importlib.machinery

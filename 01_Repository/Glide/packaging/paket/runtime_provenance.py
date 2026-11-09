@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Geprüfte eigene Tk-9.1-Eingaben vor dem Paketbau, ohne App-/Tk-Import."""
 import hashlib
 import json

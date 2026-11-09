@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Datenkern der Glide-Pixelzeichnung.
 
 Das Modul ist absichtlich unabhängig von Tk und vom produktiven Glide-Bestand.

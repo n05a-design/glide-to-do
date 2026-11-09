@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Unprofilierter Vergleich des Speicherwegs bei wachsendem Bestand (P08, T2).
 
 Misst je Bestandsgröße das erste Speichern einer Sitzung (mit den

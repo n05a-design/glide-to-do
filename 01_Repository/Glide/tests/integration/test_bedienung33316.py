@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """U01/U02/U13/U14/U16/U22/U24: gemeinsame echte Bedienwege und Neustart."""
 import argparse
 import copy

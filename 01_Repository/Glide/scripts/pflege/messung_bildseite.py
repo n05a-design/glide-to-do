@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Bildlayout einer Seite beim Tippen und Scrollen messen (P04).
 
 Aufruf (aus `01_Repository/Glide`):

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Seitenleisten-Ziehen und Layoutoptimierung mit echten Tk-Bindungen.
 
 Prüft Inhalte, IDs, Datumsfelder, Rückgängig und Neustart. Keine echten Daten.

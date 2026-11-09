@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Ablagegröße: verhindert, dass das Repository wieder aufgebläht wird.
 
 Aufruf aus `01_Repository/Glide`:
@@ -19,7 +20,7 @@ neuesten begrenzt.
 3. Archivalter: Hauptdateien in `07_Python-Versionen/Archiv`, Nachweisordner
    `tests/qa-<Version>` und Releaseplanungen in `tests/fixtures/beispiele`
    gehören zu den sieben neuesten Versionen. Ausgenommen sind die
-   Releaseplanungen in `DAUERHAFT`.
+   Releaseplanungen in `DAUERHAFT` sowie ausdrücklich geschützte QA-Stände.
 4. Fensterbilder: nur in den drei neuesten Versionen, gleich in welchem
    Bildordner (`fenster/`, `fensterbilder/`, `screenshots/`); Vollprüfungen nach
    3.33.6 versionieren den Ordner `fenster/` gar nicht mehr.
@@ -56,6 +57,11 @@ VERSIONIERT = (
     re.compile(re.escape(QUELLBAUM) + r"tests/fixtures/beispiele/glide_releaseplanung_" + _V + r"\.glidebackup"),
 )
 QA_ORDNER = re.compile(re.escape(QUELLBAUM) + r"tests/qa-" + _V + r"/")
+# Inhaberauftrag 08.11.2026: historische Nachweise im aktuellen Audit nicht
+# löschen. Der bereits vorbereitete Altersabgang des Erststands wird bewahrt;
+# Größen-, Fremdrest- und Bildregeln bleiben unverändert.
+GESCHUETZTE_QA_VERSIONEN = frozenset({"3.50.0"})
+GESCHUETZTE_REFERENZEN = frozenset({QUELLBAUM + "tests/fixtures/beispiele/glide_releaseplanung_3.50.0.glidebackup"})
 # Bleiben außerhalb der sieben Versionen: je Datenformat die letzte
 # Releaseplanung (11–19) als Lesbarkeitsbeleg der Fixtureprüfung und 3.30.0,
 # die test_tempo330 als feste Messgrundlage liest.
@@ -106,7 +112,9 @@ def befunde(eintraege, aktuell=None):
         if (endung in DATENFORMATE and pfad.startswith(ARCHIVBEREICHE)
                 and any(teil.lower() == "archiv" for teil in teile)):
             funde.append(("Archivkopie", pfad, "Vorfassungen trägt Git; keine Kopie im Archivordner"))
-        if version and version not in archiv and pfad not in DAUERHAFT:
+        qa_geschuetzt = QA_ORDNER.match(pfad) and version in GESCHUETZTE_QA_VERSIONEN
+        if (version and version not in archiv and pfad not in DAUERHAFT
+                and pfad not in GESCHUETZTE_REFERENZEN and not qa_geschuetzt):
             funde.append(("Archivalter", pfad, f"{version} liegt vor den {ARCHIV_VERSIONEN} neuesten Versionen"))
         elif QA_ORDNER.match(pfad) and BILDORDNER & set(teile[:-1]) and endung == ".png":
             if "fenster" in teile[:-1] and als_tupel(version) > FENSTERBILDER_BIS:
@@ -145,7 +153,7 @@ def zusammenfassung(eintraege, funde):
     if not funde:
         return (text + f"; keine Archivkopien, Fehlreste, Dateien über {GRENZE_MB} MB, Archive und "
                 f"Nachweise nur der {ARCHIV_VERSIONEN} neuesten, Fensterbilder nur der "
-                f"{BILDER_VERSIONEN} neuesten Versionen")
+                f"{BILDER_VERSIONEN} neuesten Versionen; ausdrücklich geschützte QA-Stände und Referenzfixtures bleiben erhalten")
     regeln = sorted({regel for regel, _, _ in funde})
     return (text + f"; {len(funde)} Funde ({', '.join(regeln)}): "
             + ", ".join(f"{pfad} ({grund})" for _, pfad, grund in funde[:5])

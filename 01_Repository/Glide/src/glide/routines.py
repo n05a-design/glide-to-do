@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Routinen in „Heute“ ohne Tk (AU06 seit 3.33.20).
 
 Eine Routine ist eine vorhandene Aufgabenliste mit wiederkehrender Checkliste,

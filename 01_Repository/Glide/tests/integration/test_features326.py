@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Regressionen aus der 3.26-Nachprüfung; ausschließlich isolierte Testdaten."""
 import copy
 import importlib.machinery

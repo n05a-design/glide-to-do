@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Portable flache Anhangspfade, ohne Tk und ohne Dateizugriff.
 
 Seit D67 (menschliche Abnahme 07.11.2026) gilt für Anhangsnamen dieselbe Grenze

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Raster, Zeitumstellung und begrenzte Tagesauswahl aus großen Jahresfenstern."""
 from datetime import date, datetime, timedelta, timezone
 import random

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Anzeige- und Bedienregeln für Palette, Hinweise, Termine und Tastenwege, ohne Tk oder Mutation."""
 
 

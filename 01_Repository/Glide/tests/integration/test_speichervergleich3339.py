@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P08a: gemeinsamer Speichervergleich, Undo/Reload und Fehler/Retry.
 
 --app erlaubt die rote Gegenprobe; --baseline-ref vergleicht zusätzlich alle

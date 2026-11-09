@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Semantische Grenzen: Heimat, Referenz, Archiv, Papierkorb, ID-Neuvergabe."""
 import copy
 from pathlib import Path

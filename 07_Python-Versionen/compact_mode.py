@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kompaktmodus ohne Tk (E-U1 A, D55, 23.10.2026).
 
 Ein ausdrücklich eingeschalteter Arbeitsmodus für ein schmales Glide-Fenster

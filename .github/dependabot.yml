@@ -1,4 +1,4 @@
-# Glide 3.50.0: Laufzeit ohne pip-Abhängigkeiten; feste Bauabhängigkeiten
+# Glide: Laufzeit ohne pip-Abhängigkeiten; feste Bauabhängigkeiten
 # und GitHub Actions werden getrennt geprüft. Dependabot
 # schlägt deren Aktualisierungen wöchentlich als ein gebündelter Pull Request vor.
 # Der mitgelieferte Fremdcode (src/glide/vendor) wird nicht automatisch

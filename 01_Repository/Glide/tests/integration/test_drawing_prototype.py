@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Regressionstests für die isolierte Tk-Zeichenflächenprobe."""
 
 from __future__ import annotations

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Feste Bestandteile bleiben fest (Entscheidung des Nutzers vom 27.09.2026).
 
 Beim Wechsel zwischen Aufgabenliste, Liste im Unterordner, Notiz, Zeichnung,

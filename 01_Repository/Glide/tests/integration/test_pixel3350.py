@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Pixel (3.35.0): G19 Palettenfarbe ändern mit Vorschau, G-03 Symbolvorschau vor dem ICO-Export.
 
 G19: Doppelklick auf eine Farbe der Farbleiste öffnet „ersetzen durch …“; die

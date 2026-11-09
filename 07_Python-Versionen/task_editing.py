@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Feldweises Zusammenführen einer Inspektoreingabe, ohne Tk oder Mutation.
 
 Eine gehaltene Eingabefläche darf während einer Änderung nicht neu gebaut

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Regressionen für gepflegte Einstiege; kein App-Import, keine Nutzerdaten."""
 
 import unittest
@@ -9,6 +10,20 @@ import standpruefung as stand
 
 
 class Einstiegspruefung(unittest.TestCase):
+    def test_public_readme_uses_dated_authoritative_version_link_without_allowing_stale_or_missing_stands(self):
+        for path,target in (("README.md","01_Repository/Glide/VERSION"),
+                            ("01_Repository/Glide/README.md","VERSION")):
+            link=f"[Technischer Quellstand]({target})\n"
+            with self.subTest(path=path):
+                current=self.check(path,"# Glide\nStand 08.11.2026\n"+link)
+                self.assertEqual(current.fehler,[])
+                for text in ("# Glide\n"+link, "# Glide\nStand 08.11.2026\n",
+                             "# Glide\nStand 08.11.2026\n[Quelle](other/VERSION)\n",
+                             "# Glide\nStand 08.11.2026 · Glide 3.32.2\n"+link):
+                    self.assertTrue(any('(R1)' in error for error in self.check(path,text).fehler))
+        other=self.check("docs/README.md","# Intern\nStand 08.11.2026\n[Version](VERSION)\n")
+        self.assertTrue(any('(R1)' in error for error in other.fehler))
+
     def check(self, path, text):
         result = stand.Befund("3.32.3", {"DATA_SCHEMA_VERSION": 20}, suiten=58)
         stand.datei_pruefen(result, path, text)

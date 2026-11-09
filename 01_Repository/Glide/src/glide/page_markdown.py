@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Markdown ↔ Seitendokument für die Seitenart „Seite“ (26.09.2026).
 
 Seiten sind für KI-erzeugte Berichte gedacht; die kommen als Markdown. Dieses

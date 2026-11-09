@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Versionswechsel für Glide: Nummern, Fixtures und Standangaben.
 
 Aufruf: python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026

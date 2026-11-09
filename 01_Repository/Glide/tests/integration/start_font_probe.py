@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Frischer echter Appstart: gebündelte Symbole und sichtbare Navigationszähler."""
 import importlib.machinery
 import importlib.util

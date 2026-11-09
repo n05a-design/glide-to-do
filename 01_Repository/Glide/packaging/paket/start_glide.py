@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Startet das eigenständige Paket oder dessen isolierte native Startprobe."""
 from pathlib import Path
 import json

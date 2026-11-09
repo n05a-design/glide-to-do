@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Findet Aufrufe von `self.x(...)`, die es in der eigenen Klasse nicht gibt.
 
 Warum dieses Werkzeug seit 3.23 dabei ist: Der Dialog „Tabellenspalten“ öffnete

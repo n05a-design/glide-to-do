@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Vier Bereiche: echte Bindungen, Erstellen, Regeln, Undo, Einstellungen, Neustart."""
 import importlib.machinery,importlib.util,json,os,tempfile
 from pathlib import Path

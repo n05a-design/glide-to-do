@@ -1,23 +1,23 @@
 # Veröffentlichung – Glide
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
-Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
+Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Dieser datierte Erstlieferstand trug in allen Ausgaben 3.50.0. Quelle und Python/Showcase werden inzwischen als 3.50.2 gepflegt; die vorhandenen nativen Pakete bleiben bei ihrem separat geprüften 3.50.0-Quellstand. Ein neuer Paketbau darf daraus nicht abgeleitet werden. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
+3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). Ausgangsstand ist 3.50.6 / Format 26 im noch offenen PR #69; die Validierungsrunde D72/D73 führt Quelle und Python auf 3.50.7, weiterhin Format 26. Der [QA-/Liefernachweis](07_QA_BERICHT.md) trennt native Pakete, automatisierte Prüfungen, native und menschliche Abnahmen. Die Versionsbezeichnung belegt keine öffentliche Release-Veröffentlichung.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
 - Python-Fassung bytegleich abgleichen, Showcase reproduzieren und getrennt prüfen; native Pakete mit Original-Lizenzbelegen bauen, kompilierten Quell-/Ressourcenabgleich und echte isolierte Startprobe durchführen.
 - Actions auf Commit-SHA und Bauabhängigkeiten auf Version/Originalhash festlegen (WA-43/45). Herkunft von Runtime, tkDnD, Schriften und Zeitzonen beilegen; Paketprüfsummen dokumentieren.
 - Die menschliche Prüfung erfolgt anschließend durch den Inhaber: Bedienung, Tastatur, Mindestgröße/große Schrift, DPI, mehrere Monitore und konkrete Plattformabläufe. **Screenreader ist bis Bedarf zurückgestellt und kein aktiver offener 3.50-Punkt.**
-- Für einen allgemeinen signierten Vertrieb bleiben öffentliche Signatur/Notarisierung, freigegebene Lizenz, Kanalunterlagen und Markenprüfung gesonderte Voraussetzungen. Die neue Versionsbezeichnung erteilt keine Lizenz und ersetzt keine Zertifikate.
+- Für einen allgemeinen signierten Vertrieb bleiben öffentliche Signatur/Notarisierung, MPL-Weitergabehinweise, Kanalunterlagen und Markenprüfung gesonderte Voraussetzungen. MPL-2.0 ist beschlossen; eine Versionsbezeichnung ersetzt keine Zertifikate oder Abnahmen.
 
 Der aktuelle Auftrag umfasst Commit und Push. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
 
-**Noch offene technische Releasevorbereitung (WA-46):** Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden; ein CycloneDX-/SPDX-Inventar samt automatisiertem Erzeugungs-/Prüfweg ist noch nicht umgesetzt. Vor einem entsprechend freigegebenen Release aus den vorhandenen Manifesten erzeugen und mit den tatsächlichen Artefakten abgleichen. Nicht als erfülltes Tor ausweisen. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](../tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
+**Noch offene technische Releasevorbereitung (WA-46):** Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden; ein CycloneDX-/SPDX-Inventar samt automatisiertem Erzeugungs-/Prüfweg ist noch nicht umgesetzt. Vor einem entsprechend freigegebenen Release aus den vorhandenen Manifesten erzeugen und mit den tatsächlichen Artefakten abgleichen. Nicht als erfülltes Tor ausweisen. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
 
 ## Signierung und Notarisierung
 
@@ -40,7 +40,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## GitHub-Auftritt
 
-**Projektseite 06.11.2026 (Auftrag des Inhabers, Plan §21.71):** Die README ist nach dem Vorbild erfolgreicher Repositorys neu gegliedert: zentriertes App-Symbol, Leitsatz und Ein-Satz-Nutzen, fünf Badges, Linkzeile mit „Herunterladen“ zuerst, großes Bild hell/dunkel per `<picture>`, „Warum Glide?“, Bildraster mit sechs echten Aufnahmen (künstlicher Showcase, Windows, 1440 × 900, Bedienhinweise aus), Funktionsliste, „Was Glide bewusst nicht ist“ mit passenden Alternativen, Download-Tabelle je System mit ehrlichem Hinweis zu Artefakten und unsignierten Paketen, „Deine Daten“, Häufige Fragen, Rückmeldung, Entwicklung, Lizenz und eine englische Kurzfassung. Issue-Formulare für Fehler und Wünsche liegen unter `.github/ISSUE_TEMPLATE/`; leere Issues sind abgeschaltet, Sicherheitsmeldungen verweisen auf die Richtlinie. Beschreibung und Topics der GitHub-Seite wurden auf Nutzen und Suchbegriffe ausgerichtet (höchstens 20 Topics, keine Varianten desselben Worts, kein „open-source“ und kein „local-first“, weil beides für Glide nicht zutrifft). Aufnahmen entstehen reproduzierbar mit `tests/tools/projektseite_aufnahmen.py` aus dem Showcase in einem eigenen Prüfordner; sie liegen unter `assets/marketing/` und werden bei sichtbaren Oberflächenänderungen ersetzt, nicht gesammelt.
+**Projektseite 06.11.2026 (Auftrag des Inhabers, Plan §21.71):** Die README ist nach dem Vorbild erfolgreicher Repositorys neu gegliedert: zentriertes App-Symbol, Leitsatz und Ein-Satz-Nutzen, fünf Badges, Linkzeile mit „Herunterladen“ zuerst, großes Bild hell/dunkel per `<picture>`, „Warum Glide?“, Bildraster mit sechs echten Aufnahmen (künstlicher Showcase, Windows, 1440 × 900, Bedienhinweise aus), Funktionsliste, „Was Glide bewusst nicht ist“ mit passenden Alternativen, Download-Tabelle je System mit ehrlichem Hinweis zu Artefakten und unsignierten Paketen, „Deine Daten“, Häufige Fragen, Rückmeldung, Entwicklung, Lizenz und eine englische Kurzfassung. Issue-Formulare für Fehler und Wünsche liegen unter `.github/ISSUE_TEMPLATE/`; leere Issues sind abgeschaltet, Sicherheitsmeldungen verweisen auf die Richtlinie. Beschreibung und Topics der GitHub-Seite wurden auf Nutzen und Suchbegriffe ausgerichtet (höchstens 20 Topics, keine Varianten desselben Worts, damals ohne „open-source“ wegen fehlender Lizenz; dieser historische Ausschluss ist seit MPL-2.0 überholt). Aufnahmen entstehen reproduzierbar mit `tests/tools/projektseite_aufnahmen.py` aus dem Showcase in einem eigenen Prüfordner; sie liegen unter `assets/marketing/` und werden bei sichtbaren Oberflächenänderungen ersetzt, nicht gesammelt.
 
 ### Recherche erfolgreicher Repositorys (06.11.2026)
 
@@ -65,13 +65,13 @@ Untersucht wurden rund 20 Aufgaben-, Notiz- und Produktivitäts-Apps auf GitHub 
 | Aufnahmen reproduzierbar aus dem Showcase (`tests/tools/projektseite_aufnahmen.py`) | erledigt |
 | Funktionsliste weiter kürzen, Details nur im Handbuch | offen; bewusst noch vollständig, weil die README die einzige Landingpage ist |
 | Kurzes GIF Erfassen → Planen → Erledigen | offen |
-| CONTRIBUTING.md und SUPPORT.md (Rückmeldungen willkommen, Code nur nach Absprache, keine echten Daten) | offen; Code-Beiträge hängen an der Lizenz |
+| CONTRIBUTING.md und SUPPORT.md (Rückmeldungen willkommen, Code nur nach Absprache, keine echten Daten) | offen; MPL-2.0 ist beschlossen, Beitrags- und Supportprozess noch festzulegen |
 | Social-Preview-Bild gegen 1280 × 640 / 1 MB prüfen, ggf. neu exportieren (nur Weboberfläche) | offen |
 | Seitenleiste: Packages/Deployments ausblenden, Wiki aus | offen, Kontoaktion |
 | Release-Weg technisch vorbereiten, ohne zu veröffentlichen | erledigt mit D64: `.github/workflows/release.yml` erzeugt aus Tag `v<VERSION>` einen Entwurf mit Windows-ZIP, DMG, TAR und je einer `.sha256`-Datei (statt `SHA256SUMS.txt`); siehe [GitHub-Auftritt](#github-auftritt). Eine Release-Notes-Vorlage `.github/release.yml` ist nicht nötig, die Hinweise erzeugt der Workflow |
-| **Inhaberentscheidungen:** Lizenz (I2), Veröffentlichen eines Release-Entwurfs (Weg mit D64 beschlossen, Freigabe von Hand), Signierung (I3), Englisch als Hauptsprache, Discussions, Homepage/GitHub Pages (Website-Direktvertrieb seit 27.09.2026 vorgesehen), Inhaberangaben/Marke (I1/I4), Reichweite | offen |
+| **Inhaberentscheidungen:** Veröffentlichen eines Release-Entwurfs (Weg mit D64 beschlossen, Freigabe von Hand), Signierung (I3), Englisch als Hauptsprache, Discussions, Homepage/GitHub Pages (Website-Direktvertrieb seit 27.09.2026 vorgesehen), Inhaberangaben/Marke (I1/I4), Reichweite | offen |
 
-Ein öffentlicher Release bleibt nach der Regel oben an Lizenz und Signatur gebunden. Ohne Open-Source-Lizenz sind das Topic `open-source`, kostenlose OSS-Signierprogramme und die Lesart „Open-Source-App“ ausgeschlossen; Glide positioniert sich deshalb ausdrücklich als lokale, öffentlich einsehbare Desktop-App [A].
+Seit 07.11.2026 ist Glide-Code MPL-2.0-lizenziert. Die frühere Begründung gegen die Bezeichnung Open Source ist entfallen. Eignung für Signierprogramme muss separat geprüft werden; daraus folgen weder ein Preisbeschluss noch Signatur, Markenfreigabe oder Releasefreigabe.
 
 Am 02.11.2026 für den ersten öffentlichen Stand gekürzt und zusammengeführt. README beginnt mit Nutzen, Funktionsübersicht und Startwegen. Versions-/Lieferdetails, historische Prüfberichte und technische Restlisten stehen im QA-Bericht bzw. Entwicklungsplan. Die Featureübersicht wird bei jeder Funktionsänderung zusammen mit Handbuch, Neuerungen und CHANGELOG gepflegt.
 
@@ -87,17 +87,23 @@ Ein öffentlicher GitHub-Release mit allgemeinem Vertriebsversprechen ist von ei
 4. Die Versionshinweise enthalten den CHANGELOG-Abschnitt, Startanleitung für SmartScreen/Gatekeeper und oben einen Prüfstandskasten (Vollmatrix für denselben Commit grün, rot oder nicht gefunden). Den Kasten vor dem Veröffentlichen entfernen.
 5. **Veröffentlichen nur von Hand** in GitHub unter „Releases“. Ein erneuter Lauf auf demselben Tag ersetzt nur einen noch unveröffentlichten Entwurf, nie einen veröffentlichten Release.
 
-Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber (D64); das berührt I11 (öffentlicher Auftritt), I2 (bis zur Lizenzentscheidung räumt [LICENSE.md](../LICENSE.md) keine Nutzungsrechte ein; die Versionshinweise verweisen darauf) und, solange unsigniert, I3. Prüfschritte vor dem Veröffentlichen: Block „Release-Entwurf prüfen“ der [manuellen Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#e-nur-durch-den-inhaber). Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
+Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber (D64); das berührt I11 (öffentlicher Auftritt), I2 (MPL-2.0 beschlossen; aktuelle Paket-/Quellhinweise prüfen) und, solange unsigniert, I3. Prüfschritte vor dem Veröffentlichen: Block „Release-Entwurf prüfen“ der [manuellen Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#e-nur-durch-den-inhaber). Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
 
-**Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des 3.50-Abschlusses. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
+**Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des aktuellen Projektabgleichs. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
 
-## Lizenzentwurf
+<a id="lizenzentwurf"></a>
 
-Entwurf vom 21.09.2026, **noch nicht veröffentlicht** (I2):
+## MPL-2.0
 
-> Glide darf für eigene private, nicht kommerzielle Zwecke kostenlos installiert und verwendet werden, einschließlich lokaler Sicherungskopien. Eigene Inhalte bleiben bei ihren Rechteinhabern. Kommerzielle Nutzung, Verkauf oder entgeltliche Weitergabe brauchen eine gesonderte Erlaubnis des Herausgebers. Eine Erlaubnis zur Weiterverbreitung veränderter Fassungen wird nicht erteilt. Gesetzlich zwingende Rechte bleiben unberührt. Komponenten Dritter (Schriften, tkinterdnd2) unterliegen ihren eigenen Lizenzen; deren Hinweise dürfen nicht entfernt werden.
+**Entschieden am 07.11.2026 (D72/I2): Mozilla Public License 2.0, SPDX `MPL-2.0`.** Der vollständige [Lizenztext in der Wurzel](../../../LICENSE) ist maßgeblich. [LICENSE.md](../LICENSE.md) erläutert den Geltungsbereich. Der frühere nichtkommerzielle Entwurf ist verworfen; seine Vorfassung bleibt in Git.
 
-Vor der Veröffentlichung festlegen: Geltungsbeginn und Lizenzdatei im Paket; Abgrenzung privat/ehrenamtlich/geschäftlich und unveränderte Weitergabe; Kontakt für kommerzielle Anfragen; rechtliche Endfassung zu Haftung, Gewährleistung und Vertragspartei. Der Entwurf macht Glide nicht zu Open-Source-Software; bis zur Freigabe sagen Store- und Vertriebsseiten keine weitergehenden Rechte zu. Bis dahin gilt `LICENSE.md` im Quellbaum: keine Lizenz festgelegt, keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte eingeräumt.
+Die MPL erlaubt kommerzielle Nutzung und Weitergabe nach ihren Bedingungen. Bei externer Weitergabe sind abgedeckte Quelldateien samt Änderungen unter MPL zugänglich zu machen und vorhandene Hinweise zu bewahren. Binärempfänger brauchen einen verständlichen Bezugsweg zum entsprechenden Quellcode (Abschnitte 3.1–3.4). Ein größeres Werk kann andere Bedingungen haben, ohne die Rechte an den abgedeckten Dateien einzuschränken. Markenrechte sind ausgenommen (2.3).
+
+Neue native Lizenzbestände führen den unveränderten Root-Text als `Glide-MPL-2.0.txt`, Geltungsbereichshinweise und `Glide-Quellcode.txt` mit Commit-URL/Quellarchiv und Verweis auf die Bauhashes mit. Der Erzeuger verlangt gesicherte Paketquellen im Git-Commit; dieser Commit muss vor Weitergabe erreichbar sein. Bei eigenem Fork den Bezugsweg anpassen. Python-Lieferung: vollständiges `LICENSE` und Hinweisdatei mitführen. Alte Pakete werden durch die neue Dokumentation nicht nachträglich korrigiert; native Neubauten bleiben eigene Tore.
+
+Drittkomponenten und Ressourcen behalten MIT-, OFL-, Tcl/Tk-/Python-, DejaVu-, IANA-/CLDR- und weitere Originalbedingungen. Die gehashte Mac-Lizenzbasis bleibt als historischer Beleg unverändert; der Mac-Erzeuger ersetzt Glides eigenen Eintrag erst im neuen Bestand. Fremde Inspirationsbilder und Entwurfsreferenzen sind gesondert zu klären, bevor sie erneut verbreitet werden. Copyright-Inhaberschaft wird nicht erfunden. Quellen, abgerufen 07.11.2026: [Mozilla-Lizenztext](https://www.mozilla.org/en-US/MPL/2.0/), [Mozilla-FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
+
+Lizenz, Preise für spätere Distribution/Services, Marke, Support und Releasefreigabe bleiben verschiedene Sachverhalte. I2 ist als Lizenzentscheidung erledigt; neue Pakete samt Hinweisen sind vor Weitergabe zu prüfen. I1/I3/I4/I11 bleiben in ihrem jeweiligen Restumfang offen.
 
 ## Inhaberangaben
 
@@ -117,46 +123,36 @@ Nach der Bestätigung: Produktregister mit Datum nachführen, Sicherheitskontakt
 
 > Glide ist eine lokale Anwendung. Aufgaben, Notizen, Seiten, Zeichnungen, Bilder und Einstellungen bleiben auf deinem Gerät, in dem Datenordner, den du selbst wählst. Glide hat kein Benutzerkonto und keinen Server, sendet keine Nutzungsdaten, Absturzberichte oder Telemetrie und stellt von sich aus keine Verbindung ins Internet her; nur ein Link, den du anklickst, öffnet den Browser. Liegt dein Datenordner in einem Cloudordner, gelten für diese Kopie die Bedingungen des Anbieters. Systemmitteilungen, falls eingeschaltet, zeigt dein Betriebssystem an; sie enthalten den Titel der fälligen Aufgabe.
 
+## Produktkommunikation
+
+**Verbindliche Richtung (D72/D74):** Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Projekte werden mit den vorhandenen Ordnern, Listen, Seiten und Verknüpfungen organisiert; ein zusätzlicher Projektdatentyp wird damit nicht behauptet. Datenhaltung bleibt eine technische Produkteigenschaft. „Privat“, „ruhig“, Sprachzugehörigkeit und Fachbegriffe zur Nutzungsdatenerfassung sind keine Leitbotschaften. Speicherung wird positiv erklärt: Inhalte werden gespeichert und mit Sicherungen/Exporten aufbewahrt. Auf Inhaberauftrag vom 08.11.2026 entfallen aktive Beta-/Erstversionswerbung und allgemeine Versionsserienbotschaften; technische Versions-/Paketzuordnung und datierte historische Nachweise bleiben erhalten.
+
+| Fundstelle | Text / Regel |
+|---|---|
+| Produktname / Kategorie | **Glide – Desktop-Planer** |
+| Hauptbeschreibung | **Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.** |
+| Kurze Unterzeile | Aufgaben planen. Ideen verbinden. Selbst gestalten. |
+| Ein Satz | Glide verbindet deine Aufgaben und Tagesplanung mit Seiten, Pinnwänden und eigenen Pixel-Zeichnungen. |
+| GitHub-Beschreibung, freigegeben und gesetzt | Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Verbinde Aufgaben mit Seiten und Notizen und gestalte deine Ideen. |
+| Englische Kurzfassung | Desktop planner for tasks, day planning, pinboards and pixel drawings. Connect tasks with pages and notes and create your own visual material. |
+| Ausführliche Beschreibung | Glide verbindet Aufgaben und Tagesplanung mit Seiten, Notizen und Pinnwänden. Du kannst denselben Aufgabenbestand in verschiedenen Ansichten bearbeiten, Aufwand und verfügbare Zeit gegenüberstellen und Vorschläge vor dem Übernehmen prüfen. In der Pixel-Werkstatt entstehen eigene Zeichnungen, Symbole und Bildfolgen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert; automatische Sicherungen und lesbare Exporte unterstützen die Weiterarbeit. |
+| Nutzen und Priorität | 1. Aufgaben im Kontext bearbeiten. 2. Den eigenen Tag planen. 3. Ideen sichtbar verbinden. 4. Eigene Zeichnungen weiterverwenden. 5. Arbeit aufbewahren und exportieren. |
+| Zielgruppenhypothese | Menschen mit eigenen Desktop-Projekten, besonders Gestaltung, Schreiben, Lernen und Entwicklung; keine belegte Nutzer- oder Nachfragezahl |
+| Differenzierung | Kombination aus fertiger Tagesplanung, Aufgaben in Seiten/Pinnwänden und integrierter Pixel-Werkstatt; kein weltweit belegtes Alleinstellungsmerkmal |
+| GitHub-Topics, freigegeben und gesetzt | `desktop-app`, `daily-planner`, `task-management`, `productivity`, `kanban`, `note-taking`, `pinboard`, `pixel-art`, `pomodoro`, `time-management`, `python`, `tkinter`, `cross-platform`, `open-source`, `mpl-2-0` |
+| Website-/Store-Suchthemen | Desktop-Planer, Aufgabenplanung, Tagesplanung, Pinnwand, Notizen, Pixel-Zeichnungen; international zusätzlich desktop planner, day planning, task management, pinboard, pixel art |
+
+Beschreibung und die hier genannten 15 Topics wurden am 07.11.2026 nach konkreter Freigabe des Inhabers öffentlich aktualisiert und zurückgelesen. Eine erreichbare eigene Glide-Website/Store-Seite wurde in den Projektquellen nicht nachgewiesen; das Produktdatenblatt dient als Textvorlage, nicht als Nachweis einer Veröffentlichung. Die derzeitige Oberflächensprache bleibt eine technische Ist-Angabe; Internationalisierung ist vorgesehen, ohne bestätigten Termin oder implementierte Übersetzung.
+
+**Technischer Name:** `APP_PRODUCT_NAME` („Glide – Aufgaben und Listen“) bleibt für Fenster, Druck/Export und Paketmetadaten stabil. Der öffentliche Beschreibungstext steht in `brand.DESCRIPTION` und „Über Glide“. Bundle-ID, AppUserModelID, Datenordner, Paketnamen und vorhandene Startdateinamen ändern sich nicht durch Marketing.
+
+**Funktions- und Qualitätsgrenzen:** Der [Funktionsvertrag](20_FUNKTIONEN.md) beschreibt tatsächliche Bedienung. [QA](07_QA_BERICHT.md) trennt nachgewiesene Prüfbereiche, implementierte Korrekturen ohne vollständige Abnahme, native Pakete und menschliche Tore. Vorschläge und Teilumfänge aus dem Plan werden nicht als neue verfügbare Funktion beworben. Die existierenden Bilder sind ausdrücklich Aufnahmen von 3.50.5 und werden nicht als 3.50.6 umetikettiert.
+
+<a id="produktdatenblatt-entwurf"></a>
+
 ## Produktdatenblatt (Entwurf)
 
-Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreigabe. Store-Grenzen stammen aus der Recherche vom 04.09.2026 und sind bei der Einreichung neu zu prüfen; Screenshots nur vom realen Build.
-
-**Kurzprofil:** Deutschsprachige Desktop-App für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Alles lokal – ohne Konto, Server, Abo oder Telemetrie. Python 3.14 mit Tk 9 und Standardbibliothek; mitgeliefert nur tkinterdnd2 (MIT). **Positionierungshypothese:** Aufgabenorganisation mit Pixel-Werkstatt – Zeichnungen werden Symbole, Pinnwandkarten und Galeriebilder. Keine weltweit belegte Alleinstellung.
-
-**Kurzbeschreibung** (Microsoft empfiehlt unter 270 Zeichen):
-
-> Aufgaben, Notizen, Seiten, Notizbücher, Pinnwände und Pixelzeichnungen in einer deutschsprachigen App – vollständig lokal, ohne Konto und ohne Abo. Plane deinen Tag, ordne Projekte auf Boards und gestalte eigene Pixelsymbole.
-
-**Beschreibung** (höchstens 10.000 Zeichen):
-
-> Glide ordnet, was du dir vornimmst – und gibt ihm ein Gesicht.
->
-> Listen, Ordner und Notizbücher halten Aufgaben, Notizen und Zeichnungen zusammen. „Heute“ zeigt, was ansteht – Verspätetes, Eingeplantes und heute Fälliges, jede Aufgabe genau einmal, mit Zeitplan und Stundenraster. Erfasse in Alltagssprache: „Angebot schicken morgen bis Freitag !hoch“. Die Pinnwand wird zum Board: Karten nach Fälligkeit, Wichtigkeit oder Dringlichkeit × Wichtigkeit in Spalten ziehen, Bereiche benennen, Verbindungen beschriften und alles als Folien präsentieren.
->
-> Die Pixel-Werkstatt ist Glides Besonderheit. Zeichne auf 16 bis 128 Zellen mit Pinsel, Formen, Symmetrie und Mustern, verwende eigene Paletten und exportiere als PNG oder Symbol (ICO). Mache deine Zeichnungen zu Symbolen für Listen und Ordner.
->
-> Alles bleibt auf deinem Rechner. Glide braucht weder Internet noch Konto, sendet keine Nutzungsdaten und sichert deinen Bestand mit vollständigen Backups und einer Sicherung vor jeder Formatumstellung.
-
-**Features** (bis zu 20, je höchstens 200 Zeichen):
-
-1. Aufgaben, Listen, Ordner, Bücher und Notizbücher – verschachtelt, mit Gruppen, Überschriften und Archiv.
-2. „Heute“ und „Demnächst“: Verspätet, Liegen geblieben, Tagesplan, heute fällig; Zeitplan, Stundenraster, Kapazität.
-3. Schnelleingabe in Alltagssprache mit sichtbaren, einzeln rücknehmbaren Feldern.
-4. Pinnwand als Board: Spalten nach Feldern, Eisenhower-Gruppierung, Bereiche, Verbindungen, Präsentation.
-5. Pixel-Werkstatt mit 16 bis 128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export.
-6. Seiten für lange Texte und KI-Berichte mit Markdown, Bildern und echten Aufgaben.
-7. Startseite „Ruhig“ mit sieben Kacheln in der hier beschriebenen Paketbasis 3.42.0; seit B04/3.43.0 acht Standardkacheln im Python-Stand, frei anpassbar.
-8. Verknüpfte Punkte, „wartet auf“ mit Kreisprüfung und Zeiterfassung je Punkt.
-9. Wiederholungen, Erinnerungen, Systemmitteilungen und Kalenderaustausch per ICS.
-10. Vorlagen mit selbstfüllenden Platzhaltern wie {{Datum}} und Eingabefeldern wie {{Projektname}}.
-11. Zehn Designs, darunter „Pixel“ mit eigener Pixelschrift, sowie Kontrastdesigns.
-12. Vollständig lokal: kein Konto, kein Abo, keine Telemetrie; Backups und Wiederherstellung mit Vorschau.
-13. Eigenständige Mac-/Windows-Entwicklungspakete mit eigenem Python/Tcl-Tk; Python-Startweg zusätzlich verfügbar.
-14. Notion-Import mit Quellenvergleich und ausdrücklich gewählter Übernahme, ohne Live-Synchronisation.
-15. Einzelne Seiten aus Sicherungen mit Vorschau, Bildern und Aufgabenverweisen wiederherstellen.
-16. Pixel-Bildfolgen und Animationsvorschau innerhalb der Pixel-Werkstatt.
-
-**Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Formatversion öffnet schreibgeschützt. Erinnerungen und Systemmitteilungen nur bei laufender App. Textschriften Rubik, Roboto Mono, Playfair Display und Fraunces sowie Pixelify Sans unter SIL OFL 1.1; interner DejaVu-Symbolbegleiter unter eigener Bitstream-/Arev-Lizenz. Original-Lizenztexte gehen mit.
+Die aktuellen Beschreibungstexte und Suchthemen stehen im Abschnitt [Produktkommunikation](#produktkommunikation). Die frühere 3.42.0-Funktionskopie wurde durch diesen Verweis ersetzt. Store-Grenzen und Pflichtangaben sind vor einer konkreten Einreichung beim jeweiligen Anbieter neu zu prüfen. Screenshots müssen den tatsächlich eingereichten Build zeigen; keine Store-Einreichung oder allgemeine Plattformfreigabe ist belegt.
 
 <a id="windows-entwicklungsbau-auf-eigenem-gerät-3490"></a>
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederholen nach Rückgängig (FP-01) ohne Tk.
 
 Die App führt ihren Rückgängig-Stapel weiter selbst; dieses Modul hält den

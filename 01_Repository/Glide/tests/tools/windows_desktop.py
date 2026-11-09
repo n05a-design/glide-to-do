@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Vergänglichen Windows-CI-Desktop auf die Größe der Geometrieprüfungen setzen.
 
 Nur in GitHub Actions; verändert keine gespeicherte Bildschirmkonfiguration.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eine Zeiterfassung mit pausierbarer Fokussitzung und Buchungsjournal, ohne Tk."""
 from datetime import datetime
 import math

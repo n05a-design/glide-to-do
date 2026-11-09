@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -33,7 +33,7 @@ Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 
 | Bildbibliothek (etwa Pillow), allgemeines Textverarbeitungsprogramm | Abhängigkeit bzw. nicht Ziel |
 | Gewohnheiten (G06), verschlüsselte Ablage (G22) | vorerst nicht |
 
-Installer, Signatur, Store, Markenfreigabe und endgültige Lizenz sind gesonderte, offene Schritte ([Veröffentlichung](10_VEROEFFENTLICHUNG.md)); was automatisch und was von Menschen auf welcher Plattform geprüft ist, unterscheidet der [QA-Bericht](07_QA_BERICHT.md). Die Kennungen `de.shaye.glide` und `Shaye.Glide` ändern sich nie.
+MPL-2.0 ist beschlossen. Installer, Signatur, Store und Markenfreigabe sind gesonderte, offene Schritte ([Veröffentlichung](10_VEROEFFENTLICHUNG.md)); was automatisch und was von Menschen auf welcher Plattform geprüft ist, unterscheidet der [QA-Bericht](07_QA_BERICHT.md). Die Kennungen `de.shaye.glide` und `Shaye.Glide` ändern sich nie.
 
 **Begrenzte lokale Kalenderbelegung (3.39.0, D30):** Eine ausdrücklich gewählte lokale ICS-Datei fließt rein lesend als belegte Zeit in Zeitraster, freie Fenster und gemeinsame Kapazitätsbilanz ein. Einzel-/ganztägige Termine, übliche tägliche/wöchentliche/monatliche/jährliche Serien, Ausnahmen und Zeitzonen/Sommerzeit sind im vereinbarten Rahmen enthalten. Unbekannte Regeln und Quellenfehler bleiben sichtbar. Der Aufgabenimport bleibt ein eigener Dateivorgang; Synchronisation, Abonnement, Teilnehmer und VTODO bleiben ausgeschlossen. Vollständiges Verhalten und Grenzen in [Funktionen](20_FUNKTIONEN.md#tagesplanung-3390).
 

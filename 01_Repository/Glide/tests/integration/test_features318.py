@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """CSV-Import: Erkennung, Zuordnung, Werteregeln, Verschachtelung, Ziele, Dialog."""
 import copy
 import csv

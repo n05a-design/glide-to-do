@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Offizielle gepinnte Runtimequellen nur im vergänglichen CI-Prüfstand holen."""
 import argparse
 import json

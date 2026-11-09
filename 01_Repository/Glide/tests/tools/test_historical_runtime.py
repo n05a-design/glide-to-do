@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Historische Altleser verwenden echte gepinnte Gitmodule, keine aktuellen."""
 import io
 import json

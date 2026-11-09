@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """U10/U19: Titel, Unterzeile, Quellen und bestehende Bedienbindungen.
 
 --observe erfasst den Ausgangsstand ohne neue Anforderungen; Bilder zeigen
@@ -69,12 +70,21 @@ with tempfile.TemporaryDirectory(prefix="glide-titel-") as directory:
                                            title=label.cget("text"), title_width=label.winfo_width(),
                                            header_height=app.header_frame.winfo_height(),
                                            stats=app.stats_label.cget("text"))
+                        # D66: Unterzeilentext kann aus Kennzahlen oder den
+                        # sichtbaren Seitenchips kommen. Ein ungepacktes
+                        # stats_label besitzt keine gültige Bildschirmkante.
+                        subtitle = [widget for widget in [app.stats_label] + list(app.page_chip_row.winfo_children())
+                                    if widget.winfo_ismapped() and str(widget.cget("text")).strip()]
+                        observation["subtitle"] = [str(widget.cget("text")) for widget in subtitle]
                         observations.append(observation)
                         if not args.observe:
                             assert label.winfo_width() >= label.winfo_reqwidth(), observation
                             assert label.winfo_rootx() + label.winfo_width() <= app.title_row.winfo_rootx() + app.title_row.winfo_width(), observation
                             assert app.header_meta.master is app.subtitle_row
-                            assert app.stats_label.winfo_rooty() >= label.winfo_rooty() + label.winfo_height(), observation
+                            assert subtitle and any(any(char.isalnum() for char in text)
+                                                    for text in observation["subtitle"]), observation
+                            for widget in subtitle:
+                                assert widget.winfo_rooty() >= label.winfo_rooty() + label.winfo_height(), observation
                             assert app.stats_label.cget("wraplength") == 0
                             if view == "today":
                                 row = f"in-progress:{entry['id']}:{item['id']}"

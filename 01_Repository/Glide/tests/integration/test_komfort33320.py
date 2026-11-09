@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paket Komfort 3.33.20: KO02, KO03, KO05, KO06, U04, U20, N07, AB08, AU06.
 
 Über echte Einstiege (Kontextmenüs, Eingabezeile, Einfügeereignis,

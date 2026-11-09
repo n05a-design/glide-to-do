@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Wiederanlauf prüft ausschließlich künstliche Daten und lokale Marker."""
 import hashlib
 import json

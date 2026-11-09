@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Rückmeldung zu 3.30.0 vom 26.09.2026: Abstände, Kopfzeile, Seitenleiste, Mein Tag, Zeichenfläche.
 
 - Seitenleiste und Inhaltsbereich enden in jeder Ansicht auf derselben Linie.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """SVG export compatibility and compound path invariants, without Tk."""
 import sys
 import unittest

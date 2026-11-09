@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ein Speicherablauf mit expliziter Commitgrenze, ohne Tk oder Appzustand.
 
 Der Adapter liefert die vorhandenen Operationen; nur dieser Koordinator

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tagesplanung mit echten Tk-Widgets, Dateischreibfehlern und Vorversionsgegenproben."""
 import argparse
 import copy

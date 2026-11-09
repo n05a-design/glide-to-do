@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Zusammengehörige PNG-/Manifestdateien mit rückrollbarem Dateiaustausch."""
 import os
 from pathlib import Path

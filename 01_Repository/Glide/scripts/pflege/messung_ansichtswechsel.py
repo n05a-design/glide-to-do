@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Misst Ansichtswechsel in Glide: Zeit je Wechsel und die teuersten Funktionen.
 
 Aufruf (im Repository): GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund \

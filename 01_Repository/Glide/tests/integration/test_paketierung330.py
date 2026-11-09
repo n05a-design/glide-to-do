@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Paketierung (Vorstufe, 26.09.2026): Kennungen, Windows-Anmeldung, macOS-Entwicklungsbundle.
 
 - Die Kennungen stehen genau einmal im Code (`APP_BUNDLE_ID`, `APP_USER_MODEL_ID`)

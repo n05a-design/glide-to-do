@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Aufgabenmarken, Heimat und Textquellen ohne Tk (Format 21)."""
 import re
 

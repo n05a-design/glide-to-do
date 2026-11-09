@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Inhaltskarte bis ganz unten und saubere Ansichtswechsel (Auftrag vom 29.09.2026).
 
 - Die Inhaltskarte endet in jeder Ansicht auf der Unterkante der Seitenleiste.

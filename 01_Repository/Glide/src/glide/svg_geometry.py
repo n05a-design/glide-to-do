@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Geometrie der mitgelieferten SVG-Logos, ohne Tk oder Dateizugriffe.
 
 Unterstützt die freigegebenen Pfade (M/L/H/V/C/S/Z und matrix/translate/scale).

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Kalibrierte UI-Erwartungen gegen echte Defekte in isolierten App-Kopien.
 
 Keine Produktionsdatei wird verändert. Jede Mutation muss an ihrer passenden

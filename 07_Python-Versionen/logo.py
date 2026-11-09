@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide-Logo und App-Symbol aus freigegebenen SVG-Mastern.
 
 Tk 9 rastert SVG nativ. Tk 8.6 bekommt ein transparentes, mit der

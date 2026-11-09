@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bearbeitungstage und Aufwandsbilanz ohne Tk oder Datenmutation (KO01/AU02)."""
 from datetime import date, timedelta
 

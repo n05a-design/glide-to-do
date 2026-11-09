@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Jedes Fenster über den Weg, den der Nutzer nimmt (Befunde R10 und R11, 29.09.2026).
 
 Die Suite öffnet alle Fenster über Menüleiste, Kontextmenüs, „+“-Menüs und die

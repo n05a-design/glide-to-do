@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Startseitenprojektion: Originale, Fachgrenzen und begrenzter Aufwand."""
 import copy
 from datetime import date, datetime

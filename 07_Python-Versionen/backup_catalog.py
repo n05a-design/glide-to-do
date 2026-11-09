@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Sicherungsinventar und Auswahlmodell ohne Tk oder Inhaltsänderungen."""
 from dataclasses import dataclass
 from datetime import datetime

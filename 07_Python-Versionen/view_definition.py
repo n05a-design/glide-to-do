@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Bedingungen und Darstellung gespeicherter Ansichten, ohne Tk (FP-03).
 
 Der eigene oberste Einstellungsschlüssel überlebt den bisherigen Altleser.

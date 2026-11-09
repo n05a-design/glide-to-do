@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """KO05 Zeilen, KO06 zuletzt benutzte Ziele, N07 „Neu in …“ ohne Oberfläche."""
 from pathlib import Path
 import sys

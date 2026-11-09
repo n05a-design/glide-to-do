@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echter Einzelrestore mit Archiv, Writer, Änderungsrahmen und Undo; ohne Tk."""
 import copy
 import hashlib

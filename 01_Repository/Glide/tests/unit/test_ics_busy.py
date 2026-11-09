@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import unittest
 from datetime import datetime, timedelta, timezone
 import ics_busy as ics

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Kürzt Archive und Nachweise auf die Aufbewahrungsregeln der Ablage.
 
 Aufruf aus `01_Repository/Glide`:

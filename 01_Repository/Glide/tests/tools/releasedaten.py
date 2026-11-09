@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Erzeugt und prüft die drei Arbeitslisten zur Releaseplanung von Glide.
 
 Aufruf: python tests/tools/releasedaten.py [--ziel PFAD] [--stichtag JJJJ-MM-TT]
@@ -30,7 +31,7 @@ import zlib
 from beispieldaten import Builder, REPOSITORY_ROOT, load_module, summarise
 
 
-APP_VERSION = "3.50.6"
+APP_VERSION = "3.50.7"
 # Ein Wert fuer beides: die Standangaben in den Inhaltstexten und die
 # Zusicherung weiter unten, dass die App wirklich dieses Format schreibt.
 DATA_SCHEMA_VERSION = 26

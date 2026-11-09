@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gehaltene native AT-SPI-Referenzen über künstliche Widgetwechsel prüfen."""
 import argparse
 import json

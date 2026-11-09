@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import sys,unittest
 from datetime import date
 from pathlib import Path

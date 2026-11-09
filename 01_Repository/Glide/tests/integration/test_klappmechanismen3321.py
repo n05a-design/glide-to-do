@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Klappkontrolle: echte Pfeilklicks, native Tastaturwege und Neuaufbau.
 
 Jede Familie erhält eine Bedienprobe; keine echten Nutzerdaten werden geladen.

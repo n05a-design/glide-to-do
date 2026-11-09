@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gemeinsamer Vergleichsstand für Verlauf und erfolgreich gespeicherte Aktivität.
 
 Ein Durchlauf je Aufgabenbaum. Teilbaum-Prüfsummen entstehen von unten nach

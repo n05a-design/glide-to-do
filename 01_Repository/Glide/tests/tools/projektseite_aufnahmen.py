@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Aufnahmen für die GitHub-Projektseite aus dem künstlichen Showcase (06.11.2026).
 
 Lädt das Showcase-App-Backup in einen frischen temporären Datenordner, schaltet

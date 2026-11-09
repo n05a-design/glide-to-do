@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tagespaket: echte Bedienung, Wechselwirkungen, Speicherfehler und Neustart."""
 import argparse
 import copy

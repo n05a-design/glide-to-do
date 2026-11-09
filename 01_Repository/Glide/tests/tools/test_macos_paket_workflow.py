@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mac-Paketworkflow: Shell/Python-Syntax und begrenzte CI-Vertrauensgrenzen."""
 import ast
 import os
@@ -49,6 +50,8 @@ class MacWorkflowTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r"(?m)^\s*permissions:", self.source)), 1)
         self.assertNotIn("secrets.", self.source)
         self.assertIn("persist-credentials: false", self.source)
+        checkout = self.source.split('- name: Unveränderten Commit auschecken',1)[1].split('      - name:',1)[0]
+        self.assertIn('fetch-depth: 0',checkout)
 
     def test_only_verified_actions_and_original_installer_are_used(self):
         actions = re.findall(r"uses:\s*([^\s]+)", self.source)
@@ -74,13 +77,55 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 6)
+        self.assertEqual(len(blocks), 10)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
                 path.write_text(block, encoding="utf-8")
                 result = subprocess.run([executable, "-n", str(path)], capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_optional_full_qa_uses_native_runtime_and_preserves_evidence(self):
+        self.assertRegex(self.source, r"vollpruefung:\n\s+description:.*\n\s+type: boolean\n\s+default: false")
+        step = self.source.split("- name: Vollständige native macOS-Prüfung", 1)[1].split("      - name:", 1)[0]
+        self.assertIn("github.event_name == 'workflow_dispatch' && inputs.vollpruefung", step)
+        self.assertIn('"$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll --vordergrund', step)
+        self.assertIn('tests/tools/macos_desktop.py --breite 1920 --hoehe 1080', step)
+        self.assertIn('${{ runner.temp }}/glide-macos-desktop.json', self.source)
+        self.assertIn('--protokoll "$RUNNER_TEMP/glide-macos-voll" --timeout 900', step)
+        self.assertNotIn("continue-on-error", self.source)
+        self.assertIn("tests/integration/test_bedienung33316.py", self.source)
+        focused = self.source.split('- name: Bekannten Mac-Bedienbefund gezielt nachprüfen',1)[1].split('      - name:',1)[0]
+        self.assertIn('tests/tools/macos_desktop.py --breite 1920 --hoehe 1080', focused)
+        self.assertIn('glide-macos-bedienung-desktop.json', focused)
+        self.assertIn('id: gezielte_pruefung', focused)
+        for name in ('startseite3332', 'import3410'):
+            self.assertIn(f'tests/integration/test_{name}.py', focused)
+        self.assertIn("steps.gezielte_pruefung.outcome == 'success'", step)
+        self.assertIn("steps.kompakt_pruefung.outcome == 'success'", step)
+        compact = self.source.split('- name: Externen Kompaktfokus gezielt nachprüfen',1)[1].split('      - name:',1)[0]
+        self.assertIn("(inputs.vollpruefung || inputs.nachtest != 'keiner')", compact)
+        self.assertIn('--fall kompakt_verlorenes_loslassen', compact)
+        self.assertIn('${{ runner.temp }}/glide-macos-kompakt.json', self.source)
+        self.assertIn("steps.ui_nachlauf.outcome == 'success'", step)
+        followup = self.source.split('- name: Seitenkarten und verbleibende Mac-Arbeitsmodi gezielt nachprüfen',1)[1].split('      - name:',1)[0]
+        self.assertIn('--fall druck_tempo', followup)
+        self.assertIn('for gruppe in bedienung planung navigation geometrie abschluss', followup)
+        self.assertIn('--gruppe "$gruppe"', followup)
+        self.assertIn('glide-macos-arbeitsmodi-$gruppe.log', followup)
+        self.assertNotIn('glide-macos-$gruppe.log', followup)
+        self.assertIn('if [ "$GLIDE_MAC_VOLLMODUS" != "true" ]', followup)
+        self.assertNotIn('always()', step)
+        for name in ('startseite', 'import'):
+            self.assertIn(f'${{{{ runner.temp }}}}/glide-macos-{name}.log', self.source)
+        self.assertIn("steps.runtime_bau.outcome == 'success'", step)
+        freeze = self.source.split('- name: Originalruntime und konkrete Bauquellen einfrieren',1)[1].split('      - name:',1)[0]
+        self.assertIn('GLIDE_VOLLPRUEFUNG',freeze)
+        self.assertIn('from historical_runtime import SNAPSHOTS, DELIVERY',freeze)
+        self.assertIn('"cat-file", "-e"',freeze)
+        self.assertIn('cwd=outer, check=True',freeze)
+        self.assertIn("${{ runner.temp }}/glide-macos-voll", self.source)
+        self.assertLess(self.source.index("PYTHONPATH=%s"), self.source.index("- name: Vollständige native macOS-Prüfung"))
 
     def test_dmg_is_built_from_checked_archive_and_compared_after_mount(self):
         step = self.source.split("- name: Geprüftes Archiv als DMG verpacken und Inhalt gegenprüfen", 1)[1].split("      - name:", 1)[0]

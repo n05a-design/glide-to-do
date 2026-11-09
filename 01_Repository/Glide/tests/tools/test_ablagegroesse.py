@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Regeln der Ablagegröße; ohne Git, ohne App-Import, ohne Nutzerdaten."""
 
 import unittest
@@ -25,6 +26,16 @@ def archivdatei(version):
 
 
 class Ablagegroesse(unittest.TestCase):
+    def test_explicitly_protected_first_release_evidence_is_kept_without_waiving_other_rules(self):
+        old = nachweis("3.50.0")
+        reference = releaseplanung("3.50.0")
+        newer = [(nachweis(f"3.50.{n}"), 4096) for n in range(1, 9)]
+        self.assertEqual(regeln((old, 4096), (reference, MB), *newer, aktuell="3.50.8"),
+                         [("Archivalter", nachweis("3.50.1"))])
+        self.assertIn(("Dateigröße", old), regeln((old, 51 * MB), *newer, aktuell="3.50.8"))
+        image = nachweis("3.50.0", "fenster/a.png")
+        self.assertIn(("Fensterbilder", image), regeln((image, MB), *newer, aktuell="3.50.8"))
+
     def test_archive_copies_of_data_files_are_rejected(self):
         for pfad in (Q + "tests/fixtures/showcase/archiv/Glide-Showcase_App_3.33.6_vor_3.33.7.glideapp",
                      Q + "tests/fixtures/beispiele/archiv/glide_rundgang_3.33.6_vor_3.33.7.glidebackup",

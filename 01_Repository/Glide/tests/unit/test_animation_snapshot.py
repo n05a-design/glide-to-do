@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Zwischenstände und ersetzte Einzelbilder erhalten den Rest der Bildfolge."""
 import unittest
 from animation import Animation, from_snapshot

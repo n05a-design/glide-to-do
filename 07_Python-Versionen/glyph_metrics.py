@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Optische Höhe von Symbolen neben Text, ohne Tk (B09, 15.10.2026).
 
 Tk setzt jedes Zeichen nach Schriftmetrik, nicht nach seiner sichtbaren Form:

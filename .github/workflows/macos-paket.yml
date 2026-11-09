@@ -1,4 +1,4 @@
-# Glide 3.50.0: nativer Mac-Bau mit eigener Tcl/Tk 9.1; Prüfung vor der Bereitstellung.
+# Glide: nativer Mac-Bau mit eigener Tcl/Tk 9.1; Prüfung vor der Bereitstellung.
 # Verifiziert am 26.10.2026:
 # https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job
 # macos-15 ist der Standard-arm64-Runner; macos-15-intel wäre eine andere Architektur.
@@ -11,6 +11,16 @@ name: Glide-Paket macOS arm64
 
 on:
   workflow_dispatch:
+    inputs:
+      vollpruefung:
+        description: 'Vor dem Paketbau die vollständige native QA ausführen'
+        type: boolean
+        default: false
+      nachtest:
+        description: 'Gezielte native Nachprüfung vor Paketbau; keine Vollabnahme'
+        type: choice
+        default: keiner
+        options: [keiner, kompakt_fokus, seitenkarten_arbeitsmodi]
   workflow_call:
   push:
     branches: ["main", "codex/**"]
@@ -48,6 +58,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Offiziellen Python-Installer prüfen und im vergänglichen Runner installieren
         run: |
@@ -64,12 +75,21 @@ jobs:
           "$MAC_PYTHON" -B -c 'import platform,sys; assert sys.version_info[:3] == (3,14,5); assert platform.machine() == "arm64"'
 
       - name: Originalruntime und konkrete Bauquellen einfrieren
+        env:
+          GLIDE_VOLLPRUEFUNG: ${{ github.event_name == 'workflow_dispatch' && inputs.vollpruefung }}
         run: |
           "$MAC_PYTHON" -B - <<'PY'
           import json, os, subprocess, sys
           from pathlib import Path
           repo = Path.cwd()
           outer = repo.parents[1]
+          if os.environ.get("GLIDE_VOLLPRUEFUNG") == "true":
+              sys.path.insert(0, str(repo / "tests/integration"))
+              from historical_runtime import SNAPSHOTS, DELIVERY
+              for version, historical_commit in SNAPSHOTS.items():
+                  filename = f"Glide-Aufgaben-und-Listen_v{version}.pyw"
+                  subprocess.run(["git", "cat-file", "-e", f"{historical_commit}:{DELIVERY}/{filename}"],
+                                 cwd=outer, check=True)
           sys.path.insert(0, str(repo / "packaging/paket"))
           import macos_build_run as runner
           runtime = runner.native_runtime()
@@ -92,6 +112,7 @@ jobs:
           PY
 
       - name: Eigene Tcl/Tk 9.1 und Original-Lizenzbasis bauen
+        id: runtime_bau
         run: |
           "$MAC_PYTHON" -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/tk91-quellen"
           "$MAC_PYTHON" -B packaging/runtime/baue_runtime.py \
@@ -102,6 +123,58 @@ jobs:
             --basis packaging/paket/lizenzen/macos --quellen "$RUNNER_TEMP/tk91-quellen" \
             --ziel "$RUNNER_TEMP/tk91-lizenzen"
           printf 'PYTHONPATH=%s\n' "$RUNNER_TEMP/tk91-runtime/python-extension" >> "$GITHUB_ENV"
+
+      - name: Externen Kompaktfokus gezielt nachprüfen
+        id: kompakt_pruefung
+        if: github.event_name == 'workflow_dispatch' && (inputs.vollpruefung || inputs.nachtest != 'keiner')
+        run: |
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-kompakt-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_arbeitsmodi.py --fall kompakt_verlorenes_loslassen \
+            --report "$RUNNER_TEMP/glide-macos-kompakt.json" > "$RUNNER_TEMP/glide-macos-kompakt.log" 2>&1
+
+      - name: Seitenkarten und verbleibende Mac-Arbeitsmodi gezielt nachprüfen
+        id: ui_nachlauf
+        if: github.event_name == 'workflow_dispatch' && (inputs.vollpruefung || inputs.nachtest == 'seitenkarten_arbeitsmodi')
+        env:
+          GLIDE_MAC_VOLLMODUS: ${{ inputs.vollpruefung }}
+        run: |
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-tempo-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_seitenkarten.py --fall druck_tempo \
+            --report "$RUNNER_TEMP/glide-macos-tempo.json" > "$RUNNER_TEMP/glide-macos-tempo.log" 2>&1
+          # Im Vollmodus folgen alle fünf Gruppen bereits verpflichtend in pruefen.py.
+          # Der gezielte Nachlauf prüft sie hier ohne die 108 vorgelagerten Suiten.
+          if [ "$GLIDE_MAC_VOLLMODUS" != "true" ]; then
+            for gruppe in bedienung planung navigation geometrie abschluss; do
+              "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+                --protokoll "$RUNNER_TEMP/glide-macos-arbeitsmodi-$gruppe-desktop.json" -- \
+                "$MAC_PYTHON" -B tests/integration/test_arbeitsmodi.py --gruppe "$gruppe" \
+                --report "$RUNNER_TEMP/glide-macos-arbeitsmodi-$gruppe.json" > "$RUNNER_TEMP/glide-macos-arbeitsmodi-$gruppe.log" 2>&1
+            done
+          fi
+
+      - name: Bekannten Mac-Bedienbefund gezielt nachprüfen
+        id: gezielte_pruefung
+        if: github.event_name == 'workflow_dispatch' && (inputs.vollpruefung || inputs.nachtest == 'seitenkarten_arbeitsmodi')
+        run: |
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-bedienung-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_bedienung33316.py > "$RUNNER_TEMP/glide-macos-bedienung.log" 2>&1
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-startseite-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_startseite3332.py > "$RUNNER_TEMP/glide-macos-startseite.log" 2>&1
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-import-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_import3410.py > "$RUNNER_TEMP/glide-macos-import.log" 2>&1
+
+      - name: Vollständige native macOS-Prüfung
+        if: success() && steps.runtime_bau.outcome == 'success' && steps.kompakt_pruefung.outcome == 'success' && steps.ui_nachlauf.outcome == 'success' && steps.gezielte_pruefung.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.vollpruefung
+        run: |
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/tools/pruefen.py --zugang-nativ --modus voll --vordergrund \
+            --protokoll "$RUNNER_TEMP/glide-macos-voll" --timeout 900
 
       - name: Nativen Paketbau und Prozesssandbox-Startprüfung ausführen
         run: |
@@ -170,6 +243,19 @@ jobs:
         with:
           name: paket-macos-arm64-belege
           path: |
+            ${{ runner.temp }}/glide-macos-voll
+            ${{ runner.temp }}/glide-macos-desktop.json
+            ${{ runner.temp }}/glide-macos-bedienung-desktop.json
+            ${{ runner.temp }}/glide-macos-bedienung.log
+            ${{ runner.temp }}/glide-macos-kompakt-desktop.json
+            ${{ runner.temp }}/glide-macos-kompakt.json
+            ${{ runner.temp }}/glide-macos-kompakt.log
+            ${{ runner.temp }}/glide-macos-tempo*
+            ${{ runner.temp }}/glide-macos-arbeitsmodi-*
+            ${{ runner.temp }}/glide-macos-startseite-desktop.json
+            ${{ runner.temp }}/glide-macos-startseite.log
+            ${{ runner.temp }}/glide-macos-import-desktop.json
+            ${{ runner.temp }}/glide-macos-import.log
             ${{ runner.temp }}/tk91-runtime/runtime-bau.json
             ${{ runner.temp }}/glide-macos-runtime/*.json
             ${{ runner.temp }}/glide-macos-runtime/*.sha256

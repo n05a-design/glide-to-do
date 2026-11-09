@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Native Paketprobe mit ausschließlich im Kindprozess gesperrtem externem Python."""
 import argparse
 import json

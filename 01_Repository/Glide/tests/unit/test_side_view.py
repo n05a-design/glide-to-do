@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """E-U2 A: Ziel, Lesbarkeit und Projektion der lesenden Nebenansicht."""
 from pathlib import Path
 import sys

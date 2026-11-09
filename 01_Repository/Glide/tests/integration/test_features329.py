@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.29.0: Zeichnung als eigene Listenart im produktiven Bestand (Format 19)."""
 import copy
 import importlib.machinery
@@ -48,7 +49,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # ================================================================
         # Vertrag und Typregistrierung
         # ================================================================
-        assert mod.APP_VERSION == "3.50.6"
+        assert mod.APP_VERSION == "3.50.7"
         assert app.DATA_SCHEMA_VERSION == 26
         # Seit dem 26.09.2026 kommt die Seitenart „Seite“ hinzu (test_seiten330).
         # 27.09.2026: dazu die Galerie (test_aufraeumen330).

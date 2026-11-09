@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-40/47: Speicherstatus, Retry und geschützte Größenüberschreitung."""
 import argparse
 import hashlib

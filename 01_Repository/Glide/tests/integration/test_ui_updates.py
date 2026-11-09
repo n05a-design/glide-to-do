@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide: Startseite, Einstellungen, Artwechsel, Textfarben und schmale Fenster.
 
 Optional --screenshots ORDNER zeichnet ausschließlich eigene Testfenster auf Windows.

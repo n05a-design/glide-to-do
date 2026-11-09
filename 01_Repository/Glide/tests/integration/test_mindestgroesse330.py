@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Mindestgröße: jede Ansicht bei 860 × 700 ohne Überstand, Quetschung oder Anschnitt.
 
 Anforderung vom 26.09.2026: „Wenn ich das Fenster komplett zusammendrücke,

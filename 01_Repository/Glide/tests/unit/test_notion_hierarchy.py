@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import copy
 from types import SimpleNamespace
 import unittest

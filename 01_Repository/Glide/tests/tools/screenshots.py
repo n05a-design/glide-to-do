@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.12
+# SPDX-License-Identifier: MPL-2.0
 """Bildschirmaufnahmen der Oberflaeche fuer die Sichtpruefung.
 
 Kein Test, sondern ein Werkzeug: Es baut eine Beispiel-Ablage auf, oeffnet

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-42: echte kleine Kindprozesse; keine Glide-/Last-/Nutzerdatenprüfung."""
 import contextlib
 import io
@@ -7,6 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -108,14 +110,34 @@ class FakeLauf:
         self.errors=[]
         self.root=SimpleNamespace(tk=SimpleNamespace(call=lambda *args: 'test'))
 suite.Lauf=FakeLauf
-suite.fall_werkzeugzeile=lambda run: time.sleep(30)
+def blockierender_fall(run):
+    from pathlib import Path
+    Path({str(report.with_suffix(".ready"))!r}).touch()
+    time.sleep(30)
+suite.fall_werkzeugzeile=blockierender_fall
 dump=faulthandler.dump_traceback_later
 faulthandler.dump_traceback_later=lambda seconds,repeat=False: dump(.1,repeat=repeat)
 sys.argv=['test_arbeitsmodi.py','--fall','werkzeugzeile','--report',{str(report)!r}]
 suite.main()
 """
         run = pruefen.Prueflauf(logdir, 1, waechter=self.guard)
-        with contextlib.redirect_stdout(io.StringIO()):
+        original_popen = flow.subprocess.Popen
+        def gestarteter_fall(*args, **kwargs):
+            process = original_popen(*args, **kwargs)
+            # Diese Gegenprobe misst den blockierenden Fall, nicht den
+            # Import des Kindprozesses. Das eigentliche Limit bleibt 1 s.
+            deadline = time.monotonic() + 30
+            while time.monotonic() < deadline:
+                if report.with_suffix(".ready").is_file():
+                    return process
+                if process.poll() is not None:
+                    break
+                time.sleep(.01)
+            process.kill()
+            stdout, stderr = process.communicate()
+            self.fail("Timeout-Gegenprobe erreicht den Testfall nicht: " + (stdout + stderr)[-1600:])
+        wall_start = time.time()
+        with patch.object(flow.subprocess, "Popen", side_effect=gestarteter_fall), contextlib.redirect_stdout(io.StringIO()):
             self.assertFalse(run.prozess("arbeitsmodi", [sys.executable, "-B", "-c", code]))
             self.assertFalse(run.prozess("folge", [sys.executable, "-B", "-c", "pass"]))
         output = (logdir / "arbeitsmodi.log").read_text(encoding="utf-8")
@@ -123,7 +145,12 @@ suite.main()
         self.assertIn("test_arbeitsmodi.py", output)
         self.assertIn("Timeout (", output)
         progress = json.loads(report.read_text(encoding="utf-8"))
-        self.assertEqual(progress["laufender_fall"], {"name": "werkzeugzeile", "phase": "test"})
+        started = progress["laufender_fall"]["gestartet_unix"]
+        self.assertIsInstance(started, (float, int))
+        self.assertGreaterEqual(started, wall_start)
+        self.assertLessEqual(started, time.time())
+        self.assertEqual(progress["laufender_fall"], {
+            "name": "werkzeugzeile", "phase": "test", "gestartet_unix": started})
         self.assertEqual(progress["faelle"], {})
         self.assertTrue(self.guard.stopped)
         self.assertEqual(len(self.guard.rows), 1)
@@ -161,6 +188,21 @@ suite.main()
             self.assertFalse(run.funktion('folge', lambda: called.append(True)))
         self.assertEqual(called, [])
         self.assertEqual([r['status'] for r in run.results], ['fehlgeschlagen','übersprungen'])
+
+    def test_zero_exit_with_uncaught_tcl_callback_error_stops_the_sequence(self):
+        logdir = self.root / "callback-log"
+        run = pruefen.Prueflauf(logdir, 30, waechter=self.guard)
+        error = 'invalid command name "123collapse_emptied_frames"'
+        command = [sys.executable, "-B", "-c", "import sys; print(" + repr(error) + ", file=sys.stderr)"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(run.prozess("abbau", command))
+            self.assertFalse(run.prozess("folge", [sys.executable, "-B", "-c", "pass"]))
+        self.assertEqual(run.results[0]["exitcode"], 0)
+        self.assertEqual(run.results[0]["callback_errors"], [error])
+        self.assertEqual(run.results[1]["status"], "übersprungen")
+        self.assertEqual(len(self.guard.rows), 1)
+        self.assertFalse(self.guard.rows[0]["passed"])
+        self.assertIn(error, (logdir / "abbau.log").read_text(encoding="utf-8"))
 
     def test_hint_does_not_stop_and_stays_a_hint(self):
         run = pruefen.Prueflauf(None, 10, waechter=self.guard)

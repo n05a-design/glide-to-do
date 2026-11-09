@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Ladeweg in zwei Phasen ohne Tk (WA-28, Befund A34)."""
 import json
 from pathlib import Path

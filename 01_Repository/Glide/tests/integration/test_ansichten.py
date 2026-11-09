@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-03/1: echte Filtereinstiege, Dialog, Persistenz, Altleser und Gegenprobe."""
 import argparse
 import copy

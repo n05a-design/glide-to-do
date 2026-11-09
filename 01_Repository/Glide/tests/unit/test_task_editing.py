@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import copy
 import unittest
 from task_editing import FIELDS, Conflict, merge, creation_target, toggle_labels, overview_change, sort_items

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Prüft und liefert den Showcase nach 05; verändert keinen Arbeitsstand.
 
 Überschreibt die Lieferkopie ohne Archivkopie: Vorfassungen trägt Git. Bis

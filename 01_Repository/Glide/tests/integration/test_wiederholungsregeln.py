@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """FP-02/1: echte Masken, Vorrücken, Formatmigration und unveränderter Altleser."""
 import argparse
 import copy

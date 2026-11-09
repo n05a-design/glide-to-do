@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """T2/W1: reale Speicher-/Ladewege, Fehler, Tabellen- und Listenbreiten."""
 import importlib.machinery
 import importlib.util

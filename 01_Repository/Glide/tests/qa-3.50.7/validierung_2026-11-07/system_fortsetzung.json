@@ -1,0 +1,4480 @@
+{
+  "date": "2026-11-08",
+  "scope": "System-/Lizenz-/Steps-Nachtrag, kein Gesamtabschluss",
+  "base_main": "d7e017f001e5c069eeb98a0f5302577966ac4098",
+  "previous_candidate": "a4c34b86ad22554c39905b25b0a46cb5b6ccef1d",
+  "app_version": "3.50.7",
+  "data_schema": 26,
+  "system_version": "1.3",
+  "inputs": {
+    "src/glide/accessibility.py": "c0acfad5312830b33d0e5f4e3c7e9df7d2df3379f7d454f44178af29525c3108",
+    "src/glide/accessibility_bindings.py": "80fa87e32214ab2f6e82356db3e44bc6585815f767928805f2926bc3c80b27fa",
+    "src/glide/action_catalog.py": "3cfd37402f8fa742ce3695137c9238b7be6529a00685f7f299610578b1a5d36d",
+    "src/glide/action_menu.py": "e07ad2c10b19c500ac2f503d77ff1e13bdd53a7b947b6498643f0d777dc87870",
+    "src/glide/animation.py": "7fd6cb69f5a241a8240b81eccdcdfc00d9f5f2c130692bc0f0622b8d8165397c",
+    "src/glide/animation_export.py": "2f4a34f566b275847976d134ffe6b9d89479f18c24a9ac467a2cf6cb569fb5a3",
+    "src/glide/app.pyw": "8aa5adcbf81d5a32bb7fe17120d3f12073917339f653d87931179e1b70bdc1ea",
+    "src/glide/appearance.py": "5b66a880bfcc21476919b6d15b56b75416248bf2eeadfbed098686380652936d",
+    "src/glide/attachment_paths.py": "9b2034597906fffd720ce4655879577578372a53a4413900e24c71fbc21b9515",
+    "src/glide/attachment_policy.py": "9e1481cf51bd7d5ed867ee0e00ff84c3cfabcdf37da748bbabeee42cca1870fd",
+    "src/glide/backdrop.py": "537e3353e81f3bf4cc6d31e3795e6cb33687b368c865a9c5ce8fc8f7fa789b51",
+    "src/glide/backup_catalog.py": "62164312d00ce2e5b9edc46d056e8fa54954c52cc5ed9a8890f449e68f5b238a",
+    "src/glide/backup_diff.py": "411a56d832f8286fc6772cb780a50cde48b42ea7e97ded4213f905031f46c51d",
+    "src/glide/backup_snapshot.py": "a8e428ec8dd89856fb37fbb90bd05777b50778ded228e57a33651f2259dbbf06",
+    "src/glide/brand.py": "9586afa573cb99df48857c025cb0d081f39c9e1c3e61d9cf32d7ab1ce2a17812",
+    "src/glide/busy_calendar.py": "9f65a3031d8402abb6b038e8d3179ec245d3a0fd1a7943010d5d1eb649ec0405",
+    "src/glide/calendar_service.py": "20e704752d44760122b7fd3f8795fc26f695fa5b7bedeb656515e3f6f8526174",
+    "src/glide/capture_parser.py": "9f3ba8791a410bca1a31599b79cccabf45623bcc71337e184eaf3f72e380d2c6",
+    "src/glide/compact_mode.py": "4f7557fd10d5537c6f59c4da3077adaba09f9b6d11b42df34d05c7ef5ed97f1d",
+    "src/glide/content_search.py": "727a70ce9c16bcaff85c7d9596fa32bcc63e8a818c30c6e727d20cce85392d1c",
+    "src/glide/core_accessibility.py": "2dc9c270e4bd4c47d56ce4d680cc408dee30ed8180bce5664406b10929c4c154",
+    "src/glide/daily_hints.py": "2e1b236a5cff7c1df8abe133ed7ed2f57b01b7793e69dab724821f704e751662",
+    "src/glide/data_lock.py": "d8a7a8fb489fffe459ac597fe13d86e71a3d8967ff3c8e415f761f164dee8e10",
+    "src/glide/day_proposal.py": "db84d74cf5cf442d5090eb086e1760d6dd825dd83ce9aeca0f5d08531e65bbc4",
+    "src/glide/day_relief.py": "293524f680b1753f11dad2d5017d2ff0f6ca8aa12756a609a3ec397e281b01e0",
+    "src/glide/drawing.py": "6b3fadfaf5de9c98646a8fdbe88d0a8af55d333ecb3a060a0c36b0eb4d036ded",
+    "src/glide/drawing_image.py": "55b97f728311ced67ca8d533039b24e6f345f8ddd7a92f341fd070406518132e",
+    "src/glide/drawing_prototype.pyw": "749925b07666818bb9800ddaa7cc70bb9bc63a6ad89ab4648abfca5d1dd9c7df",
+    "src/glide/editor_flush.py": "842b56547f6fa1ce0b1c0589e11d748dbb641ebd3cc7574d650a4886a75dc2f0",
+    "src/glide/eisenhower.py": "e1275eed83daa27d8345d615f6c983bf28453d1952e63c313d7b7d3ff12fd7e5",
+    "src/glide/exchange_patch.py": "6e2a0347b978bf27f6f063b8f874930108376efee636a40b6dc4a80a03ec7282",
+    "src/glide/exchange_recipes.py": "5bf8434a0164a5e44492156ad794e61f547c6ac5f780153237885383178a3678",
+    "src/glide/filter_explain.py": "c1a1d299fdcb554b0d96001d680097e733bf3ec63ba38aff201ed5f17620c5c0",
+    "src/glide/focus_timer.py": "448cf281d863a0bf436acf3b7379d3847e8178397d088d700344993e14fa31d5",
+    "src/glide/font_catalog.py": "446879f2c76be36aac7c0f6949251de692e115ff92065c8f3d6fe6d7f0bf0b9f",
+    "src/glide/glide_start.py": "ea2c2786b90e57aea5f80034554492bcd130e1fbc47aa5e545201ccb562a1498",
+    "src/glide/glyph_metrics.py": "635931f5fb3e3ec558646512c8c57cdc7a371d88732d3b831b6c034267256b0d",
+    "src/glide/home_dashboard.py": "14d3929d223771df452983a0febfe85d1c572c9a77f9ba01bf550362972ebcdb",
+    "src/glide/home_task_tiles.py": "4f132b1f79836a23397f03439d975c368423b04f031afede199ea469cd32122b",
+    "src/glide/home_tiles.py": "4b8d2403ede692c4ca97b6c8f72d2473f46a40821eb17ccecbfad6c418fb822a",
+    "src/glide/ics_busy.py": "4055873eb599fb2c913fdaa7d99fe0374cb88903b39a58367d26b7eeee7fc974",
+    "src/glide/ics_recurrence.py": "2371c465c5dda8023c1a2ce4d2f451c5dccf929131ef1c06e6841b665d3069b1",
+    "src/glide/ics_timezone.py": "9222fa5edcdd5b7ce9cd787652e17be2b490f3516dddab2ba25851ba2fae266b",
+    "src/glide/image_conversion.py": "6790bf47e0f1ec8927821bf5ef690e960ab2f07cec923e4ccb9d505a3a1803c0",
+    "src/glide/image_preview.py": "5111429f28170139dc42c7ef3d3d6206e3ffab8444ebf06a19e4fb879b4ccf8c",
+    "src/glide/interaction_policy.py": "20d402dd2e64eb1d6e32223bded592de075feb13b63286d75ac5686db758ddd0",
+    "src/glide/item_index.py": "655850fef1abe02bdc9822b9b753be600621c92d03761a8658c3630b0bdae935",
+    "src/glide/load_phases.py": "56facb330dbc6885f4bf8d81a22ed877aa57fca9f5f142596b97e255fa703978",
+    "src/glide/logo.py": "b2766fc19249b567b782d67dc0eac12bfa33d0988349fed00bf62865348e5d99",
+    "src/glide/logo_raster.py": "76a01c3a78903a5a0ac819c93d9447cbf85863987190d87de00a7032df11fd10",
+    "src/glide/markdown_tree.py": "3b4bd15dcf4ab5a1d6783c265aece32dfd5a6c8ff2a64fa88e531e5ee92509a7",
+    "src/glide/motion.py": "3d88d5ad28fbfcd685ea5f36b9d2f05aeb014094b202c2f037062fc071472f19",
+    "src/glide/notion_archive.py": "2655443a5d1828961b9d593c81a80c197dea9e95b9db6338736e39e6d4be80fb",
+    "src/glide/notion_hierarchy.py": "f8d19a2b06e0566416c20b02bfe16209c028fdd695000d6f4d301f4fca5c0d5c",
+    "src/glide/notion_import.py": "cbb5ca3caa191d11ebd95117ae688497fccf3951cc0b92f0ad2cfb08e8b3422f",
+    "src/glide/notion_reimport.py": "a61c464594c0bfb0c45694bfd8b645eee0ac0eedb24020ee4d6881dd8c3b3256",
+    "src/glide/object_references.py": "6bff06f028a514acf8d58a2cf46b82de4509f091bf92a003b2fc47a0d0127ea7",
+    "src/glide/occupied_time.py": "e414c5e6c90aac54a861782a6f43c076a85c46f2a47805372948f69070653450",
+    "src/glide/page_features.py": "6a23b974fc61dd0951574ab566f11249340abc0b0b14fa0d638e4c2a4d15e087",
+    "src/glide/page_markdown.py": "6d813693256e2f0536e8c039d18b95ed41c07587dda891b6d7bfa83c9f355ade",
+    "src/glide/page_restore.py": "4a0f4a492585baa20080ccc452368b3fd7ab9b1523d94807f3aa207c93f4635b",
+    "src/glide/persistence.py": "f7aabd057d48ec5b8235b54f197e476ddf99eed26008a72a0221217ac67d4c73",
+    "src/glide/pinboard_pages.py": "6ed5d0c08d14fd8167d18f5932e88e0e236362e7bba2c8844a798e0e2dd25bf0",
+    "src/glide/planning.py": "3859614638ffd45e1441f7dce3fe33801c9f43c2f62d86713e1fd6806f2b20b5",
+    "src/glide/preview_tools.py": "75edb1874d3a0fb84ea678469a489bdb580873f16979b49d9f1eb2b9226afd10",
+    "src/glide/release_notes.py": "f211a897f23f36e0675099db282ce2a1410de04a0d01f135bc05ac90078f5e1a",
+    "src/glide/render_retention.py": "263be1a095ca02170a2725c10b9ba42cc24f7de199ee39893126774f9d0f5c6a",
+    "src/glide/repeat_ics.py": "059e1fd9d66b9caa1e60307d11a76e806df5d463d2b07d2c19a0f46945f30708",
+    "src/glide/repeat_rules.py": "0e9b0ba102e77f321cdcd6ebb482192e79debe127209d321ca8f2cb45fab1f9a",
+    "src/glide/restore_assets.py": "a062516ecbaa2148f7f7d5c8a0b80ecdf87b1ebfa85eda3682d32628f35eb6cd",
+    "src/glide/routines.py": "b1ed8d78e461346144f08bc46fb6feaf8becc0ab372280155d0af2411776e9db",
+    "src/glide/runtime_check.py": "de84e7aabdfc1a263d0f404326bc100496ab1134445008cc9dcd3b82779785bf",
+    "src/glide/runtime_diagnostics.py": "6bf7165d86b05e77d6e12bc57fede1d87ad7eba9a17d912d16aeb60ff5020eaf",
+    "src/glide/save_comparison.py": "68dd34483ea6210dc936c2d62c8f257242c2e8ae85a9500c4a85bd2e4e93e1e5",
+    "src/glide/save_result.py": "188675338e3475d0dd322b969f09c798df194a67704d4e7eb0ac78cd043b0424",
+    "src/glide/schema_backups.py": "315fa2592c37282ef6da08c24710449787800268ad612384a615397bfc5e1a7d",
+    "src/glide/session_guard.py": "645f79cecc5cec0d8aade11e528e7723a58513ee66c48e2203951572c44f0b11",
+    "src/glide/settings_compat.py": "8f36b64c9afa3efb5067e5671eeba9fdedf24068de6770fc76d91e5fa3b3a133",
+    "src/glide/sidebar_policy.py": "c7c64ef76c7ce12ee1463c14d4b93f9c146910e8f7d5768e9fa2caf00e4eefeb",
+    "src/glide/side_view.py": "9e6a071b89291cd0736098e029f1b40650787f30969f53193ecd70e472625f52",
+    "src/glide/source_metadata.py": "7bb36a845e5d40fb1b51b168419aab93572d54bd46110dd1f16c6bb0909a2f41",
+    "src/glide/storage_health.py": "efb0c2965ccb4fd0765e82a9c3206d3b5c1285363c753c4da8d22c6d3682e233",
+    "src/glide/structural_guard.py": "bb76bc5abd60a6ad247176f82798e12ca83a1ab5c13e4e35f27713ce445ae3dd",
+    "src/glide/svg_geometry.py": "55d9ffb5a2aeb47079c4d8a99213c6249f4e51cc5a621fa844f135fcf897f98b",
+    "src/glide/symbol_policy.py": "dc015125950c91a0b0d82ea8564a4ed9e2be87023a6d52b1e1bce5dc3f714c20",
+    "src/glide/task_editing.py": "573e5a3a8bdec86a2ed6c6ba49f5b01d648856b451a6b8889440223f775738f7",
+    "src/glide/task_references.py": "0071c2515ff131252aa9a0fd8db1d275429bd662b0c247210694ab372c7e4d27",
+    "src/glide/timezones.py": "f86bc19897fb7f210e8e3535575082688d8acf8585b685da736e1aba267f9ad5",
+    "src/glide/today_view.py": "db44fd4b5abd574c2ce7adcfab04d5711dad54cd70c1c37c0e9716d86fac91d6",
+    "src/glide/ui_design.py": "431034c0f04da1c45c56dfdb9601b9679294779320f7b4e7445a601c7b95935a",
+    "src/glide/undo_history.py": "3a9824141a8e86f1971b9224c4a9b7a99d38ec2df4645fc329772c2a644390be",
+    "src/glide/view_definition.py": "fa8bb5e4a5267a19c444eccf865db56a85d76bb11fd1c661fb2ab6f4f6d553b3",
+    "src/glide/view_metrics.py": "c51a6c3f4f754a6a21b3464b383899ca186a34401de33d2fd8d8c12c5b561f0e",
+    "src/glide/week_planning.py": "e14489d755cfefd58b88920e398c07065b795281fd8486a60848c1b711904142",
+    "GLIDE_SYSTEM_VERSION": "25eb1b956396aab12dc89098a663419d6e6666a5323f09360e1bc77344205078",
+    "packaging/paket/sbom.py": "1251e429680e9ee33819126603770d34fb95dedcddd5583b7b6a3bf3acad90ff",
+    "packaging/paket/project_license.py": "68104a7bb0198e7d0ff406ea998410131b926b5ea1a072f26b38c5f2492e3cc5",
+    "tests/tools/macos_desktop.py": "6d0b56dc07268b24cc495be001293e7f7c583302d3f5a68f6b46d16b4791f655",
+    "tests/tools/test_glide_system.py": "617e47867726ad33b6f449f713427340eafb6efaa915913510612940a8945859"
+  },
+  "inventory": {
+    "source_files": 94,
+    "feature_entries": 147,
+    "packages": 25,
+    "test_tool_files": 309
+  },
+  "focused_tests": {
+    "system": 5,
+    "project_license": 5,
+    "sbom": 5,
+    "stand": 20,
+    "package_tools": 92,
+    "mac_workflow": 6,
+    "mac_desktop": 3,
+    "retention": 13
+  },
+  "performance": {
+    "measured_commit": "a4c34b86ad22554c39905b25b0a46cb5b6ccef1d",
+    "measured_app_sha256": "c253cc1dafdacb7c527773354733b65f3527c1e9345c1564b10d95dbf4569ecb",
+    "scope": "Neue lokale Messpunkte; kein behaupteter Vergleichsgewinn; Profildaten separat",
+    "reports": {
+      "performance-speicher-a4c.json": {
+        "sha256": "0f79c47ceaae037108af4b48c477b1fef15a9b532a2e4504e2c8b08e37b19fd0",
+        "data": {
+          "werkzeug": "messung_speicherweg.py",
+          "app": "01_Repository\\Glide\\src\\glide\\app.pyw",
+          "app_version": "3.50.7",
+          "punkte": 1000,
+          "datei_kb": 1059,
+          "runden_warm": 9,
+          "vergleich_scope": "Vollvergleich",
+          "umgebung": {
+            "python": "3.14.7",
+            "tk": "9.1.0",
+            "plattform": "Windows-11-10.0.26300-SP0",
+            "prozessor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD"
+          },
+          "erstes_speichern_ms": 94.603,
+          "snapshot_undo": {
+            "median_ms": 4.703,
+            "p95_ms": 5.276,
+            "stichproben_ms": [
+              3.887,
+              5.163,
+              5.276,
+              4.436,
+              3.713,
+              4.703,
+              4.752,
+              3.924,
+              4.818
+            ]
+          },
+          "save_items": {
+            "median_ms": 31.77,
+            "p95_ms": 43.809,
+            "stichproben_ms": [
+              43.809,
+              32.514,
+              41.575,
+              30.989,
+              31.76,
+              31.158,
+              29.941,
+              31.77,
+              31.968
+            ]
+          },
+          "history_snapshot": {
+            "median_ms": 6.064,
+            "p95_ms": 13.119,
+            "stichproben_ms": [
+              6.175,
+              7.33,
+              6.064,
+              5.768,
+              13.119,
+              6.757,
+              5.733,
+              5.697,
+              5.784
+            ]
+          },
+          "json_eingerueckt": {
+            "median_ms": 2.729,
+            "p95_ms": 2.955,
+            "stichproben_ms": [
+              2.601,
+              2.628,
+              2.865,
+              2.955,
+              2.821,
+              2.724,
+              2.656,
+              2.778,
+              2.729
+            ]
+          },
+          "json_kompakt": {
+            "median_ms": 2.438,
+            "p95_ms": 2.845,
+            "stichproben_ms": [
+              2.453,
+              2.376,
+              2.614,
+              2.392,
+              2.561,
+              2.413,
+              2.438,
+              2.407,
+              2.845
+            ]
+          },
+          "abhaken_item_change": {
+            "median_ms": 54.121,
+            "p95_ms": 66.989,
+            "stichproben_ms": [
+              50.525,
+              54.382,
+              50.047,
+              52.565,
+              60.871,
+              66.989,
+              56.848,
+              54.121,
+              52.156
+            ]
+          },
+          "verlauf": true,
+          "speicher_kb": {
+            "vorher": null,
+            "nach_50_abhaken": null,
+            "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+          },
+          "callbackfehler": []
+        }
+      },
+      "performance-speicher-10000-a4c.json": {
+        "sha256": "ad0db17e86971bc80036d5361aeef489eb2faad75f8452c4ed6e6dee798a199d",
+        "data": {
+          "werkzeug": "messung_speicherweg.py",
+          "app": "01_Repository\\Glide\\src\\glide\\app.pyw",
+          "app_version": "3.50.7",
+          "punkte": 10000,
+          "datei_kb": 10542,
+          "runden_warm": 9,
+          "vergleich_scope": "Vollvergleich",
+          "umgebung": {
+            "python": "3.14.7",
+            "tk": "9.1.0",
+            "plattform": "Windows-11-10.0.26300-SP0",
+            "prozessor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD"
+          },
+          "erstes_speichern_ms": 672.784,
+          "snapshot_undo": {
+            "median_ms": 42.381,
+            "p95_ms": 78.728,
+            "stichproben_ms": [
+              78.728,
+              57.838,
+              41.011,
+              41.423,
+              44.253,
+              35.304,
+              47.82,
+              41.349,
+              42.381
+            ]
+          },
+          "save_items": {
+            "median_ms": 342.472,
+            "p95_ms": 411.307,
+            "stichproben_ms": [
+              305.132,
+              411.307,
+              345.344,
+              289.94,
+              342.472,
+              374.117,
+              306.584,
+              296.078,
+              369.779
+            ]
+          },
+          "history_snapshot": {
+            "median_ms": 67.456,
+            "p95_ms": 92.67,
+            "stichproben_ms": [
+              69.542,
+              65.675,
+              69.581,
+              92.67,
+              67.456,
+              65.017,
+              65.481,
+              69.18,
+              66.139
+            ]
+          },
+          "json_eingerueckt": {
+            "median_ms": 32.427,
+            "p95_ms": 38.709,
+            "stichproben_ms": [
+              31.615,
+              32.084,
+              32.361,
+              32.271,
+              33.262,
+              38.709,
+              35.016,
+              35.018,
+              32.427
+            ]
+          },
+          "json_kompakt": {
+            "median_ms": 43.757,
+            "p95_ms": 46.047,
+            "stichproben_ms": [
+              29.944,
+              43.584,
+              45.803,
+              43.757,
+              45.357,
+              45.861,
+              46.047,
+              35.294,
+              29.446
+            ]
+          },
+          "abhaken_item_change": {
+            "median_ms": 380.262,
+            "p95_ms": 478.222,
+            "stichproben_ms": [
+              355.94,
+              448.974,
+              374.003,
+              385.243,
+              380.262,
+              460.142,
+              351.775,
+              362.586,
+              478.222
+            ]
+          },
+          "verlauf": true,
+          "speicher_kb": {
+            "vorher": null,
+            "nach_50_abhaken": null,
+            "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+          },
+          "callbackfehler": []
+        }
+      },
+      "performance-ansichten-a4c.json": {
+        "sha256": "92f886f77a92fab405385634d0685b19d7aee1f193b49c147debb4c852311045",
+        "data": {
+          "version": "3.50.7",
+          "source_sha256": "c253cc1dafdacb7c527773354733b65f3527c1e9345c1564b10d95dbf4569ecb",
+          "python": "3.14.7",
+          "platform": "Windows-11-10.0.26300-SP0",
+          "tk": "9.1.0",
+          "profiling": false,
+          "fixture": {
+            "tasks": 1000,
+            "lists": 12,
+            "page_paragraphs": 50,
+            "page_images": 2,
+            "notes": 1,
+            "window": "1400x950",
+            "idle_rounds": 3
+          },
+          "warm_rounds": 8,
+          "views": {
+            "Startseite": {
+              "median_ms": 608.994,
+              "p95_ms": 938.088,
+              "stichproben_ms": [
+                570.778,
+                938.088,
+                763.625,
+                589.67,
+                577.937,
+                573.239,
+                628.318,
+                632.924
+              ],
+              "first_ms": 433.145
+            },
+            "Bibliothek": {
+              "median_ms": 735.02,
+              "p95_ms": 909.336,
+              "stichproben_ms": [
+                647.738,
+                689.318,
+                775.148,
+                788.278,
+                694.892,
+                909.336,
+                651.57,
+                781.225
+              ],
+              "first_ms": 650.536
+            },
+            "Liste": {
+              "median_ms": 1063.782,
+              "p95_ms": 1516.623,
+              "stichproben_ms": [
+                1024.295,
+                1103.269,
+                1127.881,
+                1153.896,
+                997.817,
+                1516.623,
+                924.478,
+                989.184
+              ],
+              "first_ms": 1399.604
+            },
+            "Tabelle": {
+              "median_ms": 185.341,
+              "p95_ms": 278.397,
+              "stichproben_ms": [
+                178.662,
+                183.181,
+                203.435,
+                194.269,
+                187.5,
+                278.397,
+                166.218,
+                174.922
+              ],
+              "first_ms": 212.459
+            },
+            "Seite mit zwei Bildern": {
+              "median_ms": 174.885,
+              "p95_ms": 221.18,
+              "stichproben_ms": [
+                172.226,
+                163.439,
+                209.543,
+                221.18,
+                176.735,
+                173.035,
+                181.442,
+                167.74
+              ],
+              "first_ms": 254.082
+            },
+            "Notiz": {
+              "median_ms": 200.721,
+              "p95_ms": 279.764,
+              "stichproben_ms": [
+                245.015,
+                201.03,
+                279.764,
+                230.015,
+                200.411,
+                193.724,
+                194.902,
+                190.875
+              ],
+              "first_ms": 274.432
+            }
+          },
+          "font_3000_calls": {
+            "median_ms": 4.073,
+            "p95_ms": 6.788,
+            "stichproben_ms": [
+              3.796,
+              4.028,
+              6.642,
+              3.784,
+              3.945,
+              4.119,
+              4.812,
+              6.788
+            ]
+          },
+          "toolbar_30_buttons": {
+            "median_ms": 300.907,
+            "p95_ms": 487.793,
+            "stichproben_ms": [
+              298.194,
+              308.11,
+              487.793,
+              303.621,
+              480.847,
+              215.423,
+              224.912,
+              291.639
+            ]
+          },
+          "callback_errors": []
+        }
+      }
+    }
+  },
+  "sbom_schema": {
+    "date": "2026-11-08",
+    "specification": "CycloneDX 1.6",
+    "schemas": {
+      "bom-1.6.schema.json": {
+        "url": "https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/bom-1.6.schema.json",
+        "sha256": "3e92dddbc30cf7f6a02b80f0942b1a4cfd4fb1c26f1dfc4310afa9d613cafb93"
+      },
+      "spdx.schema.json": {
+        "url": "https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/spdx.schema.json",
+        "sha256": "baa9d3bd1ed57b6751b0887edead6b5063ff53ff7429cf85d476c6c94af0166e"
+      },
+      "jsf-0.82.schema.json": {
+        "url": "https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/jsf-0.82.schema.json",
+        "sha256": "8bae002c25e723db7ee1f26afde680ae1a2b1a8f6b4b4b0fd65dc3becb090aae"
+      }
+    },
+    "validator": {
+      "attrs": "26.1.0",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "pip": "26.2.1",
+      "referencing": "0.37.0",
+      "rpds-py": "2026.9.1"
+    },
+    "results": [
+      {
+        "scope": "fixture",
+        "components": 2,
+        "errors": 0,
+        "complete_dependency_graph": false
+      },
+      {
+        "scope": "historische-mac-basis",
+        "components": 23,
+        "errors": 0,
+        "complete_dependency_graph": false
+      }
+    ],
+    "scope": "Vollständige offizielle JSON-Schemaprobe; kein neuer nativer Paketbau. Historische Lizenz-/Baukomponenten unverändert, Modellfixture gesondert."
+  },
+  "github": {
+    "open_issues": 0,
+    "open_pull_requests": [
+      71
+    ],
+    "releases": 0,
+    "topics_reconciled": true,
+    "description_includes_projects": true
+  },
+  "pending": [
+    "Native Endmatrix Windows/Linux auf neuem Commit",
+    "Native Mac-Prüfplatzprobe und danach Vollprüfung",
+    "Aktuelle native Paket-/SBOM-Zuordnung",
+    "Physische DPI/Mehrmonitor und menschliche Abnahme",
+    "I1/I3/I4/I11, vollständiger transitiver SBOM-Graph"
+  ],
+  "ci_grundstufe": {
+    "exitcode": 0,
+    "steps": 19,
+    "tool_tests": 279,
+    "tool_skips": 1,
+    "domain_tests_each_run": 1155,
+    "strict_python_delivery": true,
+    "documentation_links": 342
+  },
+  "native_repair_baseline": {
+    "commit": "a4c34b86ad22554c39905b25b0a46cb5b6ccef1d",
+    "linux_run": 42474978541,
+    "linux_job": 128714619994,
+    "linux_job_conclusion": "success",
+    "windows_job": 128722830296,
+    "windows_status": "in_progress",
+    "scope": "Reparatur-Vorbeleg, nicht die neue Endmatrix dieses Nachtrags"
+  },
+  "changed_files_vs_main": [
+    {
+      "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/fehler.yml",
+      "change": "M",
+      "reason": "Native QA-, Release-/Lizenzvorbereitung oder neutrale öffentliche Eingabe-/Statustexte"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "change": "M",
+      "reason": "Native QA-, Release-/Lizenzvorbereitung oder neutrale öffentliche Eingabe-/Statustexte"
+    },
+    {
+      "path": ".github/workflows/macos-paket.yml",
+      "change": "M",
+      "reason": "Native QA-, Release-/Lizenzvorbereitung oder neutrale öffentliche Eingabe-/Statustexte"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "change": "M",
+      "reason": "Native QA-, Release-/Lizenzvorbereitung oder neutrale öffentliche Eingabe-/Statustexte"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/AGENTS.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/CHANGELOG.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/GLIDE_SYSTEM_VERSION",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/LICENSE.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/VERSION",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/assets/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/macos/baue_app.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/baue_paket.py",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/compiled_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/license_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_macos.py",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_windows.py",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/macos_build_run.py",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/package_sources.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/package_spec.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/project_license.py",
+      "change": "A",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_macho.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_start_macos.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_start_windows.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/runtime_paths.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/runtime_provenance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/sbom.py",
+      "change": "A",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/start_glide.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_acl.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_isolation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_license_sources.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_native.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "change": "M",
+      "reason": "MPL-/Quellbezug, Lizenzmetadaten, CycloneDX-Erzeugung und Paket-/Startnachweise"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/baue_runtime.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/hole_runtimequellen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/lizenzen_tk91_macos.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/runtime_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/runtime_patches.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/_glide_laden.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/ablage_kuerzen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/analyse_codebasis.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/bauhashes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/logo_abgleich.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_ansichtswechsel.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_bildseite.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_fundament3360.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_performance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_speichervergleich.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_speicherweg.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_startseite.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_suche.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/pfade_bereinigen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/pruefaufrufe_probe.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/showcase_abgleich.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/versionswechsel.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/zaehlung_aktualisierungen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/README.md",
+      "change": "M",
+      "reason": "Systemregister, Produkt-/Lizenztext, UI-Regeln oder Neuerungskatalog gemäß Nachtrag"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/accessibility_bindings.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/action_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/action_menu.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/animation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/animation_export.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/app.pyw",
+      "change": "M",
+      "reason": "Schrift-/Stilbindung, Designfarben, Fokus, Pinnwandleiste, Root-Lebensdauer und Produkttext"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/appearance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/attachment_paths.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/attachment_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backdrop.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backup_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backup_diff.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backup_snapshot.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/brand.py",
+      "change": "M",
+      "reason": "Systemregister, Produkt-/Lizenztext, UI-Regeln oder Neuerungskatalog gemäß Nachtrag"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/busy_calendar.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/calendar_service.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/capture_parser.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/compact_mode.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/content_search.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/core_accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/daily_hints.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/data_lock.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/day_proposal.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/day_relief.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing_image.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing_prototype.pyw",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/editor_flush.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/eisenhower.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/exchange_patch.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/exchange_recipes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/filter_explain.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/focus_timer.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/font_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/glide_start.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/glyph_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/home_dashboard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/home_task_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/home_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_busy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_recurrence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_timezone.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/image_conversion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/image_preview.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/interaction_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/item_index.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/load_phases.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/logo.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/logo_raster.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/markdown_tree.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/motion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_archive.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_hierarchy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_import.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_reimport.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/object_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/occupied_time.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_features.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_markdown.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_restore.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/persistence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/pinboard_pages.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/preview_tools.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/release_notes.py",
+      "change": "M",
+      "reason": "Systemregister, Produkt-/Lizenztext, UI-Regeln oder Neuerungskatalog gemäß Nachtrag"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/render_retention.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/repeat_ics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/repeat_rules.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates",
+      "change": "M",
+      "reason": "Systemregister, Produkt-/Lizenztext, UI-Regeln oder Neuerungskatalog gemäß Nachtrag"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/restore_assets.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/routines.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/runtime_check.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/runtime_diagnostics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/save_comparison.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/save_result.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/schema_backups.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/session_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/settings_compat.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/side_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/sidebar_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/source_metadata.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/storage_health.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/structural_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/svg_geometry.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/symbol_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/task_editing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/task_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/timezones.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/today_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ui_design.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/undo_history.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/view_definition.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/view_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/week_planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/README.md",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.50.7.glidebackup",
+      "change": "A",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_rundgang.glidebackup",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase.glidebackup",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase.glidetemplates",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase_App.glideapp",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/manifest.json",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/audit_app.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/historical_runtime.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/start_font_probe.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_animation3400.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ansichten.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_arbeitsmodi.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_aufgaben3380.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_aufraeumen330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_auftraege.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_austausch3350.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bedienung33316.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_befunde330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bereiche3331.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bilder330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bildkonversion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_datenintegritaet.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_dialog_theme.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drag_performance3322.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing_prototype.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_editor3338.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_eingabe3333.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_eisenhower3335.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_erwaehnungen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_etappe1_332.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features311.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features312.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features313.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features314.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features315.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features316.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features317.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features318.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features319.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features320.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features321.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features322.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features323.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features324.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features325.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features326.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features328.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features329.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fenster330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_festlayout330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fortsetzung33311.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fundament333.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fundament3360.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_glide.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_glide_36.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_heute3336.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_hintergrund330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_import3410.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kartenfuss330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kennzahlen33310.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_klappmechanismen3321.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_komfort33320.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kompression330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kontrast330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_library_performance3323.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_listenleeren.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_logo330.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_logo3370.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_markdownbaum.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_mindestgroesse330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_mutationsreste.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_notizbereich330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_oberflaeche33321.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_paket3420.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_paketierung330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_pixel3350.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_planen33313.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_release36.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_release37.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_reminders.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_rueckmeldung330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_schutzrunde.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seiten330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seiten33318.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seitenkarten.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_sicherungszentrale.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_speicherlast330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_speicherstatus.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_speichervergleich3339.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_startseite3332.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_suche3337.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tag3390.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tagpaket33314.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_template_workflows.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tempo330.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tempo33319.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_titel33312.py",
+      "change": "M",
+      "reason": "Gezielte Regression; sichtbarer D66-Vertrag, Schrift-/Fenster-/Cleanup- und Anhangswege"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui39.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_followup36.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_polish36.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_updates.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_uiux_paket.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_vollpruefung325.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederanlauf.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederholen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederholung3391.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederholungsregeln.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wissen33315.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wissen3340.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_woche33317.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_workspace310.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_zugang400.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_zukunftsfelder.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/vorversion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/README.md",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/aufbewahrung.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/bewahrung_nachtrag.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/ergebnis.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/main_fortsetzung.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/system_fortsetzung.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/zweiter_reparaturnachtrag.json",
+      "change": "A",
+      "reason": "Datierter Nachweis, Bewahrung oder belegter Statusabgleich; keine umetikettierte Freigabe"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/README.md",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/ablagegroesse.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/altbestandteile.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/analyse_erreichbarkeit.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/analyse_statisch.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/attributpruefung.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/beispieldaten.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/ci_grundstufe.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/dauerlauf.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/design_inventory.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/dublettenpruefung.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/gesichert_pruefen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/kandidat_starten.pyw",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/leistungspruefung.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/linux_gegenproben.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/macos_desktop.py",
+      "change": "A",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/macos_native_accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/projektseite_aufnahmen.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/prozessdiagnose.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefablauf.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_atspi_lifetime.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_linux_runtime.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_accessibility_skript.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_atspi.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_tk91_macos.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_reader_nvda.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_reader_orca.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_showcase.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_tk.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_windows_msaa.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_windows_signatur.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefen.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_app400.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_navigation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_nvda.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_x11.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/releasedaten.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/rundgang.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/screenshots.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/showcase.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/standpruefung.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/symbolpruefung.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/synchronisationswaechter.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_ablagegroesse.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_altbestandteile.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_analyse_statisch.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_datenschutz.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_design_richtlinien.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_glide_system.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_historical_runtime.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_kandidat_starten.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_linux_gegenproben.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_macos_desktop.py",
+      "change": "A",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_macos_paket_workflow.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_native_atspi_consumer.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_compiled_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_license_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_macos_build_run.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_macos_licenses.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_package_sources.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_runtime_paths.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_runtime_provenance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_start_isolation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_isolation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_licenses.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_native.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_project_license.py",
+      "change": "A",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_prozessdiagnose.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_pruefablauf.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_app400.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_navigation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_nvda.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_orca.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_release_workflow.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_runtime_contract.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_runtime_patches.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_sbom.py",
+      "change": "A",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_standpruefung.py",
+      "change": "M",
+      "reason": "Prüfvertrag, Lizenz-/Inventarsicherung, Fehlertest oder native CI-Voraussetzung"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_synchronisationswaechter.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_ui_nachlauf_workflow.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_versionspflege.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_windows_sandbox.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_zugang_pruefvertrag.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/titelmessung.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/vorlagendaten.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/windows_desktop.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/windows_sandbox.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/zugang_pruefvertrag.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_accessibility_bindings.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_action_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_action_menu.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_entry.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_export.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_snapshot.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_appearance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_attachment_paths.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_attachment_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_backup_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_backup_diff.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_backup_snapshot.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_bulk_changes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_busy_calendar.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_calendar_service.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_parser.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_reminder.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_repeat_anchor.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_compact_mode.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_content_search.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_core_accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_daily_hints.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_data_lock.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_day_proposal.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_day_relief.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_drawing_pixel35.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_editor_flush.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_eisenhower.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_exchange_patch.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_exchange_recipes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_featurepakete349.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_featurephase348.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_filter_explain.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_focus_timer.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_font_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_glyph_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_guard_inventory.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_home_dashboard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_home_selection.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_home_task_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_home_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_busy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_edges.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_recurrence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_timezone.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_image_conversion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_incremental_comparison.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_interaction_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_item_index.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_load_phases.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_logo_raster.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_markdown_tree.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_motion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_archive.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_hierarchy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_import.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_import_bridge.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_reimport.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_task_binding.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_object_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_occupied_grid.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_occupied_time.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_features.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_markdown.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_print.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_restore.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_restore_bridge.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_paket2_klein.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_persistence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_pinboard_pages.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_portable_source_bridge.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_preview_tools.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_release_notes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_render_retention.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_controls.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_ics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_rules.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_series.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_restore_assets.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_retention.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_routines.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_runtime_check.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_runtime_diagnostics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_save_comparison.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_save_result.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_schema_backups.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_schema_bridge.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_session_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_settings_compat.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_side_history.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_side_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_sidebar_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_source_metadata.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_source_schema_bridge.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_storage_health.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_structural_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_svg_geometry.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_svg_sampling.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_symbol_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_task_editing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_task_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_timezones.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_today_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ui_design.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_undo_history.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_unlinked_mentions.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_view_definition.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_view_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_week_planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/README.md",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/Glide-Showcase.glidebackup",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/Glide-Showcase.glidetemplates",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/Glide-Showcase_App.glideapp",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/README.md",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/manifest.json",
+      "change": "M",
+      "reason": "Versionierte synthetische Beispiele/Showcase/Vorlagen; kein neuer Datenformatstand"
+    },
+    {
+      "path": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.50.6.pyw",
+      "change": "R100",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich",
+      "previous_path": "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.50.6.pyw"
+    },
+    {
+      "path": "07_Python-Versionen/Archiv/README.md",
+      "change": "M",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.50.7.pyw",
+      "change": "R096",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich",
+      "previous_path": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.50.0.pyw"
+    },
+    {
+      "path": "07_Python-Versionen/LICENSE",
+      "change": "A",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/LICENSE.md",
+      "change": "A",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/README.md",
+      "change": "M",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/Schnellstart.pyw",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/accessibility_bindings.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/action_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/action_menu.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/animation.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/animation_export.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/appearance.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/attachment_paths.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/attachment_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/backdrop.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/backup_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/backup_diff.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/backup_snapshot.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/brand.py",
+      "change": "M",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/busy_calendar.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/calendar_service.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/capture_parser.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/compact_mode.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/content_search.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/core_accessibility.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/daily_hints.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/data_lock.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/day_proposal.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/day_relief.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/drawing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/drawing_image.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/editor_flush.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/eisenhower.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/exchange_patch.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/exchange_recipes.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/filter_explain.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/focus_timer.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/font_catalog.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/glyph_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/home_dashboard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/home_task_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/home_tiles.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/ics_busy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/ics_recurrence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/ics_timezone.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/image_conversion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/image_preview.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/interaction_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/item_index.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/load_phases.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/logo.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/logo_raster.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/markdown_tree.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/motion.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/notion_archive.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/notion_hierarchy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/notion_import.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/notion_reimport.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/object_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/occupied_time.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/page_features.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/page_markdown.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/page_restore.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/persistence.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/pinboard_pages.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/preview_tools.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/release_notes.py",
+      "change": "M",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/render_retention.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/repeat_ics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/repeat_rules.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/resources/templates/glide_vorlagen.glidetemplates",
+      "change": "M",
+      "reason": "Python-Lieferung, Lizenzbeigaben oder unverändert bewahrter Vorstand; Quell-/Lieferabgleich"
+    },
+    {
+      "path": "07_Python-Versionen/restore_assets.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/routines.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/runtime_check.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/runtime_diagnostics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/save_comparison.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/save_result.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/schema_backups.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/session_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/settings_compat.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/side_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/sidebar_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/source_metadata.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/storage_health.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/structural_guard.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/svg_geometry.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/symbol_policy.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/task_editing.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/task_references.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/timezones.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/today_view.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/ui_design.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/undo_history.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/view_definition.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/view_metrics.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "07_Python-Versionen/week_planning.py",
+      "change": "M",
+      "reason": "MPL-2.0-Dateihinweis; übriger Dateiinhalt unverändert"
+    },
+    {
+      "path": "20_Grafik_Master/README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "CLAUDE.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    },
+    {
+      "path": "README.md",
+      "change": "M",
+      "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
+    }
+  ],
+  "followup_2026_11_08_round4": {
+    "date": "2026-11-08",
+    "base_commit": "967f84f44860456b885067b8aef5a6e76f641122",
+    "system_version": "1.4",
+    "data_schema": 26,
+    "source_files": 94,
+    "features": 147,
+    "packages": 25,
+    "test_tool_files": 311,
+    "inputs": {
+      "src/glide/app.pyw": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+      "src/glide/symbol_policy.py": "6d08d40e0880ea2e2ae5f716fc5870b4c337fe0ea661bb718deb455b76c7b63b",
+      "GLIDE_SYSTEM_VERSION": "2e8516fe8eade72d519ce204c2c296bf838589585c14d28170e1621bd10e4dc4",
+      "tests/integration/test_arbeitsmodi.py": "6c1c10e2976650413690ea70589b86ba890165125661824e071f71dac844cdb3",
+      "tests/tools/arbeitsmodi_gruppen.py": "a0411ab7387dcd5cc0efded15e7a528ce6de59185704cb3465b12345c230e572",
+      "tests/tools/test_arbeitsmodi_gruppen.py": "f073deeeeddddc2e067d8a5a85df91add337a37efcc21193ede8391088374785",
+      "tests/tools/macos_desktop.py": "3d9d14e93a741fba1c6e8b0002e25e045f8e81532cb53272b1c155b9e3344850",
+      "tests/tools/test_macos_desktop.py": "018e263883f07c8a61112e0f78839f896c4d82b0c87afac2e89034a3603a92bb",
+      "tests/tools/test_macos_paket_workflow.py": "d3d5dcb1aaa35cb6f4258d15cc92def302ae2e90324f03c6f39f27c36357a248",
+      "tests/tools/pruefen.py": "3dc59484f1915ab15d2e98c327d5e73ca99c18af4f46f09f2915c9ef640f3385",
+      "tests/tools/test_pruefablauf.py": "e122dacdd97e987944e7d42016548a2448ad50ab1b680b81a79fc36cb2585308",
+      "tests/unit/test_symbol_policy.py": "66491e6f50855b03b9a1b9a0e95ae5db6548b5047ef779fcefbd476187316749"
+    },
+    "windows_failure": {
+      "run": 42478170734,
+      "job": 128733783184,
+      "artifact": 13619971774,
+      "artifact_sha256": "f921425bf89e299fdf9d27e6beb7f528f42422fbc1fbc34bcb164fba89ebbb8b",
+      "button_bottom": 830,
+      "visible_bottom": 827,
+      "completed_cases": 62,
+      "green_cases": 61,
+      "red": [
+        "neuerungen3"
+      ],
+      "completed_seconds": 895.28,
+      "timeout_seconds": 900,
+      "last_case": "fensterende3507",
+      "last_phase": "setup",
+      "deadlock_proven": false
+    },
+    "linux_baseline": {
+      "commit": "967f84f44860456b885067b8aef5a6e76f641122",
+      "run": 42478170734,
+      "job": 128724517027,
+      "conclusion": "success"
+    },
+    "local_targeted": {
+      "neuerungen": {
+        "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+        "faelle": {
+          "neuerungen3": {
+            "ok": true,
+            "befund": "48 Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 113.762,
+            "gestartet_unix": 1794153739.85419
+          }
+        },
+        "fehler": [],
+        "gruppe": null,
+        "vorgesehene_faelle": [
+          "neuerungen3"
+        ],
+        "laufender_fall": null
+      },
+      "isolated_root_end": {
+        "app_sha256": "8aa5adcbf81d5a32bb7fe17120d3f12073917339f653d87931179e1b70bdc1ea",
+        "faelle": {
+          "fensterende3507": {
+            "ok": true,
+            "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 8.926
+          }
+        },
+        "fehler": [],
+        "laufender_fall": null
+      },
+      "symbol_tests": 8,
+      "ascii_counterprobe_red": true,
+      "mac_desktop_tests": 6,
+      "mac_workflow_tests": 6,
+      "system_tests": 5,
+      "group_contract_tests": 2,
+      "subprocess_runs": [
+        {
+          "name": "uiux",
+          "exitcode": 0,
+          "dauer_s": 150.35
+        },
+        {
+          "name": "bedienung",
+          "exitcode": 0,
+          "dauer_s": 13.133
+        },
+        {
+          "name": "abschluss",
+          "exitcode": 0,
+          "dauer_s": 402.227
+        }
+      ],
+      "uiux_cases": 17,
+      "abschluss_group": {
+        "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+        "faelle": {
+          "neuerungen3": {
+            "ok": true,
+            "befund": "48 Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 76.621,
+            "gestartet_unix": 1794154184.8138628
+          },
+          "titelzaehler": {
+            "ok": true,
+            "befund": "Feldrahmen: noch 40 → noch 3 → max. 40 → 17 gekürzt; Inline-Umbenennen mit Zähler rechts; Haupteingabe/Ordner/Einfügen: Zähler, Ablehnung mit Zeichenzahl, Rückfrage; Schnellerfassung: Zähler über den erkannten Titel",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 11.554,
+            "gestartet_unix": 1794154261.4354498
+          },
+          "anhangsnamen": {
+            "ok": true,
+            "befund": "Umbenennen erzwungen (Abbruch übernimmt nichts, Endung bleibt), Speichername ≤ 73, automatische Kürzung gemeldet, Bestand nach ZIP-Vorsicherung (Datendatei und Originalbytes) gekürzt, alte Datei entfernt; Schreibschutz nimmt per Kennung zurück, Speicherfehler lässt Kopien liegen",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 14.897,
+            "gestartet_unix": 1794154272.9901533
+          },
+          "themenfarbe": {
+            "ok": true,
+            "befund": "300 Titelprüfungen in 10 Designs × 5 Themenfarben, Kontrast ≥ 4,5:1, Kontrastgrau neutral",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 168.0,
+            "gestartet_unix": 1794154287.8882565
+          },
+          "pinnwandleiste": {
+            "ok": true,
+            "befund": "1250 Knopfprüfungen in 3 Anordnungen, 4 Breiten (1000–1720 px), Liste und Ordner, Hinweise an/aus, 2 Schriften, hell/dunkel; Wahl über das Menü wirkt",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 58.571,
+            "gestartet_unix": 1794154455.888997
+          },
+          "ruecktaste": {
+            "ok": true,
+            "befund": "Rücktaste/Entf im Titelfeld (Pinnwand und Liste) löscht keinen Punkt, Wechsel möglich, gesperrter Wechsel meldet jeden neuen Versuch; Entf am Baum löscht wie bisher",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 18.786,
+            "gestartet_unix": 1794154514.4610791
+          },
+          "restflaechen": {
+            "ok": true,
+            "befund": "51 Ansichten und Aktionsschritte ohne Restfläche; Seitentext und Liste nach dem Schließen wieder gleich groß",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 29.248,
+            "gestartet_unix": 1794154533.2484548
+          },
+          "markenkante": {
+            "ok": true,
+            "befund": "16 Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 9.737,
+            "gestartet_unix": 1794154562.4969602
+          },
+          "beta350": {
+            "ok": true,
+            "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 8.671,
+            "gestartet_unix": 1794154572.2345397
+          },
+          "fensterende3507": {
+            "ok": true,
+            "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 5.378,
+            "gestartet_unix": 1794154580.9064755
+          }
+        },
+        "fehler": [],
+        "gruppe": "abschluss",
+        "vorgesehene_faelle": [
+          "neuerungen3",
+          "titelzaehler",
+          "anhangsnamen",
+          "themenfarbe",
+          "pinnwandleiste",
+          "ruecktaste",
+          "restflaechen",
+          "markenkante",
+          "beta350",
+          "fensterende3507"
+        ],
+        "laufender_fall": null
+      },
+      "timeout_counterprobe_tests": 19
+    },
+    "mac_actual_package": {
+      "commit": "967f84f44860456b885067b8aef5a6e76f641122",
+      "package_digests": {
+        "Glide-3.50.7-macos-arm64.dmg": "6c1557eb6f5b77727d2ed8f1f0219e90813aa45ff85b6371101a6c0f73894d3e",
+        "Glide-3.50.7-macos-arm64.tar.gz": "da31d71b28836bc11c28dcb19c88a5139d7f3a55e7dbce6ceffb43251b4daf43"
+      },
+      "completion": {
+        "exitcode": 0,
+        "version": "3.50.7",
+        "target": "macos-arm64",
+        "archive": "Glide-3.50.7-macos-arm64.tar.gz",
+        "sha256": "da31d71b28836bc11c28dcb19c88a5139d7f3a55e7dbce6ceffb43251b4daf43",
+        "archive_validation": {
+          "files": 494,
+          "symlinks": 30,
+          "modes_preserved": true
+        },
+        "source_files": 241,
+        "sources_unchanged": true,
+        "signature": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+        "native_start_verified": true,
+        "developer_id_and_notarization": "offen; Entwicklungsartefakt"
+      },
+      "project_component": {
+        "name": "Glide",
+        "version": "3.50.7",
+        "license": "MPL-2.0",
+        "source": "https://github.com/n05a-design/glide-to-do/tree/967f84f44860456b885067b8aef5a6e76f641122",
+        "files": {
+          "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+          "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+          "Glide-Quellcode.txt": "58ec3b37ed36ec24b9051a35e314696a1a37d0e19499f1bfa72550ee88a82ae5"
+        }
+      },
+      "checked_license_files": {
+        "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+        "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+        "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+        "macholib-LICENSE": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09",
+        "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "setuptools-LICENSE": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+        "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+        "Python-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+        "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+        "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+        "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+        "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+        "Henry-Spencer-Regex-LICENSE.txt": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a",
+        "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+        "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+        "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+        "tkdnd-LICENSE.txt": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+        "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+        "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+        "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+        "Rubik-OFL.txt": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+        "PlayfairDisplay-OFL.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+        "Fraunces-OFL.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+        "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+        "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+        "XZ-COPYING.txt": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+        "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+        "IANA-LICENSE.txt": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+        "CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+        "utf8proc-LICENSE.txt": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256",
+        "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+        "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+        "Glide-Quellcode.txt": "58ec3b37ed36ec24b9051a35e314696a1a37d0e19499f1bfa72550ee88a82ae5"
+      },
+      "bom_path": "Glide.app/Contents/Resources/licenses/Glide.cdx.json",
+      "bom_sha256": "c0b5840b4bafd0105204b413ffb06c40b31ae555650fea8f278c6fcdf49ca3df",
+      "bom_components": 24,
+      "schema_errors": 0,
+      "git_mpl_bytes_equal": true,
+      "scope": "Tatsächlich gebautes natives Mac-Paket, Bau-/Lizenzinventar pre-build/incomplete; keine Voll-QA oder öffentliche Signatur abgeleitet"
+    },
+    "archive": {
+      "files": 35380,
+      "bytes": 8284103358,
+      "copy_verified": true,
+      "errors": 0,
+      "archive_accepted": false,
+      "active_text_candidates": 117,
+      "historical_exact": 99,
+      "other_candidates": "18 generated historical package metadata files; no newly found unmatched active application code",
+      "deleted_temporary_bytes": 206581655,
+      "stashes_exported": 4,
+      "original_git_object_damaged": true,
+      "clean_c_checkout_created": false,
+      "required_gate": "PR71 fully green and merged into verified new Main; archive reconciliation accepted"
+    },
+    "pending": [
+      "Native Pflicht-Endmatrix Windows/Linux auf neuem Commit",
+      "Native Mac-Arbeitsflächen-/Bedien-/Vollprüfung",
+      "Neue Pakete nach Quellkorrektur",
+      "Archivabnahme und neue C-Kopie erst nach Grün und genehmigtem Merge",
+      "Menschliche/physische DPI-Abnahme, Signierung/Notarisierung/Veröffentlichung getrennt"
+    ],
+    "ci_grundstufe": {
+      "exitcode": 0,
+      "steps": 19,
+      "tool_tests": 284,
+      "tool_skips": 1,
+      "domain_tests_each_run": 1156,
+      "strict_python_delivery": true,
+      "documentation_links": 343
+    }
+  },
+  "editor_host_regression_2026_11_08": {
+    "base_commit": "17d268fc19e5d53d206c7d31ec4ceec2f73a6d6b",
+    "linux_job": 128789887282,
+    "source": "Nutzeranhang und originales GitHub-Jobprotokoll",
+    "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+    "product_changed": false,
+    "counterprobe_before": {
+      "gestaltung": {
+        "ok": false,
+        "befund": "Traceback (most recent call last):\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 5073, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1217, in fall_gestaltung\n    editor.show_block_actions()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"E:\\gq\\glide-audit-20261107\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 12249, in show_block_actions\n    x, y = self.text.winfo_rootx() + 40, self.text.winfo_rooty() + 40\n           ~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\tkinter\\__init__.py\", line 1350, in winfo_rootx\n    self.tk.call('winfo', 'rootx', self._w))\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_tkinter.TclError: bad window path name \".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2.!frame5.page_text\"\n",
+        "runtime": {
+          "python": "3.14.7",
+          "platform": "win32",
+          "tk": "9.1.0"
+        },
+        "dauer_s": 8.086,
+        "gestartet_unix": 1794156811.3136592
+      }
+    },
+    "counterprobe_after": {
+      "gestaltung": {
+        "ok": true,
+        "befund": "199 Knopfprüfungen in fünf Konfigurationen ohne Befund",
+        "runtime": {
+          "python": "3.14.7",
+          "platform": "win32",
+          "tk": "9.1.0"
+        },
+        "editor_host_trace": [
+          {
+            "context": "hell_eng",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+            "content_preserved": true
+          },
+          {
+            "context": "dunkel_breit",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+            "content_preserved": true
+          },
+          {
+            "context": "verlauf_breit",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+            "content_preserved": true
+          },
+          {
+            "context": "kompakt_hell",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor8",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor9",
+            "content_preserved": true
+          },
+          {
+            "context": "kompakt_verlauf",
+            "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor10",
+            "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor11",
+            "content_preserved": true
+          }
+        ],
+        "dauer_s": 21.542,
+        "gestartet_unix": 1794156914.0796533
+      }
+    },
+    "replacement_proof": {
+      "exitcode": 0,
+      "replacements": [
+        {
+          "context": "hell_eng Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+          "content_preserved": true
+        },
+        {
+          "context": "dunkel_breit Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "content_preserved": true
+        },
+        {
+          "context": "verlauf_breit Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_hell Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor8",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor9",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_verlauf Seite",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor10",
+          "new_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor11",
+          "content_preserved": true
+        }
+      ]
+    },
+    "native_ui_pending": true,
+    "local_planung": {
+      "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+      "exitcode": 0,
+      "gestaltung_trace": [
+        {
+          "context": "hell_eng",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor2",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor3",
+          "content_preserved": true
+        },
+        {
+          "context": "dunkel_breit",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor4",
+          "content_preserved": true
+        },
+        {
+          "context": "verlauf_breit",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor5",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_hell",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor6",
+          "content_preserved": true
+        },
+        {
+          "context": "kompakt_verlauf",
+          "old_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "active_widget": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor7",
+          "content_preserved": true
+        }
+      ],
+      "cases": 13
+    }
+  },
+  "windows_dialog_retry_2026_11_08": {
+    "base_commit": "17d268fc19e5d53d206c7d31ec4ceec2f73a6d6b",
+    "job": 128795808927,
+    "before": {
+      "errors": [
+        "invalid command name \"1999103559296apply_or_retry\""
+      ],
+      "pending_before": [
+        "after#147"
+      ],
+      "pending_after": [
+        "after#147"
+      ],
+      "callback_errors": []
+    },
+    "after": {
+      "errors": [],
+      "pending_before": [
+        "after#147"
+      ],
+      "pending_after": [],
+      "callback_errors": []
+    },
+    "root_regression": {
+      "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+      "faelle": {
+        "fensterende3507": {
+          "ok": true,
+          "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.407,
+          "gestartet_unix": 1794157651.7397482
+        }
+      },
+      "fehler": [],
+      "gruppe": null,
+      "vorgesehene_faelle": [
+        "fensterende3507"
+      ],
+      "laufender_fall": null
+    },
+    "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+    "native_matrix_pending": true,
+    "local_core": {
+      "exitcode": 0,
+      "python": "3.14.7",
+      "tk": "9.1.0",
+      "log_sha256": "eac6769e8b9f6531f5d0571cc21c7bbc632e9dcba4bd8ae9d290a70bedcc4031",
+      "unhandled_callbacks": 0,
+      "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
+      "python_delivery_identical": true
+    }
+  },
+  "targeted_native_closure_2026_11_08": {
+    "linux_ui": {
+      "commit": "61d496270d777a16c0cc745c77253acd31727e8c",
+      "run": 42502724327,
+      "job": 128798771446,
+      "uiux_green": 17,
+      "arbeitsmodi_green": 63
+    },
+    "mac": {
+      "commit": "ca864151f82a30268f413ad7edf3618e2af9444b",
+      "run": 42501505341,
+      "job": 128795052815,
+      "workarea_and_focused_bedienung": "success",
+      "full_result": "failure: historical delivery missing in checkout",
+      "correction": "fetch-depth0 plus early pinned-history prerequisite",
+      "workflow_tests": 6,
+      "local_pinned_deliveries": [
+        "3.43.1",
+        "3.40.0"
+      ]
+    },
+    "final_native_matrix_pending": true
+  },
+  "startseite_wait_2026_11_08": {
+    "baseline_commit": "f3408de4ddc8a13f08147049b5c727d11fc9b983",
+    "native_failure_run": 42504338614,
+    "native_failure_job": 128804322780,
+    "contract": "ruhende Startseitengeometrie nach natürlichem Ende der Aktionsfahnen",
+    "counterprobe_before": {
+      "mode": "before",
+      "frame_delay_factor": 3,
+      "duration_s": 1.111,
+      "visible_banners": 1
+    },
+    "counterprobe_after": {
+      "mode": "after",
+      "frame_delay_factor": 3,
+      "duration_s": 1.755,
+      "visible_banners": 0
+    },
+    "local_startseite": {
+      "exitcode": 0,
+      "python": "3.14.7",
+      "tk": "9.1.0",
+      "button_checks": 459,
+      "delayed_real_frames_factor": 3,
+      "log_sha256": "35bdeb6c25d0873fe01d103a359d948f3029b2fd3b955fd0387c0c2323be6691"
+    },
+    "workflow_tests": 6,
+    "native_confirmation_pending": true
+  },
+  "mac_followup_62e_2026_11_08": {
+    "commit": "62e84ef1c3c9cfe909f3d0728e588bd19fdc5c44",
+    "run": 42507520055,
+    "job": 128813264890,
+    "targeted": [
+      "bedienung33316",
+      "startseite3332",
+      "import3410"
+    ],
+    "targeted_result": "success",
+    "full_result": "failure: kompakt_verlorenes_loslassen focus prerequisite",
+    "artifact": 13629676192,
+    "artifact_sha256": "0400348b8740adaac3d16d8ba7f3eca4838a552e6397c49ee73ed2c22cfc8e07",
+    "correction": "Cocoa actual external Finder activation, observed focus and FocusOut; native pending"
+  },
+  "mandatory_matrix_f340_2026_11_08": {
+    "commit": "f3408de4ddc8a13f08147049b5c727d11fc9b983",
+    "pr_run": 42504256498,
+    "push_run": 42504251091,
+    "windows": "success",
+    "linux": "success",
+    "windows_package": "success",
+    "main_merged": false
+  },
+  "card_measurement_2026_11_08": {
+    "baseline_commit": "6d362ea5a603bf1af058ef470a4af92c1cd33fb7",
+    "mac_full_run": 42523626586,
+    "mac_full_job": 128862283082,
+    "mac_full_result": "failure: druck_tempo separate median aggregation",
+    "repeated_measurement_before": [
+      "ab",
+      "ab cd",
+      "ab cd",
+      "ab cd"
+    ],
+    "local_all_page_cases": 6,
+    "page_suite_log_sha256": "a62b4287c1eb7bfbbca156deb1fc70e8fadde3ec269aac156ff48c8e9cb74ee8",
+    "threshold": 1.1,
+    "aggregation": "median paired current/baseline ratios; all raw times retained",
+    "false_alarm_and_hidden_20_percent_regression_controls": true,
+    "cache_lifetime": "one truncate_lines invocation only",
+    "native_confirmation_pending": true,
+    "wrap_equivalence": {
+      "baseline_commit": "6d362ea5a603bf1af058ef470a4af92c1cd33fb7",
+      "new_source_sha256": "d3cd55a067a9eefbcb9b9d01ec07cd9b4039a066d71bfb92e2f3fd4ab5d3bd18",
+      "cases": 2120,
+      "all_outputs_equal": true,
+      "scope": "Frozen original AST vs optimized function; deterministic proportional Unicode/kerning metric, widths and line limits"
+    },
+    "profile_font_measure_calls": {
+      "baseline_board": {
+        "before": 2000,
+        "after": 800
+      },
+      "mixed_board": {
+        "before": 1950,
+        "after": 850
+      },
+      "scope": "Per complete draw; profiling times are not unprofiled speedup evidence"
+    }
+  },
+  "targeted_preclosure_0e_2026_11_08": {
+    "commit": "0e704f30751d1996d02e93f7f970043def9700cc",
+    "app_sha256": "d3cd55a067a9eefbcb9b9d01ec07cd9b4039a066d71bfb92e2f3fd4ab5d3bd18",
+    "local_strict_ci": {
+      "exitcode": 0,
+      "steps": 19,
+      "tools": 285,
+      "tool_platform_skips": 1,
+      "unit_tests": 1156,
+      "unit_tests_without_system_timezones": 1156,
+      "log_sha256": "771c64ed0b1826a915c9e62ac7b2659613c08e89fab03d0fe7b3e050c527d911"
+    },
+    "mac": {
+      "run": 42527665270,
+      "job": 128874765645,
+      "result": "success: targeted only, not full",
+      "groups": [
+        17,
+        13,
+        14,
+        9,
+        10
+      ],
+      "total_cases": 63,
+      "focused_suites": [
+        "kompakt_verlorenes_loslassen",
+        "druck_tempo",
+        "bedienung33316",
+        "startseite3332",
+        "import3410"
+      ],
+      "paired_timing_ratio": 0.803118780111497,
+      "package_native_start": true,
+      "package_proof": {
+        "commit": "0e704f30751d1996d02e93f7f970043def9700cc",
+        "package_digests": {
+          "Glide-3.50.7-macos-arm64.dmg": "ad7cc01e5e2b55428ebc92b50eb9c0ee94eb92c04f595d3e0800e7b0b80e20ea",
+          "Glide-3.50.7-macos-arm64.tar.gz": "e06dce11c9f38f15551e4533b573340126a98d4cf01f0909ca4d4e7006e5618d"
+        },
+        "completion": {
+          "exitcode": 0,
+          "version": "3.50.7",
+          "target": "macos-arm64",
+          "archive": "Glide-3.50.7-macos-arm64.tar.gz",
+          "sha256": "e06dce11c9f38f15551e4533b573340126a98d4cf01f0909ca4d4e7006e5618d",
+          "archive_validation": {
+            "files": 494,
+            "symlinks": 30,
+            "modes_preserved": true
+          },
+          "source_files": 241,
+          "sources_unchanged": true,
+          "signature": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+          "native_start_verified": true,
+          "developer_id_and_notarization": "offen; Entwicklungsartefakt"
+        },
+        "project_component": {
+          "name": "Glide",
+          "version": "3.50.7",
+          "license": "MPL-2.0",
+          "source": "https://github.com/n05a-design/glide-to-do/tree/0e704f30751d1996d02e93f7f970043def9700cc",
+          "files": {
+            "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+            "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+            "Glide-Quellcode.txt": "7a7b57367e2e799b664a0bbfa316bd13eed03a3612444f473302325ead4097b1"
+          }
+        },
+        "checked_license_files": {
+          "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+          "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+          "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+          "macholib-LICENSE": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09",
+          "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "setuptools-LICENSE": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+          "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+          "Python-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+          "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+          "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+          "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+          "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+          "Henry-Spencer-Regex-LICENSE.txt": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a",
+          "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+          "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+          "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+          "tkdnd-LICENSE.txt": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+          "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+          "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+          "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+          "Rubik-OFL.txt": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+          "PlayfairDisplay-OFL.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+          "Fraunces-OFL.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+          "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+          "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+          "XZ-COPYING.txt": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+          "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+          "IANA-LICENSE.txt": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+          "CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+          "utf8proc-LICENSE.txt": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256",
+          "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+          "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+          "Glide-Quellcode.txt": "7a7b57367e2e799b664a0bbfa316bd13eed03a3612444f473302325ead4097b1"
+        },
+        "bom_path": "Glide.app/Contents/Resources/licenses/Glide.cdx.json",
+        "bom_sha256": "a2c6613aaf688c9f4f60dffdf50579734b77211d7c9be91dd5fcb33d94873851",
+        "bom_components": 24,
+        "schema_errors": 0,
+        "git_mpl_bytes_equal": true,
+        "scope": "Tatsächlich gebautes natives Mac-Paket, Bau-/Lizenzinventar pre-build/incomplete; keine Voll-QA oder öffentliche Signatur abgeleitet"
+      }
+    },
+    "common_final_commit_full_matrix": "pending; see PR71/checks with exact commit",
+    "human_and_hardware_acceptance": "pending"
+  },
+  "macbook_marker_2026_11_09": {
+    "baseline_commit": "53116993b8806f8ffd83a1f8e1530c95691e8c5f",
+    "github_full_runs": [
+      42529699457,
+      42529694910,
+      42529765832
+    ],
+    "macbook_baseline": {
+      "passed": 4,
+      "cases": 5,
+      "failed": "seitenleistenzeilen3507",
+      "error": "KeyError('✓')",
+      "paired_card_timing_ratio": 0.950464243,
+      "python": "3.14.5",
+      "tk": "9.1.0",
+      "hardware": "MacBook Air M2"
+    },
+    "windows_counterprobe": {
+      "before_exitcode": 1,
+      "after_exitcode": 0,
+      "configurations": 48,
+      "visible_rows": 384,
+      "restarts": 4,
+      "logs_sha256": {
+        "macbook-marker-red.json": "b83782fc6a5053e333dffeb0277eed0d67a025f3075f4bdafd91373900f63797",
+        "macbook-marker-green.json": "313331eb6bbd55f1b743d7ad964e5f3fa0f5a6b03f5cdc46b523b87cb1378349"
+      }
+    },
+    "native_retest": "pending"
+  }
+}

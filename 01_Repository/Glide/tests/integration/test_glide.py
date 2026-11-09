@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MPL-2.0
+from contextlib import ExitStack
 import ctypes
 import importlib.machinery
 import importlib.util
@@ -63,6 +65,15 @@ def pump_tk(root, milliseconds):
 
 def close_test_app(app):
     """Löst Timer des isolierten Interpreters vor einem Tk-Neustart."""
+    # Dieses Testende zerstört den Interpreter direkt. Seine globalen
+    # Layoutbeobachter dürfen dabei keine neuen Leerlaufjobs mehr anlegen.
+    try:
+        if not app.root.winfo_exists():
+            return
+    except mod.tk.TclError:
+        return
+    app.root.unbind_all("<Destroy>")
+    app.root.unbind_all("<Unmap>")
     app.cancel_pending_callbacks()
     app.release_data_lock()
     for job in app.root.tk.call("after", "info"):
@@ -70,7 +81,7 @@ def close_test_app(app):
     app.root.destroy()
 
 
-with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
+with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack() as cleanup:
     # GLIDE_DATA_DIR isoliert den Nutzerdatenordner auf allen Plattformen.
     # APPDATA allein wirkt nur unter Windows; unter macOS und Linux würde der
     # Test sonst die echten Daten in ~/Library/Application Support/Glide bzw.
@@ -97,9 +108,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     root = mod.tk.Tk()
     root.withdraw()
     app = mod.ListApp(root)
+    cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.50.6"
+    assert mod.APP_VERSION == "3.50.7"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -3084,6 +3096,9 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # U10: Fortschritt steht in der Unterzeile. Die Labels der geöffneten
     # Seite stehen seit dem 02.11.2026 oben rechts in der Ecke der
     # Inhaltskarte; der Kopf bleibt beim Labelwechsel unverändert hoch.
+    # Tatsächliche Bildschirmkoordinaten erst am sichtbaren Fenster prüfen.
+    root.deiconify()
+    root.update()
     assert app.stats_label.master is app.header_meta
     assert app.page_labels_frame.master is app.list_frame_outer.inner
     header_list = app.current_list()
@@ -3112,7 +3127,14 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert app.subtitle_row.winfo_height() == header_with_labels
     assert app.header_meta.master is app.subtitle_row
     assert app.header_meta.winfo_height() <= app.subtitle_row.winfo_height()
-    assert app.header_meta.winfo_rooty() >= app.title_row.winfo_rooty() + app.title_row.winfo_height()
+    # D66 bindet die Unterzeile an den sichtbaren Titel; die Titelzeile kann
+    # durch die höheren Menü-/Aktionsknöpfe über den Titeltext hinausreichen.
+    subtitle_widgets = [app.stats_label] + list(app.page_chip_row.winfo_children())
+    visible_subtitle = [widget for widget in subtitle_widgets
+                        if widget.winfo_ismapped() and str(widget.cget("text")).strip()]
+    assert app.title_label.winfo_ismapped() and visible_subtitle
+    for widget in visible_subtitle:
+        assert widget.winfo_rooty() >= app.title_label.winfo_rooty() + app.title_label.winfo_height() - 1
     header_list["labels"] = saved_header_labels
     app.update_page_labels()
 
@@ -3564,6 +3586,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     legacy_root = mod.tk.Tk()
     legacy_root.withdraw()
     legacy_app = mod.ListApp(legacy_root)
+    cleanup.callback(close_test_app, legacy_app)
     legacy_root.update_idletasks()
     assert legacy_app.get_filter_mode() == "all", legacy_app.get_filter_mode()
     assert legacy_app.hide_done_var.get() is False

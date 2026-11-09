@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Erscheinungsbild „Automatisch (hell/dunkel)“ ohne Tk (N01 seit 3.33.21).
 
 Glide kennt Designpaare (Hell/Dunkel, Liquid Glass, Minimal, Kontrast) und

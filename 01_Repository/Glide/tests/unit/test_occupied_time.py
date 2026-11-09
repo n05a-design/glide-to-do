@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 import unittest
 from datetime import date, datetime, timedelta, timezone
 import occupied_time as busy

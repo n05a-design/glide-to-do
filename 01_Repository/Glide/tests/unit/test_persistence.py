@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Commitgrenze: ein Schreibweg, vorbereitende Fehler und unabhängiger Nachlauf."""
 from dataclasses import replace
 from pathlib import Path

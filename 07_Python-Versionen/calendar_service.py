@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Hintergrundarbeit für lokale Kalender; keine Tk-Aufrufe oder Nutzerdateischreibzugriffe.
 
 Die UI pumpt poll() und liest view(day). Generation und Quellhash verwerfen

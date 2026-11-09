@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Druck- und PDF-Ausgabe: Formate, Optionen, Escaping, Dateien und Dialog."""
 import copy
 import importlib.machinery

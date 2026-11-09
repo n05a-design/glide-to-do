@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tk-Bildfunktionen der Glide-Zeichenfläche.
 
 Gemeinsam genutzt von der eingebetteten Zeichenseite in ``app.pyw`` und der

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Veränderte Runtimeeingaben und falsche Anbieter beim Paketbau verweigern."""
 import hashlib
 import json

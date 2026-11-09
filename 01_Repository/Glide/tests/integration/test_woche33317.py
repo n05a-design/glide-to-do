@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """N04/AU04/G08/G30: echte UI, Formattor, Verweise, Drag, Undo und Neustart."""
 import argparse
 import copy

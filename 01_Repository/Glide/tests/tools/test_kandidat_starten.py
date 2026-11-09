@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Starter für Sicht-/Bedienabnahmen am Quellstand (25.10.2026): Ordner und Showcase-Wahl."""
 import importlib.machinery
 import importlib.util

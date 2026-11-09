@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Release-Entwurf: nur aus Tags, nur Entwurf/Vorabversion, dieselben Paketbauten wie die Prüfung."""
 from pathlib import Path
 import re

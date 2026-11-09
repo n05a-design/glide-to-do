@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Originalreferenzen und Suchsemantik der kurzlebigen ID-Projektion."""
 import copy
 from pathlib import Path

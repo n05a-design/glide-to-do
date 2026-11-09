@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eigenständiges Entwicklungspaket ausschließlich im nativen lokalen Bauordner.
 
 Die Quellen bleiben unverändert. Lizenzbelege müssen vor dem Bau vollständig
@@ -22,6 +23,7 @@ from compiled_contract import inspect_archive
 from package_sources import TARGETS, identity, in_onedrive, manifest
 from package_spec import specification, windows_version
 from license_contract import macos_native_components, windows_native_components, pure_components, resource_components, validate_components
+from sbom import make_bom, validate_bom
 from runtime_provenance import validate_runtime_proof
 
 PIN = "6.22.3"
@@ -86,6 +88,11 @@ def stage_licenses(source, stage, runtime):
             shutil.copy2(path, target)
             hashes[name] = digest
     write(stage / "licenses" / "manifest.json", document)
+    bom = make_bom(records, runtime)
+    bom_path = stage / "licenses" / "Glide.cdx.json"
+    write(bom_path, bom)
+    validate_bom(json.loads(bom_path.read_text(encoding="utf-8")), records, runtime)
+    hashes[bom_path.name] = sha(bom_path)
     return dict(components=records, sha256=hashes)
 
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Echte lokale Quellen, unveränderliche Ergebnisse und begrenzte Rechenarbeit."""
 from dataclasses import FrozenInstanceError
 from datetime import date, timezone

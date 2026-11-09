@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Pixel-Paket (G19 Palette umfärben, G-03 Symbolvorschau) am Zellmodell, ohne Oberfläche."""
 from pathlib import Path
 import struct

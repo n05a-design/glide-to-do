@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Prüft den Showcase über Import, Editor, Undo, Vorlagen und Neustart.
 
 Alle Schreibzugriffe sind temporär. Optionale Fotos zeigen nur das eigene

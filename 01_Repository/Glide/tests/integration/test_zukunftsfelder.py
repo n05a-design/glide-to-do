@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """WA-09: echte Einstellungsrundläufe, unbekannte Karten und gültige Grenzen."""
 import argparse
 import copy

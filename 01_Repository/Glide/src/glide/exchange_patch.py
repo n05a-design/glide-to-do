@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """KI-Austausch Stufe 2 ohne Tk: Kontextpaket und Änderungsvorschläge (G24 seit 3.35.0).
 
 Stufe 1 (`mode: "create"`) legt nur Neues an. Stufe 2 schickt einer KI ein

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tagesnavigation, explizite Mehrfachfelder und lesende Verweisdaten."""
 import copy
 from datetime import date

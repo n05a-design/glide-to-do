@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """G28/G09/U08: Originalaufgaben, Bilder, echte Vorschau, Undo/Import/Neustart."""
 import argparse
 import copy

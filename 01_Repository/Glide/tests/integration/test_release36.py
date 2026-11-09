@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.6-Rundläufe mit echten Tk-Widgets und ausschließlich temporären Nutzdaten."""
 import argparse
 import copy

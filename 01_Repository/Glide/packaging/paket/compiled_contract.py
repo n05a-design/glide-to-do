@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Eingefrorenen Bytecode auf denselben Programmstand wie seine Quellen prüfen."""
 import hashlib
 import marshal

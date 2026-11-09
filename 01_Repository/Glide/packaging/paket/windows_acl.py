@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Original-DACLs ohne erneute Windows-Vererbungspropagation restaurieren.
 
 Nur der bereits auf Hosted-CI begrenzte Startprüfer verwendet diese Schnittstelle.

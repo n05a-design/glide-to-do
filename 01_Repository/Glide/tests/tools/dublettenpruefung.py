@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Findet wiederholte Codeblöcke – die Vorstufe jeder Zusammenfassung.
 
 Punkt 3 (5. Prüfung, 3.25.0) fragt, ob sich ähnliche, sich wiederholende

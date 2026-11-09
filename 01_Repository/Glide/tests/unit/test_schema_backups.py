@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Sicherungsvertrag: alte Bytes, Fehler und Dateiaustausch ohne Tk prüfen."""
 from pathlib import Path
 import json

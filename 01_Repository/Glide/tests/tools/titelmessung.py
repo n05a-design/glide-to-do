@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Gleicher künstlicher Tagesbestand: Heute-Aufbau vor/nach U19.
 
 Kalte erste Messung getrennt von fünf warmen Messungen, Median/p95 und

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Reale Bauquellen und native Startbelege der eigenständigen Pakete prüfen.
 
 Die Vollmatrix prüft die Eingaben beider Zielpakete. Die tatsächlichen nativen

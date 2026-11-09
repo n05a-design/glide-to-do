@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Begrenzte lokale Start-/Abschlussdiagnose ohne Aufgabeninhalte oder Netzwerk.
 
 Ein Starter kann den Appprozess begleiten: Der Begleiter schreibt den echten

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Erinnerungen: Migration, Zustellung, Serien, Fehler und echte Tk-Dialoge."""
 import copy
 from datetime import datetime, timedelta, timezone

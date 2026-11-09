@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Suchvertrag: echte Inhalte, Rangfolge, Umlaute und begrenzte Ausschnitte."""
 from pathlib import Path
 import sys

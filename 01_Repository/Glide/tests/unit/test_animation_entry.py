@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Formatbrücke: alte statische Daten bewahren, vollständige Bildfolge atomar speichern."""
 import copy
 import unittest

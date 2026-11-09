@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Glide 3.23: Designsystem, Navigation, Tabellen, Dialoge, Pinnwand und Austauschformat.
 
 Jeder Abschnitt trägt die Nummer des Auftragspunkts, den er nachweist.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P08a: JSON-Gegenprobe und Grenzen des gemeinsamen Vergleichs ohne Tk."""
 import copy
 import json

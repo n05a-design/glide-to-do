@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MPL-2.0
 """Baut ein Entwicklungsbundle „Glide.app“ für macOS – ohne neue Abhängigkeit.
 
 Das Bundle ist eine Vorstufe, kein Release:

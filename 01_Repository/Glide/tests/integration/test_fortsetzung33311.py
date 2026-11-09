@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """P08b, stabile Aktionskennungen und U03/U07 über echte Tk-Bindungen.
 
 --app erlaubt die rote Gegenprobe; --baseline-app den unabhängigen Verlauf-

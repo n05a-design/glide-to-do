@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Stabile Aktionskennungen, Gruppen und Editorbefehle ohne Tk.
 
 LEGACY_GROUPS bewahrt nur den alten Abfragevertrag der Pruefwerkzeuge.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Explizites Entlasten mit gemeinsamer Belegzeitbilanz; ohne Tk/Mutation."""
 from dataclasses import dataclass
 from datetime import date

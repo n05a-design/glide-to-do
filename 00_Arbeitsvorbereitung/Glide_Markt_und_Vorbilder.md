@@ -1,5 +1,8 @@
 # Glide – Markt und Vorbilder
 
+**Aktuelle Produktkommunikation 07.11.2026:** [§15](#15-markt-und-produktkommunikation-am-07112026) wertet die vorhandenen Recherchestränge aus, aktualisiert zentrale Aussagen mit Primärquellen und richtet sie auf den Desktop-Planer mit vier Produktbereichen aus. Frühere Positionierungssätze sind datierte Vorschläge und seit D72 überholt; sie sind keine aktuellen Marketingtexte.
+
+
 **Systematische Konkurrenzanalyse 06.11.2026:** [§14](#14-systematische-konkurrenzanalyse-vom-06112026) stellt rund 100 Produkte in sechs Gattungen gegen Glide 3.50.5 – Aufgabenmanager, Tages-/Fokusplaner, Wissens-Workspaces, Boards, Kreativwerkzeuge sowie DE/EU- und Open-Source-Nischen – mit Lücken nach Produktgrenzen, Gestaltungslehren und Alleinstellungsmerkmalen. Die Glide-Spalte der [Featurematrix](#4-featurematrix) ist auf 3.50.5 nachgeführt. Priorität und Auswahl im [Plan §21.70](Glide_Entwicklungsplan.md#2170-systematische-konkurrenzanalyse-und-dokumentabgleich-vom-06112026).
 
 **Neue Primärrecherche 04.11.2026:** [§13](#13-neue-konkurrenzanalyse-vom-04112026) bewertet 13 Vergleichsprodukte gegen Glide 3.50.2: vorhandene Funktionen, tragfähige Eigenständigkeit und konkrete Mehrwertrichtungen. Neu geprüft wird von neu veröffentlicht getrennt; aktuelle Vorschläge und Priorität stehen im [Plan §21.62](Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026).
@@ -8,7 +11,7 @@
 
 **Erweiterung 21.10.2026:** Die frische Konkurrenz-, Komponenten- und Integrationsuntersuchung steht in [§12](#12-erweiterte-recherche-vom-21102026). Die älteren Abschnitte behalten ihre Abrufdaten. Aktuelle Glide-Restlücken ergeben sich aus dem [Roadmap-Abgleich](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), nicht aus den historischen „fehlt“-Spalten des Vorzustands. Neue Integrationen werden auf ausdrücklichen Wunsch erneut bewertet; daraus folgt keine Aktivierung von Netzwerkzugriff oder eine stillschweigende Änderung der bisherigen Kernentscheidungen.
 
-Stand 07.11.2026 · Glide 3.50.6 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
+Stand 07.11.2026 · Glide 3.50.7 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
 
 Zusammengeführt am 18.10.2026. Dieses Dokument ist die einzige aktuelle Wettbewerbsquelle. Es konsolidiert die Hersteller-Matrix vom 01.10., die Vertiefungen vom 05.–13.10. und die Notion-Bildauswertung vom 15.10.2026. Frühere Fassungen liegen in Git. Aufgaben, Paketfolge und Auswahl stehen ausschließlich im [Entwicklungsplan](Glide_Entwicklungsplan.md), technische Befunde und Nutzungsszenarien in der [Analyse](Glide_Analyse.md); bestätigte Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Dieser Analyseauftrag setzt keine neuen Produktentscheidungen um.
 
@@ -172,11 +175,7 @@ Die Matrix ersetzt die überholten ●/○-Tabellen. **Ein Feld beschreibt einen
 
 ## 5. Positionierung
 
-**Arbeitshypothese:** Glide ist ein lokaler persönlicher Arbeitsplatz für einen machbaren Tag: Gedanken erfassen, Arbeitszeit bewusst zuweisen, im passenden Kontext erledigen und Wissen/kreative Inhalte behalten. Das kann die Einrichtung eines eigenen Systems vermeiden. „Weniger Pflege“ und „ruhig“ sind durch Nutzertests zu prüfen; Sunsama besetzt ruhige Planung und Super Productivity lokale Zeit-/Fokusarbeit bereits.
-
-Die Pixel-Werkstatt ist eine persönliche Signatur im untersuchten Produktmix. Keine weltweite Alleinstellung oder belegte Kaufrelevanz wird behauptet. Ihr Nutzen wächst, wenn Zeichnungen als Symbol, Titelbild, Anhang und Pinnwandkarte weiterverwendet werden; dafür ist kein zweites Bildverwaltungssystem nötig.
-
-**Zu vertiefen:** verlässliche Tagesführung, echte Aufgaben im Wissenskontext, Wiederfinden, Fehlerkorrektur, lesbare Ausstiegswege. **Bestehende Grenzen:** keine Teamplattform, eigener Sync, frei definierbarer Datenbankbaukasten, Unterseiten/Spalten oder eingebaute Cloud-KI. Die neue Analyse liefert keinen Anlass, diese Beschlüsse aufzuheben. Marken-/Lizenz-/Veröffentlichungsfragen bleiben im [Veröffentlichungsdokument](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md) und im Plan (I4/D43), nicht in der Marktpositionierung entschieden.
+Glide – Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Die Kombination verbindet Aufgaben im Kontext mit fertiger Tagesplanung und eigenen visuellen Inhalten. Zielgruppen und Kaufrelevanz bleiben Hypothesen, bis Nutzertests sie belegen. Aktuelle Ableitung und Marktgrenzen: [§15](#15-markt-und-produktkommunikation-am-07112026); verbindliche Wortlaute: [Produktkommunikation](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#produktkommunikation). Historische Formulierungen und Vergleichsstände in §§6–14 gelten mit ihrem jeweils eigenen Datum.
 
 ## 6. Notion vertieft
 
@@ -776,3 +775,59 @@ Der Markt ist gesättigt, aber seine Größe lässt sich kaum belegen. Die Schä
 ### Methodik und Grenzen
 
 Grundlage sind sechs Recherchestränge vom 06.11.2026: Aufgabenmanager, Tagesplaner/Fokus, Wissens-Workspaces, Boards/Kreativ/Nischen, Markt und UX-Lehren sowie ein lesender Abgleich von Dokumentation und Code im Worktree `claude/docs-competitor-analysis-review-aa9f90` (HEAD `5e63ea34`, `app.pyw` mit 67.905 Zeilen). Kein Konkurrenzprodukt wurde installiert, angemeldet oder praktisch geprüft. Es gab keinen Usability-Test, keinen Leistungsvergleich und keine Nutzerbefragung; Reddit- und Forenstimmung wurde nicht systematisch erhoben. Viele 2026-Bewertungen stammen von Wettbewerbern, etwa Morgen, Saner, Ellie, Akiflow, Kosmik, Stackfield, AFFiNE und Vikunja, oder von Aggregatoren. Preise sind deshalb oft [S] und widersprechen sich; offizielle Seiten waren teils nicht lesbar (TickTick-Upgrade, Anytype-Preise). Bei mehreren Changelogs fehlt das Jahr (Todoist Ramble, Planify, Super-Productivity-Kopfzeilen); die Jahreszuordnung ist dort Ableitung. Marktgrößen schwanken je nach Institut um den Faktor vier. Glide-Aussagen beruhen auf Codezeilen und Dokumenten, nicht auf einem Lauf der App. Die Dokumentationsbefunde sind in [Analyse §13.28](Glide_Analyse.md#1328-dokumentations--und-featureabgleich-vom-06112026) eingeordnet und in derselben Runde nachgeführt ([Plan §21.70](Glide_Entwicklungsplan.md#2170-systematische-konkurrenzanalyse-und-dokumentabgleich-vom-06112026)). „Nicht gefunden“ bedeutet keine belegte Abwesenheit. Die Zählung „rund 50 Produkte fehlen im Marktdokument“ beruht auf einem Namensabgleich und kann Erwähnungen unter anderem Namen übersehen.
+
+## 15. Markt und Produktkommunikation am 07.11.2026
+
+**Umfang und Belegstand:** Auf ausdrückliche Rückmeldung des Inhabers werden die vorhandenen konsolidierten Recherchen in diesem Dokument verwendet: §§1–11 (18.10., mit älteren Teilständen), §12 (21.10.), §13 (04.11.), §14 (06.11.). Keine zusätzlichen Roh-Exporte oder Nutzerinterviews wurden vorgelegt. Die rund 100 Profile in §14 sind ein dokumentiertes Vergleichsfeld, keine aktuelle Markt-Vollerhebung. Folgende Primärseiten wurden am 07.11.2026 tatsächlich erneut abgerufen; sie haben überwiegend kein ausgewiesenes Veröffentlichungsdatum. [H] bleibt Herstellerangabe, [A] eigene Ableitung. Kein Wettbewerber wurde installiert oder praktisch getestet. Alte [S]-Preise, Marktgrößen und Trendzahlen tragen keine neuen Verkaufs- oder Investitionsaussagen.
+
+### 15.1 Auswertung der vorhandenen Recherche
+
+| Untersuchungsbereich | Vorliegendes Ergebnis / Beleg | Bedeutung für Glide | Konsequenz |
+|---|---|---|---|
+| Markt und Zielgruppen | §§1.1, 3, 14: Aufgabenmanager, Tages-/Fokusplaner, Wissensräume, Boards, Pixelwerkzeuge, Nischen | Mehrere angrenzende Märkte; keine gemessene Nachfrage | Desktop-Planer als verständliche Kategorie, vier Produktbereiche nennen |
+| Nutzerbedürfnisse | §§7, 13.2: Erfassung, Tagesauswahl, Zusammenhang, Wiederfinden, Rücknahme | Dokumentierte Ablaufhypothesen, keine eigene Nutzerstudie | Konkrete Abläufe statt emotionaler Adjektive erklären |
+| Wettbewerber | §§3–4, 13–14; aktuelle Auswahl §15.2 | Überlappende Fähigkeiten, keine Pauschalaussage „nur Glide“ | Gleiche Vergleichsaufgabe und Variante nennen |
+| Positionierung | §§5, 13.3, 14: Aufgaben plus Wissen/Planung/Kreativität | Bisherige Formulierung enthielt heute unerwünschte Attribute | D72-Wortlaut und positive Nutzenstruktur übernehmen |
+| Differenzierung | §§13.3, 14: Aufgabenidentität, Planungs-/Fälligkeitsdatum, Pixel-Werkstatt | Kombination nachvollziehbar, weltweite Einzigartigkeit unbelegt | Szenarien zeigen; Pixel-Zeichnungen als nutzbarer Inhalt |
+| Funktionsumfang | Featurematrix §4 und Handbuch/Code | Implementierung ist von QA-/Abnahmegrad zu trennen | Aktuelle Quelle 3.50.6 rekonstruieren, Ergebnis auf 3.50.7 prüfen |
+| Preis und Lizenz | §§3, 9.6, 14; alte Lizenzannahmen überholt | MPL-2.0 ist beschlossen, Bezahl-/Serviceangebote offen | Keine nichtkommerzielle Schranke, kein Preisvorteil ohne Beleg |
+| Datenhaltung | §§8.1–8.2: lesbarer Export, Erhalt der Bedeutung, Wiederherstellung getrennt | Arbeit wird dauerhaft gespeichert; Sicherungen und Ausgabe sind verschiedene Wege | Positive Aussage zu gespeicherten Inhalten, Backups und Exporten |
+| Kommunikation / Auffindbarkeit | §14 und Veröffentlichung › GitHub-Auftritt | Alter GitHub-Text enthält Branding-No-Gos und Sprachfokus | README/Über-Text/Metadatenvorlage vereinheitlichen; Kontofreigabe getrennt |
+| Chancen und Risiken | §§11, 13.4, 14 | Kreative Kombination versus breites Leistungsbild; Paket-/Namensrisiko | Wenige konkrete Abläufe priorisieren, native Lieferungen belegen |
+| KI und Kontrolle | §§8.3, 12.2, 14 | Dateiaustausch ist vorhanden; Integration von Diensten ungewählt | Vorschau und selbst gewählte Übernahme erklären; kein eingebautes KI-Versprechen |
+| Interoperabilität | §§8.1, 12.3, 14 | Markdown-Ausgabe implementiert, JSON Canvas nur Option | Wiederimport nicht versprechen, neue Formate im Plan belassen |
+| UX und Gestaltung | §§2, 10, 14 | Kontextaktionen, Lesbarkeit, Flächenschutz und klare Rücknahme | Bestehende Design Richtlinien weiter anwenden; neue Seitenleistenhöhen prüfen |
+| Technik und Fremdcode | §§9, 12.3 | Komponentenfunde sind keine Übernahmefreigabe | Original-Lizenzen und Provenienz bewahren; keine neue Abhängigkeit |
+| Barrierefreiheit / Plattform | §14: technische Grundlage und wirkliche Abnahme verschieden | Tastaturwege/Kontrast vorhanden, Reader zurückgestellt | Kein umfassendes Sicherheits-/Reader-/Plattformversprechen |
+
+### 15.2 Aktuell nachgeprüfte Vergleichsprodukte
+
+| Kategorie / Produkt | Herstellerstand [H], Abruf 07.11.2026 | Vergleich und Konsequenz [A] |
+|---|---|---|
+| Aufgaben: [Todoist](https://www.todoist.com/pricing) | Kostenlose und bezahlte Kontomodelle; Schnellerfassung, Liste/Board, erweiterte Planungsfunktionen je Tarif | Tagesplanung oder Boards allein differenzieren Glide nicht. Keine ungeprüften Preisvergleiche. |
+| Aufgaben/Fokus: [Super Productivity](https://super-productivity.com/) | Aufgaben, Zeiterfassung, Fokus, Planung; Hersteller nennt Offline-Nutzung ohne Konto und optionale Synchronisation | Stärkster Gegenbeleg gegen eine Alleinstellung durch Datenhaltung oder Kontofreiheit. Glides Kontext-/Pixelkombination erklären. |
+| Tagesplanung: [Sunsama](https://www.sunsama.com/) | Tagesplaner mit Aufgaben und Kalender, zeitlich begrenzte Testphase | Tagesauswahl als verständlichen Arbeitsablauf zeigen; keine gemessene Überlegenheit oder Zahlungsbereitschaft ableiten. |
+| Automatische Planung: [Motion](https://www.usemotion.com/) | Bewirbt KI-Aufgaben-/Kalenderplanung und automatische Planung | Glides eigener Vorschau-/Übernahmeweg ist eine andere Bedienentscheidung; keine allgemeine Abwertung von Automatik. |
+| Wissensraum: [Notion Offline-Hilfe](https://www.notion.com/help/use-pages-offline) | Offline für heruntergeladene Seiten in Desktop/Mobil; automatische Downloads je Tarif, Unterseiten gesondert, begrenzte Datenbankzeilen | „Notion funktioniert nicht offline“ wäre falsch. Ganze Bestände und ausgewählte Downloads unterscheiden, ohne Werbeslogan aus der Datenhaltung zu machen. |
+| Wissen/Canvas: [Obsidian Canvas](https://obsidian.md/canvas) | Kostenfreie freie Fläche für Notizen, Medien und Ideen | Pinnwand plus Notizen ist keine Exklusivität. Unterschied liegt in fertiger Tagesplanung mit Aufgaben und zusätzlicher Pixel-Werkstatt. |
+| Dokument/Whiteboard: [AFFiNE](https://affine.pro/) | Docs, Edgeless, KI sowie Team-/Enterprise-Angebote | Gemeinsame visuelle/textuelle Arbeitsräume bereits im Markt vorhanden. Tarif-/Lizenzdetails nicht aus der Startseite ableiten. |
+| Pixelwerkzeug: [Aseprite](https://www.aseprite.org/) | Spezialisierte Zeichnungs-/Animationsfunktionen, Ebenen, Bildfolgen, Import/Export, Kauf-/Testangebote | Glide ergänzt Planung um Zeichnungen und Symbole; kein Ersatz für die Tiefe eines spezialisierten Sprite-Editors behauptet. |
+| Namensrisiko: [Glide Apps](https://www.glideapps.com/) | Anbieter nutzt „Glide“ für eine App-/Geschäftssoftwareplattform | Reales Auffindbarkeits-/Verwechslungsrisiko. Kein Register- oder Verletzungsbefund; professionelle Markenprüfung I4 offen. |
+
+### 15.3 Marktbewegungen, Positionierung und Maßnahmen
+
+Aus den geprüften Angeboten lässt sich eine **Konvergenz von Planung, Wissen und visuellen Flächen** erkennen [A]. Mehrere Hersteller vermarkten KI-Unterstützung; zugleich bestehen Angebote mit bewusst eigener Datenhaltung und selbst gewählten Synchronisationswegen. Das belegt verfügbare Angebotsrichtungen, keine gemessenen Marktanteile, Wachstumsraten oder einen zwingenden KI-Bedarf. Die Relevanz der Pixel-Werkstatt für die Kaufentscheidung ist weiter offen.
+
+**Positionierung:** Glide – Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Der belegbare Nutzen ist, dieselben Aufgaben im Zusammenhang mit Seiten und Pinnwänden zu bearbeiten, den Tag anhand von Aufwand/Kapazität zu planen und eigene visuelle Inhalte weiterzuverwenden. Die Zielgruppe „Menschen mit eigenen Desktop-Projekten“ ist eine Hypothese; Gestaltung, Schreiben, Lernen und Entwicklung sind plausible Einsatzfelder, keine bewiesenen Segmente.
+
+**Kommunikation:** Zuerst die vier Produktbereiche, dann drei sichtbare Abläufe (Aufgabe aus einer Seite in Heute bearbeiten; Tagesauswahl prüfen; Zeichnung als Symbol/Pinnwandinhalt verwenden). Daten werden gespeichert, durch Sicherungen aufbewahrt und lesbar exportiert. Die technischen Eigenschaften bleiben im Handbuch. Keine Leitbotschaft mit „lokal“, „privat“, „ruhig“, „Deutsch“ oder Nutzungsdatenerfassungsjargon. Öffentliche Texte stehen einmalig in [Veröffentlichung › Produktkommunikation](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#produktkommunikation); dort auch die konkret freigegebene und öffentlich aktualisierte GitHub-Beschreibung mit 15 Topics.
+
+**Chancen und Grenzen:** Fertige Abläufe und die Pixelkombination sind demonstrierbar. Breiter Umfang erschwert die erste Erklärung; alte Screenshots und uneinheitliche native Paketstände schwächen die Beweisführung. Für eine neue 3.50.7-Vermarktung sind neue geprüfte Pakete und zugehörige Abnahmen nachzuziehen. Die Namensprüfung bleibt fachlich offen. Lizenzrechtlich schafft MPL-2.0 eine klare Codebasis; Markenrechte, Preis-/Serviceangebote und Freigabe des ersten öffentlichen Releases bleiben eigene Entscheidungen.
+
+Neue Produktideen aus den früheren Recherchen (WA-21 Fundorte, Zeitauswertung, JSON Canvas, globaler Hotkey oder zusätzliche Integrationen) bleiben mit ihrem bestehenden Status im Entwicklungsplan. Diese Auswertung wählt sie nicht aus. Ein künftiger Nutzertest sollte Verständlichkeit der vier Bereiche, erfolgreiche Erledigung der Abläufe und Wiederfinden prüfen, bevor Nutzensteigerungen oder Marktpassung behauptet werden.
+
+### 15.4 Kommunikationsnachtrag und technische Zielgruppe (08.11.2026, D74)
+
+Die aktuelle Produktbeschreibung führt Projekte ausdrücklich mit: **Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.** Projekte werden über bestehende Ordner, Listen, Seiten und Verknüpfungen organisiert; ein neuer eigener Projektdatentyp wird damit nicht beworben. Aktive Beta-/Erstversionswerbung und allgemeine Versionsserienbotschaften entfallen auf Inhaberauftrag. Technische Versionen und datierte Bild-/Prüfprovenienz bleiben nachweisbar. Die genehmigten 15 GitHub-Topics wurden am 08.11. erneut gesetzt und zurückgelesen; alte Sprach-/Privatheits-Topics gehören nicht zur aktuellen Positionierung.
+
+Das Glide-System erschließt eine zusätzliche **technische** Leserschaft: Menschen, die bestehende Desktop-Bausteine, Schutz-/Prüfwege und Prozesse für eigene Projekte auswählen wollen. Diese Leserschaft ist von der oben untersuchten Produktzielgruppe zu unterscheiden. Wiederverwendung ist durch Quellbestand und Verträge beschreibbar; eine unabhängige Framework-Freigabe oder ein schon ausgeliefertes Steps-Template ist noch nicht belegt. Die öffentliche Projektseite verlinkt den kanonischen System-/Übernahmevertrag, ohne dessen technische Details zum allgemeinen Produktnutzen zu machen. Neue Behauptungen zu Reichweite, Nachfrage, Einzigartigkeit oder Marktgröße werden daraus nicht abgeleitet.

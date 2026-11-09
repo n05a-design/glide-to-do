@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """3.9: reale Dropdown-Ereignisse, Dialoggeometrie, Aktionsparität und Persistenz."""
 import copy
 import argparse

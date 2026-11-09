@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Auswahlbudget, stabile Reihenfolge und unveränderliche Vorschläge."""
 import copy
 from pathlib import Path

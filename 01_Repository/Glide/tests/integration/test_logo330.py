@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Logo, Lupe und Programmsymbol (Auftrag vom 29.09.2026).
 
 - Das Logo kommt aus den SVG-Mastern in `resources/logo` und trägt die
@@ -78,6 +79,9 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    about = app.about_text()
+    assert mod.glide_brand.DESCRIPTION in about and "MPL-2.0" in about
+    assert mod.APP_BUNDLE_ID == "de.shaye.glide" and mod.APP_USER_MODEL_ID == "Shaye.Glide"
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
     def ruhe(runden=10):

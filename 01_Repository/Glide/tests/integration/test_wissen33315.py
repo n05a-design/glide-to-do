@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """G29/G31/G32 zusammen: UI, Heimat, Referenzen, Formattor, Import und Neustart."""
 import argparse
 import copy
