@@ -2840,6 +2840,10 @@ class GlideCheckbutton(tk.Canvas):
             return str(self._variable) if self._variable is not None else ""
         if key == "command":
             return self._command
+        if key == "onvalue":
+            return self._onvalue
+        if key == "offvalue":
+            return self._offvalue
         if key in self._opts:
             return self._opts[key]
         return super().cget(key)
@@ -3272,6 +3276,8 @@ class GlideListbox(tk.Canvas):
             key = "fg"
         if key == "yscrollcommand":
             return self._yscrollcommand
+        if key == "selectmode":
+            return self._opts.get("selectmode", "browse")
         if key in self._opts:
             return self._opts[key]
         return super().cget(key)
@@ -3506,6 +3512,8 @@ class GlideScale(tk.Canvas):
             self._to = float(werte.pop("to"))
         if "resolution" in werte:
             self._resolution = float(werte.pop("resolution") or 1.0)
+        if "orient" in werte:
+            self._orient = werte.pop("orient")
         if "variable" in werte:
             self._attach_variable(werte.pop("variable"))
         if "command" in werte:
@@ -3520,6 +3528,14 @@ class GlideScale(tk.Canvas):
             return self._from
         if key == "to":
             return self._to
+        if key == "resolution":
+            return self._resolution
+        if key == "orient":
+            return self._orient
+        if key == "variable":
+            return str(self._variable) if self._variable is not None else ""
+        if key == "command":
+            return self._command
         if key in self._opts:
             return self._opts[key]
         return super().cget(key)

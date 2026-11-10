@@ -221,6 +221,11 @@ class UsageLocation:
     scope: str = ''
     line: int = 0
     mention: object = None
+    context: str = ''
+
+    @property
+    def kind_label(self) -> str:
+        return USAGE_KIND_LABELS.get(self.kind, self.kind)
 
 
 def _folder_path(folder_id, folders_by_id):

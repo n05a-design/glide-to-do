@@ -41,7 +41,7 @@ Stand 10.11.2026 · Glide 3.54.0 · Glide-System V1.16 · Aufgabenformat 26 · E
 | Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 311 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 312 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -860,6 +860,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T309 | [`test_sbom.py`](../../tests/tools/test_sbom.py) | CycloneDX-Lizenz-/Bauinventar, fehlende/mehrdeutige Belege und nachträgliche Abweichung prüfen; kein vollständiger transitiver Laufzeitgraph |
 | T310 | [`arbeitsmodi_gruppen.py`](../../tests/tools/arbeitsmodi_gruppen.py) | Fünf verpflichtende serielle Gruppen aus demselben vollständigen Fallbestand; kein Tk-Import, keine zweite Fallliste, unveränderte 900-s-Wächter |
 | T311 | [`test_arbeitsmodi_gruppen.py`](../../tests/tools/test_arbeitsmodi_gruppen.py) | Alle implementierten Arbeitsmodifälle genau einmal und in Originalreihenfolge; fehlende/doppelte/verschobene Grenzen als Fehler |
+| T312 | [`test_custom_controls.py`](../../tests/unit/test_custom_controls.py) | Vollständige Schnittstellenkompatibilität (keys, cget, configure, getitem, setitem, Aliase, Tk-Variablen) der D78-Custom-Controls |
 
 <!-- GLIDE-SYSTEM:TESTS-END -->
 
