@@ -28,6 +28,7 @@ class MacLicenseTests(unittest.TestCase):
                 {'name': 'OpenSSL', 'files': {'openssl-license.txt': 'external'}},
             ]}
 
+            self.assertEqual([record['name'] for record in licenses.external_components(document)], ['OpenSSL'])
             licenses.copy_external_licenses(document, basis, destination)
 
             self.assertFalse((destination / 'old-font-license.txt').exists())
