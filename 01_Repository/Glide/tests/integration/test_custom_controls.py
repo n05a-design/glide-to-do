@@ -1,22 +1,43 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Dauerhafte Regressionstests für D78-Custom-Controls (CanvasLabel, GlideCheckbutton, GlideRadiobutton, GlideListbox, GlideScale)."""
+"""Dauerhafte Integrations- und UI-Vertragstests für D78-Custom-Controls.
+
+Prüft Schnittstellenkompatibilität (keys, cget, configure, getitem, setitem, Aliase,
+Tk-Variablen, Deaktivierung und Ereignisbehandlung) der D78-Custom-Controls
+(CanvasLabel, GlideCheckbutton, GlideRadiobutton, GlideListbox, GlideScale).
+"""
+import argparse
+import importlib.machinery
+import importlib.util
+import os
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 
 REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO / "src"))
-sys.path.insert(0, str(REPO / "src/glide"))
+parser = argparse.ArgumentParser()
+parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
+parser.add_argument("--report", type=Path)
+args, _ = parser.parse_known_args()
 
-import tkinter as tk
-import glide.app as gapp
+with tempfile.TemporaryDirectory(prefix="glide-custom-controls-") as folder:
+    os.environ["GLIDE_DATA_DIR"] = folder
+    os.environ["GLIDE_TEST_MODE"] = "1"
+    sys.path.insert(0, str(args.app.parent))
+    loader = importlib.machinery.SourceFileLoader("glide_app_controls", str(args.app.resolve()))
+    gapp = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+    sys.modules[loader.name] = gapp
+    loader.exec_module(gapp)
+
+import tkinter as tk  # noqa: E402
 
 
 class TestCustomControlsUnit(unittest.TestCase):
-    """Reine Unit-Tests ohne offene Fensterinteraktion."""
+    """Schnittstellen- und Optionsprüfungen der D78-Custom-Controls."""
 
     def test_keys_cget_and_item_access_consistency(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             cl = gapp.CanvasLabel(root, text="LabelText", fg="#123456", bg="#abcdef")
             for k in cl.keys():
@@ -51,6 +72,7 @@ class TestCustomControlsUnit(unittest.TestCase):
 
     def test_option_aliases_consistency(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             cl = gapp.CanvasLabel(root, text="T", background="#111111", foreground="#eeeeee")
             self.assertEqual(cl.cget("bg"), "#111111")
@@ -74,6 +96,7 @@ class TestCustomControlsUnit(unittest.TestCase):
 
     def test_configure_and_state_transitions(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             cb = gapp.GlideCheckbutton(root, text="Start", onvalue="JA", offvalue="NEIN")
             cb.configure(text="Geändert", onvalue=1, offvalue=0, state="disabled")
@@ -98,6 +121,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_checkbutton_and_radiobutton_variable_sync_and_invoke(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             var_b = tk.BooleanVar(value=False)
             cmds = []
@@ -130,6 +154,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_disabled_controls_prevent_actions(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             cmds = []
             cb = gapp.GlideCheckbutton(root, text="Disabled", state="disabled", command=lambda: cmds.append("fired"))
@@ -151,6 +176,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_scale_variable_sync_and_clamping(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             var = tk.DoubleVar(value=20.0)
             sc = gapp.GlideScale(root, from_=0, to=100, resolution=5.0, variable=var)
@@ -167,6 +193,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_listbox_operations_and_bounds(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             lb = gapp.GlideListbox(root)
             self.assertEqual(lb.size(), 0)
@@ -184,6 +211,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_widget_destruction_and_callback_cleanup(self):
         root = tk.Tk()
+        root.withdraw()
         try:
             var = tk.DoubleVar(value=10.0)
             sc = gapp.GlideScale(root, from_=0, to=100, variable=var)
@@ -194,5 +222,12 @@ class TestCustomControlsInteractions(unittest.TestCase):
             root.destroy()
 
 
+def main():
+    suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    return 0 if result.wasSuccessful() else 1
+
+
 if __name__ == "__main__":
-    unittest.main()
+    sys.exit(main())
