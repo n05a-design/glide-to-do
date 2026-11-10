@@ -34,6 +34,10 @@ import importlib.util
 import tkinter as tk
 import tkinter.font as tkfont
 
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="backslashreplace")
+
 REPO = Path(__file__).resolve().parents[2]
 
 # Tests und Werkzeuge dürfen niemals den echten Nutzerdatenordner benutzen.
@@ -53,30 +57,34 @@ def main():
     try:
         app = mod.ListApp(root)
         root.withdraw()
-        symbole = app.ICONS
-        family = app.ui_font_family()
         print(f"Plattform: {sys.platform} · Tk {root.tk.call('package', 'provide', 'Tk')}")
-        print(f"App-Familie: {family} · {len(symbole)} aufgelöste Symbole")
-        print(f"Angepasste Zeichen: {len(app._symbol_changes)}")
         fazit = []
-        for weight in ("normal", "bold"):
-            print(f"\nSchnitt {weight} – UI-Schrift: {family}")
-            for name, zeichen in symbole.items():
-                erwartet = getattr(app, "_symbol_fonts", {}).get(name, family)
-                erlaubt = {family, mod.glide_symbols.BUNDLED_SYMBOL_FAMILY,
-                           *mod.glide_symbols.SYMBOL_FONT_FALLBACKS.get(name, ())}
-                schrift = tkfont.Font(root=root, font=app.symbol_font(name, 12))
-                schrift.configure(weight=weight)
-                eingestellt = str(schrift.actual("family"))
-                familien = list(dict.fromkeys(str(root.tk.call("font", "actual", schrift.name,
-                                                               "-family", char)) for char in zeichen))
-                ersatz = (erwartet not in erlaubt or eingestellt.casefold() != erwartet.casefold()
-                          or any(f.casefold() != erwartet.casefold() for f in familien))
-                print(f"  {name:<18} {zeichen:<8} {schrift.measure(zeichen):>5} px · "
-                      f"{schrift.metrics('linespace'):>3} px hoch · {' + '.join(familien)}"
-                      + (" ← Ersatzschrift" if ersatz else ""))
-                if ersatz:
-                    fazit.append((weight, name, zeichen, familien))
+        for style in mod.glide_fonts.STYLES:
+            app.settings["ui_font_family"] = style.family
+            app._ui_font_family = None
+            app.apply_ui_font()
+            symbole = app.ICONS
+            family = app.ui_font_family()
+            print(f"\nStil {style.label} · UI-Familie: {family} · "
+                  f"{len(symbole)} Symbole · {len(app._symbol_changes)} angepasste Zeichen")
+            for weight in ("normal", "bold"):
+                print(f"\nSchnitt {weight} – UI-Schrift: {family}")
+                for name, zeichen in symbole.items():
+                    erwartet = getattr(app, "_symbol_fonts", {}).get(name, family)
+                    erlaubt = {family, mod.glide_symbols.BUNDLED_SYMBOL_FAMILY,
+                               *mod.glide_symbols.SYMBOL_FONT_FALLBACKS.get(name, ())}
+                    schrift = tkfont.Font(root=root, font=app.symbol_font(name, 12))
+                    schrift.configure(weight=weight)
+                    eingestellt = str(schrift.actual("family"))
+                    familien = list(dict.fromkeys(str(root.tk.call("font", "actual", schrift.name,
+                                                                   "-family", char)) for char in zeichen))
+                    ersatz = (erwartet not in erlaubt or eingestellt.casefold() != erwartet.casefold()
+                              or any(f.casefold() != erwartet.casefold() for f in familien))
+                    print(f"  {name:<18} {zeichen:<8} {schrift.measure(zeichen):>5} px · "
+                          f"{schrift.metrics('linespace'):>3} px hoch · {' + '.join(familien)}"
+                          + (" ← Ersatzschrift" if ersatz else ""))
+                    if ersatz:
+                        fazit.append((style.label, weight, name, zeichen, familien))
         if fazit:
             print(f"FEHLER: {len(fazit)} Zeichen verwenden eine nicht freigegebene oder unerwartete Schrift.")
             return 1

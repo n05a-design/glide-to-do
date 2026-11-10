@@ -1,6 +1,6 @@
 # Vorlagen im Unternehmensalltag
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 3.28 ergänzt vier integrierte Tagebuchvorlagen: Tagesnotiz, Dankbarkeit,
 Wochenrückblick und Jahresordner mit Quartalen. Sie verwenden Notizseiten und

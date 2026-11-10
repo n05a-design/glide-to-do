@@ -1,6 +1,6 @@
 # Grafik-Master und zentrale Logo-Übersicht
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Am 05.11.2026 zusammengeführt und gekürzt: alle aktiven Logo-Quellen, Verwendungen und künftigen Aktualisierungsschritte stehen hier. Frühere Logo-Dateien sind auf ausdrücklichen Benutzerauftrag im Grafikarchiv erhalten; diese Ausnahme betrifft Grafiken, keine zusätzlichen Dokumentarchive.
 
@@ -67,8 +67,8 @@ Anschließend aktuelle Dokumentationsaufnahme/Verweise, Änderungsverlauf, Entwi
 
 `05_Inspiration` enthält historische Stilvorlagen und Entwurfsbelege. Sie sind keine aktuelle Logo-Quelle. Fremdbilder vor öffentlicher Veröffentlichung nach ihrer jeweiligen Lizenz prüfen.
 
-`07_Fonts` enthält die unveränderten Originale und Lizenztexte für Rubik, Roboto Mono, Playfair Display und Fraunces. Die Runtime führt zusätzlich DejaVu Sans als internen Symbolbegleiter und Pixelify Sans für Pixel-Überschriften; Details im Schriftkatalog und Veröffentlichungsdokument.
+`07_Fonts` enthält die unveränderten Originale und Lizenztexte für Rubik, Charis SIL, DM Serif Display und DM Mono. Die Runtime führt zusätzlich DejaVu Sans als internen Symbolbegleiter und Pixelify Sans für Pixel-Überschriften; Details im Schriftkatalog und Veröffentlichungsdokument.
 
 Die sechs Originalbilder des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md) liegen ausschließlich in `01_Repository/Glide/tests/fixtures/showcase/bilder`. `06_Beispielbilder` enthält andere Referenzmotive. [Herkunft der Showcase-Bilder](../01_Repository/Glide/tests/fixtures/showcase/quellen.json).
 
-Aktueller Umsetzungs-/Prüf-/Lieferstand: [Logo-Nachweis 3.50.3](../01_Repository/Glide/tests/qa-3.50.3/logo_2026-11-05/README.md). Die Übersicht ist keine Bestätigung aller nativen Anzeigen oder einer erfolgten Veröffentlichung.
+Aktueller Umsetzungs-/Prüf-/Lieferstand: [Logo-Nachweis in Git-Fassung vom 05.11.2026](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.3/logo_2026-11-05/README.md). Die Übersicht ist keine Bestätigung aller nativen Anzeigen oder einer erfolgten Veröffentlichung.

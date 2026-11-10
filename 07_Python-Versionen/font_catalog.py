@@ -19,6 +19,8 @@ class FontStyle:
     body_family: str = ""
     body_regular: str = ""
     body_postscript: str = ""
+    automatic_bold: bool = False
+    aliases: tuple = ()
 
     @property
     def label(self):
@@ -38,45 +40,48 @@ class FontStyle:
 
 STYLES = (
     FontStyle("rubik", "Modern", "Rubik", "Rubik", "Rubik-Regular.ttf", "Rubik-Bold.ttf"),
-    FontStyle("roboto_mono", "Technisch", "Roboto Mono", "Roboto Mono",
-              "RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"),
-    FontStyle("playfair_display", "Kreativ", "Playfair Display", "Playfair Display",
-              "PlayfairDisplay-Regular.ttf", "PlayfairDisplay-Bold.ttf",
-              "Playfair Display SemiBold", "PlayfairDisplay-SemiBold.ttf", "PlayfairDisplay-SemiBold"),
-    FontStyle("fraunces", "Klassisch", "Fraunces", "Fraunces 72pt",
-              "Fraunces_72pt-Regular.ttf", "Fraunces_72pt-Bold.ttf",
-              "Fraunces 72pt SemiBold", "Fraunces_72pt-SemiBold.ttf", "Fraunces72pt-SemiBold"),
+    FontStyle("dm_mono", "Technisch", "DM Mono", "DM Mono",
+              "DMMono-Regular.ttf", "DMMono-Medium.ttf",
+              aliases=("roboto_mono", "Roboto Mono")),
+    FontStyle("dm_serif_display", "Kreativ", "DM Serif Display", "DM Serif Display",
+              "DMSerifDisplay-Regular.ttf", "DMSerifDisplay-Regular.ttf",
+              automatic_bold=True, aliases=("playfair_display", "Playfair Display")),
+    FontStyle("charis_sil", "Klassisch", "Charis SIL", "Charis SIL",
+              "CharisSIL-Regular.ttf", "CharisSIL-Bold.ttf",
+              automatic_bold=True, aliases=("fraunces", "Fraunces")),
 )
 DEFAULT = STYLES[0]
 LABELS = tuple(style.label for style in STYLES)
 
 
 def style_for(value):
-    """Anzeige, stabile Kennung und alte Familienangaben eindeutig zuordnen.
+    """Anzeige, stabile Kennung und bisher gespeicherte Familien zuordnen.
 
-    Leere oder nicht mehr angebotene Familien folgen der aktuellen Vorgabe.
-    Die native Fraunces-Familie bleibt ein Alias der öffentlichen Bezeichnung.
+    Ausgewählte Familien behalten nach einem Fontwechsel ihre Stilklasse.
+    Leere oder unbekannte Werte folgen der aktuellen Vorgabe.
     """
     key = str(value or "").strip().casefold()
     return next((style for style in STYLES
                  if key in {style.key.casefold(), style.family.casefold(),
                             style.tk_family.casefold(), style.body_family.casefold(),
                             style.body_postscript.casefold(), (style.body_postscript + "Italic").casefold(),
-                            style.label.casefold()}), DEFAULT)
+                            style.label.casefold(),
+                            *(str(alias).casefold() for alias in style.aliases)}), DEFAULT)
 
 
 def family_for_weight(family, bold=False, italic=False, platform=None):
-    """SemiBold für Lesetext, echte Bold-Familie für Hervorhebungen.
+    """Resolve style aliases while preserving the requested Tk weight.
 
-    Tk unterscheidet nur normal/bold. Windows/Linux wählen die separate
-    SemiBold-Familie; macOS den konkreten PostScript-Schnitt einschließlich
-    Italic. Bold verwendet weiter die Stammfamilie mit ihrem echten 700er.
+    Tk exposes normal/bold rather than arbitrary font weights. DM Mono maps
+    its bold request to the bundled Medium face; fonts without a bold face use
+    Tk's weight selection from their regular family.
     """
     key = str(family or "").casefold()
     style = next((style for style in STYLES
-                  if key and key in (style.tk_family.casefold(), style.body_family.casefold(),
-                             style.body_postscript.casefold(),
-                             (style.body_postscript + "Italic").casefold())), None)
+                  if key and key in {style.tk_family.casefold(), style.body_family.casefold(),
+                                     style.body_postscript.casefold(),
+                                     (style.body_postscript + "Italic").casefold(),
+                                     *(str(alias).casefold() for alias in style.aliases)}), None)
     if style is None:
         return family
     chosen = style.tk_family if bold else style.family_for_platform(platform)
@@ -93,18 +98,18 @@ def actual_family(family, platform=None):
         for style in STYLES:
             names = ((style.body_postscript, style.body_postscript + "Italic") if native == "darwin"
                      else (style.body_family,))
-            if style.body_family and key in {name.casefold() for name in names}:
+            names = (*names, *(str(alias) for alias in style.aliases))
+            if key and key in {name.casefold() for name in names}:
                 return style.tk_family
     return family
 
 
 def face_options(description, platform=None):
-    """Einen konkreten Schnitt beim Kopieren eines Tk-Tupels erhalten.
+    """Preserve a resolved Tk face when reconstructing a font tuple.
 
-    tkinter.Font löst Tupel über `font actual` auf. AppKit meldet dabei nur
-    die Stammfamilie, ebenso Fontconfig bei Familienaliasen; ein erneuter
-    Aufbau würde den 600er-Schnitt verlieren.
-    Benannte und gewöhnliche Schriften bleiben auf dem normalen Tk-Weg.
+    AppKit and Fontconfig may report a base family for a resolved face; this
+    recreates the original family, weight, and slant instead of losing them.
+    Named and ordinary fonts remain on Tk's normal path.
     """
     native = platform or sys.platform
     if native not in ("darwin", "linux") or len(description) < 2:

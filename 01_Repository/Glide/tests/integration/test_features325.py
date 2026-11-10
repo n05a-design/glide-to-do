@@ -260,7 +260,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
         assert app.manual_entries("gibtesnichtimhandbuch") == []
 
         # ================================================================
-        # Punkt 1.11: Zwei Designs ohne Farbe
+        # Punkt 1.11: Graue Flächen mit den freigegebenen Aktionsfarben
         # ================================================================
         def neutral(wert):
             return len(wert) == 7 and wert[1:3] == wert[3:5] == wert[5:7]
@@ -271,10 +271,14 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
             tafel = app.active_theme()
             bunt = sorted(name for name, wert in tafel.items()
                           if isinstance(wert, str) and wert.startswith("#") and not neutral(wert))
-            # D68 (07.11.2026): `view_title` ist die Themenfarbe des Ansichtstitels – dieselbe
-            # Farbe wie `ui_accent`, keine zusätzliche Farbe im farblosen Design.
-            assert set(bunt) <= {"ui_accent", "view_title", "selection", "selection_text"}, (schluessel, bunt)
+            assert set(bunt) <= {"ui_accent", "view_title", "selection", "selection_text",
+                                 "add", "confirm", "delete"}, (schluessel, bunt)
             assert "view_title" not in bunt or tafel["view_title"] == tafel["ui_accent"], (schluessel, tafel["view_title"])
+            assert tafel["add"] == tafel["ui_accent"]
+            for rolle, kanal in (("confirm", 1), ("delete", 0)):
+                rgb = [int(tafel[rolle][i:i + 2], 16) for i in (1, 3, 5)]
+                assert rgb[kanal] == max(rgb) and not neutral(tafel[rolle]), (schluessel, rolle, rgb)
+                assert mod.contrast_ratio(tafel["card"], tafel[rolle]) >= 4.5
             for flaeche in ("bg", "card", "input", "hover"):
                 for schrift, schwelle in (("text", 4.5), ("muted", 4.5), ("placeholder", 3.0)):
                     wert = mod.contrast_ratio(tafel[flaeche], tafel[schrift])

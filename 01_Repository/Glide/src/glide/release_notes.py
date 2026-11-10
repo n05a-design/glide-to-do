@@ -20,6 +20,17 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.52.0": (
+        "Schriftstile: Modern Rubik, Technisch DM Mono, Kreativ DM Serif Display, Klassisch Charis SIL; gespeicherte Stile bleiben erhalten.",
+        "Schriftgewicht und Schriftgröße lassen sich getrennt einstellen. Kreativ und Klassisch sind automatisch kräftiger.",
+        "Hinzufügen und weitere Hervorhebungen folgen der gewählten Themenfarbe. Löschen bleibt rot und Bestätigen grün.",
+        "Das Kopflogo ist etwas größer und sitzt zwei Pixel weiter rechts.",
+        "DejaVu Sans bleibt intern für UI-Symbole, die die auswählbaren Schriften nicht enthalten.",
+    ),
+    "3.51.0": (
+        "Die Plus-Knöpfe der Seitenleiste zeigen ihre Fläche beim Überfahren und den Fokus bei Tastaturbedienung.",
+        "Seitenleistenzähler haben mehr Platz zur rechten Kante. Die Windows-Menüs sind flacher und die Kopfsymbole auf den Titel abgestimmt.",
+    ),
     "3.50.7": (
         "Glide verbindet Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen als Desktop-Planer.",
         "Über Glide zeigt die Produktbeschreibung, die MPL-2.0-Lizenz und den Bezug zum Quellcode.",

@@ -234,7 +234,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.50.7"
+APP_VERSION = "3.53.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -309,9 +309,12 @@ def app_font(size=11, *styles, root=None):
         family_delta = _APP_FONT_CACHE.get(root)
         if family_delta is None:
             named = tkfont.nametofont("TkDefaultFont", root=root)
-            family_delta = (named.actual("family"), max(-1, min(1, named.actual("size") - 11)))
+            family_delta = (named.actual("family"), max(-1, min(1, named.actual("size") - 11)),
+                            named.cget("weight") == "bold")
             _APP_FONT_CACHE[root] = family_delta
-        family, delta = family_delta
+        family, delta, strong = family_delta
+        if strong and "bold" not in styles:
+            styles = (*styles, "bold")
         return (glide_fonts.family_for_weight(family, "bold" in styles, "italic" in styles),
                 int(size) + delta, *styles)
     except (tk.TclError, RuntimeError):
@@ -1346,6 +1349,7 @@ def bundled_glyph_metrics(bold, family="DejaVu Sans", italic=False):
             filename = "DejaVuSans-BoldOblique.ttf" if bold else "DejaVuSans-Oblique.ttf"
         else:
             filename = filename.replace("-Bold.ttf", "-BoldItalic.ttf").replace("-Regular.ttf", "-Italic.ttf")
+            filename = filename.replace("-Medium.ttf", "-MediumItalic.ttf")
             filename = filename.replace("-SemiBold.ttf", "-SemiBoldItalic.ttf")
     schluessel = (filename, bool(bold))
     if schluessel not in _BUNDLED_GLYPH_METRICS:
@@ -1423,7 +1427,7 @@ class RoundedButton(DeferredDrawCanvas):
         # aus einer der Systemsymbolschriften der Symbolregel (die Lupe)
         # behält seine Familie, sonst erschiene ein Ersatzkästchen. Seit D59
         # (03.11.2026) gilt das auch für den Symbolbegleiter DejaVu Sans, wenn
-        # die UI-Schrift (Roboto Mono) das Zeichen nicht selbst enthält.
+        # die gewählte UI-Schrift das Zeichen nicht selbst enthält.
         if isinstance(font, tuple) and font and (
                 font[0] in glide_symbols.SYMBOL_FONT_FAMILIES
                 or (font[0] == glide_symbols.BUNDLED_SYMBOL_FAMILY and font[0] != app_font(11)[0])):
@@ -17286,6 +17290,7 @@ class ListApp:
     SIDEBAR_ICON_GAP = glide_design.SPACING[8]
     SIDEBAR_INDENT = 12
     SIDEBAR_COUNT_MIN_WIDTH = 36
+    SIDEBAR_COUNT_RIGHT_MARGIN = 3
     SYSTEM_ITEM_LEFT_PADDING = 10
     # Trennung zwischen Systembereich und Listenbereich: ausschließlich Abstand.
     # Weder Linie noch Band – die Ruhe zwischen den Blöcken trägt die Trennung.
@@ -18621,7 +18626,6 @@ class ListApp:
     # Rollen, die als Schrift auf den Grundflächen stehen. Sie müssen dort
     # WCAG AA erreichen (4,5:1); `legible_text_roles` zieht sie im eigenen
     # Farbton nach, wo ein Design das nicht schafft.
-    ADD_COLORS = {"light": "#7B3FC4", "dark": "#B794F6"}
     TEXT_ROLE_KEYS = ("text", "muted", "placeholder", "accent", "ui_accent", "view_title", "add", "delete", "export", "import",
                       "clear", "flag", "priority_low", "priority_medium", "priority_high", "overdue",
                       "due_today", "due_action", "confirm")
@@ -18696,15 +18700,12 @@ class ListApp:
             base.update(self.MINIMAL_THEMES[info["base"]])
         accent_key = self.settings.get("accent_color", "accent")
         base["ui_accent"] = base.get(accent_key, base["accent"])
-        # „Hinzufügen“ ist in jedem Design dasselbe Lila – unabhängig von der
-        # gewählten Akzentfarbe (Entscheidung Q1 vom 29.09.2026). Lesbar macht
-        # es `legible_text_roles` wie jede Schriftrolle.
-        # Ausnahme: Die Minimaldesigns bleiben farblos; dort kommt „add“ aus
-        # MINIMAL_THEMES (grau wie Bestätigen und Löschen).
-        if info["layer"] != "minimal":
-            base["add"] = self.ADD_COLORS["dark" if info["base"] == "dark" else "light"]
         if info["layer"] == "minimal":
             base["ui_accent"] = base["text"] if accent_key == "muted" else self.THEMES[info["base"]].get(accent_key, base["accent"])
+        base["add"] = base["ui_accent"]
+        # Lösch- und Bestätigungsaktionen behalten ihre semantischen Farben.
+        for role in ("delete", "confirm"):
+            base[role] = self.THEMES[info["base"]][role]
         # D68 (menschliche Abnahme 07.11.2026): Der Titel der aktuellen Ansicht
         # trägt die gewählte Themenfarbe – zusammen mit Logo und Auswahl in der
         # Seitenleiste das Zeichen „hier bin ich“. „Kontrastgrau“ würde den
@@ -20247,6 +20248,8 @@ class ListApp:
         result["week_start"] = week_start if week_start in ("monday", "sunday") else "monday"
         font_size = result.get("ui_font_size", "mittel")
         result["ui_font_size"] = font_size if font_size in cls.UI_FONT_SIZE_CHOICES else "mittel"
+        weight = result.get("ui_font_weight")
+        result["ui_font_weight"] = weight if weight in cls.UI_FONT_WEIGHT_CHOICES else "Automatisch"
         family = result.get("ui_font_family", "")
         result["ui_font_family"] = str(family).strip()[:120] if isinstance(family, str) else ""
         accent = result.get("accent_color", "accent")
@@ -26307,7 +26310,7 @@ class ListApp:
 
     def sidebar_symbol_font(self):
         """Schrift der Systemsymbole (▣ ◉ ◈ ▤ ♲): Abschnittsschrift, bei fehlenden
-        Zeichen der UI-Schrift (Roboto Mono, D59) im Symbolbegleiter."""
+        Zeichen der gewählten UI-Schrift im Symbolbegleiter."""
         font = self.sidebar_section_font()
         family = _ICON_FAMILY.get("family")
         return (family, *font[1:]) if family else font
@@ -31247,6 +31250,7 @@ class ListApp:
         design_schluessel = {name: key for key, name in design_namen.items()}
         design_var = tk.StringVar(value=design_namen[self.design_name()])
         font_size = tk.StringVar(value=self.settings.get("ui_font_size", "mittel"))
+        font_weight = tk.StringVar(value=self.settings.get("ui_font_weight", "Automatisch"))
         font_family = tk.StringVar(value=glide_fonts.style_for(self.settings.get("ui_font_family", "")).label)
         accent = tk.StringVar(value=dict((key, label) for label, key in self.ACCENT_COLOR_CHOICES).get(self.settings.get("accent_color", "accent"), "Lila"))
         ziel = tk.StringVar(value=str(self.daily_goal()))
@@ -31327,7 +31331,7 @@ class ListApp:
                 ("Tageskapazität · Minuten (0 = aus)", kapazitaet, "daily_capacity"))):
             kopf, fuss = tageswerte.cell(spalte)
             # width=1: Der Umbruch bestimmt nur die Höhe, nie die Spaltenbreite.
-            # Mit der breiteren Roboto Mono (D59) schaukelten Umbruch und
+            # Mit der damaligen Roboto-Mono-Auswahl (D59) schaukelten Umbruch und
             # gleichmäßige Spalten sich sonst endlos auf (wie Startseite eda9278).
             beschriftung = tk.Label(kopf, text=titel, bg=self.theme["bg"], fg=self.theme["muted"],
                                     font=app_font(10), anchor="w", justify="left", width=1)
@@ -31643,6 +31647,10 @@ class ListApp:
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
         font_frame, font_button = self._make_option_menu(appearance, font_family, glide_fonts.LABELS)
         font_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
+        tk.Label(appearance, text="Schriftgewicht", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
+        weight_frame, _ = self._make_option_menu(appearance, font_weight, self.UI_FONT_WEIGHT_CHOICES)
+        weight_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
         self._make_dialog_button(appearance, "Startseite einrichten …", self.show_home_tiles_dialog,
                                  "accent", width=250).pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
         self._make_dialog_button(appearance, "Datenordner wechseln …", self.show_data_folder_dialog,
@@ -31720,6 +31728,7 @@ class ListApp:
                                  **{glide_interaction.HINTS_SETTING: hinweise.get()},
                                  week_start=week_value,
                                  ui_font_size=font_size.get(), ui_font_family=glide_fonts.style_for(font_family.get()).family,
+                                 ui_font_weight=font_weight.get(),
                                  )
             gewaehlt = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
             if hell_dunkel.get():
@@ -31798,7 +31807,7 @@ class ListApp:
             panel.bind("<Configure>", lambda event, ziel=panel: umbrechen(event, ziel), add="+")
         variables = (name, logo, start, startup, startliste, stats, moon, yearly, seconds,
                      attention, systemhinweis, verlauf, animationen, hinweise, rueckmeldung, week_start,
-                     design_var, font_size, font_family, accent, background_var, ziel, kapazitaet, hell_dunkel,
+                     design_var, font_size, font_family, font_weight, accent, background_var, ziel, kapazitaet, hell_dunkel,
                      *sidebar_visibility.values(), *wochenwerte)
         initial_values = tuple(variable.get() for variable in variables)
         initial_backdrops = dict(hintergrund_auswahl)
@@ -31952,8 +31961,22 @@ class ListApp:
     def sidebar_section_font(self):
         return (glide_fonts.family_for_weight(self.ui_font_family(), True), self.ui_font_size(1), "bold")
 
+    UI_FONT_WEIGHT_CHOICES = ("Automatisch", "Standard", "Kräftig")
+
+    def ui_text_font(self, size):
+        """Leseschnitt für die gewählte Stil- und Gewichtskombination."""
+        family = self.ui_font_family()
+        choice = self.settings.get("ui_font_weight", "Automatisch")
+        style = glide_fonts.style_for(self.settings.get("ui_font_family"))
+        strong = choice == "Kräftig" or (
+            choice == "Automatisch" and family == style.default_family
+            and (style.body_family or style.automatic_bold))
+        if strong:
+            return (glide_fonts.family_for_weight(family, True), size, "bold")
+        return (family, size)
+
     def tree_font(self):
-        return (self.ui_font_family(), self.ui_font_size(1))
+        return self.ui_text_font(self.ui_font_size(1))
 
     def apply_ui_font(self):
         """Setzt die benannte Tk-Standardschrift für neu erzeugte Widgets."""
@@ -31964,7 +31987,8 @@ class ListApp:
         _APP_FONT_CACHE.pop(self.root, None)
         try:
             named = tkfont.nametofont("TkDefaultFont", root=self.root)
-            named.configure(family=self.ui_font_family(), size=self.ui_font_size(), weight="normal")
+            family, size, *styles = self.ui_text_font(self.ui_font_size())
+            named.configure(family=family, size=size, weight="bold" if styles else "normal")
         except (tk.TclError, RuntimeError):
             pass
         self.resolve_ui_symbols()
@@ -32024,7 +32048,7 @@ class ListApp:
         familie = getattr(self, "_symbol_fonts", {}).get(key)
         if familie:
             # B10: Die Lupe kommt aus einer Systemschrift, seit D59 die übrigen
-            # Zeichen bei Roboto Mono aus dem Symbolbegleiter DejaVu Sans;
+            # fehlende Zeichen aus dem Symbolbegleiter DejaVu Sans;
             # dieselbe Größe wie die übrigen Kopfsymbole, damit Reihe und
             # Gewicht stimmen.
             return (familie, *app_font(size, "bold")[1:])
@@ -35199,7 +35223,7 @@ class ListApp:
         self._calendar_selected_day = day
         for value, cell in getattr(self, '_calendar_day_cells', {}).items():
             if cell.winfo_exists():
-                cell.configure(highlightbackground=self.theme['accent'] if value == day else self.theme['line'],
+                cell.configure(highlightbackground=self.theme.get('ui_accent', self.theme['accent']) if value == day else self.theme['line'],
                                highlightthickness=2 if value == day else 1)
         status = getattr(self, '_calendar_status', None)
         if status and status.winfo_exists():
@@ -35409,7 +35433,7 @@ class ListApp:
             card = tk.Frame(days_panel, bg=theme['card'], highlightbackground=theme['line'], highlightthickness=1)
             self._calendar_day_cells[iso] = card
             if iso == self._calendar_selected_day:
-                card.configure(highlightbackground=theme['accent'], highlightthickness=2)
+                card.configure(highlightbackground=theme.get('ui_accent', theme['accent']), highlightthickness=2)
             if mode == 'week':
                 card.pack(fill='x', pady=(0, 6))
             else:
@@ -35428,7 +35452,7 @@ class ListApp:
                 text = label(header, day_relief.available_text(summary), 9, color='muted', surface='card')
                 if summary['capacity']:
                     ProgressBar(card, value=summary['minutes'], maximum=summary['capacity'],
-                        bg_color=theme['card'], track_color=theme['input'], fill_color=theme['delete'] if summary['remaining'] < 0 else theme['accent'], height=6).pack(fill='x', padx=10, pady=(2, 4))
+                        bg_color=theme['card'], track_color=theme['input'], fill_color=theme['delete'] if summary['remaining'] < 0 else theme.get('ui_accent', theme['accent']), height=6).pack(fill='x', padx=10, pady=(2, 4))
                 else:
                     label(card, '0 Minuten frei' if summary.get('remaining') is not None else
                           'Kalenderzeit unbekannt' if summary.get('calendar_state') in ('loading','error','closed') else
@@ -37676,8 +37700,8 @@ class ListApp:
         self.system_listbox = SystemNavigation(
             self.sidebar_frame,
             app=self,
-            columns=("icon", "count", "title"),
-            displaycolumns=("icon", "title", "count"),
+            columns=("icon", "count", "title", "count_margin"),
+            displaycolumns=("icon", "title", "count", "count_margin"),
             # Keine leere Kopfzeile: auch ohne gezeichnetes Heading reserviert
             # Tk dafür Höhe. Der Karteninnenabstand gilt oben wie seitlich.
             show="",
@@ -37699,8 +37723,7 @@ class ListApp:
         self.system_listbox.column("#0", width=0, minwidth=0, stretch=False)
         self.system_listbox.column("title", anchor="w", stretch=True, width=192, minwidth=30)
         self.style.layout("System.Treeview.Heading", [])
-        self.system_listbox.column("count", anchor="e", stretch=False,
-                                   width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        self.configure_sidebar_count_columns(self.system_listbox)
         self.system_listbox.bind("<<TreeviewSelect>>", self.on_system_select)
         self.system_listbox.bind("<Button-1>", self.clear_sidebar_context_selection)
         self.system_listbox.bind("<Button-3>", self.show_sidebar_context_menu)
@@ -37785,6 +37808,7 @@ class ListApp:
             radius=14,
             bg_key="card",
             font=app_font(13, "bold"),
+            outline=False,
         )
         self.add_list_button.pack(side="right")
         self.add_tooltip(self.add_list_button, "Neu anlegen oder importieren")
@@ -37796,8 +37820,8 @@ class ListApp:
         # markierten Zeile bleibt das Verhalten identisch zu früheren Versionen.
         self.sidebar_listbox = ttk.Treeview(
             self.sidebar_frame,
-            columns=("icon", "count"),
-            displaycolumns=("count",),
+            columns=("icon", "count", "count_margin"),
+            displaycolumns=("count", "count_margin"),
             show="tree",
             selectmode="extended",
             style="Sidebar.Treeview",
@@ -37811,8 +37835,7 @@ class ListApp:
         self.sidebar_listbox.heading("icon", text="")
         self.sidebar_listbox.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
         self.sidebar_listbox.column("#0", anchor="w", stretch=True, width=192)
-        self.sidebar_listbox.column("count", anchor="e", stretch=False,
-                                    width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        self.configure_sidebar_count_columns(self.sidebar_listbox)
         self.sidebar_listbox.bind("<<TreeviewSelect>>", self.on_sidebar_select)
         self.sidebar_listbox.bind("<Double-Button-1>", self.edit_selected_sidebar_title)
         self.sidebar_listbox.bind("<Tab>", self.toggle_sidebar_indent)
@@ -37972,7 +37995,7 @@ class ListApp:
 
     def sidebar_row_font(self):
         """Schrift der Seitenleistenzeilen."""
-        return self.cached_font("_sidebar_row_font", (self.ui_font_family(), self.ui_font_size()))
+        return self.cached_font("_sidebar_row_font", self.ui_text_font(self.ui_font_size()))
 
     def sidebar_available_text_width(self, tree, depth=0):
         """Platz im Titel: Zähler und Einrückung besitzen eigene feste Breiten."""
@@ -38064,6 +38087,13 @@ class ListApp:
         return self.render_cached(("list_count", id(entry)),
                                   lambda: self.count_items(entry.get("items", [])))
 
+    def configure_sidebar_count_columns(self, tree):
+        tree.column("count", anchor="e", stretch=False,
+                    width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        # Die Zeilenhintergründe füllen weiterhin den ganzen Baum.
+        tree.column("count_margin", stretch=False, width=self.SIDEBAR_COUNT_RIGHT_MARGIN,
+                    minwidth=self.SIDEBAR_COUNT_RIGHT_MARGIN)
+
     def sync_sidebar_count_columns(self):
         """Zählerbreite nach Inhalt und Schriftgröße; alle Ebenen fluchten rechts."""
         for tree in [self.system_listbox] + self.sidebar_trees():
@@ -38079,10 +38109,10 @@ class ListApp:
                     width = max(width, font.measure(value) + self.SIDEBAR_ROW_RIGHT_PADDING)
             tree.column("count", width=width, minwidth=width)
             if tree.winfo_width() > 1:
-                tree.column("#0", width=max(50, tree.winfo_width() - width), minwidth=50)
+                title_width = tree.winfo_width() - width - self.SIDEBAR_COUNT_RIGHT_MARGIN
+                tree.column("#0", width=max(50, title_width), minwidth=50)
                 if tree is self.system_listbox:
-                    tree.column("title", width=max(30, tree.winfo_width() - width
-                                                   - int(tree.column("icon", "width")) - 2))
+                    tree.column("title", width=max(30, title_width - int(tree.column("icon", "width")) - 2))
 
     def sidebar_row_icon(self, row):
         """Symbol einer Seitenleistenzeile.
@@ -38585,16 +38615,17 @@ class ListApp:
             beschriftung.bind(sequence, lambda _event: oeffnen())
         self.add_tooltip(beschriftung, titel_hinweis)
         plus = self.make_button(zeile, text="+", command=plus_befehl, color_key="accent", width=42, height=32,
-                                radius=14, bg_key="card", font=app_font(13, "bold"))
+                                radius=14, bg_key="card", font=app_font(13, "bold"), outline=False)
         plus.pack(side="right")
         self.add_tooltip(plus, plus_hinweis)
         baum = ttk.Treeview(
-            self.sidebar_frame, columns=("icon", "count"), displaycolumns=("count",), show="tree",
+            self.sidebar_frame, columns=("icon", "count", "count_margin"),
+            displaycolumns=("count", "count_margin"), show="tree",
             selectmode="browse", style="Sidebar.Treeview", takefocus=True, height=1)
         baum.heading("#0", text="")
         baum.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
         baum.column("#0", anchor="w", stretch=True, width=192)
-        baum.column("count", anchor="e", stretch=False, width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        self.configure_sidebar_count_columns(baum)
         baum.pack(fill="x")
         baum.bind("<<TreeviewSelect>>", lambda _event, ziel=baum: self.on_section_select(ziel))
         baum.bind("<Double-Button-1>", self.edit_selected_sidebar_title)
@@ -42926,15 +42957,16 @@ class ListApp:
         # Untertitel einer Systemansicht die Zeile `page_chip_row`
         # (Rückmeldung: „die App weiter komprimieren“).
 
-        # B07 (15.10.2026): Die Symbolknöpfe stehen in der Titelzeile, rechts
-        # neben den Windows-Menüs. Beide werden dort von pack auf dieselbe
-        # Mittellinie gesetzt und haben dieselbe Höhe (HEADER_CONTROL_HEIGHT);
-        # vorher standen die Menüs oben in der Titelzeile, die Knöpfe mittig
-        # über Titel und Unterzeile. Die Unterzeile behält die volle Breite.
+        # B07: Die Symbolknöpfe stehen in der Titelzeile neben den flacheren
+        # Windows-Menüs. Der Platzhalter reserviert ihre Breite, ohne dass
+        # die abgesenkte Symbolgruppe die Titelzeile höher macht.
+        # Die Unterzeile behält die volle Breite.
         # Gemeinsamer Vorfahr erlaubt dieselben Knöpfe wahlweise in der
         # Titel- oder Eingabezeile, ohne eine zweite Instanz zu erzeugen.
         self.header_controls = self.register_theme_widget(tk.Frame(self.shell, bg=self.theme["bg"]), "bg")
-        self.header_controls.pack(in_=title_row, side="right", padx=(glide_design.SPACING[12], 0))
+        self.header_controls_slot = self.register_theme_widget(
+            tk.Frame(title_row, bg=self.theme["bg"], height=self.HEADER_CONTROL_HEIGHT), "bg")
+        self.place_header_controls_in_title()
         self.create_menubar()
         self.settings_button = self.make_button(self.header_controls, self.ICONS["settings"],
                                                 self.show_settings_dialog, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("settings", 16))
@@ -43769,29 +43801,43 @@ class ListApp:
                     self.content_toolbar.pack(fill="x", before=home)
                 elif target is not fallback and self.content_toolbar.winfo_manager():
                     self.content_toolbar.pack_forget()
-            info = self.header_controls.pack_info()
-            if str(info.get("in")) != str(target):
-                self.header_controls.pack_forget()
+            controls = self.header_controls
+            if docked:
+                if controls.winfo_manager() == "pack" and str(controls.pack_info()["in"]) == str(target):
+                    return
+                controls.place_forget()
+                self.header_controls_slot.pack_forget()
+                controls.pack_forget()
                 others = target.pack_slaves()
-                options = {"in_": target, "side": "right", "padx": (8 if docked else 12, 0)}
-                if docked:
-                    # Feste Oberkante in jeder Trägerzeile (Entscheidung
-                    # 27.09.2026): Zeilen sind 40–43 px hoch, zentriert
-                    # sprängen die Kopfknöpfe beim Ansichtswechsel.
-                    options.update(anchor="n", pady=(1, 0))
+                # Feste Oberkante in jeder Trägerzeile (Entscheidung 27.09.2026).
+                options = {"in_": target, "side": "right", "padx": (8, 0),
+                           "anchor": "n", "pady": (1, 0)}
                 if others:
                     options["before"] = others[0]
-                self.header_controls.pack(**options)
+                controls.pack(**options)
                 if target is self.input_frame:
                     # Rechte Aktionen und Plus zuerst reservieren; ein langes
                     # Eingabefeld darf den Hinzufügen-Knopf nicht verdrängen.
                     self.add_button.pack_configure(before=self.entry_border)
                 elif target is self.search_frame:
                     self.pin_view_switch_right()
-                self.header_controls.tkraise()
-                self.update_header_title()
+            elif controls.winfo_manager() != "place":
+                controls.pack_forget()
+                self.place_header_controls_in_title()
+            else:
+                return
+            controls.tkraise()
+            self.update_header_title()
         except (tk.TclError, AttributeError):
             return
+
+    def place_header_controls_in_title(self):
+        slot = self.header_controls_slot
+        slot.configure(width=max(1, self.packed_width(self.header_controls)))
+        others = self.title_row.pack_slaves()
+        options = {"before": others[0]} if others else {}
+        slot.pack(side="right", padx=(12, 0), **options)
+        self.header_controls.place(in_=slot, y=self.HEADER_SYMBOL_OFFSET, relwidth=1)
 
     def pack_header_controls(self):
         """Packt die Kopfzeilenknöpfe in fester Reihenfolge von rechts nach links.
@@ -43821,12 +43867,15 @@ class ListApp:
         soll = [(getattr(self, name, None), rand) for name, sichtbar, rand in reihe
                 if sichtbar and getattr(self, name, None) is not None]
         try:
-            if [str(knopf) for knopf, _rand in soll] == [str(knopf) for knopf in leiste.pack_slaves()]:
-                return
-            for knopf in leiste.pack_slaves():
-                knopf.pack_forget()
-            for knopf, rand in soll:
-                knopf.pack(side="right", padx=rand)
+            bisher = leiste.pack_slaves()
+            if [knopf for knopf, _rand in soll] != bisher:
+                for knopf in bisher:
+                    knopf.pack_forget()
+                for knopf, rand in soll:
+                    knopf.pack(side="right", padx=rand)
+            slot_width = max(1, self.packed_width(leiste))
+            if int(self.header_controls_slot.cget("width")) != slot_width:
+                self.header_controls_slot.configure(width=slot_width)
         except tk.TclError:
             pass
 
@@ -44224,7 +44273,7 @@ class ListApp:
             logo = getattr(self, "header_logo", None)
             for widget, gap in (
                 (None if getattr(self, "_header_actions_docked", False) else getattr(self, "header_controls", None), 12),
-                (logo if logo is not None and logo.winfo_manager() else None, self.HEADER_LOGO_GAP),
+                (logo if logo is not None and logo.winfo_manager() else None, getattr(self, "_header_logo_padding", 0)),
                 (getattr(self, "custom_menubar", None), 8),
             ):
                 if widget is not None:
@@ -45508,7 +45557,7 @@ class ListApp:
         # B11 (Designprüfung 03.11.2026, Befund 1): Neben den festen Schwellen
         # weichen Labels und danach Fälligkeit auch dann, wenn der Titel sonst
         # nicht mehr die breiteste Spalte wäre oder unter 180 px fiele – mit
-        # großer Schrift, Nebenansicht oder der breiteren Roboto Mono.
+        # großer Schrift, Nebenansicht oder breiter UI-Schrift.
         if measured:
             def rest(due, labels):
                 return (measured - due - labels - (self.TASK_METADATA_GAP if due or labels else 0)
@@ -53489,10 +53538,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     # --- Logo in der Kopfzeile (29.09.2026) -------------------------------
     HEADER_LOGO_GAP = 14
-    # Höhe der Kopfsymbole und der Windows-Menüknöpfe (B07): eine Höhe, eine
-    # Mittellinie. 38 px = Höhe der Titelzeile; mit 42 px wuchs der Kopf um
-    # 4 px, und die Bedienfläche überschritt bei 1280 × 800 die 15 % (Paket 3).
+    HEADER_LOGO_LEFT = 2
+    HEADER_LOGO_LIFT = 3
+    # B07: Die Kopfsymbole behalten ihre Bedienfläche. Das Textmenü hat
+    # weniger vertikalen Innenraum und bleibt mittig in der Titelzeile.
     HEADER_CONTROL_HEIGHT = 38
+    HEADER_MENU_HEIGHT = 30
+    HEADER_SYMBOL_OFFSET = 3
 
     def header_logo_color(self):
         """Akzentfarbe der Oberfläche, auf dem Grund mindestens 3:1 (WCAG für Grafiken)."""
@@ -53524,7 +53576,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         else:
             chips = zeile
         versatz = max(0, (self.subtitle_row.winfo_reqheight() - max(1, chips)) // 2)
-        return max(24, self.title_row.winfo_reqheight() + versatz + ascent - self.header_logo_top_inset())
+        return (max(24, self.title_row.winfo_reqheight() + versatz + ascent - self.header_logo_top_inset())
+                + min(self.HEADER_LOGO_LIFT, self.header_logo_top_inset()))
 
     def header_logo_top_inset(self):
         font = self.cached_font("_header_cap_font", self.header_title_font())
@@ -53548,18 +53601,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     leinwand.pack_forget()
                     self.update_header_title()
                 return
-            inset = self.header_logo_top_inset()
-            if leinwand.winfo_manager() and inset != getattr(self, "_header_logo_inset", None):
-                self._header_logo_inset = inset
-                leinwand.pack_configure(pady=(inset, 0))
+            old_inset = self.header_logo_top_inset()
+            lift = min(self.HEADER_LOGO_LIFT, old_inset)
+            inset = old_inset - lift
             hoehe = self.header_logo_height()
             farbe = self.header_logo_color()
             if (hoehe, farbe) != getattr(self, "_header_logo_key", None):
                 self._header_logo_key = (hoehe, farbe)
                 self.draw_logo(leinwand, hoehe, farbe)
-            if not leinwand.winfo_manager():
-                leinwand.pack(side="left", anchor="nw", padx=(0, self.HEADER_LOGO_GAP), pady=(inset, 0), before=self.title_block)
-                self._header_logo_inset = inset
+            old_width = round((hoehe - lift) * glide_logo.aspect())
+            padding = self.HEADER_LOGO_GAP + old_width - int(leinwand.cget("width"))
+            if not leinwand.winfo_manager() or (inset, padding) != getattr(self, "_header_logo_geometry", None):
+                leinwand.pack(side="left", anchor="nw", padx=(self.HEADER_LOGO_LEFT, padding - self.HEADER_LOGO_LEFT),
+                              pady=(inset, 0), before=self.title_block)
+                self._header_logo_geometry = (inset, padding)
+                self._header_logo_padding = padding
                 self.update_header_title()
         except (tk.TclError, ValueError, OSError, AttributeError):
             return
@@ -66939,7 +66995,7 @@ Labels, Termine und Metadaten."""
                             style="QuickOpen.Treeview", height=12)
         tree.column("#0", width=380, stretch=True)
         tree.column("path", width=220, stretch=False, anchor="e")
-        tree.tag_configure("group", foreground=theme["accent"], font=app_font(10, "bold"))
+        tree.tag_configure("group", foreground=theme.get("ui_accent", theme["accent"]), font=app_font(10, "bold"))
         tree.pack(fill="both", expand=True, pady=(10, 2))
         results = []
         images = []
@@ -67256,7 +67312,7 @@ Labels, Termine und Metadaten."""
         baum.column("mark", width=markenbreite, minwidth=markenbreite, stretch=False, anchor="center")
         baum.column("label", width=nutzbar - markenbreite, stretch=True, anchor="w")
         baum.column("where", width=0, minwidth=0, stretch=False, anchor="e")
-        baum.tag_configure("group", foreground=theme["accent"], font=app_font(9, "bold"))
+        baum.tag_configure("group", foreground=theme.get("ui_accent", theme["accent"]), font=app_font(9, "bold"))
         baum.tag_configure("disabled", foreground=theme["muted"])
         baum.tag_configure("hover", background=theme["hover"])
         leiste = ThemedAutoScrollbar(rahmen, bg_color=flaeche, track_color=flaeche,
@@ -67775,7 +67831,7 @@ Labels, Termine und Metadaten."""
                 # deshalb unter Windows robuster.
                 width = ui_font_object(font=app_font(9)).measure(label) + 16
                 button = self.make_button(self.custom_menubar, label, None, "muted", width=width,
-                                          height=self.HEADER_CONTROL_HEIGHT, radius=10, font=app_font(9),
+                                          height=self.HEADER_MENU_HEIGHT, radius=10, font=app_font(9),
                                           outline=False)
                 # Seit 3.50 teilt die Kopfzeile ihre Breite mit der durchgehenden
                 # Seitenleiste. Mit dem allgemeinen Textrand von 30 px wurde
@@ -67788,7 +67844,7 @@ Labels, Termine und Metadaten."""
                 button.configure(width=width)
                 button._fit_width()
                 button.command = lambda b=button, m=menu: self._post_custom_menu(b, m)
-                button.pack(side="left", fill="y", padx=(0, 4))
+                button.pack(side="left", padx=(0, 4))
                 self.custom_menu_buttons.append(button)
                 self.root.bind(
                     f"<Alt-{mnemonic}>",
@@ -68329,7 +68385,7 @@ Labels, Termine und Metadaten."""
         row = 1
         for section, entries in sections:
             tk.Label(
-                table, text=section, bg=self.theme["bg"], fg=self.theme["accent"],
+                table, text=section, bg=self.theme["bg"], fg=self.theme.get("ui_accent", self.theme["accent"]),
                 font=app_font(11, "bold"), anchor="w",
             ).grid(row=row, column=0, columnspan=2, sticky="ew", pady=(14 if row > 1 else 0, 8))
             row += 1

@@ -15,6 +15,24 @@ import lizenzen_vorbereiten_macos as licenses
 
 
 class MacLicenseTests(unittest.TestCase):
+    def test_historical_glide_licenses_are_not_copied_to_new_package(self):
+        with tempfile.TemporaryDirectory() as folder:
+            basis = Path(folder) / 'basis'
+            destination = Path(folder) / 'package'
+            basis.mkdir()
+            destination.mkdir()
+            (basis / 'old-font-license.txt').write_text('old Glide license')
+            (basis / 'openssl-license.txt').write_text('pinned dependency license')
+            document = {'components': [
+                {'name': 'Glide', 'files': {'old-font-license.txt': 'old'}},
+                {'name': 'OpenSSL', 'files': {'openssl-license.txt': 'external'}},
+            ]}
+
+            licenses.copy_external_licenses(document, basis, destination)
+
+            self.assertFalse((destination / 'old-font-license.txt').exists())
+            self.assertEqual((destination / 'openssl-license.txt').read_text(), 'pinned dependency license')
+
     def test_repository_basis_preserves_original_license_bytes(self):
         basis = TOOLS / 'lizenzen/macos'
         document = json.loads((basis / 'manifest.json').read_text(encoding='utf-8'))

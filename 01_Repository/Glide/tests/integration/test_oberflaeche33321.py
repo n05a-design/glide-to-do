@@ -127,15 +127,18 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         assert echte in (True, False, None), echte
         pruefungen.append("N01: Wahl übersteht Neustart; aus beendet das Folgen; Unlesbares ergibt aus")
 
-        # --- U15: Lila nur für Hinzufügen -------------------------------------
+        # --- Hinzufügen folgt der Themenfarbe --------------------------------
         liste = app.new_list_object("Umschalter", [app.new_item("Punkt")])
         app.lists.append(liste)
         app.save_items()
         for design in app.DESIGN_ORDER:
+            app.settings["accent_color"] = "clear"
             app.set_design(design)
             app.set_active_list(liste["id"])
             ruhe(0.05)
             theme = app.theme
+            assert theme["add"] == theme["ui_accent"], design
+            assert theme["confirm"] != theme["delete"], design
             assert mod.contrast_ratio(theme["active_text"], theme["active"]) >= 4.5, design
             if app.design_info()["layer"] != "minimal":
                 # In den Minimaldesigns ist alles grau; sonst unterscheiden sich die Rollen.
@@ -148,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         app.set_table_view()
         ruhe()
         assert app.table_button.active_fill == app.theme["active"] and app.list_view_button.active_fill is None
-        pruefungen.append("U15: offene Ansicht in allen zehn Designs neutral und lesbar, Lila bleibt bei „+“")
+        pruefungen.append("Offene Ansicht neutral und lesbar, Plus in der gewählten Themenfarbe")
 
         # --- U05r: Gismo-Kachel in Ruhe ohne Knöpfe ----------------------------
         app.set_home_view()

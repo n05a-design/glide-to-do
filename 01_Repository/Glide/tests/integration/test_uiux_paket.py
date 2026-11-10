@@ -285,8 +285,8 @@ def fall_b05(lauf):
     grundlinie = chips[0].winfo_rooty() + schrift.metrics("ascent")
     unten = logo.winfo_rooty() + logo.winfo_height()
     assert abs(unten - grundlinie) <= 2, ("Logo-Unterkante", unten, grundlinie)
-    oben_titel = app.title_label.winfo_rooty()
-    assert logo.winfo_rooty() > oben_titel, "Logo beginnt über dem Titel"
+    inset = app.header_logo_top_inset()
+    assert logo.winfo_rooty() == app.header_frame.winfo_rooty() + max(0, inset - 3)
     seiten = logo.winfo_width() / logo.winfo_height()
     assert abs(seiten - mod.glide_logo.aspect()) < 0.06, seiten
     return f"Unterkante {unten} ≈ Grundlinie {grundlinie}, Seitenverhältnis {seiten:.3f}"
@@ -541,20 +541,26 @@ def fall_b15_appweit(lauf):
 
 
 def fall_b07(lauf):
-    """Windows-Menüs und Kopfsymbole teilen Mittellinie und Höhe."""
+    """Kompakte Windows-Menüs und abgesenkte Kopfsymbole bleiben in der Titelzeile."""
     app = lauf.app
     knoepfe_kopf = [k for k in app.header_controls.pack_slaves() if k.winfo_ismapped()]
     assert knoepfe_kopf
     mitten = {k.winfo_rooty() + k.winfo_height() / 2 for k in knoepfe_kopf}
     assert max(mitten) - min(mitten) <= 1, mitten
+    assert {k.winfo_height() for k in knoepfe_kopf} == {38}
+    titel_y = app.title_row.winfo_rooty()
+    titel_mitte = titel_y + app.title_row.winfo_height() / 2
+    assert abs(min(mitten) - titel_mitte - 3) <= 1, (mitten, titel_mitte)
+    assert app.title_row.winfo_height() == max(38, app.title_label.winfo_reqheight())
     menues = getattr(app, "custom_menu_buttons", [])
     if not menues:
-        return "keine Fenstermenüs auf dieser Plattform (Systemmenüleiste); Kopfsymbole fluchten"
+        return "Kopfsymbole fluchten und stehen tiefer; Menüs in der Systemmenüleiste"
     for knopf in menues:
         mitte = knopf.winfo_rooty() + knopf.winfo_height() / 2
-        assert abs(mitte - min(mitten)) <= 1, (knopf.text, mitte, mitten)
-        assert knopf.winfo_height() == knoepfe_kopf[0].winfo_height(), (knopf.text, knopf.winfo_height())
-    return f"{len(menues)} Menüs auf der Mittellinie der {len(knoepfe_kopf)} Kopfsymbole"
+        assert abs(mitte - titel_mitte) <= 1, (knopf.text, mitte, titel_mitte)
+        assert knopf.winfo_height() == 30, (knopf.text, knopf.winfo_height())
+        assert knopf.winfo_ismapped() and knopf.display_text == knopf.text
+    return f"{len(menues)} Menüs mit 30 px, {len(knoepfe_kopf)} Kopfsymbole 3 px unter der Titelzeilenmitte"
 
 
 def fall_b08(lauf):

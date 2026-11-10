@@ -2,7 +2,7 @@
 
 **Schutzauftrag 08.11.2026:** Im laufenden Gesamt-/Steps-Audit bleiben die historischen Originalnachweise erhalten. Die vorbereitete Alterskürzung von `tests/qa-3.50.0` und der zugehörigen Releaseplanungsfixture wurde zurückgenommen; 225 Dateien gegen die Git-Blobs von Main `d7e017f` geprüft. `ablagegroesse.GESCHUETZTE_QA_VERSIONEN` und `GESCHUETZTE_REFERENZEN` schützen diesen konkreten Bestand auch vor `ablage_kuerzen.py`. Die Größen-, Bild- und Fremdrestprüfungen gelten weiter. Der ursprüngliche Kürzungsnachweis bleibt datierte Vorgeschichte, der [Bewahrungsnachtrag](../tests/qa-3.50.7/validierung_2026-11-07/bewahrung_nachtrag.json) belegt die Rücknahme. Allgemeine neue Archivkopien entstehen dadurch nicht.
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 
@@ -71,7 +71,7 @@ Frühere Datei-/Dokumentaudits stehen in [Analyse §13.17](../../../00_Arbeitsvo
 
 Separate Worktrees, Branches, Stashes und Git-Objekte gehören nicht zur Dokumentbereinigung. Arbeitskopien erst nach Prüfung ihrer eigenen Änderungen und lokalen Belege sowie gesicherter Integration auflösen. Ignorierte Dateien sind nicht automatisch entbehrlich. Crashdumps, Originaleingänge und Nutzerreferenzen nach ihrem Zweck prüfen; keine Sammellöschung aufgrund eines Ignore-Eintrags.
 
-Die [Bereinigung vom 04.11.2026](../tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md) enthält Dokumentregister, Einzeldatei-Löschmanifest und Abschlussprüfungen. Es entstehen keine neuen Dokumentarchive; Git trägt die Vorfassungen.
+Die [Bereinigung vom 04.11.2026](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md) enthält Dokumentregister, Einzeldatei-Löschmanifest und Abschlussprüfungen. Es entstehen keine neuen Dokumentarchive; Git trägt die Vorfassungen.
 
 ## Öffentliche Featurepflege ab 3.50.0
 

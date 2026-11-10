@@ -9,8 +9,8 @@ from font_catalog import DEFAULT, LABELS, STYLES, style_for, family_for_weight, 
 
 class CatalogTests(unittest.TestCase):
     def test_requested_classifications_and_default_are_stable(self):
-        self.assertEqual(LABELS, ("Modern: Rubik", "Technisch: Roboto Mono",
-                                  "Kreativ: Playfair Display", "Klassisch: Fraunces"))
+        self.assertEqual(LABELS, ("Modern: Rubik", "Technisch: DM Mono",
+                                  "Kreativ: DM Serif Display", "Klassisch: Charis SIL"))
         self.assertEqual(DEFAULT.key, "rubik")
         self.assertEqual(len({style.key for style in STYLES}), 4)
 
@@ -19,10 +19,14 @@ class CatalogTests(unittest.TestCase):
             for alias in (style.key, style.label, style.family, style.tk_family, style.default_family):
                 with self.subTest(alias=alias):
                     self.assertIs(style_for("  " + alias.upper() + "  "), style)
-        self.assertEqual(style_for("Fraunces").tk_family, "Fraunces 72pt")
-        self.assertEqual(style_for("Roboto Mono").key, "roboto_mono")
+            for alias in style.aliases:
+                with self.subTest(legacy_alias=alias):
+                    self.assertIs(style_for(alias), style)
+                    self.assertEqual(family_for_weight(alias, True), style.tk_family)
+        self.assertEqual(style_for("DM Serif Display").key, "dm_serif_display")
+        self.assertEqual(style_for("Charis SIL").key, "charis_sil")
 
-    def test_semibold_body_preserves_real_bold_and_other_families(self):
+    def test_weight_mapping_preserves_other_families_and_automatic_emphasis(self):
         for style in STYLES:
             self.assertEqual(family_for_weight(style.default_family), style.default_family)
             self.assertEqual(family_for_weight(style.default_family, True), style.tk_family)
@@ -30,36 +34,34 @@ class CatalogTests(unittest.TestCase):
         for family in ("DejaVu Sans", "Pixelify Sans", "Eigene Schrift"):
             self.assertEqual(family_for_weight(family), family)
             self.assertEqual(family_for_weight(family, True), family)
-        for key in ("playfair_display", "fraunces"):
-            style = style_for(key)
-            self.assertTrue(style.body_family.endswith(" SemiBold"))
-            self.assertTrue(style.body_regular.endswith("-SemiBold.ttf"))
+        self.assertFalse(style_for("dm_mono").automatic_bold)
+        self.assertTrue(style_for("dm_serif_display").automatic_bold)
+        self.assertTrue(style_for("charis_sil").automatic_bold)
 
-    def test_macos_selects_original_semibold_postscript_faces(self):
-        expected = {"playfair_display": "PlayfairDisplay-SemiBold", "fraunces": "Fraunces72pt-SemiBold"}
-        for key, postscript in expected.items():
-            style = style_for(key)
-            self.assertEqual(style.family_for_platform("darwin"), postscript)
-            for alias in (style.tk_family, style.body_family, postscript, postscript + "Italic"):
-                self.assertIs(style_for(alias), style)
-                self.assertEqual(family_for_weight(alias, platform="darwin"), postscript)
-                self.assertEqual(family_for_weight(alias, italic=True, platform="darwin"), postscript + "Italic")
-                self.assertEqual(family_for_weight(alias, bold=True, platform="darwin"), style.tk_family)
-            self.assertEqual(actual_family(postscript, "darwin"), style.tk_family)
-            self.assertEqual(actual_family(postscript + "Italic", "darwin"), style.tk_family)
-            for platform in ("win32", "linux"):
-                self.assertEqual(style.family_for_platform(platform), style.body_family)
-                self.assertEqual(family_for_weight(style.tk_family, italic=True, platform=platform), style.body_family)
-                self.assertEqual(actual_family(style.body_family, platform),
-                                 style.tk_family if platform == "linux" else style.body_family)
-
-    def test_postscript_names_belong_to_bundled_original_faces(self):
-        fonts = Path(__file__).resolve().parents[2] / "src/glide/resources/fonts"
+    def test_platform_families_resolve_to_the_selected_static_fonts(self):
         for style in STYLES:
-            if not style.body_postscript:
-                continue
-            for italic in (False, True):
-                filename = style.body_regular.replace("-SemiBold.ttf", "-SemiBoldItalic.ttf") if italic else style.body_regular
+            for platform in ("win32", "darwin", "linux"):
+                with self.subTest(style=style.key, platform=platform):
+                    self.assertEqual(style.family_for_platform(platform), style.tk_family)
+                    self.assertEqual(family_for_weight(style.tk_family, True, platform=platform), style.tk_family)
+                    self.assertEqual(actual_family(style.tk_family, platform), style.tk_family)
+
+    def test_bundled_font_files_and_postscript_names_match_the_catalog(self):
+        fonts = Path(__file__).resolve().parents[2] / "src/glide/resources/fonts"
+        expected = {
+            "DMMono-Regular.ttf": "DMMono-Regular",
+            "DMMono-Medium.ttf": "DMMono-Medium",
+            "DMMono-Italic.ttf": "DMMono-Italic",
+            "DMMono-MediumItalic.ttf": "DMMono-MediumItalic",
+            "DMSerifDisplay-Regular.ttf": "DMSerifDisplay-Regular",
+            "DMSerifDisplay-Italic.ttf": "DMSerifDisplay-Italic",
+            "CharisSIL-Regular.ttf": "CharisSIL",
+            "CharisSIL-Bold.ttf": "CharisSIL-Bold",
+            "CharisSIL-Italic.ttf": "CharisSIL-Italic",
+            "CharisSIL-BoldItalic.ttf": "CharisSIL-BoldItalic",
+        }
+        for filename, postscript in expected.items():
+            with self.subTest(filename=filename):
                 data = (fonts / filename).read_bytes()
                 tables = {struct.unpack_from(">4sIII", data, 12 + i * 16)[0]:
                           struct.unpack_from(">4sIII", data, 12 + i * 16)[2]
@@ -71,25 +73,21 @@ class CatalogTests(unittest.TestCase):
                     platform, _, _, key, length, position = struct.unpack_from(">HHHHHH", data, offset + 6 + index * 12)
                     if platform in (0, 3) and key == 6:
                         names.add(data[offset + start + position:offset + start + position + length].decode("utf-16-be"))
-                self.assertIn(style.body_postscript + ("Italic" if italic else ""), names)
+                self.assertIn(postscript, names)
+        for style in STYLES:
+            self.assertTrue((fonts / style.regular).is_file(), style.regular)
+            self.assertTrue((fonts / style.bold).is_file(), style.bold)
 
-    def test_copying_macos_face_keeps_requested_size_and_styles(self):
-        face = "Fraunces72pt-SemiBoldItalic"
-        self.assertEqual(face_options((face, -16, "italic underline"), "darwin"),
-                         {"family": face, "size": -16, "weight": "normal", "slant": "italic",
-                          "underline": 1, "overstrike": 0})
-        self.assertIsNone(face_options((face, 12), "win32"))
+    def test_unaliased_font_families_use_the_native_tk_resolution(self):
+        self.assertIsNone(face_options(("DM Serif Display", 12), "darwin"))
         self.assertIsNone(face_options(("Rubik", 12), "darwin"))
         self.assertIsNone(face_options(("TkDefaultFont",), "darwin"))
 
-    def test_fontconfig_alias_keeps_the_semibold_face_when_actual_reports_base(self):
+    def test_fontconfig_resolves_current_and_legacy_family_names(self):
         for style in STYLES:
-            if not style.body_family:
-                continue
-            self.assertEqual(actual_family(style.body_family, "linux"), style.tk_family)
-            description = (style.body_family, 11, "italic")
-            self.assertEqual(face_options(description, "linux")["family"], style.body_family)
-            self.assertEqual(face_options(description, "linux")["slant"], "italic")
+            self.assertEqual(actual_family(style.family, "linux"), style.tk_family)
+            for alias in style.aliases:
+                self.assertEqual(actual_family(alias, "linux"), style.tk_family)
 
     def test_empty_legacy_and_invalid_choices_use_current_default(self):
         for value in ("", None, "DejaVu Sans", "Glide Sans", "Unbekannt"):

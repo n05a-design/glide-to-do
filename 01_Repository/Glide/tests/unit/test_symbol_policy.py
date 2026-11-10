@@ -61,8 +61,8 @@ class SymbolPolicyTests(unittest.TestCase):
         self.assertFalse(any("emoji" in name.lower() for name in SYMBOL_FONT_FAMILIES))
 
     def test_bundled_companion_supplies_symbols_missing_in_ui_font(self):
-        # D59 (03.11.2026): Roboto Mono enthält keine geometrischen Zeichen.
-        # Sie kommen aus der mitgelieferten DejaVu Sans, nicht aus dem Text.
+        # D77 (10.11.2026): Die auswählbaren Schriftfamilien decken nicht alle
+        # geometrischen Zeichen ab; DejaVu Sans bleibt ihr Begleiter.
         from symbol_policy import resolve_with_fonts, BUNDLED_SYMBOL_FAMILY
         icons={key:"■" for key in TEXT_FALLBACKS}
         nur_ascii=lambda text: text.isascii()

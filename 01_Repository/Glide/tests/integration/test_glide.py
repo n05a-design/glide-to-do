@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.50.7"
+    assert mod.APP_VERSION == "3.53.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -2097,7 +2097,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     assert app.labels_button.text == f"{app.ICONS['labels']}  Labels"
     assert app.plan_button.text == f"{app.ICONS['calendar']}  Einplanen"
     assert [button.color_key for button in app.selection_buttons] == ["muted", "muted", "muted", "muted", "delete"]
-    assert app.add_button.color_key == "add"  # festes Lila seit 29.09.2026 (R8)
+    assert app.add_button.color_key == "add"
+    assert app.theme["add"] == app.theme["ui_accent"]
     for veraltet in ("clear_button", "calendar_button", "edit_item_button", "undo_button", "copy_button",
                      "paste_button", "expand_button", "collapse_button", "utility_frame"):
         assert not hasattr(app, veraltet), veraltet

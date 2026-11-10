@@ -1,12 +1,18 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
+**D76 – Schriftgewicht, Logo und Themenfarbe (09.11.2026).** Schriftgewicht im Designbereich speichern. Kreativ und Klassisch automatisch kräftiger setzen. Das Kopflogo bei gleicher Unterkante zwei Pixel nach rechts und proportional nach oben vergrößern. Die gewählte Themenfarbe übernimmt die bisher feste lila Aktionsbetonung. Löschen und Bestätigen bleiben rot bzw. grün. Diese Änderungen sind lokal als 3.52.0 versioniert. Der eingefrorene Windows-Volltest für 3.52.0 endete mit Exitcode 0 (130/131 Schritte; „Sichtprüfung“ übersprungen); die strenge CI-Grundstufe des aktuellen Arbeitsbaums bestand mit 19/19 Schritten. Der historische 131-Schritte-Volltest gehört zu 3.51.0. Die menschliche und native Plattformabnahme bleibt offen.
+
+**D77 – Schriftwechsel (Inhaberwahl 10.11.2026).** Modern bleibt Rubik; Technisch wird DM Mono, Kreativ DM Serif Display und Klassisch Charis SIL. Die vorhandenen Stilklassen, Einstellungswahl und Trennung von Schriftgröße und Gewicht bleiben erhalten. Frühere gespeicherte Familiennamen werden ihren jeweiligen Stilklassen zugeordnet. DejaVu Sans bleibt bis auf Weiteres ausschließlich interner Symbolbegleiter; die drei neuen Schriftfamilien decken Glides Symbolbestand nicht vollständig ab.
+
+**D75 – Seitenleiste und Fensterkopf (09.11.2026).** Der Inhaber beauftragt Plus-Knöpfe ohne Ruhekontur bei sichtbarem Hover, 3 px mehr Abstand rechts für Seitenleistenzähler, flachere Windows-Menüs und eine optische Absenkung der Kopfsymbole. Der Versionswechsel auf 3.51.0 folgt auf den grünen Windows-Volltest der Anpassungen. Maße und Zustände stehen in den [Gestaltungsregeln](DESIGN_RICHTLINIEN.md), die Nachweise im [QA-Bericht](07_QA_BERICHT.md).
+
 **D74 – Systemgrundlage für Steps und aktive Produktkommunikation (Inhaberauftrag 08.11.2026):** Das vorhandene Glide-System ist die kanonische Grundlage für die Wiederverwendung in neuen Projekten. Ergänzt werden technische Systemfähigkeiten direkt in der Featureübersicht, Abhängigkeiten, Produktkopplungen, Prüf-/Performancegrenzen und eine konkrete Übergabefolge. Keine neue App-Funktion, kein pauschaler Framework-Abschluss und noch keine Steps-Abzweigung. Aktive Produkttexte führen „Projekte“ mit, entfernen Beta-/Erstversionswerbung sowie allgemeine Versionsserienbotschaften; technische Versionen und unveränderte datierte Nachweise bleiben für Prüfung und Herkunft erhalten. Historische Originalnachweise werden im laufenden Audit bewahrt. Diese aktuelle Vorgabe ersetzt D58 für aktive Werbe-/Statusformulierungen, ohne dessen damaligen Beschluss umzudeuten. Aufgabenstatus im Plan §21.79.
 
 **Commitauftrag 06.11.2026:** Benutzer bittet nach grünen Online-Prüfungen um Commit der letzten Änderungen dieses Chats und übernimmt den vorgelagerten Merge selbst. Nur eigene Titel-/Prüfkopieänderungen auf bereits gemergter Basis `5e63ea34` übernehmen; frühere lokale Fremdänderungen nicht pauschal mitnehmen. Commitfreigabe für diesen Nachtrag, kein selbstständiger Merge. Auftrag/Prüfung/Liefergrenzen in Plan §21.71 und QA-Nachweis.
 
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 
 
@@ -123,7 +129,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetragen; nächste freie Nummer D74. D59 legte Roboto Mono als mitgelieferte Standardschrift und den durchsichtigen Pixelgrund fest; D60 führt die Schriftvorgabe als Rubik und vier klassifizierte Stile fort. D58 bezeichnet den ersten öffentlichen Stand einschließlich Blockziehen und Reader-Zurückstellung. D52–D54 stammen aus dem neuen Analyse-/Roadmapauftrag, keine Auslegung einer Featurefreigabe; D55 ist die erste Auswahl aus den E-U-Vorlagen.
+Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetragen; nächste freie Nummer D77. D59 legte Roboto Mono als mitgelieferte Standardschrift und den durchsichtigen Pixelgrund fest; D60 führt die Schriftvorgabe als Rubik und vier klassifizierte Stile fort. D58 bezeichnet den ersten öffentlichen Stand einschließlich Blockziehen und Reader-Zurückstellung. D52–D54 stammen aus dem neuen Analyse-/Roadmapauftrag, keine Auslegung einer Featurefreigabe; D55 ist die erste Auswahl aus den E-U-Vorlagen.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|

@@ -1,7 +1,7 @@
 {
-  "app_version": "3.50.7",
+  "app_version": "3.53.0",
   "format_version": 26,
-  "bearbeitungstag": "2026-11-07",
+  "bearbeitungstag": "2026-11-10",
   "dokumente": [
     {
       "titel": "Vermarktung · Umsetzung",
@@ -50,16 +50,16 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 32972318,
-      "sha256": "2e5cc1ba2c960ce89cd3f4a06927b6b69f6f92abab7ead0424f38ab44d68a7e0"
+      "bytes": 32972215,
+      "sha256": "60c81119dc957d9b79f3bbe22b19cd11601f72ea533d5547be014d9cbc66705b"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 37548415,
-      "sha256": "e3f0d5cec732bfcec4be1cab1573b1c246e3dc9c11aca90c37e2471f227bf490"
+      "bytes": 37548320,
+      "sha256": "7996fb96ea390e74eac9653b915f2e314a2fc827cff162554f060b1f59dba7b2"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 6066809,
-      "sha256": "688a2d21c8016d8a618ea67039b44261e14a70b9371716f95771b1b57be4bdac"
+      "sha256": "d170ffbb52ab53bc5a877f52054afba4704764367d57d03515cec507a3d3debc"
     }
   }
 }

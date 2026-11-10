@@ -90,7 +90,7 @@
 - **Pinnwände:** Karten frei anordnen, Bereiche und Verbindungen anlegen, zoomen und präsentieren. Aufgaben, Seiten und Notizen lassen sich miteinander verbinden; Karten zeigen ihre Originalinhalte.
 - **Pixel-Werkstatt:** Zeichnungen mit 16 bis 128 Zellen, Formen, Symmetrie, Muster, Farbpaletten und Umfärben; Referenzbild zum Nachzeichnen und benannte Zwischenstände. Export als PNG, ICO mit Symbolvorschau, SVG oder JSON. Bildfolgen erstellen, abspielen und als Einzelbilder bzw. Sprite-Sheet ausgeben.
 - **Persönliche Oberfläche:** zehn Designs, automatische Hell-/Dunkelumschaltung, Akzentfarben, Hintergrundverläufe und getrennte Hintergrundfarben. „Wie die Fensterfläche“ verbindet den Hintergrund mit den Arbeitsflächen und deaktiviert deren Materialschatten.
-- **Dein Arbeitsstil:** Schriftstil (Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces) und Größe wählen, Seitenleiste vollständig, schmal oder ausgeblendet nutzen, Bereiche einblenden, Lesebreite ändern und zusätzliche Bedienhinweise oder Animationen abschalten.
+- **Dein Arbeitsstil:** Schriftstil (Modern: Rubik, Technisch: DM Mono, Kreativ: DM Serif Display, Klassisch: Charis SIL) und Größe wählen, Seitenleiste vollständig, schmal oder ausgeblendet nutzen, Bereiche einblenden, Lesebreite ändern und zusätzliche Bedienhinweise oder Animationen abschalten.
 - **Tastatur und gute Lesbarkeit:** Tastenkürzel für Navigation, Seitenleiste, Pinnwand und Zeitraster, eine Übersicht aller Kürzel und ein eingebautes Handbuch (F1); berechneter Textkontrast in allen Designs und zwei Kontrastdesigns.
 
 ### Inhalte mitnehmen und sicher aufbewahren
@@ -121,7 +121,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Es gibt beim Abgleich am 08.11.2026 noch **keinen öffentlichen GitHub-Release**. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
+Zum Abgleich am 09.11.2026 gibt es weiterhin **keinen öffentlichen GitHub-Release**. Der öffentliche Quellstand auf `main` ist 3.50.7; die lokale 3.52.0-Arbeitskopie ist noch kein Release. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -155,7 +155,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 08.11.2026
+Stand 09.11.2026
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

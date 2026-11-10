@@ -1,5 +1,25 @@
 # Änderungsverlauf
 
+## 3.53.0 – 10.11.2026
+
+- Schrift- und Symbolprüfungen erweitert: alle vier auswählbaren Schriftfamilien werden mit sämtlichen UI-Symbolen in normalem und fettem Tk-Gewicht auf die tatsächlich verwendete Glyphenfamilie geprüft.
+- `symbolpruefung.py` untersucht die vier Schriftstile statt nur der aktuell gewählten Familie; die lokale QA-Zuordnung benennt direkte Tests, indirekte Geometrieprüfungen sowie native und menschliche Abnahmegrenzen.
+- Versionswechsel von 3.52.0 auf 3.53.0. Die plattformübergreifende Vollmatrix und menschliche Abnahme sind weiterhin Freigabetore.
+
+## 3.52.0 – 10.11.2026
+
+- Schriftstile: Modern Rubik, Technisch DM Mono, Kreativ DM Serif Display und Klassisch Charis SIL. Frühere gespeicherte Familien bleiben der passenden Stilklasse zugeordnet.
+- DM Mono nutzt für „Kräftig“ Medium 500; DM Serif Display besitzt keinen statischen Bold-Schnitt. Schriftgewicht und Größe bleiben getrennt.
+- OFL-Texte und SHA-256-Provenienz der ausgewählten Originaldateien sind mitgeführt. DejaVu Sans bleibt als Symbolbegleiter erforderlich, da die neuen Schriften nicht alle UI-Symbole abdecken.
+- Das Schriftgewicht lässt sich unabhängig von der Größe wählen. Kreativ und Klassisch erscheinen automatisch im kräftigeren Bold-Schnitt.
+- Das Kopflogo rückt 2 px nach rechts und wächst proportional nach oben. Die Unterkante bleibt an der Unterzeile, der Titel behält seine Position.
+- Hinzufügen und weitere bisher lila Oberflächenakzente folgen der Themenfarbe. Löschen bleibt rot, Bestätigen grün.
+
+## 3.51.0 – 09.11.2026
+
+- Die vier Plus-Knöpfe in der Seitenleiste erscheinen im Ruhezustand ohne Kontur. Hover und Tastaturfokus bleiben sichtbar.
+- Seitenleistenzähler stehen 3 px weiter links. Die Windows-Menüknöpfe sind 8 px flacher, die Kopfsymbole sitzen in der Titelzeile 3 px tiefer bei gleicher Kopfhöhe.
+
 ## Aufgabenmarkierungen beim Schriftwechsel 09.11.2026
 
 - Markierungen nach Schriftattributen und tatsächlich dargestelltem Zeichenpaar messen. Wechsel zwischen Ersatztext und Symbol lässt den Seiteneditor wieder korrekt aufbauen. Die Seitenleistenmatrix prüft den Übergang und den Rückwechsel.
@@ -152,18 +172,18 @@
 - Nach Merge-Lauf #254: Bildscrolltest wartet auf fertiges Layout und prüft alle echten Bildanker gegen die native Tk-Textklasse. Einheitensprünge und wirkungslose Handler erhalten eigene Defektgegenproben; UI-Nachlauf prüft zusätzlich alle 17 UI-/UX-Verträge. Anwendung unverändert.
 - Folgereparatur nach CI #250: Linux-Schriftalias und Symbolfläche, feste Kennzahlenzeile sowie Höhenabgleich nach Werkzeugumbruch. Separater nativer UI-Nachlauf über alle 45 Fälle; vollständige Pushprüfungen bleiben erhalten. Mac-Paket #31 mit isolierter Startprobe auf dem ersten Reparaturcommit grün.
 - Nach CI #247/#248: Kopfknöpfe bleiben bei geänderter Kennzahlenhöhe stehen; beim synchronen Speichern/Ansichtswechsel bleibt genau ein Seiteneditor mit seiner Werkzeugleiste aktiv.
-- Mac-Paket: originale SemiBold-/Italic-Schnitte per PostScript-Namen auswählen und beim Kopieren einer Tk-Schrift erhalten; tatsächliche Stammfamilie getrennt prüfen. [Fehler, Gegenproben und neue Laufgrenzen](tests/qa-3.50.2/ci247_2026-11-03/README.md).
+- Mac-Paket: originale SemiBold-/Italic-Schnitte per PostScript-Namen auswählen und beim Kopieren einer Tk-Schrift erhalten; tatsächliche Stammfamilie getrennt prüfen. [Fehler, Gegenproben und neue Laufgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/ci247_2026-11-03/README.md).
 
 - Themenflächen, korrigierte Schriftklassen mit kräftigerem Serifentext sowie Kopf-/Flächenreparatur aus 3.50.1 als neuen Stand zusammengeführt. Neuerungenkarte ergänzt.
-- Dokumente, Dateiinventar, aktuelle Liefermatrizen, Verweise und Sprunganker abgeglichen; Python-/Showcase-Lieferung auf 3.50.2. Native Pakete bleiben 3.50.0, neue Remote-/Native-Abnahme offen. Historische Belege bewahren ihre ursprünglichen Werte. [Audit und Grenzen](tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
+- Dokumente, Dateiinventar, aktuelle Liefermatrizen, Verweise und Sprunganker abgeglichen; Python-/Showcase-Lieferung auf 3.50.2. Native Pakete bleiben 3.50.0, neue Remote-/Native-Abnahme offen. Historische Belege bewahren ihre ursprünglichen Werte. [Audit und Grenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
 
 ## 3.50.1 (03.11.2026) – Themenflächen und lesbarere Schriftstile
 
-- Nach GitHub #246: Kopfzeile wächst beim Wechsel zu „Mein Tag“ nicht mehr durch Symbol-Ersatzschrift im kursiven Hinweis. Der Tageshinweis nennt die Pfeile als Klartext. Ein zusätzlicher Pixel Kopfreserve entfällt, damit der Inhalt bei der Linux-Skalierung innerhalb des unveränderten 130-px-Budgets beginnt. Kalibrierungstor bleibt streng; fehlende positive Basissuiten werden weiterhin als nicht belegt gemeldet. [Nachweis](tests/qa-3.50.1/ci246_2026-11-03/README.md).
+- Nach GitHub #246: Kopfzeile wächst beim Wechsel zu „Mein Tag“ nicht mehr durch Symbol-Ersatzschrift im kursiven Hinweis. Der Tageshinweis nennt die Pfeile als Klartext. Ein zusätzlicher Pixel Kopfreserve entfällt, damit der Inhalt bei der Linux-Skalierung innerhalb des unveränderten 130-px-Budgets beginnt. Kalibrierungstor bleibt streng; fehlende positive Basissuiten werden weiterhin als nicht belegt gemeldet. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.1/ci246_2026-11-03/README.md).
 
-- Schriftzuordnung nach Inhaberkorrektur: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces; Reihenfolge wie die Originalordner. Playfair und Fraunces verwenden nun die originalen SemiBold-Schnitte (600) als Lesetext statt Regular (400); Hervorhebungen bleiben echtes Bold (700), beides mit Kursivschnitt. Glyphenmessung folgt den verwendeten Dateien; Bereichspfeile werden bei geänderter Titelgeometrie neu ausgerichtet. [Nachweis](tests/qa-3.50.1/schriftgewicht_2026-11-03/README.md).
+- Schriftzuordnung nach Inhaberkorrektur: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces; Reihenfolge wie die Originalordner. Playfair und Fraunces verwenden nun die originalen SemiBold-Schnitte (600) als Lesetext statt Regular (400); Hervorhebungen bleiben echtes Bold (700), beides mit Kursivschnitt. Glyphenmessung folgt den verwendeten Dateien; Bereichspfeile werden bei geänderter Titelgeometrie neu ausgerichtet. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.1/schriftgewicht_2026-11-03/README.md).
 
-- Seitenleiste und Inhaltskarte behalten vollständig ihre helle bzw. dunkle Themenfarbe. Die eingestellte Hintergrundfarbe erscheint nur dahinter. Behoben ist ein stehengebliebener Baumstil, der nach dem Wechsel von „Wie die Fensterfläche“ zu einer Farbe auch die Karteninnenflächen färbte. Farb-/Designwechsel und Neustart sind durch eine echte UI-Gegenprobe abgesichert. [Nachweis](tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md).
+- Seitenleiste und Inhaltskarte behalten vollständig ihre helle bzw. dunkle Themenfarbe. Die eingestellte Hintergrundfarbe erscheint nur dahinter. Behoben ist ein stehengebliebener Baumstil, der nach dem Wechsel von „Wie die Fensterfläche“ zu einer Farbe auch die Karteninnenflächen färbte. Farb-/Designwechsel und Neustart sind durch eine echte UI-Gegenprobe abgesichert. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md).
 
 ## 3.50.0 (02.11.2026) – Erster öffentlicher Stand
 
