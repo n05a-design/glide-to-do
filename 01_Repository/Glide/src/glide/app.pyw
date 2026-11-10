@@ -2519,6 +2519,12 @@ class CanvasLabel(tk.Canvas):
     def __setitem__(self, key, value):
         self.configure(**{key: value})
 
+    def keys(self):
+        opts = set(super().keys())
+        opts.update(self._opts.keys())
+        opts.update(("text", "font", "fg", "foreground", "bg", "background", "anchor", "justify", "wraplength", "padx", "pady"))
+        return sorted(opts)
+
     # --- Zeichnen --------------------------------------------------------
     def set_halo(self, farbe):
         """Farbe einer dezenten Glas-Pille hinter dem Text – oder None.
@@ -2844,6 +2850,12 @@ class GlideCheckbutton(tk.Canvas):
     def __setitem__(self, key, value):
         self.configure(**{key: value})
 
+    def keys(self):
+        opts = set(super().keys())
+        opts.update(self._opts.keys())
+        opts.update(("text", "variable", "command", "onvalue", "offvalue", "font", "state", "justify", "wraplength", "padx", "pady"))
+        return sorted(opts)
+
     def _render(self):
         self.delete("all")
         o = self._opts
@@ -2942,6 +2954,11 @@ class GlideRadiobutton(GlideCheckbutton):
         if key == "value":
             return self._value
         return super().cget(key)
+
+    def keys(self):
+        opts = set(super().keys())
+        opts.add("value")
+        return sorted(opts)
 
     def _render(self):
         super()._render()
@@ -3265,6 +3282,12 @@ class GlideListbox(tk.Canvas):
     def __setitem__(self, key, value):
         self.configure(**{key: value})
 
+    def keys(self):
+        opts = set(super().keys())
+        opts.update(self._opts.keys())
+        opts.update(("yscrollcommand", "selectmode", "activestyle"))
+        return sorted(opts)
+
     def _on_click(self, event):
         if str(self._opts.get("state", "normal")) == "disabled":
             return "break"
@@ -3500,6 +3523,18 @@ class GlideScale(tk.Canvas):
         if key in self._opts:
             return self._opts[key]
         return super().cget(key)
+
+    def __getitem__(self, key):
+        return self.cget(key)
+
+    def __setitem__(self, key, value):
+        self.configure(**{key: value})
+
+    def keys(self):
+        opts = set(super().keys())
+        opts.update(self._opts.keys())
+        opts.update(("from", "from_", "to", "resolution", "variable", "command", "orient", "length"))
+        return sorted(opts)
 
     def _safe_render(self):
         try:
