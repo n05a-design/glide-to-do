@@ -50,11 +50,13 @@ def verified_basis(basis, runtime, versions):
 
 def copy_external_licenses(document, basis, destination):
     """Keep the pinned basis for build dependencies, not obsolete Glide licenses."""
-    for record in document['components']:
-        if record['name'] == 'Glide':
-            continue
+    for record in external_components(document):
         for name in record['files']:
             shutil.copy2(basis / name, destination / name)
+
+
+def external_components(document):
+    return [record for record in document['components'] if record['name'] != 'Glide']
 
 
 def native_versions():
@@ -77,6 +79,7 @@ def prepare(source, repo, destination, basis):
     runtime = check_native('macos-arm64')
     versions = {name: importlib.metadata.version(name) for name in BUILD}
     document = verified_basis(basis, runtime, versions)
+    document['components'] = external_components(document)
     records = {record['name']: record for record in document['components']}
     for name, version in native_versions().items():
         if records.get(name, {}).get('version') != version:
@@ -98,9 +101,7 @@ def prepare(source, repo, destination, basis):
     for record in document['components']:
         for name in record['files']:
             record['files'][name] = sha(destination / name)
-    # Die Basis ist ein unveränderter historischer Fremdcodebeleg. Nur der
-    # neu erzeugte Bestand erhält Glides heute geltende Lizenz und Quellen.
-    document['components'] = [record for record in document['components'] if record['name'] != 'Glide']
+    # Die verifizierte historische Glide-Kopie wird durch den aktuellen Quellstand ersetzt.
     document['components'].append(stage_project_license(repo, destination, source))
     document.update(bauabhaengigkeiten=versions,
                     abnahme='Originalbelege und Baulaufzeit abgeglichen; native Paketzuordnung und Start separat.')
