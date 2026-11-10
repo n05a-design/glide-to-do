@@ -136,8 +136,11 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert app.header_density() != "minimal"
         zeichen, titel = lage(app.header_logo), lage(app.title_label)
         assert zeichen and titel, (zeichen, titel)
-        assert zeichen[0] == lage(app.content_frame)[0], "Logo auf der Flucht des Inhalts"
-        assert zeichen[0] + zeichen[2] + app.HEADER_LOGO_GAP <= titel[0], "Titel rückt nach rechts"
+        assert zeichen[0] == lage(app.content_frame)[0] + 2, "Logo zwei Pixel rechts der Inhaltskante"
+        lift = min(3, app.header_logo_top_inset())
+        old_width = round((zeichen[3] - lift) * logo.aspect())
+        assert titel[0] == lage(app.content_frame)[0] + old_width + app.HEADER_LOGO_GAP
+        assert zeichen[1] == lage(app.header_frame)[1] + app.header_logo_top_inset() - lift
         # B05 folgt Titel und Unterzeilen-Grundlinie. Nach den ausdrücklich
         # verkleinerten Titeln ist die frühere feste 40-px-Grenze überholt.
         assert zeichen[3] == app.header_logo_height(), zeichen

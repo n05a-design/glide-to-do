@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -52,7 +52,7 @@ MPL-2.0 ist beschlossen. Installer, Signatur, Store und Markenfreigabe sind geso
 
 - Keine Seitenleistenzeile ist ein zweiter Weg zu denselben Punkten; Symbole nur aus der Textzeichentabelle `ICONS` (einzige Ausnahme: das Logo aus `resources/logo`), kein Symbol trägt zwei Bedeutungen (Bewegungspfeile ausgenommen); Knöpfe erscheinen, wo sie wirken; Bedienelemente ohne Wirkung werden ausgeblendet.
 - Seitenleiste, Kopf und Inhalt springen nie; Kanten fluchten. Funktionen leben eingebettet in der Ansicht, nicht in Zusatzfenstern.
-- Farben nach `BUTTON_ROLE_RULES`: Rot nur Löschen, Grün nur Bestätigen, festes Lila für Hinzufügen und Neu, Gelb für Hinweise, sonst neutral. Knöpfe nie von Hand einfärben.
+- Farben nach `BUTTON_ROLE_RULES`: Rot nur Löschen, Grün nur Bestätigen, gewählte Themenfarbe für Hinzufügen und Neu, Gelb für Hinweise, sonst neutral. Knöpfe nie von Hand einfärben.
 - Mindestgröße 860 × 700 ohne Quetschen oder Anschneiden; jeder Text erreicht WCAG 2.2 AA in allen Designs.
 - Hinweisblöcke in Seiten bleiben gestalterisch unverändert (D06); ergänzende Ansichtshinweise sind seit B06 (D50) über den gespeicherten Schalter in Einstellungen/Persönlich ein-/ausblendbar (präzisierte D11).
 

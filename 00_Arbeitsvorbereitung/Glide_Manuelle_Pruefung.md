@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 
@@ -8,13 +8,22 @@ Nach dem technischen Abschluss mit den tatsächlich gelieferten Paketen prüfen:
 
 **Bis Bedarf zurückgestellt:** Screenreader-Abnahme einschließlich VoiceOver, NVDA und Orca ist kein aktiver offener 3.50-Punkt. Die unten erhaltenen Readeranleitungen sind optionale spätere Prüfhilfe; reine Tastaturbedienung bleibt Teil der normalen menschlichen Prüfung.
 
-
-<a id="abschlussrunde-31102026--noch-menschlich-zu-bestätigen"></a>
 <a id="aktuelle-abschlussrunde"></a>
 
+## Offene Sichtabnahme 3.52.0 (D76, 09.11.2026)
+
+Der lokale, nicht commitete Kandidat 3.52.0 hat noch keine menschliche oder native Paketfreigabe. Die automatisierte Windows-Vollprüfung dieses Stands endete mit Exitcode 0 (130/131 Schritte; die menschliche Sichtprüfung wurde übersprungen). Die folgenden D76-Punkte sind weiterhin separat am selben Quellstand zu prüfen. Frühere Haken oder Prüfungen auf 3.50.x/3.51.0 übertragen sich nicht automatisch. Die D76-Aktionsfarben ergänzen die ältere D68-Prüfung der Ansichtstitelfarbe; sie ersetzen sie nicht.
+
+**Teilrückmeldung des Inhabers, 10.11.2026:** Schriftgewicht und Schriftgröße wirken passend; für Kreativ und Klassisch wurde zusätzlicher Zeichenabstand von 0,2 px angeregt. Der Zeichenabstand ist keine vorhandene D76-Anforderung und wurde nicht geändert. Ohne Plattformvergleich und Prüfung von Umbruch, Ausrichtung und Textmessung bleibt die vollständige Schriftabnahme offen.
+
+- [ ] **Schriftgewicht:** Gewicht unabhängig von Schriftgröße für Modern, Technisch, Kreativ und Klassisch wählen, speichern und nach Neustart prüfen. Kreativ und Klassisch müssen automatisch kräftiger erscheinen; große Schrift darf weder abgeschnitten noch unleserlich werden.
+- [ ] **Kopflogo:** Die neue Verschiebung um 2 px nach rechts und proportionale Vergrößerung nach oben prüfen. Unterkante bleibt an der Unterzeile, der Titel an seiner bisherigen Position. Ansichten mit und ohne Kennzahlenchips, Hell/Dunkel und große Schrift einbeziehen.
+- [ ] **Themenfarbe:** Alle Themenfarben und Kontrastgrau prüfen. Hinzufügen und die bisher lila Aktionsakzente folgen der Auswahl; Löschen bleibt rot, Bestätigen grün. Ruhezustand, Hover, Tastaturfokus und Neustart kontrollieren.
+
+<a id="abschlussrunde-31102026--noch-menschlich-zu-bestätigen"></a>
 <a id="aktuelle-abschlussrunde-3502"></a>
 
-## Aktuelle Abschlussrunde 3.50.5
+## Weiterführende Prüfliste aus 3.50.5 (keine 3.52.0-Abnahme)
 
 **Mac-Sitzung 07.11.2026 (D66–D69, D71, Plan §21.76):** Eingefrorene Python-Prüffassung 3.50.5 mit Tk 9.1 und eigener synthetischer Showcase-Kopie. Inhaberbefunde: Systemscrollleiste in der Live-Liste, zu lange Neuerungenkarte, fehlende Unterzeile neben dem Logo; dazu Auftrag zu strikten Maximallängen mit Restzähler und zu langen Anhangsnamen. In der Quelle korrigiert und automatisch geprüft; die folgenden Punkte sind in der neuen Prüffassung menschlich zu bestätigen.
 
@@ -36,7 +45,7 @@ Nach dem technischen Abschluss mit den tatsächlich gelieferten Paketen prüfen:
 - [ ] **Abschnitte:** Seiten/Listen/Notizen/Zeichnungen: Überschrift mit enger Zugehörigkeit zum ersten Eintrag, auch nach Einklappen und großer Schrift.
 - [ ] **Suchfelder:** Startseite mit Anfrage + Enter in globale Suche, Treffer öffnen. Vorlagenfilter nach Titel/Inhalt, keine Treffer, Escape und Wechsel zwischen beiden Ansichten prüfen.
 
-Aktueller Gesamtnachweis: [3.50.5](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md). Die folgenden Rückmeldungen und Teilfreigaben bleiben an ihre ursprünglichen Quell-/Pakethashes gebunden; kein neuer Haken aus automatischen Prüfungen.
+Gesamtnachweis der damaligen 3.50.5-Fassung: [3.50.5](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md). Die folgenden Rückmeldungen und Teilfreigaben bleiben an ihre ursprünglichen Quell-/Pakethashes gebunden; kein neuer Haken aus automatischen Prüfungen und keine automatische Freigabe für 3.52.0.
 
 - [ ] **Suchzeilenbreite, erneuter Befund 05.11.:** Aktuelle Python-Prüffassung `1c48a095…`: im Buch ohne Suchanfrage endet das Suchfeld bündig mit der rechten Außenkante der Inhaltskarte. Mindestbreite/breit und volle/schmale/ausgeblendete Seitenleiste samt Rückwechsel prüfen. Suchwort eingeben: „Suche löschen“ bleibt vollständig sichtbar und mit Abstand erreichbar; nach Löschen reicht das Feld wieder bis zur Inhaltskante. Labels/Liste nach Ansichtswechsel mitprüfen. Keine Freigabe aus der automatischen Prüfung. [Aktueller Nachweis](../01_Repository/Glide/tests/qa-3.50.4/suchbreite_2026-11-05/README.md).
 
@@ -70,7 +79,9 @@ Die ersten Rückmeldungen (Briefing/Scrollen, Ansichtswechsel und funktionierend
 - [ ] **Labels in der Kartenecke (02.11.2026):** Seite, Liste und Ordner mit ein, zwei und vielen Labels öffnen: Chips oben rechts in der Inhaltskarte, Rest als „+n“, keine Überdeckung von Titel, erster Zeile, Tabellenkopf oder Pinnwandleiste. Ohne Labels kein Freiraum. Hell/Dunkel, 860/1280 px, volle Lesebreite und Fenstergröße ändern.
 - [ ] **Hinweise bei schmaler Breite (02.11.2026):** Mit eingeschalteten Bedienhinweisen das Fenster langsam schmaler ziehen: Sobald das Logo verschwindet, verschwinden Kartenfußhinweis, Werkzeugleistenhinweis der Seite, Pinnwand-Tastenzeile und Untertitel; der Inhalt rückt nach. Breiter ziehen und Kompaktmodus ein/aus prüfen; Auswahlzahl der Pinnwand bleibt.
 - [ ] **Werkzeugzeile und Pinnwand (02.11.2026):** Abstand zwischen Eingabe-/Suchzeile und Inhaltskarte in Liste, Tabelle, Pinnwand, Ordner, Heute und Seite wirkt gleichmäßig; Pinnwandfläche in Kartenfarbe auch mit eigener Hintergrundfarbe; ☷/⊞/▨ ganz rechts, „≡“ und „Spalten“ links davon.
-- [ ] **Schriftstile D60 / 3.50.2:** Frischer Start zeigt Rubik. In den Einstellungen Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display und Klassisch: Fraunces wählen, speichern und neu starten. Beide Serifenschriften in „klein“ mit kräftiger Grundschrift und weiterhin erkennbaren fetten/kursiven Hervorhebungen; DejaVu steht nicht zur Auswahl. Deutsche Zeichen, Symbole, Hell/Dunkel, 100/150/200 % DPI sowie 860 × 700 prüfen.
+- [ ] **Schriftstile und Symbole D77 / 3.53.0:** Frischer Start zeigt Rubik. In den Einstellungen Modern: Rubik, Technisch: DM Mono, Kreativ: DM Serif Display und Klassisch: Charis SIL wählen, speichern und neu starten. Schriftgröße und Gewicht getrennt prüfen; Kreativ/Klassisch automatisch kräftig sowie alle vier Stile in Standard/Kräftig und kursiv ansehen. Deutsche Zeichen, Symbole, Hell/Dunkel, 100/150/200 % DPI sowie 860 × 700 prüfen. DejaVu bleibt intern für fehlende UI-Symbole, ist aber keine Auswahl. Automatisierte Änderungszuordnung und direkte Testfälle stehen im [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md#schrift--und-symboländerungen--d77-10112026).
+
+**Sichtabnahme D77, 10.11.2026:** Der Inhaber hat die befüllte lokale Windows-Prüffassung 3.53.0 mit dem fiktiven Parkquartier-Showcase durchgesehen und zurückgemeldet: „passt alles“. Die gezeigte Darstellung ist damit visuell akzeptiert; einzelne Schrift-, Gewicht-, Modus-, DPI- und Fenstergrößenkombinationen wurden nicht separat protokolliert. Deshalb bleibt die obige vollständige Matrix offen.
 - [ ] **Pixelgrund (03.11.2026):** Neues Pixelsymbol zeichnen und einer Seite/Liste zuweisen: in Seitenleiste, Angeheftet und Seitenkopf kein weißer Kasten, auch im Dunkelmodus. Mit „Weiß“ gefüllte Fläche bleibt weiß, karierter Grund bleibt durchsichtig.
 - [ ] **Import:** CSV/ICS neu und an vorhandene Liste, TXT und Austauschformat importieren, Inhalt/Labels prüfen und vollständig rücknehmen. Die automatischen Schreib-/Nachlauffehlerbelege ergänzen diese reale Bedienprüfung.
 - [ ] **Pinnwand:** Bildvorschau und Titelbild bei 100/125/150/200 % sowie Präsentation prüfen; Auswahl, Drag, Zoomposition, Text-/Bildschärfe, Druckvorschau und Rückweg kontrollieren. Der historische macOS-Laufzeitbefund ist durch eine schnelle Einzelmessung nicht ursächlich geklärt.
@@ -521,7 +532,7 @@ Automatisch belegt mit `test_wiederholen.py` (neun Fälle über echte Tastenwege
 
 ## Arbeitsmodi und Seitenbedienung (D55, seit 3.45.0 geliefert)
 
-Historischer D55-Nachweis: `test_arbeitsmodi.py` mit 13 echten Tk-Fällen und Knopfschutz B15 unter Linux/Xvfb/Tk 8.6. D55 ist inzwischen seit 3.45.0 geliefert; die datierte 3.48.0-Erweiterung zählte 26 automatisch geprüfte Fälle ([Nachweis](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)). Hier bleibt die Sicht- und Bedienabnahme am echten Gerät, je Plattform hell/dunkel, ein Verlaufsdesign, mittlere/große Schrift und Windows 100/150 % DPI. Der Showcase-Starter verwendet die Python-Lieferung 3.50.2 einschließlich D55. `01_Repository/Glide/tests/tools/kandidat_starten.pyw` verwendet die Quelle 3.50.2 mit separatem künstlichem Showcase unter `GlidePruefung/kandidat_showcase`; deren Bytegleichheit zur Python-Lieferung und die älteren nativen Pakete sind im [aktuellen Audit](../01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md) getrennt erfasst. Start nur im jeweils beauftragten Prüfumfang.
+Historischer D55-Nachweis: `test_arbeitsmodi.py` mit 13 echten Tk-Fällen und Knopfschutz B15 unter Linux/Xvfb/Tk 8.6. D55 ist inzwischen seit 3.45.0 geliefert; die datierte 3.48.0-Erweiterung zählte 26 automatisch geprüfte Fälle ([Nachweis](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)). Hier bleibt die Sicht- und Bedienabnahme am echten Gerät, je Plattform hell/dunkel, ein Verlaufsdesign, mittlere/große Schrift und Windows 100/150 % DPI. Der Showcase-Starter verwendet die Python-Lieferung 3.50.2 einschließlich D55. `01_Repository/Glide/tests/tools/kandidat_starten.pyw` verwendet die Quelle 3.50.2 mit separatem künstlichem Showcase unter `GlidePruefung/kandidat_showcase`; deren Bytegleichheit zur Python-Lieferung und die älteren nativen Pakete sind im [aktuellen Audit](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md) getrennt erfasst. Start nur im jeweils beauftragten Prüfumfang.
 
 - [ ] Seite: „Mehr“ öffnet die Auswahl „Seitenaktionen“ direkt unter dem Knopf; „volle breite“ oder „druck“ tippen filtert sofort, Enter führt den ersten Treffer aus, Esc schließt und die Schreibmarke steht wieder im Text; ein gesperrter Eintrag nennt seinen Grund (Schreibmarke in normalem Text: „In Liste übernehmen …“ – „Nur für eine Aufgabe dieser Seite an der Schreibmarke“). „Mehr“ enthält kein „Kopieren“: „Seite kopieren“ kopiert die ganze Seite (Hinweis „Seite kopiert“), und Enter auf „Seite aus Zwischenablage einfügen“ fügt die Zwischenablage sofort in die Seite ein. Nirgends steht „Markdown“ außer bei „Als Markdown speichern …“ und in Formatlisten (Datei › Exportieren, Dateidialoge). Notiz: dieselbe Auswahl heißt „Notizaktionen“. **Windows 25.10.2026: abgenommen** (Mac offen).
 - [ ] Strg/Cmd+/ in einer Aufzählung: Kopf „Blockaktionen · Aufzählung“, Häkchen an „Aufzählung“; ohne Markierung sind „Ausschneiden“ und „Kopieren“ gesperrt mit „Zuerst Text markieren“; „Überschrift 2“ wählen, ein Strg/Cmd+Z nimmt es zurück. Griff ⠿ links der Zeile beim Überfahren und an der Schreibmarke, auf Höhe der ersten Zeile eines umbrochenen Absatzes; verschwindet beim Tippen; keine Überdeckung des Texts, auch bei großer Schrift und nach Scrollen. **Windows 25.10.2026: abgenommen**, große Schrift offen (Mac offen).

@@ -3638,6 +3638,7 @@ def fall_seitenleistenzeilen3507(lauf):
                     font_height = app.sidebar_row_font().metrics("linespace")
                     for name, style, minimum, padding in (
                             ("system_listbox", "System.Treeview", 28, 8),
+                            ("pages_listbox", "Sidebar.Treeview", 30, 10),
                             ("sidebar_listbox", "Sidebar.Treeview", 30, 10),
                             ("notes_listbox", "Sidebar.Treeview", 30, 10),
                             ("drawings_listbox", "Sidebar.Treeview", 30, 10)):
@@ -3651,6 +3652,10 @@ def fall_seitenleistenzeilen3507(lauf):
                             box = tree.bbox(item)
                             if box:
                                 assert box[3] == height, (context, name, box, height)
+                                if tree.set(item, "count"):
+                                    count_x, _, count_width, _ = tree.bbox(item, "count")
+                                    assert box[0] + box[2] - (count_x + count_width) == 3, (
+                                        "Zählerrand", context, name, box, count_x, count_width)
                                 rows += 1
                     # Auch angeheftete Zeilen müssen nach dem Designwechsel lesbar bleiben.
                     for _, pinned_row in app.pinned_sidebar_rows:
@@ -3681,6 +3686,16 @@ def fall_seitenleistenabstand3504(lauf):
     lauf.showcase()
     app.set_labels_view()
     checks = 0
+
+    for button in (app.add_pages_button, app.add_list_button, app.add_notes_button, app.add_drawings_button):
+        assert button.winfo_ismapped() and not button.outline
+        button.event_generate("<Leave>")
+        idle(lauf)
+        assert button.itemcget(button.find_all()[0], "fill") == ""
+        button.event_generate("<Enter>")
+        idle(lauf)
+        assert button.itemcget(button.find_all()[0], "fill") == button.hover_fill
+        button.event_generate("<Leave>")
 
     def pruefen(context):
         nonlocal checks
@@ -3975,9 +3990,10 @@ def fall_schriftstile(lauf):
     """Vier Stilklassen über die echten Einstellungen speichern und neu laden."""
     mod = lauf.mod
     assert lauf.app.ui_font_family() == "Rubik", lauf.app.ui_font_family()
-    expected = ("Modern: Rubik", "Technisch: Roboto Mono",
-                "Kreativ: Playfair Display", "Klassisch: Fraunces")
+    expected = ("Modern: Rubik", "Technisch: DM Mono",
+                "Kreativ: DM Serif Display", "Klassisch: Charis SIL")
     assert mod.glide_fonts.LABELS == expected
+    gewicht_index = 0
     for index in (1, 2, 3, 0):
         app = lauf.app
         style = mod.glide_fonts.STYLES[index]
@@ -3991,7 +4007,9 @@ def fall_schriftstile(lauf):
             idle(lauf)
             assert auswahl.variable.get() == style.label, (index, auswahl.variable.get(), style.label)
             groesse = next(feld for feld in felder if tuple(feld.options) == tuple(app.UI_FONT_SIZE_CHOICES))
-            groesse.menu.invoke(0 if style.body_family else 1)
+            groesse.menu.invoke(0 if style.automatic_bold else 1)
+            gewichte = next(feld for feld in felder if tuple(feld.options) == app.UI_FONT_WEIGHT_CHOICES)
+            gewichte.menu.invoke(gewicht_index)
             idle(lauf)
             speichern = next(knopf for knopf in knoepfe(dialog, mod.RoundedButton) if knopf.text == "Speichern")
             speichern.command()
@@ -4003,7 +4021,9 @@ def fall_schriftstile(lauf):
         assert app.ui_font_family() == style.default_family, (
             style.label, app.ui_font_family(), style.default_family,
             mod.tkfont.Font(root=lauf.root, family=style.default_family, size=12).actual(),
-            [name for name in app.available_font_families() if 'playfair' in name.lower() or 'fraunces' in name.lower()])
+            [name for name in app.available_font_families()
+             if any(part in name.lower() for part in ("dm mono", "dm serif", "charis"))])
+        assert ("bold" in app.tree_font()[2:]) == style.automatic_bold, style.label
         for gewicht in ("normal", "bold"):
             for neigung in ("roman", "italic"):
                 familie = mod.glide_fonts.family_for_weight(style.default_family, gewicht == "bold", neigung == "italic")
@@ -4012,19 +4032,27 @@ def fall_schriftstile(lauf):
                 assert font.actual("family") == mod.glide_fonts.actual_family(familie), (style.label, font.actual())
                 assert font.measure("Glide ÄÖÜ äöü ß 0123456789") > 0
                 assert mod.bundled_glyph_metrics(gewicht == "bold", familie, neigung == "italic") is not None
-        if style.body_family:
+        for name, text in app.ICONS.items():
+            erwartet = app._symbol_fonts.get(name, app.ui_font_family())
+            erwartet = mod.glide_fonts.actual_family(erwartet, sys.platform).casefold()
+            for gewicht in ("normal", "bold"):
+                font = mod.tkfont.Font(root=lauf.root, font=app.symbol_font(name, 12))
+                font.configure(weight=gewicht)
+                familien = tuple(str(lauf.root.tk.call("font", "actual", font.name, "-family", zeichen))
+                                 for zeichen in text)
+                assert all(familie.casefold() == erwartet for familie in familien), (
+                    style.label, name, text, erwartet, familien, gewicht)
+        if style.automatic_bold:
             for size in (8, 9, 10, 11):
                 for gewicht in ("normal", "bold"):
                     specification = mod.app_font(size, *(() if gewicht == "normal" else ("bold",)), root=lauf.root)
                     font = mod.ui_font_object(root=lauf.root, font=specification)
-                    familie = style.default_family if gewicht == "normal" else style.tk_family
+                    familie = style.tk_family
                     assert font.cget("family") == familie, (style.label, size, font.cget("family"))
                     assert font.actual("family") == mod.glide_fonts.actual_family(familie), (style.label, size, font.actual())
-                    # Tk meldet den physischen 600er-Schnitt unter Windows als
-                    # bold, obwohl normal angefordert wird. Familie + Tupel
-                    # unterscheiden SemiBold und den echten 700er-Schnitt.
-                    assert ("bold" in specification[2:]) == (gewicht == "bold")
-            assert app.tree_font()[0] == style.default_family
+                    assert "bold" in specification[2:]
+            assert app.tree_font()[0] == style.tk_family and "bold" in app.tree_font()[2:]
+            assert app.sidebar_row_font().actual("weight") == "bold"
             assert app.sidebar_section_font()[0] == style.tk_family
             assert app.header_title_font()[0] == style.tk_family
             assert app.settings["ui_font_size"] == "klein"
@@ -4036,13 +4064,13 @@ def fall_schriftstile(lauf):
             app.set_active_list(liste["id"])
             app.open_list_view()
             idle(lauf, 6)
-            assert app.task_row_font().actual("family") == mod.glide_fonts.actual_family(style.default_family)
+            assert app.task_row_font().actual("family") == style.tk_family
             assert app.tree.bbox(liste["items"][0]["id"]), style.label
         assert all(app.ICONS[key] == type(app).ICONS[key] for key in ("home", "today", "settings"))
         lauf.neustart()
         assert lauf.app.settings["ui_font_family"] == style.family
         assert lauf.app.ui_font_family() == style.default_family
-        if style.body_family:
+        if style.automatic_bold:
             app = lauf.app
             lauf.root.geometry("860x700+20+20")
             heading = mod.tkfont.Font(root=lauf.root, font=app.sidebar_title.cget("font"))
@@ -4050,7 +4078,7 @@ def fall_schriftstile(lauf):
             app.set_active_list(liste["id"])
             app.open_list_view()
             idle(lauf, 6)
-            assert app.task_row_font().actual("family") == mod.glide_fonts.actual_family(style.default_family)
+            assert app.task_row_font().actual("family") == style.tk_family
             if getattr(lauf, "capture", None) is not None and sys.platform == "win32":
                 sys.path.insert(0, str(REPO / "tests/tools"))
                 from releasedaten import save_windows_screenshot
@@ -4059,7 +4087,14 @@ def fall_schriftstile(lauf):
                     app.set_design(design)
                     idle(lauf, 6)
                     save_windows_screenshot(lauf.root, lauf.capture / f"{style.key}-klein-{design}.png")
-    return "Vier korrigierte Stilklassen gespeichert und nach Neustart erhalten; Playfair/Fraunces SemiBold normal, echtes Bold bei 8–11 pt, Metriken einschließlich Italic; Rubik Vorgabe, Symbole vollständig"
+    for gewicht_index, gewicht in ((1, "Standard"), (2, "Kräftig")):
+        app = lauf.app
+        with patch.object(app, "run_modal", auswaehlen):
+            app.show_settings_dialog()
+        lauf.neustart()
+        assert lauf.app.settings["ui_font_weight"] == gewicht
+        assert lauf.app.task_row_font().actual("weight") == ("bold" if gewicht_index == 2 else "normal")
+    return "Vier Stilklassen und Schriftgewicht gespeichert; DM Serif Display und Charis SIL automatisch Bold, Standard und Kräftig nach Neustart"
 
 
 def fall_kartenflaechen(lauf):
@@ -4278,6 +4313,7 @@ def fall_neuerungen3(lauf):
     app, mod = lauf.app, lauf.mod
     lauf.showcase()
     rn = mod.glide_release
+    verlauf = rn.history(mod.APP_VERSION)
     befund = []
     from itertools import product
     for schrift, groesse, design, geometry in product(
@@ -4298,9 +4334,9 @@ def fall_neuerungen3(lauf):
         texte = [str(w.cget("text")) for w in knoepfe(app.home_content, mod.tk.Label)]
         versionen = [text for text in texte if text.startswith("Version ")]
         # Entscheidung D66: höchstens drei; der Katalog hat mehr, also genau drei.
-        assert len(rn.history(mod.APP_VERSION)) > 3
+        assert len(verlauf) > 3
         assert len(versionen) == 3, ("Karte zeigt nicht genau drei Versionen", len(versionen), versionen[:6])
-        assert versionen[0] == f"Version {mod.APP_VERSION}", versionen
+        assert versionen[0] == f"Version {verlauf[0][0]}", versionen
         gelesen = [k for k in knoepfe(app.home_content, mod.RoundedButton) if k.text == "Gelesen"]
         assert gelesen, "„Gelesen“ fehlt"
         unten = gelesen[0].winfo_rooty() + gelesen[0].winfo_height()

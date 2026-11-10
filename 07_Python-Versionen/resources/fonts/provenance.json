@@ -28,27 +28,27 @@
       }
     },
     {
-      "name": "Roboto Mono",
-      "use": "Technisch: Roboto Mono; auswählbarer Textstil",
-      "license": "SIL Open Font License 1.1 (ohne reservierten Schriftnamen)",
-      "copyright": "Copyright 2015 The Roboto Mono Project Authors",
-      "source": "https://github.com/googlefonts/robotomono",
-      "version": "3.001",
-      "retrieved": "2026-11-03",
-      "project_copy": "20_Grafik_Master/07_Fonts/02_Roboto_Mono (unveränderte statische Schnitte des Inhabers)",
+      "name": "DM Mono",
+      "use": "Technisch: DM Mono; Medium 500 für Kräftig, Regular und Medium kursiv",
+      "license": "SIL Open Font License 1.1",
+      "copyright": "Copyright 2020 The DM Mono Project Authors",
+      "source": "https://github.com/google/fonts/tree/main/ofl/dmmono",
+      "version": "1.000",
+      "verified": "2026-11-10",
+      "project_copy": "20_Grafik_Master/07_Fonts/07_DM_Mono (unveränderte statische Schnitte des Inhabers)",
       "files": {
-        "RobotoMono-Regular.ttf": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
-        "RobotoMono-Bold.ttf": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
-        "RobotoMono-Italic.ttf": "82629b0b8a721ce1a79942f68b39438512b406dad2a4a7476c94b72e7794b2f4",
-        "RobotoMono-BoldItalic.ttf": "5bc2918abfd7399aff52e0a7ee22c97d544601f7ae8ff3b49ad176497acff1ed",
-        "OFL-RobotoMono.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+        "DMMono-Regular.ttf": "f98ada968dc3b6b2c08d3f5caaf266977df0bfe0929372b93df5a06cf2ace450",
+        "DMMono-Medium.ttf": "8055df2253a84993c7f16586fac775f2f7fcf1bfd191fa23bc1058a58969782a",
+        "DMMono-Italic.ttf": "a15c5f16fbfc45b97168f8cedd959149298639bc93e95c0f7be44f7de7508d5b",
+        "DMMono-MediumItalic.ttf": "f6b7a415ecfb6ab07c148fe53c9b03409ca1969c1d49758122a9515b93fdfe91",
+        "OFL-DMMono.txt": "0f2c192cfa63e591f680392d1792ff06e52a76ef81f70841ccb0b36c11b61826"
       },
       "upstream_paths": {
-        "RobotoMono-Regular.ttf": "static/RobotoMono-Regular.ttf",
-        "RobotoMono-Bold.ttf": "static/RobotoMono-Bold.ttf",
-        "RobotoMono-Italic.ttf": "static/RobotoMono-Italic.ttf",
-        "RobotoMono-BoldItalic.ttf": "static/RobotoMono-BoldItalic.ttf",
-        "OFL-RobotoMono.txt": "OFL.txt"
+        "DMMono-Regular.ttf": "static/DMMono-Regular.ttf",
+        "DMMono-Medium.ttf": "static/DMMono-Medium.ttf",
+        "DMMono-Italic.ttf": "static/DMMono-Italic.ttf",
+        "DMMono-MediumItalic.ttf": "static/DMMono-MediumItalic.ttf",
+        "OFL-DMMono.txt": "OFL.txt"
       }
     },
     {
@@ -77,61 +77,44 @@
       }
     },
     {
-      "name": "Playfair Display",
-      "use": "Kreativ: Playfair Display; Lesetext SemiBold 600, Hervorhebung Bold 700",
+      "name": "DM Serif Display",
+      "use": "Kreativ: DM Serif Display; Regular/Italic, Bold über Tk-Gewicht",
       "classification": "Kreativ",
       "license": "SIL Open Font License 1.1",
-      "reserved_font_name": "Playfair Display",
-      "source": "https://github.com/clauseggers/Playfair-Display",
-      "version": "1.203",
-      "retrieved": "2026-11-03",
-      "project_copy": "20_Grafik_Master/07_Fonts/03_Playfair_Display",
+      "copyright": "Copyright 2014-2018 Adobe; Copyright 2019 Google LLC",
+      "reserved_font_name": "Source",
+      "source": "https://github.com/google/fonts/tree/main/ofl/dmserifdisplay",
+      "version": "5.200",
+      "verified": "2026-11-10",
+      "project_copy": "20_Grafik_Master/07_Fonts/06_DM_Serif_Display (unveränderte statische Schnitte des Inhabers)",
       "files": {
-        "PlayfairDisplay-Regular.ttf": "861f838d481d28cbbd4793e45dc02f01d04c81e06ed98ab2779ca152ace9f27b",
-        "PlayfairDisplay-Bold.ttf": "4f3b87b5aa297eed5e5a48dbd9941356ca0313d4725b02c29a298cb042b7b31b",
-        "PlayfairDisplay-Italic.ttf": "40a6afa92220254c2c426ccef129d3615dd19e4c591fbfa997e5f28ebba8302c",
-        "PlayfairDisplay-BoldItalic.ttf": "db5737059ff617317aca97e9e35730f8933a2e187c75bbe2deaf45c4d72f5b1d",
-        "OFL-PlayfairDisplay.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
-        "PlayfairDisplay-SemiBold.ttf": "0f8ae66ea018739838dac8fc0a70f9dd6fe8806bf4f63bb35b3c643480221d31",
-        "PlayfairDisplay-SemiBoldItalic.ttf": "20fc46693b21b25f042b8542d41a1e5a86bdfdeb363e1878be05fdd7c8ad8166"
+        "DMSerifDisplay-Regular.ttf": "3722299d62af9b61d36c7834c0845269462de7dce47e810cac3be4c683b8e8b2",
+        "DMSerifDisplay-Italic.ttf": "586b6df8de9ade079b25e0308910f2e86d0f060b1f5c8c1cd8e803c14d89f4d3",
+        "OFL-DMSerifDisplay.txt": "3eb3b9a4caffd436819224822c59aec7f39080338ff981a28590e74aad422d5d"
       },
       "upstream_paths": {
-        "PlayfairDisplay-Regular.ttf": "static/PlayfairDisplay-Regular.ttf",
-        "PlayfairDisplay-Bold.ttf": "static/PlayfairDisplay-Bold.ttf",
-        "PlayfairDisplay-Italic.ttf": "static/PlayfairDisplay-Italic.ttf",
-        "PlayfairDisplay-BoldItalic.ttf": "static/PlayfairDisplay-BoldItalic.ttf",
-        "OFL-PlayfairDisplay.txt": "OFL.txt",
-        "PlayfairDisplay-SemiBold.ttf": "static/PlayfairDisplay-SemiBold.ttf",
-        "PlayfairDisplay-SemiBoldItalic.ttf": "static/PlayfairDisplay-SemiBoldItalic.ttf"
+        "DMSerifDisplay-Regular.ttf": "static/DMSerifDisplay-Regular.ttf",
+        "DMSerifDisplay-Italic.ttf": "static/DMSerifDisplay-Italic.ttf",
+        "OFL-DMSerifDisplay.txt": "OFL.txt"
       }
     },
     {
-      "name": "Fraunces",
-      "use": "Klassisch: Fraunces; Lesetext SemiBold 600, Hervorhebung Bold 700",
+      "name": "Charis SIL",
+      "use": "Klassisch: Charis SIL; Regular, Bold und beide Italic-Schnitte",
       "classification": "Klassisch",
       "license": "SIL Open Font License 1.1",
-      "reserved_font_name": null,
-      "source": "https://github.com/undercasetype/Fraunces",
-      "version": "1.000",
-      "retrieved": "2026-11-03",
-      "project_copy": "20_Grafik_Master/07_Fonts/04_Fraunces",
+      "copyright": "Copyright (c) 1997-2022 SIL International",
+      "reserved_font_name": "Charis, SIL",
+      "source": "https://github.com/silnrsi/font-charis-sil",
+      "version": "6.101",
+      "verified": "2026-11-10",
+      "project_copy": "20_Grafik_Master/07_Fonts/05_Charis_SIL (unveränderte statische Schnitte des Inhabers)",
       "files": {
-        "Fraunces_72pt-Regular.ttf": "a6152c9249698b121ddcd66116b94185e1631a331763e52b8840006885f30813",
-        "Fraunces_72pt-Bold.ttf": "6f6ec15b30f3d66e30084322e0f70fcbb0ab64116a81d3a0feb097154530cd87",
-        "Fraunces_72pt-Italic.ttf": "8764b6b5c734eda35361609720da2da0043918008dc8b7fac9a3d20ddf3b2ecb",
-        "Fraunces_72pt-BoldItalic.ttf": "c03f9dc34b35fdf58b59c6a56991c2ae8ceef5d1f42ee8433fbab6e837ad7064",
-        "OFL-Fraunces.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
-        "Fraunces_72pt-SemiBold.ttf": "e70276daed1f9335e4d87e6cf76965339d105bd945f97ab900ffd0c9bdcdc204",
-        "Fraunces_72pt-SemiBoldItalic.ttf": "8bf4147db3c6b328ca13bb0bb311e6d716ecd1af00be6cd89940505515ba76d0"
-      },
-      "upstream_paths": {
-        "Fraunces_72pt-Regular.ttf": "static/Fraunces_72pt-Regular.ttf",
-        "Fraunces_72pt-Bold.ttf": "static/Fraunces_72pt-Bold.ttf",
-        "Fraunces_72pt-Italic.ttf": "static/Fraunces_72pt-Italic.ttf",
-        "Fraunces_72pt-BoldItalic.ttf": "static/Fraunces_72pt-BoldItalic.ttf",
-        "OFL-Fraunces.txt": "OFL.txt",
-        "Fraunces_72pt-SemiBold.ttf": "static/Fraunces_72pt-SemiBold.ttf",
-        "Fraunces_72pt-SemiBoldItalic.ttf": "static/Fraunces_72pt-SemiBoldItalic.ttf"
+        "CharisSIL-Regular.ttf": "6e006f4d80139119c2be9250ccfa19d423cdc48d5185a9ed1a9cbbc380719537",
+        "CharisSIL-Bold.ttf": "deab36e7cfa694c2c4f5d7921eef7060af7b997475f833b0f58e56c39524f640",
+        "CharisSIL-Italic.ttf": "95e4eda1f44c164350a9b7d908d6a443a1848145cb009809ab64be4578b9d956",
+        "CharisSIL-BoldItalic.ttf": "c899862d99112b93d26e50057c46f5841853c0eaef801d7711040ac45a4a7e1f",
+        "OFL-CharisSIL.txt": "c4a20f23e692c70f10c6e0136e683497be4e72e8122d01ee2b644fe2b33eb7fd"
       }
     }
   ]

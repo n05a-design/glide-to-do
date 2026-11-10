@@ -12,21 +12,27 @@ SCHRIFTEN = Path(__file__).resolve().parents[2] / "src/glide/resources/fonts"
 
 
 class GlyphMetrics(unittest.TestCase):
-    def test_serif_body_files_are_real_semibold_with_heavier_bold(self):
-        from font_catalog import STYLES
-        for style in STYLES:
-            if not style.body_regular:
-                continue
-            for filename, weight in ((style.body_regular, 600),
-                                     (style.body_regular.replace(".ttf", "Italic.ttf"), 600),
-                                     (style.bold, 700), (style.bold.replace(".ttf", "Italic.ttf"), 700)):
-                with self.subTest(style=style.label, file=filename):
-                    data = (SCHRIFTEN / filename).read_bytes()
-                    offset = gm.FontMetrics._tables(data)[b"OS/2"]
-                    self.assertEqual(struct.unpack_from(">H", data, offset + 4)[0], weight)
-                    font = gm.load(SCHRIFTEN / filename)
-                    self.assertTrue(all(font.covers(char) for char in "ÄÖÜäöüßgjpqy0123456789"))
-                    self.assertGreater(font.cap_height, 0)
+    def test_selected_static_faces_have_expected_weights_and_metrics(self):
+        faces = (
+            ("DMMono-Regular.ttf", 400),
+            ("DMMono-Medium.ttf", 500),
+            ("DMMono-Italic.ttf", 400),
+            ("DMMono-MediumItalic.ttf", 500),
+            ("DMSerifDisplay-Regular.ttf", 400),
+            ("DMSerifDisplay-Italic.ttf", 400),
+            ("CharisSIL-Regular.ttf", 400),
+            ("CharisSIL-Bold.ttf", 700),
+            ("CharisSIL-Italic.ttf", 400),
+            ("CharisSIL-BoldItalic.ttf", 700),
+        )
+        for filename, weight in faces:
+            with self.subTest(file=filename):
+                data = (SCHRIFTEN / filename).read_bytes()
+                offset = gm.FontMetrics._tables(data)[b"OS/2"]
+                self.assertEqual(struct.unpack_from(">H", data, offset + 4)[0], weight)
+                font = gm.load(SCHRIFTEN / filename)
+                self.assertTrue(all(font.covers(char) for char in "ÄÖÜäöüßgjpqy0123456789"))
+                self.assertGreater(font.cap_height, 0)
 
     @classmethod
     def setUpClass(cls):
@@ -41,10 +47,9 @@ class GlyphMetrics(unittest.TestCase):
         self.assertFalse(self.normal.covers("\u2315"), "Die Lupe fehlt der UI-Schrift (Grund für B10)")
         self.assertIsNone(self.normal.bbox(" "))
 
-    def test_bundled_roboto_mono_reads_text_metrics_without_icon_glyphs(self):
-        # D59 (03.11.2026): Standardschrift ohne geometrische Zeichen; Text
-        # und Pfadtrenner messen, Symbole kommen aus DejaVu Sans.
-        for datei in ("RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"):
+    def test_bundled_dm_mono_reads_text_metrics_without_icon_glyphs(self):
+        # DM Mono enthält den Text, UI-Symbole bleiben beim Symbolbegleiter.
+        for datei in ("DMMono-Regular.ttf", "DMMono-Medium.ttf"):
             mono = gm.load(SCHRIFTEN / datei)
             self.assertGreater(mono.cap_height, 0)
             self.assertTrue(all(mono.covers(zeichen) for zeichen in "ÄÖÜäöüß„“…–·›€"))

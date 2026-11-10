@@ -48,6 +48,15 @@ def verified_basis(basis, runtime, versions):
     return copy.deepcopy(document)
 
 
+def copy_external_licenses(document, basis, destination):
+    """Keep the pinned basis for build dependencies, not obsolete Glide licenses."""
+    for record in document['components']:
+        if record['name'] == 'Glide':
+            continue
+        for name in record['files']:
+            shutil.copy2(basis / name, destination / name)
+
+
 def native_versions():
     import _decimal
     import _lzma
@@ -73,17 +82,15 @@ def prepare(source, repo, destination, basis):
         if records.get(name, {}).get('version') != version:
             raise ValueError('Abweichende native Bibliothek: ' + name)
     destination.mkdir(parents=True, exist_ok=False)
-    for record in document['components']:
-        for name in record['files']:
-            shutil.copy2(basis / name, destination / name)
+    copy_external_licenses(document, basis, destination)
     # Projektbelege kommen aus genau dem anschließend gebauten Quellstand.
     current = {'tkinterdnd2-LICENSE': source / 'vendor/tkinterdnd2/LICENSE',
                'DejaVu-LICENSE': source / 'resources/fonts/LICENSE',
                'PixelifySans-OFL.txt': source / 'resources/fonts/OFL-PixelifySans.txt',
-               'RobotoMono-OFL.txt': source / 'resources/fonts/OFL-RobotoMono.txt',
+               'DMMono-OFL.txt': source / 'resources/fonts/OFL-DMMono.txt',
                'Rubik-OFL.txt': source / 'resources/fonts/OFL-Rubik.txt',
-               'PlayfairDisplay-OFL.txt': source / 'resources/fonts/OFL-PlayfairDisplay.txt',
-               'Fraunces-OFL.txt': source / 'resources/fonts/OFL-Fraunces.txt',
+               'DMSerifDisplay-OFL.txt': source / 'resources/fonts/OFL-DMSerifDisplay.txt',
+               'CharisSIL-OFL.txt': source / 'resources/fonts/OFL-CharisSIL.txt',
                'IANA-LICENSE.txt': source / 'resources/timezones/LICENSE-iana.txt',
                'CLDR-LICENSE.txt': source / 'resources/timezones/LICENSE-CLDR.txt'}
     for name, original in current.items():

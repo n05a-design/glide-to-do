@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 07.11.2026 · Glide 3.50.7 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). Ausgangsstand ist 3.50.6 / Format 26 im noch offenen PR #69; die Validierungsrunde D72/D73 führt Quelle und Python auf 3.50.7, weiterhin Format 26. Der [QA-/Liefernachweis](07_QA_BERICHT.md) trennt native Pakete, automatisierte Prüfungen, native und menschliche Abnahmen. Die Versionsbezeichnung belegt keine öffentliche Release-Veröffentlichung.
+3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). PR #71 wurde am 09.11.2026 gemergt; `main` steht auf Glide 3.50.7 / Format 26 (`61a2f3a`, PR-Head `2c3e543`). Die lokale Arbeitskopie führt Änderungen bis 3.53.0; sie ist noch nicht committet oder veröffentlicht. Der [QA-/Liefernachweis](07_QA_BERICHT.md) trennt diese Stände sowie native Pakete, automatisierte Prüfungen und menschliche Abnahmen. Eine Versionsnummer belegt keine öffentliche Release-Veröffentlichung.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
@@ -15,9 +15,9 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 - Die menschliche Prüfung erfolgt anschließend durch den Inhaber: Bedienung, Tastatur, Mindestgröße/große Schrift, DPI, mehrere Monitore und konkrete Plattformabläufe. **Screenreader ist bis Bedarf zurückgestellt und kein aktiver offener 3.50-Punkt.**
 - Für einen allgemeinen signierten Vertrieb bleiben öffentliche Signatur/Notarisierung, MPL-Weitergabehinweise, Kanalunterlagen und Markenprüfung gesonderte Voraussetzungen. MPL-2.0 ist beschlossen; eine Versionsbezeichnung ersetzt keine Zertifikate oder Abnahmen.
 
-Der aktuelle Auftrag umfasst Commit und Push. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
+Der frühere Auftrag zur Zusammenführung von PR #71 umfasste Commit und Push und ist mit dessen Merge abgeschlossen. Am 10.11.2026 beauftragte der Inhaber, alle Schritte für Commit und Push von 3.53.0 zu erledigen. Ein Kandidatenbranch darf ausschließlich für die ausstehenden Remoteprüfungen gepusht werden; `main` bleibt bis zum Nachweis aller Pflichtläufe, Paketprüfungen und Abnahmen unverändert. Dies ist weder ein Auftrag zum Taggen noch zur Veröffentlichung eines Releaseartefakts oder zur Signierung. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder zusätzliche Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
 
-**Noch offene technische Releasevorbereitung (WA-46):** Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden; ein CycloneDX-/SPDX-Inventar samt automatisiertem Erzeugungs-/Prüfweg ist noch nicht umgesetzt. Vor einem entsprechend freigegebenen Release aus den vorhandenen Manifesten erzeugen und mit den tatsächlichen Artefakten abgleichen. Nicht als erfülltes Tor ausweisen. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
+**Noch offene technische Releasevorbereitung (WA-46):** Ein CycloneDX-1.6-Inventar mit geprüftem Pre-build-/Incomplete-Umfang sowie Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden. Ein dokumentierter Mac-Baustand enthielt 24 BOM-Komponenten und 37 Lizenzdateien ohne Schemafehler; der vollständige Abhängigkeitsgraph und der abschließende Abgleich eines freigegebenen Releaseartefakts fehlen weiterhin. WA-46 ist daher offen und darf nicht als vollständiger SBOM-/Releaseabschluss ausgewiesen werden. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
 
 ## Signierung und Notarisierung
 
