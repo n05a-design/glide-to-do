@@ -10,6 +10,14 @@ Nach dem technischen Abschluss mit den tatsächlich gelieferten Paketen prüfen:
 
 <a id="aktuelle-abschlussrunde"></a>
 
+## Offene Sichtabnahme 3.54.0 (D78, 10.11.2026)
+
+Für das Dreierpaket 3.54.0 sind die automatisierten Fach-, Kontrast-, Zugangs-, Animations- und Altbestandteilsprüfungen grün; die folgenden Punkte sind am echten Gerät (Hell/Dunkel, große Schrift, 860 × 700 und 1280 × 800) menschlich zu bestätigen:
+
+- [ ] **Fundortübersicht (WA-21):** Aufgabe, Seite, Notiz, Liste und Zeichnung jeweils über Aufgabeninspektor („Fundorte …“), Seiten-/Notiz-Verweismenü und Ansicht › „Fundorte anzeigen …“ prüfen: alle acht Fundortarten (Heimat, Objektverweis, Textlink, Aufgabenzeile, Live-Liste, Aufgabenbeziehung, Pinnwand, unverknüpfte Erwähnung) samt Status (`Aktiv`, `Archiv`, `Papierkorb`) erscheinen; „Öffnen“ springt in den Hauptbereich, „In Nebenansicht“ öffnet rechts ohne Verlust des Hauptentwurfs, „Erwähnung verknüpfen“ wandelt eine unverknüpfte Erwähnung in einen echten Verweis um und lässt sich mit einem Strg/Cmd+Z rückgängig machen.
+- [ ] **Pinnwand als JSON Canvas 1.0 (`.canvas`, WA-07 / FP-07 Stufe 2):** Globale, Listen- und Ordnerpinnwand mit Bereichen, Aufgaben-, Seiten-, Notiz- und Zeichnungskarten sowie beschrifteten/gerichteten/gestrichelten Verbindungen über Fläche › „Als JSON Canvas (.canvas) …“ und Datei › Exportieren › „Pinnwand als JSON Canvas (.canvas) …“ exportieren: Verlustbericht nach dem Speichern lesbar; erzeugte `.canvas`-Datei in Obsidian Canvas oder einem JSON-Canvas-Viewer öffnen und Positionen, Farben, Markdown-Inhalte und Kantenrichtungen vergleichen.
+- [ ] **Eigenzeichnungen statt klassischer Tk-Steuerelemente (`Sperrklinke = 0/0`):** `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox` und `GlideScale` in Einstellungen, Filterdialog, KI-Austausch, Vorlagen, Sicherungsvergleich und Pixel-Animation prüfen: kein Systemkästchen oder System-Listenfeld im Altstil, klare Fokusrahmen, Tastaturbedienung (Leertaste, Pfeiltasten) und Mausrad in allen Designs (Hell, Dunkel, Glas, Pixel, Kontrast).
+
 ## Offene Sichtabnahme 3.52.0 (D76, 09.11.2026)
 
 Der lokale, nicht commitete Kandidat 3.52.0 hat noch keine menschliche oder native Paketfreigabe. Die automatisierte Windows-Vollprüfung dieses Stands endete mit Exitcode 0 (130/131 Schritte; die menschliche Sichtprüfung wurde übersprungen). Die folgenden D76-Punkte sind weiterhin separat am selben Quellstand zu prüfen. Frühere Haken oder Prüfungen auf 3.50.x/3.51.0 übertragen sich nicht automatisch. Die D76-Aktionsfarben ergänzen die ältere D68-Prüfung der Ansichtstitelfarbe; sie ersetzen sie nicht.

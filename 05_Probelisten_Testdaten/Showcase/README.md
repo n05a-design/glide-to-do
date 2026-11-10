@@ -69,4 +69,4 @@ python3 -B scripts/pflege/showcase_abgleich.py
 
 Der Abgleich prüft die Demo vor der Auslieferung und ersetzt die Basisdateien; frühere Fassungen hält Git vor. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
 
-Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D63 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; die menschliche Prüfung folgt anschließend; Screenreader ist bis Bedarf zurückgestellt.
+Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D78 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; die menschliche Prüfung folgt anschließend; Screenreader ist bis Bedarf zurückgestellt.

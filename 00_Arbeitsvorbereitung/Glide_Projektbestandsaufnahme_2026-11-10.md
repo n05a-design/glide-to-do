@@ -1,8 +1,13 @@
 # Vollständige Projektbestandsaufnahme & Technisches Audit – Glide (`glide-to-do`)
 
-Stand: 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26 · Glide-System V1.15 · Git-Referenz `main` (`9e767bea`)
+Stand: 10.11.2026 · Erhoben auf Basis `main` (`9e767bea`, Glide 3.53.0 / Format 26 / Glide-System V1.15) · Fortgeschrieben auf **Glide 3.54.0** · Aufgabenformat 26 · Glide-System V1.16 (D78, Branch `codex/glide-3.54.0-release`)
 
 > **Zweck dieses Dokuments:** Eigenständige, verifizierbare Projektbestandsaufnahme und technische/dokumentarische Analyse des Glide-Repositories als Referenz für zukünftige Chats, Entwicklerinnen/Entwickler und KI-Agenten. Kanonische Aufgabenquelle bleibt [`Glide_Entwicklungsplan.md`](Glide_Entwicklungsplan.md); kanonische Fachanalyse bleibt [`Glide_Analyse.md`](Glide_Analyse.md).
+>
+> **Nachtrag 3.54.0 (D78, 10.11.2026):** Direkt im Anschluss an die Erstbestandsaufnahme auf `main` (`9e767bea`) wurden die in Abschnitt 6 und 8 aufgeführten Dokumentationslücken zu PR #75 geschlossen und auf Inhaberwahl (D78) drei Featurepakete als **Glide 3.54.0 / Format 26 / Glide-System V1.16** umgesetzt ([`Glide_Entwicklungsplan.md §21.85`](Glide_Entwicklungsplan.md#2185-dreierpaket-3540-fundortübersicht-wa-21-json-canvas-10-wa-07-und-sperrklinke-00-d78-10112026), [`Glide_Analyse.md §13.33`](Glide_Analyse.md#1333-dreierpaket-3540-fundortübersicht-wa-21-json-canvas-10-wa-07-und-sperrklinke-00-10112026)):
+> 1. **Paket 1 (`WA-21` Fundortübersicht „Fundorte anzeigen …“):** `usage_locations` und `UsageLocation` in [`object_references.py`](../01_Repository/Glide/src/glide/object_references.py) sowie `show_usage_locations_dialog` und `open_usage_location` in [`app.pyw`](../01_Repository/Glide/src/glide/app.pyw) über alle acht Fundortarten (`home`, `reference`, `rich_link`, `task_line`, `live_list`, `relation`, `pinboard`, `mention`) samt Sprung in Haupt-/Nebenansicht und Erwähnungsverknüpfung.
+> 2. **Paket 2 (`WA-07` / `FP-07` Stufe 2 JSON Canvas 1.0):** `export_json_canvas` und `CanvasExportReport` in [`pinboard_pages.py`](../01_Repository/Glide/src/glide/pinboard_pages.py) sowie `ItemWorkspace.export_board_json_canvas` in [`app.pyw`](../01_Repository/Glide/src/glide/app.pyw) für den Export jeder Pinnwand als `.canvas` mit Verlustbericht.
+> 3. **Paket 3 (`Sperrklinke = 0/0`):** Vollständige Ablösung aller 35 klassischen Tk-Steuerelemente (`28 × Checkbutton`, `2 × Radiobutton`, `4 × Listbox`, `1 × Scale`) durch `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox` und `GlideScale` in [`app.pyw`](../01_Repository/Glide/src/glide/app.pyw); Sperre in [`altbestandteile.py`](../01_Repository/Glide/tests/tools/altbestandteile.py) auf `0/0` gesetzt und in `WIDGETKLASSEN_VERBOTEN` aufgenommen.
 
 ---
 
@@ -51,7 +56,7 @@ Das Quellverzeichnis umfasst **94 Python-Dateien** (93 produktive Module + `draw
    - `backdrop.py`, `drawing_image.py`, `image_preview.py`, `pinboard_pages.py`, `drawing_prototype.pyw`.
 
 ### 2.3 Lieferkopie-Architektur (`07_Python-Versionen/`)
-- Das Verzeichnis [`07_Python-Versionen/`](../07_Python-Versionen) enthält eine direkt ausführbare Spiegelkopie aller 93 Laufzeitmodule und 171 Ressourcendateien (`app.pyw` heißt dort [`Glide-Aufgaben-und-Listen_v3.53.0.pyw`](../07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.53.0.pyw), gestartet über [`Schnellstart.pyw`](../07_Python-Versionen/Schnellstart.pyw)).
+- Das Verzeichnis [`07_Python-Versionen/`](../07_Python-Versionen) enthält eine direkt ausführbare Spiegelkopie aller 93 Laufzeitmodule und 171 Ressourcendateien (`app.pyw` heißt dort [`Glide-Aufgaben-und-Listen_v3.54.0.pyw`](../07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.54.0.pyw), frühere Versionen liegen unter [`07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.53.0.pyw`](../07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.53.0.pyw), gestartet über [`Schnellstart.pyw`](../07_Python-Versionen/Schnellstart.pyw)).
 - Bytegleichheit zwischen `01_Repository/Glide/src/glide/` und `07_Python-Versionen/` ist zwingendes CI-Tor und wird über [`scripts/pflege/abgleich_07.py`](../01_Repository/Glide/scripts/pflege/abgleich_07.py) geprüft.
 
 ### 2.4 Datenmodelle & Persistenz ([`06_DATA_BACKUP_MIGRATION.md`](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md))
