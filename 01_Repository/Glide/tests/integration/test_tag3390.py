@@ -526,7 +526,7 @@ def run(app_path, cases, report):
                 def apply_stock(dialog):
                     tree=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_tasks")
                     tree.selection_set(identities[:2]);pump()
-                    stock=next(widget for widget in descendants(dialog) if isinstance(widget,mod.tk.Radiobutton)
+                    stock=next(widget for widget in descendants(dialog) if isinstance(widget,(mod.tk.Radiobutton,mod.GlideRadiobutton))
                                and widget.cget("value")=="stock")
                     stock.invoke();pump()
                     click(dialog,"Vergleichen")

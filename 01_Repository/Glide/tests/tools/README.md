@@ -2,7 +2,7 @@
 
 **Prüfkopien auf anderen Laufwerken (06.11.2026):** Der lokale Git-Klon kopiert Objekte mit `--no-hardlinks`; Quell- und Prüfkopie teilen keine Objektdateien. Das erlaubt eine Prüfablage auf E trotz Quellablage auf C. Der bestehende Kopiertest prüft Bytegleichheit und getrennte Dateidentität.
 
-Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 10.11.2026 · Glide 3.54.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Intel-/AMD-Prüfplätze:** Jeder neue WA-42-Prüfablauf erfasst CPU-Modell/-Hersteller, logische Prozessorzahl, Board-/BIOS-Kontext und Laufzeit bereits am Anfang, auch bei grünen Läufen. `runtime.pruefplatz` führt die ermittelte CPU-Familie und einen Hardwareprofil-Hash ohne Rechner-/Benutzerkennung; er ist keine eindeutige physische Rechner-ID. Intel- und AMD-Ergebnisse getrennt zuordnen, zusätzlich App-/Suite-/Fixturehashes und Python/Tk vergleichen. Ein angekündigter AMD-Bericht bleibt bis zum tatsächlichen Eingang offen. Weder Hardwareprofil noch grüner Gegenlauf beweisen eine CPU-Ursache. Aktueller Intel-Eingang und Nachweise im [Abschlussnachlauf](https://github.com/n05a-design/glide-to-do/blob/f1a5b5b6e0f97f2b5eab1ac552999c33c6416e69/01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md).
 

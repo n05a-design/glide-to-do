@@ -149,7 +149,7 @@ def run(app_path, report=None, *, native=False):
             app.add_detail_pane_step(identity, 'Unterlagen prüfen')
             pump()
             checkbox = step()
-            assert isinstance(checkbox, mod.tk.Checkbutton)
+            assert isinstance(checkbox, (mod.tk.Checkbutton, mod.GlideCheckbutton))
             assert checkbox.cget('variable') and attributes(checkbox).value == '0'
             assert not checkbox._accessible_variable.get()
             depth = len(app.undo_stack)

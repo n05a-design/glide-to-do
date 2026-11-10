@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.54.0 · Aufgabenformat 26
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 
@@ -47,9 +47,9 @@ Der lokale, nicht commitete Kandidat 3.52.0 hat noch keine menschliche oder nati
 
 Gesamtnachweis der damaligen 3.50.5-Fassung: [3.50.5](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md). Die folgenden Rückmeldungen und Teilfreigaben bleiben an ihre ursprünglichen Quell-/Pakethashes gebunden; kein neuer Haken aus automatischen Prüfungen und keine automatische Freigabe für 3.52.0.
 
-- [ ] **Suchzeilenbreite, erneuter Befund 05.11.:** Aktuelle Python-Prüffassung `1c48a095…`: im Buch ohne Suchanfrage endet das Suchfeld bündig mit der rechten Außenkante der Inhaltskarte. Mindestbreite/breit und volle/schmale/ausgeblendete Seitenleiste samt Rückwechsel prüfen. Suchwort eingeben: „Suche löschen“ bleibt vollständig sichtbar und mit Abstand erreichbar; nach Löschen reicht das Feld wieder bis zur Inhaltskante. Labels/Liste nach Ansichtswechsel mitprüfen. Keine Freigabe aus der automatischen Prüfung. [Aktueller Nachweis](../01_Repository/Glide/tests/qa-3.50.4/suchbreite_2026-11-05/README.md).
+- [ ] **Suchzeilenbreite, erneuter Befund 05.11.:** Aktuelle Python-Prüffassung `1c48a095…`: im Buch ohne Suchanfrage endet das Suchfeld bündig mit der rechten Außenkante der Inhaltskarte. Mindestbreite/breit und volle/schmale/ausgeblendete Seitenleiste samt Rückwechsel prüfen. Suchwort eingeben: „Suche löschen“ bleibt vollständig sichtbar und mit Abstand erreichbar; nach Löschen reicht das Feld wieder bis zur Inhaltskante. Labels/Liste nach Ansichtswechsel mitprüfen. Keine Freigabe aus der automatischen Prüfung. [Aktueller Nachweis](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.4/suchbreite_2026-11-05/README.md).
 
-- [ ] **Seitenleistenabstand, Befund 05.11.:** In der aktuellen Python-Prüffassung `e984ba99…` über „Startseite“ hovern: der farbige Zeilenhintergrund hat oben denselben Abstand zur Karte wie links/rechts (10 px). Hell/Dunkel und Rückkehr nach Ein-/Ausblenden prüfen. Automatische Geometrieprüfung ersetzt diese menschliche Bestätigung nicht. [Aktueller Nachweis](../01_Repository/Glide/tests/qa-3.50.4/seitenleistenabstand_2026-11-05/README.md).
+- [ ] **Seitenleistenabstand, Befund 05.11.:** In der aktuellen Python-Prüffassung `e984ba99…` über „Startseite“ hovern: der farbige Zeilenhintergrund hat oben denselben Abstand zur Karte wie links/rechts (10 px). Hell/Dunkel und Rückkehr nach Ein-/Ausblenden prüfen. Automatische Geometrieprüfung ersetzt diese menschliche Bestätigung nicht. [Aktueller Nachweis](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.4/seitenleistenabstand_2026-11-05/README.md).
 
 **Fortsetzung auf Benutzerauftrag 05.11.:** Neuer eindeutig bezeichneter Python-Nachteststand 3.50.4 mit neuer G-Kontur, Darkmode-Gelb und korrigierter Buchbreite. Punkte 1–5 bleiben als menschliche Teilfreigaben des vorherigen nativen Kandidaten erhalten. Als Nächstes Punkt 6 (Buchbreite) erneut bestätigen, danach Seiten-/Zeichenwerkzeuge und übrige Blöcke. Native Neubauten heute Abend auf 3.50.4 ausrichten.
 

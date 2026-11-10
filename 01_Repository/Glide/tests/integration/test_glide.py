@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.53.0"
+    assert mod.APP_VERSION == "3.54.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -1493,7 +1493,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
                 elif widget_class == "Text":
                     box = child.bbox("1.0")
                     measured_offsets.append(child.winfo_rootx() - origin + (box[0] if box else 0))
-                elif widget_class == "Listbox" and child.size():
+                elif (widget_class == "Listbox" or isinstance(child, mod.GlideListbox)) and child.size():
                     box = child.bbox(0)
                     measured_offsets.append(child.winfo_rootx() - origin + (box[0] if box else 0))
                 walk(child)

@@ -392,7 +392,7 @@ with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
             idle()
             buttons = [w for w in descendants(dialog) if isinstance(w, mod.RoundedButton)]
             next(w for w in buttons if w.text == 'Standard wiederherstellen').command()
-            listbox = next(w for w in descendants(dialog) if isinstance(w, mod.tk.Listbox))
+            listbox = next(w for w in descendants(dialog) if isinstance(w, (mod.tk.Listbox, mod.GlideListbox)))
             assert listbox.size() == len(app.HOME_TILE_KEYS)
             next(w for w in buttons if w.text == 'Speichern').command()
         app.run_modal = reset_modal

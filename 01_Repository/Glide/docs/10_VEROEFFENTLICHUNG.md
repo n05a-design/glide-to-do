@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.54.0 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). PR #71 wurde am 09.11.2026 gemergt; `main` steht auf Glide 3.50.7 / Format 26 (`61a2f3a`, PR-Head `2c3e543`). Die lokale Arbeitskopie führt Änderungen bis 3.53.0; sie ist noch nicht committet oder veröffentlicht. Der [QA-/Liefernachweis](07_QA_BERICHT.md) trennt diese Stände sowie native Pakete, automatisierte Prüfungen und menschliche Abnahmen. Eine Versionsnummer belegt keine öffentliche Release-Veröffentlichung.
+3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). PR #75 wurde am 10.11.2026 gemergt; `main` steht auf Glide 3.53.0 / Format 26 (`9e767bea`). Die Linux- und Windows-Vollprüfungen sowie Windows- und macOS-Paket-/Startprüfungen sind auf diesem Commit erfolgreich. Die vollständige native macOS-Prüfung und die detaillierte menschliche Bedien-/DPI-Abnahme bleiben offen. Es gibt keinen öffentlichen Release; der [QA-/Liefernachweis](07_QA_BERICHT.md) ordnet Ergebnisse und Grenzen den konkreten Commits zu. Eine Versionsnummer belegt keine öffentliche Release-Veröffentlichung.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
@@ -15,7 +15,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 - Die menschliche Prüfung erfolgt anschließend durch den Inhaber: Bedienung, Tastatur, Mindestgröße/große Schrift, DPI, mehrere Monitore und konkrete Plattformabläufe. **Screenreader ist bis Bedarf zurückgestellt und kein aktiver offener 3.50-Punkt.**
 - Für einen allgemeinen signierten Vertrieb bleiben öffentliche Signatur/Notarisierung, MPL-Weitergabehinweise, Kanalunterlagen und Markenprüfung gesonderte Voraussetzungen. MPL-2.0 ist beschlossen; eine Versionsbezeichnung ersetzt keine Zertifikate oder Abnahmen.
 
-Der frühere Auftrag zur Zusammenführung von PR #71 umfasste Commit und Push und ist mit dessen Merge abgeschlossen. Am 10.11.2026 beauftragte der Inhaber, alle Schritte für Commit und Push von 3.53.0 zu erledigen. Ein Kandidatenbranch darf ausschließlich für die ausstehenden Remoteprüfungen gepusht werden; `main` bleibt bis zum Nachweis aller Pflichtläufe, Paketprüfungen und Abnahmen unverändert. Dies ist weder ein Auftrag zum Taggen noch zur Veröffentlichung eines Releaseartefakts oder zur Signierung. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder zusätzliche Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
+Der Commit-/Pushauftrag vom 10.11.2026 wurde erfüllt; der Inhaber mergte PR #75 nach den Kandidatenprüfungen in `main`. Die erfolgreichen Main-Läufe sind im [QA-Bericht](07_QA_BERICHT.md) festgehalten. Der Auftrag umfasste weder Tag noch Releaseartefakt, Signierung oder Veröffentlichung in weiteren Vertriebskanälen; diese Schritte bleiben gesonderte Freigaben. Erinnerungen werden nur bei laufender App verarbeitet.
 
 **Noch offene technische Releasevorbereitung (WA-46):** Ein CycloneDX-1.6-Inventar mit geprüftem Pre-build-/Incomplete-Umfang sowie Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden. Ein dokumentierter Mac-Baustand enthielt 24 BOM-Komponenten und 37 Lizenzdateien ohne Schemafehler; der vollständige Abhängigkeitsgraph und der abschließende Abgleich eines freigegebenen Releaseartefakts fehlen weiterhin. WA-46 ist daher offen und darf nicht als vollständiger SBOM-/Releaseabschluss ausgewiesen werden. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
 
@@ -175,17 +175,17 @@ Jeden Aufruf nur nach Exitcode 0 des vorherigen ausführen. Die Paketprobe isoli
 
 Dieser normale Start auf dem eigenen Gerät ersetzt die ausdrücklich an Hosted-CI gebundene externe Python-/Quellen-ACL-Isolationsprobe **nicht**. `pruefe_start_windows.py` und `windows_isolation.plan` lassen persönliche Installationen dafür nicht zu. Diese Grenze bleibt bestehen; keine fremden oder eigenen Inhaberinstallationen für eine Prüfung sperren und keine Hosted-Marker vortäuschen. Die aktuelle bereits geprüfte Mac-Lieferung und die frühere Windows-Lieferung bleiben bis zum tatsächlichen Windows-Abgleich erhalten.
 
-## Schriftlizenzen und Stilklassifikationen (D60)
+## Schriftlizenzen und Stilklassifikationen (D60 / D77)
 
-Geprüft am 03.11.2026: die vier abgelegten Original-OFL-Dateien und offiziellen Google-Fonts-Lizenztexte. Unveränderte statische Schnitte mit Prüfsummen in `resources/fonts/provenance.json`; die Anzeigenamen in Glide ändern weder Fontmetadaten noch reservierte Namen.
+Geprüft am 03.11.2026 (D60) und aktualisiert am 10.11.2026 (D77): die abgelegten Original-OFL-Dateien und offiziellen Lizenztexte. Unveränderte statische Schnitte mit Prüfsummen in `resources/fonts/provenance.json`; die Anzeigenamen in Glide ändern weder Fontmetadaten noch reservierte Namen. Frühere gespeicherte Familiennamen (`Roboto Mono`, `Playfair Display`, `Fraunces`) werden ihren jeweiligen Stilklassen zugeordnet.
 
 | Auswahl | Lizenz | GitHub mit Fontdateien | Kostenlose Glide-Weitergabe | Verkauf einer Glide-Anwendung |
 |---|---|---|---|---|
-| Modern: Rubik | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/rubik/OFL.txt) | erlaubt | erlaubt | erlaubt |
-| Technisch: Roboto Mono | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/robotomono/OFL.txt) | erlaubt | erlaubt | erlaubt |
-| Kreativ: Playfair Display | [SIL OFL 1.1, reservierter Name „Playfair Display“](https://github.com/google/fonts/blob/main/ofl/playfairdisplay/OFL.txt) | erlaubt | erlaubt | erlaubt |
-| Klassisch: Fraunces | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/fraunces/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Modern: Rubik | [SIL OFL 1.1](https://github.com/googlefonts/rubik/blob/main/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Technisch: DM Mono | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/dmmono/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Kreativ: DM Serif Display | [SIL OFL 1.1, reservierter Name „Source“](https://github.com/google/fonts/blob/main/ofl/dmserifdisplay/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Klassisch: Charis SIL | [SIL OFL 1.1, reservierte Namen „Charis“, „SIL“](https://github.com/silnrsi/font-charis-sil/blob/master/OFL.txt) | erlaubt | erlaubt | erlaubt |
 
-Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Kreativ: Playfair Display“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
+Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Kreativ: DM Serif Display“ bzw. „Klassisch: Charis SIL“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
 
 Diese Rechte betreffen die Fontkomponenten. Glides eigene Nutzungs-/Vertriebslizenz und sonstige Komponenten bleiben getrennte Rechte. DejaVu Sans bleibt nach Inhabernachtrag intern für Symbole mit seinem unveränderten Original-Lizenztext; Pixelify bleibt für das Pixel-Design. Beide sind keine weiteren Textstil-Angebote.

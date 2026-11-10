@@ -234,7 +234,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.53.0"
+APP_VERSION = "3.54.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -2614,6 +2614,921 @@ class CanvasLabel(tk.Canvas):
             self.tag_lower("pill", "text")
 
 
+class GlideCheckbutton(tk.Canvas):
+    """Themebares Auswahlkästchen auf Canvas-Grundlage ohne native Systemkästchen."""
+
+    BOX_SIZE = 16
+    BOX_GAP = 8
+    PAD_X = 4
+    PAD_Y = 3
+
+    def __init__(self, master, **kwargs):
+        self._variable = kwargs.pop("variable", None)
+        self._command = kwargs.pop("command", None)
+        self._onvalue = kwargs.pop("onvalue", True)
+        self._offvalue = kwargs.pop("offvalue", False)
+        name = kwargs.pop("name", None)
+        cursor = kwargs.pop("cursor", "hand2")
+        takefocus = kwargs.pop("takefocus", 1)
+        bg = kwargs.pop("bg", kwargs.pop("background", None))
+        if bg is None:
+            try:
+                bg = master.cget("bg")
+            except Exception:
+                bg = "#1e1e1e"
+        self._opts = {
+            "text": str(kwargs.pop("text", "") or ""),
+            "font": kwargs.pop("font", None) or app_font(10),
+            "bg": bg,
+            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
+            "activebackground": kwargs.pop("activebackground", bg),
+            "activeforeground": kwargs.pop("activeforeground", "#e5e5e5"),
+            "selectcolor": kwargs.pop("selectcolor", bg),
+            "disabledforeground": kwargs.pop("disabledforeground", "#888888"),
+            "anchor": kwargs.pop("anchor", "w"),
+            "justify": kwargs.pop("justify", "left"),
+            "wraplength": kwargs.pop("wraplength", 0),
+            "padx": kwargs.pop("padx", self.PAD_X),
+            "pady": kwargs.pop("pady", self.PAD_Y),
+            "state": kwargs.pop("state", "normal"),
+            "relief": kwargs.pop("relief", "flat"),
+            "bd": kwargs.pop("bd", kwargs.pop("borderwidth", 0)),
+        }
+        highlightthickness = kwargs.pop("highlightthickness", 0)
+        highlightbackground = kwargs.pop("highlightbackground", bg)
+        highlightcolor = kwargs.pop("highlightcolor", self._opts["fg"])
+        for Rest in list(kwargs):
+            self._opts[Rest] = kwargs.pop(Rest)
+        init_kw = dict(
+            bg=bg, bd=0, highlightthickness=highlightthickness,
+            highlightbackground=highlightbackground, highlightcolor=highlightcolor,
+            cursor=cursor, takefocus=takefocus,
+        )
+        if name is not None:
+            init_kw["name"] = name
+        super().__init__(master, **init_kw)
+        self._trace_id = None
+        self._focused = False
+        self._hovered = False
+        self._required = (1, 1)
+        self._attach_variable(self._variable)
+        self.bind("<Button-1>", self._on_click)
+        self.bind("<space>", self._on_key_toggle)
+        self.bind("<Return>", self._on_key_toggle)
+        self.bind("<FocusIn>", self._on_focus_in, add="+")
+        self.bind("<FocusOut>", self._on_focus_out, add="+")
+        self.bind("<Enter>", self._on_enter, add="+")
+        self.bind("<Leave>", self._on_leave, add="+")
+        self.bind("<Configure>", self._on_configure, add="+")
+        self.bind("<Destroy>", self._on_destroy, add="+")
+        self._render()
+
+    def _attach_variable(self, variable):
+        if self._variable is not None and self._trace_id is not None:
+            try:
+                self._variable.trace_remove("write", self._trace_id)
+            except Exception:
+                pass
+        self._variable = variable
+        self._trace_id = None
+        if variable is not None and hasattr(variable, "trace_add"):
+            try:
+                self._trace_id = variable.trace_add("write", lambda *_: self._safe_render())
+            except Exception:
+                self._trace_id = None
+
+    def _on_destroy(self, event):
+        if event.widget is self:
+            self._attach_variable(None)
+
+    def _safe_render(self):
+        try:
+            if self.winfo_exists():
+                self._render()
+        except tk.TclError:
+            pass
+
+    def _is_checked(self):
+        if self._variable is None:
+            return bool(getattr(self, "_internal_checked", False))
+        try:
+            val = self._variable.get()
+        except Exception:
+            return False
+        if isinstance(self._onvalue, bool):
+            return bool(val) is self._onvalue
+        return val == self._onvalue or bool(val)
+
+    def select(self):
+        if self._variable is not None:
+            try:
+                self._variable.set(self._onvalue)
+            except Exception:
+                pass
+        else:
+            self._internal_checked = True
+        self._safe_render()
+
+    def deselect(self):
+        if self._variable is not None:
+            try:
+                self._variable.set(self._offvalue)
+            except Exception:
+                pass
+        else:
+            self._internal_checked = False
+        self._safe_render()
+
+    def toggle(self):
+        if self._is_checked():
+            self.deselect()
+        else:
+            self.select()
+
+    def invoke(self):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        # Checklisten-Punkte im Inspektor schalten ihren Modellwert über den
+        # eigenen Rückruf um und synchronisieren danach `_accessible_variable`.
+        if getattr(self, "_accessible_step_index", None) is not None and callable(self._command):
+            return self._command()
+        self.toggle()
+        if callable(self._command):
+            return self._command()
+        return None
+
+    def _on_click(self, _event=None):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        try:
+            self.focus_set()
+        except tk.TclError:
+            pass
+        self.invoke()
+        return "break"
+
+    def _on_key_toggle(self, _event=None):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        if getattr(self, "_accessible_step_index", None) is not None:
+            return None
+        self.invoke()
+        return "break"
+
+    def _on_focus_in(self, _event=None):
+        self._focused = True
+        self._safe_render()
+
+    def _on_focus_out(self, _event=None):
+        self._focused = False
+        self._safe_render()
+
+    def _on_enter(self, _event=None):
+        self._hovered = True
+        self._safe_render()
+
+    def _on_leave(self, _event=None):
+        self._hovered = False
+        self._safe_render()
+
+    def _on_configure(self, _event=None):
+        self._safe_render()
+
+    def configure(self, cnf=None, **kwargs):
+        werte = dict(cnf or {}, **kwargs)
+        if not werte:
+            return super().configure()
+        canvas_kw = {}
+        for k in ("highlightthickness", "highlightbackground", "highlightcolor", "cursor", "takefocus"):
+            if k in werte:
+                canvas_kw[k] = werte.pop(k)
+        if "background" in werte:
+            werte["bg"] = werte.pop("background")
+        if "foreground" in werte:
+            werte["fg"] = werte.pop("foreground")
+        if "variable" in werte:
+            self._attach_variable(werte.pop("variable"))
+        if "command" in werte:
+            self._command = werte.pop("command")
+        if "onvalue" in werte:
+            self._onvalue = werte.pop("onvalue")
+        if "offvalue" in werte:
+            self._offvalue = werte.pop("offvalue")
+        if "bg" in werte:
+            canvas_kw["bg"] = werte["bg"]
+            if "highlightbackground" not in canvas_kw and int(float(super().cget("highlightthickness") or 0)) == 0:
+                canvas_kw["highlightbackground"] = werte["bg"]
+        self._opts.update(werte)
+        if canvas_kw:
+            super().configure(**canvas_kw)
+        self._safe_render()
+
+    config = configure
+
+    def cget(self, key):
+        if key == "background":
+            key = "bg"
+        elif key == "foreground":
+            key = "fg"
+        if key == "variable":
+            return str(self._variable) if self._variable is not None else ""
+        if key == "command":
+            return self._command
+        if key in self._opts:
+            return self._opts[key]
+        return super().cget(key)
+
+    def __getitem__(self, key):
+        return self.cget(key)
+
+    def __setitem__(self, key, value):
+        self.configure(**{key: value})
+
+    def _render(self):
+        self.delete("all")
+        o = self._opts
+        disabled = str(o.get("state", "normal")) == "disabled"
+        checked = self._is_checked()
+        padx = max(0, int(float(o.get("padx") or 0)))
+        pady = max(0, int(float(o.get("pady") or 0)))
+        box_s = self.BOX_SIZE
+        gap = self.BOX_GAP if o.get("text") else 0
+        wrap = int(float(o.get("wraplength") or 0))
+        text_wrap = max(40, wrap - box_s - gap - 2 * padx) if wrap > 0 else 0
+        fg = o["disabledforeground"] if disabled else o["fg"]
+        text_kw = {
+            "text": str(o.get("text") or ""),
+            "font": o["font"],
+            "fill": fg,
+            "anchor": "nw",
+            "justify": o.get("justify", "left"),
+            "tags": ("text",),
+        }
+        if text_wrap > 0:
+            text_kw["width"] = text_wrap
+        tid = self.create_text(padx + box_s + gap, pady, **text_kw)
+        tbox = self.bbox(tid) or (padx + box_s + gap, pady, padx + box_s + gap, pady + box_s)
+        tw = max(0, tbox[2] - tbox[0])
+        th = max(box_s, tbox[3] - tbox[1])
+        req_w = padx * 2 + box_s + gap + tw + 4
+        req_h = pady * 2 + max(box_s, th)
+        if (req_w, req_h) != self._required:
+            self._required = (req_w, req_h)
+            super().configure(width=max(1, req_w), height=max(1, req_h))
+        h = self.winfo_height() if self.winfo_height() > 1 else req_h
+        if "\n" in str(o.get("text") or "") or th > box_s + 6:
+            by = pady + 2
+            ty = pady
+        else:
+            by = max(pady, (h - box_s) / 2)
+            ty = max(pady, (h - (tbox[3] - tbox[1])) / 2)
+        self.coords(tid, padx + box_s + gap, ty)
+        bx = padx
+        box_fill = o.get("selectcolor") or o["bg"]
+        border_col = fg if (checked or self._focused or self._hovered) and not disabled else o.get("disabledforeground", fg)
+        self.create_polygon(
+            rounded_rect_points(bx, by, bx + box_s, by + box_s, 4),
+            smooth=True, splinesteps=12, fill=box_fill, outline=border_col, width=1.4 if self._focused else 1,
+            tags=("box",),
+        )
+        if checked:
+            self.create_line(
+                bx + 3.5, by + box_s * 0.52,
+                bx + box_s * 0.44, by + box_s - 4,
+                bx + box_s - 3.2, by + 4,
+                fill=fg, width=2, capstyle="round", joinstyle="round", tags=("check",),
+            )
+        paint_canvas_backdrop(self)
+
+
+class GlideRadiobutton(GlideCheckbutton):
+    """Themebarer Radioschalter auf Canvas-Grundlage."""
+
+    def __init__(self, master, **kwargs):
+        self._value = kwargs.pop("value", "")
+        super().__init__(master, **kwargs)
+
+    def _is_checked(self):
+        if self._variable is None:
+            return False
+        try:
+            return self._variable.get() == self._value
+        except Exception:
+            return False
+
+    def select(self):
+        if self._variable is not None:
+            try:
+                self._variable.set(self._value)
+            except Exception:
+                pass
+        self._safe_render()
+
+    def deselect(self):
+        pass
+
+    def toggle(self):
+        self.select()
+
+    def configure(self, cnf=None, **kwargs):
+        werte = dict(cnf or {}, **kwargs)
+        if "value" in werte:
+            self._value = werte.pop("value")
+        return super().configure(werte)
+
+    config = configure
+
+    def cget(self, key):
+        if key == "value":
+            return self._value
+        return super().cget(key)
+
+    def _render(self):
+        super()._render()
+        self.delete("box", "check")
+        o = self._opts
+        disabled = str(o.get("state", "normal")) == "disabled"
+        checked = self._is_checked()
+        padx = max(0, int(float(o.get("padx") or 0)))
+        pady = max(0, int(float(o.get("pady") or 0)))
+        box_s = self.BOX_SIZE
+        h = self.winfo_height() if self.winfo_height() > 1 else self._required[1]
+        by = max(pady, (h - box_s) / 2)
+        bx = padx
+        fg = o["disabledforeground"] if disabled else o["fg"]
+        box_fill = o.get("selectcolor") or o["bg"]
+        border_col = fg if (checked or self._focused or self._hovered) and not disabled else o.get("disabledforeground", fg)
+        self.create_oval(
+            bx, by, bx + box_s, by + box_s,
+            fill=box_fill, outline=border_col, width=1.4 if self._focused else 1, tags=("box",),
+        )
+        if checked:
+            inset = 4
+            self.create_oval(
+                bx + inset, by + inset, bx + box_s - inset, by + box_s - inset,
+                fill=fg, outline="", tags=("check",),
+            )
+
+
+class GlideListbox(tk.Canvas):
+    """Themebare Listenauswahl auf Canvas-Grundlage mit kompatibler Listbox-Schnittstelle."""
+
+    ROW_PAD_X = 6
+    ROW_PAD_Y = 3
+
+    def __init__(self, master, **kwargs):
+        self._height_rows = int(kwargs.pop("height", 6) or 6)
+        self._width_chars = int(kwargs.pop("width", 36) or 36)
+        name = kwargs.pop("name", None)
+        bg = kwargs.pop("bg", kwargs.pop("background", "#1e1e1e"))
+        self._opts = {
+            "bg": bg,
+            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
+            "selectbackground": kwargs.pop("selectbackground", "#335588"),
+            "selectforeground": kwargs.pop("selectforeground", "#ffffff"),
+            "font": kwargs.pop("font", None) or app_font(10),
+            "activestyle": kwargs.pop("activestyle", "none"),
+            "relief": kwargs.pop("relief", "flat"),
+            "bd": kwargs.pop("bd", kwargs.pop("borderwidth", 0)),
+            "state": kwargs.pop("state", "normal"),
+            "height": self._height_rows,
+            "width": self._width_chars,
+        }
+        highlightthickness = kwargs.pop("highlightthickness", 0)
+        takefocus = kwargs.pop("takefocus", 1)
+        for k in list(kwargs):
+            self._opts[k] = kwargs.pop(k)
+        self._items = []
+        self._item_styles = {}
+        self._selected = set()
+        self._active_index = 0
+        self._top_index = 0
+        self._yscrollcommand = self._opts.pop("yscrollcommand", None)
+        row_h = self._row_height()
+        char_w = self._char_width()
+        init_kw = dict(
+            bg=bg, bd=0, highlightthickness=highlightthickness, takefocus=takefocus,
+            width=max(60, self._width_chars * char_w),
+            height=max(24, self._height_rows * row_h),
+        )
+        if name is not None:
+            init_kw["name"] = name
+        super().__init__(master, **init_kw)
+        self.bind("<Button-1>", self._on_click)
+        self.bind("<Up>", lambda _e: self._move_selection(-1))
+        self.bind("<Down>", lambda _e: self._move_selection(1))
+        self.bind("<Home>", lambda _e: self._jump_selection(0))
+        self.bind("<End>", lambda _e: self._jump_selection(max(0, len(self._items) - 1)))
+        self.bind("<Configure>", lambda _e: self._safe_render(), add="+")
+        self._render()
+
+    def _row_height(self):
+        try:
+            f = ui_font_object(root=self, font=self._opts["font"])
+            return max(20, int(f.metrics("linespace")) + 2 * self.ROW_PAD_Y)
+        except Exception:
+            return 22
+
+    def _char_width(self):
+        try:
+            f = ui_font_object(root=self, font=self._opts["font"])
+            return max(6, int(f.measure("0")))
+        except Exception:
+            return 8
+
+    def _resolve_index(self, index):
+        if index in (tk.END, "end"):
+            return max(0, len(self._items) - 1)
+        if index == "active":
+            return max(0, min(self._active_index, max(0, len(self._items) - 1)))
+        try:
+            idx = int(index)
+        except (TypeError, ValueError):
+            idx = 0
+        if idx < 0:
+            idx = max(0, len(self._items) + idx)
+        return idx
+
+    def size(self):
+        return len(self._items)
+
+    def delete(self, first, last=None):
+        if first == "all":
+            return super().delete("all")
+        start = self._resolve_index(first)
+        if last is None:
+            if 0 <= start < len(self._items):
+                self._items.pop(start)
+        else:
+            end = len(self._items) - 1 if last in (tk.END, "end") else self._resolve_index(last)
+            if start <= end:
+                del self._items[start:end + 1]
+        if not self._items:
+            self._selected.clear()
+            self._item_styles.clear()
+            self._active_index = 0
+            self._top_index = 0
+        else:
+            self._selected = {i for i in self._selected if 0 <= i < len(self._items)}
+            self._active_index = min(self._active_index, len(self._items) - 1)
+            self._top_index = max(0, min(self._top_index, len(self._items) - 1))
+        self._safe_render()
+
+    def insert(self, index, *elements):
+        if index in (tk.END, "end"):
+            pos = len(self._items)
+        else:
+            pos = max(0, min(self._resolve_index(index), len(self._items)))
+        for offset, text in enumerate(elements):
+            self._items.insert(pos + offset, str(text))
+        self._safe_render()
+
+    def get(self, first, last=None):
+        if not self._items:
+            return () if last is not None else ""
+        start = max(0, min(self._resolve_index(first), len(self._items) - 1))
+        if last is None:
+            return self._items[start]
+        end = len(self._items) - 1 if last in (tk.END, "end") else max(0, min(self._resolve_index(last), len(self._items) - 1))
+        return tuple(self._items[start:end + 1])
+
+    def curselection(self):
+        return tuple(sorted(i for i in self._selected if 0 <= i < len(self._items)))
+
+    def selection_set(self, first, last=None):
+        if not self._items:
+            return
+        start = max(0, min(self._resolve_index(first), len(self._items) - 1))
+        end = start if last is None else max(0, min(self._resolve_index(last), len(self._items) - 1))
+        for i in range(min(start, end), max(start, end) + 1):
+            self._selected.add(i)
+        self._safe_render()
+
+    select_set = selection_set
+
+    def selection_clear(self, first, last=None):
+        if first == 0 and last in (tk.END, "end"):
+            self._selected.clear()
+        else:
+            start = self._resolve_index(first)
+            end = start if last is None else self._resolve_index(last)
+            for i in range(min(start, end), max(start, end) + 1):
+                self._selected.discard(i)
+        self._safe_render()
+
+    select_clear = selection_clear
+
+    def selection_includes(self, index):
+        return self._resolve_index(index) in self._selected
+
+    def activate(self, index):
+        if self._items:
+            self._active_index = max(0, min(self._resolve_index(index), len(self._items) - 1))
+            self._safe_render()
+
+    def see(self, index):
+        if not self._items:
+            return
+        idx = max(0, min(self._resolve_index(index), len(self._items) - 1))
+        vis = max(1, self._visible_rows())
+        if idx < self._top_index:
+            self._top_index = idx
+        elif idx >= self._top_index + vis:
+            self._top_index = max(0, idx - vis + 1)
+        self._safe_render()
+
+    def itemconfig(self, index, cnf=None, **kwargs):
+        idx = self._resolve_index(index)
+        werte = dict(cnf or {}, **kwargs)
+        if "fg" in werte:
+            werte["foreground"] = werte.pop("fg")
+        if "bg" in werte:
+            werte["background"] = werte.pop("bg")
+        self._item_styles.setdefault(idx, {}).update(werte)
+        self._safe_render()
+
+    itemconfigure = itemconfig
+
+    def itemcget(self, index, option):
+        if isinstance(index, str) and not index.isdigit() and index not in ("end", "active"):
+            return super().itemcget(index, option)
+        idx = self._resolve_index(index)
+        if option == "fg":
+            option = "foreground"
+        elif option == "bg":
+            option = "background"
+        styles = self._item_styles.get(idx, {})
+        if option in styles:
+            return styles[option]
+        if option == "foreground":
+            return self._opts["fg"]
+        if option == "background":
+            return self._opts["bg"]
+        if option in ("selectforeground", "selectbackground"):
+            return self._opts[option]
+        return ""
+
+    def bbox(self, *args):
+        if len(args) == 1 and (isinstance(args[0], int) or str(args[0]).isdigit() or args[0] in ("end", "active")):
+            if not self._items:
+                return None
+            idx = max(0, min(self._resolve_index(args[0]), len(self._items) - 1))
+            row_h = self._row_height()
+            y = (idx - self._top_index) * row_h
+            w = max(1, self.winfo_width() if self.winfo_width() > 1 else self._width_chars * self._char_width())
+            return (0, y, w, row_h)
+        return super().bbox(*args)
+
+    def nearest(self, y):
+        if not self._items:
+            return 0
+        row_h = max(1, self._row_height())
+        idx = self._top_index + int(y // row_h)
+        return max(0, min(idx, len(self._items) - 1))
+
+    def _visible_rows(self):
+        row_h = max(1, self._row_height())
+        h = self.winfo_height()
+        if h > 1:
+            return max(1, h // row_h)
+        return max(1, self._height_rows)
+
+    def yview(self, *args):
+        total = len(self._items)
+        vis = self._visible_rows()
+        if not args:
+            if total <= vis or total == 0:
+                return (0.0, 1.0)
+            first = max(0.0, min(1.0, self._top_index / total))
+            last = max(0.0, min(1.0, (self._top_index + vis) / total))
+            return (first, last)
+        cmd = args[0]
+        if cmd == "moveto" and len(args) >= 2:
+            frac = max(0.0, min(1.0, float(args[1])))
+            self._top_index = max(0, min(max(0, total - vis), int(round(frac * total))))
+        elif cmd == "scroll" and len(args) >= 2:
+            delta = int(float(args[1]))
+            unit = args[2] if len(args) >= 3 else "units"
+            step = delta * (max(1, vis - 1) if unit == "pages" else 1)
+            self._top_index = max(0, min(max(0, total - vis), self._top_index + step))
+        self._safe_render()
+        return None
+
+    def yview_moveto(self, fraction):
+        self.yview("moveto", fraction)
+
+    def yview_scroll(self, number, what):
+        self.yview("scroll", number, what)
+
+    def configure(self, cnf=None, **kwargs):
+        werte = dict(cnf or {}, **kwargs)
+        if not werte:
+            return super().configure()
+        if "background" in werte:
+            werte["bg"] = werte.pop("background")
+        if "foreground" in werte:
+            werte["fg"] = werte.pop("foreground")
+        if "yscrollcommand" in werte:
+            self._yscrollcommand = werte.pop("yscrollcommand")
+        if "height" in werte:
+            self._height_rows = int(werte["height"] or 6)
+        if "width" in werte:
+            self._width_chars = int(werte["width"] or 36)
+        canvas_kw = {}
+        if "bg" in werte:
+            canvas_kw["bg"] = werte["bg"]
+        if "height" in werte or "font" in werte:
+            canvas_kw["height"] = max(24, self._height_rows * self._row_height())
+        if "width" in werte or "font" in werte:
+            canvas_kw["width"] = max(60, self._width_chars * self._char_width())
+        self._opts.update(werte)
+        if canvas_kw:
+            super().configure(**canvas_kw)
+        self._safe_render()
+
+    config = configure
+
+    def cget(self, key):
+        if key == "background":
+            key = "bg"
+        elif key == "foreground":
+            key = "fg"
+        if key == "yscrollcommand":
+            return self._yscrollcommand
+        if key in self._opts:
+            return self._opts[key]
+        return super().cget(key)
+
+    def __getitem__(self, key):
+        return self.cget(key)
+
+    def __setitem__(self, key, value):
+        self.configure(**{key: value})
+
+    def _on_click(self, event):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        try:
+            self.focus_set()
+        except tk.TclError:
+            pass
+        if not self._items:
+            return "break"
+        idx = self.nearest(event.y)
+        self._selected = {idx}
+        self._active_index = idx
+        self._safe_render()
+        self.event_generate("<<ListboxSelect>>")
+        return "break"
+
+    def _move_selection(self, delta):
+        if not self._items:
+            return "break"
+        cur = self.curselection()
+        base = cur[0] if cur else self._active_index
+        target = max(0, min(len(self._items) - 1, base + delta))
+        self._selected = {target}
+        self._active_index = target
+        self.see(target)
+        self.event_generate("<<ListboxSelect>>")
+        return "break"
+
+    def _jump_selection(self, target):
+        if not self._items:
+            return "break"
+        target = max(0, min(len(self._items) - 1, target))
+        self._selected = {target}
+        self._active_index = target
+        self.see(target)
+        self.event_generate("<<ListboxSelect>>")
+        return "break"
+
+    def _safe_render(self):
+        try:
+            if self.winfo_exists():
+                self._render()
+        except tk.TclError:
+            pass
+
+    def _render(self):
+        super().delete("all")
+        o = self._opts
+        row_h = self._row_height()
+        w = max(1, self.winfo_width() if self.winfo_width() > 1 else self._width_chars * self._char_width())
+        vis = self._visible_rows()
+        total = len(self._items)
+        if self._top_index > max(0, total - vis):
+            self._top_index = max(0, total - vis)
+        for row_offset in range(vis + 1):
+            idx = self._top_index + row_offset
+            if idx >= total:
+                break
+            y0 = row_offset * row_h
+            y1 = y0 + row_h
+            st = self._item_styles.get(idx, {})
+            selected = idx in self._selected
+            bg = st.get("selectbackground", o["selectbackground"]) if selected else st.get("background", o["bg"])
+            fg = st.get("selectforeground", o["selectforeground"]) if selected else st.get("foreground", o["fg"])
+            if selected or bg != o["bg"]:
+                self.create_rectangle(0, y0, w, y1, fill=bg, outline="", tags=("row",))
+            self.create_text(
+                0, (y0 + y1) / 2,
+                text=self._items[idx], font=o["font"], fill=fg, anchor="w", tags=("text",),
+            )
+        if callable(self._yscrollcommand):
+            try:
+                first, last = self.yview()
+                self._yscrollcommand(first, last)
+            except Exception:
+                pass
+
+
+class GlideScale(tk.Canvas):
+    """Themebarer Schieberegler auf Canvas-Grundlage mit kompatibler Scale-Schnittstelle."""
+
+    def __init__(self, master, **kwargs):
+        self._from = float(kwargs.pop("from_", kwargs.pop("from", 0.0)))
+        self._to = float(kwargs.pop("to", 100.0))
+        self._resolution = float(kwargs.pop("resolution", 1.0) or 1.0)
+        self._orient = kwargs.pop("orient", "horizontal")
+        self._variable = kwargs.pop("variable", None)
+        self._command = kwargs.pop("command", None)
+        length = int(kwargs.pop("length", 240) or 240)
+        bar_w = int(kwargs.pop("width", 12) or 12)
+        self._slider_len = int(kwargs.pop("sliderlength", 22) or 22)
+        bg = kwargs.pop("bg", kwargs.pop("background", "#335588"))
+        try:
+            parent_bg = master.cget("bg")
+        except Exception:
+            parent_bg = bg
+        self._opts = {
+            "bg": bg,
+            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
+            "troughcolor": kwargs.pop("troughcolor", "#444444"),
+            "activebackground": kwargs.pop("activebackground", bg),
+            "showvalue": kwargs.pop("showvalue", False),
+            "sliderrelief": kwargs.pop("sliderrelief", "flat"),
+            "state": kwargs.pop("state", "normal"),
+            "length": length,
+            "width": bar_w,
+        }
+        highlightthickness = kwargs.pop("highlightthickness", 0)
+        bd = kwargs.pop("bd", kwargs.pop("borderwidth", 0))
+        for k in list(kwargs):
+            self._opts[k] = kwargs.pop(k)
+        self._value = self._from
+        self._trace_id = None
+        super().__init__(
+            master, bg=parent_bg, bd=bd, highlightthickness=highlightthickness,
+            width=length, height=max(22, bar_w + 10), cursor="hand2", takefocus=1,
+        )
+        self._attach_variable(self._variable)
+        self.bind("<Button-1>", self._on_pointer)
+        self.bind("<B1-Motion>", self._on_pointer)
+        self.bind("<Left>", lambda _e: self._step(-1))
+        self.bind("<Right>", lambda _e: self._step(1))
+        self.bind("<Configure>", lambda _e: self._safe_render(), add="+")
+        self.bind("<Destroy>", self._on_destroy, add="+")
+        self._render()
+
+    def _attach_variable(self, variable):
+        if self._variable is not None and self._trace_id is not None:
+            try:
+                self._variable.trace_remove("write", self._trace_id)
+            except Exception:
+                pass
+        self._variable = variable
+        self._trace_id = None
+        if variable is not None:
+            try:
+                self._value = float(variable.get())
+            except Exception:
+                pass
+            if hasattr(variable, "trace_add"):
+                try:
+                    self._trace_id = variable.trace_add("write", lambda *_: self._sync_from_var())
+                except Exception:
+                    self._trace_id = None
+
+    def _on_destroy(self, event):
+        if event.widget is self:
+            self._attach_variable(None)
+
+    def _sync_from_var(self):
+        if self._variable is not None:
+            try:
+                self._value = float(self._variable.get())
+            except Exception:
+                pass
+        self._safe_render()
+
+    def _clamp(self, value):
+        lo, hi = min(self._from, self._to), max(self._from, self._to)
+        val = max(lo, min(hi, float(value)))
+        if self._resolution > 0:
+            steps = round((val - self._from) / self._resolution)
+            val = max(lo, min(hi, self._from + steps * self._resolution))
+            if self._resolution == int(self._resolution):
+                return int(round(val))
+        return val
+
+    def get(self):
+        if self._variable is not None:
+            try:
+                return self._clamp(self._variable.get())
+            except Exception:
+                pass
+        return self._clamp(self._value)
+
+    def set(self, value, *, invoke_command=False):
+        clamped = self._clamp(value)
+        self._value = clamped
+        if self._variable is not None:
+            try:
+                self._variable.set(clamped)
+            except Exception:
+                pass
+        self._safe_render()
+        if invoke_command and callable(self._command):
+            self._command(str(clamped))
+
+    def _on_pointer(self, event):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        try:
+            self.focus_set()
+        except tk.TclError:
+            pass
+        w = max(1, self.winfo_width())
+        pad = self._slider_len / 2
+        usable = max(1.0, w - 2 * pad)
+        frac = max(0.0, min(1.0, (event.x - pad) / usable))
+        self.set(self._from + frac * (self._to - self._from), invoke_command=True)
+        return "break"
+
+    def _step(self, direction):
+        if str(self._opts.get("state", "normal")) == "disabled":
+            return "break"
+        step = self._resolution if self._resolution > 0 else 1
+        self.set(self.get() + direction * step, invoke_command=True)
+        return "break"
+
+    def configure(self, cnf=None, **kwargs):
+        werte = dict(cnf or {}, **kwargs)
+        if not werte:
+            return super().configure()
+        if "from_" in werte:
+            self._from = float(werte.pop("from_"))
+        if "to" in werte:
+            self._to = float(werte.pop("to"))
+        if "resolution" in werte:
+            self._resolution = float(werte.pop("resolution") or 1.0)
+        if "variable" in werte:
+            self._attach_variable(werte.pop("variable"))
+        if "command" in werte:
+            self._command = werte.pop("command")
+        self._opts.update(werte)
+        self._safe_render()
+
+    config = configure
+
+    def cget(self, key):
+        if key in ("from", "from_"):
+            return self._from
+        if key == "to":
+            return self._to
+        if key in self._opts:
+            return self._opts[key]
+        return super().cget(key)
+
+    def _safe_render(self):
+        try:
+            if self.winfo_exists():
+                self._render()
+        except tk.TclError:
+            pass
+
+    def _render(self):
+        super().delete("all")
+        o = self._opts
+        w = max(40, self.winfo_width() if self.winfo_width() > 1 else int(o["length"]))
+        h = max(18, self.winfo_height() if self.winfo_height() > 1 else 22)
+        cy = h / 2
+        pad = self._slider_len / 2
+        usable = max(1.0, w - 2 * pad)
+        span = (self._to - self._from) or 1.0
+        frac = max(0.0, min(1.0, (float(self.get()) - self._from) / span))
+        sx = pad + frac * usable
+        self.create_polygon(
+            rounded_rect_points(4, cy - 3, w - 4, cy + 3, 3),
+            smooth=True, splinesteps=8, fill=o["troughcolor"], outline="",
+        )
+        self.create_polygon(
+            rounded_rect_points(sx - pad, cy - 6, sx + pad, cy + 6, 5),
+            smooth=True, splinesteps=10, fill=o["bg"], outline=o["fg"], width=1,
+        )
+
+
 class ThemedAutoScrollbar(tk.Canvas):
     """Themebare Canvas-Scrollbar ohne native weiße Windows-/Tk-Hintergründe.
 
@@ -4505,8 +5420,8 @@ class SavedFilters:
         if original_problems:
             tk.Label(advanced, text=' '.join(original_problems), bg=theme['bg'], fg=theme['delete'],
                      wraplength=560, justify='left').pack(fill='x')
-            tk.Checkbutton(advanced, text='Ungültige Definition durch diese Auswahl ersetzen', variable=repair,
-                           bg=theme['bg'], fg=theme['text'], selectcolor=theme['card']).pack(anchor='w')
+            GlideCheckbutton(advanced, text='Ungültige Definition durch diese Auswahl ersetzen', variable=repair,
+                             bg=theme['bg'], fg=theme['text'], selectcolor=theme['card']).pack(anchor='w')
         presentation_raw = self.raw_layout(initial)
         presentation = self.layout(initial)
         presentation_problems = glide_view_definition.layout_errors(presentation_raw)
@@ -4542,7 +5457,7 @@ class SavedFilters:
         for key in glide_view_definition.COLUMNS:
             variable = tk.BooleanVar(master=dialog, value=key in presentation['columns'])
             column_fields[key] = variable
-            check = tk.Checkbutton(appearance, text='Liste' if key == 'source' else app.TABLE_COLUMN_LABELS[key],
+            check = GlideCheckbutton(appearance, text='Liste' if key == 'source' else app.TABLE_COLUMN_LABELS[key],
                 variable=variable, bg=theme['bg'], fg=theme['text'], selectcolor=theme['input'],
                 activebackground=theme['bg'], activeforeground=theme['text'], font=app_font(11), anchor='w')
             check.pack(fill='x', pady=2)
@@ -4552,15 +5467,15 @@ class SavedFilters:
         for key, title in (('hide_empty', 'Leere Gruppen ausblenden'), ('only_open', 'In der Darstellung nur offene Aufgaben')):
             variable = tk.BooleanVar(master=dialog, value=presentation[key])
             option_fields[key] = variable
-            tk.Checkbutton(appearance, text=title, variable=variable, bg=theme['bg'], fg=theme['text'],
-                           selectcolor=theme['input'], font=app_font(11), anchor='w').pack(fill='x', pady=3)
+            GlideCheckbutton(appearance, text=title, variable=variable, bg=theme['bg'], fg=theme['text'],
+                             selectcolor=theme['input'], font=app_font(11), anchor='w').pack(fill='x', pady=3)
         layout_repair = tk.BooleanVar(master=dialog, value=False)
         if presentation_problems:
             tk.Label(appearance, text=' '.join(presentation_problems), wraplength=560,
                      bg=theme['bg'], fg=theme['delete'], justify='left').pack(fill='x')
-            tk.Checkbutton(appearance, text='Ungültige Darstellung durch diese Auswahl ersetzen',
-                           variable=layout_repair, bg=theme['bg'], fg=theme['text'],
-                           selectcolor=theme['card']).pack(anchor='w')
+            GlideCheckbutton(appearance, text='Ungültige Darstellung durch diese Auswahl ersetzen',
+                             variable=layout_repair, bg=theme['bg'], fg=theme['text'],
+                             selectcolor=theme['card']).pack(anchor='w')
         if appearance_open['value']:
             appearance.pack(fill='x')
         preview = tk.Label(body, text="", bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left")
@@ -5405,6 +6320,7 @@ class ItemWorkspace:
                  lambda: self.configure_board("auto_connect", not self.board().get("auto_connect"))),
                 (("Vollbild beenden" if self.board_focus_active() else "Vollbild"),
                  self.toggle_board_focus),
+                ("Als JSON Canvas (.canvas) …", self.export_board_json_canvas),
                 ("Drucken und PDF …", self.print_board),
             ],
         }
@@ -6621,6 +7537,113 @@ class ItemWorkspace:
             app.show_warning("Pinnwand drucken", str(fehler))
             return "break"
         return app.open_print_html(html_text, "glide_pinnwand", "Pinnwand drucken")
+
+    def board_canvas_cards_info(self, scope=None):
+        """Stellt die Kartendaten der Pinnwand für den JSON-Canvas-Export zusammen."""
+        app = self.app
+        scope = scope or self.scope()
+        board = self.board(scope)
+        cards = board.get("cards", {})
+        if not isinstance(cards, dict):
+            return {}
+        info = {}
+        item_lookup = {}
+        list_lookup = {}
+        for lst in getattr(app, "lists", []):
+            if not isinstance(lst, dict):
+                continue
+            lid = str(lst.get("id", "")).strip()
+            if lid:
+                list_lookup[lid] = lst
+            for item in app.walk_items(lst.get("items", [])):
+                iid = str(item.get("id", "")).strip()
+                if iid and iid not in item_lookup:
+                    item_lookup[iid] = (lst, item)
+        for key in cards:
+            key_str = str(key).strip()
+            if not key_str:
+                continue
+            if key_str.startswith("page:"):
+                lid = key_str[5:].strip()
+                lst = list_lookup.get(lid)
+                if lst is None:
+                    continue
+                kind = str(lst.get("list_kind", lst.get("kind", "list")) or "list")
+                note = str(lst.get("note", "") or "")
+                rich = lst.get("rich_note")
+                if not note.strip() and isinstance(rich, dict) and rich.get("text"):
+                    note = str(rich.get("text", "") or "")
+                info[key_str] = {
+                    "title": str(lst.get("title", lst.get("name", "")) or "Unbenannte Seite"),
+                    "kind": kind if kind in ("page", "note", "drawing") else "page",
+                    "note": note,
+                    "done": False,
+                    "checklist": [],
+                    "labels": [],
+                    "uri": f"glide://list/{lid}",
+                }
+            else:
+                pair = item_lookup.get(key_str)
+                if pair is None:
+                    continue
+                _lst, item = pair
+                labels = []
+                for lid in item.get("labels", []) or []:
+                    lbl = app.get_label(lid)
+                    name = str((lbl or {}).get("name", "") or lid).strip()
+                    if name:
+                        labels.append(name)
+                info[key_str] = {
+                    "title": str(item.get("text", "") or "Unbenannter Punkt"),
+                    "kind": str(item.get("kind", "task") or "task"),
+                    "note": str(item.get("description", item.get("note", "")) or ""),
+                    "done": bool(item.get("done")),
+                    "checklist": list(item.get("checklist", []) or []),
+                    "labels": labels,
+                    "uri": f"glide://item/{key_str}",
+                }
+        return info
+
+    def export_board_json_canvas(self, path=None):
+        """Exportiert die aktive oder globale Pinnwand als JSON Canvas 1.0 (.canvas)."""
+        app = self.app
+        scope = self.scope() if self.mode == "board" else "global"
+        board = self.board(scope)
+        cards = board.get("cards", {}) if isinstance(board, dict) else {}
+        areas = board.get("areas", []) if isinstance(board, dict) else []
+        if not cards and not areas:
+            app.show_info(
+                "JSON Canvas exportieren",
+                "Diese Pinnwand enthält noch keine angehefteten Karten oder Bereiche.",
+            )
+            return "break"
+        scope_title = app.get_display_title() if self.mode == "board" else "Globale Pinnwand"
+        cards_info = self.board_canvas_cards_info(scope)
+        payload, report = glide_pinboard_pages.export_json_canvas(
+            board, cards_info, scope_title=scope_title
+        )
+        if not path:
+            default_stem = app.safe_filename(scope_title or "pinnwand") or "pinnwand"
+            path = filedialog.asksaveasfilename(
+                parent=app.root,
+                title="Pinnwand als JSON Canvas (.canvas) exportieren",
+                defaultextension=".canvas",
+                initialfile=f"{default_stem}.canvas",
+                filetypes=[("JSON Canvas 1.0", "*.canvas"), ("JSON-Datei", "*.json"), ("Alle Dateien", "*.*")],
+            )
+        if not path:
+            return "break"
+        try:
+            app.write_json_atomic(path, payload)
+        except (OSError, ValueError) as exc:
+            app.show_error("JSON Canvas exportieren", f"Die Datei konnte nicht geschrieben werden:\n{exc}")
+            return "break"
+        app.record_data_operation("exported", path)
+        app.show_info(
+            "JSON Canvas exportiert",
+            f"Gespeichert unter:\n{path}\n\n{report.summary_text()}",
+        )
+        return path
 
     def area_selected_only(self):
         return bool(getattr(self, "selected_area", None)) and not self.selection() and self.areas_visible() \
@@ -20923,10 +21946,10 @@ class ListApp:
 
 
     def _daily_toggle(self, master, text, variable):
-        return tk.Checkbutton(master, text=text, variable=variable, bg=self.theme["bg"],
-                              fg=self.theme["text"], selectcolor=self.theme["input"],
-                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                              highlightthickness=0, font=app_font(10), takefocus=True)
+        return GlideCheckbutton(master, text=text, variable=variable, bg=self.theme["bg"],
+                                fg=self.theme["text"], selectcolor=self.theme["input"],
+                                activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                                highlightthickness=0, font=app_font(10), takefocus=True)
 
 
     def _daily_label(self, master, text, *, size=10, color="text", bold=False):
@@ -21555,10 +22578,10 @@ class ListApp:
         target_frame = tk.Frame(body, bg=self.theme["bg"])
         target_frame.pack(fill="x")
         for key, text in (("day", "Anderer Tag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
-            tk.Radiobutton(target_frame, text=text, value=key, variable=destination,
-                           bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
-                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                           font=app_font(10)).pack(side="left", padx=(0, 12))
+            GlideRadiobutton(target_frame, text=text, value=key, variable=destination,
+                             bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
+                             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                             font=app_font(10)).pack(side="left", padx=(0, 12))
         target = DueField(body, self, due=days[0] if days else self.plan_day(), due_time=None,
                           compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
         target.pack(fill="x", pady=(5, 8))
@@ -25079,7 +26102,7 @@ class ListApp:
         gewaehlt = set(repeat_form.get("tage", []))
         tage = [tk.BooleanVar(value=index in gewaehlt) for index in range(7)]
         for index, name in enumerate(self.REPEAT_WEEKDAY_NAMES):
-            tagwahl = tk.Checkbutton(tage_zeile, text=name, variable=tage[index], command=self.commit_detail_pane,
+            tagwahl = GlideCheckbutton(tage_zeile, text=name, variable=tage[index], command=self.commit_detail_pane,
                            bg=theme["card"], fg=theme["text"], activebackground=theme["card"],
                            activeforeground=theme["text"], selectcolor=theme["input"],
                            font=app_font(glide_design.FONT_SIZES["body"]))
@@ -25184,7 +26207,7 @@ class ListApp:
             reihe = tk.Frame(inhalt, bg=theme["card"])
             reihe.pack(fill="x")
             variable = tk.BooleanVar(value=bool(eintrag.get("done")))
-            schritt = tk.Checkbutton(reihe, text=eintrag.get("text", ""), variable=variable,
+            schritt = GlideCheckbutton(reihe, text=eintrag.get("text", ""), variable=variable,
                                     state="disabled" if getattr(self, "_data_read_only", False) else "normal",
                                     bg=theme["card"], activebackground=theme["card"],
                                     fg=theme["muted"] if eintrag.get("done") else theme["text"],
@@ -25273,6 +26296,9 @@ class ListApp:
             if rueck:
                 hinweis(rueck_titel + ": " + "; ".join(self.relation_label(punkt, index_aller)
                                                        for _eintrag, punkt in rueck[:6]))
+        self._make_dialog_button(inhalt, "Fundorte …",
+                                 lambda iid=item["id"]: self.show_usage_locations_dialog(("item", iid)),
+                                 "muted", width=170, height=30).pack(anchor="w", pady=(6, 0))
 
         self.detail_status = tk.Label(inhalt, text="", bg=theme["card"], fg=theme["delete"], font=app_font(glide_design.FONT_SIZES["caption"]),
                                       anchor="w", wraplength=breite, justify="left")
@@ -25305,7 +26331,7 @@ class ListApp:
         if getattr(self,"_data_read_only",False):
             self.detail_status.configure(text="Schreibgeschützter Bestand · Angaben nur ansehen.")
             for widget in self.iter_descendants(inhalt):
-                if isinstance(widget,(tk.Entry,tk.Text,tk.Checkbutton,tk.Button,tk.Menubutton,AppOptionMenu)):
+                if isinstance(widget,(tk.Entry,tk.Text,GlideCheckbutton,tk.Button,tk.Menubutton,AppOptionMenu)):
                     widget.configure(state="disabled")
                 elif isinstance(widget, LabelDropdown):
                     widget.summary_label.configure(state="disabled")
@@ -25331,9 +26357,9 @@ class ListApp:
         """Passt einen Maskenbaustein an eine Fläche mit anderem Hintergrund und schmaler Breite an."""
         for kind in [block, *self.iter_descendants(block)]:
             try:
-                if isinstance(kind, (tk.Frame, tk.Label, tk.Checkbutton)) and kind.cget("bg") == self.theme["bg"]:
+                if isinstance(kind, (tk.Frame, tk.Label, GlideCheckbutton)) and kind.cget("bg") == self.theme["bg"]:
                     kind.configure(bg=bg)
-                    if isinstance(kind, tk.Checkbutton):
+                    if isinstance(kind, GlideCheckbutton):
                         kind.configure(activebackground=bg)
                     if isinstance(kind, DueField):
                         kind.surface = bg
@@ -25429,7 +26455,7 @@ class ListApp:
         border, button = self._make_option_menu(row, basis, ("Ab Fälligkeit", "Ab Erledigung"))
         border.pack(fill="x", pady=(4, 6))
         glide_core_accessibility.bind_choice(button, "Wiederholung: Bezug")
-        check = tk.Checkbutton(row, text="Serie pausieren", variable=paused, bg=background,
+        check = GlideCheckbutton(row, text="Serie pausieren", variable=paused, bg=background,
             fg=self.theme["text"], selectcolor=self.theme["input"], activebackground=background,
             font=app_font(10))
         check.pack(anchor="w")
@@ -27382,10 +28408,10 @@ class ListApp:
                 selected.add(key) if value.get() else selected.discard(key)
                 totals()
 
-            check = tk.Checkbutton(panel, text=label, variable=variable, command=toggle,
-                                   font=app_font(10), bg=theme["card"], fg=theme["text"],
-                                   selectcolor=theme["card"], activebackground=theme["card"],
-                                   activeforeground=theme["text"], anchor="w", justify="left")
+            check = GlideCheckbutton(panel, text=label, variable=variable, command=toggle,
+                                     font=app_font(10), bg=theme["card"], fg=theme["text"],
+                                     selectcolor=theme["card"], activebackground=theme["card"],
+                                     activeforeground=theme["text"], anchor="w", justify="left")
             check._proposal_identity = identity
             check.pack(fill="x", pady=(0, 8))
             check.bind("<Configure>", lambda event, widget=check: widget.configure(
@@ -28191,10 +29217,10 @@ class ListApp:
         rahmen, feld = self._make_field(outer)
         rahmen.pack(fill="both", expand=True)
         feld.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
-        liste = tk.Listbox(feld, height=14, bg=self.theme["input"], fg=self.theme["text"],
-                           selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
-                           activestyle="none", relief="flat", bd=0, highlightthickness=0,
-                           font=app_font(10), name="home_tiles")
+        liste = GlideListbox(feld, height=14, bg=self.theme["input"], fg=self.theme["text"],
+                             selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+                             activestyle="none", relief="flat", bd=0, highlightthickness=0,
+                             font=app_font(10), name="home_tiles")
         self._attach_field_scrollbar(feld, liste)
         liste.pack(fill="both", expand=True, padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
         titel = {key: text for key, text, _gewicht, _breit, _sichtbar in self.HOME_TILE_DEFINITIONS}
@@ -31382,18 +32408,18 @@ class ListApp:
                 ("Fällige Benachrichtigungen auch als Systemmitteilung zeigen", systemhinweis,
                  "setting_system_notifications"),
                 ("Änderungen protokollieren (Änderungsverlauf)", verlauf, "setting_history")):
-            tk.Checkbutton(personal, text=title, variable=variable, name=widgetname, bg=self.theme["bg"],
-                           fg=self.theme["text"],
-                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
+            GlideCheckbutton(personal, text=title, variable=variable, name=widgetname, bg=self.theme["bg"],
+                             fg=self.theme["text"],
+                             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
         self._make_dialog_button(personal, "Systemmitteilung testen", self.test_system_notification, "muted", width=240).pack(anchor="w", pady=(glide_design.SPACING[4], glide_design.SPACING[8]))
         tk.Label(appearance, text="Bereiche der Seitenleiste", bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
         for key, variable in sidebar_visibility.items():
-            tk.Checkbutton(appearance, text=glide_sidebar.TITLES[key], variable=variable,
-                           name=f"setting_sidebar_{key}", bg=self.theme["bg"], fg=self.theme["text"],
-                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[3])
+            GlideCheckbutton(appearance, text=glide_sidebar.TITLES[key], variable=variable,
+                             name=f"setting_sidebar_{key}", bg=self.theme["bg"], fg=self.theme["text"],
+                             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[3])
         tk.Label(appearance, text="Listen bleibt immer sichtbar. Ausgeblendete Inhalte findest du dort weiterhin.",
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), wraplength=300,
                  justify="left", anchor="w").pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
@@ -31482,9 +32508,9 @@ class ListApp:
                                 ("Bewegte Rückmeldung bei Zustands- und Bereichswechseln", animationen),
                                 # B06 (15.10.2026): ersetzt das „?“ je Ansicht.
                                 ("Ergänzende Bedienhinweise in den Ansichten anzeigen", hinweise)):
-            tk.Checkbutton(appearance, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
-                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
+            GlideCheckbutton(appearance, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
+                             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
         # Wie weit die Rückmeldung reicht. Die Voreinstellung
         # folgt dem Design: Im Dopamin-Design meldet sich jede Aktion, sonst
         # nur Erledigtes und erreichte Ziele.
@@ -31509,10 +32535,10 @@ class ListApp:
         # ein Design ohne helles Gegenstück nutzt bei hellem System „Hell“.
         hell_dunkel = tk.BooleanVar(
             value=glide_appearance.normalize_auto(self.settings.get("design_auto"), self.DESIGNS) is not None)
-        tk.Checkbutton(appearance, text="Automatisch hell/dunkel nach System", variable=hell_dunkel,
-                       name="setting_design_auto", bg=self.theme["bg"], fg=self.theme["text"],
-                       activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                       selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
+        GlideCheckbutton(appearance, text="Automatisch hell/dunkel nach System", variable=hell_dunkel,
+                         name="setting_design_auto", bg=self.theme["bg"], fg=self.theme["text"],
+                         activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                         selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
 
         def design_hinweis_nachziehen(*_args):
             schluessel = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
@@ -31797,12 +32823,12 @@ class ListApp:
                 return
             panel._glide_wrap = breite
             for widget in panel.winfo_children():
-                if isinstance(widget, (tk.Label, tk.Checkbutton)):
+                if isinstance(widget, (tk.Label, GlideCheckbutton)):
                     widget.configure(wraplength=breite)
 
         for panel in (personal, appearance):
             for widget in panel.winfo_children():
-                if isinstance(widget, (tk.Label, tk.Checkbutton)):
+                if isinstance(widget, (tk.Label, GlideCheckbutton)):
                     widget.configure(justify="left", anchor="w")
             panel.bind("<Configure>", lambda event, ziel=panel: umbrechen(event, ziel), add="+")
         variables = (name, logo, start, startup, startliste, stats, moon, yearly, seconds,
@@ -32820,7 +33846,7 @@ class ListApp:
         attachment_border, attachment_field = self._make_field(inner)
         attachment_border.pack(fill="x")
         attachment_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
-        attachment_list = tk.Listbox(
+        attachment_list = GlideListbox(
             attachment_field, height=4,
             bg=self.theme["input"], fg=self.theme["text"],
             selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
@@ -32932,7 +33958,7 @@ class ListApp:
         border, field = self._make_field(inner)
         border.pack(fill="x")
         field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
-        liste = tk.Listbox(
+        liste = GlideListbox(
             field, height=5,
             bg=self.theme["input"], fg=self.theme["text"],
             selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
@@ -33192,7 +34218,7 @@ class ListApp:
         list_border, list_field = self._make_field(container)
         list_border.pack(fill="both", expand=True)
         list_field.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
-        listbox = tk.Listbox(
+        listbox = GlideListbox(
             list_field,
             height=min(9, max(3, len(choices))), width=48,
             bg=self.theme["input"], fg=self.theme["text"],
@@ -33754,7 +34780,7 @@ class ListApp:
                 self._make_field_label(block, label).pack(
                     side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
             else:
-                tk.Checkbutton(
+                GlideCheckbutton(
                     block, name="apply_" + key, text=label + " ändern", variable=apply_fields[key],
                     bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                     activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -34177,10 +35203,10 @@ class ListApp:
         for index, name in enumerate(self.REPEAT_WEEKDAY_NAMES):
             var = tk.BooleanVar(value=index in gewaehlte_tage)
             weekday_vars.append(var)
-            tk.Checkbutton(weekday_boxes, text=name, variable=var, bg=self.theme["bg"],
-                           fg=self.theme["text"], activebackground=self.theme["bg"],
-                           activeforeground=self.theme["text"], selectcolor=self.theme["input"],
-                           font=app_font(10)).pack(side="left", padx=(0, 8))
+            GlideCheckbutton(weekday_boxes, text=name, variable=var, bg=self.theme["bg"],
+                             fg=self.theme["text"], activebackground=self.theme["bg"],
+                             activeforeground=self.theme["text"], selectcolor=self.theme["input"],
+                             font=app_font(10)).pack(side="left", padx=(0, 8))
 
         position_row, position_vars = self.make_repeat_position_editor(repeat_detail, vorhandene_regel, self.theme["bg"])
         repeat_options_row, repeat_options = self.make_repeat_options_editor(repeat_detail, vorhandene_regel, self.theme["bg"])
@@ -35076,6 +36102,7 @@ class ListApp:
         if source not in index:
             menu.add_command(label='Kein Objekt ausgewählt', state='disabled')
             return menu
+        menu.add_command(label='Fundorte anzeigen …', command=lambda: self.show_usage_locations_dialog(source))
         if index[source][0] == 'active':
             menu.add_command(label='Verknüpfen …', command=lambda: self.change_object_reference(source))
         for label, keys in [('Verweise', outgoing.get(source, set())), ('Rückverweise', incoming.get(source, set()))]:
@@ -35197,6 +36224,258 @@ class ListApp:
         menu = self.build_object_reference_menu(source)
         self._popup_at_widget(menu, self.search_button)
         return 'break'
+
+    def export_board_json_canvas(self, path=None):
+        """Exportiert die aktive oder globale Pinnwand als JSON Canvas 1.0 (.canvas)."""
+        return self.workspace.export_board_json_canvas(path=path)
+
+    def open_usage_location(self, loc, *, side=False):
+        """Öffnet einen Fundort aus der Fundortübersicht im Hauptbereich oder in der Nebenansicht."""
+        if loc is None:
+            return False
+        if side:
+            if loc.source[0] in ("item", "list"):
+                return self.open_object_reference(glide_objects.uri(*loc.source), side=True)
+            return False
+        if loc.kind == "pinboard":
+            scope = str(loc.source[1] or "global")
+            if scope == "global":
+                self.open_global_board()
+                return True
+            if scope.startswith("list:"):
+                lid = scope.split(":", 1)[1]
+                if self.open_object_reference(glide_objects.uri("list", lid)):
+                    self.open_board_view()
+                    return True
+                return False
+            if scope.startswith("folder:"):
+                fid = scope.split(":", 1)[1]
+                self.set_active_folder(fid)
+                self.open_board_view()
+                return True
+            return False
+        if loc.kind == "mention" and loc.mention is not None:
+            return self.open_mention(loc.mention)
+        if loc.source[0] in ("item", "list"):
+            return self.open_object_reference(glide_objects.uri(*loc.source))
+        return False
+
+    def show_usage_locations_dialog(self, target=None, event=None):
+        """Zeigt alle Fundorte des ausgewählten oder übergebenen Objekts im gesamten Bestand."""
+        target = target or self.current_object_key()
+        index, _, _ = self.object_graph()
+        if not target or target not in index:
+            self.show_info(
+                "Fundorte anzeigen",
+                "Bitte zuerst eine Aufgabe, eine Liste, eine Seite, eine Notiz oder eine Zeichnung auswählen.",
+            )
+            return "break"
+        _state, target_title = glide_objects.caption(target, index)
+        pinboards = getattr(self.workspace, "pinboards", None) if hasattr(self, "workspace") else None
+
+        theme = self.theme
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Fundorte: {target_title}")
+        dialog.configure(bg=theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(560, 380)
+        body = tk.Frame(dialog, bg=theme["bg"])
+        body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(
+            body,
+            text=f"Fundorte: {target_title}",
+            bg=theme["bg"],
+            fg=theme["text"],
+            font=app_font(15, "bold"),
+            anchor="w",
+        ).pack(anchor="w", pady=(0, 4))
+
+        header_var = tk.StringVar(value="")
+        tk.Label(
+            body,
+            textvariable=header_var,
+            bg=theme["bg"],
+            fg=theme["muted"],
+            font=app_font(glide_design.FONT_SIZES["body"]),
+            anchor="w",
+            justify="left",
+            wraplength=660,
+        ).pack(fill="x", pady=(0, 8))
+
+        filter_row = tk.Frame(body, bg=theme["bg"])
+        filter_row.pack(fill="x", pady=(0, 8))
+        tk.Label(
+            filter_row,
+            text="Filtern:",
+            bg=theme["bg"],
+            fg=theme["text"],
+            font=app_font(glide_design.FONT_SIZES["body"]),
+        ).pack(side="left", padx=(0, 6))
+        query_var = tk.StringVar(value="")
+        search_border, search_field = self._make_field(filter_row)
+        search_border.pack(side="left", fill="x", expand=True)
+        search_field.pack(fill="x", padx=1, pady=1)
+        search_entry = tk.Entry(
+            search_field,
+            textvariable=query_var,
+            bg=theme["input"],
+            fg=theme["text"],
+            insertbackground=theme["text"],
+            relief="flat",
+            bd=0,
+            highlightthickness=0,
+            font=app_font(glide_design.FONT_SIZES["body"]),
+        )
+        search_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+
+        list_border, list_field = self._make_field(body)
+        list_border.pack(fill="both", expand=True)
+        list_field.pack(fill="both", expand=True, padx=1, pady=1)
+        listbox = GlideListbox(
+            list_field,
+            bg=theme["input"],
+            fg=theme["text"],
+            selectbackground=theme["selection"],
+            selectforeground=theme["selection_text"],
+            font=app_font(glide_design.FONT_SIZES["body"]),
+            activestyle="none",
+            exportselection=False,
+            height=12,
+        )
+        self._attach_field_scrollbar(list_field, listbox)
+        listbox.pack(side="left", fill="both", expand=True, padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+
+        detail_var = tk.StringVar(value="")
+        tk.Label(
+            body,
+            textvariable=detail_var,
+            bg=theme["bg"],
+            fg=theme["muted"],
+            font=app_font(glide_design.FONT_SIZES["caption"]),
+            anchor="w",
+            justify="left",
+            wraplength=660,
+        ).pack(fill="x", pady=(8, 0))
+
+        visible_locations = []
+
+        def current_selection():
+            sel = listbox.curselection()
+            if not sel:
+                return None
+            idx = sel[0]
+            if 0 <= idx < len(visible_locations):
+                return visible_locations[idx]
+            return None
+
+        def update_detail(_event=None):
+            loc = current_selection()
+            if loc is None:
+                detail_var.set("Fundort auswählen, um Details zu sehen oder direkt dorthin zu springen.")
+                return
+            state_map = {
+                "active": "Aktiv",
+                "archived": "Archiviert",
+                "trash": "Im Papierkorb",
+                "missing": "Nicht gefunden",
+            }
+            parts = [
+                f"Art: {loc.kind_label}",
+                f"Fundort: {loc.title}",
+                f"Status: {state_map.get(loc.state, loc.state)}",
+            ]
+            if loc.context:
+                parts.append(f"Kontext: {loc.context}")
+            if loc.detail:
+                parts.append(f"Hinweis: {loc.detail}")
+            detail_var.set("  ·  ".join(parts))
+
+        def reload_locations(*_args):
+            all_locs = glide_objects.usage_locations(
+                target,
+                self.lists,
+                folders=getattr(self, "folders", ()),
+                trash=getattr(self, "trash", ()),
+                pinboards=pinboards,
+            )
+            q = query_var.get().strip().casefold()
+            visible_locations.clear()
+            listbox.delete(0, "end")
+            for loc in all_locs:
+                row_text = f"[{loc.kind_label}] {loc.title}"
+                if loc.context:
+                    row_text += f" — {loc.context}"
+                if loc.detail:
+                    row_text += f" ({loc.detail})"
+                if loc.state == "archived":
+                    row_text += " [Archiv]"
+                elif loc.state == "trash":
+                    row_text += " [Papierkorb]"
+                if q and q not in row_text.casefold():
+                    continue
+                visible_locations.append(loc)
+                listbox.insert("end", row_text)
+            header_var.set(
+                f"{len(all_locs)} Fundort(e) für {target_title} im gesamten Bestand gefunden"
+                + (f" ({len(visible_locations)} sichtbar)." if q else ".")
+            )
+            if visible_locations:
+                listbox.selection_set(0)
+            update_detail()
+
+        def jump_to_selected(*, side=False):
+            loc = current_selection()
+            if loc is None:
+                return
+            if loc.state in ("trash", "missing") and loc.kind != "pinboard":
+                self.show_info("Fundort öffnen", "Einträge im Papierkorb können hier nicht direkt geöffnet werden.", parent=dialog)
+                return
+            dialog.destroy()
+            self.open_usage_location(loc, side=side)
+
+        def link_selected_mention():
+            loc = current_selection()
+            if loc is None or loc.kind != "mention" or loc.mention is None:
+                self.show_info("Erwähnung verknüpfen", "Bitte eine unverknüpfte Text-Erwähnung in der Liste auswählen.", parent=dialog)
+                return
+            if self.link_unlinked_mention(target, loc.mention):
+                reload_locations()
+
+        query_var.trace_add("write", reload_locations)
+        listbox.bind("<<ListboxSelect>>", update_detail, add="+")
+        listbox.bind("<Double-Button-1>", lambda _e: jump_to_selected(side=False), add="+")
+        listbox.bind("<Return>", lambda _e: jump_to_selected(side=False), add="+")
+        dialog.bind("<Escape>", lambda _e: dialog.destroy())
+
+        buttons = tk.Frame(body, bg=theme["bg"])
+        buttons.pack(fill="x", pady=(12, 0))
+        self._make_dialog_button(buttons, "Schließen", dialog.destroy, "muted").pack(side="right", padx=(6, 0))
+        if target[0] == "list" and not getattr(self, "_data_read_only", False):
+            self._make_dialog_button(buttons, "Erwähnung verknüpfen", link_selected_mention, "muted", width=175).pack(
+                side="right", padx=(6, 0)
+            )
+        if not getattr(self, "_compact", None):
+            self._make_dialog_button(
+                buttons,
+                "In Nebenansicht",
+                lambda: jump_to_selected(side=True),
+                "muted",
+                width=145,
+            ).pack(side="right", padx=(6, 0))
+        self._make_dialog_button(
+            buttons,
+            "Öffnen",
+            lambda: jump_to_selected(side=False),
+            "confirm",
+            width=110,
+        ).pack(side="right")
+
+        reload_locations()
+        self._center_dialog(dialog, min_width=680, min_height=460)
+        self._schedule_windows_chrome_theme(dialog)
+        search_entry.focus_set()
+        self.run_modal(dialog)
+        return "break"
 
     def open_calendar_view(self, event=None):
         self._calendar_anchor = getattr(self, '_calendar_anchor', date.today())
@@ -37176,7 +38455,7 @@ class ListApp:
         for key in self.TABLE_COLUMN_KEYS:
             variable = tk.BooleanVar(value=key in selected)
             variables[key] = variable
-            check = tk.Checkbutton(
+            check = GlideCheckbutton(
                 outer, text=self.TABLE_COLUMN_LABELS[key], variable=variable,
                 bg=self.theme["bg"], fg=self.theme["text"], activebackground=self.theme["bg"],
                 activeforeground=self.theme["text"], selectcolor=self.theme["input"],
@@ -43301,7 +44580,7 @@ class ListApp:
         self.hide_done_box_border.pack_propagate(False)
         self.hide_done_box_inner = self.hide_done_box_border.inner
 
-        self.hide_done_check = tk.Checkbutton(
+        self.hide_done_check = GlideCheckbutton(
             self.hide_done_box_inner,
             text="Nur offene Punkte",
             variable=self.hide_done_var,
@@ -51859,9 +53138,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         modes = ButtonFlow(body, self.theme["bg"], gap=8)
         modes.pack(fill="x")
         for label, value in (("Gemeinsame Dauer", "common"), ("Eigene Dauer", "own")):
-            radio = tk.Radiobutton(modes, text=label, variable=own_mode, value=value,
-                                   font=app_font(self.ui_font_size()), bg=self.theme["bg"], fg=self.theme["text"],
-                                   selectcolor=self.theme["input"], activebackground=self.theme["bg"])
+            radio = GlideRadiobutton(modes, text=label, variable=own_mode, value=value,
+                                     font=app_font(self.ui_font_size()), bg=self.theme["bg"], fg=self.theme["text"],
+                                     selectcolor=self.theme["input"], activebackground=self.theme["bg"])
             modes.add(radio)
 
         def live_editor():
@@ -52824,12 +54103,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         row.pack(fill="x", pady=(4, 0))
         tk.Label(row, text=label, width=11, anchor="w", bg=self.theme["bg"], fg=self.theme["text"],
                  font=app_font(10)).pack(side="left")
-        scale = tk.Scale(row, from_=start, to=end, resolution=1, orient="horizontal", showvalue=False,
-                         length=300, variable=variable, command=lambda _value: command(),
-                         bg=self.theme["selection"], fg=self.theme["text"],
-                         troughcolor=self.theme["input_border"], width=12, sliderlength=22,
-                         highlightthickness=0, bd=0, sliderrelief="flat",
-                         activebackground=self.theme["selection"])
+        scale = GlideScale(row, from_=start, to=end, resolution=1, orient="horizontal", showvalue=False,
+                           length=300, variable=variable, command=lambda _value: command(),
+                           bg=self.theme["selection"], fg=self.theme["text"],
+                           troughcolor=self.theme["input_border"], width=12, sliderlength=22,
+                           highlightthickness=0, bd=0, sliderrelief="flat",
+                           activebackground=self.theme["selection"])
         scale.pack(side="left", fill="x", expand=True)
         value_label = tk.Label(row, width=10, anchor="e", bg=self.theme["bg"], fg=self.theme["muted"],
                                font=app_font(10))
@@ -57238,15 +58517,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         note.bind("<Tab>", lambda e: (note.tk_focusNext().focus_set(), "break")[1])
         note.bind("<Shift-Tab>", lambda e: (note.tk_focusPrev().focus_set(), "break")[1])
         more = tk.BooleanVar(value=False)
-        # Ein ttk.Checkbutton zeichnet sich nach den
-        # Vorgaben des Betriebssystems – im Dunkelmodus ein weißer Kasten
-        # mitten in der dunklen Maske. Alle anderen Kästchen in Glide sind
-        # tk.Checkbutton mit Themefarben; dieses eine war übersehen worden.
-        tk.Checkbutton(body, text="Danach eine weitere Aufgabe erfassen", variable=more,
-                       bg=theme["bg"], fg=theme["text"], activebackground=theme["bg"],
-                       activeforeground=theme["text"], selectcolor=theme["input"],
-                       relief="flat", bd=0, highlightthickness=0, anchor="w",
-                       font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[12], glide_design.SPACING[0]))
+        GlideCheckbutton(body, text="Danach eine weitere Aufgabe erfassen", variable=more,
+                         bg=theme["bg"], fg=theme["text"], activebackground=theme["bg"],
+                         activeforeground=theme["text"], selectcolor=theme["input"],
+                         relief="flat", bd=0, highlightthickness=0, anchor="w",
+                         font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[12], glide_design.SPACING[0]))
         message = tk.Label(body, text="", bg=theme["bg"], fg=theme["delete"], anchor="w", justify="left")
         message.pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[0]))
         def show_preview(*_args):
@@ -61766,11 +63041,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         rahmen, umfang_menu = self._make_option_menu(aussen, auswahl, [name for _key, name in umfaenge])
         umfang_menu.configure(width=1)
         rahmen.pack(fill="x", pady=(0, 8))
-        tk.Checkbutton(aussen, text="Erledigte Punkte mitgeben", variable=erledigte,
-                       bg=self.theme["bg"], fg=self.theme["text"], activebackground=self.theme["bg"],
-                       activeforeground=self.theme["text"], selectcolor=self.theme["input"],
-                       relief="flat", bd=0, highlightthickness=0, anchor="w",
-                       font=app_font(10)).pack(fill="x", pady=(0, 8))
+        GlideCheckbutton(aussen, text="Erledigte Punkte mitgeben", variable=erledigte,
+                         bg=self.theme["bg"], fg=self.theme["text"], activebackground=self.theme["bg"],
+                         activeforeground=self.theme["text"], selectcolor=self.theme["input"],
+                         relief="flat", bd=0, highlightthickness=0, anchor="w",
+                         font=app_font(10)).pack(fill="x", pady=(0, 8))
         meldung = self.dialog_label(footer, "", color="delete", pady=(4, 0))
         knoepfe = ButtonFlow(footer, bg=self.theme["bg"], align="e")
         knoepfe.pack(fill="x")
@@ -63245,21 +64520,21 @@ Labels, Termine und Metadaten."""
             baue_zuordnung()
             aktualisiere_vorschau()
 
-        tk.Checkbutton(
+        GlideCheckbutton(
             body, name="csv_header", text="Erste Zeile enthält Spaltennamen", variable=kopf_var,
             command=lade_neu, bg=self.theme["bg"], fg=self.theme["text"],
             selectcolor=self.theme["input"], activebackground=self.theme["bg"],
             activeforeground=self.theme["text"], anchor="w", font=app_font(10),
             highlightthickness=0,
         ).pack(fill="x", pady=(14, 2))
-        tk.Checkbutton(
+        GlideCheckbutton(
             body, name="csv_nest", text="Verschachtelung aus Ebene oder Nummer übernehmen",
             variable=nest_var, command=lambda: aktualisiere_vorschau(),
             bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
             anchor="w", font=app_font(10), highlightthickness=0,
         ).pack(fill="x", pady=2)
-        tk.Checkbutton(
+        GlideCheckbutton(
             body, name="csv_append",
             text=(f"An die geöffnete Liste „{self.app_title}“ anhängen (sonst als neue Liste)"
                   if liste_offen else "An die geöffnete Liste anhängen (keine Liste geöffnet)"),
@@ -63955,7 +65230,7 @@ Labels, Termine und Metadaten."""
         variablen = {}
         for key, text in self.PRINT_OPTION_LABELS:
             variablen[key] = tk.BooleanVar(value=vorgaben[key])
-            tk.Checkbutton(
+            GlideCheckbutton(
                 outer, name="print_" + key, text=text, variable=variablen[key],
                 bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                 activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -64334,7 +65609,7 @@ Labels, Termine und Metadaten."""
         variablen = {}
         for key, text in self.ICS_OPTION_LABELS:
             variablen[key] = tk.BooleanVar(value=vorgaben[key])
-            tk.Checkbutton(
+            GlideCheckbutton(
                 outer, name="ics_" + key, text=text, variable=variablen[key],
                 bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                 activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -64956,7 +66231,7 @@ Labels, Termine und Metadaten."""
         variablen = {}
         for key, text in self.ICS_IMPORT_OPTION_LABELS:
             variablen[key] = tk.BooleanVar(value=vorgaben[key])
-            tk.Checkbutton(
+            GlideCheckbutton(
                 body, name="icsimp_" + key, text=text, variable=variablen[key],
                 bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                 activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -64964,7 +66239,7 @@ Labels, Termine und Metadaten."""
             ).pack(fill="x", pady=2)
         liste_offen = self.view_mode in ("list", self.TABLE_VIEW)
         anhaengen_var = tk.BooleanVar(value=bool(append_to_current))
-        tk.Checkbutton(
+        GlideCheckbutton(
             body, name="icsimp_append",
             text=(f"An die geöffnete Liste „{self.app_title}“ anhängen (sonst als neue Liste)"
                   if liste_offen else "An die geöffnete Liste anhängen (keine Liste geöffnet)"),
@@ -65353,7 +66628,7 @@ Labels, Termine und Metadaten."""
         variablen = {}
         for name in self.APP_BACKUP_SECTIONS:
             variablen[name] = tk.BooleanVar(value=verfuegbar[name])
-            check = tk.Checkbutton(
+            check = GlideCheckbutton(
                 outer, name="section_" + name, text=beschriftung[name], variable=variablen[name],
                 bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                 activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -67614,6 +68889,7 @@ Labels, Termine und Metadaten."""
                     ("Alles als Markdown-Ordner …", self.export_all_markdown),
                     ("Als CSV …", self.export_as_csv),
                     ("Als Glide-Seite …", self.export_glide_pages),
+                    ("Pinnwand als JSON Canvas (.canvas) …", self.export_board_json_canvas),
                     None,
                     ("Kalenderdatei (ICS) …", self.show_calendar_export_dialog),
                     ("Drucken und PDF …", self.show_print_dialog, self.accel("P")),
@@ -67793,6 +69069,7 @@ Labels, Termine und Metadaten."""
                 ("Benachrichtigungen …", self.open_reminders),
                 ("Änderungsverlauf", self.open_history_view, self.accel("H")),
                 ("Verweise und Rückverweise", self.show_object_references, None),
+                ("Fundorte anzeigen …", self.show_usage_locations_dialog),
             )),
             ("Hilfe", (
                 ("Handbuch …", self.show_manual_dialog, "F1"),
@@ -68646,7 +69923,7 @@ class TemplateDraft(ListApp):
             commands.add(self._make_dialog_button(commands, text, command, color, width=width, height=36))
         self.relative_var = tk.BooleanVar(value=bool(self.record.get("schedule_anchor")))
         self.relative_anchor = self.record.get("schedule_anchor") or date.today().isoformat()
-        relative = tk.Checkbutton(footer, text="Termine relativ zum Einsatzdatum", variable=self.relative_var,
+        relative = GlideCheckbutton(footer, text="Termine relativ zum Einsatzdatum", variable=self.relative_var,
             bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
             activebackground=self.theme["bg"], activeforeground=self.theme["text"], font=app_font(9))
         relative.pack(side="left")

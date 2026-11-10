@@ -317,7 +317,7 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
             dialog.update()
             spalten = {}
             for widget in descendants(dialog):
-                if isinstance(widget, (mod.tk.Label, mod.tk.Checkbutton)) and str(widget.cget("justify")) == "left":
+                if isinstance(widget, (mod.tk.Label, mod.tk.Checkbutton, mod.GlideCheckbutton)) and str(widget.cget("justify")) == "left":
                     umbruch = int(float(widget.cget("wraplength") or 0))
                     if umbruch:
                         spalten.setdefault(str(widget.master), set()).add(umbruch)

@@ -61,25 +61,27 @@ VERBOTEN = {
     "tkinter.simpledialog.Dialog": "Glide-Dialog (run_modal)",
 }
 
-# Sperrklinke für den heutigen Restbestand klassischer Tk-Elemente. Auf macOS
-# zeichnet Tk sie nativ; unter Windows/Linux erscheinen sie im Systemaltstil.
-# Ihr Ersatz ist ein eigener Auftrag (Plan §21.76); bis dahin darf ihre Zahl
-# nur sinken. Nach einem Abbau die Zahl hier im selben Schritt senken.
+# Sperrklinke für klassische Tk-Elemente (Plan §21.76 / D78): vollständig auf 0
+# abgebaut. Jedes neue Vorkommen von Checkbutton, Radiobutton, Listbox oder Scale
+# wird sofort als Befund gemeldet; stattdessen `GlideCheckbutton`,
+# `GlideRadiobutton`, `GlideListbox` und `GlideScale` verwenden.
 BESTAND = {
-    "tkinter.Checkbutton": 28,
-    "tkinter.Radiobutton": 2,
-    "tkinter.Listbox": 4,
-    "tkinter.Scale": 1,
+    "tkinter.Checkbutton": 0,
+    "tkinter.Radiobutton": 0,
+    "tkinter.Listbox": 0,
+    "tkinter.Scale": 0,
 }
 
 # Winfo-Klassen zur Laufzeit. „Scrollbar“ ist die klassische Tk-Leiste,
-# „TScrollbar“ die ttk-Leiste; beide sind ausgeschlossen.
+# „TScrollbar“ die ttk-Leiste; auch klassische Tk-Kästchen, Radioschalter,
+# Listenboxen und Schieberegler sind seit 3.54.0 ausgeschlossen.
 WIDGETKLASSEN_VERBOTEN = frozenset({
     "Scrollbar", "TScrollbar", "Spinbox", "TSpinbox", "TCombobox", "TProgressbar", "TScale",
     "Menubutton", "TMenubutton", "TNotebook", "TButton", "TCheckbutton", "TRadiobutton", "TEntry",
     "Labelframe", "TLabelframe", "TSizegrip",
+    "Checkbutton", "Radiobutton", "Listbox", "Scale",
 })
-WIDGETKLASSEN_BESTAND = frozenset({"Checkbutton", "Radiobutton", "Listbox", "Scale"})
+WIDGETKLASSEN_BESTAND = frozenset()
 
 
 def ausgelieferte_dateien(quelle=QUELLE):

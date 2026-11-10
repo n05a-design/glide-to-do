@@ -197,7 +197,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 fields=[w for w in descendants(dialog) if isinstance(w,mod.tk.Entry)]
                 fields[0].delete(0,'end'); fields[0].insert(0,'Tim')
                 fields[1].delete(0,'end'); fields[1].insert(0,'TV')
-                checks=[w for w in descendants(dialog) if isinstance(w,mod.tk.Checkbutton)]
+                checks=[w for w in descendants(dialog) if isinstance(w,(mod.tk.Checkbutton,mod.GlideCheckbutton))]
                 checks[0].select()
                 startup = next(w for w in descendants(dialog) if isinstance(w,(mod.tk.OptionMenu,mod.MacOptionMenu))
                                and w.cget('text') in ('Letzte Ansicht','Startseite','Vorlagen'))

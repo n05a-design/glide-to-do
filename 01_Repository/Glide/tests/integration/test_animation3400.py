@@ -160,7 +160,7 @@ def run(app_path, cases, report, previous):
                     own = next(w for w in children(dialog) if w.winfo_name() == 'animation_frame_duration')
                     common.delete(0, 'end');common.insert(0, '250')
                     own.delete(0, 'end');own.insert(0, '90')
-                    radio = next(w for w in children(dialog) if isinstance(w, mod.tk.Radiobutton) and w.cget('text') == 'Eigene Dauer')
+                    radio = next(w for w in children(dialog) if isinstance(w, (mod.tk.Radiobutton, mod.GlideRadiobutton)) and w.cget('text') == 'Eigene Dauer')
                     radio.invoke()
                     activate(button(dialog, 'Dauer speichern'))
                     assert editor().animation.durations() == (250, 90, 250)

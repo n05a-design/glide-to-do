@@ -1,6 +1,6 @@
 # Archiv – Python-Versionen
 
-Stand 10.11.2026 · Glide 3.53.0 · aktuelle Python-Lieferung 3.53.0
+Stand 10.11.2026 · Glide 3.54.0 · aktuelle Python-Lieferung 3.54.0
 
 Hier liegen die abgelösten Hauptdateien `Glide-Aufgaben-und-Listen_v<Version>.pyw`: 3.49.0, 3.50.0, 3.50.1, 3.50.2, 3.50.3 und 3.50.4. Die gelieferte 3.50.5 liegt eine Ebene höher. Für die nie gelieferte 3.48.0 wird keine Archivdatei erzeugt.
 
