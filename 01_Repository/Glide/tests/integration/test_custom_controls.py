@@ -235,6 +235,45 @@ class TestCustomControlsInteractions(unittest.TestCase):
         finally:
             root.destroy()
 
+    def test_configure_event_recursion_and_render_guard(self):
+        """Prüft, dass wiederholte oder kaskadierende <Configure>-Ereignisse keine Endlosschleife auslösen."""
+        root = tk.Tk()
+        root.withdraw()
+        try:
+            cb = gapp.GlideCheckbutton(root, text="Recursion Guard Test")
+            cb.pack()
+            root.update_idletasks()
+
+            # Mehrfache identische Configure-Aufrufe dürfen nicht mehrfach rendern
+            renders = [0]
+            orig_render = cb._render
+            def counted_render():
+                renders[0] += 1
+                return orig_render()
+            cb._render = counted_render
+
+            class DummyEvent:
+                width = 150
+                height = 24
+
+            event = DummyEvent()
+            # Erstes Ereignis setzt die Dimensionen
+            cb._on_configure(event)
+            self.assertEqual(renders[0], 1)
+
+            # Zweites identisches Ereignis muss ignoriert werden
+            renders[0] = 0
+            cb._on_configure(event)
+            self.assertEqual(renders[0], 0, "Identisches <Configure>-Ereignis darf kein Re-Render auslösen")
+
+            # Re-entrancy guard prüfen
+            cb._rendering = True
+            cb._safe_render()
+            self.assertEqual(renders[0], 0, "_safe_render darf während laufendem Rendern nicht reentrant aufgerufen werden")
+            cb._rendering = False
+        finally:
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])

@@ -2708,11 +2708,16 @@ class GlideCheckbutton(tk.Canvas):
             self._attach_variable(None)
 
     def _safe_render(self):
+        if getattr(self, "_rendering", False):
+            return
+        self._rendering = True
         try:
             if self.winfo_exists():
                 self._render()
         except tk.TclError:
             pass
+        finally:
+            self._rendering = False
 
     def _is_checked(self):
         if self._variable is None:
@@ -2797,7 +2802,13 @@ class GlideCheckbutton(tk.Canvas):
         self._hovered = False
         self._safe_render()
 
-    def _on_configure(self, _event=None):
+    def _on_configure(self, event=None):
+        if event is not None:
+            w, h = getattr(event, "width", None), getattr(event, "height", None)
+            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
+                return
+            self._last_conf_w = w
+            self._last_conf_h = h
         self._safe_render()
 
     def configure(self, cnf=None, **kwargs):
@@ -2824,10 +2835,12 @@ class GlideCheckbutton(tk.Canvas):
             canvas_kw["bg"] = werte["bg"]
             if "highlightbackground" not in canvas_kw and int(float(super().cget("highlightthickness") or 0)) == 0:
                 canvas_kw["highlightbackground"] = werte["bg"]
+        changed = any(self._opts.get(k) != v for k, v in werte.items()) or bool(canvas_kw)
         self._opts.update(werte)
         if canvas_kw:
             super().configure(**canvas_kw)
-        self._safe_render()
+        if changed:
+            self._safe_render()
 
     config = configure
 
@@ -2890,6 +2903,8 @@ class GlideCheckbutton(tk.Canvas):
         req_h = pady * 2 + max(box_s, th)
         if (req_w, req_h) != self._required:
             self._required = (req_w, req_h)
+            self._last_conf_w = max(1, req_w)
+            self._last_conf_h = max(1, req_h)
             super().configure(width=max(1, req_w), height=max(1, req_h))
         h = self.winfo_height() if self.winfo_height() > 1 else req_h
         if "\n" in str(o.get("text") or "") or th > box_s + 6:
@@ -3040,8 +3055,17 @@ class GlideListbox(tk.Canvas):
         self.bind("<Down>", lambda _e: self._move_selection(1))
         self.bind("<Home>", lambda _e: self._jump_selection(0))
         self.bind("<End>", lambda _e: self._jump_selection(max(0, len(self._items) - 1)))
-        self.bind("<Configure>", lambda _e: self._safe_render(), add="+")
+        self.bind("<Configure>", self._on_configure, add="+")
         self._render()
+
+    def _on_configure(self, event=None):
+        if event is not None:
+            w, h = getattr(event, "width", None), getattr(event, "height", None)
+            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
+                return
+            self._last_conf_w = w
+            self._last_conf_h = h
+        self._safe_render()
 
     def _row_height(self):
         try:
@@ -3333,11 +3357,16 @@ class GlideListbox(tk.Canvas):
         return "break"
 
     def _safe_render(self):
+        if getattr(self, "_rendering", False):
+            return
+        self._rendering = True
         try:
             if self.winfo_exists():
                 self._render()
         except tk.TclError:
             pass
+        finally:
+            self._rendering = False
 
     def _render(self):
         super().delete("all")
@@ -3416,9 +3445,18 @@ class GlideScale(tk.Canvas):
         self.bind("<B1-Motion>", self._on_pointer)
         self.bind("<Left>", lambda _e: self._step(-1))
         self.bind("<Right>", lambda _e: self._step(1))
-        self.bind("<Configure>", lambda _e: self._safe_render(), add="+")
+        self.bind("<Configure>", self._on_configure, add="+")
         self.bind("<Destroy>", self._on_destroy, add="+")
         self._render()
+
+    def _on_configure(self, event=None):
+        if event is not None:
+            w, h = getattr(event, "width", None), getattr(event, "height", None)
+            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
+                return
+            self._last_conf_w = w
+            self._last_conf_h = h
+        self._safe_render()
 
     def _attach_variable(self, variable):
         if self._variable is not None and self._trace_id is not None:
@@ -3553,11 +3591,16 @@ class GlideScale(tk.Canvas):
         return sorted(opts)
 
     def _safe_render(self):
+        if getattr(self, "_rendering", False):
+            return
+        self._rendering = True
         try:
             if self.winfo_exists():
                 self._render()
         except tk.TclError:
             pass
+        finally:
+            self._rendering = False
 
     def _render(self):
         super().delete("all")
