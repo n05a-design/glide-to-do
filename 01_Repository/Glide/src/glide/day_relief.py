@@ -47,6 +47,24 @@ def available_text(value):
     return text
 
 
+def capacity_analysis(value):
+    """Fachliche Kapazitätsanalyse des Tagesstands (WA-12 / D57)."""
+    return planning.capacity_analysis(value)
+
+
+def relief_summary_text(value):
+    """Präzise Vorher/Nachher-Bilanzzeile für die Tagesentlastung (WA-12 / D57)."""
+    items_count = value.get("items", 0)
+    items_label = f"{items_count} {'Aufgabe' if items_count == 1 else 'Aufgaben'}"
+    if value.get("calendar_state") in ("loading", "error", "closed"):
+        text = f"{items_label} · Freie Zeit unbekannt · " + value.get("calendar_message", "Kalender nicht verfügbar")
+        if value.get("without_estimate"):
+            text += f" · {value['without_estimate']} ohne Schätzung"
+        return text
+    analysis = planning.capacity_analysis(value)
+    return f"{items_label} · {analysis['summary_text']}"
+
+
 @dataclass(frozen=True)
 class Move:
     identity: str

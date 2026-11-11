@@ -121,7 +121,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Stand 10.11.2026: Aktueller Quell- und Lieferstand ist Glide 3.54.0 (D78, Datenformat 26, Glide-System V1.16) auf Basis des vorigen `main`-Commits `9e767bea` (PR #75). Die strenge CI-Grundstufe, 1.158 Fachlogiktests, Kontrast-, Zugangs- und Altbestandteilsprüfungen für 3.54.0 sowie die früheren Linux-/Windows-Vollprüfungen auf der `main`-Basis sind erfolgreich. Die vollständige native Plattformmatrix für 3.54.0, eigenständige 3.54.0-Pakete und die detaillierte menschliche Bedien-/DPI-Abnahme bleiben offen. Es gibt weiterhin **keinen öffentlichen GitHub-Release**; [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach gesonderter Freigabe zum Downloadkanal. Actions-Artefakte erfordern eine GitHub-Anmeldung. Entwicklungsbauten sind unsigniert; Prüfgrenzen und Quellstände beschreibt der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+Stand 11.11.2026: Aktueller Quell- und Lieferstand ist Glide 3.55.0 (D78, Datenformat 26, Glide-System V1.16) auf Basis des vorigen `main`-Commits `9e767bea` (PR #75). Die strenge CI-Grundstufe, 1.158 Fachlogiktests, Kontrast-, Zugangs- und Altbestandteilsprüfungen für 3.55.0 sowie die früheren Linux-/Windows-Vollprüfungen auf der `main`-Basis sind erfolgreich. Die vollständige native Plattformmatrix für 3.55.0, eigenständige 3.55.0-Pakete und die detaillierte menschliche Bedien-/DPI-Abnahme bleiben offen. Es gibt weiterhin **keinen öffentlichen GitHub-Release**; [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach gesonderter Freigabe zum Downloadkanal. Actions-Artefakte erfordern eine GitHub-Anmeldung. Entwicklungsbauten sind unsigniert; Prüfgrenzen und Quellstände beschreibt der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -155,7 +155,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 10.11.2026 · Glide 3.54.0
+Stand 11.11.2026 · Glide 3.55.0
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

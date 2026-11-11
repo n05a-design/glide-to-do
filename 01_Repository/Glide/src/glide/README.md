@@ -1,8 +1,8 @@
-# Glide-System V1.16
+# Glide-System V1.17
 
-Stand 10.11.2026 · Glide 3.54.0 · Glide-System V1.16 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 11.11.2026 · Glide 3.55.0 · Glide-System V1.17 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.16` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.17` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 10.11.2026 · Glide 3.54.0 · Glide-System V1.16 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.17** | 11.11.2026 | Laufzeitkonfiguration und Pfadentkopplung (WA-49) in `runtime_config.py`, erweiterte Tageskapazitätsanalyse (WA-12) und zugehörige Unit-Tests. | App 3.54.0, Format 26 |
 | **V1.16** | 10.11.2026 | Vollständige Fundortübersicht (WA-21) in `object_references.py`, JSON-Canvas-1.0-Pinnwandexport mit Verlustbericht (WA-07) in `pinboard_pages.py` und vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0`). | App 3.54.0, Format 26 |
 | **V1.15** | 10.11.2026 | Schrift-/Symbolprüfungen decken alle vier auswählbaren Stile und beide Tk-Gewichte ab; Testkatalog verweist auf die direkte Änderungszuordnung. | App 3.53.0, Format 26 |
 | **V1.14** | 09.11.2026 | Einstellbares Schriftgewicht, kräftige Serifenschriften, Themenfarbe für hervorgehobene Aktionen und präziser Logo-Versatz. | Format 26 |
@@ -37,11 +38,11 @@ Stand 10.11.2026 · Glide 3.54.0 · Glide-System V1.16 · Aufgabenformat 26 · E
 
 | Bestandteil | Einträge | Pflege |
 |---|---:|---|
-| Python-Quelldateien | 94 | 93 Laufzeitdateien und `drawing_prototype.pyw` als separater Prototyp |
+| Python-Quelldateien | 95 | 94 Laufzeitdateien und `drawing_prototype.pyw` als separater Prototyp |
 | Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 312 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 314 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -60,6 +61,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M003 | [`runtime_check.py`](runtime_check.py) | Prüfung der Python- und Tk-Mindestversionen | Mindestversion Python/Tk, bewusst in einfacher Syntax (AB08); der Schnellstart prüft vor dem App-Import, der direkte Start von `app.pyw` nicht (Abschnitt Laufzeit oben, WA-49); Stand: 3.33.20 | hoch | Isolationstest erforderlich; Python-/Tk-Prüfvertrag parametrisieren; Direktstart gesondert absichern; Kein aktueller modulspezifischer Isolationsnachweis | test_runtime_check.py |
 | M004 | [`release_notes.py`](release_notes.py) | Versionsbezogene Neuerungskarten und Anzeigeregeln | Katalog und Regeln der einmaligen Karte „Neu in …“ (Tk-frei, N07); Stand: 3.33.20 | mittel | Adapter + Isolationstest; Startprotokoll, Laufzeit-/Projektpfade, App-Kontext und Konfiguration abstrahieren; Kein aktueller modulspezifischer Isolationsnachweis | test_release_notes.py |
 | M005 | [`settings_compat.py`](settings_compat.py) | Erhalt unbekannter gültiger Zusatzfelder in Einstellungen | Additive unbekannte Filter-/Pinnwandfelder und fremde Kartentypen bewahren; geprüfte bekannte Werte und Grenzen bleiben maßgeblich, keine neue Auswertung; Stand: lokaler 3.49.0-Fortsetzungsstand (WA-09) | mittel | Adapter + Isolationstest; Startprotokoll, Laufzeit-/Projektpfade, App-Kontext und Konfiguration abstrahieren; Kein aktueller modulspezifischer Isolationsnachweis | test_settings_compat.py |
+| M095 | [`runtime_config.py`](runtime_config.py) | Laufzeitkonfiguration und zustandslose Pfadauflösung ohne Import-Seiteneffekte | Seiteneffektfreie Pfadbestimmung, getrennte Daten- und Cachepfade; Stand: 3.55.0 (WA-49) | hoch | Isolationstest vorhanden; neutrales Konfigurationsmodell | test_runtime_config.py |
 
 ### Design/Branding
 
@@ -644,6 +646,8 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T110 | [`test_view_definition.py`](../../tests/unit/test_view_definition.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T111 | [`test_view_metrics.py`](../../tests/unit/test_view_metrics.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T112 | [`test_week_planning.py`](../../tests/unit/test_week_planning.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T313 | [`test_day_capacity.py`](../../tests/unit/test_day_capacity.py) | Unit-Tests für Tageskapazitätsanalyse, Überlastungsgründe und Entlastungsvorschau (WA-12) |
+| T314 | [`test_runtime_config.py`](../../tests/unit/test_runtime_config.py) | Unit-Tests für seiteneffektfreie Pfadauflösung und Konfiguration (WA-49) |
 
 ### Integration
 

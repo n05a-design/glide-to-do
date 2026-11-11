@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 10.11.2026 · Glide 3.54.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 11.11.2026 · Glide 3.55.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Aktueller Quell-, Prüf- und Lieferstand: [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Aufgabenstatus und konkrete Gitautorisierung stehen im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
 

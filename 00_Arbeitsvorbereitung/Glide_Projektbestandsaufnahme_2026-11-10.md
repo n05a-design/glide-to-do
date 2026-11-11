@@ -56,7 +56,7 @@ Das Quellverzeichnis umfasst **94 Python-Dateien** (93 produktive Module + `draw
    - `backdrop.py`, `drawing_image.py`, `image_preview.py`, `pinboard_pages.py`, `drawing_prototype.pyw`.
 
 ### 2.3 Lieferkopie-Architektur (`07_Python-Versionen/`)
-- Das Verzeichnis [`07_Python-Versionen/`](../07_Python-Versionen) enthält eine direkt ausführbare Spiegelkopie aller 93 Laufzeitmodule und 171 Ressourcendateien (`app.pyw` heißt dort [`Glide-Aufgaben-und-Listen_v3.54.0.pyw`](../07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.54.0.pyw), frühere Versionen liegen unter [`07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.53.0.pyw`](../07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.53.0.pyw), gestartet über [`Schnellstart.pyw`](../07_Python-Versionen/Schnellstart.pyw)).
+- Das Verzeichnis [`07_Python-Versionen/`](../07_Python-Versionen) enthält eine direkt ausführbare Spiegelkopie aller 94 Laufzeitmodule und 171 Ressourcendateien (`app.pyw` heißt dort [`Glide-Aufgaben-und-Listen_v3.55.0.pyw`](../07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.55.0.pyw), frühere Versionen liegen unter [`07_Python-Versionen/Archiv/`](../07_Python-Versionen/Archiv), gestartet über [`Schnellstart.pyw`](../07_Python-Versionen/Schnellstart.pyw)).
 - Bytegleichheit zwischen `01_Repository/Glide/src/glide/` und `07_Python-Versionen/` ist zwingendes CI-Tor und wird über [`scripts/pflege/abgleich_07.py`](../01_Repository/Glide/scripts/pflege/abgleich_07.py) geprüft.
 
 ### 2.4 Datenmodelle & Persistenz ([`06_DATA_BACKUP_MIGRATION.md`](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md))

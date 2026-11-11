@@ -1,6 +1,6 @@
 # Eigene Tcl/Tk-9.1-Runtime
 
-Stand 10.11.2026 · Glide 3.54.0 · Erster öffentlicher Stand · eigene Tcl/Tk 9.1 · Reader bis Bedarf zurückgestellt
+Stand 11.11.2026 · Glide 3.55.0 · Erster öffentlicher Stand · eigene Tcl/Tk 9.1 · Reader bis Bedarf zurückgestellt
 
 `baue_runtime.py` exportiert saubere Git-Originale aus den Pins in `runtime_contract.py` und baut Tcl, Tk und die dazu passende CPython-3.14-Erweiterung `_tkinter` in einem neuen Ziel außerhalb von OneDrive. Installierte Python-Header und Quellheader müssen bytegleich sein. Native Ziele: macOS arm64, Windows x64 mit MSVC, Linux x64 mit verpflichtendem ATK/AT-SPI. Es gibt keine Systeminstallation.
 

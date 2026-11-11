@@ -1,0 +1,113 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "01_Repository\\Glide\\src\\glide\\app.pyw",
+  "app_version": "3.54.0",
+  "punkte": 1000,
+  "datei_kb": 1059,
+  "runden_warm": 9,
+  "vergleich_scope": "Vollvergleich",
+  "umgebung": {
+    "python": "3.15.1",
+    "tk": "9.0.4",
+    "plattform": "Windows-11-10.0.26300-SP0",
+    "prozessor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD"
+  },
+  "erstes_speichern_ms": 66.225,
+  "snapshot_undo": {
+    "median_ms": 3.079,
+    "p95_ms": 3.546,
+    "stichproben_ms": [
+      3.546,
+      3.498,
+      3.495,
+      3.5,
+      3.079,
+      1.957,
+      1.907,
+      1.889,
+      2.912
+    ]
+  },
+  "save_items": {
+    "median_ms": 32.514,
+    "p95_ms": 47.696,
+    "stichproben_ms": [
+      32.874,
+      33.96,
+      30.4,
+      30.807,
+      47.696,
+      32.371,
+      35.212,
+      30.517,
+      32.514
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 4.637,
+    "p95_ms": 7.162,
+    "stichproben_ms": [
+      4.619,
+      5.105,
+      4.607,
+      7.162,
+      4.674,
+      4.637,
+      5.139,
+      4.455,
+      4.594
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 1.824,
+    "p95_ms": 2.641,
+    "stichproben_ms": [
+      1.906,
+      1.806,
+      1.824,
+      2.337,
+      2.364,
+      2.641,
+      1.788,
+      1.73,
+      1.775
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 2.758,
+    "p95_ms": 2.897,
+    "stichproben_ms": [
+      1.468,
+      1.454,
+      1.46,
+      2.734,
+      2.835,
+      2.758,
+      2.759,
+      2.782,
+      2.897
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 59.914,
+    "p95_ms": 78.93,
+    "stichproben_ms": [
+      70.377,
+      59.914,
+      65.514,
+      59.527,
+      78.93,
+      61.977,
+      56.961,
+      57.469,
+      54.959
+    ]
+  },
+  "verlauf": true,
+  "speicher_kb": {
+    "vorher": null,
+    "nach_50_abhaken": null,
+    "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+  },
+  "callbackfehler": []
+}
