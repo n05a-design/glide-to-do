@@ -6,6 +6,7 @@ Alle Nutzdaten werden vor dem App-Import in einem temporären Ordner isoliert.
 """
 import argparse
 import copy
+import faulthandler
 import importlib.machinery
 import importlib.util
 import io
@@ -14,6 +15,27 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import threading
+import time
+
+faulthandler.enable()
+try:
+    faulthandler.dump_traceback_later(timeout=25, repeat=True, file=sys.stderr)
+except Exception:
+    pass
+
+def _test_watchdog():
+    time.sleep(40)
+    print("\n[WATCHDOG] 40s abgelaufen in test_ui_updates! Stacktrace aller Threads:", file=sys.stderr, flush=True)
+    import traceback
+    for thread_id, frame in sys._current_frames().items():
+        print(f"\n--- Thread {thread_id} ---", file=sys.stderr)
+        traceback.print_stack(frame, file=sys.stderr)
+    print("[WATCHDOG] Erzwinge Prozessabbruch nach 40s...", file=sys.stderr, flush=True)
+    os._exit(88)
+
+_wd = threading.Thread(target=_test_watchdog, name="TestWatchdog", daemon=True)
+_wd.start()
 
 REPO = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
@@ -73,6 +95,12 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
 
     def inspect_dialog(check):
         def inspect(dialog, parent=None):
+            title = ""
+            try:
+                title = dialog.title()
+            except Exception:
+                title = str(dialog)
+            print(f"[test_ui_updates] inspect_dialog aufgerufen für: {title!r}", flush=True)
             dialog.update_idletasks()
             dialog.update()
             try:
@@ -81,6 +109,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 if dialog.winfo_exists():
                     dialog.destroy()
                 app.run_modal = safe_modal
+                print(f"[test_ui_updates] inspect_dialog beendet für: {title!r}", flush=True)
         app.run_modal = inspect
 
     def button(dialog, name):
@@ -131,7 +160,9 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             app.apply_theme()
             assert (mod.relative_luminance(app.theme['bg']) < 0.2) == (theme == 'dark'), (theme, app.theme['bg'])
             app.set_active_list(entry['id'])
+            print(f"[test_ui_updates] Theme {theme}: Breiten pruefen...", flush=True)
             for width in (1280,980,860):
+                print(f"[test_ui_updates] Theme {theme}: Breite {width}...", flush=True)
                 root.geometry(f'{width}x900+10+10')
                 root.update_idletasks()
                 root.update()
@@ -148,6 +179,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             root.geometry('1280x960+10+10')
             app.settings.update(profile_name='Tim',profile_logo='TV')
             app.set_home_tile_hidden('welcome', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
+            print(f"[test_ui_updates] Theme {theme}: Startseite pruefen...", flush=True)
             app.set_home_view()
             root.update_idletasks()
             root.update()
@@ -156,12 +188,14 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             assert app.home_content.cget('bg') == app.theme['bg']
             assert any('Tim' in str(w.cget('text')) for w in descendants(app.home_content) if isinstance(w,mod.tk.Label))
             capture(root,f'startseite-{theme}')
+            print(f"[test_ui_updates] Theme {theme}: Aktive Liste aktivieren...", flush=True)
             app.set_active_list(entry['id'])
             root.update_idletasks()
             root.update()
             assert app.tree.winfo_ismapped() and not app.home_frame.winfo_ismapped()
 
             def form_check(dialog):
+                print(f"[test_ui_updates] Theme {theme}: form_check Start...", flush=True)
                 dropdown=next(w for w in descendants(dialog) if isinstance(w,mod.LabelDropdown))
                 due=next(w for w in descendants(dialog) if isinstance(w,mod.DueField))
                 options=[w for w in descendants(dialog) if isinstance(w,(mod.tk.OptionMenu,mod.MacOptionMenu))]
@@ -213,13 +247,19 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 assert row['mark'].fill == app.theme['selection']
                 dropdown._close_popup()
                 capture(dialog,f'eingabe-{theme}')
+                print(f"[test_ui_updates] Theme {theme}: form_check Speichern...", flush=True)
                 button(dialog,'Speichern').command()
+                print(f"[test_ui_updates] Theme {theme}: form_check Fertig.", flush=True)
+
+            print(f"[test_ui_updates] Theme {theme}: Vor item_form_dialog...", flush=True)
             inspect_dialog(form_check)
             result=app.item_form_dialog(mode='edit',item=task)
+            print(f"[test_ui_updates] Theme {theme}: Nach item_form_dialog.", flush=True)
             assert result['kind']=='long' and result['text']=='Erste Zeile\nZweite Zeile'
             assert result['due_time']=='09:30' and custom['id'] in result['labels']
 
             def settings_check(dialog):
+                print(f"[test_ui_updates] Theme {theme}: settings_check Start...", flush=True)
                 assert dialog.cget('bg')==app.theme['bg']
                 fields=[w for w in descendants(dialog) if isinstance(w,mod.tk.Entry)]
                 fields[0].delete(0,'end'); fields[0].insert(0,'Tim')
@@ -232,16 +272,30 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 root.update_idletasks()
                 dialog.update()  # Menübefehle laufen seit 3.32.0 im nächsten Leerlauf
                 capture(dialog,f'einstellungen-{theme}')
+                print(f"[test_ui_updates] Theme {theme}: settings_check Speichern...", flush=True)
                 button(dialog,'Speichern').command()
+                print(f"[test_ui_updates] Theme {theme}: settings_check Fertig.", flush=True)
+
+            print(f"[test_ui_updates] Theme {theme}: Vor show_settings_dialog...", flush=True)
             inspect_dialog(settings_check)
             app.show_settings_dialog()
+            print(f"[test_ui_updates] Theme {theme}: Nach show_settings_dialog.", flush=True)
             assert app.settings['profile_name']=='Tim' and app.settings['start_on_home']
+
+            print(f"[test_ui_updates] Theme {theme}: Vor show_shortcuts_dialog...", flush=True)
             inspect_dialog(lambda dialog: capture(dialog,f'tastenkuerzel-{theme}'))
             app.show_shortcuts_dialog()
+            print(f"[test_ui_updates] Theme {theme}: Nach show_shortcuts_dialog.", flush=True)
+
+            print(f"[test_ui_updates] Theme {theme}: Vor show_about_dialog...", flush=True)
             inspect_dialog(lambda dialog: capture(dialog,f'ueber-glide-{theme}'))
             app.show_about_dialog()
+            print(f"[test_ui_updates] Theme {theme}: Nach show_about_dialog.", flush=True)
+
+            print(f"[test_ui_updates] Theme {theme}: Vor ask_yes_no...", flush=True)
             inspect_dialog(lambda dialog: capture(dialog,f'rueckfrage-{theme}'))
             assert app.ask_yes_no('In den Papierkorb verschieben?', 'Diese Liste kann später wiederhergestellt werden.') is False
+            print(f"[test_ui_updates] Theme {theme}: Nach ask_yes_no.", flush=True)
             print(f"[test_ui_updates] Theme {theme}: Dialoge erfolgreich.", flush=True)
 
         app.run_modal = safe_modal
@@ -327,5 +381,10 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 root.destroy()
         except Exception:
             pass
+
+try:
+    faulthandler.cancel_dump_traceback_later()
+except Exception:
+    pass
 
 print('UI-Erweiterungen: OK (Farben, Artwechsel, Abstände, Startseite, Vorlagen, Einstellungen und Neustart)')
