@@ -3,22 +3,26 @@
 ## Prüfstand 3.55.0 (11.11.2026)
 
 - **Umfang:** Weiterentwicklung auf Basis 3.54.0 (`main` `594f4c8` nach PR #76):
-  1. **Tagesplanung & Kapazität (WA-12 / D57):** Erweiterte Kapazitätsanalyse in `planning.py` und `day_relief.py`. Transparente Berechnung von Arbeitszeit, Aufgabenaufwand, belegter Kalenderzeit und Netto-Kapazität; ungeschätzte Aufgaben werden gesondert ausgewiesen und niemals als 0 min gerechnet; konkrete Überlastungsgründe werden genannt. Im Tagesentlastungs-Dialog (`app.pyw`) wird der Fälligkeitserhalt (`due`) als explizite Spalte dargestellt mit automatischer Breitenanpassung (`_daily_fit_columns`) und atomarem Undo.
-  2. **Architekturentkopplung & Initialisierung (WA-49):** Neues Modul `runtime_config.py` (`M095`) zur zustandslosen und seiteneffektfreien Pfadauflösung ohne Tk-Initialisierung und ohne Erzeugung von Verzeichnissen beim Modulimport.
-  3. **Performance & Tk-Stabilität (WA-36):** Vorher/Nachher-Messung mit `messung_performance.py` und `messung_speicherweg.py` durchgeführt. 0 Callback-Fehler, keine Livelocks, keine Speicherlecks.
+  1. **Tagesplanung & Kapazität (WA-12 / D57):** Erweiterte Kapazitätsanalyse in `planning.py` und `day_relief.py`. Transparente Berechnung von Arbeitszeit, Aufgabenaufwand, belegter Kalenderzeit und Netto-Kapazität; ungeschätzte Aufgaben werden gesondert ausgewiesen und niemals als 0 min gerechnet; konkrete Überlastungsgründe werden benannt. Im Tagesentlastungs-Dialog (`app.pyw`) wird der Fälligkeitserhalt (`due`) als explizite Spalte dargestellt mit automatischer Breitenanpassung (`_daily_fit_columns`) und atomarem Undo.
+  2. **Architekturentkopplung & Initialisierung (WA-49):** Neues Modul `runtime_config.py` (`M095`) zur zustandslosen und seiteneffektfreien Pfadauflösung ohne Tk-Initialisierung und ohne Erzeugung von Verzeichnissen beim Modulimport. Standardpfad unter Windows auf `%APPDATA%\Glide` korrigiert (Erhalt bestehender Anwenderdaten), Cache auf `%LOCALAPPDATA%\Glide\Cache` entkoppelt.
+  3. **Performance- und Speichermessung (WA-36):** Reproduzierbarer A/B-Vergleich gegen 3.54-Basis unter identischer Referenzlaufzeit Python 3.14.7 / Tk 9.0 auf Windows 11. Keine Code-Regression (der Code von `snapshot_undo` und den Kern-Renderpfaden ist identisch). Ansichten im Median unter Python 3.14: Startseite 359,9 ms (3.54: 385,7 ms), Liste 101,4 ms (3.54: 103,6 ms), Notiz 117,7 ms (3.54: 128,3 ms), Tabelle 91,8 ms (3.54: 90,1 ms). Schwankungen von Einzelwerten (z. B. `snapshot_undo` ~5 ms) reflektieren normale Windows-Desktop-Messvarianz. Kein Performance-Optimierungslabel vergeben (reines Funktions- und Architekturpaket).
   4. **Glide Shell Framework Konzept:** Ausführliches Architektur- und Entkopplungskonzept in `docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md` erstellt.
-- **Statische und Werkzeugprüfungen (Python 3.15.1, Windows 11, Tk 9.1):**
+- **Statische und Werkzeugprüfungen (Python 3.14.7, Windows 11, Tk 9.0):**
   - `altbestandteile.py`: Exitcode 0 (`Checkbutton 0/0, Listbox 0/0, Radiobutton 0/0, Scale 0/0`).
   - `attributpruefung.py`: Exitcode 0.
   - `test_glide_system.py`: 5/5 grün, Systemregister V1.17 (95 Quelldateien, 314 Testdateien).
-  - `standpruefung.py`: Exitcode 0, 79 aktive Dokumente konsistent.
+  - `standpruefung.py`: Exitcode 0, 75 aktive Dokumente konsistent.
   - `abgleich_07.py`: Exitcode 0, 94 Code-Dateien und 165 Ressourcen bytegleich zu `07_Python-Versionen/`.
 - **Fachlogik- und Integrationsprüfungen:**
-  - `test_day_capacity.py` (8/8 grün).
-  - `test_runtime_config.py` (4/4 grün).
-  - `test_tag3390.py` (22/22 grün).
-  - `ci_grundstufe.py`: Alle 19 Schritte erfolgreich mit Exitcode 0 durchlaufen.
-- **Offene Freigabetore:** Plattformübergreifende Vollmatrix (Windows/Linux/macOS) in CI, native Paketbauten, detaillierte manuelle Sicht-/DPI-Abnahme sowie Veröffentlichungstore bleiben getrennte Tore (`release_ready=false`).
+  - `unittest discover -s tests/unit`: **1.174 Tests grün** (einschließlich 12/12 `test_day_capacity.py` für überlappende ICS-Blöcke, Fehlerzustände, veränderten Bestand und 4/4 `test_runtime_config.py`).
+  - `test_tag3390.py` (22/22 Checks grün, 0 Callbackfehler).
+  - `test_ui_updates.py`: Erfolgreich (alle Dialoge, Livelock-Schutz, 2 Instanzen sauber beendet).
+  - `test_custom_controls.py`: 11/11 grün.
+  - `ci_grundstufe.py --lieferstand-streng`: Alle 19 Schritte erfolgreich mit Exitcode 0 durchlaufen.
+- **Analyse 3.54-Main-CI:**
+  - Workflow 43065210553 (`macos-paket.yml` auf `594f4c8`): Status `failure`, Job `Nativer Bau und isolierter Start (macOS arm64)` war `cancelled` nach 15 min Queue-Zeit (0 Schritte ausgeführt, Runner-Zuweisung blieb aus). Dies war ein GitHub Actions Runner-Infrastruktur-Queue-Timeout, kein Produktfehler (identischer Git-Tree war auf Run 42984887452 grün).
+  - Workflow 43065210687 (`python-app.yml` auf `594f4c8`): Linux-Grundstufe und Linux-Vollprüfung (Xvfb, Tk 9.1) beide erfolgreich grün abgeschlossen.
+- **Offene Freigabetore:** Plattformübergreifende Vollmatrix (Windows/Linux/macOS) in CI für den endgültigen 3.55-Commit, native Standalone-Paketbauten sowie detaillierte manuelle Sicht-/DPI-Abnahme bleiben getrennte Tore (`release_ready=false`).
 
 ## Prüfstand 3.54.0 (10.11.2026)
 

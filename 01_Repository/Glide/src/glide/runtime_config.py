@@ -23,10 +23,22 @@ def resolve_default_data_dir() -> str:
     if IS_MACOS:
         base = os.path.join(os.path.expanduser("~/Library/Application Support"), APP_NAME)
     elif IS_WINDOWS:
-        base = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), APP_NAME)
+        base = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~"), APP_NAME)
     else:
         base_dir = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
         base = os.path.join(base_dir, APP_NAME)
+    return os.path.abspath(base)
+
+
+def resolve_default_cache_dir() -> str:
+    """Standard-Speicherort für Cache und Bytecode nach Plattformkonvention."""
+    if IS_MACOS:
+        base = os.path.expanduser("~/Library/Caches/Glide")
+    elif IS_WINDOWS:
+        base = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), APP_NAME, "Cache")
+    else:
+        base_dir = os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache")
+        base = os.path.join(base_dir, "glide")
     return os.path.abspath(base)
 
 
@@ -43,6 +55,8 @@ class RuntimePaths:
     templates_file: str
     lock_file: str
     error_log_file: str
+    cache_dir: str
+    is_overridden: bool = False
 
     def ensure_dirs(self) -> None:
         """Erzeugt die benötigten Verzeichnisse bewusst und kontrolliert.
@@ -87,6 +101,12 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
             except (OSError, ValueError, TypeError):
                 pass
 
+    cache_override = env.get("GLIDE_CACHE_DIR")
+    if cache_override:
+        cache_dir = os.path.abspath(os.path.expanduser(cache_override))
+    else:
+        cache_dir = resolve_default_cache_dir()
+
     return RuntimePaths(
         base_dir=base_dir,
         default_dir=default_dir,
@@ -98,6 +118,8 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
         templates_file=os.path.join(base_dir, "vorlagen.json"),
         lock_file=os.path.join(base_dir, "glide.lock"),
         error_log_file=os.path.join(base_dir, "fehlerprotokoll.txt"),
+        cache_dir=cache_dir,
+        is_overridden=bool(override),
     )
 
 

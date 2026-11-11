@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 11.11.2026 · Glide 3.54.0 · Aufgabenformat 26
+Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt die architektonische Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von den fachspezifischen Domänenmodulen der Aufgaben- und Produktivitätsanwendung Glide. Es dient als verbindliche Richtschnur für zukünftige Refactorings und als Blaupause für Schwesterprojekte (z. B. *Steps*).
 
