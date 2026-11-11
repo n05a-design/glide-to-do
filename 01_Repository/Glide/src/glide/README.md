@@ -12,7 +12,7 @@ Stand 11.11.2026 · Glide 3.55.0 · Glide-System V1.17 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
-| **V1.17** | 11.11.2026 | Laufzeitkonfiguration und Pfadentkopplung (WA-49) in `runtime_config.py`, erweiterte Tageskapazitätsanalyse (WA-12) und zugehörige Unit-Tests. | App 3.54.0, Format 26 |
+| **V1.17** | 11.11.2026 | Laufzeitkonfiguration und Pfadentkopplung (WA-49) in `runtime_config.py`, erweiterte Tageskapazitätsanalyse (WA-12) und zugehörige Unit-Tests. | App 3.55.0, Format 26 |
 | **V1.16** | 10.11.2026 | Vollständige Fundortübersicht (WA-21) in `object_references.py`, JSON-Canvas-1.0-Pinnwandexport mit Verlustbericht (WA-07) in `pinboard_pages.py` und vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0`). | App 3.54.0, Format 26 |
 | **V1.15** | 10.11.2026 | Schrift-/Symbolprüfungen decken alle vier auswählbaren Stile und beide Tk-Gewichte ab; Testkatalog verweist auf die direkte Änderungszuordnung. | App 3.53.0, Format 26 |
 | **V1.14** | 09.11.2026 | Einstellbares Schriftgewicht, kräftige Serifenschriften, Themenfarbe für hervorgehobene Aktionen und präziser Logo-Versatz. | Format 26 |

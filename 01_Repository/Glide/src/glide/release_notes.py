@@ -20,6 +20,10 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.55.0": (
+        "Die Tagesbilanz zeigt Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität und Überlastungsgründe.",
+        "Aufgaben ohne Schätzung bleiben sichtbar. Im Entlastungsdialog siehst du, welche Fälligkeiten beim Umplanen erhalten bleiben.",
+    ),
     "3.54.0": (
         "Fundorte anzeigen nennt alle Verwendungen einer Aufgabe, Seite, Notiz, Liste oder Zeichnung mit direktem Sprung.",
         "Pinnwände lassen sich als offene JSON-Canvas-1.0-Datei (.canvas) mit Karten, Bereichen, Verbindungen und Verlustbericht exportieren.",
