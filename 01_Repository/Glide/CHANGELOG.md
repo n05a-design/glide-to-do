@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## 3.55.0 – 11.11.2026
+
+- **Tagesplanung & Kapazität (WA-12 / D57):** Transparente und handlungsorientierte Kapazitätsübersicht im Tagesentlastungs- und Planungsbereich (`planning.py`, `day_relief.py`, `app.pyw`). Exakte Berechnung von geplantem Aufgabenaufwand, belegter Kalenderzeit und verfügbarer Netto-Kapazität. Ungeschätzte Aufgaben werden transparent gesondert ausgewiesen und niemals heimlich als 0 Minuten gewertet. Konkrete Überlastungsgründe werden benannt. Im Entlastungsdialog wird die Fälligkeit von Aufgaben explizit als erhalten ausgewiesen (`Fälligkeit bleibt`), unterstützt von dynamischer Spaltenbreitenanpassung und atomarem Undo.
+- **Architekturentkopplung & Initialisierung (WA-49):** Einführung des dedizierten Moduls [`runtime_config.py`](src/glide/runtime_config.py) zur zustandslosen und seiteneffektfreien Ermittlung aller Anwendungs-, Cache- und Logpfade (`RuntimePaths`, `RuntimeConfig`). Beseitigung unkontrollierter Modulimport-Seiteneffekte auf Dateisystemebene vor dem eigentlichen Anwendungsstart.
+- **Glide Shell Framework Vorbereitung:** Ausarbeitung des umfassenden Architektur- und Entkopplungskonzepts in [`docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) mit klarer Abgrenzung zwischen wiederverwendbarem Desktop-Fundament (Lifecycle, Window-Manager, Appearance, Widgets, Modal-Runner) und Glide-spezifischer Domäne sowie Entkopplung über Ports & Adapters.
+- **System- und Testpflege:** Glide-Systemkatalog auf `V1.17` fortgeschrieben (`M095` `runtime_config.py`, `T313` `test_day_capacity.py`, `T314` `test_runtime_config.py`), 95 Quell- und 314 Testdateien, CI-Grundstufe 19/19 grün, Aufgabenformat 26 unverändert beibehalten.
+
 ## 3.54.0 – 10.11.2026
 
 - Vollständige Fundortübersicht („Fundorte anzeigen …“, WA-21): listet für jede Aufgabe, Seite, Notiz, Liste und Zeichnung alle Verwendungen im Bestand auf (Heimatcontainer, Objektverweise, Textlinks, Aufgabenzeilen in Seiten/Notizen, Live-Listen, Aufgabenbeziehungen, Pinnwandkarten/-verbindungen und unverknüpfte Titelerwähnungen) samt Zielzustand, Öffnen im Haupt- oder Nebenbereich und direktem Verknüpfen unverknüpfter Erwähnungen.
@@ -294,7 +301,7 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 
 ## 3.48.0 (27.10.2026) – Tagesnavigation, Mehrfachfelder und Verweise
 
-- **Prüfwerkzeugnachlauf 28.10.2026:** Gemeinsamer Prüfungsstarter sichert CPU-/BIOS-/Python-Kontext und ergänzt passende native/Interpreterabbrüche um eine mögliche Software-/Systemursache (WA-41A); konkrete Datenabweichungen bleiben WA-41B. Originalstatus, Exitcode, Lastumfang und Datenvergleich unverändert. Kein CPU-Defektnachweis, keine App-/Liefer-/Versionsänderung. [Prüfnachweis](tests/qa-3.50.5/abnahme_2026-11-05/aufbewahrung.json).
+- **Prüfwerkzeugnachlauf 28.10.2026:** Gemeinsamer Prüfungsstarter sichert CPU-/BIOS-/Python-Kontext und ergänzt passende native/Interpreterabbrüche um eine mögliche Software-/Systemursache (WA-41A); konkrete Datenabweichungen bleiben WA-41B. Originalstatus, Exitcode, Lastumfang und Datenvergleich unverändert. Kein CPU-Defektnachweis, keine App-/Liefer-/Versionsänderung. [Prüfnachweis](https://github.com/n05a-design/glide-to-do/blob/594f4c85eb60370a44282b06fcb8017df8181d70/01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/aufbewahrung.json).
 
 - **Dokumentationsnachlauf zur Vorbeugung:** AMD-Gegenlauf und vorhandene Datensicherungen von geplanten Prüfablauf-, Absturzdiagnose- und Wiederanlaufmaßnahmen getrennt; Reihenfolge und Abnahmekriterien in [Plan §21.27](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf). Reine Dokumentation/Planung, keine neue Schutzfunktion oder Lieferung aus diesem Nachlauf.
 

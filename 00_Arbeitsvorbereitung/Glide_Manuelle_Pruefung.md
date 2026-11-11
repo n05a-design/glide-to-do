@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 10.11.2026 · Glide 3.54.0 · Aufgabenformat 26
+Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 
@@ -53,7 +53,7 @@ Der lokale, nicht commitete Kandidat 3.52.0 hat noch keine menschliche oder nati
 - [ ] **Abschnitte:** Seiten/Listen/Notizen/Zeichnungen: Überschrift mit enger Zugehörigkeit zum ersten Eintrag, auch nach Einklappen und großer Schrift.
 - [ ] **Suchfelder:** Startseite mit Anfrage + Enter in globale Suche, Treffer öffnen. Vorlagenfilter nach Titel/Inhalt, keine Treffer, Escape und Wechsel zwischen beiden Ansichten prüfen.
 
-Gesamtnachweis der damaligen 3.50.5-Fassung: [3.50.5](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md). Die folgenden Rückmeldungen und Teilfreigaben bleiben an ihre ursprünglichen Quell-/Pakethashes gebunden; kein neuer Haken aus automatischen Prüfungen und keine automatische Freigabe für 3.52.0.
+Gesamtnachweis der damaligen 3.50.5-Fassung: [3.50.5](https://github.com/n05a-design/glide-to-do/blob/594f4c85eb60370a44282b06fcb8017df8181d70/01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md). Die folgenden Rückmeldungen und Teilfreigaben bleiben an ihre ursprünglichen Quell-/Pakethashes gebunden; kein neuer Haken aus automatischen Prüfungen und keine automatische Freigabe für 3.52.0.
 
 - [ ] **Suchzeilenbreite, erneuter Befund 05.11.:** Aktuelle Python-Prüffassung `1c48a095…`: im Buch ohne Suchanfrage endet das Suchfeld bündig mit der rechten Außenkante der Inhaltskarte. Mindestbreite/breit und volle/schmale/ausgeblendete Seitenleiste samt Rückwechsel prüfen. Suchwort eingeben: „Suche löschen“ bleibt vollständig sichtbar und mit Abstand erreichbar; nach Löschen reicht das Feld wieder bis zur Inhaltskante. Labels/Liste nach Ansichtswechsel mitprüfen. Keine Freigabe aus der automatischen Prüfung. [Aktueller Nachweis](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.4/suchbreite_2026-11-05/README.md).
 
@@ -63,7 +63,7 @@ Gesamtnachweis der damaligen 3.50.5-Fassung: [3.50.5](../01_Repository/Glide/tes
 
 - [ ] **D62 – neue Logos und Darkmode-Gelb:** Aktuelle Quellfassung 3.50.5 `e984ba99…` und anschließend die heute Abend neu gebauten nativen Pakete getrennt prüfen: neue G-Kontur in Kopf/Start/Über Glide, Fenster-/Dialog-/Tray-Symbole; Gelb `#FFDC0B` in farbigen dunklen Designs. Taskleiste/Dock, Alt-Tab/Vorschauen, Explorer/Finder, Menüanzeige und vorhandene Verknüpfungen nach echtem Paketstart kontrollieren. Dateitypsymbole benötigen vorhandene Zuordnung; keine automatische Registrierung behaupten. [Vollständige Verwendungs-/Neubaucheckliste](../20_Grafik_Master/README.md). Automatische Logo-/ICO-/Farbtests sind keine menschliche Shell-/DPI-Abnahme.
 
-Prüfgrundlage ist ausschließlich der im [aktuellen Nachweis](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md) anhand von SHA-256 bezeichnete Stand; lokale synthetische Testablage verwenden. Erst nach erfolgreicher Lieferung deren Starter nutzen. Für jeden Punkt Prüfername, Datum, Gerät/OS, Runtime/Reader-Version, Paket-/Apphash, Ergebnis und etwaige Befundkennung eintragen. Ein automatischer Attribut-/Tastaturtest trägt keine Menschenfreigabe ein.
+Prüfgrundlage ist ausschließlich der im [aktuellen Nachweis](https://github.com/n05a-design/glide-to-do/blob/594f4c85eb60370a44282b06fcb8017df8181d70/01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md) anhand von SHA-256 bezeichnete Stand; lokale synthetische Testablage verwenden. Erst nach erfolgreicher Lieferung deren Starter nutzen. Für jeden Punkt Prüfername, Datum, Gerät/OS, Runtime/Reader-Version, Paket-/Apphash, Ergebnis und etwaige Befundkennung eintragen. Ein automatischer Attribut-/Tastaturtest trägt keine Menschenfreigabe ein.
 
 Die ersten Rückmeldungen (Briefing/Scrollen, Ansichtswechsel und funktionierender Hell-/Dunkelwechsel) gehören zur eingefrorenen 3.50.2-Prüfung. Die gemeldeten Abweichungen sind in 3.50.3 korrigiert; ihr menschlicher Nachtest bleibt offen. Dies bestätigt keine weiteren Blöcke oder Plattformen.
 

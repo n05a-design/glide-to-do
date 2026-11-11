@@ -158,6 +158,7 @@ import content_search as glide_search  # noqa: E402
 import save_comparison as glide_comparison  # noqa: E402
 import view_metrics as glide_metrics  # noqa: E402
 import interaction_policy as glide_interaction
+import runtime_config as glide_runtime_config
 import object_references as glide_objects
 import exchange_recipes as glide_recipes
 import week_planning as glide_week
@@ -234,7 +235,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.54.0"
+APP_VERSION = "3.55.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -371,65 +372,34 @@ ChangeRecord = glide_task_editing.ChangeRecord
 
 def _default_app_data_dir():
     """Lokaler Standardordner, ohne einen eventuell gewählten Datenpfad."""
-    if sys.platform == "darwin":
-        base = os.path.join(os.path.expanduser("~"), "Library", "Application Support")
-        path = os.path.join(base, APP_NAME)
-    elif os.name == "nt":
-        base = os.environ.get("APPDATA") or os.path.expanduser("~")
-        path = os.path.join(base, APP_NAME)
-    else:
-        base = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
-        path = os.path.join(base, APP_NAME)
-    os.makedirs(path, exist_ok=True)
-    return path
+    return glide_runtime_config.resolve_default_data_dir()
 
 
 def get_app_data_dir():
     """Plattformgerechter, beschreibbarer Speicherort ohne externe Bibliotheken.
 
     GLIDE_DATA_DIR überschreibt den Pfad vollständig. Das ist der einzige
-    plattformunabhängige Weg, Tests zu isolieren: %APPDATA% wirkt nur unter
-    Windows, unter macOS und Linux würde ein Test sonst die echten Nutzerdaten
-    in ~/Library/Application Support/Glide bzw. ~/.local/share/Glide benutzen.
+    plattformunabhängige Weg, Tests zu isolieren.
     """
-    override = os.environ.get("GLIDE_DATA_DIR")
-    if override:
-        path = os.path.abspath(os.path.expanduser(override))
-        os.makedirs(path, exist_ok=True)
-        return path
-    default = _default_app_data_dir()
-    pointer = os.path.join(default, "datenordner.json")
-    # Tests setzen GLIDE_DATA_DIR absichtlich vor dem Import. In diesem Modus
-    # darf kein echter Benutzerzeiger gelesen oder verändert werden.
-    if not os.environ.get("GLIDE_DATA_DIR") and os.path.isfile(pointer):
-        try:
-            with open(pointer, "r", encoding="utf-8") as file:
-                selected = glide_storage.read_stream(file).get("path")
-            if isinstance(selected, str) and selected.strip():
-                path = os.path.abspath(os.path.expanduser(selected))
-                os.makedirs(path, exist_ok=True)
-                return path
-        except (OSError, ValueError, TypeError):
-            pass
-    path = default
-    return path
+    return glide_runtime_config.resolve_paths().base_dir
 
 
-BASE_DIR = get_app_data_dir()
-SAVE_FILE = os.path.join(BASE_DIR, "liste_speicher.json")
-SETTINGS_FILE = os.path.join(BASE_DIR, "settings.json")
-BACKUP_DIR = os.path.join(BASE_DIR, "backups")
-ATTACHMENTS_DIR = os.path.join(BASE_DIR, "attachments")
-TEMPLATES_FILE = os.path.join(BASE_DIR, "vorlagen.json")
-DATA_POINTER_FILE = os.path.join(_default_app_data_dir(), "datenordner.json")
-LOCK_FILE = os.path.join(BASE_DIR, "glide.lock")
-# Wohin ein Fehler aus einem Tk-Callback
-# geschrieben wird. Ohne Konsole – und eine `.pyw` hat keine – gäbe es sonst
-# keinen Ort, an dem er sichtbar würde.
-ERROR_LOG_FILE = os.path.join(BASE_DIR, "fehlerprotokoll.txt")
+RUNTIME_PATHS = glide_runtime_config.resolve_paths()
+BASE_DIR = RUNTIME_PATHS.base_dir
+SAVE_FILE = RUNTIME_PATHS.save_file
+SETTINGS_FILE = RUNTIME_PATHS.settings_file
+BACKUP_DIR = RUNTIME_PATHS.backup_dir
+ATTACHMENTS_DIR = RUNTIME_PATHS.attachments_dir
+TEMPLATES_FILE = RUNTIME_PATHS.templates_file
+DATA_POINTER_FILE = RUNTIME_PATHS.pointer_file
+LOCK_FILE = RUNTIME_PATHS.lock_file
+ERROR_LOG_FILE = RUNTIME_PATHS.error_log_file
 ERROR_LOG_MAX_BYTES = 200_000
-os.makedirs(BACKUP_DIR, exist_ok=True)
-os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
+
+# In Testumgebungen mit GLIDE_DATA_DIR Ordner direkt verfügbar halten;
+# im regulären Betrieb erfolgt die Bereitstellung erst beim App-Start in ListApp.__init__.
+if os.environ.get("GLIDE_DATA_DIR"):
+    RUNTIME_PATHS.ensure_dirs()
 
 
 def register_private_fonts(font_dir=None):
@@ -18657,6 +18627,8 @@ class ListApp:
 
     def __init__(self, root):
         self.root = root
+        self.paths = glide_runtime_config.resolve_paths(BASE_DIR)
+        self.paths.ensure_dirs()
         # Der eigene Fehlerbericht steht vor
         # allem anderen. Ein Fehler beim Aufbau soll bereits im Protokoll
         # landen, nicht erst einer im laufenden Betrieb.
@@ -20902,22 +20874,22 @@ class ListApp:
         self.close_daily_planning()
         self.finish_recovery_session()
         self.release_data_lock()
+        self.paths = glide_runtime_config.resolve_paths(target)
+        self.paths.ensure_dirs()
         BASE_DIR = target
         SAVE_FILE = target_data
-        SETTINGS_FILE = os.path.join(target, "settings.json")
-        BACKUP_DIR = os.path.join(target, "backups")
-        ATTACHMENTS_DIR = os.path.join(target, "attachments")
-        TEMPLATES_FILE = os.path.join(target, "vorlagen.json")
-        LOCK_FILE = os.path.join(target, "glide.lock")
+        SETTINGS_FILE = self.paths.settings_file
+        BACKUP_DIR = self.paths.backup_dir
+        ATTACHMENTS_DIR = self.paths.attachments_dir
+        TEMPLATES_FILE = self.paths.templates_file
+        LOCK_FILE = self.paths.lock_file
         # Das Fehlerprotokoll liegt bei den Daten: Wer den Ordner wechselt,
         # nimmt es mit, statt zwei Protokolle an zwei Orten zu haben.
-        ERROR_LOG_FILE = os.path.join(target, "fehlerprotokoll.txt")
+        ERROR_LOG_FILE = self.paths.error_log_file
         self._schema12_backup_checked = False
         self._schema13_backup_checked = False
         self._schema14_backup_checked = False
         self._last_backup_monotonic = None
-        os.makedirs(BACKUP_DIR, exist_ok=True)
-        os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
         self.lock_info = self.acquire_data_lock()
         self.init_recovery_session()
         if self.lock_info and not os.environ.get("GLIDE_TEST_MODE"):
@@ -22649,9 +22621,7 @@ class ListApp:
 
 
     def relief_summary_text(self, summary):
-        return (str(summary["items"]) + " Aufgaben · "
-                + (self.format_estimated_minutes(summary["minutes"]) or "0 min") + " · "
-                + day_relief.available_text(summary))
+        return day_relief.relief_summary_text(summary)
 
 
     def show_day_relief(self, event=None, days=None):
@@ -22683,10 +22653,11 @@ class ListApp:
         menu.pack(fill="x", pady=(0, 6))
         frame = tk.Frame(body, bg=self.theme["card"])
         frame.pack(fill="both", expand=True)
-        tree = ttk.Treeview(frame, name="day_relief_tasks", columns=("day", "effort", "list"),
+        tree = ttk.Treeview(frame, name="day_relief_tasks", columns=("day", "due", "effort", "list"),
                             selectmode="extended", style="Dialog.Treeview", height=6)
-        self.prepare_table(tree, (("#0", "Aufgabe", 280), ("day", "Bearbeitungstag", 125),
-                                 ("effort", "Aufwand", 85), ("list", "Liste", 130)), stretch="#0")
+        self.prepare_table(tree, (("#0", "Aufgabe", 240), ("day", "Bearbeitungstag", 110),
+                                 ("due", "Fälligkeit (bleibt)", 125), ("effort", "Aufwand", 90),
+                                 ("list", "Liste", 115)), stretch="#0")
         scroll = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
                                      thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
                                      width=10, radius=5)
@@ -22720,8 +22691,8 @@ class ListApp:
         preview_frame.pack(fill="both", expand=True)
         preview = ttk.Treeview(preview_frame, name="day_relief_balance", columns=("before", "after"),
                                selectmode="none", style="Dialog.Treeview", height=4)
-        self.prepare_table(preview, (("#0", "Tag", 110), ("before", "Vorher", 290),
-                                    ("after", "Nachher", 290)), stretch="after")
+        self.prepare_table(preview, (("#0", "Tag", 100), ("before", "Vorher (Bilanz)", 300),
+                                    ("after", "Nachher (Bilanz)", 300)), stretch="after")
         preview_scroll = ThemedAutoScrollbar(preview_frame, bg_color=self.theme["card"], track_color=self.theme["card"],
                                              thumb_color=self.theme["input_border"],
                                              active_thumb_color=self.theme["muted"], width=10, radius=5)
@@ -22763,9 +22734,10 @@ class ListApp:
                     page_ids.add(identity)
                     tree.insert("", "end", iid=identity, text=item.get("text", ""),
                                 values=(self.format_due_display(item["planned_date"]),
+                                        self.format_due_display(item.get("due")) or "Keine",
                                         self.format_estimated_minutes(item.get("estimated_minutes")) or "Ohne Schätzung",
                                         entry.get("title", "")))
-                self._daily_fit_columns(tree, (("#0", 280), ("day", 125), ("effort", 85), ("list", 130)))
+                self._daily_fit_columns(tree, (("#0", 240), ("day", 110), ("due", 125), ("effort", 90), ("list", 115)))
                 tree.selection_set([identity for identity in selected if identity in page_ids])
             finally:
                 rebuilding[0] = False

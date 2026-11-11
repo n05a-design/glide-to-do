@@ -1,0 +1,141 @@
+# SPDX-License-Identifier: MPL-2.0
+"""Prüfungen für die erweiterte Tageskapazitäts- und Belastungsanalyse (WA-12 / D57)."""
+import copy
+from datetime import datetime, timezone
+from pathlib import Path
+import sys
+import unittest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/glide"))
+import planning as p
+import day_relief as relief
+from occupied_time import Block
+
+UTC = timezone.utc
+DAY = "2026-11-12"
+NEXT = "2026-11-13"
+
+
+def task(identity, minutes=60, day=DAY, due="2026-11-20", done=False):
+    return dict(id=identity, text=identity, planned_date=day, planned_time="09:00",
+                estimated_minutes=minutes, due=due, done=done, kind="task")
+
+
+class DayCapacityAnalysisTest(unittest.TestCase):
+    def test_planned_effort_and_free_capacity(self):
+        items = [task("t1", 90), task("t2", 60)]
+        summary = p.summarize(items, 240, lambda item: True)
+        analysis = p.capacity_analysis(summary)
+
+        self.assertEqual(analysis["task_minutes"], 150)
+        self.assertEqual(analysis["estimated_count"], 2)
+        self.assertEqual(analysis["without_estimate_count"], 0)
+        self.assertEqual(analysis["capacity_minutes"], 240)
+        self.assertTrue(analysis["has_capacity"])
+        self.assertFalse(analysis["is_overloaded"])
+        self.assertEqual(analysis["overload_minutes"], 0)
+        self.assertEqual(analysis["remaining_minutes"], 90)
+        self.assertEqual(analysis["free_minutes"], 90)
+        self.assertIn("Aufwand 2 h 30 min", analysis["summary_text"])
+        self.assertIn("frei 1 h 30 min", analysis["summary_text"])
+
+    def test_overload_reasons_and_calculation(self):
+        # 300 Minuten Aufgaben bei 180 Minuten Kapazität -> 120 Minuten überplant
+        items = [task("t1", 180), task("t2", 120)]
+        summary = p.summarize(items, 180, lambda item: True)
+        analysis = p.capacity_analysis(summary)
+
+        self.assertEqual(analysis["task_minutes"], 300)
+        self.assertTrue(analysis["is_overloaded"])
+        self.assertEqual(analysis["overload_minutes"], 120)
+        self.assertEqual(analysis["remaining_minutes"], -120)
+        self.assertGreater(len(analysis["overload_reasons"]), 0)
+        self.assertTrue(any("übersteigt nutzbare Kapazität" in r for r in analysis["overload_reasons"]))
+        self.assertIn("2 h überplant", analysis["summary_text"])
+
+    def test_unknown_estimates_are_never_treated_as_zero(self):
+        items = [task("t1", 60), task("t2", None), task("t3", 0), task("t4", -30), task("t5", "invalid")]
+        summary = p.summarize(items, 120, lambda item: True)
+        analysis = p.capacity_analysis(summary)
+
+        self.assertEqual(analysis["task_minutes"], 60)
+        self.assertEqual(analysis["estimated_count"], 1)
+        self.assertEqual(analysis["without_estimate_count"], 4)
+        # 4 Aufgaben ohne Schätzung müssen ausdrücklich ausgewiesen werden
+        self.assertIn("4 ohne Schätzung", analysis["summary_text"])
+        self.assertTrue(any("4 Aufgaben ohne Aufwandsschätzung" in r for r in analysis["overload_reasons"]))
+
+    def test_no_fictitious_capacity_when_undefined(self):
+        # Wenn keine Kapazität festgelegt ist, darf keine freie Zeit erfunden werden
+        items = [task("t1", 120)]
+        summary = p.summarize(items, 0, lambda item: True)
+        analysis = p.capacity_analysis(summary)
+
+        self.assertFalse(analysis["has_capacity"])
+        self.assertIsNone(analysis["remaining_minutes"])
+        self.assertIsNone(analysis["free_minutes"])
+        self.assertFalse(analysis["is_overloaded"])
+        self.assertIn("Kapazität nicht festgelegt", analysis["summary_text"])
+        self.assertNotIn("frei", analysis["summary_text"])
+
+    def test_calendar_occupancy_impact_on_net_capacity(self):
+        items = [task("t1", 120)]
+        busy_blocks = (
+            Block(datetime(2026, 11, 12, 10, 0, tzinfo=UTC), datetime(2026, 11, 12, 12, 0, tzinfo=UTC)),  # 120 min
+        )
+        summary = relief.day_summary(items, DAY, 300, busy_blocks, UTC, lambda item: True)
+        analysis = relief.capacity_analysis(summary)
+
+        self.assertEqual(analysis["capacity_minutes"], 300)
+        self.assertEqual(analysis["occupied_minutes"], 120)
+        self.assertEqual(analysis["net_capacity"], 180)
+        self.assertEqual(analysis["task_minutes"], 120)
+        self.assertEqual(analysis["remaining_minutes"], 60)
+        self.assertFalse(analysis["is_overloaded"])
+        self.assertIn("Kalender 2 h", analysis["summary_text"])
+        self.assertIn("frei 1 h", analysis["summary_text"])
+
+    def test_all_day_calendar_occupancy(self):
+        items = [task("t1", 30)]
+        all_day_block = (
+            Block(datetime(2026, 11, 12, tzinfo=UTC), datetime(2026, 11, 13, tzinfo=UTC), all_day=True),
+        )
+        summary = relief.day_summary(items, DAY, 240, all_day_block, UTC, lambda item: True)
+        analysis = relief.capacity_analysis(summary)
+
+        self.assertTrue(analysis["occupied_all_day"])
+        self.assertEqual(analysis["net_capacity"], 0)
+        self.assertTrue(analysis["is_overloaded"])
+        self.assertEqual(analysis["overload_minutes"], 30)
+        self.assertTrue(any("ganztägig" in r for r in analysis["overload_reasons"]))
+        self.assertIn("ganztägig belegt", analysis["summary_text"])
+
+    def test_relief_summary_text_formatting(self):
+        items = [task("t1", 90), task("t2", None)]
+        summary = relief.day_summary(items, DAY, 180, (), UTC, lambda item: True)
+        text = relief.relief_summary_text(summary)
+
+        self.assertTrue(text.startswith("2 Aufgaben"))
+        self.assertIn("Aufwand 1 h 30 min", text)
+        self.assertIn("frei 1 h 30 min", text)
+        self.assertIn("1 ohne Schätzung", text)
+
+    def test_due_date_preservation_in_relief_plan(self):
+        items = [task("t1", 60, due="2026-11-25"), task("t2", 90, due="2026-11-30")]
+        original = copy.deepcopy(items)
+        options = dict(capacity=lambda day: 240, blocks=lambda day: (), zone=UTC, schedulable=lambda i: True)
+        plan = relief.propose(items, ["t1"], NEXT, **options)
+
+        # Fälligkeiten dürfen unter keinen Umständen mutiert werden
+        self.assertEqual(items, original)
+        self.assertEqual(plan.moves[0].identity, "t1")
+        self.assertEqual(plan.moves[0].source, DAY)
+        self.assertEqual(plan.moves[0].target, NEXT)
+
+        # Validierung liefert genaue Zielzuordnung
+        valid_moves = relief.validate(plan, items, lambda i: True)
+        self.assertEqual(valid_moves, (("t1", NEXT, "09:00"),))
+
+
+if __name__ == "__main__":
+    unittest.main()

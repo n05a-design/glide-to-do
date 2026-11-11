@@ -86,6 +86,108 @@ def duration(minutes):
     return (f"{hours} h {rest} min" if rest else f"{hours} h") if hours else f"{rest} min"
 
 
+def capacity_analysis(summary):
+    """Fachliche Kapazitäts- und Belastungsanalyse ohne Tk (WA-12 / D57).
+
+    Ermittelt aus den Zusammenfassungsdaten:
+    - task_minutes: Geplanter Aufgabenaufwand in Minuten (nur geschätzte Aufgaben)
+    - estimated_count: Anzahl Aufgaben mit Schätzung
+    - without_estimate_count: Anzahl Aufgaben ohne Schätzung (nie als 0 min gerechnet)
+    - done_minutes: Davon bereits erledigte Schätzungen
+    - capacity_minutes: Gesetzte Tageskapazität vor Belegzeiten
+    - has_capacity: Ob eine Kapazität festgelegt oder ganztägig belegt ist
+    - occupied_minutes: Belegte Kalenderzeit (sofern vorhanden)
+    - occupied_all_day: Ob der Tag ganztägig belegt ist
+    - net_capacity: Tatsächlich für Aufgaben verbleibende Gesamtkapazität
+    - remaining_minutes: Verbleibende freie Minuten (oder negativ bei Überlastung, None ohne Kapazität)
+    - is_overloaded: True, wenn verbleibende Zeit negativ ist
+    - overload_minutes: Betrag der Überplanung
+    - overload_reasons: Liste nachvollziehbarer Gründe für Überlastung
+    - summary_text: Kompakte Textdarstellung für UI und Berichte
+    """
+    summary = summary or {}
+    task_minutes = summary.get("minutes", 0)
+    estimated_count = summary.get("estimated", 0)
+    without_estimate_count = summary.get("without_estimate", 0)
+    done_minutes = summary.get("done_minutes", 0)
+
+    cap_before = summary.get("capacity_before")
+    if cap_before is None:
+        cap_before = summary.get("capacity", 0)
+    capacity_minutes = max(0, int(cap_before)) if cap_before else 0
+
+    occupied_minutes = max(0, int(summary.get("occupied_minutes", 0)))
+    occupied_all_day = bool(summary.get("occupied_all_day", False))
+
+    has_capacity = bool(capacity_minutes > 0 or occupied_all_day)
+    net_capacity = 0 if occupied_all_day else max(0, capacity_minutes - occupied_minutes)
+
+    if has_capacity:
+        remaining_minutes = net_capacity - task_minutes
+        is_overloaded = remaining_minutes < 0
+        overload_minutes = -remaining_minutes if is_overloaded else 0
+        free_minutes = remaining_minutes if remaining_minutes >= 0 else 0
+    else:
+        remaining_minutes = None
+        is_overloaded = False
+        overload_minutes = 0
+        free_minutes = None
+
+    reasons = []
+    if is_overloaded:
+        if occupied_all_day:
+            reasons.append("Tag ist ganztägig durch Kalendertermine belegt")
+        elif occupied_minutes > 0:
+            reasons.append(
+                f"Kalenderzeit belegt {duration(occupied_minutes)} der Kapazität ({duration(capacity_minutes)})"
+            )
+        if task_minutes > net_capacity:
+            reasons.append(
+                f"Geplanter Aufgabenaufwand ({duration(task_minutes)}) übersteigt nutzbare Kapazität ({duration(net_capacity)}) um {duration(overload_minutes)}"
+            )
+    if without_estimate_count > 0:
+        label = "Aufgabe" if without_estimate_count == 1 else "Aufgaben"
+        reasons.append(f"{without_estimate_count} {label} ohne Aufwandsschätzung können den Tag zusätzlich belasten")
+
+    parts = []
+    if task_minutes > 0 or estimated_count > 0:
+        parts.append(f"Aufwand {duration(task_minutes)}")
+    if occupied_all_day:
+        parts.append("ganztägig belegt")
+    elif occupied_minutes > 0:
+        parts.append(f"Kalender {duration(occupied_minutes)}")
+
+    if not has_capacity:
+        parts.append("Kapazität nicht festgelegt")
+    elif is_overloaded:
+        parts.append(f"{duration(overload_minutes)} überplant")
+    else:
+        parts.append(f"frei {duration(free_minutes)}")
+
+    if without_estimate_count > 0:
+        parts.append(f"{without_estimate_count} ohne Schätzung")
+
+    summary_text = " · ".join(parts) if parts else "0 min geplant"
+
+    return {
+        "task_minutes": task_minutes,
+        "estimated_count": estimated_count,
+        "without_estimate_count": without_estimate_count,
+        "done_minutes": done_minutes,
+        "capacity_minutes": capacity_minutes,
+        "has_capacity": has_capacity,
+        "occupied_minutes": occupied_minutes,
+        "occupied_all_day": occupied_all_day,
+        "net_capacity": net_capacity,
+        "remaining_minutes": remaining_minutes,
+        "free_minutes": free_minutes,
+        "is_overloaded": is_overloaded,
+        "overload_minutes": overload_minutes,
+        "overload_reasons": tuple(reasons),
+        "summary_text": summary_text,
+    }
+
+
 def available_text(summary):
     remaining = summary["remaining"]
     if remaining is None:
