@@ -20,6 +20,11 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.54.0": (
+        "Fundorte anzeigen nennt alle Verwendungen einer Aufgabe, Seite, Notiz, Liste oder Zeichnung mit direktem Sprung.",
+        "Pinnwände lassen sich als offene JSON-Canvas-1.0-Datei (.canvas) mit Karten, Bereichen, Verbindungen und Verlustbericht exportieren.",
+        "Auswahlkästchen, Radioschalter, Listenfelder und Schieberegler sind vollständig in das Glide-Design integriert.",
+    ),
     "3.52.0": (
         "Schriftstile: Modern Rubik, Technisch DM Mono, Kreativ DM Serif Display, Klassisch Charis SIL; gespeicherte Stile bleiben erhalten.",
         "Schriftgewicht und Schriftgröße lassen sich getrennt einstellen. Kreativ und Klassisch sind automatisch kräftiger.",

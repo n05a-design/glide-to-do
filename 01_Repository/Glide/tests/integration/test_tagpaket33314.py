@@ -419,10 +419,10 @@ app.on_close()
                     assert app.home_content.winfo_width()>200
                     assert button(app.template_actions,"Übernehmen & Raster").winfo_ismapped()
                     for check in descendants(app.home_content):
-                        if isinstance(check,mod.tk.Checkbutton):
+                        if isinstance(check,(mod.tk.Checkbutton,mod.GlideCheckbutton)):
                             assert check.winfo_width()<=app.home_content.winfo_width()
                     assert any("gibt 3 weitere Aufgaben frei" in w.cget("text")
-                               for w in descendants(app.home_content) if isinstance(w, mod.tk.Checkbutton))
+                               for w in descendants(app.home_content) if isinstance(w, (mod.tk.Checkbutton, mod.GlideCheckbutton)))
                     if args.capture and size=="gross":
                         from releasedaten import save_windows_screenshot
                         args.capture.mkdir(parents=True,exist_ok=True)

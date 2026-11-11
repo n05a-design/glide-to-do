@@ -91,7 +91,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kontrast-") as ordner:
                         for zustand in ("ruhend", "hover", "aktiv"):
                             flaeche, schrift = w.state_colors(zustand)
                             paare.append((f"Knopf/{zustand}", w.text, schrift, flaeche, w.font))
-                    elif isinstance(w, mod.CanvasLabel):
+                    elif isinstance(w, (mod.CanvasLabel, mod.GlideCheckbutton, mod.GlideRadiobutton)):
                         text = str(w.cget("text")).strip()
                         if not text:
                             continue

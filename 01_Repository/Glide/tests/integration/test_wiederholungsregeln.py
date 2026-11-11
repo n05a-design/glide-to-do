@@ -284,7 +284,7 @@ def fall_steuerung(run):
     options=lambda:app._detail_state['fields']['repeat']['options']
     choose(run,app.detail_pane,options()['basis'],'Ab Erledigung');run.idle()
     entry=options()['entry'];entry.delete(0,'end');entry.insert(0,'3');entry.event_generate('<FocusOut>');run.idle()
-    pause=next(w for w in descendants(app.detail_pane) if isinstance(w,run.mod.tk.Checkbutton)
+    pause=next(w for w in descendants(app.detail_pane) if isinstance(w,(run.mod.tk.Checkbutton,run.mod.GlideCheckbutton))
                and str(w.cget('variable'))==str(options()['paused']))
     pause.invoke();run.idle()
     current=app.find_item_in_lists(identity)[0]

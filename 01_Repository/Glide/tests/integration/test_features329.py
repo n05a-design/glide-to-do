@@ -49,7 +49,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # ================================================================
         # Vertrag und Typregistrierung
         # ================================================================
-        assert mod.APP_VERSION == "3.53.0"
+        assert mod.APP_VERSION == "3.54.0"
         assert app.DATA_SCHEMA_VERSION == 26
         # Seit dem 26.09.2026 kommt die Seitenart „Seite“ hinzu (test_seiten330).
         # 27.09.2026: dazu die Galerie (test_aufraeumen330).
@@ -214,7 +214,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         seen = {}
         def inspect_dialog(dialog, parent=None):
             widgets = list(descendants(dialog))
-            seen["scales"] = [widget.get() for widget in widgets if isinstance(widget, mod.tk.Scale)]
+            seen["scales"] = [widget.get() for widget in widgets if isinstance(widget, (mod.tk.Scale, mod.GlideScale))]
             seen["entries"] = [widget.get() for widget in widgets if isinstance(widget, mod.tk.Entry)]
             dialog.destroy()
         original_modal = app.run_modal

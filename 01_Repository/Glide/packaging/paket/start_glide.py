@@ -133,7 +133,7 @@ def accessible_core_probe(app, mod, settle):
     field.event_generate('<Return>')
     wait(lambda: len(fresh().get('checklist', [])) == 1)
     checkbox = named('Paket-Unterlagen prüfen')
-    assert isinstance(checkbox, mod.tk.Checkbutton)
+    assert isinstance(checkbox, (mod.tk.Checkbutton, mod.GlideCheckbutton))
     checkbox.focus_force()
     settle()
     checkbox.event_generate('<space>')

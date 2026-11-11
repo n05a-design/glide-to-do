@@ -68,5 +68,90 @@ class PageCardTests(unittest.TestCase):
         self.assertEqual(pages.zoomed_image('nsimage', 3, 1, 0.25), ('nsimage', 1, 1))
         self.assertIsNone(pages.zoomed_image('bitmap', 10, 10, 2))
 
+    def test_export_json_canvas_nodes_edges_and_loss_report(self):
+        board = {
+            'layout': 'free',
+            'width': 300,
+            'areas': [
+                {'id': 'a1', 'name': 'Sprint-Ziele', 'color': 'clear', 'x': 10, 'y': 20, 'w': 600, 'h': 400},
+            ],
+            'cards': [
+                {'item_id': 't1', 'list_id': 'l1', 'x': 40, 'y': 60},
+                {'item_id': 'page:p1', 'list_id': 'p1', 'x': 400, 'y': 60},
+                {'item_id': 'hidden', 'list_id': 'l1', 'x': 800, 'y': 60},
+            ],
+            'connections': [
+                {'from': 't1', 'to': 'page:p1', 'style': 'forward', 'label': 'belegt', 'color': 'export', 'dash': True},
+                {'from': 't1', 'to': 'hidden', 'style': 'line'},
+            ],
+        }
+        cards_info = [
+            {
+                'id': 't1',
+                'x': 40,
+                'y': 60,
+                'width': 300,
+                'height': 180,
+                'title': 'Architektur prüfen',
+                'done': False,
+                'importance_label': 'Hohe Priorität',
+                'due': '12.11.2026',
+                'source_title': 'Kernliste',
+                'description': 'Schnittstellen abgleichen',
+                'checklist': [{'text': 'Schema lesen', 'done': True}, {'text': 'Tests ergänzen', 'done': False}],
+                'labels': ['Wichtig', 'Kern'],
+                'attachments_count': 2,
+                'color': 'priority_high',
+            },
+            {
+                'id': 'page:p1',
+                'x': 400,
+                'y': 60,
+                'width': 300,
+                'height': 150,
+                'title': 'Spezifikation',
+                'is_page': True,
+                'kind_label': 'Seite',
+                'description': 'Auszug der Seite · 3 offene Aufgaben',
+                'color': 'accent',
+            },
+        ]
+        doc, report = pages.export_json_canvas(board, cards_info, scope_title='Globale Pinnwand')
+        self.assertEqual(set(doc.keys()), {'nodes', 'edges'})
+        self.assertEqual(report.areas_count, 1)
+        self.assertEqual(report.cards_count, 2)
+        self.assertEqual(report.edges_count, 1)
+
+        group_nodes = [n for n in doc['nodes'] if n['type'] == 'group']
+        text_nodes = [n for n in doc['nodes'] if n['type'] == 'text']
+        self.assertEqual(len(group_nodes), 1)
+        self.assertEqual(group_nodes[0]['label'], 'Sprint-Ziele')
+        self.assertEqual(group_nodes[0]['color'], '5')
+        self.assertEqual(len(text_nodes), 2)
+        t1_node = next(n for n in text_nodes if n['id'] == 't1')
+        self.assertIn('### [ ] Architektur prüfen', t1_node['text'])
+        self.assertIn('- [x] Schema lesen', t1_node['text'])
+        self.assertIn('`glide://item/t1`', t1_node['text'])
+        p1_node = next(n for n in text_nodes if n['id'] == 'page:p1')
+        self.assertIn('### Spezifikation (Seite)', p1_node['text'])
+        self.assertIn('`glide://list/p1`', p1_node['text'])
+
+        edge = doc['edges'][0]
+        self.assertEqual(edge['fromNode'], 't1')
+        self.assertEqual(edge['toNode'], 'page:p1')
+        self.assertEqual(edge['fromSide'], 'right')
+        self.assertEqual(edge['toSide'], 'left')
+        self.assertEqual(edge['fromEnd'], 'none')
+        self.assertEqual(edge['toEnd'], 'arrow')
+        self.assertEqual(edge['label'], 'belegt')
+        self.assertEqual(edge['color'], '4')
+
+        summary = report.summary_text()
+        self.assertIn('Globale Pinnwand', summary)
+        self.assertIn('gestrichelte Verbindung', summary)
+        self.assertIn('Checklisten', summary)
+        self.assertIn('Dateianhänge', summary)
+        self.assertIn('ausgeblendete oder nicht mehr vorhandene Karte', summary)
+
 
 if __name__ == '__main__':unittest.main()

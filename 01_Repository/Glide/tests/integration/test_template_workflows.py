@@ -186,7 +186,7 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
                     labels = [w.cget('text') for w in widgets if isinstance(w, mod.tk.Label)]
                     dropdown = next(w for w in widgets if isinstance(w, mod.LabelDropdown))
                     assert 'Labels (Mehrfachauswahl)' in labels
-                    assert any(isinstance(w, mod.tk.Listbox) for w in widgets), 'Anhangsauswahl fehlt'
+                    assert any(isinstance(w, (mod.tk.Listbox, mod.GlideListbox)) for w in widgets), 'Anhangsauswahl fehlt'
                     dropdown.set_selected_ids([draft.labels[-1]['id']])
                     first = next(w for w in widgets if isinstance(w, mod.tk.Entry))
                     first.delete(0, 'end'); first.insert(0, 'Geprüfter Titel')

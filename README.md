@@ -82,12 +82,12 @@
 - **Seiten mit Blöcken:** Überschriften, Listen, nummerierte Listen, Zitate, Code, Tabellen, Hinweise, Trennlinien und aufklappbare Bereiche; Formatierung, Links, Bilder, Titelbilder und Pixelsymbole. Blöcke am Sechspunktgriff ziehen; Rechtsklick öffnet die Blockaktionen.
 - **Aufgaben direkt auf Seiten:** echte Aufgaben und Verknüpfungen statt isolierter Kästchen; Live-Listen zeigen den aktuellen Inhalt ihrer Quelle.
 - **Notizen, Notizbücher und Bücher:** kurze Gedanken und längere Texte sammeln, gliedern und durchsuchen. Notizbücher führen datierte Einträge wie ein Tagebuch, mit Zeitraumfilter sowie Stimmung und Ort im Mehr-Menü; Galerien sammeln Bilder mit Großansicht.
-- **Wissen vernetzen:** lokale Verweise auf Seiten, Listen und Aufgaben, Rückverweise und unverknüpfte Erwähnungen. Markierten Text direkt in der Nebenansicht nachschlagen.
+- **Wissen vernetzen:** lokale Verweise auf Seiten, Listen und Aufgaben, Rückverweise, unverknüpfte Erwähnungen und vollständige Fundortübersicht („Fundorte anzeigen …“) über alle Verwendungsarten samt Sprung in Haupt- oder Nebenansicht. Markierten Text direkt in der Nebenansicht nachschlagen.
 - **Finden und Befehle:** Inhalte und Aktionen über die Suche und die Befehlspalette erreichen, Fundstellen markieren und zu Abschnitten springen; Vorlagen lassen sich nach Titel, Beschreibung und Inhalt filtern.
 
 ### Ideen sichtbar machen
 
-- **Pinnwände:** Karten frei anordnen, Bereiche und Verbindungen anlegen, zoomen und präsentieren. Aufgaben, Seiten und Notizen lassen sich miteinander verbinden; Karten zeigen ihre Originalinhalte.
+- **Pinnwände:** Karten frei anordnen, Bereiche und Verbindungen anlegen, zoomen, präsentieren und als offenes JSON Canvas 1.0 (`.canvas`) mit Verlustbericht ausgeben. Aufgaben, Seiten und Notizen lassen sich miteinander verbinden; Karten zeigen ihre Originalinhalte.
 - **Pixel-Werkstatt:** Zeichnungen mit 16 bis 128 Zellen, Formen, Symmetrie, Muster, Farbpaletten und Umfärben; Referenzbild zum Nachzeichnen und benannte Zwischenstände. Export als PNG, ICO mit Symbolvorschau, SVG oder JSON. Bildfolgen erstellen, abspielen und als Einzelbilder bzw. Sprite-Sheet ausgeben.
 - **Persönliche Oberfläche:** zehn Designs, automatische Hell-/Dunkelumschaltung, Akzentfarben, Hintergrundverläufe und getrennte Hintergrundfarben. „Wie die Fensterfläche“ verbindet den Hintergrund mit den Arbeitsflächen und deaktiviert deren Materialschatten.
 - **Dein Arbeitsstil:** Schriftstil (Modern: Rubik, Technisch: DM Mono, Kreativ: DM Serif Display, Klassisch: Charis SIL) und Größe wählen, Seitenleiste vollständig, schmal oder ausgeblendet nutzen, Bereiche einblenden, Lesebreite ändern und zusätzliche Bedienhinweise oder Animationen abschalten.
@@ -96,7 +96,7 @@
 ### Inhalte mitnehmen und sicher aufbewahren
 
 - **Anhänge und Zwischenablage:** Dateien über die Dateiauswahl oder per Ziehen hinzufügen, Bilder in der lokalen Vorschau ansehen und Inhalte aus der Zwischenablage übernehmen; eigene Daten und Anhänge bleiben unter deiner Kontrolle.
-- **Importieren und ausgeben:** TXT, CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und Glide-Seiten; Ausgabe auch als CSV und als vollständiger Markdown-Ordner. Druck und PDF über eine lokale Druckansicht.
+- **Importieren und ausgeben:** TXT, CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und Glide-Seiten; Ausgabe auch als CSV, als vollständiger Markdown-Ordner und für Pinnwände als JSON Canvas 1.0 (`.canvas`). Druck und PDF über eine lokale Druckansicht.
 - **Vorlagen:** mitgelieferte und eigene Vorlagen, Vorschau vor dem Übernehmen, Aufgaben- und Ordnerstrukturen sowie passende Datumsverschiebung.
 - **KI-Austausch über Dateien:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.
 - **Sichern und wiederherstellen:** atomare Speicherung, automatische Sicherungen bei Änderungen, Tagesstände, Voll-, Teil- und App-Backups. Sicherungen durchsuchen, Inhalte prüfen, vergleichen und einzelne Seiten wiederherstellen.
@@ -121,7 +121,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Zum Abgleich am 09.11.2026 gibt es weiterhin **keinen öffentlichen GitHub-Release**. Der öffentliche Quellstand auf `main` ist 3.50.7; die lokale 3.52.0-Arbeitskopie ist noch kein Release. [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach Freigabe zum Downloadkanal. Für Actions-Artefakte ist eine GitHub-Anmeldung erforderlich. Die vorhandenen Entwicklungsbauten sind unsigniert; Startfreigaben und genaue Quellstände beschreibt der Liefernachweis.
+Stand 10.11.2026: Aktueller Quell- und Lieferstand ist Glide 3.54.0 (D78, Datenformat 26, Glide-System V1.16) auf Basis des vorigen `main`-Commits `9e767bea` (PR #75). Die strenge CI-Grundstufe, 1.158 Fachlogiktests, Kontrast-, Zugangs- und Altbestandteilsprüfungen für 3.54.0 sowie die früheren Linux-/Windows-Vollprüfungen auf der `main`-Basis sind erfolgreich. Die vollständige native Plattformmatrix für 3.54.0, eigenständige 3.54.0-Pakete und die detaillierte menschliche Bedien-/DPI-Abnahme bleiben offen. Es gibt weiterhin **keinen öffentlichen GitHub-Release**; [Releases](https://github.com/n05a-design/glide-to-do/releases) wird erst nach gesonderter Freigabe zum Downloadkanal. Actions-Artefakte erfordern eine GitHub-Anmeldung. Entwicklungsbauten sind unsigniert; Prüfgrenzen und Quellstände beschreibt der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -130,7 +130,7 @@ Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnell
 - Alles liegt in einem Datenordner außerhalb des Programmordners; Datei › „Wo liegen meine Daten?“ zeigt ihn, und du kannst ihn wechseln.
 - Glide speichert atomar, legt bei Änderungen automatische Sicherungen und Tagesstände an und schützt den Bestand vor zwei gleichzeitig schreibenden Glide-Fenstern.
 - Der gewählte Datenordner enthält deine gespeicherten Inhalte und Anhänge. Links kannst du gezielt im Browser öffnen; eine selbst gewählte Cloudablage verwaltet deren Anbieter.
-- Ausstieg jederzeit: Der ganze Bestand lässt sich als lesbarer Markdown-Ordner ausgeben; Teil- und App-Sicherungen stellen Glide-Bestände wieder her.
+- Ausstieg jederzeit: Der ganze Bestand lässt sich als lesbarer Markdown-Ordner und jede Pinnwand als JSON Canvas 1.0 (`.canvas`) ausgeben; Teil- und App-Sicherungen stellen Glide-Bestände wieder her.
 
 <details>
 <summary><strong>Häufige Fragen</strong></summary>
@@ -155,7 +155,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 09.11.2026
+Stand 10.11.2026 · Glide 3.54.0
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

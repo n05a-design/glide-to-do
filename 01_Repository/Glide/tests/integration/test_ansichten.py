@@ -483,7 +483,7 @@ def fall_darstellung_ui(run):
             footer=[w for w in descendants(dialog) if isinstance(w,run.mod.RoundedButton) and w.text in ('Speichern','Abbrechen')]
             assert len(footer)==2 and all(w.winfo_ismapped() for w in footer)
             assert all(w.winfo_rooty()+w.winfo_height()<=dialog.winfo_rooty()+dialog.winfo_height() for w in footer)
-            last=next(w for w in descendants(dialog) if isinstance(w,run.mod.tk.Checkbutton)
+            last=next(w for w in descendants(dialog) if isinstance(w,(run.mod.tk.Checkbutton,run.mod.GlideCheckbutton))
                       and w.cget('text')=='In der Darstellung nur offene Aufgaben')
             assert last.winfo_rooty()+last.winfo_height()<min(w.winfo_rooty() for w in footer)
             screenshot(dialog,name+'_dialog')

@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 10.11.2026 · Glide 3.53.0 · Aufgabenformat 26
+Stand 10.11.2026 · Glide 3.54.0 · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -8,7 +8,7 @@ Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 
 
 - Eine deutschsprachige, lokale Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Leitsatz: *der ruhige, lokale Arbeitsplatz für den eigenen Tag – planen, erledigen, festhalten; alles in einer eigenen Datei, ohne Konto. Die Pixel-Werkstatt ist die persönliche Signatur.*
 - Kernfunktionen brauchen weder Internet noch Benutzerkonto oder Cloudservice. Kein automatischer Datentransfer, keine Telemetrie; nur ein angeklickter Link öffnet den Browser.
-- Laufzeit: Python 3.14 mit Tk 9 und Standardbibliothek. Tk 8.6 bleibt mit eingeschränkter Systemintegration lauffähig ([Architektur](02_ARCHITECTURE.md)). Mitgeliefert sind nur tkinterdnd2, optional geladen ([Abhängigkeitsentscheidung](decisions/ABHAENGIGKEIT_TKDND.md)), und privat registrierte Schriften (Rubik als Standard, Roboto Mono, Playfair Display, Fraunces und Pixelify Sans unter SIL OFL 1.1; DejaVu Sans ausschließlich als interner Symbolbegleiter unter eigener Bitstream-/Arev-Lizenz, Lizenztexte und Prüfsummen in `resources/fonts/provenance.json`). Eine neue Laufzeitabhängigkeit braucht eine dokumentierte Entscheidung.
+- Laufzeit: Python 3.14 mit Tk 9 und Standardbibliothek. Tk 8.6 bleibt mit eingeschränkter Systemintegration lauffähig ([Architektur](02_ARCHITECTURE.md)). Mitgeliefert sind nur tkinterdnd2, optional geladen ([Abhängigkeitsentscheidung](decisions/ABHAENGIGKEIT_TKDND.md)), und privat registrierte Schriften (Rubik als Standard, DM Mono, DM Serif Display, Charis SIL und Pixelify Sans unter SIL OFL 1.1; DejaVu Sans ausschließlich als interner Symbolbegleiter unter eigener Bitstream-/Arev-Lizenz, Lizenztexte und Prüfsummen in `resources/fonts/provenance.json`). Eine neue Laufzeitabhängigkeit braucht eine dokumentierte Entscheidung.
 - Plattformunabhängig: macOS, Windows, Linux; keine Funktion nur für eine Plattform (Antwort des Inhabers vom 30.09.2026). Mobile und ein Toolkit-Wechsel sind zurückgestellt (D03).
 - Nutzerdaten liegen außerhalb des Programmordners und dürfen in einem extern synchronisierten Ordner liegen. Glide synchronisiert selbst nicht; die Belegungsdatei verhindert erkannte Fremdnutzung, kann aber zwei unsynchronisierte Cloudkopien nicht verriegeln. Nacheinander arbeiten: schließen, synchronisieren, am anderen Gerät öffnen.
 - Erinnerungen und Systemmitteilungen (Option, Vorgabe aus) nur bei laufender App; verpasste Hinweise erscheinen gesammelt ([Systemintegration](decisions/SYSTEMBENACHRICHTIGUNGEN.md)).

@@ -271,6 +271,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
             kinder = list(descendants(dialog))
             gesehen["anzahl"] = len(kinder)
             gesehen["klassen"] = [kind.winfo_class() for kind in kinder]
+            gesehen["checkbuttons"] = [kind for kind in kinder if isinstance(kind, (mod.tk.Checkbutton, mod.GlideCheckbutton))]
             gesehen["texte"] = texte(dialog)
             gesehen["knoepfe"] = [kind.text for kind in kinder if isinstance(kind, mod.RoundedButton)]
             dialog.destroy()
@@ -283,7 +284,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         assert gesehen["anzahl"] > 5, gesehen["anzahl"]
         assert any("Tabellenspalten" in wert for wert in gesehen["texte"])
         # Jede wählbare Spalte steht als Kästchen im Dialog.
-        assert gesehen["klassen"].count("Checkbutton") == len(app.TABLE_COLUMN_KEYS), gesehen["klassen"]
+        assert len(gesehen["checkbuttons"]) == len(app.TABLE_COLUMN_KEYS), gesehen["klassen"]
         assert "Speichern" in gesehen["knoepfe"] and "Abbrechen" in gesehen["knoepfe"]
         assert not fehler, fehler
 
@@ -385,7 +386,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         assert any("Kalender" in wert for wert in gesehen["texte"])
         # Punkt 10: kein natives ttk-Kästchen mehr im Glide-Dialog.
         assert "TCheckbutton" not in gesehen["klassen"]
-        assert gesehen["klassen"].count("Checkbutton") >= 1
+        assert len(gesehen["checkbuttons"]) >= 1
 
         # Punkt 11: Die Kalenderauswahl hängt an jedem Datumsfeld.
         assert callable(app.attach_calendar_picker)

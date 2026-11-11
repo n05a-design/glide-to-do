@@ -31,7 +31,7 @@ import zlib
 from beispieldaten import Builder, REPOSITORY_ROOT, load_module, summarise
 
 
-APP_VERSION = "3.53.0"
+APP_VERSION = "3.54.0"
 # Ein Wert fuer beides: die Standangaben in den Inhaltstexten und die
 # Zusicherung weiter unten, dass die App wirklich dieses Format schreibt.
 DATA_SCHEMA_VERSION = 26

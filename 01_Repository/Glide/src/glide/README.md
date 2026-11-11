@@ -1,8 +1,8 @@
-# Glide-System V1.15
+# Glide-System V1.16
 
-Stand 10.11.2026 · Glide 3.53.0 · Glide-System V1.15 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 10.11.2026 · Glide 3.54.0 · Glide-System V1.16 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.15` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.16` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 10.11.2026 · Glide 3.53.0 · Glide-System V1.15 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.16** | 10.11.2026 | Vollständige Fundortübersicht (WA-21) in `object_references.py`, JSON-Canvas-1.0-Pinnwandexport mit Verlustbericht (WA-07) in `pinboard_pages.py` und vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0`). | App 3.54.0, Format 26 |
 | **V1.15** | 10.11.2026 | Schrift-/Symbolprüfungen decken alle vier auswählbaren Stile und beide Tk-Gewichte ab; Testkatalog verweist auf die direkte Änderungszuordnung. | App 3.53.0, Format 26 |
 | **V1.14** | 09.11.2026 | Einstellbares Schriftgewicht, kräftige Serifenschriften, Themenfarbe für hervorgehobene Aktionen und präziser Logo-Versatz. | Format 26 |
 | **V1.13** | 09.11.2026 | Seitenleisten-Plus mit Hover und Tastaturfokus, 3 px zusätzlicher Zählerrand, kompaktere Windows-Menüs und abgesenkte Kopfsymbole. Geometrie und Zustände werden in den bestehenden Pflichtfällen geprüft. | Format 26 |
@@ -40,7 +41,7 @@ Stand 10.11.2026 · Glide 3.53.0 · Glide-System V1.15 · Aufgabenformat 26 · E
 | Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 311 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 312 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -94,7 +95,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M028 | [`home_task_tiles.py`](home_task_tiles.py) | Heute-/Fokus-Kacheln mit UI- und Aktionsschnittstellen | Heute-/Nächste-Aufgabe-Renderer über explizite Anzeigemodelle, UI-Ports und bestehende Aktionen; keine App-/Tk-Imports, nur IDs in Callbacks; Stand: Lokaler Startseitenaktionskandidat 3.45.0 | mittel | Adapter + Isolationstest; Ansichtsmodell, Aktionen, Fensterkontext und Tk-Callbacks per Ports/Adapter trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_home_task_tiles.py |
 | M029 | [`today_view.py`](today_view.py) | Datenprojektion der Heute-Ansicht | Aufteilung von „Heute“ ohne Dubletten, nächste Aufgabe, Zählung; Stand: 3.33.6 | gering | Refactoring zuerst; Ansichtsmodell, Aktionen, Fensterkontext und Tk-Callbacks per Ports/Adapter trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_today_view.py |
 | M030 | [`page_features.py`](page_features.py) | Seitenfunktionen, Live-Listen, Titelbilder, Vorlagenvorschau | Live-Listen, Titelbildvertrag und gefüllte Vorlagenvorschau ohne Bestandsmutation (Tk-frei); Stand: 3.33.18 | gering | Refactoring zuerst; Ansichtsmodell, Aktionen, Fensterkontext und Tk-Callbacks per Ports/Adapter trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_page_features.py |
-| M031 | [`pinboard_pages.py`](pinboard_pages.py) | Pinnwand-Seitenkarten, Verbindungen, Druckprojektionen | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04); Stand: 3.44.0 (FP-07/FP-04) | gering | Refactoring zuerst; Ansichtsmodell, Aktionen, Fensterkontext und Tk-Callbacks per Ports/Adapter trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_pinboard_pages.py |
+| M031 | [`pinboard_pages.py`](pinboard_pages.py) | Pinnwand-Seitenkarten, Verbindungen, Druckprojektionen, JSON-Canvas-Export | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf, begrenzte Druckbilder (FP-04) und offener JSON-Canvas-1.0-Export samt Verlustbericht ohne Tk (WA-07); Stand: 3.54.0 (FP-07/FP-04/WA-07) | gering | Refactoring zuerst; Ansichtsmodell, Aktionen, Fensterkontext und Tk-Callbacks per Ports/Adapter trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_pinboard_pages.py |
 
 ### Aufgaben/Planung
 
@@ -103,7 +104,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M032 | [`capture_parser.py`](capture_parser.py) | Deutsche Schnelleingabe mit strukturierten Feldchips | Deutsche Schnelleingabe (G01): Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels, „/“-Befehle, Wiederholungen; jede Erkennung mit Textstelle zum Zurücknehmen; Stand: 3.33.3 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_capture_parser.py |
 | M033 | [`task_editing.py`](task_editing.py) | Feldverträge, Dreiwegevergleich und Batch-Änderungen | Feldvertrag/Dreiwegevergleich, Mehrfachänderungen, Labelprüfung und reiner Entnahme-/Retentionsplan für erledigte Aufgaben (Tk-frei); Stand: 3.38.0 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_task_editing.py |
 | M034 | [`task_references.py`](task_references.py) | Aufgabenheimat, Textverweise, Quellenindex, ID-Neuvergabe | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk; Stand: 3.33.15 | gering | Refactoring zuerst; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_task_references.py |
-| M035 | [`object_references.py`](object_references.py) | Typisierte Objektverweise und Rückverweislogik | Typisierte lokale Verweise, abgeleitete Rückverweise, unverknüpfte Titelerwähnungen (FP-05) und Import-/Kopierregeln (Tk-frei); Stand: 3.33.17 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_object_references.py |
+| M035 | [`object_references.py`](object_references.py) | Typisierte Objektverweise, Rückverweislogik und Fundortübersicht | Typisierte lokale Verweise, abgeleitete Rückverweise, unverknüpfte Titelerwähnungen (FP-05), vollständige Fundortübersicht (WA-21) und Import-/Kopierregeln (Tk-frei); Stand: 3.54.0 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_object_references.py |
 | M036 | [`item_index.py`](item_index.py) | Kurzlebiger ID-Index für Mehrfachaktionen | Kurzlebige Original-/Eltern-/Geschwister-/Listenprojektion für Mehrfachaktionen, nach Dialog-/Modellgrenzen frisch aufgelöst (Tk-frei, WA-36); Stand: 3.44.0 (Roadmap-Paket 1) | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_item_index.py |
 | M037 | [`filter_explain.py`](filter_explain.py) | Prüfung und Erklärung gespeicherter Filter | Bedingungen gespeicherter Filter prüfen und erklären (Tk-frei, D-03); Stand: 3.34.0 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_filter_explain.py |
 | M038 | [`planning.py`](planning.py) | Tagesziele, Kapazitäten, Wochenbilanz, Planungsvorschau | Bearbeitungstagsziele, Wochentagskapazität, gemeinsame Bilanz und Vorschau ohne Mutation (Tk-frei, KO01/AU02); Stand: 3.33.13 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_planning.py |
@@ -381,7 +382,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F121 | **Keine System-Standardscrollleisten** | ThemedAutoScrollbar in Live-Liste, Speicherstatus, Sicherungsübersicht; Werkzeug altbestandteile.py | app.pyw, tests/tools/altbestandteile.py | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F121 | **Keine System-Standardscrollleisten oder Altbestandteile** | ThemedAutoScrollbar sowie GlideCheckbutton, GlideRadiobutton, GlideListbox und GlideScale; Werkzeug altbestandteile.py mit Sperrklinke 0/0 | app.pyw, tests/tools/altbestandteile.py | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert und mit 3.54.0 vollständig auf 0/0 gesenkt; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Neuerungen
 
@@ -859,6 +860,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T309 | [`test_sbom.py`](../../tests/tools/test_sbom.py) | CycloneDX-Lizenz-/Bauinventar, fehlende/mehrdeutige Belege und nachträgliche Abweichung prüfen; kein vollständiger transitiver Laufzeitgraph |
 | T310 | [`arbeitsmodi_gruppen.py`](../../tests/tools/arbeitsmodi_gruppen.py) | Fünf verpflichtende serielle Gruppen aus demselben vollständigen Fallbestand; kein Tk-Import, keine zweite Fallliste, unveränderte 900-s-Wächter |
 | T311 | [`test_arbeitsmodi_gruppen.py`](../../tests/tools/test_arbeitsmodi_gruppen.py) | Alle implementierten Arbeitsmodifälle genau einmal und in Originalreihenfolge; fehlende/doppelte/verschobene Grenzen als Fehler |
+| T312 | [`test_custom_controls.py`](../../tests/integration/test_custom_controls.py) | Vollständige Schnittstellenkompatibilität (keys, cget, configure, getitem, setitem, Aliase, Tk-Variablen) der D78-Custom-Controls |
 
 <!-- GLIDE-SYSTEM:TESTS-END -->
 

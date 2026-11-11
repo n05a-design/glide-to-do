@@ -1,5 +1,11 @@
 # Änderungsverlauf
 
+## 3.54.0 – 10.11.2026
+
+- Vollständige Fundortübersicht („Fundorte anzeigen …“, WA-21): listet für jede Aufgabe, Seite, Notiz, Liste und Zeichnung alle Verwendungen im Bestand auf (Heimatcontainer, Objektverweise, Textlinks, Aufgabenzeilen in Seiten/Notizen, Live-Listen, Aufgabenbeziehungen, Pinnwandkarten/-verbindungen und unverknüpfte Titelerwähnungen) samt Zielzustand, Öffnen im Haupt- oder Nebenbereich und direktem Verknüpfen unverknüpfter Erwähnungen.
+- Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, WA-07 / FP-07 Stufe 2): exportiert Bereiche als `group`-Knoten, Aufgaben-, Seiten-, Notiz- und Zeichnungskarten als `text`-Knoten mit stabilen Kennungen, Koordinaten, Maßen und Farben sowie Verbindungen als `edges`, begleitet von einem ausdrücklichen Verlustbericht über nicht abbildbare Glide-Metadaten.
+- Klassischen Tk-Restbestand vollständig abgelöst (`Sperrklinke = 0`, UI-Feinschliff §21.76): alle 28 `Checkbutton`-, 2 `Radiobutton`-, 4 `Listbox`- und 1 `Scale`-Instanzen durch themengerechte Eigenzeichnungen (`GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`) ersetzt und in `altbestandteile.py` dauerhaft gesperrt.
+
 ## 3.53.0 – 10.11.2026
 
 - Schrift- und Symbolprüfungen erweitert: alle vier auswählbaren Schriftfamilien werden mit sämtlichen UI-Symbolen in normalem und fettem Tk-Gewicht auf die tatsächlich verwendete Glyphenfamilie geprüft.
