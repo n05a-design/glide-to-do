@@ -78,10 +78,14 @@ with tempfile.TemporaryDirectory(prefix="glide-klappkontrolle-") as folder:
         """Tatsächlich registrierte Widget-Bindung ohne OS-Fokus ausführen."""
         script = widget.bind(sequence)
         assert script, ("Fehlende Tastaturbindung", widget, sequence)
+        key_name = "space" if "space" in sequence.lower() else "Return"
+        keysym_num = 32 if key_name == "space" else 13
         values = dict(zip("#bfh kst wxy AEK NWT XYD".replace(" ", ""),
-                          (1, 0, 0, 0, 0, 0, click_time, 0, 0, 0, "", 0, "Return", 13,
+                          (1, 0, 0, 0, 0, 0, click_time, 0, 0, 0, "", 0, key_name, keysym_num,
                            str(widget), 2, 0, 0, 0)))
-        script = re.sub(r"%([#a-zA-Z])", lambda match: "{" + str(values[match[1]]) + "}", script)
+        values["d"] = key_name
+        values["m"] = 0
+        script = re.sub(r"%([#a-zA-Z])", lambda match: "{" + str(values.get(match[1], 0)) + "}", script)
         result = widget.tk.call("catch", script)
         assert int(result) in (0, 3), ("Tastaturbindung fehlgeschlagen", sequence, result)
         idle()

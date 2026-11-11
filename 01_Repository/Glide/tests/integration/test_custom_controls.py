@@ -20,20 +20,34 @@ parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
 parser.add_argument("--report", type=Path)
 args, _ = parser.parse_known_args()
 
-with tempfile.TemporaryDirectory(prefix="glide-custom-controls-") as folder:
-    os.environ["GLIDE_DATA_DIR"] = folder
-    os.environ["GLIDE_TEST_MODE"] = "1"
-    sys.path.insert(0, str(args.app.parent))
-    loader = importlib.machinery.SourceFileLoader("glide_app_controls", str(args.app.resolve()))
-    gapp = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
-    sys.modules[loader.name] = gapp
-    loader.exec_module(gapp)
+_temp_dir = tempfile.TemporaryDirectory(prefix="glide-custom-controls-")
+os.environ["GLIDE_DATA_DIR"] = _temp_dir.name
+os.environ["GLIDE_TEST_MODE"] = "1"
+sys.path.insert(0, str(args.app.parent))
+loader = importlib.machinery.SourceFileLoader("glide_app_controls", str(args.app.resolve()))
+gapp = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+sys.modules[loader.name] = gapp
+loader.exec_module(gapp)
+
+
+def tearDownModule():
+    try:
+        _temp_dir.cleanup()
+    except Exception:
+        pass
+
 
 import tkinter as tk  # noqa: E402
 
 
 class TestCustomControlsUnit(unittest.TestCase):
     """Schnittstellen- und Optionsprüfungen der D78-Custom-Controls."""
+
+    def test_temp_data_dir_persists_during_suite_execution(self):
+        """Prüft, dass das temporäre Testdatenverzeichnis während der gesamten Suiten-Ausführung verfügbar bleibt."""
+        data_dir = Path(os.environ["GLIDE_DATA_DIR"])
+        self.assertTrue(data_dir.exists(), f"GLIDE_DATA_DIR {data_dir} muss während der Testausführung existieren")
+        self.assertTrue(data_dir.is_dir(), f"GLIDE_DATA_DIR {data_dir} muss ein Verzeichnis sein")
 
     def test_keys_cget_and_item_access_consistency(self):
         root = tk.Tk()

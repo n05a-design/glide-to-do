@@ -249,19 +249,29 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         app.on_close()
         assert json.loads(session_marker.read_text(encoding='utf-8'))['state'] == 'clean'
         root=mod.tk.Tk()
+        root.report_callback_exception = lambda *error: reported_errors.append(error)
         app=mod.ListApp(root)
+        app.confirm_template_preview = lambda template: True
         root.update()
         assert not app._data_read_only and app._recovery_assessment.writable
         assert app.view_mode==app.HOME_VIEW and app.home_frame.winfo_ismapped()
         assert app.settings['profile_name']=='Tim' and app.settings['profile_logo']=='TV'
         assert app.home_summary()['total']==3
         assert app.settings['recent_lists']
+        assert not reported_errors, reported_errors
     finally:
         app.cancel_pending_callbacks()
-        for job in root.tk.splitlist(root.tk.call('after', 'info')):
-            root.tk.call('after', 'cancel', job)
+        try:
+            for job in root.tk.splitlist(root.tk.call('after', 'info')):
+                root.tk.call('after', 'cancel', job)
+        except Exception:
+            pass
         app.finish_recovery_session()
         app.release_data_lock()
-        root.destroy()
+        try:
+            if root.winfo_exists():
+                root.destroy()
+        except Exception:
+            pass
 
 print('UI-Erweiterungen: OK (Farben, Artwechsel, Abstände, Startseite, Vorlagen, Einstellungen und Neustart)')
