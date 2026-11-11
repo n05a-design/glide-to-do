@@ -281,9 +281,10 @@ class TestCustomControlsInteractions(unittest.TestCase):
             flow = gapp.ButtonFlow(root, bg="#ffffff", gap=8)
 
             class DummyEvent:
-                def __init__(self, width, height=20):
+                def __init__(self, width, height=20, widget=None):
                     self.width = width
                     self.height = height
+                    self.widget = widget or flow
 
             reflows = [0]
             orig_schedule = flow.schedule_reflow
@@ -293,6 +294,11 @@ class TestCustomControlsInteractions(unittest.TestCase):
                 return orig_schedule()
 
             flow.schedule_reflow = counted_schedule
+
+            # 0. Ereignisse für fremde/untergeordnete Widgets dürfen kein schedule_reflow auslösen
+            other_widget = tk.Frame(root)
+            flow._on_configure(DummyEvent(width=300, height=40, widget=other_widget))
+            self.assertEqual(reflows[0], 0, "ButtonFlow darf bei Ereignissen fremder Widgets kein Reflow planen")
 
             # 1. Breiten <= 1 (ungemappter Zustand) dürfen kein schedule_reflow auslösen
             flow._on_configure(DummyEvent(width=1, height=1))
@@ -329,6 +335,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
             dlg_flow.add(btn1)
             dlg_flow.add(btn2)
             dlg.update_idletasks()
+            self.assertEqual(len(dlg_flow._rows), 1, "Im ungemappten Dialog müssen alle Knöpfe in Zeile 0 liegen")
             dlg.destroy()
         finally:
             root.destroy()

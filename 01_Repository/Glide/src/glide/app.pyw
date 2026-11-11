@@ -778,6 +778,8 @@ def bind_resize(widget, callback, add=None):
     (Messung: 20 Scrollschritte 2,8 s, mit Verlauf 10,5 s).
     """
     def bei_groesse(event):
+        if getattr(event, "widget", None) is not widget:
+            return None
         groesse = (event.width, event.height)
         if getattr(widget, "_resize_seen", None) == groesse:
             return None
@@ -1729,6 +1731,8 @@ class ButtonFlow(tk.Frame):
         zu Idle-Kaskaden in dialog.update_idletasks().
         """
         if event is not None:
+            if getattr(event, "widget", None) is not self:
+                return
             w = getattr(event, "width", None)
             if w is not None:
                 if w <= 1 or w == self._last_reflow_width:
@@ -1762,9 +1766,10 @@ class ButtonFlow(tk.Frame):
         self._reflowing = True
         try:
             self.cancel_reflow()
-            width = max(1, self.winfo_width())
-            if width > 1:
-                self._last_reflow_width = width
+            w = self.winfo_width()
+            width = 999999 if w <= 1 else w
+            if w > 1:
+                self._last_reflow_width = w
             compact = self.compact_keys is not None and width < self.compact_below
             bg = self.cget("bg")
             visible, hidden = [], []
