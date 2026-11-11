@@ -301,7 +301,7 @@ class Prueflauf:
         self.waechter = waechter
         self.systemkontext = systemkontext()
         self.systemkontext["app_sha256"] = hashlib.sha256(APP.read_bytes()).hexdigest()
-        self.env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", PYTHONFAULTHANDLER="1")
+        self.env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", PYTHONFAULTHANDLER="1", PYTHONUNBUFFERED="1")
         # Suiten laufen absichtlich in einer Zone mit Versatz, wenn der
         # Aufrufer keine vorgibt. In UTC ist jeder Zeitzonenfehler unsichtbar,
         # weil der Versatz null ist: Der UNTIL-Fehler aus 3.21.0 war in einer

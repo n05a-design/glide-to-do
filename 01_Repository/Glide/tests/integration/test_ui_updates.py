@@ -27,6 +27,7 @@ def descendants(widget):
 
 with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
     os.environ['GLIDE_DATA_DIR'] = tmp
+    os.environ.setdefault('GLIDE_TEST_MODE', '1')
     old_settings = {'theme': 'dark', 'title': 'Meine Liste', 'custom_setting': 'behalten'}
     (Path(tmp)/'settings.json').write_text(json.dumps(old_settings), encoding='utf-8')
     loader = importlib.machinery.SourceFileLoader('glide_ui_updates', str(REPO/'src/glide/app.pyw'))
@@ -37,35 +38,56 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
     app = mod.ListApp(root)
     app.confirm_template_preview = lambda template: True
     root.geometry('1280x960+10+10')
+    root.update_idletasks()
     root.update()
     reported_errors=[]
     root.report_callback_exception = lambda *error: reported_errors.append(error)
-    original_modal = app.run_modal
+
+    def safe_modal(dialog, parent=None):
+        title = ""
+        try:
+            title = dialog.title()
+        except Exception:
+            title = str(dialog)
+        print(f"[test_ui_updates] Unerwarteter modaler Dialog: {title!r}", flush=True)
+        try:
+            if dialog.winfo_exists():
+                dialog.destroy()
+        except Exception:
+            pass
+        raise RuntimeError(f"Unerwarteter modaler Dialog aufgerufen: {title!r}")
+
+    app.run_modal = safe_modal
 
     def capture(widget, name):
         if args.screenshots and os.name == 'nt':
             sys.path.insert(0, str(REPO/'tests/tools'))
             from releasedaten import save_windows_screenshot
+            widget.update_idletasks()
             widget.update()
             widget.tk.call('after', 100, 'set', '::capture_ready', '1')
             widget.tk.call('vwait', '::capture_ready')
+            widget.update_idletasks()
             widget.update()
             save_windows_screenshot(widget, args.screenshots.resolve()/f'{name}.png')
 
     def inspect_dialog(check):
         def inspect(dialog, parent=None):
+            dialog.update_idletasks()
             dialog.update()
             try:
                 check(dialog)
             finally:
                 if dialog.winfo_exists():
                     dialog.destroy()
+                app.run_modal = safe_modal
         app.run_modal = inspect
 
     def button(dialog, name):
         return next(w for w in descendants(dialog) if isinstance(w, mod.RoundedButton) and w.text == name)
 
     try:
+        print("[test_ui_updates] Schritt 1: Initialisierung und Navigation...", flush=True)
         assert Path(mod.BASE_DIR).resolve() == Path(tmp).resolve()
         assert app.settings['profile_name'] == '' and not app.settings['start_on_home']
         assert app.settings['profile_logo'] == 'G'
@@ -102,6 +124,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         assert app.settings['recent_lists'] == recent, 'Navigation/Autosave ist keine Bearbeitung'
 
         for theme in ('dark','light'):
+            print(f"[test_ui_updates] Theme {theme}: Start...", flush=True)
             # Seit das Design die einzige Quelle ist, wirkt eine Zuweisung an
             # theme_name nicht mehr; bis 08.10.2026 lief der Dunkelfall hier hell (W02).
             app.set_design(theme, apply_now=False)
@@ -110,6 +133,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             app.set_active_list(entry['id'])
             for width in (1280,980,860):
                 root.geometry(f'{width}x900+10+10')
+                root.update_idletasks()
                 root.update()
                 app.sync_task_tree_columns()
                 text=app.tree.bbox(task['id'],'#0')
@@ -125,6 +149,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             app.settings.update(profile_name='Tim',profile_logo='TV')
             app.set_home_tile_hidden('welcome', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
             app.set_home_view()
+            root.update_idletasks()
             root.update()
             assert app.home_frame.winfo_ismapped() and not app.tree.winfo_ismapped()
             assert app.system_listbox.selection() == (app.HOME_ROW_ID,)
@@ -132,6 +157,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             assert any('Tim' in str(w.cget('text')) for w in descendants(app.home_content) if isinstance(w,mod.tk.Label))
             capture(root,f'startseite-{theme}')
             app.set_active_list(entry['id'])
+            root.update_idletasks()
             root.update()
             assert app.tree.winfo_ismapped() and not app.home_frame.winfo_ismapped()
 
@@ -149,6 +175,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 ):
                     for index,(choice,key) in enumerate(zip(choices,colors)):
                         widget['menu'].invoke(index)
+                        root.update_idletasks()
                         widget.update()  # Menübefehle laufen seit 3.32.0 im nächsten Leerlauf
                         assert widget.cget('fg') == app.theme[key]
                         if index:
@@ -202,6 +229,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 startup = next(w for w in descendants(dialog) if isinstance(w,(mod.tk.OptionMenu,mod.MacOptionMenu))
                                and w.cget('text') in ('Letzte Ansicht','Startseite','Vorlagen'))
                 startup['menu'].invoke(1)
+                root.update_idletasks()
                 dialog.update()  # Menübefehle laufen seit 3.32.0 im nächsten Leerlauf
                 capture(dialog,f'einstellungen-{theme}')
                 button(dialog,'Speichern').command()
@@ -214,8 +242,10 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
             app.show_about_dialog()
             inspect_dialog(lambda dialog: capture(dialog,f'rueckfrage-{theme}'))
             assert app.ask_yes_no('In den Papierkorb verschieben?', 'Diese Liste kann später wiederhergestellt werden.') is False
+            print(f"[test_ui_updates] Theme {theme}: Dialoge erfolgreich.", flush=True)
 
-        app.run_modal=original_modal
+        app.run_modal = safe_modal
+        print("[test_ui_updates] Schritt 3: Vorlagen und Import/Export...", flush=True)
         before_ids={value['id'] for value in app.lists}
         app.set_home_view()
         new=app.create_list_from_template('daily')
@@ -241,17 +271,26 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         app.cancel_pending_callbacks()
         # Widgeteigene Jobs gehören zum alten Tk-Interpreter. Der Test erzeugt
         # gleich einen zweiten im selben Prozess; keine alten Tcl-Jobs übernehmen.
+        root.update_idletasks()
         for job in root.tk.splitlist(root.tk.call('after', 'info')):
             # Nur den Auftrag abbrechen. Den Tcl-Befehl löscht sein Widget;
             # root.after_cancel würde fremde Widgetbefehle doppelt freigeben.
             root.tk.call('after', 'cancel', job)
+        root.update_idletasks()
         session_marker = app._recovery_guard.marker_path
+        print("[test_ui_updates] Schritt 4: Erste Instanz beenden...", flush=True)
         app.on_close()
         assert json.loads(session_marker.read_text(encoding='utf-8'))['state'] == 'clean'
+        print("[test_ui_updates] Schritt 4: Erste Instanz sauber beendet.", flush=True)
+
+        print("[test_ui_updates] Schritt 5: Zweite Instanz starten...", flush=True)
         root=mod.tk.Tk()
         root.report_callback_exception = lambda *error: reported_errors.append(error)
         app=mod.ListApp(root)
+        app.run_modal = safe_modal
+        app.show_warning = app.show_error = lambda *a, **kw: reported_errors.append(repr(a))
         app.confirm_template_preview = lambda template: True
+        root.update_idletasks()
         root.update()
         assert not app._data_read_only and app._recovery_assessment.writable
         assert app.view_mode==app.HOME_VIEW and app.home_frame.winfo_ismapped()
@@ -259,15 +298,30 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         assert app.home_summary()['total']==3
         assert app.settings['recent_lists']
         assert not reported_errors, reported_errors
-    finally:
         app.cancel_pending_callbacks()
+        root.update_idletasks()
+        for job in root.tk.splitlist(root.tk.call('after', 'info')):
+            root.tk.call('after', 'cancel', job)
+        app.on_close()
+        print("[test_ui_updates] Schritt 5: Zweite Instanz sauber beendet.", flush=True)
+    finally:
+        try:
+            app.cancel_pending_callbacks()
+        except Exception:
+            pass
         try:
             for job in root.tk.splitlist(root.tk.call('after', 'info')):
                 root.tk.call('after', 'cancel', job)
         except Exception:
             pass
-        app.finish_recovery_session()
-        app.release_data_lock()
+        try:
+            app.finish_recovery_session()
+        except Exception:
+            pass
+        try:
+            app.release_data_lock()
+        except Exception:
+            pass
         try:
             if root.winfo_exists():
                 root.destroy()
