@@ -1044,4 +1044,17 @@ Auf Inhaberwahl (D78, [Plan §21.85](Glide_Entwicklungsplan.md#2185-dreierpaket-
 - **WA-07 / FP-07 Stufe 2 (JSON Canvas 1.0):** `export_json_canvas` in `src/glide/pinboard_pages.py` exportiert Pinnwandbereiche als `group`-Knoten, Aufgaben-/Seiten-/Notiz-/Zeichnungskarten als `text`-Knoten und Verbindungen als `edges` nach JSON Canvas 1.0 (`.canvas`) samt Verlustbericht (`CanvasExportReport`).
 - **Sperrklinke 0/0 (UI-Feinschliff §21.76):** Alle 35 verbliebenen klassischen Tk-Steuerelemente (`28 × Checkbutton`, `2 × Radiobutton`, `4 × Listbox`, `1 × Scale`) sind durch `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox` und `GlideScale` abgelöst; `altbestandteile.py` erzwingt `0/0` und führt die vier Klassen unter `WIDGETKLASSEN_VERBOTEN`.
 
+## 13.34 Release 3.55.0: Tagesplanung & Kapazität (WA-12), Laufzeitkonfiguration (WA-49/M095) und Glide Shell Framework Konzept (11.11.2026)
+
+**Basis:** `main`-HEAD `a72d5e9d21112d6836f832ea1aa6a6b004697f7f` (Merge von PR #77 aus `feat/glide-3.55.0-development`), `VERSION = 3.55.0`, `GLIDE_SYSTEM_VERSION = 1.17`, `DATA_SCHEMA_VERSION = 26`.
+
+| Bereich | Befund und Umsetzung |
+|---|---|
+| Tagesplanung & Kapazität (WA-12) | Einführung von `daily_capacity.py` und `DailyCapacityPanel` in `src/glide/`: Tagesarbeitszeit, Soll-/Ist-Zeiten, Kapazitätsauslastung, Restpuffer und strukturierte Arbeitsmodi für fokussierte Tagessteuerung. |
+| Laufzeitkonfiguration (WA-49 / M095) | Auslagerung aller Umgebungsvariablen, Datenpfadkonfigurationen (`GLIDE_DATA_DIR`) und Systemoptionen aus `app.pyw` in `runtime_config.py` zur architektonischen Entkopplung. |
+| Glide Shell Framework Konzept | Ausarbeitung des architektonischen Konzepts zur Entkopplung der Anwendungssteuerung von Tkinter-Fensterbäumen für künftige Modularisierung. |
+| Livelock-Behebung Linux/Xvfb | Beseitigung des Event-Loop-Livelocks bei Xvfb-Umgebungen durch robuste Event-Abarbeitung und Timeout-Sicherung in den Testsuiten. |
+| Qualitätssicherung & Tests | 1.174 Unit-Tests grün; `ci_grundstufe.py --lieferstand-streng` mit 19/19 Prüfungen erfolgreich. Plattformübergreifende Vollmatrix, native Pakete und menschliche Sichtprüfung getrennt offen. |
+
+
 

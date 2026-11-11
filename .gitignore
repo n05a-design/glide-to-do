@@ -143,3 +143,12 @@ skills-main/
 !07_Python-Versionen/resources/templates/*.glidetemplates
 !05_Probelisten_Testdaten/Showcase/*.glideapp
 !05_Probelisten_Testdaten/Showcase/*.glidetemplates
+
+# Lokale Audit-, Kontext- und Übergabe-Mappen; bleiben lokale Artefakte
+AI_CONTEXT_HANDOVER/
+AI_CONTEXT_HANDOVER.zip
+GLIDE_ABLAGEAUDIT_*/
+GLIDE_MASTER_AUDIT_*/
+GLIDE_GESAMTAUDIT_*
+Antigravity Glide Bericht.zip
+Antigravity_Glide_Bericht.zip

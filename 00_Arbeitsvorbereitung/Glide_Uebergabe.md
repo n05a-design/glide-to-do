@@ -1,8 +1,17 @@
 # Glide – Übergabe an eine neue Sitzung
 
-## Aktueller Stand 3.54.0 (Dreierpaket D78 auf Basis `main` `9e767bea`)
+## Aktueller Stand 3.55.0 (Tagesplanung WA-12, runtime_config M095 und Shell-Konzept auf Basis `main` `a72d5e9`)
 
-Auf Inhaberwahl (D78) bündelt **Glide 3.54.0** (Datenformat **26**, Glide-System **V1.16**) drei zusammenhängende Pakete auf Basis des gemergten `main`-Stands 3.53.0 (`9e767bea`):
+Nach Inhaber-Merge von PR #77 bündelt **Glide 3.55.0** (Datenformat **26**, Glide-System **V1.17**) auf Basis des gemergten `main`-Stands (`a72d5e9`):
+1. **Tagesplanung & Kapazität (`WA-12`):** `daily_capacity.py` und `DailyCapacityPanel` in `src/glide/` bieten Tagesplanung, Kapazitätsanzeige, Pufferberechnung und strukturierte Arbeitsmodi direkt in der Tagesansicht.
+2. **Laufzeitkonfiguration (`WA-49` / `M095`):** Vollständige Auslagerung von Konfigurations- und Umgebungsparametern in `runtime_config.py` zur Entlastung von `app.pyw` und sauberer Modularisierung.
+3. **Glide Shell Framework Architekturkonzept:** Fundament zur Entkopplung von Fensterverwaltung, Navigation und Fachlogik für zukünftige Plattform- und Modularisierungsschritte.
+
+Quelle (`01_Repository/Glide/src/glide`) und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.55.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch abgeglichen. 1.174 Unit-Tests, `ci_grundstufe.py --lieferstand-streng` (19/19) und der Linux/Xvfb-Livelock-Fix sind grün. Vollständige plattformübergreifende Vollmatrix, eigenständige 3.55.0-Paketbauten und menschliche Sichtabnahme bleiben getrennte offene Tore (`release_ready=false`); Details in [Plan §21.86](Glide_Entwicklungsplan.md#2186-release-3550-tagesplanung-wa-12-laufzeitkonfiguration-wa-49m095-und-glide-shell-konzept-11112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+
+## Vorangegangener Stand 3.54.0 (`main` nach PR #76)
+
+Auf Inhaberwahl (D78) bündelte **Glide 3.54.0** (Datenformat **26**, Glide-System **V1.16**) drei zusammenhängende Pakete auf Basis des gemergten `main`-Stands 3.53.0 (`9e767bea`):
 1. **Vollständige Fundortübersicht („Fundorte anzeigen …“, `WA-21`):** `usage_locations(...)` und `UsageLocation` in `src/glide/object_references.py` sowie `show_usage_locations_dialog` und `open_usage_location` in `src/glide/app.pyw` zeigen alle Verwendungen einer Aufgabe, Seite, Notiz, Liste oder Zeichnung über acht Fundortarten (`home`, `reference`, `rich_link`, `task_line`, `live_list`, `relation`, `pinboard`, `mention`) samt Zielstatus (`active`, `archived`, `trash`, `missing`), direktem Öffnen in Haupt- oder Nebenansicht und Verknüpfen unverknüpfter Erwähnungen als ein Rückgängig-Schritt.
 2. **Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, `WA-07` / `FP-07` Stufe 2):** `export_json_canvas` und `CanvasExportReport` in `src/glide/pinboard_pages.py` sowie `ItemWorkspace.export_board_json_canvas` in `src/glide/app.pyw` exportieren jede Pinnwand (`global`, `list:<id>`, `folder:<id>`) in das offene Format JSON Canvas 1.0 (`group`-Bereiche, `text`-Karten für Aufgaben/Seiten/Notizen/Zeichnungen mit stabilen IDs, Maßen und Farben sowie `edges` mit Richtung und Beschriftung) einschließlich ausdrücklichem Verlustbericht.
 3. **Vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0/0`, UI-Feinschliff §21.76):** Alle verbliebenen 35 klassischen Tk-Instanzen (`28 × Checkbutton`, `2 × Radiobutton`, `4 × Listbox`, `1 × Scale`) sind durch themengerechte Eigenzeichnungen (`GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`) ersetzt; in `tests/tools/altbestandteile.py` steht `BESTAND` für alle vier Klassen auf `0/0` und die Klassen sind in `WIDGETKLASSEN_VERBOTEN` gesperrt.
