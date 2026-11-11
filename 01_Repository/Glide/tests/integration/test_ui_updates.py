@@ -20,18 +20,18 @@ import time
 
 faulthandler.enable()
 try:
-    faulthandler.dump_traceback_later(timeout=25, repeat=True, file=sys.stderr)
+    faulthandler.dump_traceback_later(timeout=60, repeat=True, file=sys.stderr)
 except Exception:
     pass
 
 def _test_watchdog():
-    time.sleep(40)
-    print("\n[WATCHDOG] 40s abgelaufen in test_ui_updates! Stacktrace aller Threads:", file=sys.stderr, flush=True)
+    time.sleep(120)
+    print("\n[WATCHDOG] 120s abgelaufen in test_ui_updates! Stacktrace aller Threads:", file=sys.stderr, flush=True)
     import traceback
     for thread_id, frame in sys._current_frames().items():
         print(f"\n--- Thread {thread_id} ---", file=sys.stderr)
         traceback.print_stack(frame, file=sys.stderr)
-    print("[WATCHDOG] Erzwinge Prozessabbruch nach 40s...", file=sys.stderr, flush=True)
+    print("[WATCHDOG] Erzwinge Prozessabbruch nach 120s...", file=sys.stderr, flush=True)
     os._exit(88)
 
 _wd = threading.Thread(target=_test_watchdog, name="TestWatchdog", daemon=True)

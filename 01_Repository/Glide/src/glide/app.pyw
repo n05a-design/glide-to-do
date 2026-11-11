@@ -1715,8 +1715,26 @@ class ButtonFlow(tk.Frame):
         self._rows = []
         self._reflow_pending = None
         self._layout_signature = None
-        bind_resize(self, self.schedule_reflow)
+        self._reflowing = False
+        self._last_reflow_width = None
+        self.bind("<Configure>", self._on_configure, add="+")
         self.bind("<Destroy>", self.cancel_reflow, add="+")
+
+    def _on_configure(self, event=None):
+        """Reagiert nur bei tatsächlicher Breitenänderung über 1 Pixel.
+
+        ButtonFlow bricht Knöpfe horizontal um; die Höhe ist das Resultat
+        des Umbruchs, nie sein Eingang. Reaktionen auf Höhenänderungen oder
+        unvollständige Maße ungemappter Dialoge (width <= 1) führten unter Xvfb/Tk 9.1
+        zu Idle-Kaskaden in dialog.update_idletasks().
+        """
+        if event is not None:
+            w = getattr(event, "width", None)
+            if w is not None:
+                if w <= 1 or w == self._last_reflow_width:
+                    return
+                self._last_reflow_width = w
+        self.schedule_reflow()
 
     def add(self, button, key=None):
         self.entries.append((button, key))
@@ -1732,76 +1750,87 @@ class ButtonFlow(tk.Frame):
         if event is not None and event.widget is not self:
             return
         if self._reflow_pending is not None:
-            self.after_cancel(self._reflow_pending)
+            try:
+                self.after_cancel(self._reflow_pending)
+            except tk.TclError:
+                pass
             self._reflow_pending = None
 
     def reflow(self, _event=None):
-        self.cancel_reflow()
-        width = max(1, self.winfo_width())
-        compact = self.compact_keys is not None and width < self.compact_below
-        bg = self.cget("bg")
-        visible, hidden = [], []
-        for button, key in self.entries:
-            try:
-                if not button.winfo_exists():
-                    continue
-            except tk.TclError:
-                continue
-            if compact and key not in self.compact_keys:
-                hidden.append(button)
-                continue
-            visible.append((button, button.winfo_reqwidth() + self.gap))
-        if self.single_line:
-            # Feste Werkzeugleisten geben Platz an den Inhalt zurück. Weitere
-            # Aktionen bleiben im vorhandenen Mehr-Menü erreichbar.
-            keys = {button: key for button, key in self.entries}
-            remaining = sum(needed for button, needed in visible if keys[button] in self.required)
-            kept = []
-            for button, needed in visible:
-                if keys[button] in self.required:
-                    kept.append((button, needed))
-                elif remaining + needed <= width:
-                    kept.append((button, needed))
-                    remaining += needed
-                else:
-                    hidden.append(button)
-            visible = kept
-        self.hidden_keys = tuple(key for button, key in self.entries if button in hidden)
-        signature = (width, bg, self.gap, tuple(visible), tuple(hidden))
-        if signature == self._layout_signature:
+        if self._reflowing:
             return
-        self._layout_signature = signature
-        for button in hidden:
-            button.grid_remove()
-        row, column, used = 0, 0, 0
-        for button, needed in visible:
-            if not self.single_line and used and used + needed > width:
-                row, column, used = row + 1, 0, 0
-            try:
-                while len(self._rows) <= row:
-                    frame = tk.Frame(self, bg=bg)
-                    if self.on_layout is not None:
-                        # Der Größenwunsch wandert erst nach reflow durch
-                        # Grid und Pack. Die festen Eltern bleiben dabei
-                        # eventuell gleich groß; die fertig angeordnete Reihe
-                        # meldet deshalb den anschließenden Höhenabgleich.
-                        frame.bind("<Configure>", lambda _event: self.on_layout(), add="+")
-                    self._rows.append(frame)
-                frame = self._rows[row]
-                if column == 0:
-                    frame.configure(bg=bg)
-                    frame.grid(row=row, column=0, sticky=self.align)
-                button.grid(in_=frame, row=0, column=column, sticky="w", padx=(0, self.gap),
-                            pady=(1, 1) if self.single_line else (3, 3))
-                button.tk.call("raise", button._w)
-            except tk.TclError:
-                continue
-            used += needed
-            column += 1
-        for frame in self._rows[row + 1 if visible else 0:]:
-            frame.grid_remove()
-        if self.on_layout is not None:
-            self.on_layout()
+        self._reflowing = True
+        try:
+            self.cancel_reflow()
+            width = max(1, self.winfo_width())
+            if width > 1:
+                self._last_reflow_width = width
+            compact = self.compact_keys is not None and width < self.compact_below
+            bg = self.cget("bg")
+            visible, hidden = [], []
+            for button, key in self.entries:
+                try:
+                    if not button.winfo_exists():
+                        continue
+                except tk.TclError:
+                    continue
+                if compact and key not in self.compact_keys:
+                    hidden.append(button)
+                    continue
+                visible.append((button, button.winfo_reqwidth() + self.gap))
+            if self.single_line:
+                # Feste Werkzeugleisten geben Platz an den Inhalt zurück. Weitere
+                # Aktionen bleiben im vorhandenen Mehr-Menü erreichbar.
+                keys = {button: key for button, key in self.entries}
+                remaining = sum(needed for button, needed in visible if keys[button] in self.required)
+                kept = []
+                for button, needed in visible:
+                    if keys[button] in self.required:
+                        kept.append((button, needed))
+                    elif remaining + needed <= width:
+                        kept.append((button, needed))
+                        remaining += needed
+                    else:
+                        hidden.append(button)
+                visible = kept
+            self.hidden_keys = tuple(key for button, key in self.entries if button in hidden)
+            signature = (width, bg, self.gap, tuple(visible), tuple(hidden))
+            if signature == self._layout_signature:
+                return
+            self._layout_signature = signature
+            for button in hidden:
+                button.grid_remove()
+            row, column, used = 0, 0, 0
+            for button, needed in visible:
+                if not self.single_line and used and used + needed > width:
+                    row, column, used = row + 1, 0, 0
+                try:
+                    while len(self._rows) <= row:
+                        frame = tk.Frame(self, bg=bg)
+                        if self.on_layout is not None:
+                            # Der Größenwunsch wandert erst nach reflow durch
+                            # Grid und Pack. Die festen Eltern bleiben dabei
+                            # eventuell gleich groß; die fertig angeordnete Reihe
+                            # meldet deshalb den anschließenden Höhenabgleich.
+                            frame.bind("<Configure>", lambda _event: self.on_layout(), add="+")
+                        self._rows.append(frame)
+                    frame = self._rows[row]
+                    if column == 0:
+                        frame.configure(bg=bg)
+                        frame.grid(row=row, column=0, sticky=self.align)
+                    button.grid(in_=frame, row=0, column=column, sticky="w", padx=(0, self.gap),
+                                pady=(1, 1) if self.single_line else (3, 3))
+                    button.tk.call("raise", button._w)
+                except tk.TclError:
+                    continue
+                used += needed
+                column += 1
+            for frame in self._rows[row + 1 if visible else 0:]:
+                frame.grid_remove()
+            if self.on_layout is not None:
+                self.on_layout()
+        finally:
+            self._reflowing = False
 
 
 class ResponsiveColumns(tk.Frame):

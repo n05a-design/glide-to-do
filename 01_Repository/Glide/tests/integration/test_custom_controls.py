@@ -274,6 +274,65 @@ class TestCustomControlsInteractions(unittest.TestCase):
         finally:
             root.destroy()
 
+    def test_buttonflow_configure_and_reflow_guard(self):
+        """Prüft Breiten-Filterung, Breiten-Deduplizierung und Re-Entrancy-Guard von ButtonFlow."""
+        root = tk.Tk()
+        try:
+            flow = gapp.ButtonFlow(root, bg="#ffffff", gap=8)
+
+            class DummyEvent:
+                def __init__(self, width, height=20):
+                    self.width = width
+                    self.height = height
+
+            reflows = [0]
+            orig_schedule = flow.schedule_reflow
+
+            def counted_schedule():
+                reflows[0] += 1
+                return orig_schedule()
+
+            flow.schedule_reflow = counted_schedule
+
+            # 1. Breiten <= 1 (ungemappter Zustand) dürfen kein schedule_reflow auslösen
+            flow._on_configure(DummyEvent(width=1, height=1))
+            self.assertEqual(reflows[0], 0, "ButtonFlow darf bei Breite <= 1 kein Reflow planen")
+
+            # 2. Reale Breite löst schedule_reflow aus
+            flow._on_configure(DummyEvent(width=300, height=40))
+            self.assertEqual(reflows[0], 1, "ButtonFlow muss bei neuer Breite schedule_reflow aufrufen")
+
+            # 3. Reine Höhenänderung (Breite bleibt 300) darf KEIN weiteres Reflow auslösen
+            reflows[0] = 0
+            flow._on_configure(DummyEvent(width=300, height=80))
+            self.assertEqual(reflows[0], 0, "ButtonFlow darf bei reiner Höhenänderung kein Reflow planen")
+
+            # 4. Re-Entrancy Guard
+            flow._reflowing = True
+            called = [False]
+
+            def dummy_cancel():
+                called[0] = True
+
+            flow.cancel_reflow = dummy_cancel
+            flow.reflow()
+            self.assertFalse(called[0], "reflow() darf während aktivem _reflowing nicht ausgeführt werden")
+            flow._reflowing = False
+
+            # 5. In zurückgezogenem Dialog (withdraw) darf update_idletasks() nicht livelocken
+            dlg = tk.Toplevel(root)
+            dlg.withdraw()
+            dlg_flow = gapp.ButtonFlow(dlg, bg="#ffffff", gap=8)
+            dlg_flow.pack(fill="x")
+            btn1 = tk.Button(dlg_flow, text="Knopf 1")
+            btn2 = tk.Button(dlg_flow, text="Knopf 2")
+            dlg_flow.add(btn1)
+            dlg_flow.add(btn2)
+            dlg.update_idletasks()
+            dlg.destroy()
+        finally:
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
