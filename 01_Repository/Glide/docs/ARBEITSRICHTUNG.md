@@ -14,7 +14,7 @@
 
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 
 
@@ -225,6 +225,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetrage
 | D78 | **10.11.2026, Dreierpaket 3.54.0 (Fundortübersicht, JSON Canvas 1.0, Sperrklinke 0/0):** Inhaberwahl für 3.54.0: (1) vollständige Fundortübersicht „Fundorte anzeigen …“ (`WA-21`) über alle Verwendungsarten samt Haupt-/Nebenansichtssprung, (2) Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, `WA-07` / `FP-07` Stufe 2) mit Verlustbericht, (3) vollständige Ablösung der 35 klassischen Tk-Altbestandteile (`Checkbutton`, `Radiobutton`, `Listbox`, `Scale`) durch `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox` und `GlideScale` (`Sperrklinke = 0/0`). | In Quelle (`3.54.0`), Systemregister (`1.16`) und `07_Python-Versionen` umgesetzt (Plan §21.85); 1.158 Fachlogiktests, Kontrast-, Zugangs-, Animations- und Altbestandteilsprüfungen grün; Vollmatrix, native Pakete und menschliche Abnahme getrennt offen. |
 | D79 | **11.11.2026, Release 3.55.0 (Tagesplanung WA-12, runtime_config M095 und Shell-Konzept):** Integration von (1) WA-12 Tageskapazität im bestehenden Planungs- und Entlastungsbereich (`planning.py`, `day_relief.py`, `ListApp` in `app.pyw`), (2) WA-49/M095 Tk-freie Pfadauflösung in `runtime_config.py` mit Anbindung an `app.pyw`, (3) Glide Shell Framework Architekturkonzept zur Entkopplung von Fensterverwaltung, Navigation und Fachmodulen. Merge von PR #77 in `main` (`a72d5e9`). | In Quelle (`3.55.0`), Systemregister (`1.17`) und `07_Python-Versionen` umgesetzt; 19 Grundstufen-Schritte und eine Unit-Suite mit 1.174 Fällen einschließlich eines Skips auf dem Merge-Commit belegt. Linux/Xvfb-Vollprüfung im ersten PR-Lauf grün. macOS-arm64-Paketbau mit isoliertem Start auf dem Merge-Commit grün. Vollmatrix, Windows-Paketnachweis und menschliche Sichtprüfung offen. |
 
+
+**Stand zu D79 nach PR #78 (12.11.2026):** Die Auslieferungs- und Abnahmenachweise für `766978d` stehen im [QA-Bericht](07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026). WA-49 umfasst im gelieferten Stand die Pfadauflösung. Die weiteren Shell-Bausteine sind als Konzept dokumentiert.
 
 Die Tabelle fasst die Anweisungen und Auswahlantworten dieses Chats zusammen; sie erfindet keinen wörtlichen historischen Ausspruch. D01–D51 einschließlich D49 mit Korrekturvorbehalt bleiben in ihren jeweiligen Grenzen erhalten.
 

@@ -1,8 +1,8 @@
 # Prüfungen für Glide
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26 · 108 Integrationsdateien, 112 serielle Aufrufe und fünf Analysen
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26 · 108 Integrationsdateien, 112 serielle Aufrufe und fünf Analysen
 
-Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
+Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md). Der historische Stand 3.50.0 ist im [Betanachweis](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 
 Die Arbeitsmodiprüfung umfasst 63 Fälle einschließlich Hintergrundfarben, Seitenleistenhöhen, Blockziehen und Root-Lebensdauer. Der Vollmodus führt sie vollständig in fünf seriellen Pflichtgruppen aus: `bedienung`, `planung`, `navigation`, `geometrie`, `abschluss`. Keine Fallliste wird dupliziert; `arbeitsmodi_gruppen.py` prüft den tatsächlichen Bestand gegen die implementierten Funktionen. Die bisherigen 900 Sekunden gelten weiterhin je Prozess; Fehler und Integritätsbefunde stoppen wie bisher. `--fall <Name>` bleibt zur Einzelreproduktion verfügbar, `--gruppe <Name>` zur Gruppendiagnose. Berichte heißen `arbeitsmodi-<Gruppe>.json` und enthalten Startzeit, Phase und Einzeldauer. Der historisch benannte Fall `beta350` prüft weiterhin zehn Designs, Hintergrundoptionen, drei Größen, echte künstliche Aufgaben/Bildanhänge, Speicherung/Neustart, Undo/Redo, Abbruch und Schreibschutz.
 
@@ -12,7 +12,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.55.0/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.55.1/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -24,7 +24,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefung.ps1 -PythonExecutable <Pfad>` verwenden; `--timeout 900` ist dort mit Virenschutz und synchronisiertem Ordner realistischer als die Vorgabe von 300 Sekunden je Suite. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
 
-Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft zuerst alle 17 UI-/UX-Verträge (einschließlich Bildscrollen B16), danach alle 47 Arbeitsmodi mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert die JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
+Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft zuerst alle 17 UI-/UX-Verträge (einschließlich Bildscrollen B16), danach alle 63 Arbeitsmodifälle mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert die JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
 
 ## Aufbau
 

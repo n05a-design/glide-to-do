@@ -235,7 +235,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.55.0"
+APP_VERSION = "3.55.1"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -7636,102 +7636,75 @@ class ItemWorkspace:
             return "break"
         return app.open_print_html(html_text, "glide_pinnwand", "Pinnwand drucken")
 
-    def board_canvas_cards_info(self, scope=None):
-        """Stellt die Kartendaten der Pinnwand für den JSON-Canvas-Export zusammen."""
+    def board_canvas_cards_info(self, scope, board, *, visible):
+        """Projiziert gespeicherte Karten oder die sichtbare Pinnwand auf JSON Canvas."""
         app = self.app
-        scope = scope or self.scope()
-        board = self.board(scope)
-        cards = board.get("cards", {})
-        if not isinstance(cards, dict):
-            return {}
-        info = {}
-        item_lookup = {}
-        list_lookup = {}
-        for lst in getattr(app, "lists", []):
-            if not isinstance(lst, dict):
+        if visible:
+            boxes = self.logical_card_boxes()
+        else:
+            boxes = {card["item_id"]: (card["x"], card["y"],
+                                       board["width"] * self.card_scale_factor(card), 140)
+                     for card in board["cards"]}
+        cards = []
+        valid = self.valid_cards(scope)
+        for identity, (x, y, width, height) in boxes.items():
+            if identity not in valid:
                 continue
-            lid = str(lst.get("id", "")).strip()
-            if lid:
-                list_lookup[lid] = lst
-            for item in app.walk_items(lst.get("items", [])):
-                iid = str(item.get("id", "")).strip()
-                if iid and iid not in item_lookup:
-                    item_lookup[iid] = (lst, item)
-        for key in cards:
-            key_str = str(key).strip()
-            if not key_str:
-                continue
-            if key_str.startswith("page:"):
-                lid = key_str[5:].strip()
-                lst = list_lookup.get(lid)
-                if lst is None:
-                    continue
-                kind = str(lst.get("list_kind", lst.get("kind", "list")) or "list")
-                note = str(lst.get("note", "") or "")
-                rich = lst.get("rich_note")
-                if not note.strip() and isinstance(rich, dict) and rich.get("text"):
-                    note = str(rich.get("text", "") or "")
-                info[key_str] = {
-                    "title": str(lst.get("title", lst.get("name", "")) or "Unbenannte Seite"),
-                    "kind": kind if kind in ("page", "note", "drawing") else "page",
-                    "note": note,
-                    "done": False,
-                    "checklist": [],
-                    "labels": [],
-                    "uri": f"glide://list/{lid}",
-                }
-            else:
-                pair = item_lookup.get(key_str)
-                if pair is None:
-                    continue
-                _lst, item = pair
-                labels = []
-                for lid in item.get("labels", []) or []:
-                    lbl = app.get_label(lid)
-                    name = str((lbl or {}).get("name", "") or lid).strip()
-                    if name:
-                        labels.append(name)
-                info[key_str] = {
-                    "title": str(item.get("text", "") or "Unbenannter Punkt"),
-                    "kind": str(item.get("kind", "task") or "task"),
-                    "note": str(item.get("description", item.get("note", "")) or ""),
-                    "done": bool(item.get("done")),
-                    "checklist": list(item.get("checklist", []) or []),
-                    "labels": labels,
-                    "uri": f"glide://item/{key_str}",
-                }
-        return info
+            source, item = valid[identity]
+            is_page = bool(item.get("page"))
+            owner = source if is_page else item
+            cards.append({
+                "id": identity, "x": x, "y": y, "width": width, "height": height,
+                "title": item.get("text", ""), "is_page": is_page,
+                "kind_label": app.list_kind_label(source) if is_page else "",
+                "description": item.get("description", ""),
+                "done": item.get("done", False),
+                "importance_label": app.importance_choice_text(item["importance"]) if item.get("importance") else "",
+                "planned": app.format_due_full(item.get("planned_date"), item.get("planned_time")),
+                "due": app.format_due_full(item.get("due"), item.get("due_time")),
+                "source_title": source.get("title", ""),
+                "checklist": item.get("checklist", []),
+                "labels": [label["name"] for label in app.item_labels(item)],
+                "attachments_count": len(owner.get("attachments") or ()),
+                "has_planning_rules": bool(item.get("repeat") or item.get("reminder")),
+                "color": self.card_accent(item, scope),
+            })
+        return cards
 
     def export_board_json_canvas(self, path=None):
         """Exportiert die aktive oder globale Pinnwand als JSON Canvas 1.0 (.canvas)."""
         app = self.app
-        scope = self.scope() if self.mode == "board" else "global"
+        visible = bool(self.visible and self.mode == "board" and self.scope)
+        scope = self.scope if visible else self.GLOBAL_SCOPE
         board = self.board(scope)
-        cards = board.get("cards", {}) if isinstance(board, dict) else {}
-        areas = board.get("areas", []) if isinstance(board, dict) else []
-        if not cards and not areas:
-            app.show_info(
-                "JSON Canvas exportieren",
-                "Diese Pinnwand enthält noch keine angehefteten Karten oder Bereiche.",
-            )
+        if not visible and board["layout"] == "columns":
+            app.show_info("JSON Canvas exportieren", "Öffne zuerst die globale Pinnwand, um ihre Spalten zu exportieren.")
             return "break"
-        scope_title = app.get_display_title() if self.mode == "board" else "Globale Pinnwand"
-        cards_info = self.board_canvas_cards_info(scope)
+        scope_title = app.get_display_title() if visible else "Globale Pinnwand"
+        cards_info = self.board_canvas_cards_info(scope, board, visible=visible)
         payload, report = glide_pinboard_pages.export_json_canvas(
-            board, cards_info, scope_title=scope_title
+            board, cards_info, scope_title=scope_title, visible_layout=visible
         )
+        if not payload["nodes"]:
+            app.show_info("JSON Canvas exportieren", "Diese Pinnwand enthält keine exportierbaren Karten oder Bereiche.")
+            return "break"
         if not path:
             default_stem = app.safe_filename(scope_title or "pinnwand") or "pinnwand"
             path = filedialog.asksaveasfilename(
                 parent=app.root,
                 title="Pinnwand als JSON Canvas (.canvas) exportieren",
                 defaultextension=".canvas",
-                initialfile=f"{default_stem}.canvas",
+                initialfile=default_stem,
                 filetypes=[("JSON Canvas 1.0", "*.canvas"), ("JSON-Datei", "*.json"), ("Alle Dateien", "*.*")],
             )
         if not path:
             return "break"
         try:
+            target = app.validate_backup_target(path)
+            if target == os.path.normcase(os.path.realpath(TEMPLATES_FILE)) or (os.path.isfile(path) and any(
+                    os.path.isfile(protected) and os.path.samefile(path, protected)
+                    for protected in (SAVE_FILE, SETTINGS_FILE, TEMPLATES_FILE))):
+                raise ValueError("Diese Glide-Systemdatei darf nicht überschrieben werden.")
             app.write_json_atomic(path, payload)
         except (OSError, ValueError) as exc:
             app.show_error("JSON Canvas exportieren", f"Die Datei konnte nicht geschrieben werden:\n{exc}")
@@ -9387,10 +9360,10 @@ class ItemWorkspace:
             self.draw_board()
         return "break"
 
-    def card_accent(self, item):
+    def card_accent(self, item, scope=None):
         """Farbschlüssel oder Farbwert des Kartenakzents nach Kartenfarbquelle."""
         app = self.app
-        if self.board().get("color_source") == "label":
+        if self.board(scope).get("color_source") == "label":
             bekannt = app.regular_label_ids()
             erstes = next((app.get_label(value) for value in item.get("labels", []) or [] if value in bekannt), None)
             if erstes is not None:
@@ -22110,7 +22083,7 @@ class ListApp:
                 canvas.yview_moveto(max(0, y+height-canvas.winfo_height()+8)/total)
         def focus(event):
             widget = event.widget
-            if widget not in (dialog, outer, body, canvas, viewport) and widget.winfo_toplevel() is dialog:
+            if widget is not body and glide_design.widget_within(str(widget), str(body)):
                 self._daily_after(0, lambda: reveal(widget), owner=dialog)
         def wheel(event):
             step = -1 if getattr(event, "num", 0) == 4 or getattr(event, "delta", 0) > 0 else 1
@@ -22641,9 +22614,9 @@ class ListApp:
                 days = [self.plan_day()]
         days = tuple(dict.fromkeys(day_relief.iso_day(day) for day in days))
         dialog, body, footer = self._daily_dialog("Tag entlasten", 820, 620)
-        self._daily_label(body, "Wähle selbst, welche offenen Aufgaben auf einen anderen Bearbeitungstag "
-                          "oder zurück in den Vorrat gehen. Fälligkeiten bleiben erhalten. Eine Übernahme "
-                          "ist ein Rückgängig-Schritt; es gibt keine automatische Verteilung.", color="muted")
+        dialog._daily_scroll_canvas.configure(height=380)
+        self._daily_label(body, "Aufgaben markieren, Ziel wählen und mit „Umplanen“ bestätigen. "
+                          "Die Fälligkeiten bleiben erhalten.", color="muted")
         label = ("Tag: " + self.format_due_display(days[0]) if len(days) == 1 else
                  "Zeitraum: " + self.format_due_display(days[0]) + " bis " + self.format_due_display(days[-1]))
         labels = {label: set(days),
@@ -22672,21 +22645,18 @@ class ListApp:
         line.pack(fill="x", pady=(5, 8))
         count = tk.Label(line, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
         count.pack(side="left")
-        self._daily_label(body, "Ziel: anderer Bearbeitungstag oder Vorrat", bold=True)
         destination = tk.StringVar(master=dialog, value="day")
-        target_frame = tk.Frame(body, bg=self.theme["bg"])
+        target_frame = tk.Frame(footer, bg=self.theme["bg"])
         target_frame.pack(fill="x")
-        for key, text in (("day", "Anderer Tag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
+        for key, text in (("day", "Neuer Bearbeitungstag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
             GlideRadiobutton(target_frame, text=text, value=key, variable=destination,
                              bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                              font=app_font(10)).pack(side="left", padx=(0, 12))
-        target = DueField(body, self, due=days[0] if days else self.plan_day(), due_time=None,
-                          compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
+        target = DueField(footer, self, compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
         target.pack(fill="x", pady=(5, 8))
-        self._daily_label(body, "Vorhandene Uhrzeiten bleiben beim Wechsel des Tages erhalten. "
-                          "Im Vorrat wird die Aufgabenzeit entfernt.",
-                          size=9, color="muted")
+        target_text = tk.StringVar(master=dialog)
+        target.date_entry.configure(textvariable=target_text)
         preview_frame = tk.Frame(body, bg=self.theme["card"])
         preview_frame.pack(fill="both", expand=True)
         preview = ttk.Treeview(preview_frame, name="day_relief_balance", columns=("before", "after"),
@@ -22701,14 +22671,18 @@ class ListApp:
         preview.configure(yscrollcommand=preview_scroll.set)
         self._daily_horizontal(preview_frame, preview)
         preview.pack(fill="both", expand=True)
-        message = self._daily_label(body, "", size=9, color="muted")
+        message = self._daily_label(footer, "", size=9, color="muted")
         preview_page = [0]
 
-        def invalidate(*_args):
+        def set_confirmation(ready):
+            color = self.dialog_color("confirm" if ready else "muted")
+            confirm.configure(state="normal" if ready else "disabled", takefocus=int(ready))
+            confirm.set_theme(self.theme["bg"], color, border_color=color, hover_fill=color)
+
+        def clear_preview():
             plan[0] = None
             preview.delete(*preview.get_children())
-            message.configure(text="Auswahl und Ziel anschließend über „Vergleichen“ prüfen.",
-                              fg=self.theme["muted"])
+            set_confirmation(False)
 
         def capture(_event=None):
             if rebuilding[0]:
@@ -22718,12 +22692,11 @@ class ListApp:
             selected.update(tree.selection())
             count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
             if selected != before:
-                invalidate()
+                compare()
 
         def render(delta=0, reset=False):
-            if not reset and not rebuilding[0]:
-                selected.difference_update(page_ids)
-                selected.update(tree.selection())
+            if not reset:
+                capture()
             page[0] = 0 if reset else max(0, min(max(0, (len(rows)-1)//100), page[0]+delta))
             rebuilding[0] = True
             try:
@@ -22753,7 +22726,7 @@ class ListApp:
             rows.sort(key=lambda pair: (pair[1]["planned_date"], pair[0].get("title", "").casefold(),
                                         pair[1].get("text", "").casefold(), pair[1]["id"]))
             render(reset=True)
-            invalidate()
+            compare()
 
         def show_comparison(delta=0):
             preview.delete(*preview.get_children())
@@ -22766,31 +22739,44 @@ class ListApp:
                                values=(self.relief_summary_text(before), self.relief_summary_text(after)))
             self._daily_fit_columns(preview, (("#0", 110), ("before", 290), ("after", 290)))
             warnings = sum(bool(self.busy_view(value["day"]).issues) for value in plan[0].before)
-            message.configure(text=(f"{len(plan[0].moves)} Aufgaben · {len(pairs)} betroffene Tage · "
-                                    f"Bilanzseite {preview_page[0]+1} von {max(1, (len(pairs)+49)//50)}"
-                                    + (" · Kalenderhinweise beachten" if warnings else "")
-                                    if plan[0].moves else "Keine Änderung: Die Auswahl liegt bereits am gewählten Tag."),
-                              fg=self.theme["muted"])
+            moves = plan[0].moves
+            if not moves:
+                message.configure(text="Die gewählten Aufgaben liegen bereits an diesem Tag.", fg=self.theme["muted"])
+                return
+            day = moves[0].target
+            goal = f"auf {self.format_due_display(day)}" if day else "in den Vorrat"
+            task_count = "1 Aufgabe" if len(moves) == 1 else f"{len(moves)} Aufgaben"
+            timing = "Uhrzeiten bleiben erhalten." if day else "Geplante Uhrzeiten werden entfernt."
+            pages = f" · Bilanzseite {preview_page[0]+1} von {(len(pairs)+49)//50}" if len(pairs) > 50 else ""
+            message.configure(text=f"{task_count} {goal} umplanen. {timing}" + pages
+                              + (" · Kalenderhinweise beachten" if warnings else ""), fg=self.theme["muted"])
 
-        def compare():
+        def compare(*_args):
+            clear_preview()
+            if not selected:
+                message.configure(text="Aufgaben in der Tabelle markieren.", fg=self.theme["muted"])
+                return
+            value = None
+            if destination.get() == "day":
+                parsed, error = target.read()
+                if error or not parsed[0]:
+                    message.configure(text=error or "Neuen Bearbeitungstag wählen.", fg=self.theme["muted"])
+                    return
+                value = parsed[0]
             try:
-                value = None
-                if destination.get() == "day":
-                    parsed, error = target.read()
-                    if error or not parsed[0]:
-                        raise ValueError(error or "Bitte einen Bearbeitungstag wählen.")
-                    value = parsed[0]
                 plan[0] = self.relief_plan(sorted(selected), value)
                 preview_page[0] = 0
                 show_comparison()
+                set_confirmation(bool(plan[0].moves))
             except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
-                plan[0] = None
-                preview.delete(*preview.get_children())
+                clear_preview()
                 message.configure(text=str(exc), fg=self.theme["delete"])
 
         def apply(_event=None):
-            if plan[0] is None:
-                message.configure(text="Bitte zuerst die aktuelle Auswahl vergleichen.", fg=self.theme["delete"])
+            if set(tree.selection()) != selected.intersection(page_ids):
+                capture()
+                return "break"
+            if not plan[0] or not plan[0].moves:
                 return "break"
             try:
                 if self.apply_day_relief(plan[0]):
@@ -22799,8 +22785,12 @@ class ListApp:
                     message.configure(text="Keine Änderung gespeichert. Die Auswahl bleibt für einen erneuten Versuch erhalten.",
                                       fg=self.theme["delete"])
             except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
-                plan[0] = None
-                message.configure(text=str(exc), fg=self.theme["delete"])
+                compare()
+                if plan[0] and plan[0].moves:
+                    message.configure(text="Die Planung hat sich geändert. Aktualisierte Bilanz prüfen "
+                                      "und erneut bestätigen.", fg=self.theme["delete"])
+                else:
+                    message.configure(text=str(exc), fg=self.theme["delete"])
             return "break"
 
         for text, delta in (("Vorige Aufgaben", -1), ("Weitere Aufgaben", 1)):
@@ -22813,13 +22803,12 @@ class ListApp:
                                      "muted", width=145, height=28).pack(side="left", padx=(0, 6))
         flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
         flow.pack(fill="x")
-        for text, command, color in (("Vergleichen", compare, "accent"), ("Übernehmen", apply, "confirm"),
-                                     ("Abbrechen", dialog.destroy, "muted")):
-            flow.add(self._make_dialog_button(flow, text, command, color, width=150, height=36))
+        confirm = self._make_dialog_button(flow, "Umplanen", apply, "confirm", width=150, height=36)
+        flow.add(confirm)
+        flow.add(self._make_dialog_button(flow, "Abbrechen", dialog.destroy, "muted", width=150, height=36))
         scope.trace_add("write", refresh)
-        destination.trace_add("write", invalidate)
-        target.on_change = invalidate
-        target.date_entry.bind("<KeyRelease>", invalidate, add="+")
+        destination.trace_add("write", compare)
+        target_text.trace_add("write", compare)
         tree.bind("<<TreeviewSelect>>", capture)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.bind("<Control-s>", apply)
@@ -66536,7 +66525,7 @@ Labels, Termine und Metadaten."""
         if not self.output_editor_ready():
             return
         self.sync_current_list_reference()
-        default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}{self.APP_BACKUP_EXTENSION}"
+        default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
         path = filedialog.asksaveasfilename(
             title="Vollständiges App-Sicherung speichern",
             defaultextension=self.APP_BACKUP_EXTENSION,

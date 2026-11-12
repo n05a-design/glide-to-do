@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt die architektonische Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von den fachspezifischen Domänenmodulen der Aufgaben- und Produktivitätsanwendung Glide. Es dient als verbindliche Richtschnur für zukünftige Refactorings und als Blaupause für Schwesterprojekte (z. B. *Steps*).
 
@@ -45,12 +45,12 @@ Die Shell umfasst alle Komponenten, die für jede plattformübergreifende Tkinte
 
 | Bereich | Modul / Komponente | Verantwortung |
 |---|---|---|
-| **Laufzeit & Konfiguration** | [`runtime_config.py`](../src/glide/runtime_config.py) | Auflösung von AppData-, Cache- und Logpfaden ohne Modulimport-Seiteneffekte; CLI-Flag-Parsing; Headless- & Testumgebungs-Erkennung. |
-| **Lebenszyklus (Lifecycle)** | `shell_lifecycle.py` *(neu)* | Kontrollierter Start, sauberer Exit (`WM_DELETE_WINDOW`), Session-Restore, Verhindern doppelter Instanzen (Lockfile). |
+| **Laufzeit & Konfiguration** | [`runtime_config.py`](../src/glide/runtime_config.py) | Pfadauflösung für Daten, Cache und Fehlerprotokoll ohne Tk-Import oder Schreibzugriff. `RuntimeConfig.create` übernimmt den Lesemodus als Parameter und liest `GLIDE_TEST_MODE`. CLI-Auswertung und Startlogik liegen weiterhin außerhalb des Moduls. |
+| **Lebenszyklus (Lifecycle)** | `shell_lifecycle.py` *(geplant)* | Kontrollierter Start, sauberer Exit (`WM_DELETE_WINDOW`), Session-Restore, Verhindern doppelter Instanzen (Lockfile). |
 | **Theme & Design-System** | [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) | Dark-/Light-/Systemmodus-Erkennung, Farb- und Abstands-Token, dynamische Re-Theming-Events ohne Neustart. |
 | **Typografie & Symbole** | [`font_catalog.py`](../src/glide/font_catalog.py), [`glyph_metrics.py`](../src/glide/glyph_metrics.py), [`symbol_policy.py`](../src/glide/symbol_policy.py) | Plattformspezifische Schriftarten, Skalierungsfaktoren, optische Zentrierung von Glyphen, sichere ASCII-/Unicode-Fallbacks. |
-| **Fenster & Navigation** | [`compact_mode.py`](../src/glide/compact_mode.py), `window_manager.py` *(neu)* | Bildschirmgrenzen-Prüfung, DPI-Awareness, Multi-Monitor-Positionierung, Statusleisten, Sidebar-Layouts. |
-| **Dialog-Infrastruktur** | `modal_runner.py` *(neu)* | Robuste modale Dialoge (`app.run_modal`-Abstraktion) mit ausnahmesicherer Tcl-Grab- und Focus-Wiederherstellung. |
+| **Fenster & Navigation** | [`compact_mode.py`](../src/glide/compact_mode.py), `window_manager.py` *(geplant)* | Bildschirmgrenzen-Prüfung, DPI-Awareness, Multi-Monitor-Positionierung, Statusleisten, Sidebar-Layouts. |
+| **Dialog-Infrastruktur** | `modal_runner.py` *(geplant)* | Robuste modale Dialoge (`app.run_modal`-Abstraktion) mit ausnahmesicherer Tcl-Grab- und Focus-Wiederherstellung. |
 | **Custom Controls (D78)** | `controls/` *(abgeleitet)* | Konsistente, zugängliche Widgets (Ersatz für veraltete Tk-Widgets: Schalter, Eingabefelder, Card-Views) mit vollständiger Tk-Schnittstellenkompatibilität (`keys`, `cget`, `configure`, `[]`). |
 | **Undo/Redo-Fundament** | [`undo_history.py`](../src/glide/undo_history.py) | Generischer Memento-/Command-Stack mit Snapshot-Drosselung, Tiefenbegrenzung und Transaktionsklammern (`group_undo`). |
 | **Barrierefreiheit (A11y)** | [`accessibility.py`](../src/glide/accessibility.py), [`accessibility_bindings.py`](../src/glide/accessibility_bindings.py) | Semantische Rollen, Screenreader-Announcements, Tastaturfokus-Traversierung. |
@@ -102,8 +102,8 @@ Die Shell führt einen zentralen `WindowManager` ein:
 
 Die Entkopplung erfolgt inkrementell ohne Bruch der bestehenden Funktionalität oder Datenformate:
 
-### Phase 1: Laufzeit- und Pfad-Entkopplung (Bereits in 3.55.0 umgesetzt)
-- **Status:** **Erledigt mit [`runtime_config.py`](../src/glide/runtime_config.py)** (M095, WA-49).
+### Phase 1: Laufzeit- und Pfad-Entkopplung
+- **Status:** Der Pfadschnitt ist seit 3.55.0 mit [`runtime_config.py`](../src/glide/runtime_config.py) umgesetzt (M095). Die vollständige Entkopplung von App-Import, Start und Desktop-Initialisierung bleibt Teil von WA-49.
 - **Nutzen:** Daten- und Konfigurationspfade können ohne Seiteneffekte und ohne Tk-Initialisierung instanziiert werden. Tests und Headless-Werkzeuge greifen auf isolierte Pfade zu.
 
 ### Phase 2: Design- und Widget-Extraktion

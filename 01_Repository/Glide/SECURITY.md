@@ -1,6 +1,6 @@
 # Sicherheit
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (öffentliche erste Beta); 3.50.3–3.50.6 ändern nur Oberfläche sowie Titel- und Anhangsnamengrenzen, die hier beschriebenen Vertrauensgrenzen bleiben unverändert
+Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 Glide verarbeitet lokale Nutzerdaten und lokale Anhänge. Die Anwendung überträgt diese Daten nicht selbstständig an externe Dienste und öffnet keine Netzwerkverbindungen. Links in Notizen (nur `http(s)://` und `mailto:`) gibt sie ausschließlich auf Klick an den Standardbrowser weiter.
 
@@ -19,8 +19,8 @@ Grundlage vom 25.10.2026, am 02.11.2026 gegen die vorhandenen Schutzmodule und P
 
 | Grenze | Was Glide heute absichert | Offen |
 |---|---|---|
-| Fremde Dateien: `.glidebackup`, `.glidetemplates`, `.glideexchange`, CSV, ICS, Notion-ZIP | Archive: Pfad-, Größen-, Eintrags-, Symlink-, Verschlüsselungs- und Kompressionsprüfung, Anhänge gestreamt ausgepackt, kein `extractall`. Austausch, CSV und ICS: höchstens 12 MiB, Feld- und Schemaprüfung. Sicherungen werden erst nach vollständiger Prüfung und nach einer Vorab-Sicherung übernommen, Importe sind ein Rückgängig-Schritt | 32-MiB-Budget vor JSON-Verarbeitung und Frühwarnung ab 80 %; konkrete Grenzproben im QA-Bericht (WA-47) |
-| Eigener Datenordner, auch in einem Cloudordner | atomares Schreiben, lokale Sitzungssperre, Schreibschutz bei fremder oder unlesbarer Sperre, Startprüfung, Sicherungen nur bei Änderung | Keine verteilte Sperre zwischen Rechnern (nacheinander arbeiten). JSON-Budget 32 MiB, sichtbarer Speicherstatus und kontrollierter Wiederanlauf sind umgesetzt; atomarer Austausch beweist keine semantische Fehlerfreiheit (WA-41B) |
+| Fremde Dateien: `.glidebackup`, `.glidetemplates`, `.glideexchange`, CSV, ICS, Notion-ZIP | Archive: Pfad-, Größen-, Eintrags-, Symlink-, Verschlüsselungs- und Kompressionsprüfung, Anhänge gestreamt ausgepackt, kein `extractall`. Austausch, CSV und ICS: höchstens 12 MiB, Feld- und Schemaprüfung. Backup- und Vorlagen-JSON werden vor der Verarbeitung auf 32 MiB begrenzt. Sicherungen werden erst nach vollständiger Prüfung und nach einer Vorab-Sicherung übernommen, Importe sind ein Rückgängig-Schritt | Grenzproben und Stand der Prüfungen im [QA-Bericht](docs/07_QA_BERICHT.md) |
+| Eigener Datenordner, auch in einem Cloudordner | atomares Schreiben, lokale Sitzungssperre, Schreibschutz bei fremder oder unlesbarer Sperre, Startprüfung, Sicherungen nur bei Änderung, JSON-Budget 32 MiB, Speicherstatus mit Frühwarnung ab 80 % des Sicherungsbudgets und kontrollierter Wiederanlauf | Keine verteilte Sperre zwischen Rechnern (nacheinander arbeiten). |
 | Anhänge | Speichername nur `attachments/<Name>`, bereinigt und kanonisch aufgelöst, auch beim Import neu vergeben; höchstens 512 MiB je Datei | Keine Malwareprüfung. Vor aktiven bzw. ausführbaren Dateitypen fragt Glide mit tatsächlichem Pfad und Vorgabe Nein nach; danach übernimmt das Standardprogramm (WA-48) |
 | Ausgaben: CSV, Druck-HTML, Markdown | Formelanfänge in CSV geschützt, HTML maskiert, keine externen Verweise in der Druckansicht | – |
 | Systemdecoder und nativer Code (WIC über PowerShell, `sips`, `gdk-pixbuf-thumbnailer`/`djpeg`, tkDnD) | ein Wandlungs-Worker mit Warteschlange (32), Zeitlimit (45 s) und Abbruch; Unterprozesse ohne Shell; tkDnD nur mit geprüfter Prüfsumme | Windows-Pfade werden als Base64-Daten übergeben (WA-51). PC-02 zeigte systemweite native Instabilität; keine bewiesene Einzelursache (WA-41A). Herkunfts-/Hashprüfung ersetzt keine fortlaufende Beobachtung von tkDnD (WA-44) |

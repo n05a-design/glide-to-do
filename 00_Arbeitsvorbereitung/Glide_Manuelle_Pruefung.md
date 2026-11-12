@@ -1,6 +1,15 @@
 # Manuelle Prüfung – Glide
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+
+## Offene menschliche Abnahme 3.55.0
+
+Als Prüfbasis die in der [QA-Matrix](../01_Repository/Glide/docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) bezeichneten Entwicklungspakete oder die Linux-Quellfassung mit isolierten künstlichen Daten verwenden. Pro Ergebnis Plattform, Paket-/Quellhash, Tcl/Tk, Skalierung, Fenstergröße und Beobachtung festhalten.
+
+- [ ] **Neuerungskarte:** Mit einem Prüfdatenstand einer früheren Version starten. „Neu in Glide 3.55.0“ lesen, „Gelesen“ bestätigen und neu starten. Die Karte bleibt geschlossen. Unter Hilfe › Über Glide › Neuerungen ist der Eintrag weiter lesbar.
+- [ ] **Tagesbilanz:** Geschätzte und ungeschätzte Aufgaben auf denselben Bearbeitungstag planen und eine lokale ICS-Datei mit überlappenden Terminen über **Ansicht › Ansichten › Kalender als Belegzeiten … › Datei wählen › Speichern** laden. Der Kalenderdatei-Import unter „Datei“ erzeugt Aufgaben. Aufgabenaufwand, einfach gezählte Belegzeit, Netto-Kapazität und Überlastungsgrund mit der Erwartung vergleichen. Auch fehlende Kapazitätsvorgabe und eine fehlerhafte Kalenderquelle prüfen.
+- [ ] **Tag entlasten:** Mehrere Aufgaben markieren, im festen Fensterfuß einen neuen Bearbeitungstag wählen und die automatisch aktualisierte Bilanz prüfen. „Umplanen“ bestätigen, Fälligkeiten kontrollieren und die gesamte Übernahme einmal rückgängig machen. Mit Abbruch sowie nach zwischenzeitlich geänderter Kalenderbelegung kontrollieren, dass kein alter Vorschlag übernommen wird.
+- [ ] **Sicht und Bedienung:** Die neuen Flächen mit Tastatur, Hell/Dunkel, großer Schrift, Mindestgröße und mehreren DPI-Stufen prüfen. Die darunter beschriebenen Fundort-, Canvas- und Steuerelementeprüfungen auf derselben 3.55.0-Prüffassung nachholen, wo ein aktueller Nachweis fehlt.
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 

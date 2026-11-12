@@ -32,7 +32,7 @@
 
 **Buchbreite, präzisierte menschliche Abnahme 05.11.2026 (D61, 3.50.4):** Der Buchbaum selbst und seine Spalten nutzen die gesamte Karteninnenbreite. Keine zusätzlichen 14-px-Packabstände links/rechts; nur der gemeinsame innere Rundungs-/Rahmenabstand der Inhaltskarte bleibt. Keine Aktionsreserve oder leere Beschreibung. In `buchbreite3503` linke Baumkante und tatsächliche rechte Tabellenkante gegen den übergeordneten Karten-Innenframe messen – Spaltenbreite gegen Treeview-Breite allein genügt ausdrücklich nicht. Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und direkter Rückwechsel im geöffneten Buch bleiben Pflicht.
 
-Stand 11.11.2026 · Glide 3.55.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 **Menschliche Abnahme 04./05.11.2026, Korrekturen für 3.50.3 (D61):** Kontexte: feste Werkzeugleiste außerhalb der Karten, Aufgabenliste/Tabelle, Labels, Buch/Bibliothek, Seitenfuß und Zeicheneditor. Gleiche Aktionsrollen verwenden dieselbe Kontur/Rundung; äußere Werkzeugknöpfe sind 38 px hoch wie Eingabe-/Ansichtsknöpfe und werden bei Themewechsel sowie Editorabbau korrekt nachgeführt. Feste Aktionsleisten bleiben **einzeilig**: Häufiges direkt, Weiteres im vorhandenen Überlauf. „Überschrift“ und „Code“ entfallen aus der direkten Seitenwerkzeugleiste; sie bleiben über die bestehenden Text-/Blockaktionen verfügbar. Keine unnötigen mehrfachen dauerhaften Knöpfe für dieselbe Handlung. Dies ersetzt für feste Werkzeugleisten die frühere Umbruchregel. Scrollbare Dialogfüße behalten ihren Erreichbarkeitsvertrag.
 

@@ -1,13 +1,17 @@
 # Glide – Übergabe an eine neue Sitzung
 
-## Aktueller Stand 3.55.0 (Tagesplanung WA-12, runtime_config M095 und Shell-Konzept auf Basis `main` `a72d5e9`)
+## Lokaler Prüfstand 3.55.1 (12.11.2026)
 
-Mit dem Merge von PR #77 bündelt **Glide 3.55.0** (Datenformat **26**, Glide-System **V1.17**) auf Basis des gemergten `main`-Stands (`a72d5e9`):
+3.55.1 kennzeichnet den korrigierten Stand nach der macOS-Abnahme. Enthalten sind die vereinfachte Tagesentlastung, der reparierte JSON-Canvas-Export und korrigierte Dateinamenvorschläge. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2 gelten weiter. Die [QA-Nachweise](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentieren Abnahme und Freigabestatus.
+
+## GitHub-Stand 3.55.0 nach PR #78
+
+**Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) steht auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation. Der unabhängige Systemkatalog steht nach der Dokumentationspflege auf **V1.17.2**.
 1. **Tagesplanung & Kapazität (`WA-12`):** `planning.py` berechnet geplanten Aufgabenaufwand, Kalenderbelegung und Netto-Kapazität. `day_relief.py` bereitet Tagesbilanz und Überlastungsgründe auf. `ListApp` in `app.pyw` bindet die Bilanz und den Entlastungsdialog ein. Ungeschätzte Aufgaben bleiben gesondert sichtbar und Fälligkeiten bleiben beim Umplanen erhalten.
 2. **Laufzeitkonfiguration (`WA-49` / `M095`):** `runtime_config.py` bündelt die Tk-freie Auflösung der Datenpfade. Ein expliziter Pfad oder `GLIDE_DATA_DIR` hat Vorrang vor `datenordner.json` und dem Plattformstandard. Unter Windows liegen Daten standardmäßig in `%APPDATA%/Glide`, der Cache in `%LOCALAPPDATA%/Glide/Cache`. `app.pyw` nutzt die Pfadfunktionen und verwaltet weiterhin einzelne Laufzeitoptionen.
 3. **Glide Shell Framework Architekturkonzept:** Der Entwurf beschreibt die schrittweise Entkopplung von Fensterverwaltung, Navigation und Fachlogik. Mit der Pfadauflösung liegt ein erster Baustein vor.
 
-Die aktive Python-Lieferung 3.55.0 entspricht der Quelle für Hauptdatei, Schnellstart, Laufzeitmodule und mitgelieferte Ressourcen (SHA-256). Die Grundstufe auf dem Merge-Commit bestand 19 Schritte. Die Unit-Suite meldete 1.174 Fälle, davon einen übersprungenen. Der PR-Lauf bestätigte die Linux/Xvfb-Vollprüfung, der Merge-Lauf wurde abgebrochen. Der native macOS-arm64-Paketbau mit isoliertem Start gelang auf dem Merge-Commit. Die vollständige Matrix, der Windows-Paketnachweis und die menschliche Sichtabnahme bleiben offene Tore (`release_ready=false`). Details in [Plan §21.86](Glide_Entwicklungsplan.md#2186-weiterentwicklung-3550-tagesplanung--kapazit%C3%A4t-wa-12-laufzeitentkopplung-wa-49-und-glide-shell-framework-konzept-11112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+Die aktive Python-Lieferung 3.55.0 ist per SHA-256 mit Quelle, Schnellstart, Laufzeitmodulen und mitgelieferten Ressourcen abgeglichen. Linux- und Windows-Vollprüfung sowie eigenständiger Windows-x64- und macOS-arm64-Paketbau mit isoliertem Start sind auf `766978d` belegt. Der separate native macOS-Vollmodus scheiterte am Zeitgrenzwert für Seitenkarten-Druck. Menschliche Bedien-/Sicht-/DPI-Abnahme, Veröffentlichungssignaturen und Inhaberfreigabe bleiben offen. Maßgeblich sind der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) und die [manuelle Prüfliste](Glide_Manuelle_Pruefung.md#offene-menschliche-abnahme-3550).
 
 ## Vorangegangener Stand 3.54.0 (`main` nach PR #76)
 
@@ -16,7 +20,7 @@ Auf Inhaberwahl (D78) bündelte **Glide 3.54.0** (Datenformat **26**, Glide-Syst
 2. **Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, `WA-07` / `FP-07` Stufe 2):** `export_json_canvas` und `CanvasExportReport` in `src/glide/pinboard_pages.py` sowie `ItemWorkspace.export_board_json_canvas` in `src/glide/app.pyw` exportieren jede Pinnwand (`global`, `list:<id>`, `folder:<id>`) in das offene Format JSON Canvas 1.0 (`group`-Bereiche, `text`-Karten für Aufgaben/Seiten/Notizen/Zeichnungen mit stabilen IDs, Maßen und Farben sowie `edges` mit Richtung und Beschriftung) einschließlich ausdrücklichem Verlustbericht.
 3. **Vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0/0`, UI-Feinschliff §21.76):** Alle verbliebenen 35 klassischen Tk-Instanzen (`28 × Checkbutton`, `2 × Radiobutton`, `4 × Listbox`, `1 × Scale`) sind durch themengerechte Eigenzeichnungen (`GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`) ersetzt; in `tests/tools/altbestandteile.py` steht `BESTAND` für alle vier Klassen auf `0/0` und die Klassen sind in `WIDGETKLASSEN_VERBOTEN` gesperrt.
 
-Quelle (`01_Repository/Glide/src/glide`) und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.54.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch abgeglichen. 1.158 Unit-Tests, `altbestandteile.py`, `attributpruefung.py`, `test_glide_system.py`, `standpruefung.py`, `test_kontrast330.py`, `test_zugang400.py` und `test_animation3400.py --fall frames` sind grün. Vollständige plattformübergreifende Vollmatrix, eigenständige 3.54.0-Paketbauten und menschliche Sichtabnahme bleiben getrennte offene Tore (`release_ready=false`); Details in [Plan §21.85](Glide_Entwicklungsplan.md#2185-dreierpaket-3540-fundortübersicht-wa-21-json-canvas-10-wa-07-und-sperrklinke-00-d78-10112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+Quelle (`01_Repository/Glide/src/glide`) und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.54.0.pyw`) waren zum damaligen Lieferzeitpunkt per `abgleich_07.py` SHA-256-identisch. Die 3.54.0-Hauptdatei liegt heute im Archiv. 1.158 Unit-Tests, `altbestandteile.py`, `attributpruefung.py`, `test_glide_system.py`, `standpruefung.py`, `test_kontrast330.py`, `test_zugang400.py` und `test_animation3400.py --fall frames` sind grün. Vollständige plattformübergreifende Vollmatrix, eigenständige 3.54.0-Paketbauten und menschliche Sichtabnahme bleiben getrennte offene Tore (`release_ready=false`); Details in [Plan §21.85](Glide_Entwicklungsplan.md#2185-dreierpaket-3540-fundortübersicht-wa-21-json-canvas-10-wa-07-und-sperrklinke-00-d78-10112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 ## Vorangegangener Stand 3.53.0 (`main` nach PR #75)
 
@@ -59,11 +63,13 @@ Nächster Schritt: den konsolidierten Schlusscommit einmal in PR #71 übernehmen
 
 ## Datierte Vorgeschichte des vorherigen Übergabeeinstiegs
 
+Die nummerierten Abschnitte 1–3 sowie der WA-41-Sofortblock dokumentieren frühere Sitzungen. Für aktuelle Prioritäten gelten der Einstieg oben und der Entwicklungsplan.
+
 Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-/Metadatenzustände sind durch den aktuellen Einstieg oben fortgeschrieben und keine aktiven Ausführungsanweisungen.
 
-**Aktuelle Fortsetzung 08.11.2026:** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
+**Fortsetzung am 08.11.2026 (historisch):** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 

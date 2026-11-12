@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 11.11.2026 · App-Version 3.55.0 · Datenformat 26
+Stand 12.11.2026 · App-Version 3.55.1 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -15,7 +15,7 @@ ersetzt werden.
 | Technischer Langname | Glide – Aufgaben und Listen; vorhandene Fenster-/Export-/Paketbezeichnung | `APP_PRODUCT_NAME`, unverändert |
 | Öffentliche Beschreibung | Glide – Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72/D74, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
 | Softwarelizenz | Mozilla Public License 2.0 (`MPL-2.0`), kommerzielle Nutzung nach Bedingungen zulässig | [kanonischer Lizenztext](../../../../LICENSE), D72 |
-| App-Version | 3.55.0 | `APP_VERSION`, `VERSION` |
+| App-Version | 3.55.1 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
@@ -46,7 +46,7 @@ ersetzt werden.
 | Mitgelieferte Schriften | Rubik, Roboto Mono, Playfair Display, Fraunces und Pixelify Sans (OFL); DejaVu als interner Symbolbegleiter (eigene Lizenz) | `font_catalog.py`, `resources/fonts/provenance.json` |
 | macOS Bundle Identifier | `de.shaye.glide` (Inhaberentscheidung 26.09.2026) | `APP_BUNDLE_ID`, `packaging/macos/baue_app.py` |
 | Windows AppUserModelID | `Shaye.Glide` (Inhaberentscheidung 26.09.2026) | `APP_USER_MODEL_ID`, `set_windows_app_user_model_id`, `packaging/windows/verknuepfung_anlegen.ps1` |
-| Beispielbestand zum Einlesen | Beispiel-, Rundgang- und Releasebackups unter `tests/fixtures/beispiele/` werden je Versionswechsel neu erzeugt und tragen seit 3.44.0 Format 26; ältere Releaseplanungen behalten ihr Format. Feste Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
+| Beispielbestand zum Einlesen | Beispiel- und Releasebackups unter `tests/fixtures/beispiele/` werden zur aktuellen Version erzeugt. Der bebilderte Rundgang ist ein fester Prüfbestand. Ältere Releaseplanungen behalten ihr Format. Feste Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
 
 ## Offen – Entscheidung oder Plattformabnahme erforderlich
 

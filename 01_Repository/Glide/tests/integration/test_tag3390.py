@@ -508,18 +508,18 @@ def run(app_path, cases, report):
                     assert identities[0] in tree.get_children()
                     full_table_values(tree,("#0","day","effort","list"))
                     tree.selection_set(identities[0]);pump()
-                    # Ohne Vergleich kann Übernehmen keine Daten ändern.
+                    # Eine Aufgabenauswahl allein kann noch keine Daten ändern.
                     before=copy.deepcopy(app.lists)
-                    click(dialog,"Übernehmen")
+                    confirm=button(dialog,"Umplanen")
+                    assert str(confirm.cget("state"))=="disabled"
+                    click(dialog,"Umplanen")
                     assert dialog.winfo_exists() and app.lists==before
-                    click(dialog,"Vergleichen")
-                    assert dialog.winfo_exists()
                     dialog.event_generate("<Escape>");pump()
                 for opener in (lambda: app.set_plan_day_view(day=day), app.show_week_review, app.start_day_proposal):
                     app._calendar_selected_day=tomorrow
                     opener();pump()
                     modal("Tag entlasten",app.show_day_relief,relief)
-                checks.append("Echte Entlasten-Dialoge in Heute/Woche/Vorschlag: Auswahl, Vergleichspflicht, Escape")
+                checks.append("Echte Entlasten-Dialoge in Heute/Woche/Vorschlag: Auswahl braucht ein Ziel, Escape bricht ab")
                 app.set_plan_day_view(day=day);pump()
                 before=[copy.deepcopy(fresh(i)) for i in range(3)]
                 depth=len(app.undo_stack)
@@ -529,18 +529,42 @@ def run(app_path, cases, report):
                     stock=next(widget for widget in descendants(dialog) if isinstance(widget,(mod.tk.Radiobutton,mod.GlideRadiobutton))
                                and widget.cget("value")=="stock")
                     stock.invoke();pump()
-                    click(dialog,"Vergleichen")
                     balance=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_balance")
                     assert balance.get_children()
                     full_table_values(balance,("before","after"))
                     assert [fresh(i) for i in range(3)]==before
-                    click(dialog,"Übernehmen")
+                    click(dialog,"Umplanen")
                 modal("Tag entlasten",app.show_day_relief,apply_stock)
                 assert len(app.undo_stack)==depth+1 and all(fresh(i)["planned_date"] is None for i in (0,1))
                 assert all(fresh(i)["due"]==before[i]["due"] for i in range(3))
                 app.undo_last_change();pump()
                 assert [fresh(i) for i in range(3)]==before
-                checks.append("Echter Mehrfachdialog: Vergleich ändert nichts, Vorrat übernimmt ausgewählte Aufgaben, ein Undo stellt alles her")
+                checks.append("Echter Mehrfachdialog: automatische Bilanz, Vorrat übernimmt ausgewählte Aufgaben, ein Undo stellt alles her")
+                def apply_day(dialog):
+                    tree=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_tasks")
+                    target=next(widget for widget in descendants(dialog) if isinstance(widget,mod.DueField))
+                    confirm=button(dialog,"Umplanen")
+                    tree.selection_set(identities[:2]);pump()
+                    target.set_due(day);pump()
+                    assert str(confirm.cget("state"))=="disabled"
+                    target.set_due(tomorrow);pump()
+                    assert str(confirm.cget("state"))=="normal"
+                    assert [fresh(i) for i in range(3)]==before
+                    capacity=app.daily_capacity_minutes(tomorrow)
+                    original=app.daily_capacity_minutes
+                    app.daily_capacity_minutes=lambda value=None: capacity+60 if value==tomorrow else original(value)
+                    try:
+                        click(dialog,"Umplanen")
+                        assert dialog.winfo_exists() and [fresh(i) for i in range(3)]==before
+                        click(dialog,"Umplanen")
+                    finally:
+                        app.daily_capacity_minutes=original
+                modal("Tag entlasten",app.show_day_relief,apply_day)
+                assert len(app.undo_stack)==depth+1
+                assert all(fresh(i)["planned_date"]==tomorrow and fresh(i)["due"]==before[i]["due"] for i in (0,1))
+                app.undo_last_change();pump()
+                assert [fresh(i) for i in range(3)]==before
+                checks.append("Zieltag wählen und bestätigen: gleiche Tage gesperrt, geänderte Bilanz erneut bestätigen, Fälligkeiten und Undo erhalten")
                 for font_stage in ("mittel", "gross"):
                     app.settings["ui_font_size"] = font_stage
                     app.apply_ui_font()
@@ -563,6 +587,10 @@ def run(app_path, cases, report):
                         assert footer.winfo_rooty()>=dialog.winfo_rooty(), measured
                         assert footer.winfo_rooty()+footer.winfo_height()<=dialog.winfo_rooty()+dialog.winfo_height(), measured
                         assert canvas.winfo_ismapped(), measured
+                        if title=="Tag entlasten":
+                            target=next(widget for widget in descendants(footer) if isinstance(widget,mod.DueField))
+                            assert target.date_entry.winfo_ismapped(), measured
+                            assert dialog.winfo_height()<=700, measured
                         for widget in descendants(footer):
                             if isinstance(widget,mod.RoundedButton):
                                 assert widget.winfo_rootx()>=dialog.winfo_rootx(), measured
