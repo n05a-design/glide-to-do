@@ -1,10 +1,10 @@
 # Glide · aktiver Showcase
 
-Stand 12.11.2026 · Glide 3.55.0 · Quellfixtures und Lieferung in Speicherstufe 26
+Stand 12.11.2026 · Glide 3.55.1 · Quellfixtures und Lieferung in Speicherstufe 26
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze mit Bildfolge, Routinen, Wiedervorlagen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
-## Tagesplanung mit Glide 3.55.0 ausprobieren
+## Tagesplanung mit Glide 3.55.1 ausprobieren
 
 In „Heute“ zwei Showcase-Aufgaben auf denselben Bearbeitungstag planen und bei einer die Schätzung entfernen. Die Tagesbilanz weist geschätzten Aufwand und die fehlende Schätzung getrennt aus. Eine zusätzlich gewählte lokale ICS-Datei zeigt, wie belegte Kalenderzeit die Netto-Kapazität verändert. In „Tag entlasten“ die Vorher-/Nachher-Bilanz und den Fälligkeitserhalt prüfen. „Rückgängig“ nimmt eine übernommene Umplanung gemeinsam zurück.
 

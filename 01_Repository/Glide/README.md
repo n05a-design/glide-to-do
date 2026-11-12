@@ -1,10 +1,10 @@
 # Glide – Desktop-Planer
 
-Stand 12.11.2026 · Quellstand 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Quellstand 3.55.1 · Aufgabenformat 26
 
 Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
-> **Projektstatus:** Glide 3.55.0, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2. Der [QA-Bericht](docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) nennt die geprüften Commits, Paketbauten und offenen Abnahmen. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand.
+> **Projektstatus:** Lokaler Prüfstand Glide 3.55.1, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2. Der [QA-Bericht](docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) nennt die geprüften Commits, Paketbauten und offenen Abnahmen. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand.
 
 **Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md), eigenständig versioniert in [`GLIDE_SYSTEM_VERSION`](GLIDE_SYSTEM_VERSION) (Start **V1.0**) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege. Diese Katalogversion ist unabhängig von Glides Anwendungs- und Datenformatversion.
 

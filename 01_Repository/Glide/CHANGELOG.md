@@ -1,6 +1,8 @@
 # Änderungsverlauf
 
-## Lokaler Nachlauf zur macOS-Abnahme 3.55.0
+## 3.55.1 – 12.11.2026
+
+- **Dateinamen unter macOS:** Die Speicherdialoge für JSON Canvas und App-Sicherung schlagen den Namen mit einfacher Dateiendung vor. Bestehende Sicherungen bleiben lesbar.
 
 - **JSON-Canvas-Export:** Die aktive Pinnwand liefert ihre sichtbaren Karten, Positionen und Verbindungen. Der Export schreibt eine nutzbare Datei und zeigt die Formatgrenzen im Verlustbericht. Der Dateidialog und der Schutz der internen Daten sind über den App-Einstieg geprüft.
 

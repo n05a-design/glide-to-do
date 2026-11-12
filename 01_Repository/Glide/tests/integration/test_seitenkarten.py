@@ -165,7 +165,11 @@ def fall_titelbild_praesentation_sicherung(run):
     assert page['title'] in html and 'Erster Absatz' in html
     view.end_presentation();run.idle()
     backup=Path(run.data).parent/'probe.glideapp'
-    app.write_complete_backup(str(backup),app.app_backup_payload())
+    with patch.object(run.mod.filedialog, 'asksaveasfilename', return_value=str(backup)) as dialog:
+        app.export_app_backup()
+    assert dialog.call_args.kwargs['defaultextension'] == '.glideapp'
+    assert not dialog.call_args.kwargs['initialfile'].endswith('.glideapp')
+    assert backup.is_file()
     view.selected_id=identity;view.selected_ids=[identity];view.unpin();run.idle()
     assert identity not in view.card_ids
     assert app.restore_app_backup(str(backup),sections={
@@ -293,6 +297,7 @@ def fall_json_canvas_export(run):
     with patch.object(run.mod.filedialog, 'asksaveasfilename', return_value=str(target)) as dialog:
         assert app.export_board_json_canvas() == str(target)
     assert dialog.call_args.kwargs['defaultextension'] == '.canvas'
+    assert not dialog.call_args.kwargs['initialfile'].endswith('.canvas')
     document = json.loads(target.read_text(encoding='utf-8'))
     nodes = {node['id']: node for node in document['nodes']}
     assert set(nodes) == {item['id'], page_id}

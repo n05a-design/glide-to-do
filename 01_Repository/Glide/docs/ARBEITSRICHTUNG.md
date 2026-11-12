@@ -14,7 +14,7 @@
 
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
-Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 
 

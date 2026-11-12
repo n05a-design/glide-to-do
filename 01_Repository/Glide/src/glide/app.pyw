@@ -235,7 +235,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.55.0"
+APP_VERSION = "3.55.1"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -7694,7 +7694,7 @@ class ItemWorkspace:
                 parent=app.root,
                 title="Pinnwand als JSON Canvas (.canvas) exportieren",
                 defaultextension=".canvas",
-                initialfile=f"{default_stem}.canvas",
+                initialfile=default_stem,
                 filetypes=[("JSON Canvas 1.0", "*.canvas"), ("JSON-Datei", "*.json"), ("Alle Dateien", "*.*")],
             )
         if not path:
@@ -66525,7 +66525,7 @@ Labels, Termine und Metadaten."""
         if not self.output_editor_ready():
             return
         self.sync_current_list_reference()
-        default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}{self.APP_BACKUP_EXTENSION}"
+        default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
         path = filedialog.asksaveasfilename(
             title="Vollständiges App-Sicherung speichern",
             defaultextension=self.APP_BACKUP_EXTENSION,

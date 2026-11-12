@@ -1,4 +1,10 @@
-# QA-Bericht – Glide 3.55.0
+# QA-Bericht – Glide 3.55.1
+
+## Lokale Nachabnahme und Prüfstand 3.55.1 (12.11.2026)
+
+Auf dem macOS-Nachbaustand 3.55.0 wurden Fundorte im Hauptbereich und in der Nebenansicht sowie der JSON-Canvas-Export mit Verlustbericht manuell geprüft. Der Sicherungsrundlauf im Parkquartier-Prüfbestand zeigt die Wiederherstellung des geänderten Seitentexts, des Seitenbilds und der sichtbaren Aufgaben mit Fälligkeiten. Die Screenshots dokumentieren den Rundlauf in der laufenden Sitzung.
+
+3.55.1 übernimmt den vereinfachten Dialog „Tag entlasten“ und die Korrekturen für JSON Canvas und die voreingestellten Dateinamen. Die nachfolgenden GitHub-Läufe gelten für ihre jeweils genannten 3.55.0-Commits. Die plattformübergreifende Freigabe für 3.55.1 steht aus.
 
 ## Plattformprüfung und Pakete auf main (12.11.2026)
 
@@ -142,7 +148,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Aktueller Validierungsstand 07.11.2026 / 3.50.7:** Quell-/Dokumentabgleich auf PR #69, zuletzt `13bcb66a`, plus D72/D73. Neue Produkt-/MPL-Texte und Seitenleistenkorrekturen. Lokal 48 Schrift-/Geometriekonfigurationen mit 384 Zeilen, UI/UX 17/17, Abstände 16, Unterzeilen 136 sowie Anhangs- und Showcase-Nachtests grün. Befehle, Quellhashes, rote Gegenproben und Endergebnisse im [Nachweis](../tests/qa-3.50.7/validierung_2026-11-07/README.md). Die Anfangsbasis `be379408` bestand die strenge Windows-Grundstufe mit Python 3.14.7/Tk 9.0.4. Neue Ergebnisse gelten ausschließlich für ihre jeweils protokollierten Bytes. Kein neuer nativer Paket- oder Menschenfreigabebeleg.
 
-**3.50.6-Vorgeschichte korrekt zugeordnet:** [Originalnachweis](../tests/qa-3.50.6/README.md). Zusammengeführter Mac-Stand: 1.153 Unit-Tests (1 Skip), 107 Integrationssuiten mit 101 unmittelbar grünen und fünf anschließend einzeln grünen Fokus-/Tastaturfällen; der bestehende Mac-Befund `test_bedienung33316` blieb rot. Arbeitsmodi 61/61 auf dem dort bezeichneten Stand. Nativer Mac-Vollmodus auf App `f4339a5d…`: 80 grüne Schritte, Stopp am Mac-Befund, 44 Folgeschritte nicht ausgeführt. Lokales TAR/DMG und isolierter Start beziehen sich auf genau diesen früheren Hash, nicht auf den späteren Seitenleisten-/Anhangsstand und nicht auf 3.50.7. Seitenleisten-Nachtrag und Codex-Anhangskorrekturen `be379408`/`13bcb66a` sind gesonderte spätere Änderungen. Frühere Zahlen 104/107 und 60/60 bleiben in den historischen Runden, sind kein aktueller Gesamtabschluss.
+**3.50.6-Vorgeschichte korrekt zugeordnet:** [Originalnachweis](https://github.com/n05a-design/glide-to-do/blob/766978d1836927ae4572d1968ed58929cd046a95/01_Repository/Glide/tests/qa-3.50.6/README.md). Zusammengeführter Mac-Stand: 1.153 Unit-Tests (1 Skip), 107 Integrationssuiten mit 101 unmittelbar grünen und fünf anschließend einzeln grünen Fokus-/Tastaturfällen; der bestehende Mac-Befund `test_bedienung33316` blieb rot. Arbeitsmodi 61/61 auf dem dort bezeichneten Stand. Nativer Mac-Vollmodus auf App `f4339a5d…`: 80 grüne Schritte, Stopp am Mac-Befund, 44 Folgeschritte nicht ausgeführt. Lokales TAR/DMG und isolierter Start beziehen sich auf genau diesen früheren Hash, nicht auf den späteren Seitenleisten-/Anhangsstand und nicht auf 3.50.7. Seitenleisten-Nachtrag und Codex-Anhangskorrekturen `be379408`/`13bcb66a` sind gesonderte spätere Änderungen. Frühere Zahlen 104/107 und 60/60 bleiben in den historischen Runden, sind kein aktueller Gesamtabschluss.
 
 | Statusachse am Abgleich | Nachgewiesen | Weiter offen |
 |---|---|---|
@@ -203,7 +209,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

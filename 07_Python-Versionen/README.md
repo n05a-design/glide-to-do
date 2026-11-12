@@ -1,8 +1,8 @@
 # Aktuelle startbare Python-Fassung
 
-Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26 · Vorlagenformat 2
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26 · Vorlagenformat 2
 
-Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.55.0.pyw` und ihre Begleitmodule und Ressourcen entsprechen dem Quellstand 3.55.0. Enthalten sind die transparente Tageskapazitätsanalyse mit Entlastungsvorschau (WA-12), die Tk-freie Pfadauflösung als ersten Teil von WA-49 und die Neuerungskarte 3.55.0, die vollständige Fundortübersicht (WA-21), der Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, WA-07) mit Verlustbericht und die vollständige Ablösung klassischer Tk-Steuerelemente durch themengerechte Eigenzeichnungen (`Sperrklinke = 0/0`). Modern bleibt Rubik; Technisch, Kreativ und Klassisch verwenden DM Mono, DM Serif Display und Charis SIL. Vollständiger MPL-2.0-Text (`LICENSE`) und [Lizenzhinweise](LICENSE.md) gehören zur separaten Lieferung. Technische Programm- und Datenkennungen und Format 26 bleiben erhalten.
+Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.55.1.pyw` und ihre Begleitmodule und Ressourcen entsprechen dem Quellstand 3.55.1. Enthalten sind die transparente Tageskapazitätsanalyse mit vereinfachter Zielwahl im Entlastungsdialog (WA-12), die Tk-freie Pfadauflösung als ersten Teil von WA-49 und die Neuerungskarte 3.55.1, die vollständige Fundortübersicht (WA-21), der Pinnwand-Export als JSON Canvas 1.0 (`.canvas`, WA-07) mit Verlustbericht und die vollständige Ablösung klassischer Tk-Steuerelemente durch themengerechte Eigenzeichnungen (`Sperrklinke = 0/0`). Modern bleibt Rubik; Technisch, Kreativ und Klassisch verwenden DM Mono, DM Serif Display und Charis SIL. Vollständiger MPL-2.0-Text (`LICENSE`) und [Lizenzhinweise](LICENSE.md) gehören zur separaten Lieferung. Technische Programm- und Datenkennungen und Format 26 bleiben erhalten.
 
 Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) trennt die commitbezogene Plattformprüfung von den eigenständigen Paketbauten und der menschlichen Abnahme. In denselben Ordner gehören:
 

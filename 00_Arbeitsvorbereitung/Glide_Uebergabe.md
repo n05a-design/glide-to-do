@@ -1,6 +1,10 @@
 # Glide – Übergabe an eine neue Sitzung
 
-## Aktueller Stand 3.55.0 nach PR #78
+## Lokaler Prüfstand 3.55.1 (12.11.2026)
+
+3.55.1 kennzeichnet den korrigierten Stand nach der macOS-Abnahme. Enthalten sind die vereinfachte Tagesentlastung, der reparierte JSON-Canvas-Export und korrigierte Dateinamenvorschläge. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2 gelten weiter. Die [QA-Nachweise](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentieren Abnahme und Freigabestatus.
+
+## GitHub-Stand 3.55.0 nach PR #78
 
 **Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) steht auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation. Der unabhängige Systemkatalog steht nach der Dokumentationspflege auf **V1.17.2**.
 1. **Tagesplanung & Kapazität (`WA-12`):** `planning.py` berechnet geplanten Aufgabenaufwand, Kalenderbelegung und Netto-Kapazität. `day_relief.py` bereitet Tagesbilanz und Überlastungsgründe auf. `ListApp` in `app.pyw` bindet die Bilanz und den Entlastungsdialog ein. Ungeschätzte Aufgaben bleiben gesondert sichtbar und Fälligkeiten bleiben beim Umplanen erhalten.
@@ -65,7 +69,7 @@ Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-
 
 **Fortsetzung am 08.11.2026 (historisch):** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 
