@@ -30,6 +30,13 @@ def python_pin(version, header, *, free_threaded=False, debug=False):
     return PYTHON_PINS[version]
 
 
+def same_header(installed, source):
+    # Der python.org-Installer für Windows liefert die Header mit CRLF,
+    # git archive exportiert die gepinnte Quelle mit LF. Nur die
+    # Zeilenenden dürfen abweichen; jeder andere Unterschied bleibt Fehler.
+    return installed.replace(b'\r\n', b'\n') == source.replace(b'\r\n', b'\n')
+
+
 def build_destination(destination, sources):
     destination = Path(destination).resolve()
     if any('onedrive' in part.casefold() for part in destination.parts):
