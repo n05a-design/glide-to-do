@@ -1,8 +1,14 @@
 # Änderungsverlauf
 
+## Lokaler Nachlauf zur macOS-Abnahme 3.55.0
+
+- **Tag entlasten:** Zielwahl und Rückmeldung stehen im festen Dialogfuß. Glide zeigt die Bilanz automatisch nach der Zielwahl. „Umplanen“ ist erst bei einer wirksamen Auswahl verfügbar. Fälligkeiten und gemeinsames Rückgängig bleiben erhalten.
+
 ## 3.55.0 – 11.11.2026
 
-- **Tagesplanung & Kapazität (WA-12 / D57):** Transparente und handlungsorientierte Kapazitätsübersicht im Tagesentlastungs- und Planungsbereich (`planning.py`, `day_relief.py`, `app.pyw`). Exakte Berechnung von geplantem Aufgabenaufwand, belegter Kalenderzeit und verfügbarer Netto-Kapazität. Ungeschätzte Aufgaben werden transparent gesondert ausgewiesen und niemals heimlich als 0 Minuten gewertet. Konkrete Überlastungsgründe werden benannt. Im Entlastungsdialog wird die Fälligkeit von Aufgaben explizit als erhalten ausgewiesen (`Fälligkeit bleibt`), unterstützt von dynamischer Spaltenbreitenanpassung und atomarem Undo.
+- **Neuerungskarte:** Die Startseite zeigt nach dem Update „Neu in Glide 3.55.0“ mit der Tagesbilanz und dem Fälligkeitserhalt. Nach „Gelesen“ bleibt der Eintrag unter Hilfe › Über Glide › Neuerungen verfügbar.
+
+- **Tagesplanung & Kapazität (WA-12 / D57):** Transparente und handlungsorientierte Kapazitätsübersicht im Tagesentlastungs- und Planungsbereich (`planning.py`, `day_relief.py`, `app.pyw`). Exakte Berechnung von geplantem Aufgabenaufwand, belegter Kalenderzeit und verfügbarer Netto-Kapazität. Ungeschätzte Aufgaben werden transparent gesondert ausgewiesen und niemals heimlich als 0 Minuten gewertet. Konkrete Überlastungsgründe werden benannt. Im Entlastungsdialog wird die Fälligkeit von Aufgaben explizit als erhalten ausgewiesen (`Fälligkeit (bleibt)`), unterstützt von dynamischer Spaltenbreitenanpassung und atomarem Undo.
 - **Architekturentkopplung & Initialisierung (WA-49):** Das Tk-freie Modul [`runtime_config.py`](src/glide/runtime_config.py) löst die Anwendungs-, Cache- und Logpfade auf. Die Pfadauflösung legt keine Verzeichnisse an. Windows verwendet für bestehende Daten weiterhin `%APPDATA%/Glide` und für den Cache standardmäßig `%LOCALAPPDATA%/Glide/Cache`.
 - **Glide Shell Framework Vorbereitung:** Ausarbeitung des umfassenden Architektur- und Entkopplungskonzepts in [`docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) mit klarer Abgrenzung zwischen wiederverwendbarem Desktop-Fundament (Lifecycle, Window-Manager, Appearance, Widgets, Modal-Runner) und Glide-spezifischer Domäne sowie Entkopplung über Ports & Adapters.
 - **System- und Testpflege:** Glide-Systemkatalog auf `V1.17` fortgeschrieben (`M095` `runtime_config.py`, `T313` `test_day_capacity.py`, `T314` `test_runtime_config.py`), 95 Quell- und 314 Testdateien, CI-Grundstufe 19/19 grün, Aufgabenformat 26 unverändert beibehalten.

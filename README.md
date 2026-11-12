@@ -61,7 +61,7 @@
 
 ### Den Tag planen und Aufgaben erledigen
 
-- **Schnell erfassen:** Aufgaben in Alltagssprache eingeben, erkannte Termine und Eigenschaften vor dem Anlegen als Feldchips prüfen; die Schnellerfassung öffnet sich in jeder Glide-Ansicht mit Alt+N, mehrere eingefügte Zeilen werden auf Wunsch zu einzelnen Aufgaben.
+- **Schnell erfassen:** Aufgaben in Alltagssprache eingeben, erkannte Termine und Eigenschaften vor dem Anlegen als Feldchips prüfen; die Schnellerfassung öffnet sich in jeder Glide-Ansicht über das Menü oder per Strg+Alt+N (macOS auch Cmd+Alt+N). Mehrere eingefügte Zeilen werden auf Wunsch zu einzelnen Aufgaben.
 - **Aufgaben strukturieren:** Listen, Ordner, Gruppen, Zwischenüberschriften, Unteraufgaben und Checklisten; Wichtigkeit, Labels, eigene Farben, Fälligkeit und Bearbeitungstag getrennt verwalten, Aufwand schätzen und Zeit erfassen. Beziehungen und Abhängigkeiten zeigen, welche Aufgabe eine andere blockiert.
 - **Eigene Rhythmen:** täglich, wöchentlich, mehrere Wochentage, Monatsende, n-ter oder letzter Wochentag sowie Monats- und Jahresintervalle; Wiederholung ab Erledigung, Pause, begrenzte Anzahl, Vorschau und Termin überspringen.
 - **Heute und Demnächst:** Tagesvorschlag, nächste Aufgabe, Routinen, Tagesziel, Fortschritt, Stundenraster, Wochen- und Monatsplanung sowie Kapazität je Wochentag. Tagesbeginn, Tagesabschluss und Wochenrückblick helfen beim Einordnen; „Tag entlasten“ verschiebt ausgewählte Aufgaben mit Vorher-/Nachher-Bilanz, ohne Fälligkeiten zu ändern, und Tageshinweise erinnern auf Wunsch an Beginn und Abschluss.
@@ -121,7 +121,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Der aktuelle Quell- und Python-Lieferstand ist Glide 3.55.0 mit Datenformat 26 und Glide-System V1.17. Die Tagesplanung zeigt Aufgabenaufwand, Kalenderbelegung und verbleibende Kapazität. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
+Der aktuelle Quell- und Python-Lieferstand ist Glide 3.55.0 mit Datenformat 26 und Glide-System V1.17.1. Die Tagesplanung zeigt geplanten Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität, fehlende Schätzungen und Gründe für Überlastung. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -155,7 +155,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 11.11.2026 · Glide 3.55.0
+Stand 12.11.2026 · Glide 3.55.0
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

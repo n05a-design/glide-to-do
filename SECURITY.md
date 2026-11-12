@@ -1,12 +1,12 @@
 # Sicherheitsrichtlinie
 
-Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (öffentliche erste Beta); 3.50.3–3.50.6 ändern nur Oberfläche sowie Titel- und Anhangsnamengrenzen, die hier beschriebenen Vertrauensgrenzen bleiben unverändert
+Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 Glide verarbeitet Aufgaben, Notizen, Seiten, Pinnwände und Anhänge lokal. Die Kernanwendung benötigt weder Konto noch Netzwerkzugriff. Bewusst angeklickte Weblinks und Anhänge werden an das jeweilige Standardprogramm übergeben; die dortige Verarbeitung liegt außerhalb von Glide. Die verbindlichen [technischen Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) ergänzen diese Richtlinie.
 
 ## Unterstützte Fassungen
 
-Sicherheitskorrekturen gehen in den aktuellen 3.50-Stand auf `main` und anschließend in die Python-Fassung und die nativen Pakete. Der tatsächliche Paket- und Prüfstand ist im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) dokumentiert. Frühere Entwicklungsfassungen erhalten keine eigene Wartungszusage.
+Sicherheitskorrekturen gehen in den aktuellen Quellstand auf `main` und anschließend in die Python-Fassung und die nativen Pakete. Der tatsächliche Paket- und Prüfstand ist im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) dokumentiert. Frühere Entwicklungsfassungen erhalten keine eigene Wartungszusage.
 
 ## Schwachstelle melden
 

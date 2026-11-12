@@ -6,7 +6,7 @@ Aktueller Aufgabenstand: **Glide 3.55.0 / Format 26**. `current_v26` ergänzt di
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.
 - Dazu kommen Pixelsymbole an Liste und Ordner, eine archivierte Liste und
   eine 32er-Zeichnung (Dokumentversion 2).
-- Die aktuelle Format-23-Referenz bleibt bei wiederholter Normalisierung unverändert; die [Dokumentationsprüfung](https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/dokumentation_2026-10-08/README.md) bestätigt dies mit isolierter Ablage. `test_features330.py` prüft weiterhin die feste Format-20-Referenz.
+- Die historische Format-23-Referenz bleibt bei wiederholter Normalisierung unverändert; die [Dokumentationsprüfung](https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/dokumentation_2026-10-08/README.md) bestätigt dies mit isolierter Ablage. `test_features330.py` prüft weiterhin die feste Format-20-Referenz.
 - `current_v19` bleibt die Referenz für Format 19. Historische Formatordner bleiben für
 Migrationen erhalten; sie werden nicht auf den aktuellen App-Stand
 umetikettiert.

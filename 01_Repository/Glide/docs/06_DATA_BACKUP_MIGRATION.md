@@ -2,7 +2,7 @@
 
 **Aufgabentitel seit 3.50.5, Nachtrag 06.11.:** Neuanlage und tatsächliches Umbenennen begrenzen auf 40; automatische Übernahmen und explizite neue Duplikate sichern den Originaltitel in Beschreibung/Notiz. Vorlagenquellen und Bestandstitel bei Laden, Metadatenänderung, Sicherungswiederherstellung und Export erhalten. Lange Vorlagen-/Galerienotizen beim Normalisieren nicht abschneiden, damit Originale erhalten bleiben. Die historische vorgesicherte Container-Titelkürzung bleibt gesondert. Datenformat bleibt 26.
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 **Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Der erste öffentliche Stand 3.50.0 verwendet weiterhin Aufgabenformat 26. Tatsächliche Paketlieferungen und Prüfungen stehen im QA-Bericht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
 
@@ -19,7 +19,15 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 | `backups/` | automatische Sicherungen und Vorsicherungen | Datenordnerkopie |
 | `window.conf`, `glide.lock`, `datenordner.json` | Fenster, Belegung, gerätebezogener Ablagezeiger | nicht übertragen |
 
-- Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
+- Der Datenordner liegt außerhalb des Programms. Die [Pfadauflösung](../src/glide/runtime_config.py) verwendet zuerst einen expliziten Pfad, dann `GLIDE_DATA_DIR`, danach einen gültigen Pfad aus `datenordner.json` im Plattformstandard. Ohne diese Vorgaben gilt der Plattformstandard. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand. Die Quelle bleibt bestehen.
+
+| Plattform | Standard für Nutzerdaten | Standard für Cache laut `runtime_config` |
+| --- | --- | --- |
+| Windows | `%APPDATA%/Glide` | `%LOCALAPPDATA%/Glide/Cache` |
+| macOS | `~/Library/Application Support/Glide` | `~/Library/Caches/Glide` |
+| Linux | `$XDG_DATA_HOME/Glide`, sonst `~/.local/share/Glide` | `$XDG_CACHE_HOME/glide`, sonst `~/.cache/glide` |
+
+`resolve_paths` akzeptiert `GLIDE_CACHE_DIR` als Überschreibung für den Cachepfad im zurückgegebenen Pfadobjekt. Der Cache ist kein Bestandteil der Nutzerdatensicherung.
 - `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern – der Aufgabendatei ebenso wie von Einstellungen, Fenstergröße und Vorlagen. Eine beschädigte oder unlesbare Sperre öffnet schreibgeschützt; die Warnung beim Start bietet an, sie bewusst zu übernehmen. Eine verschwundene Sperre legt Glide beim nächsten Schreiben neu an (Schutzrunde WA-30). Die Sperre ersetzt keinen Synchronisationsdienst. Die lokale OS-Sperre auf `glide.lock.acquire` schützt auch die Übernahme verwaister Sperren; sie ist kein verteilter Konsens zwischen Rechnern.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
 
@@ -164,7 +172,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 ## Backups und Transportwege
 
 - **`.glidebackup`** ist ein ZIP aus `data.json` und den referenzierten Anhängen. Archivpfade, Größen, Symlinks, doppelte Namen und Kompressionsverhältnisse werden geprüft. Portable Backups werden ab Format 4 gelesen.
-- **Größengrenzen:** `data.json` höchstens 32 MiB (`MAX_BACKUP_DATA_BYTES`), lese- und schreibseitig gleich geprüft; Anhänge je 512 MiB, zusammen 2 GiB, höchstens 4.096 Einträge. `data.json` hat dieselbe Kodierung wie `liste_speicher.json`, die Grenze gilt deshalb praktisch auch für den Bestand: Darüber scheitern vollständige Sicherungen, App-Backups und die Vorab-Sicherung vor Importen, ohne vorherige Warnung. Die Speicherlastsuite (26.420 Punkte) schreibt 28,5 MB. Die Hauptdatei selbst, die Einstellungen und Vorlagen werden ohne Vorabgrenze vollständig gelesen; der Vorlagenimport prüft vorab nur 4 GiB. Gemeinsames Budget mit Frühwarnung: WA-47 im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#212-ergänztes-aufgabenregister-und-gemeinsame-komponenten).
+- **Größengrenzen:** `data.json` höchstens 32 MiB (`MAX_BACKUP_DATA_BYTES`) beim Schreiben und Lesen. Anhänge höchstens 512 MiB je Datei, insgesamt höchstens 2 GiB pro Backup, höchstens 4.096 Archiveinträge. Für Aufgaben, Einstellungen und Vorlagen gilt das oben beschriebene [JSON-Budget mit Speicherstatus und Frühwarnung](#größenbudget-und-speicherstatus-seit-3450-geliefert). Archiv- und JSON-Grenzen werden getrennt geprüft.
 - **Komplettbackup laden** ersetzt erst nach Validierung und Sicherung (`vor_import_*.glidebackup`). **Teilbackup / Listen und Ordner hinzufügen** importiert additiv mit neuen Kennungen, vollständige Zweige einschließlich leerer Unterordner; Verweise (`links`, `blocked_by`, `references`, interne Textlinks, `item:<id>`, Bildanhänge, Zeichnungsreferenzen) ziehen nach.
 - **App-Backup** = Komplettbackup plus Abschnitt `app_backup` (`format_version`, `settings` ohne Tageshistorien, `templates`, `activity`); für ältere Fassungen bleibt es ein gültiges Aufgabenbackup. Wiederherstellen mit Inhaltsvorschau und wählbaren Bereichen. Pinnwände reisen mit und werden beim Import neu zugeordnet.
 - **`.glidepage`:** Teilbackup nur mit Seiten und Büchern (`"content": "pages"`); eine Datei mit Listen weist der Seitenimport ab.
@@ -262,7 +270,7 @@ Vorhandenes ändern, ohne interne Kennungen preiszugeben und ohne still zu über
 
 **FP-06-Aufträge (3.44.0):** Das Format bleibt unverändert. Ein gewählter Patch-Auftrag ergänzt ausschließlich den vorhandenen Text `instructions`; `items`, `ref`, `base` und Ausgangsfelder bleiben erhalten. Ein Create-Auftrag nutzt das bereits erlaubte Wurzelfeld `notes` für Anweisung und Antwortschema; neue Aufgaben werden ausschließlich über `mode: "create"` importiert. Ohne Auftragswahl kommt kein Feld hinzu. Die je Auftrag genannten erlaubten Felder sind Anweisungen, keine zusätzliche Import-Zulassung: Die bestehende Prüfung der neun Felder bleibt maßgeblich.
 
-Eigene Aufträge liegen additiv im Einstellungsschlüssel `exchange_recipes` (Einstellungen 2): Liste bis 50 Datensätze mit `id`, `title` (1–80 Zeichen), `mode` (`create`/`patch`), `instruction` (1–12.000 Zeichen) und `fields` (Teilmenge der neun Austauschfelder). Kennungen und Titel innerhalb eigener Vorlagen sind eindeutig; mitgelieferte Kennungen bleiben geschützt. Die Ressource `resources/exchange_recipes.json` trägt ihren eigenen `format_version: 1`. Eigene Vorlagen sind im Einstellungsteil der vollständigen `.glideapp`-Sicherung enthalten und werden auch ohne Aufgabenteil wiederhergestellt; sie enthalten keine Aufgabenverweise. FP-06 selbst änderte die Formate nicht; inzwischen gilt durch FP-02 Aufgabenformat 26, Austauschformat 2 und Vorlagenhülle 2 bleiben erhalten.
+Eigene Aufträge liegen additiv im Einstellungsschlüssel `exchange_recipes` (Einstellungen 2): Liste bis 50 Datensätze mit `id`, `title` (gespeicherte Altwerte bis 80 Zeichen, bei Neuanlage und tatsächlichem Umbenennen höchstens 40), `mode` (`create`/`patch`), `instruction` (1–12.000 Zeichen) und `fields` (Teilmenge der neun Austauschfelder). Kennungen und Titel innerhalb eigener Vorlagen sind eindeutig; mitgelieferte Kennungen bleiben geschützt. Die Ressource `resources/exchange_recipes.json` trägt ihren eigenen `format_version: 1`. Eigene Vorlagen sind im Einstellungsteil der vollständigen `.glideapp`-Sicherung enthalten und werden auch ohne Aufgabenteil wiederhergestellt; sie enthalten keine Aufgabenverweise. FP-06 selbst änderte die Formate nicht; inzwischen gilt durch FP-02 Aufgabenformat 26, Austauschformat 2 und Vorlagenhülle 2 bleiben erhalten.
 
 **Änderungsvorschlag** (Antwort, `.glideexchange` oder `.json`):
 

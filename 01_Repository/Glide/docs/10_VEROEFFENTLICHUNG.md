@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 11.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). PR #75 wurde am 10.11.2026 gemergt; `main` steht auf Glide 3.53.0 / Format 26 (`9e767bea`). Die Linux- und Windows-Vollprüfungen sowie Windows- und macOS-Paket-/Startprüfungen sind auf diesem Commit erfolgreich. Die vollständige native macOS-Prüfung und die detaillierte menschliche Bedien-/DPI-Abnahme bleiben offen. Es gibt keinen öffentlichen Release; der [QA-/Liefernachweis](07_QA_BERICHT.md) ordnet Ergebnisse und Grenzen den konkreten Commits zu. Eine Versionsnummer belegt keine öffentliche Release-Veröffentlichung.
+3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). Die aktuellen Quell- und Paketnachweise zu Glide 3.55.0 auf `766978d` stehen im [QA-Bericht](07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026). Für einen öffentlichen 3.55.0-Download gelten die nachfolgenden Freigabetore.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
@@ -174,6 +174,8 @@ $VersionGlideBau = (Get-Content VERSION -Raw).Trim()
 Jeden Aufruf nur nach Exitcode 0 des vorherigen ausführen. Die Paketprobe isoliert ihre synthetischen Nutzdaten. `runtime-bau.json`, `bau-ergebnis.json`, PE-/Lizenzinventar, `start.json` und alle Bau-/Startlogs mitgeben. Das Artefakt bleibt bis zur Auswertung Entwicklungsbau, keine öffentliche Windows-Signatur oder Menschenfreigabe.
 
 Dieser normale Start auf dem eigenen Gerät ersetzt die ausdrücklich an Hosted-CI gebundene externe Python-/Quellen-ACL-Isolationsprobe **nicht**. `pruefe_start_windows.py` und `windows_isolation.plan` lassen persönliche Installationen dafür nicht zu. Diese Grenze bleibt bestehen; keine fremden oder eigenen Inhaberinstallationen für eine Prüfung sperren und keine Hosted-Marker vortäuschen. Die aktuelle bereits geprüfte Mac-Lieferung und die frühere Windows-Lieferung bleiben bis zum tatsächlichen Windows-Abgleich erhalten.
+
+<a id="schriftlizenzen-und-stilklassifikationen-d60"></a>
 
 ## Schriftlizenzen und Stilklassifikationen (D60 / D77)
 

@@ -22110,7 +22110,7 @@ class ListApp:
                 canvas.yview_moveto(max(0, y+height-canvas.winfo_height()+8)/total)
         def focus(event):
             widget = event.widget
-            if widget not in (dialog, outer, body, canvas, viewport) and widget.winfo_toplevel() is dialog:
+            if widget is not body and glide_design.widget_within(str(widget), str(body)):
                 self._daily_after(0, lambda: reveal(widget), owner=dialog)
         def wheel(event):
             step = -1 if getattr(event, "num", 0) == 4 or getattr(event, "delta", 0) > 0 else 1
@@ -22641,9 +22641,9 @@ class ListApp:
                 days = [self.plan_day()]
         days = tuple(dict.fromkeys(day_relief.iso_day(day) for day in days))
         dialog, body, footer = self._daily_dialog("Tag entlasten", 820, 620)
-        self._daily_label(body, "Wähle selbst, welche offenen Aufgaben auf einen anderen Bearbeitungstag "
-                          "oder zurück in den Vorrat gehen. Fälligkeiten bleiben erhalten. Eine Übernahme "
-                          "ist ein Rückgängig-Schritt; es gibt keine automatische Verteilung.", color="muted")
+        dialog._daily_scroll_canvas.configure(height=380)
+        self._daily_label(body, "Aufgaben markieren, Ziel wählen und mit „Umplanen“ bestätigen. "
+                          "Die Fälligkeiten bleiben erhalten.", color="muted")
         label = ("Tag: " + self.format_due_display(days[0]) if len(days) == 1 else
                  "Zeitraum: " + self.format_due_display(days[0]) + " bis " + self.format_due_display(days[-1]))
         labels = {label: set(days),
@@ -22672,21 +22672,18 @@ class ListApp:
         line.pack(fill="x", pady=(5, 8))
         count = tk.Label(line, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
         count.pack(side="left")
-        self._daily_label(body, "Ziel: anderer Bearbeitungstag oder Vorrat", bold=True)
         destination = tk.StringVar(master=dialog, value="day")
-        target_frame = tk.Frame(body, bg=self.theme["bg"])
+        target_frame = tk.Frame(footer, bg=self.theme["bg"])
         target_frame.pack(fill="x")
-        for key, text in (("day", "Anderer Tag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
+        for key, text in (("day", "Neuer Bearbeitungstag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
             GlideRadiobutton(target_frame, text=text, value=key, variable=destination,
                              bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                              font=app_font(10)).pack(side="left", padx=(0, 12))
-        target = DueField(body, self, due=days[0] if days else self.plan_day(), due_time=None,
-                          compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
+        target = DueField(footer, self, compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
         target.pack(fill="x", pady=(5, 8))
-        self._daily_label(body, "Vorhandene Uhrzeiten bleiben beim Wechsel des Tages erhalten. "
-                          "Im Vorrat wird die Aufgabenzeit entfernt.",
-                          size=9, color="muted")
+        target_text = tk.StringVar(master=dialog)
+        target.date_entry.configure(textvariable=target_text)
         preview_frame = tk.Frame(body, bg=self.theme["card"])
         preview_frame.pack(fill="both", expand=True)
         preview = ttk.Treeview(preview_frame, name="day_relief_balance", columns=("before", "after"),
@@ -22701,14 +22698,18 @@ class ListApp:
         preview.configure(yscrollcommand=preview_scroll.set)
         self._daily_horizontal(preview_frame, preview)
         preview.pack(fill="both", expand=True)
-        message = self._daily_label(body, "", size=9, color="muted")
+        message = self._daily_label(footer, "", size=9, color="muted")
         preview_page = [0]
 
-        def invalidate(*_args):
+        def set_confirmation(ready):
+            color = self.dialog_color("confirm" if ready else "muted")
+            confirm.configure(state="normal" if ready else "disabled", takefocus=int(ready))
+            confirm.set_theme(self.theme["bg"], color, border_color=color, hover_fill=color)
+
+        def clear_preview():
             plan[0] = None
             preview.delete(*preview.get_children())
-            message.configure(text="Auswahl und Ziel anschließend über „Vergleichen“ prüfen.",
-                              fg=self.theme["muted"])
+            set_confirmation(False)
 
         def capture(_event=None):
             if rebuilding[0]:
@@ -22718,12 +22719,11 @@ class ListApp:
             selected.update(tree.selection())
             count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
             if selected != before:
-                invalidate()
+                compare()
 
         def render(delta=0, reset=False):
-            if not reset and not rebuilding[0]:
-                selected.difference_update(page_ids)
-                selected.update(tree.selection())
+            if not reset:
+                capture()
             page[0] = 0 if reset else max(0, min(max(0, (len(rows)-1)//100), page[0]+delta))
             rebuilding[0] = True
             try:
@@ -22753,7 +22753,7 @@ class ListApp:
             rows.sort(key=lambda pair: (pair[1]["planned_date"], pair[0].get("title", "").casefold(),
                                         pair[1].get("text", "").casefold(), pair[1]["id"]))
             render(reset=True)
-            invalidate()
+            compare()
 
         def show_comparison(delta=0):
             preview.delete(*preview.get_children())
@@ -22766,31 +22766,44 @@ class ListApp:
                                values=(self.relief_summary_text(before), self.relief_summary_text(after)))
             self._daily_fit_columns(preview, (("#0", 110), ("before", 290), ("after", 290)))
             warnings = sum(bool(self.busy_view(value["day"]).issues) for value in plan[0].before)
-            message.configure(text=(f"{len(plan[0].moves)} Aufgaben · {len(pairs)} betroffene Tage · "
-                                    f"Bilanzseite {preview_page[0]+1} von {max(1, (len(pairs)+49)//50)}"
-                                    + (" · Kalenderhinweise beachten" if warnings else "")
-                                    if plan[0].moves else "Keine Änderung: Die Auswahl liegt bereits am gewählten Tag."),
-                              fg=self.theme["muted"])
+            moves = plan[0].moves
+            if not moves:
+                message.configure(text="Die gewählten Aufgaben liegen bereits an diesem Tag.", fg=self.theme["muted"])
+                return
+            day = moves[0].target
+            goal = f"auf {self.format_due_display(day)}" if day else "in den Vorrat"
+            task_count = "1 Aufgabe" if len(moves) == 1 else f"{len(moves)} Aufgaben"
+            timing = "Uhrzeiten bleiben erhalten." if day else "Geplante Uhrzeiten werden entfernt."
+            pages = f" · Bilanzseite {preview_page[0]+1} von {(len(pairs)+49)//50}" if len(pairs) > 50 else ""
+            message.configure(text=f"{task_count} {goal} umplanen. {timing}" + pages
+                              + (" · Kalenderhinweise beachten" if warnings else ""), fg=self.theme["muted"])
 
-        def compare():
+        def compare(*_args):
+            clear_preview()
+            if not selected:
+                message.configure(text="Aufgaben in der Tabelle markieren.", fg=self.theme["muted"])
+                return
+            value = None
+            if destination.get() == "day":
+                parsed, error = target.read()
+                if error or not parsed[0]:
+                    message.configure(text=error or "Neuen Bearbeitungstag wählen.", fg=self.theme["muted"])
+                    return
+                value = parsed[0]
             try:
-                value = None
-                if destination.get() == "day":
-                    parsed, error = target.read()
-                    if error or not parsed[0]:
-                        raise ValueError(error or "Bitte einen Bearbeitungstag wählen.")
-                    value = parsed[0]
                 plan[0] = self.relief_plan(sorted(selected), value)
                 preview_page[0] = 0
                 show_comparison()
+                set_confirmation(bool(plan[0].moves))
             except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
-                plan[0] = None
-                preview.delete(*preview.get_children())
+                clear_preview()
                 message.configure(text=str(exc), fg=self.theme["delete"])
 
         def apply(_event=None):
-            if plan[0] is None:
-                message.configure(text="Bitte zuerst die aktuelle Auswahl vergleichen.", fg=self.theme["delete"])
+            if set(tree.selection()) != selected.intersection(page_ids):
+                capture()
+                return "break"
+            if not plan[0] or not plan[0].moves:
                 return "break"
             try:
                 if self.apply_day_relief(plan[0]):
@@ -22799,8 +22812,12 @@ class ListApp:
                     message.configure(text="Keine Änderung gespeichert. Die Auswahl bleibt für einen erneuten Versuch erhalten.",
                                       fg=self.theme["delete"])
             except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
-                plan[0] = None
-                message.configure(text=str(exc), fg=self.theme["delete"])
+                compare()
+                if plan[0] and plan[0].moves:
+                    message.configure(text="Die Planung hat sich geändert. Aktualisierte Bilanz prüfen "
+                                      "und erneut bestätigen.", fg=self.theme["delete"])
+                else:
+                    message.configure(text=str(exc), fg=self.theme["delete"])
             return "break"
 
         for text, delta in (("Vorige Aufgaben", -1), ("Weitere Aufgaben", 1)):
@@ -22813,13 +22830,12 @@ class ListApp:
                                      "muted", width=145, height=28).pack(side="left", padx=(0, 6))
         flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
         flow.pack(fill="x")
-        for text, command, color in (("Vergleichen", compare, "accent"), ("Übernehmen", apply, "confirm"),
-                                     ("Abbrechen", dialog.destroy, "muted")):
-            flow.add(self._make_dialog_button(flow, text, command, color, width=150, height=36))
+        confirm = self._make_dialog_button(flow, "Umplanen", apply, "confirm", width=150, height=36)
+        flow.add(confirm)
+        flow.add(self._make_dialog_button(flow, "Abbrechen", dialog.destroy, "muted", width=150, height=36))
         scope.trace_add("write", refresh)
-        destination.trace_add("write", invalidate)
-        target.on_change = invalidate
-        target.date_entry.bind("<KeyRelease>", invalidate, add="+")
+        destination.trace_add("write", compare)
+        target_text.trace_add("write", compare)
         tree.bind("<<TreeviewSelect>>", capture)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.bind("<Control-s>", apply)
