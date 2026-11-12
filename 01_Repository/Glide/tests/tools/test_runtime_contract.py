@@ -6,10 +6,20 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'packaging/runtime'))
-from runtime_contract import PINS, build_destination, export_identity, extension_command, python_pin, require_atk
+from runtime_contract import (PINS, build_destination, export_identity, extension_command, python_pin, require_atk,
+                              same_header)
 
 
 class RuntimeContract(unittest.TestCase):
+    def test_installed_header_may_differ_from_source_only_in_line_endings(self):
+        source = b'#define PY_VERSION "3.14.7"\n#define PY_RELEASE_SERIAL 0\n'
+        self.assertTrue(same_header(source, source))
+        self.assertTrue(same_header(source.replace(b'\n', b'\r\n'), source))
+        for installed in (b'#define PY_VERSION "3.14.8"\r\n#define PY_RELEASE_SERIAL 0\r\n',
+                          source + b'#define EXTRA 1\n', source.replace(b'\n', b'\r')):
+            with self.subTest(installed=installed):
+                self.assertFalse(same_header(installed, source))
+
     def test_export_identity_retains_original_prefix_and_exact_source_pin(self):
         self.assertEqual(export_identity(b'git-', PINS['tcl']), ('git-'+PINS['tcl']+'\n').encode('ascii'))
         for prefix, pin in ((b'git-\n', PINS['tk']), (b'foreign-', PINS['tcl']),
