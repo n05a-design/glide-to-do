@@ -2689,11 +2689,11 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 **B – Verifikation und Qualitätsstand:**
 - `ci_grundstufe.py`: Alle 19 Schritte erfolgreich mit Exitcode 0 durchlaufen (Python 3.15.1, win32).
-- `standpruefung.py`: Exitcode 0 (79 Dokumente konsistent).
+- `standpruefung.py`: Exitcode 0 und 75 aktive Dokumente im Linux-Grundstufenprotokoll auf `a72d5e9`.
 - `altbestandteile.py`: Exitcode 0 (`Checkbutton 0/0, Listbox 0/0, Radiobutton 0/0, Scale 0/0`).
 - `test_glide_system.py`: 5/5 grün (Systemkatalog V1.17, 95 Quelldateien, 314 Testdateien).
 - `abgleich_07.py`: Exitcode 0, 94 Code-Dateien und 165 Ressourcen bytegleich zu `07_Python-Versionen/`.
-- `test_day_capacity.py` (8/8) und `test_runtime_config.py` (4/4) bestanden.
+- `test_day_capacity.py`: 8 Fälle im Erstcommit `eaf72de`, 12/12 ab `fd97993` und auf dem Merge-Stand. `test_runtime_config.py`: 4/4.
 - `test_tag3390.py` (22/22) bestanden.
 - **Offen:** Vollständige plattformübergreifende Gesamtmatrix (Windows/Linux/macOS) in GitHub Actions, native Paketbauten und menschliche Sichtabnahme (`release_ready=false`).
 

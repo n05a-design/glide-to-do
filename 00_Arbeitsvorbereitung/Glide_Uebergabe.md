@@ -2,12 +2,12 @@
 
 ## Aktueller Stand 3.55.0 (Tagesplanung WA-12, runtime_config M095 und Shell-Konzept auf Basis `main` `a72d5e9`)
 
-Nach Inhaber-Merge von PR #77 bündelt **Glide 3.55.0** (Datenformat **26**, Glide-System **V1.17**) auf Basis des gemergten `main`-Stands (`a72d5e9`):
-1. **Tagesplanung & Kapazität (`WA-12`):** `daily_capacity.py` und `DailyCapacityPanel` in `src/glide/` bieten Tagesplanung, Kapazitätsanzeige, Pufferberechnung und strukturierte Arbeitsmodi direkt in der Tagesansicht.
-2. **Laufzeitkonfiguration (`WA-49` / `M095`):** Vollständige Auslagerung von Konfigurations- und Umgebungsparametern in `runtime_config.py` zur Entlastung von `app.pyw` und sauberer Modularisierung.
-3. **Glide Shell Framework Architekturkonzept:** Fundament zur Entkopplung von Fensterverwaltung, Navigation und Fachlogik für zukünftige Plattform- und Modularisierungsschritte.
+Mit dem Merge von PR #77 bündelt **Glide 3.55.0** (Datenformat **26**, Glide-System **V1.17**) auf Basis des gemergten `main`-Stands (`a72d5e9`):
+1. **Tagesplanung & Kapazität (`WA-12`):** `planning.py` berechnet geplanten Aufgabenaufwand, Kalenderbelegung und Netto-Kapazität. `day_relief.py` bereitet Tagesbilanz und Überlastungsgründe auf. `ListApp` in `app.pyw` bindet die Bilanz und den Entlastungsdialog ein. Ungeschätzte Aufgaben bleiben gesondert sichtbar und Fälligkeiten bleiben beim Umplanen erhalten.
+2. **Laufzeitkonfiguration (`WA-49` / `M095`):** `runtime_config.py` bündelt die Tk-freie Auflösung der Datenpfade. Ein expliziter Pfad oder `GLIDE_DATA_DIR` hat Vorrang vor `datenordner.json` und dem Plattformstandard. Unter Windows liegen Daten standardmäßig in `%APPDATA%/Glide`, der Cache in `%LOCALAPPDATA%/Glide/Cache`. `app.pyw` nutzt die Pfadfunktionen und verwaltet weiterhin einzelne Laufzeitoptionen.
+3. **Glide Shell Framework Architekturkonzept:** Der Entwurf beschreibt die schrittweise Entkopplung von Fensterverwaltung, Navigation und Fachlogik. Mit der Pfadauflösung liegt ein erster Baustein vor.
 
-Quelle (`01_Repository/Glide/src/glide`) und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.55.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch abgeglichen. 1.174 Unit-Tests, `ci_grundstufe.py --lieferstand-streng` (19/19) und der Linux/Xvfb-Livelock-Fix sind grün. Vollständige plattformübergreifende Vollmatrix, eigenständige 3.55.0-Paketbauten und menschliche Sichtabnahme bleiben getrennte offene Tore (`release_ready=false`); Details in [Plan §21.86](Glide_Entwicklungsplan.md#2186-release-3550-tagesplanung-wa-12-laufzeitkonfiguration-wa-49m095-und-glide-shell-konzept-11112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+Die aktive Python-Lieferung 3.55.0 entspricht der Quelle für Hauptdatei, Schnellstart, Laufzeitmodule und mitgelieferte Ressourcen (SHA-256). Die Grundstufe auf dem Merge-Commit bestand 19 Schritte. Die Unit-Suite meldete 1.174 Fälle, davon einen übersprungenen. Der PR-Lauf bestätigte die Linux/Xvfb-Vollprüfung, der Merge-Lauf wurde abgebrochen. Der native macOS-arm64-Paketbau mit isoliertem Start gelang auf dem Merge-Commit. Die vollständige Matrix, der Windows-Paketnachweis und die menschliche Sichtabnahme bleiben offene Tore (`release_ready=false`). Details in [Plan §21.86](Glide_Entwicklungsplan.md#2186-weiterentwicklung-3550-tagesplanung--kapazit%C3%A4t-wa-12-laufzeitentkopplung-wa-49-und-glide-shell-framework-konzept-11112026) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 ## Vorangegangener Stand 3.54.0 (`main` nach PR #76)
 

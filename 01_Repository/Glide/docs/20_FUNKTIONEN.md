@@ -331,6 +331,10 @@ Die Planungsauswahl erlaubt mehrere Aufgaben. Tag wählen und Einplanen/Enter od
 
 „Freies Zeitfenster“ verlangt eine ausgewählte offene Aufgabe mit Aufwand. Seit 3.39.0 zeigt die Vorschau Lücken zwischen 08:00 und 18:00 anhand vorhandener Glide-Zeitblöcke mit Schätzung und der ausdrücklich gewählten lokalen ICS-Belegdatei. Ungeschätzte Aufgaben bleiben als fehlende Schätzungen sichtbar; eine unbekannte oder fehlerhafte Kalenderquelle verhindert eine scheinbar freie Vorschau. Abbruch ist wirkungslos. Nach erneuter Prüfung der Aufgabe und Belegung schreibt die bestätigte Übernahme Bearbeitungstag und Uhrzeit, erhält die Fälligkeit und bildet einen Undo-Schritt. Überplanung bleibt erlaubt. Keine Kalender-Synchronisierung. Pflichtsuiten `test_woche33317.py` und `test_tag3390.py`, Unit-Tests `test_week_planning.py` und die Tagesplanungsmodule.
 
+### Tageskapazität und Entlastung seit 3.55.0
+
+Die Tagesbilanz zeigt geplanten Aufgabenaufwand, belegte Kalenderzeit und verbleibende Netto-Kapazität. Ungeschätzte Aufgaben erscheinen gesondert. Bei Überlastung nennt die Bilanz den Grund. Im Dialog „Tag entlasten“ zeigt die Vergleichstabelle die Fälligkeiten. Sie bleiben bei der Übernahme erhalten. Die gemeinsame Änderung lässt sich in einem Schritt rückgängig machen.
+
 ### Tagesplanung 3.39.0
 
 **Tageshinweise (D20):** Einstellungen → Tageshinweise legt Uhrzeiten und Wochentage für Tagesbeginn/-abschluss fest. Vorgabe aus, Zeiten 08:30/17:30. Die Glocke öffnet den gemeinsamen Hinweiskorb; ein Hinweis erzwingt keinen Bereichswechsel. „Später erinnern“ verschiebt um eine echte UTC-Dauer, „Heute überspringen“ erledigt nur diesen Termin. Verpasste Hinweise werden gesammelt; bei beendetem Glide gibt es keine Zustellung. Zustellbelege werden vor der Anzeige atomar geschrieben und über Neustarts erhalten. Schreibfehler zeigt Glide an und bietet Wiederholung. Ein modaler Dialog unterdrückt die unaufgeforderte Anzeige, ohne Termine zu verlieren; schreibgeschützte Bestände schreiben keine Belege.

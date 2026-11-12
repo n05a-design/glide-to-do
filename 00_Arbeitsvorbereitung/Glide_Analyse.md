@@ -1050,11 +1050,8 @@ Auf Inhaberwahl (D78, [Plan §21.85](Glide_Entwicklungsplan.md#2185-dreierpaket-
 
 | Bereich | Befund und Umsetzung |
 |---|---|
-| Tagesplanung & Kapazität (WA-12) | Einführung von `daily_capacity.py` und `DailyCapacityPanel` in `src/glide/`: Tagesarbeitszeit, Soll-/Ist-Zeiten, Kapazitätsauslastung, Restpuffer und strukturierte Arbeitsmodi für fokussierte Tagessteuerung. |
-| Laufzeitkonfiguration (WA-49 / M095) | Auslagerung aller Umgebungsvariablen, Datenpfadkonfigurationen (`GLIDE_DATA_DIR`) und Systemoptionen aus `app.pyw` in `runtime_config.py` zur architektonischen Entkopplung. |
-| Glide Shell Framework Konzept | Ausarbeitung des architektonischen Konzepts zur Entkopplung der Anwendungssteuerung von Tkinter-Fensterbäumen für künftige Modularisierung. |
-| Livelock-Behebung Linux/Xvfb | Beseitigung des Event-Loop-Livelocks bei Xvfb-Umgebungen durch robuste Event-Abarbeitung und Timeout-Sicherung in den Testsuiten. |
-| Qualitätssicherung & Tests | 1.174 Unit-Tests grün; `ci_grundstufe.py --lieferstand-streng` mit 19/19 Prüfungen erfolgreich. Plattformübergreifende Vollmatrix, native Pakete und menschliche Sichtprüfung getrennt offen. |
-
-
-
+| Tagesplanung & Kapazität (WA-12) | `planning.capacity_analysis` berechnet geplanten Aufgabenaufwand, Kalenderbelegung, Netto-Kapazität und Überlastung. `day_relief.summary` berücksichtigt lokale Kalenderblöcke, `day_relief.relief_summary_text` liefert die Dialogbilanz. `ListApp.show_day_relief` zeigt die Bilanz und die Fälligkeit im bestehenden Entlastungsdialog. |
+| Laufzeitkonfiguration (WA-49 / M095) | `runtime_config.resolve_paths` kapselt die Tk-freie Datenpfadauflösung. Expliziter Pfad, `GLIDE_DATA_DIR`, gespeicherter Zeiger und Plattformstandard gelten in dieser Reihenfolge. `RuntimePaths.ensure_dirs` legt Verzeichnisse bei Bedarf an. `app.pyw` verwendet die Pfadauflösung beim Import, in `ListApp` und beim Datenordnerwechsel und wertet einzelne Umgebungsvariablen weiterhin selbst aus. |
+| Glide Shell Framework Konzept | Das Konzept dokumentiert den ersten Pfadschnitt und plant die weitere Extraktion von Widgets, Dialogverwaltung, Undo und App-Controller. |
+| Livelock-Behebung Linux/Xvfb | Der ButtonFlow-Schutz gegen die Xvfb-Leerlaufschleife stammt aus PR #76. Der Linux-Vollprüfjob des ersten PR-#77-Laufs bestand. |
+| Qualitätssicherung & Tests | Linux-Grundstufe auf `a72d5e9` mit 19/19 Schritten, Unit-Suite mit 1.174 Fällen und einem Skip. Nativer macOS-arm64-Bau mit isoliertem Start auf `a72d5e9` erfolgreich. Die vollständige Matrix, Windows-Paketnachweis und menschliche Sichtprüfung bleiben offen. |
