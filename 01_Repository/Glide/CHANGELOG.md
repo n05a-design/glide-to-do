@@ -2,6 +2,8 @@
 
 ## Lokaler Nachlauf zur macOS-Abnahme 3.55.0
 
+- **JSON-Canvas-Export:** Die aktive Pinnwand liefert ihre sichtbaren Karten, Positionen und Verbindungen. Der Export schreibt eine nutzbare Datei und zeigt die Formatgrenzen im Verlustbericht. Der Dateidialog und der Schutz der internen Daten sind über den App-Einstieg geprüft.
+
 - **Tag entlasten:** Zielwahl und Rückmeldung stehen im festen Dialogfuß. Glide zeigt die Bilanz automatisch nach der Zielwahl. „Umplanen“ ist erst bei einer wirksamen Auswahl verfügbar. Fälligkeiten und gemeinsames Rückgängig bleiben erhalten.
 
 ## 3.55.0 – 11.11.2026

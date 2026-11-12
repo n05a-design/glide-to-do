@@ -7636,90 +7636,58 @@ class ItemWorkspace:
             return "break"
         return app.open_print_html(html_text, "glide_pinnwand", "Pinnwand drucken")
 
-    def board_canvas_cards_info(self, scope=None):
-        """Stellt die Kartendaten der Pinnwand für den JSON-Canvas-Export zusammen."""
+    def board_canvas_cards_info(self, scope, board, *, visible):
+        """Projiziert gespeicherte Karten oder die sichtbare Pinnwand auf JSON Canvas."""
         app = self.app
-        scope = scope or self.scope()
-        board = self.board(scope)
-        cards = board.get("cards", {})
-        if not isinstance(cards, dict):
-            return {}
-        info = {}
-        item_lookup = {}
-        list_lookup = {}
-        for lst in getattr(app, "lists", []):
-            if not isinstance(lst, dict):
+        if visible:
+            boxes = self.logical_card_boxes()
+        else:
+            boxes = {card["item_id"]: (card["x"], card["y"],
+                                       board["width"] * self.card_scale_factor(card), 140)
+                     for card in board["cards"]}
+        cards = []
+        valid = self.valid_cards(scope)
+        for identity, (x, y, width, height) in boxes.items():
+            if identity not in valid:
                 continue
-            lid = str(lst.get("id", "")).strip()
-            if lid:
-                list_lookup[lid] = lst
-            for item in app.walk_items(lst.get("items", [])):
-                iid = str(item.get("id", "")).strip()
-                if iid and iid not in item_lookup:
-                    item_lookup[iid] = (lst, item)
-        for key in cards:
-            key_str = str(key).strip()
-            if not key_str:
-                continue
-            if key_str.startswith("page:"):
-                lid = key_str[5:].strip()
-                lst = list_lookup.get(lid)
-                if lst is None:
-                    continue
-                kind = str(lst.get("list_kind", lst.get("kind", "list")) or "list")
-                note = str(lst.get("note", "") or "")
-                rich = lst.get("rich_note")
-                if not note.strip() and isinstance(rich, dict) and rich.get("text"):
-                    note = str(rich.get("text", "") or "")
-                info[key_str] = {
-                    "title": str(lst.get("title", lst.get("name", "")) or "Unbenannte Seite"),
-                    "kind": kind if kind in ("page", "note", "drawing") else "page",
-                    "note": note,
-                    "done": False,
-                    "checklist": [],
-                    "labels": [],
-                    "uri": f"glide://list/{lid}",
-                }
-            else:
-                pair = item_lookup.get(key_str)
-                if pair is None:
-                    continue
-                _lst, item = pair
-                labels = []
-                for lid in item.get("labels", []) or []:
-                    lbl = app.get_label(lid)
-                    name = str((lbl or {}).get("name", "") or lid).strip()
-                    if name:
-                        labels.append(name)
-                info[key_str] = {
-                    "title": str(item.get("text", "") or "Unbenannter Punkt"),
-                    "kind": str(item.get("kind", "task") or "task"),
-                    "note": str(item.get("description", item.get("note", "")) or ""),
-                    "done": bool(item.get("done")),
-                    "checklist": list(item.get("checklist", []) or []),
-                    "labels": labels,
-                    "uri": f"glide://item/{key_str}",
-                }
-        return info
+            source, item = valid[identity]
+            is_page = bool(item.get("page"))
+            owner = source if is_page else item
+            cards.append({
+                "id": identity, "x": x, "y": y, "width": width, "height": height,
+                "title": item.get("text", ""), "is_page": is_page,
+                "kind_label": app.list_kind_label(source) if is_page else "",
+                "description": item.get("description", ""),
+                "done": item.get("done", False),
+                "importance_label": app.importance_choice_text(item["importance"]) if item.get("importance") else "",
+                "planned": app.format_due_full(item.get("planned_date"), item.get("planned_time")),
+                "due": app.format_due_full(item.get("due"), item.get("due_time")),
+                "source_title": source.get("title", ""),
+                "checklist": item.get("checklist", []),
+                "labels": [label["name"] for label in app.item_labels(item)],
+                "attachments_count": len(owner.get("attachments") or ()),
+                "has_planning_rules": bool(item.get("repeat") or item.get("reminder")),
+                "color": self.card_accent(item, scope),
+            })
+        return cards
 
     def export_board_json_canvas(self, path=None):
         """Exportiert die aktive oder globale Pinnwand als JSON Canvas 1.0 (.canvas)."""
         app = self.app
-        scope = self.scope() if self.mode == "board" else "global"
+        visible = bool(self.visible and self.mode == "board" and self.scope)
+        scope = self.scope if visible else self.GLOBAL_SCOPE
         board = self.board(scope)
-        cards = board.get("cards", {}) if isinstance(board, dict) else {}
-        areas = board.get("areas", []) if isinstance(board, dict) else []
-        if not cards and not areas:
-            app.show_info(
-                "JSON Canvas exportieren",
-                "Diese Pinnwand enthält noch keine angehefteten Karten oder Bereiche.",
-            )
+        if not visible and board["layout"] == "columns":
+            app.show_info("JSON Canvas exportieren", "Öffne zuerst die globale Pinnwand, um ihre Spalten zu exportieren.")
             return "break"
-        scope_title = app.get_display_title() if self.mode == "board" else "Globale Pinnwand"
-        cards_info = self.board_canvas_cards_info(scope)
+        scope_title = app.get_display_title() if visible else "Globale Pinnwand"
+        cards_info = self.board_canvas_cards_info(scope, board, visible=visible)
         payload, report = glide_pinboard_pages.export_json_canvas(
-            board, cards_info, scope_title=scope_title
+            board, cards_info, scope_title=scope_title, visible_layout=visible
         )
+        if not payload["nodes"]:
+            app.show_info("JSON Canvas exportieren", "Diese Pinnwand enthält keine exportierbaren Karten oder Bereiche.")
+            return "break"
         if not path:
             default_stem = app.safe_filename(scope_title or "pinnwand") or "pinnwand"
             path = filedialog.asksaveasfilename(
@@ -7732,6 +7700,11 @@ class ItemWorkspace:
         if not path:
             return "break"
         try:
+            target = app.validate_backup_target(path)
+            if target == os.path.normcase(os.path.realpath(TEMPLATES_FILE)) or (os.path.isfile(path) and any(
+                    os.path.isfile(protected) and os.path.samefile(path, protected)
+                    for protected in (SAVE_FILE, SETTINGS_FILE, TEMPLATES_FILE))):
+                raise ValueError("Diese Glide-Systemdatei darf nicht überschrieben werden.")
             app.write_json_atomic(path, payload)
         except (OSError, ValueError) as exc:
             app.show_error("JSON Canvas exportieren", f"Die Datei konnte nicht geschrieben werden:\n{exc}")
@@ -9387,10 +9360,10 @@ class ItemWorkspace:
             self.draw_board()
         return "break"
 
-    def card_accent(self, item):
+    def card_accent(self, item, scope=None):
         """Farbschlüssel oder Farbwert des Kartenakzents nach Kartenfarbquelle."""
         app = self.app
-        if self.board().get("color_source") == "label":
+        if self.board(scope).get("color_source") == "label":
             bekannt = app.regular_label_ids()
             erstes = next((app.get_label(value) for value in item.get("labels", []) or [] if value in bekannt), None)
             if erstes is not None:

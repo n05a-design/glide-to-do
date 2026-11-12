@@ -275,7 +275,77 @@ def fall_druck_tempo(run):
             'paarquotienten':[after/before for before,after in zip(baseline,current)]}
 
 
-CASES=('inhalt_undo','archiv_loeschen','auswahl_ziehen','altleser_backup','titelbild_praesentation_sicherung','druck_tempo')
+def fall_json_canvas_export(run):
+    app = run.app
+    entry, page, _, item = seed(run)
+    item['description'] = 'Exportierter Aufgabentext'
+    item['checklist'] = [{'text': 'Prüfschritt', 'done': True}]
+    app.workspace.pin([item['id']])
+    app.pin_page_on_board(page['id'])
+    run.idle()
+    view = app.workspace
+    page_id = 'page:' + page['id']
+    view.toggle_connection(item['id'], page_id)
+    run.idle()
+    assert view.mode == 'board' and view.scope == 'list:' + entry['id']
+
+    target = Path(run.data).parent / 'pinnwand.canvas'
+    with patch.object(run.mod.filedialog, 'asksaveasfilename', return_value=str(target)) as dialog:
+        assert app.export_board_json_canvas() == str(target)
+    assert dialog.call_args.kwargs['defaultextension'] == '.canvas'
+    document = json.loads(target.read_text(encoding='utf-8'))
+    nodes = {node['id']: node for node in document['nodes']}
+    assert set(nodes) == {item['id'], page_id}
+    assert 'Exportierter Aufgabentext' in nodes[item['id']]['text']
+    assert 'Prüfschritt' in nodes[item['id']]['text']
+    assert 'Wissensseite' in nodes[page_id]['text']
+    assert {(edge['fromNode'], edge['toNode']) for edge in document['edges']} == {(item['id'], page_id)}
+    for identity, (x, y, width, height) in view.logical_card_boxes().items():
+        node = nodes[identity]
+        assert (node['x'], node['y'], node['width'], node['height']) == (
+            round(x), round(y), max(160, round(width)), max(80, round(height)))
+    assert 'Verlustbericht' in run.meldungen[-1][1][1]
+    assert '2 Karte(n)' in run.meldungen[-1][1][1]
+    assert '1 Verbindung(en)' in run.meldungen[-1][1][1]
+
+    protected = Path(run.mod.SAVE_FILE)
+    before = protected.read_bytes()
+    assert app.export_board_json_canvas(path=protected) == 'break'
+    assert protected.read_bytes() == before
+    assert run.meldungen[-1][0] == 'show_error'
+    templates = Path(run.mod.TEMPLATES_FILE)
+    previous_templates = templates.read_bytes() if templates.exists() else None
+    assert app.export_board_json_canvas(path=templates) == 'break'
+    assert (templates.read_bytes() if templates.exists() else None) == previous_templates
+
+    action = dict(view.board_action_groups()['Fläche'])['Als JSON Canvas (.canvas) …']
+    original = target.read_bytes()
+    with patch.object(run.mod.filedialog, 'asksaveasfilename', return_value=''):
+        assert action() == 'break'
+    assert target.read_bytes() == original
+
+    view.configure_board('layout', 'columns')
+    app.settings['pinboards'][view.scope]['cards'].clear()
+    view.draw_board()
+    assert item['id'] in view.card_boxes and not view.board()['cards']
+    columns = target.with_name('spalten.canvas')
+    assert app.export_board_json_canvas(path=columns) == columns
+    assert item['id'] in {node['id'] for node in json.loads(columns.read_text())['nodes']}
+    assert 'Spaltenboard' in run.meldungen[-1][1][1]
+
+    app.open_global_board()
+    view.pin([item['id']])
+    app.set_today_view()
+    run.idle()
+    global_target = target.with_name('global.canvas')
+    assert app.export_board_json_canvas(path=global_target) == global_target
+    assert {node['id'] for node in json.loads(global_target.read_text())['nodes']} == {item['id']}
+    return {'knoten': len(nodes), 'kanten': len(document['edges']), 'verlustbericht': True,
+            'spalten_ohne_anheften': True, 'globale_pinnwand_aus_heute': True, 'abbruch': True}
+
+
+CASES=('inhalt_undo','archiv_loeschen','auswahl_ziehen','altleser_backup','titelbild_praesentation_sicherung','druck_tempo',
+       'json_canvas_export')
 # Unter macOS verlangsamt eine frühere Tk-Instanz desselben Prozesses, die die
 # Startseite zeigte, jede spätere Schriftanlage um ein Vielfaches (§21.36). Glide
 # selbst hat je Prozess nur eine Instanz; die Tempoprobe misst deshalb im

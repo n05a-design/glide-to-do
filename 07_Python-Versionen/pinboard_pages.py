@@ -167,7 +167,7 @@ def _edge_sides(from_box, to_box):
     return ('bottom', 'top') if dy >= 0 else ('top', 'bottom')
 
 
-def export_json_canvas(board, cards_info, scope_title=''):
+def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True):
     """WA-07 / FP-07 Stufe 2: Exportiert eine Pinnwand nach JSON Canvas 1.0 (`.canvas`).
 
     Erzeugt `{"nodes": [...], "edges": [...]}` nach der offenen Spezifikation
@@ -180,11 +180,11 @@ def export_json_canvas(board, cards_info, scope_title=''):
     losses = []
 
     layout = board.get('layout', 'free')
-    if layout in ('grid', 'columns'):
-        losses.append(
-            f'Die dynamische Anordnung ({ "Spaltenboard" if layout == "columns" else "Geordnete Karten" }) '
-            'wurde mit ihren berechneten Kartenpositionen als statische Fläche übernommen.'
-        )
+    if layout == 'columns':
+        losses.append('Das Spaltenboard wurde als statische Fläche exportiert. Karten in mehreren Spalten erscheinen einmal.')
+    elif layout == 'grid':
+        losses.append('Die geordnete Pinnwand wurde als statische Fläche exportiert.'
+                      if visible_layout else 'Für die geschlossene Pinnwand wurden die gespeicherten Kartenpositionen verwendet.')
     if board.get('collapsed'):
         losses.append('Eingeklappte Spaltenzustände des Spaltenboards sind in JSON Canvas 1.0 nicht darstellbar.')
 
@@ -208,6 +208,8 @@ def export_json_canvas(board, cards_info, scope_title=''):
     node_boxes = {}
     has_interactive_checklists = False
     has_attachments = False
+    has_pages = False
+    has_planning_rules = False
     for info in cards_info:
         if not isinstance(info, dict) or not info.get('id'):
             continue
@@ -220,6 +222,8 @@ def export_json_canvas(board, cards_info, scope_title=''):
 
         title = str(info.get('title') or 'Ohne Titel').strip()
         is_page = bool(info.get('is_page')) or cid.startswith('page:')
+        has_pages |= is_page
+        has_planning_rules |= bool(info.get('has_planning_rules'))
         md_lines = []
         if is_page:
             kind_label = str(info.get('kind_label') or 'Seite')
@@ -296,6 +300,10 @@ def export_json_canvas(board, cards_info, scope_title=''):
         losses.append('Abhakbare Checklisten und Live-Zähler wurden als statisches Markdown übernommen.')
     if has_attachments:
         losses.append('Lokale Dateianhänge und Vorschaubilder bleiben in der Glide-Ablage und sind als Anzahl vermerkt.')
+    if has_pages:
+        losses.append('Seiten, Notizen und Zeichnungen werden als Textkarten übertragen. Vollständige Seiteninhalte und Zeichnungsdaten bleiben in Glide.')
+    if has_planning_rules:
+        losses.append('Wiederholungsregeln und Erinnerungen bleiben in Glide.')
 
     dashed_count = 0
     skipped_edges = 0

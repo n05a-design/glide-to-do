@@ -1,8 +1,8 @@
-# Glide-System V1.17.1
+# Glide-System V1.17.2
 
-Stand 12.11.2026 · Glide 3.55.0 · Glide-System V1.17.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 12.11.2026 · Glide 3.55.0 · Glide-System V1.17.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.17.1` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.17.2` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 12.11.2026 · Glide 3.55.0 · Glide-System V1.17.1 · Aufgabenformat 26 ·
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.17.2** | 12.11.2026 | JSON-Canvas-Export über die App-Einstiege und zugehörige Integrationsprüfung nachgeführt. | App 3.55.0, Format 26 |
 | **V1.17.1** | 12.11.2026 | Pfadauflösung, Startgrenzen und verbleibenden Umfang von WA-49 präzisiert. Den vereinfachten Entlastungsdialog im lokalen macOS-Abnahmenachlauf zugeordnet. | App 3.55.0, Format 26 |
 | **V1.17** | 11.11.2026 | Laufzeitkonfiguration und Pfadentkopplung (WA-49) in `runtime_config.py`, erweiterte Tageskapazitätsanalyse (WA-12) und zugehörige Unit-Tests. | App 3.55.0, Format 26 |
 | **V1.16** | 10.11.2026 | Vollständige Fundortübersicht (WA-21) in `object_references.py`, JSON-Canvas-1.0-Pinnwandexport mit Verlustbericht (WA-07) in `pinboard_pages.py` und vollständige Ablösung klassischer Tk-Steuerelemente (`Sperrklinke = 0`). | App 3.54.0, Format 26 |
@@ -735,7 +736,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T191 | [`test_schutzrunde.py`](../../tests/integration/test_schutzrunde.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T192 | [`test_seiten330.py`](../../tests/integration/test_seiten330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T193 | [`test_seiten33318.py`](../../tests/integration/test_seiten33318.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T194 | [`test_seitenkarten.py`](../../tests/integration/test_seitenkarten.py) | Seiten-/Notizkarten, Undo/Backup/Altleser/Druck; unveränderter Textumbruch ohne Mehrfachmessung, Fontwechsel und gepaarte +10-%-Temposchranke mit echten Verlangsamungsgegenproben |
+| T194 | [`test_seitenkarten.py`](../../tests/integration/test_seitenkarten.py) | Seiten-/Notizkarten, JSON-Canvas-Export über App und Flächenmenü, Undo/Backup/Altleser/Druck; unveränderter Textumbruch ohne Mehrfachmessung, Fontwechsel und gepaarte +10-%-Temposchranke mit echten Verlangsamungsgegenproben |
 | T195 | [`test_sicherungszentrale.py`](../../tests/integration/test_sicherungszentrale.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T196 | [`test_speicherlast330.py`](../../tests/integration/test_speicherlast330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T197 | [`test_speicherstatus.py`](../../tests/integration/test_speicherstatus.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |

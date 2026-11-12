@@ -2,7 +2,7 @@
 
 ## Aktueller Stand 3.55.0 nach PR #78
 
-**Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) steht auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation. Der unabhängige Systemkatalog steht nach der Dokumentationspflege auf **V1.17.1**.
+**Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) steht auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation. Der unabhängige Systemkatalog steht nach der Dokumentationspflege auf **V1.17.2**.
 1. **Tagesplanung & Kapazität (`WA-12`):** `planning.py` berechnet geplanten Aufgabenaufwand, Kalenderbelegung und Netto-Kapazität. `day_relief.py` bereitet Tagesbilanz und Überlastungsgründe auf. `ListApp` in `app.pyw` bindet die Bilanz und den Entlastungsdialog ein. Ungeschätzte Aufgaben bleiben gesondert sichtbar und Fälligkeiten bleiben beim Umplanen erhalten.
 2. **Laufzeitkonfiguration (`WA-49` / `M095`):** `runtime_config.py` bündelt die Tk-freie Auflösung der Datenpfade. Ein expliziter Pfad oder `GLIDE_DATA_DIR` hat Vorrang vor `datenordner.json` und dem Plattformstandard. Unter Windows liegen Daten standardmäßig in `%APPDATA%/Glide`, der Cache in `%LOCALAPPDATA%/Glide/Cache`. `app.pyw` nutzt die Pfadfunktionen und verwaltet weiterhin einzelne Laufzeitoptionen.
 3. **Glide Shell Framework Architekturkonzept:** Der Entwurf beschreibt die schrittweise Entkopplung von Fensterverwaltung, Navigation und Fachlogik. Mit der Pfadauflösung liegt ein erster Baustein vor.
