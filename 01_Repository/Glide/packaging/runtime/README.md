@@ -2,7 +2,7 @@
 
 Stand 12.11.2026 · Glide 3.55.1 · eigene Tcl/Tk 9.1 · Reader bis Bedarf zurückgestellt
 
-`baue_runtime.py` exportiert saubere Git-Originale aus den Pins in `runtime_contract.py` und baut Tcl, Tk und die dazu passende CPython-3.14-Erweiterung `_tkinter` in einem neuen Ziel außerhalb von OneDrive. Installierte Python-Header und Quellheader müssen bytegleich sein. Native Ziele: macOS arm64, Windows x64 mit MSVC, Linux x64 mit verpflichtendem ATK/AT-SPI. Es gibt keine Systeminstallation.
+`baue_runtime.py` exportiert saubere Git-Originale aus den Pins in `runtime_contract.py` und baut Tcl, Tk und die dazu passende CPython-3.14-Erweiterung `_tkinter` in einem neuen Ziel außerhalb von OneDrive. Installierte Python-Header und Quellheader müssen bis auf die Zeilenenden bytegleich sein (der python.org-Installer für Windows liefert CRLF, der Git-Export LF). Native Ziele: macOS arm64, Windows x64 mit MSVC, Linux x64 mit verpflichtendem ATK/AT-SPI. Es gibt keine Systeminstallation.
 
 `runtime_patches.py` wendet ausschließlich die in `patches.json` dokumentierten Korrekturen auf die exportierte Baukopie an. Quellpin, Originalbytes, Diffbytes und Ergebnisbytes müssen passen. Originalquellen bleiben unverändert. Die Mac-Korrektur betrifft bestätigte native Verträge bei Aktionswarteschlange, deaktivierten Inhalten, Fokus, Verfügbarkeit, Kennungen, Hilfe und Aufgabengruppen. Jede vorgemerkte Aktion besitzt Interpreter und Kommandodaten; entfernte, versteckte, deaktivierte oder ersetzte Ziele werden verworfen. Interpreterlöschung entfernt ausstehende Aktionen.
 

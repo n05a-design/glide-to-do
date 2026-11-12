@@ -18,7 +18,8 @@ import sys
 import sysconfig
 import tarfile
 
-from runtime_contract import PINS, build_destination, export_identity, extension_command, python_pin, require_atk
+from runtime_contract import (PINS, build_destination, export_identity, extension_command, python_pin, require_atk,
+                              same_header)
 from runtime_patches import apply_patches
 
 
@@ -67,7 +68,7 @@ def build(tcl_source, tk_source, python_source, destination):
     for kind, source, pin in (('tcl', tcl_source, PINS['tcl']), ('tk', tk_source, PINS['tk']),
                               ('python', python_source, python_commit)):
         source_copy(source, pin, sources / kind)
-    if (sources / 'python/Include/patchlevel.h').read_bytes() != (include / 'patchlevel.h').read_bytes():
+    if not same_header((include / 'patchlevel.h').read_bytes(), (sources / 'python/Include/patchlevel.h').read_bytes()):
         raise ValueError('Installierter Python-Header weicht vom gepinnten Original ab.')
     patches = apply_patches(sources / 'tk', system)
     export_identities = {}
