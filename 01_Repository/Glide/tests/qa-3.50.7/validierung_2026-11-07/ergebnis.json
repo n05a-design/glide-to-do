@@ -1,0 +1,234 @@
+{
+  "date": "2026-11-07",
+  "version": "3.50.7",
+  "data_schema": 26,
+  "base_main": "8e71ae5286f6cfcc7f738cb238c29c180c3f289c",
+  "base_pr69": "13bcb66a7ba2007c3d8828ba1e0e082cb8918c91",
+  "branch": "codex/glide-3.50.7-validierung",
+  "attachment_original_sha256": null,
+  "attachment_note": "Vollständig gelesen; ursprünglicher Download beim Abschluss nicht mehr verfügbar, kein Hash erfunden.",
+  "source_inventory": {
+    "count": 266,
+    "algorithm": "SHA-256 der UTF-8-Zeilen aus sortiertem relativem Pfad, Tab, Datei-SHA-256 und LF",
+    "sha256": "af7dca10c5a0bdad3a8910ce3a92390fe72c2becf08aa93129a98e546061fc49"
+  },
+  "inputs_sha256": {
+    "LICENSE": "9221c2f936159b8446d329249fb4c0f25be510f447383a0f13336ac7985668a3",
+    "01_Repository/Glide/VERSION": "53566a4e62327187870538c6e0391b49457aad831bc236c77a5c61e0ed722644",
+    "01_Repository/Glide/LICENSE.md": "ae2b316fa35bedd6f4a056ab6b7ca83b4adf29635590fce7b0b4892e8b9b56a4",
+    "01_Repository/Glide/src/glide/app.pyw": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd",
+    "01_Repository/Glide/src/glide/brand.py": "3e4f00f105cc496842296254bda11dbe187a735825fb7055111e2935faed8a93",
+    "01_Repository/Glide/src/glide/release_notes.py": "c5872cf7a2c82c57ba35c5bcc667e404cededa1455ae9b17a7940afb3933c735",
+    "01_Repository/Glide/packaging/paket/project_license.py": "1221b03734d3f62ded5bbfc3049fcf69eae6a87aef795e9da4c60e1fd2cbbeec",
+    "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_macos.py": "bc48e060b90362c4c60a3340383e275d86cc0a03bf1e4c8b3f26ccb8e5a8af35",
+    "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_windows.py": "a268f1e75b3fe0502fe92ccb3c16a9afd43085f4139723dd91054a1a993380ac",
+    "01_Repository/Glide/packaging/paket/macos_build_run.py": "f91326414a5ee0dd39186074c894025b6d783347c11c96f604e96b890ac523df",
+    "01_Repository/Glide/tests/integration/test_glide.py": "95bba0efb0566da8c1a0e37f7e1dbbb7c099ba621c1701400ce71b1d9a7595cd",
+    "01_Repository/Glide/tests/integration/test_arbeitsmodi.py": "1ea03ef2236a246b83c577a77a441b9cad946bf34e919937f191c7c2c44a8daf",
+    "01_Repository/Glide/tests/integration/test_uiux_paket.py": "6144c2337c86c9839bdb297315cc24c6218e3b28f9716a3518f3638232be332a",
+    "01_Repository/Glide/tests/tools/test_project_license.py": "c652894b0989c964796f3d5f07e6bcf78324940a97e0d0b815c760dafd4cba47",
+    "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.50.7.pyw": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd",
+    "07_Python-Versionen/LICENSE": "9221c2f936159b8446d329249fb4c0f25be510f447383a0f13336ac7985668a3",
+    "05_Probelisten_Testdaten/Showcase/Glide-Showcase.glidebackup": "2e5cc1ba2c960ce89cd3f4a06927b6b69f6f92abab7ead0424f38ab44d68a7e0",
+    "05_Probelisten_Testdaten/Showcase/Glide-Showcase.glidetemplates": "688a2d21c8016d8a618ea67039b44261e14a70b9371716f95771b1b57be4bdac",
+    "05_Probelisten_Testdaten/Showcase/Glide-Showcase_App.glideapp": "e3f0d5cec732bfcec4be1cab1573b1c246e3dc9c11aca90c37e2471f227bf490",
+    "05_Probelisten_Testdaten/Showcase/manifest.json": "ed3471e0275dbbc16754ac076130dd5d6d71c98da34a9e73034ea1eb67a2dfe6",
+    "05_Probelisten_Testdaten/Showcase/README.md": "906c98c789b5c12ab97f345c63c2bd84fcc5e98d16824a9fe919cae8988d9b1e",
+    "05_Probelisten_Testdaten/Showcase/Showcase_starten.pyw": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319"
+  },
+  "runtime": {
+    "platform": "Windows 11 AMD Ryzen 7 5800X3D",
+    "python": "3.14.7",
+    "tcl": "9.1.0",
+    "tk": "9.1.0",
+    "tkinter_sha256": "e6c1229220998098965f041d053e587eea6f5a74b5dbff38e2348a2aa5bf21c0",
+    "data": "Ausschließlich isolierte synthetische GLIDE_DATA_DIR-Bestände"
+  },
+  "regression_round": [
+    {
+      "name": "test_glide",
+      "command": [
+        "python",
+        "-B",
+        "tests/integration/test_glide.py"
+      ],
+      "exitcode": 1,
+      "seconds": 16.44,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "anhangsnamen",
+      "command": [
+        "python",
+        "-B",
+        "tests/integration/test_arbeitsmodi.py",
+        "--fall",
+        "anhangsnamen",
+        "--report",
+        "anhangsnamen.json"
+      ],
+      "exitcode": 0,
+      "seconds": 19.15,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "test_uiux_paket",
+      "command": [
+        "python",
+        "-B",
+        "tests/integration/test_uiux_paket.py"
+      ],
+      "exitcode": 0,
+      "seconds": 202.78,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "seitenleistenabstand3504",
+      "command": [
+        "python",
+        "-B",
+        "tests/integration/test_arbeitsmodi.py",
+        "--fall",
+        "seitenleistenabstand3504",
+        "--report",
+        "seitenleistenabstand3504.json"
+      ],
+      "exitcode": 0,
+      "seconds": 16.84,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "unterzeile",
+      "command": [
+        "python",
+        "-B",
+        "tests/integration/test_arbeitsmodi.py",
+        "--fall",
+        "unterzeile",
+        "--report",
+        "unterzeile.json"
+      ],
+      "exitcode": 0,
+      "seconds": 83.55,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "showcase_abgleich",
+      "command": [
+        "python",
+        "-B",
+        "scripts/pflege/showcase_abgleich.py"
+      ],
+      "exitcode": 0,
+      "seconds": 35.02,
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    }
+  ],
+  "final_reruns": [
+    {
+      "name": "core-abschluss",
+      "exitcode": 0,
+      "log_sha256": "eac6769e8b9f6531f5d0571cc21c7bbc632e9dcba4bd8ae9d290a70bedcc4031",
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    },
+    {
+      "name": "seitenleisten-abschluss",
+      "exitcode": 0,
+      "log_sha256": "2c410fb4073a909015c15db0b5b05bc39255b9ffe79cec701ba33fa7944fd1e3",
+      "app_sha256": "b8c0e6a79d05cee055dd57c15d84c08e0b9b7a78b889da0109c2c90b066df2fd"
+    }
+  ],
+  "sidebars": {
+    "configurations": 48,
+    "visible_rows": 384,
+    "font_styles": 4,
+    "font_sizes": 3,
+    "designs": 2,
+    "widths": [
+      860,
+      1280
+    ],
+    "restarts": 4,
+    "result": "erfolgreich",
+    "report_sha256": "16ec0f016239b82ef22c27c8d40ba51232462201495e38755af688d3d9d3b902"
+  },
+  "anchors": {
+    "checks": 322,
+    "errors": []
+  },
+  "remote_pr69": {
+    "head": "13bcb66a7ba2007c3d8828ba1e0e082cb8918c91",
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/42409344418",
+    "grundstufe": "success",
+    "windows": "failure: alter Unterzeilenrahmenvergleich",
+    "linux": "failure: kompakt und pinnwandleiste, 59/61 Arbeitsmodi grün",
+    "artifacts": [
+      {
+        "artifact_id": 13589594328,
+        "archive_sha256": "17673cb610fe86099263ed4b813ed7a8ef272d98981432545129ff002b54672d",
+        "statuses": {
+          "ausgeführt": 107,
+          "fehlgeschlagen": 1,
+          "übersprungen": 17
+        },
+        "failed": [
+          {
+            "schritt": "test_arbeitsmodi",
+            "status": "fehlgeschlagen",
+            "grund": "Exitcode 1",
+            "exitcode": 1
+          }
+        ]
+      },
+      {
+        "artifact_id": 13590525241,
+        "archive_sha256": "59275aa6551b650e959df6a01589b4bd2bb2dc37d52131b3f02e9ef0ec1cf543",
+        "statuses": {
+          "ausgeführt": 8,
+          "fehlgeschlagen": 1,
+          "übersprungen": 116
+        },
+        "failed": [
+          {
+            "schritt": "test_glide",
+            "status": "fehlgeschlagen",
+            "grund": "Exitcode 1",
+            "exitcode": 1
+          }
+        ]
+      }
+    ],
+    "packages": "skipped",
+    "reader": "skipped"
+  },
+  "metadata": {
+    "approved": true,
+    "updated": true,
+    "readback_verified": true,
+    "topics_count": 15
+  },
+  "retention": {
+    "files": 226,
+    "active_links": 81,
+    "archive_sha256": "4ca0e21851ed463545216144f073db9f26b2d4207b6f429b4d4876512ea831f4",
+    "manifest": "aufbewahrung.json"
+  },
+  "presentation": {
+    "slides": 6,
+    "filename": "Glide-3.50.7-Marktbericht-geprueft.pptx",
+    "sha256": "1e6646af5c466564bc24404cedbc2c6d81e4aee8ccec53e0df0450ef93b99218",
+    "reference_sha256": "52396c3a70dc11d35989bb4e3f9a96d2c728c5eba8a1aad96920cfe24cff59fa",
+    "validation": "Paket- und Layoutprüfung null Befunde; gerenderte Sichtprüfung; keine native PowerPoint-Ausführung"
+  },
+  "full_native_acceptance": false,
+  "release_created": false,
+  "tag_created": false,
+  "merged": false,
+  "strict_ci_final": {
+    "status": "ausstehend"
+  },
+  "integrity_stop_prior_run": {
+    "reason": "README und portable Lizenzverweise während des Laufs geändert; korrekter Integritätsstopp, Unit-Exitcode 0, Gesamtlauf rot",
+    "raw_report_sha256": "edf5dcbf94a8541af837e50881a815c645cb90665bc7ece51aca618d5a706ef1"
+  }
+}

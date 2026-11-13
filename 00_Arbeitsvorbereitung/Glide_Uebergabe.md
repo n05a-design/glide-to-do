@@ -100,7 +100,7 @@ Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überh
 |---|---|
 | Ausgangspunkt | 3.50.6 / Format 26 in PR #69, anfangs `be379408`, ergänzt auf `13bcb66a`; PR beim Abgleich offen, `main` `8e71ae52` trägt noch 3.50.5 |
 | Eigene Arbeit | `codex/glide-3.50.7-validierung`: Branding/MPL/Statusabgleich und gezielte Seitenleistenkorrektur; Zielversion 3.50.7 nach D73, kein neues Datenformat |
-| Python und Showcase | Versionswechsel und separater Lieferabgleich; konkrete SHA-256 und Testergebnisse im [Rundennachweis](https://github.com/n05a-design/glide-to-do/blob/45ab307e2d2fcf5892a806880faaf344a3c058a1/01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/README.md) |
+| Python und Showcase | Versionswechsel und separater Lieferabgleich; konkrete SHA-256 und Testergebnisse im [Rundennachweis](../01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/README.md) |
 | Eigenständige Pakete | Windows 3.50.5 auf früherem Hash; Mac 3.50.6 lokal auf `f4339a5d…`, vor Seitenleisten-/Anhangsnachträgen. Kein Paketnachweis für 3.50.7. Diese Versionen bleiben getrennt. |
 | Automatisierte QA | Strenge Windows-Grundstufe auf Startbasis grün; neue Prüfergebnisse auf aktuellen Bytes ausschließlich im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). PR-#69-Vollmatrix auf `13bcb66a` rot: Windows-Unterzeilentest, Linux kompakt/pinnwandleiste. Stopps und übersprungene Folgen sind kein Erfolg. |
 | Native und menschliche QA | Mac-Befund `test_bedienung33316` offen, dortiger Vollmodus nach 80 Schritten gestoppt und 44 Folgeschritte nicht ausgeführt. Gemeldete und bestätigte Teilabnahmen vom 07.11. bleiben ihrem Vorzustand zugeordnet. Neue Gesamt-/DPI-/Mehrmonitorabnahme offen; Reader nach D58 zurückgestellt. |
