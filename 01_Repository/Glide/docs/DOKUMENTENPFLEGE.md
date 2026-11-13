@@ -2,7 +2,7 @@
 
 **Schutzauftrag 08.11.2026:** Im laufenden Gesamt-/Steps-Audit bleiben die historischen Originalnachweise erhalten. Die vorbereitete Alterskürzung von `tests/qa-3.50.0` und der zugehörigen Releaseplanungsfixture wurde zurückgenommen; 225 Dateien gegen die Git-Blobs von Main `d7e017f` geprüft. `ablagegroesse.GESCHUETZTE_QA_VERSIONEN` und `GESCHUETZTE_REFERENZEN` schützen diesen konkreten Bestand auch vor `ablage_kuerzen.py`. Die Größen-, Bild- und Fremdrestprüfungen gelten weiter. Der ursprüngliche Kürzungsnachweis bleibt datierte Vorgeschichte, der [Bewahrungsnachtrag](../tests/qa-3.50.7/validierung_2026-11-07/bewahrung_nachtrag.json) belegt die Rücknahme. Allgemeine neue Archivkopien entstehen dadurch nicht.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 
@@ -22,44 +22,59 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 - **Belege bleiben Belege:** Nutzeraufträge, Messwerte und Prüfergebnisse innerhalb der Aufbewahrung werden nicht umetikettiert oder nachträglich geändert.
 - **Nutzerreferenzen für offene Anforderungen:** Der Auftrag vom 15.10.2026 verlangt, das [UI-/UX-Paket](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) mit Originalauftrag und 28 Screenshots für spätere Agenten zu erhalten. Das sind Eingangsreferenzen, keine neu erzeugten QA-Fensterbilder. Solange Anforderungen oder ihre Referenzfunktion offen sind, nicht mit der Drei-Versionen-Grenze für QA-Aufnahmen entsorgen. Originalbilder wegen Kontoangaben lokal und vom Git-Upload ausgeschlossen halten; bei Übergaben ausdrücklich mitgeben. Nach Abschluss Zweck und Verlinkung prüfen, keine ungeprüfte Sammellöschung.
 
-## Dokumente und ihre Zuständigkeit
+<a id="dokumente-und-ihre-zuständigkeit"></a>
 
-| Thema | Einziges Dokument |
-|---|---|
-| Einstieg, Stand, Regeln, nächste Schritte | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` |
-| Aufgaben, Backlog, Stufen, Ziele | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` |
-| Analyse (Funktionen, Oberfläche, Entscheidungen, Nutzung, Abgleich Dokumentation ↔ Code) | `00_Arbeitsvorbereitung/Glide_Analyse.md` |
-| Markt und Vorbilder | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` |
-| Manuelle Prüfung (Mac, Windows, Linux) | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` |
-| Ausführbarer UI-/UX-Nutzerauftrag und Eingangsreferenzen vom 15.10.2026 | `00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`; Originalauftrag, Bildzuordnung und Manifest daneben; Aufgabenstatus ausschließlich im Entwicklungsplan |
-| Konkrete Gestaltungsvorgaben des Benutzers, Informationshierarchie, Buttonschutz | [DESIGN_RICHTLINIEN.md](DESIGN_RICHTLINIEN.md); bestehende Produkt-/Architekturregeln referenzieren, nicht kopieren |
-| Entscheidungen, Leitgedanken des Inhabers, Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
-| Produktgrenzen und Prinzipien | [01_PRODUCT_CONSTRAINTS.md](01_PRODUCT_CONSTRAINTS.md) |
-| Architektur, Performance-Regeln, Tk-Fallstricke | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) |
-| Verbindliches Modul-, Feature- und Bausteininventar, Wiederverwendung, Testkatalog und Systempflege | [Glide-System](../src/glide/README.md) (einzige vollständige aktuelle Tabelle) |
-| Prüfplan | [05_QA_TESTPLAN.md](05_QA_TESTPLAN.md) |
-| Datenformat, Backups, Austauschformat | [06_DATA_BACKUP_MIGRATION.md](06_DATA_BACKUP_MIGRATION.md) |
-| Geprüfter Stand | [07_QA_BERICHT.md](07_QA_BERICHT.md) |
-| Veröffentlichung, Lizenz, Signierung, Store, GitHub-Auftritt | [10_VEROEFFENTLICHUNG.md](10_VEROEFFENTLICHUNG.md) |
-| Verhalten der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
-| Vorlagen in der Praxis | [27_VORLAGEN_PRAXISANLEITUNG.md](27_VORLAGEN_PRAXISANLEITUNG.md) |
-| Sicherheitsregeln und Vertrauensgrenzen der Anwendung | `SECURITY.md` im Quellbaum; Meldeweg und Schutz des öffentlichen Repositorys in `SECURITY.md` der Wurzel |
-| Eingereichte externe Analysen, Validierungen und Gutachten | kein eigenes Dokument: Einordnung in der Analyse (§13.8, §13.10, §13.12), Aufgaben im Entwicklungsplan, Eingangshash und Prüfprovenienz im QA-Nachweis der Runde |
-| Einzelentscheidungen mit eigenem Gegenstand | `decisions/` (Produktregister, tkdnd, Arbeitsbegleiter, Gruppe/Ordner/Überschrift, Systembenachrichtigungen) |
-| Änderungsverlauf | `CHANGELOG.md` (sieben neueste Versionen ausführlich, ältere als Zeile) |
+## Zuständigkeiten und Änderungsbezüge
 
-Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie gehören in den [Index](00_INDEX.md).
+Diese Tabelle ist die zentrale Pflegematrix. Sie verbindet den jeweils führenden Inhalt mit seinen Auswirkungen. Bei einer Änderung die betroffenen Zeilen und ihre Folgewirkungen prüfen; verknüpfte Dokumente nur ändern, wenn sich deren Aussage, Bedienweg, Vertrag oder Nachweis tatsächlich ändert. Ein bloßer Link auf die führende Quelle benötigt keine erneute Statuskopie.
+
+| Geänderter Aspekt | Führende Quelle | Zusätzlich auf Auswirkungen prüfen |
+|---|---|---|
+| Öffentlicher Projekteinstieg und Navigation | [Projekt-README](../../../README.md), [Contributing-Einstieg](../../../CONTRIBUTING.md) für Mitwirkung | [Dokumentationsindex](00_INDEX.md), [technischer Einstieg](../README.md), [GitHub-Auftritt](10_VEROEFFENTLICHUNG.md#github-auftritt); jeweils Einstieg und Links pflegen, keine eigenen Fachregister |
+| Aufgaben, Prioritäten, Auftrag und Restumfang | [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) als einzige Roadmap | [Arbeitsrichtung](ARBEITSRICHTUNG.md) bei Entscheidungen; [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) für die nächste Sitzung; Implementierungs- und Abnahmestatus mit [QA](07_QA_BERICHT.md) abgleichen |
+| Arbeitsstand und nächste Sitzung | [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) | Auf Roadmap und QA verweisen; keine zweite Aufgaben-, Messwert- oder Paketstatusliste aufbauen |
+| Produktentscheidung und Arbeitsablauf | [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Arbeitsregeln](../AGENTS.md) als Einstieg | Roadmap, [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), betroffene Fachverträge und Contributing-Einstieg; [CLAUDE.md](../../../CLAUDE.md) verweist auf die Regeln |
+| Technischer oder fachlicher Befund | [Analyse](../../../00_Arbeitsvorbereitung/Glide_Analyse.md) | Betroffene Fachquelle und Systemrisiko berichtigen; Maßnahmen in der Roadmap, ausgeführte Prüfungen mit Provenienz im QA-Nachweis |
+| Markt, Vorbilder und externe Vorschläge | [Markt und Vorbilder](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md) | Quellen und Recherchedatum, Produktgrenzen und Roadmap; Vorschlag, Auftrag und Umsetzung getrennt halten |
+| Nutzerfunktion oder Bedienverhalten | [Funktionen](20_FUNKTIONEN.md) | [Glide-System](../src/glide/README.md) für Feature-/Modul-/Testbezug, Roadmap, Prüfplan und QA; Nutzerübersicht in der Projekt-README, [Neuerungenkatalog](../src/glide/release_notes.py) und [CHANGELOG](../CHANGELOG.md) bei tatsächlicher Funktionsänderung |
+| Architektur und bestehende technische Verträge | [Architektur](02_ARCHITECTURE.md) | Systemregister, betroffene Funktionen, Daten-/Sicherheitsverträge und Tests; bei Entkopplung zusätzlich Shell-Konzept und Roadmap |
+| Geplante Shell-Grenzen und Entkopplung | [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur für den tatsächlichen Istzustand; Systemregister für vorhandene Module, Kopplungen und Übernahmegrenzen; WA-49/50 in der Roadmap für Umfang und Status; Prüfplan/QA für Isolations- und Plattformnachweise |
+| Module, Features, Bausteine, Wiederverwendung und Testinventar | [Glide-System](../src/glide/README.md) als einziges vollständiges Register | Architektur und Shell-Konzept bei geänderten Grenzen; Funktionen bei geändertem Verhalten; tatsächliche Quell-/Paketmanifeste und Tests. [Systemversion](../GLIDE_SYSTEM_VERSION) und [Versionsverlauf](../src/glide/README.md#versionsverlauf-des-glide-systems) nach den dortigen Versionsregeln pflegen |
+| Datenformat, Speicherpfad, Backup, Import oder Export | [Daten und Migration](06_DATA_BACKUP_MIGRATION.md) | Funktionen, Architektur, Systemregister, [technische Sicherheit](../SECURITY.md), Migrations-/Rundlauftests, Fixtures und Lieferwege; bei Pfad-/Startentkopplung auch Shell-Konzept. Formatstufen kommen aus dem Code |
+| Gestaltung, Schriften, Fokus und Fensterverhalten | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Betroffene Funktionen, Systembausteine, Architektur/Shell bei technischen Grenzen sowie automatisierte und [manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md); Schriftlizenzen und Paketressourcen bei Fontänderungen |
+| Logo, Markenfigur und Grafikressourcen | [Grafik-Master](../../../20_Grafik_Master/README.md), [Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md) für Gismo | App-Ressourcen, Design, öffentliche Bilder, Betriebssystem-/Paketsymbole und Herkunft/Lizenzen; Ableitungen aus den Mastern erzeugen, keine unabhängigen Originale pflegen |
+| Prüfverfahren, Tests und Pflichtfälle | [Prüfplan](05_QA_TESTPLAN.md); [manuelle Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) für menschliche Fälle | Tatsächliche Tests/CI, [Prüfwerkzeuge](../tests/README.md), System-Testkatalog, betroffene Funktionsverträge und QA; Falllisten möglichst aus ausführbaren Registern ableiten |
+| Prüfergebnis, Paketstatus oder Abnahme | [QA-Bericht](07_QA_BERICHT.md) mit datiertem Originalnachweis | Roadmap und Übergabe auf diesen Beleg ausrichten; frühere Rotläufe, Skips und manuelle Fälle erhalten. Kein neues Ergebnis aus einer redaktionellen Änderung ableiten |
+| Bau, Laufzeit, Abhängigkeit und Lieferung | [Paketierung](../packaging/README.md), [Runtime](../packaging/runtime/README.md), [Pflegewerkzeuge](../scripts/pflege/README.md) für ihre jeweiligen Ausführungswege | Tatsächliche Requirements, Manifeste, Workflow-/Bauskripte, Systemregister, Übernahmeverträge, Ressourcen/Lizenzen; Quell-/Python-Abgleich und native Bau-/Startbelege im QA-Bericht |
+| Vorlage, Beispiel oder Showcase | [Vorlagenpraxis](27_VORLAGEN_PRAXISANLEITUNG.md), [Testfixtures](../tests/fixtures/README.md), [Showcase-Quelle](../tests/fixtures/showcase/README.md) | Mitgelieferte Ressourcen, Funktionsbeschreibung, Rundlauf-/Fixtureprüfungen und [öffentlicher Showcase](../../../05_Probelisten_Testdaten/Showcase/README.md); Lieferkopien über vorhandene Werkzeuge abgleichen |
+| Veröffentlichung, Lizenz und Produktidentität | [Veröffentlichung](10_VEROEFFENTLICHUNG.md), [Produktregister](decisions/PRODUCT_IDENTITY.md), [Lizenztext](../../../LICENSE) und [Geltungsbereich](../LICENSE.md) | Bau-/Store-Konfiguration, Drittkomponenten und Original-Lizenzbestände, öffentliche Texte, QA und Inhaberfreigabe; technische IDs ausschließlich im Produktregister führen |
+| Sicherheitsverhalten und Meldeweg | [Technische Sicherheit](../SECURITY.md), [öffentlicher Meldeweg](../../../SECURITY.md) | Daten-/Import-/Exportverträge, Architektur, Abhängigkeiten, Tests, Systemrisiken und vertraulicher Meldekanal; die beiden Sicherheitsdokumente haben getrennte Aufgaben |
+| Einzelentscheidung zu einem abgegrenzten Thema | [Entscheidungsindex](00_INDEX.md#einzelentscheidungen) mit jeweiligem Fachdokument | Entscheidungsregister, Roadmap und betroffene Funktions-/Architekturverträge; Gismo, Gliederung und Systembenachrichtigungen bleiben an ihren Fachquellen |
+| UI-/UX-Originalauftrag und Eingangsreferenzen | [Ausführungsprompt](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) mit Originalauftrag und Bildzuordnung daneben | Designvertrag und Roadmap; Aufgabenstatus ausschließlich im Entwicklungsplan, Originalbilder lokal schützen |
+| App-, System- oder Formatversion | [VERSION](../VERSION), [GLIDE_SYSTEM_VERSION](../GLIDE_SYSTEM_VERSION), Formatkonstanten im Code | [Versionswerkzeuge](../scripts/pflege/README.md), Systemverlauf und betroffene aktive Standzeilen; jede Version behält ihren eigenen Zweck, datierte Prüfstände bleiben unverändert |
+| Änderungsverlauf | [CHANGELOG](../CHANGELOG.md) | Tatsächliche Änderung beschreiben und auf Fachquelle/Nachweis verweisen; sieben neueste Versionen ausführlich, ältere als Zeile. Kein zweites Backlog und keine zweite aktuelle QA-Matrix |
+| Dokumentpfad, Zuständigkeit oder Gliederung | Diese Pflegematrix und [Dokumentationsindex](00_INDEX.md) | Eingehende Links und Abschnittsanker, Projekt-/Bereichs-READMEs und Contributing prüfen; eindeutige Inhalte vor einer Konsolidierung übernehmen und alte Anker bei Bedarf als Alias erhalten |
+
+Neue Dokumente nur, wenn kein bestehendes das Thema trägt. Neue Fachquellen gehören in diese Matrix und den [Index](00_INDEX.md); Einstiegsdateien verweisen auf sie. Der datierte [Bestandsaufnahmebericht](../../../00_Arbeitsvorbereitung/Glide_Projektbestandsaufnahme_2026-11-10.md) bleibt ein historischer Befund und wird nicht als zweites aktuelles Systemregister fortgeschrieben.
+
+## Abgleich ohne doppelte Pflege
+
+1. **Führende Quelle ändern.** Verhalten aus Code und Tests belegen; Ziele als Entwurf und Prüfstände mit Datum, Commit und Plattform kennzeichnen.
+2. **Auswirkungen verfolgen.** Die passende Matrixzeile und betroffene Folgeaspekte abarbeiten. In der Roadmap den Umfang und Rest, im datierten QA-Nachweis die tatsächlich geänderten Quellen, Prüfungen und begründeten Grenzen festhalten. Keine identische Checkliste in jedem Dokument anlegen.
+3. **Zusammenfassen oder verlinken.** Einstiegsseiten dürfen kurze Erklärungen für ihre Zielgruppe enthalten. Vollständige Modul-/Testlisten, Aufgabenstatus, Messwerte und Freigabematrizen stehen jeweils nur an ihrer führenden Quelle. Unvermeidbare Liefer-/Lizenzkopien werden erzeugt oder per Hash verglichen; datierte Originalbelege bleiben unverändert.
+4. **Konsolidierung absichern.** Ähnliche Dokumente nach ihrem Zweck vergleichen, einzigartige Anforderungen und Belege erhalten, Verweise umstellen und erst dann tatsächlich entbehrliche Dateien entfernen. Architektur-Istzustand, Shell-Zielbild und Systeminventar ergänzen einander und bleiben getrennte Fachquellen.
+5. **Prüfung abschließen.** Standprüfung, lokale Dateiziele einschließlich HTML-Navigation, Abschnittsanker, Systeminventar und passende Werkzeugtests prüfen. Vor einem Commit die CI-Grundstufe ausführen. Diese Strukturprüfungen ersetzen keinen fachlichen Abgleich und keine App-/Plattformabnahme.
 
 ## Pflege bei jeder Runde
 
 - Standzeile („Stand TT.MM.JJJJ · Glide X.Y.Z …“) und Inhalt zusammen nachführen; `versionswechsel.py` hebt die Standzeilen, ersetzt aber keinen inhaltlichen Abgleich von Status, Entscheidungen und Prüfgrenzen. Aktive Tabellen, Einstieg und Entscheidungsregister auf dieselbe aktuelle Statusquelle ausrichten; ein neuer Banner allein berichtigt keine alte Lieferzeile. Datierte Belege unverändert lassen.
-- Neue Funktion: Abschnitt in [Funktionen](20_FUNKTIONEN.md), Zeile im [Glide-System](../src/glide/README.md), Marke im Entwicklungsplan, Zeile im QA-Bericht, Eintrag im CHANGELOG. Neue/umbenannte/gelöschte Module und Tests erfordern ebenfalls im selben Commit System-und-Modulpflege; die CI prüft Dateivollständigkeit. **Eigenständige Systemversion:** `GLIDE_SYSTEM_VERSION` und der Versionsverlauf im Glide-System werden bei jeder inhaltlichen Pflege synchron aktualisiert (V1.0 als Initialstand, unabhängig von der Glide-App-Version); keine versionsbenannten Kopien des Katalogs erstellen. Keine eigene Vertragsdatei je Version.
+- Die [Pflegematrix](#zuständigkeiten-und-änderungsbezüge) nach den tatsächlich betroffenen Aspekten abarbeiten. Neue/umbenannte/gelöschte Module und Tests erfordern im selben Commit System-und-Modulpflege; die CI prüft Dateivollständigkeit. Versionsregeln ausschließlich im [Systemregister](../src/glide/README.md#7-system-und-modulpflege) pflegen. Keine eigene Vertragsdatei je Version.
 - Vor dem Commit `python3 -B tests/tools/ci_grundstufe.py` (Stand, Links, Index, Datenschutz, Ablagegröße, Synchronisation).
 - Produktionskommentare erklären Invarianten, technische Gründe und Plattformbesonderheiten; Auftragsnummern und Entwicklungserzählungen gehören ins CHANGELOG. Eine reine Kommentarbereinigung lässt den Syntaxbaum unverändert.
 
 ## Was die Standprüfung erzwingt
 
-`tests/tools/standpruefung.py` (Regeln R1–R15) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
+`tests/tools/standpruefung.py` (Regeln R1–R15) prüft im Git-Checkout die bereits versionierten aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Neue, noch nicht vorgemerkte Dateien separat in den Link-/Inhaltsabgleich aufnehmen; nach Aufnahme in Git werden sie vom regulären Lauf erfasst. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; datierte Bestandsaufnahmen bleiben historische Befunde.
 
 Die Standprüfung kontrolliert definierte Muster und Dateiziele. Beim fachlichen Abgleich zusätzlich Symbolnamen, Aufrufer und relevante Tests im Quellstand prüfen. Bei Markdown-Links mit Fragment auch die Zielüberschrift oder den expliziten HTML-Anker prüfen. Releaseaussagen mit dem tatsächlich getesteten Commit und den jeweiligen Jobs abgleichen.
 
@@ -77,6 +92,6 @@ Die [Bereinigung vom 04.11.2026](https://github.com/n05a-design/glide-to-do/blob
 
 ## Öffentliche Featurepflege ab 3.50.0
 
-Bei jeder erfolgreich umgesetzten oder geänderten Nutzerfunktion werden im selben Arbeitsgang README › „Was Glide kann“, `20_FUNKTIONEN.md`, `release_notes.CATALOG`, CHANGELOG und Entwicklungsplan inhaltlich abgeglichen. Marketing nennt verfügbare Fähigkeiten und keine ungeprüften Versprechen. Datierte Prüfbelege bleiben unverändert; aktuelle Lieferstände kommen ausschließlich aus dem neuesten QA-/Liefernachweis. Die Standprüfung bleibt Pflicht. Öffentliche Bezeichnung von 3.50.0: „Erster öffentlicher Stand“, interner Status: „öffentliche erste Beta“.
+Die Zuordnung für Nutzerfunktionen steht in der [Pflegematrix](#zuständigkeiten-und-änderungsbezüge). Marketing nennt verfügbare Fähigkeiten und keine ungeprüften Versprechen; datierte Prüfbelege bleiben unverändert. Die Bezeichnung „Erster öffentlicher Stand“ (intern „öffentliche erste Beta“) gehört zur historischen D58-Entscheidung für 3.50.0; aktive Produkttexte folgen D74 in der [Arbeitsrichtung](ARBEITSRICHTUNG.md).
 
 **Versionspflege 05.11.2026, 3.50.4:** 19 überalterte 3.47.0-Dateien vorab bytegleich lokal gesichert und nach der vorhandenen Aufbewahrungsregel gekürzt; acht historische Links auf bytegleich verifizierte Git-Fassung umgestellt. Git-Index unverändert. Pfad-/Hashmanifest im 3.50.4-Abnahmenachweis.

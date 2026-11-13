@@ -25,6 +25,16 @@
   <a href="#in-english">English</a>
 </p>
 
+<p align="center">
+  <strong>Projektentwicklung</strong><br>
+  <a href="CONTRIBUTING.md">An Glide arbeiten</a> ·
+  <a href="00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md">Roadmap</a> ·
+  <a href="01_Repository/Glide/docs/20_FUNKTIONEN.md">Funktionen</a> ·
+  <a href="01_Repository/Glide/docs/02_ARCHITECTURE.md">Aufbau der App</a> ·
+  <a href="CONTRIBUTING.md#entwicklungsablauf">Entwicklungsablauf</a> ·
+  <a href="01_Repository/Glide/docs/07_QA_BERICHT.md">Qualität</a>
+</p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/glide-3.50.5-heute-dunkel.png">
   <img alt="Heute mit nächster Aufgabe, verspäteten Aufgaben, Tagesplan und Fälligkeiten" src="01_Repository/Glide/assets/marketing/glide-3.50.5-heute.png">
@@ -121,7 +131,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Der aktuelle Quell- und Python-Lieferstand ist Glide 3.55.1 mit Datenformat 26 und Glide-System V1.17.2. Die Tagesplanung zeigt geplanten Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität, fehlende Schätzungen und Gründe für Überlastung. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
+Der aktuelle Quell- und Python-Lieferstand ist Glide 3.55.1 mit Datenformat 26; das [Glide-System](01_Repository/Glide/src/glide/README.md) führt seinen Bestand mit [eigener Katalogversion](01_Repository/Glide/GLIDE_SYSTEM_VERSION). Die Tagesplanung zeigt geplanten Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität, fehlende Schätzungen und Gründe für Überlastung. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -155,7 +165,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 12.11.2026 · Glide 3.55.1
+Stand 13.11.2026 · Glide 3.55.1
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 
@@ -164,7 +174,8 @@ Quellstand, automatisierte Prüfungen und native Pakete sind im [QA-Bericht](01_
 - [Quellcode und Entwicklung](01_Repository/Glide/README.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Markt und Vorbilder](00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md)
 - [Technischer Quellstand](01_Repository/Glide/VERSION)
 - [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Backups](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md)
-- [Glide-System und wiederverwendbare Bestandteile](01_Repository/Glide/src/glide/README.md) · [Übernahmegrundlage für Steps und weitere Projekte](01_Repository/Glide/src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte)
+- [Glide-System und wiederverwendbare Bestandteile](01_Repository/Glide/src/glide/README.md) · [Shell-Konzept](01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) · [Übernahmegrundlage für Steps und weitere Projekte](01_Repository/Glide/src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte)
+- [An Glide arbeiten](CONTRIBUTING.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md) · [Zuständigkeiten und Änderungsbezüge](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge)
 - [Sicherheitsrichtlinie](SECURITY.md) · [Technische Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) · [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md)
 
 ## Lizenz

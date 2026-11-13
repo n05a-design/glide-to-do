@@ -14,7 +14,7 @@
 
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 
 
@@ -276,7 +276,7 @@ Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklung
 4. Wirkung messen: gleiche Fixtures, Aufwärmlauf, kalte und warme Werte getrennt, Median und p95, Rohwerte. Profiling erklärt Ursachen, belegt aber keinen Gewinn.
 5. Bedienweg und Invarianten über echte Bindungen prüfen: Callbackfehler, Undo, Auswahl/Fokus/Scrollen, Größen-, Design- und Schriftwechsel, Tageswechsel, Neustart. Neue Pflichtsuite mit Gegenprobe gegen die Vorversion.
 6. Nach D51 bilden mehrere zusammengehörige Pakete eine Phase. Gezielte Prüfungen laufen während der Entwicklung; am Phasenende einmal den vollständigen Phasenstand mit `versionswechsel.py` versionieren und Quell-/Prüfstand einfrieren, dann Vollprüfung ([Prüfplan](05_QA_TESTPLAN.md)); ändert sich danach ein ausführbarer Pfad oder entsteht ein tatsächlicher Fehlerbefund, betroffene Prüfungen und Volllauf wiederholen. Keine Zwischenversion und Gesamtprüfung je kleiner Teilfunktion.
-7. Nach grüner Vollprüfung `abgleich_07.py`, Bundle bauen, SHA-256 und Signatur prüfen, Showcase ausliefern. CHANGELOG, Funktionen, QA-Bericht, Entwicklungsplan und Übergabe nachführen. Manuelle Plattformabnahme bleibt ausdrücklich offen.
+7. Nach grüner Vollprüfung `abgleich_07.py`, Bundle bauen, SHA-256 und Signatur prüfen, Showcase ausliefern. Dokumentation anhand der [zentralen Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) mit den tatsächlichen Auswirkungen abgleichen; sie verbindet auch Systemregister und Shell-Konzept. Manuelle Plattformabnahme bleibt ausdrücklich offen.
 
 **Abschluss:** Erledigt ist eine Änderung erst, wenn `07_Python-Versionen` und das Bundle den geprüften Stand tragen.
 

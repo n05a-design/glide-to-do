@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -8,7 +8,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 3.50.0 trägt die historische Bezeichnung **Erster öffentlicher Stand** (intern **öffentliche erste Beta**). Die aktuellen Quell- und Paketnachweise zu Glide 3.55.0 auf `766978d` stehen im [QA-Bericht](07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026). Für einen öffentlichen 3.55.0-Download gelten die nachfolgenden Freigabetore.
 
-- VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
+- Nutzerstand und betroffene Fach-/Lieferquellen anhand der [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) abgleichen; App-, System- und Formatversion nach ihren jeweiligen Regeln führen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
 - Python-Fassung bytegleich abgleichen, Showcase reproduzieren und getrennt prüfen; native Pakete mit Original-Lizenzbelegen bauen, kompilierten Quell-/Ressourcenabgleich und echte isolierte Startprobe durchführen.
 - Actions auf Commit-SHA und Bauabhängigkeiten auf Version/Originalhash festlegen (WA-43/45). Herkunft von Runtime, tkDnD, Schriften und Zeitzonen beilegen; Paketprüfsummen dokumentieren.

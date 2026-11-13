@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## Dokumentationspflege – 13.11.2026
+
+- Contributing-Einstieg und README-Navigation für Mitarbeit, Roadmap, Funktionen, Architektur, Entwicklungsablauf und Qualität ergänzt.
+- Führende Dokumente und Änderungsfolgen in der [Pflegematrix](docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) zusammengeführt; Arbeitsregeln, Einstiege und Fachquellen darauf ausgerichtet.
+- Shell-Konzept auf Zielarchitektur konzentriert, doppelte Modulaufzählungen ins bestehende Systemregister zurückgeführt und geplante Schnittstellen von vorhandenen Bausteinen abgegrenzt; Beschreibung von `RedoHistory` und den verbleibenden App-Kopplungen berichtigt.
+- Glide-Systemkatalog als Dokumentationskorrektur auf V1.17.3 fortgeschrieben; App 3.55.1 und Datenformat 26 unverändert. Prüfumfang und Grenzen im [Nachweis](tests/qa-3.55.1/dokumentation_2026-11-13/README.md).
+
 ## 3.55.1 – 12.11.2026
 
 - **Dateinamen unter macOS:** Die Speicherdialoge für JSON Canvas und App-Sicherung schlagen den Namen mit einfacher Dateiendung vor. Bestehende Sicherungen bleiben lesbar.

@@ -1,12 +1,14 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
+**Dokumentationspflege:** Führende Quellen und Änderungsfolgen stehen in der [zentralen Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Der [Abgleich vom 13.11.2026](#2187-dokumentationsbezüge-und-konsolidierung-13112026) verknüpft insbesondere Roadmap, Systembestand, Architektur und Shell-Zielbild.
+
 **GitHub-Projektseite und Showcase 06.11.2026:** [§21.71](#2171-github-projektseite-und-showcase-3505-06112026) – neue README-Projektseite, Aufnahmen, Issue-Formulare, Beschreibung und Topics; Showcase zeigt die Funktionen bis 3.50.5.
 
 **Konkurrenz- und Dokumentabgleich 06.11.2026:** [§21.70](#2170-systematische-konkurrenzanalyse-und-dokumentabgleich-vom-06112026) schärft die Rangfolge aus §21.62 mit der systematischen Konkurrenzanalyse und vergibt die Vorschlagskennungen WA-52–WA-59; kein Featurepaket gewählt.
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -2700,3 +2702,13 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - **Nachtrag nach PR #78:** Linux- und Windows-Vollprüfung und beide native Paketbauten sind auf `766978d` belegt. Die native macOS-Vollprüfung, menschliche Abnahme, Veröffentlichungssignaturen und Inhaberfreigabe bleiben offen. Den vollständigen Nachweis führt der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026).
 
 **Menschlicher macOS-Nachlauf, 12.11.2026:** Der Inhaber hat die Neuerungskarte auf dem Paket zu `766978d` bestätigt. Für die Kapazitätsprüfung ist „Kalender als Belegzeiten …“ der vorgesehene Einleseweg. Der Entlastungsdialog erhält Zielwahl und Rückmeldung im festen Fensterfuß, eine automatische Bilanz und eine einzige Bestätigung. Die Korrektur liegt lokal im Quellstand. Die menschliche Nachabnahme des Dialogs und der übrigen Schritte ist offen.
+
+### 21.87 Dokumentationsbezüge und Konsolidierung (13.11.2026)
+
+**A – Auftrag:** Verknüpfte Aspekte bei Änderungen gemeinsam prüfen und nachführen, insbesondere Roadmap, Glide-System und Shell Framework; doppelte Pflege vermeiden, ähnliche Inhalte konsolidieren und Lücken schließen. Reine Dokumentationspflege, kein neuer Produktionsumfang.
+
+**B – Umsetzung:** Die [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet führende Fachquellen mit ihren Änderungsfolgen. Arbeitsregeln, Contributing-/README-Einstiege, Index und betroffene Fachverträge verweisen darauf. Die parallelen Modulaufzählungen im Shell-Konzept sind in Registerverweisen aufgegangen; Istarchitektur, Systembestand und Zielarchitektur bleiben getrennt. Hypothetische Shell-APIs, `RedoHistory` und noch bestehende App-Kopplungen sind präzisiert. Glide-System V1.17.3 dokumentiert diese Korrektur bei unverändertem Modul-/Feature-/Testbestand.
+
+**C – Prüfung und Rest:** Ausgeführte Prüfungen, Link-/Ankerumfang, CI-Ergebnis und App-/Lieferhashvergleich stehen ausschließlich im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md). Keine neue App-Version, Plattformvollprüfung, Paketlieferung oder menschliche Abnahme. Die Pflegebezüge sind verbindliche Arbeitsregeln; redaktionelle Folgewirkungen werden nicht automatisch aus dem Code abgeleitet. Git-Veröffentlichung ist durch diesen Auftrag nicht beauftragt.
+
+**Git-Folgeauftrag, 13.11.2026:** Der Inhaber beauftragt anschließend ausdrücklich Commit und Push der Dokumentationsänderungen, damit Navigation und Contributing auf GitHub verfügbar sind. Die Bereitstellung setzt auf dem aktuellen `origin/main` auf; Prüfbezug und zusätzlicher Standzeilenbefund stehen im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md#git-folgeauftrag-13112026).

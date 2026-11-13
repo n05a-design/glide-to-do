@@ -66,7 +66,7 @@ Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner L
 
 ## Mitwirken und Lizenz
 
-Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md); Entscheidungen und Arbeitsablauf stehen in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Änderungen müssen zum Datenmodell passen, Nutzerdaten schützen und mit den betroffenen Tests und der Dokumentation abgeschlossen werden.
+Der [Contributing-Einstieg](../../CONTRIBUTING.md) führt durch die Mitarbeit. Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md); Entscheidungen und Arbeitsablauf stehen in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Die [Pflegematrix](docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) bestimmt die betroffenen Fachquellen. [Architektur](docs/02_ARCHITECTURE.md), [Systembestand](src/glide/README.md) und [Shell-Zielbild](docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) werden entsprechend ihrer Zuständigkeit abgeglichen.
 
 Der Projektcode steht unter **MPL-2.0**, einschließlich kommerzieller Nutzung nach den Lizenzbedingungen. [Vollständiger Lizenztext](../../LICENSE) und [Hinweise zu Drittkomponenten und Weitergabe](LICENSE.md).
 

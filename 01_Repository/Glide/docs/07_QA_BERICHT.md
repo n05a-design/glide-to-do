@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 3.55.1
 
+## Dokumentationsabgleich (13.11.2026)
+
+Der [Nachweis zur Dokumentationspflege](../tests/qa-3.55.1/dokumentation_2026-11-13/README.md) enthält den geprüften Umfang, Struktur-/Linkprüfungen, Systeminventar, CI-Grundstufe und den Vergleich der App-/Lieferhashes. Die Änderung betrifft Zuständigkeiten und Querverweise sowie die Abgrenzung des Shell-Zielbilds vom Systembestand. Sie ersetzt keine der folgenden App-, Plattform-, Paket- oder menschlichen Abnahmen.
+
 ## Lokale Nachabnahme und Prüfstand 3.55.1 (12.11.2026)
 
 Auf dem macOS-Nachbaustand 3.55.0 wurden Fundorte im Hauptbereich und in der Nebenansicht sowie der JSON-Canvas-Export mit Verlustbericht manuell geprüft. Der Sicherungsrundlauf im Parkquartier-Prüfbestand zeigt die Wiederherstellung des geänderten Seitentexts, des Seitenbilds und der sichtbaren Aufgaben mit Fälligkeiten. Die Screenshots dokumentieren den Rundlauf in der laufenden Sitzung.
@@ -209,7 +213,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

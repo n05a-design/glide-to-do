@@ -1,8 +1,8 @@
-# Glide-System V1.17.2
+# Glide-System V1.17.3
 
-Stand 12.11.2026 · Glide 3.55.1 · Glide-System V1.17.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 13.11.2026 · Glide 3.55.1 · Glide-System V1.17.3 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.17.2` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.17.3` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 12.11.2026 · Glide 3.55.1 · Glide-System V1.17.2 · Aufgabenformat 26 ·
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.17.3** | 13.11.2026 | Pflegebezüge zu Roadmap, Architektur, Shell-Konzept und QA zentral verknüpft; doppelte Bestandsangaben im Shell-Konzept durch Registerverweise ersetzt. Modul-/Feature-/Testbestand unverändert. | Dokumentationskorrektur, App 3.55.1 und Format 26 unverändert |
 | **V1.17.2** | 12.11.2026 | JSON-Canvas-Export über die App-Einstiege und zugehörige Integrationsprüfung nachgeführt. | App 3.55.0, Format 26 |
 | **V1.17.1** | 12.11.2026 | Pfadauflösung, Startgrenzen und verbleibenden Umfang von WA-49 präzisiert. Den vereinfachten Entlastungsdialog im lokalen macOS-Abnahmenachlauf zugeordnet. | App 3.55.0, Format 26 |
 | **V1.17** | 11.11.2026 | Laufzeitkonfiguration und Pfadentkopplung (WA-49) in `runtime_config.py`, erweiterte Tageskapazitätsanalyse (WA-12) und zugehörige Unit-Tests. | App 3.55.0, Format 26 |
@@ -887,7 +888,7 @@ Leitlinien ergänzen, aber ersetzen nicht die verbindlichen [Architekturregeln](
 | G09 | Undo/Redo | Anwendungsänderungen getrennt von UI-Visualisierung | Eine Benutzeraktion = ein Undo-Schritt |
 | G10 | Import/Export | Lesender Parser, Vorschau und Konfliktentscheidung vor Commit | ZIP-Bomb/Traversal, ICS, JSON, Notion |
 | G11 | Medien | Konversion Queue/Timeout/Cache/Worker und Bildreferenzlebensdauer | Alle OS + Dateitypen/Abbruch |
-| G12 | Tests | CI-Grundstufe, 112 Unitdateien, 111 Integrationsdateien, 81 Werkzeugdateien | Vollmatrix erst grün, wenn identischer SHA vollständig geprüft |
+| G12 | Tests | CI-Grundstufe und [Test-/Werkzeugkatalog](#5-test--und-werkzeugkatalog); aktuelle Dateizahlen aus der [Übersicht](#übersicht) | Vollmatrix erst grün, wenn identischer SHA vollständig geprüft |
 | G13 | Pakete | Python+Tk Runtime gepinnt, Herstellerlizenzen, isolierter Start | DMG/TAR ZIP hashgebunden, Signierung bewusst getrennt |
 | G14 | Performance | 100/1000/10000 Testdaten, 500-Karten UI/Dauerlauf und native Maschinen | p50/p95 CPU/Tk/OS vergleichbar halten |
 | G15 | Archivierung | QA-Rohbelege/alte Pfade nur mit stabilem Belegmanifest kürzen | Keine pauschalen Löschungen ungesicherter Historie |
@@ -899,6 +900,8 @@ Leitlinien ergänzen, aber ersetzen nicht die verbindlichen [Architekturregeln](
 
 
 Dieses Register wird **bei jeder relevanten Code-, Feature-, Test- oder Paketänderung im selben Commit** aktualisiert, nicht als zweite Kopie in anderen Dokumenten nachgeschrieben.
+
+Die übergreifenden Änderungsbezüge stehen ausschließlich in der [Pflegematrix](../../docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Das Register dokumentiert den vorhandenen Bestand und seine Übernahmegrenzen, die [Architektur](../../docs/02_ARCHITECTURE.md) den technischen Istvertrag und das [Shell-Konzept](../../docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) das Entkopplungsziel. Auftrag und Restumfang stehen in der [Roadmap](../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), Prüfergebnisse im QA-Bericht; hier keine zweite Shell-Roadmap oder Freigabematrix führen.
 
 1. **Module:** Beim Anlegen, Löschen, Verschieben oder Umbenennen eines Moduls die Tabelle mit stabiler ID, Zweck, Testbezug, Dependencies und Wiederverwendungsstatus aktualisieren. Die automatische Katalogprüfung vergleicht Dateinamen **exakt** mit dem Quellverzeichnis; auch `app.pyw` und `drawing_prototype.pyw` gehören ausdrücklich zum Inventar.
 2. **Features:** Neue, entfallene oder geänderte Funktionen mit stabiler Feature-ID aktualisieren. Fachverhalten bleibt in [20_FUNKTIONEN.md](../../docs/20_FUNKTIONEN.md) beschrieben; hier stehen Sichtbarkeit, Modulbezüge, Wiederverwendung und Prüfbedarf. IDs werden nicht recycelt.

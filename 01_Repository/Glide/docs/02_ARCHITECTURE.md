@@ -1,10 +1,12 @@
 # Architektur – Glide
 
+**Abgrenzung und Pflege:** Dieses Dokument beschreibt die bestehende Architektur und ihre Regeln. Das [Glide-System](../src/glide/README.md) führt den Bestand und seine Kopplungen, das [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) das Entkopplungsziel. Änderungen an diesen Grenzen werden nach der [zentralen Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) mit Roadmap, Funktionen, Datenverträgen und Prüfungen abgeglichen.
+
 **Wiederverwendungsprüfung 08.11.2026 (D74):** Der aktuelle Systembestand und seine Steps-Übernahmeverträge stehen ausschließlich im [Glide-System](../src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte). Statisches Inventar des Reparaturcommits `a4c34b8`: 94 Quelldateien, 88 ohne direkten Tkinter-Import; `app.pyw` 68.933 Zeilen, `ListApp` 1.863 direkte Methoden. Ein fehlender Tk-Import beweist keine neutrale Daten-/Pfad-/Aktionsschnittstelle. UI-, Runtime- und Hostkopplungen bleiben konkrete WA-32/39/49/50-Reste; ein großflächiger Rewrite ist daraus nicht beschlossen.
 
 **Neue Performance-Baseline auf `a4c34b8`:** Windows 11 / Python 3.14.7 / Tk 9.1, künstliche Daten, neun warme Speicherweg-Runden mit vollem Vergleich und Verlauf: Abhaken inklusive Speichern/Refresh median 54,121 ms (p95 66,989) bei 1.000 Aufgaben und 380,262 ms (p95 478,222) bei 10.000. Acht warme Ansichtswechsel-Runden mit 1.000 Aufgaben und drei Tk-Zeichendurchläufen: Liste median 1.063,782 ms, Bibliothek 735,020 ms, Startseite 608,994 ms. Profiling zeigt vor allem Tk-Aufrufe/Layout sowie Baum-/Kachelaufbau; beim Schreiben zusätzlich Serialisierung/Vergleich und atomare Dateiausgabe. Das sind Ansatzpunkte für WA-36, keine nachgewiesene Beschleunigung gegenüber historischen anderen Läufen. Neue Basis und Profil getrennt behandeln; vor einem Eingriff denselben unprofilierten Vorher-/Nachherweg samt Fehler-/Undo-/Neustartverträgen prüfen.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 **Abschlussstand 02.11.2026:** Die unten datierten Modell-/Koordinator-/Renderer-/Mutationsschnitte sind Bestandteil der Python-/Windows-/macOS-Lieferung 3.50.0. Der [Abschlussabgleich](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) prüft die tatsächlich gelieferten Dateien; aktuelle technische Restvorhaben stehen im [Plan §21.44](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2144-abschlussabgleich-von-features-optimierungen-und-dokumentation). WA-32/36/37/38/39/40 sind dadurch keine vollständig abgeschlossenen appweiten Umbauten. Historische Größen-/Zeitmessungen behalten ihren ursprünglichen Quellstand.
 

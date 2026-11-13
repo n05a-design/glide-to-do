@@ -15,6 +15,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 - **System-und-Modulpflege (eigenständige Version):** `src/glide/README.md` (Glide-System) ist das einzige aktuelle vollständige Inventar von Modulen, Funktionen, Wiederverwendung, Testdateien und datierten QA-Risiken. Bei Modul-/Feature-/Teständerungen im selben Commit pflegen; `tests/tools/test_glide_system.py` läuft über die CI-Grundstufe.  Architektur-/Paketierungsdokumente dürfen keine zweite vollständige Modulbestandsliste führen. Die **Systemversion** steht allein in `GLIDE_SYSTEM_VERSION` (Start: V1.0, unabhängig von `VERSION`); jede inhaltliche Katalogänderung hebt sie nach den Regeln und dem Versionsverlauf in `src/glide/README.md` an und pflegt den Versionsverlauf im selben Commit.
 - Verhalten der Funktionen: `docs/20_FUNKTIONEN.md`
 - QA: `docs/05_QA_TESTPLAN.md`, geprüfter Stand und was ungeprüft blieb: `docs/07_QA_BERICHT.md`
+- Übergreifender Dokumentabgleich: [Pflegematrix](docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Für jede Änderung führende Quelle und betroffene Folgeaspekte prüfen; Architektur-Istzustand, Systembestand und [Shell-Zielbild](docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) getrennt pflegen.
 - Daten und Backups: `docs/06_DATA_BACKUP_MIGRATION.md`
 - Release, Lizenz, Signierung, Store: `docs/10_VEROEFFENTLICHUNG.md`
 - Aktuelle Version: `VERSION` und die dazu passende Konstante in `src/glide/app.pyw`
@@ -34,13 +35,13 @@ D74 (08.11.2026) ersetzt diese Bezeichnungen für aktive Produkttexte. Die histo
 3. Datenformatänderungen nur mit eigener Migration, Sicherung und Tests vornehmen. Eine neue Listen- oder Ordnerart ist eine Datenformatänderung und hebt `DATA_SCHEMA_VERSION` – nur so öffnet eine ältere Fassung den Bestand schreibgeschützt, statt ihn zu überschreiben (29.09.2026).
 4. Keine neue Laufzeitabhängigkeit ohne dokumentierte Entscheidung einführen.
 5. Tests dürfen niemals den echten Nutzerdatenordner verwenden. Die Isolierung läuft über die Umgebungsvariable `GLIDE_DATA_DIR`; `%APPDATA%` allein wirkt nur unter Windows und würde unter macOS und Linux die echten Daten treffen.
-6. Änderungen in `CHANGELOG.md` und der relevanten Dokumentation festhalten.
+6. Änderungen in `CHANGELOG.md` und den nach der [Pflegematrix](docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) betroffenen Fachquellen festhalten. Einstiege verlinken die Quelle; vollständige Bestands-/Statuslisten nicht duplizieren.
 7. Signing-Secrets, Zertifikate, Schlüssel, Tokens und Recovery-Codes niemals einchecken.
 8. Änderungen an Punkten laufen durch `item_change`, an Listen und Ordnern durch `sidebar_change`; Umbauaktionen zusätzlich unter `guarded_structural_change`. Modale Dialoge ausschließlich über `run_modal`.
 9. Oberflächensymbole ausschließlich als Textzeichen aus der Tabelle `ICONS`. Der Integrationstest erzwingt das. Einzige Ausnahme ist das Logo als Bild aus `resources/logo` (`logo.py`, seit 29.09.2026).
 10. Aktuelle Dokumente an ihrer verbindlichen Quelle fortschreiben: ein Thema, ein Dokument. Seit dem Auftrag vom 03.10.2026 werden doppelte und überholte Dokumente zusammengeführt und gelöscht statt archiviert oder mit `_Z` markiert; Git trägt die Historie. Neue Funktionen bekommen einen Abschnitt in `docs/20_FUNKTIONEN.md`, keine eigene Vertragsdatei. Archive und Nachweise nur der sieben neuesten Versionen (`scripts/pflege/ablage_kuerzen.py`). Siehe `docs/DOKUMENTENPFLEGE.md`.
 
-11. Aufgabenstatus, nächste Schritte, Entscheidungen und Prüfgrenzen in Entwicklungsplan, Arbeitsrichtung und Übergabe inhaltlich abgleichen. Aktuelle Versionszeilen allein reichen nicht.
+11. Aufgabenstatus, nächste Schritte, Entscheidungen und Prüfgrenzen nach der zentralen [Abgleichregel](docs/DOKUMENTENPFLEGE.md#abgleich-ohne-doppelte-pflege) verfolgen. Der Entwicklungsplan führt Aufgaben, die Arbeitsrichtung Entscheidungen, der QA-Bericht Prüfstände; die Übergabe verweist darauf. Aktuelle Versionszeilen allein reichen nicht.
 12. Caches nach stabilen IDs und Host-Lebensdauer führen, vollständig invalidieren; Undo kann Objekte ersetzen. Ersetzte Bindungen/after-Aufträge freigeben. Keine verschachtelten `update()`/`update_idletasks()` in selbstauslösenden Rückrufen. Details und Abnahme in `docs/ARBEITSRICHTUNG.md`.
 
 13. Nach D17 entsteht neue oder angefasste Fachlogik als Tk-freies Modul mit eigenen Unit-Tests; bestehende UI- und Mutationseinstiege bleiben erhalten. Seit D09 ist die Git-Arbeitskopie des gesamten Projektordners maßgeblich.

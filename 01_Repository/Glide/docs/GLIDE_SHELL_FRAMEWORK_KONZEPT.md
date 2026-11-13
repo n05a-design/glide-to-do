@@ -1,14 +1,16 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
-Dieses Konzeptdokument beschreibt die architektonische Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von den fachspezifischen Domänenmodulen der Aufgaben- und Produktivitätsanwendung Glide. Es dient als verbindliche Richtschnur für zukünftige Refactorings und als Blaupause für Schwesterprojekte (z. B. *Steps*).
+Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
+
+**Zuständigkeiten:** Der tatsächliche Architekturzustand steht in der [Architektur](02_ARCHITECTURE.md), vorhandene Module, Tests, Kopplungen und Übernahmeverträge im [Glide-System](../src/glide/README.md). Auftrag, Priorität und Umsetzungsrest von WA-49/50 stehen ausschließlich in der [Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md); Prüfungen und Abnahme im [QA-Bericht](07_QA_BERICHT.md). Änderungen werden nach der [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) abgeglichen.
 
 ---
 
 ## 1. Ausgangslage und Zielsetzung
 
-Historisch wuchs Glide als Desktop-Anwendung rund um die monolithische Klasse `ListApp` in [`app.pyw`](../src/glide/app.pyw). Trotz erfolgreicher Auslagerung zahlreicher Fachmodule (mittlerweile 95 Python-Quelldateien im Glide-System) verbleiben in `app.pyw` erhebliche Überschneidungen zwischen:
+Historisch wuchs Glide als Desktop-Anwendung rund um die Klasse `ListApp` in [`app.pyw`](../src/glide/app.pyw). Trotz ausgelagerter Fachmodule verbleiben dort Überschneidungen zwischen:
 - generischer Desktop-Infrastruktur (Fensterverwaltung, Dialog-Modale, Theme-Token, Event-Loop, Menüleisten),
 - anwendungsspezifischer Steuerung (Listen, Aufgaben, Canvas, Kalender, Notizen).
 
@@ -41,34 +43,23 @@ Ein sauberes, modulares Schichtenmodell, bei dem das Fundament als eigenständig
 
 ### 2.1 Wiederverwendbare Desktop-Shell (Plattform- & UI-Fundament)
 
-Die Shell umfasst alle Komponenten, die für jede plattformübergreifende Tkinter-Desktop-Anwendung benötigt werden:
+Die folgende Tabelle beschreibt Zielverantwortungen. Dateibestand, Featurezuordnung, Testdateien und Wiederverwendungseignung werden ausschließlich im Systemregister gepflegt.
 
-| Bereich | Modul / Komponente | Verantwortung |
+| Zielbereich | Entkopplungsvertrag | Vorhandene Grundlage und Grenze |
 |---|---|---|
-| **Laufzeit & Konfiguration** | [`runtime_config.py`](../src/glide/runtime_config.py) | Pfadauflösung für Daten, Cache und Fehlerprotokoll ohne Tk-Import oder Schreibzugriff. `RuntimeConfig.create` übernimmt den Lesemodus als Parameter und liest `GLIDE_TEST_MODE`. CLI-Auswertung und Startlogik liegen weiterhin außerhalb des Moduls. |
-| **Lebenszyklus (Lifecycle)** | `shell_lifecycle.py` *(geplant)* | Kontrollierter Start, sauberer Exit (`WM_DELETE_WINDOW`), Session-Restore, Verhindern doppelter Instanzen (Lockfile). |
-| **Theme & Design-System** | [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) | Dark-/Light-/Systemmodus-Erkennung, Farb- und Abstands-Token, dynamische Re-Theming-Events ohne Neustart. |
-| **Typografie & Symbole** | [`font_catalog.py`](../src/glide/font_catalog.py), [`glyph_metrics.py`](../src/glide/glyph_metrics.py), [`symbol_policy.py`](../src/glide/symbol_policy.py) | Plattformspezifische Schriftarten, Skalierungsfaktoren, optische Zentrierung von Glyphen, sichere ASCII-/Unicode-Fallbacks. |
-| **Fenster & Navigation** | [`compact_mode.py`](../src/glide/compact_mode.py), `window_manager.py` *(geplant)* | Bildschirmgrenzen-Prüfung, DPI-Awareness, Multi-Monitor-Positionierung, Statusleisten, Sidebar-Layouts. |
-| **Dialog-Infrastruktur** | `modal_runner.py` *(geplant)* | Robuste modale Dialoge (`app.run_modal`-Abstraktion) mit ausnahmesicherer Tcl-Grab- und Focus-Wiederherstellung. |
-| **Custom Controls (D78)** | `controls/` *(abgeleitet)* | Konsistente, zugängliche Widgets (Ersatz für veraltete Tk-Widgets: Schalter, Eingabefelder, Card-Views) mit vollständiger Tk-Schnittstellenkompatibilität (`keys`, `cget`, `configure`, `[]`). |
-| **Undo/Redo-Fundament** | [`undo_history.py`](../src/glide/undo_history.py) | Generischer Memento-/Command-Stack mit Snapshot-Drosselung, Tiefenbegrenzung und Transaktionsklammern (`group_undo`). |
-| **Barrierefreiheit (A11y)** | [`accessibility.py`](../src/glide/accessibility.py), [`accessibility_bindings.py`](../src/glide/accessibility_bindings.py) | Semantische Rollen, Screenreader-Announcements, Tastaturfokus-Traversierung. |
+| Laufzeit und Lebenszyklus | Pfade ohne Tk oder Dateisystemmutation ermitteln; Start, Ende, Session und Schreibbesitz ausdrücklich koordinieren | [Start/Architektur](../src/glide/README.md#startarchitektur). `runtime_config.py` löst Pfade auf; CLI-Auswertung, App-Import und Desktop-Initialisierung bleiben eigene Schritte (WA-49). Eine `shell_lifecycle.py` wäre ein neuer Entwurf. |
+| Design, Typografie und Symbole | Theme-Token, Schrift-/Glyphenwahl und Maßberechnung über eine stabile UI-Schnittstelle bereitstellen | [Design/Branding](../src/glide/README.md#designbranding) und [Designvertrag](DESIGN_RICHTLINIEN.md). Vorhandene Module bilden noch kein unabhängig geprüftes UI-Paket. |
+| Fenster, Navigation und modale Dialoge | Root-/Toplevel-Lebensdauer, Fokus, Grab-Freigabe, Bildschirmgrenzen und Menübesitz koordinieren | [UI/Navigation](../src/glide/README.md#uinavigation) und [Tk-Regeln](02_ARCHITECTURE.md#5-tk-fallstricke-teuer-gelernt). `run_modal` liegt in `ListApp`; ein `window_manager.py` oder `modal_runner.py` ist hier nur ein vorgeschlagener Schnitt. |
+| Steuerelemente und Zugänglichkeit | Theme, Tastaturbedienung und semantische Rollen erhalten; benötigte `keys`-/`cget`-/`configure`-/Indexzugriffe kompatibel halten | [Oberflächenbestand](../src/glide/README.md#oberflächen-bestandsprüfung) und [Barrierefreiheit](../src/glide/README.md#barrierefreiheit). Die D78-Controls liegen in `app.pyw`; ein eigenes `controls/`-Paket ist kein Istzustand. |
+| Undo und Commands | Transaktionsgrenzen der App über einen expliziten Vertrag anbinden, ohne Aufgabenformate in die Shell einzubauen | [Daten/Schutz](../src/glide/README.md#datenschutz). `undo_history.py` enthält `RedoHistory` für Wiederholen; der Undo-Gesamtablauf liegt weiterhin in der App. Ein generischer Command-Stack ist Zielarbeit. |
 
 ---
 
 ### 2.2 Glide-Fachinhalt (Spezifische Anwendungsdomäne)
 
-Diese Module gehören exklusiv zur fachlichen Identität von Glide und dürfen **nicht** in die Shell einfließen:
+Aufgabenformate, Listen, Fälligkeiten, Kapazitätsplanung, Kalenderregeln, Seiten und inhaltliche Import-/Exportabbildungen bleiben außerhalb der Shell. Die Zuordnung steht im [Modulregister](../src/glide/README.md#1-python-module), das gültige Verhalten in den [Funktionen](20_FUNKTIONEN.md) und im [Datenvertrag](06_DATA_BACKUP_MIGRATION.md).
 
-| Domänenbereich | Zugehörige Module |
-|---|---|
-| **Aufgaben- & Listenmodell** | [`persistence.py`](../src/glide/persistence.py), [`storage_health.py`](../src/glide/storage_health.py), [`item_index.py`](../src/glide/item_index.py), [`data_lock.py`](../src/glide/data_lock.py), [`schema_backups.py`](../src/glide/schema_backups.py) (Aufgabenformat 26, Validierung, Migration). |
-| **Planung & Kapazität** | [`planning.py`](../src/glide/planning.py), [`day_relief.py`](../src/glide/day_relief.py), [`occupied_time.py`](../src/glide/occupied_time.py), [`week_planning.py`](../src/glide/week_planning.py), [`day_proposal.py`](../src/glide/day_proposal.py). |
-| **Produktivitätsmethoden** | [`eisenhower.py`](../src/glide/eisenhower.py) (Matrix), [`focus_timer.py`](../src/glide/focus_timer.py) (Pomodoro), [`routines.py`](../src/glide/routines.py), [`daily_hints.py`](../src/glide/daily_hints.py). |
-| **Kalender- & Zeitverwaltung** | [`busy_calendar.py`](../src/glide/busy_calendar.py), [`calendar_service.py`](../src/glide/calendar_service.py), [`repeat_rules.py`](../src/glide/repeat_rules.py), [`repeat_ics.py`](../src/glide/repeat_ics.py), [`ics_busy.py`](../src/glide/ics_busy.py), [`timezones.py`](../src/glide/timezones.py). |
-| **Notizen, Seiten & Canvas** | [`page_markdown.py`](../src/glide/page_markdown.py), [`markdown_tree.py`](../src/glide/markdown_tree.py), [`pinboard_pages.py`](../src/glide/pinboard_pages.py) (JSON-Canvas 1.0), [`attachment_paths.py`](../src/glide/attachment_paths.py). |
-| **Import / Export** | [`notion_import.py`](../src/glide/notion_import.py), [`notion_archive.py`](../src/glide/notion_archive.py), [`exchange_patch.py`](../src/glide/exchange_patch.py). |
+Ein heute fachnahes Modul kann einen wiederverwendbaren Anteil enthalten. Beispielsweise sind Schreibbesitz und Sicherungen technische Fähigkeiten, deren aktuelle Glide-Kopplung vor einer Übernahme aufzulösen ist. Deshalb ganze Dateien nicht pauschal als ausschließlich fachlich oder bereits neutral einstufen; maßgeblich sind die [technischen Systemfähigkeiten](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte) und [Übernahmeverträge](../src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte).
 
 ---
 
@@ -79,11 +70,11 @@ Glide verwendet eine primäre Tk-`root`-Instanz für das Hauptfenster und `Tople
 
 **Erkannte Herausforderungen:**
 1. **macOS Event Loop & Menübindung:** Auf macOS gehört das Anwendungsmenü (`Apple Menu`) zwingend zur primären `root`-Instanz. Wenn ein Toplevel-Fenster schließt oder den Fokus wechselt, darf das Menü nicht in einen verwaisten Zustand fallen.
-2. **Modal Grab Deadlocks:** Wird ein Modalfenster (`grab_set()`) nicht absolut ausnahmesicher geschlossen (oder stürzt der Aufrufer währenddessen ab), bleibt der Tcl-Grab aktiv. Die gesamte Anwendung blockiert, da keine Mausklicks oder Tastaturevents mehr an das Hauptfenster zugestellt werden (dies war die Ursache historischer CI-Timeouts unter Linux/Xvfb).
+2. **Modal Grab Deadlocks:** Ein nicht freigegebener Tcl-Grab kann Eingaben an das Hauptfenster blockieren. Ausnahmesichere Freigabe und Fokuswiederherstellung bleiben Pflicht; konkrete Timeout-Ursachen benötigen ihren jeweiligen Laufnachweis.
 3. **Multi-Monitor DPI-Scaling (Windows Per-Monitor V2):** Wenn Haupt- und Nebenfenster auf Monitoren mit unterschiedlichen Skalierungsfaktoren (z. B. 100% vs. 175%) liegen, müssen Schriften und Widgetabstände je Fensterinstanz isoliert berechnet werden können.
 
 ### 3.2 Architekturvorgabe für die Shell
-Die Shell führt einen zentralen `WindowManager` ein:
+Das Zielbild sieht einen zentralen `WindowManager` vor. Die folgenden Namen und Aufrufe sind Schnittstellenskizzen, keine vorhandene API:
 - **Root-Transparenz:** Die Anwendung erstellt Fenster nicht direkt per `tk.Toplevel(self.root)`, sondern fordert Fenster über den `WindowManager` an:
   `window = shell.create_window(title="Tagesentlastung", kind=WindowKind.MODAL_DIALOG, parent=...)`
 - **Ausnahmesicherer Modal-Runner:**
@@ -91,20 +82,19 @@ Die Shell führt einen zentralen `WindowManager` ein:
   ```python
   with shell.modal_session(dialog_window):
       shell.wait_window(dialog_window)
-  # Garantiert: grab_release(), focus_set() auf Parent und Zerstörung von Hooks
+  # Geforderter Vertrag: Grab freigeben, Fokus und Hooks aufräumen
   ```
 - **Zwei-Fenster- und Pane-Orchestrierung:**
-  Für Dual-Pane-Ansichten (Hauptliste + Detailinspektor) stellt die Shell native Container bereit (z. B. splitfähige PanedWindows oder Side-Drawers), die Fensterkoordinaten automatisch innerhalb der virtuellen Desktopgrenzen halten (`compact_mode.py`).
+  Hauptfenster, Nebenansichten und geteilte Arbeitsbereiche sollen eine gemeinsame Lebensdauer-/Geometriekoordination erhalten. `compact_mode.py` ist eine bestehende Teilgrundlage; es kapselt nicht bereits die gesamte Fenster-, DPI- und Pane-Steuerung.
 
 ---
 
 ## 4. Empfohlene Migrationsreihenfolge (Schritt-für-Schritt)
 
-Die Entkopplung erfolgt inkrementell ohne Bruch der bestehenden Funktionalität oder Datenformate:
+Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- oder Statusliste. Beauftragter Umfang und Rest von WA-49/50 werden nur in der Roadmap geführt. Istbelege kommen aus Architektur/Systemregister; jede Umsetzung benötigt neue passende Prüfungen.
 
 ### Phase 1: Laufzeit- und Pfad-Entkopplung
-- **Status:** Der Pfadschnitt ist seit 3.55.0 mit [`runtime_config.py`](../src/glide/runtime_config.py) umgesetzt (M095). Die vollständige Entkopplung von App-Import, Start und Desktop-Initialisierung bleibt Teil von WA-49.
-- **Nutzen:** Daten- und Konfigurationspfade können ohne Seiteneffekte und ohne Tk-Initialisierung instanziiert werden. Tests und Headless-Werkzeuge greifen auf isolierte Pfade zu.
+- **Architekturschritt:** Auf der Tk-freien Pfadauflösung aufbauen und App-Import, CLI-Auswertung, Verzeichnisanlage und Tk-Initialisierung explizit trennen. Seiteneffektfreiheit für jeden Einstieg gesondert prüfen; Eigenschaften von `runtime_config.py` nicht auf den App-Import übertragen.
 
 ### Phase 2: Design- und Widget-Extraktion
 - **Aufgabe:** Zusammenfassung von [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) und den D78-Custom-Controls in ein Teilpaket `glide_shell.ui`.
@@ -116,7 +106,7 @@ Die Entkopplung erfolgt inkrementell ohne Bruch der bestehenden Funktionalität 
 
 ### Phase 4: Undo/Command-Abstraktion
 - **Aufgabe:** Entkopplung von [`undo_history.py`](../src/glide/undo_history.py) von den Datenstrukturen der Aufgabenliste.
-- **Ziel:** `UndoHistory` akzeptiert beliebige serialisierbare Memento-Objekte oder Command-Objekte mit `execute()` und `undo()`.
+- **Ziel:** Einen noch zu definierenden Undo-/Command-Vertrag für Memento- oder Command-Objekte schaffen; `execute()` und `undo()` wären vorgeschlagene Schnittstellen, keine heutige `UndoHistory`-API.
 
 ### Phase 5: Trennung von Shell und App-Controller
 - **Aufgabe:** Reduzierung von `ListApp` in `app.pyw` auf die reine Controller-Rolle für die Aufgabenverwaltung.
@@ -154,6 +144,6 @@ Um die Shell unabhängig von Glide zu halten, kommuniziert die Anwendungsdomäne
 ```
 
 ### Vorteile:
-1. **Volle Testbarkeit ohne Tkinter:** Domänenfeatures wie die Kapazitätsanalyse (`planning.capacity_analysis`) oder Datumsberechnungen können zu 100% in schnellen Unit-Tests geprüft werden.
-2. **Wiederverwendbarkeit für Folgeprojekte:** Neue Anwendungen wie *Steps* binden lediglich die Shell ein und bringen eigene Domänen-Controller und Ansichten mit.
-3. **Plattform-Sicherheit:** Alle Plattform-Eigenheiten (macOS Cocoa-Menüs, Windows DPI, Linux X11/Wayland-Clipboard) sind an einer einzigen Stelle im Shell-Fundament gekapselt.
+1. **Gezielte Prüfung ohne Tkinter:** Fachberechnungen über explizite Ports mit Unit-Tests prüfen; UI-, Host- und Plattformverhalten benötigt weiterhin Integrationstests.
+2. **Wiederverwendung für Folgeprojekte:** Ein künftig entkoppeltes Fundament könnte eigene Domänen-Controller und Ansichten aufnehmen. Bis dahin gelten die bestehenden Übernahmeverträge und ihre Kopplungsgrenzen.
+3. **Gebündelte Plattformverträge:** Menübesitz, DPI und Zwischenablage über definierte Adapter kapseln und auf jeder Plattform prüfen. Die bloße Modultrennung beweist keine Plattformfreigabe.

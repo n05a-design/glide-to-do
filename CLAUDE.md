@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Aktueller Quell-, Prüf- und Lieferstand: [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Aufgabenstatus und konkrete Gitautorisierung stehen im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
 
@@ -20,7 +20,7 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
 2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D79 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
-4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
+4. [Pflegematrix und Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) vor jeder Änderung: führende Quelle und betroffene Folgeaspekte abgleichen; zusammenführen statt parallel pflegen
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung

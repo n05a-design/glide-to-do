@@ -1,0 +1,806 @@
+{
+  "datum": "2026-11-13",
+  "art": "Dokumentationspflege",
+  "status": "Dokumentationsabgleich abgeschlossen",
+  "basis": {
+    "git_head": "766978d1836927ae4572d1968ed58929cd046a95",
+    "bereits_veraenderter_arbeitsbaum": true,
+    "app_version": "3.55.1",
+    "datenformat": 26,
+    "systemversion_vorher": "1.17.2",
+    "systemversion_nachher": "1.17.3"
+  },
+  "aenderungen": {
+    "bestehende_dokumente": [
+      "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "00_Arbeitsvorbereitung/README.md",
+      "01_Repository/Glide/AGENTS.md",
+      "01_Repository/Glide/CHANGELOG.md",
+      "01_Repository/Glide/docs/00_INDEX.md",
+      "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md",
+      "01_Repository/Glide/README.md",
+      "01_Repository/Glide/src/glide/README.md",
+      "CLAUDE.md",
+      "CONTRIBUTING.md",
+      "README.md"
+    ],
+    "neue_nachweise": [
+      "README.md",
+      "ergebnis.json"
+    ],
+    "fachdateien_geloescht": []
+  },
+  "baseline": {
+    "standpruefung": {
+      "exitcode": 0,
+      "dokumente": 74
+    },
+    "systeminventar": {
+      "exitcode": 0,
+      "faelle": 5
+    },
+    "lokale_links": {
+      "dokumente": 75,
+      "verweise": 1727,
+      "abschnittsverweise": 394,
+      "befunde": []
+    }
+  },
+  "zwischenpruefung": {
+    "neuer_abschnittslink_mit_falschem_anker": 1,
+    "korrigiert": "#5-test--und-werkzeugkatalog"
+  },
+  "finaler_linkabgleich": {
+    "documents": 76,
+    "local_links": 1811,
+    "fragments": 438,
+    "failures": []
+  },
+  "systeminventar": {
+    "befehl": "py -3.14 -B -m unittest discover -s 01_Repository/Glide/tests/tools -p test_glide_system.py",
+    "exitcode": 0,
+    "faelle": 5
+  },
+  "ci_versuche": [
+    {
+      "versuch": 1,
+      "einordnung": "Integritätsstopp: während des Laufs wurden von dieser Dokumentationsrunde Zeilenenden in zwölf Dokumenten geändert. Werkzeugprozess Exitcode 0; Gesamtlauf bleibt fehlgeschlagen.",
+      "ergebnis": {
+        "zeitpunkt": "2026-11-13T03:41:52",
+        "stufe": "CI-Grundstufe",
+        "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+        "plattform": "win32",
+        "exitcode": 1,
+        "pruefablauf": "%PRUEFABLAGE%\\ci-ablage\\lauf-6qu8pztj\\pruefablauf.json",
+        "schritte": [
+          {
+            "schritt": "Syntax",
+            "status": "ausgeführt",
+            "grund": "427 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+          },
+          {
+            "schritt": "Versionskonsistenz",
+            "status": "ausgeführt",
+            "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.55.1; Datenformat 26"
+          },
+          {
+            "schritt": "Dokumentation",
+            "status": "ausgeführt",
+            "grund": "Alle Dokumente einschließlich Archiv im Index; 401 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+          },
+          {
+            "schritt": "Fixtures",
+            "status": "ausgeführt",
+            "grund": "21 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+          },
+          {
+            "schritt": "Werkzeugtests",
+            "status": "fehlgeschlagen",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Fachlogik-Unit-Tests",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Fachlogik ohne Systemzeitzonen",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "analyse_statisch",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "analyse_erreichbarkeit",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "standpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "attributpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "dublettenpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Tk-Voraussetzung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Startprobe",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Lieferstand",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Fremdcode",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Datenschutz",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Ablagegröße",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Synchronisation",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          }
+        ]
+      },
+      "original_ergebnis_sha256": "e4486515c2e0c35c3598f96e3296d9405a7fd1e38ae5aa999b30aa7962d9ec4c",
+      "tests": [
+        {
+          "datei": "Werkzeugtests.log",
+          "faelle": 286,
+          "dauer_s": 23.287,
+          "zusammenfassung": "OK (skipped=1)",
+          "log_sha256": "43dcca104fea2155893fa64e284222066ab514c599e5cf7517c4c6e2b12d7cd1"
+        }
+      ],
+      "integritaet": {
+        "stopped": true,
+        "integrity_stop": {
+          "after": "Werkzeugtests",
+          "source": [],
+          "documents": [
+            "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+            "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+            "00_Arbeitsvorbereitung/README.md",
+            "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+            "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+            "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+            "01_Repository/Glide/docs/07_QA_BERICHT.md",
+            "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+            "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+            "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+            "CLAUDE.md",
+            "README.md"
+          ]
+        },
+        "reported_failure": {
+          "step": "Werkzeugtests",
+          "reason": "Exitcode 0"
+        }
+      }
+    },
+    {
+      "versuch": 2,
+      "einordnung": "16 Fehler in test_markdown_tree beim Durchlauf ohne Systemzeitzonen: die Ausgabeorte überschritten die bestehende 130-Zeichen-Grenze. Prüfablage für den dritten Lauf verkürzt; Produktcode unverändert.",
+      "ergebnis": {
+        "zeitpunkt": "2026-11-13T03:45:04",
+        "stufe": "CI-Grundstufe",
+        "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+        "plattform": "win32",
+        "exitcode": 1,
+        "pruefablauf": "%PRUEFABLAGE%\\ci-ablage-final\\lauf-euujrtdv\\pruefablauf.json",
+        "schritte": [
+          {
+            "schritt": "Syntax",
+            "status": "ausgeführt",
+            "grund": "427 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+          },
+          {
+            "schritt": "Versionskonsistenz",
+            "status": "ausgeführt",
+            "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.55.1; Datenformat 26"
+          },
+          {
+            "schritt": "Dokumentation",
+            "status": "ausgeführt",
+            "grund": "Alle Dokumente einschließlich Archiv im Index; 401 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+          },
+          {
+            "schritt": "Fixtures",
+            "status": "ausgeführt",
+            "grund": "21 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+          },
+          {
+            "schritt": "Werkzeugtests",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Fachlogik-Unit-Tests",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Fachlogik ohne Systemzeitzonen",
+            "status": "fehlgeschlagen",
+            "grund": "Exitcode 1",
+            "exitcode": 1
+          },
+          {
+            "schritt": "analyse_statisch",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "analyse_erreichbarkeit",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "standpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "attributpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "dublettenpruefung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Tk-Voraussetzung",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Startprobe",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Lieferstand",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Fremdcode",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Datenschutz",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Ablagegröße",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          },
+          {
+            "schritt": "Synchronisation",
+            "status": "übersprungen",
+            "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+          }
+        ]
+      },
+      "original_ergebnis_sha256": "f2f676cd0bf0e2aef9d94c230cad16956aabea09ddd41b89f8d5c5b0bd37e3ef",
+      "tests": [
+        {
+          "datei": "Fachlogik ohne Systemzeitzonen.log",
+          "faelle": 1174,
+          "dauer_s": 33.1,
+          "zusammenfassung": "FAILED (errors=16)",
+          "log_sha256": "eae67f509acf694b277dc9d5f32b5eb5fdfe9e01d42884feb8defc5e5e78a54a"
+        },
+        {
+          "datei": "Fachlogik-Unit-Tests.log",
+          "faelle": 1174,
+          "dauer_s": 34.082,
+          "zusammenfassung": "OK",
+          "log_sha256": "00ae580ced286644bd29bb92bfca24079a7f91d1d134c7d15428122941347a1f"
+        },
+        {
+          "datei": "Werkzeugtests.log",
+          "faelle": 286,
+          "dauer_s": 22.255,
+          "zusammenfassung": "OK (skipped=1)",
+          "log_sha256": "5df8f723444b1c46b2033d0c6cd9cda2b0daaab5f14d21ba250d912433e8c6e4"
+        }
+      ],
+      "integritaet": {
+        "stopped": true,
+        "integrity_stop": null,
+        "reported_failure": {
+          "step": "Fachlogik ohne Systemzeitzonen",
+          "reason": "Exitcode 1"
+        }
+      }
+    },
+    {
+      "versuch": 3,
+      "einordnung": "Wiederholung auf unverändertem Stand mit kurzer Prüfablage.",
+      "ergebnis": {
+        "zeitpunkt": "2026-11-13T03:49:21",
+        "stufe": "CI-Grundstufe",
+        "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+        "plattform": "win32",
+        "exitcode": 0,
+        "pruefablauf": "C:\\gq\\d13-r9lo7e1e\\lauf-98szkgyx\\pruefablauf.json",
+        "schritte": [
+          {
+            "schritt": "Syntax",
+            "status": "ausgeführt",
+            "grund": "427 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+          },
+          {
+            "schritt": "Versionskonsistenz",
+            "status": "ausgeführt",
+            "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.55.1; Datenformat 26"
+          },
+          {
+            "schritt": "Dokumentation",
+            "status": "ausgeführt",
+            "grund": "Alle Dokumente einschließlich Archiv im Index; 401 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+          },
+          {
+            "schritt": "Fixtures",
+            "status": "ausgeführt",
+            "grund": "21 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+          },
+          {
+            "schritt": "Werkzeugtests",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Fachlogik-Unit-Tests",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Fachlogik ohne Systemzeitzonen",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "analyse_statisch",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "analyse_erreichbarkeit",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "standpruefung",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "attributpruefung",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "dublettenpruefung",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Tk-Voraussetzung",
+            "status": "ausgeführt",
+            "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+          },
+          {
+            "schritt": "Startprobe",
+            "status": "ausgeführt",
+            "grund": "Exitcode 0",
+            "exitcode": 0
+          },
+          {
+            "schritt": "Lieferstand",
+            "status": "ausgeführt",
+            "grund": "07_Python-Versionen ist bytegleich zu src/glide"
+          },
+          {
+            "schritt": "Fremdcode",
+            "status": "ausgeführt",
+            "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
+          },
+          {
+            "schritt": "Datenschutz",
+            "status": "ausgeführt",
+            "grund": "keine Benutzerpfade in versionierten Textdateien"
+          },
+          {
+            "schritt": "Ablagegröße",
+            "status": "ausgeführt",
+            "grund": "1502 versionierte Dateien, 293 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen; ausdrücklich geschützte QA-Stände und Referenzfixtures bleiben erhalten"
+          },
+          {
+            "schritt": "Synchronisation",
+            "status": "ausgeführt",
+            "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+          }
+        ]
+      },
+      "original_ergebnis_sha256": "774bf0b6a1f21c7be2fd58d30c9fb88363cc7489ef7b9feaf13268fe4c5433e4",
+      "tests": [
+        {
+          "datei": "Fachlogik ohne Systemzeitzonen.log",
+          "faelle": 1174,
+          "dauer_s": 30.813,
+          "zusammenfassung": "OK",
+          "log_sha256": "ff9427a6739612b229ba8cdb1627bcf3b59b82ed92580da76efe282db6c58e44"
+        },
+        {
+          "datei": "Fachlogik-Unit-Tests.log",
+          "faelle": 1174,
+          "dauer_s": 31.63,
+          "zusammenfassung": "OK",
+          "log_sha256": "76e3e3d94c9aa127e8c9ab5428adf54e198e5b5316171e5c067af58fb0d8877a"
+        },
+        {
+          "datei": "Werkzeugtests.log",
+          "faelle": 286,
+          "dauer_s": 21.509,
+          "zusammenfassung": "OK (skipped=1)",
+          "log_sha256": "b593f6e4276e5b5ffa15ea7fa7d83a20408a3ebe9864c879b7b6e7267401725e"
+        }
+      ],
+      "integritaet": {
+        "stopped": false,
+        "integrity_stop": null,
+        "reported_failure": null
+      }
+    }
+  ],
+  "hashvergleich": {
+    "dateien_geprueft": 201,
+    "unveraendert": 200,
+    "einzige_aenderung": "01_Repository/Glide/GLIDE_SYSTEM_VERSION",
+    "ausfuehrbarer_code_und_app_version_unveraendert": true,
+    "app_sha256": "5100098b17a1bb38b390697d9634e3462f401a77a1c0b3d0fad14da0768cdcbd",
+    "pythonlieferung_sha256": "5100098b17a1bb38b390697d9634e3462f401a77a1c0b3d0fad14da0768cdcbd"
+  },
+  "pruefgrenzen": [
+    "Lokale Markdown- und HTML-Verweise mit Abschnittsankern geprüft; externe URLs nicht live geprüft.",
+    "Standprüfung im Git-Checkout erfasst nur bereits versionierte Dateien; neue Dateien zusätzlich im lokalen Abgleich enthalten.",
+    "Keine neue vollständige UI-/Plattformmatrix, kein nativer Paketbau und keine neue menschliche Abnahme.",
+    "Pflegematrix als verbindlicher redaktioneller Ablauf; semantische Folgepflege wird nicht automatisch aus dem Code erzwungen.",
+    "Historische Bestandsaufnahmen, Originalaufträge und frühere Rot-/Skipnachweise unverändert."
+  ],
+  "git_veroeffentlichung": false,
+  "release_ready": false,
+  "abschlusskontrolle_nach_berichtsergaenzung": {
+    "lokale_links": {
+      "documents": 76,
+      "local_links": 1811,
+      "fragments": 438,
+      "failures": []
+    },
+    "standpruefung": {
+      "exitcode": 0,
+      "versionierte_dokumente": 74
+    },
+    "git_diff_check": {
+      "exitcode": 0,
+      "hinweis": "Nur Hinweise zur bestehenden Zeilenendenbehandlung der Versionsdateien, keine Leerraumfehler."
+    },
+    "neue_dateien_und_datenschutz": {
+      "befunde": []
+    },
+    "code_und_app_version_unveraendert": true
+  },
+  "git_folgeauftrag_2026_11_13": {
+    "auftrag": "Dokumentationsänderungen committen und auf GitHub pushen, damit Navigation und Contributing verfügbar sind.",
+    "basis_origin_main": "97dd55cf4a8c883258c99e72c4186446a7421635",
+    "erste_pruefung_der_vorgemerkten_dateien": {
+      "zeitpunkt": "2026-11-13T04:00:07",
+      "stufe": "CI-Grundstufe",
+      "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+      "plattform": "win32",
+      "exitcode": 1,
+      "pruefablauf": "C:\\gq\\dp-run13\\lauf-ei9h_5jf\\pruefablauf.json",
+      "schritte": [
+        {
+          "schritt": "Syntax",
+          "status": "ausgeführt",
+          "grund": "427 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+        },
+        {
+          "schritt": "Versionskonsistenz",
+          "status": "ausgeführt",
+          "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.55.1; Datenformat 26"
+        },
+        {
+          "schritt": "Dokumentation",
+          "status": "ausgeführt",
+          "grund": "Alle Dokumente einschließlich Archiv im Index; 401 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+        },
+        {
+          "schritt": "Fixtures",
+          "status": "ausgeführt",
+          "grund": "21 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+        },
+        {
+          "schritt": "Werkzeugtests",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Fachlogik-Unit-Tests",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Fachlogik ohne Systemzeitzonen",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "analyse_statisch",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "analyse_erreichbarkeit",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "standpruefung",
+          "status": "fehlgeschlagen",
+          "grund": "Exitcode 1",
+          "exitcode": 1
+        },
+        {
+          "schritt": "attributpruefung",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "dublettenpruefung",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Tk-Voraussetzung",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Startprobe",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Lieferstand",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Fremdcode",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Datenschutz",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Ablagegröße",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        },
+        {
+          "schritt": "Synchronisation",
+          "status": "übersprungen",
+          "grund": "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+        }
+      ]
+    },
+    "befund": "CONTRIBUTING.md fehlte eine Standzeile (R1); erst mit Git-Vormerkung durch die bestehende Standprüfung erfasst.",
+    "korrektur": "Standzeile 13.11.2026 mit Glide 3.55.1 ergänzt.",
+    "gezielter_standnachlauf": {
+      "exitcode": 0,
+      "dokumente": 76
+    },
+    "finale_veroeffentlichungspruefung": {
+      "zeitpunkt": "2026-11-13T04:05:43",
+      "stufe": "CI-Grundstufe",
+      "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+      "plattform": "win32",
+      "exitcode": 0,
+      "pruefablauf": "C:\\gq\\dp-run13\\lauf-l2zq84rd\\pruefablauf.json",
+      "schritte": [
+        {
+          "schritt": "Syntax",
+          "status": "ausgeführt",
+          "grund": "427 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+        },
+        {
+          "schritt": "Versionskonsistenz",
+          "status": "ausgeführt",
+          "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.55.1; Datenformat 26"
+        },
+        {
+          "schritt": "Dokumentation",
+          "status": "ausgeführt",
+          "grund": "Alle Dokumente einschließlich Archiv im Index; 401 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+        },
+        {
+          "schritt": "Fixtures",
+          "status": "ausgeführt",
+          "grund": "21 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+        },
+        {
+          "schritt": "Werkzeugtests",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Fachlogik-Unit-Tests",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Fachlogik ohne Systemzeitzonen",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "analyse_statisch",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "analyse_erreichbarkeit",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "standpruefung",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "attributpruefung",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "dublettenpruefung",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Tk-Voraussetzung",
+          "status": "ausgeführt",
+          "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+        },
+        {
+          "schritt": "Startprobe",
+          "status": "ausgeführt",
+          "grund": "Exitcode 0",
+          "exitcode": 0
+        },
+        {
+          "schritt": "Lieferstand",
+          "status": "ausgeführt",
+          "grund": "07_Python-Versionen ist bytegleich zu src/glide"
+        },
+        {
+          "schritt": "Fremdcode",
+          "status": "ausgeführt",
+          "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
+        },
+        {
+          "schritt": "Datenschutz",
+          "status": "ausgeführt",
+          "grund": "keine Benutzerpfade in versionierten Textdateien"
+        },
+        {
+          "schritt": "Ablagegröße",
+          "status": "ausgeführt",
+          "grund": "1508 versionierte Dateien, 300 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen; ausdrücklich geschützte QA-Stände und Referenzfixtures bleiben erhalten"
+        },
+        {
+          "schritt": "Synchronisation",
+          "status": "ausgeführt",
+          "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+        }
+      ]
+    },
+    "lokale_links": {
+      "dokumente": 76,
+      "verweise": 1812,
+      "abschnittsverweise": 439,
+      "befunde": []
+    },
+    "testzahlen_final": [
+      {
+        "lauf": "Werkzeugtests",
+        "faelle": 287,
+        "ergebnis": "OK (skipped=1)"
+      },
+      {
+        "lauf": "Fachlogik-Unit-Tests",
+        "faelle": 1174,
+        "ergebnis": "OK"
+      },
+      {
+        "lauf": "Fachlogik ohne Systemzeitzonen",
+        "faelle": 1174,
+        "ergebnis": "OK"
+      }
+    ]
+  }
+}

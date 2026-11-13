@@ -1,5 +1,9 @@
 # Glide – Übergabe an eine neue Sitzung
 
+## Dokumentationsabgleich (13.11.2026)
+
+Die [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) führt Zuständigkeiten und Änderungsfolgen zentral. Architektur, Glide-System und Shell-Konzept sind als Istvertrag, Bestand und Zielbild abgegrenzt; doppelte Modulaufzählungen im Shell-Konzept wurden durch Registerverweise ersetzt. Auftrag und Umfang stehen im [Plan §21.87](Glide_Entwicklungsplan.md#2187-dokumentationsbezüge-und-konsolidierung-13112026), die Prüfungen im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md). Die App-Freigabe bleibt beim folgenden QA-Stand; diese Pflege ist keine neue Plattform- oder Paketabnahme.
+
 ## Lokaler Prüfstand 3.55.1 (12.11.2026)
 
 3.55.1 kennzeichnet den korrigierten Stand nach der macOS-Abnahme. Enthalten sind die vereinfachte Tagesentlastung, der reparierte JSON-Canvas-Export und korrigierte Dateinamenvorschläge. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2 gelten weiter. Die [QA-Nachweise](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentieren Abnahme und Freigabestatus.
@@ -69,7 +73,7 @@ Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-
 
 **Fortsetzung am 08.11.2026 (historisch):** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 
