@@ -1,5 +1,22 @@
 # Glide – Übergabe an eine neue Sitzung
 
+## Lokaler Stand 3.60.0 (13.11.2026)
+
+**Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.22**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
+1. **Normallage:** `compact_mode.keep_visible` rechnet die Fensterlage beim Start Tk-frei; `ListApp.clamp_geometry` bleibt Fassade.
+2. **Start und Import (WA-49, weiter teilweise):** Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner an. `test_startwege.py` (Teil von `SUITEN`) und der Gleichheitstest der Bytecode-Pfade in `test_runtime_config.py` sind die Vergleichsgrundlage für weitere Startänderungen.
+3. **Einstellungsdialog:** Die Umbruchschaukel mit „Kreativ: DM Serif Display“ in kleiner Schrift ist behoben (`ui_design.settled_wrap_width`).
+
+Quelle und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.60.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch; der Showcase ist abgeglichen. Auftrag, Entscheidungen und Folgepakete stehen im [Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026), Prüfergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3600-13112026), validierte Architekturgrenzen im [Shell-Konzept](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md#6-validierte-grenzen-13112026).
+
+**Nächste Schritte:** Plattformmatrix (Windows, Linux, macOS mit Tk 9.1), Paketbau und menschliche Abnahme für 3.60.0. In der Shell-Migration folgt der Modal-Vertragstest mit echtem Grab vor jeder Verlagerung von `run_modal`; jedes Folgepaket braucht eine eigene Freigabe.
+
+## GitHub-Prüfstand 3.55.1 (13.11.2026)
+
+`main` steht auf `45ab307` mit PR #80 und der Dokumentationspflege für Glide-System V1.17.3. Für diesen Commit sind Linux- und Windows-Vollprüfung, beide eigenständigen Entwicklungsbauten und deren isolierte Starts belegt. Die lokal gesicherten Windows- und Mac-Pakete sind hashgeprüft. Der [native macOS-Volllauf](https://github.com/n05a-design/glide-to-do/actions/runs/43405769310) ist nach 105 erfolgreichen Schritten im Zeitfall für Seitenkarten rot (1,1176 bei Grenze 1,10). Der gezielte Vorlauf bestand. Originalwerte und Laufzeitkontext stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#macos-seitenkarten-im-vollmodus). Nächster Einstieg im [Plan §21.89](Glide_Entwicklungsplan.md#2188-prüfung-und-lieferabgleich-3551-13112026).
+
+PC-02 Intel hat eine DLL-Suchpfadabhängigkeit im Windows-Paket reproduziert. Der lokale korrigierte Starter ist im nativen Windows-Regressionsfall und auf einer Paketkopie geprüft. Der reguläre Paketneubau bleibt offen. [A/B-Nachweis](../01_Repository/Glide/docs/07_QA_BERICHT.md#gezielte-windows-paketprobe-auf-pc-02-intel).
+
 ## Dokumentationsabgleich (13.11.2026)
 
 Die [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) führt Zuständigkeiten und Änderungsfolgen zentral. Architektur, Glide-System und Shell-Konzept sind als Istvertrag, Bestand und Zielbild abgegrenzt; doppelte Modulaufzählungen im Shell-Konzept wurden durch Registerverweise ersetzt. Auftrag und Umfang stehen im [Plan §21.87](Glide_Entwicklungsplan.md#2187-dokumentationsbezüge-und-konsolidierung-13112026), die Prüfungen im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md). Die App-Freigabe bleibt beim folgenden QA-Stand; diese Pflege ist keine neue Plattform- oder Paketabnahme.
@@ -8,14 +25,14 @@ Die [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkei
 
 3.55.1 kennzeichnet den korrigierten Stand nach der macOS-Abnahme. Enthalten sind die vereinfachte Tagesentlastung, der reparierte JSON-Canvas-Export und korrigierte Dateinamenvorschläge. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2 gelten weiter. Die [QA-Nachweise](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentieren Abnahme und Freigabestatus.
 
-## GitHub-Stand 3.55.0 nach PR #78
+## Vorangegangener GitHub-Stand 3.55.0 nach PR #78
 
-**Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) steht auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation. Der unabhängige Systemkatalog steht nach der Dokumentationspflege auf **V1.17.2**.
+**Glide 3.55.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) lag nach PR #78 auf `main` bei `766978d`. PR #77 (`a72d5e9`) brachte die fachlichen Änderungen ein. PR #78 ergänzte die App-Neuerungskarte „Neu in 3.55.0“ und korrigierte die Dokumentation.
 1. **Tagesplanung & Kapazität (`WA-12`):** `planning.py` berechnet geplanten Aufgabenaufwand, Kalenderbelegung und Netto-Kapazität. `day_relief.py` bereitet Tagesbilanz und Überlastungsgründe auf. `ListApp` in `app.pyw` bindet die Bilanz und den Entlastungsdialog ein. Ungeschätzte Aufgaben bleiben gesondert sichtbar und Fälligkeiten bleiben beim Umplanen erhalten.
 2. **Laufzeitkonfiguration (`WA-49` / `M095`):** `runtime_config.py` bündelt die Tk-freie Auflösung der Datenpfade. Ein expliziter Pfad oder `GLIDE_DATA_DIR` hat Vorrang vor `datenordner.json` und dem Plattformstandard. Unter Windows liegen Daten standardmäßig in `%APPDATA%/Glide`, der Cache in `%LOCALAPPDATA%/Glide/Cache`. `app.pyw` nutzt die Pfadfunktionen und verwaltet weiterhin einzelne Laufzeitoptionen.
 3. **Glide Shell Framework Architekturkonzept:** Der Entwurf beschreibt die schrittweise Entkopplung von Fensterverwaltung, Navigation und Fachlogik. Mit der Pfadauflösung liegt ein erster Baustein vor.
 
-Die aktive Python-Lieferung 3.55.0 ist per SHA-256 mit Quelle, Schnellstart, Laufzeitmodulen und mitgelieferten Ressourcen abgeglichen. Linux- und Windows-Vollprüfung sowie eigenständiger Windows-x64- und macOS-arm64-Paketbau mit isoliertem Start sind auf `766978d` belegt. Der separate native macOS-Vollmodus scheiterte am Zeitgrenzwert für Seitenkarten-Druck. Menschliche Bedien-/Sicht-/DPI-Abnahme, Veröffentlichungssignaturen und Inhaberfreigabe bleiben offen. Maßgeblich sind der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) und die [manuelle Prüfliste](Glide_Manuelle_Pruefung.md#offene-menschliche-abnahme-3550).
+Die damalige Python-Lieferung 3.55.0 war per SHA-256 mit Quelle, Schnellstart, Laufzeitmodulen und mitgelieferten Ressourcen abgeglichen. Linux- und Windows-Vollprüfung sowie eigenständiger Windows-x64- und macOS-arm64-Paketbau mit isoliertem Start sind auf `766978d` belegt. Der separate native macOS-Vollmodus scheiterte am Zeitgrenzwert für Seitenkarten-Druck. Details stehen im [QA-Bericht für 3.55.0](../01_Repository/Glide/docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026).
 
 ## Vorangegangener Stand 3.54.0 (`main` nach PR #76)
 
@@ -73,7 +90,7 @@ Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-
 
 **Fortsetzung am 08.11.2026 (historisch):** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 
@@ -83,7 +100,7 @@ Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überh
 |---|---|
 | Ausgangspunkt | 3.50.6 / Format 26 in PR #69, anfangs `be379408`, ergänzt auf `13bcb66a`; PR beim Abgleich offen, `main` `8e71ae52` trägt noch 3.50.5 |
 | Eigene Arbeit | `codex/glide-3.50.7-validierung`: Branding/MPL/Statusabgleich und gezielte Seitenleistenkorrektur; Zielversion 3.50.7 nach D73, kein neues Datenformat |
-| Python und Showcase | Versionswechsel und separater Lieferabgleich; konkrete SHA-256 und Testergebnisse im [Rundennachweis](../01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/README.md) |
+| Python und Showcase | Versionswechsel und separater Lieferabgleich; konkrete SHA-256 und Testergebnisse im [Rundennachweis](https://github.com/n05a-design/glide-to-do/blob/45ab307e2d2fcf5892a806880faaf344a3c058a1/01_Repository/Glide/tests/qa-3.50.7/validierung_2026-11-07/README.md) |
 | Eigenständige Pakete | Windows 3.50.5 auf früherem Hash; Mac 3.50.6 lokal auf `f4339a5d…`, vor Seitenleisten-/Anhangsnachträgen. Kein Paketnachweis für 3.50.7. Diese Versionen bleiben getrennt. |
 | Automatisierte QA | Strenge Windows-Grundstufe auf Startbasis grün; neue Prüfergebnisse auf aktuellen Bytes ausschließlich im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). PR-#69-Vollmatrix auf `13bcb66a` rot: Windows-Unterzeilentest, Linux kompakt/pinnwandleiste. Stopps und übersprungene Folgen sind kein Erfolg. |
 | Native und menschliche QA | Mac-Befund `test_bedienung33316` offen, dortiger Vollmodus nach 80 Schritten gestoppt und 44 Folgeschritte nicht ausgeführt. Gemeldete und bestätigte Teilabnahmen vom 07.11. bleiben ihrem Vorzustand zugeordnet. Neue Gesamt-/DPI-/Mehrmonitorabnahme offen; Reader nach D58 zurückgestellt. |

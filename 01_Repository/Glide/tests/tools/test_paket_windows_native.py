@@ -1,9 +1,16 @@
 # SPDX-License-Identifier: MPL-2.0
-import sys as _sys
-from pathlib import Path as _Path
-_sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import copy
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
 import unittest
+
+PACKAGE_TOOLS = Path(__file__).resolve().parents[2] / 'packaging/paket'
+sys.path.insert(0, str(PACKAGE_TOOLS))
+
 from windows_native import validate_graph, validate_loaded
 from runtime_paths import defender_provider
 
@@ -13,6 +20,35 @@ def record(path, imports=(), *, machine=0x8664, sha256='a'*64):
 
 
 class WindowsNativeContract(unittest.TestCase):
+    @unittest.skipUnless(sys.platform == 'win32', 'Benötigt den nativen Windows-DLL-Loader')
+    def test_package_bootstrap_ignores_dlls_from_inherited_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            system_library = Path(os.environ['SystemRoot']) / 'System32/version.dll'
+            shutil.copy2(system_library, Path(directory) / 'glide-dll-pfad-probe.dll')
+            env = dict(os.environ, PATH=directory + os.pathsep + os.environ['PATH'])
+            probe = """
+import ctypes
+import sys
+from start_glide import restrict_windows_dll_search
+
+if sys.argv[1] == 'restricted':
+    restrict_windows_dll_search()
+    ctypes.WinDLL('version.dll', winmode=0)
+try:
+    ctypes.WinDLL('glide-dll-pfad-probe.dll', winmode=0)
+except FileNotFoundError:
+    print('abgewiesen')
+else:
+    print('geladen')
+"""
+            for mode, expected in (('baseline', 'geladen'), ('restricted', 'abgewiesen')):
+                with self.subTest(mode=mode):
+                    result = subprocess.run(
+                        [sys.executable, '-B', '-c', probe, mode], cwd=PACKAGE_TOOLS,
+                        env=env, capture_output=True, text=True, timeout=20)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(result.stdout.strip(), expected)
+
     def test_internal_python_tcl_and_system_imports_resolve_without_mutation(self):
         records = [record('Glide.exe', ['KERNEL32.dll', 'python314.dll']),
                    record('_internal/python314.dll', ['api-ms-win-core-file-l1-1-0.dll']),

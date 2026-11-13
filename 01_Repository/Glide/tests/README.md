@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26 · 108 Integrationsdateien, 112 serielle Aufrufe und fünf Analysen
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26 · 110 Integrationsdateien, 114 serielle Aufrufe und fünf Analysen
 
 Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md). Der historische Stand 3.50.0 ist im [Betanachweis](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 
@@ -12,7 +12,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.55.1/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.60.0/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -30,7 +30,7 @@ Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `b
 
 | Ordner | Inhalt |
 |---|---|
-| `integration/` | 108 registrierte Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
+| `integration/` | 110 registrierte Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
 | `unit/` | Unit-Tests der Tk-freien Fachmodule (D17) |
 | `tools/` | Prüfstand, Analysen, Erzeuger für Beispiel-, Release-, Rundgang- und Showcase-Daten, CI-Grundstufe, Ablagegröße ([Übersicht](tools/README.md)) |
 | `fixtures/` | Referenzformate 2 und 4–26, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |

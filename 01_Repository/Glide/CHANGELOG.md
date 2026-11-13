@@ -1,5 +1,13 @@
 # Änderungsverlauf
 
+## 3.60.0 – 13.11.2026
+
+- **Einstellungen mit „Kreativ“ in kleiner Schrift:** Der Einstellungsdialog öffnet auch mit DM Serif Display und der Schriftgröße „klein“ sofort. Vorher kreisten Umbruch und Spaltenbreite vor dem ersten Anzeigen endlos über drei Werte (gemessen unter macOS mit Tk 9.0.3). Die Tk-freie Regel `ui_design.settled_wrap_width` beendet die Runde bei einer wiederkehrenden Breite; das Ergebnis der übrigen Schriftkombinationen ist unverändert.
+- **Fensterlage beim Start:** Die Lageregel der Normalansicht rechnet Tk-frei in `compact_mode.keep_visible`; `ListApp.clamp_geometry` bleibt die Fassade. Verhalten unverändert.
+- **Import ohne Ordneranlage (WA-49):** Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner mehr an; das übernimmt der App-Start.
+- **Prüfungen:** `test_startwege.py` hält als Teil von `SUITEN` Direktstart, Schnellstart und nachgestellten Paketstarter gegen vier künstliche Ablagen fest. `test_runtime_config.py` hält die drei Auflösungen des Bytecode-Ordners gleich. `test_arbeitsmodi.py` berücksichtigt zwei Eigenschaften von Tk 9.0 unter macOS.
+- Glide-System V1.22; Datenformat 26 unverändert. Prüfumfang und Grenzen im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3600-13112026).
+
 ## Dokumentationspflege – 13.11.2026
 
 - Contributing-Einstieg und README-Navigation für Mitarbeit, Roadmap, Funktionen, Architektur, Entwicklungsablauf und Qualität ergänzt.
@@ -8,6 +16,8 @@
 - Glide-Systemkatalog als Dokumentationskorrektur auf V1.17.3 fortgeschrieben; App 3.55.1 und Datenformat 26 unverändert. Prüfumfang und Grenzen im [Nachweis](tests/qa-3.55.1/dokumentation_2026-11-13/README.md).
 
 ## 3.55.1 – 12.11.2026
+
+- **Windows-Paketstart (lokaler Nachlauf, 13.11.2026):** Der Paketstart beschränkt den DLL-Suchpfad auf Anwendung, Paket und Windows-Systemverzeichnis. Die native Startprobe löst Pfadumleitungen vor dem Vergleich auf. Ein regulärer Paketneubau mit diesem Startskript steht aus.
 
 - **Dateinamen unter macOS:** Die Speicherdialoge für JSON Canvas und App-Sicherung schlagen den Namen mit einfacher Dateiendung vor. Bestehende Sicherungen bleiben lesbar.
 

@@ -20,6 +20,9 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.60.0": (
+        "Die Einstellungen öffnen sich auch mit dem Stil „Kreativ“ und kleiner Schrift sofort.",
+    ),
     "3.55.1": (
         "Beim Entlasten eines Tages wählst du die Aufgaben und den neuen Bearbeitungstag und bestätigst mit „Umplanen“.",
         "Der JSON-Canvas-Export funktioniert wieder und schlägt wie die App-Sicherung einen Dateinamen mit einfacher Endung vor.",

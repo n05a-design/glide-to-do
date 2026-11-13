@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 
@@ -13,6 +13,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 - **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Architektur, Bestand und Zielbild:** [Architektur](02_ARCHITECTURE.md), [Glide-System](../src/glide/README.md) und [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) haben getrennte Zuständigkeiten.
+- **Shell-Migration vorbereiten:** [Fable-Masterprompt](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) mit Quellstand, Planungsauftrag und Freigabegrenzen.
 - **Änderungen übergreifend abgleichen und Dokumente konsolidieren:** [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und [Abgleich ohne doppelte Pflege](DOKUMENTENPFLEGE.md#abgleich-ohne-doppelte-pflege).
 
 ## Dokumente
@@ -30,6 +31,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D79 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
 | [Glide Shell Framework](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur- und Entkopplungskonzept für das wiederverwendbare Desktop-Fundament, Fensterorchestrierung und Migrationspfad |
+| [Arbeitsvorlage zur Shell-Migration](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | Lokale Planungsvorlage für den ersten Schnitt auf Basis von `45ab307` |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |
 
 ## Einzelentscheidungen

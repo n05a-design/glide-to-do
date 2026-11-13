@@ -189,5 +189,27 @@ class GleicheMarkenbreiteTest(unittest.TestCase):
     def test_gleiche_zeichen(self):
         self.assertEqual(design.aligned_markers(("□", "□"), self.messen), {"□": "□"})
 
+
+class BeruhigterUmbruchTest(unittest.TestCase):
+    """Umbruchbreite im Einstellungsdialog: neue Breiten gelten, wiederkehrende beenden die Runde."""
+
+    def test_neue_breiten_gelten_wie_gemeldet(self):
+        gesehen = set()
+        self.assertEqual([design.settled_wrap_width(breite, gesehen) for breite in (300, 402, 483)], [300, 402, 483])
+        self.assertEqual(gesehen, {300, 402, 483})
+
+    def test_wiederkehrende_breite_ergibt_die_engste(self):
+        # Gemessene Schaukel mit DM Serif Display in kleiner Schrift: 402 → 411 → 428 → 402 → …
+        gesehen, gesetzt = set(), []
+        for breite in (402, 411, 428, 402, 411, 428, 402):
+            gesetzt.append(design.settled_wrap_width(breite, gesehen))
+        self.assertEqual(gesetzt, [402, 411, 428, 402, 402, 402, 402])
+
+    def test_geleerte_menge_gibt_breitere_spalte_wieder_frei(self):
+        gesehen = {402, 411, 428}
+        self.assertEqual(design.settled_wrap_width(411, gesehen), 402)
+        gesehen.clear()
+        self.assertEqual(design.settled_wrap_width(483, gesehen), 483)
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # An Glide arbeiten
 
-Stand 13.11.2026 · Glide 3.55.1
+Stand 13.11.2026 · Glide 3.60.0
 
 Du möchtest einen Fehler melden, eine Idee einbringen, die Dokumentation verbessern oder an Glide entwickeln? Hier findest du den Einstieg und die zuständigen Unterlagen.
 

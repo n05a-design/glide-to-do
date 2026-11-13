@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzusammenfassungen entfernt. Stand, Prüfgrenzen und nächste Schritte stehen in der Übergabe; datierte Ergebnisse im QA-Bericht.
 

@@ -154,6 +154,21 @@ def stale_empty_frame(has_slaves, configured_width, configured_height, requested
     return requested_width > 1 or requested_height > 1
 
 
+def settled_wrap_width(width, seen):
+    """Umbruchbreite, die auch bei einer Layoutschaukel zur Ruhe kommt.
+
+    `seen` sammelt die Breiten, die bei unveränderter Fensterbreite schon
+    gesetzt wurden. Eine neue Breite gilt wie gemeldet. Kehrt eine gesehene
+    wieder, schaukeln Umbruch und Spaltenbreite einander auf; dann gilt die
+    engste gesehene Breite, und jede weitere gesehene Breite ändert nichts.
+    Der Aufrufer leert `seen`, sobald das Fenster seine Breite ändert.
+    """
+    if width in seen:
+        return min(seen)
+    seen.add(width)
+    return width
+
+
 HAIR_SPACE = "\u200a"
 
 
