@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Erzeugt den aktiven Showcase mit echten App-APIs in einem temporären Bestand.
 
-Bildquellen: JPEG-Arbeitskopien unter tests/fixtures/showcase/bilder.
+Bildquellen: PNG-Arbeitskopien unter tests/fixtures/showcase/bilder.
 Alle Termine beziehen sich auf --tag; ohne Angabe auf den Erzeugungstag.
 Kein Zugriff auf den persönlichen Glide-Datenordner, keine Laufzeitänderung.
 """
@@ -28,10 +28,10 @@ PHOTO_TITLE = "Raumstudien"
 PIXEL_TITLE = "Leitschild · Lichtwechsel"
 NOTIZ_TITLE = "Freitagsrunde · Offene Fragen"
 PHOTOS = [
-    (STOCK / "Planstudie.jpg", "Vom Plan zum Raum", "Referenz für den Einstieg: Linie und Modell in einem Bild."),
-    (STOCK / "Licht-zum-Hof.jpg", "Licht zum Hof", "Modellstudie für den letzten Abschnitt des Rundgangs."),
-    (STOCK / "Materialwand.jpg", "Ruhiger Hintergrund", "Wandfläche und Einfassung für die kleine Materialschau."),
-    (STOCK / "Sitzbereich.jpg", "Sitzen und sprechen", "Referenz für die Bank am Ende des Rundgangs."),
+    (STOCK / "Planstudie.png", "Vom Plan zum Raum", "Referenz für den Einstieg: Linie und Modell in einem Bild."),
+    (STOCK / "Licht-zum-Hof.png", "Licht zum Hof", "Modellstudie für den letzten Abschnitt des Rundgangs."),
+    (STOCK / "Materialwand.png", "Ruhiger Hintergrund", "Wandfläche und Einfassung für die kleine Materialschau."),
+    (STOCK / "Sitzbereich.png", "Sitzen und sprechen", "Referenz für die Bank am Ende des Rundgangs."),
 ]
 
 BRIEFING = """## Die Tür ist der Anfang

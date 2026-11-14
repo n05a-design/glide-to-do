@@ -192,7 +192,7 @@ def check(fixture, images=None, restart_dir=None):
             assert not app.settings["system_notifications"]
             assert app.settings["pinned_pages"] and app.settings["saved_filters"]
             assert app.day_close_queue(today=manifest["bearbeitungstag"])
-            # Alle Dokumentarten real anzeigen; auf macOS müssen Originalmotive Vorschauen bekommen.
+            # Die PNG-Arbeitskopien müssen auf jeder Plattform sichtbar sein.
             for title, filename in [(briefing["title"],"01_Briefing"), (gallery["title"],"02_Galerie"),
                 (NOTIZ_TITLE,"03_Protokoll"), (PIXEL_TITLE,"04_Zeichnung")]:
                 app.set_active_list(lists[title]["id"])
@@ -201,15 +201,15 @@ def check(fixture, images=None, restart_dir=None):
                     editor = app.rich_note_editor
                     assert len(editor.images) == 3
                     assert {info["mode"] for info in editor.images.values()} == {"left","right","center"}
-                    if sys.platform == "darwin":
-                        assert all(v._photo is not None for v in editor._image_views.values())
+                    assert len(editor._image_views) == len(editor.images)
+                    assert all(v._photo is not None for v in editor._image_views.values())
                     closed = editor.text.tag_ranges("toggle_closed")
                     assert closed and editor.text.tag_ranges("folded")
                     assert editor.set_toggle_open(str(closed[0]), True)
                     assert not editor.text.tag_ranges("folded")
                     assert editor.set_toggle_open(str(closed[0]), False)
                     editor.flush()
-                if title == gallery["title"] and sys.platform == "darwin":
+                if title == gallery["title"]:
                     assert {key[0] for key in app.gallery_view._images} == {a["storage"] for a in gallery["attachments"]}
                 photo(images, filename)
             project = next(f for f in app.folders if f["title"] == "Werkhaus West")
