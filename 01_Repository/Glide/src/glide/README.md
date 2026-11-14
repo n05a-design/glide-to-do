@@ -1,8 +1,8 @@
-# Glide-System V1.23.1
+# Glide-System V1.24
 
-Stand 14.11.2026 · Glide 3.60.0 · Glide-System V1.23.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 14.11.2026 · Glide 3.61.0 · Glide-System V1.24 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.23.1` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.24` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 14.11.2026 · Glide 3.60.0 · Glide-System V1.23.1 · Aufgabenformat 26 ·
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.24** | 14.11.2026 | Glide 3.61.0: `content_search` normalisiert NFC vor der Faltung, Trefferpositionen je Zeichengruppe; `runtime_config.prepare_data_dir`/`unreachable_message` melden einen nicht anlegbaren Datenordner, Zeiger mit `utf-8-sig`; `day_relief.overload_lines` liefert die Gründe unter der Entlastungsbilanz, `planning` mit korrekter Einzahl. Tests: NFD-Fälle, BOM/Meldung, `overload_lines`, Zustand „unerreichbar“ in `test_startwege.py`, Gründe im Dialog in `test_tag3390.py`. Fünf Textverweise auf den gekürzten Ordner `qa-3.50.6` zeigen auf die feste Git-Fassung. | App 3.61.0, Format 26 |
 | **V1.23.1** | 14.11.2026 | Werkhaus-Showcase mit PNG-Arbeitskopien und plattformübergreifender Vorschauprüfung. Der Paketbelegtest prüft auch die zusätzliche Windows-Quellenisolation. | App 3.60.0, Format 26 |
 | **V1.23** | 13.11.2026 | Zweifarbiges In-App-Logo aus dem SVG-Master. SVG-Pfade mit quadratischen Bézierkurven, gruppierten CSS-Selektoren und geschichteter PNG-Ausgabe. Der Windows-Aufnahmehelfer verwendet den Werkhaus-Showcase mit echten Ansichten und Dialogen. | App 3.60.0, Format 26 |
 | **V1.22** | 13.11.2026 | Glide 3.60.0: `ui_design.settled_wrap_width` beendet die Umbruchschaukel im Einstellungsdialog (DM Serif Display in kleiner Schrift) mit Unit-Tests. `test_startwege.py` ist Teil von `SUITEN` (110 Suiten). `test_arbeitsmodi.py` berücksichtigt bei `schriftstile` und `kompakt_verlorenes_loslassen` zwei Eigenschaften von Tk 9.0 unter macOS. Die Shell-Schnitte der Versionen V1.18 bis V1.21 sind mit 3.60.0 Teil der Lieferung. | App 3.60.0, Format 26 |
@@ -71,7 +72,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M003 | [`runtime_check.py`](runtime_check.py) | Prüfung der Python- und Tk-Mindestversionen | Mindestversion Python/Tk, bewusst in einfacher Syntax (AB08); der Schnellstart prüft vor dem App-Import, der direkte Start von `app.pyw` nicht (Abschnitt Laufzeit oben, WA-49); Stand: 3.33.20 | hoch | Isolationstest erforderlich; Python-/Tk-Prüfvertrag parametrisieren; Direktstart gesondert absichern; Kein aktueller modulspezifischer Isolationsnachweis | test_runtime_check.py |
 | M004 | [`release_notes.py`](release_notes.py) | Versionsbezogene Neuerungskarten und Anzeigeregeln | Katalog und Regeln der einmaligen Karte „Neu in …“ (Tk-frei, N07); Stand: 3.33.20 | mittel | Adapter + Isolationstest; Startprotokoll, Laufzeit-/Projektpfade, App-Kontext und Konfiguration abstrahieren; Kein aktueller modulspezifischer Isolationsnachweis | test_release_notes.py |
 | M005 | [`settings_compat.py`](settings_compat.py) | Erhalt unbekannter gültiger Zusatzfelder in Einstellungen | Additive unbekannte Filter-/Pinnwandfelder und fremde Kartentypen bewahren; geprüfte bekannte Werte und Grenzen bleiben maßgeblich, keine neue Auswertung; Stand: lokaler 3.49.0-Fortsetzungsstand (WA-09) | mittel | Adapter + Isolationstest; Startprotokoll, Laufzeit-/Projektpfade, App-Kontext und Konfiguration abstrahieren; Kein aktueller modulspezifischer Isolationsnachweis | test_settings_compat.py |
-| M095 | [`runtime_config.py`](runtime_config.py) | Laufzeitkonfiguration und zustandslose Pfadauflösung ohne Import-Seiteneffekte | Seiteneffektfreie Pfadbestimmung, getrennte Daten- und Cachepfade; Stand: 3.55.0 (WA-49) | hoch | Isolationstest vorhanden; neutrales Konfigurationsmodell | test_runtime_config.py |
+| M095 | [`runtime_config.py`](runtime_config.py) | Laufzeitkonfiguration und zustandslose Pfadauflösung ohne Import-Seiteneffekte | Seiteneffektfreie Pfadbestimmung, getrennte Daten- und Cachepfade; Stand: 3.55.0 (WA-49); meldet seit 3.61.0 einen nicht anlegbaren Datenordner als Titel und Text (`prepare_data_dir`) und liest den Zeiger mit `utf-8-sig` | hoch | Isolationstest vorhanden; neutrales Konfigurationsmodell | test_runtime_config.py |
 
 ### Design/Branding
 
@@ -121,7 +122,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M037 | [`filter_explain.py`](filter_explain.py) | Prüfung und Erklärung gespeicherter Filter | Bedingungen gespeicherter Filter prüfen und erklären (Tk-frei, D-03); Stand: 3.34.0 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_filter_explain.py |
 | M038 | [`planning.py`](planning.py) | Tagesziele, Kapazitäten, Wochenbilanz, Planungsvorschau | Bearbeitungstagsziele, Wochentagskapazität, gemeinsame Bilanz und Vorschau ohne Mutation (Tk-frei, KO01/AU02); Stand: 3.33.13 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_planning.py |
 | M039 | [`day_proposal.py`](day_proposal.py) | Erklärbare Tagesvorschläge und Veraltungsprüfung | Erklärbare Tagesauswahl, Auswahlbudget und Prüfung veralteter Vorschläge (Tk-frei, AU01); Stand: 3.33.14 | gering | Refactoring zuerst; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_day_proposal.py |
-| M040 | [`day_relief.py`](day_relief.py) | Mehrfachumplanung mit Kapazitäts- und Konfliktprüfung | Explizite Mehrfach-Umplanung mit gemeinsamem Kapazitätsvergleich und Konfliktschutz ohne Tk; Stand: 3.39.0 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_day_relief.py |
+| M040 | [`day_relief.py`](day_relief.py) | Mehrfachumplanung mit Kapazitäts- und Konfliktprüfung | Explizite Mehrfach-Umplanung mit gemeinsamem Kapazitätsvergleich und Konfliktschutz ohne Tk; Stand: 3.39.0; seit 3.61.0 erklärende Zeilen zu überplanten Tagen (`overload_lines`) | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_day_relief.py |
 | M041 | [`week_planning.py`](week_planning.py) | Wochenbilanz und Zeitfensterplanung | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei); Stand: 3.33.17 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_week_planning.py |
 | M042 | [`eisenhower.py`](eisenhower.py) | Dringlichkeits-/Wichtigkeitsquadranten | Quadranten „Dringlichkeit × Wichtigkeit“ und Änderung beim Ablegen (`DRINGEND_TAGE`, `WICHTIG_AB`); Stand: 3.33.5 | hoch | Isolationstest erforderlich; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_eisenhower.py |
 | M043 | [`routines.py`](routines.py) | Routinenauswahl, Fortschritt, Tageserledigung | Routinen in „Heute“: Auswahl, Fortschritt, heute vollständig (Tk-frei, AU06); Stand: 3.33.20 | mittel | Adapter + Isolationstest; Glide-Aufgabenmodell/ID-Konventionen durch eigenständigen Domain-Vertrag ersetzen; Kein aktueller modulspezifischer Isolationsnachweis | test_routines.py |
@@ -177,7 +178,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M078 | [`notion_import.py`](notion_import.py) | Planung der Notion-Übernahme | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, D26/D37/D39); Stand: 3.41.0 | gering | Refactoring zuerst; Parser aus Glide-Importplanung herauslösen; Notion-ZIP-Grenzen erhalten; Kein aktueller modulspezifischer Isolationsnachweis | test_notion_import.py |
 | M079 | [`notion_reimport.py`](notion_reimport.py) | Änderungserkennung und Konfliktprüfung beim Reimport | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, D26/D37/D39); Stand: 3.41.0 | mittel | Adapter + Isolationstest; Parser ohne Glide-Datenmutationen testen; Mapping zum neuen Domainmodell separat; Kein aktueller modulspezifischer Isolationsnachweis | test_notion_reimport.py |
 | M080 | [`notion_hierarchy.py`](notion_hierarchy.py) | Zuordnung von Notion-Unterseiten | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, D26/D37/D39); Stand: 3.41.0 | gering | Refactoring zuerst; Parser ohne Glide-Datenmutationen testen; Mapping zum neuen Domainmodell separat; Kein aktueller modulspezifischer Isolationsnachweis | test_notion_hierarchy.py |
-| M081 | [`content_search.py`](content_search.py) | Inhaltssuche und Trefferausschnitte | Inhaltssuche, Titelrang und Ausschnitt ohne Tk, I/O oder Index; Stand: 3.33.7 | hoch | Isolationstest erforderlich; Textsuche/Trefferprojektion als Domain-neutralen Dienst herauslösen; Kein aktueller modulspezifischer Isolationsnachweis | test_content_search.py |
+| M081 | [`content_search.py`](content_search.py) | Inhaltssuche und Trefferausschnitte | Inhaltssuche, Titelrang und Ausschnitt ohne Tk, I/O oder Index; NFC vor der Faltung, damit zerlegte Umlaute gefunden werden (3.61.0); Stand: 3.33.7 | hoch | Isolationstest erforderlich; Textsuche/Trefferprojektion als Domain-neutralen Dienst herauslösen; Kein aktueller modulspezifischer Isolationsnachweis | test_content_search.py |
 | M082 | [`markdown_tree.py`](markdown_tree.py) | Markdown-Baumexport, Anhänge, Prüfsummen | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1); Stand: 3.44.0 (FP-07/FP-04) | mittel | Adapter + Isolationstest; Parser ohne Glide-Datenmutationen testen; Mapping zum neuen Domainmodell separat; Kein aktueller modulspezifischer Isolationsnachweis | test_markdown_tree.py |
 | M083 | [`page_markdown.py`](page_markdown.py) | Umwandlung Markdown und Glide-Seitendokument | Markdown ↔ Seitendokument; Stand: 3.30 | mittel | Adapter + Isolationstest; Parser ohne Glide-Datenmutationen testen; Mapping zum neuen Domainmodell separat; Kein aktueller modulspezifischer Isolationsnachweis | test_page_markdown.py |
 
@@ -394,25 +395,25 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F121 | **Keine System-Standardscrollleisten oder Altbestandteile** | ThemedAutoScrollbar sowie GlideCheckbutton, GlideRadiobutton, GlideListbox und GlideScale; Werkzeug altbestandteile.py mit Sperrklinke 0/0 | app.pyw, tests/tools/altbestandteile.py | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert und mit 3.54.0 vollständig auf 0/0 gesenkt; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F121 | **Keine System-Standardscrollleisten oder Altbestandteile** | ThemedAutoScrollbar sowie GlideCheckbutton, GlideRadiobutton, GlideListbox und GlideScale; Werkzeug altbestandteile.py mit Sperrklinke 0/0 | app.pyw, tests/tools/altbestandteile.py | Teilweise wiederverwendbar; in [qa-3.50.6](https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/tests/qa-3.50.6/README.md) (feste Git-Fassung) dokumentiert und mit 3.54.0 vollständig auf 0/0 gesenkt; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Neuerungen
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F122 | **Neuerungenkarte auf drei Versionen** | release_notes.CARD_VERSIONS = 3; bei großer Schrift bleibt Gelesen sichtbar | release_notes.py, app.pyw | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F122 | **Neuerungenkarte auf drei Versionen** | release_notes.CARD_VERSIONS = 3; bei großer Schrift bleibt Gelesen sichtbar | release_notes.py, app.pyw | Teilweise wiederverwendbar; in [qa-3.50.6](https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/tests/qa-3.50.6/README.md) (feste Git-Fassung) dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Eingabe & Anhang
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F123 | **Anhangsnamen / Vorsicherung** | Titel 40 Zeichen, Speichername 73; vor Umbenennen ZIP mit Originalbytes, Wiederherstellung alter Pfade | attachment_paths.py, app.pyw | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F123 | **Anhangsnamen / Vorsicherung** | Titel 40 Zeichen, Speichername 73; vor Umbenennen ZIP mit Originalbytes, Wiederherstellung alter Pfade | attachment_paths.py, app.pyw | Teilweise wiederverwendbar; in [qa-3.50.6](https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/tests/qa-3.50.6/README.md) (feste Git-Fassung) dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Design
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F124 | **Themenfarbige Ansichtstitel** | Ansichtstitel mit Themenfarbe und Mindestkontrast 4,5:1, Kontrastgrau neutral | appearance.py, ui_design.py, app.pyw | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F124 | **Themenfarbige Ansichtstitel** | Ansichtstitel mit Themenfarbe und Mindestkontrast 4,5:1, Kontrastgrau neutral | appearance.py, ui_design.py, app.pyw | Teilweise wiederverwendbar; in [qa-3.50.6](https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/tests/qa-3.50.6/README.md) (feste Git-Fassung) dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Pinnwand
 
@@ -424,7 +425,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 
 | ID | Funktion | Verhalten | Modulbezug | Wiederverwendung / Testbedarf |
 |---|---|---|---|---|
-| F126 | **Delete/Backspace in Textfeldern** | Rück-/Löschtaste darf beim Editieren keine Task löschen; Sperrwechsel meldet Zustand | ui_design.py, app.pyw | Teilweise wiederverwendbar; in qa-3.50.6 dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
+| F126 | **Delete/Backspace in Textfeldern** | Rück-/Löschtaste darf beim Editieren keine Task löschen; Sperrwechsel meldet Zustand | ui_design.py, app.pyw | Teilweise wiederverwendbar; in [qa-3.50.6](https://github.com/n05a-design/glide-to-do/blob/74717a85e9401e9d76fa87f323e2647dff39884e/01_Repository/Glide/tests/qa-3.50.6/README.md) (feste Git-Fassung) dokumentiert; CI-Abnahme offen; Plattformspezifische QA notwendig |
 
 ### Kopf und Navigation
 
@@ -565,7 +566,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T019 | [`test_capture_reminder.py`](../../tests/unit/test_capture_reminder.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T020 | [`test_capture_repeat_anchor.py`](../../tests/unit/test_capture_repeat_anchor.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T021 | [`test_compact_mode.py`](../../tests/unit/test_compact_mode.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T022 | [`test_content_search.py`](../../tests/unit/test_content_search.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T022 | [`test_content_search.py`](../../tests/unit/test_content_search.py) | Suchvertrag einschließlich zerlegter Umlaute und Akzente (NFC, 3.61.0); grün im Prüfstand 3.61.0 |
 | T023 | [`test_core_accessibility.py`](../../tests/unit/test_core_accessibility.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T024 | [`test_daily_hints.py`](../../tests/unit/test_daily_hints.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T025 | [`test_data_lock.py`](../../tests/unit/test_data_lock.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
@@ -751,7 +752,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T198 | [`test_speichervergleich3339.py`](../../tests/integration/test_speichervergleich3339.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T199 | [`test_startseite3332.py`](../../tests/integration/test_startseite3332.py) | Ruhende Geometrie nach natürlichem Ende der Fahnen; dreifach verzögerte reale Animationsbilder als Regression; vier Konfigurationen und sämtliche Knopfassertions bleiben |
 | T200 | [`test_suche3337.py`](../../tests/integration/test_suche3337.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T201 | [`test_tag3390.py`](../../tests/integration/test_tag3390.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T201 | [`test_tag3390.py`](../../tests/integration/test_tag3390.py) | Tagesplanung, Belegzeiten und Entlastung im echten Dialog, seit 3.61.0 mit Überlastungsgründen unter der Bilanz; grün im Prüfstand 3.61.0 (macOS, Tk 9.0) |
 | T202 | [`test_tagpaket33314.py`](../../tests/integration/test_tagpaket33314.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T203 | [`test_template_workflows.py`](../../tests/integration/test_template_workflows.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T204 | [`test_tempo330.py`](../../tests/integration/test_tempo330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
@@ -774,7 +775,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T221 | [`test_zugang400.py`](../../tests/integration/test_zugang400.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T222 | [`test_zukunftsfelder.py`](../../tests/integration/test_zukunftsfelder.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T223 | [`vorversion.py`](../../tests/integration/vorversion.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T315 | [`test_startwege.py`](../../tests/integration/test_startwege.py) | Start-Baseline der drei Startwege gegen vier künstliche Ablagezustände mit Schutzfall für den umgelenkten Profilordner und Importfall ohne Ordner und Fenster (WA-49); Teil von `SUITEN`, Paketstarter aus den Quellen nachgestellt |
+| T315 | [`test_startwege.py`](../../tests/integration/test_startwege.py) | Start-Baseline der drei Startwege gegen fünf künstliche Ablagezustände (seit 3.61.0 auch „unerreichbar“: Meldung, Exitcode 1, Ablage unverändert) mit Schutzfall für den umgelenkten Profilordner und Importfall ohne Ordner und Fenster (WA-49); Teil von `SUITEN`, Paketstarter aus den Quellen nachgestellt |
 
 ### Werkzeuge
 

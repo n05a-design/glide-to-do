@@ -1,6 +1,6 @@
 # Werkhaus West · Glide-Showcase
 
-Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26 · Vorlagen 2
+Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26 · Vorlagen 2
 
 Ein kleines Studio bereitet einen offenen Werkstatttag vor. Lea prüft den Weg vom Hof zur Modellwand, Mira wartet auf das Papiermuster, und Jona bringt die Materialplatten aus dem Lager. Die Aufnahmen zeigen denselben Arbeitsstand aus mehreren Blickwinkeln.
 

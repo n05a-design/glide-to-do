@@ -3,7 +3,8 @@
 
 Jede Zelle startet einen echten Prozess über seinen unveränderten Einstieg –
 `app.pyw` direkt, `glide_start.py` und den Paketstarter `start_glide.py` – gegen
-eine leere, vorhandene, fremd gesperrte oder beschädigte Ablage. Festgehalten
+eine leere, vorhandene, fremd gesperrte, beschädigte oder nicht anlegbare Ablage
+(statt `backups/` liegt dort eine Datei). Festgehalten
 werden Exit-Code, Diagnosebeleg, geschlossene Dialoge und alle entstandenen
 Pfade. Die Tabelle ist die Vergleichsgrundlage für Änderungen an Start, Pfaden
 und Importzustand; sie ändert kein Produktverhalten. Der Fall
@@ -40,13 +41,14 @@ SRC = REPO / "src" / "glide"
 PAKETSTARTER = REPO / "packaging" / "paket" / "start_glide.py"
 HINTERGRUND = REPO / "tests" / "tools" / "hintergrund" / "sitecustomize.py"
 EINSTIEGE = ("direkt", "schnellstart", "paket_quelle")
-ZUSTAENDE = ("leer", "vorhanden", "gesperrt", "fehlerhaft")
+ZUSTAENDE = ("leer", "vorhanden", "gesperrt", "fehlerhaft", "unerreichbar")
 SCHUTZ = "schutz_profil"
 IMPORT = "import_ohne_ordner"
 FAELLE = tuple(f"{einstieg}_{zustand}" for einstieg in EINSTIEGE for zustand in ZUSTAENDE) + (SCHUTZ, IMPORT)
 ZEITLIMIT = 120
 FREMDE_SPERRE = {"host": "anderer-arbeitsplatz", "pid": 4242, "token": "0" * 32}
 BESCHAEDIGT = '{"version": 26, "lists": ['
+SPERRDATEI = "Datei statt Ordner"
 
 IMPORTPROBE = r'''
 import importlib.machinery, importlib.util, json, os, sys, tkinter
@@ -115,6 +117,15 @@ if _protokoll and _wurzel:
         return _alt_schleife(self, *args, **kwargs)
 
     tkinter.Tk.__init__, tkinter.Misc.mainloop = _init, _schleife
+    import tkinter.messagebox as _meldungen
+
+    def _fehlermeldung(title=None, message=None, **_optionen):
+        # Systemdialoge vor dem App-Fenster (etwa ein nicht erreichbarer
+        # Datenordner) sind keine Tk-Fenster; ihr Titel wird festgehalten.
+        _melden(meldung=str(title))
+        return "ok"
+
+    _meldungen.showerror = _fehlermeldung
     _hintergrund = os.environ.get("GLIDE_STARTWEGE_HINTERGRUND")
     if _hintergrund and os.environ.get("GLIDE_QA_HINTERGRUND"):
         with open(_hintergrund, encoding="utf-8") as _quelle:
@@ -237,6 +248,10 @@ def ablage_herrichten(daten, zustand, vorlage):
                                           encoding="utf-8")
     elif zustand == "fehlerhaft":
         (daten / "liste_speicher.json").write_text(BESCHAEDIGT, encoding="utf-8")
+    elif zustand == "unerreichbar":
+        sperre = daten / "backups"
+        shutil.rmtree(sperre, ignore_errors=True)
+        sperre.write_text(SPERRDATEI, encoding="utf-8")
 
 
 def zelle(einstieg, zustand, befehle, vorlage, wurzel, begleiter):
@@ -251,6 +266,7 @@ def zelle(einstieg, zustand, befehle, vorlage, wurzel, begleiter):
         for zeile in protokoll.read_text(encoding="utf-8").splitlines():
             eintrag = json.loads(zeile)
             schritte.append("Dialog: " + eintrag["dialog"] if "dialog" in eintrag
+                            else "Meldung: " + eintrag["meldung"] if "meldung" in eintrag
                             else "Hauptfenster: " + eintrag["hauptfenster"])
     ergebnis = dict(exit=code, ende=ende, schritte=schritte, belege=belege(daten, vorher),
                     daten=veraenderung(vorher, abbild(daten)),
@@ -313,6 +329,20 @@ def befunde(name, ergebnis):
         return [text for erfuellt, text in regeln if not erfuellt]
     einstieg, zustand = name.rsplit("_", 1)
     daten = set(ergebnis["daten"])
+    if zustand == "unerreichbar":
+        belege = ergebnis["belege"]
+        regeln = [
+            (ergebnis["ende"] == "regulär" and ergebnis["exit"] == 1, f"Ende {ergebnis['ende']} mit Exit {ergebnis['exit']}"),
+            (ergebnis["schritte"] == ["Meldung: Datenordner nicht erreichbar"], f"Meldeweg {ergebnis['schritte']}"),
+            (len(belege) == 1 and belege[0].get("exit_code") == 1 and belege[0].get("completed") is True,
+             f"Diagnosebeleg {belege}"),
+            (not ergebnis["ausgabe"], "Ausgabe auf der Konsole: " + ergebnis.get("ausgabe_ende", "")),
+            (not ergebnis["temp"], f"Reste im Temp-Ordner: {ergebnis['temp']}"),
+            ({"gleich liste_speicher.json", "gleich backups"} <= daten
+             and not any(zeile.startswith(("neu ", "anders ")) and "diagnostics/" not in zeile for zeile in daten),
+             f"Ablage verändert: {sorted(daten)}"),
+        ]
+        return [text for erfuellt, text in regeln if not erfuellt]
     erwartet_beleg = dict(supervised=einstieg != "direkt", last_completed_phase="closed", completed=True,
                           exit_code=0, start_error=None)
     regeln = [

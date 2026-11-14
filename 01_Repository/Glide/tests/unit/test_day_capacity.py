@@ -196,5 +196,50 @@ class DayCapacityAnalysisTest(unittest.TestCase):
         self.assertTrue(all(item["due"] == "2026-11-20" for item in items))
 
 
+class OverloadLinesTests(unittest.TestCase):
+    """Gründe unter der Vorher/Nachher-Bilanz der Tagesentlastung."""
+
+    @staticmethod
+    def wert(day, minutes, capacity, without=0, occupied=0):
+        return dict(day=day, items=1, minutes=minutes, estimated=1 if minutes else 0, without_estimate=without,
+                    done_minutes=0, capacity_before=capacity, occupied_minutes=occupied, occupied_all_day=False)
+
+    def test_relieved_day_names_reasons_before(self):
+        vorher = [self.wert("2026-11-16", 300, 240)]
+        nachher = [self.wert("2026-11-16", 120, 240)]
+        zeilen = relief.overload_lines(vorher, nachher, lambda day: "Mo 16.11.")
+        self.assertEqual(len(zeilen), 1)
+        self.assertTrue(zeilen[0].startswith("Mo 16.11., vorher: Geplanter Aufgabenaufwand (5 h)"))
+        self.assertTrue(zeilen[0].endswith("nachher nicht mehr überplant"))
+
+    def test_target_still_overloaded_names_reasons_after(self):
+        vorher = [self.wert("2026-11-17", 60, 120, occupied=60)]
+        nachher = [self.wert("2026-11-17", 180, 120, occupied=60, without=2)]
+        zeile = relief.overload_lines(vorher, nachher, str)[0]
+        self.assertTrue(zeile.startswith("2026-11-17, nachher: Kalenderzeit belegt 1 h"))
+        self.assertIn("2 Aufgaben ohne Aufwandsschätzung", zeile)
+
+    def test_no_line_without_overload_or_capacity(self):
+        frei = [self.wert("2026-11-18", 60, 480)]
+        ohne = [self.wert("2026-11-18", 600, 0)]
+        self.assertEqual(relief.overload_lines(frei, frei, str), [])
+        self.assertEqual(relief.overload_lines(ohne, ohne, str), [])
+
+    def test_singular_without_estimate_reads_correctly(self):
+        wert = self.wert("2026-11-19", 300, 60, without=1)
+        self.assertIn("1 Aufgabe ohne Aufwandsschätzung kann den Tag", relief.overload_lines([wert], [wert], str)[0])
+
+    def test_calendar_without_result_gives_no_reasons(self):
+        wert = dict(self.wert("2026-11-19", 600, 60), calendar_state="loading")
+        self.assertEqual(relief.overload_lines([wert], [wert], str), [])
+
+    def test_many_days_are_counted_not_listed(self):
+        tage = [self.wert(f"2026-11-{20 + i}", 300, 60) for i in range(6)]
+        zeilen = relief.overload_lines(tage, tage, str, limit=4)
+        self.assertEqual(len(zeilen), 5)
+        self.assertEqual(zeilen[-1], "… und 2 weitere Tage")
+        self.assertEqual(relief.overload_lines(tage[:5], tage[:5], str, limit=4)[-1], "… und ein weiterer Tag")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # Fable 5.2 – Masterprompt für die Glide-Shell-Migration
 
-Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26 · Glide-System V1.22
+Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26 · Glide-System V1.22
 
 **Bearbeitungsstand 13.11.2026:** Abschnitt 1 ist geliefert; der Inhaber verfolgt die inkrementelle Extraktion mit Fassaden. Umgesetzt und in Glide 3.60.0 enthalten sind Paket 1 (Normallage), 2a (Start-Baseline), 2b (Bytecode-Pfade) und 2c (Import ohne Ordneranlage). Status, Prüfung und Folgepakete führt der [Entwicklungsplan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026); validierte Grenzen stehen im [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md#6-validierte-grenzen-13112026). Befunde, Zeilenbereiche und Prüfzahlen unten beschreiben weiter die Ausgangsbasis `45ab307e` mit Glide 3.55.1 und Glide-System V1.17.3.
 

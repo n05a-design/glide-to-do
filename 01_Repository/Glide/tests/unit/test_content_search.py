@@ -69,16 +69,26 @@ class ContentSearchTests(unittest.TestCase):
 
     def test_excerpt_matches_character_wise_reference(self):
         """P07 (3.34.0): Halbierungssuche statt Zeichenschleife – gleiche Ausschnitte wie vorher."""
+        import unicodedata
+
+        def falten(wert):
+            wert = unicodedata.normalize('NFC', wert).casefold()
+            for alt, neu in (('ä', 'ae'), ('ö', 'oe'), ('ü', 'ue'), ('ß', 'ss')):
+                wert = wert.replace(alt, neu)
+            return wert
+
         def referenz(text, key, limit=100):
             plain = ' '.join(str(text or '').split())
             if key not in search_key(plain):
                 return ''
-            offsets, normal = [], []
-            for index, zeichen in enumerate(plain):
-                teil = search_key(zeichen) if not zeichen.isspace() else ' '
-                normal.append(teil)
-                offsets.extend([index] * len(teil))
-            position = ''.join(normal).find(key)
+            # Jedes Originalzeichen erhält die Positionen, um die es das
+            # normalisierte Anfangsstück verlängert (linear statt halbiert).
+            offsets, bisher = [], 0
+            for index in range(len(plain)):
+                laenge = len(falten(plain[:index + 1]))
+                offsets.extend([index] * (laenge - bisher))
+                bisher = laenge
+            position = falten(plain).find(key)
             first, last = offsets[position], offsets[position + len(key) - 1] + 1
             start = max(0, first - 24)
             end = min(len(plain), max(last, start + limit - 2))
@@ -100,6 +110,33 @@ class ContentSearchTests(unittest.TestCase):
                 key = zufall.choice(['ae', 'strasse', 'groesse', 'fi', 'i', 'x'])
             self.assertEqual(content_excerpt(text, key), referenz(text, key), (text, key))
 
+
+
+class ZerlegteUmlaute(unittest.TestCase):
+    """NFC vor der Faltung: zerlegtes ü (u + U+0308) gilt wie ü und ue."""
+
+    NFD = 'Pru\u0308fung der Gro\u0308ße'
+
+    def test_search_key_equal_for_composed_and_decomposed(self):
+        self.assertEqual(search_key(self.NFD), search_key('Prüfung der Größe'))
+        self.assertEqual(search_key(self.NFD), 'pruefung der groesse')
+
+    def test_both_directions_find_each_other(self):
+        self.assertEqual(title_rank(self.NFD, search_key('prüfung')), 0)
+        self.assertEqual(title_rank('Prüfung', search_key('Pru\u0308fung')), 0)
+        self.assertEqual(match_content('Titel', [self.NFD], search_key('größe'))[0], 3)
+
+    def test_excerpt_and_spans_keep_original_characters(self):
+        from content_search import match_spans
+        text = 'x ' * 40 + self.NFD + ' y' * 60
+        self.assertIn(self.NFD, content_excerpt(text, search_key('pruefung der groesse')))
+        spans = match_spans(self.NFD, search_key('prüfung'))
+        self.assertEqual([self.NFD[a:b] for a, b in spans], ['Pru\u0308fung'])
+        spans = match_spans(self.NFD, search_key('größe'))
+        self.assertEqual([self.NFD[a:b] for a, b in spans], ['Gro\u0308ße'])
+
+    def test_other_accents_compare_canonically(self):
+        self.assertEqual(search_key('Cafe\u0301'), search_key('Café'))
 
 
 class TrefferImDokument(unittest.TestCase):

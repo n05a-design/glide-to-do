@@ -4,7 +4,7 @@
 
 Der Umfang ist `pre-build`, einschließlich Bauhilfen, und `compositions.aggregate = incomplete`: kein behaupteter vollständiger transitiver Laufzeitgraph. Eine vollständige offizielle JSON-Schemaprobe mit jsonschema 4.26.0 bestand am 08.11.2026 für eine explizite MPL-Modellfixture und die unveränderte historische Mac-Lizenzbasis (23 Komponenten); Schemaquellen/Hashes und Aussagegrenzen im QA-Nachtrag. Die späteren nativen Entwicklungsbauten 3.55.0 enthalten das Inventar. WA-46 bleibt teilweise umgesetzt. Der vollständige transitive Laufzeitgraph ist weiterhin offen.
 
-Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen in Git-Fassung vom 05.11.2026](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 

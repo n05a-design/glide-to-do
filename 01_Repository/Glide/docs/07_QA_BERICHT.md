@@ -1,4 +1,14 @@
-# QA-Bericht – Glide 3.60.0
+# QA-Bericht – Glide 3.61.0
+
+## Prüfstand 3.61.0 (14.11.2026)
+
+Ausgangscommit `b362abca`, Branch `claude/glide-3.61.0`, geprüft unter macOS arm64 mit Python 3.14.5 und Tk 9.0 auf künstlichen Daten. Umfang im [Plan §21.92](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026).
+
+- **Gezielt:** 1.201 Unit-Tests grün, einer übersprungen (vorher 1.186). `test_content_search` 18/18 einschließlich NFD-Fällen, `test_runtime_config` 13/13 mit BOM und Meldung, `test_day_capacity` mit `overload_lines`. `test_tag3390.py` 23 Prüfgruppen ohne Callbackfehler, darunter die Gründe unter der Entlastungsbilanz bei großer Schrift mit erreichbarem Fuß. `test_startwege.py` „unerreichbar“ für Direktstart, Schnellstart und Paketstarter: Meldung, Exitcode 1, Ablage unverändert. `test_glide_system.py` 5/5 (V1.24).
+- **Erste Vollprüfung:** rot in `test_dialog_theme.py`. Die neue Datenordnermeldung stand als `messagebox` in `ListApp.__init__`; der Dialogvertrag erlaubt Systemdialoge nur außerhalb von `ListApp`. Die Meldung liegt jetzt in `main()` vor dem App-Fenster; Dialogtest und die drei Startwege danach grün.
+- **Zweite Vollprüfung** (`pruefen.py --modus voll --timeout 900`, Hintergrundmodus): 131 Schritte ausgeführt und grün, darunter Unit-Tests, alle 110 Integrationssuiten aus `SUITEN`, Showcase, Beispieldaten-Reproduktion, statische Analysen, Stand-, Attribut- und Dublettenprüfung. Übersprungen: Fensterfotos (Werkzeug nur unter Linux/X11) und die Sichtprüfung durch eine Person. Rohprotokolle lokal, nicht versioniert.
+- **Grundstufe** `--lieferstand-streng`: 18 Schritte bestanden; Fremdcodevergleich nur als Hinweis, weil das Originalpaket lokal nicht abrufbar war. `abgleich_07.py`: 94 Code-Dateien und 165 Ressourcen SHA-256-gleich; Showcase über `showcase_abgleich.py` abgeglichen; Ablagekürzung entfernte Releaseplanung und Archivskript 3.51.0.
+- **Grenzen:** nur macOS arm64 mit Tk 9.0.3, keine Tk-9.1-Laufzeit im Lauf; Linux, Windows und Pakete folgen in den GitHub-Workflows zum PR. Keine menschliche Abnahme des Entlastungsdialogs, der Systemmeldung und der Suche.
 
 ## Technische Vollprüfung 3.60.0 auf PC02 (14.11.2026)
 
@@ -287,7 +297,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 
