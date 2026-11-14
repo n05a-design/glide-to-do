@@ -1,4 +1,18 @@
-# QA-Bericht – Glide 3.61.0
+# QA-Bericht – Glide 3.62.0
+
+## Prüfstand 3.62.0 (14.11.2026)
+
+Basis `e7d18c36` (Modal-Vertragstest auf 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und Tcl/Tk 9.0.4 auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive. Umfang im [Plan §21.94](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Baseline | `test_modalvertrag.py` 13/13 und sechs Gegenproben auf `e7d18c36` unter Windows und nativ macOS grün (Abschnitt unten) |
+| `modal_session.py` hinter den Fassaden | `test_modalvertrag.py` 13/13 über die unveränderten `ListApp`-Methoden; Gegenproben verändern jetzt eine Kopie von `modal_session.py`, sechs von sechs erkannt |
+| Importregel | `test_modal_session.py` 6/6: nur `contextlib` und `tkinter`, keine Glide-Bezeichner, Schnittstelle und Kompatibilitätsattribute |
+| Dialogsuiten, die `run_modal` nutzen oder ersetzen | `test_dialog_theme.py`, `test_ui_updates.py`, `test_fenster330.py`, `test_mindestgroesse330.py`, `test_befunde330.py` grün |
+| Systemregister | `test_glide_system.py` grün (96 Quelldateien, 317 Test-/Werkzeugdateien) |
+
+**Grenzen:** Linux/Xvfb, Tk 8.6/9.1, Python 3.12 und macOS für 3.62.0 stehen aus; die Vollprüfung folgt in der GitHub-Prüfung zum Push. Kein Paketbau und keine menschliche Abnahme; sichtbares Verhalten ist unverändert.
 
 ## Modal-Vertragstest auf 3.61.0 (14.11.2026)
 
@@ -11,6 +25,7 @@ Basis `e403a7c4` (Glide 3.61.0), Branch `claude/fable-shell-frameworks-audit-438
 | Gegenproben (`--gegenproben`) | Sechs von sechs entfernten Schutzzeilen vom zuständigen Fall erkannt: Griff, Freigabe, Aktivmarke, Schutz vor gescheitertem Griff, Wartevariable, Rückgabe an den Vorgänger |
 | Datenisolation | Im echten Datenordner kein Eintrag jünger als der Lauf; Fehlerprotokoll nur in der Prüfablage |
 | Nativer Mac-Lauf (Inhaber, 14.11.2026) | macOS mit Python 3.14 aus dem Python.org-Framework und Tk 9.0 (Patchstand nicht ausgegeben), dieselbe Testdatei (23.615 Bytes) über OneDrive: 13 von 13 Fällen grün, sechs von sechs Gegenproben erkannt |
+| GitHub-Prüfung zu `e7d18c36` (Lauf 43627854088) | Grundstufe Linux/Tk 8.6 und Vollprüfung Linux/Xvfb mit eigener Tk 9.1 grün, darin `test_modalvertrag.py` als Teil von `SUITEN`; die Windows-Vollprüfung lief bei Redaktionsschluss noch |
 
 **Befunde:**
 - Ein früher Lauf des Escape-Falls lief in den weichen Zeitwächter. Tk leitet erzeugte Tastenereignisse an den Fokus des Fensters; ohne Systemfokus des Prüfprozesses ging Escape verloren. Der Fall setzt den Fokus im Dialog jetzt ausdrücklich, danach waren fünf Läufe grün. Das Produktverhalten ist davon nicht betroffen.
@@ -316,7 +331,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

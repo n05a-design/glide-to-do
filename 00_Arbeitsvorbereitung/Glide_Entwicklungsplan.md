@@ -8,9 +8,11 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
+
+**Glide 3.62.0 (14.11.2026).** Shell-Paket 3a: Der modale Warteweg liegt im Tk-Modul `modal_session.py`, `ListApp` behält die Fassaden; davor der Modal-Vertragstest mit echtem Grab ([§21.93](#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026), [§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)). Gezielt unter Windows geprüft, Vertragstest auch nativ am Mac; Vollprüfung, Pakete und Abnahme stehen aus.
 
 **Glide 3.61.0 (14.11.2026).** Überlastungsgründe im Entlastungsdialog (D81), Meldung bei nicht erreichbarem Datenordner und wieder gültiger BOM-Zeiger (D82), Suche über zerlegte Umlaute, Design Richtlinien mit Gestaltungsregister und verbindlichen Marktlehren (D83), Faktenkorrekturen aus der Dokumentationsprüfung ([§21.92](#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026)). Offen bleiben Plattformmatrix, Paketbau und menschliche Abnahme.
 
@@ -66,7 +68,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.61.0). Die Zeilen verweisen a
 | 3.61.0 | Merge, Linux-/Windows-Vollprüfung, macOS- und Windows-Paket | ▶ | PR prüfen, CI dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.61: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11., Windows und Mac grün ([§21.93](#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026)) | Linux-Lauf des Vertragstests, dann Paket 3 Fenster/Modal/Abbau | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)) | Abbau-Vertragstest, dann Fenster-/Toplevel-Lebensdauer | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2809,3 +2811,14 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 3. Der Test gehört zur Vollprüfung (`SUITEN`); Glide-System V1.25 (T316).
 
 **C – Prüfung und Rest:** Ergebnisse und Befunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026): Windows 11, Python 3.14.7/3.15.1, Tk 9.0.4, und ein nativer Mac-Lauf des Inhabers (Python 3.14, Tk 9.0) mit 13 von 13 Fällen und sechs von sechs Gegenproben. Vor Paket 3 steht ein Linux/Xvfb-Lauf aus; die Menüverfolgung eines echten Klicks in die Menüleiste bleibt eine Bedienprüfung; danach braucht Paket 3 (Fenster/Modal/Abbau) eine eigene Freigabe. Weiter offen sind Namensraum und Paketgrenze der Shell, die Python-Prüfung beim Direktstart und die beiden ungeprüften Hypothesen aus §21.89. Ob die Shell nach dem Schließen den Fokus zurückgibt, ist bei Paket 3 zu entscheiden.
+
+### 21.94 Glide 3.62.0: Shell-Paket 3a, Modal-Weg als eigenes Modul (14.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 14.11.2026 Paket 3a frei: den modalen Warteweg aus `ListApp` in ein Tk-Modul ohne Glide-Bezug herauslösen, die `ListApp`-Methoden als Fassaden erhalten. Produktionsrunde mit Version 3.62.0. Namensraum und Paketgrenze der Shell bleiben offen; das Modul liegt deshalb flach in `src/glide`.
+
+**B – Umsetzung auf Basis `e7d18c36`:**
+1. `src/glide/modal_session.py` (M096): `modal_over`, `ensure_min_width`, `bring_to_front`, `wait_modal`, `run_modal`. Importiert nur `contextlib` und `tkinter`; Theme-Farbe, Bildschirmanteil und Fehlerprotokoll kommen als Argumente.
+2. `ListApp.modal_over`, `ensure_dialog_min_width`, `bring_dialog_to_front` und `run_modal` delegieren. `run_modal` ruft die Vorbereitung weiter über die eigenen Methoden auf, damit Prüfungen, die sie ersetzen, unverändert greifen. Alle Aufrufer unverändert.
+3. Prüfungen: `test_modal_session.py` (T317) für Importregel und Schnittstelle; Gegenproben in `test_modalvertrag.py` auf das Modul umgestellt. Lieferliste in `abgleich_07.py`, Mac-Vorstufe und `07_Python-Versionen/README.md` ergänzt. Glide-System V1.26.
+
+**C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3620-14112026). Offen: Vollprüfung Linux/Windows in der GitHub-Prüfung, macOS-Lauf für 3.62.0, Pakete und menschliche Abnahme. Nächste Teile von Paket 3 mit eigener Freigabe: Abbau-Vertragstest (39 nicht registrierte Zeitgeber am Hauptfenster, darunter der Abholtimer des Hintergrundverlaufs) und Fenster-/Toplevel-Lebensdauer; ob die Shell den Fokus nach dem Schließen zurückgibt, ist dabei zu entscheiden.

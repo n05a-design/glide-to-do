@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
 
 <a id="offene-menschliche-abnahme-3550"></a>
 ## Offene menschliche Nachabnahme 3.55.1

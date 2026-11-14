@@ -2,6 +2,12 @@
 
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
+## 3.62.0 – 14.11.2026
+
+- **Shell-Fundament, erster Baustein (Paket 3a):** Jeder modale Dialog wartet jetzt über das neue Modul `modal_session.py`. Es kennt nur Tk; Theme-Farbe, Bildschirmanteil und Fehlerprotokoll kommen von Glide. `run_modal`, `modal_over`, `ensure_dialog_min_width` und `bring_dialog_to_front` bleiben als Fassaden in `ListApp`, ihre 58 bzw. 6 Aufrufer sind unverändert. Verhalten unverändert.
+- **Prüfungen:** `test_modal_session.py` prüft, dass das Modul nur Standardbibliothek und `tkinter` importiert. Die Gegenproben des Modalvertrags verändern jetzt das neue Modul.
+- Glide-System V1.26; Datenformat 26 unverändert. Prüfumfang und Grenzen im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3620-14112026).
+
 ## Prüfwerkzeuge – 14.11.2026
 
 - **Modalvertrag:** `test_modalvertrag.py` hält fest, was `run_modal` und `modal_over` heute garantieren: echter Grab in 13 Fällen, dazu sechs Gegenproben; Teil von `SUITEN`. Vorstufe zum Shell-Paket Fenster/Modal/Abbau. [QA-Bericht](docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026)
@@ -76,16 +82,6 @@ Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der R
 - `symbolpruefung.py` untersucht die vier Schriftstile statt nur der aktuell gewählten Familie; die lokale QA-Zuordnung benennt direkte Tests, indirekte Geometrieprüfungen sowie native und menschliche Abnahmegrenzen.
 - Versionswechsel von 3.52.0 auf 3.53.0. Die plattformübergreifende Vollmatrix und menschliche Abnahme sind weiterhin Freigabetore.
 
-## 3.52.0 – 10.11.2026
-
-- Schriftstile: Modern Rubik, Technisch DM Mono, Kreativ DM Serif Display und Klassisch Charis SIL. Frühere gespeicherte Familien bleiben der passenden Stilklasse zugeordnet.
-- DM Mono nutzt für „Kräftig“ Medium 500; DM Serif Display besitzt keinen statischen Bold-Schnitt. Schriftgewicht und Größe bleiben getrennt.
-- OFL-Texte und SHA-256-Provenienz der ausgewählten Originaldateien sind mitgeführt. DejaVu Sans bleibt als Symbolbegleiter erforderlich, da die neuen Schriften nicht alle UI-Symbole abdecken.
-- Das Schriftgewicht lässt sich unabhängig von der Größe wählen. Kreativ und Klassisch erscheinen automatisch im kräftigeren Bold-Schnitt.
-- Das Kopflogo rückt 2 px nach rechts und wächst proportional nach oben. Die Unterkante bleibt an der Unterzeile, der Titel behält seine Position.
-- Hinzufügen und weitere bisher lila Oberflächenakzente folgen der Themenfarbe. Löschen bleibt rot, Bestätigen grün.
-
-
 ## Frühere Versionen (verdichtet)
 
 Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle darunter. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (3.33.13–3.33.16 im Commit `6098877`, ältere im Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
@@ -94,6 +90,7 @@ Datenformate und ihre Felder: [Daten und Migration](docs/06_DATA_BACKUP_MIGRATIO
 
 | Version | Datum | Kern |
 |---|---|---|
+| 3.52.0 | 10.11.2026 | Vier Schriftstile (Rubik, DM Mono, DM Serif Display, Charis SIL), Schriftgewicht unabhängig von der Größe, Kopflogo und Akzente in der Themenfarbe. |
 | 3.51.0 | 09.11.2026 | Die vier Plus-Knöpfe in der Seitenleiste erscheinen im Ruhezustand ohne Kontur. |
 | 3.50.7 | 08.11.2026 | Produktkommunikation, MPL-2.0 und Validierung |
 | 3.50.6 | 07.11.2026 | Menschliche Abnahme am Mac (D66–D71) |
