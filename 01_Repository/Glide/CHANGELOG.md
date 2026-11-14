@@ -13,6 +13,7 @@
 
 - **Marke und Projektseite:** Neues Glide-App-Symbol und zweifarbiges In-App-Logo. Die Fläche folgt der Themenfarbe, der Schatten bleibt eigenständig sichtbar. Der Showcase „Werkhaus West“ liefert einen bearbeitbaren Projektstand und 15 verschiedene Windows-Aufnahmen.
 - **Showcase auf Linux:** Dieselben vier Studio-Motive liegen in den Demo-Sicherungen und Vorlagen als PNG vor. Galerie und Seitenbilder laden auch ohne externen JPEG-Decoder.
+- **Seitenleiste:** Bei mehreren angehefteten Seiten passt Glide die Baumhöhen nach dem Layout an. Der Bereich „Zeichnungen“ bleibt dadurch auch bei eingeschränkter Fensterhöhe erreichbar.
 
 - **Einstellungen mit „Kreativ“ in kleiner Schrift:** Der Einstellungsdialog öffnet auch mit DM Serif Display und der Schriftgröße „klein“ sofort. Vorher kreisten Umbruch und Spaltenbreite vor dem ersten Anzeigen endlos über drei Werte (gemessen unter macOS mit Tk 9.0.3). Die Tk-freie Regel `ui_design.settled_wrap_width` beendet die Runde bei einer wiederkehrenden Breite; das Ergebnis der übrigen Schriftkombinationen ist unverändert.
 - **Fensterlage beim Start:** Die Lageregel der Normalansicht rechnet Tk-frei in `compact_mode.keep_visible`; `ListApp.clamp_geometry` bleibt die Fassade. Verhalten unverändert.

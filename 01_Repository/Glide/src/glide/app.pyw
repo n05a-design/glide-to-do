@@ -27515,7 +27515,8 @@ class ListApp:
             if pfeil is not None:
                 pfeil.configure(text=self.SIDEBAR_SECTION_ARROWS[self.sidebar_section_open(schluessel)])
         self.sync_pages_sidebar_height()
-        # Neu gepackte Blöcke kennen ihre Höhe erst im Leerlauf.
+        # Die Geometrie neu gepackter Blöcke kann erst nach dem ersten
+        # Durchlauf der Tk-Leerlaufwarteschlange vollständig vorliegen.
         self.schedule_sidebar_heights()
 
     def build_sidebar_quick_actions(self, baum=None):
@@ -40186,8 +40187,12 @@ class ListApp:
             self._sidebar_heights_after = None
             self._sidebar_heights_pending = False
             self.sync_pages_sidebar_height()
-        try:
+        def nach_geometrie():
+            self._after_ids.discard(self._sidebar_heights_after)
             self._sidebar_heights_after = self._register_after(self.root.after_idle(ausfuehren))
+
+        try:
+            self._sidebar_heights_after = self._register_after(self.root.after_idle(nach_geometrie))
         except tk.TclError:
             self._sidebar_heights_after = None
             self._sidebar_heights_pending = False
