@@ -73,6 +73,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.61.0). Die Zeilen verweisen a
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
 | WA-53–WA-59 | sieben Marktvorschläge aus §21.70 | ○ Vorschlag | Reihung | Inhaber |
+| WA-60 | Installation per Terminal: winget (Windows) und Homebrew Cask (macOS) aus den Release-Dateien | ○ Vorschlag, Vorlagen 14.11.2026 | [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf): Release veröffentlichen, Tap anlegen, einreichen | Inhaber |
 | D83 | sechs Gestaltungsregeln auf bestehende Bereiche übertragen | ○ | im jeweils nächsten UI-Paket des Bereichs | je Paket |
 | Tempo Mac | `test_seitenkarten/druck_tempo` 1,1176 bei Grenze 1,10 | ○ | Profilierung im nativen Mac-Kontext | technisch |
 | Systemregister | Verhaltensspalte wiederholt rund 48 KB Handbuchtext | ○ | auf Kennung, Modul, Test und Link kürzen | Produktionsrunde |

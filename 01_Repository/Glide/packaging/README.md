@@ -57,6 +57,8 @@ python3 -B packaging/macos/baue_app.py --ziel build/macos-vorstufe [--symbol and
 
 Baut `Glide.app` mit Quellen und Modulen (Start über `glide_start.py`), Ressourcen, dem macOS-Teil von `vendor/tkinterdnd2`, einer Kopie des Python-Starters aus dem installierten python.org-Framework, `Glide.icns` und Ad-hoc-Signatur. macOS führt den Prozess als „Glide“ mit `de.shaye.glide`. Das Bundle braucht das installierte Python mit Tk und ist nicht zur Weitergabe gedacht.
 
+**Installation per Terminal – [`winget/`](winget/manifests/s/Shaye/Glide/3.62.0/Shaye.Glide.installer.yaml) und [`homebrew/`](homebrew/Casks/glide.rb):** Entwürfe für `winget install Shaye.Glide` und einen Homebrew-Cask aus den Release-Dateien; nicht eingereicht. Ablauf und offene Freigaben in [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf).
+
 **Windows-Verknüpfung – [`windows/verknuepfung_anlegen.ps1`](windows/verknuepfung_anlegen.ps1):** legt im Startmenü „Glide“ an (pythonw.exe mit `app.pyw`, Symbol `glide.ico`) mit der AppUserModelID; kein Adminrecht, keine Registry. Glide meldet sich beim Start mit derselben Kennung an (`set_windows_app_user_model_id`). Unter Windows noch nicht ausgeführt.
 
 Die vorhandene Vorstufe bleibt durch `tests/integration/test_paketierung330.py` geprüft. Die eigenständigen Entwicklungsbauten stehen im folgenden Abschnitt; Developer-ID-Signatur, Notarisierung, Windows-Zertifikat und Installer bleiben nach D43 gesondert offen.

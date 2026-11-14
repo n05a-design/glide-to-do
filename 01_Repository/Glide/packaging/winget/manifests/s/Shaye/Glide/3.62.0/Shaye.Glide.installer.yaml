@@ -1,0 +1,26 @@
+# Entwurf 14.11.2026 – nicht eingereicht.
+# Liefert das unveränderte Release-ZIP aus release.yml (Ordner Glide\ mit Glide.exe).
+# InstallerSha256 ist ein Platzhalter: Wert aus Glide-<v>-windows-x64.zip.sha256 des
+# veröffentlichten Releases eintragen (oder `wingetcreate update` füllt ihn).
+# Startmenüeintrag: erst mit dem Inno-Setup-Installer; dann InstallerType: inno und
+# die Installer-URL, NestedInstallerFiles/ArchiveBinariesDependOnPath entfallen.
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.10.0.schema.json
+PackageIdentifier: Shaye.Glide
+PackageVersion: 3.62.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+- RelativeFilePath: Glide\Glide.exe
+  PortableCommandAlias: glide
+# Glide.exe lädt DLLs, Tcl/Tk und Ressourcen aus seinem eigenen Ordner. Statt eines
+# Symlinks legt winget deshalb den entpackten Ordner in den PATH.
+ArchiveBinariesDependOnPath: true
+InstallModes:
+- silent
+UpgradeBehavior: uninstallPrevious
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/n05a-design/glide-to-do/releases/download/v3.62.0/Glide-3.62.0-windows-x64.zip
+  InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.10.0

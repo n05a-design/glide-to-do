@@ -38,6 +38,40 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 - **Marke:** „Glide“ wird von mehreren Softwareanbietern genutzt. Vor einer Veröffentlichung professionelle Marken- und Namensrecherche durch einen Fachanwalt (I4). Ausgangspunkte: [DPMA-Recherche](https://www.dpma.de/marken/markenrecherche/index.html) (nur übereinstimmende Wortelemente, keine Ähnlichkeitsprüfung), [EUIPO/TMview](https://www.euipo.europa.eu/en/trade-marks/before-applying/availability). Eine Rechercheakte nennt Datum, Suchausdruck mit Varianten, Register, Waren-/Dienstleistungsklassen, Treffer, Inhaber, Status und Links.
 - **Gismo** wird selbst produziert; die gezeichnete Tk-Figur bleibt, bis freigegebene Dateien vorliegen ([Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md)). Aus Inspirationsbildern wird keine Marken- oder Lizenzfreigabe abgeleitet.
 
+## winget und Homebrew (Entwurf)
+
+**Entwurf 14.11.2026, nicht eingereicht.** Ziel: Glide mit einem Terminalbefehl installieren, ohne vorher Python oder Tk einzurichten. Beide Wege liefern die unveränderten Release-Dateien aus `release.yml` (`Glide-<v>-windows-x64.zip`, `Glide-<v>-macos-arm64.dmg`) samt eigener Tk-9.1-Laufzeit. Am Quellstand ändert sich nichts. PyPI wurde dafür verworfen: Es setzt ein vorhandenes Python mit Tk voraus und braucht einen Umbau der Modulimporte.
+
+| | Windows: winget | macOS: Homebrew Cask |
+|---|---|---|
+| Befehl für Nutzer | `winget install Shaye.Glide` | `brew install --cask n05a-design/glide/glide` |
+| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/3.62.0/`](../packaging/winget/manifests/s/Shaye/Glide/3.62.0/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
+| Einreichung | Pull Request an `microsoft/winget-pkgs`, am einfachsten mit `wingetcreate new <ZIP-URL>` bzw. für Folgeversionen `wingetcreate update Shaye.Glide --version <v> --urls <ZIP-URL>` | eigenes Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
+| Prüfung durch Dritte | automatische Validierung und Moderation durch Microsoft | keine im eigenen Tap; das offizielle `homebrew/cask` setzt Signierung und Notarisierung voraus |
+| Ohne Signierung (I3) | SmartScreen warnt beim ersten Start | Gatekeeper blockiert den ersten Start, Freigabe unter Systemeinstellungen › Datenschutz & Sicherheit |
+| Grenze | ZIP wird als portable Anwendung entpackt: kein Startmenüeintrag, Start über `glide`; Abhilfe siehe unten | nur arm64; macOS-Mindestversion offen |
+
+**Startmenüeintrag unter Windows:** winget legt für portable Pakete keine Verknüpfungen an. Ein Eintrag entsteht nur, wenn das Paket einen echten Installer mitbringt. Empfohlen ist der in E-10 ohnehin vorgesehene **Inno-Setup-Installer** `Glide-<v>-windows-x64-setup.exe`:
+- Installation je Benutzer ohne Adminrecht (`PrivilegesRequired=lowest`) nach `%LOCALAPPDATA%\Programs\Glide`.
+- Startmenüverknüpfung im Abschnitt `[Icons]` mit `AppUserModelID: "Shaye.Glide"`. Damit gehören Taskleiste und Systemmitteilungen zur selben Kennung wie bisher.
+- Eintrag unter Einstellungen › Apps mit sauberer Deinstallation. Nutzerdaten unter `%APPDATA%\Glide` bleiben unberührt.
+- Das winget-Manifest wechselt dann von `zip`/`portable` auf `InstallerType: inno` mit der Installer-URL. `NestedInstallerFiles` und `ArchiveBinariesDependOnPath` entfallen. winget kennt die Inno-Schalter für eine stille Installation selbst.
+- Für den Bau braucht es die AppId. Sie liegt als Vorschlag in den [Inhaberangaben](#inhaberangaben) bereit und gilt erst nach Bestätigung (I1). Dazu kommt ein Bauschritt im Windows-Workflow (Inno Setup ist auf den GitHub-Windows-Runnern vorinstalliert, vor der Umsetzung nachsehen).
+
+Andere Wege bleiben schwächer: MSIX verlangt ein signiertes Paket. Eine Verknüpfung, die Glide beim ersten Start selbst anlegt, würde Produktcode ändern und bei der winget-Deinstallation liegen bleiben. Bis zum Installer bleibt `packaging/windows/verknuepfung_anlegen.ps1` der Weg für den Quellstand.
+
+Kennung `Shaye.Glide` übernimmt die AppUserModelID aus dem [Produktregister](decisions/PRODUCT_IDENTITY.md). Herausgeber ist der dort eingetragene Name. `brew uninstall --zap` entfernt bewusst nur Zwischenspeicher und Systemzustand, nie `~/Library/Application Support/Glide`.
+
+**Voraussetzungen und Inhaberentscheidungen:**
+1. Ein **veröffentlichter** GitHub-Release; der Entwurf aus `release.yml` reicht nicht, weil beide Kanäle eine öffentlich erreichbare URL brauchen (D64). Homebrews `livecheck` übergeht Vorabversionen.
+2. Freigabe der beiden Kanäle; winget steht in der Kanalliste oben, Homebrew noch nicht.
+3. Anlegen des Tap-Repositorys `n05a-design/homebrew-glide`.
+4. Prüfsummen eintragen: `InstallerSha256` bzw. `sha256` aus den `.sha256`-Dateien des Releases.
+5. Optional später: Folgeversionen per GitHub Action automatisch einreichen. Das braucht ein Token als Geheimnis im Repository.
+6. Signierung (I3) entfernt die Warnungen und öffnet das offizielle `homebrew/cask`; der Ablauf funktioniert aber auch ohne.
+
+Vor der ersten Einreichung prüfen: Paket auf einem frischen Windows bzw. Mac aus der Vorlage installieren, starten, aktualisieren und deinstallieren. Die Nutzerdaten müssen erhalten bleiben. Manifestschema und Homebrew-Regeln beim Anbieter neu nachsehen; Stand der Vorlagen ist winget-Manifest 1.10.0.
+
 ## GitHub-Auftritt
 
 **Projektseite 13.11.2026:** README-Kopf und Galerie nutzen Glides 3.60.0-Branding. Die Windows-Aufnahmen zeigen unterschiedliche Arbeitssituationen im Showcase „Werkhaus West“. Der [Showcase](../../../05_Probelisten_Testdaten/Showcase/README.md) enthält auch den JSON-Canvas-Export derselben Pinnwand. Die [Logo-Checkliste](../../../20_Grafik_Master/README.md) führt Repository-Vorschau, Dokumentation, Betriebssystem- und Lieferressourcen.
