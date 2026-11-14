@@ -29,7 +29,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 
@@ -342,7 +342,7 @@ Die Planungsauswahl erlaubt mehrere Aufgaben. Tag wählen und Einplanen/Enter od
 
 ### Tageskapazität und Entlastung seit 3.55.0
 
-Die Tagesbilanz zeigt den geschätzten Aufwand der eingeplanten Aufgaben, die belegte Kalenderzeit und die nach Abzug der Belegzeit verfügbare Netto-Kapazität. Der freie Rest berücksichtigt zusätzlich den geschätzten Aufgabenaufwand. Fehlende Schätzungen werden separat gezählt. Bei Überlastung nennt Glide die Ursachen, zum Beispiel dass der geschätzte Aufwand die Netto-Kapazität übersteigt. Fehlt eine Kapazitätsvorgabe oder ist die Kalenderbelegung noch unbekannt, zeigt Glide diesen Zustand an. In „Tag entlasten“ Aufgaben markieren und im festen Fensterfuß den neuen Bearbeitungstag oder den Vorrat wählen. Glide aktualisiert die Vorher-/Nachher-Bilanz automatisch. Erst „Umplanen“ speichert die Änderung. Die Fälligkeit bleibt sichtbar und erhalten. Die gemeinsame Änderung lässt sich in einem Schritt rückgängig machen.
+Die Tagesbilanz zeigt den freien Rest oder die überplante Zeit, die belegte Kalenderzeit und die Zahl der Aufgaben ohne Schätzung. Der freie Rest ist die Tageskapazität abzüglich Kalenderbelegung und geschätztem Aufgabenaufwand; erledigte Aufgaben zählen mit. Aufgaben ohne Schätzung gelten nicht als 0 Minuten, sondern werden gesondert gezählt. In „Tag entlasten“ nennt die Vorher-/Nachher-Bilanz zusätzlich den geschätzten Aufwand. Bei Überlastung nennt die Bilanz die überplante Zeit, etwa „45 min überplant“. Die einzelnen Ursachen berechnet Glide bereits, zeigt sie aber noch nicht an ([Befund vom 14.11.2026](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1336-gesamtaudit-gegen-code-und-dokumentation-14112026)). Fehlt eine Kapazitätsvorgabe oder ist die Kalenderbelegung noch unbekannt, zeigt Glide diesen Zustand an. In „Tag entlasten“ Aufgaben markieren und im festen Fensterfuß den neuen Bearbeitungstag oder den Vorrat wählen. Glide aktualisiert die Vorher-/Nachher-Bilanz automatisch. Erst „Umplanen“ speichert die Änderung. Die Fälligkeit bleibt sichtbar und erhalten. Die gemeinsame Änderung lässt sich in einem Schritt rückgängig machen.
 
 ### Tagesplanung 3.39.0
 

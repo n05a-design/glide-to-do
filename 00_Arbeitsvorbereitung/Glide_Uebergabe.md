@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-## Lokaler Stand 3.60.0 (13.11.2026)
+## Stand 3.60.0 (`main` `846915e`, 14.11.2026)
 
 **Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.23.1**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
 1. **Normallage:** `compact_mode.keep_visible` rechnet die Fensterlage beim Start Tk-frei; `ListApp.clamp_geometry` bleibt Fassade.
@@ -10,6 +10,8 @@
 Quelle und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.60.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch; der Showcase ist abgeglichen. Auftrag, Entscheidungen und Folgepakete stehen im [Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026), Prüfergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3600-13112026), validierte Architekturgrenzen im [Shell-Konzept](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md#6-validierte-grenzen-13112026).
 
 Logo- und Showcase-Ergänzung [Plan §21.90](Glide_Entwicklungsplan.md#2190-logo-wechsel-und-werkhaus-showcase-für-3600-13112026) mit aktualisierten Master-, Paket- und README-Ressourcen.
+
+**GitHub:** 3.60.0 kam mit PR #81 (`ae755c2`) und dem direkten Folgecommit `0d0e826` (Logo und Showcase) auf `main`. Auf `ae755c2` wurde die Windows-Vollprüfung abgebrochen; auf `0d0e826` fand die Linux-Vollprüfung eine leere Galerievorschau. PR #82 (`edb3de7`) liefert die Showcase-Motive als PNG. PR #83 (`846915e`) hält in der Seitenleiste mit mehreren angehefteten Seiten alle Bereiche erreichbar. Plattform-, Paket- und Zugangsbefunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#technische-vollprüfung-3600-auf-pc02-14112026); Dokumentationskorrekturen vom 14.11.2026 im [Plan §21.91](Glide_Entwicklungsplan.md#2191-dokumentationskorrekturen-aus-dem-gesamtaudit-14112026).
 
 **Nächste Schritte:** Plattformmatrix (Windows, Linux, macOS mit Tk 9.1), Paketbau und menschliche Abnahme für 3.60.0. In der Shell-Migration folgt der Modal-Vertragstest mit echtem Grab vor jeder Verlagerung von `run_modal`; jedes Folgepaket braucht eine eigene Freigabe.
 
@@ -92,7 +94,7 @@ Die folgenden Abschnitte dokumentieren die damalige Runde. Ihre alten PR-/Paket-
 
 **Fortsetzung am 08.11.2026 (historisch):** Main `d7e017f` enthält #69 und #70; neuer Branch `codex/glide-3.50.7-main-validierung` direkt davon. Gesicherte Übernahme `1b58d1e`, ursprünglicher Codex-Checkpoint `f0c4442`. Vorrang hat jetzt CI-Reparatur gemäß [Plan §21.78](Glide_Entwicklungsplan.md#2178-ci-abschlussauftrag-3507-auf-main-08112026). Die folgende Runde vom 07.11. bleibt datierte Vorgeschichte, keine aktuelle Aussage über einen offenen PR #69. Kein Gesamtabschluss; Main-Vollmatrix rot.
 
-Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Am 07.11.2026 nach dem Validierungsauftrag zusammengeführt und gekürzt: überholte aktive Lauf-/Mergeanweisungen durch Quellenverweise ersetzt. Die datierten Originalnachweise bleiben in QA beziehungsweise nach der vorhandenen Aufbewahrungsregel über feste Git-Verweise erhalten. Keine weitere Roadmap und keine neue allgemeine Archivablage.
 
