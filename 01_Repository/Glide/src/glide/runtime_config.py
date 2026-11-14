@@ -69,6 +69,38 @@ class RuntimePaths:
         os.makedirs(self.attachments_dir, exist_ok=True)
 
 
+UNREACHABLE_TITLE = "Datenordner nicht erreichbar"
+
+
+def prepare_data_dir(paths: RuntimePaths, origin: RuntimePaths | None = None) -> tuple[str, str] | None:
+    """Legt die Ordner an; ein nicht erreichbares Ziel ergibt (Titel, Meldung) statt einer Ausnahme.
+
+    `origin` ist die Auflösung beim Start ohne ausdrücklichen Pfad. Nur sie
+    weiß, ob der Ordner aus `GLIDE_DATA_DIR`, dem Zeiger oder dem Standard
+    stammt; die Meldung nennt diese Quelle.
+    """
+    try:
+        paths.ensure_dirs()
+    except OSError as error:
+        return UNREACHABLE_TITLE, unreachable_message(origin or paths, error)
+    return None
+
+
+def unreachable_message(paths: RuntimePaths, error: OSError | None = None) -> str:
+    """Meldung für einen Datenordner, der sich nicht anlegen oder öffnen lässt."""
+    teile = [f"Glide erreicht den Datenordner nicht:\n{paths.base_dir}"]
+    if paths.is_overridden:
+        teile.append("Der Ordner ist über die Umgebungsvariable GLIDE_DATA_DIR gesetzt.")
+    elif os.path.normcase(paths.base_dir) != os.path.normcase(paths.default_dir):
+        teile.append(f"Der Ordner ist eingetragen in:\n{paths.pointer_file}")
+    teile.append("Binde das Laufwerk oder den Ordner ein und starte Glide erneut. "
+                 "Glide beendet sich jetzt, ohne den Bestand zu ändern.")
+    grund = getattr(error, "strerror", None)
+    if grund:
+        teile.append(f"Systemmeldung: {grund}")
+    return "\n\n".join(teile)
+
+
 def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> RuntimePaths:
     """Löst alle Pfade rein rechnerisch und seiteneffektfrei auf.
 
@@ -93,7 +125,8 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
         base_dir = default_dir
         if os.path.isfile(pointer_file):
             try:
-                with open(pointer_file, "r", encoding="utf-8") as f:
+                # utf-8-sig: Ein von Hand mit Byte-Order-Mark gespeicherter Zeiger bleibt gültig.
+                with open(pointer_file, "r", encoding="utf-8-sig") as f:
                     data = json.load(f)
                 selected = data.get("path") if isinstance(data, dict) else None
                 if isinstance(selected, str) and selected.strip():

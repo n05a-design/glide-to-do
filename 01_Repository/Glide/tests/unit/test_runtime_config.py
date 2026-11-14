@@ -91,6 +91,68 @@ def simulated(platform, home, environ):
             types.SimpleNamespace(platform=platform, pycache_prefix=None))
 
 
+class PointerAndUnreachableTests(unittest.TestCase):
+    """Zeiger mit BOM bleibt gültig; ein nicht erreichbares Ziel wird gemeldet statt geworfen."""
+
+    def setUp(self):
+        self.ordner = Path(tempfile.mkdtemp(prefix="glide-zeiger-"))
+        self.addCleanup(lambda: __import__("shutil").rmtree(self.ordner, ignore_errors=True))
+        self.standard = self.ordner / "standard"
+        self.standard.mkdir()
+        patcher = mock.patch.object(rc, "resolve_default_data_dir", return_value=str(self.standard))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def zeiger(self, ziel, kodierung="utf-8"):
+        import json
+        (self.standard / "datenordner.json").write_text(json.dumps({"path": str(ziel)}), encoding=kodierung)
+
+    def test_pointer_with_byte_order_mark_is_read(self):
+        ziel = self.ordner / "eigene_ablage"
+        self.zeiger(ziel, "utf-8-sig")
+        self.assertEqual(rc.resolve_paths(env={}).base_dir, str(ziel))
+
+    def test_unreachable_pointer_target_returns_message_and_creates_nothing(self):
+        sperre = self.ordner / "keinordner"
+        sperre.write_text("Datei statt Ordner", encoding="utf-8")
+        ziel = sperre / "Glide"
+        self.zeiger(ziel)
+        pfade = rc.resolve_paths(env={})
+        meldung = rc.prepare_data_dir(pfade)
+        self.assertIsNotNone(meldung)
+        titel, text = meldung
+        self.assertEqual(titel, rc.UNREACHABLE_TITLE)
+        self.assertIn(str(ziel), text)
+        self.assertIn("datenordner.json", text)
+        self.assertIn("ohne den Bestand zu ändern", text)
+        self.assertTrue(sperre.is_file())
+
+    def test_environment_override_names_its_source(self):
+        sperre = self.ordner / "keinordner"
+        sperre.write_text("x", encoding="utf-8")
+        pfade = rc.resolve_paths(env={"GLIDE_DATA_DIR": str(sperre / "Glide")})
+        titel, text = rc.prepare_data_dir(pfade)
+        self.assertIn("GLIDE_DATA_DIR", text)
+        self.assertNotIn("datenordner.json", text)
+
+    def test_origin_describes_source_when_paths_were_given_explicitly(self):
+        sperre = self.ordner / "keinordner"
+        sperre.write_text("x", encoding="utf-8")
+        ziel = sperre / "Glide"
+        self.zeiger(ziel)
+        herkunft = rc.resolve_paths(env={})
+        ausdruecklich = rc.resolve_paths(herkunft.base_dir, env={})
+        titel, text = rc.prepare_data_dir(ausdruecklich, herkunft)
+        self.assertIn("datenordner.json", text)
+
+    def test_reachable_target_creates_folders_and_returns_none(self):
+        ziel = self.ordner / "neu" / "Glide"
+        self.zeiger(ziel)
+        self.assertIsNone(rc.prepare_data_dir(rc.resolve_paths(env={})))
+        self.assertTrue((ziel / "backups").is_dir())
+        self.assertTrue((ziel / "attachments").is_dir())
+
+
 class BytecodePathAgreementTests(unittest.TestCase):
     """Die drei Auflösungen des Bytecode-Ordners liefern denselben Pfad (WA-49).
 

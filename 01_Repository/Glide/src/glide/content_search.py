@@ -1,13 +1,23 @@
 # SPDX-License-Identifier: MPL-2.0
 """Inhaltssuche ohne Tk, Datei-I/O oder dauerhaften Index (G14, erste Stufe)."""
+import unicodedata
 
 
-def search_key(text):
-    """Bestehende Suchsemantik: zusammenhängender Text, ae/oe/ue/ss."""
-    value = ' '.join(str(text or '').split()).casefold()
+def _fold(value):
+    """Gemeinsame Gleichheit: NFC, Groß/Klein, ä/ae, ö/oe, ü/ue, ß/ss.
+
+    NFC zuerst, damit zerlegte Umlaute (``u`` + U+0308, etwa aus macOS-
+    Dateinamen oder kopiertem Text) wie zusammengesetzte gefunden werden.
+    """
+    value = unicodedata.normalize('NFC', value).casefold()
     for original, replacement in (('ä', 'ae'), ('ö', 'oe'), ('ü', 'ue'), ('ß', 'ss')):
         value = value.replace(original, replacement)
     return value
+
+
+def search_key(text):
+    """Bestehende Suchsemantik: zusammenhängender Text, ae/oe/ue/ss, NFC."""
+    return _fold(' '.join(str(text or '').split()))
 
 
 def title_rank(text, key):
@@ -48,19 +58,17 @@ def list_content(entry):
 
 
 def _normal(text):
-    """Wie `search_key`, aber ohne Leerraum zu verändern; je Zeichen unabhängig."""
-    value = text.casefold()
-    for original, replacement in (('ä', 'ae'), ('ö', 'oe'), ('ü', 'ue'), ('ß', 'ss')):
-        value = value.replace(original, replacement)
-    return value
+    """Wie `search_key`, aber ohne Leerraum zu verändern."""
+    return _fold(text)
 
 
 def _original_index(plain, position):
     """Index des Originalzeichens, aus dem die normalisierte Position `position` stammt.
 
-    Die Normalisierung wirkt je Zeichen und verlängert höchstens (ä → ae,
-    ß → ss, Ligaturen); deshalb genügt eine Halbierungssuche über die Länge
-    normalisierter Anfangsstücke – in C statt Zeichen für Zeichen (P07, 3.34.0).
+    Die Länge normalisierter Anfangsstücke wächst nie, wenn ein Zeichen
+    hinzukommt (ä → ae, ß → ss, Ligaturen verlängern; ein Kombinationszeichen
+    verschmilzt höchstens mit seinem Grundzeichen); deshalb genügt eine
+    Halbierungssuche – in C statt Zeichen für Zeichen (P07, 3.34.0).
     """
     lo, hi = 0, len(plain)
     while lo < hi:
@@ -110,30 +118,41 @@ def match_content(title, texts, key):
 def match_spans(text, key, limit=500):
     """(Start, Ende) aller Vorkommen von `key` im Originaltext, als Zeichenpositionen.
 
-    Dieselbe Gleichheit wie die Suche (Groß/Klein, ä/ae, ö/oe, ü/ue, ß/ss,
-    Leerraum zusammengezogen), damit ein Treffer im Dokument genau dort
-    markiert wird, wo die Suche ihn gefunden hat (G14h seit 3.34.0).
+    Dieselbe Gleichheit wie die Suche (NFC, Groß/Klein, ä/ae, ö/oe, ü/ue,
+    ß/ss, Leerraum zusammengezogen), damit ein Treffer im Dokument genau dort
+    markiert wird, wo die Suche ihn gefunden hat (G14h seit 3.34.0). Ein
+    Grundzeichen und seine folgenden Kombinationszeichen gelten als eine
+    Gruppe; ein Treffer schließt die Kombinationszeichen mit ein.
     """
     if not key:
         return []
     original = str(text or '')
-    normal, offsets = [], []
+    normal, starts, ends = [], [], []
     leer = False
-    for index, character in enumerate(original):
+    index, length = 0, len(original)
+    while index < length:
+        character = original[index]
         if character.isspace():
             if not leer:
                 normal.append(' ')
-                offsets.append(index)
+                starts.append(index)
+                ends.append(index + 1)
             leer = True
+            index += 1
             continue
         leer = False
-        for teil in search_key(character):
+        end = index + 1
+        while end < length and unicodedata.combining(original[end]):
+            end += 1
+        for teil in _fold(original[index:end]):
             normal.append(teil)
-            offsets.append(index)
+            starts.append(index)
+            ends.append(end)
+        index = end
     flach = ''.join(normal)
     spans = []
     position = flach.find(key)
     while position != -1 and len(spans) < limit:
-        spans.append((offsets[position], offsets[position + len(key) - 1] + 1))
+        spans.append((starts[position], ends[position + len(key) - 1]))
         position = flach.find(key, position + len(key))
     return spans

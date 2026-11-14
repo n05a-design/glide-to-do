@@ -235,7 +235,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.60.0"
+APP_VERSION = "3.61.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -22680,6 +22680,7 @@ class ListApp:
         def clear_preview():
             plan[0] = None
             preview.delete(*preview.get_children())
+            show_reasons("")
             set_confirmation(False)
 
         def capture(_event=None):
@@ -22736,6 +22737,8 @@ class ListApp:
                 preview.insert("", "end", text=self.format_due_display(before["day"]),
                                values=(self.relief_summary_text(before), self.relief_summary_text(after)))
             self._daily_fit_columns(preview, (("#0", 110), ("before", 290), ("after", 290)))
+            show_reasons("\n".join(day_relief.overload_lines(plan[0].before, plan[0].after,
+                                                               self.format_due_display)))
             warnings = sum(bool(self.busy_view(value["day"]).issues) for value in plan[0].before)
             moves = plan[0].moves
             if not moves:
@@ -22799,6 +22802,17 @@ class ListApp:
         for text, delta in (("Vorige Bilanzen", -1), ("Weitere Bilanzen", 1)):
             self._make_dialog_button(preview_navigation, text, lambda step=delta: show_comparison(step),
                                      "muted", width=145, height=28).pack(side="left", padx=(0, 6))
+        # Gründe der Überlastung unter der Bilanz: ruhige Begleitzeile, nur bei überplanten Tagen.
+        reasons = tk.Label(body, name="day_relief_reasons", text="", bg=self.theme["bg"], fg=self.theme["muted"],
+                           font=app_font(9), anchor="w", justify="left", wraplength=620)
+        reasons.bind("<Configure>", lambda event: reasons.configure(wraplength=max(120, event.width - 4)))
+
+        def show_reasons(text):
+            reasons.configure(text=text)
+            if text:
+                reasons.pack(fill="x", pady=(6, 0))
+            else:
+                reasons.pack_forget()
         flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
         flow.pack(fill="x")
         confirm = self._make_dialog_button(flow, "Umplanen", apply, "confirm", width=150, height=36)
@@ -70378,6 +70392,16 @@ def main():
         if stufe == "zu_alt":
             root.withdraw()
             messagebox.showerror("Glide kann nicht starten", meldung, parent=root)
+            root.destroy()
+            raise SystemExit(1)
+        # Ein nicht erreichbarer Datenordner (etwa ein nicht eingebundenes
+        # Laufwerk hinter datenordner.json) wird vor dem App-Fenster gemeldet.
+        # Glide legt dann nichts an und schaltet nicht still auf einen anderen
+        # Bestand um.
+        problem = glide_runtime_config.prepare_data_dir(glide_runtime_config.resolve_paths(BASE_DIR), RUNTIME_PATHS)
+        if problem:
+            root.withdraw()
+            messagebox.showerror(*problem, parent=root)
             root.destroy()
             raise SystemExit(1)
         platzhalter = show_start_window(root)

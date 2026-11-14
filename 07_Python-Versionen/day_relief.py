@@ -65,6 +65,35 @@ def relief_summary_text(value):
     return f"{items_label} · {analysis['summary_text']}"
 
 
+def _overload_reasons(value):
+    if value.get("calendar_state") in ("loading", "error", "closed"):
+        return ()
+    analysis = planning.capacity_analysis(value)
+    return analysis["overload_reasons"] if analysis["is_overloaded"] else ()
+
+
+def overload_lines(before, after, day_label, limit=4):
+    """Erklärende Zeilen unter der Vorher/Nachher-Bilanz der Tagesentlastung.
+
+    Je Tag, der nachher überplant ist, die Gründe danach; je Tag, den das
+    Umplanen entlastet, die Gründe davor und dass er danach frei ist. Mehr als
+    `limit` Tage werden nur gezählt, damit der feste Dialogfuß sichtbar bleibt.
+    """
+    lines = []
+    for old, new in zip(before, after):
+        now = _overload_reasons(new)
+        if now:
+            lines.append(f"{day_label(new['day'])}, nachher: " + "; ".join(now))
+            continue
+        was = _overload_reasons(old)
+        if was:
+            lines.append(f"{day_label(old['day'])}, vorher: " + "; ".join(was) + " · nachher nicht mehr überplant")
+    if len(lines) > limit:
+        rest = len(lines) - limit
+        lines = lines[:limit] + ["… und ein weiterer Tag" if rest == 1 else f"… und {rest} weitere Tage"]
+    return lines
+
+
 @dataclass(frozen=True)
 class Move:
     identity: str

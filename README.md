@@ -145,7 +145,7 @@ Die Python-Fassung ist für **Windows, macOS und Linux** vorgesehen. Der konkret
 | **macOS Apple Silicon** | Nativer Entwicklungsbau und isolierter Start belegt; aktuelle Paket-/Prüfzuordnung im Liefernachweis | [Mac-Paketworkflow](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) und Liefernachweis prüfen |
 | **Linux** | Python-Startweg; eigenständige Pakete separat nachzuweisen | Repository mit Python und Tk starten |
 
-Der aktuelle Quell- und Python-Lieferstand ist Glide 3.60.0 mit Datenformat 26; das [Glide-System](01_Repository/Glide/src/glide/README.md) führt seinen Bestand mit [eigener Katalogversion](01_Repository/Glide/GLIDE_SYSTEM_VERSION). Die Tagesplanung zeigt geplanten Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität, fehlende Schätzungen und Gründe für Überlastung. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
+Der aktuelle Quell- und Python-Lieferstand ist Glide 3.61.0 mit Datenformat 26; das [Glide-System](01_Repository/Glide/src/glide/README.md) führt seinen Bestand mit [eigener Katalogversion](01_Repository/Glide/GLIDE_SYSTEM_VERSION). Die Tagesplanung zeigt freie oder überplante Zeit, belegte Kalenderzeit und fehlende Schätzungen; „Tag entlasten“ nennt die Gründe überplanter Tage. Prüfergebnisse, verfügbare Entwicklungsbauten und offene Abnahmen stehen mit ihrem jeweiligen Commit im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Actions-Artefakte erfordern eine GitHub-Anmeldung. Der öffentliche Downloadkanal unter [Releases](https://github.com/n05a-design/glide-to-do/releases) setzt die Inhaberfreigabe voraus.
 
 Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnellstart.pyw`. Erst einmal ausprobieren? Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) öffnet ein fiktives Projekt mit Briefing, Aufgaben, Pinnwänden, Bildfolge und Wiedervorlagen in einem eigenen Datenordner – deine echten Daten bleiben unberührt. Weitere [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
@@ -179,7 +179,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 13.11.2026 · Glide 3.60.0
+Stand 14.11.2026 · Glide 3.61.0
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

@@ -512,6 +512,8 @@ def run(app_path, cases, report):
                     before=copy.deepcopy(app.lists)
                     confirm=button(dialog,"Umplanen")
                     assert str(confirm.cget("state"))=="disabled"
+                    reasons=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_reasons")
+                    assert reasons.winfo_manager()=="" and not reasons.cget("text")
                     click(dialog,"Umplanen")
                     assert dialog.winfo_exists() and app.lists==before
                     dialog.event_generate("<Escape>");pump()
@@ -525,21 +527,33 @@ def run(app_path, cases, report):
                 depth=len(app.undo_stack)
                 def apply_stock(dialog):
                     tree=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_tasks")
-                    tree.selection_set(identities[:2]);pump()
-                    stock=next(widget for widget in descendants(dialog) if isinstance(widget,(mod.tk.Radiobutton,mod.GlideRadiobutton))
-                               and widget.cget("value")=="stock")
-                    stock.invoke();pump()
-                    balance=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_balance")
-                    assert balance.get_children()
-                    full_table_values(balance,("before","after"))
-                    assert [fresh(i) for i in range(3)]==before
-                    click(dialog,"Umplanen")
+                    # 30 Minuten Kapazität: Der Tag ist vorher überplant, nach dem Umplanen frei.
+                    original=app.daily_capacity_minutes
+                    app.daily_capacity_minutes=lambda value=None: 30 if value==day else original(value)
+                    try:
+                        tree.selection_set(identities[:2]);pump()
+                        stock=next(widget for widget in descendants(dialog) if isinstance(widget,(mod.tk.Radiobutton,mod.GlideRadiobutton))
+                                   and widget.cget("value")=="stock")
+                        stock.invoke();pump()
+                        balance=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_balance")
+                        assert balance.get_children()
+                        full_table_values(balance,("before","after"))
+                        reasons=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_reasons")
+                        text=reasons.cget("text")
+                        assert reasons.winfo_manager()=="pack", text
+                        assert ", vorher: " in text and "übersteigt nutzbare Kapazität" in text, text
+                        assert "1 Aufgabe ohne Aufwandsschätzung kann den Tag" in text, text
+                        assert text.endswith("nachher nicht mehr überplant"), text
+                        assert [fresh(i) for i in range(3)]==before
+                        click(dialog,"Umplanen")
+                    finally:
+                        app.daily_capacity_minutes=original
                 modal("Tag entlasten",app.show_day_relief,apply_stock)
                 assert len(app.undo_stack)==depth+1 and all(fresh(i)["planned_date"] is None for i in (0,1))
                 assert all(fresh(i)["due"]==before[i]["due"] for i in range(3))
                 app.undo_last_change();pump()
                 assert [fresh(i) for i in range(3)]==before
-                checks.append("Echter Mehrfachdialog: automatische Bilanz, Vorrat übernimmt ausgewählte Aufgaben, ein Undo stellt alles her")
+                checks.append("Echter Mehrfachdialog: automatische Bilanz mit Überlastungsgründen, Vorrat übernimmt ausgewählte Aufgaben, ein Undo stellt alles her")
                 def apply_day(dialog):
                     tree=next(widget for widget in descendants(dialog) if widget.winfo_name()=="day_relief_tasks")
                     target=next(widget for widget in descendants(dialog) if isinstance(widget,mod.DueField))

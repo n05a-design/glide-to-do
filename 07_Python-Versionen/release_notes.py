@@ -20,15 +20,22 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.61.0": (
+        "„Tag entlasten“ nennt unter der Bilanz, warum ein Tag überplant ist.",
+        "Die Suche findet Umlaute auch in Texten, die sie zerlegt speichern, etwa aus macOS-Dateinamen.",
+        "Ist der Datenordner nicht erreichbar, nennt Glide den Pfad und beendet sich, ohne etwas zu ändern.",
+    ),
     "3.60.0": (
         "Die Einstellungen öffnen sich auch mit dem Stil „Kreativ“ und kleiner Schrift sofort.",
+        "Neues App-Symbol und zweifarbiges Logo im Fensterkopf; seine Fläche folgt der Themenfarbe.",
+        "Die Seitenleiste bleibt auch mit mehreren angehefteten Seiten bis zu den Zeichnungen erreichbar.",
     ),
     "3.55.1": (
         "Beim Entlasten eines Tages wählst du die Aufgaben und den neuen Bearbeitungstag und bestätigst mit „Umplanen“.",
         "Der JSON-Canvas-Export funktioniert wieder und schlägt wie die App-Sicherung einen Dateinamen mit einfacher Endung vor.",
     ),
     "3.55.0": (
-        "Die Tagesbilanz zeigt Aufgabenaufwand, belegte Kalenderzeit, verbleibende Kapazität und Überlastungsgründe.",
+        "Die Tagesbilanz zeigt Aufgabenaufwand, belegte Kalenderzeit und verbleibende Kapazität.",
         "Aufgaben ohne Schätzung bleiben sichtbar. Im Entlastungsdialog siehst du, welche Fälligkeiten beim Umplanen erhalten bleiben.",
     ),
     "3.54.0": (

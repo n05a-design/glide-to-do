@@ -113,7 +113,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.60.0"
+    assert mod.APP_VERSION == "3.61.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")

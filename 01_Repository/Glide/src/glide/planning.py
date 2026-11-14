@@ -146,8 +146,8 @@ def capacity_analysis(summary):
                 f"Geplanter Aufgabenaufwand ({duration(task_minutes)}) übersteigt nutzbare Kapazität ({duration(net_capacity)}) um {duration(overload_minutes)}"
             )
     if without_estimate_count > 0:
-        label = "Aufgabe" if without_estimate_count == 1 else "Aufgaben"
-        reasons.append(f"{without_estimate_count} {label} ohne Aufwandsschätzung können den Tag zusätzlich belasten")
+        label, verb = ("Aufgabe", "kann") if without_estimate_count == 1 else ("Aufgaben", "können")
+        reasons.append(f"{without_estimate_count} {label} ohne Aufwandsschätzung {verb} den Tag zusätzlich belasten")
 
     parts = []
     if task_minutes > 0 or estimated_count > 0:

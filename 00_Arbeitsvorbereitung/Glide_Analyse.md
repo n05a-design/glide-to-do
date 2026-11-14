@@ -20,7 +20,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
@@ -1074,6 +1074,13 @@ Quellstand `main` `edb3de7` (3.60.0 mit PR #82). PR #83 (`846915e`) ändert dana
 4. **Featurematrix.** Die Glide-Spalte im [Marktbericht §4](Glide_Markt_und_Vorbilder.md#4-featurematrix) stand auf 3.50.5 und führte Fundortübersicht und JSON Canvas als fehlend. Seit `8a20072f` war die Zeile „Persönliche Gestaltung“ mitten in „Kleine Fenster und große Schrift“ eingefügt.
 5. **Umfang von `ListApp`.** 53.183 Zeilen und 1.869 Methoden (AST-Abgrenzung), `app.pyw` gesamt 70.396 Zeilen. Risiko R1 im Plan nannte noch 46.929 Zeilen am Stand `c0252ba`.
 6. **Statusverweise im Plan.** Statusmarken und Einstieg nannten §21.77 und §21.44 als aktuellen Rest; dort steht WA-49 als nicht umgesetzt, obwohl es seit 3.55.0 und 3.60.0 teilweise umgesetzt ist. Der Einstieg nannte noch `766978d` als `main`.
-7. **Glide-System-Register (offen, Lieferstand).** `src/glide/README.md` verweist zwölfmal als Text auf den mit 3.60.0 gekürzten Ordner `tests/qa-3.50.6`. Die Korrektur gehört in eine Produktionsrunde, ebenso die Neuerungskarte.
+7. **Glide-System-Register (offen, Lieferstand).** `src/glide/README.md` nennt den mit 3.60.0 gekürzten Ordner `tests/qa-3.50.6` zwölfmal, davon fünfmal als toten Textverweis. Die Korrektur gehört in eine Produktionsrunde, ebenso die Neuerungskarte.
 
 Berichtigungen, Prüfung und Rest: [Plan §21.91](Glide_Entwicklungsplan.md#2191-dokumentationskorrekturen-aus-dem-gesamtaudit-14112026).
+
+**Nachtrag 3.61.0 (14.11.2026, Plan [§21.92](Glide_Entwicklungsplan.md#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026)):**
+
+- Punkt 1 behoben (D82): `runtime_config.prepare_data_dir` meldet ein nicht anlegbares Ziel als Systemdialog vor dem App-Fenster; der Zeiger wird mit `utf-8-sig` gelesen. `test_startwege.py` prüft den Fall für alle drei Startwege.
+- Punkt 2 behoben (D81): `day_relief.overload_lines` liefert die Gründe, der Entlastungsdialog zeigt sie unter der Bilanz. Dabei fiel „1 Aufgabe … können“ auf; die Einzahl lautet jetzt „kann“.
+- Neu gefunden und behoben: `content_search` faltete ohne Unicode-Normalisierung, zerlegte Umlaute (NFD) wurden nicht gefunden. NFC vor der Faltung; Trefferpositionen gelten je Zeichengruppe.
+- Punkt 7 teilweise: Von den zwölf Fundstellen zu `tests/qa-3.50.6` zeigten sieben bereits auf eine feste Git-Fassung; die fünf toten Textverweise sind berichtigt (Glide-System V1.24); die Dublette seiner Verhaltensspalte zum Handbuch steht im [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat).
