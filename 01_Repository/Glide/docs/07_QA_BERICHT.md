@@ -1,5 +1,11 @@
 # QA-Bericht – Glide 3.60.0
 
+## Technische Vollprüfung 3.60.0 auf PC02 (14.11.2026)
+
+Ausgangscommit `0d0e826f`. Die Linux-Vollprüfung mit eigener Tk-9.1-Laufzeit meldete bei `test_uiux_paket` in B04 „keine Vorschau geladen“. Alle vier aktiven Galeriemotive waren JPEGs. Tk benötigte auf dem Linux-Prüfstand dafür einen externen Decoder. Der Showcase verwendet dieselben Motive als PNG. Der Importtest prüft sichtbare Bilder in Galerie und Seite auf allen Prüfplattformen. [Linux-Ausgangslauf](https://github.com/n05a-design/glide-to-do/actions/runs/43546722741)
+
+Windows x64 und macOS arm64 wurden für den Ausgangscommit nativ gebaut und isoliert gestartet. Die separate Zugangsprüfung meldete AT-SPI und MSAA grün. Orca aktivierte kein Skript für das Tk-Fenster. NVDA sprach die Bedienelemente, erreichte aber die bereits eingeplante Aufgabe in „Mein Tag“ nicht. [Windows-Paket](https://github.com/n05a-design/glide-to-do/actions/runs/43547850307), [macOS-Paket](https://github.com/n05a-design/glide-to-do/actions/runs/43546722196), [Reader-Ausgangslauf](https://github.com/n05a-design/glide-to-do/actions/runs/43547847769)
+
 ## Prüfstand 3.60.0 (13.11.2026)
 
 Lokal geprüft auf einem MacBook (macOS arm64) mit Python 3.14.5 und dem Tcl/Tk 9.0.3 des Python-Installers, mit künstlichen Daten in einer kurzen Prüfablage außerhalb der synchronisierten Ablage. Basis ist `45ab307e`; Auftrag und Umfang stehen im [Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026). Einzelbelege liegen lokal und sind nicht versioniert.

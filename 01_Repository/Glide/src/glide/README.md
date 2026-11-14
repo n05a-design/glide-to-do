@@ -1,8 +1,8 @@
-# Glide-System V1.23
+# Glide-System V1.23.1
 
-Stand 13.11.2026 · Glide 3.60.0 · Glide-System V1.23 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 14.11.2026 · Glide 3.60.0 · Glide-System V1.23.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.23` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.23.1` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 13.11.2026 · Glide 3.60.0 · Glide-System V1.23 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.23.1** | 14.11.2026 | Werkhaus-Showcase mit PNG-Arbeitskopien und plattformübergreifender Vorschauprüfung. Der Paketbelegtest prüft auch die zusätzliche Windows-Quellenisolation. | App 3.60.0, Format 26 |
 | **V1.23** | 13.11.2026 | Zweifarbiges In-App-Logo aus dem SVG-Master. SVG-Pfade mit quadratischen Bézierkurven, gruppierten CSS-Selektoren und geschichteter PNG-Ausgabe. Der Windows-Aufnahmehelfer verwendet den Werkhaus-Showcase mit echten Ansichten und Dialogen. | App 3.60.0, Format 26 |
 | **V1.22** | 13.11.2026 | Glide 3.60.0: `ui_design.settled_wrap_width` beendet die Umbruchschaukel im Einstellungsdialog (DM Serif Display in kleiner Schrift) mit Unit-Tests. `test_startwege.py` ist Teil von `SUITEN` (110 Suiten). `test_arbeitsmodi.py` berücksichtigt bei `schriftstile` und `kompakt_verlorenes_loslassen` zwei Eigenschaften von Tk 9.0 unter macOS. Die Shell-Schnitte der Versionen V1.18 bis V1.21 sind mit 3.60.0 Teil der Lieferung. | App 3.60.0, Format 26 |
 | **V1.21** | 13.11.2026 | Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner mehr an; die Bereitstellung bleibt bei `ListApp.__init__` und beim Ordnerwechsel (WA-49, weiter teilweise). Neuer Fall `import_ohne_ordner` in `test_startwege.py` und eine Zusicherung in `test_glide.py`. Vorausgegangener Testzensus über Unit-, Werkzeug- und Integrationssuiten ohne abhängigen Zugriff. | Arbeitsstand auf App 3.55.1 ohne Produktionsrunde, Format 26 |
@@ -732,7 +733,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T180 | [`test_mutationsreste.py`](../../tests/integration/test_mutationsreste.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T181 | [`test_notizbereich330.py`](../../tests/integration/test_notizbereich330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T182 | [`test_oberflaeche33321.py`](../../tests/integration/test_oberflaeche33321.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T183 | [`test_paket3420.py`](../../tests/integration/test_paket3420.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T183 | [`test_paket3420.py`](../../tests/integration/test_paket3420.py) | Prüft native Bauquellen und optionale isolierte Startbelege. Prüft Sperrung und ACL-Wiederherstellung je Windows-Prüfquelle. |
 | T184 | [`test_paketierung330.py`](../../tests/integration/test_paketierung330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T185 | [`test_pixel3350.py`](../../tests/integration/test_pixel3350.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T186 | [`test_planen33313.py`](../../tests/integration/test_planen33313.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
@@ -803,7 +804,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T245 | [`pruefe_native_tk91_macos.py`](../../tests/tools/pruefe_native_tk91_macos.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T246 | [`pruefe_reader_nvda.py`](../../tests/tools/pruefe_reader_nvda.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T247 | [`pruefe_reader_orca.py`](../../tests/tools/pruefe_reader_orca.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T248 | [`pruefe_showcase.py`](../../tests/tools/pruefe_showcase.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
+| T248 | [`pruefe_showcase.py`](../../tests/tools/pruefe_showcase.py) | Prüft Demo-Import und Neustart sowie sichtbare Vorschauen für alle Galerie- und Seitenbilder auf allen drei Plattformen. |
 | T249 | [`pruefe_tk.py`](../../tests/tools/pruefe_tk.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T250 | [`pruefe_windows_msaa.py`](../../tests/tools/pruefe_windows_msaa.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T251 | [`pruefe_windows_signatur.py`](../../tests/tools/pruefe_windows_signatur.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
@@ -815,7 +816,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T257 | [`releasedaten.py`](../../tests/tools/releasedaten.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T258 | [`rundgang.py`](../../tests/tools/rundgang.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T259 | [`screenshots.py`](../../tests/tools/screenshots.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T260 | [`showcase.py`](../../tests/tools/showcase.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
+| T260 | [`showcase.py`](../../tests/tools/showcase.py) | Erzeugt den Werkhaus-Showcase mit PNG-Arbeitskopien der Projektmotive. |
 | T261 | [`standpruefung.py`](../../tests/tools/standpruefung.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T262 | [`symbolpruefung.py`](../../tests/tools/symbolpruefung.py) | Native Glyphen-/Ersatzschriftdiagnose für alle vier Stile und beide Tk-Gewichte |
 | T263 | [`synchronisationswaechter.py`](../../tests/tools/synchronisationswaechter.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |

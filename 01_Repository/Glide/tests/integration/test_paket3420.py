@@ -70,12 +70,16 @@ def run(repo, report=None, native=None):
             assert proof.get('nur_vergaenglicher_hosted_ci_runner')
             assert proof.get('externes_python_gegenprobe') != 0
             assert proof.get('externes_python_nach_restaurierung_exitcode') == 0
-            assert proof.get('externe_quellen_lesegegenproben') == [True] * 4
-            assert proof.get('acl_entsperrung_exitcodes') == [0] * 4
-            assert proof.get('acl_restaurierung_exitcodes') == [0] * 4
-            assert proof.get('acl_native_restaurierung_exitcodes') == [0] * 4
-            assert proof.get('acl_zugriffsregeln_wiederhergestellt') == [True] * 4
-            assert len(proof.get('acl_originale_wiederhergestellt', [])) == 4
+            read_probes = proof.get('externe_quellen_lesegegenproben', [])
+            count = len(read_probes)
+            # The current workflow also isolates the staged build source.
+            # Older reports checked four roots and remain valid.
+            assert count >= 4 and read_probes == [True] * count
+            assert proof.get('acl_entsperrung_exitcodes') == [0] * count
+            assert proof.get('acl_restaurierung_exitcodes') == [0] * count
+            assert proof.get('acl_native_restaurierung_exitcodes') == [0] * count
+            assert proof.get('acl_zugriffsregeln_wiederhergestellt') == [True] * count
+            assert len(proof.get('acl_originale_wiederhergestellt', [])) == count
         result['nativer_startbeleg'] = dict(plattform=proof['plattform'], version=version, exitcode=0)
     if report:
         report.parent.mkdir(parents=True, exist_ok=True)

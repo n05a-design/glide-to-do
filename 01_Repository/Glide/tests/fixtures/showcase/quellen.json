@@ -1,29 +1,29 @@
 {
-  "zweck": "Werkhaus West: JPEG-Arbeitskopien vorhandener Projektmotive, längste Kante 1600 px. Originale im Grafikmaster.",
+  "zweck": "Werkhaus West: sRGB-PNG-Arbeitskopien vorhandener Projektmotive, längste Kante 1200 px. Tk liest PNG auch ohne Systemdecoder. Originale im Grafikmaster.",
   "bilder": [
     {
-      "datei": "Planstudie.jpg",
+      "datei": "Planstudie.png",
       "original": "20_Grafik_Master/06_Beispielbilder/Haus-auf-Zeichnung-942956610.jpeg",
-      "sha256": "fd4d37be12c6f19166bba1eb9795b886bf97ced96170c6db37e698bf2da09497",
-      "bytes": 152124
+      "sha256": "8cf2f95a7811311417e6134db841b5409564b53e0ba3d98f1fcd99d3663b6d5e",
+      "bytes": 586724
     },
     {
-      "datei": "Licht-zum-Hof.jpg",
+      "datei": "Licht-zum-Hof.png",
       "original": "20_Grafik_Master/06_Beispielbilder/modernes-Haus-aus-der-Planung.png",
-      "sha256": "90918d96720d274542192308ad061fc5bc2589fcdb5748dd6e89bdcc52d6cbf7",
-      "bytes": 255771
+      "sha256": "6e671d0b733e6b0a6afe41e5340cd7a7ad79d58ecd242a716f251733d41180fe",
+      "bytes": 1252964
     },
     {
-      "datei": "Materialwand.jpg",
+      "datei": "Materialwand.png",
       "original": "20_Grafik_Master/06_Beispielbilder/Welche-Kunst-passt-zu-ihrer-wohnung.png",
-      "sha256": "7892fd0c7e92bc61483e6d88ef0e586ec05695f7d11dca00cc7a1e741860bf22",
-      "bytes": 458731
+      "sha256": "735c0b6c6e10cb60c42646410ca1419264e1797e74ae7b740827ef7704b51c27",
+      "bytes": 1568089
     },
     {
-      "datei": "Sitzbereich.jpg",
+      "datei": "Sitzbereich.png",
       "original": "20_Grafik_Master/06_Beispielbilder/Tipps-in-der-Einrichtung.png",
-      "sha256": "28de7c8204d090ccdf838a2a7f2c71eb9150a2d6d52caf2270daa62518f698cf",
-      "bytes": 493662
+      "sha256": "2183366508e5248ee6cd8e51f4b23fa6b749c48fbf17640b54ee6d5997686208",
+      "bytes": 1572720
     }
   ]
 }

@@ -2,7 +2,7 @@
 
 ## Lokaler Stand 3.60.0 (13.11.2026)
 
-**Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.23**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
+**Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.23.1**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
 1. **Normallage:** `compact_mode.keep_visible` rechnet die Fensterlage beim Start Tk-frei; `ListApp.clamp_geometry` bleibt Fassade.
 2. **Start und Import (WA-49, weiter teilweise):** Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner an. `test_startwege.py` (Teil von `SUITEN`) und der Gleichheitstest der Bytecode-Pfade in `test_runtime_config.py` sind die Vergleichsgrundlage für weitere Startänderungen.
 3. **Einstellungsdialog:** Die Umbruchschaukel mit „Kreativ: DM Serif Display“ in kleiner Schrift ist behoben (`ui_design.settled_wrap_width`).
