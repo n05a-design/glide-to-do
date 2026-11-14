@@ -1,8 +1,8 @@
-# Glide-System V1.26
+# Glide-System V1.27
 
-Stand 14.11.2026 · Glide 3.62.0 · Glide-System V1.26 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 14.11.2026 · Glide 3.62.0 · Glide-System V1.27 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.26` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.27` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 14.11.2026 · Glide 3.62.0 · Glide-System V1.26 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.27** | 14.11.2026 | Shell-Paket 3b: `test_abbauvertrag.py` (T318) schließt eine vollständige App mit künstlichen Daten in vier Fällen über `on_close` und misst Hauptfenster, Datensperre, verbleibende Tcl-Zeitgeber, späte Rückrufe und Hintergrundfäden; drei Gegenproben. Teil von `SUITEN`. Produktcode unverändert. | App 3.62.0, Format 26 |
 | **V1.26** | 14.11.2026 | Glide 3.62.0, Shell-Paket 3a: neues Modul M096 `modal_session.py` (nur Standardbibliothek und `tkinter`) mit `modal_over`, `ensure_min_width`, `bring_to_front`, `wait_modal` und `run_modal`; die gleichnamigen `ListApp`-Methoden sind Fassaden. `test_modal_session.py` (T317) prüft Importregel und Schnittstelle, die Gegenproben von `test_modalvertrag.py` verändern jetzt das Modul. Baustein B03 nennt das Modul. | App 3.62.0, Format 26 |
 | **V1.25** | 14.11.2026 | Shell-Paket 3, Vorstufe: `test_modalvertrag.py` hält den Vertrag von `ListApp.run_modal`/`modal_over` mit echtem Grab in 13 Fällen fest (Griff und Freigabe, Escape/Schließen, Event-Loop, drei Ebenen, `parent=`, verschwundener Besitzer, gescheiterter Griff, Abbruch im Warten, wiederverwendbarer Dialog, 25 Wiederholungen, Fokus, aufgeschobener Menübefehl, Abbau des Hauptfensters); sechs Gegenproben entfernen je eine Schutzzeile. Teil von `SUITEN`. Produktcode unverändert. | App 3.61.0, Format 26 |
 | **V1.24** | 14.11.2026 | Glide 3.61.0: `content_search` normalisiert NFC vor der Faltung, Trefferpositionen je Zeichengruppe; `runtime_config.prepare_data_dir`/`unreachable_message` melden einen nicht anlegbaren Datenordner, Zeiger mit `utf-8-sig`; `day_relief.overload_lines` liefert die Gründe unter der Entlastungsbilanz, `planning` mit korrekter Einzahl. Tests: NFD-Fälle, BOM/Meldung, `overload_lines`, Zustand „unerreichbar“ in `test_startwege.py`, Gründe im Dialog in `test_tag3390.py`. Fünf Textverweise auf den gekürzten Ordner `qa-3.50.6` zeigen auf die feste Git-Fassung. | App 3.61.0, Format 26 |
@@ -55,7 +56,7 @@ Stand 14.11.2026 · Glide 3.62.0 · Glide-System V1.26 · Aufgabenformat 26 · E
 | Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 317 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 318 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -781,6 +782,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T223 | [`vorversion.py`](../../tests/integration/vorversion.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T315 | [`test_startwege.py`](../../tests/integration/test_startwege.py) | Start-Baseline der drei Startwege gegen fünf künstliche Ablagezustände (seit 3.61.0 auch „unerreichbar“: Meldung, Exitcode 1, Ablage unverändert) mit Schutzfall für den umgelenkten Profilordner und Importfall ohne Ordner und Fenster (WA-49); Teil von `SUITEN`, Paketstarter aus den Quellen nachgestellt |
 | T316 | [`test_modalvertrag.py`](../../tests/integration/test_modalvertrag.py) | Vertragstest für `ListApp.run_modal` und `modal_over` mit echtem Grab am echten Interpreter, 13 Fälle mit hartem und weichem Zeitwächter; `--gegenproben` entfernt sechs Schutzzeilen in einer Kopie und verlangt den zuständigen roten Fall. Vorstufe zu Shell-Paket 3; Aqua-Menüverfolgung nur nativ am Mac prüfbar. Teil von `SUITEN` |
+| T318 | [`test_abbauvertrag.py`](../../tests/integration/test_abbauvertrag.py) | Abbau-Vertragstest (Shell-Paket 3b): vollständige App mit künstlichen Daten je Fall in eigenem Prozess, Schließen über `on_close` in Ruhe, bei laufendem Hintergrundverlauf, mit Abbruch der Rückfrage und doppelt; misst Hauptfenster, Datensperre, verbleibende Tcl-Zeitgeber, späte Rückrufe und Fäden und nennt nicht registrierte Zeitgeber vor dem Schließen; `--gegenproben` für drei Schutzzeilen. Teil von `SUITEN` |
 
 ### Werkzeuge
 

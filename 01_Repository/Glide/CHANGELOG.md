@@ -2,6 +2,11 @@
 
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
+## Prüfwerkzeuge – 14.11.2026 (nach 3.62.0)
+
+- **Abbauvertrag:** `test_abbauvertrag.py` schließt eine vollständige App über den normalen Weg und belegt: Hauptfenster abgebaut, Datensperre frei, kein Zeitgeber und kein später Rückruf danach; dazu drei Gegenproben. Teil von `SUITEN`. Vorstufe zur Fensterlebensdauer in der Shell. [QA-Bericht](docs/07_QA_BERICHT.md#abbau-vertragstest-auf-3620-14112026)
+- App 3.62.0 und Datenformat 26 unverändert; Glide-System V1.27.
+
 ## 3.62.0 – 14.11.2026
 
 - **Shell-Fundament, erster Baustein (Paket 3a):** Jeder modale Dialog wartet jetzt über das neue Modul `modal_session.py`. Es kennt nur Tk; Theme-Farbe, Bildschirmanteil und Fehlerprotokoll kommen von Glide. `run_modal`, `modal_over`, `ensure_dialog_min_width` und `bring_dialog_to_front` bleiben als Fassaden in `ListApp`, ihre 58 bzw. 6 Aufrufer sind unverändert. Verhalten unverändert.
