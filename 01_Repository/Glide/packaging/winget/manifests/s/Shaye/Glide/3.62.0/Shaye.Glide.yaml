@@ -1,0 +1,7 @@
+# Entwurf 14.11.2026 – nicht eingereicht. Erklärung: docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.10.0.schema.json
+PackageIdentifier: Shaye.Glide
+PackageVersion: 3.62.0
+DefaultLocale: de-DE
+ManifestType: version
+ManifestVersion: 1.10.0
