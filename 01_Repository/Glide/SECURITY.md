@@ -1,6 +1,6 @@
 # Sicherheit
 
-Stand 12.11.2026 · Glide 3.55.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Glide verarbeitet lokale Nutzerdaten und lokale Anhänge. Die Anwendung überträgt diese Daten nicht selbstständig an externe Dienste und öffnet keine Netzwerkverbindungen. Links in Notizen (nur `http(s)://` und `mailto:`) gibt sie ausschließlich auf Klick an den Standardbrowser weiter.
 

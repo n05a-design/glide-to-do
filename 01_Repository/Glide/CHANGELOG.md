@@ -1,5 +1,14 @@
 # Änderungsverlauf
 
+## Dokumentationspflege – 14.11.2026
+
+- **Tagesbilanz:** Das [Handbuch](docs/20_FUNKTIONEN.md#tageskapazität-und-entlastung-seit-3550) beschreibt die tatsächliche Anzeige. Die mit 3.55.0 angekündigten Überlastungsgründe werden berechnet, aber noch nicht angezeigt; der Eintrag zu 3.55.0 bleibt als Verlauf stehen.
+- **WA-49:** 3.55.0 brachte den ersten Schnitt, die Tk-freie Pfadauflösung. Erst seit 3.60.0 legt der Import keine Ordner mehr an; Menüaufschub und Zeigerlesen beim Import bleiben offen.
+- **Datenordnerzeiger:** Der [Datenvertrag](docs/06_DATA_BACKUP_MIGRATION.md#ablage) nennt das Verhalten bei unerreichbarem Ziel und bei BOM als offenen Befund.
+- **Prüfstand 3.55.0:** Nachtrag zu Version, Laufzeit und Quellhash der Messdateien im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3550-11112026).
+- **Markt, Plan, Übergabe, Index:** Featurematrix auf 3.60.0 ergänzt und eine verschobene Tabellenzeile repariert. Planeinstieg, Statusverweise, Register WA-12/WA-49 und Risiko R1 auf den Code ausgerichtet. Befunde in der [Analyse §13.36](../../00_Arbeitsvorbereitung/Glide_Analyse.md#1336-gesamtaudit-gegen-code-und-dokumentation-14112026), Rest im [Plan §21.91](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2191-dokumentationskorrekturen-aus-dem-gesamtaudit-14112026).
+- App 3.60.0, Datenformat 26 und Glide-System V1.23.1 unverändert.
+
 ## 3.60.0 – 13.11.2026
 
 - **Marke und Projektseite:** Neues Glide-App-Symbol und zweifarbiges In-App-Logo. Die Fläche folgt der Themenfarbe, der Schatten bleibt eigenständig sichtbar. Der Showcase „Werkhaus West“ liefert einen bearbeitbaren Projektstand und 15 verschiedene Windows-Aufnahmen.
