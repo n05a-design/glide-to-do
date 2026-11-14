@@ -200,6 +200,7 @@ import backup_diff as glide_backup_diff  # noqa: E402
 import action_menu as glide_action_menu  # noqa: E402
 import side_view as glide_side_view  # noqa: E402
 import compact_mode as glide_compact  # noqa: E402
+import modal_session as glide_modal_session  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -235,7 +236,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.61.0"
+APP_VERSION = "3.62.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -33710,65 +33711,26 @@ class ListApp:
             return color_key
         return self.theme.get("accent", "#000000")
 
-    @contextlib.contextmanager
     def modal_over(self, parent=None):
         """Gibt den Tastatur- und Mausgriff nach einem Unterdialog zurück.
 
-        Ein modaler Dialog nimmt den Griff an sich. Schließt er sich, fällt der
-        Griff nicht von allein an das Fenster zurück, aus dem er geöffnet wurde –
-        dieses nähme dann keine Eingabe mehr an und wirkte eingefroren. Genau
-        das passiert, wenn aus einer modalen Maske heraus ein weiterer Dialog
-        geöffnet wird: Kalender, Farbauswahl, Namensabfrage.
-
-        Ohne `parent` fragt Tk selbst, wer den Griff gerade hält. Das ist der
-        zuverlässigere Weg, weil kein Aufrufer sein Fenster durchreichen muss –
-        und weil er auch dann greift, wenn zwischen Maske und Unterdialog noch
-        ein drittes Fenster liegt.
-
-        Wird das aufrufende Fenster in der Zwischenzeit geschlossen, bleibt der
-        Griff aus: Ihn an ein verschwundenes Fenster zu binden wäre schlimmer
-        als gar keiner.
+        Fassade für `modal_session.modal_over` (Shell-Paket 3a, 3.62.0). Genau
+        das braucht es, wenn aus einer modalen Maske heraus ein weiterer
+        Dialog geöffnet wird: Kalender, Farbauswahl, Namensabfrage. Ohne
+        `parent` fragt Tk selbst, wer den Griff hält; ist das aufrufende
+        Fenster inzwischen geschlossen, bleibt der Griff aus.
         """
-        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else None
-        if owner is None:
-            try:
-                current = self.root.grab_current()
-            except tk.TclError:
-                current = None
-            owner = current if isinstance(current, (tk.Toplevel, tk.Tk)) else None
-        had_grab = False
-        if owner is not None and owner is not self.root:
-            try:
-                had_grab = bool(owner.grab_status())
-            except tk.TclError:
-                had_grab = False
-        try:
-            yield
-        finally:
-            if had_grab:
-                try:
-                    if owner.winfo_exists():
-                        owner.grab_set()
-                except tk.TclError:
-                    pass
+        return glide_modal_session.modal_over(self.root, parent)
 
     def ensure_dialog_min_width(self, dialog):
         """Die Mindestbreite eines Dialogs deckt seinen Inhalt – höchstens bis zur Bildschirmbreite.
 
         Feste Mindestgrößen stammen aus der mittleren Schrift. Bei „groß“
         passte „Arbeitsdateien verschieben“ nicht mehr in „Über Glide“ (380 px)
-        und wurde gequetscht, sobald man den Dialog kleiner zog.
+        und wurde gequetscht, sobald man den Dialog kleiner zog. Die Regel
+        liegt seit 3.62.0 in `modal_session.ensure_min_width`.
         """
-        try:
-            if not getattr(dialog, "_glide_layout_measured", False):
-                dialog.update_idletasks()
-            breite, hoehe = dialog.minsize()
-            bedarf = dialog.winfo_reqwidth()
-            grenze = int(dialog.winfo_screenwidth() * self.DIALOG_MAX_SCREEN_SHARE)
-            if bedarf > breite:
-                dialog.minsize(min(bedarf, max(360, grenze)), hoehe)
-        except (tk.TclError, ValueError, TypeError):
-            pass
+        glide_modal_session.ensure_min_width(dialog, self.DIALOG_MAX_SCREEN_SHARE)
 
     def run_modal(self, dialog, parent=None):
         """Führt einen modalen Dialog aus und stellt den vorherigen Griff wieder her.
@@ -33777,50 +33739,23 @@ class ListApp:
         stand `grab_set` + `wait_window` an sieben Stellen einzeln da, und nur
         eine davon gab den Griff zurück – die übrigen hinterließen eine Maske,
         die noch zu sehen war, aber keine Eingabe mehr annahm.
+
+        Seit 3.62.0 wartet `modal_session.wait_modal` (Shell-Paket 3a). Die
+        Vorbereitung läuft weiter über die beiden Methoden dieser Klasse,
+        damit Prüfungen, die sie ersetzen, unverändert greifen.
         """
         dialog.configure(bg=self.theme["bg"])
         self.ensure_dialog_min_width(dialog)
         self.bring_dialog_to_front(dialog)
-        with self.modal_over(parent):
-            # `grab_set` scheitert, wenn eine
-            # andere Anwendung den Griff hält oder das Fenster noch nicht
-            # sichtbar ist. Bis 3.24 riss die Ausnahme den Aufrufer mit: Der
-            # Dialog blieb offen, das Ergebnis wurde nie gelesen, und die
-            # Anwendung wartete auf ein Fenster, das niemand mehr schließen
-            # konnte. Ein Dialog ohne Griff ist unschön; ein Dialog ohne
-            # Rückweg ist ein Stillstand.
-            try:
-                dialog.grab_set()
-            except tk.TclError as fehler:
-                self.log_error(f"grab_set fehlgeschlagen: {fehler}\n")
-            dialog._glide_modal_active = True
-            try:
-                finished = getattr(dialog, "_glide_modal_finished", None)
-                if finished is None:
-                    self.root.wait_window(dialog)
-                else:
-                    self.root.wait_variable(finished)
-            finally:
-                dialog._glide_modal_active = False
-                try:
-                    if dialog.winfo_exists():
-                        dialog.grab_release()
-                except tk.TclError:
-                    pass
+        glide_modal_session.wait_modal(self.root, dialog, parent, log_error=self.log_error)
 
     def bring_dialog_to_front(self, dialog):
         """Zeigt einen Dialog sichtbar über dem Hauptfenster (Befund R11, 29.09.2026).
 
         Ein Dialog, der hinter dem Hauptfenster oder minimiert entsteht, wirkt
-        wie ein Klick ohne Folge.
+        wie ein Klick ohne Folge. Fassade für `modal_session.bring_to_front`.
         """
-        try:
-            if dialog.state() in ("withdrawn", "iconic"):
-                dialog.deiconify()
-            dialog.lift()
-            dialog.focus_force()
-        except tk.TclError:
-            pass
+        glide_modal_session.bring_to_front(dialog)
 
     def create_label_interactively(self, parent=None):
         """Label anlegen; None bei Abbruch/Schreibfehler, Fehler bleibt rücknehmbar."""

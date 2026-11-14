@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 14.11.2026 · Glide 3.61.0 · Aufgabenformat 26
+Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
 
@@ -49,7 +49,7 @@ Die folgende Tabelle beschreibt Zielverantwortungen. Dateibestand, Featurezuordn
 |---|---|---|
 | Laufzeit und Lebenszyklus | Pfade ohne Tk oder Dateisystemmutation ermitteln; Start, Ende, Session und Schreibbesitz ausdrücklich koordinieren | [Start/Architektur](../src/glide/README.md#startarchitektur). `runtime_config.py` löst Pfade auf; CLI-Auswertung, App-Import und Desktop-Initialisierung bleiben eigene Schritte (WA-49). Eine `shell_lifecycle.py` wäre ein neuer Entwurf. |
 | Design, Typografie und Symbole | Theme-Token, Schrift-/Glyphenwahl und Maßberechnung über eine stabile UI-Schnittstelle bereitstellen | [Design/Branding](../src/glide/README.md#designbranding) und [Designvertrag](DESIGN_RICHTLINIEN.md). Vorhandene Module bilden noch kein unabhängig geprüftes UI-Paket. |
-| Fenster, Navigation und modale Dialoge | Root-/Toplevel-Lebensdauer, Fokus, Grab-Freigabe, Bildschirmgrenzen und Menübesitz koordinieren | [UI/Navigation](../src/glide/README.md#uinavigation) und [Tk-Regeln](02_ARCHITECTURE.md#5-tk-fallstricke-teuer-gelernt). `run_modal` liegt in `ListApp`; ein `window_manager.py` oder `modal_runner.py` ist hier nur ein vorgeschlagener Schnitt. |
+| Fenster, Navigation und modale Dialoge | Root-/Toplevel-Lebensdauer, Fokus, Grab-Freigabe, Bildschirmgrenzen und Menübesitz koordinieren | [UI/Navigation](../src/glide/README.md#uinavigation) und [Tk-Regeln](02_ARCHITECTURE.md#5-tk-fallstricke-teuer-gelernt). Der modale Warteweg liegt seit 3.62.0 in `modal_session.py`, `ListApp.run_modal` ist Fassade; ein `window_manager.py` für Fensterlebensdauer und Abbau ist weiter nur ein vorgeschlagener Schnitt. |
 | Steuerelemente und Zugänglichkeit | Theme, Tastaturbedienung und semantische Rollen erhalten; benötigte `keys`-/`cget`-/`configure`-/Indexzugriffe kompatibel halten | [Oberflächenbestand](../src/glide/README.md#oberflächen-bestandsprüfung) und [Barrierefreiheit](../src/glide/README.md#barrierefreiheit). Die D78-Controls liegen in `app.pyw`; ein eigenes `controls/`-Paket ist kein Istzustand. |
 | Undo und Commands | Transaktionsgrenzen der App über einen expliziten Vertrag anbinden, ohne Aufgabenformate in die Shell einzubauen | [Daten/Schutz](../src/glide/README.md#datenschutz). `undo_history.py` enthält `RedoHistory` für Wiederholen; der Undo-Gesamtablauf liegt weiterhin in der App. Ein generischer Command-Stack ist Zielarbeit. Validierung 13.11.2026: Der Ablauf hängt an Aufgabenmodellen, Einstellungen und Speicherweg und bleibt beim Host; die Shell bindet Verfügbarkeit und Auslösen als Aktionen an. |
 
@@ -101,7 +101,7 @@ Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- 
 - **Ziel:** Einheitliche Widget-Schnittstelle (`keys()`, `configure()`, Event-Binding) unabhängig vom konkreten Glide-Inhalt.
 
 ### Phase 3: Modal- und Dialog-Manager
-- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul `glide_shell.dialogs`.
+- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py` als flaches Modul; ein Namensraum wie `glide_shell.dialogs` bleibt an die offene Paketentscheidung gebunden.
 - **Ziel:** Schutz vor Livelocks, standardisierte Bestätigungs-, Eingabe- und Auswahldialoge mit einheitlicher Tastaturbedienung (Escape zum Abbrechen, Enter zum Bestätigen).
 
 ### Phase 4: Undo/Command-Abstraktion
@@ -157,11 +157,12 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 - **Abhängigkeitsrichtung:** Host/Glide → Shell → Tk/OS. Shell-Module importieren nur Standardbibliothek, `tkinter` und andere Shell-Module. Glide-Werte kommen als Argumente, Werte und Callbacks; ein Port entsteht nur, wo er eine konkrete Abhängigkeit entfernt.
 - **Vorgehen:** Inkrementelle Extraktion mit vorhandenen Fassaden. `ListApp`-Methoden und die Pfadkonstanten des App-Moduls bleiben Aufrufstellen, weil Tests und Werkzeuge an ihnen hängen. Ein physisches Teilpaket berührt Lieferabgleich, Paketbau und Importwege und ist eine eigene Entscheidung.
 - **Start:** Direktstart, Schnellstart und Paketstarter verhalten sich gegen leere, vorhandene, fremd gesperrte und beschädigte Ablage gleich; sie unterscheiden sich nur in der Überwachung durch den Begleitprozess. Der Bytecode-Ordner wird dreifach aufgelöst, weil jeder Einstieg ihn vor seinem ersten eigenen Import braucht; ein Test hält die drei Auflösungen gleich.
-- **Modal:** `run_modal` ist der einzige Warteweg und hängt an Theme, Mindestbreite, Vordergrund und Fehlerprotokoll der `ListApp`. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau. Seit 14.11.2026 hält `test_modalvertrag.py` diesen Vertrag in 13 Fällen mit sechs Gegenproben fest; den Fokus nach dem Schließen stellen weiterhin die Aufrufer her.
+- **Modal:** `run_modal` ist der einzige Warteweg. Seit 3.62.0 wartet `modal_session.wait_modal`; Theme, Bildschirmanteil und Fehlerprotokoll reicht die `ListApp`-Fassade als Argumente hinein. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau. Seit 14.11.2026 hält `test_modalvertrag.py` diesen Vertrag in 13 Fällen mit sechs Gegenproben fest; den Fokus nach dem Schließen stellen weiterhin die Aufrufer her.
 
 | Modul | Neutral | Glide-gebunden |
 |---|---|---|
 | `motion` | vollständig | – |
+| `modal_session` (seit 3.62.0) | vollständig; Importregel in `test_modal_session.py` | Attributnamen `_glide_modal_active`/`_glide_modal_finished` aus Kompatibilität |
 | `compact_mode` | `parse`, `format_geometry`, `clamp`, `keep_visible` | Mindestmaße, Einstellungsname, Kürzelregel |
 | `appearance` | Designpaar, Erkennung des Systemmodus | Hintergrundauswahl, `with_background` |
 | `ui_design` | Skalen, `fit_text`, `clip_title`, Breitenausgleich, `settled_wrap_width` | `task_title`, `today_columns`, `page_icon_layout` |

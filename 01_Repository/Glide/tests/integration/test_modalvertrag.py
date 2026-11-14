@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Vertragstest für `ListApp.run_modal` und `modal_over` mit echtem Grab (Shell-Paket 3, Vorstufe).
+"""Vertragstest für `ListApp.run_modal` und `modal_over` mit echtem Grab (Shell-Paket 3).
 
 Bevor der Modal-Weg aus `ListApp` herausgelöst wird, hält dieser Test fest,
 was er heute garantiert. Jeder Fall öffnet echte `Toplevel`-Fenster am
@@ -17,10 +17,13 @@ meldet den Fall als rot. Unter Windows und Linux belegt der Menüfall nur den
 Aufschub über `after_idle`; die Menüverfolgung von macOS/Aqua braucht einen
 nativen Mac-Lauf.
 
-Gegenproben (`--gegenproben`) laden eine Kopie von `app.pyw`, in der je eine
-Schutzzeile von `run_modal`/`modal_over` entfernt ist, und verlangen, dass der
-zuständige Fall rot wird. Findet eine Gegenprobe ihre Zeile nicht mehr, ist der
-Modal-Weg umgebaut worden: Gegenproben und Vertrag gemeinsam nachführen.
+Seit 3.62.0 (Paket 3a) sind die `ListApp`-Methoden Fassaden für das
+Shell-Modul `modal_session.py`; geprüft wird weiter über die Fassaden, also
+über den Weg der App. Gegenproben (`--gegenproben`) legen `app.pyw` neben eine
+Kopie von `modal_session.py`, in der je eine Schutzzeile entfernt ist, und
+verlangen, dass der zuständige Fall rot wird. Findet eine Gegenprobe ihre Zeile
+nicht mehr, ist der Modal-Weg umgebaut worden: Gegenproben und Vertrag
+gemeinsam nachführen.
 
 Aufruf: python3 -B tests/integration/test_modalvertrag.py [--fall NAME] [--gegenproben]
 """
@@ -438,9 +441,10 @@ def fall_fokus(u):
     fokus = stand.get("fokus")
     u.pruefe(fokus is not None and str(fokus).startswith(str(d)),
              f"Fokus lag während des Wartens nicht im Dialog: {fokus!r}")
-    quelle = inspect.getsource(u.mod.ListApp.run_modal)
+    shell = u.mod.glide_modal_session
+    quelle = inspect.getsource(shell.wait_modal) + inspect.getsource(shell.modal_over)
     u.pruefe("focus_set" not in quelle and "focus_force" not in quelle,
-             "run_modal stellt jetzt selbst Fokus her – Vertrag und Aufrufer prüfen")
+             "der Warteweg stellt jetzt selbst Fokus her – Vertrag und Aufrufer prüfen")
 
 
 def fall_menue(u):
@@ -515,46 +519,54 @@ FAELLE = {
 }
 
 
-# Name: (Methode, entfernte Schutzzeile, Ersatz, Fall, der rot werden muss)
+# Name: (Funktion in modal_session.py, entfernte Schutzzeile, Ersatz, Fall, der rot werden muss)
 NL = "\n"
+SHELL_MODUL = "modal_session.py"
 GEGENPROBEN = {
-    "ohne_griff": ("run_modal", "dialog.grab_set()", "pass", "grundvertrag"),
-    "ohne_freigabe": ("run_modal", "dialog.grab_release()", "pass", "wiederverwendbar"),
-    "ohne_aktivmarke_ende": ("run_modal", "dialog._glide_modal_active = False", "pass", "grundvertrag"),
-    "ohne_grabschutz": ("run_modal", r'self.log_error(f"grab_set fehlgeschlagen: {fehler}\n")', "raise",
+    "ohne_griff": ("wait_modal", "dialog.grab_set()", "pass", "grundvertrag"),
+    "ohne_freigabe": ("wait_modal", "dialog.grab_release()", "pass", "wiederverwendbar"),
+    "ohne_aktivmarke_ende": ("wait_modal", "setattr(dialog, ACTIVE_ATTRIBUTE, False)", "pass", "grundvertrag"),
+    "ohne_grabschutz": ("wait_modal", r'log_error(f"grab_set fehlgeschlagen: {fehler}\n")', "raise",
                         "grab_fehlschlag"),
-    "ohne_wartevariable": ("run_modal", 'finished = getattr(dialog, "_glide_modal_finished", None)',
+    "ohne_wartevariable": ("wait_modal", "finished = getattr(dialog, FINISHED_ATTRIBUTE, None)",
                            "finished = None", "wiederverwendbar"),
     "ohne_rueckgabe": ("modal_over", "owner.grab_set()", "pass", "verschachtelt"),
 }
 
 
-def mutiere(text, methode, alt, neu):
-    """Ersetzt genau eine ganze Zeile `alt` (ohne Einrückung) im Körper von `methode`."""
-    anfang = text.index(f"    def {methode}(")
-    ende = text.index(NL + "    def ", anfang + 1)
+def mutiere(text, funktion, alt, neu):
+    """Ersetzt genau eine ganze Zeile `alt` (ohne Einrückung) im Körper der Modulfunktion `funktion`."""
+    anfang = text.index(f"{NL}def {funktion}(")
+    folgen = [i for i in (text.find(NL + "def ", anfang + 1), text.find(NL + "@", anfang + 1)) if i != -1]
+    ende = min(folgen) if folgen else len(text)
     zeilen = text[anfang:ende].split(NL)
     treffer = [i for i, zeile in enumerate(zeilen) if zeile.strip() == alt]
     if len(treffer) != 1:
-        raise Vertragsbruch(f"Gegenprobe findet ihre Zeile in {methode} nicht genau einmal: {alt!r}")
+        raise Vertragsbruch(f"Gegenprobe findet ihre Zeile in {funktion} nicht genau einmal: {alt!r}")
     zeile = zeilen[treffer[0]]
     zeilen[treffer[0]] = zeile[:len(zeile) - len(zeile.lstrip())] + neu
     return text[:anfang] + NL.join(zeilen) + text[ende:]
 
 
 def gegenproben():
-    text = SOURCE.read_text(encoding="utf-8")
+    modul = (SOURCE.parent / SHELL_MODUL).read_bytes().decode("utf-8")
+    app = SOURCE.read_bytes()
     umgebung = dict(os.environ, PYTHONPATH=os.pathsep.join(
         [str(SOURCE.parent)] + ([os.environ["PYTHONPATH"]] if os.environ.get("PYTHONPATH") else [])),
         PYTHONIOENCODING="utf-8")
     befunde = []
     with tempfile.TemporaryDirectory(prefix="glide-modal-gp-") as ordner:
-        for name, (methode, alt, neu, fall) in GEGENPROBEN.items():
-            ziel = pathlib.Path(ordner) / name / "app.pyw"
-            ziel.parent.mkdir()
-            ziel.write_text(mutiere(text, methode, alt, neu), encoding="utf-8")
+        for name, (funktion, alt, neu, fall) in GEGENPROBEN.items():
+            # app.pyw stellt seinen eigenen Ordner vorn in den Suchpfad: Die
+            # veränderte Modulkopie daneben gewinnt, alle übrigen Module kommen
+            # über PYTHONPATH aus der Quelle.
+            ziel = pathlib.Path(ordner) / name
+            ziel.mkdir()
+            (ziel / "app.pyw").write_bytes(app)
+            (ziel / SHELL_MODUL).write_bytes(mutiere(modul, funktion, alt, neu).encode("utf-8"))
             try:
-                lauf = subprocess.run([sys.executable, "-B", __file__, "--quelle", str(ziel), "--fall", fall],
+                lauf = subprocess.run([sys.executable, "-B", __file__, "--quelle", str(ziel / "app.pyw"),
+                                       "--fall", fall],
                                       capture_output=True, text=True, encoding="utf-8", errors="replace",
                                       env=umgebung, timeout=ZEITLIMIT + 30)
                 erkannt = lauf.returncode != 0 and f"ROT {fall}" in lauf.stdout
