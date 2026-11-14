@@ -1,5 +1,24 @@
 # QA-Bericht – Glide 3.61.0
 
+## Modal-Vertragstest auf 3.61.0 (14.11.2026)
+
+Basis `e403a7c4` (Glide 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und 3.15.1, jeweils Tcl/Tk 9.0.4, auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive (`GLIDE_DATA_DIR`, `PYTHONPYCACHEPREFIX`, `-B`). Auftrag und Umfang im [Plan §21.93](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Baseline vor der Arbeit | `test_dialog_theme.py` und `test_ui_updates.py` unter Python 3.14.7 grün |
+| `test_modalvertrag.py` | 13 von 13 Fällen grün in fünf aufeinanderfolgenden Läufen unter 3.14.7 und in einem Lauf unter 3.15.1 |
+| Gegenproben (`--gegenproben`) | Sechs von sechs entfernten Schutzzeilen vom zuständigen Fall erkannt: Griff, Freigabe, Aktivmarke, Schutz vor gescheitertem Griff, Wartevariable, Rückgabe an den Vorgänger |
+| Datenisolation | Im echten Datenordner kein Eintrag jünger als der Lauf; Fehlerprotokoll nur in der Prüfablage |
+| Nativer Mac-Lauf (Inhaber, 14.11.2026) | macOS mit Python 3.14 aus dem Python.org-Framework und Tk 9.0 (Patchstand nicht ausgegeben), dieselbe Testdatei (23.615 Bytes) über OneDrive: 13 von 13 Fällen grün, sechs von sechs Gegenproben erkannt |
+
+**Befunde:**
+- Ein früher Lauf des Escape-Falls lief in den weichen Zeitwächter. Tk leitet erzeugte Tastenereignisse an den Fokus des Fensters; ohne Systemfokus des Prüfprozesses ging Escape verloren. Der Fall setzt den Fokus im Dialog jetzt ausdrücklich, danach waren fünf Läufe grün. Das Produktverhalten ist davon nicht betroffen.
+- Die Prüfung `owner.winfo_exists()` vor dem erneuten Griff in `modal_over` ist von außen nicht beobachtbar: Ein Griff auf ein zerstörtes Fenster wirft `TclError`, und dieselbe Stelle fängt ihn ab. Der Fall `besitzer_weg` belegt das Ergebnis, nicht die Zeile; sie hat deshalb keine Gegenprobe ([Analyse §13.37](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1337-modal-vertragstest-14112026)).
+- `run_modal` stellt den Fokus nach dem Schließen nicht wieder her; das bleibt Aufgabe der Aufrufer. Der Fall `fokus` hält das fest.
+
+**Grenzen:** Unter macOS/Aqua ist der Vertrag nativ belegt. Der Menüfall löst den Eintrag mit `invoke` aus und belegt damit den Aufschub über `after_idle`, nicht die Menüverfolgung eines echten Klicks in die Menüleiste. Nicht geprüft sind Linux/Xvfb, Tk 8.6 und 9.1, Python 3.12, die native Dateiauswahl und physische Bedienung. Gescheiterter Griff und Abbruch im Warten sind gezielt herbeigeführt (Ersatz von `grab_set` bzw. `wait_window`); alle übrigen Griffe sind echt. Keine Vollprüfung, kein Lieferabgleich und kein Paketbau: Produktcode und `07_Python-Versionen` sind unverändert, die App-Version bleibt 3.61.0.
+
 ## Prüfstand 3.61.0 (14.11.2026)
 
 Ausgangscommit `b362abca`, Branch `claude/glide-3.61.0`, geprüft unter macOS arm64 mit Python 3.14.5 und Tk 9.0 auf künstlichen Daten. Umfang im [Plan §21.92](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026).

@@ -1084,3 +1084,9 @@ Berichtigungen, Prüfung und Rest: [Plan §21.91](Glide_Entwicklungsplan.md#2191
 - Punkt 2 behoben (D81): `day_relief.overload_lines` liefert die Gründe, der Entlastungsdialog zeigt sie unter der Bilanz. Dabei fiel „1 Aufgabe … können“ auf; die Einzahl lautet jetzt „kann“.
 - Neu gefunden und behoben: `content_search` faltete ohne Unicode-Normalisierung, zerlegte Umlaute (NFD) wurden nicht gefunden. NFC vor der Faltung; Trefferpositionen gelten je Zeichengruppe.
 - Punkt 7 teilweise: Von den zwölf Fundstellen zu `tests/qa-3.50.6` zeigten sieben bereits auf eine feste Git-Fassung; die fünf toten Textverweise sind berichtigt (Glide-System V1.24); die Dublette seiner Verhaltensspalte zum Handbuch steht im [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat).
+
+## 13.37 Modal-Vertragstest (14.11.2026)
+
+- `modal_over` prüft vor dem erneuten Griff `owner.winfo_exists()`. Von außen ist die Prüfung nicht beobachtbar, weil ein Griff auf ein zerstörtes Fenster einen `TclError` wirft, den dieselbe Stelle abfängt. Kein Handlungsbedarf; bei der Verlagerung in Shell-Paket 3 darf sie bleiben oder entfallen.
+- `run_modal` stellt den Fokus nach dem Schließen nicht wieder her; Aufrufer wie `themed_message_dialog` tun das selbst. Ob die Shell das übernimmt, ist bei Paket 3 zu entscheiden.
+- Nachweis im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026).

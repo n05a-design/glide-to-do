@@ -157,7 +157,7 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 - **Abhängigkeitsrichtung:** Host/Glide → Shell → Tk/OS. Shell-Module importieren nur Standardbibliothek, `tkinter` und andere Shell-Module. Glide-Werte kommen als Argumente, Werte und Callbacks; ein Port entsteht nur, wo er eine konkrete Abhängigkeit entfernt.
 - **Vorgehen:** Inkrementelle Extraktion mit vorhandenen Fassaden. `ListApp`-Methoden und die Pfadkonstanten des App-Moduls bleiben Aufrufstellen, weil Tests und Werkzeuge an ihnen hängen. Ein physisches Teilpaket berührt Lieferabgleich, Paketbau und Importwege und ist eine eigene Entscheidung.
 - **Start:** Direktstart, Schnellstart und Paketstarter verhalten sich gegen leere, vorhandene, fremd gesperrte und beschädigte Ablage gleich; sie unterscheiden sich nur in der Überwachung durch den Begleitprozess. Der Bytecode-Ordner wird dreifach aufgelöst, weil jeder Einstieg ihn vor seinem ersten eigenen Import braucht; ein Test hält die drei Auflösungen gleich.
-- **Modal:** `run_modal` ist der einzige Warteweg und hängt an Theme, Mindestbreite, Vordergrund und Fehlerprotokoll der `ListApp`. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau.
+- **Modal:** `run_modal` ist der einzige Warteweg und hängt an Theme, Mindestbreite, Vordergrund und Fehlerprotokoll der `ListApp`. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau. Seit 14.11.2026 hält `test_modalvertrag.py` diesen Vertrag in 13 Fällen mit sechs Gegenproben fest; den Fokus nach dem Schließen stellen weiterhin die Aufrufer her.
 
 | Modul | Neutral | Glide-gebunden |
 |---|---|---|
