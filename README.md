@@ -35,13 +35,6 @@
   <a href="01_Repository/Glide/docs/07_QA_BERICHT.md">Qualität</a>
 </p>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/glide-3.50.5-heute-dunkel.png">
-  <img alt="Heute mit nächster Aufgabe, verspäteten Aufgaben, Tagesplan und Fälligkeiten" src="01_Repository/Glide/assets/marketing/glide-3.50.5-heute.png">
-</picture>
-
-<p align="center"><sub>Windows-Aufnahmen mit dem künstlichen <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> vom 06.11.2026; <a href="01_Repository/Glide/docs/07_QA_BERICHT.md">Quellstand und Prüfgrenzen</a>. Hell oder dunkel folgt deiner GitHub-Darstellung.</sub></p>
-
 ## Warum Glide?
 
 - **Aufgaben im Zusammenhang bearbeiten.** Eine Aufgabe auf einer Seite, in Heute und auf der Pinnwand bearbeiten: Änderungen gelten überall für dasselbe Original.
@@ -52,18 +45,39 @@
 
 ## Ein Blick hinein
 
+Im **Werkhaus West** bereitet ein kleines Studio einen offenen Werkstatttag vor. Auf der Pinnwand laufen Rundgang, Einladung und Leitschild zusammen. Die Aufnahmen stammen aus Glide 3.60.0 unter Windows. [Showcase öffnen](05_Probelisten_Testdaten/Showcase/README.md)
+
+<img alt="Fünf Karten mit beschrifteten Verbindungen für den Werkstatt-Rundgang" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png">
+<p><sub><strong>Pinnwand</strong> · Aufgaben, Notizen und Seiten über beschriftete Verbindungen zusammenführen</sub></p>
+
 <table>
   <tr>
-    <td width="50%"><img alt="Startseite mit Gismo, Heute, nächsten sieben Tagen und Galeriebildern" src="01_Repository/Glide/assets/marketing/glide-3.50.5-startseite.png"><br><sub><strong>Startseite</strong> · Tag, Woche, zuletzt Bearbeitetes und Suche auf einen Blick</sub></td>
-    <td width="50%"><img alt="Spaltenboard einer Aufgabenliste nach Bearbeitungstag" src="01_Repository/Glide/assets/marketing/glide-3.50.5-spaltenboard.png"><br><sub><strong>Spaltenboard</strong> · Ziehen ändert den Bearbeitungstag, Checklisten und Bilder bleiben an der Karte</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"><img alt="Startseite mit Tagesplan, Sieben-Tage-Vorschau und Bildern" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"></a><br><sub><strong>Startseite</strong> · Tagesplan, nächste Termine, letzte Dokumente und Raumstudien</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"><img alt="Wochenkalender mit geplanten und fälligen Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"></a><br><sub><strong>Kalender</strong> · Bearbeitungstage, Uhrzeiten, Fälligkeiten und freie Kapazität</sub></td>
   </tr>
   <tr>
-    <td width="50%"><img alt="Globale Pinnwand mit Aufgaben-, Seiten- und Notizkarten und beschrifteten Verbindungen" src="01_Repository/Glide/assets/marketing/glide-3.50.5-pinnwand.png"><br><sub><strong>Pinnwand</strong> · Seiten, Notizen und echte Aufgaben auf einer Fläche verbinden</sub></td>
-    <td width="50%"><img alt="Pixel-Werkstatt mit 32 × 32 Zeichnung eines Hauses mit Baum, Sonne und Wolke" src="01_Repository/Glide/assets/marketing/glide-3.50.5-pixel-werkstatt.png"><br><sub><strong>Pixel-Werkstatt</strong> · Symbole, Skizzen und Bildfolgen für die eigene Arbeit</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"><img alt="Tagesliste mit Projektaufgaben und Uhrzeiten" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"></a><br><sub><strong>Heute</strong> · Nächste Aufgabe, überfällige Punkte und Zeitplan im dunklen Design</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"><img alt="Studioroutinen mit farbigen Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"></a><br><sub><strong>Aufgabenlisten</strong> · Labels, Wiederholungen und unterschiedliche Fristen in einer Liste</sub></td>
   </tr>
   <tr>
-    <td width="50%"><img alt="Seite mit Überschriften, Text und eingebettetem Bild" src="01_Repository/Glide/assets/marketing/glide-3.50.5-seite.png"><br><sub><strong>Seiten</strong> · Blöcke, Bilder, Live-Listen und echte Aufgaben im Text</sub></td>
-    <td width="50%"><img alt="Globale Pinnwand im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-3.50.5-pinnwand-dunkel.png"><br><sub><strong>Zehn Designs</strong> · hell, dunkel, Glas, Minimal, Kontrast und mehr</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-punkt.png"><img alt="Listenansicht mit geöffnetem Aufgabeninspektor" src="01_Repository/Glide/assets/marketing/glide-3.60-punkt.png"></a><br><sub><strong>Punktbearbeitung</strong> · Checkliste, Aufwand, Bearbeitungstag und Fälligkeit am Original ändern</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"><img alt="Rundgangsseite mit Stockmotiv und Live-Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"></a><br><sub><strong>Vertraute Seitenansicht</strong> · Textblöcke, Bilder und eine eingebettete Live-Liste</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-geteilt.png"><img alt="Spaltenboard und lesbare Briefingseite in der Nebenansicht" src="01_Repository/Glide/assets/marketing/glide-3.60-geteilt.png"></a><br><sub><strong>Geteilte Ansicht</strong> · Aufgabenboard und Rundgangsseite gleichzeitig sehen</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-seitenuebersicht.png"><img alt="Übersicht mehrerer Werkhaus-Seiten" src="01_Repository/Glide/assets/marketing/glide-3.60-seitenuebersicht.png"></a><br><sub><strong>Seitenübersicht</strong> · Favoriten, zuletzt geöffnete Seiten und Projektwissen</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"><img alt="Pixel-Editor mit einem beleuchteten Richtungsschild" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"></a><br><sub><strong>Pixel-Fabrik</strong> · Leitschild zeichnen und vier Lichtstufen als Bildfolge bearbeiten</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-tag-entlasten.png"><img alt="Umplanungsdialog mit Vorher-nachher-Bilanz und unveränderter Fälligkeit" src="01_Repository/Glide/assets/marketing/glide-3.60-tag-entlasten.png"></a><br><sub><strong>Tag entlasten</strong> · Bearbeitungstag ändern und Kapazität vor dem Übernehmen vergleichen</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-fundorte.png"><img alt="Fundortdialog für die Abnahme des Rundgangs" src="01_Repository/Glide/assets/marketing/glide-3.60-fundorte.png"></a><br><sub><strong>Fundorte anzeigen</strong> · Aufgabe auf Pinnwänden, Seiten und in Notizen wiederfinden</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-wochenrueckblick.png"><img alt="Wochenrückblick mit Aufgabenstand des Werkhauses" src="01_Repository/Glide/assets/marketing/glide-3.60-wochenrueckblick.png"></a><br><sub><strong>Wochenrückblick</strong> · Erledigte und offene Arbeit nach Kalenderwoche betrachten</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-raumstudien.png"><img alt="Galerie mit vier Architektur- und Innenraummotiven" src="01_Repository/Glide/assets/marketing/glide-3.60-raumstudien.png"></a><br><sub><strong>Galerie</strong> · Referenzen beschriften und direkt mit dem Projekt öffnen</sub></td>
+    <td width="50%"><a href="01_Repository/Glide/assets/marketing/glide-3.60-einstellungen.png"><img alt="Glide-Einstellungen für Design, Themenfarbe und Schrift" src="01_Repository/Glide/assets/marketing/glide-3.60-einstellungen.png"></a><br><sub><strong>Darstellung</strong> · Design, Themenfarbe, Schriftstil und Schriftgewicht einstellen</sub></td>
   </tr>
 </table>
 

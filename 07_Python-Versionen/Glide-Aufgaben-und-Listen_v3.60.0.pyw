@@ -54979,8 +54979,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             inset = old_inset - lift
             hoehe = self.header_logo_height()
             farbe = self.header_logo_color()
-            if (hoehe, farbe) != getattr(self, "_header_logo_key", None):
-                self._header_logo_key = (hoehe, farbe)
+            logo_key = (hoehe, farbe, leinwand.cget("bg"))
+            if logo_key != getattr(self, "_header_logo_key", None):
+                self._header_logo_key = logo_key
                 self.draw_logo(leinwand, hoehe, farbe)
             old_width = round((hoehe - lift) * glide_logo.aspect())
             padding = self.HEADER_LOGO_GAP + old_width - int(leinwand.cget("width"))
@@ -54998,8 +54999,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         leinwand.delete("logo")
         breite = max(1, round(hoehe * glide_logo.aspect()))
         leinwand.configure(width=breite, height=hoehe)
+        grund = leinwand.cget("bg")
+        if not re.fullmatch(r"#[0-9A-Fa-f]{6}", grund):
+            grund = "#%02X%02X%02X" % tuple(channel // 257 for channel in leinwand.winfo_rgb(grund))
         try:
-            bild = glide_logo.logo_photo(leinwand, hoehe, farbe)
+            bild = glide_logo.logo_photo(leinwand, hoehe, farbe, background=grund)
         except (tk.TclError, ValueError, OSError):
             bild = None
         leinwand._logo_image = bild
@@ -55008,7 +55012,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             leinwand.configure(width=breite)
             leinwand.create_image(0, 0, image=bild, anchor="nw", tags=("logo",))
         else:
-            glide_logo.draw_logo_polygons(leinwand, 0, 0, hoehe, farbe)
+            glide_logo.draw_logo_polygons(leinwand, 0, 0, hoehe, farbe, background=grund)
         leinwand.tag_raise("logo")
         return breite
 
@@ -70338,12 +70342,13 @@ def show_start_window(root):
     try:
         hoehe = 96
         platzhalter.configure(width=round(hoehe * glide_logo.aspect()), height=hoehe)
-        bild = glide_logo.logo_photo(platzhalter, hoehe, legible_on(akzent, [grund], minimum=3.0).upper())
+        farbe = legible_on(akzent, [grund], minimum=3.0).upper()
+        bild = glide_logo.logo_photo(platzhalter, hoehe, farbe, background=grund)
         if bild is not None:
             platzhalter._logo_image = bild
             platzhalter.create_image(0, 0, image=bild, anchor="nw")
         else:
-            glide_logo.draw_logo_polygons(platzhalter, 0, 0, hoehe, akzent)
+            glide_logo.draw_logo_polygons(platzhalter, 0, 0, hoehe, farbe, background=grund)
     except (tk.TclError, ValueError, OSError):
         platzhalter.destroy()
         platzhalter = tk.Label(root, text=APP_NAME, bg=grund, fg=schrift, font=("TkDefaultFont", 18, "bold"))

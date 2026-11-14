@@ -80,6 +80,28 @@ def rgba_png(mask, width, height, color):
         for alpha in mask[row * width:(row + 1) * width]:
             rows.extend(rgb)
             rows.append(alpha)
+    return _png(width, height, rows)
+
+
+def layered_png(layers, width, height):
+    """Legt geglättete Pfade in Zeichenreihenfolge übereinander (RGBA source over)."""
+    stride = 1 + 4 * width
+    rows = bytearray(stride * height)
+    for mask, color in layers:
+        for index, alpha in enumerate(mask):
+            if not alpha:
+                continue
+            y, x = divmod(index, width)
+            pos = y * stride + 1 + 4 * x
+            underneath = rows[pos + 3] * (255 - alpha) / 255
+            combined = alpha + underneath
+            for channel, value in enumerate(color):
+                rows[pos + channel] = round((alpha * value + underneath * rows[pos + channel]) / combined)
+            rows[pos + 3] = round(combined)
+    return _png(width, height, rows)
+
+
+def _png(width, height, rows):
     def chunk(kind, data):
         return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
     return (b"\x89PNG\r\n\x1a\n"

@@ -2,7 +2,7 @@
 """Erzeugt die Programmsymbole aus dem SVG-Master – reproduzierbar, ohne neue Abhängigkeit.
 
 Quelle ist `src/glide/resources/logo/glide-app-icon.svg`, eine unveränderte
-Kopie von `20_Grafik_Master/01_Logo/2026-Glide-Logo-App-und-Fav-Icon.svg`.
+Kopie von `20_Grafik_Master/01_Logo/svg/Logo_Glide-03.svg`.
 Auch 16/32 px verwenden exakt die neue freigegebene G-Kontur. Tk 9 rechnet das
 SVG in jeder Größe scharf (nanosvg); daraus entstehen unter `assets/icons/`:
 

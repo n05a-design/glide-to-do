@@ -42,9 +42,10 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     for name in (logo.LOGO_FILE, logo.ICON_FILE, logo.LOGO_PNG, logo.ICON_PNG):
         assert Path(logo.resource_dir(), name).is_file(), name
     svg = logo.read_svg()
-    assert logo.MASTER_FILL in svg, "Der Logo-Master ist einfarbig in Glide-Lila"
+    assert logo.MASTER_FILL in svg and mod.glide_brand.LOGO_SHADOW.lower() in svg
     tinted_svg = logo.tinted(svg, "#123456")
     assert logo.MASTER_FILL not in tinted_svg and ('fill="#123456"' in tinted_svg or "fill: #123456" in tinted_svg)
+    assert mod.glide_brand.LOGO_SHADOW in tinted_svg
     for falsch in ("rot", "#12345", "", None):
         try:
             logo.tinted(svg, falsch)
@@ -53,7 +54,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         else:
             raise AssertionError(f"ungültige Farbe angenommen: {falsch!r}")
     x, y, breite, hoehe = logo.bounding_box()
-    assert 220 < x < 225 and 90 < y < 95 and 400 < breite < 410 and 650 < hoehe < 655, (x, y, breite, hoehe)
+    assert 222 < x < 226 and 96 < y < 100 and 410 < breite < 416 and 650 < hoehe < 655, (x, y, breite, hoehe)
     assert 0.6 < logo.aspect() < 0.7
     assert 'viewBox="' in logo.cropped_svg(svg, (x, y, breite, hoehe))
     assert logo.icon_margin("darwin") > 0 and logo.icon_margin("win32") == 0 and logo.icon_margin("linux") == 0
@@ -279,6 +280,6 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         except Exception:
             pass
 
-print("test_logo330: OK; Logo-Master einfarbig und einfärbbar, Logo links neben Titel ab der ersten "
+print("test_logo330: OK; Logo mit getrennter Fläche und Schatten, Logo links neben Titel ab der ersten "
       "Breitenstufe, fest in allen geprüften Ansichten, Akzentfarbe in fünf Designs, Rückfall ohne SVG, "
       "„Über Glide“, Programmsymbol und Lupe.")

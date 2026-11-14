@@ -1,65 +1,86 @@
 {
   "app_version": "3.60.0",
   "format_version": 26,
+  "thema": "Werkhaus West",
   "bearbeitungstag": "2026-11-13",
   "dokumente": [
     {
-      "titel": "Vermarktung · Umsetzung",
+      "titel": "Offene Werkstatt",
       "art": "tasks"
     },
     {
-      "titel": "Abstimmung · Entwurf 02",
+      "titel": "Freitagsrunde · Offene Fragen",
       "art": "note"
     },
     {
-      "titel": "Bildwelt · Auswahl mit Kommentaren",
+      "titel": "Raumstudien",
       "art": "gallery"
     },
     {
-      "titel": "Quartier · Pixelskizze",
+      "titel": "Leitschild · Lichtwechsel",
       "art": "drawing"
     },
     {
-      "titel": "Wochenstart · Wiederkehrende Checkliste",
+      "titel": "Aufschließen · Wiederkehrende Checkliste",
       "art": "tasks"
     },
     {
-      "titel": "Wiedervorlagen · Projektrhythmus",
+      "titel": "Studioroutinen",
       "art": "tasks"
     },
     {
-      "titel": "Rückblick · Briefing freigegeben",
+      "titel": "Erster Lauf durch den Hof",
       "art": "note"
     },
     {
-      "titel": "Tagesnotiz · Gestaltung und Freigabe",
+      "titel": "Freitag · Das Licht am Modell",
       "art": "note"
     },
     {
-      "titel": "Vorbereitung · abgeschlossen",
+      "titel": "Probelauf am Donnerstag",
       "art": "tasks"
     },
     {
-      "titel": "Parkquartier · Briefing und Freigabe",
+      "titel": "Schilder und Druck",
+      "art": "page"
+    },
+    {
+      "titel": "Material am Modell",
+      "art": "page"
+    },
+    {
+      "titel": "Einladung & Ablauf",
+      "art": "page"
+    },
+    {
+      "titel": "Rückblick · Probelauf",
+      "art": "page"
+    },
+    {
+      "titel": "Werkhaus West · Rundgang",
       "art": "page"
     }
   ],
-  "bilder": 6,
+  "bilder": 4,
   "seitenbilder": 3,
   "projektpinnwaende": 2,
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 32959650,
-      "sha256": "f7ebe1fe18006ce450681b1650bbe167b3b8bc41132c9cf519aebaf9f40bac92"
+      "bytes": 2225047,
+      "sha256": "4652fa01d38d00ca8337f31f51696d07468ae4dc0c0414a2d9123134e442540c"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 37568024,
-      "sha256": "29f1cbbcc651a4df0cf7c8960601faa5f02f2845771b262d5f149b51871e8eca"
+      "bytes": 2726654,
+      "sha256": "2c6272076a2e1817f42e29b994dbacc41bcf7ac756bdb98d6ab38dec266dfc12"
     },
     "Glide-Showcase.glidetemplates": {
-      "bytes": 6066809,
-      "sha256": "7eb13d4315f8a2ab2a8eba0eddd1b07f4706dc047a2161dcc67b2c8830b4c02f"
+      "bytes": 625960,
+      "sha256": "aeb34a853d92c94b7afefec21de50cd57a26ed211d4c38cf7afe97b2530cba0c"
+    },
+    "Werkhaus-West.canvas": {
+      "bytes": 4502,
+      "sha256": "1649157e7595af2ec6c973c85785ffcac2643d75ccf960b25664da984b534600"
     }
   }
 }

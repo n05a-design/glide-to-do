@@ -13,9 +13,8 @@ liegen nicht hier, sondern bei der App unter `src/glide/resources/logo/`.
 | `icons/glide_512.png` | Linux (`.desktop`) und Store-Symbole, randlos | `packaging/baue_symbole.py` |
 
 Quelle aller drei ist `src/glide/resources/logo/glide-app-icon.svg`, eine
-unveränderte Kopie von `20_Grafik_Master/01_Logo/2026-Glide-Logo-App-und-Fav-Icon.svg`.
-Nach einer Änderung am Master: kopieren, `python3 packaging/baue_symbole.py`
-ausführen (Tk 9 nötig) und die Dateien hier ersetzen.
+unveränderte Kopie von `20_Grafik_Master/01_Logo/svg/Logo_Glide-03.svg`.
+Bei einer Änderung am Master die [zentrale Logo-Checkliste](../../../20_Grafik_Master/README.md) und `scripts/pflege/logo_abgleich.py` verwenden. `marketing/` enthält die aktuelle Windows-Galerie für das GitHub-README.
 
 Store-Grafiken (Screenshots, Werbebilder) gibt es noch nicht; ihre
 Anforderungen stehen in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md).

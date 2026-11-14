@@ -1,0 +1,96 @@
+{
+    "nodes": [
+        {
+            "id": "page:1a1dda46f32a4e76bcbe9c1e557e7b66",
+            "type": "text",
+            "x": 34,
+            "y": 63,
+            "width": 240,
+            "height": 177,
+            "text": "### Werkhaus West · Rundgang (Seite)\n\nDie Tür ist der Anfang Beim Probelauf sind drei Leute direkt zur Modellwand gegangen. Ab Samstag beginnt der Rundgang am Tisch neben der Tür. Dort liegen der…\nAnhänge: 3\n\nVerweis: `glide://list/1a1dda46f32a4e76bcbe9c1e557e7b66`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:b081bb791747460eb03a1736a4a0dd26",
+            "type": "text",
+            "x": 34,
+            "y": 355,
+            "width": 240,
+            "height": 177,
+            "text": "### Freitagsrunde · Offene Fragen (Notiz)\n\nFreitag am großen Tisch Lea hat den Eingang mit einer Klebebandlinie markiert. Die Gruppe sieht das Modell jetzt erst nach der kurzen Begrüßung. Das nimmt am…\n\nLabels: `Werkhaus`\nAnhänge: 1\n\nVerweis: `glide://list/b081bb791747460eb03a1736a4a0dd26`",
+            "color": "#217E39"
+        },
+        {
+            "id": "bf87c09aed4940e38b1559a75187552e",
+            "type": "text",
+            "x": 390,
+            "y": 64,
+            "width": 240,
+            "height": 473,
+            "text": "### [ ] Laufweg im Erdgeschoss abnehmen\n⚑⚑ hoch · Bearbeitungstag: 13.11.2026, 09:00 · Fällig: 13.11.2026, 11:00 · Liste: Offene Werkstatt\n\nLea läuft den Weg vom Hoftor bis zur Modellwand ab. Die Kisten am Abzweig vorher wegräumen.\n\n- [x] Eingang markiert\n- [ ] Engpass an der Modellwand prüfen\n- [ ] Schild am Abzweig markieren\n\nLabels: `Freigabe`, `Einladung`\nAnhänge: 1\n\nVerweis: `glide://item/bf87c09aed4940e38b1559a75187552e`",
+            "color": "#217E39"
+        },
+        {
+            "id": "9159a389535b45a897595a26fbad5ceb",
+            "type": "text",
+            "x": 735,
+            "y": 58,
+            "width": 240,
+            "height": 282,
+            "text": "### [ ] Motiv für die Einladung auswählen\n⚑ mittel · Bearbeitungstag: 13.11.2026, 11:00 · Fällig: 14.11.2026 · Liste: Offene Werkstatt\n\nMira bevorzugt die Planstudie. Den Ausschnitt für Handy und Druck zusammen prüfen.\n\nLabels: `Raum`, `Freigabe`\nAnhänge: 2\n\nVerweis: `glide://item/9159a389535b45a897595a26fbad5ceb`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:581fa5d5a6e04e57a9c5006e458001ec",
+            "type": "text",
+            "x": 735,
+            "y": 470,
+            "width": 187,
+            "height": 229,
+            "text": "### Leitschild · Lichtwechsel (Zeichnung)\n\nLeitschild mit vier Lichtstufen, PNG-Referenz und separatem 16-Pixel-Symbol.\nAnhänge: 2\n\nVerweis: `glide://list/581fa5d5a6e04e57a9c5006e458001ec`",
+            "color": "#217E39"
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge:1:page:1a1dda46f32a4e76bcbe9c1e557e7b66:bf87c09aed4940e38b1559a75187552e",
+            "fromNode": "page:1a1dda46f32a4e76bcbe9c1e557e7b66",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "bf87c09aed4940e38b1559a75187552e",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Weg ablaufen"
+        },
+        {
+            "id": "edge:2:page:b081bb791747460eb03a1736a4a0dd26:bf87c09aed4940e38b1559a75187552e",
+            "fromNode": "page:b081bb791747460eb03a1736a4a0dd26",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "bf87c09aed4940e38b1559a75187552e",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Rückfragen klären"
+        },
+        {
+            "id": "edge:3:bf87c09aed4940e38b1559a75187552e:9159a389535b45a897595a26fbad5ceb",
+            "fromNode": "bf87c09aed4940e38b1559a75187552e",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "9159a389535b45a897595a26fbad5ceb",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Eingang zeigen"
+        },
+        {
+            "id": "edge:4:9159a389535b45a897595a26fbad5ceb:page:581fa5d5a6e04e57a9c5006e458001ec",
+            "fromNode": "9159a389535b45a897595a26fbad5ceb",
+            "fromSide": "bottom",
+            "fromEnd": "none",
+            "toNode": "page:581fa5d5a6e04e57a9c5006e458001ec",
+            "toSide": "top",
+            "toEnd": "none",
+            "label": "Pfeil abstimmen"
+        }
+    ]
+}

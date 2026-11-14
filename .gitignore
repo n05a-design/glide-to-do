@@ -44,6 +44,7 @@ liste_unlesbar_*.json
 datenordner.json
 window.conf
 05_Probelisten_Testdaten/Showcase/Arbeitsstand/
+05_Probelisten_Testdaten/Showcase/Arbeitsstand-Werkhaus/
 *.glidebackup
 !01_Repository/Glide/tests/fixtures/beispiele/*.glidebackup
 !01_Repository/Glide/tests/fixtures/showcase/*.glidebackup

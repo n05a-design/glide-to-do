@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Geometrie der mitgelieferten SVG-Logos, ohne Tk oder Dateizugriffe.
 
-Unterstützt die freigegebenen Pfade (M/L/H/V/C/S/Z und matrix/translate/scale).
+Unterstützt die freigegebenen Pfade (M/L/H/V/C/S/Q/Z und matrix/translate/scale).
 Die Canvas-Ausgabe verbindet Innenkonturen mit einer retracierten Brücke,
 damit der ausgesparte Innenraum auch ohne SVG-Unterstützung transparent bleibt.
 """
@@ -46,7 +46,7 @@ def _tokens(pfad):
 
 
 def subpaths(pfad, schritte=10):
-    """Zerlegt einen SVG-Pfad (M, L, H, V, C, S, Z – absolut und relativ) in Polygonzüge."""
+    """Zerlegt einen SVG-Pfad (M, L, H, V, C, S, Q, Z – absolut und relativ) in Polygonzüge."""
     if type(schritte) is not int or not 1 <= schritte <= 256:
         raise ValueError("Ungültige Kurvenabtastung")
     teile, aktuell = [], []
@@ -97,13 +97,17 @@ def subpaths(pfad, schritte=10):
             ny = zahl()
             y = y + ny if relativ else ny
             aktuell.append((x, y))
-        elif art in ("C", "S"):
+        elif art in ("C", "S", "Q"):
             werte = [zahl() for _ in range(6 if art == "C" else 4)]
             if relativ:
                 werte = [wert + (x if index % 2 == 0 else y) for index, wert in enumerate(werte)]
             if art == "S":
                 reflected = (2 * x - control[0], 2 * y - control[1]) if control else (x, y)
                 werte = [*reflected, *werte]
+            elif art == "Q":
+                qx, qy, zx, zy = werte
+                werte = [x + 2 / 3 * (qx - x), y + 2 / 3 * (qy - y),
+                         zx + 2 / 3 * (qx - zx), zy + 2 / 3 * (qy - zy), zx, zy]
             x1, y1, x2, y2, x3, y3 = werte
             for schritt in range(1, schritte + 1):
                 t = schritt / schritte
@@ -122,7 +126,12 @@ def subpaths(pfad, schritte=10):
 
 
 def outline(svg, schritte=10):
-    """Polygonzüge aller Flächen im Koordinatensystem des Masters (viewBox).
+    """Polygonzüge aller Flächen im Koordinatensystem des Masters (viewBox)."""
+    return tuple(ring for _fill, rings in painted_paths(svg, schritte) for ring in rings)
+
+
+def painted_paths(svg, schritte=10):
+    """Füllfarbe und Konturen je Pfad in SVG-Zeichenreihenfolge.
 
     Gelesen werden nur die mitgelieferten Master aus `resources/logo`, nie
     Dateien des Nutzers. Entitäten lehnt die Funktion trotzdem ab: Ein Master
@@ -130,30 +139,27 @@ def outline(svg, schritte=10):
     Entitätenexpansion auslösen. Externe Verweise (die DTD im Kopf) lädt
     ElementTree ohnehin nicht.
     """
-    text = svg
-    if "<!ENTITY" in text:
-        raise ValueError("SVG enthält Entitätsdefinitionen")
-    wurzel = ElementTree.fromstring(text)
+    wurzel = ElementTree.fromstring(inline_styles(svg))
     ergebnis = []
-    empty_classes = {name for name, styles in re.findall(r"\.([\w-]+)\s*\{([^}]+)\}", text)
-                     if re.search(r"fill\s*:\s*none(?:\s*[;}])?", styles)}
 
-    def laufen(knoten, matrix):
-        matrix = _multiply(matrix, _matrix(knoten.get("transform")))
-        if knoten.tag == _SVG_NS + "clipPath":
+    def laufen(knoten, matrix, fill):
+        if knoten.tag in (_SVG_NS + "defs", _SVG_NS + "clipPath"):
             return
-        if knoten.tag == _SVG_NS + "path":
-            stil = (knoten.get("style") or "") + " " + (knoten.get("fill") or "")
-            if knoten.get("fill") != "none" and "fill:none" not in stil.replace(" ", "") and not (set((knoten.get("class") or "").split()) & empty_classes):
-                for teil in subpaths(knoten.get("d") or "", schritte=schritte):
-                    ergebnis.append([_apply(matrix, px, py) for px, py in teil])
+        matrix = _multiply(matrix, _matrix(knoten.get("transform")))
+        style_fills = re.findall(r"(?:^|;)\s*fill\s*:\s*([^;]+)", knoten.get("style", ""))
+        fill = style_fills[-1].strip() if style_fills else knoten.get("fill", fill)
+        if knoten.tag == _SVG_NS + "path" and fill != "none":
+            rings = tuple(tuple(_apply(matrix, px, py) for px, py in teil)
+                          for teil in subpaths(knoten.get("d", ""), schritte=schritte))
+            if rings:
+                ergebnis.append((fill, rings))
         for kind in knoten:
-            laufen(kind, matrix)
+            laufen(kind, matrix, fill)
 
-    laufen(wurzel, (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
+    laufen(wurzel, (1.0, 0.0, 0.0, 1.0, 0.0, 0.0), "#000000")
     if not ergebnis:
         raise ValueError("SVG enthält keine Fläche")
-    return tuple(tuple(teil) for teil in ergebnis)
+    return tuple(ergebnis)
 
 
 def signed_area(points):
@@ -210,10 +216,14 @@ def inline_styles(svg):
         raise ValueError("SVG enthält Entitätsdefinitionen")
     root = ElementTree.fromstring(svg)
     classes = {}
-    for name, styles in re.findall(r"\.([\w-]+)\s*\{([^}]+)\}", svg):
-        classes[name] = styles.strip()
+    for style in root.iter(_SVG_NS + "style"):
+        for selectors, declarations in re.findall(r"([^{}]+)\{([^}]+)\}", style.text or ""):
+            for selector in selectors.split(","):
+                match = re.fullmatch(r"\.([\w-]+)", selector.strip())
+                if match:
+                    classes.setdefault(match[1], []).append(declarations.strip().rstrip(";"))
     for node in root.iter():
-        styles = [classes[name] for name in (node.get("class") or "").split() if name in classes]
+        styles = [rules for name in node.get("class", "").split() for rules in classes.get(name, ())]
         if styles:
             node.set("style", ";".join(styles + [node.get("style", "")]))
     ElementTree.register_namespace("", "http://www.w3.org/2000/svg")
@@ -232,11 +242,13 @@ def document_box(svg):
     return values
 
 
-def tinted(svg, color):
+def tinted(svg, color, shadow=brand.LOGO_SHADOW):
     rgb = tuple(int(brand.PURPLE[i:i + 2], 16) for i in (1, 3, 5))
-    pattern = re.escape(brand.PURPLE) + r"\b|rgb\(\s*" + r"\s*,\s*".join(map(str, rgb)) + r"\s*\)"
-    if not re.search(pattern, svg, re.IGNORECASE):
+    primary = re.escape(brand.PURPLE) + r"\b|rgb\(\s*" + r"\s*,\s*".join(map(str, rgb)) + r"\s*\)"
+    if not re.search(primary, svg, re.IGNORECASE):
         raise ValueError("Der Logo-Master trägt nicht die freigegebene Füllfarbe")
     if not re.fullmatch(r"#[0-9A-Fa-f]{6}", str(color or "")):
         raise ValueError(f"Keine Farbe im Format #RRGGBB: {color!r}")
-    return inline_styles(re.sub(pattern, color, svg, flags=re.IGNORECASE))
+    return inline_styles(re.sub(f"{primary}|{brand.LOGO_SHADOW}\\b",
+                                lambda match: shadow if match[0].upper() == brand.LOGO_SHADOW else color,
+                                svg, flags=re.IGNORECASE))

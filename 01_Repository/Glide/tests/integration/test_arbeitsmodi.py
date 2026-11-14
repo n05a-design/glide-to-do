@@ -25,6 +25,7 @@ from unittest.mock import patch
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "tests/tools"))
 from arbeitsmodi_gruppen import GRUPPEN, gruppen  # noqa: E402
+from showcase import BRIEFING_TITLE, MAIN_TITLE, NOTIZ_TITLE  # noqa: E402
 sys.path.insert(0, str(REPO / "tests/integration"))
 from test_uiux_paket import Lauf, knopf_befunde, knoepfe, sichtbarer_ausschnitt  # noqa: E402
 
@@ -3342,7 +3343,7 @@ def fall_abnahme3505(lauf):
                     assert widget.winfo_rootx() + widget.winfo_width() <= row.winfo_rootx() + row.winfo_width()
                     assert widget is field or widget.winfo_width() >= widget.winfo_reqwidth(), ("Heute-Knopf gequetscht", context)
             app.clear_search_placeholder()
-            app.search_var.set("Briefing")
+            app.search_var.set("Rundgang")
             idle(lauf, 8)
             assert app.clear_search_button.winfo_ismapped(), "Aktiver Filter muss löschbar bleiben"
             assert all(w is field or w.winfo_width() >= w.winfo_reqwidth() for w in row.pack_slaves() if w.winfo_ismapped()), (
@@ -3375,9 +3376,9 @@ def fall_abnahme3505(lauf):
         app.set_home_view()
         idle(lauf, 8)
         assert app.overview_search_entry.winfo_ismapped(), "Startseiten-Suche fehlt"
-        app.overview_search_var.set("Briefing")
+        app.overview_search_var.set("Rundgang")
         taste(app.overview_search_entry, "<Return>", lauf)
-        assert app._quick_open["entry"].get() == "Briefing"
+        assert app._quick_open["entry"].get() == "Rundgang"
         assert app._quick_open["results"], "Globale Suche ohne Bestandstreffer"
         app.close_quick_open()
         app.set_template_view()
@@ -3396,7 +3397,7 @@ def fall_abnahme3505(lauf):
         assert len(app.template_cards) == len(app.templates)
         app.set_home_view()
         idle(lauf, 6)
-        assert app.overview_search_var.get() == "Briefing"
+        assert app.overview_search_var.get() == "Rundgang"
         app.overview_search_var.set("")
     return f"{checks} Heute-/Abschnitts-Geometrien und vier Suchabläufe: globaler Bestandstreffer, Vorlagenfilter/Trefferleerstand/Escape, getrennte Suchzustände"
 
@@ -3535,7 +3536,7 @@ def fall_suchbreite3504(lauf):
     app = lauf.app
     lauf.showcase()
     library = next(e for e in app.folders if e.get("folder_kind") == "library")
-    source = next(e for e in app.lists if "Wiedervorlagen" in e["title"])
+    source = next(e for e in app.lists if e["title"] == "Studioroutinen")
     checks = 0
 
     def pruefen(context):
@@ -3592,7 +3593,7 @@ def fall_suchbreite3504(lauf):
                 context = (design, size, geometry, visible, narrow, view)
                 pruefen((*context, "ohne Suchanfrage"))
                 app.clear_search_placeholder()
-                app.search_var.set("Parkquartier")
+                app.search_var.set("Werkhaus")
                 idle(lauf, 6)
                 pruefen((*context, "mit Suche löschen"))
                 app.clear_search()
@@ -3840,9 +3841,9 @@ def fall_menschen3503(lauf):
     """Inhaberbefunde: nutzbare Breite, einzeilige Werkzeuge und bewusster Zeichencursor."""
     app, tk = lauf.app, lauf.mod.tk
     lauf.showcase()
-    page = next(e for e in app.lists if app.is_page_list(e) and "Briefing" in e["title"])
+    page = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
     library = next(e for e in app.folders if e.get("folder_kind") == "library")
-    source = next(e for e in app.lists if "Wiedervorlagen" in e["title"])
+    source = next(e for e in app.lists if e["title"] == "Studioroutinen")
     drawing = next(e for e in app.lists if app.is_drawing_list(e))
     checks = 0
 
@@ -3888,7 +3889,7 @@ def fall_menschen3503(lauf):
             assert str(app.header_controls.pack_info()["in"]) == str(app.input_frame)
             assert app.add_button.winfo_ismapped(), "Hinzufügen bei Kopfumbau verdrängt"
             assert app.add_button.winfo_rootx() + app.add_button.winfo_width() <= app.header_controls.winfo_rootx()
-            assert app.title_label.cget("text").startswith("Wissen"), app.title_label.cget("text")
+            assert app.title_label.cget("text").startswith("Werkstattbuch"), app.title_label.cget("text")
             assert all(button.winfo_rooty() < app.input_frame.winfo_rooty()
                        for button in getattr(app, "custom_menu_buttons", ()))
         assert int(app.tree.column("#0", "width")) >= min(220, app.tree.winfo_width() - 4)
@@ -4188,8 +4189,8 @@ def fall_kartenflaechen(lauf):
 
 def abnahme3505_ansichten(app, lauf):
     """Hauptansichten und typische Dokumente des Showcase (D66-Prüfungen, 07.11.2026)."""
-    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
     zeichnung = next(e for e in app.lists if app.is_drawing_list(e))
     buch = next(f for f in app.folders if f.get("folder_kind") == "library")
     return (("Startseite", app.set_home_view), ("Heute", app.set_today_view), ("Labels", app.set_labels_view),
@@ -4220,7 +4221,7 @@ def fall_altbestandteile(lauf):
             gesehen.append(name)
     assert not funde, ("Systemelemente im Altstil oder verdeckte Auswahl", funde[:8])
     # Die gemeldete Stelle: Live-Liste einer Seite mit gezeichneter Leiste.
-    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
     app.set_active_list(seite["id"])
     idle(lauf, 8)
     editor = app.rich_note_editor
@@ -4244,8 +4245,8 @@ def fall_altbestandteile(lauf):
 
     app.run_modal = lambda dialog, parent=None: einsammeln(dialog)
     app.__dict__.pop("show_info", None)
-    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
     dialoge_auf = [getattr(app, name) for name in (
         "show_settings_dialog", "show_about_dialog", "show_release_notes_dialog", "open_error_log",
         "show_shortcuts_dialog", "show_storage_status", "show_backup_catalog", "show_quick_capture")]
@@ -4430,7 +4431,7 @@ def fall_titelzaehler(lauf):
     # 3) Inline-Umbenennen in der Seitenleiste: Zähler rechts daneben, keine Überdeckung.
     lauf.showcase()
     app.settings["release_notes_seen"] = mod.APP_VERSION
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
     app.set_active_list(liste["id"])
     warte(lauf, 0.3)
     app.begin_sidebar_rename()
@@ -4526,7 +4527,7 @@ def fall_anhangsnamen(lauf):
     galerie = next(e for e in app.lists if app.is_gallery_list(e))
     quelle = Path(lauf.data) / "quelle"
     quelle.mkdir(exist_ok=True)
-    langer_name = "Parkquartier Fassadenstudie Haus B Variante mit Abendlicht final.jpg"
+    langer_name = "Werkhaus West Modellwand Variante mit Abendlicht final.jpg"
     datei = quelle / langer_name
     datei.write_bytes(Path(app.resolve_attachment_path(galerie["attachments"][0])).read_bytes())
     vorher = len(galerie["attachments"])
@@ -4650,7 +4651,7 @@ def fall_anhangsnamen(lauf):
     assert anhang2["storage"] == alt2 and pfad2.exists(), "Rücknahme zeigt nicht auf die alte Datei"
     assert Path(app.resolve_attachment_path({"storage": neu2})).exists(), "Kopie bei Rücknahme gelöscht"
     # Prüfbefund PR #69: gleicher Anfang (1 MiB), anderes Ende – beide Dateien sind verschieden.
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
     app.set_active_list(liste["id"])
     warte(lauf, 0.3)
     punkt = next(i for i in app.iter_tree_ids() if app.find_item_in_lists(i))
@@ -4680,8 +4681,8 @@ def fall_themenfarbe(lauf):
     app, mod = lauf.app, lauf.mod
     lauf.showcase()
     app.settings["release_notes_seen"] = mod.APP_VERSION
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
-    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
+    seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
     buch = next(f for f in app.folders if f.get("folder_kind") == "library")
     ansichten = (("Liste", lambda: app.set_active_list(liste["id"])), ("Seite", lambda: app.set_active_list(seite["id"])),
                  ("Buch", lambda: app.set_active_folder(buch["id"])), ("Heute", app.set_today_view),
@@ -4762,8 +4763,8 @@ def fall_pinnwandleiste(lauf):
     app, mod = lauf.app, lauf.mod
     lauf.showcase()
     app.settings["release_notes_seen"] = mod.APP_VERSION
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
-    ordner = next(f for f in app.folders if f.get("title", "").startswith("Showcase"))
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
+    ordner = next(f for f in app.folders if f.get("title") == "Werkhaus West")
     schrift = mod.ui_font_object(font=mod.app_font(10, "bold"))
     feldschrift = mod.ui_font_object(font=mod.app_font(11))
     geprueft, befunde = 0, []
@@ -4852,8 +4853,8 @@ def fall_ruecktaste(lauf):
     app.settings["release_notes_seen"] = mod.APP_VERSION
     meldungen = []
     app.show_info = app.show_warning = lambda *a, **k: meldungen.append(a[:2])
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
-    andere = next(e for e in app.lists if e["title"].startswith("Abstimmung"))
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
+    andere = next(e for e in app.lists if e["title"] == NOTIZ_TITLE)
     papierkorb = len(app.trash)
     # 1) Pinnwand: Karte markiert, Seitenansicht offen, Rücktaste im Titelfeld (Inhaberablauf).
     app.set_active_list(liste["id"])
@@ -4960,8 +4961,8 @@ def fall_restflaechen(lauf):
     lauf.showcase()
     app.settings["release_notes_seen"] = mod.APP_VERSION
     app.show_info = app.show_warning = lambda *a, **k: None
-    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
-    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
+    liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
     zeichnung = next(e for e in app.lists if app.is_drawing_list(e))
     befunde, schritte = [], []
 
@@ -5085,7 +5086,7 @@ def fall_markenkante(lauf):
         lauf.neustart() if hasattr(lauf, "neustart") else None
         app = lauf.app
         app.settings["release_notes_seen"] = mod.APP_VERSION
-        seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+        seite = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
         app.set_active_list(seite["id"])
         warte(lauf, 0.4)
         ed = app.rich_note_editor

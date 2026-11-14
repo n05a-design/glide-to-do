@@ -47,7 +47,7 @@ def main():
     subprocess.run([sys.executable,"-B",str(REPO/"tests/tools/pruefe_showcase.py")],cwd=REPO,env=env,check=True)
     TARGET.mkdir(parents=True,exist_ok=True)
     names = ["Glide-Showcase.glidebackup","Glide-Showcase_App.glideapp","Glide-Showcase.glidetemplates",
-             "manifest.json","Showcase_starten.pyw","README.md"]
+             "Werkhaus-West.canvas","manifest.json","Showcase_starten.pyw","README.md"]
     records = {}
     for name in names:
         source, target = SOURCE/name, TARGET/name

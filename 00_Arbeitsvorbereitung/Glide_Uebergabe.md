@@ -2,12 +2,14 @@
 
 ## Lokaler Stand 3.60.0 (13.11.2026)
 
-**Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.22**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
+**Glide 3.60.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**, Glide-System **V1.23**) setzt auf `main` `45ab307e` auf. Enthalten sind die ersten Schnitte der Shell-Migration und eine Fehlerkorrektur:
 1. **Normallage:** `compact_mode.keep_visible` rechnet die Fensterlage beim Start Tk-frei; `ListApp.clamp_geometry` bleibt Fassade.
 2. **Start und Import (WA-49, weiter teilweise):** Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner an. `test_startwege.py` (Teil von `SUITEN`) und der Gleichheitstest der Bytecode-Pfade in `test_runtime_config.py` sind die Vergleichsgrundlage für weitere Startänderungen.
 3. **Einstellungsdialog:** Die Umbruchschaukel mit „Kreativ: DM Serif Display“ in kleiner Schrift ist behoben (`ui_design.settled_wrap_width`).
 
 Quelle und startbare Python-Lieferung (`07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.60.0.pyw`) sind per `abgleich_07.py` SHA-256-identisch; der Showcase ist abgeglichen. Auftrag, Entscheidungen und Folgepakete stehen im [Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026), Prüfergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3600-13112026), validierte Architekturgrenzen im [Shell-Konzept](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md#6-validierte-grenzen-13112026).
+
+Logo- und Showcase-Ergänzung [Plan §21.90](Glide_Entwicklungsplan.md#2190-logo-wechsel-und-werkhaus-showcase-für-3600-13112026) mit aktualisierten Master-, Paket- und README-Ressourcen.
 
 **Nächste Schritte:** Plattformmatrix (Windows, Linux, macOS mit Tk 9.1), Paketbau und menschliche Abnahme für 3.60.0. In der Shell-Migration folgt der Modal-Vertragstest mit echtem Grab vor jeder Verlagerung von `run_modal`; jedes Folgepaket braucht eine eigene Freigabe.
 

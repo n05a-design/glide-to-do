@@ -22,7 +22,7 @@ def main():
     backup = here/"Glide-Showcase_App.glideapp"
     if not backup.is_file():
         raise SystemExit("Glide-Showcase_App.glideapp fehlt neben dem Starter.")
-    data = here/"Arbeitsstand"
+    data = here/"Arbeitsstand-Werkhaus"
     first_start = not (data/"liste_speicher.json").exists()
     os.environ["GLIDE_DATA_DIR"] = str(data)
     os.environ.pop("GLIDE_TEST_MODE", None)

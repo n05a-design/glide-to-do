@@ -37,7 +37,7 @@ ersetzt werden.
 | Automatische Sicherungen | unter `backups/`, nur bei geändertem Inhalt: die zehn neuesten, jüngere als 30 Minuten, höchstens 40; dazu je Tag der letzte Stand für 14 Tage (29.09.2026) | `MIN_BACKUPS`, `BACKUP_MAX_AGE_MINUTES`, `MAX_BACKUPS`, `BACKUP_DAILY_DAYS`, `write_backup_copy` |
 | Oberflächensprache | Deutsch, einsprachig | Beschriftungen im Code |
 | Oberflächensymbole | zentrale Textzeichen-Tabelle; Legacy-Emoji nur beim Parsen alter Eingaben | `ICONS`, Symbolprüfung |
-| Logo und Programmsymbol | D62, 05.11.2026: unveränderte neue SVG-G-Kontur aus `20_Grafik_Master/01_Logo/2026-Glide-Logo-in-App.svg`; App-/Favicons aus `2026-Glide-Logo-App-und-Fav-Icon.svg`, Lila `#9E4AC8` auf Gelb `#FFDC0B`. Individuelle Oberflächenakzente bleiben erhalten; Darkmode-Gelb zentral `#FFDC0B` | `brand.py`, `logo.py`, `resources/logo`, `scripts/pflege/logo_abgleich.py`; vollständige Verwendungs-/Neubaucheckliste in `20_Grafik_Master/README.md` |
+| Logo und Programmsymbol | D80, 13.11.2026: `Logo_Glide-01.svg` für das App-Innere mit getrennter Schattenfarbe, `Logo_Glide-03.svg` für das Programmsymbol und Favicons. Master unter `20_Grafik_Master/01_Logo/svg/` | `brand.py`, `logo.py`, `resources/logo`, `scripts/pflege/logo_abgleich.py`; vollständige Verwendungs-/Neubaucheckliste in `20_Grafik_Master/README.md` |
 | Übernahme aus Altordnern | keine – der Datenordner ist der Datenordner | `get_app_data_dir()` |
 | Rückgängig-Tiefe | 20 Schritte | `MAX_UNDO_STEPS` |
 | Max. Papierkorbeinträge | 200 | `MAX_TRASH_ENTRIES` |

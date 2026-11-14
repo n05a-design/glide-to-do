@@ -15,6 +15,11 @@
 .gitattributes text eol=lf
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
+# Freigegebene Markenmaster und SVG-Ableitungen bytegleich halten.
+20_Grafik_Master/01_Logo/svg/*.svg -text
+20_Grafik_Master/03_Fav-Icon/favicon.svg -text
+07_Python-Versionen/resources/logo/*.svg -text
+*.canvas text eol=lf
 *.png binary
 *.jpg binary
 *.jpeg binary

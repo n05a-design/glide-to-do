@@ -49,8 +49,17 @@ class SVGGeometryTests(unittest.TestCase):
         self.assertEqual(explicit, svg.subpaths("M0 0c1 2 3 4 5 6s4 4 6 6"))
         self.assertEqual(svg.subpaths("M0 0L5 6C5 6 9 10 11 12"),
                          svg.subpaths("M0 0L5 6S9 10 11 12"))
-        with self.assertRaises(ValueError):
-            svg.subpaths("M0 0Q5 5 10 10")
+        self.assertEqual(svg.subpaths("M10 20q6 12 12 0", schritte=2),
+                         [[(10, 20), (16, 26), (22, 20)]])
+
+    def test_shared_css_rules_keep_face_and_shadow_separate(self):
+        source = ('<svg xmlns="http://www.w3.org/2000/svg"><defs><style>'
+                  '.face {fill-rule: evenodd;} .face, .frame {fill:#9e4ac8;}'
+                  '.shadow {fill:#15243c;}</style></defs>'
+                  '<path class="shadow" d="M2 2H4V4Z"/><path class="face" d="M0 0H3V3Z"/></svg>')
+        result = svg.tinted(source, "#123456", "#AABAD3")
+        self.assertEqual([fill for fill, _rings in svg.painted_paths(result)], ["#AABAD3", "#123456"])
+        self.assertIn("fill-rule: evenodd", result)
 
     def test_attribute_nonpainted_path_is_excluded(self):
         source = '<svg xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0H100V100H0Z"/><path d="M10 10H20V20H10Z"/></svg>'

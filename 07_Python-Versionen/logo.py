@@ -4,7 +4,7 @@
 Tk 9 rastert SVG nativ. Tk 8.6 bekommt ein transparentes, mit der
 Standardbibliothek geglättetes PNG in exakter Zielgröße; vorberechnete
 App-Symbole vermeiden den großen PNG-Lade- und Verkleinerungsweg.
-Alle Größen verwenden unverändert die neue G-Kontur vom 05.11.2026.
+Alle Größen verwenden die Masterkonturen einschließlich des Schattens.
 """
 
 import functools
@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import tkinter as tk
+import backdrop
 import svg_geometry
 import logo_raster
 import brand
@@ -33,9 +34,6 @@ BOX_MARGIN = 4.0
 # Pixeln (Apple-Raster seit macOS 11). Windows und Linux nutzen die volle
 # Fläche.
 MACOS_ICON_SHARE = 824 / 1024
-
-_SVG_NS = "{http://www.w3.org/2000/svg}"
-
 
 def resource_dir():
     """Ordner `resources/logo` neben diesem Modul – auch im Bundle und in 07_Python-Versionen."""
@@ -63,14 +61,18 @@ subpaths = svg_geometry.subpaths
 
 @functools.lru_cache(maxsize=8)
 def outline(name=LOGO_FILE, schritte=10):
-    return svg_geometry.outline(read_svg(name), schritte=schritte)
+    return tuple(ring for _fill, rings in painted_paths(name, schritte) for ring in rings)
+
+
+@functools.lru_cache(maxsize=8)
+def painted_paths(name, schritte):
+    return svg_geometry.painted_paths(read_svg(name), schritte)
 
 
 def bounding_box(name=LOGO_FILE):
     """(x, y, Breite, Höhe) der gezeichneten Fläche – die Kurvenpunkte schließen sie ein."""
     if name in (ICON_FILE, ICON_SMALL_FILE):
-        # Der gelbe Rechteckgrund gehört zur freigegebenen Gesamtgestaltung.
-        # Nicht allein nach den Pfadkonturen des lila G zuschneiden.
+        # Rahmen und Hintergrund gehören zur freigegebenen Gesamtgestaltung.
         return svg_geometry.document_box(read_svg(name))
     punkte = [punkt for teil in outline(name) for punkt in teil]
     x0 = min(px for px, _py in punkte) - BOX_MARGIN
@@ -113,20 +115,37 @@ def has_svg(master):
         return False
 
 
-def logo_photo(master, hoehe, farbe=BRAND_PURPLE, name=LOGO_FILE):
+def shadow_color(farbe, background=None):
+    """Behält das Schattenblau bei oder wählt auf dunklem Grund eine hellere Stufe."""
+    face = backdrop.hex_rgb(farbe)
+    ground = backdrop.hex_rgb(background) if background else None
+    candidates = (brand.LOGO_SHADOW, brand.LOGO_SHADOW_LIGHT, "#586983")
+
+    def score(candidate):
+        rgb = backdrop.hex_rgb(candidate)
+        against_face = backdrop.contrast(rgb, face)
+        against_ground = backdrop.contrast(rgb, ground) if ground else 21
+        return min(1.5, against_face), min(2.0, against_ground)
+
+    return max(candidates, key=score)
+
+
+def logo_photo(master, hoehe, farbe=BRAND_PURPLE, name=LOGO_FILE, *, background=None):
     """Logo in exakter Höhe: natives SVG oder geglättetes transparentes PNG."""
     hoehe = max(1, int(hoehe))
     if name == LOGO_FILE and hoehe in (16, 32):
         name = LOGO_SMALL_FILE
-    svg = tinted(read_svg(name), farbe)  # Prüft die Farbe in beiden Wegen gleich.
+    schatten = shadow_color(farbe, background) if re.fullmatch(r"#[0-9A-Fa-f]{6}", str(farbe)) else brand.LOGO_SHADOW
+    svg = tinted(read_svg(name), farbe, schatten)
     box = bounding_box(name)
     if has_svg(master):
         return tk.PhotoImage(master=master, data=cropped_svg(svg, box),
                              format=f"svg -scaletoheight {hoehe}")
     breite, raster_box = logo_raster.proportional_box(box, hoehe)
-    mask = logo_raster.alpha_mask(outline(name, schritte=32), raster_box, breite, hoehe)
-    rgb = tuple(int(farbe[i:i + 2], 16) for i in (1, 3, 5))
-    png = logo_raster.rgba_png(mask, breite, hoehe, rgb)
+    layers = [(logo_raster.alpha_mask(rings, raster_box, breite, hoehe),
+               backdrop.hex_rgb(farbe if fill.lower() == MASTER_FILL else schatten))
+              for fill, rings in painted_paths(name, 32)]
+    png = logo_raster.layered_png(layers, breite, hoehe)
     return tk.PhotoImage(master=master, data=png, format="png")
 
 
@@ -180,13 +199,16 @@ def icon_photos(master, groessen=(256, 64, 32, 16)):
     return fotos
 
 
-def draw_logo_polygons(canvas, x, y, hoehe, farbe, tag="logo", name=LOGO_FILE):
-    """Zeichnet das Zeichen als Fläche auf `canvas` (Rückfall ohne SVG)."""
+def draw_logo_polygons(canvas, x, y, hoehe, farbe, tag="logo", name=LOGO_FILE, *, background=None):
+    """Zeichnet die Flächen in SVG-Reihenfolge, falls das Bild nicht geladen werden kann."""
     bx, by, _breite, bhoehe = bounding_box(name)
     faktor = hoehe / bhoehe
-    for teil in svg_geometry.canvas_polygons(outline(name)):
-        punkte = []
-        for px, py in teil:
-            punkte.extend((x + (px - bx) * faktor, y + (py - by) * faktor))
-        if len(punkte) >= 6:
-            canvas.create_polygon(punkte, fill=farbe, outline="", tags=(tag,))
+    schatten = shadow_color(farbe, background)
+    for fill, rings in painted_paths(name, 10):
+        color = farbe if fill.lower() == MASTER_FILL else schatten
+        for teil in svg_geometry.canvas_polygons(rings):
+            punkte = []
+            for px, py in teil:
+                punkte.extend((x + (px - bx) * faktor, y + (py - by) * faktor))
+            if len(punkte) >= 6:
+                canvas.create_polygon(punkte, fill=color, outline="", tags=(tag,))

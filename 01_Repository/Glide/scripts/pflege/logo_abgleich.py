@@ -12,9 +12,11 @@ import tempfile
 REPO = Path(__file__).resolve().parents[2]
 ROOT = REPO.parents[1]
 MASTER = ROOT / "20_Grafik_Master/01_Logo"
+IN_APP = "svg/Logo_Glide-01.svg"
+APP_ICON = "svg/Logo_Glide-03.svg"
 MAPPING = {
-    "2026-Glide-Logo-in-App.svg": ("glide-logo.svg", "glide-logo-klein.svg"),
-    "2026-Glide-Logo-App-und-Fav-Icon.svg": ("glide-app-icon.svg", "glide-app-icon-klein.svg"),
+    IN_APP: ("glide-logo.svg", "glide-logo-klein.svg"),
+    APP_ICON: ("glide-app-icon.svg", "glide-app-icon-klein.svg"),
 }
 
 
@@ -50,11 +52,11 @@ def main():
         for generated in (temp / "resources").iterdir():
             compare_or_write(generated.read_bytes(), resources / generated.name)
         compare_or_write((temp / "resources/glide-logo.png").read_bytes(),
-                         MASTER / "Exporte/2026-Glide-Logo-in-App.png")
+                         MASTER / "Exporte/Logo_Glide-01.png")
         compare_or_write((temp / "resources/glide-app-icon.png").read_bytes(),
-                         MASTER / "Exporte/2026-Glide-Logo-App-und-Fav-Icon.png")
+                         MASTER / "Exporte/Logo_Glide-03.png")
         fav = ROOT / "20_Grafik_Master/03_Fav-Icon"
-        compare_or_write((MASTER / "2026-Glide-Logo-App-und-Fav-Icon.svg").read_bytes(), fav / "favicon.svg")
+        compare_or_write((MASTER / APP_ICON).read_bytes(), fav / "favicon.svg")
         compare_or_write((temp / "icons/glide.ico").read_bytes(), fav / "favicon.ico")
         for size in (16, 32, 64, 256):
             compare_or_write((temp / f"resources/glide-app-icon-{size}.png").read_bytes(),

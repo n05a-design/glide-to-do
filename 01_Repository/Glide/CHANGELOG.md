@@ -2,11 +2,13 @@
 
 ## 3.60.0 – 13.11.2026
 
+- **Marke und Projektseite:** Neues Glide-App-Symbol und zweifarbiges In-App-Logo. Die Fläche folgt der Themenfarbe, der Schatten bleibt eigenständig sichtbar. Der Showcase „Werkhaus West“ liefert einen bearbeitbaren Projektstand und 15 verschiedene Windows-Aufnahmen.
+
 - **Einstellungen mit „Kreativ“ in kleiner Schrift:** Der Einstellungsdialog öffnet auch mit DM Serif Display und der Schriftgröße „klein“ sofort. Vorher kreisten Umbruch und Spaltenbreite vor dem ersten Anzeigen endlos über drei Werte (gemessen unter macOS mit Tk 9.0.3). Die Tk-freie Regel `ui_design.settled_wrap_width` beendet die Runde bei einer wiederkehrenden Breite; das Ergebnis der übrigen Schriftkombinationen ist unverändert.
 - **Fensterlage beim Start:** Die Lageregel der Normalansicht rechnet Tk-frei in `compact_mode.keep_visible`; `ListApp.clamp_geometry` bleibt die Fassade. Verhalten unverändert.
 - **Import ohne Ordneranlage (WA-49):** Der Import von `app.pyw` legt auch mit `GLIDE_DATA_DIR` keine Ordner mehr an; das übernimmt der App-Start.
 - **Prüfungen:** `test_startwege.py` hält als Teil von `SUITEN` Direktstart, Schnellstart und nachgestellten Paketstarter gegen vier künstliche Ablagen fest. `test_runtime_config.py` hält die drei Auflösungen des Bytecode-Ordners gleich. `test_arbeitsmodi.py` berücksichtigt zwei Eigenschaften von Tk 9.0 unter macOS.
-- Glide-System V1.22; Datenformat 26 unverändert. Prüfumfang und Grenzen im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3600-13112026).
+- Glide-System V1.23; Datenformat 26 unverändert. Prüfumfang und Grenzen im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3600-13112026).
 
 ## Dokumentationspflege – 13.11.2026
 

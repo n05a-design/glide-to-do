@@ -68,18 +68,21 @@ with tempfile.TemporaryDirectory(prefix="glide-logo3370-") as data:
     try:
         settle()
         if args.fall in ("marke", "alle"):
-            master = Path(__file__).resolve().parents[4] / "20_Grafik_Master/01_Logo"
+            master = Path(__file__).resolve().parents[4] / "20_Grafik_Master/01_Logo/svg"
             for original, copies in (
-                    ("2026-Glide-Logo-in-App.svg", (logo.LOGO_FILE, logo.LOGO_SMALL_FILE)),
-                    ("2026-Glide-Logo-App-und-Fav-Icon.svg", (logo.ICON_FILE, logo.ICON_SMALL_FILE))):
+                    ("Logo_Glide-01.svg", (logo.LOGO_FILE, logo.LOGO_SMALL_FILE)),
+                    ("Logo_Glide-03.svg", (logo.ICON_FILE, logo.ICON_SMALL_FILE))):
                 for name in copies:
                     assert Path(logo.resource_dir(), name).read_bytes() == (master/original).read_bytes(), (
                         "Laufzeit verwendet nicht exakt die neue freigegebene G-Kontur", name)
             def check_brand_image(photo, size):
                 w, h, pixels = rgba(photo)
                 assert (w, h) == (size, size)
-                assert pixels[(size//2)*w + max(1, size//10)][:3] == (255, 220, 11), (
+                assert pixels[(size//2)*w + size//4][:3] == (255, 220, 11), (
                     "Gelber Hintergrund fehlt oder ist nach G-Kontur beschnitten", size)
+                frame_pixel = pixels[(size//2)*w + size//32]
+                assert frame_pixel[3] >= 240 and max(abs(a-b) for a, b in zip(frame_pixel[:3], (158, 74, 200))) <= 4, (
+                    "Lilafarbener Außenrahmen fehlt", size)
                 assert any(max(abs(a-b) for a,b in zip(pixel[:3], (158, 74, 200))) <= 10
                            and pixel[3] >= 240 for pixel in pixels), ("Neues lila G fehlt", size)
                 assert pixels[0][3] == 0, ("Abgerundete Ecke nicht transparent", size)
@@ -127,25 +130,42 @@ with tempfile.TemporaryDirectory(prefix="glide-logo3370-") as data:
                         alphas={p[3] for p in pixels}
                         assert 0 in alphas and 255 in alphas and len(alphas)>=16,(height,alphas)
                         expected=tuple(int(color[i:i+2],16) for i in (1,3,5))
-                        assert all(p[:3]==expected for p in pixels if p[3]==255)
+                        shadow = logo.backdrop.hex_rgb(logo.shadow_color(color))
+                        assert expected in {p[:3] for p in pixels if p[3] == 255}
+                        assert any(p[:3] == shadow and p[3] > 40 for p in pixels), (height, shadow)
                         # Geometrische Mitte des freigegebenen Innenraums:
                         # ceil(Bildbreite) enthält einen transparenten Restpixel
                         # und darf die Abtastposition nicht verschieben.
                         name = logo.LOGO_SMALL_FILE if height in (16, 32) else logo.LOGO_FILE
-                        hole = logo.outline(name, schritte=32)[1]
-                        cx = (min(x for x, y in hole) + max(x for x, y in hole)) / 2
+                        face_rings = next(rings for fill, rings in logo.painted_paths(name, 32)
+                                          if fill.lower() == logo.MASTER_FILL)
+                        hole = face_rings[1]
+                        left, right = min(x for x, y in hole), max(x for x, y in hole)
+                        cx = left + (right - left) * .65  # Mitte der sichtbaren Öffnung neben dem Schatten
                         cy = (min(y for x, y in hole) + max(y for x, y in hole)) / 2
                         bx, by, _, bh = logo.bounding_box(name)
-                        px, py = int((cx - bx) * h / bh), int((cy - by) * h / bh)
+                        px, py = round((cx - bx) * h / bh - .5), round((cy - by) * h / bh - .5)
                         inside = pixels[py * w + px][3]
-                        assert inside == 0, (height, inside)
+                        # Bei 16 px berührt der Schatten einen Teil des Pixels.
+                        assert inside <= (25 if height == 16 else 0), (height, inside)
+                assert logo.shadow_color(mod.glide_brand.LOGO_SHADOW) != mod.glide_brand.LOGO_SHADOW
                 canvas=mod.tk.Canvas(root)
                 app.draw_logo(canvas,54,"#AB12CD")
                 assert canvas.type(canvas.find_withtag("logo")[0])=="image"
                 assert int(canvas.cget("width"))==canvas._logo_image.width()
                 canvas.destroy()
             finally:logo.has_svg=native
-            print("OK Logo: Alpha-Zwischentöne, Farbe, Innenraum, echte Zeichenfläche")
+            if native(root):
+                for background in ("#FFFFFF", "#181820"):
+                    face = "#B17AF4"
+                    shadow = logo.shadow_color(face, background)
+                    assert shadow != face
+                    _, _, pixels = rgba(logo.logo_photo(root, 96, face, background=background))
+                    for color in (face, shadow):
+                        rgb = logo.backdrop.hex_rgb(color)
+                        assert any(p[3] >= 245 and max(abs(a-b) for a, b in zip(p[:3], rgb)) <= 4
+                                   for p in pixels), (background, color)
+            print("OK Logo: Alpha-Zwischentöne, getrennte Fläche und Schatten, Innenraum, native und PNG-Ausgabe")
         if args.fall in ("icons","alle"):
             native=logo.has_svg;logo.has_svg=lambda master:False
             original_sys=logo.sys;original_photo=logo.tk.PhotoImage;loaded=[]

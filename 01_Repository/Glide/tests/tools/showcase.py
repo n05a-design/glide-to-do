@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Erzeugt den aktiven Showcase mit echten App-APIs in einem temporären Bestand.
 
-Originalbilder: tests/fixtures/showcase/bilder (unveränderte Inhaberdateien).
+Bildquellen: JPEG-Arbeitskopien unter tests/fixtures/showcase/bilder.
 Alle Termine beziehen sich auf --tag; ohne Angabe auf den Erzeugungstag.
 Kein Zugriff auf den persönlichen Glide-Datenordner, keine Laufzeitänderung.
 """
@@ -16,99 +16,58 @@ from pathlib import Path
 import tempfile
 from datetime import date, timedelta
 
-from rundgang import load_module, ruhe, zeichnung
+from rundgang import load_module, ruhe
 
 ROOT = Path(__file__).resolve().parents[2]
-ASSETS = ROOT / "tests/fixtures/showcase/bilder"
 TARGET = ROOT / "tests/fixtures/showcase"
+STOCK = TARGET / "bilder"
+BRIEFING_TITLE = "Werkhaus West · Rundgang"
+MAIN_TITLE = "Offene Werkstatt"
+FOCUS_TASK = "Laufweg im Erdgeschoss abnehmen"
+PHOTO_TITLE = "Raumstudien"
+PIXEL_TITLE = "Leitschild · Lichtwechsel"
+NOTIZ_TITLE = "Freitagsrunde · Offene Fragen"
 PHOTOS = [
-    ("Haus-in-weiß-1114004174.jpeg", "Architektur · Referenz", "Modellmotiv für das Briefing; kein reales Verkaufsobjekt."),
-    ("Haus-in-gelb-666269411.jpeg", "Farbwelt · Akzent", "Warmer Akzent für die Kampagnenentwicklung."),
-    ("Architektin-171340787.jpeg", "Planung · Menschen", "Symbolmotiv für die Abstimmung; keine Projektbeteiligte."),
-    ("Helm-auf-Zeichnung-23388604.jpeg", "Planung · Detail", "Unterlagen und Bauplanung als Bildthema."),
-    ("Haus-auf-Statistik-1172003382.jpeg", "Markt · Auswertung", "Symbolmotiv; die abgebildeten Zahlen sind keine Projektdaten."),
-    ("Tipps-in-der-Einrichtung-02.png", "Wohnen · Atmosphäre", "Einrichtungsmotiv für die Bildsprache."),
+    (STOCK / "Planstudie.jpg", "Vom Plan zum Raum", "Referenz für den Einstieg: Linie und Modell in einem Bild."),
+    (STOCK / "Licht-zum-Hof.jpg", "Licht zum Hof", "Modellstudie für den letzten Abschnitt des Rundgangs."),
+    (STOCK / "Materialwand.jpg", "Ruhiger Hintergrund", "Wandfläche und Einfassung für die kleine Materialschau."),
+    (STOCK / "Sitzbereich.jpg", "Sitzen und sprechen", "Referenz für die Bank am Ende des Rundgangs."),
 ]
 
-BRIEFING = """# Parkquartier · Projektbriefing
+BRIEFING = """## Die Tür ist der Anfang
 
-Ein fiktives Vermarktungsprojekt für vier Stadthäuser. Atelier Nord entwickelt Exposé, Landingpage und eine kleine Bildstrecke. Ziel dieser Arbeitsseite ist ein klarer, freigegebener Stand für Gestaltung und Vertrieb.
+Beim Probelauf sind drei Leute direkt zur Modellwand gegangen. Ab Samstag beginnt der Rundgang am Tisch neben der Tür. Dort liegen der Plan und zwei Materialproben. An der Modellwand bleibt Platz für Fragen.
 
-## Architektur und Zielgruppe
+### 1. Ankommen und orientieren
 
-ARCHITEKTUR: Die helle Modellansicht steht für eine ruhige, verständliche Darstellung. Sie ist ein Referenzmotiv aus der Beispielablage und zeigt kein reales Verkaufsobjekt.
+PLAN: Die Zeichnung zeigt, wie wenig Text eine gute Orientierung braucht. Das ist die Richtung für das Schild am Eingang.
 
-Gesucht wird ein Zuhause mit Platz für Familie und konzentriertes Arbeiten. Die Seite führt zuerst zum Wohngefühl, dann zur Ausstattung und schließlich zum Kontakt. Flächen, Preise und Energieangaben bleiben Platzhalter, bis der Vertrieb belastbare Angaben liefert.
+- [x] Türöffnung und Weg durch den Hof geprüft
+- [ ] Schild bei eingeschaltetem Licht aus fünf Metern lesen
+- [ ] Mit Lea den Engpass an der Modellwand ablaufen
 
-## Bildsprache
+### 2. Am Modell stehen bleiben
 
-WOHNGEFÜHL: Warmes Licht, ein gezielter Farbakzent und großzügige Details machen die Motive zugänglich. Die Galerie enthält sechs Originalbilder mit eigenständigen Bildunterschriften.
+HOF: Am Modell bleibt nur die Leuchte über dem Hof an. Die zweite nimmt Spiegelungen aus der Scheibe. Beim Probelauf hat das am besten funktioniert.
 
-PLANUNG: Menschen und Planungsdetails ergänzen die Architektur. Die Motive illustrieren Themen; sie werden nicht als Fotos des fiktiven Objekts ausgegeben.
+> Für den Rundgang reichen zwölf Minuten. Wer länger am Modell bleiben will, kann sich danach in Ruhe dazustellen.
 
-## Lieferumfang und Abnahme
+### 3. Material in die Hand nehmen
 
-- Exposé: Titel, Objektübersicht, Grundrissplatzhalter und Kontakt
-- Landingpage: Einstieg, Ausstattung, Bilder, FAQ und Kontaktformular
-- Übergabe: freigegebene Dateien, Bildzuordnung und Pflegehinweise
+BANK: Zwei Hölzer und ein Putzmuster liegen an der Bank bereit. Die Karte daneben trägt nur Materialname und Einsatzort.
 
-1. Entwurf gemeinsam prüfen
-2. Rückmeldungen in der Aufgabenliste bündeln
-3. Freigabe im Protokoll dokumentieren
-
-- [x] Ziel und Lieferumfang abgestimmt
-- [ ] Bildauswahl mit dem Vertrieb freigeben
-- [ ] Exposé und Landingpage gegen das Briefing prüfen
-
-> Freigabe bedeutet: Inhalt, Gestaltung und Verantwortliche sind dokumentiert. Eine Zeichnung, eine Liste und eine Notiz behalten dabei ihren eigenen Zweck.
-
-## Technische Übergabe
-
-```text
-Projekt: Parkquartier / PQ-04
-Stand: Entwurf 02
-Nächster Schritt: konsolidierte Rückmeldung
-```
-
-[Projektkennung und Dateien](https://example.invalid/parkquartier)
-
-## Entscheidungen und Hintergrund
-
-Details der Bildauswahl
-Die weiße Architekturansicht bleibt das Leitmotiv.
-Der gelbe Akzent erscheint sparsam in der Bildstrecke.
-Einrichtung und Planung ergänzen den sachlichen Einstieg.
-
-## Arbeitsstand
-
-Die verknüpften Aufgaben in „Vermarktung · Umsetzung“ tragen Bearbeitungstag, Aufwand und Fälligkeit getrennt. Abhängigkeiten markieren die Freigabe vor der Veröffentlichung. Die Projektpinnwand ordnet Karten, verbindet Entscheidungen und zeigt die Zeichnung als Verweis.
+Offene Fragen aus dem Probelauf
 """
 
-MEETING = """# Abstimmung · Entwurf 02
+MEETING = """## Freitag am großen Tisch
 
-**Teilnehmende:** Mara (Gestaltung), Jonas (Vertrieb), Lea (Projektkoordination). Alle Namen und Projektdaten sind fiktiv.
+Lea hat den Eingang mit einer Klebebandlinie markiert. Die Gruppe sieht das Modell jetzt erst nach der kurzen Begrüßung. Das nimmt am Anfang etwas Unruhe raus.
 
-## Beschlossen
+- Jona bringt um halb zehn die beiden Musterplatten aus dem Lager.
+- Mira wartet noch auf die Druckerei. Falls der Karton bis Montag fehlt, drucken wir die kleinen Karten im Studio.
+- Beim Probelauf bitte einmal mit jemandem testen, der den Raum noch nie gesehen hat.
 
-- Ruhiger Architektureinstieg, danach Wohngefühl und Ausstattung
-- Eine gemeinsame Rückmeldung statt mehrerer widersprüchlicher Dateien
-- Kontaktformular mit klarer Bestätigung nach dem Absenden
-
-## Offene Rückmeldung
-
-Die Liste der Ausstattungsmerkmale benötigt noch eine bestätigte Quelle. Jonas liefert den freigegebenen Steckbrief. Lea prüft anschließend Exposé und Website gemeinsam.
-
-> „Erst den Inhalt bestätigen, dann den freigegebenen Stand gestalten.“
-
-## Nächste Schritte
-
-1. Bildauswahl im Briefing vergleichen
-2. Rückfragen in der Aufgabenliste klären
-3. Freigabe mit Datum und Stand dokumentieren
-
-## Pflegehinweis
-
-Aufgaben stehen bei einer Notiz oberhalb des freien Textes. Einzelne Aufgaben bleiben echte Punkte; diese Notiz wird dadurch keine Seite.
+> Die Bank am Fenster bleibt frei. Da legen wir keine Kisten ab.
 """
 
 
@@ -135,27 +94,46 @@ def zweiter_dienstag(anchor):
         jahr, monat = (jahr + 1, 1) if monat == 12 else (jahr, monat + 1)
 
 
-def bildfolge(mod, start):
-    """Vier Bilder: eine Wolke zieht über den Himmel der Pixelskizze (Bildfolgen seit 3.40.0)."""
-    frames = []
-    for index, versatz in enumerate((1, 5, 9, 13)):
-        bild = mod.glide_drawing.DrawingModel.from_document(copy.deepcopy(start))
-        for x, y in [(versatz + dx, 4) for dx in range(1, 5)] + [(versatz + dx, 5) for dx in range(6)]:
-            bild.set_cell(x, y, "#FFFFFF")
-        frames.append({"id": f"frame-{index + 1}", "drawing": bild.to_document(), "duration_ms": None})
+def leitschild(mod, light):
+    """Rastermotiv für das Leitschild am Eingang, mit wechselnder Signalleuchte."""
+    bild = mod.glide_drawing.DrawingModel.blank(32)
+    def rechteck(x, y, w, h, color):
+        for yy in range(y, y + h):
+            for xx in range(x, x + w):
+                bild.set_cell(xx, yy, color)
+
+    rechteck(0, 0, 32, 32, "#14292E")
+    rechteck(2, 2, 28, 28, "#275355")
+    rechteck(3, 3, 26, 26, "#193438")
+    rechteck(6, 6, 20, 16, "#295254")
+    rechteck(7, 7, 18, 14, "#DCE5CC")
+    rechteck(10, 13, 10, 3, "#183538")
+    for delta in range(5):
+        rechteck(17 + delta, 10 + delta, 3, 2, "#183538")
+        rechteck(17 + delta, 18 - delta, 3, 2, "#183538")
+    rechteck(8, 25, 10, 2, "#6B8B7C")
+    rechteck(22, 24, 4, 3, light)
+    return bild
+
+
+def bildfolge(mod):
+    colors = ("#DCA553", "#FFDB79", "#FFD16A", "#A66C34")
+    frames = [{"id": f"frame-{index}", "drawing": leitschild(mod, color).to_document(), "duration_ms": None}
+              for index, color in enumerate(colors, 1)]
     return {"format": mod.glide_animation.FORMAT, "format_version": mod.glide_animation.FORMAT_VERSION,
-            "width": 32, "height": 32, "duration_ms": 250, "frames": frames}
+            "width": 32, "height": 32, "duration_ms": 300, "frames": frames}
 
 
 def build(app, mod, root, anchor):
     """Zusammenhängende Dokumente; zurückgegeben wird die portable Projektwahl."""
     tag = lambda offset: (anchor + timedelta(days=offset)).isoformat()
     app.flush_rich_note()
+    app.settings["daily_hints"] = {}
     app.lists = [entry for entry in app.lists if entry.get("system_role") == "inbox"]
     app.folders = []
     labels = {}
-    for name, color in (("Parkquartier", "accent"), ("Gestaltung", "clear"), ("Freigabe", "flag"),
-                        ("Vertrieb", "export"), ("Warten", "due_action")):
+    for name, color in (("Werkhaus", "accent"), ("Raum", "clear"), ("Freigabe", "flag"),
+                        ("Einladung", "export"), ("Warten", "due_action")):
         label = app.new_label_object(name, color=color)
         app.labels.append(label)
         labels[name] = label["id"]
@@ -166,148 +144,158 @@ def build(app, mod, root, anchor):
     icon_doc = icon.to_document()
     attachments_dir = Path(mod.BASE_DIR) / "showcase-quellen"
     attachments_dir.mkdir(parents=True, exist_ok=True)
-    model = mod.glide_drawing.DrawingModel.from_document(zeichnung(mod))
+    model = leitschild(mod, "#FFDB79")
     generated = {
-        "Quartier-Skizze.png": model.to_png(scale=8),
-        "Quartier-Symbol.ico": icon.to_ico(),
-        "Parkquartier-Palette.gpl": mod.glide_drawing.palette_to_gpl("Parkquartier", ["#1C6A77", "#E8AD43", "#CFE8F7"]).encode(),
-        "Parkquartier-Palette.hex": mod.glide_drawing.palette_to_hex(["#1C6A77", "#E8AD43", "#CFE8F7"]).encode(),
-        "Objektsteckbrief.csv": "Objektkennung;Projekt;Status\nPQ-04;Parkquartier;Fiktiver Entwurf\n".encode(),
-        "Uebergabe.txt": "Parkquartier · Entwurf 02\nExposé, Landingpage und Bildzuordnung gemeinsam prüfen.\nAlle Projektangaben sind fiktiv.\n".encode(),
+        "Leitschild-Entwurf.png": model.to_png(scale=8),
+        "Werkhaus-Symbol.ico": icon.to_ico(),
+        "Werkhaus-Palette.gpl": mod.glide_drawing.palette_to_gpl("Werkhaus", ["#1C6A77", "#E8AD43", "#CFE8F7"]).encode(),
+        "Werkhaus-Palette.hex": mod.glide_drawing.palette_to_hex(["#1C6A77", "#E8AD43", "#CFE8F7"]).encode(),
+        "Raumplan.csv": "Station;Ort;Status\n01;Eingang;markiert\n02;Modellwand;offen\n".encode(),
+        "Uebergabe.txt": "Werkhaus West\nMontag: Einladung und Wegführung am Eingang gegenprüfen.\nDie Bank am Fenster bleibt frei.\n".encode(),
     }
     generated_attachments = []
     for name, content in generated.items():
         path = attachments_dir / name
         path.write_bytes(content)
         generated_attachments.append(app.store_attachment(str(path)))
-    project = app.new_folder_object("Showcase · Parkquartier", color="accent", icon=icon_doc,
-                                    note="Fiktives Arbeitsprojekt: Briefing, Umsetzung, Bilder und Rückblick.")
-    library = app.new_folder_object("Wissen und Bildmaterial", parent_id=None, folder_kind="library")
-    journal = app.new_folder_object("Projekttagebuch", parent_id=None, folder_kind="journal")
-    archive = app.new_folder_object("Abgeschlossene Vorbereitung", parent_id=project["id"], archived=True,
+    project = app.new_folder_object("Werkhaus West", color="accent", icon=icon_doc,
+                                    note="Offene Werkstatt: Rundgang, Einladung und Vorbereitung.")
+    library = app.new_folder_object("Werkstattbuch", parent_id=None, folder_kind="library")
+    journal = app.new_folder_object("Studiojournal", parent_id=None, folder_kind="journal")
+    archive = app.new_folder_object("Archiv · Probelauf", parent_id=project["id"], archived=True,
                                     archived_at=tag(-7)+"T16:00:00+02:00")
     app.folders.extend([project, library, journal, archive])
-    stored = {name: app.store_attachment(str(ASSETS / name)) for name, _title, _note in PHOTOS}
+    stored = {name: app.store_attachment(str(name)) for name, _title, _note in PHOTOS}
     assert all(stored.values()), "Ein Beispielbild konnte nicht eingelesen werden."
     # Ein Anhang am Ordner bleibt beim Projektimport und bei der Vorlage erhalten.
     project["attachments"] = [copy.deepcopy(stored[PHOTOS[3][0]])]
     def task(text, **kwargs):
         return app.new_item(text, **kwargs)
-    specification = task("Objektsteckbrief bestätigen", due=tag(0), due_time="11:00", importance=3,
-        planned_date=tag(0), planned_time="09:00", estimated_minutes=45, time_spent_minutes=20,
-        labels=[labels["Vertrieb"], labels["Freigabe"]],
-        description="Jonas bestätigt Ausstattungsmerkmale und die Quelle jeder Objektangabe.",
+    specification = task(FOCUS_TASK, due=tag(0), due_time="11:00", importance=3,
+        planned_date=tag(0), planned_time="09:00", estimated_minutes=75, time_spent_minutes=20,
+        labels=[labels["Einladung"], labels["Freigabe"]],
+        description="Lea läuft den Weg vom Hoftor bis zur Modellwand ab. Die Kisten am Abzweig vorher wegräumen.",
         attachments=[copy.deepcopy(stored[PHOTOS[3][0]])],
-        checklist=[{"text":"Objektkennung PQ-04", "done":True}, {"text":"Ausstattung bestätigt"}, {"text":"Quellen dokumentiert"}])
-    images = task("Bildauswahl freigeben", due=tag(1), planned_date=tag(0), planned_time="10:30",
-        estimated_minutes=30, importance=2, labels=[labels["Gestaltung"], labels["Freigabe"]],
-        attachments=[copy.deepcopy(stored[PHOTOS[0][0]]), copy.deepcopy(stored[PHOTOS[5][0]])],
-        description="Leitmotiv Architektur und ergänzende Wohnatmosphäre nebeneinander prüfen.")
-    design = task("Landingpage · Entwurf 02 ausarbeiten", kind=app.ITEM_KIND_LONG, due=tag(2),
-        planned_date=tag(1), estimated_minutes=120, importance=2, labels=[labels["Gestaltung"]],
-        description="Hero, Ausstattungsabschnitt und Kontaktbereich gemeinsam aufbauen.\nAbnahme: klare Reihenfolge, lesbare Bildunterschriften und erreichbarer Kontakt.",
+        checklist=[{"text":"Eingang markiert", "done":True}, {"text":"Engpass an der Modellwand prüfen"}, {"text":"Schild am Abzweig markieren"}])
+    images = task("Motiv für die Einladung auswählen", due=tag(1), planned_date=tag(0), planned_time="11:00",
+        estimated_minutes=45, importance=2, labels=[labels["Raum"], labels["Freigabe"]],
+        attachments=[copy.deepcopy(stored[PHOTOS[0][0]]), copy.deepcopy(stored[PHOTOS[1][0]])],
+        description="Mira bevorzugt die Planstudie. Den Ausschnitt für Handy und Druck zusammen prüfen.")
+    design = task("Druckdatei für den Eingang bauen", kind=app.ITEM_KIND_LONG, due=tag(2),
+        planned_date=tag(0), planned_time="13:30", estimated_minutes=80, importance=2, labels=[labels["Raum"]],
+        description="A3 am Eingang, kleine Karte am Modell. Der Pfeil muss bei Gegenlicht aus fünf Metern erkennbar sein.",
         links=[images["id"]], blocked_by=[specification["id"]], color="clear",
-        checklist=[{"text":"Hero und Einstieg", "done":True}, {"text":"Kontaktbestätigung"}, {"text":"Tastatur und Fokus prüfen"}])
-    release = task("Freigabestand an den Vertrieb übergeben", due=tag(4), importance=3,
+        checklist=[{"text":"Maß und Papier geklärt", "done":True}, {"text":"Hell-Dunkel-Probe"}, {"text":"PDF an die Druckerei"}])
+    release = task("Einladung an den Verteiler geben", due=tag(4), importance=3,
         labels=[labels["Freigabe"]], blocked_by=[design["id"]], links=[specification["id"]],
         attachments=[copy.deepcopy(generated_attachments[-1])],
         reminder={"mode":"fixed", "at":app.local_reminder_time(tag(4), "10:00")},
-        description="Exposé, Website und Bildzuordnung als einen dokumentierten Stand übergeben.")
-    completed = task("Ziel und Lieferumfang abstimmen", done=True, done_at=tag(-1)+"T14:30:00+02:00",
+        description="Text und Bild freigeben, anschließend den Termin im Rundbrief ankündigen.")
+    completed = task("Schlüssel fürs Hoftor abgeholt", done=True, done_at=tag(-1)+"T14:30:00+02:00",
                      planned_date=tag(-1), estimated_minutes=60, time_spent_minutes=55)
-    missing = task("Rückfrage zur Ausstattung nachhalten", due=tag(-1), importance=1,
-                   labels=[labels["Warten"]], description="Eine bewusst überfällige Aufgabe für den Arbeitsüberblick.")
-    checklist = task("Vertriebsübergabe vorbereiten", kind=app.ITEM_KIND_GROUP, children=[
-        task("Dateinamen und Versionsstand prüfen", due=tag(3), estimated_minutes=15),
-        task("Pflegehinweise ergänzen", due=tag(3), estimated_minutes=30),
-        task("Ansprechpersonen dokumentieren", done=True, done_at=tag(0)+"T08:30:00+02:00")])
-    main = app.new_list_object("Vermarktung · Umsetzung", [
-        task("Entwurf und Freigabe", kind=app.ITEM_KIND_HEADING), completed, specification, images, design,
-        missing, task("Übergabe", kind=app.ITEM_KIND_HEADING), checklist, release], folder_id=project["id"],
-        labels=[labels["Parkquartier"]], icon=icon_doc, color="accent", attachments=generated_attachments[2:],
-        note="Ein aktiver Projektstand mit abgeschlossenen und offenen Arbeitspaketen.")
-    note = app.new_list_object("Abstimmung · Entwurf 02", [task("Steckbrief von Jonas einholen", due=tag(0)),
-        task("Gemeinsame Rückmeldung bündeln", planned_date=tag(1), estimated_minutes=30)],
+    missing = task("Papiermuster bei der Druckerei anfragen", due=tag(-1), importance=1,
+                   labels=[labels["Warten"]], description="Mira hat angerufen. Rückruf wegen des ungestrichenen Kartons steht noch aus.")
+    checklist = task("Kiste für den Eingang packen", kind=app.ITEM_KIND_GROUP, children=[
+        task("Klemmbrett und Klebeband einpacken", due=tag(3), estimated_minutes=15),
+        task("Drei Ersatzkarten mitnehmen", due=tag(3), estimated_minutes=30),
+        task("Stifte nachgefüllt", done=True, done_at=tag(0)+"T08:30:00+02:00")])
+    main = app.new_list_object(MAIN_TITLE, [
+        task("Vor Ort und im Studio", kind=app.ITEM_KIND_HEADING), completed, specification, images, design,
+        missing, task("Vor dem Öffnen", kind=app.ITEM_KIND_HEADING), checklist, release], folder_id=project["id"],
+        labels=[labels["Werkhaus"]], icon=icon_doc, color="accent", attachments=generated_attachments[2:],
+        note="Vor dem nächsten Rundgang. Mira übernimmt die Einladung, Lea den Weg durchs Haus.")
+    note = app.new_list_object(NOTIZ_TITLE, [task("Jona wegen Musterplatten schreiben", due=tag(0)),
+        task("Ausschnitt prüfenen vom Probelauf sortieren", planned_date=tag(1), estimated_minutes=30)],
         folder_id=project["id"], list_kind="note", rich_note=mod.glide_page_markdown.markdown_to_page(MEETING),
-        labels=[labels["Parkquartier"]], attachments=[copy.deepcopy(stored[PHOTOS[2][0]])])
-    gallery = app.new_list_object("Bildwelt · Auswahl mit Kommentaren", [], folder_id=project["id"],
+        labels=[labels["Werkhaus"]], attachments=[copy.deepcopy(stored[PHOTOS[2][0]])])
+    gallery = app.new_list_object(PHOTO_TITLE, [], folder_id=project["id"],
         list_kind="gallery", attachments=[copy.deepcopy(stored[name]) for name, _, _ in PHOTOS],
-        note="Sechs Motive aus der Beispielablage: Originale, Bildunterschriften und Kontext.")
-    skizze = zeichnung(mod)
-    animation = bildfolge(mod, skizze)
-    drawing = app.new_list_object("Quartier · Pixelskizze", [], folder_id=None, list_kind="drawing",
+        note="Was wir für den Rundgang, das Schild und die Einladung aus den Referenzen mitnehmen.")
+    animation = bildfolge(mod)
+    drawing = app.new_list_object(PIXEL_TITLE, [], folder_id=None, list_kind="drawing",
         drawing=copy.deepcopy(animation["frames"][0]["drawing"]), animation=animation, icon=icon_doc,
         attachments=generated_attachments[:2],
         drawing_reference={"attachment_id":generated_attachments[0]["id"], "mode":"fit", "zoom_percent":100},
-        note="Bearbeitbare 32 × 32 Zeichnung mit Bildfolge (vier Bilder, eine ziehende Wolke), "
-             "passendem 16 × 16 Symbol, PNG-Referenz und ICO-Export.")
+        note="Leitschild mit vier Lichtstufen, "
+             "PNG-Referenz und separatem 16-Pixel-Symbol.")
     app.lists.extend([main, note, gallery, drawing])
     for name, title, caption in PHOTOS:
         app.set_gallery_caption(gallery["id"], stored[name]["id"], title, caption)
-    routines = app.new_list_object("Wochenstart · Wiederkehrende Checkliste", [task("Eingang sichten"),
-        task("Wochenergebnisse priorisieren", done=True), task("Kapazität und Rückfragen einplanen")],
+    routines = app.new_list_object("Aufschließen · Wiederkehrende Checkliste", [task("Hoftor aufschließen"),
+        task("Weg im Hof freihalten", done=True), task("Karten und Stifte nachlegen")],
         folder_id=project["id"], recurring_checklist=True, color="due_action")
     repeats = []
-    for title, rule, offset in [
-        ("Eingang kurz sichten", {"art":"taeglich"}, 0),
-        ("Projektstatus besprechen", {"art":"woechentlich"}, 1),
-        ("Bildmaterial nachhalten", {"art":"tage", "abstand":14}, 2),
-        ("Redaktionsplan aktualisieren", {"art":"wochentage", "tage":[0,4]}, 3),
-        ("Ablage und Sicherungen prüfen", {"art":"monatlich"}, 5),
-        ("Jahresrückblick vorbereiten", {"art":"jaehrlich"}, 7),
+    for index, (title, rule, offset) in enumerate([
+        ("Postfach der Werkstatt prüfen", {"art":"taeglich"}, 0),
+        ("Montagsrunde im Studio", {"art":"woechentlich"}, 1),
+        ("Musterregal abgleichen", {"art":"tage", "abstand":14}, 2),
+        ("Abholzeiten aktualisieren", {"art":"wochentage", "tage":[0,4]}, 3),
+        ("Bildarchiv sichern", {"art":"monatlich"}, 5),
+        ("Jahresrückblick zusammentragen", {"art":"jaehrlich"}, 7),
         # Serie aus FP-02 (3.44.0): erster Termin ist der nächste letzte Werktag.
-        ("Monatsabschluss an den Vertrieb", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1"},
+        ("Monatsrückblick ins Journal schreiben", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1"},
          (letzter_werktag(anchor) - anchor).days),
         # Erweiterte Rhythmen FP-02 Stufe 2 (3.44.0): n-ter Wochentag, Bezug auf
         # Erledigung, begrenzte Anzahl und Pause.
-        ("Bildredaktion am zweiten Dienstag", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=2TU"},
+        ("Materialrunde im Studio", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=2TU"},
          (zweiter_dienstag(anchor) - anchor).days),
-        ("Atelierpflanzen gießen", {"art":"tage", "abstand":3, "bezug":"erledigt"}, 1),
-        ("Fototermin bestätigen", {"art":"woechentlich", "rest":3}, 4),
-        ("Newsletter-Entwurf", {"art":"monatlich", "pausiert":True}, 10)]:
+        ("Pflanzen am Hoftor gießen", {"art":"tage", "abstand":3, "bezug":"erledigt"}, 1),
+        ("Fototermin nachfassen", {"art":"woechentlich", "rest":3}, 4),
+        ("Einladungsliste aufräumen", {"art":"monatlich", "pausiert":True}, 10)]):
         repeats.append(task(title, due=tag(offset), repeat=rule, reminder={"mode":"relative", "minutes":30},
-                            due_time="09:00", estimated_minutes=15))
-    rhythm = app.new_list_object("Wiedervorlagen · Projektrhythmus", repeats, folder_id=project["id"],
+                            due_time="09:00", estimated_minutes=15,
+                            labels=[labels[("Einladung", "Raum", "Freigabe", "Warten")[index % 4]]]))
+    rhythm = app.new_list_object("Studioroutinen", repeats, folder_id=project["id"],
                                  note="Alle sieben Wiederholungsarten, Serien am letzten Werktag und am zweiten "
                                       "Dienstag, Abstand nach Erledigung, begrenzte Anzahl und eine pausierte Reihe; "
                                       "Systembenachrichtigungen sind im Showcase ausgeschaltet.")
+    rhythm["items"].insert(2, task("Karten vom letzten Termin aktualisieren", due=tag(3),
+        planned_date=tag(2), labels=[labels["Einladung"], labels["Raum"]], estimated_minutes=30))
     app.lists.extend([routines, rhythm])
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
-    inbox["items"] = [task("Neue Bildidee für die nächste Abstimmung sichten", labels=[labels["Gestaltung"]]),
-                       task("Rückfrage aus dem Vertrieb einordnen", description="Noch ohne Termin: erst klären, dann einplanen.")]
+    inbox["items"] = [task("Foto vom Schild am Hoftor ablegen", labels=[labels["Raum"]]),
+                       task("Nachbarin wegen Hofzugang zurückrufen", description="Sie kommt voraussichtlich mit dem Lastenrad.")]
     for offset, mood, title, text in [
-        (-1, "grateful", "Rückblick · Briefing freigegeben", "Das Briefing ist klar. Ein gemeinsamer Rückmeldestand spart Abstimmungsaufwand.\n\nMorgen: Bildauswahl bestätigen und den Kontaktbereich ausarbeiten. Die offenen Punkte stehen in Vermarktung · Umsetzung."),
-        (0, "thoughtful", "Tagesnotiz · Gestaltung und Freigabe", "Heute stehen Steckbrief und Bildauswahl im Mittelpunkt.\n\n**Fortschritt:** Hero-Struktur ist vorbereitet.\n\n**Offen:** Ausstattung braucht die bestätigte Quelle.\n\n**Lernpunkt:** Abhängigkeiten vor dem Entwurf sichtbar machen.")]:
+        (-1, "grateful", "Erster Lauf durch den Hof", "Das Schlüsselschild war zu klein. Lea hat das Tor mit einer gelben Karte markiert. Beim nächsten Test gehen wir Warteraum und Modellwand getrennt ab."),
+        (0, "thoughtful", "Freitag · Das Licht am Modell", "Die Streiflichtprobe am Modell war besser als gedacht. Nur das Fenster spiegelt, wenn beide Lampen an sind. Den zweiten Stromkreis nach dem Abnahmelauf ausschalten.")]:
         app.lists.append(app.new_list_object(title, [], folder_id=journal["id"], list_kind="note",
             rich_note=mod.glide_page_markdown.markdown_to_page("# "+title+"\n\n"+text),
             journal={"moment_date":tag(offset), "mood":mood, "favorite":offset==-1,
-                     "location":"Atelier Nord", "prompt":"Was möchte ich von heute bewahren?"}))
-    app.lists.append(app.new_list_object("Vorbereitung · abgeschlossen", [task("Briefing einsammeln", done=True,
-        done_at=tag(-7)+"T12:00:00+02:00"), task("Lieferumfang bestätigen", done=True,
+                     "location":"Studio am Hof", "prompt":"Was möchte ich von heute bewahren?"}))
+    app.lists.append(app.new_list_object("Probelauf am Donnerstag", [task("Gruppengröße für Rundgang klären", done=True,
+        done_at=tag(-7)+"T12:00:00+02:00"), task("Rundgang intern testen", done=True,
         done_at=tag(-7)+"T15:00:00+02:00")], folder_id=archive["id"], archived=True,
         archived_at=tag(-7)+"T16:00:00+02:00"))
     app.save_items()
-    briefing = app.new_page_from_markdown(BRIEFING, title="Parkquartier · Briefing und Freigabe", folder_id=library["id"])
+    pages = []
+    for title, text in (
+        ("Schilder und Druck", "## Am Hoftor\n\nA3 quer, ein Pfeil, darunter der Zugang zum Studio.\n\n## Am Modell\n\nVier schmale Karten mit Material und Einsatzort. Die große Platte bleibt beschriftungsfrei."),
+        ("Material am Modell", "## Die kleine Auswahl\n\nEiche geölt, Sperrholz roh und das helle Putzmuster aus dem Lager. Jona stellt die Kiste morgens an die Bank."),
+        ("Einladung & Ablauf", "## Samstag im Werkhaus\n\nKurzer Rundgang ab 14 Uhr. Die Tür zum Hof bleibt offen. Die Führung startet jeweils am Klebeband vor dem ersten Tisch."),
+        ("Rückblick · Probelauf", "## Wege und Wartezeiten\n\nZwei Gruppen nacheinander funktionieren besser als ein großer Rundgang. Wer warten möchte, bleibt im Hof."),
+    ):
+        pages.append(app.new_page_from_markdown(text, title=title, folder_id=library["id"]))
+    briefing = app.new_page_from_markdown(BRIEFING, title=BRIEFING_TITLE, folder_id=library["id"])
     ruhe(root)
     app.set_active_list(briefing["id"])
     ruhe(root)
     editor = app.rich_note_editor
     # Richtige Editor-Anker verwenden; Bilder gehören als Anhänge zur Seite.
     for prefix, filename, mode, width in reversed([
-        ("ARCHITEKTUR:", PHOTOS[0][0], "center", 620),
-        ("WOHNGEFÜHL:", PHOTOS[5][0], "left", 250),
-        ("PLANUNG:", PHOTOS[2][0], "right", 300)]):
+        ("PLAN:", PHOTOS[0][0], "center", 590),
+        ("BANK:", PHOTOS[1][0], "left", 250),
+        ("HOF:", PHOTOS[2][0], "right", 300)]):
         lines = editor.text.get("1.0", "end-1c").splitlines()
         index = f"{next(i for i, line in enumerate(lines, 1) if line.startswith(prefix))}.0"
-        key = editor.insert_images([str(ASSETS/filename)], index)[0]
+        key = editor.insert_images([str(filename)], index)[0]
         editor.images[key].update(mode=mode, width=width)
     # Klappblock mit echten semantischen Tags, keine gemalte Attrappe.
     lines = editor.text.get("1.0", "end-1c").splitlines()
-    line = next(i for i, text in enumerate(lines, 1) if text.startswith("Details der Bildauswahl"))
+    line = next(i for i, text in enumerate(lines, 1) if text.startswith("Offene Fragen aus dem Probelauf"))
     editor.text.delete(f"{line}.0", f"{line}.end")
-    editor.text.insert(f"{line}.0", "Details der Bildauswahl\nDie weiße Architekturansicht bleibt das Leitmotiv.\n"
-                       "Der gelbe Akzent erscheint sparsam in der Bildstrecke.\n"
-                       "Einrichtung und Planung ergänzen den sachlichen Einstieg.")
+    editor.text.insert(f"{line}.0", "Offene Fragen aus dem Probelauf\nBlenden die beiden Leuchten an der Modellwand?\n"
+                       "Reicht der Durchgang, wenn eine Gruppe am Tisch wartet?\n"
+                       "Nach dem letzten Gast Schild und Klemmbrett ins Studio zurückbringen.")
     editor.text.mark_set("insert", f"{line}.0")
     editor.convert_block("toggle")
     for number in range(line+1, line+4):
@@ -320,7 +308,8 @@ def build(app, mod, root, anchor):
     # Liste; Rückverweise entstehen daraus ohne zweiten Bestand.
     briefing = next(entry for entry in app.lists if entry["id"] == briefing["id"])
     briefing["live_lists"] = mod.glide_pages.live_lists([mod.glide_objects.uri("list", main["id"])])
-    note["references"] = mod.glide_objects.normalize([mod.glide_objects.uri("list", briefing["id"]),
+    note["references"] = mod.glide_objects.normalize([mod.glide_objects.uri("item", specification["id"]),
+                                                      mod.glide_objects.uri("list", briefing["id"]),
                                                       mod.glide_objects.uri("list", main["id"])])
     app.save_items()
     ruhe(root)
@@ -331,7 +320,7 @@ def build(app, mod, root, anchor):
     meeting_template["note"] = "Datumsfelder füllen sich selbst; Projekt wird abgefragt. Aufgaben und Anhang bleiben enthalten."
     routine_template = app.capture_template(list_id=routines["id"])
     routine_template = next(t for t in app.templates if t["id"] == routine_template["id"])
-    routine_template["title"] = "Showcase · Wochenstart"
+    routine_template["title"] = "Werkhaus · Aufschließen"
     meeting_template = next(t for t in app.templates if t["id"] == meeting_template["id"])
     settings = copy.deepcopy(app.settings)
     board_cards = [{"list_id":main["id"], "item_id":item["id"], "x":x, "y":y, "scale":"normal"}
@@ -340,15 +329,16 @@ def build(app, mod, root, anchor):
                         "x":24, "y":500, "scale":"small"})
     folder_scope = "folder:"+project["id"]
     list_scope = "list:"+main["id"]
-    settings.update(profile_name="Atelier Nord · Showcase", start_on_home=True, show_home_stats=True,
+    settings.update(profile_name="Studio am Hof", start_on_home=True, show_home_stats=True,
         sidebar_sections_visible={"pages":True,"lists":True,"notes":True,"drawings":True},
         sidebar_locations={},
         mascot_name="Gismo", mascot_playful=False, system_notifications=False,
         pinned_pages=[{"kind":"list", "id":briefing["id"]}, {"kind":"folder", "id":library["id"]}],
         recent_lists=[{"id":entry["id"], "edited_at":tag(0)+"T10:00:00+02:00"} for entry in [briefing,note,drawing]],
-        page_favorites=[briefing["id"]], gallery_tile_size={gallery["id"]:"medium"},
+        page_favorites=[briefing["id"], pages[0]["id"]], page_recent=[briefing["id"], pages[1]["id"]],
+        gallery_tile_size={gallery["id"]:"large"},
         list_group_by={main["id"]:"importance"},
-        saved_filters=[{"id":"showcase-freigabe", "name":"Parkquartier · Freigabe", "query":"",
+        saved_filters=[{"id":"showcase-freigabe", "name":"Werkhaus · Freigaben", "query":"",
                         "label_ids":[labels["Freigabe"]], "list_ids":[main["id"]], "status":"open"},
                        {"id":"showcase-woche", "name":"Diese Woche · Eisenhower", "query":"",
                         "label_ids":[], "list_ids":[], "status":"open"}],
@@ -359,34 +349,38 @@ def build(app, mod, root, anchor):
                                                  "columns":["title", "source", "due", "planned_date",
                                                             "estimated_minutes", "importance"]}},
         # Realistischer Tag (D57/WA-12): Kapazität je Wochentag und Tagesziel.
-        daily_capacity_by_weekday=[360, 360, 300, 360, 240, None, None], daily_goal=4,
+        daily_capacity_by_weekday=[300, 360, 300, 240, 150, 120, None], daily_goal=4,
+        completion_history={tag(-1): 1, tag(0): 3},
         # Reiter (bis zwölf) und ein eigener KI-Auftrag für den Dateiaustausch (FP-06).
         open_tabs=[{"list_id":main["id"], "item_id":specification["id"], "used":1},
                    {"list_id":main["id"], "item_id":design["id"], "used":2}],
-        exchange_recipes=[{"id":"showcase-rueckmeldung", "title":"Rückmeldungen zu Aufgaben bündeln",
-                           "mode":"patch", "instruction":"Fasse die Rückmeldungen in den Beschreibungen "
+        exchange_recipes=[{"id":"showcase-rueckmeldung", "title":"Ausschnitt prüfenen zu Aufgaben bündeln",
+                           "mode":"patch", "instruction":"Fasse die Ausschnitt prüfenen in den Beschreibungen "
                            "der ausgewählten Aufgaben knapp zusammen und schlage höchstens eine "
                            "Checkliste je Aufgabe vor. Ändere keine Termine."}],
-        active_tab={folder_scope:"board", list_scope:"board"},
+        active_tab={folder_scope:"board", list_scope:"list"},
         pinboards={folder_scope:{"cards":board_cards, "layout":"free", "background":"dots", "width":260,
-            "areas":[{"id":"showcase-inhalt", "name":"Inhalt und Freigabe", "color":"accent", "x":8,"y":16,"w":940,"h":940}],
-            "connections":[{"from":specification["id"],"to":design["id"],"label":"Inhalt vor Gestaltung","dash":True},
-                           {"from":design["id"],"to":release["id"],"label":"prüfen und übergeben"}],
+            "areas":[{"id":"showcase-inhalt", "name":"Rundgang vorbereiten", "color":"accent", "x":8,"y":16,"w":940,"h":940}],
+            "connections":[{"from":specification["id"],"to":design["id"],"label":"Weg vor Druck","dash":True},
+                           {"from":design["id"],"to":release["id"],"label":"danach ankündigen"}],
             "show_description":True, "show_checklist":True, "color_mode":"header"},
             list_scope:{"cards":board_cards[:-1], "layout":"columns", "group_by":"planned", "background":"grid",
                         "show_checklist":True, "color_mode":"stripe"},
-            # Seiten- und Notizkarten mit Originaltitel (FP-04, 3.44.0) neben echten Aufgaben.
-            mod.ItemWorkspace.GLOBAL_SCOPE:{"cards":board_cards[:2] + [
-                {"list_id":briefing["id"], "item_id":mod.ItemWorkspace.PAGE_CARD_PREFIX+briefing["id"],
-                 "x":620, "y":40, "scale":"normal"},
-                {"list_id":note["id"], "item_id":mod.ItemWorkspace.PAGE_CARD_PREFIX+note["id"],
-                 "x":620, "y":420, "scale":"normal"}],
-                "layout":"free", "width":260, "background":"dots",
-                # Beide Kanten führen zur benachbarten Karte und kreuzen keine dritte.
-                "connections":[{"from":mod.ItemWorkspace.PAGE_CARD_PREFIX+briefing["id"],
-                                "to":images["id"], "label":"Grundlage"},
-                               {"from":mod.ItemWorkspace.PAGE_CARD_PREFIX+note["id"],
-                                "to":images["id"], "label":"Rückmeldung"}]}})
+            mod.ItemWorkspace.GLOBAL_SCOPE:{
+                "cards": [
+                    {"list_id":briefing["id"], "item_id":"page:"+briefing["id"], "x":34, "y":63, "scale":"normal"},
+                    {"list_id":note["id"], "item_id":"page:"+note["id"], "x":34, "y":355, "scale":"normal"},
+                    {"list_id":main["id"], "item_id":specification["id"], "x":390, "y":64, "scale":"normal"},
+                    {"list_id":main["id"], "item_id":images["id"], "x":735, "y":58, "scale":"normal"},
+                    {"list_id":drawing["id"], "item_id":"page:"+drawing["id"], "x":735, "y":470, "scale":"small"},
+                ],
+                "layout":"free", "width":238, "background":"dots", "show_checklist":True,
+                "connections":[
+                    {"from":"page:"+briefing["id"], "to":specification["id"], "label":"Weg ablaufen"},
+                    {"from":"page:"+note["id"], "to":specification["id"], "label":"Rückfragen klären"},
+                    {"from":specification["id"], "to":images["id"], "label":"Eingang zeigen"},
+                    {"from":images["id"], "to":"page:"+drawing["id"], "label":"Pfeil abstimmen"},
+                ]}})
     app.settings = app.normalize_personal_settings(settings)
     app.save_settings()
     app.save_templates()
@@ -421,10 +415,16 @@ def export(target, anchor):
             # Zeilenenden wie im Repository (LF): Unter Windows schreibt die App
             # CRLF, und die Prüfsumme im Manifest passte nach dem Einchecken nicht.
             paths[2].write_bytes(paths[2].read_bytes().replace(b"\r\n", b"\n"))
+            app.open_global_board()
+            ruhe(root)
+            canvas = target / "Werkhaus-West.canvas"
+            assert app.export_board_json_canvas(str(canvas)) == str(canvas)
+            canvas.write_bytes(canvas.read_bytes().replace(b"\r\n", b"\n"))
+            paths.append(canvas)
             ruhe(root)
             assert not errors, errors
             manifest = {"app_version":mod.APP_VERSION,"format_version":app.DATA_SCHEMA_VERSION,
-                "bearbeitungstag":anchor.isoformat(), "dokumente":[{"titel":e["title"],"art":e["list_kind"]} for e in payload["lists"]],
+                "thema":"Werkhaus West", "bearbeitungstag":anchor.isoformat(), "dokumente":[{"titel":e["title"],"art":e["list_kind"]} for e in payload["lists"]],
                 "bilder":len(PHOTOS), "seitenbilder":sum(len((e.get("rich_note") or {}).get("images") or {}) for e in payload["lists"]),
                 "projektpinnwaende":len(payload["pinboards"]), "vorlagen":len(templates),
                 "dateien":{p.name:{"bytes":p.stat().st_size,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths}}

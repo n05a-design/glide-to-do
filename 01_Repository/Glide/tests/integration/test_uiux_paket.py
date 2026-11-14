@@ -23,6 +23,9 @@ import zipfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO / "tests/tools"))
+from showcase import NOTIZ_TITLE  # noqa: E402
+
 SHOWCASE_APP = REPO / "tests/fixtures/showcase/Glide-Showcase_App.glideapp"
 FAELLE = ("b01", "b02", "b03", "b04", "b05", "b06_b15", "b15_appweit", "b07", "b08", "b09", "b10", "b11",
           "b12_b13", "b14", "b16", "b17_b19", "b18")
@@ -851,7 +854,7 @@ def fall_b17_b19(lauf):
     app.settings["backdrops"] = {"light": "morgenrot"}
     app.set_design("light")
     lauf.idle(6)
-    notiz = next(e for e in app.lists if e.get("title") == "Abstimmung · Entwurf 02")
+    notiz = next(e for e in app.lists if e.get("title") == NOTIZ_TITLE)
     app.set_active_list(notiz["id"])
     lauf.idle(8)
     fenster = app.theme["bg"].lower()

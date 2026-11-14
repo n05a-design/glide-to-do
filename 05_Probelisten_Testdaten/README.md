@@ -2,9 +2,7 @@
 
 Stand 13.11.2026 · Glide 3.60.0 · Speicherstufe 26 · Vorlagen 2
 
-Hier liegt nur noch der **[Showcase](Showcase/README.md)**: das fiktive Projekt „Parkquartier“ mit zehn bearbeitbaren Dokumenten in allen fünf Arten, sechs Originalmotiven aus der kanonischen Fixture-Ablage `01_Repository/Glide/tests/fixtures/showcase/bilder`, Projekt- und Demo-Pinnwand, Tagesplanung, Notizbuch, Archiv und zwei Vorlagen. Herkunft und Prüfsummen stehen in `showcase/quellen.json` des Quellbaums; die Motive lagen früher zusätzlich im Grafikmaster. `Showcase_starten.pyw` hält den Demobestand im eigenen Ordner `Arbeitsstand` (nicht versioniert) und öffnet nie den normalen Datenordner.
-
-Quellfixtures und Showcase-Lieferung sind für 3.55.1 mit künstlichen Daten reproduziert und über echten Import/Neustart sowie SHA-256 abgeglichen. Der bearbeitete separate Arbeitsstand wird dabei nicht ersetzt. Die konkreten Archivhashes stehen im jeweiligen `manifest.json`; Prüfungen und tatsächliche Pakete im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Menschliche Prüfung anschließend; Screenreader bis Bedarf zurückgestellt.
+Der [Showcase „Werkhaus West“](Showcase/README.md) enthält 14 bearbeitbare Projektdokumente, vier Stock-Referenzen, beschriftete Pinnwände, Tagesplanung, Vorlagen und einen JSON-Canvas-Export. Der Starter hält den Bestand im eigenen Arbeitsordner `Arbeitsstand-Werkhaus`.
 
 ## Weitere Probebestände (Quelle im Repository)
 

@@ -25,6 +25,14 @@ Lokal geprüft auf einem MacBook (macOS arm64) mit Python 3.14.5 und dem Tcl/Tk 
 
 **Freigabestatus:** `release_ready=false`. Offen sind Windows, Linux, macOS mit Tcl/Tk 9.1, Python 3.12, eigenständiger Paketbau und die menschliche Abnahme. Eine physische Mehrmonitor- und DPI-Abnahme ist für diese Schnitte nach Entscheidung des Inhabers nicht erforderlich.
 
+## Logo und Showcase für 3.60.0 (14.11.2026)
+
+Aufbauend auf dem Merge von PR #81 unter Windows x64 mit Python 3.14.7 und Tk 9.0.4. Die [Logo-Checkliste](../../../20_Grafik_Master/README.md) führt Quellen, Ableitungen und Auslieferungsziele.
+
+- Der Showcase wurde mit echten Glide-Importen, Verweisprüfung, Vorlagen, Undo, Export und einem Neustart geprüft. Die Lieferdateien stimmen mit den Quellfixtures per SHA-256 überein.
+- Die Projektseite verwendet 15 unterschiedliche Windows-Aufnahmen des Werkhaus-Showcase. Hauptfenster und Dialoge stammen aus der laufenden App mit einer isolierten Datenablage.
+- Der Aufnahmenachweis und der Lieferabgleich gelten für die Quell-/Python-Fassung. Native Paketneubauten, Betriebssystem-Caches und plattformübergreifende Sichtabnahme sind eigene Schritte.
+
 ## Plattformprüfung und Pakete für 3.55.1 (13.11.2026)
 
 Prüfbasis ist `45ab307e2d2fcf5892a806880faaf344a3c058a1` auf `main`. Dieser Stand umfasst PR #80 (Tagesentlastung, JSON Canvas und Dateinamenvorschläge), den zeilenendenneutralen Windows-Header-Abgleich aus PR #79 und die Dokumentationspflege für Glide-System V1.17.3. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2.

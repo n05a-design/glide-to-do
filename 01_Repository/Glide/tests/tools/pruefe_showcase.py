@@ -21,6 +21,7 @@ import zipfile
 from unittest.mock import patch
 
 from rundgang import load_module, ruhe
+from showcase import BRIEFING_TITLE, FOCUS_TASK, MAIN_TITLE, NOTIZ_TITLE, PHOTO_TITLE, PIXEL_TITLE
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests/fixtures/showcase"
@@ -95,8 +96,8 @@ def integrity(app, expected_lists, expected_boards=3):
             assert app.sidebar_section_for_tree(tree) == app.sidebar_section_for(kind, obj["id"])
             parent = obj.get("folder_id" if kind == "list" else "parent_id")
             assert tree.parent(iid) == ("folder:" + parent if parent else ""), obj["title"]
-    for title, section in (("Wissen und Bildmaterial", "pages"), ("Projekttagebuch", "notes"),
-                           ("Quartier · Pixelskizze", "drawings")):
+    for title, section in (("Werkstattbuch", "pages"), ("Studiojournal", "notes"),
+                           (PIXEL_TITLE, "drawings")):
         kind = "list" if section == "drawings" else "folder"
         objects = app.lists if kind == "list" else app.folders
         matches = [obj for obj in objects if obj["title"] == title]
@@ -136,9 +137,9 @@ def check(fixture, images=None, restart_dir=None):
         try:
             settle(root)
             if restart_dir:
-                integrity(app, 11)
-                assert len(entries(app)["Parkquartier · Briefing und Freigabe"]["rich_note"]["images"]) == 3
-                assert app.settings["profile_name"] == "Atelier Nord · Showcase"
+                integrity(app, 15)
+                assert len(entries(app)[BRIEFING_TITLE]["rich_note"]["images"]) == 3
+                assert app.settings["profile_name"] == "Studio am Hof"
                 assert any(t["title"] == "{{Wochentag}} KW {{KW}} · {{Projekt}}" for t in app.templates)
                 assert not errors, errors
                 print("Neustart: ok")
@@ -148,6 +149,10 @@ def check(fixture, images=None, restart_dir=None):
             for name, record in manifest["dateien"].items():
                 path = fixture/name
                 assert hashlib.sha256(path.read_bytes()).hexdigest() == record["sha256"], name
+                if path.suffix == ".canvas":
+                    canvas = json.loads(path.read_bytes())
+                    assert len(canvas["nodes"]) == 5 and len(canvas["edges"]) == 4
+                    assert all(edge["label"] for edge in canvas["edges"])
                 if path.suffix in (".glidebackup", ".glideapp"):
                     with zipfile.ZipFile(path) as archive:
                         assert archive.testzip() is None
@@ -167,20 +172,20 @@ def check(fixture, images=None, restart_dir=None):
             assert app.import_full_backup(additive=True, path=str(fixture/"Glide-Showcase.glidebackup"),
                                           show_success=False, confirm=False)
             settle(root)
-            assert len(app.lists) == before_count+10
+            assert len(app.lists) == before_count+14
             assert before_ids <= app.data_item_ids()
             assert app.settings["profile_name"] == "Vorhandenes Profil"
-            integrity(app, before_count+10, expected_boards=2)
+            integrity(app, before_count+14, expected_boards=2)
             # Die Vollvariante setzt nur diesen temporären Arbeitsstand auf die Demo zurück.
             assert app.restore_app_backup(str(fixture/"Glide-Showcase_App.glideapp"),
                 sections={"tasks":True,"settings":True,"templates":True,"activity":True}, show_success=False)
             settle(root)
-            integrity(app, 11)
+            integrity(app, 15)
             lists = entries(app)
-            main = lists["Vermarktung · Umsetzung"]
-            briefing = lists["Parkquartier · Briefing und Freigabe"]
-            gallery = lists["Bildwelt · Auswahl mit Kommentaren"]
-            assert len(gallery["attachments"]) == 6
+            main = lists[MAIN_TITLE]
+            briefing = lists[BRIEFING_TITLE]
+            gallery = lists[PHOTO_TITLE]
+            assert len(gallery["attachments"]) == 4
             assert all(a.get("title") and a.get("note") for a in gallery["attachments"])
             assert set((i.get("repeat") or {}).get("art") for e in app.lists for i in e["items"] if i.get("repeat")) == set(app.REPEAT_KINDS)
             assert {i["reminder"]["mode"] for e in app.lists for i in e["items"] if i.get("reminder")} == {"fixed","relative"}
@@ -189,7 +194,7 @@ def check(fixture, images=None, restart_dir=None):
             assert app.day_close_queue(today=manifest["bearbeitungstag"])
             # Alle Dokumentarten real anzeigen; auf macOS müssen Originalmotive Vorschauen bekommen.
             for title, filename in [(briefing["title"],"01_Briefing"), (gallery["title"],"02_Galerie"),
-                ("Abstimmung · Entwurf 02","03_Protokoll"), ("Quartier · Pixelskizze","04_Zeichnung")]:
+                (NOTIZ_TITLE,"03_Protokoll"), (PIXEL_TITLE,"04_Zeichnung")]:
                 app.set_active_list(lists[title]["id"])
                 settle(root, .65)
                 if title == briefing["title"]:
@@ -207,7 +212,7 @@ def check(fixture, images=None, restart_dir=None):
                 if title == gallery["title"] and sys.platform == "darwin":
                     assert {key[0] for key in app.gallery_view._images} == {a["storage"] for a in gallery["attachments"]}
                 photo(images, filename)
-            project = next(f for f in app.folders if f["title"] == "Showcase · Parkquartier")
+            project = next(f for f in app.folders if f["title"] == "Werkhaus West")
             app.set_active_folder(project["id"])
             settle(root)
             assert app.workspace.mode == "board" and len(app.workspace.board()["cards"]) == 5
@@ -218,7 +223,7 @@ def check(fixture, images=None, restart_dir=None):
             photo(images, "06_Bearbeitungstage")
             app.workspace.set_mode("list")
             settle(root)
-            candidate = next(i for i in main["items"] if i["text"] == "Objektsteckbrief bestätigen")
+            candidate = next(i for i in main["items"] if i["text"] == FOCUS_TASK)
             original = copy.deepcopy(candidate)
             app.tree.selection_set(candidate["id"])
             app.toggle_done()
@@ -282,7 +287,7 @@ def check(fixture, images=None, restart_dir=None):
                                    capture_output=True,text=True,timeout=90)
             assert child.returncode == 0, child.stdout+child.stderr
             print(child.stdout.strip())
-            print("Showcase: Import, ID-Verweise, 5 Dokumentarten, 3 Ordnertypen, 6 Originalmotive, 3 Seitenbilder, "
+            print("Showcase: Import, ID-Verweise, 5 Dokumentarten, 3 Ordnertypen, 4 Stockmotive, 3 Seitenbilder, "
                   "2 Pinnwände, Klappblock, Termine, Erinnerungen, Undo, Vorlagen, Export und Neustart: ok")
         finally:
             if root is not None:
