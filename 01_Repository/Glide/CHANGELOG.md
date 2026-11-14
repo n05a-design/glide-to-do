@@ -13,6 +13,11 @@ Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der R
 - **Prüfungen:** `test_modal_session.py` prüft, dass das Modul nur Standardbibliothek und `tkinter` importiert. Die Gegenproben des Modalvertrags verändern jetzt das neue Modul.
 - Glide-System V1.26; Datenformat 26 unverändert. Prüfumfang und Grenzen im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3620-14112026).
 
+## Vertriebsentwürfe – 14.11.2026
+
+- **Installation per Terminal (WA-60, Vorschlag):** Vorlagen für `winget install Shaye.Glide` und einen Homebrew-Cask aus den Release-Dateien unter `packaging/winget` und `packaging/homebrew`; nichts eingereicht, Prüfsummen bis zum veröffentlichten Release offen. Startmenüeintrag erst mit dem Inno-Setup-Installer. [Veröffentlichung](docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf)
+- App 3.62.0 und Datenformat 26 unverändert.
+
 ## Prüfwerkzeuge – 14.11.2026
 
 - **Modalvertrag:** `test_modalvertrag.py` hält fest, was `run_modal` und `modal_over` heute garantieren: echter Grab in 13 Fällen, dazu sechs Gegenproben; Teil von `SUITEN`. Vorstufe zum Shell-Paket Fenster/Modal/Abbau. [QA-Bericht](docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026)
