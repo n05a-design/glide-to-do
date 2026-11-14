@@ -1090,3 +1090,10 @@ Berichtigungen, Prüfung und Rest: [Plan §21.91](Glide_Entwicklungsplan.md#2191
 - `modal_over` prüft vor dem erneuten Griff `owner.winfo_exists()`. Von außen ist die Prüfung nicht beobachtbar, weil ein Griff auf ein zerstörtes Fenster einen `TclError` wirft, den dieselbe Stelle abfängt. Kein Handlungsbedarf; bei der Verlagerung in Shell-Paket 3 darf sie bleiben oder entfallen.
 - `run_modal` stellt den Fokus nach dem Schließen nicht wieder her; Aufrufer wie `themed_message_dialog` tun das selbst. Ob die Shell das übernimmt, ist bei Paket 3 zu entscheiden.
 - Nachweis im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026).
+
+## 13.38 Abbau beim Schließen (14.11.2026)
+
+- Die Vermutung aus der Shell-Validierung vom 13.11.2026, der nicht registrierte Abholtimer des Hintergrundverlaufs überlebe den Abbau, trifft für das Beenden nicht zu: `install_empty_frame_guard` verwirft am `<Destroy>` der Wurzel alle Tcl-Zeitgeber. Ein reines Tk ohne diesen Schutz behält sie (Gegenprobe ohne die Zeile: vier Zeitgeber einschließlich `abholen` bleiben).
+- Nicht registriert sind vor dem Schließen `_save_recent_pages` (Zeitgeber, auch im Ruhezustand), dazu nach einem Designwechsel mit Hintergrundverlauf `abholen` (Zeitgeber des Hintergrundverlaufs), `abgleichen`, `collapse_emptied_frames`, `draw_icons` und `sync_backdrop_surfaces` (Leerlauf). Kein Handlungsbedarf für das Beenden; für den Abbau einzelner Ansichten in Shell-Paket 3 sind sie umzustellen.
+- Die Datensperre wird beim Schließen und am `<Destroy>` der Wurzel freigegeben; die zweite Freigabe ist ein Rückfall, kein Fehler.
+- Nachweis im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#abbau-vertragstest-auf-3620-14112026).

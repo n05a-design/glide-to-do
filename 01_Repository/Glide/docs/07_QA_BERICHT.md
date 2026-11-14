@@ -1,5 +1,23 @@
 # QA-Bericht – Glide 3.62.0
 
+## Abbau-Vertragstest auf 3.62.0 (14.11.2026)
+
+Basis `main` `6d719ca7` (Glide 3.62.0), Branch `claude/shell-abbauvertrag`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und 3.15.1, jeweils Tcl/Tk 9.0.4, mit den künstlichen Beispieldaten in einer kurzen Prüfablage außerhalb von OneDrive. Auftrag im [Plan §21.95](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2195-shell-paket-3b-abbau-vertragstest-14112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| `test_abbauvertrag.py` | Vier Fälle grün (Ruhe, laufender Hintergrundverlauf, Abbruch der Rückfrage, doppelter Aufruf) in zwei Läufen unter 3.14.7 und einem unter 3.15.1 |
+| Gegenproben (`--gegenproben`) | Drei von drei erkannt: ohne Tcl-Abbruch am `<Destroy>` der Wurzel überleben vier Zeitgeber einschließlich `abholen`; ohne Freigabe bleibt die Datensperre liegen; ohne Rücksetzen von `_closing` schließt ein zweiter Versuch nach einem Abbruch nicht mehr |
+| Datenisolation | Im echten Datenordner kein Eintrag jünger als der Lauf |
+
+**Befunde:**
+- Nach dem Schließen steht kein Tcl-Zeitgeber mehr an, auch keiner der nicht registrierten. `install_empty_frame_guard` verwirft am `<Destroy>` der Wurzel alle Aufträge des Interpreters. Die Vermutung aus der Validierung vom 13.11.2026 – der Abholtimer des Hintergrundverlaufs überlebe den Abbau – trifft für das Beenden der App nicht zu ([Analyse §13.38](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1338-abbau-beim-schließen-14112026)).
+- Vor dem Schließen sind nicht registriert: `_save_recent_pages` (Zeitgeber, auch im Ruhezustand), dazu nach einem Designwechsel mit Hintergrundverlauf `abholen` (Zeitgeber des Hintergrundverlaufs), `abgleichen`, `collapse_emptied_frames`, `draw_icons` und `sync_backdrop_surfaces` (Leerlauf). Für einen Abbau von Ansichten ohne das Hauptfenster ist das der Aufräumbedarf.
+- Die Datensperre wird zweimal freigegeben: in `_close_after_confirmation` und noch einmal am `<Destroy>` der Wurzel. Die Gegenprobe trifft deshalb die Freigabe selbst.
+- Ein Hintergrundfaden des Verlaufs endet nach dem Schließen ohne Tk-Zugriff; in 1,5 s Ereignisverarbeitung danach scheitert kein Rückruf.
+
+**Grenzen:** Nicht geprüft sind macOS (Beenden über `::tk::mac::Quit` und das Menü), Linux/Xvfb, Tk 8.6/9.1, Python 3.12, das Schließen bei offenem modalem Dialog und physische Bedienung. Produktcode unverändert; keine Vollprüfung, kein Paketbau.
+
 ## Prüfstand 3.62.0 (14.11.2026)
 
 Basis `e7d18c36` (Modal-Vertragstest auf 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und Tcl/Tk 9.0.4 auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive. Umfang im [Plan §21.94](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026).

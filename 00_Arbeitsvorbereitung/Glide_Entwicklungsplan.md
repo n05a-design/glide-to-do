@@ -68,7 +68,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.61.0). Die Zeilen verweisen a
 | 3.61.0 | Merge, Linux-/Windows-Vollprüfung, macOS- und Windows-Paket | ▶ | PR prüfen, CI dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.61: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)) | Abbau-Vertragstest, dann Fenster-/Toplevel-Lebensdauer | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)) | Fenster-/Toplevel-Lebensdauer | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2822,3 +2822,14 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 3. Prüfungen: `test_modal_session.py` (T317) für Importregel und Schnittstelle; Gegenproben in `test_modalvertrag.py` auf das Modul umgestellt. Lieferliste in `abgleich_07.py`, Mac-Vorstufe und `07_Python-Versionen/README.md` ergänzt. Glide-System V1.26.
 
 **C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3620-14112026). Offen: Vollprüfung Linux/Windows in der GitHub-Prüfung, macOS-Lauf für 3.62.0, Pakete und menschliche Abnahme. Nächste Teile von Paket 3 mit eigener Freigabe: Abbau-Vertragstest (39 nicht registrierte Zeitgeber am Hauptfenster, darunter der Abholtimer des Hintergrundverlaufs) und Fenster-/Toplevel-Lebensdauer; ob die Shell den Fokus nach dem Schließen zurückgibt, ist dabei zu entscheiden.
+
+### 21.95 Shell-Paket 3b: Abbau-Vertragstest (14.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 14.11.2026 Paket 3b frei: einen Vertragstest für das Schließen der App, bevor Fensterlebensdauer und Abbau in die Shell wandern. Nur Test, Produktcode und App-Version 3.62.0 bleiben unverändert.
+
+**B – Umsetzung auf Basis `6d719ca7`:**
+1. `tests/integration/test_abbauvertrag.py` startet je Fall eine vollständige App mit den künstlichen Beispieldaten in eigenem Prozess und eigener Ablage und schließt sie über `on_close`: in Ruhe, bei laufendem Hintergrundverlauf, mit Abbruch der Rückfrage zu ungespeicherten Änderungen und doppelt. Gemessen werden Hauptfenster, Datensperre, verbleibende Tcl-Zeitgeber, späte Rückrufe und Hintergrundfäden; vor dem Schließen nennt der Bericht die nicht registrierten Zeitgeber.
+2. `--gegenproben` entfernt drei Schutzzeilen: den Tcl-Abbruch am `<Destroy>` der Wurzel, die Freigabe der Datensperre und das Rücksetzen von `_closing` nach einem Abbruch.
+3. Teil von `SUITEN`; Glide-System V1.27 (T318).
+
+**C – Prüfung und Rest:** Ergebnisse und Befunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#abbau-vertragstest-auf-3620-14112026). Die Vermutung zum Abholtimer aus §21.89 ist für das Beenden widerlegt; für den Abbau einzelner Ansichten bleibt die Liste der nicht registrierten Zeitgeber der Aufräumbedarf. Offen sind macOS- und Linux-Lauf sowie das Schließen bei offenem modalem Dialog. Nächster Teil von Paket 3 mit eigener Freigabe: Fenster-/Toplevel-Lebensdauer; offen bleiben die Hypothese zu `unbind` mit Kennung unter Python 3.12, Namensraum und Paketgrenze der Shell und die Python-Prüfung beim Direktstart.
