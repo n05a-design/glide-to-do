@@ -33,7 +33,7 @@ Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Reg
 1. PR zu 3.61.0 prüfen und mergen (Inhaber). Linux- und Windows-Vollprüfung sowie das macOS-Paket dem Merge-Commit zuordnen.
 2. Menschliche Abnahme am Mac: Entlastungsdialog mit Gründen, Meldung bei nicht eingebundenem Datenlaufwerk, Suche nach Text mit zerlegten Umlauten; offene Bedien-, Sicht- und DPI-Fälle stehen in der [Prüfliste](Glide_Manuelle_Pruefung.md).
 3. Marktvorschläge neu reihen (WA-08, WA-20, WA-12-Rest, WA-53 bis WA-59): Inhaberentscheidung, Vorlage im [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat).
-4. Shell-Migration: zuerst der Modal-Vertragstest mit echtem Grab, dann jedes Folgepaket mit eigener Freigabe ([Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)).
+4. Shell-Migration: Der Modal-Vertragstest liegt vor und ist unter Windows und nativ am Mac grün ([Plan §21.93](Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026)). Vor Paket 3 (Fenster/Modal/Abbau) läuft er noch unter Linux; danach jedes Folgepaket mit eigener Freigabe ([Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)).
 5. Die sechs D83-Regeln bei jedem UI-Paket anwenden, das den Bereich anfasst; bestehende Oberflächen nicht ungefragt umbauen.
 6. Inhaberangaben I1, Signierung I3, Markenprüfung I4 und Releasefreigabe I11 bleiben offen; Screenreader-Abnahme nach D58 zurückgestellt.
 

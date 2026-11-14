@@ -66,7 +66,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.61.0). Die Zeilen verweisen a
 | 3.61.0 | Merge, Linux-/Windows-Vollprüfung, macOS- und Windows-Paket | ▶ | PR prüfen, CI dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.61: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ○ | Modal-Vertragstest | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11., Windows und Mac grün ([§21.93](#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026)) | Linux-Lauf des Vertragstests, dann Paket 3 Fenster/Modal/Abbau | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2799,3 +2799,13 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 **C – Prüfung und Rest:** Ergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3610-14112026). Offen bleiben die Dublette Systemregister/Handbuch, die Straffung der Rundenprotokolle, die Reihung der Marktvorschläge und die menschliche Abnahme; siehe [Arbeitsvorrat](#aktueller-arbeitsvorrat).
 
+### 21.93 Shell-Paket 3, Vorstufe: Modal-Vertragstest mit echtem Grab (14.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 14.11.2026 den Modal-Vertragstest als nächsten Schnitt der [Shell-Migration](#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026) auf Basis 3.61.0 frei. Umfang: ein Testvertrag für `ListApp.run_modal` und `modal_over`, bevor der Modal-Weg verlagert wird. Produktcode, Lieferstand und App-Version bleiben unverändert.
+
+**B – Umsetzung auf Basis `e403a7c4`:**
+1. `tests/integration/test_modalvertrag.py` ruft die unveränderten Methoden an einer `ListApp`-Hülle mit eigener Root und echtem Tk. 13 Fälle: Griff und Freigabe, Escape und Schließen-Protokoll, ansprechbarer Event-Loop, drei Ebenen ohne `parent=`, ausdrücklicher `parent=`, verschwundener Besitzer, gescheiterter Griff, Abbruch im Warten, wiederverwendbarer Dialog über `_glide_modal_finished`, 25 Wiederholungen ohne liegengebliebene Zeitgeber, Fokus, aufgeschobener Menübefehl mit Unterdialog, Abbau des Hauptfensters während zweier Dialoge. Je Fall ein harter Wächter (`faulthandler`) und ein weicher Wächter am Event-Loop.
+2. `--gegenproben` lädt eine Kopie von `app.pyw` ohne jeweils eine Schutzzeile und verlangt den zuständigen roten Fall. Findet eine Gegenprobe ihre Zeile nicht mehr, wurde der Modal-Weg umgebaut; dann Vertrag und Gegenproben gemeinsam nachführen.
+3. Der Test gehört zur Vollprüfung (`SUITEN`); Glide-System V1.25 (T316).
+
+**C – Prüfung und Rest:** Ergebnisse und Befunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026): Windows 11, Python 3.14.7/3.15.1, Tk 9.0.4, und ein nativer Mac-Lauf des Inhabers (Python 3.14, Tk 9.0) mit 13 von 13 Fällen und sechs von sechs Gegenproben. Vor Paket 3 steht ein Linux/Xvfb-Lauf aus; die Menüverfolgung eines echten Klicks in die Menüleiste bleibt eine Bedienprüfung; danach braucht Paket 3 (Fenster/Modal/Abbau) eine eigene Freigabe. Weiter offen sind Namensraum und Paketgrenze der Shell, die Python-Prüfung beim Direktstart und die beiden ungeprüften Hypothesen aus §21.89. Ob die Shell nach dem Schließen den Fokus zurückgibt, ist bei Paket 3 zu entscheiden.

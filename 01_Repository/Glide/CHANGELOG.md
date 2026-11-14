@@ -2,6 +2,11 @@
 
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
+## Prüfwerkzeuge – 14.11.2026
+
+- **Modalvertrag:** `test_modalvertrag.py` hält fest, was `run_modal` und `modal_over` heute garantieren: echter Grab in 13 Fällen, dazu sechs Gegenproben; Teil von `SUITEN`. Vorstufe zum Shell-Paket Fenster/Modal/Abbau. [QA-Bericht](docs/07_QA_BERICHT.md#modal-vertragstest-auf-3610-14112026)
+- App 3.61.0 und Datenformat 26 unverändert; Glide-System V1.25.
+
 ## 3.61.0 – 14.11.2026
 
 - **Überlastungsgründe sichtbar (D81):** „Tag entlasten“ nennt unter der Vorher/Nachher-Bilanz je überplantem Tag die Gründe; ein entlasteter Tag zeigt die Gründe davor und „nachher nicht mehr überplant“. Die Einzahl lautet jetzt „1 Aufgabe ohne Aufwandsschätzung kann …“. [Handbuch](docs/20_FUNKTIONEN.md#tageskapazität-und-entlastung-seit-3550).
