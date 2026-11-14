@@ -89,6 +89,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     os.environ["APPDATA"] = temp_root
     os.environ["GLIDE_DATA_DIR"] = str(pathlib.Path(temp_root) / "Glide")
     mod = load_module()
+    # Der Import legt auch mit GLIDE_DATA_DIR keine Ordner an (WA-49); das übernimmt der App-Start.
+    assert not (pathlib.Path(temp_root) / "Glide").exists(), "Import hat den Datenordner angelegt"
     assert pathlib.Path(mod.BASE_DIR).resolve() == (
         pathlib.Path(temp_root) / "Glide"
     ).resolve(), mod.BASE_DIR
@@ -111,7 +113,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.55.1"
+    assert mod.APP_VERSION == "3.60.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -1408,6 +1410,22 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     # bis 23.10.2026 mit AttributeError ab (GitHub #142, test_bilder330).
     ersatz = type("Startfenster", (), {"root": app.root})()
     assert mod.ListApp.clamp_geometry(ersatz,f"980x740+{left + 10}+{top + 10}") == f"980x740+{left + 10}+{top + 10}"
+    # Die Lageregel rechnet Tk-frei in `compact_mode.keep_visible`; Lesart,
+    # Bildschirmabfrage und Rückfälle bleiben in der Fassade (13.11.2026).
+    echte_flaeche = mod.desktop_bounds
+    try:
+        mod.desktop_bounds = lambda _root: (-1920, -100, 3840, 1180)
+        assert app.clamp_geometry("860x700+-1550+-90") == "860x700+-1550+-90"
+        mod.desktop_bounds = lambda _root: (0, 0, 1920, 1080)
+        assert app.clamp_geometry("860x700+-1550+-90") == "860x700+-740+0"
+        assert app.clamp_geometry("980x740-30-40") == "980x740"
+
+        def ohne_bildschirm(_root):
+            raise mod.tk.TclError("kein Bildschirm")
+        mod.desktop_bounds = ohne_bildschirm
+        assert app.clamp_geometry("980x740+100+100") == "980x740"
+    finally:
+        mod.desktop_bounds = echte_flaeche
 
     # Wiederholte Listenaufbauten duerfen keine toten after-IDs ansammeln.
     app.cancel_pending_callbacks()

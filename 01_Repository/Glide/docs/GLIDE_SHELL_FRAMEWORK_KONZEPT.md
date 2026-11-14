@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
 
@@ -27,7 +27,7 @@ Ein sauberes, modulares Schichtenmodell, bei dem das Fundament als eigenständig
                            v
 +-------------------------------------------------------+
 |             Glide Shell Framework (Fundament)         |
-|  Lifecycle, Window Manager, Appearance, Widgets, Undo |
+|  Lifecycle, Fenster, Appearance, Widgets, Aktionen    |
 +-------------------------------------------------------+
                            |
             (steuert UI & Plattform)
@@ -51,7 +51,7 @@ Die folgende Tabelle beschreibt Zielverantwortungen. Dateibestand, Featurezuordn
 | Design, Typografie und Symbole | Theme-Token, Schrift-/Glyphenwahl und Maßberechnung über eine stabile UI-Schnittstelle bereitstellen | [Design/Branding](../src/glide/README.md#designbranding) und [Designvertrag](DESIGN_RICHTLINIEN.md). Vorhandene Module bilden noch kein unabhängig geprüftes UI-Paket. |
 | Fenster, Navigation und modale Dialoge | Root-/Toplevel-Lebensdauer, Fokus, Grab-Freigabe, Bildschirmgrenzen und Menübesitz koordinieren | [UI/Navigation](../src/glide/README.md#uinavigation) und [Tk-Regeln](02_ARCHITECTURE.md#5-tk-fallstricke-teuer-gelernt). `run_modal` liegt in `ListApp`; ein `window_manager.py` oder `modal_runner.py` ist hier nur ein vorgeschlagener Schnitt. |
 | Steuerelemente und Zugänglichkeit | Theme, Tastaturbedienung und semantische Rollen erhalten; benötigte `keys`-/`cget`-/`configure`-/Indexzugriffe kompatibel halten | [Oberflächenbestand](../src/glide/README.md#oberflächen-bestandsprüfung) und [Barrierefreiheit](../src/glide/README.md#barrierefreiheit). Die D78-Controls liegen in `app.pyw`; ein eigenes `controls/`-Paket ist kein Istzustand. |
-| Undo und Commands | Transaktionsgrenzen der App über einen expliziten Vertrag anbinden, ohne Aufgabenformate in die Shell einzubauen | [Daten/Schutz](../src/glide/README.md#datenschutz). `undo_history.py` enthält `RedoHistory` für Wiederholen; der Undo-Gesamtablauf liegt weiterhin in der App. Ein generischer Command-Stack ist Zielarbeit. |
+| Undo und Commands | Transaktionsgrenzen der App über einen expliziten Vertrag anbinden, ohne Aufgabenformate in die Shell einzubauen | [Daten/Schutz](../src/glide/README.md#datenschutz). `undo_history.py` enthält `RedoHistory` für Wiederholen; der Undo-Gesamtablauf liegt weiterhin in der App. Ein generischer Command-Stack ist Zielarbeit. Validierung 13.11.2026: Der Ablauf hängt an Aufgabenmodellen, Einstellungen und Speicherweg und bleibt beim Host; die Shell bindet Verfügbarkeit und Auslösen als Aktionen an. |
 
 ---
 
@@ -66,7 +66,7 @@ Ein heute fachnahes Modul kann einen wiederverwendbaren Anteil enthalten. Beispi
 ## 3. Bewertung der Zwei-Fenster- und Multi-Window-Architektur
 
 ### 3.1 Aktuelle Situation in Glide
-Glide verwendet eine primäre Tk-`root`-Instanz für das Hauptfenster und `Toplevel`-Instanzen für Zusatzfenster (z. B. Nebenansichten, Modaldialoge, Einstellungen oder Zeichenflächen).
+Glide verwendet eine primäre Tk-`root`-Instanz für das Hauptfenster und `Toplevel`-Instanzen für Dialoge, Einstellungen, Meldungen und Hinweise. Nebenansicht und Aufgabeninspektor sind eingebettete Flächen im Hauptfenster (D55) und keine eigenen Fenster.
 
 **Erkannte Herausforderungen:**
 1. **macOS Event Loop & Menübindung:** Auf macOS gehört das Anwendungsmenü (`Apple Menu`) zwingend zur primären `root`-Instanz. Wenn ein Toplevel-Fenster schließt oder den Fokus wechselt, darf das Menü nicht in einen verwaisten Zustand fallen.
@@ -97,7 +97,7 @@ Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- 
 - **Architekturschritt:** Auf der Tk-freien Pfadauflösung aufbauen und App-Import, CLI-Auswertung, Verzeichnisanlage und Tk-Initialisierung explizit trennen. Seiteneffektfreiheit für jeden Einstieg gesondert prüfen; Eigenschaften von `runtime_config.py` nicht auf den App-Import übertragen.
 
 ### Phase 2: Design- und Widget-Extraktion
-- **Aufgabe:** Zusammenfassung von [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) und den D78-Custom-Controls in ein Teilpaket `glide_shell.ui`.
+- **Aufgabe:** Zusammenfassung von [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) und den D78-Custom-Controls in ein Teilpaket `glide_shell.ui`. Lieferabgleich und Paketbau erfassen heute nur flache Module; bis zur Entscheidung über Namensraum und Paketgrenze bleibt die Shell-Zugehörigkeit eine Modulliste mit Importregel.
 - **Ziel:** Einheitliche Widget-Schnittstelle (`keys()`, `configure()`, Event-Binding) unabhängig vom konkreten Glide-Inhalt.
 
 ### Phase 3: Modal- und Dialog-Manager
@@ -106,7 +106,7 @@ Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- 
 
 ### Phase 4: Undo/Command-Abstraktion
 - **Aufgabe:** Entkopplung von [`undo_history.py`](../src/glide/undo_history.py) von den Datenstrukturen der Aufgabenliste.
-- **Ziel:** Einen noch zu definierenden Undo-/Command-Vertrag für Memento- oder Command-Objekte schaffen; `execute()` und `undo()` wären vorgeschlagene Schnittstellen, keine heutige `UndoHistory`-API.
+- **Ziel:** Einen noch zu definierenden Undo-/Command-Vertrag für Memento- oder Command-Objekte schaffen; `execute()` und `undo()` wären vorgeschlagene Schnittstellen, keine heutige `UndoHistory`-API. Vor einer Verlagerung steht der Nachweis fachlicher Unabhängigkeit; bis dahin bleibt Undo beim Host.
 
 ### Phase 5: Trennung von Shell und App-Controller
 - **Aufgabe:** Reduzierung von `ListApp` in `app.pyw` auf die reine Controller-Rolle für die Aufgabenverwaltung.
@@ -147,3 +147,25 @@ Um die Shell unabhängig von Glide zu halten, kommuniziert die Anwendungsdomäne
 1. **Gezielte Prüfung ohne Tkinter:** Fachberechnungen über explizite Ports mit Unit-Tests prüfen; UI-, Host- und Plattformverhalten benötigt weiterhin Integrationstests.
 2. **Wiederverwendung für Folgeprojekte:** Ein künftig entkoppeltes Fundament könnte eigene Domänen-Controller und Ansichten aufnehmen. Bis dahin gelten die bestehenden Übernahmeverträge und ihre Kopplungsgrenzen.
 3. **Gebündelte Plattformverträge:** Menübesitz, DPI und Zwischenablage über definierte Adapter kapseln und auf jeder Plattform prüfen. Die bloße Modultrennung beweist keine Plattformfreigabe.
+
+---
+
+## 6. Validierte Grenzen (13.11.2026)
+
+Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlichen Aufrufern geprüft. Auftrag, Pakete und Status stehen in der [Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026); die Arbeitsübergabe im [Masterprompt](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md).
+
+- **Abhängigkeitsrichtung:** Host/Glide → Shell → Tk/OS. Shell-Module importieren nur Standardbibliothek, `tkinter` und andere Shell-Module. Glide-Werte kommen als Argumente, Werte und Callbacks; ein Port entsteht nur, wo er eine konkrete Abhängigkeit entfernt.
+- **Vorgehen:** Inkrementelle Extraktion mit vorhandenen Fassaden. `ListApp`-Methoden und die Pfadkonstanten des App-Moduls bleiben Aufrufstellen, weil Tests und Werkzeuge an ihnen hängen. Ein physisches Teilpaket berührt Lieferabgleich, Paketbau und Importwege und ist eine eigene Entscheidung.
+- **Start:** Direktstart, Schnellstart und Paketstarter verhalten sich gegen leere, vorhandene, fremd gesperrte und beschädigte Ablage gleich; sie unterscheiden sich nur in der Überwachung durch den Begleitprozess. Der Bytecode-Ordner wird dreifach aufgelöst, weil jeder Einstieg ihn vor seinem ersten eigenen Import braucht; ein Test hält die drei Auflösungen gleich.
+- **Modal:** `run_modal` ist der einzige Warteweg und hängt an Theme, Mindestbreite, Vordergrund und Fehlerprotokoll der `ListApp`. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau.
+
+| Modul | Neutral | Glide-gebunden |
+|---|---|---|
+| `motion` | vollständig | – |
+| `compact_mode` | `parse`, `format_geometry`, `clamp`, `keep_visible` | Mindestmaße, Einstellungsname, Kürzelregel |
+| `appearance` | Designpaar, Erkennung des Systemmodus | Hintergrundauswahl, `with_background` |
+| `ui_design` | Skalen, `fit_text`, `clip_title`, Breitenausgleich, `settled_wrap_width` | `task_title`, `today_columns`, `page_icon_layout` |
+| `action_menu` | Eintragsmodell, Gruppierung, Auswahl | Begründungstexte, Bindung an `content_search` |
+| `accessibility`, `accessibility_bindings`, `core_accessibility` | `Attributes`, `set_attributes`, `Binding`, allgemeine Binder | `task_value`, alle Binder mit `app` |
+| `undo_history` | `RedoHistory` | Board-Einträge |
+| `runtime_config` | Auflösungsmechanik | Produktname, Dateinamen, Umgebungsvariablen |

@@ -93,5 +93,33 @@ class GeometryTests(unittest.TestCase):
         self.assertEqual(compact_mode.normal_geometry(None, None), '1280x860')
 
 
+class NormalPositionTests(unittest.TestCase):
+    """Lageregel der Normalansicht (`ListApp.clamp_geometry` bleibt die Fassade)."""
+
+    def test_position_on_area_stays(self):
+        self.assertEqual(compact_mode.keep_visible(100, 50, 980, (0, 0, 1920, 1080)), (100, 50))
+        # Genau an der Grenze bleibt die Lage, ein Pixel weiter wird sie geholt.
+        rand = 1920 - compact_mode.VISIBLE_MARGIN
+        self.assertEqual(compact_mode.keep_visible(rand, 0, 980, (0, 0, 1920, 1080)), (rand, 0))
+        self.assertEqual(compact_mode.keep_visible(rand + 1, -1, 980, (0, 0, 1920, 1080)), (rand, 0))
+
+    def test_left_and_upper_monitor_and_its_removal(self):
+        # Bildschirm links und über dem Hauptbildschirm: negative Lage bleibt.
+        self.assertEqual(compact_mode.keep_visible(-1550, -90, 860, (-1920, -100, 3840, 1180)), (-1550, -90))
+        # Derselbe Stand ohne diesen Bildschirm: Ein 120-px-Streifen bleibt links sichtbar.
+        self.assertEqual(compact_mode.keep_visible(-1550, -90, 860, (0, 0, 1920, 1080)), (-740, 0))
+
+    def test_far_outside_and_wider_than_area(self):
+        self.assertEqual(compact_mode.keep_visible(6000, 5000, 980, (0, 0, 1920, 1080)), (1800, 960))
+        # Die Maße gehören nicht zur Regel: Ein zu breites Fenster behält sie.
+        self.assertEqual(compact_mode.keep_visible(-5000, 10, 3000, (0, 0, 1280, 800)), (-2880, 10))
+
+    def test_margin_and_empty_area(self):
+        self.assertEqual(compact_mode.keep_visible(6000, 5000, 980, (0, 0, 1920, 1080), margin=200), (1720, 880))
+        self.assertEqual(compact_mode.keep_visible(-5000, 0, 980, (0, 0, 1920, 1080), margin=200), (-780, 0))
+        # Anders als `clamp` ohne Schutz für eine leere Fläche – der Stand vor der Auslagerung.
+        self.assertEqual(compact_mode.keep_visible(10, 10, 980, (0, 0, 0, 0)), (-120, 0))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -60,8 +60,10 @@ QA_ORDNER = re.compile(re.escape(QUELLBAUM) + r"tests/qa-" + _V + r"/")
 # Inhaberauftrag 08.11.2026: historische Nachweise im aktuellen Audit nicht
 # löschen. Der bereits vorbereitete Altersabgang des Erststands wird bewahrt;
 # Größen-, Fremdrest- und Bildregeln bleiben unverändert.
-GESCHUETZTE_QA_VERSIONEN = frozenset({"3.50.0"})
-GESCHUETZTE_REFERENZEN = frozenset({QUELLBAUM + "tests/fixtures/beispiele/glide_releaseplanung_3.50.0.glidebackup"})
+# 3.50.7 trägt den Bewahrungsnachtrag des laufenden Audits (AGENTS.md); mit 3.60.0 fiel es aus den sieben neuesten Versionen.
+GESCHUETZTE_QA_VERSIONEN = frozenset({"3.50.0", "3.50.7"})
+GESCHUETZTE_REFERENZEN = frozenset({QUELLBAUM + "tests/fixtures/beispiele/glide_releaseplanung_3.50.0.glidebackup",
+                                    QUELLBAUM + "tests/fixtures/beispiele/glide_releaseplanung_3.50.7.glidebackup"})
 # Bleiben außerhalb der sieben Versionen: je Datenformat die letzte
 # Releaseplanung (11–19) als Lesbarkeitsbeleg der Fixtureprüfung und 3.30.0,
 # die test_tempo330 als feste Messgrundlage liest.

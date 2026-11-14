@@ -1,6 +1,6 @@
 # Glide – Desktop-Planer
 
-Stand 12.11.2026 · Quellstand 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Quellstand 3.60.0 · Aufgabenformat 26
 
 Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 

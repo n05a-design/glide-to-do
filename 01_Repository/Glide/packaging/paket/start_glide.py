@@ -9,6 +9,20 @@ import tempfile
 import traceback
 
 
+def restrict_windows_dll_search():
+    """Begrenzt die DLL-Suche des eigenständigen Windows-Prozesses."""
+    import ctypes
+    from ctypes import wintypes
+
+    set_default_dirs = ctypes.WinDLL('kernel32', use_last_error=True).SetDefaultDllDirectories
+    set_default_dirs.argtypes = [wintypes.DWORD]
+    set_default_dirs.restype = wintypes.BOOL
+    # Anwendungsverzeichnis, vom Bootloader gesetztes Paketverzeichnis und System32.
+    load_library_search_default_dirs = 0x00001000
+    if not set_default_dirs(load_library_search_default_dirs):
+        raise ctypes.WinError(ctypes.get_last_error())
+
+
 def loaded_libraries():
     """Native Anbieter feststellen; ausschließlich bei der isolierten Paketprobe."""
     import ctypes
@@ -47,7 +61,10 @@ def loaded_libraries():
             length = filename(module, buffer, len(buffer))
             if length == 0 or length >= len(buffer):
                 raise ctypes.WinError(ctypes.get_last_error())
-            names.append(buffer.value)
+            path = Path(buffer.value)
+            if not path.is_absolute():
+                raise RuntimeError('Geladener Bibliothekspfad ist nicht absolut.')
+            names.append(str(path.resolve(strict=True)))
         return list(dict.fromkeys(names))
     raise RuntimeError('Paketprobe braucht eine beauftragte native Zielplattform.')
 
@@ -307,6 +324,8 @@ def smoke(report_path):
 
 
 def main():
+    if sys.platform == 'win32' and getattr(sys, 'frozen', False):
+        restrict_windows_dll_search()
     if len(sys.argv) == 3 and sys.argv[1] == "--paket-pruefen":
         raise SystemExit(smoke(sys.argv[2]))
     import runtime_diagnostics as diagnostic

@@ -4,7 +4,7 @@
 
 Der Umfang ist `pre-build`, einschließlich Bauhilfen, und `compositions.aggregate = incomplete`: kein behaupteter vollständiger transitiver Laufzeitgraph. Eine vollständige offizielle JSON-Schemaprobe mit jsonschema 4.26.0 bestand am 08.11.2026 für eine explizite MPL-Modellfixture und die unveränderte historische Mac-Lizenzbasis (23 Komponenten); Schemaquellen/Hashes und Aussagegrenzen im QA-Nachtrag. Die späteren nativen Entwicklungsbauten 3.55.0 enthalten das Inventar. WA-46 bleibt teilweise umgesetzt. Der vollständige transitive Laufzeitgraph ist weiterhin offen.
 
-Stand 12.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen in Git-Fassung vom 05.11.2026](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 
@@ -19,7 +19,9 @@ Der Paketstarter begleitet den Appprozess für lokale technische Diagnose und de
 
 ## Aktuelle Lieferartefakte
 
-Glide 3.55.0 auf `766978d`: [Windows-x64-Paket](https://github.com/n05a-design/glide-to-do/actions/runs/43136211793) und [macOS-arm64-DMG und -TAR](https://github.com/n05a-design/glide-to-do/actions/runs/43131842652) sind gebaute und isoliert gestartete Entwicklungsartefakte. Der [QA-Bericht](../docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026) dokumentiert Signaturstatus und offene Abnahmen.
+Für Glide 3.55.1 auf `45ab307` sind Windows x64 sowie macOS arm64 als DMG und TAR gebaut und isoliert gestartet. Der [QA-Bericht](../docs/07_QA_BERICHT.md#plattformprüfung-und-pakete-für-3551-13112026) führt die Entwicklungsartefakte, Prüfsummen, den Signaturstatus und die offenen Abnahmen.
+
+Der lokale Windows-Paketstarter beschränkt den DLL-Suchpfad vor dem App-Import auf Anwendung, Paket und System32. Die Herkunftsprüfung vergleicht aufgelöste Windows-Pfade. Die Gegenproben mit geerbtem Fremdpfad und umgeleitetem Anwendungsdatenordner bestanden auf einer Paketkopie mit korrigiertem Starter. Der reguläre Neubau steht aus. [PC-02-Prüfnachweis](../docs/07_QA_BERICHT.md#gezielte-windows-paketprobe-auf-pc-02-intel).
 
 ### Historische Lieferartefakte 3.50.0
 

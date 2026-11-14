@@ -235,7 +235,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.55.1"
+APP_VERSION = "3.60.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -396,10 +396,8 @@ LOCK_FILE = RUNTIME_PATHS.lock_file
 ERROR_LOG_FILE = RUNTIME_PATHS.error_log_file
 ERROR_LOG_MAX_BYTES = 200_000
 
-# In Testumgebungen mit GLIDE_DATA_DIR Ordner direkt verfügbar halten;
-# im regulären Betrieb erfolgt die Bereitstellung erst beim App-Start in ListApp.__init__.
-if os.environ.get("GLIDE_DATA_DIR"):
-    RUNTIME_PATHS.ensure_dirs()
+# Der Import legt keine Ordner an, auch nicht mit GLIDE_DATA_DIR (WA-49). Die
+# Bereitstellung erfolgt beim App-Start in ListApp.__init__ und beim Ordnerwechsel.
 
 
 def register_private_fonts(font_dir=None):
@@ -32910,6 +32908,15 @@ class ListApp:
             breite = max(160, event.width - 8)
             if getattr(panel, "_glide_wrap", None) == breite:
                 return
+            # Mit DM Serif Display in kleiner Schrift kreiste die Spaltenbreite vor dem ersten
+            # Anzeigen endlos über drei Werte, weil jeder Umbruch die Wunschbreite änderte
+            # (macOS, Tk 9.0.3, 13.11.2026). Eine wiederkehrende Breite beendet die Runde.
+            fenster = dialog.winfo_width()
+            if getattr(panel, "_glide_wrap_window", None) != fenster:
+                panel._glide_wrap_window, panel._glide_wrap_seen = fenster, set()
+            breite = glide_design.settled_wrap_width(breite, panel._glide_wrap_seen)
+            if getattr(panel, "_glide_wrap", None) == breite:
+                return
             panel._glide_wrap = breite
             for widget in panel.winfo_children():
                 if isinstance(widget, (tk.Label, GlideCheckbutton)):
@@ -46574,9 +46581,7 @@ class ListApp:
         except tk.TclError:
             return f"{width}x{height}"
         # Mindestens ein sichtbarer Fensterstreifen muss auf der Arbeitsfläche liegen.
-        visible_margin = 120
-        x = max(left - (width - visible_margin), min(x, left + screen_w - visible_margin))
-        y = max(top, min(y, top + screen_h - visible_margin))
+        x, y = glide_compact.keep_visible(x, y, width, (left, top, screen_w, screen_h))
         return f"{width}x{height}+{x}+{y}"
 
     def restore_window_position(self):

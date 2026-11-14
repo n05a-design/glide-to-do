@@ -1,4 +1,59 @@
-# QA-Bericht – Glide 3.55.1
+# QA-Bericht – Glide 3.60.0
+
+## Prüfstand 3.60.0 (13.11.2026)
+
+Lokal geprüft auf einem MacBook (macOS arm64) mit Python 3.14.5 und dem Tcl/Tk 9.0.3 des Python-Installers, mit künstlichen Daten in einer kurzen Prüfablage außerhalb der synchronisierten Ablage. Basis ist `45ab307e`; Auftrag und Umfang stehen im [Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026). Einzelbelege liegen lokal und sind nicht versioniert.
+
+**Gesamtprüfung nach Versionswechsel und Lieferabgleich:** Strenge CI-Grundstufe bestanden; `07_Python-Versionen` ist bytegleich zu `src/glide` (94 Code-Dateien, 165 Ressourcen), der Fremdcode-Abgleich für tkinterdnd2 lief ohne Netzzertifikat nicht. 1.185 Unit-Tests (ein Skip) und 287 Werkzeugtests (drei Skips) grün. Alle 110 Suiten aus `SUITEN` in 114 seriellen Aufrufen sowie der Showcase grün im ersten Durchgang, im Hintergrundmodus. Die eingefrorene Vollprüfung über `pruefen.py --modus voll` wurde wegen des knappen Plattenplatzes nicht ausgeführt; die Suiten liefen einzeln nacheinander mit demselben Aufruf.
+
+| Gegenstand | Gezielter Nachweis |
+|---|---|
+| Normallage (`compact_mode.keep_visible`) | Fassade `ListApp.clamp_geometry` gegen die Baseline in 12 benannten und 60.000 zufälligen Fällen bytegleich; vier falsche Regelvarianten von den neuen Unit-Tests erkannt; Einstieg mit echtem Tk in vier Lagen vorher und nachher gleich |
+| Start-Baseline (`test_startwege.py`) | 14 Fälle grün: drei Startwege gegen vier Ablagen, Schutzfall, Importfall. Tabelle in zwei Läufen bytegleich; 17 gezielte Abweichungen von den Prüfregeln erkannt. Die drei Startwege unterscheiden sich nur im Feld `supervised` |
+| Bytecode-Pfade (`test_runtime_config.py`) | Acht Plattformvarianten gleich; elf einzeln veränderte Auflösungen erkannt |
+| Import ohne Ordneranlage | Testzensus mit mitschreibendem Begleiter: 146 Prozesse, in 132 legte der Import Ordner an, kein abhängiger Zugriff. Gegenprobe ohne Anlage über alle Läufe ohne Befund. Der neue Importfall war vor der Änderung rot und ist danach grün |
+| Einstellungsdialog | „Kreativ: DM Serif Display“ in kleiner Schrift: vorher Stillstand vor dem ersten Anzeigen (Spaltenbreiten 410, 419, 436 im Kreis), danach Aufbau in unter einer Sekunde. Acht weitere Schriftkombinationen mit unveränderten Spalten- und Umbruchwerten |
+| Mess- und Pflegewerkzeuge | 17 Werkzeuge mit kleinen Beständen Exit 0. `projektseite_aufnahmen.py` läuft nur unter Windows, `reader_app400.py` nur mit Tk 9.1; `kandidat_starten.pyw` wurde nicht gestartet, weil es die Prüffassung des Inhabers öffnet |
+
+**Eigenschaften von Tk 9.0.3 unter macOS:** Zwei Fälle aus `test_arbeitsmodi.py` waren auf `45ab307e` in dieser Umgebung rot, in elf Läufen im Hintergrund- und Vordergrundmodus.
+- **`kompakt_verlorenes_loslassen`:** Nach dem Wechsel zum Finder ist die Tk-Anwendung nicht mehr aktiv, Tk 9.0.3 liefert aber weder `<FocusOut>` noch `<Deactivate>`, und `focus_get()` bleibt beim Hauptfenster (reine Tk-Probe ohne Glide-Code). Der Fall misst den Fokusverlust unter macOS deshalb erst ab Tk 9.1 und vermerkt die Auslassung im Ergebnis. Ob unter Tk 9.0 ein Kompaktkürzel nach einem App-Wechsel einmal ausbleibt, ist eine ungeprüfte Folgerung; das Produkt blieb dafür unverändert.
+- **`schriftstile`:** DM Serif Display ist nur als Regular und Italic gebündelt. Tk meldet unter macOS das Gewicht des gefundenen Schnitts: `bold` für Rubik und Charis SIL, `normal` für DM Serif Display und DM Mono. Die Zusicherung `bold` gilt jetzt, wo die Familie einen eigenen fetten Schnitt hat oder Windows es meldet. Das kräftige Lesegewicht hat für „Kreativ“ in dieser Umgebung keine sichtbare Wirkung.
+
+**Historische Nachweise:** Der Versionswechsel hätte `tests/qa-3.50.7` und die zugehörige Releaseplanung als achte Version aus der Ablage gekürzt. Sie tragen den Bewahrungsnachtrag des laufenden Audits und bleiben deshalb erhalten; `ablagegroesse.GESCHUETZTE_QA_VERSIONEN` und `GESCHUETZTE_REFERENZEN` schützen sie jetzt wie den Bestand 3.50.0.
+
+**Störungen langer Läufe:** In den vorangegangenen Zensusläufen waren 28 von 117 Läufen durch Tastatur- und Fokusaktivität am Rechner rot oder liefen ins Zeitlimit; einzeln wiederholt waren sie grün. Der abschließende Lauf blieb ungestört.
+
+**Freigabestatus:** `release_ready=false`. Offen sind Windows, Linux, macOS mit Tcl/Tk 9.1, Python 3.12, eigenständiger Paketbau und die menschliche Abnahme. Eine physische Mehrmonitor- und DPI-Abnahme ist für diese Schnitte nach Entscheidung des Inhabers nicht erforderlich.
+
+## Plattformprüfung und Pakete für 3.55.1 (13.11.2026)
+
+Prüfbasis ist `45ab307e2d2fcf5892a806880faaf344a3c058a1` auf `main`. Dieser Stand umfasst PR #80 (Tagesentlastung, JSON Canvas und Dateinamenvorschläge), den zeilenendenneutralen Windows-Header-Abgleich aus PR #79 und die Dokumentationspflege für Glide-System V1.17.3. Aufgabenformat 26, Einstellungen 2 und Vorlagenformat 2.
+
+| Prüfung | Ergebnis | Nachweis |
+| --- | --- | --- |
+| Grundstufe | 19/19, Python 3.14.10 auf Linux. | [Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/43356821889) |
+| Vollprüfung Linux und Windows | Je 132/133 Schritte ausgeführt, Exitcode 0. Die menschliche Sichtprüfung wurde übersprungen. Linux Python 3.14.8/Xvfb, Windows Python 3.14.7/x64, jeweils eigene Tcl/Tk 9.1. | [Prüfläufe](https://github.com/n05a-design/glide-to-do/actions/runs/43356821889) |
+| Paket Windows x64 | Eigenständiger Bau und isolierter Start mit Python 3.14.7 und Tcl/Tk 9.1.0 erfolgreich. Alle 129 lokal gesicherten Dateien stimmen per SHA-256 mit dem Bauprotokoll überein. Unsignierter Entwicklungsbau. | [Windows-Paketjob](https://github.com/n05a-design/glide-to-do/actions/runs/43356821889/job/131699443082) |
+| Paket macOS arm64 | Eigenständiger Bau und isolierter Start erfolgreich. SHA-256 für DMG und TAR lokal bestätigt. Im TAR stimmen alle 488 Dateihashes mit dem Bauprotokoll überein, 30 Symlinks sind erhalten. Die native CI prüfte Ad-hoc-Signatur und Dateimodi. | [Mac-Paketlauf](https://github.com/n05a-design/glide-to-do/actions/runs/43356821789) |
+| Nativer macOS-Vollmodus | Rot nach 105 erfolgreichen Schritten. `test_seitenkarten/druck_tempo`: gepaarter Medianquotient 1,1176 bei Grenze 1,10. 24 Schritte übersprungen, der Paketbau in diesem Lauf ebenfalls. Der gezielte Vorlauf auf demselben Commit bestand mit 0,8431. | [Vollprüfung](https://github.com/n05a-design/glide-to-do/actions/runs/43405769310) |
+
+Die Python-Lieferung in `07_Python-Versionen` ist zur lokalen Quelle bytegleich (94 Code-Dateien und 165 Ressourcen). Die Prüflauf- und Paketartefakte sind auf dem Windows-Prüfplatz unter `%USERPROFILE%/Glide-QA/3.55.1-45ab307` gesichert. Beide Pakete führen für `app.pyw` denselben SHA-256 `5100098b17a1bb38b390697d9634e3462f401a77a1c0b3d0fad14da0768cdcbd`.
+
+Die Plattformnachweise stammen von GitHub-Runnern. Für einen Gerätevergleich PC-01 AMD, PC-02 Intel und MacBook M2 fehlen hier gleich konfigurierte Berichte mit denselben Quell-, Modul-, Test-, Fixture- und Ressourcenständen. Die historischen Geräteberichte behalten ihren jeweiligen Prüfstand.
+
+**Freigabestatus `release_ready=false`.** Offen sind die Ursachenprüfung und ein grüner macOS-Volllauf, der reguläre Windows-Paketbau mit der lokalen Startkorrektur, die menschliche Nachprüfung von „Tag entlasten“ samt Bedien-/Sicht-/DPI-Matrix, Veröffentlichungssignaturen mit macOS-Notarisierung und die Inhaberfreigabe.
+
+### macOS-Seitenkarten im Vollmodus
+
+Der GitHub-Runner meldet macOS 15.8.2, Apple M1 (Virtual), arm64, ohne Rosetta, Python 3.14.5 und die im Workflow gebaute Tcl/Tk-9.1-Runtime. Der Zeitfall vergleicht den Aufbau einer Pinnwand mit 200 Aufgabenkarten mit dem Aufbau aus 150 Aufgaben- und 50 Seitenkarten. Der JSON-Canvas-Fall und die weiteren Fälle derselben Suite bestanden. Im Vollmodus lagen drei von fünf Paarquotienten über 1,10. Vorlauf und Vollmodus unterscheiden sich trotz identischer App-Quelle deutlich. Die Ursache ist offen. Rohprotokolle, Systemkontext und beide Messreihen liegen unter `%USERPROFILE%/Glide-QA/3.55.1-45ab307/macos-voll-43405769310`. Für die nächste Gegenprobe den Renderpfad im echten macOS-Kontext profilieren und die Grenzwerte beibehalten.
+
+### Gezielte Windows-Paketprobe auf PC-02 Intel
+
+- Der unveränderte Windows-Entwicklungsbau auf dem Core i9-14900K bestand mit einem reinen Windows-Systempfad. Auf derselben Paketkopie führte allein das Hinzufügen des Codex-Poppler-Ordners zum Laden von `icuuc78.dll` und `icudt78.dll`. Die Isolation meldete Exitcode 1. Der umgeleitete lokale Anwendungsdatenpfad löste zusätzlich falsche Außenpfadmeldungen für paketinterne Bibliotheken aus. Originalberichte und A/B-Protokolle liegen als `startprobe-pc-02-intel*.json` in der lokalen Prüfablage.
+- Im lokalen Startskript schränkt `SetDefaultDllDirectories` die Suche vor dem App-Import ein. Der Herkunftsvergleich verwendet aufgelöste Windows-Dateipfade. Die paketinterne Probe bestand mit geerbtem Poppler-Pfad sowohl aus dem umgeleiteten Ordner als auch aus einem direkt auflösbaren Ordner. Geprüft wurden sechs Ansichten, Anlegen/Abhaken/Undo, Sicherungsrundlauf, Tcl/Tk 9.1.0 und isolierte Testdaten. Der normale Start erreichte `ui_ready` und beendete sich regulär mit Exitcode 0. Für diese Gegenproben wurde ausschließlich das eingebettete Startskript in einer Kopie des CI-Entwicklungsbaus ausgetauscht. Nachweise stehen in `bootstrap-kandidat-pc-02.json` und `pc-02-kandidat-normalstart.json`. Alle 94 Paketwerkzeugtests sind lokal grün. Der reguläre Neubau erfordert die vollständige gepinnte Windows-Baulaufzeit, die hier nicht vorliegt.
+- Auf der lokalen Python-Quelle bestand der gezielte Tagesentlastungs-/Dialoglauf einschließlich Zieltag, neuer Bilanz, Escape, Fälligkeit und einem gemeinsamen Undo. Der JSON-Canvas-Export bestand mit Verlustbericht, Abbruchprobe und globaler Pinnwand aus „Heute“. Im lokalen Vergleichsordner `13_TK-Test-Umgebung/PC-02-Intel/2026-11-13_3.55.1` liegen 13 unveränderte Berichte zu diesem Prüfplatz einschließlich `pc-02-pruefherkunft.json` mit Quell-, Test-, Fixture- und Pakethashes.
+- Strenge lokale CI-Grundstufe auf PC-02: 19/19, einschließlich Dokumentationsindex mit 421 lokalen Links, Werkzeugtests, Fachlogik, Startprobe und bytegleicher Python-Lieferung. Der Nachlauf steht unter `lokale-grundstufe-paketstarter-04/ergebnis.json`. Frühere rote Vorläufe bleiben erhalten. Der Synchronisationswächter bestätigte die bereinigte Arbeitsablage. Die sieben wiederhergestellten OneDrive-Konfliktkopien liegen separat unter `onedrive-konfliktkopien`.
+- Tcl und Tk suchen in den gepinnten Windows-Quellen zuerst nach externen versionierten ICU-DLLs. Der Windows-Loader beschränkt die Suche nach DLL-Namen auf die angegebenen Verzeichnisse. [Tcl-Quelle](https://github.com/tcltk/tcl/blob/0c6bad08d91fa2ad51f05a50a41f8c1ea82ce985/generic/tclIcu.c#L1269-L1347), [Tk-Quelle](https://github.com/tcltk/tk/blob/3f45110c0a568b70f2ebd5412f215e87d199bc7d/generic/tkIcu.c#L231-L290), [Windows-API](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-setdefaultdlldirectories).
 
 ## Dokumentationsabgleich (13.11.2026)
 
@@ -8,7 +63,7 @@ Der [Nachweis zur Dokumentationspflege](../tests/qa-3.55.1/dokumentation_2026-11
 
 Auf dem macOS-Nachbaustand 3.55.0 wurden Fundorte im Hauptbereich und in der Nebenansicht sowie der JSON-Canvas-Export mit Verlustbericht manuell geprüft. Der Sicherungsrundlauf im Parkquartier-Prüfbestand zeigt die Wiederherstellung des geänderten Seitentexts, des Seitenbilds und der sichtbaren Aufgaben mit Fälligkeiten. Die Screenshots dokumentieren den Rundlauf in der laufenden Sitzung.
 
-3.55.1 übernimmt den vereinfachten Dialog „Tag entlasten“ und die Korrekturen für JSON Canvas und die voreingestellten Dateinamen. Die nachfolgenden GitHub-Läufe gelten für ihre jeweils genannten 3.55.0-Commits. Die plattformübergreifende Freigabe für 3.55.1 steht aus.
+3.55.1 übernimmt den vereinfachten Dialog „Tag entlasten“ und die Korrekturen für JSON Canvas und die voreingestellten Dateinamen. Die menschliche Nachprüfung von „Tag entlasten“ auf 3.55.1 steht aus. Die nachfolgenden historischen GitHub-Läufe gelten für die jeweils genannten 3.55.0-Commits.
 
 ## Plattformprüfung und Pakete auf main (12.11.2026)
 
@@ -213,7 +268,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 13.11.2026 · Glide 3.55.1 · Aufgabenformat 26
+Stand 13.11.2026 · Glide 3.60.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

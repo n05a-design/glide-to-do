@@ -96,6 +96,21 @@ def clamp(width, height, x, y, screen_width, screen_height, minimum=COMPACT_MIN,
     return width, height, x, y
 
 
+def keep_visible(x, y, width, bounds, margin=VISIBLE_MARGIN):
+    """Lage der Normalansicht: ein sichtbarer Streifen bleibt auf der Arbeitsfläche.
+
+    `bounds` ist (links, oben, Breite, Höhe) der Arbeitsfläche. Die Maße des
+    Fensters bleiben unberührt, seine Höhe geht in die Regel nicht ein: Die
+    Oberkante bleibt auf der Fläche, seitlich genügt der Streifen. Anders als
+    `clamp` gilt die Regel für jede gemeldete Fläche, auch für 0 × 0 – so
+    rechnete die Fensterlage beim Start schon vor dieser Auslagerung.
+    """
+    left, top, screen_width, screen_height = bounds
+    x = max(left - (width - margin), min(x, left + screen_width - margin))
+    y = max(top, min(y, top + screen_height - margin))
+    return x, y
+
+
 def compact_geometry(normal, saved, screen_width, screen_height, origin=(0, 0)):
     """Fensterlage beim Eintritt in den Kompaktmodus.
 
