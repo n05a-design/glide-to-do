@@ -132,13 +132,18 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
                            for row in dict(menus)['Ansicht'])
             assert app.ITEM_KIND_LABELS[app.ITEM_KIND_LONG] == 'Langtext'
             assert app.ICONS['inbox'] != app.ICONS['move_down']
-            assert app.ICONS['overdue'] != app.ICONS['move_up']
             assert app.ICONS['timer'] != app.ICONS['history']
             symbols = {}
             for key, value in app.ICONS.items():
                 symbols.setdefault(value, set()).add(key)
             duplicate_roles = {frozenset(keys) for keys in symbols.values() if len(keys) > 1}
-            assert duplicate_roles <= {frozenset(('move_up','sort_ascending')), frozenset(('move_down','sort_descending'))}
+            # D84 (3.63.0): eine kompakte gefüllte Dreieckfamilie für Richtung,
+            # Klappen, Auswahlfelder, Sortierung und Verspätet. Gleiche Nutzung
+            # soll nicht in unterschiedlichen Zeichen auseinanderlaufen; diese
+            # Rollen teilen ihr Zeichen deshalb ausdrücklich (Inhaber 15.11.2026).
+            assert duplicate_roles <= {frozenset(('move_up', 'overdue', 'dropdown_open', 'sort_ascending')),
+                                       frozenset(('move_down', 'dropdown_closed', 'sort_descending')),
+                                       frozenset(('group', 'next'))}, duplicate_roles
             actions = app.app_action_entries()
             assert not [a for a in actions if a['group'] == 'Weitere Aktionen']
             app.apply_reminder_badge(1); idle()
