@@ -1,0 +1,178 @@
+{
+  "app_sha256": "d368740aa9b0be18856b336ce4f5e582742de4b9fbe275956568fe1478014e12",
+  "faelle": {
+    "side_verweisaktionen": {
+      "ok": true,
+      "befund": "Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.501,
+      "gestartet_unix": 1794763416.0534058
+    },
+    "side_trefferuebersicht": {
+      "ok": true,
+      "befund": "Abschnitt/Ausschnitt je Treffer, Ansteuern über den Suchweg, veraltete Einträge und kein Treffer wirkungslos, 50er-Grenze, Listengruppen; Modell/Datei/Undo/Haupteditor unverändert; 85 Knopfprüfungen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 8.594,
+      "gestartet_unix": 1794763419.5560484
+    },
+    "side_nachschlagen": {
+      "ok": true,
+      "befund": "Sperrgrund ohne Nebenansicht/Markierung, Suche mit erstem Treffer, readonly verfügbar, Blockaktionen, Aufgabentitel aus dem Kontextmenü; Modell/Datei/Undo/Haupteditor unverändert",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.451,
+      "gestartet_unix": 1794763428.1515653
+    },
+    "home_fokusdauer": {
+      "ok": true,
+      "befund": "Mehr-Menü „Fokus für“ mit Vorgabe-Häkchen, Start 15/50 min, Aufwand 30 min ohne Vorgabe, gespeicherte Vorgabe, Intervall/Fortsetzen, +5 Minuten, Sperre, Speicherfehler, Neustart, Aufgaben-Kontextmenü",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 7.162,
+      "gestartet_unix": 1794763431.604276
+    },
+    "fokus_wechseln": {
+      "ok": true,
+      "befund": "Fokusfeld „Wechseln zu …“: Knopf öffnet Menü, bis zu fünf Tagesaufgaben in Rangfolge von „Nächste Aufgabe“ ohne Blockierte/Erledigte/andere Tage, gekürzte Titel, Wechsel bucht Zeit, veraltete Wahl mit Warnung, Speicherfehler, leere Wahl, Zahl der übrigen jenseits der Grenze",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.904,
+      "gestartet_unix": 1794763438.7672093
+    },
+    "side_suchverlauf": {
+      "ok": true,
+      "befund": "Nebenansicht „Letzte Suchen …“: leer gesperrt, Tippen merkt nichts, Weiter/Zurück/Nachschlagen merken nur Suchen mit Treffer, ✓ am aktuellen Begriff, Wahl sucht erneut, Grenze 8, Pfeiltasten, Liste leeren, Datenordnergrenze, lesend, Knopfprüfung",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.707,
+      "gestartet_unix": 1794763442.6728072
+    },
+    "fokus_als_naechstes": {
+      "ok": true,
+      "befund": "Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“ mit Zahl der übrigen, folgt Erledigen/Wechsel/Undo, keine Neubestimmung im Sekundentakt, leerer Zustand, Knopfprüfung",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.132,
+      "gestartet_unix": 1794763445.3813457
+    },
+    "fokus_menue": {
+      "ok": true,
+      "befund": "Menü „Ansichten“/Aktionsauswahl: vier Fokusbefehle mit Gruppe „Planen und einordnen“, Hinweis ohne Sitzung, Pause/Fortsetzen, +5 Minuten, Wechseln zu …, Beenden und Buchen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.968,
+      "gestartet_unix": 1794763448.5151243
+    },
+    "home_fokus_laeuft": {
+      "ok": true,
+      "befund": "Kachel „Nächste Aufgabe“: laufender Fokus benannt, „Fokus anzeigen“ öffnet Heute ohne Neustart, danach wieder „Fokus starten“",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.396,
+      "gestartet_unix": 1794763451.4852276
+    },
+    "side_abschnitte": {
+      "ok": true,
+      "befund": "Nebenansicht Alt+Pfeil runter/hoch: Seite über Einfügemarke und Liste über Gruppen in Anzeigereihenfolge, sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend, in Hilfe › Tastenkürzel",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.136,
+      "gestartet_unix": 1794763454.8833737
+    },
+    "ansichtssymbole": {
+      "ok": true,
+      "befund": "12 Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; eine dauerhafte Zeilenaktion per Tastatur auf stabiler Aufgaben-ID",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 4.76,
+      "gestartet_unix": 1794763458.0203876
+    },
+    "eckenlabels": {
+      "ok": true,
+      "befund": "Liste, Tabelle, Pinnwand, Ordner und Seite bei 1280/860 px: Chips in der Kartenecke, ohne Überdeckung",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 4.906,
+      "gestartet_unix": 1794763462.7820466
+    },
+    "hinweisplatz": {
+      "ok": true,
+      "befund": "Liste, Tabelle, Pinnwand, Seite: Hinweise bei 1280 px, keine bei 860 px und im Kompaktmodus; Schalter unverändert",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 7.625,
+      "gestartet_unix": 1794763467.689795
+    },
+    "werkzeugzeile": {
+      "ok": true,
+      "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 6.212,
+      "gestartet_unix": 1794763475.3161623
+    }
+  },
+  "fehler": [],
+  "gruppe": "navigation",
+  "vorgesehene_faelle": [
+    "side_verweisaktionen",
+    "side_trefferuebersicht",
+    "side_nachschlagen",
+    "home_fokusdauer",
+    "fokus_wechseln",
+    "side_suchverlauf",
+    "fokus_als_naechstes",
+    "fokus_menue",
+    "home_fokus_laeuft",
+    "side_abschnitte",
+    "ansichtssymbole",
+    "eckenlabels",
+    "hinweisplatz",
+    "werkzeugzeile"
+  ],
+  "laufender_fall": null
+}

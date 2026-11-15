@@ -8,7 +8,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -2867,10 +2867,10 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 **C – Rest:** Offen nach D90 sind die Mac-Läufe von `test_modalvertrag.py` (nach 3a) und `test_abbauvertrag.py` auf 3.63.0. Ohne weitere Inhaberentscheidung werden in den Schnitten miterledigt: die Hypothese zu `unbind` mit Kennung unter Python 3.12, der Fall „Schließen bei offenem modalem Dialog“ und ein Vorschlag zu WA-50. Paket 3c ist nicht begonnen und braucht als Produktionsrunde eine eigene Freigabe.
 
-### 21.99 Korrekturversion 3.63.1 nach dem CI-Volllauf (15.11.2026)
+### 21.99 Korrekturversionen 3.63.1 und 3.63.2 nach dem CI-Volllauf (15.11.2026)
 
-**Auftrag:** CI-Volllauf und Linux-Gegenproben 3.63.0 rot; Ursachen beheben und als 3.63.1 liefern (Inhaber 15.11.2026).
+**Auftrag:** CI-Volllauf und Linux-Gegenproben 3.63.0 rot; Ursachen beheben und als 3.63.1 liefern; die danach sichtbaren Befunde (Kompaktkopf, Linux-Bereichspfeil b09) als 3.63.2 (Inhaber 15.11.2026).
 
-**Umgesetzt:** Testerwartungen an D84 angeglichen; Anzeigeknopf der Zeichenleiste nur mit Profilnamen; Zeilenaktionen beim Scrollen nur umgesetzt; gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt (Design Richtlinien D84); Kompaktkopf einheitlich 28 px (D85). Versionswechsel 3.63.1, Lieferung per `abgleich_07.py`.
+**Umgesetzt:** Testerwartungen an D84 angeglichen; Anzeigeknopf der Zeichenleiste nur mit Profilnamen; Zeilenaktionen beim Scrollen nur umgesetzt; gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt (Design Richtlinien D84); in 3.63.2 Kompaktkopf einheitlich 28 px (D85) und Bereichspfeil-Ausrichtung ohne Glyphenabhängigkeit. Versionswechsel 3.63.1 und 3.63.2, Lieferung per `abgleich_07.py`.
 
 **Prüfung / Rest:** Lokaler Volllauf und CI-Grundstufe grün (Windows/Tk 9, künstliche Daten), Belege im QA-Bericht. Status: lokal abgeschlossen; offen sind Linux-CI-Bestätigung, native Matrix, Pakete und menschliche Sichtabnahme.

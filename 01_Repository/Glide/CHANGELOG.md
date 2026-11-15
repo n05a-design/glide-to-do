@@ -3,6 +3,14 @@
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.63.2 – 15.11.2026
+
+Zweite Korrekturversion nach dem CI-Volllauf: Befunde, die erst nach der Lieferung von 3.63.1 sichtbar wurden. Datenformat 26 unverändert.
+
+- Kompaktkopf: Suche, Erfassung, Menü und Normalansicht sind alle 28 px hoch wie der „…“-Knopf nach D85. Zuvor stand der Menüknopf mit 28 px zwischen 38 px hohen Nachbarn (`test_arbeitsmodi`, Fall `kompakt`).
+- Bereichspfeile der Seitenleiste stehen auch unter Linux auf der Großbuchstabenmitte: Die Ausrichtung des gezeichneten Dreiecks brach ab, wenn die Symbolschrift ▾ nicht enthielt (Linux-CI `test_uiux_paket` b09, 1,17 px).
+- Version und aktuelle Fixtures auf 3.63.2 angehoben. Prüfungen und Grenzen im QA-Bericht.
+
 ## 3.63.1 – 15.11.2026
 
 Korrekturversion: Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; dahinter lagen weitere Befunde. Datenformat 26 unverändert.
@@ -10,8 +18,6 @@ Korrekturversion: Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features3
 - Der Anzeigeknopf der Zeichenleiste zeigt nur den Profilnamen mit Menümarker („Standard ▾“). Mit „Anzeige: …“ (180 px) passten die drei Pflichtknöpfe bei 860 × 700 nicht (`test_mindestgroesse330`). `test_features323` erwartet die Tagespfeile ◂/▸.
 - Zeilenaktionen werden beim Scrollen nur umgesetzt statt alle Knöpfe und Bänder zu entfernen und neu zu setzen. Das Scrollen der Liste kostete seit den Zeilenbändern etwa 85 statt 50 ms je Bild (`test_tempo330`, Windows/Tk 9); jetzt wieder ~50 ms, die Tabelle ~18 statt 41 ms. `test_kompression330` und `test_notizbereich330` prüfen Klapppfeil und Spaltentitel gegen die aktuellen Konstanten.
 - `test_bedienung33316` erlaubt die von D84 gewollten gemeinsamen Dreieckzeichen ausdrücklich, auch „Verspätet“ = „Nach oben“ (▴). Gleiche Nutzung soll nicht in unterschiedlichen Zeichen auseinanderlaufen (Inhaber 15.11.2026).
-- Kompaktkopf: Suche, Erfassung, Menü und Normalansicht sind alle 28 px hoch wie der „…“-Knopf nach D85. Zuvor stand der Menüknopf mit 28 px zwischen 38 px hohen Nachbarn (`test_arbeitsmodi`, Fall `kompakt`).
-- Bereichspfeile der Seitenleiste stehen auch unter Linux auf der Großbuchstabenmitte: Die Ausrichtung des gezeichneten Dreiecks brach ab, wenn die Symbolschrift ▾ nicht enthielt (Linux-CI `test_uiux_paket` b09, 1,17 px).
 - Version und aktuelle Fixtures auf 3.63.1 angehoben. Prüfungen und Grenzen im QA-Bericht.
 
 ## 3.63.0 – 15.11.2026
