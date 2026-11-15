@@ -20,6 +20,7 @@ Nachabnahme desselben lokalen Versionskandidaten:
 - Version und aktuelle Fixtures auf 3.63.0 angehoben; Datenformat 26 unverändert. Prüfungen und Grenzen im QA-Bericht.
 - CI-Nachtrag: Der Anzeigeknopf der Zeichenleiste zeigt nur den Profilnamen mit Menümarker („Standard ▾“). Mit „Anzeige: …“ (180 px) passten die drei Pflichtknöpfe bei 860 × 700 nicht (`test_mindestgroesse330`). `test_features323` erwartet die Tagespfeile ◂/▸.
 - CI-Nachtrag: Zeilenaktionen werden beim Scrollen nur umgesetzt statt alle Knöpfe und Bänder zu entfernen und neu zu setzen. Das Scrollen der Liste kostete seit den Zeilenbändern etwa 85 statt 50 ms je Bild (`test_tempo330`, Windows/Tk 9); jetzt wieder ~50 ms, die Tabelle ~18 statt 41 ms. `test_kompression330` und `test_notizbereich330` prüfen Klapppfeil und Spaltentitel gegen die aktuellen Konstanten.
+- CI-Nachtrag: `test_bedienung33316` erlaubt die von D84 gewollten gemeinsamen Dreieckzeichen ausdrücklich, auch „Verspätet“ = „Nach oben“ (▴). Gleiche Nutzung soll nicht in unterschiedlichen Zeichen auseinanderlaufen (Inhaber 15.11.2026).
 
 ## Prüfwerkzeuge – 14.11.2026 (nach 3.62.0)
 
