@@ -68,7 +68,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen a
 | 3.61.0/3.62.0 | Linux-/Windows-Vollprüfung, macOS- und Windows-Paket zum Merge-Commit `6d719ca7` (PR #85, #87, #88 gemergt) | ▶ | CI-Ergebnisse dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)) | Fenster-/Toplevel-Lebensdauer | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)) | 3c Fenster-/Toplevel-Lebensdauer, danach Fokusrückgabe | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2854,7 +2854,20 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 **Zusammenführung mit `main` 3.62.0 (15.11.2026):** Der Kandidat entstand auf 3.60.0 und ist mit 3.61.0/3.62.0 zusammengeführt. §21.96 und §21.97 hießen bis dahin §21.92 und §21.93, D84/D85 hießen D81/D82, der Systemkatalog V1.28/V1.29 hieß V1.24/V1.25. Fixtures und Python-Lieferung sind aus dem zusammengeführten Quellstand neu erzeugt; veraltete Handbuch-, Richtlinien- und Prüflistenstellen sind korrigiert. Prüfumfang und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#zusammenführung-3630-mit-main-3620-15112026). Offen: Vollprüfung, native Pakete, menschliche Sichtabnahme, In-App-Hilfe zu Anzeigeprofilen und Sammelaufschub, Push.
 
-### 21.98 Korrekturversion 3.63.1 nach dem CI-Volllauf (15.11.2026)
+### 21.98 Richtungsentscheidungen zur Shell-Trennung, D86–D90 (15.11.2026)
+
+**A – Auftrag:** Der Inhaber legt am 15.11.2026 die Richtung der Shell-Trennung fest und übernimmt die fünf vorgelegten Empfehlungen („Ja, alle so“). Nur Dokumentation; Produktcode, App-Version 3.63.0 und Glide-System V1.29 bleiben unverändert.
+
+**B – Entscheidungen** (Wortlaut in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md)):
+1. **D86 Paketgrenze:** Shell-Module bleiben vorerst flach in `src/glide`, mit zentraler Modulliste und Importregel-Test. Das Paket `glide_shell` ist festes Ziel vor Paket 6; erst dann werden `abgleich_07.py`, Mac-Vorstufe und `baue_paket.py` umgebaut.
+2. **D87 Fokusrückgabe:** Die Shell gibt nach einem modalen Dialog den Fokus zurück; eigener kleiner Schnitt mit eigener Version.
+3. **D88 Reihenfolge:** 3c Fensterlebensdauer (zuerst die sechs nicht registrierten Zeitgeber aus §21.95) → Fokusrückgabe → Paket 4 → Pakete 5 und 6.
+4. **D89 Direktstart:** Die Python-Prüfung steht am Anfang von `app.pyw`; gebündelt mit dem Rest von WA-49.
+5. **D90 Mac-Nachweis:** Ein Shell-Schnitt gilt erst nach einem Mac-Lauf seiner Vertragstests als abgeschlossen.
+
+**C – Rest:** Offen nach D90 sind die Mac-Läufe von `test_modalvertrag.py` (nach 3a) und `test_abbauvertrag.py` auf 3.63.0. Ohne weitere Inhaberentscheidung werden in den Schnitten miterledigt: die Hypothese zu `unbind` mit Kennung unter Python 3.12, der Fall „Schließen bei offenem modalem Dialog“ und ein Vorschlag zu WA-50. Paket 3c ist nicht begonnen und braucht als Produktionsrunde eine eigene Freigabe.
+
+### 21.99 Korrekturversion 3.63.1 nach dem CI-Volllauf (15.11.2026)
 
 **Auftrag:** CI-Volllauf und Linux-Gegenproben 3.63.0 rot; Ursachen beheben und als 3.63.1 liefern (Inhaber 15.11.2026).
 
