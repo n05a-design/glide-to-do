@@ -4,6 +4,10 @@ Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
 
 Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Regeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Am 14.11.2026 auf den aktuellen Stand gekürzt; frühere Übergabestände trägt Git.
 
+## Korrekturversion 3.63.1 (15.11.2026)
+
+Behebt die Befunde des CI-Volllaufs 3.63.0: veraltete Glyphenerwartungen in Tests, Anzeigeknopf im Zeicheneditor nur mit Profilnamen („Standard ▾“), flüssiges Scrollen trotz Zeilenbändern, gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt, Kompaktkopf einheitlich 28 px. Lokaler Volllauf grün (Windows/Tk 9, künstliche Daten); Linux-CI, native Matrix, Pakete und Sichtabnahme offen. Auftrag im [Plan §21.98](Glide_Entwicklungsplan.md#2198-korrekturversion-3631-nach-dem-ci-volllauf-15112026), Befunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#korrekturversion-3631--ci-volllauf-15112026).
+
 ## Lokaler Kandidat 3.63.0 (15.11.2026)
 
 Nachabnahme D85: größere Bereichs-/Navigationsmarker, randlose Zeilenaktionen mit durchgehenden Zuständen, Alle bis morgen 09:00 Uhr, vier Profile im Zeicheneditor und korrigierte Tabellenkopfbedienung. Auftrag und Abgrenzung im Plan §21.97; finale Laufbefunde im Nachabnahme-QA.

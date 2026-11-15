@@ -2853,3 +2853,11 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 **Prüfung / Rest:** Baseline B09 und Erinnerungsprüfung vor Änderungen grün. Neuer UI-Fall `nachabnahme363`, B09/B12-B13, 1.189 Fachtests sowie Bildfolgenbedienung und -geometrie gezielt geprüft; tatsächlicher finaler Prüfstatus in `tests/qa-3.63.0/nachabnahme_2026-11-15/`. Originale Zwischenfehler bleiben im QA-Bericht getrennt. Python-Lieferung wird abgeglichen. Native Pakete, vollständige Plattform-/DPI-Matrix, menschliche Sichtabnahme und Git-Veröffentlichung offen.
 
 **Zusammenführung mit `main` 3.62.0 (15.11.2026):** Der Kandidat entstand auf 3.60.0 und ist mit 3.61.0/3.62.0 zusammengeführt. §21.96 und §21.97 hießen bis dahin §21.92 und §21.93, D84/D85 hießen D81/D82, der Systemkatalog V1.28/V1.29 hieß V1.24/V1.25. Fixtures und Python-Lieferung sind aus dem zusammengeführten Quellstand neu erzeugt; veraltete Handbuch-, Richtlinien- und Prüflistenstellen sind korrigiert. Prüfumfang und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#zusammenführung-3630-mit-main-3620-15112026). Offen: Vollprüfung, native Pakete, menschliche Sichtabnahme, In-App-Hilfe zu Anzeigeprofilen und Sammelaufschub, Push.
+
+### 21.98 Korrekturversion 3.63.1 nach dem CI-Volllauf (15.11.2026)
+
+**Auftrag:** CI-Volllauf und Linux-Gegenproben 3.63.0 rot; Ursachen beheben und als 3.63.1 liefern (Inhaber 15.11.2026).
+
+**Umgesetzt:** Testerwartungen an D84 angeglichen; Anzeigeknopf der Zeichenleiste nur mit Profilnamen; Zeilenaktionen beim Scrollen nur umgesetzt; gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt (Design Richtlinien D84); Kompaktkopf einheitlich 28 px (D85). Versionswechsel 3.63.1, Lieferung per `abgleich_07.py`.
+
+**Prüfung / Rest:** Lokaler Volllauf und CI-Grundstufe grün (Windows/Tk 9, künstliche Daten), Belege im QA-Bericht. Status: lokal abgeschlossen; offen sind Linux-CI-Bestätigung, native Matrix, Pakete und menschliche Sichtabnahme.

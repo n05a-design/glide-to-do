@@ -1,5 +1,21 @@
 # QA-Bericht – Glide 3.63.1
 
+## Korrekturversion 3.63.1 – CI-Volllauf (15.11.2026)
+
+Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; die Gegenproben meldeten deshalb „NICHT BELEGT“. Dahinter lagen weitere Befunde, die erst der fortgesetzte Lauf zeigte. Inhaberentscheidungen in dieser Runde: Anzeigeknopf nur mit Profilnamen, gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt, Kompaktkopf einheitlich 28 px.
+
+| Befund | Ursache | Korrektur |
+|---|---|---|
+| `test_features323`, `test_kompression330`, `test_notizbereich330` | Erwartungen noch mit ◀/▶ bzw. ▷ und ungepolstertem Spaltentitel | Erwartungen auf ◂/▸, `SIDEBAR_SECTION_ARROWS` und Haarspatien vor „Titel“ |
+| `test_mindestgroesse330` (Zeichnung, 860 × 700) | Pflichtknöpfe Werkzeug + „Anzeige: Standard“ (180 px) + Mehr brauchten 391 von 378 px | Anzeigeknopf „Standard ▾“, Breite nach Text, Tooltip „Anzeigeprofil“ |
+| `test_tempo330` Liste ~85 ms je Bild (3.62.0: ~50) | Zeilenaktionen: alle Knöpfe und Bänder je Scrollschritt entfernt und neu gesetzt; das Dreieck-Overlay war es nicht (Gegenprobe) | nur umsetzen, Überzählige ausblenden: Liste ~51 ms, Tabelle 18 statt 41 ms |
+| `test_bedienung33316` | ▴ für Verspätet und Nach oben | Doppelung nach D84 ausdrücklich erlaubt (Inhaber) |
+| `test_arbeitsmodi` Fall `kompakt` | „…“ nach D85 28 px, Nachbarn 38 px | Kompaktkopf einheitlich `COMPACT_HEADER_CONTROL_HEIGHT` = 28 px |
+
+Nachweis: Volllauf `pruefen.py --modus voll` auf dem Endstand, 134 Schritte ausgeführt, Ergebnis „automatisierte Prüfungen erfolgreich“; Belege in `tests/qa-3.63.1/volllauf_2026-11-15/`. CI-Grundstufe bestanden; `abgleich_07.py` ohne Abweichung, 3.63.0 im Archiv. Umgebung: Windows, Python 3.15.1 / Tk 9, ausschließlich künstliche Daten. Die Messung von `test_tempo330` schwankt unter Windows stark (3.62.0 einmal 236 ms); Vergleichswerte sind Mehrfachläufe.
+
+Offen: Linux-CI auf GitHub für den Endstand nicht eingesehen, native Mac-/Linux-Abnahme, eigenständige Pakete, menschliche Sichtabnahme (insbesondere Kompaktkopf mit 28 px und Anzeigeknopf).
+
 ## Zusammenführung 3.63.0 mit `main` 3.62.0 (15.11.2026)
 
 Der lokale Kandidat 3.63.0 (`835ba173`, Basis 3.60.0 `b362abca`) ist mit `main` 3.62.0 (`e29439db`) zusammengeführt. Von 66 Konflikten waren 54 reine Versions- und Standzeilen und zehn inhaltliche Dokumentstellen; im Code kollidierte nur `APP_VERSION`. Die Kennungen des Kandidaten sind gehoben, weil `main` sie mit 3.61.0 und 3.62.0 bereits vergeben hatte: D81/D82 → D84/D85, Plan §21.92/§21.93 → §21.96/§21.97, Glide-System V1.24/V1.25 → V1.28/V1.29. Die beiden folgenden Abschnitte nennen die neuen Kennungen; ihre Prüfaussagen gelten für den Kandidaten vor der Zusammenführung.

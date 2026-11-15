@@ -642,4 +642,4 @@ Der Zeichen-/Pixel-Editor bietet die Anzeigeprofile **Standard / Erweitert / Ani
 
 ### Korrekturversion 3.63.1
 
-Der Anzeigeknopf im Zeicheneditor nennt nur das Profil („Standard ▾“), damit Werkzeug, Anzeige und Mehr auch bei 860 × 700 in die feste Leiste passen; der Tooltip nennt das Anzeigeprofil. Beim Scrollen werden die „…“-Knöpfe und ihre Zeilenbänder nur verschoben statt neu gesetzt; Liste und Tabelle scrollen wieder mit der Bildzeit von 3.62.0. Gemeinsame Dreieckzeichen für Rollen gleicher Nutzung (etwa ▴ für Nach oben und Verspätet) sind nach D84 gewollt.
+Der Anzeigeknopf im Zeicheneditor nennt nur das Profil („Standard ▾“), damit Werkzeug, Anzeige und Mehr auch bei 860 × 700 in die feste Leiste passen; der Tooltip nennt das Anzeigeprofil. Beim Scrollen werden die „…“-Knöpfe und ihre Zeilenbänder nur verschoben statt neu gesetzt; Liste und Tabelle scrollen wieder mit der Bildzeit von 3.62.0. Gemeinsame Dreieckzeichen für Rollen gleicher Nutzung (etwa ▴ für Nach oben und Verspätet) sind nach D84 gewollt. Im Kompaktmodus sind alle vier Kopfknöpfe 28 px hoch wie der „…“-Knopf.

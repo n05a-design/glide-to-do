@@ -1,0 +1,1353 @@
+{
+  "app_sha256": "34144d9d43980338ce01dbfdda983a2fd4a9b5bd1a75bb5f7a965e5431712777",
+  "faelle": {
+    "kartenflaechen": {
+      "ok": true,
+      "befund": "59 Farb-/Design-/Ansichtswechsel und Neustart: sechs Bäume und beide Karten auf Themenfarbe, Hintergrund dahinter",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 12.69,
+      "gestartet_unix": 1794748596.7773995
+    },
+    "schriftstile": {
+      "ok": true,
+      "befund": "Vier Stilklassen und Schriftgewicht gespeichert; DM Serif Display und Charis SIL automatisch Bold, Standard und Kräftig nach Neustart",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 14.314,
+      "gestartet_unix": 1794748609.4688704
+    },
+    "seitenaktionen": {
+      "ok": true,
+      "befund": "22 aktive Seitenmenüeinträge auffindbar; Filter, Esc/Fokus, Ausführen, Gliederung, leere Treffer",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.207,
+      "gestartet_unix": 1794748623.7841434
+    },
+    "blockaktionen": {
+      "ok": true,
+      "befund": "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.014,
+      "gestartet_unix": 1794748625.9925108
+    },
+    "schreibschutz": {
+      "ok": true,
+      "befund": "Lesbare Aktionen bleiben, Änderungen gesperrt mit Grund, keine Kopfverweise",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 1.853,
+      "gestartet_unix": 1794748628.0085888
+    },
+    "kopfverweise": {
+      "ok": true,
+      "befund": "Titel nur im Kopf (1280/860 px), Text beginnt oben, Symbol/Titelbild über Mehr, Pixelsymbol fest links der Griffspalte (Klick/Return/Leertaste, scrollt nicht mit), 16 Knopfprüfungen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.264,
+      "gestartet_unix": 1794748629.8627443
+    },
+    "notiz": {
+      "ok": true,
+      "befund": "Notizaktionen mit eigenen Abschnitten, Blockaktionen und Griff wie in Seiten",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 1.822,
+      "gestartet_unix": 1794748632.1283135
+    },
+    "nebenansicht_liste": {
+      "ok": true,
+      "befund": "Abhaken per Kästchen/Leertaste mit einem Undo/Redo, Text klickt nicht, Umbenennen, Papierkorb, Öffnen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.16,
+      "gestartet_unix": 1794748633.9514053
+    },
+    "nebenansicht_seite": {
+      "ok": true,
+      "befund": "Blockarten, echtes Kästchen mit einem Undo, lesend gesperrt, Esc schließt",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.32,
+      "gestartet_unix": 1794748637.1128252
+    },
+    "nebenansicht_inspektor": {
+      "ok": true,
+      "befund": "Vorrang und Rückkehr gegenüber dem Inspektor, schmal als Überlagerung, 24 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.4,
+      "gestartet_unix": 1794748639.4339514
+    },
+    "nebenansicht_einstiege": {
+      "ok": true,
+      "befund": "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.215,
+      "gestartet_unix": 1794748642.8364348
+    },
+    "verweisvorschau": {
+      "ok": true,
+      "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 3.078,
+      "gestartet_unix": 1794748645.0523782
+    },
+    "verweisvorschau_grenzen": {
+      "ok": true,
+      "befund": "Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; 224 Knopfprüfungen in acht Konfigurationen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 8.679,
+      "gestartet_unix": 1794748648.1318197
+    },
+    "seitenleiste_kontext": {
+      "ok": true,
+      "befund": "Rechtsklick auf Liste/Seite/Notiz/Zeichnung/Ordner/Systemzeile ohne Öffnen; Nebenansicht, Linksklick, Pfeiltaste und Mehrfachauswahl erhalten",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 2.949,
+      "gestartet_unix": 1794748656.8120012
+    },
+    "kompakt": {
+      "ok": true,
+      "befund": "Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, 20 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 1,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 4,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+            "focus_class": "Text"
+          }
+        }
+      ],
+      "dauer_s": 6.206,
+      "gestartet_unix": 1794748659.7623825
+    },
+    "kompakt_ansichten": {
+      "ok": true,
+      "befund": "152 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 6.774,
+      "gestartet_unix": 1794748665.9695613
+    },
+    "kompakt_verlorenes_loslassen": {
+      "ok": true,
+      "befund": "Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "external_focus": "Tk",
+          "focus_out": [
+            "."
+          ],
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": null,
+            "focus_class": null
+          },
+          "tk_ohne_fokusmeldung": false
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ],
+      "dauer_s": 2.09,
+      "gestartet_unix": 1794748672.7450707
+    }
+  },
+  "fehler": [],
+  "gruppe": "bedienung",
+  "vorgesehene_faelle": [
+    "kartenflaechen",
+    "schriftstile",
+    "seitenaktionen",
+    "blockaktionen",
+    "schreibschutz",
+    "kopfverweise",
+    "notiz",
+    "nebenansicht_liste",
+    "nebenansicht_seite",
+    "nebenansicht_inspektor",
+    "nebenansicht_einstiege",
+    "verweisvorschau",
+    "verweisvorschau_grenzen",
+    "seitenleiste_kontext",
+    "kompakt",
+    "kompakt_ansichten",
+    "kompakt_verlorenes_loslassen"
+  ],
+  "laufender_fall": null
+}

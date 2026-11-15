@@ -33863,7 +33863,7 @@ class ListApp:
             font = (glide_symbols.BUNDLED_SYMBOL_FAMILY, self.ui_font_size(2))
             icon = True
         if str(text).strip() in (self.ICONS["overflow"], "…", "..."):
-            outline, height, radius = False, min(height, 28), 3
+            outline, height, radius = False, min(height, self.OVERFLOW_BUTTON_HEIGHT), 3
         bg_key = self.surface_key(master, bg_key)
         button = RoundedButton(
             master,
@@ -55252,6 +55252,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # B07: Die Kopfsymbole behalten ihre Bedienfläche. Das Textmenü hat
     # weniger vertikalen Innenraum und bleibt mittig in der Titelzeile.
     HEADER_CONTROL_HEIGHT = 38
+    # D85: „…“-Knöpfe höchstens 28 px. Der Kompaktkopf übernimmt dieses Maß
+    # für alle vier Knöpfe, damit Höhe und Mittellinie gleich bleiben (B07).
+    OVERFLOW_BUTTON_HEIGHT = 28
+    COMPACT_HEADER_CONTROL_HEIGHT = OVERFLOW_BUTTON_HEIGHT
     HEADER_MENU_HEIGHT = 30
     HEADER_SYMBOL_OFFSET = 3
 
@@ -68179,7 +68183,7 @@ Labels, Termine und Metadaten."""
         if kopf is not None and kopf.winfo_exists():
             return kopf
         theme = self.theme
-        hoehe = self.HEADER_CONTROL_HEIGHT
+        hoehe = self.COMPACT_HEADER_CONTROL_HEIGHT
         kopf = self.register_theme_widget(tk.Frame(self.shell, bg=theme["bg"], name="compact_header",
                                                    height=hoehe), "bg")
         self.compact_header = kopf
