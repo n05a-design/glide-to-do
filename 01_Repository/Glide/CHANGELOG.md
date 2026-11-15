@@ -18,6 +18,8 @@ Nachabnahme desselben lokalen Versionskandidaten:
 - Kleine, gefüllte Dreiecke (Inhaberwahl B) ersetzen die unterschiedlichen Outline-/Vollmarker. Bereichsüberschriften, Angeheftet und Auswahlfelder teilen die flache Rasterform mit allen ttk-Baumansichten; Größen folgen der Schrift.
 - Appweite Dreieckzeichen für Navigation, Sortierung und weitere Beschriftungen auf die kompakte gefüllte Familie vereinheitlicht. Aufklapptext in gespeicherten Seiten bleibt unverändert.
 - Version und aktuelle Fixtures auf 3.63.0 angehoben; Datenformat 26 unverändert. Prüfungen und Grenzen im QA-Bericht.
+- CI-Nachtrag: Der Anzeigeknopf der Zeichenleiste zeigt nur den Profilnamen mit Menümarker („Standard ▾“). Mit „Anzeige: …“ (180 px) passten die drei Pflichtknöpfe bei 860 × 700 nicht (`test_mindestgroesse330`). `test_features323` erwartet die Tagespfeile ◂/▸.
+- CI-Nachtrag: Zeilenaktionen werden beim Scrollen nur umgesetzt statt alle Knöpfe und Bänder zu entfernen und neu zu setzen. Das Scrollen der Liste kostete seit den Zeilenbändern etwa 85 statt 50 ms je Bild (`test_tempo330`, Windows/Tk 9); jetzt wieder ~50 ms, die Tabelle ~18 statt 41 ms. `test_kompression330` und `test_notizbereich330` prüfen Klapppfeil und Spaltentitel gegen die aktuellen Konstanten.
 
 ## Prüfwerkzeuge – 14.11.2026 (nach 3.62.0)
 
