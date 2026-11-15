@@ -15038,7 +15038,10 @@ class DrawingEditor(tk.Frame):
         self.tool_choice = self._button(top, "Pinsel ▾", self.show_tool_menu, width=130)
         self.app.add_tooltip(self.tool_choice, "Zeichenwerkzeug wählen; Kürzel im Menü")
         top.add(self.tool_choice, key="tool")
-        self.display_button = self._button(top, "Anzeige: Standard", self.show_display_profiles, width=180)
+        # Nur der Profilname mit Menümarker wie „Pinsel ▾“: Mit „Anzeige: …“
+        # passten die drei Pflichtknöpfe bei 860 × 700 nicht in die Leiste.
+        self.display_button = self._button(top, "Standard ▾", self.show_display_profiles, width=64)
+        self.app.add_tooltip(self.display_button, "Anzeigeprofil: welche Werkzeugleisten sichtbar sind")
         top.add(self.display_button, key="display")
         self.preview_button = self._button(top, "Vorschau", self.toggle_preview, width=80)
         self.more_button = self._button(top, "Mehr", self.show_more_menu, width=60)
@@ -16579,7 +16582,7 @@ class DrawingEditor(tk.Frame):
         return True
 
     def apply_display_profile(self):
-        self.display_button.set_text("Anzeige: " + self.DISPLAY_PROFILES[self.display_profile])
+        self.display_button.set_text(self.DISPLAY_PROFILES[self.display_profile] + " ▾")
         controls = glide_design.drawing_controls(self.display_profile)
         if self.animated:
             if "animation" in controls:
@@ -23896,11 +23899,17 @@ class ListApp:
     ROW_ACTION_PADDING = glide_design.SPACING[4]
     ROW_ACTION_WIDTH = ROW_ACTION_SIZE + 2 * ROW_ACTION_PADDING
 
-    def hide_quick_plan_row(self, event=None):
-        for button in getattr(self, "_row_action_buttons", ()):
-            button.place_forget()
-        for band in getattr(self, "_row_action_bands", ()):
-            band.place_forget()
+    def hide_quick_plan_row(self, event=None, keep=0):
+        """Knöpfe und Bänder ab Index `keep` ausblenden.
+
+        Seit 3.63.0 trägt jede Zeile neben dem Knopf ein Band. Alles bei jedem
+        Scrollschritt zu entfernen und neu zu setzen verdoppelte die Bildzeit
+        der Liste (test_tempo330); `show_quick_plan_row` setzt deshalb nur um.
+        """
+        for widget in (*getattr(self, "_row_action_buttons", ())[keep:],
+                       *getattr(self, "_row_action_bands", ())[keep:]):
+            if widget.winfo_manager():
+                widget.place_forget()
         self._quick_plan_row = None
 
     def row_actions_enabled(self):
@@ -23942,8 +23951,9 @@ class ListApp:
 
     def show_quick_plan_row(self, event=None):
         """Ein stabiler Mehr-Knopf je sichtbarer Aufgabe; kein Hover-Umbau."""
-        self.hide_quick_plan_row()
+        self._quick_plan_row = None
         if not self.row_actions_enabled() or not self.tree.winfo_ismapped():
+            self.hide_quick_plan_row()
             return
         buttons = getattr(self, "_row_action_buttons", None)
         if buttons is None:
@@ -23998,6 +24008,9 @@ class ListApp:
                 self.row_overflow_button = button
             button.tk.call("raise", str(button))
             index += 1
+        quick = self._quick_plan_row
+        self.hide_quick_plan_row(keep=index)
+        self._quick_plan_row = quick
         self.sync_row_action_colors()
 
     def sync_row_action_colors(self):
@@ -50961,8 +50974,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # Treeview Darstellung
     # -----------------------------
     def on_tree_scroll(self, first, last):
+        # Der Abgleich im Leerlauf setzt Knöpfe um und blendet nur übrige aus.
         self.schedule_row_actions()
-        self.hide_quick_plan_row()
         """Blendet die Scrollbar nur dann ein, wenn der Listeninhalt wirklich scrollbar ist."""
         if not hasattr(self, "scrollbar"):
             return

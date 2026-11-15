@@ -100,7 +100,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kompression-") as ordner:
         assert app.pages_listbox.winfo_manager() == "pack"
         app.toggle_sidebar_section("pages")
         ruhe()
-        assert app.pages_listbox.winfo_manager() == "" and app.pages_heading_icon.cget("text") == "▷"
+        assert app.pages_listbox.winfo_manager() == "" and app.pages_heading_icon.cget("text") == app.SIDEBAR_SECTION_ARROWS[False]
         app.toggle_sidebar_section("lists")
         ruhe()
         assert app.sidebar_listbox.winfo_manager() == ""
@@ -130,7 +130,8 @@ with tempfile.TemporaryDirectory(prefix="glide-kompression-") as ordner:
         assert app.tree.item(zeile, "text") == "Hobbit"
         werte = dict(zip(app.LIBRARY_COLUMNS[1:], app.tree.item(zeile, "values")))
         assert werte["note"] == "Klassiker" and werte["tasks"] == "1 von 2"
-        assert app.tree.heading("#0", "text").startswith("Titel")
+        # Seit 3.63.0 reservieren Haarspatien links den Platz des Aufklappdreiecks.
+        assert app.tree.heading("#0", "text").lstrip(" ").startswith("Titel")
         app.sort_library_by("created")
         ruhe()
         assert app._library_sort == ("created", False)

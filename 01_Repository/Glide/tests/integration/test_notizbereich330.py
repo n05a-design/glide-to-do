@@ -156,7 +156,7 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
         assert app.notes_heading_icon.cget("text") == app.SIDEBAR_SECTION_ARROWS[True]
         app.toggle_sidebar_section("notes")
         ruhe()
-        assert notizen.winfo_manager() == "" and app.notes_heading_icon.cget("text") == "▷"
+        assert notizen.winfo_manager() == "" and app.notes_heading_icon.cget("text") == app.SIDEBAR_SECTION_ARROWS[False]
         assert app.settings["sidebar_sections_closed"] == ["notes"]
         app.toggle_sidebar_section("notes")
         ruhe()
