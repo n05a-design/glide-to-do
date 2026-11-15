@@ -1,6 +1,6 @@
 # Probedaten
 
-Stand 14.11.2026 · Glide 3.62.0 · Speicherstufe 26 · Vorlagen 2
+Stand 15.11.2026 · Glide 3.63.0 · Speicherstufe 26 · Vorlagen 2
 
 Der [Showcase „Werkhaus West“](Showcase/README.md) enthält 14 bearbeitbare Projektdokumente, vier Stock-Referenzen, beschriftete Pinnwände, Tagesplanung, Vorlagen und einen JSON-Canvas-Export. Der Starter hält den Bestand im eigenen Arbeitsordner `Arbeitsstand-Werkhaus`.
 

@@ -1,8 +1,14 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Regeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Am 14.11.2026 auf den aktuellen Stand gekürzt; frühere Übergabestände trägt Git.
+
+## Lokaler Kandidat 3.63.0 (15.11.2026)
+
+Nachabnahme D85: größere Bereichs-/Navigationsmarker, randlose Zeilenaktionen mit durchgehenden Zuständen, Alle bis morgen 09:00 Uhr, vier Profile im Zeicheneditor und korrigierte Tabellenkopfbedienung. Auftrag und Abgrenzung im Plan §21.97; finale Laufbefunde im Nachabnahme-QA.
+
+Inhaberwahl B / D84: kleine, gefüllte Dreiecke für Seitenleistenbereiche, Angeheftet, Ordner und Auswahlfelder, passende Größen je Schriftrolle. Quelle und Python-Lieferung tragen 3.63.0, Aufgabenformat 26; Systemkatalog V1.29. Auftrag und Rest im [Plan §21.96](Glide_Entwicklungsplan.md#2196-kleine-gefüllte-dreiecke-und-version-3630-15112026), Prüfbefunde und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3630--dreieckmarker-15112026). Native Pakete, Plattformmatrix und menschliche Sichtabnahme bleiben offen. Der Kandidat entstand auf 3.60.0 (`b362abca`) und ist am 15.11.2026 mit `main` 3.62.0 (`e29439db`) zusammengeführt; dabei wurden die Kennungen auf D84/D85, §21.96/§21.97 und V1.28/V1.29 gehoben. Die Tabelle in §1 beschreibt den Unterbau 3.62.0.
 
 ## 1. Tatsächlicher Stand
 
@@ -21,7 +27,7 @@ Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Reg
 | Thema | Verbindliche Quelle |
 |---|---|
 | Aufgaben, Arbeitsvorrat, Rest | [Entwicklungsplan](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat), Runde [§21.92](Glide_Entwicklungsplan.md#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026) |
-| Entscheidungen D01–D83 und Arbeitsablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
+| Entscheidungen D01–D85 und Arbeitsablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Gestaltung | [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) mit [Gestaltungsregister](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md#gestaltungsregister) |
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
 | Prüf- und Lieferstände | [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) |

@@ -1,4 +1,40 @@
-# QA-Bericht – Glide 3.62.0
+# QA-Bericht – Glide 3.63.0
+
+## Zusammenführung 3.63.0 mit `main` 3.62.0 (15.11.2026)
+
+Der lokale Kandidat 3.63.0 (`835ba173`, Basis 3.60.0 `b362abca`) ist mit `main` 3.62.0 (`e29439db`) zusammengeführt. Von 66 Konflikten waren 54 reine Versions- und Standzeilen und zehn inhaltliche Dokumentstellen; im Code kollidierte nur `APP_VERSION`. Die Kennungen des Kandidaten sind gehoben, weil `main` sie mit 3.61.0 und 3.62.0 bereits vergeben hatte: D81/D82 → D84/D85, Plan §21.92/§21.93 → §21.96/§21.97, Glide-System V1.24/V1.25 → V1.28/V1.29. Die beiden folgenden Abschnitte nennen die neuen Kennungen; ihre Prüfaussagen gelten für den Kandidaten vor der Zusammenführung.
+
+| Gegenstand | Nachweis |
+|---|---|
+| Erzeugte Dateien | Beispieldaten, Rundgang, Showcase, Vorlagenkatalog und Releaseplanung 3.63.0 aus dem zusammengeführten Quellstand neu erzeugt; `showcase_abgleich.py` Exitcode 0 |
+| Lieferung | `abgleich_07.py`: 95 Code-Dateien und 165 Ressourcen, keine Abweichung; 3.62.0 ins Archiv. Nach der Sieben-Versionen-Regel entfielen Archivdatei und Releaseplanung 3.53.0 (Historie in Git) |
+| CI-Grundstufe | 19 von 19 Schritten ausgeführt, Exitcode 0 (`tests/qa-3.63.0/zusammenfuehrung_2026-11-15/grundstufe/ergebnis.json`) |
+| Fälle des Kandidaten | `test_uiux_paket.py --fall nachabnahme363`, `--fall b09`, `--fall b12_b13` und `test_reminders.py` grün |
+| Verträge aus 3.61.0/3.62.0 | `test_modalvertrag.py` 13 Fälle, `test_abbauvertrag.py` 4 Fälle und `test_dialog_theme.py` grün |
+| Dokumentation | Blätterzeichen ◂/▸ in Handbuch, Systemregister und manueller Prüfung; Symbolregel und „…“-Maß in den Design Richtlinien; Zeilenaktionen, Anzeigeprofil und Bildfolgenleiste im Handbuch; Prüffälle im Testplan; Sichtabnahme 3.63.0 in der manuellen Prüfung |
+
+Umgebung: Windows 11, Python 3.15.1 / Tk 9.0.4, ausschließlich künstliche Daten mit `GLIDE_DATA_DIR`. Die Ergebnisdateien der Grundstufe wurden nach dem Lauf abgelegt; Standprüfung, Datenschutz- und Ablageprüfung wurden danach gesondert wiederholt.
+
+**Grenzen:** keine Vollprüfung (`pruefen.py --modus voll`), keine native macOS- oder Linux-Prüfung, keine Paketneubauten, keine menschliche Sichtabnahme ([Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#offene-menschliche-sichtabnahme-3630)). Die In-App-Hilfe nennt die Anzeigeprofile und „Alle bis morgen“ noch nicht. Lokaler Merge-Commit, kein Push.
+
+## Nachabnahme 3.63.0 – sechs Inhaberbefunde (15.11.2026)
+
+D85 korrigiert die Markergröße, Zeilenaktionen und Tabellenkopfbedienung und ergänzt Sammelaufschub sowie Zeichenprofile. Baselines vor dieser Runde: B09 und `test_reminders.py` grün. Nach der Umsetzung bestehen `test_uiux_paket.py --fall nachabnahme363` (echte Spaltenkopfklicks auf-/absteigend, Zeilenfarben/Hover, vier Profile ohne Dokumentänderung), B09 (optische Symbolmitte), B12-B13 (Titel-/Symbolhierarchie), `test_reminders.py` (einschließlich Aufgaben-/Tageshinweisen gemeinsam, Zukunftsterminerhalt, Schreibschutz und Speicherausfall/Rücksetzung), die Bildfolgenfälle `frames` und `geometrie` sowie 1.189 Unit-Tests. Die abschließende strenge CI-Grundstufe (`nachabnahme_2026-11-15/grundstufe-abschluss/ergebnis.json`) ist mit Exitcode 0 und 19/19 ausgeführten Schritten grün, einschließlich strengem Lieferabgleich. Die abschließende Ergebnisredaktion dieses Absatzes und der Nachweis-README erfolgte danach; Standprüfung und Diff-Prüfung wurden gesondert nachgezogen. Diese Ergebnisse ersetzen keine native Vollmatrix.
+
+Nachweis: `tests/qa-3.63.0/nachabnahme_2026-11-15/` mit UI-/Animationsberichten und realen Tk-Sichtproben für Zeilenaktionen, Tabelle, Benachrichtigungen und alle vier Zeichenprofile. Sichtprobe: Titelkopf und Titelwerte fluchten; Auswahl-/Hoverfarbe reicht bis zum Aktionsrand; keine weiße „…“-Kachel. Umgebung: Windows, Python 3.15.1 / Tk 9.0.4, ausschließlich künstliche Daten mit `GLIDE_DATA_DIR`.
+
+Zwischenläufe bleiben getrennt: Der erste Erinnerungsdialogtest erwartete die alte Knopfzahl; der Animationsfall erwartete sichtbare Bildfolgenknöpfe auch im neuen Standardprofil. Beide Prüfverträge sind an die ausdrücklich gewählten Funktionen angepasst, nicht übersprungen. Ein zweiter synthetischer Kopfklick war ohne getrennte Ereigniszeiten ein Doppelklick; der Regressionstest prüft nun zwei reale einzelne Klickfolgen. Testfehler beim Nachschlagen einer Kennung und beim Erfassen einer absichtlich ausgelösten Schreibschutzwarnung sind korrigiert. Die finale Erinnerungsprüfung behandelt Schreibfehler/Schreibschutz ausdrücklich als negative Gegenproben.
+
+Version 3.63.0 und Aufgabenformat 26 bleiben erhalten. Katalog V1.29; Python-Lieferung per `abgleich_07.py`. Offen: vollständige native Plattform-/DPI-Matrix, Screenreader, menschliche Sichtabnahme und eigenständige Paketneubauten. Kein Commit, Push oder Merge dieser Runde.
+
+
+## Prüfstand 3.63.0 – Dreieckmarker (15.11.2026)
+
+D84 vereinheitlicht die kleinen gefüllten Marker. Baseline `test_uiux_paket.py --fall b09` auf dem unveränderten Appcode: grün. Auf dem geänderten Stand bestehen derselbe Fall einschließlich echter Marker-Klicks, Themenwechsel und geometrischer Bildmitte sowie neun Symbol-Unit-Tests. Die separat ausgeführten 1.187 Fachtests sind grün; der damalige UI-Nachtrag besteht ebenfalls, ist aber vor dem abschließenden Baum-Overlay gelaufen. Der endgültige CI-Nachlauf und zusätzliche Seitenleistenprüfung stehen in `tests/qa-3.63.0/dreiecke_2026-11-15/`.
+
+Zwischenbefunde bleiben getrennt: zwei Startfehler während der ersten Baum-Implementierung (ungültiger Bildzustand / Font-Objekt) sind korrigiert. Die erste CI-Grundstufe wurde durch Änderungen während des Laufs integritätsrot, obwohl die Fachtests Exitcode 0 hatten; sie ist kein grüner Nachweis. Der nächste Lauf (`grundstufe-final`) bestand die funktionalen Schritte, scheiterte aber an zwei veralteten 3.51.0-Archivdateien; Synchronisation wurde danach übersprungen. Die Dateien werden nach der Sieben-Versionen-Regel entfernt (Historie in Git); `grundstufe-abschluss` führt den gesonderten Nachlauf. Die Seitenleisten-Geometrieprüfung besteht mit 48 Konfigurationen / 384 sichtbaren Zeilen und vier Neustarts. Die erste Screenshotfassung zeigte noch falsche Baumzustände; maßgeblich sind die späteren `seitenleiste-light.png`/`seitenleiste-dark.png`. Die aufgegebene Bildzustandsimplementierung wurde durch eine Darstellung über der unveränderten nativen Indikatorfläche ersetzt; Blattzeilen bleiben ohne Pfeil.
+
+Sichtproben unter Windows (Python 3.15.1, Tk 9.0.4) mit künstlichem Showcase: hell/mittel und dunkel/groß. Keine vollständige DPI-/Schriftstil-/Plattformmatrix, kein Screenreadernachweis und keine menschliche Abnahme. Eigenständige 3.63.0-Pakete und native Mac-/Linux-Prüfungen sind offen. Aufgabenformat bleibt 26. Die Python-Lieferung wird separat per SHA-256 abgeglichen.
 
 ## Abbau-Vertragstest auf 3.62.0 (14.11.2026)
 
@@ -349,7 +385,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 
@@ -640,3 +676,6 @@ Screenreader (VoiceOver/NVDA/Orca) ist bis Bedarf zurückgestellt und gehört ni
 **Gesonderte Veröffentlichungstore:** öffentliche Signatur/Notarisierung und Installer, Markenprüfung und Store-Freigabe. Die lokale Ad-hoc-Signatur ist automatisch geprüft.
 
 Rohprotokolle bleiben lokal und sind nicht in Git. Erhaltene Original-JSONs bleiben unverändert; ihre früheren Dateipfade können entfernte Artefakte benennen. Aufbewahrung und Pflegeregeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
+
+
+Abschlusslauf: `grundstufe/ergebnis.json` besteht die ersten 18 Schritte und scheitert ausschließlich an der Synchronisations-Namensregel für zwei reguläre Prüfberichte. Die eindeutig umbenannten Berichte bleiben erhalten. `grundstufe-abschluss/ergebnis.json` enthält den gesonderten finalen Nachlauf; die Profile normalisieren zusätzlich ungültige alte Einstellungswerte auf Standard.
