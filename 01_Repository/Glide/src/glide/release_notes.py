@@ -20,6 +20,13 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.63.0": (
+        "Gefüllte Dreiecke sind in der Seitenleiste und bei Vor-/Zurück-Pfeilen besser lesbar.",
+        "Randlose Aufgabenaktionen übernehmen den Hintergrund der ganzen überfahrenen oder ausgewählten Zeile.",
+        "„Alle bis morgen“ verschiebt offene Aufgaben- und Tageshinweise auf morgen um 09:00 Uhr.",
+        "Der Zeicheneditor bietet die Anzeigeprofile Standard, Erweitert, Animation und Bilder pixeln.",
+        "Tabellenüberschriften stehen bündig zum Inhalt; Klicks auf den Spaltenkopf sortieren wieder.",
+    ),
     "3.60.0": (
         "Die Einstellungen öffnen sich auch mit dem Stil „Kreativ“ und kleiner Schrift sofort.",
     ),

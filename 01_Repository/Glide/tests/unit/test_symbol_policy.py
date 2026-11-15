@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import unittest
-from symbol_policy import resolve, TEXT_FALLBACKS, split_heading
+from symbol_policy import resolve, TEXT_FALLBACKS, split_heading, triangle_pixels
 
 class SymbolPolicyTests(unittest.TestCase):
     def test_complete_table_and_semantic_known_corrections(self):
@@ -84,4 +84,22 @@ class SymbolPolicyTests(unittest.TestCase):
         with self.assertRaises(ValueError):resolve({},lambda text:True)
         with self.assertRaises(ValueError):resolve(icons,lambda text:False)
 
-if __name__=="__main__":unittest.main()
+
+
+class TrianglePixelsTests(unittest.TestCase):
+    def test_rotated_same_shape_and_transparent_corners(self):
+        for width in (5, 7, 9, 12):
+            height = round(width * .625)
+            down = set(triangle_pixels(width, height))
+            right = set(triangle_pixels(width, height, False))
+            self.assertEqual(right, {(y, width - 1 - x) for x, y in down})
+            self.assertEqual({y for x, y in down}, set(range(height)))
+            self.assertEqual(down, {(width - 1 - x, y) for x, y in down})
+            self.assertIn((height - 1, width // 2), right)
+            self.assertIn((0, 0), down)
+            self.assertNotIn((0, height - 1), down)
+            self.assertTrue(all(0 <= x < width and 0 <= y < height for x, y in down))
+
+
+if __name__ == "__main__":
+    unittest.main()

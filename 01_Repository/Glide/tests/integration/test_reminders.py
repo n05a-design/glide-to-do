@@ -329,7 +329,7 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                 buttons = [w for w in descendants(dialog) if isinstance(w, mod.RoundedButton)]
                 expected = {
                     "Aufgabe öffnen", "Verschieben", "Aufgabe erledigen",
-                    "Hinweis bestätigen", "Schließen",
+                    "Hinweis bestätigen", "Schließen", "Alle bis morgen",
                     f"Tageshinweise ({getattr(app, '_daily_hint_count', 0)})",
                     "Tageshinweise",
                 }
@@ -401,6 +401,35 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
             assert record["payload"]["version"] == 26
             assert any(task.get("reminder") == {"mode": "relative", "minutes": 0}
                        for entry_record in record["payload"]["lists"] for task in app.walk_items(entry_record["items"]))
+        # Sammelaufschub bewahrt Zukunftstermine und blendet die Zahl aus.
+        now = app.daily_now()
+        future = {row["item"]["id"]: copy.deepcopy(row["item"]["reminder"])
+                  for row in app.reminder_rows() if row["state"] == "Geplant"}
+        due_ids = [row["item"]["id"] for row in app.reminder_rows() if row["state"] == "Offen / verpasst"]
+        assert due_ids
+        app.settings["daily_hints"] = {"enabled": True}
+        day = (now - timedelta(days=1)).date().isoformat()
+        daily_state = {"receipts": {day + "/start": {"status": "presented", "at": now.isoformat()}}}
+        assert app.save_daily_state(daily_state)
+        original_reminders = {item_id: copy.deepcopy(app.find_item_in_lists(item_id)[0]["reminder"])
+                              for item_id in due_ids}
+        with patch.object(app, "save_items", return_value=False):
+            assert not app.snooze_all_reminders(now)
+        assert app.settings["daily_hint_state"] == daily_state
+        for item_id, reminder in original_reminders.items():
+            assert app.find_item_in_lists(item_id)[0]["reminder"] == reminder
+        with patch.object(app, "refresh_data_lock", return_value=False), patch.object(app, "show_warning") as warning:
+            assert not app.snooze_all_reminders(now)
+            assert warning.called
+        assert app.snooze_all_reminders(now)
+        assert app._daily_hint_count == 0
+        assert app._pending_reminder_count == 0
+        assert not any(row["state"] == "Offen / verpasst" for row in app.reminder_rows())
+        for item_id, reminder in future.items():
+            assert app.find_item_in_lists(item_id)[0]["reminder"] == reminder
+        for item_id in due_ids:
+            at = datetime.fromisoformat(app.find_item_in_lists(item_id)[0]["reminder"]["snoozed_until"]).astimezone(now.tzinfo)
+            assert at.date() == (now + timedelta(days=1)).date() and at.hour == 9
         app.run_modal = real_modal
         assert not errors, errors
         # Tatsächlicher Neustart des App-Objekts mit demselben isolierten Datenordner.

@@ -196,3 +196,20 @@ def aligned_markers(markers, measure, filler=HAIR_SPACE):
     target = max(measure(marker) for marker in markers)
     return {marker: pad_to_width(marker, target, measure, filler) for marker in markers}
 
+
+
+DRAWING_DISPLAY_PROFILES = MappingProxyType({
+    "standard": "Standard", "extended": "Erweitert",
+    "animation": "Animation", "pixelate": "Bilder pixeln",
+})
+
+
+def normalize_drawing_profile(value):
+    """Ungültige/alte Einstellungswerte ändern keine Werkzeuge oder Dokumente."""
+    return value if isinstance(value, str) and value in DRAWING_DISPLAY_PROFILES else "standard"
+
+
+def drawing_controls(profile):
+    """Sichtbare Zusatzleisten; Zeichnungs- und Werkzeugzustand bleiben gleich."""
+    return {"standard": (), "extended": ("animation", "reference"),
+            "animation": ("animation",), "pixelate": ("reference",)}[normalize_drawing_profile(profile)]

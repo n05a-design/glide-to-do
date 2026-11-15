@@ -1,0 +1,11 @@
+{
+  "app_sha256": "2ac5dbe1e9819c75004176b5faa386c306889489b930509a4555ef094c6a0765",
+  "faelle": [
+    "frames"
+  ],
+  "pruefungen": [
+    "Frame-Dialog: Neu/Duplizieren/Umordnen/Dauer/Löschen; globales Undo und unabhängiges Zell-Undo"
+  ],
+  "callbackfehler": [],
+  "exitcode": 0
+}

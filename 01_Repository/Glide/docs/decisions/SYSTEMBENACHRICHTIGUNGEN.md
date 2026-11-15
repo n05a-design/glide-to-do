@@ -1,6 +1,6 @@
 # Systembenachrichtigungen für Erinnerungen – Entscheidung
 
-Stand: 13.11.2026 · Glide 3.60.0, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
+Stand: 15.11.2026 · Glide 3.63.0, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
 Diese Entscheidung ist nach Regel 4 der [Arbeitsregeln](../../AGENTS.md) nötig,
 bevor ein Hilfsprozess, ein Autostart oder eine neue Abhängigkeit entsteht.
 
@@ -183,3 +183,8 @@ Stufe A ist seit 12.09.2026 umgesetzt, die Reiteransicht seit 3.10.0. Stufe B is
   Zuordnung an den Script Editor; Bericht zum stillen Verwerfen von Toasts
   ohne registrierte AUMID. Diese Punkte sind Erfahrungsberichte, keine
   Herstellerzusagen, und am Gerät zu bestätigen.
+
+
+## Sammelaufschub seit 3.63.0
+
+„Alle bis morgen“ verschiebt aktuell offene Aufgaben- und Tageshinweise bis morgen 09:00 Uhr Ortszeit. Es verändert keine Aufgabenfälligkeit und keinen Bearbeitungstag. Geplante Zukunftshinweise behalten ihren Termin. Das Badge zählt snoozed Tageshinweise erst ab ihrer realen Aufwachzeit; Zustellbelege bleiben erhalten. Speicherfehler/Schreibschutz dürfen keinen erfolgreichen Aufschub vortäuschen.

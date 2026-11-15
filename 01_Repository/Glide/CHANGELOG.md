@@ -1,5 +1,19 @@
 # Änderungsverlauf
 
+## 3.63.0 – 15.11.2026
+
+Nachabnahme desselben lokalen Versionskandidaten:
+- Bereichsüberschriften und Angeheftet verwenden die Größe der Ordnerdreiecke. Vor-/Zurück-Knöpfe verwenden größere Glyphen aus dem Symbolbegleiter.
+- „…“-Knöpfe ohne Outline und mit kompakter Grundhöhe; die Aktionsspalte setzt Zeilenhover und Auswahl nahtlos fort, ohne weißes Knopffeld. Knopfhover übernimmt den Hover für die ganze Zeile.
+- Benachrichtigungen: „Alle bis morgen“ verschiebt aktuell offene Aufgaben- und Tageshinweise auf morgen 09:00 Uhr Ortszeit. Bereits geplante Zukunftstermine bleiben erhalten; zukünftig aufgeschobene Tageshinweise werden nicht mehr im offenen Badge gezählt.
+- Zeicheneditor: persistierte Anzeigeprofile Standard, Erweitert, Animation und Bilder pixeln. Standard behält Grundwerkzeuge, Erweitert zeigt beide Zusatzleisten, Animation zeigt die Bildfolge, Bilder pixeln die Referenzaktionen. Mehr-Menüs erhalten die ausgeblendeten Funktionen.
+- Tabellen: Baumspaltenüberschriften berücksichtigen den Indikatorplatz. Eigene Drag-Handler lassen native Kopf-/Trennlinienklicks wieder passieren; Sortierung wechselt tatsächlich auf-/absteigend.
+- Gezielte Bedien-/Geometrie-/Fehlerprüfungen im QA-Nachweis; Systemkatalog V1.25. App- und Datenformatversion bleiben 3.63.0 / 26.
+
+- Kleine, gefüllte Dreiecke (Inhaberwahl B) ersetzen die unterschiedlichen Outline-/Vollmarker. Bereichsüberschriften, Angeheftet und Auswahlfelder teilen die flache Rasterform mit allen ttk-Baumansichten; Größen folgen der Schrift.
+- Appweite Dreieckzeichen für Navigation, Sortierung und weitere Beschriftungen auf die kompakte gefüllte Familie vereinheitlicht. Aufklapptext in gespeicherten Seiten bleibt unverändert.
+- Version und aktuelle Fixtures auf 3.63.0 angehoben; Datenformat 26 unverändert. Prüfungen und Grenzen im QA-Bericht.
+
 ## Dokumentationspflege – 14.11.2026
 
 - **Tagesbilanz:** Das [Handbuch](docs/20_FUNKTIONEN.md#tageskapazität-und-entlastung-seit-3550) beschreibt die tatsächliche Anzeige. Die mit 3.55.0 angekündigten Überlastungsgründe werden berechnet, aber noch nicht angezeigt; der Eintrag zu 3.55.0 bleibt als Verlauf stehen.

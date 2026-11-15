@@ -29,7 +29,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 
@@ -623,3 +623,17 @@ Die öffentliche Beschreibung lautet „Desktop-Planer für Projekte, Aufgaben, 
 **Anhangskorrekturen im letzten Stand von PR #69 (`be379408`):** Größe und erstes MiB wählen nur Dublettenkandidaten; erst der vollständige Bytevergleich verwirft eine Datei. Bestandsumbenennungen schreiben vor dem Entfernen der Originale eine dauerhafte Zuordnung in `anhang_umbenennungen.json`. Die Seitenwiederherstellung kann darüber ältere Speicherpfade auflösen. Ohne erfolgreich gespeicherte Zuordnung bleiben Originaldateien erhalten. Pflicht: `test_attachment_paths`, Arbeitsmodi `anhangsnamen`. Diese Korrekturen liegen nach dem früheren nativen Mac-Paketbau und brauchen deshalb ihren eigenen Prüf-/Lieferbezug.
 
 **Seitenleistenhöhen (Nachtrag 3.50.6, Prüfung 3.50.7):** Normale Inhaltszeilen haben mindestens 30 px, Systemzeilen mindestens 28 px. Bei größeren Schriftmaßen wachsen sie mit (Schriftzeilenhöhe plus 10 beziehungsweise 8 px). Zwischen Abteilungen stehen 18 px, direkt unter der Abteilungsüberschrift 0 px Zusatzabstand. Pflichtfälle `seitenleistenabstand3504` (Hover-/Kartenabstände) und `seitenleistenzeilen3507` (reale Zeilenrechtecke bei vier Schriften, drei Größen, zwei Designs/Breiten und Neustarts). Die Werte sind Mindesthöhen und keine starre Obergrenze für große Schrift oder andere DPI.
+
+
+### Einheitliche Aufklappmarker (3.63.0)
+
+Seitenleistenbereiche, Angeheftet, Ordner, Listenbäume und Auswahlfelder verwenden kleine, gefüllte Dreiecke. Ihre sichtbare Größe folgt der jeweiligen Schriftrolle, die Klickfläche bleibt erhalten. Rechts öffnet einen geschlossenen Bereich, unten kennzeichnet den geöffneten Bereich; Auswahlfelder wechseln beim Öffnen nach oben. Gestaltung nach D81 in den Design-Richtlinien.
+
+
+### Nachabnahme 3.63.0: Zeilenaktionen, Aufschub und Zeichenprofile
+
+Die randlosen „…“-Knöpfe bleiben für sichtbare Aufgaben erreichbar. Ihre Spalte setzt den Hover-/Auswahlhintergrund der Aufgabe ohne Unterbrechung fort. Hover auf „…“ hebt die zugehörige ganze Zeile hervor; Zeilenhover erzeugt keine zusätzliche Knopfkachel. Bereichs-/Angeheftetdreiecke entsprechen der Ordnergröße, Navigationsdreiecke sind vergrößert. Tabellenkopftexte der Baumspalte berücksichtigen deren Indikatorplatz; Spaltenkopf- und Trennlinienklicks bleiben bei der nativen Tabellenbedienung.
+
+Unter Benachrichtigungen verschiebt **Alle bis morgen** aktuell offene/verpasste Aufgaben- und Tageshinweise auf morgen um **09:00 Uhr Ortszeit**. Aufgabenfälligkeiten und Bearbeitungstage ändern sich dadurch nicht. Bereits für später geplante bzw. aufgeschobene Hinweise behalten ihren Zeitpunkt. Aufgeschobene Tageshinweise bleiben im Hinweiskorb lesbar, zählen vor dem Aufwachzeitpunkt aber nicht als offen. Schreibschutz verhindert die Aktion; bei einem fehlgeschlagenen Aufgabenschreiben wird der Tageshinweiszustand zurückgesetzt.
+
+Der Zeichen-/Pixel-Editor bietet **Anzeige: Standard / Erweitert / Animation / Bilder pixeln**. Standard zeigt die Grundwerkzeuge einschließlich Pinseloptionen und Farben. Animation ergänzt die Bildfolgenbedienung, Bilder pixeln die direkten Referenzaktionen Bild laden/Rahmen/Bild pixeln; Erweitert zeigt beide Zusatzleisten. Ausgeblendete Funktionen bleiben über Mehr erreichbar. Das Profil wird in den Werkzeugeinstellungen gespeichert und verändert keine Zeichnungsdaten.

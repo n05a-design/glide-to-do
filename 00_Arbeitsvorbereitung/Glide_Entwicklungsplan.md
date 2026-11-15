@@ -8,7 +8,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 14.11.2026 · Glide 3.60.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -2760,3 +2760,21 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - **Produktionsrunde:** Neuerungskarte in `release_notes.py` (nennt Überlastungsgründe) und Glide-System-Register (zwölf Textverweise auf `tests/qa-3.50.6`).
 - **Inhaberentscheidung und Implementierungsauftrag:** Verhalten bei unerreichbarem oder fehlerhaftem Datenordnerzeiger und Anzeige der Überlastungsgründe.
 - **Nicht beauftragt:** Die strukturellen Vorschläge aus dem Gesamtaudit, etwa ein kompakter Arbeitsvorrat in diesem Plan.
+
+
+### 21.92 Kleine gefüllte Dreiecke und Version 3.63.0 (15.11.2026)
+
+**Auftrag / D81:** Inhaberwahl B, flache gefüllte Dreiecke passend zur Textgröße; dieselbe Form appweit, ausdrücklich auch bei Ordnern und Angeheftet. Zielversion 3.63.0.
+
+**Umgesetzt:** Gemeinsame Tk-freie Rasterform in `symbol_policy.triangle_pixels`, Symbol-Labels und Baumindikatorflächen in `app.pyw`. Baumzustände, native Trefferprüfung und Tastaturbindung bleiben bestehen. Reine Marker in Seitenleiste und Auswahlfeldern teilen die Rasterform; eingebettete Textmarker, Navigation und Sortierung verwenden die kleine gefüllte Zeichenfamilie. Keine Datenmigration. Version, Fixtures, Neuerungskarte und aktuelle Dokumentstände fortgeschrieben; Python-Lieferung 3.63.0 abgeglichen.
+
+**Prüfung / Grenzen:** Baseline und gezielter UI-Fall B09 grün, inklusive echter Ordner-Klicks und Hell-/Dunkelwechsel. Neun Symboltests und separat 1.187 Fachtests grün. Zwischenfehler und ursprüngliche integritätsrote CI bleiben im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3630--dreieckmarker-15112026) erhalten; abschließende Laufprotokolle unter `tests/qa-3.63.0/dreiecke_2026-11-15/`. Native Menüpfeile werden weiter von Tk/OS dargestellt. Vollständige Plattform-/DPI-Matrix, eigenständige Windows-/Mac-Pakete und menschliche Sichtabnahme sind offen; kein Release- oder Mergeauftrag.
+
+
+### 21.93 Nachabnahme des lokalen Kandidaten 3.63.0 (15.11.2026)
+
+**Auftrag / D82:** Sechs Inhaberbefunde: Bereichsmarker auf Ordnergröße; größere Navigation; randlose kompakte „…“-Schalter und durchgehende Zeilenzustände; Sammelaufschub von Benachrichtigungen; Anzeigeprofile; bündige/sortierbare Tabellen. Die Rückfrage wurde ausdrücklich zugunsten des Zeichen-/Pixel-Editors beantwortet.
+
+**Implementierung:** `TriangleLabel`-Rollen und zentrale Knopferstellung angepasst; Zeilenaktionsflächen folgen der zugehörigen Aufgabe. Native Kopf-/Trennlinienklicks passieren die Drag-Handler, Baumüberschriften erhalten den gemessenen Einzug. `daily_hints.snooze_open` und `ListApp.snooze_all_reminders` behandeln Aufgaben-/Tageshinweise gemeinsam bis morgen 09:00 Uhr; zukünftige Termine und Fälligkeiten bleiben erhalten. `ui_design.drawing_controls` steuert vier gespeicherte Zeichenprofile. App 3.63.0 und Aufgabenformat 26 bleiben erhalten, Systemkatalog V1.25.
+
+**Prüfung / Rest:** Baseline B09 und Erinnerungsprüfung vor Änderungen grün. Neuer UI-Fall `nachabnahme363`, B09/B12-B13, 1.189 Fachtests sowie Bildfolgenbedienung und -geometrie gezielt geprüft; tatsächlicher finaler Prüfstatus in `tests/qa-3.63.0/nachabnahme_2026-11-15/`. Originale Zwischenfehler bleiben im QA-Bericht getrennt. Python-Lieferung wird abgeglichen. Native Pakete, vollständige Plattform-/DPI-Matrix, menschliche Sichtabnahme und Git-Veröffentlichung offen.

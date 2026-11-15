@@ -226,3 +226,20 @@ def prepare_delivery(config, state, now):
     if previous and previous.astimezone(now.tzinfo).date() == now.date():
         return (), original
     return (), checkpoint(original, now)
+
+
+def snooze_open(config, state, now, until):
+    """Nur aktuell offene Hinweise gesammelt auf eine reale Zukunftszeit legen.
+
+    Bereits für später verschobene Hinweise behalten ihren eigenen Zeitpunkt.
+    Der Aufrufer speichert das Ergebnis vor jeder Badge-Aktualisierung.
+    """
+    now, until = _now(now), _now(until)
+    if until.astimezone(timezone.utc) <= now.astimezone(timezone.utc):
+        raise ValueError("Der Aufschub muss in der Zukunft liegen.")
+    result = _state(state)
+    hints = [hint for hint in pending(config, result, now)
+             if hint.due.astimezone(timezone.utc) <= now.astimezone(timezone.utc)]
+    for hint in hints:
+        result["receipts"][hint.identity] = {"status": "snoozed", "wake_at": until.isoformat()}
+    return result, len(hints)
