@@ -27730,20 +27730,24 @@ class ListApp:
                 text_font = self.measurement_font(text_label.cget("font"))
                 symbol_font = self.measurement_font(symbol_label.cget("font"))
                 text_metrics = self.glyph_metrics_for(text_label.cget("font"))
-                symbol_metrics = self.glyph_metrics_for(symbol_label.cget("font"))
-                if text_metrics is None or symbol_metrics is None:
+                if text_metrics is None:
                     return
                 oben_text = text_label.winfo_rooty() - symbol_label.master.winfo_rooty()
                 grundlinie = (oben_text + (text_label.winfo_height() - text_font.metrics("linespace")) / 2
                               + text_font.metrics("ascent"))
-                mitte = glide_glyphs.label_center_for_cap(
-                    grundlinie, text_metrics, self.font_pixels(text_font), symbol_metrics,
-                    str(symbol_label.cget("text")) or "▾", self.font_pixels(symbol_font),
-                    symbol_font.metrics("ascent"), symbol_font.metrics("linespace"))
+                if isinstance(symbol_label, TriangleLabel):
+                    # Das gezeichnete Dreieck (D84) ist bildmittig; die Glyphe
+                    # der Symbolschrift zählt nicht. Bis 3.63.1 brach die
+                    # Ausrichtung ab, wenn die Schrift ▾ nicht enthielt (Linux).
+                    mitte = grundlinie - text_metrics.cap_center() * self.font_pixels(text_font)
+                else:
+                    symbol_metrics = self.glyph_metrics_for(symbol_label.cget("font"))
+                    mitte = glide_glyphs.label_center_for_cap(
+                        grundlinie, text_metrics, self.font_pixels(text_font), symbol_metrics,
+                        str(symbol_label.cget("text")) or "▾", self.font_pixels(symbol_font),
+                        symbol_font.metrics("ascent"), symbol_font.metrics("linespace"))
                 if mitte is None:
                     return
-                if isinstance(symbol_label, TriangleLabel):
-                    mitte = grundlinie - text_metrics.cap_center() * self.font_pixels(text_font)
                 versatz = round(2 * mitte - hoehe)
                 rand = (max(0, versatz), max(0, -versatz))
                 if tuple(int(wert) for wert in self.root.tk.splitlist(

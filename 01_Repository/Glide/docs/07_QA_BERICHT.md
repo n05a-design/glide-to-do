@@ -10,6 +10,7 @@ Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; die Gegenprob
 | `test_mindestgroesse330` (Zeichnung, 860 × 700) | Pflichtknöpfe Werkzeug + „Anzeige: Standard“ (180 px) + Mehr brauchten 391 von 378 px | Anzeigeknopf „Standard ▾“, Breite nach Text, Tooltip „Anzeigeprofil“ |
 | `test_tempo330` Liste ~85 ms je Bild (3.62.0: ~50) | Zeilenaktionen: alle Knöpfe und Bänder je Scrollschritt entfernt und neu gesetzt; das Dreieck-Overlay war es nicht (Gegenprobe) | nur umsetzen, Überzählige ausblenden: Liste ~51 ms, Tabelle 18 statt 41 ms |
 | `test_bedienung33316` | ▴ für Verspätet und Nach oben | Doppelung nach D84 ausdrücklich erlaubt (Inhaber) |
+| `test_uiux_paket` b09, nur Linux-CI (Kappe 309,17 / Pfeil 308,0) | `align_symbol_to_heading` verlangte für das gezeichnete Dreieck die Glyphe ▾ in der Symbolschrift und richtete sonst gar nicht aus | Dreieckszweig vor der Glyphenabfrage; Windows +0,10 px, Linux-Bestätigung durch die CI |
 | `test_arbeitsmodi` Fall `kompakt` | „…“ nach D85 28 px, Nachbarn 38 px | Kompaktkopf einheitlich `COMPACT_HEADER_CONTROL_HEIGHT` = 28 px |
 
 Nachweis: Volllauf `pruefen.py --modus voll` auf dem Endstand, 134 Schritte ausgeführt, Ergebnis „automatisierte Prüfungen erfolgreich“; Belege in `tests/qa-3.63.1/volllauf_2026-11-15/`. CI-Grundstufe bestanden; `abgleich_07.py` ohne Abweichung, 3.63.0 im Archiv. Umgebung: Windows, Python 3.15.1 / Tk 9, ausschließlich künstliche Daten. Die Messung von `test_tempo330` schwankt unter Windows stark (3.62.0 einmal 236 ms); Vergleichswerte sind Mehrfachläufe.
