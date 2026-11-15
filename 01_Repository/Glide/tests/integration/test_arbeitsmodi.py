@@ -999,7 +999,7 @@ def fall_kompakt(lauf):
     assert not app.side_pane.winfo_ismapped() and app.side_view_open(), "Nebenansicht wartet"
     # Kopf: eine Zeile, gleiche Höhe und Mittellinie (B07), Titel gekürzt statt verdrängt.
     hoehen = {k.winfo_height() for k in kompakt_knoepfe(app)}
-    assert hoehen == {app.HEADER_CONTROL_HEIGHT}, hoehen
+    assert hoehen == {app.COMPACT_HEADER_CONTROL_HEIGHT}, hoehen
     mitten = {k.winfo_rooty() + k.winfo_height() // 2 for k in kompakt_knoepfe(app)}
     assert len(mitten) == 1, mitten
     assert app.compact_title.winfo_width() >= 120 and app.compact_title.cget("text")

@@ -1,8 +1,12 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
 
 Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Regeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Am 14.11.2026 auf den aktuellen Stand gekürzt; frühere Übergabestände trägt Git.
+
+## Korrekturversionen 3.63.1 und 3.63.2 (15.11.2026)
+
+Behebt die Befunde des CI-Volllaufs 3.63.0: veraltete Glyphenerwartungen in Tests, Anzeigeknopf im Zeicheneditor nur mit Profilnamen („Standard ▾“), flüssiges Scrollen trotz Zeilenbändern, gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt, in 3.63.2 Kompaktkopf einheitlich 28 px und Bereichspfeile auch unter Linux auf der Kappenmitte. Lokaler Volllauf grün (Windows/Tk 9, künstliche Daten); Linux-CI, native Matrix, Pakete und Sichtabnahme offen. Auftrag im [Plan §21.99](Glide_Entwicklungsplan.md#2199-korrekturversionen-3631-und-3632-nach-dem-ci-volllauf-15112026), Befunde im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#korrekturversionen-3631-und-3632--ci-volllauf-15112026).
 
 ## Lokaler Kandidat 3.63.0 (15.11.2026)
 
@@ -14,12 +18,11 @@ Inhaberwahl B / D84: kleine, gefüllte Dreiecke für Seitenleistenbereiche, Ange
 
 | Achse | Stand |
 |---|---|
-| Version | **Glide 3.62.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) auf `main` `6d719ca7` (PR #88; Modal-Vertragstest mit PR #87), entwickelt auf Branch `claude/fable-shell-frameworks-audit-43872f`, Basis 3.61.0 (`e403a7c4`) mit Modal-Vertragstest `e7d18c36`. Umfang im [Plan §21.94](Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026) |
-| Neu in 3.62.0 | Erster Shell-Baustein: Jeder modale Dialog wartet über `modal_session.py` (nur Standardbibliothek und `tkinter`); `ListApp.run_modal` und Verwandte sind Fassaden. Sichtbares Verhalten unverändert |
-| Neu in 3.61.0 | Entlastungsdialog nennt Überlastungsgründe (D81); nicht erreichbarer Datenordner wird gemeldet, Zeiger mit BOM gilt wieder (D82); Suche findet zerlegte Umlaute; Design Richtlinien mit Gestaltungsregister und verbindlichen Marktlehren (D83) |
-| Prüfung | 3.62.0 gezielt unter Windows 11 mit Python 3.14.7/Tk 9.0.4 ([QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3620-14112026)); der Modal-Vertragstest zusätzlich nativ am Mac. Linux- und Windows-Vollprüfung laufen auf GitHub zum Push. 3.61.0: [Prüfstand 3.61.0](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3610-14112026) |
-| Vorstand 3.60.0 | Auf `b362abca` sind Grundstufe und Linux-Vollprüfung grün; Windows-Paket, macOS-Paket und Zugangsprüfung siehe [Technische Vollprüfung 3.60.0](../01_Repository/Glide/docs/07_QA_BERICHT.md#technische-vollprüfung-3600-auf-pc02-14112026) |
-| Lieferung | `07_Python-Versionen` per `abgleich_07.py` SHA-256-gleich zur Quelle; eigenständige Pakete für 3.62.0 entstehen erst in den GitHub-Workflows |
+| Version | **Glide 3.63.2** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) auf Branch `claude/glide-3-63-2` zum Merge vorgelegt; `main` trägt 3.63.1 (PR #96) und die Shell-Entscheidungen D86–D90 (PR #97). Umfang im [Plan §21.99](Glide_Entwicklungsplan.md#2199-korrekturversionen-3631-und-3632-nach-dem-ci-volllauf-15112026) |
+| Neu in 3.63.x | Gefüllte Dreiecke (D84), randlose Zeilenaktionen, Alle bis morgen, Zeichen-Anzeigeprofile (D85); 3.63.1/3.63.2: Anzeigeknopf „Standard ▾“, flüssiges Scrollen mit Zeilenbändern, Kompaktkopf 28 px, Bereichspfeile unter Linux ausgerichtet |
+| Neu in 3.62.0 | Erster Shell-Baustein: Jeder modale Dialog wartet über `modal_session.py`; `ListApp.run_modal` und Verwandte sind Fassaden. Sichtbares Verhalten unverändert |
+| Prüfung | 3.63.2 lokal: Volllauf und CI-Grundstufe grün unter Windows 11, Python 3.15.1/Tk 9, künstliche Daten ([QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#korrekturversionen-3631-und-3632--ci-volllauf-15112026)). Linux-Vollprüfung auf GitHub für 3.63.2 steht aus; 3.63.1 stoppte dort nur noch an b09 |
+| Lieferung | `07_Python-Versionen` per `abgleich_07.py` SHA-256-gleich zur Quelle 3.63.2; eigenständige Pakete entstehen erst in den GitHub-Workflows |
 | Lokale Ablage | Die OneDrive-Hauptablage wurde am 14.11.2026 auf GitHub-`main` `b362abca` gesetzt (GitHub hat Vorrang). Commits entstehen in frischen Klonen außerhalb von OneDrive |
 
 ## 2. Zuständige Dokumente
@@ -37,7 +40,7 @@ Inhaberwahl B / D84: kleine, gefüllte Dreiecke für Seitenleistenbereiche, Ange
 
 ## 3. Nächste Arbeit und offene Entscheidungen
 
-1. 3.61.0 (PR #85) und 3.62.0 (PR #87, #88) sind in `main` gemergt. Linux- und Windows-Vollprüfung sowie das macOS-Paket dem Merge-Commit `6d719ca7` zuordnen (Inhaber).
+1. 3.63.2 nach `main` bringen und der Linux-/Windows-Vollprüfung sowie den Paketen auf GitHub zuordnen (Inhaber). Die Repository-Regel „Changes must be made through a pull request“ sperrt derzeit Aktualisierungen bestehender Zweige; Beschränkung auf `main` empfohlen.
 2. Menschliche Abnahme am Mac: Entlastungsdialog mit Gründen, Meldung bei nicht eingebundenem Datenlaufwerk, Suche nach Text mit zerlegten Umlauten; offene Bedien-, Sicht- und DPI-Fälle stehen in der [Prüfliste](Glide_Manuelle_Pruefung.md).
 3. Marktvorschläge neu reihen (WA-08, WA-20, WA-12-Rest, WA-53 bis WA-59): Inhaberentscheidung, Vorlage im [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat).
 4. Shell-Migration: Seit 3.62.0 wartet jeder modale Dialog über `modal_session.py` (Paket 3a, [Plan §21.94](Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)). Der Modal-Vertragstest liegt vor und ist unter Windows und nativ am Mac grün ([Plan §21.93](Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026)). Unter Linux/Xvfb mit Tk 9.1 ist er in der GitHub-Prüfung grün. Der Abbau-Vertragstest (Paket 3b, [Plan §21.95](Glide_Entwicklungsplan.md#2195-shell-paket-3b-abbau-vertragstest-14112026)) hält das Schließen fest. Die Richtung ist seit 15.11.2026 mit D86–D90 festgelegt ([Plan §21.98](Glide_Entwicklungsplan.md#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)): flache Shell-Module mit Importregel, Paket `glide_shell` vor Paket 6, Reihenfolge 3c Fensterlebensdauer → Fokusrückgabe → Paket 4 → 5/6, Python-Prüfung am Anfang von `app.pyw`, Mac-Lauf der Vertragstests je Schnitt. Als Nächstes 3c; jedes Folgepaket mit eigener Freigabe ([Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)).

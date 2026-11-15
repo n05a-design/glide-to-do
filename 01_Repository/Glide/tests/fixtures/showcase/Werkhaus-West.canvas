@@ -1,93 +1,93 @@
 {
     "nodes": [
         {
-            "id": "page:a47954d2527449a998525d262ee2350f",
+            "id": "page:53b7d19859f148099192fa28bfae8d46",
             "type": "text",
             "x": 34,
             "y": 63,
             "width": 240,
             "height": 177,
-            "text": "### Werkhaus West · Rundgang (Seite)\n\nDie Tür ist der Anfang Beim Probelauf sind drei Leute direkt zur Modellwand gegangen. Ab Samstag beginnt der Rundgang am Tisch neben der Tür. Dort liegen der…\nAnhänge: 3\n\nVerweis: `glide://list/a47954d2527449a998525d262ee2350f`",
+            "text": "### Werkhaus West · Rundgang (Seite)\n\nDie Tür ist der Anfang Beim Probelauf sind drei Leute direkt zur Modellwand gegangen. Ab Samstag beginnt der Rundgang am Tisch neben der Tür. Dort liegen der…\nAnhänge: 3\n\nVerweis: `glide://list/53b7d19859f148099192fa28bfae8d46`",
             "color": "#217E39"
         },
         {
-            "id": "page:78db42aad55a4bf0af2cab100885b63f",
+            "id": "page:fbe289adea774e98b88efffb094a5dee",
             "type": "text",
             "x": 34,
             "y": 355,
             "width": 240,
             "height": 177,
-            "text": "### Freitagsrunde · Offene Fragen (Notiz)\n\nFreitag am großen Tisch Lea hat den Eingang mit einer Klebebandlinie markiert. Die Gruppe sieht das Modell jetzt erst nach der kurzen Begrüßung. Das nimmt am…\n\nLabels: `Werkhaus`\nAnhänge: 1\n\nVerweis: `glide://list/78db42aad55a4bf0af2cab100885b63f`",
+            "text": "### Freitagsrunde · Offene Fragen (Notiz)\n\nFreitag am großen Tisch Lea hat den Eingang mit einer Klebebandlinie markiert. Die Gruppe sieht das Modell jetzt erst nach der kurzen Begrüßung. Das nimmt am…\n\nLabels: `Werkhaus`\nAnhänge: 1\n\nVerweis: `glide://list/fbe289adea774e98b88efffb094a5dee`",
             "color": "#217E39"
         },
         {
-            "id": "ba3495d43f1749c7b9258b4781967474",
+            "id": "1c096c54495445e1a29ca90b0f05a444",
             "type": "text",
             "x": 390,
             "y": 64,
             "width": 240,
             "height": 469,
-            "text": "### [ ] Laufweg im Erdgeschoss abnehmen\n⚑⚑ hoch · Bearbeitungstag: 15.11.2026, 09:00 · Fällig: 15.11.2026, 11:00 · Liste: Offene Werkstatt\n\nLea läuft den Weg vom Hoftor bis zur Modellwand ab. Die Kisten am Abzweig vorher wegräumen.\n\n- [x] Eingang markiert\n- [ ] Engpass an der Modellwand prüfen\n- [ ] Schild am Abzweig markieren\n\nLabels: `Freigabe`, `Einladung`\nAnhänge: 1\n\nVerweis: `glide://item/ba3495d43f1749c7b9258b4781967474`",
+            "text": "### [ ] Laufweg im Erdgeschoss abnehmen\n⚑⚑ hoch · Bearbeitungstag: 15.11.2026, 09:00 · Fällig: 15.11.2026, 11:00 · Liste: Offene Werkstatt\n\nLea läuft den Weg vom Hoftor bis zur Modellwand ab. Die Kisten am Abzweig vorher wegräumen.\n\n- [x] Eingang markiert\n- [ ] Engpass an der Modellwand prüfen\n- [ ] Schild am Abzweig markieren\n\nLabels: `Freigabe`, `Einladung`\nAnhänge: 1\n\nVerweis: `glide://item/1c096c54495445e1a29ca90b0f05a444`",
             "color": "#217E39"
         },
         {
-            "id": "0f8529eca7544cf8b281b31ed6f44d5b",
+            "id": "c6240c0c0e9046a895c5b585b04f69f8",
             "type": "text",
             "x": 735,
             "y": 58,
             "width": 240,
             "height": 401,
-            "text": "### [ ] Motiv für die Einladung auswählen\n⚑ mittel · Bearbeitungstag: 15.11.2026, 11:00 · Fällig: 16.11.2026 · Liste: Offene Werkstatt\n\nMira bevorzugt die Planstudie. Den Ausschnitt für Handy und Druck zusammen prüfen.\n\nLabels: `Raum`, `Freigabe`\nAnhänge: 2\n\nVerweis: `glide://item/0f8529eca7544cf8b281b31ed6f44d5b`",
+            "text": "### [ ] Motiv für die Einladung auswählen\n⚑ mittel · Bearbeitungstag: 15.11.2026, 11:00 · Fällig: 16.11.2026 · Liste: Offene Werkstatt\n\nMira bevorzugt die Planstudie. Den Ausschnitt für Handy und Druck zusammen prüfen.\n\nLabels: `Raum`, `Freigabe`\nAnhänge: 2\n\nVerweis: `glide://item/c6240c0c0e9046a895c5b585b04f69f8`",
             "color": "#217E39"
         },
         {
-            "id": "page:562e2afafbf2424a97b56791dfd26f76",
+            "id": "page:edcfd70c0d2245e1b10bdcfbce96c094",
             "type": "text",
             "x": 735,
             "y": 470,
             "width": 187,
             "height": 229,
-            "text": "### Leitschild · Lichtwechsel (Zeichnung)\n\nLeitschild mit vier Lichtstufen, PNG-Referenz und separatem 16-Pixel-Symbol.\nAnhänge: 2\n\nVerweis: `glide://list/562e2afafbf2424a97b56791dfd26f76`",
+            "text": "### Leitschild · Lichtwechsel (Zeichnung)\n\nLeitschild mit vier Lichtstufen, PNG-Referenz und separatem 16-Pixel-Symbol.\nAnhänge: 2\n\nVerweis: `glide://list/edcfd70c0d2245e1b10bdcfbce96c094`",
             "color": "#217E39"
         }
     ],
     "edges": [
         {
-            "id": "edge:1:page:a47954d2527449a998525d262ee2350f:ba3495d43f1749c7b9258b4781967474",
-            "fromNode": "page:a47954d2527449a998525d262ee2350f",
+            "id": "edge:1:page:53b7d19859f148099192fa28bfae8d46:1c096c54495445e1a29ca90b0f05a444",
+            "fromNode": "page:53b7d19859f148099192fa28bfae8d46",
             "fromSide": "right",
             "fromEnd": "none",
-            "toNode": "ba3495d43f1749c7b9258b4781967474",
+            "toNode": "1c096c54495445e1a29ca90b0f05a444",
             "toSide": "left",
             "toEnd": "none",
             "label": "Weg ablaufen"
         },
         {
-            "id": "edge:2:page:78db42aad55a4bf0af2cab100885b63f:ba3495d43f1749c7b9258b4781967474",
-            "fromNode": "page:78db42aad55a4bf0af2cab100885b63f",
+            "id": "edge:2:page:fbe289adea774e98b88efffb094a5dee:1c096c54495445e1a29ca90b0f05a444",
+            "fromNode": "page:fbe289adea774e98b88efffb094a5dee",
             "fromSide": "right",
             "fromEnd": "none",
-            "toNode": "ba3495d43f1749c7b9258b4781967474",
+            "toNode": "1c096c54495445e1a29ca90b0f05a444",
             "toSide": "left",
             "toEnd": "none",
             "label": "Rückfragen klären"
         },
         {
-            "id": "edge:3:ba3495d43f1749c7b9258b4781967474:0f8529eca7544cf8b281b31ed6f44d5b",
-            "fromNode": "ba3495d43f1749c7b9258b4781967474",
+            "id": "edge:3:1c096c54495445e1a29ca90b0f05a444:c6240c0c0e9046a895c5b585b04f69f8",
+            "fromNode": "1c096c54495445e1a29ca90b0f05a444",
             "fromSide": "right",
             "fromEnd": "none",
-            "toNode": "0f8529eca7544cf8b281b31ed6f44d5b",
+            "toNode": "c6240c0c0e9046a895c5b585b04f69f8",
             "toSide": "left",
             "toEnd": "none",
             "label": "Eingang zeigen"
         },
         {
-            "id": "edge:4:0f8529eca7544cf8b281b31ed6f44d5b:page:562e2afafbf2424a97b56791dfd26f76",
-            "fromNode": "0f8529eca7544cf8b281b31ed6f44d5b",
+            "id": "edge:4:c6240c0c0e9046a895c5b585b04f69f8:page:edcfd70c0d2245e1b10bdcfbce96c094",
+            "fromNode": "c6240c0c0e9046a895c5b585b04f69f8",
             "fromSide": "bottom",
             "fromEnd": "none",
-            "toNode": "page:562e2afafbf2424a97b56791dfd26f76",
+            "toNode": "page:edcfd70c0d2245e1b10bdcfbce96c094",
             "toSide": "top",
             "toEnd": "none",
             "label": "Pfeil abstimmen"

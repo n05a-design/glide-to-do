@@ -1,0 +1,130 @@
+{
+  "app_sha256": "34144d9d43980338ce01dbfdda983a2fd4a9b5bd1a75bb5f7a965e5431712777",
+  "faelle": {
+    "neuerungen3": {
+      "ok": true,
+      "befund": "48 Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 93.045,
+      "gestartet_unix": 1794749068.4100425
+    },
+    "titelzaehler": {
+      "ok": true,
+      "befund": "Feldrahmen: noch 40 → noch 3 → max. 40 → 17 gekürzt; Inline-Umbenennen mit Zähler rechts; Haupteingabe/Ordner/Einfügen: Zähler, Ablehnung mit Zeichenzahl, Rückfrage; Schnellerfassung: Zähler über den erkannten Titel",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 7.798,
+      "gestartet_unix": 1794749161.4571555
+    },
+    "anhangsnamen": {
+      "ok": true,
+      "befund": "Umbenennen erzwungen (Abbruch übernimmt nichts, Endung bleibt), Speichername ≤ 73, automatische Kürzung gemeldet, Bestand nach ZIP-Vorsicherung (Datendatei und Originalbytes) gekürzt, alte Datei entfernt; Schreibschutz nimmt per Kennung zurück, Speicherfehler lässt Kopien liegen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 11.333,
+      "gestartet_unix": 1794749169.257408
+    },
+    "themenfarbe": {
+      "ok": true,
+      "befund": "300 Titelprüfungen in 10 Designs × 5 Themenfarben, Kontrast ≥ 4,5:1, Kontrastgrau neutral",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 196.524,
+      "gestartet_unix": 1794749180.5923424
+    },
+    "pinnwandleiste": {
+      "ok": true,
+      "befund": "1260 Knopfprüfungen in 3 Anordnungen, 4 Breiten (1000–1720 px), Liste und Ordner, Hinweise an/aus, 2 Schriften, hell/dunkel; Wahl über das Menü wirkt",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 57.016,
+      "gestartet_unix": 1794749377.1173956
+    },
+    "ruecktaste": {
+      "ok": true,
+      "befund": "Rücktaste/Entf im Titelfeld (Pinnwand und Liste) löscht keinen Punkt, Wechsel möglich, gesperrter Wechsel meldet jeden neuen Versuch; Entf am Baum löscht wie bisher",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 9.327,
+      "gestartet_unix": 1794749434.1353161
+    },
+    "restflaechen": {
+      "ok": true,
+      "befund": "51 Ansichten und Aktionsschritte ohne Restfläche; Seitentext und Liste nach dem Schließen wieder gleich groß",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 27.233,
+      "gestartet_unix": 1794749443.4641452
+    },
+    "markenkante": {
+      "ok": true,
+      "befund": "16 Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 6.171,
+      "gestartet_unix": 1794749470.6993973
+    },
+    "beta350": {
+      "ok": true,
+      "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 6.198,
+      "gestartet_unix": 1794749476.8716047
+    },
+    "fensterende3507": {
+      "ok": true,
+      "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "dauer_s": 1.787,
+      "gestartet_unix": 1794749483.0714304
+    }
+  },
+  "fehler": [],
+  "gruppe": "abschluss",
+  "vorgesehene_faelle": [
+    "neuerungen3",
+    "titelzaehler",
+    "anhangsnamen",
+    "themenfarbe",
+    "pinnwandleiste",
+    "ruecktaste",
+    "restflaechen",
+    "markenkante",
+    "beta350",
+    "fensterende3507"
+  ],
+  "laufender_fall": null
+}

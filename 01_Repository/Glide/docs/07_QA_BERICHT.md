@@ -1,4 +1,21 @@
-# QA-Bericht – Glide 3.63.1
+# QA-Bericht – Glide 3.63.2
+
+## Korrekturversionen 3.63.1 und 3.63.2 – CI-Volllauf (15.11.2026)
+
+Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; die Gegenproben meldeten deshalb „NICHT BELEGT“. Dahinter lagen weitere Befunde, die erst der fortgesetzte Lauf zeigte. 3.63.1 ging über PR #96 nach `main`; Kompaktkopf und Linux-Bereichspfeil folgen als 3.63.2 (Zeilen mit „3.63.2“). Inhaberentscheidungen in dieser Runde: Anzeigeknopf nur mit Profilnamen, gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt, Kompaktkopf einheitlich 28 px.
+
+| Befund | Ursache | Korrektur |
+|---|---|---|
+| `test_features323`, `test_kompression330`, `test_notizbereich330` | Erwartungen noch mit ◀/▶ bzw. ▷ und ungepolstertem Spaltentitel | Erwartungen auf ◂/▸, `SIDEBAR_SECTION_ARROWS` und Haarspatien vor „Titel“ |
+| `test_mindestgroesse330` (Zeichnung, 860 × 700) | Pflichtknöpfe Werkzeug + „Anzeige: Standard“ (180 px) + Mehr brauchten 391 von 378 px | Anzeigeknopf „Standard ▾“, Breite nach Text, Tooltip „Anzeigeprofil“ |
+| `test_tempo330` Liste ~85 ms je Bild (3.62.0: ~50) | Zeilenaktionen: alle Knöpfe und Bänder je Scrollschritt entfernt und neu gesetzt; das Dreieck-Overlay war es nicht (Gegenprobe) | nur umsetzen, Überzählige ausblenden: Liste ~51 ms, Tabelle 18 statt 41 ms |
+| `test_bedienung33316` | ▴ für Verspätet und Nach oben | Doppelung nach D84 ausdrücklich erlaubt (Inhaber) |
+| 3.63.2: `test_uiux_paket` b09, nur Linux-CI (Kappe 309,17 / Pfeil 308,0) | `align_symbol_to_heading` verlangte für das gezeichnete Dreieck die Glyphe ▾ in der Symbolschrift und richtete sonst gar nicht aus | Dreieckszweig vor der Glyphenabfrage; Windows +0,10 px, Linux-Bestätigung durch die CI |
+| 3.63.2: `test_arbeitsmodi` Fall `kompakt` | „…“ nach D85 28 px, Nachbarn 38 px | Kompaktkopf einheitlich `COMPACT_HEADER_CONTROL_HEIGHT` = 28 px |
+
+Nachweis: Volllauf `pruefen.py --modus voll` auf 3.63.2 (Belege `tests/qa-3.63.2/volllauf_2026-11-15/`), zuvor auf dem Stand mit Kompaktkorrektur vor b09, 134 Schritte ausgeführt, Ergebnis „automatisierte Prüfungen erfolgreich“; Belege in `tests/qa-3.63.1/volllauf_2026-11-15/`. CI-Grundstufe bestanden; `abgleich_07.py` ohne Abweichung, 3.63.0 im Archiv. Umgebung: Windows, Python 3.15.1 / Tk 9, ausschließlich künstliche Daten. Die Messung von `test_tempo330` schwankt unter Windows stark (3.62.0 einmal 236 ms); Vergleichswerte sind Mehrfachläufe.
+
+Offen: Linux-CI auf GitHub für den Endstand nicht eingesehen, native Mac-/Linux-Abnahme, eigenständige Pakete, menschliche Sichtabnahme (insbesondere Kompaktkopf mit 28 px und Anzeigeknopf).
 
 ## Zusammenführung 3.63.0 mit `main` 3.62.0 (15.11.2026)
 
@@ -385,7 +402,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

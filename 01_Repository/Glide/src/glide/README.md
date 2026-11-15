@@ -1,6 +1,6 @@
 # Glide-System V1.29
 
-Stand 15.11.2026 · Glide 3.63.1 · Glide-System V1.29 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 15.11.2026 · Glide 3.63.2 · Glide-System V1.29 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Eigenständige Katalogversion:** `V1.29` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 

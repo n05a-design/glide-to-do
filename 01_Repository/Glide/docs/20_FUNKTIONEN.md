@@ -29,7 +29,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 
@@ -643,3 +643,7 @@ Der Zeichen-/Pixel-Editor bietet die Anzeigeprofile **Standard / Erweitert / Ani
 ### Korrekturversion 3.63.1
 
 Der Anzeigeknopf im Zeicheneditor nennt nur das Profil („Standard ▾“), damit Werkzeug, Anzeige und Mehr auch bei 860 × 700 in die feste Leiste passen; der Tooltip nennt das Anzeigeprofil. Beim Scrollen werden die „…“-Knöpfe und ihre Zeilenbänder nur verschoben statt neu gesetzt; Liste und Tabelle scrollen wieder mit der Bildzeit von 3.62.0. Gemeinsame Dreieckzeichen für Rollen gleicher Nutzung (etwa ▴ für Nach oben und Verspätet) sind nach D84 gewollt.
+
+### Korrekturversion 3.63.2
+
+Im Kompaktmodus sind alle vier Kopfknöpfe 28 px hoch wie der „…“-Knopf. Die Klapppfeile der Seitenleistenbereiche stehen auf jeder Plattform auf der Großbuchstabenmitte ihres Titels, unabhängig davon, ob die Symbolschrift das Zeichen ▾ enthält.

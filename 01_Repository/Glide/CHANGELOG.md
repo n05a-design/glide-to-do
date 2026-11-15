@@ -3,6 +3,14 @@
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.63.2 – 15.11.2026
+
+Zweite Korrekturversion nach dem CI-Volllauf: Befunde, die erst nach der Lieferung von 3.63.1 sichtbar wurden. Datenformat 26 unverändert.
+
+- Kompaktkopf: Suche, Erfassung, Menü und Normalansicht sind alle 28 px hoch wie der „…“-Knopf nach D85. Zuvor stand der Menüknopf mit 28 px zwischen 38 px hohen Nachbarn (`test_arbeitsmodi`, Fall `kompakt`).
+- Bereichspfeile der Seitenleiste stehen auch unter Linux auf der Großbuchstabenmitte: Die Ausrichtung des gezeichneten Dreiecks brach ab, wenn die Symbolschrift ▾ nicht enthielt (Linux-CI `test_uiux_paket` b09, 1,17 px).
+- Version und aktuelle Fixtures auf 3.63.2 angehoben. Prüfungen und Grenzen im QA-Bericht.
+
 ## 3.63.1 – 15.11.2026
 
 Korrekturversion: Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; dahinter lagen weitere Befunde. Datenformat 26 unverändert.
