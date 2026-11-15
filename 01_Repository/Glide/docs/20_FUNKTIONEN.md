@@ -29,7 +29,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 
@@ -639,3 +639,7 @@ Die randlosen „…“-Knöpfe bleiben für sichtbare Aufgaben erreichbar. Ihre
 Unter Benachrichtigungen verschiebt **Alle bis morgen** aktuell offene/verpasste Aufgaben- und Tageshinweise auf morgen um **09:00 Uhr Ortszeit**. Aufgabenfälligkeiten und Bearbeitungstage ändern sich dadurch nicht. Bereits für später geplante bzw. aufgeschobene Hinweise behalten ihren Zeitpunkt. Aufgeschobene Tageshinweise bleiben im Hinweiskorb lesbar, zählen vor dem Aufwachzeitpunkt aber nicht als offen. Schreibschutz verhindert die Aktion; bei einem fehlgeschlagenen Aufgabenschreiben wird der Tageshinweiszustand zurückgesetzt.
 
 Der Zeichen-/Pixel-Editor bietet die Anzeigeprofile **Standard / Erweitert / Animation / Bilder pixeln**; der Knopf zeigt nur den Profilnamen mit Menümarker (etwa „Standard ▾“), damit die Pflichtknöpfe auch bei 860 × 700 passen. Standard zeigt die Grundwerkzeuge einschließlich Pinseloptionen und Farben. Animation ergänzt die Bildfolgenbedienung, Bilder pixeln die direkten Referenzaktionen Bild laden/Rahmen/Bild pixeln; Erweitert zeigt beide Zusatzleisten. Ausgeblendete Funktionen bleiben über Mehr erreichbar. Das Profil wird in den Werkzeugeinstellungen gespeichert und verändert keine Zeichnungsdaten.
+
+### Korrekturversion 3.63.1
+
+Der Anzeigeknopf im Zeicheneditor nennt nur das Profil („Standard ▾“), damit Werkzeug, Anzeige und Mehr auch bei 860 × 700 in die feste Leiste passen; der Tooltip nennt das Anzeigeprofil. Beim Scrollen werden die „…“-Knöpfe und ihre Zeilenbänder nur verschoben statt neu gesetzt; Liste und Tabelle scrollen wieder mit der Bildzeit von 3.62.0. Gemeinsame Dreieckzeichen für Rollen gleicher Nutzung (etwa ▴ für Nach oben und Verspätet) sind nach D84 gewollt.

@@ -8,7 +8,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.1 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 

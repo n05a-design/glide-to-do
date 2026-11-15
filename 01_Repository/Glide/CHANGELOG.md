@@ -3,6 +3,15 @@
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.63.1 – 15.11.2026
+
+Korrekturversion: Der CI-Volllauf 3.63.0 stoppte unter Linux bei `test_features323`; dahinter lagen weitere Befunde. Datenformat 26 unverändert.
+
+- Der Anzeigeknopf der Zeichenleiste zeigt nur den Profilnamen mit Menümarker („Standard ▾“). Mit „Anzeige: …“ (180 px) passten die drei Pflichtknöpfe bei 860 × 700 nicht (`test_mindestgroesse330`). `test_features323` erwartet die Tagespfeile ◂/▸.
+- Zeilenaktionen werden beim Scrollen nur umgesetzt statt alle Knöpfe und Bänder zu entfernen und neu zu setzen. Das Scrollen der Liste kostete seit den Zeilenbändern etwa 85 statt 50 ms je Bild (`test_tempo330`, Windows/Tk 9); jetzt wieder ~50 ms, die Tabelle ~18 statt 41 ms. `test_kompression330` und `test_notizbereich330` prüfen Klapppfeil und Spaltentitel gegen die aktuellen Konstanten.
+- `test_bedienung33316` erlaubt die von D84 gewollten gemeinsamen Dreieckzeichen ausdrücklich, auch „Verspätet“ = „Nach oben“ (▴). Gleiche Nutzung soll nicht in unterschiedlichen Zeichen auseinanderlaufen (Inhaber 15.11.2026).
+- Version und aktuelle Fixtures auf 3.63.1 angehoben. Prüfungen und Grenzen im QA-Bericht.
+
 ## 3.63.0 – 15.11.2026
 
 Mit `main` 3.62.0 zusammengeführt: 3.63.0 enthält die Änderungen aus 3.61.0 und 3.62.0. Entscheidungen des Kandidaten heißen D84/D85 (zuvor D81/D82), der Systemkatalog V1.28/V1.29. Veraltete Dokumentstellen zu Blätterzeichen, Zeilenaktionen und Zeicheneditor sind korrigiert; Nachweis im [QA-Bericht](docs/07_QA_BERICHT.md#zusammenführung-3630-mit-main-3620-15112026).
@@ -18,9 +27,6 @@ Nachabnahme desselben lokalen Versionskandidaten:
 - Kleine, gefüllte Dreiecke (Inhaberwahl B) ersetzen die unterschiedlichen Outline-/Vollmarker. Bereichsüberschriften, Angeheftet und Auswahlfelder teilen die flache Rasterform mit allen ttk-Baumansichten; Größen folgen der Schrift.
 - Appweite Dreieckzeichen für Navigation, Sortierung und weitere Beschriftungen auf die kompakte gefüllte Familie vereinheitlicht. Aufklapptext in gespeicherten Seiten bleibt unverändert.
 - Version und aktuelle Fixtures auf 3.63.0 angehoben; Datenformat 26 unverändert. Prüfungen und Grenzen im QA-Bericht.
-- CI-Nachtrag: Der Anzeigeknopf der Zeichenleiste zeigt nur den Profilnamen mit Menümarker („Standard ▾“). Mit „Anzeige: …“ (180 px) passten die drei Pflichtknöpfe bei 860 × 700 nicht (`test_mindestgroesse330`). `test_features323` erwartet die Tagespfeile ◂/▸.
-- CI-Nachtrag: Zeilenaktionen werden beim Scrollen nur umgesetzt statt alle Knöpfe und Bänder zu entfernen und neu zu setzen. Das Scrollen der Liste kostete seit den Zeilenbändern etwa 85 statt 50 ms je Bild (`test_tempo330`, Windows/Tk 9); jetzt wieder ~50 ms, die Tabelle ~18 statt 41 ms. `test_kompression330` und `test_notizbereich330` prüfen Klapppfeil und Spaltentitel gegen die aktuellen Konstanten.
-- CI-Nachtrag: `test_bedienung33316` erlaubt die von D84 gewollten gemeinsamen Dreieckzeichen ausdrücklich, auch „Verspätet“ = „Nach oben“ (▴). Gleiche Nutzung soll nicht in unterschiedlichen Zeichen auseinanderlaufen (Inhaber 15.11.2026).
 
 ## Prüfwerkzeuge – 14.11.2026 (nach 3.62.0)
 
