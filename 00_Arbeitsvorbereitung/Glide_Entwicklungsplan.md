@@ -49,7 +49,7 @@ Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 **Prüfnachtrag WA-41, 27.10.2026:** Ausdrücklich beauftragter AMD-Gegenlauf abgeschlossen, zehn von zehn ausgewerteten Prozessen grün auf Ryzen 7 5800X3D. Hauptvergleich Python 3.14.7, eine zusätzliche Vollsuite mit 3.15.1; vier Originalvollsuiten, zwei Kernproben und vier Daten-/Importproben, davon zwei mit bytegleichem Intel-Anfangsbestand. WA-41A/B unter der geprüften Last nicht reproduziert; Ursache und Freigabetore bleiben offen. [Nachweis, Vorlauf und Integritätsgrenzen](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Keine Produktions-/BIOS-/CPU-/Liefer-/Gitaktion.
 
-Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. Glide 3.61.0 setzt auf `main` `b362abca` (Glide 3.60.0 mit PR #84, Aufgabenformat 26) auf. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) führt die commitbezogene Plattform- und Paketabnahme. Offene Arbeit steht im [Arbeitsvorrat](#aktueller-arbeitsvorrat); §21.89, §21.90 und [§21.92](#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026) beschreiben den Funktionsumfang und die noch offene Freigabe, [§21.91](#2191-dokumentationskorrekturen-aus-dem-gesamtaudit-14112026) die Dokumentationskorrekturen vom 14.11.2026.
+Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. `main` steht auf Glide 3.62.0 (`6d719ca7`, Aufgabenformat 26): 3.61.0 kam mit PR #85, der Modal-Vertragstest mit PR #87, 3.62.0 mit PR #88. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) führt die commitbezogene Plattform- und Paketabnahme. Offene Arbeit steht im [Arbeitsvorrat](#aktueller-arbeitsvorrat); §21.89, §21.90 und [§21.92](#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026) sowie [§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026) beschreiben den Funktionsumfang und die noch offene Freigabe, [§21.91](#2191-dokumentationskorrekturen-aus-dem-gesamtaudit-14112026) die Dokumentationskorrekturen vom 14.11.2026.
 
 **Lesefolge:** aktueller Auftrag und Statusachsen hier → konsolidiertes [Funktionsinventar §18](#18-konsolidiertes-funktions--und-aufgabeninventar) → [Paketvertiefung §19](#19-paketgrenzen-ausbaustufen-und-aufwand) → [Entscheidungsregister §20](#20-vollständiges-entscheidungsregister). §§3–8 ordnen bestehende Kennungen fachlich; §§14–15 erhalten die ausgewählten Sprints als Vorgeschichte; §16 trägt weiterhin die FP-/WA-Aufgaben. Es entsteht kein zweiter Backlog.
 
@@ -61,12 +61,12 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 
 ## Aktueller Arbeitsvorrat
 
-Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.61.0). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
+Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
 | Kennung | Gegenstand | Status | Nächster Schritt | Freigabe |
 |---|---|---|---|---|
-| 3.61.0 | Merge, Linux-/Windows-Vollprüfung, macOS- und Windows-Paket | ▶ | PR prüfen, CI dem Merge-Commit zuordnen | Inhaber |
-| Abnahme | Menschliche Prüfung 3.55–3.61: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
+| 3.61.0/3.62.0 | Linux-/Windows-Vollprüfung, macOS- und Windows-Paket zum Merge-Commit `6d719ca7` (PR #85, #87, #88 gemergt) | ▶ | CI-Ergebnisse dem Merge-Commit zuordnen | Inhaber |
+| Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
 | Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)) | Fenster-/Toplevel-Lebensdauer | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
