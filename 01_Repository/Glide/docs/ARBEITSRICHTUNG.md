@@ -14,7 +14,7 @@
 
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
-Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 
 
@@ -228,6 +228,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetrage
 | D81 | **14.11.2026, Überlastungsgründe anzeigen (Inhaberwahl 3.61.0):** Die seit 3.55.0 berechneten Überlastungsgründe erscheinen im Entlastungsdialog unter der Vorher/Nachher-Bilanz, je überplantem Tag eine kurze Zeile. | [Funktionen](20_FUNKTIONEN.md#tageskapazität-und-entlastung-seit-3550), [Design Richtlinien](DESIGN_RICHTLINIEN.md#gestaltungsregister). |
 | D82 | **14.11.2026, nicht erreichbarer Datenordner (Inhaberwahl 3.61.0):** Ist der Datenordner aus `datenordner.json` oder `GLIDE_DATA_DIR` nicht anlegbar, nennt Glide Pfad und Quelle in einem Systemdialog und beendet sich, ohne Daten anzulegen oder auf einen anderen Bestand umzuschalten. Ein Zeiger mit Byte-Order-Mark ist wieder gültig. | [Daten und Migration](06_DATA_BACKUP_MIGRATION.md#ablage). |
 | D83 | **14.11.2026, Gestaltungslehren aus der Marktanalyse (Inhaberwahl):** Die sechs neuen Lehren aus Markt §14 (Leerzustand, Vorher/Nachher, Summen im Abschnittskopf, neutrales Überfällig, sichtbare Zeit, Erststart mit Beispielen) sind verbindliche Regeln für neue und angefasste Oberflächen; bestehende Oberflächen werden dadurch nicht ungefragt umgebaut. | [Design Richtlinien](DESIGN_RICHTLINIEN.md#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610). |
+| D84 | **15.11.2026, kleine gefüllte Dreiecke:** Inhaberwahl B, appweit einheitliche Form statt Outline und gemischter Marker, Größen passend zur Textrolle; Zielversion 3.63.0. | [Gestaltungsvertrag](DESIGN_RICHTLINIEN.md), Prüfstand im QA-Bericht. |
+| D85 | **15.11.2026, Nachabnahme 3.63.0:** größere Bereichs-/Navigationsdreiecke, randlose durchgehende Zeilenaktionen, gemeinsamer Benachrichtigungsaufschub bis morgen, vier Anzeigeprofile ausdrücklich im Zeicheneditor und bündige/sortierbare Tabellenköpfe. | [Gestaltungsvertrag](DESIGN_RICHTLINIEN.md), Plan §21.97 und QA-Nachweis. |
 
 
 **Stand zu D79 nach PR #78 (12.11.2026):** Die Auslieferungs- und Abnahmenachweise für `766978d` stehen im [QA-Bericht](07_QA_BERICHT.md#plattformprüfung-und-pakete-auf-main-12112026). WA-49 umfasst im gelieferten Stand die Pfadauflösung. Die weiteren Shell-Bausteine sind als Konzept dokumentiert.

@@ -28,7 +28,7 @@ from showcase import NOTIZ_TITLE  # noqa: E402
 
 SHOWCASE_APP = REPO / "tests/fixtures/showcase/Glide-Showcase_App.glideapp"
 FAELLE = ("b01", "b02", "b03", "b04", "b05", "b06_b15", "b15_appweit", "b07", "b08", "b09", "b10", "b11",
-          "b12_b13", "b14", "b16", "b17_b19", "b18")
+          "b12_b13", "b14", "b16", "b17_b19", "b18", "nachabnahme363")
 
 
 class Lauf:
@@ -618,8 +618,44 @@ def fall_b09(lauf):
     grund_t = titel.winfo_rooty() + (titel.winfo_height() - t_font.metrics("linespace")) / 2 + t_font.metrics("ascent")
     grund_p = pfeil.winfo_rooty() + (pfeil.winfo_height() - p_font.metrics("linespace")) / 2 + p_font.metrics("ascent")
     kappe = grund_t - tm.cap_center() * app.font_pixels(t_font)
-    mitte = grund_p - pm.ink_center(pfeil.cget("text")) * app.font_pixels(p_font)
+    mitte = (pfeil.winfo_rooty() + pfeil.winfo_height() / 2 if isinstance(pfeil, mod.TriangleLabel)
+             else grund_p - pm.ink_center(pfeil.cget("text")) * app.font_pixels(p_font))
     assert abs(kappe - mitte) <= 1.0, (kappe, mitte)
+    # 3.63: Bereich und Baum teilen dieselbe gefüllte Form; Zustandswechsel
+    # und Themenwechsel erhalten Elementnamen und lebende Bildreferenzen.
+    assert set(app.SIDEBAR_SECTION_ARROWS.values()) == {app.ICONS["group"], app.ICONS["dropdown_closed"]}
+    assert isinstance(pfeil, mod.TriangleLabel)
+    before = pfeil.cget("text")
+    app.toggle_sidebar_section("lists")
+    lauf.idle()
+    assert pfeil.cget("text") != before
+    app.toggle_sidebar_section("lists")
+    lauf.idle()
+    assert pfeil.cget("text") == before
+    for design in ("light", "dark"):
+        app.set_design(design)
+        lauf.idle()
+        for tree in (app.sidebar_listbox, app.pages_listbox, app.notes_listbox):
+            assert isinstance(tree, mod.GlideTreeview)
+            for marker in tree._triangle_labels:
+                if marker.winfo_ismapped():
+                    assert marker.cget("text") in ("▾", "▸")
+                    assert marker._triangle_image.width() <= marker.winfo_width()
+    # Originale Baum-Klickbindung bleibt über dem gezeichneten Marker aktiv.
+    lauf.showcase()
+    tree = app.sidebar_listbox
+    lauf.idle()
+    markers = [w for w in tree._triangle_labels if w.winfo_ismapped()]
+    assert markers, "Showcase-Ordner braucht einen sichtbaren Marker"
+    marker = markers[0]
+    row = tree.identify_row(marker.winfo_y() + marker.winfo_height() // 2)
+    before = bool(tree.item(row, "open"))
+    marker.event_generate("<Button-1>", x=marker.winfo_width() // 2, y=marker.winfo_height() // 2)
+    marker.event_generate("<ButtonRelease-1>", x=marker.winfo_width() // 2, y=marker.winfo_height() // 2)
+    lauf.idle()
+    assert bool(tree.item(row, "open")) != before, "Marker-Klick klappt den Ordner nicht"
+    tree.item(row, open=before)
+    lauf.idle()
     # Startseitenkachel „Pinnwände“: Pfadtrenner „›“ auf der Großbuchstabenmitte
     # des Knopftextes (±0,5 px), Schreibweise unverändert.
     lauf.showcase()
@@ -899,6 +935,69 @@ def fall_b18(lauf):
     assert gesehen["text"] == mod.glide_release.history_text(mod.APP_VERSION)
     assert "Version 3.36.0" in gesehen["text"]
     return "Neuerungen nach „Gelesen“ und Neustart unter Über Glide"
+
+
+def fall_nachabnahme363(lauf):
+    """Reale Kopfklicks, Zeilenflächen und Anzeigeprofile der Nachabnahme."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    # Gleiche sichtbare Markergröße für Bereich und Ordner.
+    assert app.sidebar_heading_icon._triangle_image.width() >= 7
+    for button in (app.plan_day_prev_button, app.plan_day_next_button):
+        assert mod.tkfont.Font(root=lauf.root, font=button.font).measure(button.text) >= 7
+    normal = next(entry for entry in app.lists if not app.is_page_list(entry)
+                  and sum(app.is_schedulable_item(item) for item in entry.get("items", [])) >= 2)
+    app.set_active_list(normal["id"])
+    lauf.idle(6)
+    buttons = [button for button in app._row_action_buttons if button.winfo_ismapped()]
+    assert buttons, "Zeilenaktionen fehlen"
+    button = buttons[0]
+    row = button._row_owner
+    app.tree.selection_set(row)
+    lauf.idle()
+    assert not button.outline
+    assert button.bg_color == app.theme["selection"], (button.bg_color, app.theme["selection"])
+    app.tree.selection_remove(row)
+    app.set_hover_rows(app.tree, (row,))
+    assert button.bg_color == app.theme["hover"] and not button.is_hovered
+    button.event_generate("<Enter>")
+    lauf.idle()
+    assert row in app._hover_rows[str(app.tree)] and button.is_hovered
+    button.event_generate("<Leave>")
+    lauf.idle()
+    # Tatsächlicher Kopfklick, kein direkter Aufruf des Sortierbefehls.
+    book = next(folder for folder in app.folders if folder.get("folder_kind") == "library")
+    app.set_active_folder(book["id"])
+    lauf.idle(6)
+    tree = app.tree
+    rows = tree.get_children("")
+    before = [tree.item(row, "text") for row in rows]
+    assert len(before) >= 2
+    heading_y = next(y for y in range(50) if tree.identify_region(70, y) == "heading")
+    tree.event_generate("<Button-1>", x=70, y=heading_y, time=1000)
+    tree.event_generate("<ButtonRelease-1>", x=70, y=heading_y, time=1100)
+    lauf.idle(6)
+    after = [tree.item(row, "text") for row in tree.get_children("")]
+    assert after == list(reversed(before)), (before, after)
+    tree.event_generate("<Button-1>", x=70, y=heading_y, time=3000)
+    tree.event_generate("<ButtonRelease-1>", x=70, y=heading_y, time=3100)
+    lauf.idle(6)
+    assert [tree.item(row, "text") for row in tree.get_children("")] == before
+    # Profile blenden nur Werkzeuge um, keine Pixel/Bildfolgen werden verändert.
+    drawing = next(entry for entry in app.lists if app.is_drawing_list(entry))
+    app.set_active_list(drawing["id"])
+    lauf.idle(8)
+    editor = app.drawing_editor
+    original = editor._current_document()
+    for profile in editor.DISPLAY_PROFILES:
+        assert editor.set_display_profile(profile)
+        lauf.idle(5)
+        assert bool(editor.animation_toolbar.winfo_manager()) == (profile in ("extended", "animation"))
+        assert bool(editor.reference_toolbar.winfo_manager()) == (profile in ("extended", "pixelate"))
+        assert editor._current_document() == original
+    assert not editor.set_display_profile("unbekannt")
+    editor.set_display_profile("standard")
+    return "Bereichs-/Navigationspfeile, randlose Zeilenaktionen, echte Sortier-Kopfklicks und vier Zeichenprofile"
 
 
 def main():

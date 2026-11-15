@@ -99,3 +99,17 @@ def split_heading(text, icons):
     """Symbol und Beschriftung dürfen in verschiedenen Schriften stehen."""
     first, separator, caption = str(text).partition("  ")
     return (first, caption) if separator and first in icons.values() else ("", str(text))
+
+
+def triangle_pixels(width, height, opened=True):
+    """Gefülltes flaches Dreieck (B): abwärts oder um 90° nach rechts gedreht.
+
+    Breite/Höhe folgen der Textgröße; gleiche Form für jede Baumansicht.
+    Liefert nur belegte Pixel, der übrige Symbolplatz bleibt durchsichtig.
+    """
+    width, height = max(3, int(width)), max(2, int(height))
+    for y in range(height):
+        inset = int((width - 1) * y / (2 * (height - 1)))
+        for x in range(width):
+            if inset <= x <= width - 1 - inset:
+                yield (x, y) if opened else (y, width - 1 - x)

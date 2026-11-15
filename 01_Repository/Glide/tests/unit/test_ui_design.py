@@ -211,5 +211,17 @@ class BeruhigterUmbruchTest(unittest.TestCase):
         gesehen.clear()
         self.assertEqual(design.settled_wrap_width(483, gesehen), 483)
 
+
+class DrawingDisplayTests(unittest.TestCase):
+    def test_profiles_only_change_extra_controls(self):
+        self.assertEqual(design.drawing_controls("standard"), ())
+        self.assertEqual(design.drawing_controls("animation"), ("animation",))
+        self.assertEqual(design.drawing_controls("pixelate"), ("reference",))
+        self.assertEqual(design.drawing_controls("extended"), ("animation", "reference"))
+        self.assertEqual(design.drawing_controls("obsolete"), ())
+        for value in (None, True, [], {}, 12, "obsolete"):
+            self.assertEqual(design.normalize_drawing_profile(value), "standard")
+            self.assertEqual(design.drawing_controls(value), ())
+
 if __name__ == "__main__":
     unittest.main()

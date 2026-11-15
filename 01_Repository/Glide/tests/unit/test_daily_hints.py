@@ -195,5 +195,22 @@ class DailyHintTests(unittest.TestCase):
             with self.assertRaises(ValueError): hints.snooze({}, hint, self.now, value)
 
 
+
+class BulkSnoozeTests(unittest.TestCase):
+    def test_only_due_hints_and_real_tomorrow(self):
+        now = at("2026-10-10T18:00:00")
+        config = {"enabled": True}
+        due = hints.collect_due(config, {}, now)
+        state = hints.mark_presented({}, due, now)
+        until = at("2026-10-11T09:00:00")
+        result, count = hints.snooze_open(config, state, now, until)
+        self.assertEqual(count, 2)
+        self.assertTrue(all(hint.due == until for hint in hints.pending(config, result, now)))
+        self.assertTrue(all(hint.due > now for hint in hints.pending(config, result, now)))
+        second, count = hints.snooze_open(config, result, now, at("2026-10-12T09:00:00"))
+        self.assertEqual(count, 0)
+        self.assertEqual(second, result)
+        self.assertTrue(all(r["status"] == "presented" for r in state["receipts"].values()))
+
 if __name__ == "__main__":
     unittest.main()

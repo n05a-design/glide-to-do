@@ -2,7 +2,7 @@
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
-Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
 
 **Aufbau:** [Quellen und Geltung](#quellen-und-geltung) · [Gestaltungsgrundsätze P1–P6](#gestaltungsgrundsätze-p1p6) · [verbindliche Vorgaben](#verbindliche-gestaltungsvorgaben) mit den [Grundsätzen aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610) und den [Fortschreibungen aus Abnahmen](#fortschreibungen-aus-abnahmen-und-aufträgen) · [Gestaltungsregister](#gestaltungsregister) mit Entscheidungen, Fachentscheidungen und Inhaberzitaten · [Skill-Grundsätze](#übernommene-grundsätze-aus-den-skillquellen-übersetzt-nach-tk-b20) · [Pflege](#pflege-und-prüfung) und [appweite Übertragung](#appweite-übertragung-und-zukünftige-entwicklung).
 
@@ -80,7 +80,7 @@ Zusammengehörige Texte und Aktionen teilen erkennbare Kanten, Abstände und Hö
 
 ### Klare Formen und stabile Symbolbedeutung (B10, B12, B14)
 
-Ein Symbol hat eine nachvollziehbare Bedeutung. Abschnittsköpfe mit Aufklapppfeil tragen kein zweites Dreieck oder Pfeilzeichen; ▶/◀ blättern, ▿/▷ klappen. Die Lupe ⌕ kennzeichnet die Suche. Die Seiten-Blockleiste trägt keine Symbole vor einzelnen Beschriftungen. Plattformweite Glyphenabdeckung, zugängliche Benennung und Fokus mitprüfen. Zentrale `ICONS`- und Rollenfarbregeln an ihrer Quelle pflegen.
+Ein Symbol hat eine nachvollziehbare Bedeutung. Abschnittsköpfe mit Aufklapppfeil tragen kein zweites Dreieck oder Pfeilzeichen; ◂/▸ blättern, ▸/▾ klappen (seit D84 gefüllte Dreiecke derselben Familie; zuvor ▶/◀ und ▿/▷). Die Lupe ⌕ kennzeichnet die Suche. Die Seiten-Blockleiste trägt keine Symbole vor einzelnen Beschriftungen. Plattformweite Glyphenabdeckung, zugängliche Benennung und Fokus mitprüfen. Zentrale `ICONS`- und Rollenfarbregeln an ihrer Quelle pflegen.
 
 **Häkchenspalte in Menüs (Gesamtprüfung 01.11.2026):** Ein Auswahlmenü, dessen Einträge einen Zustand zeigen, setzt jede Beschriftung über `action_menu.check_label`: „✓ “ oder vier Leerzeichen. Beide sind in der macOS-Menüschrift gleich breit (15 px), in DejaVu Sans 19 bzw. 18 px; so beginnen alle Beschriftungen an einer Kante (B02). Vorher standen drei, vier oder keine Leerzeichen, Beschriftungen waren auf dem Mac um 4 bzw. 15 px versetzt. `test_arbeitsmodi` (Fall `side_suchverlauf`) misst den Versatz in der tatsächlichen Menüschrift. Nicht übertragen: die eingerückten Pinnwandmenüs mit eigener Spalte („   ✓ “) und einzelne Schalter in gemischten Menüs („Wiederkehrende Checkliste“), die das Häkchen nur im eingeschalteten Zustand tragen; Rest in [Analyse §13.22](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1322-gesamtprüfung-vom-01112026).
 
@@ -145,6 +145,10 @@ Umgesetzt ist bisher Punkt 2 im Entlastungsdialog. Für die übrigen Punkte prü
 ### Fortschreibungen aus Abnahmen und Aufträgen
 
 Die folgenden Vorgaben stammen aus Abnahmen und Einzelaufträgen ab dem 27.10.2026, überwiegend neueste zuerst. Sie gelten wie die Abschnitte oben; ältere Fassungen trägt Git.
+
+**D85 (15.11.2026, Nachabnahme 3.63.0):** Bereichs-/Angeheftetmarker orientieren sich an der Ordnergröße; alleinstehende Navigationsdreiecke erhalten die Symbolschrift in Grundgröße + 2. „…“-Schalter sind randlos und kompakter (Höhe höchstens 28 px, Eckradius 3; die ältere Angabe 32 × 32 px für Zeilenaktionen gilt nur noch für die reservierte Breite). Bei Aufgaben gehören Aktionsspalte und Inhalt zu einer durchgehenden Hover-/Auswahlfläche: Hover auf „…“ gilt auch für die Zeile, Hover/Auswahl der Zeile erzeugen keine eigene Knopfkachel. Tabellenkopf und Inhalt fluchten, native Kopf-/Trennlinienbedienung darf nicht von Drag-Handlern abgefangen werden. Zeichen-Anzeigeprofile ändern ausschließlich sichtbare Werkzeugleisten, nie Pixel oder Bildfolgen. Die Inhaberklärung ordnet diese Profile dem Zeichen-/Pixel-Editor zu, nicht der Pinnwand.
+
+**D84 (15.11.2026, Inhaberwahl B / 3.63.0):** Appweit kleine, flache, gefüllte Dreiecke, keine Outline-Aufklappmarker. Bereichsüberschriften, Angeheftet, Ordner und Auswahlfelder verwenden dieselbe Form (`symbol_policy.triangle_pixels`, Seitenverhältnis 8:5); die sichtbare Breite folgt der Schriftgröße (0,48 em, mindestens 5 px). Richtung rechts = geschlossen, unten = geöffnet; Auswahlfelder oben = geöffnet. Klickflächen und Tastaturwege bleiben erhalten. Eingebettete Textmarker, Navigation und Sortierung verwenden die kompakte gefüllte Zeichenfamilie ▸/▾/▴/◂. Native Betriebssystemmenüs bleiben durch Tk/OS gezeichnet.
 
 **Markenpflege 13.11.2026, D80:** In-App-Master `Logo_Glide-01.svg` und Programmsymbol `Logo_Glide-03.svg`. Die Fläche des In-App-Zeichens folgt der lesbaren Themenfarbe, der eigene Schattenpfad verwendet eine davon abgesetzte Blaustufe. Das App-Symbol hat einen lilafarbenen Rahmen und ein gelbes Innenfeld. [Logo-Fundorte und Wechselablauf](../../../20_Grafik_Master/README.md).
 
@@ -256,6 +260,8 @@ Hier steht jede Entscheidung, Fachentscheidung und Inhaberaussage mit Gestaltung
 | D81 | Der Entlastungsdialog nennt die Gründe überplanter Tage in einer ruhigen Begleitzeile unter der Bilanz, nur wenn ein Tag überplant ist | [Grundsätze aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610), Punkt 2 |
 | D82 | Eine Meldung vor dem App-Fenster (nicht erreichbarer Datenordner, zu alte Tk-Version) ist ein Systemdialog: Pfad, Quelle und nächster Schritt in Klartext, danach beendet sich Glide ohne Änderung | [Arbeitsrichtung](ARBEITSRICHTUNG.md#verbindliche-entscheidungen) |
 | D83 | Die sechs neuen Gestaltungslehren aus Markt §14 sind verbindlich | [Grundsätze aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610) |
+| D84 | Appweit kleine, flache, gefüllte Dreiecke aus einer gemeinsamen Rasterform; Größe folgt der Schrift, Klickflächen und Tastaturwege bleiben | [Klare Formen](#klare-formen-und-stabile-symbolbedeutung-b10-b12-b14), [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
+| D85 | „…“-Schalter randlos und kompakt; Aktionsspalte und Aufgabe bilden eine durchgehende Hover-/Auswahlfläche; Tabellenkopf fluchtet mit dem Inhalt; Zeichen-Anzeigeprofile ändern nur sichtbare Leisten | [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
 
 ### Fachentscheidungen mit Gestaltungsfolge
 

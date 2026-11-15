@@ -40,6 +40,7 @@ def run(app_path, cases, report, previous):
         root.report_callback_exception = lambda *exc: callbacks.append(repr(exc[1]))
         app = mod.ListApp(root)
         app.ask_yes_no = lambda *a, **k: True
+        app.remember_drawing_tools(display_profile="animation")
         saved_path = Path(mod.SAVE_FILE)
         app.create_new_drawing(size=16)
         identity = app.active_list_id
@@ -333,6 +334,7 @@ def run(app_path, cases, report, previous):
                 app.set_active_list(identity);pump()
                 results.append('Zwischenstand: echter Schreibfehler erhält Datei/Metadaten/Undo und räumt eigenen Anhang auf; Retry und Schreibschutz; volle Wiederherstellung/Undo und Als-neue-Zeichnung')
             if 'geometrie' in cases:
+                editor().set_display_profile('animation')
                 for size in ('mittel', 'gross'):
                     app.settings['ui_font_size'] = size
                     app.apply_ui_font()

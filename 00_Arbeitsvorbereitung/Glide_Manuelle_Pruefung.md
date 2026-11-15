@@ -1,6 +1,17 @@
 # Manuelle Prüfung – Glide
 
-Stand 14.11.2026 · Glide 3.62.0 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.63.0 · Aufgabenformat 26
+
+## Offene menschliche Sichtabnahme 3.63.0
+
+Prüfbasis ist der Quellstand 3.63.0 mit isolierten künstlichen Daten (Showcase). Die automatischen Nachweise im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#nachabnahme-3630--sechs-inhaberbefunde-15112026) ersetzen die Sichtabnahme nicht. Pro Ergebnis Plattform, Tcl/Tk, Skalierung und Beobachtung festhalten.
+
+- [ ] **Dreieckmarker (D84):** Seitenleistenbereiche, Angeheftet, Ordner, Auswahlfelder und Baumansichten in Dialogen zeigen dieselben kleinen gefüllten Dreiecke; rechts ist geschlossen, unten geöffnet. In Hell und Dunkel, mit kleiner und großer Schrift und mehreren DPI-Stufen prüfen; Klick und Tastatur klappen wie zuvor.
+- [ ] **Blättern und Sortieren:** ◂/▸ in Heute und in der Galerie sowie ▴/▾ in Spaltenköpfen und Verschiebeknöpfen sind gut lesbar und nicht abgeschnitten.
+- [ ] **Zeilenaktionen (D85):** „…“ hat keinen Rahmen. Hover und Auswahl einer Aufgabe reichen ohne helle Kachel bis zum rechten Rand; Hover auf „…“ hebt die ganze Zeile hervor. In Liste, Tabelle, Heute und Demnächst prüfen.
+- [ ] **Tabellenkopf:** Die Titelüberschrift fluchtet mit den Titeln. Ein Klick auf den Spaltenkopf sortiert aufsteigend, der nächste absteigend; Trennlinien lassen sich ziehen, ohne eine Aufgabe zu verschieben.
+- [ ] **Alle bis morgen:** Unter Benachrichtigungen offene Aufgaben- und Tageshinweise gemeinsam verschieben. Die Glocke zählt sie nicht mehr, Fälligkeiten und Bearbeitungstage bleiben, am Folgetag ab 09:00 Uhr erscheinen sie wieder. Bei Schreibschutz erscheint der Hinweis und nichts ändert sich.
+- [ ] **Zeichen-Anzeigeprofile:** Standard, Erweitert, Animation und Bilder pixeln wechseln nur die sichtbaren Leisten. Zeichnung und Bildfolge bleiben unverändert, das Profil bleibt nach einem Neustart erhalten, ausgeblendete Funktionen stehen unter „Mehr“.
 
 <a id="offene-menschliche-abnahme-3550"></a>
 ## Offene menschliche Nachabnahme 3.55.1
@@ -310,7 +321,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
       lehnt ab und sagt warum; Rückgängig.
 - [ ] **A26 Heute und Demnächst (3.33.6):** Abschnitte in fester Reihenfolge,
       keine Aufgabe doppelt; Verweis „Demnächst“ mit Doppelklick und Return;
-      „Tag …“ startet Tagesbeginn und Tagesabschluss; ◀/▶ zu anderen Tagen;
+      „Tag …“ startet Tagesbeginn und Tagesabschluss; ◂/▸ zu anderen Tagen;
       Abschnitte zuklappen und neu starten.
 
 - [ ] **A27 Sprint 3.33.19–3.35.0** (mit getrennter Testablage, echte Maus, Trackpad und Tastatur):
