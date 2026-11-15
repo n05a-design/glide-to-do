@@ -8,7 +8,7 @@ Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Reg
 
 | Achse | Stand |
 |---|---|
-| Version | **Glide 3.62.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) auf Branch `claude/fable-shell-frameworks-audit-43872f`, Basis 3.61.0 (`e403a7c4`) mit Modal-Vertragstest `e7d18c36`. Umfang im [Plan §21.94](Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026) |
+| Version | **Glide 3.62.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) auf `main` `6d719ca7` (PR #88; Modal-Vertragstest mit PR #87), entwickelt auf Branch `claude/fable-shell-frameworks-audit-43872f`, Basis 3.61.0 (`e403a7c4`) mit Modal-Vertragstest `e7d18c36`. Umfang im [Plan §21.94](Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026) |
 | Neu in 3.62.0 | Erster Shell-Baustein: Jeder modale Dialog wartet über `modal_session.py` (nur Standardbibliothek und `tkinter`); `ListApp.run_modal` und Verwandte sind Fassaden. Sichtbares Verhalten unverändert |
 | Neu in 3.61.0 | Entlastungsdialog nennt Überlastungsgründe (D81); nicht erreichbarer Datenordner wird gemeldet, Zeiger mit BOM gilt wieder (D82); Suche findet zerlegte Umlaute; Design Richtlinien mit Gestaltungsregister und verbindlichen Marktlehren (D83) |
 | Prüfung | 3.62.0 gezielt unter Windows 11 mit Python 3.14.7/Tk 9.0.4 ([QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3620-14112026)); der Modal-Vertragstest zusätzlich nativ am Mac. Linux- und Windows-Vollprüfung laufen auf GitHub zum Push. 3.61.0: [Prüfstand 3.61.0](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3610-14112026) |
@@ -31,7 +31,7 @@ Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Reg
 
 ## 3. Nächste Arbeit und offene Entscheidungen
 
-1. PR zu 3.61.0 prüfen und mergen (Inhaber). Linux- und Windows-Vollprüfung sowie das macOS-Paket dem Merge-Commit zuordnen.
+1. 3.61.0 (PR #85) und 3.62.0 (PR #87, #88) sind in `main` gemergt. Linux- und Windows-Vollprüfung sowie das macOS-Paket dem Merge-Commit `6d719ca7` zuordnen (Inhaber).
 2. Menschliche Abnahme am Mac: Entlastungsdialog mit Gründen, Meldung bei nicht eingebundenem Datenlaufwerk, Suche nach Text mit zerlegten Umlauten; offene Bedien-, Sicht- und DPI-Fälle stehen in der [Prüfliste](Glide_Manuelle_Pruefung.md).
 3. Marktvorschläge neu reihen (WA-08, WA-20, WA-12-Rest, WA-53 bis WA-59): Inhaberentscheidung, Vorlage im [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat).
 4. Shell-Migration: Seit 3.62.0 wartet jeder modale Dialog über `modal_session.py` (Paket 3a, [Plan §21.94](Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)). Der Modal-Vertragstest liegt vor und ist unter Windows und nativ am Mac grün ([Plan §21.93](Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026)). Unter Linux/Xvfb mit Tk 9.1 ist er in der GitHub-Prüfung grün. Der Abbau-Vertragstest (Paket 3b, [Plan §21.95](Glide_Entwicklungsplan.md#2195-shell-paket-3b-abbau-vertragstest-14112026)) hält das Schließen fest. Als Nächstes die Fensterlebensdauer; jedes Folgepaket mit eigener Freigabe ([Plan §21.89](Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)).

@@ -20,7 +20,7 @@ Basis `main` `6d719ca7` (Glide 3.62.0), Branch `claude/shell-abbauvertrag`. Gepr
 
 ## Prüfstand 3.62.0 (14.11.2026)
 
-Basis `e7d18c36` (Modal-Vertragstest auf 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und Tcl/Tk 9.0.4 auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive. Umfang im [Plan §21.94](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026).
+Basis `e7d18c36` (Modal-Vertragstest auf 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`; mit PR #88 als `6d719ca7` in `main` gemergt. Die Prüfung unten gilt dem Branchstand; die CI auf dem Merge-Commit ist hier nicht nachgetragen. Geprüft unter Windows 11 x64 mit Python 3.14.7 und Tcl/Tk 9.0.4 auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive. Umfang im [Plan §21.94](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026).
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -34,7 +34,7 @@ Basis `e7d18c36` (Modal-Vertragstest auf 3.61.0), Branch `claude/fable-shell-fra
 
 ## Modal-Vertragstest auf 3.61.0 (14.11.2026)
 
-Basis `e403a7c4` (Glide 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`. Geprüft unter Windows 11 x64 mit Python 3.14.7 und 3.15.1, jeweils Tcl/Tk 9.0.4, auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive (`GLIDE_DATA_DIR`, `PYTHONPYCACHEPREFIX`, `-B`). Auftrag und Umfang im [Plan §21.93](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026).
+Basis `e403a7c4` (Glide 3.61.0), Branch `claude/fable-shell-frameworks-audit-43872f`; mit PR #87 in `main` gemergt. Geprüft unter Windows 11 x64 mit Python 3.14.7 und 3.15.1, jeweils Tcl/Tk 9.0.4, auf künstlichen Daten in einer kurzen Prüfablage außerhalb von OneDrive (`GLIDE_DATA_DIR`, `PYTHONPYCACHEPREFIX`, `-B`). Auftrag und Umfang im [Plan §21.93](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2193-shell-paket-3-vorstufe-modal-vertragstest-mit-echtem-grab-14112026).
 
 | Gegenstand | Nachweis |
 |---|---|
