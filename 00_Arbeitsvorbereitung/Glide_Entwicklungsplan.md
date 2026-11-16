@@ -2936,7 +2936,7 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 ### 21.103 Agenten-Skill, Paket K1: Grundskill auf Austauschformat 2, D91 (16.11.2026)
 
-**A – Auftrag:** „Weiter entwickeln.“ Auf die Rückfrage wählte der Inhaber die Empfehlungen A und den Start von K1, den Namen `glide-to-do` im Quellbaum und einen eigenen PR (D91). Basis ist der Recherchezweig `claude/glide-to-do-skill-research-142fd5` (`2db34bb7`, PR #109) auf `main` `337dc7d8`. Umfang nach §21.102: Skill auf dem vorhandenen Austauschformat 2 und den Markdown-Seiten, ohne Änderung an der App; App-Version 3.65.0 bleibt.
+**A – Auftrag:** „Weiter entwickeln.“ Auf die Rückfrage wählte der Inhaber die Empfehlungen A und den Start von K1, den Namen `glide-to-do` im Quellbaum und einen eigenen PR (D91). Basis ist der Recherchestand `2db34bb7` (PR #109, am 16.11.2026 mit `2d59abef` in `main` gemergt). Umfang nach §21.102: Skill auf dem vorhandenen Austauschformat 2 und den Markdown-Seiten, ohne Änderung an der App; App-Version 3.65.0 bleibt.
 
 **B – Umsetzung:**
 1. Neuer Skillordner `01_Repository/Glide/skills/glide-to-do/` nach dem Agent-Skills-Standard: `SKILL.md` (Kopf mit Name, Beschreibung, Lizenz MPL-2.0, Kompatibilität und `metadata` mit Skillversion 1.0, geprüfter Glide-Fassung 3.65.0 und Austauschformat 2; Ablauf in sechs Schritten unter 100 Zeilen), `README.md` für Einrichtung und Import, vier Referenzen (Austauschformat, Seiten in Markdown, Änderungsvorschlag, Rezepte je Dokumentart) und acht Beispieldateien (Einkaufsliste, Projekt, Notiz, Zeichnung mit Eingabe, Recherchebericht, Kontextpaket mit Änderungsvorschlag).
