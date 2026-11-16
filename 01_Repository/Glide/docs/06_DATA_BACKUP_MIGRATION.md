@@ -287,6 +287,17 @@ Eigene Aufträge liegen additiv im Einstellungsschlüssel `exchange_recipes` (Ei
 
 **Einplanen 3.33.13 (KO01/AU02):** kein Formatwechsel und kein neues Feld. Die gemeinsame Aktion schreibt ausschließlich `planned_date`; „Ohne Tag“ erhält `planned_time`. Fälligkeit/Uhrzeit, Aufwand, Wiederholung, Anhänge und Kennungen bleiben erhalten. Mehrere Quelllisten werden über `item_change` atomar im bisherigen Speicherweg geschrieben, ein Undo nimmt die gesamte Auswahl zurück. Die Kapazitätsvorschau verändert keine Daten. Feldverträge und Bedienung stehen in [Funktionen](20_FUNKTIONEN.md).
 
+### Ausbaurahmen für Agenten-Skills (Entwurf, nicht aktiviert)
+
+Entwurf vom 16.11.2026, verbindlicher Rahmen für den geplanten Agenten-Skill `glide-to-do` (WA-61) und jeden weiteren fremden Erzeuger. Es ist keine Funktion aktiviert und kein Feld hinzugekommen; Umfang, Pakete und Inhaberwahl stehen im [Plan §21.102](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026), Abdeckung und Befunde in der [Analyse §13.39](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026).
+
+- **Nur Importdokumente.** Ein Skill erzeugt `.glideexchange`, Markdown-Seiten oder Antworten auf ein Kontextpaket. Er schreibt nie in den Datenordner und erzeugt weder `liste_speicher.json` noch `.glidebackup` oder `.glideapp`; diese tragen interne Kennungen und folgen der Formatstufe.
+- **Additiv ausbauen.** Neue Möglichkeiten erhalten in Austauschformat 2 eine eigene Fähigkeitsstufe in `exchange_capabilities`. Die Formatversion steigt nur, wenn sich die Bedeutung vorhandener Felder oder Modi ändert. Ältere Fassungen nennen neue Felder in der Vorschau als unbekannt.
+- **Ein Feld, ein vollständiger Schnitt.** Prüfung, Übernahme, Ausgabe, Fähigkeitsstufe, KI-Anleitung (`exchange_prompt_text`) und Rundlauftest entstehen zusammen. Was die Prüfung annimmt, wird übernommen oder ausdrücklich gemeldet, nie still verworfen; die Fähigkeiten nennen alles, was der Import kann.
+- **Formatierung als Markdown, nicht als Zeichenpositionen.** Für Seiten- und Notiztext ist Markdown nach `page_markdown.py` der Weg für fremde Erzeuger; `rich_note.spans` bleibt Glides eigene Darstellung.
+- **Dateien nur im geprüften Container.** Bilder und Anhänge kommen erst mit einem Austauschcontainer, der die Pfad-, Größen- und Eintragsprüfungen der Sicherungs-ZIPs übernimmt. Keine externen Pfade, URLs zum Nachladen, Kontodaten oder Gerätezeiger in portablen Dateien.
+- **Glide bleibt die Quelle.** Feldlisten, Grenzen und Beispiele des Skills werden aus dem Austauschvertrag erzeugt und gegen ihn geprüft, sobald dieser Tk-frei vorliegt; bis dahin gilt die Pflegezeile in der [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge).
+
 
 ## Hintergrundfarbe und Blockreihenfolge in 3.50.0
 
