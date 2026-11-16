@@ -1,6 +1,6 @@
 # Grafik-Master und zentrale Logo-Übersicht
 
-Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Am 05.11.2026 zusammengeführt und gekürzt: alle aktiven Logo-Quellen, Verwendungen und künftigen Aktualisierungsschritte stehen hier. Frühere Logo-Dateien sind auf ausdrücklichen Benutzerauftrag im Grafikarchiv erhalten; diese Ausnahme betrifft Grafiken, keine zusätzlichen Dokumentarchive.
 

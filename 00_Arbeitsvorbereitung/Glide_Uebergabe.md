@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26 · Glide-System V1.35
+Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26 · Glide-System V1.36
 
 Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Stand 16.11.2026 vollständig aktualisiert; frühere Übergabestände trägt Git.
 
@@ -25,7 +25,7 @@ Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick 
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 3.68.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.35** (99 Source-Module M001–M099, 114 Integrationssuiten, 5 Analysen). Basis auf `main` ist Commit `e2e0590b` (3.67.0, PR #115 Shell-Paket 4 gemergt). Aktiver Arbeitskandidat ist `claude/shell-paket-5-desktop-adapter` ([PR #116](https://github.com/n05a-design/glide-to-do/pull/116)). |
+| **Version & Schemata** | **Glide 3.69.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.36** (99 Source-Module M001–M099, 114 Integrationssuiten, 5 Analysen). Basis auf `main` ist Commit `e2e0590b` (3.67.0, PR #115 Shell-Paket 4 gemergt). Aktiver Arbeitskandidat ist `claude/release-3690`. |
 | **Shell-Paket 5 (3.68.0)** | **Vierter Shell-Baustein:** [`desktop_adapter.py`](../01_Repository/Glide/src/glide/desktop_adapter.py) (M099, 170 Zeilen) lagert anwendungsneutrale Menü-, Tastaturkürzel- und Betriebssystemfunktionen aus `app.pyw` aus: `build_menu_tree` (deklarativer rekursiver Menüaufbau mit Trennlinien und dynamischen Menüs), `DesktopMenuBar` (Frame-Erzeugung und sichere Popup-Verwaltung mit Grab-Release und Fokus-Wiederherstellung), OS-Aktionen (`launch_path`, `copy_to_clipboard`, `read_from_clipboard`) sowie Modifikatoren (`primary_modifier`, `format_accelerator`, `format_redo_accelerator`). Modulbudget WA-50 / T322 vollständig eingehalten. T313 [`test_desktop_adapter.py`](../01_Repository/Glide/tests/unit/test_desktop_adapter.py) mit 13 Testfällen. |
 | **Shell-Paket 4 (3.67.0)** | **Dritter Shell-Baustein:** [`custom_controls.py`](../01_Repository/Glide/src/glide/custom_controls.py) (M098, ~1.440 Zeilen) lagert thementaugliche Canvas-Bedienelemente aus `app.pyw` aus: `CanvasLabel`, `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`, `ThemedAutoScrollbar`, `rounded_rect_points`, `bind_resize`, `paint_canvas_backdrop`. `app.pyw` re-exportiert alle Steuerelemente. T312 [`test_custom_controls.py`](../01_Repository/Glide/tests/integration/test_custom_controls.py) mit 11 Testfällen. |
 | **Agenten-Skill `glide-to-do` (3.66.0)** | **WA-61 (D91/D92):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Strikte Datenformatkopplung an Aufgabenformat 26 über `abdeckung.json`. Zentrales 4-Stufen-Prüfwerkzeug `ki_ausgabe.py` (T323), Werkzeugtest `test_ki_ausgabe.py` (T324), Vollprüfungs-Integrationssuite `test_ki_ausgabe_darstellung.py` (T325). Entwickler-Skill `glide-aufbau` und Referenz `glide-aufbau.md`. Datenformat 26 unverändert. |
@@ -33,8 +33,8 @@ Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick 
 | **Shell-Paket 3c (3.64.0)** | **Zweiter Shell-Baustein:** [`window_lifetime.py`](../01_Repository/Glide/src/glide/window_lifetime.py) (M097) ordnet Zeitgeber (`after`) sauber Fenstern oder Ansichten zu (`_after_bindings`), verhindert Zombie-Callbacks und Memory-Leaks bei Fensterschließung. `ListApp.after_scope` und `_register_after` dienen als Fassaden. T318 [`test_abbauvertrag.py`](../01_Repository/Glide/tests/integration/test_abbauvertrag.py) (5 Fälle) und T320 [`test_fensterlebensdauer.py`](../01_Repository/Glide/tests/integration/test_fensterlebensdauer.py) (9 Fälle). |
 | **Shell-Paket 3a (3.62.0)** | **Erster Shell-Baustein:** [`modal_session.py`](../01_Repository/Glide/src/glide/modal_session.py) (M096) entkoppelt den modalen Warteweg aus `app.pyw`. `ListApp.run_modal` und Verwandte bleiben Fassaden. T317 [`test_modalvertrag.py`](../01_Repository/Glide/tests/integration/test_modalvertrag.py) (17 Fälle). |
 | **Dreiecke & Details (3.63.x)** | Kleine gefüllte Dreiecke (D84), randlose Zeilenaktionen, „Alle bis morgen 09:00 Uhr“, vier Zeichenprofile (D85); 3.63.1/3.63.2: Anzeigeknopf „Standard ▾“, Kompaktkopf einheitlich 28 px, Linux-Bereichspfeile auf Kappenmitte zentriert. |
-| **Prüfstand** | 3.68.0 lokal am Referenz-Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten): `ci_grundstufe.py` 19/19 grün (Exitcode 0), Standprüfung 0 Befunde, Testkatalog V1.35 5/5, Unit-Tests 1.230/1.230 grün, Desktop-Adapter-Test 13/13 grün, Shell-Importregel 7/7 grün, Modalvertrag 17/17 grün, Abbauvertrag 5/5 grün, Fensterlebensdauer 9/9 grün, Custom-Controls 11/11 grün. Vollprüfung Linux/Windows und CI-Workflows im PR #116. |
-| **Lieferstand** | `07_Python-Versionen` ist über `scripts/pflege/abgleich_07.py` vollständig SHA-256-synchron zu `src/glide` (`Glide-Aufgaben-und-Listen_v3.68.0.pyw`). Nativer macOS-Paketbau auf `main` grün. |
+| **Prüfstand** | 3.69.0 lokal am Referenz-Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten): `ci_grundstufe.py` 19/19 grün (Exitcode 0), Standprüfung 0 Befunde, Testkatalog V1.36 5/5, Unit-Tests 1.230/1.230 grün, Desktop-Adapter-Test 13/13 grün, Shell-Importregel 7/7 grün, Modalvertrag 17/17 grün, Abbauvertrag 5/5 grün, Fensterlebensdauer 9/9 grün, Custom-Controls 11/11 grün. Vollprüfung Linux/Windows und CI-Workflows in GitHub Actions. |
+| **Lieferstand** | `07_Python-Versionen` ist über `scripts/pflege/abgleich_07.py` vollständig SHA-256-synchron zu `src/glide` (`Glide-Aufgaben-und-Listen_v3.69.0.pyw`). Nativer macOS-Paketbau auf `main` grün. |
 | **Ablage-Schutz** | Unberührt und NICHT in Git: `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/` und `glide_master_audit_bericht.md`. Diese Pfade dürfen unter keinen Umständen gestaget oder committet werden. |
 
 ---
@@ -83,10 +83,9 @@ flowchart LR
     S1 --> INH["5. Inhaber-Abnahme am Mac<br/>& Marktvorschläge"]
 ```
 
-### Schritt 1: PR #116 abschließen und nach `main` überführen (Priorität 1)
-- **Status:** Branch `claude/shell-paket-5-desktop-adapter`, [PR #116](https://github.com/n05a-design/glide-to-do/pull/116).
-- **Inhalt:** Shell-Paket 5 mit `desktop_adapter.py` (M099), T313 `test_desktop_adapter.py`, Glide 3.68.0, System V1.35.
-- **Aktion:** Sicherstellen, dass GitHub Actions CI (Grundstufe und Vollprüfung) grün durchläuft (insbesondere die Headless-Skip-Absicherung für Display-freie Linux-Umgebungen in `test_desktop_adapter.py`). Nach erfolgreichem Durchlauf bittet der Agent den Inhaber um den Merge nach `main`.
+### Schritt 1: Aktuellen PR abschließen und nach `main` überführen (Priorität 1)
+- **Status:** Branch `claude/release-3690` (Glide 3.69.0, System V1.36, Shell-Paket 5 `desktop_adapter.py`, Dokumentations- und Übergabekonsolidierung, Headless-CI-Absicherung).
+- **Aktion:** Sicherstellen, dass GitHub Actions CI (Grundstufe und Vollprüfung) grün durchläuft. Nach erfolgreichem Durchlauf bittet der Agent den Inhaber um den Merge nach `main`.
 
 ### Schritt 2: Paket `glide_shell` bündeln (Vorstufe vor Paket 6, D86/D88)
 - **Kontext:** Gemäß Richtungsentscheidungen D86–D90 ([Plan §21.98](Glide_Entwicklungsplan.md#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)) wurden die vier Shell-Module flach in `src/glide` abgelegt:

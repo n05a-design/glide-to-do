@@ -3,6 +3,17 @@
 Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.69.0 – 16.11.2026
+
+Ganzheitliche Dokumentations- und Übergabekonsolidierung, Audit-Bereinigung und Headless-CI-Absicherung. Datenformat 26 unverändert.
+
+- Übergabe & Audit: `00_Arbeitsvorbereitung/Glide_Uebergabe.md` ganzheitlich und kontextbasiert für nachfolgende KI-Agenten ausgebaut (Status V1.36, D86–D90, 4 Shell-Bausteine, Skill WA-61/D92, Dokumentenautorität, priorisierte Handlungsfolge, Schutzregeln).
+- Entwicklungsplan: `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` auf aktuellen Stand synchronisiert, Arbeitsvorrat bereinigt, Anker korrigiert (§21.107).
+- Sicherheitsrichtlinie: `SECURITY.md` und `01_Repository/Glide/SECURITY.md` auf Stand 16.11.2026 synchronisiert.
+- CI-Absicherung: `tests/unit/test_desktop_adapter.py` mit Headless-SkipTest-Absicherung für Display-freie Umgebungen ergänzt; Linux-Grundstufe (Tk 8.6) grün.
+- Prüfung: Standprüfung 0 Befunde, Testkatalog V1.36 5/5, Unit-Tests 1.230/1.230 grün, Vertragstests 100 % grün, CI-Grundstufe mit 19/19 Schritten bestanden (Exitcode 0).
+
+
 ## 3.68.0 – 16.11.2026
 
 Shell-Paket 5: Aktionen, Menüs und Desktop-Adapter (`desktop_adapter.py`, D86, D88). Datenformat 26 unverändert.
