@@ -2,7 +2,7 @@
 
 ## Agenten-Skill `glide-to-do`, Paket K1 (16.11.2026)
 
-Basis: Zweig `claude/glide-to-do-skill-k1` auf dem Recherchestand `2db34bb7` (PR #109, auf `main` `337dc7d8`). App unverändert 3.65.0, `app.pyw` SHA-256 `ce3e60765d4a…` wie im Prüfstand 3.65.0. Geprüft unter Windows 11 mit Python 3.15.2 und Tcl/Tk 9.0.4, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.103](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026).
+Basis: Zweig `claude/glide-to-do-skill-k1` auf dem Recherchestand `2db34bb7` (PR #109, mit `2d59abef` in `main` gemergt). App unverändert 3.65.0, `app.pyw` SHA-256 `ce3e60765d4a…` wie im Prüfstand 3.65.0. Geprüft unter Windows 11 mit Python 3.15.2 und Tcl/Tk 9.0.4, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.103](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026).
 
 | Gegenstand | Nachweis |
 |---|---|
