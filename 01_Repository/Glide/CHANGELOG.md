@@ -3,6 +3,15 @@
 Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.67.0 – 16.11.2026
+
+Shell-Paket 4: Erscheinungsbild und Bedienelemente ausgelagert (`custom_controls.py`, D88). Datenformat 26 unverändert.
+
+- Neues Shell-Modul `custom_controls.py` (nur Standardbibliothek und `tkinter`): Lagert die anwendungsneutralen Canvas-Bedienelemente `CanvasLabel`, `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`, `ThemedAutoScrollbar` sowie die Hilfsfunktionen `rounded_rect_points`, `bind_resize` und `paint_canvas_backdrop` aus `app.pyw` aus (~1.440 Zeilen).
+- Saubere Entkopplung: Farb- und Schriftanpassungen an den Hostzustand erfolgen über entkoppelte Callback-Hooks (`set_font_provider`, `set_ink_provider`, `set_backdrop_painter`). `app.pyw` re-exportiert alle Steuerelemente drop-in-kompatibel.
+- Einhaltung des Modulbudgets (WA-50): Alle Funktionen bleiben unter 50 Zeilen und Schachtelungstiefe 15.
+- Prüfung: Neuer Integrationstest `test_custom_controls.py` (T312, 11 Fälle), `test_shell_importregel.py` (T319) um `custom_controls` erweitert. Alle 7 Shell-Importregeln und der Modalvertrag (17 Fälle) grün. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3670--shell-paket-4-custom_controlspy-16112026).
+
 ## 3.66.0 – 16.11.2026
 
 Zentrierter Agenten-Skill `glide-to-do`, strenge Datenformatkopplung und Darstellungsprüfung (WA-61, D91/D92). Datenformat 26 unverändert.

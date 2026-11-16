@@ -1,5 +1,5 @@
 {
-  "app_version": "3.66.0",
+  "app_version": "3.67.0",
   "format_version": 26,
   "thema": "Werkhaus West",
   "bearbeitungstag": "2026-11-16",
@@ -67,20 +67,20 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 8388414,
-      "sha256": "22f76c841d5b2b84309319e55b38ec52d089919fb5270ff833830c7f6b65824b"
+      "bytes": 8388368,
+      "sha256": "51d5913b191f29b2001aa422a210d780c03025784e47efe5a904c628939f772f"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 10016548,
-      "sha256": "532621f1cf5753fc1f63e9de7b0ea1292560796b57a0e19df0a9636acc9127dd"
+      "bytes": 10016474,
+      "sha256": "b934fbcd954d4f784130b80ed3a3b04666b0da17fbf3c8e56b05837bce2a05e6"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 2105104,
-      "sha256": "b4ad07e41182f549a2256534f05c8a2f208c4f5e89d9072d1d9b6fe4c5f904a0"
+      "sha256": "f98f46b402b66e44d65219981aeb4e1176b0407791c80efcb2aaa85e073ea705"
     },
     "Werkhaus-West.canvas": {
       "bytes": 4502,
-      "sha256": "923e06012a75659c3656130bf880c14eb5c14b29cec6be781db04f6a07936deb"
+      "sha256": "af26082f148a0b5661ceae9f7b524fb0365f6ebc4e1eaaca1e222b3131b981c3"
     }
   }
 }

@@ -1,6 +1,6 @@
 # Seiten als Markdown
 
-Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
 
 Eine Glide-Seite ist für lange, formatierte Texte gedacht: Recherchen, Berichte, Übersichten, Protokolle. Der Nutzer importiert die Datei über Datei › Importieren › „Seite aus Datei …“ (`.md`, `.markdown`, `.txt`, bis 5 Mio. Zeichen) oder kopiert den Text und wählt „Seite aus Zwischenablage“. Die Seite entsteht auf oberster Ebene; der Nutzer verschiebt sie bei Bedarf in einen Ordner.
 
