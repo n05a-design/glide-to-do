@@ -18,8 +18,8 @@
     },
     {
       "name": "PyInstaller-Hooks",
-      "version": "2026.8",
-      "source": "https://pypi.org/project/pyinstaller-hooks-contrib/2026.8/",
+      "version": "2026.10",
+      "source": "https://pypi.org/project/pyinstaller-hooks-contrib/2026.10/",
       "files": {
         "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0"
       }
@@ -52,8 +52,8 @@
     },
     {
       "name": "setuptools",
-      "version": "84.1.0",
-      "source": "https://pypi.org/project/setuptools/84.1.0/",
+      "version": "84.2.1",
+      "source": "https://pypi.org/project/setuptools/84.2.1/",
       "files": {
         "setuptools-LICENSE": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
         "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
