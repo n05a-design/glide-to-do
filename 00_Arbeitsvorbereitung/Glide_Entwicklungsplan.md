@@ -2,7 +2,7 @@
 
 **Dokumentationspflege:** Führende Quellen und Änderungsfolgen stehen in der [zentralen Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Der [Abgleich vom 13.11.2026](#2187-dokumentationsbezüge-und-konsolidierung-13112026) verknüpft insbesondere Roadmap, Systembestand, Architektur und Shell-Zielbild.
 
-**Glide-Agenten-Skill `glide-to-do` 16.11.2026 (WA-61):** [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) – Recherche, Abdeckung aller Glide-Ebenen, Aufwand in sechs Paketen K1–K6 und Entscheidungsvorlagen E-K1–E-K6. Ein Skill lässt gängige KI-Agenten Glide-lesbare Importdokumente anlegen (Q3); Grundskill ohne App-Änderung in einer Runde, voller Umfang ohne neues Aufgabenformat. Inhaberwahl D91; Paket K1 ist als Skillordner `01_Repository/Glide/skills/glide-to-do/` mit Werkzeugtest umgesetzt ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)).
+**Glide-Agenten-Skill `glide-to-do` 16.11.2026 (WA-61):** [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) Recherche und Aufwand; Inhaberwahl D91 (K1, [§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)); Inhaberwahl D92 (Ausbau 3.66.0, zentrierte Kopplung, `abdeckung.json`, `ki_ausgabe.py`, [§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)). App auf 3.66.0 gehoben.
 
 **GitHub-Projektseite und Showcase 06.11.2026:** [§21.71](#2171-github-projektseite-und-showcase-3505-06112026) – neue README-Projektseite, Aufnahmen, Issue-Formulare, Beschreibung und Topics; Showcase zeigt die Funktionen bis 3.50.5.
 
@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -2936,7 +2936,7 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 ### 21.103 Agenten-Skill, Paket K1: Grundskill auf Austauschformat 2, D91 (16.11.2026)
 
-**A – Auftrag:** „Weiter entwickeln.“ Auf die Rückfrage wählte der Inhaber die Empfehlungen A und den Start von K1, den Namen `glide-to-do` im Quellbaum und einen eigenen PR (D91). Basis ist der Recherchezweig `claude/glide-to-do-skill-research-142fd5` (`2db34bb7`, PR #109) auf `main` `337dc7d8`. Umfang nach §21.102: Skill auf dem vorhandenen Austauschformat 2 und den Markdown-Seiten, ohne Änderung an der App; App-Version 3.65.0 bleibt.
+**A – Auftrag:** „Weiter entwickeln.“ Auf die Rückfrage wählte der Inhaber die Empfehlungen A und den Start von K1, den Namen `glide-to-do` im Quellbaum und einen eigenen PR (D91). Basis ist der Recherchestand `2db34bb7` (PR #109, am 16.11.2026 mit `2d59abef` in `main` gemergt). Umfang nach §21.102: Skill auf dem vorhandenen Austauschformat 2 und den Markdown-Seiten, ohne Änderung an der App; App-Version 3.65.0 bleibt.
 
 **B – Umsetzung:**
 1. Neuer Skillordner `01_Repository/Glide/skills/glide-to-do/` nach dem Agent-Skills-Standard: `SKILL.md` (Kopf mit Name, Beschreibung, Lizenz MPL-2.0, Kompatibilität und `metadata` mit Skillversion 1.0, geprüfter Glide-Fassung 3.65.0 und Austauschformat 2; Ablauf in sechs Schritten unter 100 Zeilen), `README.md` für Einrichtung und Import, vier Referenzen (Austauschformat, Seiten in Markdown, Änderungsvorschlag, Rezepte je Dokumentart) und acht Beispieldateien (Einkaufsliste, Projekt, Notiz, Zeichnung mit Eingabe, Recherchebericht, Kontextpaket mit Änderungsvorschlag).
@@ -2946,3 +2946,17 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 5. Glide-System V1.32 mit Feature F148 und Test T321; Entscheidung D91; Funktionen §11, Prüfplan, Pflegematrix und Rundenregel nachgeführt.
 
 **C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#agenten-skill-glide-to-do-paket-k1-16112026). Offen: ein Import der Beispiele über die echte Oberfläche als menschliche Stichprobe, Erprobung in mindestens zwei Agenten, CHANGELOG-Eintrag mit der nächsten App-Version oder der K5-Lieferung (die App ändert sich in K1 nicht). Nächster Schritt nach D91: K2 (Austauschvertrag Tk-frei, Befunde 1 und 2, Erzeugung und CI-Abgleich der Referenzen), mit eigener Freigabe als Produktionsrunde.
+
+### 21.104 Glide 3.66.0: Zentrierte Skill-Implementierung, Datenformatkopplung und KI-Darstellungsprüfung, D92 (16.11.2026)
+
+**A – Auftrag (Wortlaut des Inhabers):** „Nach erfolgreicher Umsetzung Version auf 3.66 anheben mit Verweis auf die zentrierte Skill-Implementierung, Prüfe dabei auch gründlich dass die Skill-Implementierung gemeinsam mit dem Datenformat angeglichen werden muss! wenn Änderungen am Datensatz vorgenommen werden sollten, muss der Skill auch angepasst werden. Auf die Existenz des Skills muss auch an unterschiedlichen Stellen, in den Funktionen, ReadMe-Dateien, auf Github etc. etc. hingewiesen werden, am besten auch eine Anleitung wie es bei Claude, OpenAI und Gemini hinzugefügt werden kann. Beim Arbeiten und der Weiterentwicklung von Glide kann der Skill auch hilfreich sein die App und Struktur der App besser zu verstehen. Ich möchte auch Prüfungen zentral die prüfen, ob Ausgaben von Ki-Programmen korrekt in Glide dargestellt werden, nachdem sie den Skill benutzt haben oder währenddessen.“ Ausgelegt als Ausbau- und Zentrierungsauftrag; Entscheidung D92.
+
+**B – Umsetzung:**
+1. **Versionswechsel 3.66.0:** `VERSION`, `app.pyw` (`APP_VERSION = "3.66.0"`), `GLIDE_SYSTEM_VERSION` (V1.33) und Lieferabgleich `07_Python-Versionen/` (`Glide-Aufgaben-und-Listen_v3.66.0.pyw`). `CHANGELOG.md` um 3.66.0 ergänzt.
+2. **Strikte Datenformatkopplung:** `01_Repository/Glide/skills/glide-to-do/abdeckung.json` ordnet jedes Datenfeld des Aufgabenformats 26 verbindlich ein (`ja`, `offen` mit Zielpaket, `intern`). Werkzeugtest T321 `test_agenten_skill.py` gleicht `abdeckung.json`, Feldmengen und Regeln des Hilfsskripts mit dem Glide-Code ab. Jede Änderung am Datenformat, die den Skill nicht parallel nachzieht, bricht die CI.
+3. **Zentrale KI-Ausgabeprüfung:** Neues CLI-Werkzeug T322 `tests/tools/ki_ausgabe.py` prüft KI-Dateien in vier Stufen (Skillprüfung, Glide-Prüfung, Import/Übernahme im temporären Datenordner und Anzeige-/Feldvergleich; mit `--oberflaeche` Speichern, Prozessneustart und Ablesen der Anzeige). Werkzeugtest T323 `tests/tools/test_ki_ausgabe.py`. Vollprüfungs-Integrationssuite T324 `tests/integration/test_ki_ausgabe_darstellung.py` prüft alle Skill-Beispiele, Formatgrenzen und fehlerhafte Ausgaben mit echter Tk-Oberfläche.
+4. **Verbreitung und Einrichtungsanleitungen:** `skills/glide-to-do/README.md` mit herstellergeprüften Anleitungen für Claude (Code & Desktop/Web-Apps), OpenAI (Codex & ChatGPT) und Google (Antigravity CLI/IDE & Gemini CLI). Hinweise in `20_FUNKTIONEN.md` (§11), Repository-`README.md` und Projekt-`README.md`.
+5. **Entwicklungs-Skill `glide-aufbau`:** Neuer Entwicklungs-Skill `.claude/skills/glide-aufbau/` und Referenz `skills/glide-to-do/references/glide-aufbau.md` erklären Glides Bereiche, Daten- und Objektmodell, Speicherwege und Importstrukturen für Entwickler und Agenten.
+6. **System- und Dokumentenpflege:** Glide-System V1.33 mit 324 Testdateien (T322–T324); D92 in der Arbeitsrichtung; Pflegematrix in `DOKUMENTENPFLEGE.md` und Rundenregel.
+
+**C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3660--agenten-skill-zentrierung-und-ki-darstellungsprüfung-16112026). Standprüfung gegen 3.66.0 fehlerfrei (0 Befunde), Lizenz- und Registerprüfung 5/5, Skilltest 15/15, Ki-Ausgabetest 6/6, Integrationssuite grün. Offen: Vollprüfung auf GitHub mit dem neuen PR.

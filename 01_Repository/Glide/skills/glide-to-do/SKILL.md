@@ -4,8 +4,8 @@ description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Beri
 license: MPL-2.0
 compatibility: Erzeugt Dateien für Glide 3.65 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
-  version: "1.0"
-  glide-version: "3.65.0"
+  version: "1.1"
+  glide-version: "3.66.0"
   exchange-format: "2"
 ---
 
@@ -27,7 +27,7 @@ Glide ist ein lokaler Desktop-Planer für Aufgaben, Listen, Seiten, Notizen und 
 
 Ein Projekt darf aus zwei Dateien bestehen: eine `.glideexchange` mit den Aufgaben und eine `.md`-Seite mit Ziel, Hintergrund und Entscheidungen.
 
-Details: [Austauschformat](references/austauschformat.md), [Seiten in Markdown](references/seiten-markdown.md), [Rezepte je Dokumentart](references/dokumentarten.md), [Änderungsvorschlag](references/aenderungsvorschlag.md).
+Details: [Austauschformat](references/austauschformat.md), [Seiten in Markdown](references/seiten-markdown.md), [Rezepte je Dokumentart](references/dokumentarten.md), [Änderungsvorschlag](references/aenderungsvorschlag.md). Wie Glide aufgebaut ist und speichert: [Glide verstehen](references/glide-aufbau.md).
 
 ## 2. Inhalt nach Glide-Regeln ordnen
 
@@ -35,15 +35,15 @@ Details: [Austauschformat](references/austauschformat.md), [Seiten in Markdown](
 2. **Fälligkeit und Bearbeitungstag sind verschieden.** `due` sagt, *bis wann* etwas fertig sein muss; `planned_date` sagt, *wann* man daran arbeitet. Nur setzen, was der Nutzer gesagt hat oder was sich zwingend ergibt.
 3. **Nicht jeder Absatz ist eine Aufgabe.** `task` für etwas, das man erledigen kann; `heading` für Abschnitte; `group` für einen Behälter mit Unterpunkten; `long` für erklärenden Text. Gruppen und Überschriften haben keine Termine, Wichtigkeit oder Checkliste.
 4. **Unterpunkte oder Checkliste?** `children` sind eigenständig erledigbare Punkte (höchstens 12 Ebenen). `checklist` sind kurze Schritte innerhalb eines Punkts ohne eigene Termine (höchstens 50, je 200 Zeichen).
-5. **Wenige, wiederverwendete Labels** statt eines Labels je Aufgabe. Labels gelten in Glide 3.65 nur an Punkten, nicht an Listen und Ordnern.
+5. **Wenige, wiederverwendete Labels** statt eines Labels je Aufgabe. Labels gelten in dieser Glide-Fassung nur an Punkten, nicht an Listen und Ordnern.
 6. **Datum als `JJJJ-MM-TT`, Uhrzeit als `HH:MM`.** Relative Angaben („nächsten Freitag“) vom heutigen Datum des Nutzers aus berechnen; kennst du das Datum nicht, frag nach oder lass das Feld weg. Eine Uhrzeit braucht ein Datum.
 7. **Wichtigkeit 0–3** (0 keine, 3 hoch), sparsam vergeben. **Aufwand** `estimated_minutes` als ganze Minuten.
 8. **Nichts erfinden.** Keine Felder außerhalb des Formats, keine internen Kennungen, keine Kontodaten, keine absoluten Pfade, keine Bilder aus dem Netz. Freie Schlüssel (`key`) wählst du selbst; Glide vergibt die echten Kennungen.
 9. **Sprache des Nutzers**, sachlich und knapp. Die Seite beginnt mit `# Titel`; diese Zeile wird der Seitentitel.
 
-## 3. Was Glide 3.65 über diese Wege noch nicht übernimmt
+## 3. Was Glide über diese Wege noch nicht übernimmt
 
-Wiederholungen, Erinnerungen, Farben, Pixelsymbole, Ordnerarten Buch und Notizbuch, Verknüpfungen („Verknüpft mit“, „Wartet auf“), Anhänge und Bilder im Austauschformat, Galerien, Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Lass diese Felder weg. Wichtige Angaben schreibst du in die Beschreibung, etwa „Wiederholung: jeden Montag“, und sagst dem Nutzer, dass er sie in Glide setzt.
+Wiederholungen, Erinnerungen, Farben, Pixelsymbole, Ordnerarten Buch und Notizbuch, Verknüpfungen („Verknüpft mit“, „Wartet auf“), Anhänge und Bilder im Austauschformat, Galerien, Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Lass diese Felder weg. Wichtige Angaben schreibst du in die Beschreibung, etwa „Wiederholung: jeden Montag“, und sagst dem Nutzer, dass er sie in Glide setzt. Welches Glide-Feld ankommt, geplant ist oder bewusst in Glide bleibt, steht je Feld in [abdeckung.json](abdeckung.json).
 
 ## 4. Datei schreiben
 
@@ -69,6 +69,14 @@ python3 scripts/glide_datei.py zeichnung eingabe.json zeichnung.glideexchange
 
 Das Eingabeformat zeigt [assets/beispiele/zeichnung-eingabe.json](assets/beispiele/zeichnung-eingabe.json).
 
+**Darstellung in Glide prüfen.** Arbeitest du im Glide-Repository, zeigt die zentrale Prüfung mit dem echten Glide-Code, wie Glide die Datei darstellt – Feld für Feld, mit `--oberflaeche` in einer echten Glide-Instanz mit künstlichem Datenordner, Neustart und Ablesen der Anzeige:
+
+```
+python3 -B tests/tools/ki_ausgabe.py DATEI [--oberflaeche]
+```
+
+ABWEICHUNG heißt: Glide zeigt etwas anderes, als die Datei beschreibt. Datei anpassen und erneut prüfen.
+
 ## 6. Dem Nutzer sagen, wie es weitergeht
 
 Kurz nennen: welche Datei(en), wo sie liegen, welcher Menüpunkt in Glide sie öffnet und was nicht übernommen wurde. Beispiel: „Öffne in Glide Datei › Datenaustausch › „KI-Ergebnis importieren …“ und wähle `einkauf-wochenende.glideexchange`. Die Vorschau zeigt 1 Liste mit 13 Punkten; mit „Importieren“ legst du sie an, Rückgängig nimmt alles zurück.“
@@ -77,4 +85,8 @@ Glide zeigt in der Vorschau unbekannte Angaben an und setzt dann den Fokus auf �
 
 ## Beispiele
 
-In [assets/beispiele/](assets/beispiele/): `einkaufsliste.glideexchange`, `projekt.glideexchange`, `notiz.glideexchange`, `zeichnung.glideexchange` mit `zeichnung-eingabe.json`, `recherchebericht.md`, `kontextpaket.glidecontext` mit `aenderungsvorschlag.glideexchange`. Alle bestehen die Prüfung des Hilfsskripts und die echte Importprüfung von Glide 3.65.0.
+In [assets/beispiele/](assets/beispiele/): `einkaufsliste.glideexchange`, `projekt.glideexchange`, `notiz.glideexchange`, `zeichnung.glideexchange` mit `zeichnung-eingabe.json`, `recherchebericht.md`, `kontextpaket.glidecontext` mit `aenderungsvorschlag.glideexchange`. Alle bestehen die Prüfung des Hilfsskripts und die zentrale Prüfung mit Glide 3.66.0, auch in der echten Oberfläche.
+
+## Für die Arbeit an Glide selbst
+
+Der Skill beschreibt Glides Datenmodell und ist daran gekoppelt: [Glide verstehen](references/glide-aufbau.md) erklärt Bereiche, Objekte, Felder und Speicherweg, `abdeckung.json` ordnet jedes Datenfeld ein. Wer im Glide-Repository das Datenformat, ein Feld, eine Listen-, Ordner- oder Punktart oder den Austauschweg ändert, zieht diesen Skill im selben Schnitt nach; `tests/tools/test_agenten_skill.py` schlägt sonst fehl.

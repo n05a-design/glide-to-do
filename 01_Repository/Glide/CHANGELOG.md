@@ -1,7 +1,18 @@
 # Änderungsverlauf
 
-Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
+
+## 3.66.0 – 16.11.2026
+
+Zentrierter Agenten-Skill `glide-to-do`, strenge Datenformatkopplung und Darstellungsprüfung (WA-61, D91/D92). Datenformat 26 unverändert.
+
+- Neuer Agenten-Skill `glide-to-do` unter `skills/glide-to-do/` nach dem Agent-Skills-Standard (`SKILL.md`, Hilfsskript, Referenzen, Beispieldateien, Einrichtungsanleitungen für Claude, OpenAI und Google).
+- Strenge Datenformatkopplung: `abdeckung.json` ordnet jedes Feld des Aufgabenformats 26 verbindlich ein. Werkzeugtest T321 `test_agenten_skill.py` gleicht Skill-Regeln, Konstanten und Datenmodell ab; Formatänderungen ohne Skillanpassung werden in der CI abgewiesen.
+- Zentrales Prüfwerkzeug T322 `tests/tools/ki_ausgabe.py` und Werkzeugtest T323 `test_ki_ausgabe.py`: prüft KI-Ausgaben in vier Stufen auf Format, Glide-Regeln, Import und Anzeige.
+- Vollprüfungs-Integrationssuite T324 `tests/integration/test_ki_ausgabe_darstellung.py`: prüft alle Skill-Beispiele, Formatgrenzen und fehlerhafte Ausgaben mit echter Tk-Oberfläche, Speichern, Prozessneustart und Anzeigeablesung.
+- Entwicklungs-Skill `glide-aufbau` (`.claude/skills/glide-aufbau/`) und Referenz `glide-aufbau.md` als strukturierte Einstiegshilfe zum Verständnis von Glides Daten- und Objektmodell.
+- Prüfung: Werkzeugtests 21/21, Skilltest 15/15, Ki-Ausgabeprüfung 6/6, Vollprüfungs-Integrationssuite grün. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md).
 
 ## 3.65.0 – 16.11.2026
 

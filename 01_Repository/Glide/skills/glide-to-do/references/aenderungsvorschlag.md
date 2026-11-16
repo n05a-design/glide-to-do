@@ -1,13 +1,13 @@
 # Vorhandene Aufgaben überarbeiten
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26 · Austauschformat 2
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26 · Austauschformat 2
 
 Glide gibt dir vorhandene Aufgaben nie direkt, sondern als **Kontextpaket**: Der Nutzer wählt Datei › Datenaustausch › „Für KI bereitstellen …“ mit dem Zweck „Vorhandene Aufgaben überarbeiten lassen“ und reicht dir die `.glidecontext`-Datei weiter. Du antwortest mit einem **Änderungsvorschlag**. Glide zeigt jede Änderung Feld für Feld und übernimmt nur, was noch zum Ausgangsstand passt.
 
 ## Kontextpaket lesen
 
 ```json
-{"format": "glide.context", "format_version": 2, "application_version": "3.65.0",
+{"format": "glide.context", "format_version": 2, "application_version": "3.66.0",
  "instructions": "…", "fields": ["title", "description", "importance", "due", "due_time",
  "planned_date", "estimated_minutes", "done", "labels"],
  "lists": [{"ref": "r-…", "kind": "list", "title": "…", "description": "…"}],
