@@ -1123,7 +1123,7 @@ Ein Skill darf Glide-Daten nur über **Importdokumente** anlegen, nie über `lis
 | Beschreibung von Punkt, Liste, Ordner | `description`, `note` | Austausch | ✓ | K1 |
 | Fälligkeit mit Uhrzeit, Bearbeitungstag, Aufwand, Wichtigkeit, Erledigt | `due`, `due_time`, `planned_date`, `estimated_minutes`, `importance`, `done` | Austausch | ✓ | K1 |
 | Planungsuhrzeit | `planned_time` | keiner | ✗ | K3 |
-| Labels (Tags) an Punkten | `labels` | Austausch `labels` mit Farbe | ✓ | K1 |
+| Labels (Tags) an Punkten | `labels` | Austausch `labels`; die Labelfarbe übernimmt der Import nicht (Befund 1) | ✓ | K1 |
 | Labels an Listen und Ordnern | `labels` | angenommen, aber nicht übernommen (Befund 1) | ✗ | K2 |
 | Wiederholungen | `repeat` (Format 26) | Austausch Fähigkeit 0; Umweg TXT-Zeile „Wiederholung:“ oder ICS-`RRULE` | ◐ | K3 |
 | Erinnerungen | `reminder` | Austausch Fähigkeit 0; Umweg ICS mit Erinnerungsoption | ◐ | K3 |
@@ -1134,7 +1134,7 @@ Ein Skill darf Glide-Daten nur über **Importdokumente** anlegen, nie über `lis
 | Pixelzeichnung, Bildfolge | `drawing`, `animation` | Austausch (`hex8-row-v1`, bis 120 Bilder); von Hand kaum fehlerfrei zu kodieren | ◐ | K1 mit Hilfsskript |
 | Diagramm, Pinnwand | `pinboards` (Einstellungen) | nur Ausgabe als JSON Canvas 1.0, kein Import | ✗ | K6 |
 | Notizbuch-Angaben (Moment, Stimmung, Ort) | `journal` | keiner | ✗ | K3 |
-| Vorlagen | `vorlagen.json`, `.glidetemplates` Format 2 | „Vorlagen hinzufügen …“: einfache Listen-/Ordnervorlagen mit Punkttiteln und Platzhaltern `{{…}}`; `payload` ist internes Format | ◐ | K1 einfach, K3 |
+| Vorlagen | `vorlagen.json`, `.glidetemplates` Format 2 | „Vorlagen hinzufügen …“: einfache Listen-/Ordnervorlagen mit Punkttiteln und Platzhaltern `{{…}}`; `payload` ist internes Format | ◐ | K3 (K1 nutzt den Weg nicht, Nachtrag 16.11.2026) |
 | Anzeige (Liste, Tabelle, Spalten, gespeicherte Ansichten, Design) | Einstellungen 2 | keiner, bewusst gerätebezogen | ✗ bewusst | – |
 | Sicherung und App-Sicherung | `.glidebackup`, `.glideapp` | Skill erzeugt sie nicht; er empfiehlt vor großen Importen eine App-Sicherung | ✕ bewusst | K1 Regel, K3 Vorsicherung |
 | Vorhandenes überarbeiten | neun Austauschfelder | `.glidecontext` → `mode: "patch"` mit Konfliktprüfung | ✓ | K1 |
@@ -1143,7 +1143,7 @@ Ergebnis: Von 24 Ebenen sind 7 vollständig und 7 eingeschränkt über vorhanden
 
 ### Befunde
 
-1. **Listen- und Ordnerlabels werden still verworfen.** `EXCHANGE_LIST_FIELDS` und `EXCHANGE_FOLDER_FIELDS` enthalten `labels`, deshalb meldet die Prüfung sie nicht als unbekannt. `apply_exchange_payload` gibt sie aber weder an `new_list_object` noch an `new_folder_object` weiter. Das widerspricht dem Grundsatz im Code, dass kein Feld ohne Spur verschwinden darf.
+1. **Listen- und Ordnerlabels werden still verworfen.** `EXCHANGE_LIST_FIELDS` und `EXCHANGE_FOLDER_FIELDS` enthalten `labels`, deshalb meldet die Prüfung sie nicht als unbekannt. `apply_exchange_payload` gibt sie aber weder an `new_list_object` noch an `new_folder_object` weiter. Ebenso die Labelfarbe: `ensure_label_by_name` erhält nur den Namen und vergibt reihum eine Palettenfarbe (Nachtrag 16.11.2026 bei der Umsetzung von K1). Das widerspricht dem Grundsatz im Code, dass kein Feld ohne Spur verschwinden darf.
 2. **Die KI-Anleitung nennt nicht alles, was der Import annimmt.** `exchange_prompt_text` beschreibt weder `list_kind` (Notiz, Seite, Zeichnung) noch `rich_note`, `drawing` und `animation`, und `exchange_capabilities` führt keine Listenarten. Die Titelgrenze von 40 Zeichen (D67) fehlt ebenfalls; längere Titel kürzt `_clip_and_note_title` und sichert den Originaltitel in der Beschreibung.
 3. **Der Austauschvertrag ist nicht Tk-frei.** Feldmengen, Grenzen, Fähigkeiten, Prüfung und Anleitung liegen in `ListApp`; nur Änderungsvorschlag (`exchange_patch.py`) und Aufträge (`exchange_recipes.py`) sind eigene Module. Ein Prüfskript im Skill kann den Vertrag deshalb nicht ohne Tk laden und müsste ihn abschreiben. Nach D17 gehört er in ein Tk-freies Modul (K2).
 4. **Seitentext im Austausch verlangt Zeichenpositionen.** `rich_note.spans` zählt Python-Zeichen; Sprachmodelle verzählen sich verlässlich, besonders bei Emoji und Zeichen außerhalb der Basisebene. Der Markdown-Weg ist robust und erzeugt echte Aufgaben, steht aber nur als einzelne Seite über „Seite aus Datei …“ bereit, ohne Ordnerziel und ohne Austauschdatei.

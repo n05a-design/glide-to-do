@@ -1,0 +1,22 @@
+{
+  "format": "glide.exchange",
+  "format_version": 2,
+  "mode": "create",
+  "generator": {"type": "ai", "name": "glide-to-do"},
+  "lists": [
+    {
+      "key": "list-1",
+      "title": "Telefonat Hausverwaltung",
+      "list_kind": "note",
+      "description": "Gesprächsnotiz vom 16.11.2026.",
+      "rich_note": {
+        "text": "Anruf am 16.11.2026, 10:30 Uhr.\n\nThemen:\n- Heizung im zweiten Obergeschoss wird am 02.12. gewartet.\n- Schlüssel für die neuen Räume gibt es ab dem 11.12.\n- Parkplätze bleiben unverändert.\n\nRückfrage offen: Wer bestätigt den Termin für die Schlüsselübergabe?",
+        "spans": [],
+        "links": {}
+      },
+      "items": [
+        {"type": "task", "title": "Termin Schlüsselübergabe bestätigen", "due": "2026-11-20"}
+      ]
+    }
+  ]
+}

@@ -69,7 +69,8 @@ class ProjectLicenseTests(unittest.TestCase):
     def test_owned_active_python_sources_carry_the_mpl_identifier(self):
         repo = TOOLS.parents[1]
         folders = ("src/glide", "tests/unit", "tests/integration", "tests/tools",
-                   "scripts/pflege", "packaging/paket", "packaging/runtime", "packaging/macos")
+                   "scripts/pflege", "packaging/paket", "packaging/runtime", "packaging/macos",
+                   "skills/glide-to-do/scripts")
         paths = [p for folder in folders for p in (repo / folder).glob("*") if p.suffix in (".py", ".pyw")]
         self.assertGreaterEqual(len(paths), 400)
         for path in paths:
