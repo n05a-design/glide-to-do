@@ -1,4 +1,24 @@
-# QA-Bericht – Glide 3.63.2
+# QA-Bericht – Glide 3.64.0
+
+## Prüfstand 3.64.0 – Shell-Paket 3c (15.11.2026)
+
+Basis `main` `1fbf6a77` (Glide 3.63.2, PR #100), vor Beginn gegen `origin/main` geprüft; Branch `claude/shell-3c-fensterlebensdauer`. Geprüft unter Windows 11 x64 (AMD Ryzen 7 5800X3D) mit Python 3.14.7 und Tcl/Tk 9.0.4, künstliche Daten in kurzen Prüfablagen außerhalb von OneDrive; `app.pyw` SHA-256 `8fb53f40a758…`. Auftrag im [Plan §21.100](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Baseline auf 3.63.2 vor der Änderung | `test_abbauvertrag.py` 4/4 und `test_modalvertrag.py` 13/13 grün; frei vor dem Schließen im Fall Hintergrundverlauf: sechs `_paint_triangles`, `abgleichen`, `collapse_emptied_frames`, `draw_icons`, `sync_backdrop_surfaces`, `_save_recent_pages`, `abholen` |
+| `test_fensterlebensdauer.py` (neu) | Neun Fälle grün; `--gegenproben` sechs von sechs Schutzzeilen erkannt |
+| `test_abbauvertrag.py` | Fünf Fälle grün, vor dem Schließen kein freier Zeitgeber mehr; neuer Fall `modal_offen`: Schließen bei offener modaler Rückfrage baut ab und liefert eine Antwort statt eines Fehlers. `--gegenproben` vier von vier erkannt, darunter ein Zeitgeber am Bereich vorbei |
+| `test_modalvertrag.py` | 13 Fälle grün |
+| `tests/unit/test_shell_importregel.py` (neu) | Sieben Tests grün; die Unit-Suite insgesamt 1.217 Tests grün |
+| Volllauf `pruefen.py --modus schnell` | 126 Schritte ausgeführt, alle Integrationssuiten, Showcase und Analysen grün, nach zwei Korrekturen der Dokumentverweise (unten). Ohne `test_tempo330.py` und mit `--timeout 900` (Grenzen) |
+| Stand-, Attribut- und Dublettenprüfung | grün; Lieferabgleich `abgleich_07.py`: 96 Code-Dateien und 165 Ressourcen ohne Abweichung; `test_glide_system.py` grün (V1.30) |
+
+**Befunde:**
+- Der Versionswechsel kürzt die Nachweise auf die sieben neuesten Versionen und hat dabei `tests/qa-3.55.1` entfernt. Vier Verweise in QA-Bericht, Plan und Änderungsverlauf zeigen jetzt auf den festen GitHub-Stand `1fbf6a77`.
+- `test_tempo330.py` ist auf diesem Gerät rot, auf der unveränderten Basis 3.63.2 ebenso: Liste 66–82 ms je Bild gegen die Grenze von rund 63 ms, unter Python 3.14.7 und 3.15.1. 3c verändert die Werte nicht messbar. Die Arbeitsmodi-Gruppe „Geometrie“ lief mit 300 s ins Zeitlimit; die gemessenen Fälle dauern auf Basis und 3.64.0 gleich lang (`menschen3503` rund 19 s, im Volllauf 3.63.2 auf demselben Gerät 12,6 s). Während der Läufe lag die CPU-Last durch andere Programme bei rund 63 %. Test und Grenze sind unverändert; die Messung gehört auf ein ruhiges Gerät.
+
+**Grenzen:** Nicht geprüft sind macOS (D90: Modal-, Abbau- und Fensterlebensdauer-Vertrag einmal am Mac), Linux/Xvfb, Tk 8.6/9.1, Python 3.12, physische Bedienung und die Paketbauten. Rund 70 direkte `after`-Aufrufe und 46 direkt erzeugte `tk.Toplevel` sind nicht umgestellt.
 
 ## Korrekturversionen 3.63.1 und 3.63.2 – CI-Volllauf (15.11.2026)
 
@@ -190,7 +210,7 @@ Der GitHub-Runner meldet macOS 15.8.2, Apple M1 (Virtual), arm64, ohne Rosetta, 
 
 ## Dokumentationsabgleich (13.11.2026)
 
-Der [Nachweis zur Dokumentationspflege](../tests/qa-3.55.1/dokumentation_2026-11-13/README.md) enthält den geprüften Umfang, Struktur-/Linkprüfungen, Systeminventar, CI-Grundstufe und den Vergleich der App-/Lieferhashes. Die Änderung betrifft Zuständigkeiten und Querverweise sowie die Abgrenzung des Shell-Zielbilds vom Systembestand. Sie ersetzt keine der folgenden App-, Plattform-, Paket- oder menschlichen Abnahmen.
+Der [Nachweis zur Dokumentationspflege](https://github.com/n05a-design/glide-to-do/blob/1fbf6a774fc75a7bc910926c76ef362c184d8d50/01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md) enthält den geprüften Umfang, Struktur-/Linkprüfungen, Systeminventar, CI-Grundstufe und den Vergleich der App-/Lieferhashes. Die Änderung betrifft Zuständigkeiten und Querverweise sowie die Abgrenzung des Shell-Zielbilds vom Systembestand. Sie ersetzt keine der folgenden App-, Plattform-, Paket- oder menschlichen Abnahmen.
 
 ## Lokale Nachabnahme und Prüfstand 3.55.1 (12.11.2026)
 
@@ -402,7 +422,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
 
 ## Offene menschliche Sichtabnahme 3.63.0
 

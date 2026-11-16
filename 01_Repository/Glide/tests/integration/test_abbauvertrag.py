@@ -44,7 +44,10 @@ SOURCE = REPO / "src" / "glide" / "app.pyw"
 BESTAND = REPO / "tests" / "fixtures" / "beispiele" / "glide_beispieldaten.glidebackup"
 ZEITLIMIT = 240          # je Fallprozess in Sekunden
 NACHLAUF = 1.5           # Ereignisverarbeitung nach dem Schließen in Sekunden
-FAELLE = ("ruhig", "verlauf_laeuft", "abbruch", "doppelt")
+FAELLE = ("ruhig", "verlauf_laeuft", "abbruch", "doppelt", "modal_offen")
+# Seit Paket 3c gehören diese Zeitgeber einem Zeitgeberbereich (`window_lifetime`).
+BESESSEN = ("_save_recent_pages", "abholen", "abgleichen", "collapse_emptied_frames", "draw_icons",
+            "sync_backdrop_surfaces", "_paint_triangles")
 NL = "\n"
 
 
@@ -115,11 +118,34 @@ def fall_ausfuehren(name, quelle):
             for _ in range(3):
                 root.update()
 
-        vorher = auftraege(root)
-        registriert = set(app._after_ids)
+        if name == "modal_offen":
+            # Schließen, während eine Rückfrage modal wartet: Der Dialog geht mit
+            # dem Hauptfenster, der Aufrufer bekommt eine Antwort statt eines Fehlers.
+            app.ask_yes_no = type(app).ask_yes_no.__get__(app)
+            offen = {}
+
+            def schliessen():
+                offen["dialoge"] = sum(isinstance(k, mod.tk.Toplevel) for k in root.winfo_children())
+                offen["griff"] = bool(root.grab_current())
+                app.on_close()
+
+            root.after(400, schliessen)
+            try:
+                ergebnis["modal_antwort"] = repr(app.ask_yes_no("Abbauvertrag", "Rückfrage bleibt offen."))
+            except Exception:
+                ergebnis["modal_antwort"] = "Fehler: " + traceback.format_exc()[-400:]
+            ergebnis["modal_dialoge"] = offen.get("dialoge")
+            ergebnis["modal_griff"] = offen.get("griff")
+
+        vorher = auftraege(root) if name != "modal_offen" else set()
+        registriert = set()
+        if name != "modal_offen":
+            registriert = set(app._after_ids) | set(mod.glide_window_lifetime.pending_jobs(root))
+        ergebnis["besessen_vor_schliessen"] = benennen(root, registriert & vorher)
         ergebnis["frei_vor_schliessen"] = benennen(root, vorher - registriert)
         ergebnis["registriert_vor_schliessen"] = len(registriert & vorher)
-        app.on_close()
+        if name != "modal_offen":
+            app.on_close()
         if name == "doppelt":
             try:
                 app.on_close()
@@ -171,7 +197,15 @@ def bewerten(ergebnis):
         brueche.append(f"späte Rückrufe scheitern: {ergebnis['spaete_fehler'][:3]}")
     if ergebnis.get("faeden_haengen"):
         brueche.append(f"Hintergrundfäden laufen weiter: {ergebnis['faeden_haengen']}")
-    if name == "verlauf_laeuft" and "timer:abholen" not in ergebnis.get("frei_vor_schliessen", []):
+    unbesessen = [e for e in ergebnis.get("frei_vor_schliessen", []) if e.split(":", 1)[-1] in BESESSEN]
+    if unbesessen:
+        brueche.append(f"Zeitgeber ohne Zeitgeberbereich: {unbesessen}")
+    if name == "modal_offen":
+        if not ergebnis.get("modal_dialoge") or not ergebnis.get("modal_griff"):
+            brueche.append("Rückfrage stand beim Schließen nicht modal offen – Fall prüft nichts")
+        if ergebnis.get("modal_antwort") not in ("True", "False", "None"):
+            brueche.append(f"Rückfrage endet nicht sauber: {ergebnis.get('modal_antwort')}")
+    if name == "verlauf_laeuft" and "timer:abholen" not in ergebnis.get("besessen_vor_schliessen", []):
         brueche.append("Abholtimer des Hintergrundverlaufs stand vor dem Schließen nicht an – Fall prüft nichts")
     if name == "abbruch":
         if ergebnis.get("abbruch_rueckgabe") is not None and ergebnis.get("abbruch_lebt") is not True:
@@ -212,6 +246,10 @@ GEGENPROBEN = {
     # Wurzel. Die Gegenprobe trifft deshalb die Freigabe selbst.
     "ohne_sperrfreigabe": ("release_data_lock", "os.remove(LOCK_FILE)", "pass", "ruhig"),
     "ohne_abbruchgrenze": ("on_close", "self._closing = False", "pass", "abbruch"),
+    # Paket 3c: ein Zeitgeber am Zeitgeberbereich vorbei muss auffallen.
+    "ohne_zeitgeberbereich": ("schedule_backdrop_sync",
+                              "if self.after_scope().after_idle(self.sync_backdrop_surfaces) is None:",
+                              "if self.root.after_idle(self.sync_backdrop_surfaces) is None:", "verlauf_laeuft"),
 }
 
 

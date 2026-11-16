@@ -3,6 +3,14 @@
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.64.0 – 15.11.2026
+
+Shell-Paket 3c: Zeitgeber gehören einem Fenster oder einer Ansicht. Sichtbares Verhalten und Datenformat 26 unverändert.
+
+- Neues Tk-Modul `window_lifetime.py` (nur Standardbibliothek und `tkinter`): Ein Zeitgeberbereich führt die Zeitgeber eines Widgets, bricht sie mit dem Widget ab und nimmt danach keine neuen an. `ListApp.after_scope` und `_register_after` sind Fassaden.
+- Sieben Zeitgeber, die bisher an keiner Stelle geführt wurden, gehören jetzt einem Bereich: zuletzt geöffnete Seiten, Abholen und Abgleich des Hintergrundverlaufs, festes Layout, leere Rahmen, Symbole der Systemnavigation und die Dreieckmarker der Bäume.
+- Prüfung: `test_fensterlebensdauer.py` (neun Fälle, sechs Gegenproben), `test_shell_importregel.py` mit der zentralen Liste der Shell-Module (D86); der Abbau-Vertragstest prüft zusätzlich das Schließen bei offener Rückfrage. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3640--shell-paket-3c-15112026).
+
 ## 3.63.2 – 15.11.2026
 
 Zweite Korrekturversion nach dem CI-Volllauf: Befunde, die erst nach der Lieferung von 3.63.1 sichtbar wurden. Datenformat 26 unverändert.
@@ -93,7 +101,7 @@ Nachabnahme desselben lokalen Versionskandidaten:
 - Contributing-Einstieg und README-Navigation für Mitarbeit, Roadmap, Funktionen, Architektur, Entwicklungsablauf und Qualität ergänzt.
 - Führende Dokumente und Änderungsfolgen in der [Pflegematrix](docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) zusammengeführt; Arbeitsregeln, Einstiege und Fachquellen darauf ausgerichtet.
 - Shell-Konzept auf Zielarchitektur konzentriert, doppelte Modulaufzählungen ins bestehende Systemregister zurückgeführt und geplante Schnittstellen von vorhandenen Bausteinen abgegrenzt; Beschreibung von `RedoHistory` und den verbleibenden App-Kopplungen berichtigt.
-- Glide-Systemkatalog als Dokumentationskorrektur auf V1.17.3 fortgeschrieben; App 3.55.1 und Datenformat 26 unverändert. Prüfumfang und Grenzen im [Nachweis](tests/qa-3.55.1/dokumentation_2026-11-13/README.md).
+- Glide-Systemkatalog als Dokumentationskorrektur auf V1.17.3 fortgeschrieben; App 3.55.1 und Datenformat 26 unverändert. Prüfumfang und Grenzen im [Nachweis](https://github.com/n05a-design/glide-to-do/blob/1fbf6a774fc75a7bc910926c76ef362c184d8d50/01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md).
 
 ## 3.55.1 – 12.11.2026
 

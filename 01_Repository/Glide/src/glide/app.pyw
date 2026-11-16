@@ -201,6 +201,7 @@ import action_menu as glide_action_menu  # noqa: E402
 import side_view as glide_side_view  # noqa: E402
 import compact_mode as glide_compact  # noqa: E402
 import modal_session as glide_modal_session  # noqa: E402
+import window_lifetime as glide_window_lifetime  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -236,7 +237,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.63.2"
+APP_VERSION = "3.64.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -411,12 +412,12 @@ class GlideTreeview(ttk.Treeview):
 
     def _forget_triangles(self, event):
         if event.widget is self and self._triangle_job is not None:
-            self.after_cancel(self._triangle_job)
+            glide_window_lifetime.scope_for(self).cancel(self._triangle_job)
             self._triangle_job = None
 
     def schedule_triangles(self, *_args):
         if self._triangle_job is None and self.winfo_exists():
-            self._triangle_job = self.after_idle(self._paint_triangles)
+            self._triangle_job = glide_window_lifetime.scope_for(self).after_idle(self._paint_triangles)
 
     def _paint_triangles(self):
         self._triangle_job = None
@@ -5895,12 +5896,12 @@ class SystemNavigation(GlideTreeview):
 
     def _stop_icons(self, event):
         if event.widget is self and self._icon_job is not None:
-            self.after_cancel(self._icon_job)
+            glide_window_lifetime.scope_for(self).cancel(self._icon_job)
             self._icon_job = None
 
     def schedule_icons(self, _event=None):
         if self._icon_job is None:
-            self._icon_job = self.after_idle(self.draw_icons)
+            self._icon_job = glide_window_lifetime.scope_for(self).after_idle(self.draw_icons)
 
     def item(self, item, option=None, **kwargs):
         result = super().item(item, option, **kwargs)
@@ -18917,7 +18918,7 @@ class ListApp:
         # Wiederholen nach Rückgängig (FP-01): gleiche Tiefe, nur im Arbeitsspeicher.
         self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
         self.dirty = False
-        self._after_ids = set()
+        self.after_scope()
         self._ui_transitions = glide_motion.Transitions(self.root.after, self.cancel_ui_after)
         self._scrollbar_refresh_id = None
 
@@ -19308,7 +19309,7 @@ class ListApp:
 
         def abholen():
             if faden.is_alive():
-                self.root.after(60, abholen)
+                self.after_scope().after(60, abholen)
                 return
             if schluessel != getattr(self, "_backdrop_key", None):
                 return
@@ -19319,7 +19320,7 @@ class ListApp:
             self._store_backdrop_cache(pfad, daten["png"])
             self._install_backdrop(anfrage, schluessel, daten)
 
-        self.root.after(60, abholen)
+        self.after_scope().after(60, abholen)
 
     def wait_for_backdrop(self, timeout=30.0):
         """Für Prüfläufe: wartet, bis ein angeforderter Verlauf angelegt ist."""
@@ -19364,9 +19365,7 @@ class ListApp:
         if getattr(self, "_backdrop_sync_pending", False):
             return
         self._backdrop_sync_pending = True
-        try:
-            self.root.after_idle(self.sync_backdrop_surfaces)
-        except tk.TclError:
+        if self.after_scope().after_idle(self.sync_backdrop_surfaces) is None:
             self._backdrop_sync_pending = False
 
     # Beim Scrollen und Ziehen am Fensterrand melden Rahmen ihre neue Lage bei
@@ -47139,13 +47138,25 @@ class ListApp:
         self.open_external_path(ERROR_LOG_FILE)
         return "break"
 
+    def after_scope(self):
+        """Zeitgeberbereich des Hauptfensters (Shell-Baustein `window_lifetime`).
+
+        `_after_ids` bleibt als Bestand dieses Bereichs erhalten; wer die Menge
+        ersetzt hat, wird hier wieder zusammengeführt.
+        """
+        scope = getattr(self, "_lifetime", None)
+        if scope is None or scope.widget is not self.root:
+            scope = self._lifetime = glide_window_lifetime.AfterScope(self.root)
+        known = getattr(self, "_after_ids", None)
+        if known is not scope.jobs:
+            if known:
+                scope.jobs.update(known)
+            self._after_ids = scope.jobs
+        return scope
+
     def _register_after(self, after_id):
-        if after_id is not None:
-            # Nur lebende Aufträge behalten; ausgeführte IDs besitzen keinen Tk-Callback mehr.
-            pending = self.root.tk.splitlist(self.root.tk.call("after", "info"))
-            self._after_ids.intersection_update(pending)
-            self._after_ids.add(after_id)
-        return after_id
+        # Nur lebende Aufträge bleiben im Bestand; ausgeführte IDs besitzen keinen Tk-Callback mehr.
+        return self.after_scope().adopt(after_id)
 
     def schedule_scrollbar_refresh(self):
         if not hasattr(self, "root"):
@@ -47426,10 +47437,7 @@ class ListApp:
                 return
             self._emptied_parents.add(eltern)
             if self._empty_frame_job is None:
-                try:
-                    self._empty_frame_job = self.root.after_idle(self.collapse_emptied_frames)
-                except tk.TclError:
-                    self._empty_frame_job = None
+                self._empty_frame_job = self.after_scope().after_idle(self.collapse_emptied_frames)
 
         for sequenz in ("<Destroy>", "<Unmap>"):
             self.root.bind_all(sequenz, merken, add="+")
@@ -47489,12 +47497,7 @@ class ListApp:
             controller.close()
         self._destroy_item_context_menu()
         self._destroy_sidebar_context_menu()
-        for after_id in list(getattr(self, "_after_ids", ()) or ()):
-            try:
-                self.root.after_cancel(after_id)
-            except tk.TclError:
-                pass
-        self._after_ids = set()
+        self.after_scope().cancel_all()
         job = getattr(self, "_empty_frame_job", None)
         if job is not None:
             try:
@@ -55182,9 +55185,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.sync_tool_band()
             self.sync_card_foot()
 
-        try:
-            self.root.after_idle(abgleichen)
-        except tk.TclError:
+        if self.after_scope().after_idle(abgleichen) is None:
             self._fixed_layout_pending = False
 
     def tool_band_host(self):
@@ -68491,10 +68492,7 @@ Labels, Termine und Metadaten."""
         self.settings["recent_pages"] = recent[:self.MAX_RECENT_PAGES]
         job = getattr(self, "_recent_pages_job", None)
         if job is None:
-            try:
-                self._recent_pages_job = self.root.after(1500, self._save_recent_pages)
-            except tk.TclError:
-                self._recent_pages_job = None
+            self._recent_pages_job = self.after_scope().after(1500, self._save_recent_pages)
             if self._recent_pages_job is not None and not getattr(self, "_recent_pages_cleanup", False):
                 # Schließt sich das Fenster vorher, fällt der Auftrag weg, statt
                 # später auf ein nicht mehr vorhandenes Tk-Kommando zu treffen.
@@ -68506,11 +68504,7 @@ Labels, Termine und Metadaten."""
             return
         job = getattr(self, "_recent_pages_job", None)
         self._recent_pages_job = None
-        if job is not None:
-            try:
-                self.root.after_cancel(job)
-            except tk.TclError:
-                pass
+        self.after_scope().cancel(job)
 
     def _save_recent_pages(self):
         self._recent_pages_job = None

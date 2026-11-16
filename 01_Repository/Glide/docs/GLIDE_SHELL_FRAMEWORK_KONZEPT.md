@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
 
@@ -101,7 +101,7 @@ Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- 
 - **Ziel:** Einheitliche Widget-Schnittstelle (`keys()`, `configure()`, Event-Binding) unabhängig vom konkreten Glide-Inhalt.
 
 ### Phase 3: Modal- und Dialog-Manager
-- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py` als flaches Modul; ein Namensraum wie `glide_shell.dialogs` bleibt an die offene Paketentscheidung gebunden.
+- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py` als flaches Modul; ein Namensraum wie `glide_shell.dialogs` entsteht nach D86 erst mit dem Paket `glide_shell` vor Paket 6; bis dahin führt `tests/unit/test_shell_importregel.py` die Liste der Shell-Module.
 - **Ziel:** Schutz vor Livelocks, standardisierte Bestätigungs-, Eingabe- und Auswahldialoge mit einheitlicher Tastaturbedienung (Escape zum Abbrechen, Enter zum Bestätigen).
 
 ### Phase 4: Undo/Command-Abstraktion
@@ -159,11 +159,13 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 - **Start:** Direktstart, Schnellstart und Paketstarter verhalten sich gegen leere, vorhandene, fremd gesperrte und beschädigte Ablage gleich; sie unterscheiden sich nur in der Überwachung durch den Begleitprozess. Der Bytecode-Ordner wird dreifach aufgelöst, weil jeder Einstieg ihn vor seinem ersten eigenen Import braucht; ein Test hält die drei Auflösungen gleich.
 - **Modal:** `run_modal` ist der einzige Warteweg. Seit 3.62.0 wartet `modal_session.wait_modal`; Theme, Bildschirmanteil und Fehlerprotokoll reicht die `ListApp`-Fassade als Argumente hinein. Vor einer Verlagerung steht ein Vertragstest mit echtem Grab, Fokus, Abbruch und Besitzerabbau. Seit 14.11.2026 hält `test_modalvertrag.py` diesen Vertrag in 13 Fällen mit sechs Gegenproben fest; den Fokus nach dem Schließen stellen weiterhin die Aufrufer her.
 - **Abbau:** Beim Beenden verwirft Glide am `<Destroy>` der Wurzel alle Tcl-Zeitgeber und gibt die Datensperre ein zweites Mal frei; `test_abbauvertrag.py` hält das fest. Für den Abbau einer Ansicht ohne das Hauptfenster reicht das nicht: Vor dem Schließen sind `_save_recent_pages` (Zeitgeber, auch im Ruhezustand), dazu nach einem Designwechsel mit Hintergrundverlauf `abholen` (Zeitgeber des Hintergrundverlaufs), `abgleichen`, `collapse_emptied_frames`, `draw_icons` und `sync_backdrop_surfaces` (Leerlauf) nicht registriert. Eine Shell-Fensterlebensdauer muss diese Aufträge je Host oder Ansicht besitzen.
+- **Fensterlebensdauer (seit 3.64.0):** `window_lifetime.AfterScope` besitzt die Zeitgeber eines Widgets und endet mit ihm. Das Hauptfenster hat einen Bereich (`ListApp.after_scope`), dessen Bestand `_after_ids` ist; die sieben oben genannten freien Zeitgeber laufen darüber, die der Baumansichten über den Bereich des eigenen Widgets. Rund 70 weitere direkte `after`-Aufrufe in `app.pyw` sind noch nicht umgestellt; sie enden weiter erst am `<Destroy>` der Wurzel. Die 46 direkt erzeugten `tk.Toplevel` haben noch keinen gemeinsamen Erzeugungsweg. Schließen bei offener modaler Rückfrage ist geprüft und endet sauber.
 
 | Modul | Neutral | Glide-gebunden |
 |---|---|---|
 | `motion` | vollständig | – |
-| `modal_session` (seit 3.62.0) | vollständig; Importregel in `test_modal_session.py` | Attributnamen `_glide_modal_active`/`_glide_modal_finished` aus Kompatibilität |
+| `modal_session` (seit 3.62.0) | vollständig; Importregel in `test_shell_importregel.py` und `test_modal_session.py` | Attributnamen `_glide_modal_active`/`_glide_modal_finished` aus Kompatibilität |
+| `window_lifetime` (seit 3.64.0) | vollständig; Importregel in `test_shell_importregel.py` | Attributname `_glide_after_scope` am Widget |
 | `compact_mode` | `parse`, `format_geometry`, `clamp`, `keep_visible` | Mindestmaße, Einstellungsname, Kürzelregel |
 | `appearance` | Designpaar, Erkennung des Systemmodus | Hintergrundauswahl, `with_background` |
 | `ui_design` | Skalen, `fit_text`, `clip_title`, Breitenausgleich, `settled_wrap_width` | `task_title`, `today_columns`, `page_icon_layout` |

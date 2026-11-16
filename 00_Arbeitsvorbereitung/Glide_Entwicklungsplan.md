@@ -8,7 +8,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 15.11.2026 · Glide 3.63.2 · Aufgabenformat 26
+Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -68,7 +68,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen a
 | 3.61.0/3.62.0 | Linux-/Windows-Vollprüfung, macOS- und Windows-Paket zum Merge-Commit `6d719ca7` (PR #85, #87, #88 gemergt) | ▶ | CI-Ergebnisse dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)) | 3c Fenster-/Toplevel-Lebensdauer, danach Fokusrückgabe | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)) | Mac-Läufe nach D90, danach Fokusrückgabe (D87) | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2740,9 +2740,9 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 
 **B – Umsetzung:** Die [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet führende Fachquellen mit ihren Änderungsfolgen. Arbeitsregeln, Contributing-/README-Einstiege, Index und betroffene Fachverträge verweisen darauf. Die parallelen Modulaufzählungen im Shell-Konzept sind in Registerverweisen aufgegangen; Istarchitektur, Systembestand und Zielarchitektur bleiben getrennt. Hypothetische Shell-APIs, `RedoHistory` und noch bestehende App-Kopplungen sind präzisiert. Glide-System V1.17.3 dokumentiert diese Korrektur bei unverändertem Modul-/Feature-/Testbestand.
 
-**C – Prüfung und Rest:** Ausgeführte Prüfungen, Link-/Ankerumfang, CI-Ergebnis und App-/Lieferhashvergleich stehen ausschließlich im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md). Keine neue App-Version, Plattformvollprüfung, Paketlieferung oder menschliche Abnahme. Die Pflegebezüge sind verbindliche Arbeitsregeln; redaktionelle Folgewirkungen werden nicht automatisch aus dem Code abgeleitet. Git-Veröffentlichung ist durch diesen Auftrag nicht beauftragt.
+**C – Prüfung und Rest:** Ausgeführte Prüfungen, Link-/Ankerumfang, CI-Ergebnis und App-/Lieferhashvergleich stehen ausschließlich im [Dokumentationsnachweis](https://github.com/n05a-design/glide-to-do/blob/1fbf6a774fc75a7bc910926c76ef362c184d8d50/01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md). Keine neue App-Version, Plattformvollprüfung, Paketlieferung oder menschliche Abnahme. Die Pflegebezüge sind verbindliche Arbeitsregeln; redaktionelle Folgewirkungen werden nicht automatisch aus dem Code abgeleitet. Git-Veröffentlichung ist durch diesen Auftrag nicht beauftragt.
 
-**Git-Folgeauftrag, 13.11.2026:** Der Inhaber beauftragt anschließend ausdrücklich Commit und Push der Dokumentationsänderungen, damit Navigation und Contributing auf GitHub verfügbar sind. Die Bereitstellung setzt auf dem aktuellen `origin/main` auf; Prüfbezug und zusätzlicher Standzeilenbefund stehen im [Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md#git-folgeauftrag-13112026).
+**Git-Folgeauftrag, 13.11.2026:** Der Inhaber beauftragt anschließend ausdrücklich Commit und Push der Dokumentationsänderungen, damit Navigation und Contributing auf GitHub verfügbar sind. Die Bereitstellung setzt auf dem aktuellen `origin/main` auf; Prüfbezug und zusätzlicher Standzeilenbefund stehen im [Dokumentationsnachweis](https://github.com/n05a-design/glide-to-do/blob/1fbf6a774fc75a7bc910926c76ef362c184d8d50/01_Repository/Glide/tests/qa-3.55.1/dokumentation_2026-11-13/README.md#git-folgeauftrag-13112026).
 
 ### 21.88 Prüfung und Lieferabgleich 3.55.1 (13.11.2026)
 
@@ -2874,3 +2874,17 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 **Umgesetzt:** Testerwartungen an D84 angeglichen; Anzeigeknopf der Zeichenleiste nur mit Profilnamen; Zeilenaktionen beim Scrollen nur umgesetzt; gemeinsame D84-Dreieckzeichen ausdrücklich erlaubt (Design Richtlinien D84); in 3.63.2 Kompaktkopf einheitlich 28 px (D85) und Bereichspfeil-Ausrichtung ohne Glyphenabhängigkeit. Versionswechsel 3.63.1 und 3.63.2, Lieferung per `abgleich_07.py`.
 
 **Prüfung / Rest:** Lokaler Volllauf und CI-Grundstufe grün (Windows/Tk 9, künstliche Daten), Belege im QA-Bericht. Status: lokal abgeschlossen; offen sind Linux-CI-Bestätigung, native Matrix, Pakete und menschliche Sichtabnahme.
+
+### 21.100 Glide 3.64.0: Shell-Paket 3c, Zeitgeberbesitz je Fenster und Ansicht (15.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 15.11.2026 Paket 3c frei, mit der Vorgabe, auf dem neuesten Stand von GitHub aufzusetzen. Basis ist `main` `1fbf6a77` (Glide 3.63.2), vor Beginn gegen `origin/main` geprüft. Umfang nach D88: ein Shell-Modul, das Zeitgeber je Fenster oder Ansicht besitzt, und zuerst die bekannten freien Zeitgeber, nicht alle Fenster.
+
+**B – Umsetzung:**
+1. Neues Modul `src/glide/window_lifetime.py` (M097, nur Standardbibliothek und `tkinter`): `AfterScope` legt Zeitgeber an, führt sie, vergisst gelaufene, bricht beim `<Destroy>` seines Widgets alle ab und nimmt danach keine neuen an; `scope_for(widget)` liefert den Bereich eines Widgets, `pending_jobs(widget)` alle ausstehenden eines Interpreters.
+2. `ListApp.after_scope()` ist der Bereich des Hauptfensters; `_after_ids` bleibt als sein Bestand erhalten, `_register_after` und der Abbruch in `cancel_pending_callbacks` sind Fassaden. Bestehende Aufrufstellen und Tests bleiben unverändert.
+3. Sieben freie Zeitgeber gehören jetzt einem Bereich: `_save_recent_pages`, `abholen`, `sync_backdrop_surfaces`, `abgleichen` und `collapse_emptied_frames` dem Hauptfenster, `draw_icons` (`SystemNavigation`) und `_paint_triangles` (`GlideTreeview`, seit 3.63.0) dem eigenen Widget.
+4. D86: `tests/unit/test_shell_importregel.py` (T319) führt die zentrale Liste der Shell-Module und erzwingt die Importregel für alle; ein als Shell-Paket gekennzeichnetes Modul muss dort stehen.
+5. `tests/integration/test_fensterlebensdauer.py` (T320, Teil von `SUITEN`): neun Fälle mit echtem Tk ohne Glide, sechs Gegenproben. `test_abbauvertrag.py` (T318) verlangt den Zeitgeberbereich für die sieben Zeitgeber, erhält den Fall `modal_offen` und eine vierte Gegenprobe.
+6. Version 3.64.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`; `window_lifetime.py` in den Modullisten von Lieferabgleich, Mac-Vorstufe und Liefer-README. Glide-System V1.30.
+
+**C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3640--shell-paket-3c-15112026). Der in §21.95 offene Fall „Schließen bei offenem modalem Dialog“ ist geprüft und endet sauber. Offen: Mac-Läufe der drei Vertragstests nach D90; rund 70 weitere direkte `after`-Aufrufe und die 46 direkt erzeugten `tk.Toplevel` sind nicht umgestellt; die Hypothese zu `unbind` mit Kennung unter Python 3.12 und der Vorschlag zu WA-50 stehen aus. Nächster Schnitt nach D88: Fokusrückgabe (D87), mit eigener Freigabe.
