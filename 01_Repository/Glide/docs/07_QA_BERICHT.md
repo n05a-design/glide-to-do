@@ -1,5 +1,35 @@
 # QA-Bericht – Glide 3.69.0
 
+## Nachpflege 3.69.0 – Windows-CI, T325 und Vollprüfungsstand (16.11.2026)
+
+Stand nach dem Merge von PR #118 (`main` `f0511dd9`); Branch `claude/glide-docs-audit-handoff-c9f50b`, kein Versionswechsel, `src/glide` und `07_Python-Versionen` unverändert. Lokal macOS arm64, Python 3.14.5 (Python.org-Framework), Tcl/Tk 9.0.3, künstliche Daten außerhalb OneDrive.
+
+| Gegenstand | Nachweis |
+|---|---|
+| GitHub Actions auf `main` `f0511dd9` | Grundstufe, CodeQL, macOS-Paket und Vollprüfung Linux/Xvfb (eigene Tk 9.1, 33 min 31 s) grün. **Vollprüfung Windows x64 rot** (Lauf 43955007037): Unit-Tests enden mit Exitcode `3221225477` (`0xC0000005`) in `tkinter.clipboard_clear` aus `desktop_adapter.copy_to_clipboard`, aufgerufen von `test_desktop_adapter.test_clipboard_roundtrip`; alle folgenden Schritte übersprungen. Derselbe Workflow war schon auf PR #118 rot |
+| Korrektur `test_desktop_adapter.py` (T313) | Zwischenablage über eine Attrappe statt über das echte Tk-Wurzelfenster; der Test überschrieb bisher die Zwischenablage des Prüfrechners. `TestDesktopHelfer` öffnet kein Tk-Fenster mehr und läuft damit auch headless vollständig. `desktop_adapter.py` unverändert. Lokal 13/13 grün; Windows-Nachweis folgt mit der CI des Nachpflege-PR |
+| T325 in der Vollprüfung | `test_ki_ausgabe_darstellung.py` war als Vollprüfungssuite beschrieben, stand aber nicht in `SUITEN` von `tests/tools/pruefen.py`; nachgetragen (113 → 114 Suiten, `tests/README.md` von veralteten 110 nachgezogen). Lokal Exitcode 0 |
+| Mac-Vollprüfung `pruefen.py --modus voll` (Start 21:03 UTC, Quelle Hauptablage auf `claude/release-3690`) | 84 von 85 ausgeführten Schritten grün (Syntax 443 Dateien, Versionen, Dokumentation, Fixtures, 1.230 Unit-Tests, Tk-/Zeitzonenvoraussetzung, 77 Integrationssuiten). Gestoppt bei `test_oberflaeche33321`: „Leiste bleibt nach dem Verlassen stehen“ (Hoverzustand über die echte Zeigerlage). Isoliert danach zweimal grün. Nicht gelaufen: die übrigen 35 Suiten einschließlich Arbeitsmodi, Showcase, Analysen, Beispieldaten-/Releasereproduktion. **Kein vollständiger Mac-Volllauf für 3.69.0** |
+
+**Rest:** Nachpflege-PR mit grüner Windows-Vollprüfung nach `main`; danach ein vollständiger Mac-Volllauf auf dem gemergten Stand ohne Zeiger über dem Prüffenster.
+
+## Prüfstand 3.69.0 – Dokumentations- und Übergabekonsolidierung, Headless-CI-Absicherung (16.11.2026)
+
+Basis `main` `e2e0590b` (Glide 3.67.0); 3.68.0 (`4a7174a1`) und 3.69.0 (`9825148b`) gemeinsam über PR #118 nach `main` (`f0511dd9`); Branch `claude/release-3690`. Geprüft unter macOS arm64 mit Python 3.14.5 aus dem Python.org-Framework und Tcl/Tk 9.0.3, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.107](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21107-glide-3690-ganzheitliche-dokumentations--und-übergabekonsolidierung-audit-bereinigung-und-headless-ci-absicherung-16112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Headless-CI-Absicherung `test_desktop_adapter.py` (T313) | `TestMenuTreeBuilder`, `TestDesktopMenuBar` und `TestDesktopHelfer` fangen fehlende Tk-Displays (`tk.TclError`) in `setUpClass` mit `SkipTest` ab. Reine Logik-/Modifier-Tests laufen immer. GitHub Actions Grundstufe (Linux, Python 3.14, Tk 8.6 ohne Display) läuft mit 1.230 Tests (3 Skips) in 1m 48s fehlerfrei durch (Exitcode 0) |
+| Mac-Lauf `test_desktop_adapter.py` | 13/13 Fälle unter macOS arm64 / Tk 9.0.3 grün (alle GUI- und Nicht-GUI-Tests aktiv) |
+| Vollständige Dokumenten- und Linkprüfung | Automatisierte Prüfung aller 85 getrackten Markdown-Dateien: 0 defekte interne oder externe relative Dateilinks. Veralteter D62-Anker in `Glide_Entwicklungsplan.md` und QA-Link in `05_QA_TESTPLAN.md` korrigiert |
+| `SECURITY.md` (Root & Repo) | Auf Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26 gehoben |
+| Übergabe `Glide_Uebergabe.md` | Kontextbasierter Ausbau mit §0 WA-41/PC-02-Beweislage, §1 Faktenmatrix, §2 Instanzenweg, §3 Priorisierte Schrittfolge und §4 Leitplanken für Folgeagenten |
+| Systemregister & Versionswechsel | `GLIDE_SYSTEM_VERSION` auf 1.36 gehoben, `versionswechsel.py 3.69.0 16.11.2026` ausgeführt (Vorlagen, Beispieldaten, Rundgang, Showcase, 51 Standbezüge synchronisiert). `standpruefung.py`: 84 Dokumente, 0 Befunde |
+| Lieferabgleich `07_Python-Versionen/` | `abgleich_07.py`: 98 Code-Dateien und 165 Ressourcen byte-identisch zu `src/glide`; Lieferdatei `Glide-Aufgaben-und-Listen_v3.69.0.pyw` |
+| CI-Grundstufe lokal & GitHub Actions | Lokal 19/19 Schritte grün (Exitcode 0); GitHub Actions auf PR #118 Grundstufe grün (`✓` 1m 48s), CodeQL grün (`✓`) |
+
+**Grenzen:** Der Mac-Nachweis nach D90 ist erbracht (Tk 9.0.3). Vollprüfung Linux/Xvfb grün, Windows x64 rot und Mac-Vollprüfung unvollständig: siehe Nachpflege oben.
+
 ## Prüfstand 3.68.0 – Shell-Paket 5: desktop_adapter.py (16.11.2026)
 
 Basis `main` `e2e0590b` (Glide 3.67.0, PR #115 Shell-Paket 4 gemergt), vor Beginn gegen `origin/main` geprüft; Branch `claude/shell-paket-5-desktop-adapter`. Geprüft unter macOS arm64 mit Python 3.14.5 aus dem Python.org-Framework und Tcl/Tk 9.0.3, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.106](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026).
