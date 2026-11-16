@@ -537,17 +537,24 @@ def fall_fokus_drittes_fenster(u):
         drittes.update()
         eingabe.focus_force()
         drittes.update()
-        stand["eingabe"] = eingabe
+        stand["drittes"] = drittes
         stand["vorher"] = u.fokus()
         d.destroy()
 
+    def im_dritten(widget):
+        # Windows legt den Fokus nach focus_force zunächst auf das Toplevel
+        # selbst, macOS und X11 auf das Feld; der Vertrag gilt fensterweit.
+        try:
+            return widget is not None and widget.winfo_toplevel() is stand.get("drittes")
+        except (KeyError, u.tk.TclError):
+            return False
+
     u.ablauf([waehrend])
     u.laufen(lambda: u.app.run_modal(d))
-    eingabe = stand.get("eingabe")
     u.root.update_idletasks()
     fokus = u.fokus()
-    u.pruefe(stand.get("vorher") is eingabe, f"Vorbedingung: drittes Fenster hatte keinen Fokus ({stand.get('vorher')!r})")
-    u.pruefe(fokus is eingabe, f"drittes Fenster verlor den Fokus an {fokus!r}")
+    u.pruefe(im_dritten(stand.get("vorher")), f"Vorbedingung: drittes Fenster hatte keinen Fokus ({stand.get('vorher')!r})")
+    u.pruefe(im_dritten(fokus), f"drittes Fenster verlor den Fokus an {fokus!r}")
     u.pruefe(u.root.focus_lastfor() is feld, "der gemerkte Fokus des Hauptfensters ging verloren")
 
 
