@@ -69,13 +69,17 @@ class TestPlattformUndModifikatoren(unittest.TestCase):
 class TestMenuTreeBuilder(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.root = tk.Tk()
-        cls.root.withdraw()
+        try:
+            cls.root = tk.Tk()
+            cls.root.withdraw()
+        except tk.TclError as exc:
+            raise unittest.SkipTest(f"Tk-Display nicht verfügbar: {exc}")
 
     @classmethod
     def tearDownClass(cls):
         try:
-            cls.root.destroy()
+            if hasattr(cls, "root"):
+                cls.root.destroy()
         except Exception:
             pass
 
@@ -127,13 +131,17 @@ class TestMenuTreeBuilder(unittest.TestCase):
 class TestDesktopMenuBar(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.root = tk.Tk()
-        cls.root.withdraw()
+        try:
+            cls.root = tk.Tk()
+            cls.root.withdraw()
+        except tk.TclError as exc:
+            raise unittest.SkipTest(f"Tk-Display nicht verfügbar: {exc}")
 
     @classmethod
     def tearDownClass(cls):
         try:
-            cls.root.destroy()
+            if hasattr(cls, "root"):
+                cls.root.destroy()
         except Exception:
             pass
 
@@ -172,13 +180,17 @@ class TestDesktopMenuBar(unittest.TestCase):
 class TestDesktopHelfer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.root = tk.Tk()
-        cls.root.withdraw()
+        try:
+            cls.root = tk.Tk()
+            cls.root.withdraw()
+        except tk.TclError as exc:
+            raise unittest.SkipTest(f"Tk-Display nicht verfügbar: {exc}")
 
     @classmethod
     def tearDownClass(cls):
         try:
-            cls.root.destroy()
+            if hasattr(cls, "root"):
+                cls.root.destroy()
         except Exception:
             pass
 
