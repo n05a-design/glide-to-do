@@ -200,6 +200,8 @@ import backup_diff as glide_backup_diff  # noqa: E402
 import action_menu as glide_action_menu  # noqa: E402
 import side_view as glide_side_view  # noqa: E402
 import compact_mode as glide_compact  # noqa: E402
+import modal_session as glide_modal_session  # noqa: E402
+import window_lifetime as glide_window_lifetime  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -235,11 +237,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-<<<<<<<< HEAD:07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.61.0.pyw
-APP_VERSION = "3.61.0"
-========
-APP_VERSION = "3.63.0"
->>>>>>>> codex/glide-3.63.0:07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.63.0.pyw
+APP_VERSION = "3.66.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -414,12 +412,12 @@ class GlideTreeview(ttk.Treeview):
 
     def _forget_triangles(self, event):
         if event.widget is self and self._triangle_job is not None:
-            self.after_cancel(self._triangle_job)
+            glide_window_lifetime.scope_for(self).cancel(self._triangle_job)
             self._triangle_job = None
 
     def schedule_triangles(self, *_args):
         if self._triangle_job is None and self.winfo_exists():
-            self._triangle_job = self.after_idle(self._paint_triangles)
+            self._triangle_job = glide_window_lifetime.scope_for(self).after_idle(self._paint_triangles)
 
     def _paint_triangles(self):
         self._triangle_job = None
@@ -5898,12 +5896,12 @@ class SystemNavigation(GlideTreeview):
 
     def _stop_icons(self, event):
         if event.widget is self and self._icon_job is not None:
-            self.after_cancel(self._icon_job)
+            glide_window_lifetime.scope_for(self).cancel(self._icon_job)
             self._icon_job = None
 
     def schedule_icons(self, _event=None):
         if self._icon_job is None:
-            self._icon_job = self.after_idle(self.draw_icons)
+            self._icon_job = glide_window_lifetime.scope_for(self).after_idle(self.draw_icons)
 
     def item(self, item, option=None, **kwargs):
         result = super().item(item, option, **kwargs)
@@ -15041,7 +15039,10 @@ class DrawingEditor(tk.Frame):
         self.tool_choice = self._button(top, "Pinsel ▾", self.show_tool_menu, width=130)
         self.app.add_tooltip(self.tool_choice, "Zeichenwerkzeug wählen; Kürzel im Menü")
         top.add(self.tool_choice, key="tool")
-        self.display_button = self._button(top, "Anzeige: Standard", self.show_display_profiles, width=180)
+        # Nur der Profilname mit Menümarker wie „Pinsel ▾“: Mit „Anzeige: …“
+        # passten die drei Pflichtknöpfe bei 860 × 700 nicht in die Leiste.
+        self.display_button = self._button(top, "Standard ▾", self.show_display_profiles, width=64)
+        self.app.add_tooltip(self.display_button, "Anzeigeprofil: welche Werkzeugleisten sichtbar sind")
         top.add(self.display_button, key="display")
         self.preview_button = self._button(top, "Vorschau", self.toggle_preview, width=80)
         self.more_button = self._button(top, "Mehr", self.show_more_menu, width=60)
@@ -16582,7 +16583,7 @@ class DrawingEditor(tk.Frame):
         return True
 
     def apply_display_profile(self):
-        self.display_button.set_text("Anzeige: " + self.DISPLAY_PROFILES[self.display_profile])
+        self.display_button.set_text(self.DISPLAY_PROFILES[self.display_profile] + " ▾")
         controls = glide_design.drawing_controls(self.display_profile)
         if self.animated:
             if "animation" in controls:
@@ -18917,7 +18918,7 @@ class ListApp:
         # Wiederholen nach Rückgängig (FP-01): gleiche Tiefe, nur im Arbeitsspeicher.
         self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
         self.dirty = False
-        self._after_ids = set()
+        self.after_scope()
         self._ui_transitions = glide_motion.Transitions(self.root.after, self.cancel_ui_after)
         self._scrollbar_refresh_id = None
 
@@ -19308,7 +19309,7 @@ class ListApp:
 
         def abholen():
             if faden.is_alive():
-                self.root.after(60, abholen)
+                self.after_scope().after(60, abholen)
                 return
             if schluessel != getattr(self, "_backdrop_key", None):
                 return
@@ -19319,7 +19320,7 @@ class ListApp:
             self._store_backdrop_cache(pfad, daten["png"])
             self._install_backdrop(anfrage, schluessel, daten)
 
-        self.root.after(60, abholen)
+        self.after_scope().after(60, abholen)
 
     def wait_for_backdrop(self, timeout=30.0):
         """Für Prüfläufe: wartet, bis ein angeforderter Verlauf angelegt ist."""
@@ -19364,9 +19365,7 @@ class ListApp:
         if getattr(self, "_backdrop_sync_pending", False):
             return
         self._backdrop_sync_pending = True
-        try:
-            self.root.after_idle(self.sync_backdrop_surfaces)
-        except tk.TclError:
+        if self.after_scope().after_idle(self.sync_backdrop_surfaces) is None:
             self._backdrop_sync_pending = False
 
     # Beim Scrollen und Ziehen am Fensterrand melden Rahmen ihre neue Lage bei
@@ -22895,11 +22894,7 @@ class ListApp:
         menu.pack(fill="x", pady=(0, 6))
         frame = tk.Frame(body, bg=self.theme["card"])
         frame.pack(fill="both", expand=True)
-<<<<<<<< HEAD:07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.61.0.pyw
-        tree = ttk.Treeview(frame, name="day_relief_tasks", columns=("day", "due", "effort", "list"),
-========
         tree = GlideTreeview(frame, name="day_relief_tasks", columns=("day", "due", "effort", "list"),
->>>>>>>> codex/glide-3.63.0:07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.63.0.pyw
                             selectmode="extended", style="Dialog.Treeview", height=6)
         self.prepare_table(tree, (("#0", "Aufgabe", 240), ("day", "Bearbeitungstag", 110),
                                  ("due", "Fälligkeit (bleibt)", 125), ("effort", "Aufwand", 90),
@@ -22955,10 +22950,7 @@ class ListApp:
         def clear_preview():
             plan[0] = None
             preview.delete(*preview.get_children())
-<<<<<<<< HEAD:07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.61.0.pyw
             show_reasons("")
-========
->>>>>>>> codex/glide-3.63.0:07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.63.0.pyw
             set_confirmation(False)
 
         def capture(_event=None):
@@ -23906,11 +23898,17 @@ class ListApp:
     ROW_ACTION_PADDING = glide_design.SPACING[4]
     ROW_ACTION_WIDTH = ROW_ACTION_SIZE + 2 * ROW_ACTION_PADDING
 
-    def hide_quick_plan_row(self, event=None):
-        for button in getattr(self, "_row_action_buttons", ()):
-            button.place_forget()
-        for band in getattr(self, "_row_action_bands", ()):
-            band.place_forget()
+    def hide_quick_plan_row(self, event=None, keep=0):
+        """Knöpfe und Bänder ab Index `keep` ausblenden.
+
+        Seit 3.63.0 trägt jede Zeile neben dem Knopf ein Band. Alles bei jedem
+        Scrollschritt zu entfernen und neu zu setzen verdoppelte die Bildzeit
+        der Liste (test_tempo330); `show_quick_plan_row` setzt deshalb nur um.
+        """
+        for widget in (*getattr(self, "_row_action_buttons", ())[keep:],
+                       *getattr(self, "_row_action_bands", ())[keep:]):
+            if widget.winfo_manager():
+                widget.place_forget()
         self._quick_plan_row = None
 
     def row_actions_enabled(self):
@@ -23952,8 +23950,9 @@ class ListApp:
 
     def show_quick_plan_row(self, event=None):
         """Ein stabiler Mehr-Knopf je sichtbarer Aufgabe; kein Hover-Umbau."""
-        self.hide_quick_plan_row()
+        self._quick_plan_row = None
         if not self.row_actions_enabled() or not self.tree.winfo_ismapped():
+            self.hide_quick_plan_row()
             return
         buttons = getattr(self, "_row_action_buttons", None)
         if buttons is None:
@@ -24008,6 +24007,9 @@ class ListApp:
                 self.row_overflow_button = button
             button.tk.call("raise", str(button))
             index += 1
+        quick = self._quick_plan_row
+        self.hide_quick_plan_row(keep=index)
+        self._quick_plan_row = quick
         self.sync_row_action_colors()
 
     def sync_row_action_colors(self):
@@ -27727,20 +27729,24 @@ class ListApp:
                 text_font = self.measurement_font(text_label.cget("font"))
                 symbol_font = self.measurement_font(symbol_label.cget("font"))
                 text_metrics = self.glyph_metrics_for(text_label.cget("font"))
-                symbol_metrics = self.glyph_metrics_for(symbol_label.cget("font"))
-                if text_metrics is None or symbol_metrics is None:
+                if text_metrics is None:
                     return
                 oben_text = text_label.winfo_rooty() - symbol_label.master.winfo_rooty()
                 grundlinie = (oben_text + (text_label.winfo_height() - text_font.metrics("linespace")) / 2
                               + text_font.metrics("ascent"))
-                mitte = glide_glyphs.label_center_for_cap(
-                    grundlinie, text_metrics, self.font_pixels(text_font), symbol_metrics,
-                    str(symbol_label.cget("text")) or "▾", self.font_pixels(symbol_font),
-                    symbol_font.metrics("ascent"), symbol_font.metrics("linespace"))
+                if isinstance(symbol_label, TriangleLabel):
+                    # Das gezeichnete Dreieck (D84) ist bildmittig; die Glyphe
+                    # der Symbolschrift zählt nicht. Bis 3.63.1 brach die
+                    # Ausrichtung ab, wenn die Schrift ▾ nicht enthielt (Linux).
+                    mitte = grundlinie - text_metrics.cap_center() * self.font_pixels(text_font)
+                else:
+                    symbol_metrics = self.glyph_metrics_for(symbol_label.cget("font"))
+                    mitte = glide_glyphs.label_center_for_cap(
+                        grundlinie, text_metrics, self.font_pixels(text_font), symbol_metrics,
+                        str(symbol_label.cget("text")) or "▾", self.font_pixels(symbol_font),
+                        symbol_font.metrics("ascent"), symbol_font.metrics("linespace"))
                 if mitte is None:
                     return
-                if isinstance(symbol_label, TriangleLabel):
-                    mitte = grundlinie - text_metrics.cap_center() * self.font_pixels(text_font)
                 versatz = round(2 * mitte - hoehe)
                 rand = (max(0, versatz), max(0, -versatz))
                 if tuple(int(wert) for wert in self.root.tk.splitlist(
@@ -33860,7 +33866,7 @@ class ListApp:
             font = (glide_symbols.BUNDLED_SYMBOL_FAMILY, self.ui_font_size(2))
             icon = True
         if str(text).strip() in (self.ICONS["overflow"], "…", "..."):
-            outline, height, radius = False, min(height, 28), 3
+            outline, height, radius = False, min(height, self.OVERFLOW_BUTTON_HEIGHT), 3
         bg_key = self.surface_key(master, bg_key)
         button = RoundedButton(
             master,
@@ -34037,65 +34043,26 @@ class ListApp:
             return color_key
         return self.theme.get("accent", "#000000")
 
-    @contextlib.contextmanager
     def modal_over(self, parent=None):
         """Gibt den Tastatur- und Mausgriff nach einem Unterdialog zurück.
 
-        Ein modaler Dialog nimmt den Griff an sich. Schließt er sich, fällt der
-        Griff nicht von allein an das Fenster zurück, aus dem er geöffnet wurde –
-        dieses nähme dann keine Eingabe mehr an und wirkte eingefroren. Genau
-        das passiert, wenn aus einer modalen Maske heraus ein weiterer Dialog
-        geöffnet wird: Kalender, Farbauswahl, Namensabfrage.
-
-        Ohne `parent` fragt Tk selbst, wer den Griff gerade hält. Das ist der
-        zuverlässigere Weg, weil kein Aufrufer sein Fenster durchreichen muss –
-        und weil er auch dann greift, wenn zwischen Maske und Unterdialog noch
-        ein drittes Fenster liegt.
-
-        Wird das aufrufende Fenster in der Zwischenzeit geschlossen, bleibt der
-        Griff aus: Ihn an ein verschwundenes Fenster zu binden wäre schlimmer
-        als gar keiner.
+        Fassade für `modal_session.modal_over` (Shell-Paket 3a, 3.62.0). Genau
+        das braucht es, wenn aus einer modalen Maske heraus ein weiterer
+        Dialog geöffnet wird: Kalender, Farbauswahl, Namensabfrage. Ohne
+        `parent` fragt Tk selbst, wer den Griff hält; ist das aufrufende
+        Fenster inzwischen geschlossen, bleibt der Griff aus.
         """
-        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else None
-        if owner is None:
-            try:
-                current = self.root.grab_current()
-            except tk.TclError:
-                current = None
-            owner = current if isinstance(current, (tk.Toplevel, tk.Tk)) else None
-        had_grab = False
-        if owner is not None and owner is not self.root:
-            try:
-                had_grab = bool(owner.grab_status())
-            except tk.TclError:
-                had_grab = False
-        try:
-            yield
-        finally:
-            if had_grab:
-                try:
-                    if owner.winfo_exists():
-                        owner.grab_set()
-                except tk.TclError:
-                    pass
+        return glide_modal_session.modal_over(self.root, parent)
 
     def ensure_dialog_min_width(self, dialog):
         """Die Mindestbreite eines Dialogs deckt seinen Inhalt – höchstens bis zur Bildschirmbreite.
 
         Feste Mindestgrößen stammen aus der mittleren Schrift. Bei „groß“
         passte „Arbeitsdateien verschieben“ nicht mehr in „Über Glide“ (380 px)
-        und wurde gequetscht, sobald man den Dialog kleiner zog.
+        und wurde gequetscht, sobald man den Dialog kleiner zog. Die Regel
+        liegt seit 3.62.0 in `modal_session.ensure_min_width`.
         """
-        try:
-            if not getattr(dialog, "_glide_layout_measured", False):
-                dialog.update_idletasks()
-            breite, hoehe = dialog.minsize()
-            bedarf = dialog.winfo_reqwidth()
-            grenze = int(dialog.winfo_screenwidth() * self.DIALOG_MAX_SCREEN_SHARE)
-            if bedarf > breite:
-                dialog.minsize(min(bedarf, max(360, grenze)), hoehe)
-        except (tk.TclError, ValueError, TypeError):
-            pass
+        glide_modal_session.ensure_min_width(dialog, self.DIALOG_MAX_SCREEN_SHARE)
 
     def run_modal(self, dialog, parent=None):
         """Führt einen modalen Dialog aus und stellt den vorherigen Griff wieder her.
@@ -34104,50 +34071,23 @@ class ListApp:
         stand `grab_set` + `wait_window` an sieben Stellen einzeln da, und nur
         eine davon gab den Griff zurück – die übrigen hinterließen eine Maske,
         die noch zu sehen war, aber keine Eingabe mehr annahm.
+
+        Seit 3.62.0 wartet `modal_session.wait_modal` (Shell-Paket 3a). Die
+        Vorbereitung läuft weiter über die beiden Methoden dieser Klasse,
+        damit Prüfungen, die sie ersetzen, unverändert greifen.
         """
         dialog.configure(bg=self.theme["bg"])
         self.ensure_dialog_min_width(dialog)
         self.bring_dialog_to_front(dialog)
-        with self.modal_over(parent):
-            # `grab_set` scheitert, wenn eine
-            # andere Anwendung den Griff hält oder das Fenster noch nicht
-            # sichtbar ist. Bis 3.24 riss die Ausnahme den Aufrufer mit: Der
-            # Dialog blieb offen, das Ergebnis wurde nie gelesen, und die
-            # Anwendung wartete auf ein Fenster, das niemand mehr schließen
-            # konnte. Ein Dialog ohne Griff ist unschön; ein Dialog ohne
-            # Rückweg ist ein Stillstand.
-            try:
-                dialog.grab_set()
-            except tk.TclError as fehler:
-                self.log_error(f"grab_set fehlgeschlagen: {fehler}\n")
-            dialog._glide_modal_active = True
-            try:
-                finished = getattr(dialog, "_glide_modal_finished", None)
-                if finished is None:
-                    self.root.wait_window(dialog)
-                else:
-                    self.root.wait_variable(finished)
-            finally:
-                dialog._glide_modal_active = False
-                try:
-                    if dialog.winfo_exists():
-                        dialog.grab_release()
-                except tk.TclError:
-                    pass
+        glide_modal_session.wait_modal(self.root, dialog, parent, log_error=self.log_error)
 
     def bring_dialog_to_front(self, dialog):
         """Zeigt einen Dialog sichtbar über dem Hauptfenster (Befund R11, 29.09.2026).
 
         Ein Dialog, der hinter dem Hauptfenster oder minimiert entsteht, wirkt
-        wie ein Klick ohne Folge.
+        wie ein Klick ohne Folge. Fassade für `modal_session.bring_to_front`.
         """
-        try:
-            if dialog.state() in ("withdrawn", "iconic"):
-                dialog.deiconify()
-            dialog.lift()
-            dialog.focus_force()
-        except tk.TclError:
-            pass
+        glide_modal_session.bring_to_front(dialog)
 
     def create_label_interactively(self, parent=None):
         """Label anlegen; None bei Abbruch/Schreibfehler, Fehler bleibt rücknehmbar."""
@@ -47198,13 +47138,25 @@ class ListApp:
         self.open_external_path(ERROR_LOG_FILE)
         return "break"
 
+    def after_scope(self):
+        """Zeitgeberbereich des Hauptfensters (Shell-Baustein `window_lifetime`).
+
+        `_after_ids` bleibt als Bestand dieses Bereichs erhalten; wer die Menge
+        ersetzt hat, wird hier wieder zusammengeführt.
+        """
+        scope = getattr(self, "_lifetime", None)
+        if scope is None or scope.widget is not self.root:
+            scope = self._lifetime = glide_window_lifetime.AfterScope(self.root)
+        known = getattr(self, "_after_ids", None)
+        if known is not scope.jobs:
+            if known:
+                scope.jobs.update(known)
+            self._after_ids = scope.jobs
+        return scope
+
     def _register_after(self, after_id):
-        if after_id is not None:
-            # Nur lebende Aufträge behalten; ausgeführte IDs besitzen keinen Tk-Callback mehr.
-            pending = self.root.tk.splitlist(self.root.tk.call("after", "info"))
-            self._after_ids.intersection_update(pending)
-            self._after_ids.add(after_id)
-        return after_id
+        # Nur lebende Aufträge bleiben im Bestand; ausgeführte IDs besitzen keinen Tk-Callback mehr.
+        return self.after_scope().adopt(after_id)
 
     def schedule_scrollbar_refresh(self):
         if not hasattr(self, "root"):
@@ -47485,10 +47437,7 @@ class ListApp:
                 return
             self._emptied_parents.add(eltern)
             if self._empty_frame_job is None:
-                try:
-                    self._empty_frame_job = self.root.after_idle(self.collapse_emptied_frames)
-                except tk.TclError:
-                    self._empty_frame_job = None
+                self._empty_frame_job = self.after_scope().after_idle(self.collapse_emptied_frames)
 
         for sequenz in ("<Destroy>", "<Unmap>"):
             self.root.bind_all(sequenz, merken, add="+")
@@ -47548,12 +47497,7 @@ class ListApp:
             controller.close()
         self._destroy_item_context_menu()
         self._destroy_sidebar_context_menu()
-        for after_id in list(getattr(self, "_after_ids", ()) or ()):
-            try:
-                self.root.after_cancel(after_id)
-            except tk.TclError:
-                pass
-        self._after_ids = set()
+        self.after_scope().cancel_all()
         job = getattr(self, "_empty_frame_job", None)
         if job is not None:
             try:
@@ -51037,8 +50981,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # Treeview Darstellung
     # -----------------------------
     def on_tree_scroll(self, first, last):
+        # Der Abgleich im Leerlauf setzt Knöpfe um und blendet nur übrige aus.
         self.schedule_row_actions()
-        self.hide_quick_plan_row()
         """Blendet die Scrollbar nur dann ein, wenn der Listeninhalt wirklich scrollbar ist."""
         if not hasattr(self, "scrollbar"):
             return
@@ -55241,9 +55185,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.sync_tool_band()
             self.sync_card_foot()
 
-        try:
-            self.root.after_idle(abgleichen)
-        except tk.TclError:
+        if self.after_scope().after_idle(abgleichen) is None:
             self._fixed_layout_pending = False
 
     def tool_band_host(self):
@@ -55315,6 +55257,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # B07: Die Kopfsymbole behalten ihre Bedienfläche. Das Textmenü hat
     # weniger vertikalen Innenraum und bleibt mittig in der Titelzeile.
     HEADER_CONTROL_HEIGHT = 38
+    # D85: „…“-Knöpfe höchstens 28 px. Der Kompaktkopf übernimmt dieses Maß
+    # für alle vier Knöpfe, damit Höhe und Mittellinie gleich bleiben (B07).
+    OVERFLOW_BUTTON_HEIGHT = 28
+    COMPACT_HEADER_CONTROL_HEIGHT = OVERFLOW_BUTTON_HEIGHT
     HEADER_MENU_HEIGHT = 30
     HEADER_SYMBOL_OFFSET = 3
 
@@ -68242,7 +68188,7 @@ Labels, Termine und Metadaten."""
         if kopf is not None and kopf.winfo_exists():
             return kopf
         theme = self.theme
-        hoehe = self.HEADER_CONTROL_HEIGHT
+        hoehe = self.COMPACT_HEADER_CONTROL_HEIGHT
         kopf = self.register_theme_widget(tk.Frame(self.shell, bg=theme["bg"], name="compact_header",
                                                    height=hoehe), "bg")
         self.compact_header = kopf
@@ -68546,10 +68492,7 @@ Labels, Termine und Metadaten."""
         self.settings["recent_pages"] = recent[:self.MAX_RECENT_PAGES]
         job = getattr(self, "_recent_pages_job", None)
         if job is None:
-            try:
-                self._recent_pages_job = self.root.after(1500, self._save_recent_pages)
-            except tk.TclError:
-                self._recent_pages_job = None
+            self._recent_pages_job = self.after_scope().after(1500, self._save_recent_pages)
             if self._recent_pages_job is not None and not getattr(self, "_recent_pages_cleanup", False):
                 # Schließt sich das Fenster vorher, fällt der Auftrag weg, statt
                 # später auf ein nicht mehr vorhandenes Tk-Kommando zu treffen.
@@ -68561,11 +68504,7 @@ Labels, Termine und Metadaten."""
             return
         job = getattr(self, "_recent_pages_job", None)
         self._recent_pages_job = None
-        if job is not None:
-            try:
-                self.root.after_cancel(job)
-            except tk.TclError:
-                pass
+        self.after_scope().cancel(job)
 
     def _save_recent_pages(self):
         self._recent_pages_job = None

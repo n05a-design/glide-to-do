@@ -1,0 +1,66 @@
+{
+  "format": "glide.context",
+  "format_version": 2,
+  "created_at": "2026-11-16T10:00:00+01:00",
+  "application_version": "3.66.0",
+  "instructions": "Antworte mit einer Datei im Format glide.exchange, format_version 2, mode \"patch\": changes = [{ref, base, set: {Feld: neuer Wert}}]. Übernimm ref und base unverändert aus diesem Paket.",
+  "fields": [
+    "title",
+    "description",
+    "importance",
+    "due",
+    "due_time",
+    "planned_date",
+    "estimated_minutes",
+    "done",
+    "labels"
+  ],
+  "lists": [
+    {
+      "ref": "r-2740bfa9f266b7fe",
+      "kind": "list",
+      "title": "Planung",
+      "description": "Alles, was vor dem Umzugstag entschieden oder bestellt sein muss."
+    }
+  ],
+  "items": [
+    {
+      "ref": "r-734879dbe69e186c",
+      "kind": "item",
+      "list": "r-2740bfa9f266b7fe",
+      "parent": null,
+      "base": "8b209655b75637fa",
+      "fields": {
+        "title": "Angebote Umzugsfirma einholen",
+        "description": "Drei Angebote mit Festpreis.",
+        "importance": 2,
+        "due": "2026-11-27",
+        "due_time": null,
+        "planned_date": "2026-11-23",
+        "estimated_minutes": 60,
+        "done": false,
+        "labels": [
+          "Extern"
+        ]
+      }
+    },
+    {
+      "ref": "r-142bdd155b6330b6",
+      "kind": "item",
+      "list": "r-2740bfa9f266b7fe",
+      "parent": null,
+      "base": "6862b9593bfe1508",
+      "fields": {
+        "title": "Sitzplan festlegen",
+        "description": "",
+        "importance": 1,
+        "due": "2026-12-01",
+        "due_time": null,
+        "planned_date": null,
+        "estimated_minutes": 90,
+        "done": false,
+        "labels": []
+      }
+    }
+  ]
+}

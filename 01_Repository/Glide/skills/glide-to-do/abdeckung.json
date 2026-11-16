@@ -1,0 +1,118 @@
+{
+  "format": "glide-to-do.abdeckung",
+  "version": 1,
+  "zweck": "Ordnet jedes Datenfeld des Glide-Aufgabenformats ein: ja = der Skill legt es über den genannten Weg an; offen = geplant im genannten Paket von WA-61; intern = bewusst nur in Glide. tests/tools/test_agenten_skill.py vergleicht diese Datei mit dem Glide-Code. Ändert sich das Datenformat, ein Feld, eine Art oder eine Fähigkeit des Austauschformats, schlägt die Prüfung fehl, bis Skill und Datei nachgezogen sind.",
+  "glide_version": "3.66.0",
+  "datenformat": 26,
+  "austauschformat": 2,
+  "faehigkeiten": [
+    "animation_duration_ms", "animations", "attachments", "checklists", "descriptions", "due_dates",
+    "due_times", "estimated_minutes", "folders", "item_types", "labels", "list_descriptions",
+    "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
+    "patch_mode", "planned_date", "reminders", "repeat"
+  ],
+  "listenarten": {
+    "tasks": {"status": "ja", "weg": "austausch"},
+    "note": {"status": "ja", "weg": "austausch", "hinweis": "Text ohne Formatierung; formatiert als Seite"},
+    "page": {"status": "ja", "weg": "seite", "hinweis": "Markdown über „Seite aus Datei …“"},
+    "drawing": {"status": "ja", "weg": "austausch", "hinweis": "nur über das Hilfsskript kodieren"},
+    "gallery": {"status": "offen", "paket": "K4", "hinweis": "braucht Bilder als Anhänge"}
+  },
+  "ordnerarten": {
+    "standard": {"status": "ja", "weg": "austausch"},
+    "library": {"status": "offen", "paket": "K3", "hinweis": "Buch"},
+    "journal": {"status": "offen", "paket": "K3", "hinweis": "Notizbuch"}
+  },
+  "punktarten": {
+    "task": {"status": "ja", "weg": "austausch"},
+    "long": {"status": "ja", "weg": "austausch"},
+    "group": {"status": "ja", "weg": "austausch"},
+    "heading": {"status": "ja", "weg": "austausch"}
+  },
+  "felder": {
+    "punkt": {
+      "id": {"status": "intern", "hinweis": "Glide vergibt Kennungen beim Import"},
+      "text": {"status": "ja", "weg": "austausch", "austausch": "title"},
+      "kind": {"status": "ja", "weg": "austausch", "austausch": "type"},
+      "description": {"status": "ja", "weg": "austausch", "austausch": "description"},
+      "done": {"status": "ja", "weg": "austausch", "austausch": "done"},
+      "importance": {"status": "ja", "weg": "austausch", "austausch": "importance"},
+      "due": {"status": "ja", "weg": "austausch", "austausch": "due"},
+      "due_time": {"status": "ja", "weg": "austausch", "austausch": "due_time"},
+      "planned_date": {"status": "ja", "weg": "austausch", "austausch": "planned_date"},
+      "estimated_minutes": {"status": "ja", "weg": "austausch", "austausch": "estimated_minutes"},
+      "labels": {"status": "ja", "weg": "austausch", "austausch": "labels"},
+      "checklist": {"status": "ja", "weg": "austausch", "austausch": "checklist"},
+      "children": {"status": "ja", "weg": "austausch", "austausch": "children"},
+      "planned_time": {"status": "offen", "paket": "K3", "austausch": "planned_time"},
+      "repeat": {"status": "offen", "paket": "K3", "austausch": "repeat", "hinweis": "Wiederholung"},
+      "reminder": {"status": "offen", "paket": "K3", "austausch": "reminder", "hinweis": "Erinnerung"},
+      "color": {"status": "offen", "paket": "K3", "austausch": "color"},
+      "links": {"status": "offen", "paket": "K3", "austausch": "links", "hinweis": "Verknüpft mit"},
+      "blocked_by": {"status": "offen", "paket": "K3", "austausch": "blocked_by", "hinweis": "Wartet auf"},
+      "references": {"status": "offen", "paket": "K3", "austausch": "references"},
+      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
+      "done_at": {"status": "intern", "hinweis": "setzt Glide beim Abhaken"},
+      "time_spent_minutes": {"status": "intern", "hinweis": "Zeiterfassung in Glide"}
+    },
+    "liste": {
+      "id": {"status": "intern"},
+      "title": {"status": "ja", "weg": "austausch", "austausch": "title"},
+      "note": {"status": "ja", "weg": "austausch", "austausch": "description"},
+      "folder_id": {"status": "ja", "weg": "austausch", "austausch": "folder"},
+      "list_kind": {"status": "ja", "weg": "austausch", "austausch": "list_kind"},
+      "items": {"status": "ja", "weg": "austausch", "austausch": "items"},
+      "rich_note": {"status": "ja", "weg": "austausch, seite", "austausch": "rich_note",
+                    "hinweis": "im Austausch nur Text; Formatierung über die Markdown-Seite"},
+      "drawing": {"status": "ja", "weg": "austausch", "austausch": "drawing"},
+      "animation": {"status": "ja", "weg": "austausch", "austausch": "animation",
+                    "hinweis": "Bildfolgen prüft erst Glide"},
+      "labels": {"status": "offen", "paket": "K2", "austausch": "labels",
+                 "hinweis": "angenommen, aber nicht übernommen"},
+      "color": {"status": "offen", "paket": "K3", "austausch": "color"},
+      "icon": {"status": "offen", "paket": "K3", "austausch": "icon", "hinweis": "Pixelsymbol"},
+      "journal": {"status": "offen", "paket": "K3", "austausch": "journal", "hinweis": "Notizbuch-Angaben"},
+      "references": {"status": "offen", "paket": "K3", "austausch": "references"},
+      "live_lists": {"status": "offen", "paket": "K3", "austausch": "live_lists"},
+      "recurring_checklist": {"status": "offen", "paket": "K3", "austausch": "recurring_checklist"},
+      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
+      "cover": {"status": "offen", "paket": "K4", "austausch": "cover", "hinweis": "Titelbild"},
+      "drawing_reference": {"status": "offen", "paket": "K4", "austausch": "drawing_reference",
+                            "hinweis": "Referenzbild als Anhang"},
+      "archived": {"status": "intern"},
+      "archived_at": {"status": "intern"},
+      "created_at": {"status": "intern"},
+      "updated_at": {"status": "intern"},
+      "system_role": {"status": "intern", "hinweis": "Eingang"},
+      "notion_source": {"status": "intern", "hinweis": "Herkunft eines Notion-Imports"}
+    },
+    "ordner": {
+      "id": {"status": "intern"},
+      "title": {"status": "ja", "weg": "austausch", "austausch": "title"},
+      "note": {"status": "ja", "weg": "austausch", "austausch": "description"},
+      "parent_id": {"status": "ja", "weg": "austausch", "austausch": "parent"},
+      "labels": {"status": "offen", "paket": "K2", "austausch": "labels",
+                 "hinweis": "angenommen, aber nicht übernommen"},
+      "folder_kind": {"status": "offen", "paket": "K3", "austausch": "folder_kind"},
+      "color": {"status": "offen", "paket": "K3", "austausch": "color"},
+      "icon": {"status": "offen", "paket": "K3", "austausch": "icon"},
+      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
+      "archived": {"status": "intern"},
+      "archived_at": {"status": "intern"},
+      "notion_source_key": {"status": "intern"}
+    },
+    "label": {
+      "id": {"status": "intern"},
+      "name": {"status": "ja", "weg": "austausch", "austausch": "name"},
+      "color": {"status": "offen", "paket": "K2", "austausch": "color",
+                "hinweis": "angenommen, Glide vergibt die Farbe selbst"},
+      "system": {"status": "intern", "hinweis": "feste Labels Langtext und Zwischenüberschrift"}
+    }
+  },
+  "bewusst_intern": [
+    "Ansichten und Darstellung (Einstellungen)",
+    "Pinnwand-Anordnung (Einstellungen; Paket K6 prüft einen Import aus JSON Canvas)",
+    "Sicherung und App-Sicherung (.glidebackup, .glideapp)",
+    "Papierkorb und Änderungsverlauf"
+  ]
+}

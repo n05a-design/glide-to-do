@@ -1,4 +1,34 @@
-# QA-Bericht – Glide 3.65.0
+# QA-Bericht – Glide 3.66.0
+
+## Prüfstand 3.66.0 – Agenten-Skill-Zentrierung und KI-Darstellungsprüfung (16.11.2026)
+
+Basis: Branch `claude/glide-skill-3660` auf K1 (`deea0f9c`, PR #110). Glide auf 3.66.0 gehoben (`app.pyw`, `VERSION`, `GLIDE_SYSTEM_VERSION` V1.33). Geprüft unter macOS arm64 mit Python 3.14.5 und Tk 9.0.3, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.104](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Datenformatkopplung (`test_agenten_skill.py`, T321) | 15/15 grün: `abdeckung.json` ordnet jedes Feld des Aufgabenformats 26 verbindlich ein (ja/offen/intern). T321 erzwingt die Übereinstimmung mit dem Glide-Code und weist Formatänderungen ohne Skillanpassung ab |
+| Zentrales Prüfwerkzeug (`test_ki_ausgabe.py`, T324) | 6/6 grün: `ki_ausgabe.py` (T323) prüft KI-Ausgaben in vier Stufen; fehlerhafte Datei mit bewusst eingebauten Abweichungen wird exakt erkannt |
+| Vollprüfungs-Integrationssuite (`test_ki_ausgabe_darstellung.py`, T325) | grün: alle Beispiele des Skills, Vollprobe an Formatgrenzen und fehlerhafte Datei mit echter Tk-Oberfläche angelegt, gespeichert, in neuem Prozess neu gestartet und Anzeige abgelesen |
+| Systemregister (`test_glide_system.py`) | 5/5 grün: V1.33, 324 Test- und Werkzeugdateien, T322–T324 eingetragen |
+| Stand- und Lizenzprüfung (`test_standpruefung.py`, `test_project_license.py`) | 21/21 und 5/5 grün; Standprüfung gegen 3.66.0 mit 0 Befunden |
+| Lieferabgleich `07_Python-Versionen` (`abgleich_07.py`) | 96 Code-Dateien und 165 Ressourcen SHA-256-gleich zu `src/glide`; `Glide-Aufgaben-und-Listen_v3.66.0.pyw` geliefert |
+
+**Grenzen:** Echter Import über den GUI-Dateidialog bleibt manuelle Inhaberstichprobe; reale Erprobung in zwei Agenten steht aus. GitHub-CI-Läufe folgen mit dem PR.
+
+## Agenten-Skill `glide-to-do`, Paket K1 (16.11.2026)
+
+Basis: Zweig `claude/glide-to-do-skill-k1` auf dem Recherchestand `2db34bb7` (PR #109, mit `2d59abef` in `main` gemergt). App unverändert 3.65.0, `app.pyw` SHA-256 `ce3e60765d4a…` wie im Prüfstand 3.65.0. Geprüft unter Windows 11 mit Python 3.15.2 und Tcl/Tk 9.0.4, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.103](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| `test_agenten_skill.py` (T321) | 12/12 grün: Skillkopf nach dem Standard, Regelabgleich des Hilfsskripts mit den Glide-Konstanten, alle Beispiele im Hilfsskript (streng) und in `parse_exchange_document` ohne Fehler, Warnungen und unbekannte Felder, `apply_exchange_payload` ohne Speichern mit unverkürzten Titeln, `markdown_to_page`, `check_patch` (alle Änderungen anwendbar), Fehlerfälle und Kommandozeile |
+| `test_standpruefung.py`, `test_project_license.py`, `test_glide_system.py` | 21/21, 5/5 und 5/5 grün; neuer Fall für die Ausnahme der Skill-Beispiele |
+| CI-Grundstufe | alle 19 Schritte bestanden, 1.601 versionierte Dateien einschließlich der acht Beispieldateien |
+| Stichprobe mit echter Glide-Instanz (Tk-Fenster verborgen, nicht versioniert) | vier Austauschbeispiele über `parse_exchange_document` und `apply_exchange_payload`, der Recherchebericht über `new_page_from_markdown`; gespeichert, Glide neu gestartet: sieben Listen und Seiten mit Art und Punktzahl unverändert geladen, Ordner „Büroumzug“, „Unterlagen“, „Zeichnungen“, Seite mit vier echten Aufgaben und 32 Formatbereichen |
+
+**Befund:** Glide vergibt Langtexten und Überschriften beim Anlegen ihre festen Labels „Langtext“ und „Zwischenüberschrift“. Die Referenz des Skills nennt das jetzt; die Labelzahl der Beispiele ist sonst unverändert.
+
+**Grenzen:** Nicht über die Oberfläche bedient (Dateidialog, Vorschau, Importieren-Knopf) und nicht in einem KI-Agenten erprobt; beides bleibt Stichprobe des Inhabers. Nicht geprüft unter macOS und Linux; die GitHub-Prüfung des PR deckt die Grundstufe unter Linux/Tk 8.6 ab. Python 3.9 als Mindestfassung des Hilfsskripts ist nur aus dem Code abgeleitet, nicht ausgeführt.
 
 ## Prüfstand 3.65.0 – Fokusrückgabe (16.11.2026)
 
@@ -444,7 +474,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

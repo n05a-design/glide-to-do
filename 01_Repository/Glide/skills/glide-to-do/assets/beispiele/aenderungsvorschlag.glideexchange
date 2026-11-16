@@ -1,0 +1,28 @@
+{
+  "format": "glide.exchange",
+  "format_version": 2,
+  "mode": "patch",
+  "generator": {
+    "type": "ai",
+    "name": "glide-to-do"
+  },
+  "changes": [
+    {
+      "ref": "r-734879dbe69e186c",
+      "base": "8b209655b75637fa",
+      "set": {
+        "due": "2026-11-25",
+        "importance": 3,
+        "description": "Drei Angebote mit Festpreis; Montage der Tische inklusive."
+      }
+    },
+    {
+      "ref": "r-142bdd155b6330b6",
+      "base": "6862b9593bfe1508",
+      "set": {
+        "planned_date": "2026-11-24",
+        "estimated_minutes": 120
+      }
+    }
+  ]
+}

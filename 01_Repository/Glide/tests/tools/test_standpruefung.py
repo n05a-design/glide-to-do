@@ -121,6 +121,19 @@ class Einstiegspruefung(unittest.TestCase):
                 file.write_text("# Lizenzoriginal\n")
             self.assertEqual(list(stand.dokumente(root)), [active])
 
+    def test_skill_import_examples_are_not_project_documents(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            skill = root / "01_Repository/Glide/skills/glide-to-do"
+            active = [skill / "README.md", skill / "references/austauschformat.md"]
+            for file in (*active, skill / "assets/beispiele/recherchebericht.md",
+                         root / ".claude/skills/design-richtlinien/assets/notiz.md"):
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text("# Beispiel\n", encoding="utf-8")
+            self.assertCountEqual(list(stand.dokumente(root)), active)
+            # Auch vom Repository aus gesehen bleiben Beispiele draußen.
+            self.assertCountEqual(list(stand.dokumente(root / "01_Repository/Glide")), active)
+
     def test_python_archive_overview_is_current_but_old_evidence_stays_excluded(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

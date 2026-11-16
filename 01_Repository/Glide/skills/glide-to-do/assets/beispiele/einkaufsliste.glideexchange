@@ -1,0 +1,32 @@
+{
+  "format": "glide.exchange",
+  "format_version": 2,
+  "mode": "create",
+  "generator": {"type": "ai", "name": "glide-to-do"},
+  "labels": [
+    {"key": "label-markt", "name": "Wochenmarkt"}
+  ],
+  "lists": [
+    {
+      "key": "list-1",
+      "title": "Einkauf Wochenende",
+      "description": "Abendessen mit sechs Gästen am Samstag: Ofengemüse, Salat, Nachtisch.",
+      "items": [
+        {"type": "task", "title": "Einkaufen gehen", "planned_date": "2026-11-21", "estimated_minutes": 60,
+         "description": "Erst Wochenmarkt, dann Supermarkt."},
+        {"type": "heading", "title": "Obst und Gemüse"},
+        {"type": "task", "title": "Kartoffeln", "description": "2 kg, festkochend", "labels": ["label-markt"]},
+        {"type": "task", "title": "Paprika", "description": "4 Stück, gemischt", "labels": ["label-markt"]},
+        {"type": "task", "title": "Feldsalat", "description": "300 g", "labels": ["label-markt"]},
+        {"type": "task", "title": "Zitronen", "description": "3 Stück, unbehandelt"},
+        {"type": "heading", "title": "Kühlregal"},
+        {"type": "task", "title": "Feta", "description": "2 Packungen"},
+        {"type": "task", "title": "Joghurt griechisch", "description": "500 g"},
+        {"type": "heading", "title": "Vorrat und Drogerie"},
+        {"type": "task", "title": "Olivenöl", "description": "nur, wenn weniger als eine halbe Flasche da ist"},
+        {"type": "task", "title": "Servietten"},
+        {"type": "task", "title": "Spülmaschinentabs", "done": true}
+      ]
+    }
+  ]
+}

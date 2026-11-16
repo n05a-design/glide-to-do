@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-**Glide-Agenten-Skill 16.11.2026:** [§13.39](#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026) prüft 3.65.0 darauf, welche Glide-Ebenen ein Agenten-Skill heute über vorhandene Importwege anlegen kann, nennt sieben Befunde im Austauschweg und schätzt den Aufwand je Paket. Ein Grundskill braucht keine App-Änderung; der volle Umfang kein neues Aufgabenformat.
+**Glide-Agenten-Skill 16.11.2026 (WA-61):** [§13.39](#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026) prüft 3.65.0/3.66.0 darauf, welche Glide-Ebenen ein Agenten-Skill über vorhandene Importwege anlegen kann, nennt sieben Befunde im Austauschweg und schätzt den Aufwand je Paket; Inhaberentscheidungen D91 (K1) und D92 (Ausbau 3.66.0 mit zentrierter Kopplung).
 
 **Gesamtaudit 14.11.2026:** [§13.36](#1336-gesamtaudit-gegen-code-und-dokumentation-14112026) prüft 3.60.0 gegen Code und Dokumentation. Offene Befunde: Datenordnerzeiger, nicht angezeigte Überlastungsgründe und die Messbelege zu 3.55.0.
 
@@ -22,7 +22,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
@@ -1123,7 +1123,7 @@ Ein Skill darf Glide-Daten nur über **Importdokumente** anlegen, nie über `lis
 | Beschreibung von Punkt, Liste, Ordner | `description`, `note` | Austausch | ✓ | K1 |
 | Fälligkeit mit Uhrzeit, Bearbeitungstag, Aufwand, Wichtigkeit, Erledigt | `due`, `due_time`, `planned_date`, `estimated_minutes`, `importance`, `done` | Austausch | ✓ | K1 |
 | Planungsuhrzeit | `planned_time` | keiner | ✗ | K3 |
-| Labels (Tags) an Punkten | `labels` | Austausch `labels` mit Farbe | ✓ | K1 |
+| Labels (Tags) an Punkten | `labels` | Austausch `labels`; die Labelfarbe übernimmt der Import nicht (Befund 1) | ✓ | K1 |
 | Labels an Listen und Ordnern | `labels` | angenommen, aber nicht übernommen (Befund 1) | ✗ | K2 |
 | Wiederholungen | `repeat` (Format 26) | Austausch Fähigkeit 0; Umweg TXT-Zeile „Wiederholung:“ oder ICS-`RRULE` | ◐ | K3 |
 | Erinnerungen | `reminder` | Austausch Fähigkeit 0; Umweg ICS mit Erinnerungsoption | ◐ | K3 |
@@ -1134,7 +1134,7 @@ Ein Skill darf Glide-Daten nur über **Importdokumente** anlegen, nie über `lis
 | Pixelzeichnung, Bildfolge | `drawing`, `animation` | Austausch (`hex8-row-v1`, bis 120 Bilder); von Hand kaum fehlerfrei zu kodieren | ◐ | K1 mit Hilfsskript |
 | Diagramm, Pinnwand | `pinboards` (Einstellungen) | nur Ausgabe als JSON Canvas 1.0, kein Import | ✗ | K6 |
 | Notizbuch-Angaben (Moment, Stimmung, Ort) | `journal` | keiner | ✗ | K3 |
-| Vorlagen | `vorlagen.json`, `.glidetemplates` Format 2 | „Vorlagen hinzufügen …“: einfache Listen-/Ordnervorlagen mit Punkttiteln und Platzhaltern `{{…}}`; `payload` ist internes Format | ◐ | K1 einfach, K3 |
+| Vorlagen | `vorlagen.json`, `.glidetemplates` Format 2 | „Vorlagen hinzufügen …“: einfache Listen-/Ordnervorlagen mit Punkttiteln und Platzhaltern `{{…}}`; `payload` ist internes Format | ◐ | K3 (K1 nutzt den Weg nicht, Nachtrag 16.11.2026) |
 | Anzeige (Liste, Tabelle, Spalten, gespeicherte Ansichten, Design) | Einstellungen 2 | keiner, bewusst gerätebezogen | ✗ bewusst | – |
 | Sicherung und App-Sicherung | `.glidebackup`, `.glideapp` | Skill erzeugt sie nicht; er empfiehlt vor großen Importen eine App-Sicherung | ✕ bewusst | K1 Regel, K3 Vorsicherung |
 | Vorhandenes überarbeiten | neun Austauschfelder | `.glidecontext` → `mode: "patch"` mit Konfliktprüfung | ✓ | K1 |
@@ -1143,7 +1143,7 @@ Ergebnis: Von 24 Ebenen sind 7 vollständig und 7 eingeschränkt über vorhanden
 
 ### Befunde
 
-1. **Listen- und Ordnerlabels werden still verworfen.** `EXCHANGE_LIST_FIELDS` und `EXCHANGE_FOLDER_FIELDS` enthalten `labels`, deshalb meldet die Prüfung sie nicht als unbekannt. `apply_exchange_payload` gibt sie aber weder an `new_list_object` noch an `new_folder_object` weiter. Das widerspricht dem Grundsatz im Code, dass kein Feld ohne Spur verschwinden darf.
+1. **Listen- und Ordnerlabels werden still verworfen.** `EXCHANGE_LIST_FIELDS` und `EXCHANGE_FOLDER_FIELDS` enthalten `labels`, deshalb meldet die Prüfung sie nicht als unbekannt. `apply_exchange_payload` gibt sie aber weder an `new_list_object` noch an `new_folder_object` weiter. Ebenso die Labelfarbe: `ensure_label_by_name` erhält nur den Namen und vergibt reihum eine Palettenfarbe (Nachtrag 16.11.2026 bei der Umsetzung von K1). Das widerspricht dem Grundsatz im Code, dass kein Feld ohne Spur verschwinden darf.
 2. **Die KI-Anleitung nennt nicht alles, was der Import annimmt.** `exchange_prompt_text` beschreibt weder `list_kind` (Notiz, Seite, Zeichnung) noch `rich_note`, `drawing` und `animation`, und `exchange_capabilities` führt keine Listenarten. Die Titelgrenze von 40 Zeichen (D67) fehlt ebenfalls; längere Titel kürzt `_clip_and_note_title` und sichert den Originaltitel in der Beschreibung.
 3. **Der Austauschvertrag ist nicht Tk-frei.** Feldmengen, Grenzen, Fähigkeiten, Prüfung und Anleitung liegen in `ListApp`; nur Änderungsvorschlag (`exchange_patch.py`) und Aufträge (`exchange_recipes.py`) sind eigene Module. Ein Prüfskript im Skill kann den Vertrag deshalb nicht ohne Tk laden und müsste ihn abschreiben. Nach D17 gehört er in ein Tk-freies Modul (K2).
 4. **Seitentext im Austausch verlangt Zeichenpositionen.** `rich_note.spans` zählt Python-Zeichen; Sprachmodelle verzählen sich verlässlich, besonders bei Emoji und Zeichen außerhalb der Basisebene. Der Markdown-Weg ist robust und erzeugt echte Aufgaben, steht aber nur als einzelne Seite über „Seite aus Datei …“ bereit, ohne Ordnerziel und ohne Austauschdatei.

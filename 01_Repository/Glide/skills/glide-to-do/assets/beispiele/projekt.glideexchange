@@ -1,0 +1,75 @@
+{
+  "format": "glide.exchange",
+  "format_version": 2,
+  "mode": "create",
+  "generator": {"type": "ai", "name": "glide-to-do"},
+  "labels": [
+    {"key": "label-extern", "name": "Extern"},
+    {"key": "label-it", "name": "IT"}
+  ],
+  "folders": [
+    {"key": "folder-1", "title": "Büroumzug",
+     "description": "Umzug des Teams in das zweite Obergeschoss bis Mitte Dezember."},
+    {"key": "folder-2", "title": "Unterlagen", "parent": "folder-1",
+     "description": "Angebote, Grundriss und Absprachen."}
+  ],
+  "lists": [
+    {
+      "key": "list-planung",
+      "title": "Planung",
+      "folder": "folder-1",
+      "description": "Alles, was vor dem Umzugstag entschieden oder bestellt sein muss.",
+      "items": [
+        {"type": "task", "title": "Angebote Umzugsfirma einholen", "importance": 2,
+         "due": "2026-11-27", "planned_date": "2026-11-23", "estimated_minutes": 60,
+         "labels": ["label-extern"],
+         "description": "Drei Angebote mit Festpreis, Montage der Tische inklusive.",
+         "checklist": [
+           {"text": "Anfrage mit Grundriss senden", "done": false},
+           {"text": "Besichtigungstermine abstimmen", "done": false},
+           {"text": "Angebote in Tabelle vergleichen", "done": false}
+         ]},
+        {"type": "task", "title": "Sitzplan festlegen", "importance": 1, "due": "2026-12-01",
+         "estimated_minutes": 90,
+         "description": "Mit allen abstimmen; Fensterplätze nach Losverfahren."},
+        {"type": "group", "title": "IT vorbereiten", "children": [
+          {"type": "task", "title": "Netzwerkdosen prüfen lassen", "due": "2026-12-03",
+           "labels": ["label-it", "label-extern"]},
+          {"type": "task", "title": "Drucker umziehen", "planned_date": "2026-12-10",
+           "estimated_minutes": 45, "labels": ["label-it"]}
+        ]}
+      ]
+    },
+    {
+      "key": "list-umzugstag",
+      "title": "Umzugstag",
+      "folder": "folder-1",
+      "description": "Ablauf am Freitag, 12.12.2026.",
+      "items": [
+        {"type": "heading", "title": "Vormittag"},
+        {"type": "task", "title": "Umzugsfirma empfangen", "due": "2026-12-12", "due_time": "08:00",
+         "importance": 3, "labels": ["label-extern"]},
+        {"type": "task", "title": "Kisten nach Plan verteilen", "due": "2026-12-12", "due_time": "10:00",
+         "estimated_minutes": 120},
+        {"type": "heading", "title": "Nachmittag"},
+        {"type": "task", "title": "Arbeitsplätze testen", "due": "2026-12-12", "due_time": "14:00",
+         "labels": ["label-it"],
+         "checklist": [
+           {"text": "Bildschirme und Dockingstationen", "done": false},
+           {"text": "Netzwerk und Telefon", "done": false}
+         ]},
+        {"type": "long", "title": "Hinweis für alle",
+         "description": "Persönliche Sachen bitte am Donnerstag selbst packen und beschriften: Name, neue Raumnummer."}
+      ]
+    },
+    {
+      "key": "list-unterlagen",
+      "title": "Offene Absprachen",
+      "folder": "folder-2",
+      "items": [
+        {"type": "task", "title": "Schlüsselübergabe mit Hausverwaltung", "due": "2026-12-11",
+         "labels": ["label-extern"]}
+      ]
+    }
+  ]
+}
