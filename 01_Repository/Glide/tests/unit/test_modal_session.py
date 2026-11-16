@@ -18,6 +18,8 @@ SCHNITTSTELLE = {
     "modal_over": ["root", "parent"],
     "ensure_min_width": ["dialog", "max_screen_share"],
     "bring_to_front": ["dialog"],
+    "remember_focus": ["root", "dialog", "parent"],
+    "return_focus": ["root", "dialog", "remembered"],
     "wait_modal": ["root", "dialog", "parent", "log_error"],
     "run_modal": ["root", "dialog", "parent", "background", "max_screen_share", "log_error"],
 }

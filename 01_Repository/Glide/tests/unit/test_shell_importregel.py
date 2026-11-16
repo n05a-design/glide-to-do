@@ -23,6 +23,8 @@ SRC = Path(__file__).resolve().parents[2] / "src" / "glide"
 SHELL_MODULE = {
     "modal_session": {
         "modal_over": ["root", "parent"],
+        "remember_focus": ["root", "dialog", "parent"],
+        "return_focus": ["root", "dialog", "remembered"],
         "wait_modal": ["root", "dialog", "parent", "log_error"],
         "run_modal": ["root", "dialog", "parent", "background", "max_screen_share", "log_error"],
     },
