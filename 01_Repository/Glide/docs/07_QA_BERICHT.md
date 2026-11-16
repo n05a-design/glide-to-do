@@ -11,7 +11,7 @@ Stand nach dem Merge von PR #118 (`main` `f0511dd9`); Branch `claude/glide-docs-
 | T325 in der Vollprüfung | `test_ki_ausgabe_darstellung.py` war als Vollprüfungssuite beschrieben, stand aber nicht in `SUITEN` von `tests/tools/pruefen.py`; nachgetragen (113 → 114 Suiten, `tests/README.md` von veralteten 110 nachgezogen). Lokal Exitcode 0 |
 | Mac-Vollprüfung `pruefen.py --modus voll` (Start 21:03 UTC, Quelle Hauptablage auf `claude/release-3690`) | 84 von 85 ausgeführten Schritten grün (Syntax 443 Dateien, Versionen, Dokumentation, Fixtures, 1.230 Unit-Tests, Tk-/Zeitzonenvoraussetzung, 77 Integrationssuiten). Gestoppt bei `test_oberflaeche33321`: „Leiste bleibt nach dem Verlassen stehen“ (Hoverzustand über die echte Zeigerlage). Isoliert danach zweimal grün. Nicht gelaufen: die übrigen 35 Suiten einschließlich Arbeitsmodi, Showcase, Analysen, Beispieldaten-/Releasereproduktion. **Kein vollständiger Mac-Volllauf für 3.69.0** |
 
-**Rest:** Nachpflege-PR mit grüner Windows-Vollprüfung nach `main`; danach ein vollständiger Mac-Volllauf auf dem gemergten Stand ohne Zeiger über dem Prüffenster.
+**Stand 17.11.2026:** PR #119 ist in `main` (`d92dece9`). Dort sind Grundstufe (1 min 54 s) und Vollprüfung Linux/Xvfb (30 min 54 s) grün, auf dem PR-Zweig ebenso (2 min 20 s, 40 min 33 s). Die Windows-Vollprüfung lief auf beiden Ständen bei Redaktionsschluss (17.11.2026, 00:40 MEZ) seit rund 30 Minuten, ohne Ergebnis; der frühere Absturz trat nach etwa einer Minute ein. **Rest:** Windows-Ergebnis von Lauf 43972361020 nachtragen; vollständiger Mac-Volllauf auf `main` ohne Zeiger über dem Prüffenster.
 
 ## Prüfstand 3.69.0 – Dokumentations- und Übergabekonsolidierung, Headless-CI-Absicherung (16.11.2026)
 

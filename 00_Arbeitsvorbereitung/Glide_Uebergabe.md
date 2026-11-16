@@ -2,7 +2,10 @@
 
 Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26 · Glide-System V1.36
 
-Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Stand 16.11.2026 vollständig aktualisiert; frühere Übergabestände trägt Git.
+Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Zuletzt am 17.11.2026 gegen `main` `d92dece9` geprüft und ergänzt; frühere Übergabestände trägt Git.
+
+> [!IMPORTANT]
+> **Erste Handgriffe einer neuen Sitzung:** (1) `git fetch` und `main` mit diesem Stand vergleichen – liegt `main` weiter, gilt GitHub. (2) Ergebnis der Windows-Vollprüfung auf `main` nachsehen (Workflow „Glide-Prüfung“, Lauf 43972361020 oder neuer, siehe §1 Prüfstand). (3) [Arbeitsvorrat](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat) lesen; neue Arbeit nur nach Auftrag des Inhabers.
 
 ---
 
@@ -25,7 +28,7 @@ Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick 
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 3.69.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.36** (99 Source-Module M001–M099, 114 Integrationssuiten, 5 Analysen). `main` steht auf `f0511dd9` (Merge PR #118; enthält 3.68.0 `4a7174a1` und 3.69.0 `9825148b`). Nachpflege ohne Versionswechsel auf `claude/glide-docs-audit-handoff-c9f50b` (Windows-CI-Absturz im Unit-Test, T325 in der Vollprüfung, Dokumentstand). |
+| **Version & Schemata** | **Glide 3.69.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.36** (99 Source-Module M001–M099, 114 Integrationssuiten, 5 Analysen). `main` steht auf `d92dece9` (PR #119, Nachpflege ohne Versionswechsel) über `f0511dd9` (PR #118: 3.68.0 `4a7174a1` und 3.69.0 `9825148b`). Keine offenen PRs; alle Arbeitszweige bis einschließlich #119 sind auf GitHub gelöscht. |
 | **Shell-Paket 5 (3.68.0)** | **Vierter Shell-Baustein:** [`desktop_adapter.py`](../01_Repository/Glide/src/glide/desktop_adapter.py) (M099, 170 Zeilen) lagert anwendungsneutrale Menü-, Tastaturkürzel- und Betriebssystemfunktionen aus `app.pyw` aus: `build_menu_tree` (deklarativer rekursiver Menüaufbau mit Trennlinien und dynamischen Menüs), `DesktopMenuBar` (Frame-Erzeugung und sichere Popup-Verwaltung mit Grab-Release und Fokus-Wiederherstellung), OS-Aktionen (`launch_path`, `copy_to_clipboard`, `read_from_clipboard`) sowie Modifikatoren (`primary_modifier`, `format_accelerator`, `format_redo_accelerator`). Modulbudget WA-50 / T322 vollständig eingehalten. T313 [`test_desktop_adapter.py`](../01_Repository/Glide/tests/unit/test_desktop_adapter.py) mit 13 Testfällen. |
 | **Shell-Paket 4 (3.67.0)** | **Dritter Shell-Baustein:** [`custom_controls.py`](../01_Repository/Glide/src/glide/custom_controls.py) (M098, ~1.440 Zeilen) lagert thementaugliche Canvas-Bedienelemente aus `app.pyw` aus: `CanvasLabel`, `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale`, `ThemedAutoScrollbar`, `rounded_rect_points`, `bind_resize`, `paint_canvas_backdrop`. `app.pyw` re-exportiert alle Steuerelemente. T312 [`test_custom_controls.py`](../01_Repository/Glide/tests/integration/test_custom_controls.py) mit 11 Testfällen. |
 | **Agenten-Skill `glide-to-do` (3.66.0)** | **WA-61 (D91/D92):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Strikte Datenformatkopplung an Aufgabenformat 26 über `abdeckung.json`. Zentrales 4-Stufen-Prüfwerkzeug `ki_ausgabe.py` (T323), Werkzeugtest `test_ki_ausgabe.py` (T324), Vollprüfungs-Integrationssuite `test_ki_ausgabe_darstellung.py` (T325). Entwickler-Skill `glide-aufbau` und Referenz `glide-aufbau.md`. Datenformat 26 unverändert. |
@@ -33,8 +36,9 @@ Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick 
 | **Shell-Paket 3c (3.64.0)** | **Zweiter Shell-Baustein:** [`window_lifetime.py`](../01_Repository/Glide/src/glide/window_lifetime.py) (M097) ordnet Zeitgeber (`after`) sauber Fenstern oder Ansichten zu (`_after_bindings`), verhindert Zombie-Callbacks und Memory-Leaks bei Fensterschließung. `ListApp.after_scope` und `_register_after` dienen als Fassaden. T318 [`test_abbauvertrag.py`](../01_Repository/Glide/tests/integration/test_abbauvertrag.py) (5 Fälle) und T320 [`test_fensterlebensdauer.py`](../01_Repository/Glide/tests/integration/test_fensterlebensdauer.py) (9 Fälle). |
 | **Shell-Paket 3a (3.62.0)** | **Erster Shell-Baustein:** [`modal_session.py`](../01_Repository/Glide/src/glide/modal_session.py) (M096) entkoppelt den modalen Warteweg aus `app.pyw`. `ListApp.run_modal` und Verwandte bleiben Fassaden. T317 [`test_modalvertrag.py`](../01_Repository/Glide/tests/integration/test_modalvertrag.py) (17 Fälle). |
 | **Dreiecke & Details (3.63.x)** | Kleine gefüllte Dreiecke (D84), randlose Zeilenaktionen, „Alle bis morgen 09:00 Uhr“, vier Zeichenprofile (D85); 3.63.1/3.63.2: Anzeigeknopf „Standard ▾“, Kompaktkopf einheitlich 28 px, Linux-Bereichspfeile auf Kappenmitte zentriert. |
-| **Prüfstand** | 3.69.0 lokal am Referenz-Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten): `ci_grundstufe.py` 19/19 grün, Standprüfung 0 Befunde, Unit-Tests 1.230 grün, Shell-Verträge grün. **Vollprüfung Mac** (`pruefen.py --modus voll`, Lauf 16.11.2026 21:03 UTC): 84 von 85 Schritten grün, gestoppt bei `test_oberflaeche33321` (Leiste blieb nach dem Verlassen stehen; Zeigerlage/Hover, isoliert grün) – die übrigen 35 Suiten, Showcase, Analysen und Reproduktion liefen in diesem Lauf nicht. **GitHub `main` nach PR #118:** Grundstufe, CodeQL, macOS-Paket und Vollprüfung Linux/Xvfb (Tk 9.1, 33 min) grün; **Vollprüfung Windows rot**: `test_desktop_adapter.test_clipboard_roundtrip` stürzte in `clipboard_clear` mit `0xC0000005` ab (Lauf 43955007037). Behoben im Nachpflegezweig durch Attrappe statt echter Zwischenablage; Windows-Nachweis steht mit dessen CI aus. Einzelheiten im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). |
+| **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#nachpflege-3690--windows-ci-t325-und-vollprüfungsstand-16112026). Kurzfassung: Lokal am Referenz-Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten) Grundstufe 19/19 grün. Die Mac-Vollprüfung vom 16.11.2026 stoppte nach 84 grünen Schritten bei `test_oberflaeche33321` (Hover durch Zeigerlage, isoliert grün); **ein vollständiger Mac-Volllauf für 3.69.0 fehlt**. GitHub: Grundstufe, CodeQL, macOS-Paket und Vollprüfung Linux/Xvfb grün; die Windows-Vollprüfung war auf `f0511dd9` rot (Unit-Test-Absturz `0xC0000005` in der Zwischenablage, mit #119 behoben). Auf `d92dece9` lief sie bei Redaktionsschluss (17.11.2026, 00:40 MEZ) seit über 30 Minuten – der alte Absturz kam nach einer Minute –, ein Ergebnis lag noch nicht vor. |
 | **Lieferstand** | `07_Python-Versionen` ist über `scripts/pflege/abgleich_07.py` vollständig SHA-256-synchron zu `src/glide` (`Glide-Aufgaben-und-Listen_v3.69.0.pyw`). Nativer macOS-Paketbau auf `main` grün. |
+| **Lokale Ablage (Mac)** | Die OneDrive-Hauptablage stand am 17.11.2026 noch auf dem auf GitHub gelöschten Zweig `claude/release-3690` mit zwei nicht committeten Dateien (`05_QA_TESTPLAN.md`, `07_QA_BERICHT.md`); ihr Inhalt ist mit #119 in `main`. Vor Arbeit in der Hauptablage auf `main` wechseln und aktualisieren, die beiden Altfassungen nur nach Rückfrage verwerfen. Daneben liegen rund 35 alte lokale Zweige und 14 Worktrees unter `.claude/worktrees/`; nicht ungefragt löschen. |
 | **Ablage-Schutz** | Unberührt und NICHT in Git: `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/` und `glide_master_audit_bericht.md`. Diese Pfade dürfen unter keinen Umständen gestaget oder committet werden. |
 
 ---
@@ -49,7 +53,7 @@ flowchart TD
     PC["01_PRODUCT_CONSTRAINTS.md<br/>(Unverrückbare Produktgrenzen)"] --> EP
     EP --> PROD["01_Repository/Glide/src/glide<br/>(Quellcode & Implementierung)"]
     DR["DESIGN_RICHTLINIEN.md<br/>(Gestaltungsregister, Farben, Schriften)"] --> PROD
-    FABLE["FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md<br/>(Shell-Zielarchitektur Stufen 1–6)"] --> PROD
+    SK["GLIDE_SHELL_FRAMEWORK_KONZEPT.md<br/>(Shell-Grenzen und Entkopplungsziel)"] --> PROD
     PROD --> QA["07_QA_BERICHT.md<br/>(Prüfergebnisse, CI-Status, Plattformbelege)"]
     PROD --> MP["Glide_Manuelle_Pruefung.md<br/>(Menschliche Abnahmeliste für Inhaber)"]
     DP["DOKUMENTENPFLEGE.md<br/>(Konsistenzmatrix bei Versionswechsel)"] --> PROD
@@ -65,7 +69,7 @@ flowchart TD
 | [`01_Repository/Glide/docs/07_QA_BERICHT.md`](../01_Repository/Glide/docs/07_QA_BERICHT.md) | **Prüf- und Lieferstände:** Führt die tatsächlichen Testergebnisse, CI-Status, Plattformnachweise und Grenzwerte geordnet nach Version und Commit. |
 | [`00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md`](Glide_Manuelle_Pruefung.md) | **Menschliche Abnahmeliste:** Fälle, die ausschließlich vom Inhaber interaktiv am Mac geprüft werden können (DPI, Sicht, Bedienung). |
 | [`01_Repository/Glide/docs/DOKUMENTENPFLEGE.md`](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) | **Pflegematrix:** Regelt, welche Dateien bei Versionswechsel, Merges oder neuen Modulen zwingend synchron nachgezogen werden müssen. |
-| [`01_Repository/Glide/docs/FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md`](../01_Repository/Glide/docs/FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | **Shell-Zielarchitektur:** Sechsstufiger Migrationsplan zur vollständigen Herauslösung des Tk-Frameworks `glide_shell` aus der Anwendung. |
+| [`01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | **Shell-Grenzen und Entkopplungsziel** (führend laut Pflegematrix); der [Masterprompt](../01_Repository/Glide/docs/FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) ist die Arbeitsübergabe für die Shell-Schnitte, Status und Rest stehen im Entwicklungsplan. |
 | [`00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md`](Glide_Markt_und_Vorbilder.md) | **Marktrecherchen & Konkurrenzanalyse:** Begründungen und Hintergrundrecherchen für künftige Vorschläge (WA-08 bis WA-60). |
 | [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md) | **Agenten-Regeln:** Repository-spezifische Richtlinien für autonome Agenten. |
 
@@ -77,16 +81,16 @@ Die nächsten Schritte sind strikt nach Dringlichkeit und logischer Abhängigkei
 
 ```mermaid
 flowchart LR
-    S1["1. Nachpflege-PR<br/>Windows-CI grün"] --> S2["2. Paket glide_shell<br/>bündeln (D86/D88)"]
+    S1["1. Windows-CI und<br/>Mac-Volllauf 3.69.0"] --> S2["2. Paket glide_shell<br/>bündeln (D86/D88)"]
     S2 --> S3["3. Paket 6<br/>Demonstrationshost"]
     S1 --> K2["4. Skill glide-to-do<br/>Paket K2"]
     S1 --> INH["5. Inhaber-Abnahme am Mac<br/>& Marktvorschläge"]
 ```
 
-### Schritt 1: Nachpflege nach 3.69.0 abschließen (Priorität 1)
-- **Stand:** 3.68.0 und 3.69.0 sind mit PR #118 in `main` (`f0511dd9`). Die Zweige `claude/release-3690`, `claude/shell-paket-5-desktop-adapter` und `claude/shell-paket-5-desktop-adapter-v2` sind damit erledigt und können auf GitHub gelöscht werden (Inhaber).
-- **Offen:** Nachpflege-PR von `claude/glide-docs-audit-handoff-c9f50b` (ohne Versionswechsel): Windows-Vollprüfung muss dort grün werden; danach Merge durch den Inhaber.
-- **Danach:** eine vollständige Mac-Vollprüfung auf dem gemergten Stand (`pruefen.py --modus voll`), weil der Lauf vom 16.11.2026 bei Schritt 85 stoppte. Vorher Mauszeiger vom Prüffenster fernhalten und keine anderen GUI-Tests parallel starten.
+### Schritt 1: Prüfstand 3.69.0 schließen (Priorität 1)
+- **Windows:** Ergebnis der Vollprüfung Windows x64 auf `main` `d92dece9` (Lauf 43972361020) lesen. Grün → im QA-Bericht nachtragen. Rot → Fehlerstelle aus `gh run view <Lauf> --log-failed` bestimmen; nicht automatisch wiederholen, die Prozessdiagnose verlangt Ursachenbewertung.
+- **Mac:** einen vollständigen Volllauf auf `main` (`python3 -B tests/tools/pruefen.py --modus voll --protokoll ~/GlidePruefung/<lauf> --timeout 900` aus `01_Repository/Glide`) ausführen, Dauer rund 2½ h. Vorher Speicherplatz (`df -h`, mindestens 10 GB frei) und Zeigerlage prüfen, keine anderen GUI-Tests parallel.
+- **Danach:** Ergebnis in den QA-Bericht, Zeile 3.69.0 im Arbeitsvorrat auf ✅ setzen.
 
 ### Schritt 2: Paket `glide_shell` bündeln (Vorstufe vor Paket 6, D86/D88; eigene Inhaberfreigabe nötig)
 - **Kontext:** Gemäß Richtungsentscheidungen D86–D90 ([Plan §21.98](Glide_Entwicklungsplan.md#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)) wurden die vier Shell-Module flach in `src/glide` abgelegt:
@@ -116,7 +120,9 @@ Folgende Punkte aus der [Prüfliste](Glide_Manuelle_Pruefung.md) erfordern die m
 
 ### Schritt 6: Marktvorschläge und Inhaberangaben (Nur durch den Inhaber)
 - **Marktreihung:** Inhaberentscheidung zur Priorisierung von WA-08 (Soll-Ist-Schätzfaktor), WA-20 (Wochenabsicht), WA-12-Rest (Puffer nach Terminen, Spätstart-Frage) und WA-53 bis WA-59 (Chancen aus §21.70).
-- **Inhaberangaben:** I1 (Impressum/Anbieter), I3 (Developer-ID-Signierung & Notarisierung macOS), I4 (Markenprüfung Glide), I11 (Releasefreigabe).
+- **Inhaberangaben** ([Plan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)): offen sind unter anderem I1 (Inhaberangaben), I3 (Apple-Developer-Konto, Windows-Code-Signing), I4 (Markenprüfung „Glide“), I9 (Rechte an Fremdbildern), I10 (Git-Historie bereinigen), I11 (GitHub-Auftritt) und I12 (CodeQL-Einrichtung).
+- **Offene Auswahlvorlagen:** E-P1–E-P5 ([Plan §4.4](Glide_Entwicklungsplan.md#44-größere-umsetzungspakete-auftrag-07102026)) und E-K5 vor Skill-Paket K3. Agenten legen sie vor, entscheiden sie nicht.
+- **Manuelle Prüfungen:** neu seit 17.11.2026 die [Sichtprüfung 3.67.0/3.68.0](Glide_Manuelle_Pruefung.md#offene-sichtprüfung-36703680-ausgelagerte-bedienelemente-und-menüs) (Bedienelemente, Menüs, Kontextmenüs, Systemaktionen).
 
 ---
 
@@ -153,7 +159,7 @@ Jeder KI-Agent, der an diesem Projekt arbeitet, hat folgende verbindliche Regeln
 - Wird automatisch über `01_Repository/Glide/tests/tools/test_modulbudget.py` (T322) und `analyse_statisch.py` geprüft.
 
 ### 4.6 Mac-Vertragsprüfpflicht (D90)
-- Vor dem Eröffnen eines Pull Requests für Shell-Schnitte müssen lokal auf dem Referenz-Mac (macOS arm64) mindestens folgende Tests erfolgreich ausgeführt werden:
+- Vor dem Eröffnen eines Pull Requests für Shell-Schnitte müssen lokal auf dem Referenz-Mac (macOS arm64) mindestens folgende Tests erfolgreich ausgeführt werden, jeweils mit `GLIDE_DATA_DIR` auf einem frischen Temp-Ordner außerhalb OneDrive (etwa `export GLIDE_DATA_DIR=$(mktemp -d)`):
   ```bash
   python3 01_Repository/Glide/tests/integration/test_modalvertrag.py
   python3 01_Repository/Glide/tests/integration/test_abbauvertrag.py
@@ -175,9 +181,12 @@ Jeder KI-Agent, der an diesem Projekt arbeitet, hat folgende verbindliche Regeln
   3. `CHANGELOG.md` mit neuem Versionsabschnitt und Datum ergänzen.
   4. `01_Repository/Glide/src/glide/README.md` (Systembestand Mxxx/Txxx) aktualisieren.
   5. `standpruefung.py` und `ci_grundstufe.py` zur Validierung durchlaufen lassen.
+- **Anker:** Die Dokumentprüfung der Grundstufe prüft nur, ob verlinkte Dateien existieren, nicht ob `#Anker` zu einer Überschrift passen. Nach umbenannten Überschriften die Anker selbst prüfen; am 17.11.2026 waren so zehn Verweise tot.
 
 ### 4.9 Ablage, OneDrive und Mac-Prüffallen
 - **OneDrive:** Projekt samt `.git` liegt in OneDrive und wird von mehreren Rechnern bearbeitet. Vor der Arbeit nach Konfliktkopien suchen; bei Abweichungen gilt der GitHub-Stand. Prüfdaten, Temp und Prüfkopien nur in kurzen Ordnern außerhalb OneDrive (`~/GlidePruefung`, `~/gq`).
 - **Vollprüfung:** `pruefen.py` hat keinen Wiederaufsetzpunkt; nach einem Stopp läuft sie neu von vorn (am Mac rund 2½ h). Quellen und Dokumente während des Laufs nicht ändern – der Lauf prüft ihre Integrität nach jedem Schritt.
 - **GUI-Suiten:** nie parallel zu einer laufenden Prüffolge starten (Fokusraub). Der echte Mauszeiger über dem Prüffenster macht Hover-/Tooltip-Fälle rot (`test_oberflaeche33321`, B15-Fälle).
 - **Unit-Tests:** dürfen keine Systemressourcen des Prüfrechners anfassen (Zwischenablage, Startprogramme); dafür Attrappen verwenden.
+- **Committen:** nicht in der gemeinsamen `.git` in OneDrive, sondern in einem frischen Klon außerhalb (`git clone --reference <Hauptablage>/.git <origin> ~/gq/<kurz>`), Änderungen per `git diff --binary` übertragen, dort committen, pushen und den PR öffnen. Im Klon Namen und E-Mail des Inhabers aus dem letzten `main`-Commit übernehmen.
+- **CI vor dem Merge:** Ein PR ist erst fertig, wenn auch die Vollprüfung Windows x64 grün ist; sie startet erst nach der Linux-Vollprüfung (zusammen rund 1–1½ h). PR #118 wurde mit roter Windows-Prüfung gemergt – das hat #119 nötig gemacht.

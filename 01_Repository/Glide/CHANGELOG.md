@@ -12,6 +12,7 @@ Ganzheitliche Dokumentations- und Übergabekonsolidierung, Audit-Bereinigung und
 - Sicherheitsrichtlinie: `SECURITY.md` und `01_Repository/Glide/SECURITY.md` auf Stand 16.11.2026 synchronisiert.
 - CI-Absicherung: `tests/unit/test_desktop_adapter.py` mit Headless-SkipTest-Absicherung für Display-freie Umgebungen ergänzt; Linux-Grundstufe (Tk 8.6) grün.
 - Prüfung: Standprüfung 0 Befunde, Testkatalog V1.36 5/5, Unit-Tests 1.230/1.230 grün, Vertragstests 100 % grün, CI-Grundstufe mit 19/19 Schritten bestanden (Exitcode 0).
+- Nachtrag 16./17.11.2026 (ohne Versionswechsel, PR #119): `test_desktop_adapter.py` prüft die Zwischenablage über eine Attrappe, weil der Test unter Windows/Tk 9.1 mit `0xC0000005` abstürzte und die echte Zwischenablage überschrieb; `test_ki_ausgabe_darstellung.py` (T325) läuft in der Vollprüfung mit (114 Suiten); Shell-Konzept, Architektur, Prüfliste und Übergabe nachgezogen.
 
 
 ## 3.68.0 – 16.11.2026

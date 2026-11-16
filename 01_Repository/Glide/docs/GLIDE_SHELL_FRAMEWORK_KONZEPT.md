@@ -166,6 +166,8 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 | `motion` | vollständig | – |
 | `modal_session` (seit 3.62.0) | vollständig; Importregel in `test_shell_importregel.py` und `test_modal_session.py` | Attributnamen `_glide_modal_active`/`_glide_modal_finished` aus Kompatibilität |
 | `window_lifetime` (seit 3.64.0) | vollständig; Importregel in `test_shell_importregel.py` | Attributname `_glide_after_scope` am Widget |
+| `custom_controls` (seit 3.67.0) | vollständig; Importregel in `test_shell_importregel.py`, Verhalten in `test_custom_controls.py` | Klassennamen `GlideCheckbutton`, `GlideRadiobutton`, `GlideListbox`, `GlideScale` aus Kompatibilität; Schrift, Tinte und Hintergrund setzt der Host über `set_font_provider`, `set_ink_provider` und `set_backdrop_painter`; `app.pyw` re-exportiert die Bedienelemente |
+| `desktop_adapter` (seit 3.68.0) | vollständig; Importregel in `test_shell_importregel.py`, Verhalten in `tests/unit/test_desktop_adapter.py` | Attributname `_glide_action_ids` an Menüs; Menüeinträge, Aktionskennungen und Beschriftungen liefert der Host |
 | `compact_mode` | `parse`, `format_geometry`, `clamp`, `keep_visible` | Mindestmaße, Einstellungsname, Kürzelregel |
 | `appearance` | Designpaar, Erkennung des Systemmodus | Hintergrundauswahl, `with_background` |
 | `ui_design` | Skalen, `fit_text`, `clip_title`, Breitenausgleich, `settled_wrap_width` | `task_title`, `today_columns`, `page_icon_layout` |
