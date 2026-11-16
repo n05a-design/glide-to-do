@@ -8,7 +8,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -68,7 +68,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen a
 | 3.61.0/3.62.0 | Linux-/Windows-Vollprüfung, macOS- und Windows-Paket zum Merge-Commit `6d719ca7` (PR #85, #87, #88 gemergt) | ▶ | CI-Ergebnisse dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)) | Mac-Läufe nach D90, danach Fokusrückgabe (D87) | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)) | Mac-Lauf und Mac-Sichtprüfung der Fokusrückgabe (D87/D90), danach Paket 4 | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2888,3 +2888,17 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 6. Version 3.64.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`; `window_lifetime.py` in den Modullisten von Lieferabgleich, Mac-Vorstufe und Liefer-README. Glide-System V1.30.
 
 **C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3640--shell-paket-3c-15112026). Der in §21.95 offene Fall „Schließen bei offenem modalem Dialog“ ist geprüft und endet sauber. Die Mac-Läufe der drei Vertragstests nach D90 sind am 16.11.2026 grün (Inhaber, macOS arm64, Python 3.14.5, Tk 9.0.3); damit ist 3c abgeschlossen. Offen: rund 70 weitere direkte `after`-Aufrufe und die 46 direkt erzeugten `tk.Toplevel` sind nicht umgestellt; die Hypothese zu `unbind` mit Kennung unter Python 3.12 und der Vorschlag zu WA-50 stehen aus. Nächster Schnitt nach D88: Fokusrückgabe (D87), mit eigener Freigabe.
+
+### 21.101 Glide 3.65.0: Fokusrückgabe nach modalen Dialogen, D87 (16.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 16.11.2026 den nächsten Schnitt nach D88 frei: Die Shell merkt sich den Fokus vor einem modalen Dialog und gibt ihn nach dem Schließen zurück (D87). Basis ist `main` `76400208` (3.64.0 mit den PRs #104 und #105), vor Beginn gegen `origin/main` geprüft.
+
+**B – Umsetzung:**
+1. `modal_session.py` (M096): `remember_focus(root, dialog, parent)` bestimmt das aufrufende Fenster (`parent`, sonst der Griffhalter, sonst das Fenster des Masters) und fragt es nach seinem zuletzt fokussierten Widget (`focus_lastfor`). Das gilt auch, wenn ein Aufrufer vor `run_modal` schon ein Feld im Dialog fokussiert hat.
+2. `return_focus(root, dialog, remembered)` setzt den Fokus nach dem Schließen zurück; ist das Widget verschwunden, erhält das Fenster den Fokus. Liegt der Fokus in einem dritten, noch offenen Fenster, bleibt er dort. `wait_modal` ruft beide auf, auch wenn das Warten mit einer Ausnahme endet. Schnittstelle von `wait_modal`, `run_modal` und den `ListApp`-Fassaden unverändert.
+3. Bestehende Rückgaben einzelner Aufrufer (`restore_focus`, `themed_message_dialog`) bleiben; sie laufen danach und behalten das letzte Wort.
+4. `test_modalvertrag.py` (T316): Fall `fokus` prüft jetzt die Rückgabe; neu sind `fokus_verschoben`, `fokus_verschachtelt`, `fokus_ziel_weg` und `fokus_drittes_fenster`, dazu drei Gegenproben. T317/T319 führen die zwei neuen Funktionen in der Schnittstelle.
+5. Baseline unter macOS/Tk 9.0.3: Der Fenstermanager gab den Fokus in einfachen und verschachtelten Fällen schon von selbst zurück. Der Schnitt macht die Rückgabe zum Vertrag der Shell, unabhängig von Plattform und Aufrufer.
+6. Version 3.65.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`. Glide-System V1.31.
+
+**C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3650--fokusrückgabe-16112026). Offen: Sichtprüfung am Mac von Hand nach D87 ([Prüfliste](Glide_Manuelle_Pruefung.md#offene-sichtprüfung-3650-fokusrückgabe-d87)), GitHub-Prüfung unter Linux und Windows, Pakete. Nächster Schnitt nach D88: Paket 4 (Erscheinungsbild und Bedienelemente), mit eigener Freigabe.

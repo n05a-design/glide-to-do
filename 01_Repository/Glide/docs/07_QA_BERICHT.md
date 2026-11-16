@@ -1,4 +1,21 @@
-# QA-Bericht – Glide 3.64.0
+# QA-Bericht – Glide 3.65.0
+
+## Prüfstand 3.65.0 – Fokusrückgabe (16.11.2026)
+
+Basis `main` `76400208` (3.64.0 mit PR #104 und #105), vor Beginn gegen `origin/main` geprüft; Branch `claude/shell-fokusrueckgabe`. Geprüft unter macOS arm64 mit Python 3.14.5 aus dem Python.org-Framework und Tcl/Tk 9.0.3, Prüffenster im Hintergrund (`GLIDE_QA_HINTERGRUND=1`), künstliche Daten in kurzen Ablagen außerhalb von OneDrive; `app.pyw` SHA-256 `ce3e60765d4a…`, `modal_session.py` `0130e2f02ceb…`. Auftrag im [Plan §21.101](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Baseline auf 3.64.0 vor der Änderung | `test_modalvertrag.py` 13/13, `--gegenproben` 6/6. Eine Probe mit Feld im Hauptfenster, Dialog mit vorab fokussiertem Feld und vier Varianten verschachtelter Dialoge (Master Maske oder Hauptfenster, mit und ohne `transient`): Der Fenstermanager gab den Fokus unter macOS/Tk 9.0.3 in allen Fällen schon von selbst zurück |
+| `test_modalvertrag.py` | 17 Fälle grün in drei Läufen; `fokus` prüft jetzt die Rückgabe, neu sind `fokus_verschoben`, `fokus_verschachtelt`, `fokus_ziel_weg` und `fokus_drittes_fenster` |
+| `test_modalvertrag.py --gegenproben` | neun von neun erkannt, darunter ohne Rückgabe, ohne Merken und ohne Fremdfensterschutz |
+| `test_abbauvertrag.py`, `test_fensterlebensdauer.py` | 5/5 und 9/9 grün |
+| `test_modal_session.py`, `test_shell_importregel.py` | grün mit erweiterter Schnittstelle (`remember_focus`, `return_focus`) |
+| Volllauf `pruefen.py --modus schnell` (Hintergrundmodus) | Nicht grün abgeschlossen: Zwei Läufe stoppten an unterschiedlichen Stellen, nach 65 grünen Schritten in `test_bereiche3331` und nach 15 in `test_release36`. Beide Fälle erzeugen `<Return>` auf einem fokussierten Feld ohne modalen Dialog. Einzeln waren beide Suiten auf diesem Stand und auf der unveränderten Basis `76400208` grün (2/2 bzw. 3/3). Sie brauchen den Systemfokus, den der Hintergrundmodus nicht zusichert, wenn am Mac gleichzeitig gearbeitet wird. CI-Grundstufe am Mac bestanden |
+
+**Befund:** Ein erster Entwurf verglich Fensternamen als Präfix. Für das Hauptfenster (`.`) trifft das jedes Widget der Anwendung, auch in fremden Fenstern; der Schutz für ein drittes Fenster hätte nie gegriffen. Das Hauptfenster wird jetzt über `winfo_toplevel` verglichen, und die Gegenprobe `ohne_fremdfensterschutz` sichert das.
+
+**Grenzen:** Die Sichtprüfung am Mac von Hand nach D87 steht aus ([Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#offene-sichtprüfung-3650-fokusrückgabe-d87)). Ohne Systemfokus des Prüfprozesses belegen die Fälle, was sich das Fenster merkt (`focus_lastfor`), und nur wo vorhanden den tatsächlichen Fokus. Nicht geprüft sind Windows, Linux/Xvfb, Tk 8.6/9.1, Python 3.12 und die Paketbauten; sie folgen in der GitHub-Prüfung zum PR.
 
 ## Prüfstand 3.64.0 – Shell-Paket 3c (15.11.2026)
 
@@ -425,7 +442,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

@@ -1,6 +1,15 @@
 # Manuelle Prüfung – Glide
 
-Stand 15.11.2026 · Glide 3.64.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
+
+## Offene Sichtprüfung 3.65.0: Fokusrückgabe (D87)
+
+Prüfbasis ist der Quellstand 3.65.0 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen Testordner). D87 verlangt diese Prüfung am Mac von Hand; Plattform, Tcl/Tk und Ergebnis festhalten.
+
+- [ ] **Einfacher Dialog:** In das Erfassungsfeld klicken, über das Menü einen Dialog öffnen (etwa „Label anlegen“) und mit Esc schließen. Der Cursor blinkt wieder im Erfassungsfeld; Tippen landet dort.
+- [ ] **Unterdialog:** In einer Maske (etwa Aufgabe bearbeiten) ein Feld fokussieren, daraus einen Unterdialog öffnen (Kalender oder Farbauswahl) und schließen. Der Fokus liegt wieder im Feld der Maske, nicht im Hauptfenster.
+- [ ] **Bestätigen statt Abbrechen:** Einen Dialog mit Enter bestätigen. Danach liegt der Fokus dort, wo die Aktion ihn hinsetzt, oder wieder im Ausgangsfeld – nie auf keinem Feld.
+- [ ] **App-Wechsel:** Während ein Dialog offen ist, zu einer anderen App wechseln und zurück, dann schließen. Glide nimmt der anderen App keinen Fokus weg; nach der Rückkehr liegt er im Ausgangsfeld.
 
 ## Offene menschliche Sichtabnahme 3.63.0
 

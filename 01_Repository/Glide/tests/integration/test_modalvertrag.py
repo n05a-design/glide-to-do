@@ -88,6 +88,31 @@ class Umgebung:
         fenster.bind("<Escape>", lambda _e: fenster.destroy())
         return fenster
 
+    def feld_im_hauptfenster(self):
+        """Ein Eingabefeld im Hauptfenster, das vor dem Dialog den Fokus hat."""
+        feld = self.tk.Entry(self.root, name="hauptfeld")
+        feld.pack()
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+        feld.focus_set()
+        self.root.update()
+        return feld
+
+    def fokus(self):
+        try:
+            return self.root.focus_get()
+        except (KeyError, self.tk.TclError):
+            return None
+
+    def pruefe_fokus(self, fenster, erwartet, wann):
+        """Der Fokus liegt auf `erwartet`; ohne Systemfokus zählt, was das Fenster sich merkt."""
+        self.root.update_idletasks()
+        fokus = self.fokus()
+        gemerkt = fenster.focus_lastfor()
+        self.pruefe(gemerkt is erwartet, f"{wann}: Fenster merkt sich {gemerkt!r} statt {erwartet!r}")
+        self.pruefe(fokus in (None, erwartet), f"{wann}: Fokus liegt auf {fokus!r} statt {erwartet!r}")
+
     def grab(self):
         try:
             return self.root.grab_current()
@@ -416,24 +441,20 @@ def fall_wiederholt(u):
 
 
 def fall_fokus(u):
-    """Der Dialog erhält den Fokus; die Rückgabe danach bleibt Sache des Aufrufers.
+    """Der Dialog erhält den Fokus; nach dem Schließen kehrt er ins aufrufende Fenster zurück (D87).
 
-    `run_modal` holt den Dialog nach vorn (`focus_force`). Es stellt den Fokus
-    nach dem Schließen nicht wieder her – das tun Aufrufer wie
-    `themed_message_dialog` selbst. Der Test hält beides fest, damit eine
-    Verlagerung den Vertrag nicht still ändert.
+    `run_modal` holt den Dialog nach vorn (`focus_force`). Seit 3.65.0 gibt
+    die Shell den Fokus danach selbst zurück – auch wenn der Aufrufer vor
+    `run_modal` schon ein Feld im Dialog fokussiert hat.
     """
-    u.root.deiconify()
-    u.root.lift()
-    u.root.focus_force()
-    u.root.update()
+    feld = u.feld_im_hauptfenster()
     d = u.dialog()
+    d.nametowidget("eingabe").focus_set()
     stand = {}
 
     def waehrend():
         u.root.update_idletasks()
-        fokus = d.focus_get()
-        stand["fokus"] = fokus
+        stand["fokus"] = d.focus_get()
         d.destroy()
 
     u.ablauf([waehrend])
@@ -441,10 +462,93 @@ def fall_fokus(u):
     fokus = stand.get("fokus")
     u.pruefe(fokus is not None and str(fokus).startswith(str(d)),
              f"Fokus lag während des Wartens nicht im Dialog: {fokus!r}")
-    shell = u.mod.glide_modal_session
-    quelle = inspect.getsource(shell.wait_modal) + inspect.getsource(shell.modal_over)
-    u.pruefe("focus_set" not in quelle and "focus_force" not in quelle,
-             "der Warteweg stellt jetzt selbst Fokus her – Vertrag und Aufrufer prüfen")
+    u.pruefe_fokus(u.root, feld, "nach dem Schließen")
+
+
+def fall_fokus_verschoben(u):
+    """Verschiebt etwas den Fokus im Hauptfenster während des Wartens, gilt danach der Stand von vorher."""
+    feld = u.feld_im_hauptfenster()
+    knopf = u.tk.Button(u.root, text="anderes Ziel", name="anderes_ziel")
+    knopf.pack()
+    d = u.dialog()
+
+    def waehrend():
+        knopf.focus_set()
+        u.root.update_idletasks()
+        d.destroy()
+
+    u.ablauf([waehrend])
+    u.laufen(lambda: u.app.run_modal(d))
+    u.pruefe_fokus(u.root, feld, "nach verschobenem Fokus")
+
+
+def fall_fokus_verschachtelt(u):
+    """Ein Unterdialog gibt den Fokus an das Feld der Maske zurück, nicht an das Hauptfenster."""
+    u.feld_im_hauptfenster()
+    a = u.dialog(titel="Maske")
+    zweites = u.tk.Entry(a, name="zweites")
+    zweites.pack()
+    stand = {}
+
+    def b_oeffnen():
+        zweites.focus_set()
+        u.root.update_idletasks()
+        b = u.dialog(titel="Unterdialog")          # Master ist das Hauptfenster
+        u.root.after(SCHRITT_MS, b.destroy)
+        u.app.run_modal(b)
+        u.root.update_idletasks()
+        stand["fokus"] = u.fokus()
+        stand["lastfor"] = a.focus_lastfor()
+        a.destroy()
+
+    u.ablauf([b_oeffnen])
+    u.laufen(lambda: u.app.run_modal(a))
+    u.pruefe(stand.get("lastfor") is zweites, f"Maske merkt sich nach dem Unterdialog {stand.get('lastfor')!r}")
+    u.pruefe(stand.get("fokus") in (None, zweites), f"Fokus nach dem Unterdialog: {stand.get('fokus')!r}")
+
+
+def fall_fokus_ziel_weg(u):
+    """Verschwindet das gemerkte Widget, erhält sein Fenster den Fokus – ohne Fehler."""
+    feld = u.feld_im_hauptfenster()
+    d = u.dialog()
+
+    def waehrend():
+        feld.destroy()
+        d.destroy()
+
+    u.ablauf([waehrend])
+    u.laufen(lambda: u.app.run_modal(d))
+    fokus = u.fokus()
+    u.pruefe(fokus is None or fokus.winfo_toplevel() is u.root, f"Fokus nach verschwundenem Ziel: {fokus!r}")
+    u.pruefe(not u.protokoll, f"unerwarteter Protokolleintrag: {u.protokoll}")
+
+
+def fall_fokus_drittes_fenster(u):
+    """Öffnet der Dialog ein drittes Fenster und schließt dann, behält dieses den Fokus."""
+    feld = u.feld_im_hauptfenster()
+    d = u.dialog()
+    stand = {}
+
+    def waehrend():
+        drittes = u.tk.Toplevel(u.root)
+        drittes.geometry("240x100+200+200")
+        eingabe = u.tk.Entry(drittes)
+        eingabe.pack()
+        drittes.update()
+        eingabe.focus_force()
+        drittes.update()
+        stand["eingabe"] = eingabe
+        stand["vorher"] = u.fokus()
+        d.destroy()
+
+    u.ablauf([waehrend])
+    u.laufen(lambda: u.app.run_modal(d))
+    eingabe = stand.get("eingabe")
+    u.root.update_idletasks()
+    fokus = u.fokus()
+    u.pruefe(stand.get("vorher") is eingabe, f"Vorbedingung: drittes Fenster hatte keinen Fokus ({stand.get('vorher')!r})")
+    u.pruefe(fokus is eingabe, f"drittes Fenster verlor den Fokus an {fokus!r}")
+    u.pruefe(u.root.focus_lastfor() is feld, "der gemerkte Fokus des Hauptfensters ging verloren")
 
 
 def fall_menue(u):
@@ -514,6 +618,10 @@ FAELLE = {
     "wiederverwendbar": fall_wiederverwendbar,
     "wiederholt": fall_wiederholt,
     "fokus": fall_fokus,
+    "fokus_verschoben": fall_fokus_verschoben,
+    "fokus_verschachtelt": fall_fokus_verschachtelt,
+    "fokus_ziel_weg": fall_fokus_ziel_weg,
+    "fokus_drittes_fenster": fall_fokus_drittes_fenster,
     "menue": fall_menue,
     "hauptfenster_abbau": fall_hauptfenster_abbau,
 }
@@ -531,6 +639,11 @@ GEGENPROBEN = {
     "ohne_wartevariable": ("wait_modal", "finished = getattr(dialog, FINISHED_ATTRIBUTE, None)",
                            "finished = None", "wiederverwendbar"),
     "ohne_rueckgabe": ("modal_over", "owner.grab_set()", "pass", "verschachtelt"),
+    "ohne_fokusrueckgabe": ("return_focus", "target.focus_set()", "pass", "fokus_verschoben"),
+    "ohne_fokusmerken": ("remember_focus", "widget = window.focus_lastfor()", "widget = None",
+                         "fokus_verschoben"),
+    "ohne_fremdfensterschutz": ("return_focus", "return False  # ein drittes Fenster behält den Fokus",
+                                "pass", "fokus_drittes_fenster"),
 }
 
 

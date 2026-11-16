@@ -17,7 +17,12 @@ Vertrag (festgehalten in `tests/integration/test_modalvertrag.py`):
   gesetzt wird, und bleibt bestehen; sonst endet das Warten mit dem Fenster.
 - Hielt ein anderes Fenster vorher den Griff, bekommt es ihn danach zurück –
   außer es ist inzwischen verschwunden. Das Hauptfenster bekommt keinen.
-- Den Fokus nach dem Schließen stellt der Aufrufer her, nicht dieses Modul.
+- Fokusrückgabe (D87, 3.65.0): Vor dem Warten merkt sich das Modul, welches
+  Widget im aufrufenden Fenster zuletzt den Fokus hatte, und gibt ihn nach dem
+  Schließen dorthin zurück. Ist das Widget verschwunden, erhält das Fenster
+  selbst den Fokus. Liegt der Fokus danach in einem dritten, noch offenen
+  Fenster, bleibt er dort. Aufrufer, die danach selbst einen Fokus setzen,
+  behalten das letzte Wort.
 
 Die Attributnamen `_glide_modal_active` und `_glide_modal_finished` bleiben
 aus Kompatibilität: Einstellungsdialog und Fensterwechsel der App lesen sie.
@@ -105,8 +110,91 @@ def bring_to_front(dialog):
         pass
 
 
+def _inside(widget, window):
+    """True, wenn `widget` im Fenster `window` liegt (eigene Toplevels darin zählen mit).
+
+    Für das Hauptfenster zählt nur, was nicht in einem eigenen Toplevel liegt;
+    ein reiner Namensvergleich träfe dort jedes Widget der Anwendung.
+    """
+    if widget is None or window is None:
+        return False
+    name, prefix = str(widget), str(window)
+    if prefix == ".":
+        try:
+            return widget.winfo_toplevel() is window
+        except (KeyError, tk.TclError):
+            return False
+    return name == prefix or name.startswith(prefix + ".")
+
+
+def _focus_now(root):
+    """Fokus-Widget der Anwendung oder None – auch bei Tk-eigenen Fenstern."""
+    try:
+        return root.focus_get()
+    except (KeyError, tk.TclError):
+        return None
+
+
+def _origin_window(root, dialog, parent):
+    """Das Fenster, aus dem der Dialog kam: `parent`, sonst der Griffhalter, sonst der Master."""
+    if isinstance(parent, _WINDOWS) and parent is not dialog:
+        return parent
+    try:
+        current = root.grab_current()
+    except tk.TclError:
+        current = None
+    if isinstance(current, _WINDOWS) and current is not dialog:
+        return current
+    try:
+        master = dialog.master.winfo_toplevel() if dialog.master is not None else root
+    except (AttributeError, tk.TclError):
+        master = root
+    return master if master is not dialog else root
+
+
+def remember_focus(root, dialog, parent=None):
+    """Merkt sich, wohin der Fokus nach dem Dialog zurückkehrt: (Fenster, Widget).
+
+    Gefragt wird das aufrufende Fenster nach seinem zuletzt fokussierten Widget
+    (`focus_lastfor`). Das gilt auch dann, wenn ein Aufrufer vor `run_modal`
+    schon ein Feld im Dialog fokussiert hat oder `bring_to_front` den Fokus
+    in den Dialog gezogen hat.
+    """
+    window = _origin_window(root, dialog, parent)
+    widget = None
+    try:
+        widget = window.focus_lastfor()
+    except (KeyError, tk.TclError):
+        widget = None
+    if _inside(widget, dialog):
+        widget = None
+    return window, widget
+
+
+def return_focus(root, dialog, remembered):
+    """Gibt den gemerkten Fokus zurück; True, wenn er gesetzt wurde.
+
+    Ist das gemerkte Widget verschwunden, erhält sein Fenster den Fokus. Liegt
+    der Fokus inzwischen in einem dritten, noch offenen Fenster – etwa einem,
+    das der Dialog geöffnet hat –, bleibt er dort.
+    """
+    window, widget = remembered if remembered else (None, None)
+    try:
+        if window is None or not window.winfo_exists():
+            return False
+        current = _focus_now(root)
+        if current is not None and current.winfo_exists() and not _inside(current, dialog) \
+                and not _inside(current, window):
+            return False  # ein drittes Fenster behält den Fokus
+        target = widget if widget is not None and widget.winfo_exists() else window
+        target.focus_set()
+        return True
+    except (KeyError, tk.TclError):
+        return False
+
+
 def wait_modal(root, dialog, parent=None, *, log_error=None):
-    """Greift, wartet und gibt frei; der vorherige Griff kehrt zurück.
+    """Greift, wartet und gibt frei; der vorherige Griff und der Fokus kehren zurück.
 
     `log_error` erhält einen Text, wenn `grab_set` scheitert (etwa weil eine
     andere Anwendung den Griff hält oder das Fenster noch nicht sichtbar
@@ -114,26 +202,30 @@ def wait_modal(root, dialog, parent=None, *, log_error=None):
     blieb offen, und die Anwendung wartete auf ein Fenster, das niemand
     mehr schließen konnte.
     """
-    with modal_over(root, parent):
-        try:
-            dialog.grab_set()
-        except tk.TclError as fehler:
-            if log_error is not None:
-                log_error(f"grab_set fehlgeschlagen: {fehler}\n")
-        setattr(dialog, ACTIVE_ATTRIBUTE, True)
-        try:
-            finished = getattr(dialog, FINISHED_ATTRIBUTE, None)
-            if finished is None:
-                root.wait_window(dialog)
-            else:
-                root.wait_variable(finished)
-        finally:
-            setattr(dialog, ACTIVE_ATTRIBUTE, False)
+    remembered = remember_focus(root, dialog, parent)
+    try:
+        with modal_over(root, parent):
             try:
-                if dialog.winfo_exists():
-                    dialog.grab_release()
-            except tk.TclError:
-                pass
+                dialog.grab_set()
+            except tk.TclError as fehler:
+                if log_error is not None:
+                    log_error(f"grab_set fehlgeschlagen: {fehler}\n")
+            setattr(dialog, ACTIVE_ATTRIBUTE, True)
+            try:
+                finished = getattr(dialog, FINISHED_ATTRIBUTE, None)
+                if finished is None:
+                    root.wait_window(dialog)
+                else:
+                    root.wait_variable(finished)
+            finally:
+                setattr(dialog, ACTIVE_ATTRIBUTE, False)
+                try:
+                    if dialog.winfo_exists():
+                        dialog.grab_release()
+                except tk.TclError:
+                    pass
+    finally:
+        return_focus(root, dialog, remembered)
 
 
 def run_modal(root, dialog, parent=None, *, background=None,

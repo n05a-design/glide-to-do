@@ -3,6 +3,14 @@
 Stand 14.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.65.0 – 16.11.2026
+
+Fokusrückgabe nach modalen Dialogen (D87). Datenformat 26 unverändert.
+
+- Nach dem Schließen eines modalen Dialogs liegt der Tastaturfokus wieder auf dem Feld, das ihn vorher im aufrufenden Fenster hatte – auch bei Unterdialogen über einer Maske. Bisher hing das vom Fenstermanager oder vom einzelnen Aufrufer ab.
+- Die Shell (`modal_session.py`) merkt sich den Fokus mit `remember_focus` und gibt ihn mit `return_focus` zurück. Ist das Feld inzwischen verschwunden, erhält das Fenster den Fokus; ein drittes Fenster, das der Dialog geöffnet hat, behält ihn. Aufrufer, die danach selbst einen Fokus setzen, behalten das letzte Wort.
+- Prüfung: `test_modalvertrag.py` mit 17 statt 13 Fällen und neun statt sechs Gegenproben. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3650--fokusrückgabe-16112026).
+
 ## 3.64.0 – 15.11.2026
 
 Shell-Paket 3c: Zeitgeber gehören einem Fenster oder einer Ansicht. Sichtbares Verhalten und Datenformat 26 unverändert.
