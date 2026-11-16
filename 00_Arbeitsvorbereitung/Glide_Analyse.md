@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-**Glide-Agenten-Skill 16.11.2026:** [§13.39](#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026) prüft 3.65.0 darauf, welche Glide-Ebenen ein Agenten-Skill heute über vorhandene Importwege anlegen kann, nennt sieben Befunde im Austauschweg und schätzt den Aufwand je Paket. Ein Grundskill braucht keine App-Änderung; der volle Umfang kein neues Aufgabenformat.
+**Glide-Agenten-Skill 16.11.2026 (WA-61):** [§13.39](#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026) prüft 3.65.0/3.66.0 darauf, welche Glide-Ebenen ein Agenten-Skill über vorhandene Importwege anlegen kann, nennt sieben Befunde im Austauschweg und schätzt den Aufwand je Paket; Inhaberentscheidungen D91 (K1) und D92 (Ausbau 3.66.0 mit zentrierter Kopplung).
 
 **Gesamtaudit 14.11.2026:** [§13.36](#1336-gesamtaudit-gegen-code-und-dokumentation-14112026) prüft 3.60.0 gegen Code und Dokumentation. Offene Befunde: Datenordnerzeiger, nicht angezeigte Überlastungsgründe und die Messbelege zu 3.55.0.
 
@@ -22,7 +22,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
