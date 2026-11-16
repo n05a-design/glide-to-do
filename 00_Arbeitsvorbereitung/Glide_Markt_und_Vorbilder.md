@@ -1,5 +1,7 @@
 # Glide – Markt und Vorbilder
 
+**Agenten-Skills 16.11.2026:** [§17](#17-agenten-skills-und-dokumentbasierter-ki-austausch-16112026) erfasst den offenen Skill-Standard (`SKILL.md`), `AGENTS.md` und die Unterstützung in gängigen KI-Agenten als Grundlage für den Glide-Agenten-Skill (WA-61). Abdeckung, Befunde und Aufwand stehen in der [Analyse §13.39](Glide_Analyse.md#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026), Pakete und Entscheidungsvorlagen im [Plan §21.102](Glide_Entwicklungsplan.md#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026).
+
 **Nachrecherche 12. und 14.11.2026:** [§16](#16-nachrecherche-vom-12-und-14112026) ergänzt acht Marktbewegungen seit dem 06.11. und markiert, was Glide aus §13/§14 inzwischen umgesetzt hat. Die Schlüsse von §14 tragen weiter.
 
 **Aktuelle Produktkommunikation 07.11.2026:** [§15](#15-markt-und-produktkommunikation-am-07112026) wertet die vorhandenen Recherchestränge aus, aktualisiert zentrale Aussagen mit Primärquellen und richtet sie auf den Desktop-Planer mit vier Produktbereichen aus. Frühere Positionierungssätze sind datierte Vorschläge und seit D72 überholt; sie sind keine aktuellen Marketingtexte.
@@ -852,3 +854,36 @@ Glide-Basis 3.60.0/3.61.0. Hersteller- und Drittquellen, kein Produkt installier
 | [Microsoft To Do](https://mc.merill.net/message/MC1488845) | private Planner-Aufgaben verlassen To Do; Termin auf Dezember 2026 verschoben (MC1488845) | [S] Microsoft-Nachricht über Spiegel | bestätigt §14; lokale ICS-Dateien bleiben der robuste Weg |
 
 Things, Trello, TickTick, Anytype, Logseq und AFFiNE zeigen keine strategisch neue Lage. Die in D54 beschlossene zweiwöchentliche Recherche war am 14.11.2026 auf dem Mac nicht als geplante Aufgabe eingerichtet; diese Nachrecherche ersetzt sie nicht dauerhaft.
+
+## 17. Agenten-Skills und dokumentbasierter KI-Austausch (16.11.2026)
+
+Auftrag des Inhabers vom 16.11.2026: Recherche, wie aufwendig ein Glide-Skill für gängige KI-Agenten ist, der Ausgaben wie Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten oder Projekte direkt Glide-lesbar anlegt (Plan §21.102). Abruf 16.11.2026 über Herstellerseiten [H] und Sekundärquellen [S]; kein Agent installiert oder praktisch geprüft. Glide-Basis 3.65.0.
+
+### 17.1 Standards
+
+| Gegenstand | Stand | Beleg | Folgerung für Glide [A] |
+|---|---|---|---|
+| [Agent Skills](https://agentskills.io/specification) (`SKILL.md`) | Offener Standard, ursprünglich von Anthropic (Dezember 2025). Ein Skill ist ein Ordner mit `SKILL.md`; Pflichtfelder `name` (1–64 Zeichen, Kleinbuchstaben, Ziffern, Bindestrich, gleich dem Ordnernamen) und `description` (bis 1.024 Zeichen: was und wann). Optional `license`, `compatibility` (bis 500), `metadata` (Schlüssel/Wert, dort auch eine Version) und experimentell `allowed-tools`. Unterordner `scripts/`, `references/`, `assets/`; stufenweises Laden: Name und Beschreibung immer, `SKILL.md` unter 5.000 Token bzw. 500 Zeilen bei Bedarf, Referenzen nur bei Gebrauch. Prüfwerkzeug `skills-ref validate` | [H] | Ein einziger Skillordner kann alle unterstützenden Agenten bedienen. Versionsangaben gehören in `metadata`; Glide-spezifische Feldlisten in `references/`, damit der Einstieg klein bleibt |
+| [AGENTS.md](https://openai.com/index/agentic-ai-foundation/) | Projektanweisungen für Coding-Agenten; seit 09.12.2025 bei der Agentic AI Foundation der Linux Foundation, zusammen mit MCP und goose | [H] | Ergänzt Skills für Repositorien, ersetzt sie nicht. Ein kurzer Abschnitt „Glide-Dateien erzeugen“ mit Verweis auf den Skill reicht |
+| MCP | Schnittstelle zwischen Agent und laufendem Programm; Wettbewerber wie Heptabase bieten sie an (§16) | [H] | Für Glide ausgeschlossen (N10, Q3). Ein Skill braucht sie nicht: Er schreibt Dokumente, Glide prüft sie beim Import |
+
+### 17.2 Unterstützung in gängigen Agenten
+
+| Agent | Skillweg | Beleg | Bemerkung [A] |
+|---|---|---|---|
+| Claude Code | Ordner unter `~/.claude/skills/` oder `.claude/skills/` im Projekt | [H] | Bereits im Projekt genutzt (`design-richtlinien`); ein Produkt-Skill gehört nicht in diesen Entwicklungsordner |
+| [Claude-Apps](https://support.claude.com/en/articles/12512180) | ZIP-Upload unter „Skills“; Codeausführung muss aktiviert sein; eigene Skills erst nach Teilen für andere sichtbar | [H] | Dateien entstehen dort zum Herunterladen; der Nutzer importiert sie in Glide |
+| [OpenAI Codex und ChatGPT](https://developers.openai.com/plugins/concepts/skills) | Gleicher Aufbau; Codex liest `.agents/skills` (Projekt, Nutzer, System), ChatGPT zeigt Skills in der Desktop-App; Freischaltung je Tarif unterschiedlich | [H], Tarifangaben [S] | Gleicher Ordner wie für Claude; Unternehmens-/Bildungstarife haben Skills teils standardmäßig aus |
+| GitHub Copilot, VS Code | `.github/skills` bzw. `.agents/skills` | [S] ([Übersicht](https://codex.danielvaughan.com/2026/04/08/cross-platform-agent-portability-skill-md/)) | Pfade vor einer Installationsanleitung beim Hersteller prüfen |
+| Gemini CLI | `.gemini/skills` bzw. `.agents/skills` | [S] ([Bericht](https://medium.com/google-cloud/beyond-prompt-engineering-using-agent-skills-in-gemini-cli-04d9af3cda21)) | wie oben |
+| Cursor | `.cursor/skills`; ältere Angaben nennen nur Regeldateien | [S] ([Übersicht](https://www.mdskills.ai/de/learn/ai-agents-that-support-skill-md-2026)) | Unterstützung je Fassung prüfen |
+| Weitere (goose, Amp u. a.) | Laut Sekundärquellen 30–46 unterstützende Produkte im Jahr 2026 | [S] ([Zählung](https://www.paperclipped.de/en/blog/agent-skills-open-standard-interoperability/)) | Zahlen schwanken je Quelle; die offizielle Liste auf agentskills.io wird per Skript geladen und war nicht lesbar |
+| Chat ohne Skillunterstützung | keine | [A] | Rückfallweg ist die einzelne Anleitung, die Glide schon heute unter „Austauschformat anzeigen …“ aus seinen Konstanten erzeugt; die Antwort wird als Datei gespeichert |
+
+### 17.3 Folgerungen [A]
+
+1. **Ein Skillordner, viele Agenten.** Der Standard trägt Claude, OpenAI, GitHub, Google und Cursor. Agentenabhängig sind nur Installationsort, Freischaltung und ob der Agent Dateien schreiben oder nur zum Herunterladen anbieten kann.
+2. **Dokumente statt Schnittstelle bleibt tragfähig.** Der Skill erzeugt Importdateien; Prüfung, Vorschau und ein Rückgängig-Schritt bleiben in Glide. Q3, E-W3 A und N10 bleiben unverändert; der Skill ist keine KI-Funktion in Glide und braucht weder Netz noch Schlüssel.
+3. **Ausbaufähigkeit kommt aus der Quelle, nicht aus dem Skilltext.** Hand gepflegte Feldlisten veralten mit jeder Glide-Version. Glide erzeugt seine KI-Anleitung bereits aus den Konstanten; derselbe Weg soll die Skill-Referenzen erzeugen und in der CI prüfen (Analyse §13.39, Paket K2).
+4. **Wettbewerb:** Agentenzugriff wird Standard (§16). Glides Abstand bleibt der geprüfte Import ohne stilles Überschreiben und ohne Konto. Ein Skill, der in jedem gängigen Agenten Glide-Dateien erzeugt, ist dazu ein sichtbarer Mehrwert ohne Produktgrenzenbruch.
+5. **Grenzen der Recherche:** Pfade und Zählungen der Sekundärquellen sind nicht beim Hersteller bestätigt. Vor einer veröffentlichten Installationsanleitung je Agent die Herstellerdokumentation erneut prüfen (Paket K5).

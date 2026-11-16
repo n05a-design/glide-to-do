@@ -1,5 +1,7 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
+**Glide-Agenten-Skill 16.11.2026:** [§13.39](#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026) prüft 3.65.0 darauf, welche Glide-Ebenen ein Agenten-Skill heute über vorhandene Importwege anlegen kann, nennt sieben Befunde im Austauschweg und schätzt den Aufwand je Paket. Ein Grundskill braucht keine App-Änderung; der volle Umfang kein neues Aufgabenformat.
+
 **Gesamtaudit 14.11.2026:** [§13.36](#1336-gesamtaudit-gegen-code-und-dokumentation-14112026) prüft 3.60.0 gegen Code und Dokumentation. Offene Befunde: Datenordnerzeiger, nicht angezeigte Überlastungsgründe und die Messbelege zu 3.55.0.
 
 **Aktueller Abgleich (12.11.2026):** [§13.35](#1335-dokumentationsabgleich-nach-pr-78-12112026) ordnet 3.55.0 nach PR #78 ein. Die folgenden datierten Untersuchungen behalten ihren Quell- und Lieferstand.
@@ -1097,3 +1099,88 @@ Berichtigungen, Prüfung und Rest: [Plan §21.91](Glide_Entwicklungsplan.md#2191
 - Nicht registriert sind vor dem Schließen `_save_recent_pages` (Zeitgeber, auch im Ruhezustand), dazu nach einem Designwechsel mit Hintergrundverlauf `abholen` (Zeitgeber des Hintergrundverlaufs), `abgleichen`, `collapse_emptied_frames`, `draw_icons` und `sync_backdrop_surfaces` (Leerlauf). Kein Handlungsbedarf für das Beenden; für den Abbau einzelner Ansichten in Shell-Paket 3 sind sie umzustellen.
 - Die Datensperre wird beim Schließen und am `<Destroy>` der Wurzel freigegeben; die zweite Freigabe ist ein Rückfall, kein Fehler.
 - Nachweis im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#abbau-vertragstest-auf-3620-14112026).
+
+## 13.39 Glide-Agenten-Skill: Abdeckung, Befunde und Aufwand (16.11.2026)
+
+Quellstand `main` `337dc7d8` (3.65.0, Aufgabenformat 26, Austauschformat 2), nur gelesen; kein Import ausgeführt. Externe Standards in [Markt §17](Glide_Markt_und_Vorbilder.md#17-agenten-skills-und-dokumentbasierter-ki-austausch-16112026), Pakete und Entscheidungsvorlagen im [Plan §21.102](Glide_Entwicklungsplan.md#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026).
+
+### Grundsatz
+
+Ein Skill darf Glide-Daten nur über **Importdokumente** anlegen, nie über `liste_speicher.json`, `.glidebackup` oder `.glideapp`. Gründe aus dem Code: Das interne Format trägt Kennungen, Zustellbelege und Verlauf und wächst mit jeder Formatstufe; `glide.lock`, atomarer Schreibweg und Startmigration schützen es (Kommentar über `EXCHANGE_FORMAT_NAME` in `app.pyw`, [Daten §Ablage](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ablage)). Der Austauschweg prüft dagegen vollständig, zeigt eine Vorschau, legt nur Neues an und ist ein Rückgängig-Schritt; Änderungen an Vorhandenem laufen über Kontextpaket und Änderungsvorschlag mit Konfliktprüfung.
+
+### Abdeckung der beauftragten Ebenen
+
+✓ = über einen vorhandenen Importweg anlegbar, ◐ = mit Einschränkung oder Umweg, ✗ = heute nicht. K1–K6 sind die Pakete im Plan.
+
+| Ebene | Glide-Feld | Heutiger Importweg | Stand | Paket |
+|---|---|---|---|---|
+| Ordner und Unterordner | `folders`, `parent_id` | Austausch `folders` mit `parent` | ✓ | K1 |
+| Ordnerart Buch, Notizbuch | `folder_kind` | keiner; `new_folder_object` kennt das Feld | ✗ | K3 |
+| Aufgabenliste, Notiz, Seite, Zeichnung | `list_kind` | Austausch `list_kind`; weder in `exchange_capabilities` noch in der KI-Anleitung genannt | ◐ | K1, K2 |
+| Galerie | Anhänge der Liste | keiner | ✗ | K4 |
+| Punktarten Aufgabe, Langtext, Gruppe, Überschrift | `kind` | Austausch `type` | ✓ | K1 |
+| Unterpunkte (12 Ebenen), Checkliste (50 Schritte) | `children`, `checklist` | Austausch | ✓ | K1 |
+| Beschreibung von Punkt, Liste, Ordner | `description`, `note` | Austausch | ✓ | K1 |
+| Fälligkeit mit Uhrzeit, Bearbeitungstag, Aufwand, Wichtigkeit, Erledigt | `due`, `due_time`, `planned_date`, `estimated_minutes`, `importance`, `done` | Austausch | ✓ | K1 |
+| Planungsuhrzeit | `planned_time` | keiner | ✗ | K3 |
+| Labels (Tags) an Punkten | `labels` | Austausch `labels` mit Farbe | ✓ | K1 |
+| Labels an Listen und Ordnern | `labels` | angenommen, aber nicht übernommen (Befund 1) | ✗ | K2 |
+| Wiederholungen | `repeat` (Format 26) | Austausch Fähigkeit 0; Umweg TXT-Zeile „Wiederholung:“ oder ICS-`RRULE` | ◐ | K3 |
+| Erinnerungen | `reminder` | Austausch Fähigkeit 0; Umweg ICS mit Erinnerungsoption | ◐ | K3 |
+| Farbe und Pixelsymbol je Punkt, Liste, Ordner | `color`, `icon` | keiner | ✗ | K3 |
+| Verknüpft mit, Wartet auf, Verweise | `links`, `blocked_by`, `references` | keiner | ✗ | K3 |
+| Formatierter Text in Seiten und Notizen | `rich_note` | „Seite aus Datei …“ (Markdown, Tk-frei in `page_markdown.py`): Überschriften 1–4, Listen, echte Aufgaben, Zitat, Code, Tabelle, Trennlinie, drei Einzüge, fett, kursiv, durchgestrichen, Code, Links. Im Austausch nur `rich_note` mit Zeichenpositionen (Befund 4). Nicht über Markdown: Unterstreichen, Markieren, Hinweis- und Aufklappblock | ◐ | K1, K3 |
+| Bilder in Seiten, Anhänge | `images`, `attachments` | Markdown-Seite mit lokalen Bilddateien neben der Datei; Austausch Fähigkeit 0 | ◐ | K1, K4 |
+| Pixelzeichnung, Bildfolge | `drawing`, `animation` | Austausch (`hex8-row-v1`, bis 120 Bilder); von Hand kaum fehlerfrei zu kodieren | ◐ | K1 mit Hilfsskript |
+| Diagramm, Pinnwand | `pinboards` (Einstellungen) | nur Ausgabe als JSON Canvas 1.0, kein Import | ✗ | K6 |
+| Notizbuch-Angaben (Moment, Stimmung, Ort) | `journal` | keiner | ✗ | K3 |
+| Vorlagen | `vorlagen.json`, `.glidetemplates` Format 2 | „Vorlagen hinzufügen …“: einfache Listen-/Ordnervorlagen mit Punkttiteln und Platzhaltern `{{…}}`; `payload` ist internes Format | ◐ | K1 einfach, K3 |
+| Anzeige (Liste, Tabelle, Spalten, gespeicherte Ansichten, Design) | Einstellungen 2 | keiner, bewusst gerätebezogen | ✗ bewusst | – |
+| Sicherung und App-Sicherung | `.glidebackup`, `.glideapp` | Skill erzeugt sie nicht; er empfiehlt vor großen Importen eine App-Sicherung | ✕ bewusst | K1 Regel, K3 Vorsicherung |
+| Vorhandenes überarbeiten | neun Austauschfelder | `.glidecontext` → `mode: "patch"` mit Konfliktprüfung | ✓ | K1 |
+
+Ergebnis: Von 24 Ebenen sind 7 vollständig und 7 eingeschränkt über vorhandene Wege anlegbar, 8 heute nicht und 2 bewusst Glide-intern.
+
+### Befunde
+
+1. **Listen- und Ordnerlabels werden still verworfen.** `EXCHANGE_LIST_FIELDS` und `EXCHANGE_FOLDER_FIELDS` enthalten `labels`, deshalb meldet die Prüfung sie nicht als unbekannt. `apply_exchange_payload` gibt sie aber weder an `new_list_object` noch an `new_folder_object` weiter. Das widerspricht dem Grundsatz im Code, dass kein Feld ohne Spur verschwinden darf.
+2. **Die KI-Anleitung nennt nicht alles, was der Import annimmt.** `exchange_prompt_text` beschreibt weder `list_kind` (Notiz, Seite, Zeichnung) noch `rich_note`, `drawing` und `animation`, und `exchange_capabilities` führt keine Listenarten. Die Titelgrenze von 40 Zeichen (D67) fehlt ebenfalls; längere Titel kürzt `_clip_and_note_title` und sichert den Originaltitel in der Beschreibung.
+3. **Der Austauschvertrag ist nicht Tk-frei.** Feldmengen, Grenzen, Fähigkeiten, Prüfung und Anleitung liegen in `ListApp`; nur Änderungsvorschlag (`exchange_patch.py`) und Aufträge (`exchange_recipes.py`) sind eigene Module. Ein Prüfskript im Skill kann den Vertrag deshalb nicht ohne Tk laden und müsste ihn abschreiben. Nach D17 gehört er in ein Tk-freies Modul (K2).
+4. **Seitentext im Austausch verlangt Zeichenpositionen.** `rich_note.spans` zählt Python-Zeichen; Sprachmodelle verzählen sich verlässlich, besonders bei Emoji und Zeichen außerhalb der Basisebene. Der Markdown-Weg ist robust und erzeugt echte Aufgaben, steht aber nur als einzelne Seite über „Seite aus Datei …“ bereit, ohne Ordnerziel und ohne Austauschdatei.
+5. **Der Create-Import legt keine Vorsicherung an.** Er ist ein Rückgängig-Schritt, aber anders als der Änderungsvorschlag (`vor_vorschlag_*`) und der Sicherungsimport (`vor_import_*`) ohne Vorsicherung. Für große, maschinell erzeugte Importe wäre sie folgerichtig.
+6. **Der Ausbau braucht kein neues Aufgabenformat.** `new_item`, `new_list_object` und `new_folder_object` nehmen Farbe, Wiederholung, Ordnerart, Symbol und Labels bereits an. Der Ausbau besteht aus Prüfung, Durchreichen, Ausgabe, Fähigkeitsstufe und Anleitung je Feld. `DATA_SCHEMA_VERSION` bleibt 26; das Austauschformat kann bei 2 bleiben, weil die Fähigkeitsstufen genau dafür angelegt sind. Ältere Glide-Fassungen nennen neue Felder in der Vorschau als unbekannt und setzen den Fokus auf „Abbrechen“.
+7. **Kein Einstieg ohne Dateidialog.** `.glideexchange` öffnet nur über „KI-Ergebnis importieren …“. Agenten ohne Dateizugriff liefern einen Codeblock, den der Nutzer speichern muss. Zwischenablage-Import oder Dateizuordnung wären Optionen (K5/K6, Nähe zu WA-34).
+
+### Empfohlener Aufbau
+
+Arbeitsname `glide-to-do` (gültiger Skillname). Ein Produkt-Skill, getrennt von den Entwicklungs-Skills unter `.claude/skills/`:
+
+```
+glide-to-do/
+  SKILL.md              Ablauf, Wahl des Dokumentwegs, Glide-Regeln; unter 500 Zeilen
+  references/           erzeugt aus dem Code: Austauschfelder und Fähigkeiten je Glide-Version,
+                        Markdown-Seitenblöcke, Änderungsvorschlag, Rezepte je Dokumentart
+  scripts/glide_datei.py  nur Standardbibliothek: prüfen, Zeichnung kodieren, Datei schreiben
+  assets/beispiele/     je Dokumentart eine geprüfte Beispieldatei
+  MANIFEST.json         Skillversion, Mindestversion Glide, Austauschformat, SHA-256 der Kopien
+```
+
+- **Wahl des Wegs im Skill:** Recherche, Bericht und Übersicht → Seite als Markdown-Datei; Aufgabenliste, Einkaufsliste, Projekt, Aufgabenübersicht → `.glideexchange` mit Ordnern, Listen und Punkten; Notiz → Austausch mit `list_kind: "note"` oder Markdown-Seite; Zeichnung → Austausch über das Hilfsskript; Überarbeitung vorhandener Aufgaben → Änderungsvorschlag auf ein Kontextpaket.
+- **Glide-Grundsätze im Skill:** Fälligkeit und Bearbeitungstag getrennt (D01), Titel höchstens 40 Zeichen, wenige wiederverwendete Labels, `heading`/`long` statt Aufgaben für reinen Text, keine erfundenen Felder, keine Kennungen, Kontodaten oder absoluten Pfade, Inhalte in der Sprache des Nutzers.
+- **Ausbaufähigkeit:** Glide ist die einzige Quelle. Ein Pflegewerkzeug erzeugt die Referenzen und die Prüfkopie aus dem Tk-freien Austauschmodul; ein Werkzeugtest der CI-Grundstufe vergleicht sie mit dem Code, prüft die Beispiele mit der echten Glide-Prüfung und die Kopfzeilen nach den Skillregeln. Der Skill nennt die Fähigkeiten je Glide-Version und verwendet nur, was die Version des Nutzers kann; das Kontextpaket trägt dafür bereits `application_version`.
+- **Verteilung:** derselbe Ordner für alle Agenten mit Skillunterstützung, als ZIP für die Claude-Apps; für Chats ohne Skills die erzeugte Einzelanleitung wie „Austauschformat anzeigen …“; für Repositorien ein kurzer `AGENTS.md`-Abschnitt.
+
+### Aufwand
+
+Eine Runde ist eine Arbeitssitzung mit Umsetzung, gezielten Prüfungen und Dokumentabgleich, wie die Shell-Schnitte §21.94–§21.101. Vollprüfung, native Matrix, Mac-Lauf und Pakete kommen nach D51 am Phasenende hinzu.
+
+| Paket | Inhalt | App-Code | Aufwand | Abdeckung danach |
+|---|---|---|---|---|
+| K1 Grundskill | Skill auf Austauschformat 2 und Markdown-Seiten: Einstieg, Referenzen, Rezepte, Beispiele, Hilfsskript; Werkzeugtest importiert jedes Beispiel in einen künstlichen Datenordner | nein | 1 Runde | 7 ✓ + 7 ◐ von 24 |
+| K2 Gemeinsame Quelle | Austauschvertrag Tk-frei auslagern (D17), Fassaden in `ListApp`; Befunde 1 und 2 beheben; Erzeugungswerkzeug und CI-Abgleich; Systemregister | ja, ohne Formatwechsel | 1–2 Runden | 9 ✓ + 6 ◐, versionsgebunden und selbstprüfend |
+| K3 Fähigkeitsausbau | je Feldgruppe Fähigkeitsstufe 1: Wiederholung, Erinnerung, Planungsuhrzeit, Farbe/Symbol, Ordnerart und Notizbuch-Angaben, Verknüpfungen über Schlüssel, Markdown-Feld für Seiten und Notizen, einfache Vorlagen, Vorsicherung beim Import | ja, Aufgabenformat bleibt 26 | 2–3 Runden | 18 ✓ + 2 ◐ |
+| K4 Dateien | Austausch als geprüfter Container mit Bildern und Anhängen (Grenzen und Prüfungen der Sicherungs-ZIPs wiederverwenden); Galerie, Seitenbilder, Titelbild | ja | 1–2 Runden | 20 ✓ + 1 ◐ (Zeichnung bleibt an das Hilfsskript gebunden) |
+| K5 Verteilung | ZIP im Release-Workflow, Installationsanleitung je Agent nach Herstellerprüfung, Einzelanleitung, `AGENTS.md`-Abschnitt; optional „KI-Skill speichern …“ in Glide, das den zur installierten Version passenden Skill schreibt | optional | 1 Runde, mit Menü 2 | – |
+| K6 Optionen | Pinnwand aus JSON Canvas importieren, Import aus der Zwischenablage, Dateizuordnung für `.glideexchange` | ja | je 1–2 Runden | 21 ✓ + 1 ◐; Anzeige und Sicherung bleiben bewusst Glide-intern |
+
+Gesamt für alle Ebenen ohne bewusste Ausnahmen: etwa 6–9 Runden plus Phasenabschluss. Nutzbar ist der Skill nach K1; ohne K2 muss jede Änderung am Austauschweg den Skill von Hand nachziehen. Hauptrisiken: Antwortqualität fremder Modelle (Glide prüft, garantiert sie aber nicht), unbestätigte Agentenpfade (Markt §17.2), Platzbedarf des Einstiegs bei wachsendem Feldkatalog (daher Referenzen statt `SKILL.md`), Markenprüfung des Namens (I4).

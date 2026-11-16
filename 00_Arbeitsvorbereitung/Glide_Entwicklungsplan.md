@@ -2,6 +2,8 @@
 
 **Dokumentationspflege:** Führende Quellen und Änderungsfolgen stehen in der [zentralen Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Der [Abgleich vom 13.11.2026](#2187-dokumentationsbezüge-und-konsolidierung-13112026) verknüpft insbesondere Roadmap, Systembestand, Architektur und Shell-Zielbild.
 
+**Glide-Agenten-Skill `glide-to-do` 16.11.2026 (WA-61):** [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) – Recherche, Abdeckung aller Glide-Ebenen, Aufwand in sechs Paketen K1–K6 und Entscheidungsvorlagen E-K1–E-K6. Ein Skill lässt gängige KI-Agenten Glide-lesbare Importdokumente anlegen (Q3); Grundskill ohne App-Änderung in einer Runde, voller Umfang ohne neues Aufgabenformat. Keine Umsetzung beauftragt.
+
 **GitHub-Projektseite und Showcase 06.11.2026:** [§21.71](#2171-github-projektseite-und-showcase-3505-06112026) – neue README-Projektseite, Aufnahmen, Issue-Formulare, Beschreibung und Topics; Showcase zeigt die Funktionen bis 3.50.5.
 
 **Konkurrenz- und Dokumentabgleich 06.11.2026:** [§21.70](#2170-systematische-konkurrenzanalyse-und-dokumentabgleich-vom-06112026) schärft die Rangfolge aus §21.62 mit der systematischen Konkurrenzanalyse und vergibt die Vorschlagskennungen WA-52–WA-59; kein Featurepaket gewählt.
@@ -67,6 +69,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen a
 |---|---|---|---|---|
 | 3.61.0/3.62.0 | Linux-/Windows-Vollprüfung, macOS- und Windows-Paket zum Merge-Commit `6d719ca7` (PR #85, #87, #88 gemergt) | ▶ | CI-Ergebnisse dem Merge-Commit zuordnen | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
+| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ○ Recherche 16.11.2026 ([§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026)) | Inhaberwahl E-K1–E-K6, dann K1 Grundskill | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
 | Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)) | Mac-Lauf und Mac-Sichtprüfung der Fokusrückgabe (D87/D90), danach Paket 4 | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
@@ -276,6 +279,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 | G24 = F-01 | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschläge mit Feldvergleich (Q3) | ✅ 3.35.0 |
 | G21 = F-02 | Begrenzter Notion-Import mit Verlustbericht und Wiedererkennung | ✅ 3.41.0 im damaligen Lieferumfang; D26/D39, I6 offen |
 | F-03 | Zwei Sicherungsstände lesbar vergleichen | ✅ 3.35.0 |
+| WA-61 | Glide-Agenten-Skill `glide-to-do`: KI-Agenten legen Glide-Importdokumente an, Austauschweg als einzige Quelle (Q3) | ○ Recherche, [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) |
 | G26 = H-03 = N11 | Paket mit eingebettetem Python 3.14 + Tk 9 je Plattform (D15) | ✅ 3.42.0; neuere Python-Fassung und vorhandene Pakete getrennt, aktueller Lieferabgleich §18 |
 | – | Windows-/Linux-Abnahme, Linux-App (AppImage/Flatpak später) | ○ Inhaber |
 | H-01 | Kontrollmatrix echter Bedienwege fortführen | laufend |
@@ -2902,3 +2906,28 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 6. Version 3.65.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`. Glide-System V1.31.
 
 **C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3650--fokusrückgabe-16112026). Offen: Sichtprüfung am Mac von Hand nach D87 ([Prüfliste](Glide_Manuelle_Pruefung.md#offene-sichtprüfung-3650-fokusrückgabe-d87)), GitHub-Prüfung unter Linux und Windows, Pakete. Nächster Schnitt nach D88: Paket 4 (Erscheinungsbild und Bedienelemente), mit eigener Freigabe.
+
+### 21.102 Glide-Agenten-Skill `glide-to-do`: Recherche und Pflegeeinbindung (16.11.2026)
+
+**A – Auftrag (16.11.2026, Wortlaut gekürzt):** Zuerst prüfen, dass die lokale Ablage die aktuelle GitHub-Fassung trägt. Dann „recherchieren wie aufwändig ein glide-to-do Skill ist“, der beim Ausgeben einer Recherche, eines Berichts, einer Übersicht, Notiz, Zeichnung, Aufgabenübersicht, Aufgaben- oder Einkaufsliste, eines Projekts und weiterer Dokumente diese Dateien „direkt in einem Glide-lesbaren Format“ anlegt. Er soll „in allen gängigen Ki-Agenten benutzbar“ und „ausbaufähig“ sein, wenn Glide weiterentwickelt wird, die Grundsätze von Glide weitertragen und alle Möglichkeiten abdecken: Anzeige, Formatierung, Ordner- und Dateiebene, Vorlagen, Sicherung und App-Sicherung, Beschreibungen von Punkt, Ordner und Liste, Fälligkeiten, Wiederholungen, Tags und weitere. „Bitte erst eine ganzheitliche Recherche durchführen, die Dokumentation weiterführen und den Skill zentriert featuren und allgemein in die Pflege einarbeiten.“ Ausgelegt als Recherche-, Dokumentations- und Pflegeauftrag; keine Umsetzung, kein Versionswechsel, keine Produktwahl. Produktcode, App-Version 3.65.0 und Glide-System V1.31 bleiben unverändert.
+
+**Vorprüfung der Ablage:** Die OneDrive-Hauptablage stand auf `main` `6b647005`, elf Commits hinter `origin/main`; per Fast-Forward auf `337dc7d8` gebracht. Ihre lokalen Änderungen blieben unberührt (siehe [Übergabe §1](Glide_Uebergabe.md#1-tatsächlicher-stand), Zeile „Lokale Ablage“). Die Arbeit entstand im Worktree auf derselben Basis.
+
+**B – Ergebnis:**
+1. **Recherche:** Standards und Agentenunterstützung in [Markt §17](Glide_Markt_und_Vorbilder.md#17-agenten-skills-und-dokumentbasierter-ki-austausch-16112026); Abdeckung der 24 beauftragten Ebenen, sieben Codebefunde, empfohlener Aufbau und Aufwand in [Analyse §13.39](Glide_Analyse.md#1339-glide-agenten-skill-abdeckung-befunde-und-aufwand-16112026).
+2. **Kernaussage:** Der Skill legt Importdokumente an (`.glideexchange`, Markdown-Seiten, Kontextpaket-Antworten), nie interne Dateien oder Sicherungen; Glide prüft, zeigt die Vorschau und übernimmt als einen Rückgängig-Schritt. Das hält Q3, E-W3 A und N10 ein. Heute sind 7 von 24 Ebenen vollständig und 7 eingeschränkt anlegbar. Der Ausbau reicht vorhandene Felder des Aufgabenformats 26 durch und braucht weder neues Aufgabenformat noch neues Austauschformat.
+3. **Zentral eingeordnet:** WA-61 im [Arbeitsvorrat](#aktueller-arbeitsvorrat) und in [§6](#6-pixel-austausch-verteilung-stufen-34); Ausbaurahmen im [Datenvertrag](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ausbaurahmen-für-agenten-skills-entwurf-nicht-aktiviert); eigene Zeile in der [Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und Rundenregel in der [Dokumentenpflege](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#pflege-bei-jeder-runde): Jede neue Nutzerfunktion mit Daten wird gegen die Abdeckungsmatrix geprüft, bis K2 diesen Abgleich in der CI übernimmt.
+4. **Pakete und Aufwand** (Einzelheiten Analyse §13.39): K1 Grundskill ohne App-Code, 1 Runde · K2 gemeinsame Quelle und CI-Abgleich, 1–2 Runden · K3 Fähigkeitsausbau, 2–3 Runden · K4 Bilder und Anhänge, 1–2 Runden · K5 Verteilung, 1–2 Runden · K6 Optionen (Pinnwand aus JSON Canvas, Zwischenablage, Dateizuordnung), je 1–2 Runden. Gesamt etwa 6–9 Runden plus Phasenabschluss nach D51.
+
+**Entscheidungsvorlagen für den Inhaber** (Empfehlung jeweils A):
+
+| Kennung | Frage | A (Empfehlung) | B | C |
+|---|---|---|---|---|
+| E-K1 | Weg in Glide | Nur Importdokumente mit Prüfung und Vorschau | Direkt in den Datenordner schreiben: abgeraten (Sperre, Migration, stilles Überschreiben) | Schnittstelle/MCP: ausgeschlossen nach N10, nur mit neuer Q3-Entscheidung |
+| E-K2 | Reihenfolge | K1 → K2 → K3 → K5; K4 und K6 nach Bedarf | K2 vor K1: weniger Handpflege, später nutzbar | nur K1 |
+| E-K3 | Pflege des Skills | Ab K2 aus dem Code erzeugt, CI-Abgleich in der Grundstufe | dauerhaft von Hand mit Pflegematrixzeile | – |
+| E-K4 | Verteilung | Skillordner im Repository und Release-ZIP; Menü „KI-Skill speichern …“ später | nur Repository | Menü in Glide sofort |
+| E-K5 | Erster Umfang von K3 (Mehrfachwahl) | Markdown-Feld für Seiten und Notizen, Wiederholungen und Erinnerungen, Ordnerarten Buch/Notizbuch, Vorsicherung beim Import | zusätzlich Farben, Symbole, Verknüpfungen, Notizbuch-Angaben, Vorlagen | alle Feldgruppen in einem Schnitt |
+| E-K6 | Name und Ablage | Arbeitsname `glide-to-do` unter `01_Repository/Glide/skills/glide-to-do/`, getrennt von den Entwicklungs-Skills in `.claude/skills/`; Name mit der Markenprüfung I4 | anderer Name | – |
+
+**C – Prüfung und Rest:** Nur Dokumentation. CI-Grundstufe am 16.11.2026 mit allen 19 Schritten bestanden (Windows 11, Python 3.15.2, künstlicher Datenordner), darunter Standprüfung, Dateilinks, Datenschutz und Lieferabgleich; die neuen Abschnittsanker zusätzlich gegen ihre Zielüberschriften geprüft. Kein Commit beauftragt. Offen: Inhaberwahl E-K1–E-K6 und ein Umsetzungsauftrag; die Agentenpfade aus Sekundärquellen sind vor K5 beim Hersteller zu bestätigen. Befunde 1 (Listen-/Ordnerlabels) und 2 (unvollständige KI-Anleitung) betreffen den vorhandenen Austauschweg und sind auch ohne Skill behebbar; nach E-K2 A gehören sie zu K2.
