@@ -30,7 +30,7 @@ Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `b
 
 | Ordner | Inhalt |
 |---|---|
-| `integration/` | 110 registrierte Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
+| `integration/` | 114 registrierte Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
 | `unit/` | Unit-Tests der Tk-freien Fachmodule (D17) |
 | `tools/` | Prüfstand, Analysen, Erzeuger für Beispiel-, Release-, Rundgang- und Showcase-Daten, CI-Grundstufe, Ablagegröße ([Übersicht](tools/README.md)) |
 | `fixtures/` | Referenzformate 2 und 4–26, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |

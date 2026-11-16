@@ -178,21 +178,7 @@ class TestDesktopMenuBar(unittest.TestCase):
 
 
 class TestDesktopHelfer(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        try:
-            cls.root = tk.Tk()
-            cls.root.withdraw()
-        except tk.TclError as exc:
-            raise unittest.SkipTest(f"Tk-Display nicht verfügbar: {exc}")
-
-    @classmethod
-    def tearDownClass(cls):
-        try:
-            if hasattr(cls, "root"):
-                cls.root.destroy()
-        except Exception:
-            pass
+    """Ohne Tk-Fenster: Startwege und Zwischenablage über Attrappen."""
 
     def test_launch_path_windows(self):
         with patch("os.startfile", create=True) as mock_startfile:
@@ -217,9 +203,20 @@ class TestDesktopHelfer(unittest.TestCase):
             mock_popen.assert_called_once_with(["xdg-open", "test.txt"])
 
     def test_clipboard_roundtrip(self):
-        desktop_adapter.copy_to_clipboard(self.root, "Glide Shell Test")
-        text = desktop_adapter.read_from_clipboard(self.root)
-        self.assertEqual(text, "Glide Shell Test")
+        # Attrappe statt echter Zwischenablage: Der Test darf die Zwischenablage
+        # des Prüfrechners nicht überschreiben, und clipboard_clear auf einem
+        # zurückgezogenen Wurzelfenster stürzte im Windows-CI unter Tk 9.1 mit
+        # 0xC0000005 ab (Lauf 43955007037, 16.11.2026).
+        ablage = []
+        widget = MagicMock()
+        widget.clipboard_clear.side_effect = ablage.clear
+        widget.clipboard_append.side_effect = ablage.append
+        widget.clipboard_get.side_effect = lambda: "".join(ablage)
+        ablage.append("alter Inhalt")
+        desktop_adapter.copy_to_clipboard(widget, "Glide Shell Test")
+        widget.clipboard_clear.assert_called_once_with()
+        widget.clipboard_append.assert_called_once_with("Glide Shell Test")
+        self.assertEqual(desktop_adapter.read_from_clipboard(widget), "Glide Shell Test")
 
     def test_read_from_clipboard_error_fallback(self):
         mock_widget = MagicMock()

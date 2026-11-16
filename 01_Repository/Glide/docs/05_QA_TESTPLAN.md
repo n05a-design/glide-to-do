@@ -76,6 +76,16 @@ Eigene Austauschaufträge zusätzlich an beiden Eingängen prüfen: Feldvalidier
 
 Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26
 
+**3.69.0-Nachpflege:** Unit-Tests fassen keine Systemressourcen des Prüfrechners an; `test_desktop_adapter.py` prüft die Zwischenablage über eine Attrappe (Windows-CI-Absturz `0xC0000005`). `test_ki_ausgabe_darstellung.py` (T325) gehört zu `SUITEN` der Vollprüfung. [Nachweis](07_QA_BERICHT.md#nachpflege-3690--windows-ci-t325-und-vollprüfungsstand-16112026).
+
+**3.69.0 – Dokumentationskonsolidierung und Headless-CI-Absicherung:** `test_desktop_adapter.py` (T313) fängt fehlende Tk-Displays in headless Linux-CI mit `SkipTest` ab. Unit-Suite läuft headless (1.230 Tests, 3 Skips) sowie auf Desktopsystemen (13/13 Fälle) fehlerfrei durch. Vollständige Link- und Dokumentenprüfung über alle 85 Markdown-Dateien belegt 0 defekte Links. [Nachweis](07_QA_BERICHT.md#prüfstand-3690--dokumentations--und-übergabekonsolidierung-headless-ci-absicherung-16112026).
+
+**3.68.0 – Shell-Paket 5, Desktop-Adapter:** `test_desktop_adapter.py` (T313, 13 Fälle) prüft Plattform-Erkennung, Menüleisten, Beschleuniger, Popups und Zwischenablage. M099 erfüllt Modulbudget WA-50 und Shell-Importregel D86 (`test_shell_importregel.py` 7/7). [Nachweis](07_QA_BERICHT.md#prüfstand-3680--shell-paket-5-desktop_adapterpy-16112026).
+
+**3.67.0 – Shell-Paket 4, Erscheinungsbild und Bedienelemente:** `test_custom_controls.py` (T312, 11 Fälle) prüft eigene Canvas-Steuerelemente (`custom_controls.py`, M098). Entkopplung über Host-Hooks, Modulbudget WA-50 und Shell-Importregel D86. [Nachweis](07_QA_BERICHT.md#prüfstand-3670--shell-paket-4-custom_controlspy-16112026).
+
+**3.66.0 – Agenten-Skill-Zentrierung (D92):** `test_agenten_skill.py` (T321, 15 Fälle) sichert die Formatbindung an Aufgabenformat 26; `test_ki_ausgabe_darstellung.py` (T325) prüft die optische Darstellung von KI-Ausgaben im GUI. [Nachweis](07_QA_BERICHT.md#prüfstand-3660--agenten-skill-zentrierung-und-ki-darstellungsprüfung-16112026).
+
 **3.65.0 – Fokusrückgabe (D87):** `test_modalvertrag.py` prüft in `fokus`, `fokus_verschoben`, `fokus_verschachtelt`, `fokus_ziel_weg` und `fokus_drittes_fenster`, dass der Fokus nach dem Schließen ins aufrufende Fenster zurückkehrt, ein verschwundenes Ziel ohne Fehler auf das Fenster fällt und ein drittes Fenster seinen Fokus behält. Drei neue Gegenproben entfernen Rückgabe, Merken und Fremdfensterschutz. Ohne Systemfokus des Prüfprozesses zählt, was sich das Fenster merkt (`focus_lastfor`). Die Sichtprüfung am Mac bleibt Handarbeit (D87, [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#offene-sichtprüfung-3650-fokusrückgabe-d87)).
 
 **3.64.0 – Shell-Paket 3c, Zeitgeberbesitz:** `test_fensterlebensdauer.py` prüft `window_lifetime` allein mit echtem Tk (neun Fälle; `--gegenproben` sechs Schutzzeilen). `test_abbauvertrag.py` verlangt, dass die sieben umgestellten Zeitgeber vor dem Schließen einem Zeitgeberbereich gehören, und prüft im Fall `modal_offen` das Schließen bei offener Rückfrage (`--gegenproben` vier Schutzzeilen). `tests/unit/test_shell_importregel.py` führt die Liste der Shell-Module und ihre Importregel (D86). Nach D90 gehören die Vertragstests `test_modalvertrag.py`, `test_abbauvertrag.py` und `test_fensterlebensdauer.py` einmal je Schnitt auf den Mac.
