@@ -95,10 +95,13 @@ class AgentenSkillTests(unittest.TestCase):
         sys.path.insert(0, str(SOURCE))
         cls.app = lade("glide_agenten_skill_app", SOURCE / "app.pyw")
         cls.hilfe = lade("glide_agenten_skill_hilfsskript", SKILL / "scripts" / "glide_datei.py")
+        cls.zentral = lade("glide_agenten_skill_ki_ausgabe", Path(__file__).resolve().parent / "ki_ausgabe.py")
+        cls.abdeckung = json.loads((SKILL / "abdeckung.json").read_text(encoding="utf-8"))
         import exchange_patch
         import page_markdown
         import drawing
-        cls.patch, cls.markdown, cls.drawing = exchange_patch, page_markdown, drawing
+        import animation
+        cls.patch, cls.markdown, cls.drawing, cls.animation = exchange_patch, page_markdown, drawing, animation
 
     @classmethod
     def tearDownClass(cls):
@@ -158,8 +161,10 @@ class AgentenSkillTests(unittest.TestCase):
                 with self.subTest(datei=pfad.name, ziel=ziel):
                     self.assertTrue((pfad.parent / ziel.split("#", 1)[0]).exists())
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-        genannt = set(re.findall(r"`([\w-]+\.(?:glideexchange|glidecontext|json|md))`",
-                                 skill.split("## Beispiele", 1)[1]))
+        beispiele = skill.split("## Beispiele", 1)[1]
+        if "\n## " in beispiele:
+            beispiele = beispiele.split("\n## ", 1)[0]
+        genannt = set(re.findall(r"`([\w-]+\.(?:glideexchange|glidecontext|json|md))`", beispiele))
         self.assertEqual(genannt, {p.name for p in BEISPIELE.iterdir() if p.is_file()})
 
     def test_regeln_des_hilfsskripts_entsprechen_glide(self):
@@ -221,56 +226,138 @@ class AgentenSkillTests(unittest.TestCase):
         modell = self.drawing.DrawingModel.from_document(zeichnung)
         self.assertEqual(modell.to_document(), zeichnung)
 
-    def test_beispiele_entstehen_in_glide_unverkuerzt(self):
-        for name in CREATE_BEISPIELE:
-            with self.subTest(beispiel=name):
-                app = self.kopfloses_glide()
-                nutzlast, bericht = app.parse_exchange_document(self.lies(name))
-                listen = app.apply_exchange_payload(nutzlast)
-                self.assertIsNotNone(listen)
-                self.assertEqual(len(listen), len(nutzlast["lists"]))
-                self.assertEqual(len(app.folders), len(nutzlast.get("folders") or []))
-                quelle = {liste["title"]: liste for liste in nutzlast["lists"]}
-                angelegt = 0
-                for liste in listen:
-                    vorlage = quelle[liste["title"]]
-                    self.assertEqual(liste["list_kind"], vorlage.get("list_kind", "tasks"))
-                    self.assertEqual(liste["note"], vorlage.get("description", ""))
-                    angelegt += self.vergleiche_punkte(app, liste["items"], vorlage.get("items") or [])
-                    if vorlage.get("rich_note"):
-                        self.assertEqual(liste["rich_note"]["text"], vorlage["rich_note"]["text"])
-                    if vorlage.get("drawing"):
-                        self.assertEqual(liste["drawing"], vorlage["drawing"])
-                self.assertEqual(angelegt, bericht.total_items)
-                self.assertEqual(sorted(l["name"] for l in app.labels),
-                                 sorted(l["name"] for l in nutzlast.get("labels") or []))
-        projekt = self.kopfloses_glide()
-        projekt.apply_exchange_payload(projekt.parse_exchange_document(self.lies("projekt.glideexchange"))[0])
-        ordner = {o["title"]: o for o in projekt.folders}
-        self.assertEqual(ordner["Unterlagen"]["parent_id"], ordner["Büroumzug"]["id"])
+    def test_beispiele_bestehen_die_zentrale_pruefung(self):
+        """Dieselbe Prüfung wie `ki_ausgabe.py`: jede Angabe kommt unverändert in Glide an."""
+        dateien = [str(BEISPIELE / name) for name in (*CREATE_BEISPIELE, "recherchebericht.md")]
+        with contextlib.redirect_stdout(io.StringIO()):
+            ergebnisse = self.zentral.pruefe_fensterlos(self.app, dateien)
+        for ergebnis in ergebnisse:
+            with self.subTest(beispiel=Path(ergebnis.datei).name):
+                self.assertTrue(ergebnis.bestanden, self.zentral.bericht_text([ergebnis]))
+                self.assertEqual(ergebnis.arten(self.zentral.GRENZE), [])
+        gesamt = {Path(e.datei).name: e.angelegt for e in ergebnisse}
+        self.assertEqual(gesamt["projekt.glideexchange"], {"ordner": 2, "listen": 3, "punkte": 12})
+        self.assertEqual(gesamt["recherchebericht.md"], {"seiten": 1, "punkte": 4})
 
-    def vergleiche_punkte(self, app, punkte, vorlagen) -> int:
-        """Titel, Beschreibung und Planungsfelder kommen unverändert an; liefert die Punktzahl."""
-        self.assertEqual(len(punkte), len(vorlagen))
-        namen = {label["id"]: label["name"] for label in app.labels}
-        schluessel = {}
-        anzahl = 0
-        for punkt, vorlage in zip(punkte, vorlagen):
-            anzahl += 1
-            self.assertEqual(punkt["text"], vorlage["title"], "Titel gekürzt")
-            self.assertEqual(punkt["description"], vorlage.get("description", ""))
-            self.assertEqual(punkt["kind"], app.EXCHANGE_ITEM_TYPES[vorlage.get("type", "task")])
-            for feld in ("due", "due_time", "planned_date", "estimated_minutes"):
-                self.assertEqual(punkt.get(feld), vorlage.get(feld), feld)
-            self.assertEqual(punkt["importance"], vorlage.get("importance", 0))
-            self.assertEqual(punkt["done"], vorlage.get("done", False))
-            self.assertEqual([s["text"] for s in punkt["checklist"]],
-                             [s["text"] for s in vorlage.get("checklist") or []])
-            schluessel.update({k: k for k in vorlage.get("labels") or []})
-            self.assertEqual(len(punkt["labels"]), len(vorlage.get("labels") or []))
-            self.assertTrue(all(kennung in namen for kennung in punkt["labels"]))
-            anzahl += self.vergleiche_punkte(app, punkt["children"], vorlage.get("children") or [])
-        return anzahl
+    # ------------------------------------------------------------------
+    # Kopplung an das Datenformat: Ändert sich der Datensatz, muss der Skill mit.
+    # ------------------------------------------------------------------
+    def datenfelder(self) -> dict:
+        """Felder, die Glide tatsächlich speichert: Konstruktoren plus Referenzbestand des Formats."""
+        glide = self.app.ListApp
+        app = self.kopfloses_glide()
+        felder = {"punkt": set(app.new_item("Probe", references=[])),
+                  "liste": set(), "ordner": set(app.new_folder_object("Probe")),
+                  "label": set(app.new_label_object("Probe", None, glide.LABEL_COLOR_KEYS[0]))}
+        for art in glide.LIST_KINDS:
+            felder["liste"] |= set(app.new_list_object("Probe", list_kind=art, references=[]))
+        felder["liste"] |= set(app.new_list_object("Probe", recurring_checklist=True))
+        felder["liste"] |= set(app.new_list_object("Probe", list_kind=glide.LIST_KIND_PAGE, live_lists=[]))
+        format_nr = glide.DATA_SCHEMA_VERSION
+        referenz = ROOT / "tests" / "fixtures" / f"current_v{format_nr}" / f"reference_v{format_nr}.json"
+        self.assertTrue(referenz.is_file(), f"Datenformat {format_nr} ohne Referenzbestand {referenz.name}")
+        bestand = json.loads(referenz.read_text(encoding="utf-8"))
+
+        def punkte(liste):
+            for punkt in liste or []:
+                felder["punkt"].update(punkt)
+                punkte(punkt.get("children"))
+
+        for liste in bestand.get("lists") or []:
+            felder["liste"].update(liste)
+            punkte(liste.get("items"))
+        for ordner in bestand.get("folders") or []:
+            felder["ordner"].update(ordner)
+        for label in bestand.get("labels") or []:
+            felder["label"].update(label)
+        return felder
+
+    def austauschfelder(self) -> dict:
+        glide = self.app.ListApp
+        return {"punkt": glide.EXCHANGE_ITEM_FIELDS, "liste": glide.EXCHANGE_LIST_FIELDS,
+                "ordner": glide.EXCHANGE_FOLDER_FIELDS, "label": glide.EXCHANGE_LABEL_FIELDS}
+
+    def test_abdeckung_folgt_dem_datenformat(self):
+        glide, abdeckung = self.app.ListApp, self.abdeckung
+        hinweis = ("Skill glide-to-do nachziehen: abdeckung.json, Referenzen, Hilfsskript und Beispiele "
+                   "(Pflegematrix, Zeile Agenten-Skill)")
+        self.assertEqual(abdeckung["datenformat"], glide.DATA_SCHEMA_VERSION, "Datenformat geändert. " + hinweis)
+        self.assertEqual(abdeckung["austauschformat"], glide.EXCHANGE_FORMAT_VERSION, "Austauschformat geändert. " + hinweis)
+        self.assertEqual(abdeckung["faehigkeiten"], sorted(glide.exchange_capabilities()),
+                         "Fähigkeiten des Austauschformats geändert. " + hinweis)
+        self.assertEqual(set(abdeckung["listenarten"]), set(glide.LIST_KINDS), "Listenarten geändert. " + hinweis)
+        self.assertEqual(set(abdeckung["ordnerarten"]), set(glide.FOLDER_KINDS), "Ordnerarten geändert. " + hinweis)
+        self.assertEqual(set(abdeckung["punktarten"]), set(glide.ITEM_KINDS), "Punktarten geändert. " + hinweis)
+        self.assertEqual(set(abdeckung["punktarten"]), set(glide.EXCHANGE_ITEM_TYPES))
+        for art, felder in self.datenfelder().items():
+            with self.subTest(objektart=art):
+                eingetragen = set(abdeckung["felder"][art])
+                self.assertEqual(sorted(felder - eingetragen), [], f"Neue Datenfelder ({art}). " + hinweis)
+                self.assertEqual(sorted(eingetragen - felder), [], f"Entfallene Datenfelder ({art}). " + hinweis)
+        self.assertEqual(abdeckung["glide_version"], self.hilfe.GLIDE_VERSION)
+
+    def test_abdeckung_stimmt_mit_dem_austauschweg(self):
+        """„ja“ kommt nachweislich an; „offen“ kommt nachweislich noch nicht an."""
+        app = self.kopfloses_glide()
+        drawing = self.drawing.DrawingModel.blank(16).to_document()
+        folge = self.animation.Animation.from_legacy(drawing)
+        folge.duplicate("frame-1", new_identity="zweites")
+        bild = self.animation.entry_fields(folge)
+        proben = {  # Austauschfeld → Probewert; das Ergebnis muss vom leeren Objekt abweichen
+            "punkt": {"title": "Probe", "type": "long", "description": "Text", "done": True, "importance": 2,
+                      "due": "2026-12-01", "due_time": "09:30", "planned_date": "2026-11-30",
+                      "estimated_minutes": 45, "labels": ["Probe-Label"],
+                      "checklist": [{"text": "Schritt", "done": False}], "children": [{"title": "Kind"}]},
+            "liste": {"title": "Probeliste", "description": "Wozu", "folder": "o1", "list_kind": "note",
+                      "items": [{"title": "Eins"}], "rich_note": {"text": "Notiz", "spans": [], "links": {}},
+                      "labels": ["Probe-Label"]},
+            "ordner": {"title": "Probeordner", "description": "Wozu", "parent": "o0", "labels": ["Probe-Label"]},
+            "label": {"name": "Probe-Label", "color": "flag"},
+        }
+        nutzlast = {"format": "glide.exchange", "format_version": 2, "mode": "create",
+                    "labels": [dict(proben["label"], key="Probe-Label")],
+                    "folders": [{"key": "o0", "title": "Oben"}, dict(proben["ordner"], key="o1")],
+                    "lists": [dict(proben["liste"], items=[proben["punkt"]]),
+                              {"title": "Bild", "list_kind": "drawing", **bild}]}
+        geprueft, bericht = app.parse_exchange_document(json.dumps(nutzlast))
+        self.assertIsNotNone(geprueft, bericht.errors)
+        listen = app.apply_exchange_payload(geprueft)
+        objekte = {"punkt": listen[0]["items"][0], "liste": listen[0], "ordner": app.folders[-1],
+                   "label": next(l for l in app.labels if l["name"] == "Probe-Label")}
+        leer = {"punkt": app.new_item("Leer"), "liste": app.new_list_object("Leer"),
+                "ordner": app.new_folder_object("Leer"), "label": app.new_label_object("Leer", None, None)}
+        felder_im_austausch = self.austauschfelder()
+        for art, felder in self.abdeckung["felder"].items():
+            for name, eintrag in felder.items():
+                with self.subTest(objektart=art, feld=name):
+                    status, schluessel = eintrag["status"], eintrag.get("austausch")
+                    self.assertIn(status, ("ja", "offen", "intern"))
+                    if status == "intern":
+                        self.assertNotIn("austausch", eintrag)
+                        continue
+                    if status == "offen":
+                        self.assertRegex(eintrag.get("paket", ""), r"^K[1-6]$")
+                    if (art, name) in (("liste", "drawing"), ("liste", "animation")):
+                        self.assertEqual(listen[1][name], bild[name])
+                        continue
+                    angekommen = objekte[art].get(name) != leer[art].get(name)
+                    if status == "ja":
+                        self.assertIn(schluessel, felder_im_austausch[art])
+                        self.assertIn(schluessel, proben[art], "Probewert für ein neues Austauschfeld ergänzen")
+                        self.assertTrue(angekommen, f"{art}.{name} kommt über „{schluessel}“ nicht an")
+                    elif schluessel in felder_im_austausch[art]:
+                        self.assertFalse(angekommen, f"Glide übernimmt jetzt {art}.{name}: in abdeckung.json "
+                                                     "auf „ja“ setzen und den Skill nachziehen")
+                    else:
+                        self.assertNotIn(schluessel, felder_im_austausch[art])
+
+    def test_referenz_nennt_jedes_uebernommene_feld(self):
+        referenz = (SKILL / "references" / "austauschformat.md").read_text(encoding="utf-8")
+        for art, felder in self.abdeckung["felder"].items():
+            for name, eintrag in felder.items():
+                if eintrag["status"] == "ja" and art != "label":
+                    with self.subTest(objektart=art, feld=name):
+                        self.assertIn(f"`{eintrag['austausch']}`", referenz)
 
     def test_markdown_beispiel_wird_eine_seite(self):
         text = self.lies("recherchebericht.md")

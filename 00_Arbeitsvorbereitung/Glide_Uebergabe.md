@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26
 
 Einstieg für die nächste Sitzung: tatsächlicher Stand, nächste Schritte, Regeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Am 14.11.2026 auf den aktuellen Stand gekürzt; frühere Übergabestände trägt Git.
 
@@ -18,21 +18,22 @@ Inhaberwahl B / D84: kleine, gefüllte Dreiecke für Seitenleistenbereiche, Ange
 
 | Achse | Stand |
 |---|---|
-| Version | **Glide 3.65.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**) in `main` `cc8271ad` (PR #106); die Windows-Testkorrektur folgt mit PR #107. Basis war `main` `76400208` (3.64.0), der letzte vollständig grün geprüfte Stand. Umfang im [Plan §21.101](Glide_Entwicklungsplan.md#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026) |
+| Version | **Glide 3.66.0** (Aufgabenformat **26**, Einstellungen **2**, Vorlagen **2**); Basis nach D91/D92 ist PR #110 (`deea0f9c`). Umfang im [Plan §21.104](Glide_Entwicklungsplan.md#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026) |
+| Neu in 3.66.0 | Zentrierter Agenten-Skill `glide-to-do` (WA-61, D91/D92): strikte Datenformatkopplung an Aufgabenformat 26 über `abdeckung.json`, zentrales Prüfwerkzeug `ki_ausgabe.py` (T323), Werkzeugtest `test_ki_ausgabe.py` (T324), Vollprüfungs-Integrationssuite `test_ki_ausgabe_darstellung.py` (T325), Entwicklungs-Skill `glide-aufbau` und Referenz `glide-aufbau.md`. Datenformat unverändert |
 | Neu in 3.65.0 | Fokusrückgabe nach modalen Dialogen (D87): Der Fokus kehrt nach dem Schließen ins aufrufende Fenster zurück, auch bei Unterdialogen; Datenformat unverändert |
 | Neu in 3.64.0 | Zweiter Shell-Baustein: Zeitgeber gehören über `window_lifetime.py` einem Fenster oder einer Ansicht; `ListApp.after_scope` und `_register_after` sind Fassaden. Sichtbares Verhalten unverändert ([Plan §21.100](Glide_Entwicklungsplan.md#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)) |
 | Neu in 3.63.x | Gefüllte Dreiecke (D84), randlose Zeilenaktionen, Alle bis morgen, Zeichen-Anzeigeprofile (D85); 3.63.1/3.63.2: Anzeigeknopf „Standard ▾“, flüssiges Scrollen mit Zeilenbändern, Kompaktkopf 28 px, Bereichspfeile unter Linux ausgerichtet |
 | Neu in 3.62.0 | Erster Shell-Baustein: Jeder modale Dialog wartet über `modal_session.py`; `ListApp.run_modal` und Verwandte sind Fassaden. Sichtbares Verhalten unverändert |
-| Prüfung | 3.65.0 lokal am Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten); Ergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3650--fokusrückgabe-16112026). Die Sichtprüfung der Fokusrückgabe am Mac steht aus (D87). Grüner Ausgangspunkt vor 3.65.0: GitHub-Prüfung zu `main` `76400208` in allen drei Abläufen grün, einschließlich Windows-Vollprüfung und beider Paketbauten ([Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/43873118529), [macOS-Paket](https://github.com/n05a-design/glide-to-do/actions/runs/43873118635)); vom Inhaber vor dem Merge von #106 festgehalten. Die Windows-Vollprüfung zu #106 stoppte an einer zu strengen Testvorbedingung; Korrektur in #107. Vorstand 3.64.0 lokal unter Windows 11, Python 3.14.7/Tk 9, künstliche Daten; Umfang, Ergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3640--shell-paket-3c-15112026). Die drei Shell-Vertragstests liefen am 16.11.2026 nativ am Mac grün (D90, Python 3.14.5/Tk 9.0.3). GitHub-Prüfung zu `main` `6b647005` grün: Grundstufe Linux/Tk 8.6, Vollprüfung Linux/Xvfb und Windows x64 mit eigener Tk 9.1, Windows-Paket ([Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/43833152063)). Der macOS-Paketbau ist rot, weil das Lizenzmanifest die von Dependabot angehobenen Bauwerkzeuge noch nicht kennt ([Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/43833151994)) |
-| Lieferung | `07_Python-Versionen` per `abgleich_07.py` SHA-256-gleich zur Quelle 3.65.0; eigenständige Pakete entstehen erst in den GitHub-Workflows |
+| Prüfung | 3.66.0 lokal am Mac (macOS arm64, Python 3.14.5, Tk 9.0.3, künstliche Daten): Standprüfung 0 Befunde, Testkatalog V1.33 5/5, Skilltest 15/15, Ki-Ausgabetest 6/6, Vollprüfungs-Integrationssuite mit echter Oberfläche grün. Ergebnisse und Grenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3660--agenten-skill-zentrierung-und-ki-darstellungsprüfung-16112026). PR #110 (K1) in GitHub-CI grün (Linux Grundstufe, Linux Vollprüfung). Grüner Ausgangspunkt vor 3.65.0: GitHub-Prüfung zu `main` `76400208` in allen drei Abläufen grün ([Lauf 43873118529](https://github.com/n05a-design/glide-to-do/actions/runs/43873118529)) |
+| Lieferung | `07_Python-Versionen` per `abgleich_07.py` SHA-256-gleich zur Quelle 3.66.0 (`Glide-Aufgaben-und-Listen_v3.66.0.pyw`); eigenständige Pakete entstehen erst in den GitHub-Workflows |
 | Lokale Ablage | Die OneDrive-Hauptablage stand am 16.11.2026 auf `6b647005`, elf Commits hinter GitHub; per Fast-Forward auf `main` `337dc7d8` gebracht (GitHub hat Vorrang). Unberührt und nicht in Git: drei gelöschte Logo-Master unter `20_Grafik_Master/01_Logo` (`.ai` und zwei `.svg`) sowie die neuen Ordner `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/` und die Datei `glide_master_audit_bericht.md`; Übernahme oder Verwerfen entscheidet der Inhaber. Commits entstehen in frischen Klonen außerhalb von OneDrive |
 
 ## 2. Zuständige Dokumente
 
 | Thema | Verbindliche Quelle |
 |---|---|
-| Aufgaben, Arbeitsvorrat, Rest | [Entwicklungsplan](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat), Runde [§21.92](Glide_Entwicklungsplan.md#2192-glide-3610-lücken-geschlossen-und-design-richtlinien-zusammengeführt-14112026) |
-| Entscheidungen D01–D91 und Arbeitsablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
+| Aufgaben, Arbeitsvorrat, Rest | [Entwicklungsplan](Glide_Entwicklungsplan.md#aktueller-arbeitsvorrat), Runde [§21.104](Glide_Entwicklungsplan.md#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026) |
+| Entscheidungen D01–D92 und Arbeitsablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Gestaltung | [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) mit [Gestaltungsregister](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md#gestaltungsregister) |
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
 | Prüf- und Lieferstände | [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) |

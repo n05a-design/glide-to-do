@@ -1,6 +1,6 @@
 # Glide-Austauschformat für neue Inhalte
 
-Stand 16.11.2026 · Glide 3.65.0 · Aufgabenformat 26 · Austauschformat 2
+Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26 · Austauschformat 2
 
 Eine `.glideexchange`-Datei ist ein JSON-Objekt. Sie beschreibt, was entstehen soll; Glide entscheidet, wie es gespeichert wird. Der Import legt ausschließlich neue Ordner, Listen, Labels und Punkte an. Maßgeblich ist die Prüfung in Glide; das Hilfsskript bildet sie nach.
 
@@ -32,18 +32,35 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 
 ## Labels
 
-`{"key": "label-1", "name": "Extern"}` – `key` frei und eindeutig, `name` höchstens 40 Zeichen. Gibt es den Namen in Glide schon, wird das vorhandene Label verwendet. Eine Farbe (`color`) übernimmt Glide 3.65 nicht; es vergibt sie selbst. Insgesamt hält Glide höchstens 80 Labels, je Punkt 20.
+`{"key": "label-1", "name": "Extern"}` – `key` frei und eindeutig, `name` höchstens 40 Zeichen. Gibt es den Namen in Glide schon, wird das vorhandene Label verwendet. Eine Farbe (`color`) übernimmt diese Glide-Fassung nicht; sie vergibt die Farbe selbst. Insgesamt hält Glide höchstens 80 Labels, je Punkt 20.
 
 ## Ordner
 
 `{"key": "folder-1", "title": "Büroumzug", "description": "…", "parent": "folder-0"}`
 
-- `parent` verweist auf einen **weiter oben** in `folders` stehenden Ordner; sonst entsteht der Ordner auf oberster Ebene.
-- Ordnerart Buch oder Notizbuch und `labels` an Ordnern übernimmt Glide 3.65 noch nicht.
+| Feld | Bedeutung |
+|---|---|
+| `key` | frei wählbar, eindeutig; Listen und Unterordner verweisen darauf |
+| `title` | höchstens 40 Zeichen |
+| `description` | Zweck des Ordners |
+| `parent` | Schlüssel eines **weiter oben** in `folders` stehenden Ordners; sonst entsteht der Ordner auf oberster Ebene |
+
+Ordnerart Buch oder Notizbuch und `labels` an Ordnern übernimmt diese Glide-Fassung noch nicht.
 
 ## Listen
 
 `{"key": "list-1", "title": "Planung", "folder": "folder-1", "description": "…", "list_kind": "tasks", "items": [ … ]}`
+
+| Feld | Bedeutung |
+|---|---|
+| `key` | frei wählbar, eindeutig |
+| `title` | höchstens 40 Zeichen |
+| `description` | Zweck der Liste |
+| `folder` | Schlüssel eines Ordners aus `folders`; ohne Angabe liegt die Liste auf oberster Ebene |
+| `list_kind` | Art der Liste, siehe unten; Vorgabe `tasks` |
+| `items` | Punkte der Liste |
+| `rich_note` | Text einer Notiz oder Seite |
+| `drawing`, `animation` | Pixelzeichnung und Bildfolge einer Zeichnung |
 
 | `list_kind` | Inhalt | Hinweise |
 |---|---|---|
@@ -53,7 +70,7 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `drawing` | Pixelzeichnung in `drawing`, keine `items` | nur mit dem Hilfsskript kodieren |
 | `gallery` | Galerie | sinnlos ohne Bilder, die das Format nicht trägt |
 
-`labels` an Listen übernimmt Glide 3.65 noch nicht. `rich_note.spans` wären Formatbereiche mit Python-Zeichenpositionen; lass sie leer.
+`labels` an Listen übernimmt diese Glide-Fassung noch nicht. Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner. `rich_note.spans` wären Formatbereiche mit Python-Zeichenpositionen; lass sie leer.
 
 ## Punkte
 

@@ -1,6 +1,6 @@
 # Glide – Desktop-Planer
 
-Stand 16.11.2026 · Quellstand 3.65.0 · Aufgabenformat 26
+Stand 16.11.2026 · Quellstand 3.66.0 · Aufgabenformat 26
 
 Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
@@ -29,6 +29,10 @@ python3 packaging/macos/baue_app.py --ziel build/macos-vorstufe
 ```
 
 Die isolierte Bedienprobe der Zeichenfläche (2026-09-24) startet mit `python3 src/glide/drawing_prototype.pyw`.
+
+## KI-Agenten-Skill `glide-to-do`
+
+Für KI-Agenten (Claude Code/Apps, OpenAI Codex/ChatGPT, Google Antigravity und Gemini CLI) liegt unter [`skills/glide-to-do/`](skills/glide-to-do/README.md) ein zentrierter Skill nach dem offenen Agent-Skills-Standard bereit (WA-61, D91/D92). Damit legen Agenten Recherchen, Berichte, Notizen, Pixelzeichnungen und Aufgabenlisten direkt als Glide-Importdateien an (`.glideexchange`, `.md`). Der Skill ist über `abdeckung.json` strikt an das Aufgabenformat 26 gekoppelt; Ausgaben lassen sich mit `python3 -B tests/tools/ki_ausgabe.py DATEI [--oberflaeche]` automatisiert gegen Glide prüfen.
 
 ## Daten und Datenschutz
 

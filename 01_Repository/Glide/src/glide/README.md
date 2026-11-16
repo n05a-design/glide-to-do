@@ -1,8 +1,8 @@
-# Glide-System V1.32
+# Glide-System V1.33
 
-Stand 16.11.2026 · Glide 3.65.0 · Glide-System V1.32 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 16.11.2026 · Glide 3.66.0 · Glide-System V1.33 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.32` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.33` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 16.11.2026 · Glide 3.65.0 · Glide-System V1.32 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.33** | 16.11.2026 | Agenten-Skill `glide-to-do` (WA-61, Ausbau 3.66.0, D92): zentrierte Skill-Kopplung an Aufgabenformat 26 über `abdeckung.json`; Hilfsskript und Test T321 mit strenger Datenformatkopplung. Neues Prüfwerkzeug T323 `ki_ausgabe.py` (4-Stufen-Prüfung ohne und mit echter Oberfläche), Werkzeugtest T324 `test_ki_ausgabe.py` und Vollprüfungs-Integrationssuite T325 `test_ki_ausgabe_darstellung.py`. Entwicklungs-Skill `glide-aufbau` und Referenz `glide-aufbau.md`. | App 3.66.0, Format 26 |
 | **V1.32** | 16.11.2026 | Agenten-Skill `glide-to-do` (WA-61, Paket K1, D91): neues Produktfeature F148 außerhalb der App unter `skills/glide-to-do/` (Einstieg, Referenzen, Beispiele, Hilfsskript nur mit Standardbibliothek). Neu T321 `test_agenten_skill.py`: Skillkopf, Regelabgleich des Hilfsskripts mit den Glide-Konstanten und echte Glide-Prüfung, Übernahme und Seitenumwandlung aller Beispiele. Die Standprüfung nimmt Skill-Beispiele unter `assets/` aus; die SPDX-Prüfung erfasst das Skillskript. Kein Modul geändert. | App 3.65.0 unverändert |
 | **V1.31** | 16.11.2026 | Glide 3.65.0, Fokusrückgabe (D87): M096 `modal_session.py` merkt sich mit `remember_focus` den letzten Fokus des aufrufenden Fensters und gibt ihn mit `return_focus` nach dem Schließen zurück (Ersatz: das Fenster; ein drittes Fenster behält den Fokus); T316 mit 17 Fällen und neun Gegenproben, T317/T319 mit erweiterter Schnittstelle | App 3.65.0 |
 | **V1.30** | 15.11.2026 | Glide 3.64.0, Shell-Paket 3c: neues Modul M097 `window_lifetime.py` (nur Standardbibliothek und `tkinter`) mit `AfterScope`, `scope_for` und `pending_jobs`; `ListApp.after_scope` und `_register_after` sind Fassaden, `_after_ids` ist der Bestand des Hauptfensterbereichs. Sieben bisher freie Zeitgeber gehören jetzt einem Bereich. Neu T319 (zentrale Liste der Shell-Module und Importregel, D86) und T320 (Vertragstest des Moduls, neun Fälle, sechs Gegenproben); T318 um den Fall „Schließen bei offener Rückfrage“ und eine vierte Gegenprobe erweitert. | App 3.64.0, Format 26 |
@@ -61,7 +62,7 @@ Stand 16.11.2026 · Glide 3.65.0 · Glide-System V1.32 · Aufgabenformat 26 · E
 | Features | 148 | 128 Produkt-/Oberflächeneinträge (einschließlich des Agenten-Skills F148 außerhalb der App) und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 322 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 325 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -792,6 +793,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T316 | [`test_modalvertrag.py`](../../tests/integration/test_modalvertrag.py) | Vertragstest für `ListApp.run_modal` und `modal_over` mit echtem Grab am echten Interpreter, 17 Fälle (seit 3.65.0 mit vier Fokusfällen nach D87) mit hartem und weichem Zeitwächter; `--gegenproben` entfernt neun Schutzzeilen in einer Kopie und verlangt den zuständigen roten Fall. Vorstufe zu Shell-Paket 3; Aqua-Menüverfolgung nur nativ am Mac prüfbar. Teil von `SUITEN` |
 | T318 | [`test_abbauvertrag.py`](../../tests/integration/test_abbauvertrag.py) | Abbau-Vertragstest (Shell-Paket 3b): vollständige App mit künstlichen Daten je Fall in eigenem Prozess, Schließen über `on_close` in Ruhe, bei laufendem Hintergrundverlauf, mit Abbruch der Rückfrage, doppelt und bei offener modaler Rückfrage; misst Hauptfenster, Datensperre, verbleibende Tcl-Zeitgeber, späte Rückrufe und Fäden und nennt Zeitgeber ohne Zeitgeberbereich vor dem Schließen; sieben seit 3.64.0 besessene Zeitgeber dürfen dort nicht stehen; `--gegenproben` für vier Schutzzeilen. Teil von `SUITEN` |
 | T320 | [`test_fensterlebensdauer.py`](../../tests/integration/test_fensterlebensdauer.py) | Vertragstest für `window_lifetime` (Shell-Paket 3c) mit echtem Tk und ohne Glide: neun Fälle zu Lauf, Bestandspflege, Abbruch, Zerstörung des Widgets, Kind-`<Destroy>`, `close`, Bereich je Widget, übernommenen Aufträgen und toter Wurzel; `--gegenproben` entfernt sechs Schutzzeilen in einer Kopie des Moduls. Teil von `SUITEN` |
+| T325 | [`test_ki_ausgabe_darstellung.py`](../../tests/integration/test_ki_ausgabe_darstellung.py) | Integrationssuite in der Vollprüfung (WA-61): alle Skill-Beispiele, Formatgrenzen und fehlerhafte Ausgaben mit echter Tk-Oberfläche, Neustart in frischem Prozess und Ablesen der Anzeige prüfen |
 
 ### Werkzeuge
 
@@ -895,6 +897,8 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T312 | [`test_custom_controls.py`](../../tests/integration/test_custom_controls.py) | Vollständige Schnittstellenkompatibilität (keys, cget, configure, getitem, setitem, Aliase, Tk-Variablen) der D78-Custom-Controls |
 | T321 | [`test_agenten_skill.py`](../../tests/tools/test_agenten_skill.py) | Agenten-Skill F148: Kopf nach dem Skill-Standard, Feldmengen und Grenzen des Hilfsskripts gleich den Glide-Konstanten, alle Beispiele bestehen Hilfsskript (streng), echte Glide-Prüfung, Übernahme ohne Speichern und Seitenumwandlung; Fehlerfälle, Kommandozeile, nur Standardbibliothek. Ohne Tk-Fenster, künstliche Daten |
 | T322 | [`test_modulbudget.py`](../../tests/tools/test_modulbudget.py) | Werkzeugtest für Modulbudget (WA-50): 0 Tk-Imports in Fachlogik, <= 50 Zeilen je Funktion, Verschachtelungstiefe <= 15, Gegenproben; prüft neu ausgelagerte Module |
+| T323 | [`ki_ausgabe.py`](../../tests/tools/ki_ausgabe.py) | Zentrale 4-Stufen-Prüfung von KI-Ausgaben (WA-61): Hilfsskript, echte Glide-Prüfung, Übernahme im künstlichen Datenordner und Anzeige-/Feldvergleich; mit `--oberflaeche` Speichern, Neustart und Ablesen der Anzeige |
+| T324 | [`test_ki_ausgabe.py`](../../tests/tools/test_ki_ausgabe.py) | Werkzeugtest zu `ki_ausgabe.py` (WA-61): Prüf- und Befundstufen FEHLER/ABWEICHUNG/GRENZE/HINWEIS, absichtlich fehlerhafte Datei und synthetischer Ablauf ohne Tk-Fenster |
 
 <!-- GLIDE-SYSTEM:TESTS-END -->
 
