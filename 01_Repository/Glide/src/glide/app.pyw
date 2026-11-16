@@ -237,16 +237,19 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.67.0"
+APP_VERSION = "3.69.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
 APP_BUNDLE_ID = "de.shaye.glide"
 APP_USER_MODEL_ID = "Shaye.Glide"
-IS_MACOS = sys.platform == "darwin"
-IS_WINDOWS = os.name == "nt"
-IS_LINUX = sys.platform.startswith("linux")
+
+import desktop_adapter
+
+IS_MACOS = desktop_adapter.is_macos()
+IS_WINDOWS = desktop_adapter.is_windows()
+IS_LINUX = desktop_adapter.is_linux()
 
 
 from custom_controls import rounded_rect_points
@@ -33580,13 +33583,7 @@ class ListApp:
                 path, origin=glide_attachment_policy.origin_text(path, BASE_DIR))
             if question and not self.ask_yes_no("Ausführbaren Anhang öffnen?", question, default="no"):
                 return False
-            if IS_WINDOWS:
-                os.startfile(path)  # type: ignore[attr-defined]
-            elif IS_MACOS:
-                subprocess.Popen(["open", path])
-            else:
-                subprocess.Popen(["xdg-open", path])
-            return True
+            return desktop_adapter.launch_path(path)
         except Exception as exc:
             self.show_error("Datei öffnen", f"Die Datei konnte nicht geöffnet werden:\n{exc}")
             return False
@@ -66541,17 +66538,13 @@ Labels, Termine und Metadaten."""
 
     @staticmethod
     def accel(*keys):
-        """Plattformgerechte Beschriftung eines Tastenkürzels.
-
-        Unter macOS heißt der Modifikator Cmd; „Strg+E“ wäre dort schlicht falsch.
-        """
-        modifier = "Cmd" if IS_MACOS else "Strg"
-        return "+".join([modifier] + [str(key) for key in keys])
+        """Plattformgerechte Beschriftung eines Tastenkürzels."""
+        return desktop_adapter.format_accelerator(*keys)
 
     @classmethod
     def redo_accel(cls):
         """Beschriftung für „Wiederholen“ nach Systemkonvention (Windows: Strg+Y)."""
-        return cls.accel("Y") if IS_WINDOWS else cls.accel("Shift", "Z")
+        return desktop_adapter.format_redo_accelerator()
 
     SIDEBAR_RAIL_WIDTH = 64
 
@@ -67861,42 +67854,15 @@ Labels, Termine und Metadaten."""
                 pass
 
     def build_menu(self, parent, eintraege, tearoff=0):
-        """Baut ein Menü aus einer Beschreibung und meldet es dem Theme an.
-
-        Die Menüzeile wurde Eintrag für Eintrag von Hand
-        zusammengesetzt – jede Zeile ein Aufruf, jedes Untermenü zusätzlich ein
-        eigener Name, der am Ende in `self.menus` nachgetragen werden musste.
-        Wurde das vergessen, blieb genau dieses Untermenü ungefärbt. Die
-        Beschreibung nennt nur noch Struktur und Befehl; Anlegen, Verschachteln
-        und Anmelden erledigt diese Stelle.
-
-        Eintragsformen: `None` für eine Trennlinie, `(Beschriftung, Befehl)`,
-        `(Beschriftung, Befehl, Tastenkürzel)` und `(Beschriftung, Liste)` für
-        ein Untermenü.
-        """
-        menu = tk.Menu(parent, tearoff=tearoff)
-        menu._glide_action_ids = {}
-        self.menus.append(menu)
-        for eintrag in eintraege:
-            if eintrag is None:
-                menu.add_separator()
-                continue
-            beschriftung, ziel = eintrag[0], eintrag[1]
-            if isinstance(ziel, str):
-                # Ein Untermenü, das sich selbst füllt (etwa „Hintergrund“ je
-                # Design): Der Name wird zum Attribut der App.
-                untermenue = tk.Menu(menu, tearoff=0)
-                self.menus.append(untermenue)
-                setattr(self, ziel, untermenue)
-                menu.add_cascade(label=beschriftung, menu=untermenue)
-            elif isinstance(ziel, (list, tuple)):
-                menu.add_cascade(label=beschriftung, menu=self.build_menu(menu, ziel))
-            else:
-                menu.add_command(label=beschriftung, command=ziel,
-                                 accelerator=eintrag[2] if len(eintrag) > 2 else "")
-                menu._glide_action_ids[menu.index("end")] = (
-                    eintrag[3] if len(eintrag) > 3 else glide_actions.method_id(ziel))
-        return menu
+        """Baut ein Menü aus einer Beschreibung und meldet es dem Theme an."""
+        return desktop_adapter.build_menu_tree(
+            parent,
+            eintraege,
+            menus_out=self.menus,
+            tearoff=tearoff,
+            attr_target=self,
+            action_resolver=glide_actions.method_id,
+        )
 
     def menubar_structure(self):
         """Die vier Menüs als Beschreibung – Struktur getrennt vom Aufbau.
@@ -68190,16 +68156,9 @@ Labels, Termine und Metadaten."""
 
     def _post_custom_menu(self, button, menu):
         previous_focus = self.current_focus_widget()
-        try:
-            button.focus_set()
-            menu.tk_popup(button.winfo_rootx(), button.winfo_rooty() + button.winfo_height())
-        finally:
-            try:
-                menu.grab_release()
-            except tk.TclError:
-                pass
-            self.restore_focus(previous_focus)
-        return "break"
+        return desktop_adapter.DesktopMenuBar.post_popup_menu(
+            button, menu, previous_focus=previous_focus, restore_cb=self.restore_focus
+        )
 
     def open_backup_folder(self):
         self.open_external_path(BACKUP_DIR)

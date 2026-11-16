@@ -66,6 +66,21 @@ SHELL_MODULE = {
         "ThemedAutoScrollbar.set": ["first", "last"],
         "ThemedAutoScrollbar.is_scrollable": [],
     },
+    "desktop_adapter": {
+        "is_macos": [],
+        "is_windows": [],
+        "is_linux": [],
+        "platform_name": [],
+        "primary_modifier": ["macos_override"],
+        "format_accelerator": ["macos_override"],
+        "format_redo_accelerator": ["windows_override", "macos_override"],
+        "build_menu_tree": ["parent", "entries", "menus_out", "tearoff", "attr_target", "action_resolver"],
+        "DesktopMenuBar.create_menubar_frame": ["parent", "bg_color"],
+        "DesktopMenuBar.post_popup_menu": ["button", "menu", "previous_focus", "restore_cb"],
+        "launch_path": ["path", "windows_override", "macos_override"],
+        "copy_to_clipboard": ["widget", "text"],
+        "read_from_clipboard": ["widget"],
+    },
 }
 KENNZEICHEN = "Shell-Paket"
 VERBOTENE_NAMEN = {"__import__", "importlib", "ListApp"}

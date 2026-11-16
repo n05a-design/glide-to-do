@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26
 
 ## Offene Sichtprüfung 3.65.0: Fokusrückgabe (D87)
 

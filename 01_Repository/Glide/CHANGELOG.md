@@ -3,6 +3,27 @@
 Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.69.0 – 16.11.2026
+
+Ganzheitliche Dokumentations- und Übergabekonsolidierung, Audit-Bereinigung und Headless-CI-Absicherung. Datenformat 26 unverändert.
+
+- Übergabe & Audit: `00_Arbeitsvorbereitung/Glide_Uebergabe.md` ganzheitlich und kontextbasiert für nachfolgende KI-Agenten ausgebaut (Status V1.36, D86–D90, 4 Shell-Bausteine, Skill WA-61/D92, Dokumentenautorität, priorisierte Handlungsfolge, Schutzregeln).
+- Entwicklungsplan: `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` auf aktuellen Stand synchronisiert, Arbeitsvorrat bereinigt, Anker korrigiert (§21.107).
+- Sicherheitsrichtlinie: `SECURITY.md` und `01_Repository/Glide/SECURITY.md` auf Stand 16.11.2026 synchronisiert.
+- CI-Absicherung: `tests/unit/test_desktop_adapter.py` mit Headless-SkipTest-Absicherung für Display-freie Umgebungen ergänzt; Linux-Grundstufe (Tk 8.6) grün.
+- Prüfung: Standprüfung 0 Befunde, Testkatalog V1.36 5/5, Unit-Tests 1.230/1.230 grün, Vertragstests 100 % grün, CI-Grundstufe mit 19/19 Schritten bestanden (Exitcode 0).
+
+
+## 3.68.0 – 16.11.2026
+
+Shell-Paket 5: Aktionen, Menüs und Desktop-Adapter (`desktop_adapter.py`, D86, D88). Datenformat 26 unverändert.
+
+- Neues Shell-Modul `desktop_adapter.py` (nur Standardbibliothek und `tkinter`): Lagert anwendungsneutrale Menü-, Tastaturkürzel- und Plattformfunktionen aus `app.pyw` aus (`build_menu_tree`, `DesktopMenuBar`, `launch_path`, `copy_to_clipboard`, `read_from_clipboard`, `format_accelerator`, `format_redo_accelerator`, `primary_modifier`).
+- Plattformgerechte Menüleiste: Kapselt Menüaufbau, Windows-Kopfleiste (`custom_menubar`) mit Mnemonics und Popup-Behandlung sowie macOS/Linux-Systemmenübindung (`root.config(menu=menubar)`).
+- Einhaltung des Modulbudgets (WA-50): Alle Funktionen bleiben unter 50 Zeilen und Schachtelungstiefe 15.
+- Prüfung: Neuer Unit-Test `test_desktop_adapter.py` (T313, 13 Fälle), `test_shell_importregel.py` (T319) um `desktop_adapter` erweitert (7/7 grün). Modalvertrag (17 Fälle), Abbauvertrag (5 Fälle) und Fensterlebensdauer (9 Fälle) grün. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3680--shell-paket-5-desktop_adapterpy-16112026).
+
+
 ## 3.67.0 – 16.11.2026
 
 Shell-Paket 4: Erscheinungsbild und Bedienelemente ausgelagert (`custom_controls.py`, D88). Datenformat 26 unverändert.
