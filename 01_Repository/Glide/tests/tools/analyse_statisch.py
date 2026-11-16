@@ -161,21 +161,67 @@ def migration_weight(text):
     return hits, legacy_words
 
 
+def check_module_budget(tree, *, max_length=50, max_nesting=15, allow_tk=False):
+    """Prüft das Modulbudget (WA-50) für neue/ausgelagerte Module.
+
+    Kriterien:
+    - 0 Tkinter-Imports (sofern nicht mit allow_tk=True erlaubt)
+    - Funktionslänge <= max_length (Standard 50 Zeilen)
+    - Verschachtelungstiefe <= max_nesting (Standard 15 Ebenen)
+    """
+    violations = []
+    if not allow_tk:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "tkinter" or alias.name.startswith("tkinter.") or alias.name == "_tkinter":
+                        violations.append(f"Tkinter-Import in Tk-freiem Modul nicht erlaubt: {alias.name} (Zeile {node.lineno})")
+            elif isinstance(node, ast.ImportFrom):
+                if node.module == "tkinter" or (node.module and node.module.startswith("tkinter.")) or node.module == "_tkinter":
+                    violations.append(f"Tkinter-Import in Tk-freiem Modul nicht erlaubt: {node.module} (Zeile {node.lineno})")
+    functions, _ = collect_definitions(tree)
+    for full, _short, node in functions:
+        length = function_length(node)
+        if length > max_length:
+            violations.append(f"Funktion {full} überschreitet Längenbudget: {length} Zeilen > {max_length} (Zeile {node.lineno})")
+        depth = max_depth(node)
+        if depth > max_nesting:
+            violations.append(f"Funktion {full} überschreitet Verschachtelungsbudget: Tiefe {depth} > {max_nesting} (Zeile {node.lineno})")
+    return violations
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--quelle", default=str(DEFAULT_SOURCE))
     parser.add_argument("--grenze", type=int, default=80, help="Zeilen, ab denen eine Funktion als lang gilt")
+    parser.add_argument("--budget", action="store_true", help="Qualitätsbudget für neue/ausgelagerte Module prüfen (WA-50)")
+    parser.add_argument("--allow-tk", action="store_true", help="Tkinter-Imports für dieses Modul im Budget erlauben")
     args = parser.parse_args()
 
-    path = pathlib.Path(args.quelle)
+    path = pathlib.Path(args.quelle).resolve()
     text, tree = load(path)
     lines = text.count("\n") + 1
+
+    try:
+        rel_path = path.relative_to(REPOSITORY_ROOT)
+    except ValueError:
+        rel_path = path
+
+    if args.budget:
+        violations = check_module_budget(tree, max_length=50, max_nesting=15, allow_tk=args.allow_tk)
+        if violations:
+            print(f"BUDGET FEHLGESCHLAGEN ({rel_path}): {len(violations)} Verletzung(en)")
+            for v in violations:
+                print(f"   ! {v}")
+            return 1
+        print(f"BUDGET EINGEHALTEN ({rel_path}): {lines} Zeilen, alle Funktionen im Budget (<= 50 Z., Tiefe <= 15)")
+        return 0
 
     functions, constants = collect_definitions(tree)
     names = {short for _full, short, _node in functions} | {short for _full, short, _node in constants}
     counts = usage_counts(names)
 
-    print(f"QUELLE  {path.relative_to(REPOSITORY_ROOT)}  ({lines} Zeilen)")
+    print(f"QUELLE  {rel_path}  ({lines} Zeilen)")
     print(f"        {len(functions)} Funktionen/Methoden, {len(constants)} Konstanten")
     print()
 
