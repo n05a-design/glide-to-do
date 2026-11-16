@@ -353,6 +353,14 @@ def dokumente(wurzel: Path):
         # Produktdokumente. Ihre ursprünglichen Standangaben bleiben erhalten.
         if any(re.fullmatch(r"\d+\.\d+ Änderungen-Prompt", t) for t in teile):
             continue
+        # Beispieldateien eines Produkt-Skills (`skills/<Name>/assets/`) sind
+        # Importbeispiele: ihr Text wird eine Glide-Seite des Nutzers und trägt
+        # keine Projektstandzeile. `test_agenten_skill.py` prüft sie mit dem
+        # echten Seitenimport; Einstieg und Referenzen des Skills bleiben hier.
+        if "skills" in teile[:-1]:
+            stelle = teile.index("skills")
+            if len(teile) > stelle + 3 and teile[stelle + 2] == "assets":
+                continue
         yield pfad
 
 

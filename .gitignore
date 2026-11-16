@@ -135,7 +135,11 @@ skills-main/
 *.glideapp
 *.glidepage
 *.glideexchange
+*.glidecontext
 *.glidetemplates
+# Künstliche Beispieldateien des Agenten-Skills (D91); test_agenten_skill.py prüft sie.
+!01_Repository/Glide/skills/*/assets/beispiele/*.glideexchange
+!01_Repository/Glide/skills/*/assets/beispiele/*.glidecontext
 !01_Repository/Glide/tests/fixtures/**/*.glideapp
 !01_Repository/Glide/tests/fixtures/**/*.glidepage
 !01_Repository/Glide/tests/fixtures/**/*.glideexchange

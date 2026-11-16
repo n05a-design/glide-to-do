@@ -20,6 +20,9 @@
 20_Grafik_Master/03_Fav-Icon/favicon.svg -text
 07_Python-Versionen/resources/logo/*.svg -text
 *.canvas text eol=lf
+# Glide-Austauschdateien und Kontextpakete sind JSON (Beispiele des Agenten-Skills).
+*.glideexchange text eol=lf
+*.glidecontext text eol=lf
 *.png binary
 *.jpg binary
 *.jpeg binary

@@ -1,0 +1,32 @@
+{
+  "title": "Kaffeetasse",
+  "folder": "Zeichnungen",
+  "description": "16 × 16 Zellen; Grund durchsichtig, Tasse in deckendem Weiß.",
+  "size": 16,
+  "legend": {
+    ".": "#FFFFFF",
+    "k": "#3B3B3B",
+    "d": "#4E342E",
+    "w": "#FEFEFE",
+    "g": "#B8B8B8",
+    "b": "#8D6E63"
+  },
+  "pixels": [
+    "................",
+    "....g...g.......",
+    ".....g...g......",
+    "....g...g.......",
+    "................",
+    "..kkkkkkkkkk....",
+    "..kddddddddk....",
+    "..kwwwwwwwwkkk..",
+    "..kwwwwwwwwk.k..",
+    "..kwwwwwwwwk.k..",
+    "..kwwwwwwwwkkk..",
+    "..kwwwwwwwwk....",
+    "...kwwwwwwk.....",
+    "....kkkkkk......",
+    ".bbbbbbbbbbbb...",
+    "................"
+  ]
+}
