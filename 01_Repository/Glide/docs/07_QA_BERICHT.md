@@ -1,4 +1,24 @@
-# QA-Bericht – Glide 3.67.0
+# QA-Bericht – Glide 3.68.0
+
+## Prüfstand 3.68.0 – Shell-Paket 5: desktop_adapter.py (16.11.2026)
+
+Basis `main` `e2e0590b` (Glide 3.67.0, PR #115 Shell-Paket 4 gemergt), vor Beginn gegen `origin/main` geprüft; Branch `claude/shell-paket-5-desktop-adapter`. Geprüft unter macOS arm64 mit Python 3.14.5 aus dem Python.org-Framework und Tcl/Tk 9.0.3, künstliche Daten in kurzen Ablagen außerhalb von OneDrive. Auftrag im [Plan §21.106](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026).
+
+| Gegenstand | Nachweis |
+|---|---|
+| Auslagerung M099 `desktop_adapter.py` | 170 Zeilen: `is_macos`, `is_windows`, `is_linux`, `platform_name`, `primary_modifier`, `format_accelerator`, `format_redo_accelerator`, `build_menu_tree`, `DesktopMenuBar` (mit `create_menubar_frame` und `post_popup_menu`), `launch_path`, `copy_to_clipboard`, `read_from_clipboard`. Drop-in-Re-Export in `app.pyw` |
+| Modulbudget (WA-50 / T322) | `analyse_statisch.py --budget --allow-tk`: 170 Zeilen, 0 Verletzungen (alle Funktionen <= 50 Zeilen, max. Tiefe <= 15) |
+| Entkopplung & Shell-Importregel (D86) | Importiert nur Standardbibliothek und `tkinter`. Keine verbotenen Bezeichner (`glide_`, `theme`, etc.); `test_shell_importregel.py` 7/7 grün |
+| `test_desktop_adapter.py` (T313) | 13/13 Fälle grün: Plattform-Erkennung, Beschleuniger-Formatierung, rekursiver Menüaufbau, Trennlinien, Untermenüs, Aktionszuordnung, Menüleisten-Erzeugung, Popup-Behandlung und Zwischenablage |
+| `test_modalvertrag.py` (T316) | 17/17 Fälle grün (echter Grab, Tk 9.0) |
+| `test_abbauvertrag.py` (T318) | 5/5 Fälle grün |
+| `test_fensterlebensdauer.py` (T320) | 9/9 Fälle grün |
+| `test_custom_controls.py` (T312) | 11/11 Fälle grün |
+| Analysen & Systeminventar | `standpruefung.py` 0 Befunde; `test_glide_system.py` 5/5 grün (Glide-System V1.35, 99 Module, 326 Tests) |
+| Fachlogik Unit-Tests | 1.230/1.230 Tests grün (1 Skip) in 10,07 s |
+| CI-Grundstufe lokal | 19 von 19 Schritten am Mac grün (Exitcode 0) |
+
+**Grenzen:** Der Mac-Nachweis nach D90 ist erbracht (Tk 9.0.3); Linux/Xvfb und Windows x64 werden nach PR-Erstellung in GitHub Actions nachgewiesen. Sichtprüfung am Mac von Hand vorgemerkt.
 
 ## Prüfstand 3.67.0 – Shell-Paket 4: custom_controls.py (16.11.2026)
 
@@ -497,7 +517,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

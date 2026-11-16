@@ -3,6 +3,16 @@
 Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 3.68.0 – 16.11.2026
+
+Shell-Paket 5: Aktionen, Menüs und Desktop-Adapter (`desktop_adapter.py`, D86, D88). Datenformat 26 unverändert.
+
+- Neues Shell-Modul `desktop_adapter.py` (nur Standardbibliothek und `tkinter`): Lagert anwendungsneutrale Menü-, Tastaturkürzel- und Plattformfunktionen aus `app.pyw` aus (`build_menu_tree`, `DesktopMenuBar`, `launch_path`, `copy_to_clipboard`, `read_from_clipboard`, `format_accelerator`, `format_redo_accelerator`, `primary_modifier`).
+- Plattformgerechte Menüleiste: Kapselt Menüaufbau, Windows-Kopfleiste (`custom_menubar`) mit Mnemonics und Popup-Behandlung sowie macOS/Linux-Systemmenübindung (`root.config(menu=menubar)`).
+- Einhaltung des Modulbudgets (WA-50): Alle Funktionen bleiben unter 50 Zeilen und Schachtelungstiefe 15.
+- Prüfung: Neuer Unit-Test `test_desktop_adapter.py` (T313, 13 Fälle), `test_shell_importregel.py` (T319) um `desktop_adapter` erweitert (7/7 grün). Modalvertrag (17 Fälle), Abbauvertrag (5 Fälle) und Fensterlebensdauer (9 Fälle) grün. Ergebnisse im [QA-Bericht](docs/07_QA_BERICHT.md#prüfstand-3680--shell-paket-5-desktop_adapterpy-16112026).
+
+
 ## 3.67.0 – 16.11.2026
 
 Shell-Paket 4: Erscheinungsbild und Bedienelemente ausgelagert (`custom_controls.py`, D88). Datenformat 26 unverändert.

@@ -2,7 +2,7 @@
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
-Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26
 
 **Aufbau:** [Quellen und Geltung](#quellen-und-geltung) · [Gestaltungsgrundsätze P1–P6](#gestaltungsgrundsätze-p1p6) · [verbindliche Vorgaben](#verbindliche-gestaltungsvorgaben) mit den [Grundsätzen aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610) und den [Fortschreibungen aus Abnahmen](#fortschreibungen-aus-abnahmen-und-aufträgen) · [Gestaltungsregister](#gestaltungsregister) mit Entscheidungen, Fachentscheidungen und Inhaberzitaten · [Skill-Grundsätze](#übernommene-grundsätze-aus-den-skillquellen-übersetzt-nach-tk-b20) · [Pflege](#pflege-und-prüfung) und [appweite Übertragung](#appweite-übertragung-und-zukünftige-entwicklung).
 

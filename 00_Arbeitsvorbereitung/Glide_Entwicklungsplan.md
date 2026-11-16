@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -71,7 +71,7 @@ Offene Arbeit auf einen Blick, Stand 14.11.2026 (3.62.0). Die Zeilen verweisen a
 | Abnahme | Menschliche Prüfung 3.55–3.62: Entlastungsdialog mit Gründen, Datenordnermeldung, Suche, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), Recherche und D91 ([§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026)) | K2 gemeinsame Quelle; E-K5 vor K3 | je Paket |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
-| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)); WA-50 als Modulbudget in T322/analyse_statisch; Paket 4 in 3.67.0 ([§21.105](#21105-glide-3670-shell-paket-4--erscheinungsbild-und-bedienelemente-custom_controlspy-16112026)) | Paket 5 (Aktionen/Settings/Desktop) | je Paket |
+| Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ Modal-Vertragstest 14.11.; 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)); WA-50 als Modulbudget in T322/analyse_statisch; Paket 4 in 3.67.0 ([§21.105](#21105-glide-3670-shell-paket-4--erscheinungsbild-und-bedienelemente-custom_controlspy-16112026)); Paket 5 in 3.68.0 ([§21.106](#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026)) | Bündelung glide_shell vor Paket 6 | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
 | WA-08 | persönlicher Soll-Ist-Schätzfaktor | ◇ im Register, P2 in §21.70 | Modellentscheidung | Inhaber |
 | WA-20 | Wochenabsicht | ○ Vorschlag | Speichermodell | Inhaber |
@@ -2975,4 +2975,19 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 7. Version 3.67.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`. Glide-System V1.34.
 
 **C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3670--shell-paket-4-custom_controlspy-16112026). Mac-Nachweis nach D90 erbracht. Nächster Schnitt nach D88: Paket 5 (Aktionen, Menüs, Einstellungen und Desktop-Adapter).
+
+### 21.106 Glide 3.68.0: Shell-Paket 5 – Aktionen, Menüs und Desktop-Adapter, desktop_adapter.py (16.11.2026)
+
+**A – Auftrag:** Der Inhaber gibt am 16.11.2026 Shell-Paket 5 nach D88 frei: Auslagerung der anwendungsneutralen Menü-, Tastaturkürzel- und Desktop-Funktionen aus `app.pyw` in das neue Shell-Modul `desktop_adapter.py`. Basis ist `main` `e2e0590b` (3.67.0 mit PR #115 Shell-Paket 4), vor Beginn gegen `origin/main` geprüft.
+
+**B – Umsetzung:**
+1. `desktop_adapter.py` (M099): 170 Zeilen. Enthält `is_macos`, `is_windows`, `is_linux`, `platform_name`, `primary_modifier`, `format_accelerator`, `format_redo_accelerator`, `build_menu_tree`, `DesktopMenuBar` (mit `create_menubar_frame` und `post_popup_menu`), `launch_path`, `copy_to_clipboard` und `read_from_clipboard`. Importiert ausschließlich die Standardbibliothek und `tkinter`.
+2. Kapselung der Menüleistenlogik: Rekursiver Menüaufbau aus deklarativen Beschreibungen (`build_menu_tree`), Trennlinien, Untermenüs und Zuweisung von Aktions-IDs; Plattformmenü mit Windows-Kopfleiste (`custom_menubar`) samt Mnemonics und sicherem Popup-Grab-Abbau (`DesktopMenuBar.post_popup_menu`).
+3. Re-Export: `app.pyw` re-exportiert alle Funktionen drop-in-kompatibel.
+4. Einhaltung des Modulbudgets (WA-50 / T322): Alle Funktionen <= 50 Zeilen, maximale Verschachtelungstiefe <= 15.
+5. Registrierung & Regeln (R10, D86): In `test_shell_importregel.py` (T319), `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `07_Python-Versionen/README.md` und `src/glide/README.md` registriert.
+6. Tests: Neuer Unit-Test `test_desktop_adapter.py` (T313, 13 Fälle) prüft Plattform-Erkennung, Beschleuniger-Formatierung, rekursiven Menüaufbau, Trennlinien, Untermenüs, Aktionszuordnung, Menüleisten-Erzeugung, Popup-Behandlung und Zwischenablage; `test_modalvertrag.py` (17 Fälle), `test_abbauvertrag.py` (5 Fälle), `test_fensterlebensdauer.py` (9 Fälle) und `test_custom_controls.py` (11 Fälle) 100 % grün. 1.230 Unit-Tests grün.
+7. Version 3.68.0 per `versionswechsel.py`, Lieferung per `abgleich_07.py`. Glide-System V1.35.
+
+**C – Prüfung und Rest:** Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#prüfstand-3680--shell-paket-5-desktop_adapterpy-16112026). Mac-Nachweis nach D90 erbracht. Nächster Schritt: Bündelung der vier Shell-Module (`modal_session`, `window_lifetime`, `custom_controls`, `desktop_adapter`) im Paket `glide_shell` vor Paket 6 (Demonstrationshost).
 
