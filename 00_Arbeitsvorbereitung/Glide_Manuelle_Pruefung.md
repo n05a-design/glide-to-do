@@ -8,7 +8,7 @@ Prüfbasis ist `main` ab 3.69.0 mit isolierten künstlichen Daten (`GLIDE_DATA_D
 
 - [ ] **Bedienelemente:** In Einstellungen und Dialogen Häkchen, Auswahlpunkte, Listen, Schieberegler und Bildlaufleisten in hellem und dunklem Design ansehen und bedienen (Maus, Tab, Leertaste, Pfeiltasten). Aussehen und Verhalten wie vor 3.67.0.
 - [ ] **Menüleiste:** Alle Hauptmenüs öffnen; Tastenkürzel stehen als `Cmd+…` (Mac) bzw. `Strg+…` (Windows), Wiederholen als `Cmd+Shift+Z` bzw. `Strg+Y`. Unter Windows die eigene Kopfleiste mit Alt-Buchstaben bedienen.
-- [ ] **Kontextmenüs:** Rechtsklick in Seitenleiste und Liste öffnet das Menü an der Zeigerstelle; Esc oder Klick daneben schließt es, danach reagiert das Fenster sofort auf Tastatur.
+- [ ] **Menüknöpfe (Windows):** Ein Knopf der eigenen Kopfleiste öffnet sein Menü direkt darunter; Esc oder Klick daneben schließt es, danach liegt der Fokus wieder im vorher aktiven Feld und das Fenster reagiert sofort auf Tastatur.
 - [ ] **System:** Einen Anhang oder Ordner „im System öffnen“ und einen Verweis kopieren und in eine andere App einfügen.
 
 ## Offene Sichtprüfung 3.65.0: Fokusrückgabe (D87)

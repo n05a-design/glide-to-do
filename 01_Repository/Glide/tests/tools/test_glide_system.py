@@ -82,6 +82,11 @@ class SystemUndModulpflegeTests(unittest.TestCase):
             self.assertEqual(len(ids), len(set(ids)), section)
             # IDs may expand as Glide grows, but existing registers must not shrink.
             self.assertGreaterEqual(len(ids), count, section)
+        # Testkennungen stehen in mehreren Tabellen; jede darf es nur einmal geben
+        # (T313 war bis V1.37 doppelt vergeben).
+        tests = re.findall(r"(?m)^\| (T\d+) \|", document)
+        doppelt = sorted({t for t in tests if tests.count(t) > 1})
+        self.assertEqual(doppelt, [], "Testkennungen doppelt vergeben")
 
     def test_modulliste_entspricht_quellverzeichnis(self):
         _, parts = registry()
