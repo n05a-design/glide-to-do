@@ -74,7 +74,7 @@ Eigene Austauschaufträge zusätzlich an beiden Eingängen prüfen: Feldvalidier
 
 **UI-Nachlauf 02.11.2026:** `test_arbeitsmodi.py --fall ansichtssymbole` prüft Symbolvertrag/Klartextnamen/aktive Ansicht/Tastatur in vier Größen-/Schriftkombinationen und alle drei Zeilenaktionen. `beta350` prüft zusätzlich reale X-/Y-Kanten der Block-Einfügemarke; `test_aufgaben3380.py --fall klicks` begrenzt die tatsächlichen Textboxen aller Zeilenknöpfe, auch im Schrift-Rückfall. `test_wiederanlauf.py --fall freigabe` prüft Rückmeldung und unveränderte Original-/Einstellungsbytes bei gesperrtem Hintergrundwechsel. [Nachweise](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md).
 
-Stand 16.11.2026 · Glide 3.66.0 · Aufgabenformat 26
+Stand 16.11.2026 · Glide 3.67.0 · Aufgabenformat 26
 
 **3.65.0 – Fokusrückgabe (D87):** `test_modalvertrag.py` prüft in `fokus`, `fokus_verschoben`, `fokus_verschachtelt`, `fokus_ziel_weg` und `fokus_drittes_fenster`, dass der Fokus nach dem Schließen ins aufrufende Fenster zurückkehrt, ein verschwundenes Ziel ohne Fehler auf das Fenster fällt und ein drittes Fenster seinen Fokus behält. Drei neue Gegenproben entfernen Rückgabe, Merken und Fremdfensterschutz. Ohne Systemfokus des Prüfprozesses zählt, was sich das Fenster merkt (`focus_lastfor`). Die Sichtprüfung am Mac bleibt Handarbeit (D87, [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#offene-sichtprüfung-3650-fokusrückgabe-d87)).
 
