@@ -18,7 +18,7 @@ Meldungen: FEHLER (Glide lehnt ab oder verliert Inhalt), WARNUNG (Glide kürzt,
 übergeht oder ändert etwas), HINWEIS (zulässig, aber besser anders). Exitcode 1
 bei Fehlern, mit `--streng` auch bei Warnungen.
 
-Die Regeln bilden die Prüfung von Glide 3.65.0 (Austauschformat 2) nach.
+Die Regeln bilden die Prüfung von Glide 3.66.0 (Austauschformat 2) nach.
 `tests/tools/test_agenten_skill.py` vergleicht sie mit dem Glide-Code; ändert
 sich der Austauschweg, muss dieses Skript im selben Schnitt mitgehen.
 """
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-GLIDE_VERSION = "3.65.0"
+GLIDE_VERSION = "3.66.0"
 FORMAT = "glide.exchange"
 FORMAT_VERSION = 2
 CONTEXT_FORMAT = "glide.context"
