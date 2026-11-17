@@ -267,7 +267,8 @@ with tempfile.TemporaryDirectory(prefix="glide-mindestgroesse-") as ordner:
         for stufe in ("mittel", "gross"):
             schrift(stufe, "light")
             for eintrag in app.app_action_entries():
-                if eintrag["label"] in ("Beenden", "Papierkorb leeren", "Aktive Liste löschen"):
+                if (eintrag["label"] in ("Beenden", "Glide beenden", "Quit", "Papierkorb leeren", "Aktive Liste löschen")
+                        or eintrag.get("id") in ("on_close", "empty_trash", "delete_active_list")):
                     continue
                 app.set_active_list(normal["id"])
                 ruhe()
