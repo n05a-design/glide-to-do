@@ -140,28 +140,29 @@ def fixtures_pruefen():
         versioned_name = re.fullmatch(r"glide_releaseplanung_(\d+\.\d+\.\d+)\.glidebackup", path.name)
         expected_version = versioned_name.group(1) if versioned_name else values["APP_VERSION"]
         version_tuple = tuple(map(int, expected_version.split(".")))
-        expected_schema = (11 if versioned_name and version_tuple <= (3, 6, 0) else
-                           12 if versioned_name and version_tuple == (3, 7, 0) else
-                           13 if versioned_name and version_tuple <= (3, 13, 0) else
-                           14 if versioned_name and version_tuple <= (3, 18, 0) else
+        is_v3 = version_tuple[0] == 3
+        expected_schema = (11 if versioned_name and is_v3 and version_tuple <= (3, 6, 0) else
+                           12 if versioned_name and is_v3 and version_tuple == (3, 7, 0) else
+                           13 if versioned_name and is_v3 and version_tuple <= (3, 13, 0) else
+                           14 if versioned_name and is_v3 and version_tuple <= (3, 18, 0) else
                            # Format 16 kam mit 3.22.0 (Checkliste); die
                            # Releaseplanungen bis 3.21.4 tragen weiterhin 15.
-                           15 if versioned_name and version_tuple <= (3, 21, 4) else
-                           16 if versioned_name and version_tuple <= (3, 25, 0) else
+                           15 if versioned_name and is_v3 and version_tuple <= (3, 21, 4) else
+                           16 if versioned_name and is_v3 and version_tuple <= (3, 25, 0) else
                            # Format 17 (Notizlisten) kam mit 3.26.0, Format 18
                            # (Tagebuch) mit 3.28.0.
-                           17 if versioned_name and version_tuple <= (3, 27, 0) else
-                           18 if versioned_name and version_tuple <= (3, 28, 0) else
+                           17 if versioned_name and is_v3 and version_tuple <= (3, 27, 0) else
+                           18 if versioned_name and is_v3 and version_tuple <= (3, 28, 0) else
                            # Format 19 (Zeichnungsseite) mit 3.29.0, Format 20
                            # (Beziehungen, Zeit, Symbole, Archiv) mit 3.30.0.
-                           19 if versioned_name and version_tuple <= (3, 29, 0) else
-                           20 if versioned_name and version_tuple <= (3, 33, 14) else
-                           21 if versioned_name and version_tuple <= (3, 33, 16) else
-                           22 if versioned_name and version_tuple <= (3, 33, 17) else
-                           23 if versioned_name and version_tuple <= (3, 39, 1) else
-                           24 if versioned_name and version_tuple <= (3, 40, 0) else
+                           19 if versioned_name and is_v3 and version_tuple <= (3, 29, 0) else
+                           20 if versioned_name and is_v3 and version_tuple <= (3, 33, 14) else
+                           21 if versioned_name and is_v3 and version_tuple <= (3, 33, 16) else
+                           22 if versioned_name and is_v3 and version_tuple <= (3, 33, 17) else
+                           23 if versioned_name and is_v3 and version_tuple <= (3, 39, 1) else
+                           24 if versioned_name and is_v3 and version_tuple <= (3, 40, 0) else
                            # Festgeschriebene Lieferfixtures bleiben vor FP-02/1.
-                           25 if version_tuple <= (3, 43, 1) else
+                           25 if is_v3 and version_tuple <= (3, 43, 1) else
                            values["DATA_SCHEMA_VERSION"])
         if payload.get("version") != expected_schema:
             raise ValueError(f"{path.name}: Datenformat passt nicht zur Erzeugerversion")

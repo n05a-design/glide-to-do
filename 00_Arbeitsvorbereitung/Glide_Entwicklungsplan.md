@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 17.11.2026 · Glide 3.70.0 · Aufgabenformat 26
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -3197,6 +3197,29 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - `ci_grundstufe.py`: 19/19 Prüfungen bestanden.
 - `standpruefung.py`: 0 Befunde.
 - `abgleich_07.py`: 0 Abweichungen.
+
+### 21.114 Glide Meilenstein 1.0, Etappe 4: Release Cut auf Version 1.0.0 (D93) (17.11.2026)
+
+**A – Auftrag:** Durchführung des offiziellen Release-Cuts auf Version 1.0.0 gemäß Meilenstein-Plan Release 1.0 (D93, Issue #129):
+1. Versionswechsel auf `1.0.0` über `scripts/pflege/versionswechsel.py 1.0.0 17.11.2026 --ohne-ablagekuerzung`.
+2. Aktualisierung von `CHANGELOG.md` mit den Release-Highlights (Erste Hauptversion, i18n DE/EN, Installer & Paketmanager, Agenten-Skill `glide-to-do`).
+3. Angleichung aller Paketmanager-Manifeste auf `1.0.0`: Homebrew Cask `glide.rb`, Inno Setup `glide_setup.iss`, winget Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/1.0.0/`.
+4. Lieferabgleich und Synchronisation von `07_Python-Versionen/` mit `Glide-Aufgaben-und-Listen_v1.0.0.pyw`.
+5. Konsolidierung der Übergabe- und Meilensteindokumente.
+
+**B – Umsetzung:**
+- Versionswechsel auf Version `1.0.0` durchgeführt; `VERSION`, `app.pyw`, Fixtures und 52 Dokumente aktualisiert.
+- `CHANGELOG.md` um den Abschnitt `1.0.0 – 17.11.2026` ergänzt.
+- `packaging/homebrew/Casks/glide.rb` und `packaging/windows/glide_setup.iss` auf `1.0.0` gesetzt.
+- winget Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/1.0.0/` angelegt.
+- Lieferstand in `07_Python-Versionen/` auf `Glide-Aufgaben-und-Listen_v1.0.0.pyw` synchronisiert (`abgleich_07.py`).
+
+**C – Prüfung:**
+- `standpruefung.py`: 86 Dokumente, 0 Befunde.
+- `abgleich_07.py`: 99 Code-Dateien, 167 Ressourcen, 0 Abweichungen.
+- `ci_grundstufe.py`: 19/19 Prüfungen bestanden.
+- Systemstatus V1.40 (100 Module M001–M100, 329 Testdateien T001–T329).
+
 
 
 

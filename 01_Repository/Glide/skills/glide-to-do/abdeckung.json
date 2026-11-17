@@ -2,7 +2,7 @@
   "format": "glide-to-do.abdeckung",
   "version": 1,
   "zweck": "Ordnet jedes Datenfeld des Glide-Aufgabenformats ein: ja = der Skill legt es über den genannten Weg an; offen = geplant im genannten Paket von WA-61; intern = bewusst nur in Glide. tests/tools/test_agenten_skill.py vergleicht diese Datei mit dem Glide-Code. Ändert sich das Datenformat, ein Feld, eine Art oder eine Fähigkeit des Austauschformats, schlägt die Prüfung fehl, bis Skill und Datei nachgezogen sind.",
-  "glide_version": "3.69.0",
+  "glide_version": "1.0.0",
   "datenformat": 26,
   "austauschformat": 2,
   "faehigkeiten": [
