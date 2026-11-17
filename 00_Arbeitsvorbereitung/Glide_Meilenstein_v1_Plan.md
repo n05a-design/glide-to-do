@@ -71,21 +71,23 @@ flowchart TD
   - GitHub Actions Workflow packt Skill-ZIP mit Prüfsummen.
 - **Nachweis:** Integrationstest T328 (`test_austausch_k4.py`, 9/9 OK), Werkzeugtest T321 (18/18 OK), PR #130 gemergt.
 
-### Etappe 2: Mehrsprachigkeit (i18n: Deutsch / Englisch) – 🎯 NÄCHSTER SCHRITT
+### Etappe 2: Mehrsprachigkeit (i18n: Deutsch / Englisch) – ✅ ERLEDIGT
 - **Architektur:**
-  - Neues leichtgewichtiges Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Thread-sicher, Modulbudget max. 50 Zeilen je Funktion).
+  - Neues leichtgewichtiges Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Modulbudget max. 50 Zeilen je Funktion, WA-50 konform).
   - Strukturierte Übersetzungskataloge: `src/glide/resources/locales/de.json` und `src/glide/resources/locales/en.json`.
-  - Robuster Aufruf: `t("menu.file", default="Datei")` mit Formatierungsunterstützung (`**kwargs`).
-  - Einstellungsdialog: Dropdown zur Sprachauswahl (`Automatisch / System`, `Deutsch`, `English`), persistiert in `settings.json` als `language`.
-- **Übersetzungsumfang für v1.0:**
-  - Menüleiste (`desktop_adapter.py`) und Tastaturkürzel.
-  - Seitenleiste (Listen, Ordner, Navigation, Systembereiche, Zähler).
-  - Aktionsleisten, Knöpfe, Inspektoren und modale Bestätigungsdialoge.
-  - Fehler- und Statusmeldungen, Undo-Toasts.
-- **Qualitätssicherung:**
-  - Neuer Test T329 (`test_i18n.py`): Prüft Schlüsselparität zwischen `de.json` und `en.json`, Platzhaltervalidierung und Umschaltungsverhalten.
+  - Robuster Aufruf: `t(key, default, **kwargs)` mit sicherer Formatierung (`safe_format`).
+  - Einstellungsdialog: Dropdown zur Sprachauswahl (`Automatisch (System)`, `Deutsch`, `English`), persistiert in `settings.json` als `language`.
+- **Übersetzungsumfang:**
+  - Menüleiste (`menubar_structure` / `create_menubar`) und Tastaturkürzel/Mnemonics.
+  - Seitenleiste (Systembereiche: Startseite, Heute, Eingang, Labels, Vorlagen, Papierkorb).
+  - Aktionsleisten, Knöpfe, Inspektoren und Einstellungen.
+- **Nachweis:**
+  - Neuer Test T329 (`test_i18n.py`): 11 Tests für Spracherkennung, Auflösung, Fallbacks, 100 % Schlüsselparität und 100 % Platzhalterparität zwischen `de.json` und `en.json`, WA-50-Budget.
+  - Werkzeugtest `test_modulbudget.py` um `i18n.py` erweitert.
+  - Systemregister auf V1.40 angehoben (`test_glide_system.py` 5/5 OK).
+  - CI-Grundstufe 19/19 OK.
 
-### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – GEPLANT
+### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – 🎯 NÄCHSTER SCHRITT
 - **macOS:**
   - DMG-Erzeugung in `.github/workflows/macos-paket.yml` verifizieren.
   - Homebrew-Cask `packaging/homebrew/Casks/glide.rb` auf v1.0 vorbereiten.
@@ -110,7 +112,7 @@ flowchart TD
 Aktueller Stand in [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129):
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 `i18n.py`, JSON-Kataloge, Einstellungen, Lokalisierung der UI)
+- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 `i18n.py`, JSON-Kataloge, Einstellungen, Lokalisierung Menüs/Seitenleiste, T329)
 - [ ] **3. Paketierung & Installer** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`)
 - [ ] **4. Paketmanager** (Homebrew Cask, winget Manifest)
 - [ ] **5. Qualität & Freigabe** (100 % grüne Vollmatrix, Release Cut v1.0.0)

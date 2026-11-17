@@ -161,6 +161,7 @@ import interaction_policy as glide_interaction
 import runtime_config as glide_runtime_config
 import object_references as glide_objects
 import exchange_recipes as glide_recipes
+import i18n as glide_i18n
 import week_planning as glide_week
 import markdown_tree as glide_markdown_tree
 import pinboard_pages as glide_pinboard_pages
@@ -17543,6 +17544,7 @@ class ListApp:
         self._storage_health = glide_storage.Health()
         self._storage_blocked_files = set()
         self.settings = self.load_settings()
+        glide_i18n.set_language(self.settings.get("language", "system"))
         self.saved_filters = SavedFilters(self)
         self._registered_fonts = register_private_fonts()
         self.templates = self.load_templates()
@@ -19755,6 +19757,7 @@ class ListApp:
             except tk.TclError:
                 pass
         self.settings = self.load_settings()
+        glide_i18n.set_language(self.settings.get("language", "system"))
         self.theme_name = self.design_info()["base"]
         self._ui_font_family = None
         self.apply_ui_font()
@@ -20139,6 +20142,8 @@ class ListApp:
         for key, default in (("start_on_home", False), ("show_home_stats", True)):
             value = result.get(key, default)
             result[key] = value if isinstance(value, bool) else default
+        lang = result.get("language", "system")
+        result["language"] = lang if lang in ("system", "de", "en") else "system"
         # B03 (15.10.2026): Gismo heißt fest so und behält seine Spielereien.
         # Frühere Namen und „Spielereien aus“ wirken nicht mehr und entfallen.
         result = glide_home.retire_mascot_settings(result)
@@ -31315,6 +31320,10 @@ class ListApp:
             if self.settings.get("action_feedback") in self.ACTION_FEEDBACK_KEYS
             else self.ACTION_FEEDBACK_DEFAULT])
         week_start = tk.StringVar(value="Sonntag" if self.settings.get("week_start") == "sunday" else "Montag")
+        lang_names = glide_i18n.get_language_display_names()
+        lang_keys = {name: code for code, name in lang_names.items()}
+        current_lang = self.settings.get("language", "system")
+        language_var = tk.StringVar(value=lang_names.get(current_lang, lang_names["system"]))
         # eine Auswahl statt dreier. Der Dialog führt den
         # Anzeigenamen, gespeichert wird der Schlüssel.
         design_namen = {key: self.DESIGNS[key]["name"] for key in self.DESIGN_ORDER}
@@ -31584,6 +31593,13 @@ class ListApp:
                          name="setting_design_auto", bg=self.theme["bg"], fg=self.theme["text"],
                          activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                          selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
+        self._make_field_label(appearance, glide_i18n.t("settings.language", "Sprache")).pack(
+            anchor="w", pady=(glide_design.SPACING[8], self.FIELD_LABEL_GAP)
+        )
+        lang_frame, _lang_button = self._make_option_menu(
+            appearance, language_var, [lang_names[code] for code in ("system", "de", "en")]
+        )
+        lang_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
 
         def design_hinweis_nachziehen(*_args):
             schluessel = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
@@ -31771,6 +31787,8 @@ class ListApp:
             previous = dict(self.settings)
             previous_theme = self.theme_name
             previous_design = self.design_name()
+            previous_lang = self.settings.get("language", "system")
+            chosen_lang_code = lang_keys.get(language_var.get(), "system")
             week_value = "sunday" if week_start.get() == "Sonntag" else "monday"
             startup_value = next((key for key, label in startup_labels.items() if label == startup.get()), "last")
             startliste_value = listen_namen.get(startliste.get(), "") if startup_value == "list" else (
@@ -31800,7 +31818,9 @@ class ListApp:
                                  week_start=week_value,
                                  ui_font_size=font_size.get(), ui_font_family=glide_fonts.style_for(font_family.get()).family,
                                  ui_font_weight=font_weight.get(),
+                                 language=chosen_lang_code,
                                  )
+            glide_i18n.set_language(chosen_lang_code)
             gewaehlt = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
             if hell_dunkel.get():
                 paar = glide_appearance.pair_for(gewaehlt, self.DESIGNS)
@@ -31816,8 +31836,11 @@ class ListApp:
                 self.settings = previous
                 self.theme_name = previous_theme
                 self.set_design(previous_design, apply_now=False)
+                glide_i18n.set_language(previous_lang)
                 return "break"
             dialog.destroy()
+            if chosen_lang_code != previous_lang:
+                self.create_menubar()
             self._ui_font_family = None
             self._font_families = None
             self._header_cap_font = None
@@ -38552,7 +38575,7 @@ class ListApp:
             # Labels, Vorlagen, Papierkorb. „Verspätet“ bleibt erhalten und
             # steht direkt hinter der Ansicht, deren Teilmenge es ist.
             self.system_listbox.insert("", "end", iid=self.HOME_ROW_ID,
-                text=self.sidebar_display_title(("view", self.HOME_VIEW), "Startseite"),
+                text=self.sidebar_display_title(("view", self.HOME_VIEW), glide_i18n.t("sidebar.home", "Startseite")),
                 values=(self.sidebar_row_icon(("view", self.HOME_VIEW)), ""), tags=("system",))
             self.sidebar_rows.append(("view", self.HOME_VIEW))
             self.sidebar_iid_to_row[self.HOME_ROW_ID] = ("view", self.HOME_VIEW)
@@ -38565,7 +38588,7 @@ class ListApp:
                 iid=self.PLAN_DAY_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.PLAN_DAY_VIEW)), f"({self.count_today_view()})"),
                 text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), "Heute"),
+                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), glide_i18n.t("sidebar.today", "Heute")),
                     self.count_today_view(),
                     tree=self.system_listbox,
                 ),
@@ -38587,7 +38610,7 @@ class ListApp:
                 count = self.list_item_count(inbox)
                 self.system_listbox.insert(
                     "", "end", iid=iid,
-                    text=self.sidebar_row_text("Eingang", count, tree=self.system_listbox),
+                    text=self.sidebar_row_text(glide_i18n.t("sidebar.inbox", "Eingang"), count, tree=self.system_listbox),
                     values=(self.sidebar_row_icon(row), f"({count})"), tags=("system",))
                 self.sidebar_rows.append(row)
                 self.sidebar_iid_to_row[iid] = row
@@ -38607,7 +38630,7 @@ class ListApp:
                 "end",
                 iid=self.LABELS_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.LABELS_VIEW)), f"({self.count_labelled_items()})"),                text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.LABELS_VIEW), "Labels"),
+                    self.sidebar_display_title(("view", self.LABELS_VIEW), glide_i18n.t("sidebar.labels", "Labels")),
                     self.count_labelled_items(),
                     tree=self.system_listbox,
                 ),
@@ -38620,7 +38643,7 @@ class ListApp:
                 "", "end", iid=self.TEMPLATE_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.TEMPLATE_VIEW)), f"({len(getattr(self, 'templates', []))})"),
                 text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.TEMPLATE_VIEW), "Vorlagen"),
+                    self.sidebar_display_title(("view", self.TEMPLATE_VIEW), glide_i18n.t("sidebar.templates", "Vorlagen")),
                     len(getattr(self, "templates", [])), tree=self.system_listbox,
                 ), tags=("system",),
             )
@@ -38636,7 +38659,7 @@ class ListApp:
                 "end",
                 iid=self.TRASH_ROW_ID,
                 values=(self.sidebar_row_icon(("view", "trash")), f"({len(self.trash)})"),                text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", "trash"), "Papierkorb"),
+                    self.sidebar_display_title(("view", "trash"), glide_i18n.t("sidebar.trash", "Papierkorb")),
                     len(self.trash),
                     tree=self.system_listbox,
                 ),
@@ -68446,21 +68469,21 @@ Labels, Termine und Metadaten."""
         """
         loeschen = "Rückschritt" if IS_MACOS else "Entf"
         return (
-            ("Datei", (
-                ("Neu anlegen", (
-                    ("Schnellerfassung …", self.show_quick_capture, self.accel("Alt", "N")),
+            (glide_i18n.t("menu.file", "Datei"), (
+                (glide_i18n.t("menu.file.new", "Neu anlegen"), (
+                    (glide_i18n.t("menu.file.quick_capture", "Schnellerfassung …"), self.show_quick_capture, self.accel("Alt", "N")),
                     # Seit 3.33.20 (U04) ohne Dauerknopf neben der Eingabezeile;
                     # in der Zeile selbst führt Umschalt+Enter hierher.
-                    ("Neuer Punkt mit allen Angaben …", self.add_item_advanced),
-                    ("Neue Liste", self.create_new_list, self.accel("Shift", "N")),
-                    ("Neue Zeichnung", self.create_new_drawing),
-                    ("Neue Seite", self.create_new_page),
-                    ("Neue Galerie", self.create_new_gallery),
-                    ("Neuer Ordner", self.create_new_folder),
+                    (glide_i18n.t("menu.file.new_task_advanced", "Neuer Punkt mit allen Angaben …"), self.add_item_advanced),
+                    (glide_i18n.t("menu.file.new_list", "Neue Liste"), self.create_new_list, self.accel("Shift", "N")),
+                    (glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), self.create_new_drawing),
+                    (glide_i18n.t("menu.file.new_page", "Neue Seite"), self.create_new_page),
+                    (glide_i18n.t("menu.file.new_gallery", "Neue Galerie"), self.create_new_gallery),
+                    (glide_i18n.t("menu.file.new_folder", "Neuer Ordner"), self.create_new_folder),
                 )),
                 None,
-                ("Importieren", (
-                    ("TXT importieren …", self.import_from_txt, self.accel("I")),
+                (glide_i18n.t("menu.file.import", "Importieren"), (
+                    (glide_i18n.t("menu.file.import.txt", "TXT importieren …"), self.import_from_txt, self.accel("I")),
                     ("TXT als neue Liste(n) …", self.import_txt_as_new_lists),
                     ("CSV importieren …", self.show_csv_import_dialog),
                     ("Kalenderdatei (ICS) importieren …", self.show_ics_import_dialog),
@@ -68470,13 +68493,13 @@ Labels, Termine und Metadaten."""
                     ("Seite aus Zwischenablage", self.new_page_from_clipboard),
                     ("Glide-Seiten importieren …", self.import_glide_pages),
                 )),
-                ("Exportieren", (
-                    ("Als TXT …", self.export_as_txt, self.accel("E")),
-                    ("Als Markdown …", self.export_as_markdown),
+                (glide_i18n.t("menu.file.export", "Exportieren"), (
+                    (glide_i18n.t("menu.file.export.txt", "Als TXT …"), self.export_as_txt, self.accel("E")),
+                    (glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), self.export_as_markdown),
                     ("Alles als Markdown-Ordner …", self.export_all_markdown),
-                    ("Als CSV …", self.export_as_csv),
+                    (glide_i18n.t("menu.file.export.csv", "Als CSV …"), self.export_as_csv),
                     ("Als Glide-Seite …", self.export_glide_pages),
-                    ("Pinnwand als JSON Canvas (.canvas) …", self.export_board_json_canvas),
+                    (glide_i18n.t("menu.file.export.board_canvas", "Pinnwand als JSON Canvas (.canvas) …"), self.export_board_json_canvas),
                     None,
                     ("Kalenderdatei (ICS) …", self.show_calendar_export_dialog),
                     ("Drucken und PDF …", self.show_print_dialog, self.accel("P")),
@@ -68491,7 +68514,7 @@ Labels, Termine und Metadaten."""
                     ("Austauschformat anzeigen …", self.show_exchange_spec_dialog),
                 )),
                 None,
-                ("Sicherung", (
+                (glide_i18n.t("menu.file.backup", "Sicherung"), (
                     ("Speicherstatus …", self.show_storage_status),
                     ("Sicherungsübersicht …", self.show_backup_catalog),
                     None,
@@ -68518,16 +68541,16 @@ Labels, Termine und Metadaten."""
                     ("Standardordner benutzen", self.use_default_data_folder),
                 )),
                 None,
-                ("Beenden", self.on_close, self.accel("Q")),
+                (glide_i18n.t("menu.file.quit", "Beenden"), self.on_close, self.accel("Q")),
             )),
-            ("Bearbeiten", (
-                ("Rückgängig", self.undo_last_change, self.accel("Z")),
-                ("Wiederholen", self.redo_last_change, self.redo_accel()),
+            (glide_i18n.t("menu.edit", "Bearbeiten"), (
+                (glide_i18n.t("menu.edit.undo", "Rückgängig"), self.undo_last_change, self.accel("Z")),
+                (glide_i18n.t("menu.edit.redo", "Wiederholen"), self.redo_last_change, self.redo_accel()),
                 None,
                 ("Zwischenablage", (
-                    ("Kopieren", self.copy_selected_to_clipboard, self.accel("C")),
-                    ("Einfügen", self.paste_items_from_clipboard, self.accel("V")),
-                    ("Alle auswählen", self.select_all_items, self.accel("A")),
+                    (glide_i18n.t("menu.edit.copy", "Kopieren"), self.copy_selected_to_clipboard, self.accel("C")),
+                    (glide_i18n.t("menu.edit.paste", "Einfügen"), self.paste_items_from_clipboard, self.accel("V")),
+                    (glide_i18n.t("menu.edit.select_all", "Alle auswählen"), self.select_all_items, self.accel("A")),
                 )),
                 None,
                 ("Aufgabendetails …", self.edit_item, "F2"),
@@ -68547,23 +68570,23 @@ Labels, Termine und Metadaten."""
                     ("In Aufgabe zurückwandeln", lambda: self.convert_selected_kind(self.ITEM_KIND_TASK), "", 'convert_selected_kind.task'),
                     ("Gruppe auflösen", self.dissolve_selected_group),
                     None,
-                    ("Duplizieren", self.duplicate_selected_items),
+                    (glide_i18n.t("menu.edit.duplicate", "Duplizieren"), self.duplicate_selected_items),
                     ("In Liste verschieben …", self.move_selected_to_list_dialog),
                 )),
-                ("Löschen", self.delete_item, loeschen),
+                (glide_i18n.t("menu.edit.delete", "Löschen"), self.delete_item, loeschen),
                 ("Erledigte Aufgaben löschen", lambda: self.remove_done_items(), "", 'remove_done_items'),
                 ("Papierkorb leeren", self.empty_trash),
                 None,
-                ("Einstellungen …", self.show_settings_dialog),
+                (glide_i18n.t("menu.file.settings", "Einstellungen …"), self.show_settings_dialog),
             )),
-            ("Ansicht", (
-                ("Kompaktmodus", self.toggle_compact_mode, self.accel("Shift", "K")),
+            (glide_i18n.t("menu.view", "Ansicht"), (
+                (glide_i18n.t("menu.view.compact_mode", "Kompaktmodus"), self.toggle_compact_mode, self.accel("Shift", "K")),
                 None,
                 ("Ansichten", (
                     ("Seite, Punkt oder Aktion suchen …", self.show_quick_open, self.accel("O")),
                     None,
-                    ("Startseite", self.set_home_view),
-                    ("Heute", self.set_today_view),
+                    (glide_i18n.t("sidebar.home", "Startseite"), self.set_home_view),
+                    (glide_i18n.t("sidebar.today", "Heute"), self.set_today_view),
                     ("Demnächst", self.set_in_progress_view),
                     ("Nächste Aufgabe", self.open_next_task),
                     ("Tagesbeginn …", self.start_day_review),
@@ -68588,12 +68611,12 @@ Labels, Termine und Metadaten."""
                     # „Verspätet“ und der Eingang
                     # haben keine eigene Seitenleistenzeile mehr. Eine Ansicht
                     # ohne Weg dorthin gibt es nicht.
-                    ("Verspätet", self.set_overdue_view),
+                    (glide_i18n.t("menu.view.overdue", "Verspätet"), self.set_overdue_view),
                     ("Eingang öffnen", self.open_inbox_list),
                     None,
-                    ("Vorlagen", self.set_template_view),
+                    (glide_i18n.t("sidebar.templates", "Vorlagen"), self.set_template_view),
                     ("Kalender …", self.open_calendar_view, self.accel("K")),
-                    ("Papierkorb", self.set_trash_view),
+                    (glide_i18n.t("sidebar.trash", "Papierkorb"), self.set_trash_view),
                 )),
                 ("Heute", (
                     ("Heute: Tag zurück", self.plan_day_backward),
@@ -68659,16 +68682,22 @@ Labels, Termine und Metadaten."""
                 ("Verweise und Rückverweise", self.show_object_references, None),
                 ("Fundorte anzeigen …", self.show_usage_locations_dialog),
             )),
-            ("Hilfe", (
-                ("Handbuch …", self.show_manual_dialog, "F1"),
-                ("Tastenkürzel anzeigen", self.show_shortcuts_dialog),
+            (glide_i18n.t("menu.help", "Hilfe"), (
+                (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
+                (glide_i18n.t("menu.help.shortcuts", "Tastenkürzel anzeigen"), self.show_shortcuts_dialog),
                 None,
-                ("Fehlerprotokoll öffnen", self.open_error_log),
-                (f"Über {APP_NAME}", self.show_about_dialog),
+                (glide_i18n.t("menu.help.error_log", "Fehlerprotokoll öffnen"), self.open_error_log),
+                (glide_i18n.t("menu.help.about", f"Über {APP_NAME}", app_name=APP_NAME), self.show_about_dialog),
             )),
         )
 
     def create_menubar(self):
+        if getattr(self, "custom_menubar", None) is not None:
+            try:
+                self.custom_menubar.destroy()
+            except Exception:
+                pass
+            self.custom_menubar = None
         menubar = tk.Menu(self.root)
         self.menus = [menubar]
         self.action_menus = []
@@ -68686,7 +68715,8 @@ Labels, Termine und Metadaten."""
             self.custom_menubar.pack(side="right", padx=(8, 0))
             self.title_label.pack_forget()
             self.title_label.pack(side="left", anchor="w")
-            kuerzel = {"Datei": "d", "Bearbeiten": "b", "Ansicht": "a", "Hilfe": "h"}
+            kuerzel = {"Datei": "d", "File": "f", "Bearbeiten": "b", "Edit": "e",
+                       "Ansicht": "a", "View": "v", "Hilfe": "h", "Help": "h"}
             menu_specs = [(titel, menu, kuerzel.get(titel, titel[:1].lower()))
                           for titel, menu in self.action_menus]
             for label, menu, mnemonic in menu_specs:

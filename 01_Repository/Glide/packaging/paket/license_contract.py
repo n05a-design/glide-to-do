@@ -74,7 +74,7 @@ def resource_components(names):
         path = PurePosixPath(name)
         if path.as_posix() != name or path.is_absolute() or '..' in path.parts or '\\' in name or name in result:
             raise ValueError('Ungültiger oder doppelter Ressourcenpfad: ' + name)
-        if path.parts[:2] in (('resources', 'logo'), ('resources', 'templates')):
+        if path.parts[:2] in (('resources', 'logo'), ('resources', 'templates'), ('resources', 'locales')):
             components = ['Glide']
         elif name == 'resources/exchange_recipes.json':
             # Eigene Auftragsvorlagen für lokale KI-Aufträge (FP-06, seit 3.44.0).
