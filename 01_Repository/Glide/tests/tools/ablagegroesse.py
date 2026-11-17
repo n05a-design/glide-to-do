@@ -38,6 +38,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/glide"))
+from release_notes import release_rank  # noqa: E402  Tk-frei; eine Quelle für den Versionsschnitt
+
 ABLAGE = Path(__file__).resolve().parents[4]
 QUELLBAUM = "01_Repository/Glide/"
 DATENFORMATE = {".glidebackup", ".glideapp", ".glidetemplates"}
@@ -87,11 +90,15 @@ def pfadversion(pfad):
 
 
 def neueste_versionen(eintraege, aktuell=None, anzahl=ARCHIV_VERSIONEN):
-    """Die `anzahl` neuesten Versionen aus versionierten Pfaden und `aktuell`."""
+    """Die `anzahl` neuesten Versionen aus versionierten Pfaden und `aktuell`.
+
+    „Neu“ meint die tatsächliche Release-Abfolge (`release_rank`): Die
+    Entwicklungsreihe bis 3.70.0 liegt vor dem offiziellen Release 1.0.0.
+    """
     versionen = {pfadversion(pfad) for pfad, _ in eintraege} - {None}
     if aktuell:
         versionen.add(aktuell)
-    return set(sorted(versionen, key=als_tupel)[-anzahl:])
+    return set(sorted(versionen, key=release_rank)[-anzahl:])
 
 
 def befunde(eintraege, aktuell=None):
