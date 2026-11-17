@@ -474,7 +474,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         # ================================================================
         assert app.EXCHANGE_FORMAT_VERSION == 2
         faehigkeiten = app.exchange_capabilities()
-        assert faehigkeiten["checklists"] == 1 and faehigkeiten["attachments"] == 0
+        assert faehigkeiten["checklists"] == 1 and faehigkeiten["attachments"] == 1
         quelle_item = app.new_item("Hauptpunkt", description="Kontext", due=heute,
                                    importance=3)
         quelle_item["checklist"] = app.normalize_checklist(["A", "B"])
