@@ -6,7 +6,7 @@
   "datenformat": 26,
   "austauschformat": 2,
   "faehigkeiten": [
-    "animation_duration_ms", "animations", "attachments", "checklists", "descriptions", "due_dates",
+    "animation_duration_ms", "animations", "attachment_packages", "attachments", "checklists", "descriptions", "due_dates",
     "due_times", "estimated_minutes", "folder_kinds", "folders", "item_types", "labels", "list_descriptions",
     "list_kinds", "markdown_pages", "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
     "patch_mode", "planned_date", "reminders", "repeat"
@@ -16,7 +16,7 @@
     "note": {"status": "ja", "weg": "austausch", "hinweis": "Text ohne Formatierung; formatiert als Seite"},
     "page": {"status": "ja", "weg": "seite", "hinweis": "Markdown über „Seite aus Datei …“"},
     "drawing": {"status": "ja", "weg": "austausch", "hinweis": "nur über das Hilfsskript kodieren"},
-    "gallery": {"status": "offen", "paket": "K4", "hinweis": "braucht Bilder als Anhänge"}
+    "gallery": {"status": "ja", "weg": "austausch", "hinweis": "Bilder als Anhänge im Austauschpaket"}
   },
   "ordnerarten": {
     "standard": {"status": "ja", "weg": "austausch"},
@@ -51,7 +51,7 @@
       "links": {"status": "offen", "paket": "K3", "austausch": "links", "hinweis": "Verknüpft mit"},
       "blocked_by": {"status": "offen", "paket": "K3", "austausch": "blocked_by", "hinweis": "Wartet auf"},
       "references": {"status": "offen", "paket": "K3", "austausch": "references"},
-      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
+      "attachments": {"status": "ja", "weg": "austausch", "austausch": "attachments"},
       "done_at": {"status": "intern", "hinweis": "setzt Glide beim Abhaken"},
       "time_spent_minutes": {"status": "intern", "hinweis": "Zeiterfassung in Glide"}
     },
@@ -74,8 +74,8 @@
       "references": {"status": "offen", "paket": "K3", "austausch": "references"},
       "live_lists": {"status": "offen", "paket": "K3", "austausch": "live_lists"},
       "recurring_checklist": {"status": "offen", "paket": "K3", "austausch": "recurring_checklist"},
-      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
-      "cover": {"status": "offen", "paket": "K4", "austausch": "cover", "hinweis": "Titelbild"},
+      "attachments": {"status": "ja", "weg": "austausch", "austausch": "attachments"},
+      "cover": {"status": "ja", "weg": "austausch", "austausch": "cover", "hinweis": "Titelbild"},
       "drawing_reference": {"status": "offen", "paket": "K4", "austausch": "drawing_reference",
                             "hinweis": "Referenzbild als Anhang"},
       "archived": {"status": "intern"},
@@ -94,7 +94,7 @@
       "folder_kind": {"status": "ja", "weg": "austausch", "austausch": "folder_kind"},
       "color": {"status": "offen", "paket": "K3", "austausch": "color"},
       "icon": {"status": "offen", "paket": "K3", "austausch": "icon"},
-      "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},
+      "attachments": {"status": "ja", "weg": "austausch", "austausch": "attachments"},
       "archived": {"status": "intern"},
       "archived_at": {"status": "intern"},
       "notion_source_key": {"status": "intern"}

@@ -1,5 +1,26 @@
 # QA-Bericht – Glide 3.69.0
 
+## Agenten-Skill `glide-to-do`, Pakete K4 & K5 – Bilder/Anhänge & Verteilung (17.11.2026)
+
+Stand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pakete K4 & K5) auf Branch `claude/skill-paket-k4-k5-wa61`; Glide 3.69.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.39. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+
+| Gegenstand | Nachweis |
+|---|---|
+| Paket K4: Container-Erkennung & Zip-Slip-Schutz | `read_exchange_file` und `inspect_exchange_archive` erkennen ZIP-Container (`.glideexchange` und `.zip`), weisen unsichere Pfadkomponenten (`..`, absolute Pfade), überdimensionierte Archive und unzulässige Ordnerstrukturen strikt ab. |
+| Paket K4: Dateianhänge für Aufgaben, Listen, Ordner | `loese_anhaenge` importiert Dateien aus dem Container physisch in `ATTACHMENTS_DIR` mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`). Stellt synthetische Referenzen für künstliche Testumgebungen bereit. |
+| Paket K4: Galerielisten & Seiten-Cover | `list_kind: "gallery"` wird vollständig unterstützt. Seiten-Cover (`cover`) bindet an existierende Anhangs-IDs oder übernimmt Bilddateien direkt als Anhang. |
+| Paket K4: Markdown-Bildauflösung | Lokale Bildverweise in Notizen (Markdown-Bildsyntax) werden im ZIP-Paket gesucht, als physische Anhänge importiert und in `rich_note` eingebettet. |
+| Paket K4: Paketausgabe (`write_exchange_package`) | `write_exchange_package` bündelt `exchange.json` mit allen referenzierten Mediendateien unter `attachments/` in ein valides ZIP-Archiv. |
+| Paket K4: Rollback-Bereinigung | Schlägt der Import fehl, entfernt `apply_exchange_payload` alle neu in `ATTACHMENTS_DIR` geschriebenen Dateien rückstandslos, bevor die Vorsicherung wiederhergestellt wird. |
+| Paket K5: Metadaten & Verteilung | `MANIFEST.json` listet alle 18 Skill-Dateien mit Pfaden, Größen und SHA-256-Hashes (Format 2, Schema 26, Version 1.4). `VERTEILUNG.md` dokumentiert die Anbindung an Claude Desktop, Cursor, Gemini CLI / Antigravity, Web-LLMs und App-Export. |
+| Paket K5: In-App Export & Release-Workflow | `export_agent_skill` unter Datei › Datenaustausch exportiert den Skill als ZIP-Archiv. `.github/workflows/release.yml` packt `glide-to-do-skill-v$VERSION.zip` samt `.sha256` in die Release-Assets. |
+| Fähigkeiten `exchange_capabilities()` | Additiv erweitert um `"attachments": 1` und `"attachment_packages": 1`. Aufgabenformat 26 und Austauschformat 2 bleiben abwärtskompatibel unverändert. |
+| Neuer Integrationstest T328 | `tests/integration/test_austausch_k4.py`: 9/9 Teilprüfungen isoliert mit künstlichem Datenordner bestanden (Exitcode 0). |
+| Vollprüfungs-Integrationssuite T325 | `test_ki_ausgabe_darstellung.py`: Beispiele, Vollprobe, Grenzfälle und Fehlerabfang bestanden (Exitcode 0). |
+| Werkzeugtests T321 & T324 | `test_agenten_skill.py`: 18/18 Tests OK (inkl. Manifest-, Verteilungs- und Exporttests). `test_ki_ausgabe.py`: 6/6 Tests OK. |
+| Systeminventar V1.39 | `test_glide_system.py`: 5/5 Tests OK; `GLIDE_SYSTEM_VERSION` 1.39, 328 Test-/Werkzeugdateien. |
+| CI-Grundstufe lokal | `ci_grundstufe.py`: 19/19 Schritte bestanden (Exitcode 0). `standpruefung.py`: 84 Dokumente, 0 Befunde. `abgleich_07.py`: 0 Abweichungen. |
+
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
 Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 3.69.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.

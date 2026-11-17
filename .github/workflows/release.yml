@@ -133,7 +133,8 @@ jobs:
           (cd "$RUNNER_TEMP/mac" && shasum -a 256 -c "Glide-$VERSION-macos-arm64.tar.gz.sha256" "Glide-$VERSION-macos-arm64.dmg.sha256")
           cp "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.dmg" "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.tar.gz" "$aus/"
           (cd "$RUNNER_TEMP/win" && zip -q -r -X -9 "$aus/Glide-$VERSION-windows-x64.zip" Glide)
-          (cd "$aus" && for datei in Glide-*; do sha256sum "$datei" > "$datei.sha256"; done)
+          (cd 01_Repository/Glide/skills && zip -q -r -X -9 "$aus/glide-to-do-skill-v$VERSION.zip" glide-to-do)
+          (cd "$aus" && for datei in Glide-* glide-to-do-*; do [ -f "$datei" ] && sha256sum "$datei" > "$datei.sha256"; done)
           exe=$(sha256sum "$RUNNER_TEMP/win/Glide/Glide.exe" | cut -d' ' -f1)
           echo "EXE_SHA256=$exe" >> "$GITHUB_ENV"
           ls -l "$aus"
@@ -152,8 +153,9 @@ jobs:
             printf '## Herunterladen und starten\n\n'
             printf '| System | Datei | Start |\n|---|---|---|\n'
             printf '| Windows 10/11 (x64) | `Glide-%s-windows-x64.zip` | Entpacken, `Glide\\Glide.exe` starten. SmartScreen warnt, weil das Paket nicht signiert ist: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
-            printf '| macOS (Apple Silicon) | `Glide-%s-macos-arm64.dmg` | Öffnen, Glide in „Programme“ ziehen. Beim ersten Start blockiert macOS die nicht notarisierte App: „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“. |\n\n' "$VERSION"
-            printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
+            printf '| macOS (Apple Silicon) | `Glide-%s-macos-arm64.dmg` | Öffnen, Glide in „Programme“ ziehen. Beim ersten Start blockiert macOS die nicht notarisierte App: „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“. |\n' "$VERSION"
+            printf '| Agenten-Skill | `glide-to-do-skill-v%s.zip` | Entpacken und als Skill in Claude Desktop, Cursor, Gemini CLI / Antigravity oder Web-LLMs einbinden (Details siehe `VERTEILUNG.md`). |\n\n' "$VERSION"
+            printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Der Agenten-Skill `glide-to-do` ermöglicht die nahtlose Anbindung externer KI-Assistenten. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
             printf 'Glide verbindet Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert. Prüfstand und Grenzen: [QA-Bericht](https://github.com/%s/blob/%s/01_Repository/Glide/docs/07_QA_BERICHT.md).\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '**Lizenz:** Glides Projektcode steht unter MPL-2.0, einschließlich kommerzieller Nutzung nach deren Bedingungen. Es gelten die [Lizenzhinweise](https://github.com/%s/blob/%s/01_Repository/Glide/LICENSE.md), die jedem Paket als `Glide-Lizenzstatus.md` zusammen mit `Glide-MPL-2.0.txt` und `Glide-Quellcode.txt` beiliegen.\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '## Neu in %s\n\n' "$VERSION"

@@ -2,7 +2,7 @@
 
 **Dokumentationspflege:** Führende Quellen und Änderungsfolgen stehen in der [zentralen Pflegematrix](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). Der [Abgleich vom 13.11.2026](#2187-dokumentationsbezüge-und-konsolidierung-13112026) verknüpft insbesondere Roadmap, Systembestand, Architektur und Shell-Zielbild.
 
-**Glide-Agenten-Skill `glide-to-do` 16.11.2026 (WA-61):** [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) Recherche und Aufwand; Inhaberwahl D91 (K1, [§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)); Inhaberwahl D92 (Ausbau 3.66.0, zentrierte Kopplung, `abdeckung.json`, `ki_ausgabe.py`, [§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)). App auf 3.66.0 gehoben.
+**Glide-Agenten-Skill `glide-to-do` 16./17.11.2026 (WA-61):** [§21.102](#21102-glide-agenten-skill-glide-to-do-recherche-und-pflegeeinbindung-16112026) Recherche und Aufwand; Inhaberwahl D91 (K1, [§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)); Inhaberwahl D92 (Ausbau 3.66.0, zentrierte Kopplung, `abdeckung.json`, `ki_ausgabe.py`, [§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)); K2 Austausch-Befunde ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)); K3 Erweiterte Fähigkeiten ([§21.109](#21109-agenten-skill-paket-k3-erweiterte-austauschfähigkeiten-nach-e-k5-option-a--wa-61-17112026)); K4 & K5 Bilder/Anhänge und Verteilung ([§21.110](#21110-agenten-skill-pakete-k4--k5-bilderanhänge-im-austausch--verteilung-17112026)). Meilenstein 1.0 Etappe 1 abgeschlossen.
 
 **GitHub-Projektseite und Showcase 06.11.2026:** [§21.71](#2171-github-projektseite-und-showcase-3505-06112026) – neue README-Projektseite, Aufnahmen, Issue-Formulare, Beschreibung und Topics; Showcase zeigt die Funktionen bis 3.50.5.
 
@@ -69,7 +69,7 @@ Offene Arbeit auf einen Blick, Stand 16.11.2026 (3.69.0). Die Zeilen verweisen a
 |---|---|---|---|---|
 | 3.69.0 | Shell-Paket 5 `desktop_adapter.py` (M099, T326), Dokumentationskonsolidierung, Headless-CI-Absicherung | ◐ in `main` (PR #118, Nachpflege PR #119); Windows-Nachweis auf `d92dece9` und vollständiger Mac-Volllauf offen | Windows-Ergebnis lesen, Mac-Volllauf | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.69: Bedienelemente und Menüs nach Paket 4/5, Fokusrückgabe D87, Entlastungsdialog mit Gründen, Datenordnermeldung, Suche nach zerlegten Umlauten, Kompaktkopf 28 px, Anzeigeknopf, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
-| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)), K3 Erweiterte Austauschfähigkeiten ([§21.109](#21109-agenten-skill-paket-k3-erweiterte-austauschfähigkeiten-nach-e-k5-option-a--wa-61-17112026)) | K4 Bilder und Anhänge oder K5 Verteilung | je Paket |
+| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ✅ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)), K3 Erweiterte Austauschfähigkeiten ([§21.109](#21109-agenten-skill-paket-k3-erweiterte-austauschfähigkeiten-nach-e-k5-option-a--wa-61-17112026)), K4/K5 Bilder/Anhänge & Verteilung ([§21.110](#21110-agenten-skill-pakete-k4--k5-bilderanhänge-im-austausch--verteilung-17112026)) | abgeschlossen (Etappe 1 Meilenstein 1.0) | Inhaber |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
 | Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)); WA-50 als Modulbudget in T322/analyse_statisch; Paket 4 in 3.67.0 ([§21.105](#21105-glide-3670-shell-paket-4--erscheinungsbild-und-bedienelemente-custom_controlspy-16112026)); Paket 5 in 3.68.0 ([§21.106](#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026)) | Bündelung `glide_shell` vor Paket 6 (Demonstrationshost) | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
@@ -3091,5 +3091,64 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - `test_glide_system.py`: 5/5 Tests OK.
 - `standpruefung.py`: 0 Befunde (alle 84 Dokumente synchron).
 - `abgleich_07.py`: 0 Abweichungen.
+
+### 21.110 Agenten-Skill: Pakete K4 & K5 (Bilder/Anhänge im Austausch & Verteilung) (17.11.2026)
+
+**A – Auftrag:** Umsetzung von Etappe 1 aus dem Meilenstein-Plan Release 1.0 (WA-61 Pakete K4 & K5):
+1. **Paket K4 (Bilder & Anhänge im Austausch):**
+   - ZIP-Container-Erkennung (`.glideexchange` und `.zip`) mit strenger Sicherheitsprüfung gegen Zip-Slip-Angriffe (`inspect_exchange_archive`).
+   - Import von Anhängen für Ordner (`attachments`), Listen (`attachments`) und Aufgaben (`attachments`). Physische Speicherung in `ATTACHMENTS_DIR` mit Prüfsummen und automatischer Namenskonfliktbereinigung (`store_attachment`).
+   - Unterstützung für Galerielisten (`list_kind: "gallery"`), Seiten-Cover (`cover`) mit Bindung an Anhänge oder Neuerstellung.
+   - Auflösung eingebetteter lokaler Markdown-Bilder in Notizen und automatisches Hinzufügen als Aufgabenanhänge.
+   - Export im Austauschformat mit Paketausgabe (`write_exchange_package`) als ZIP-Archiv inklusive aller referenzierten Mediendateien.
+   - Atomare Rollback-Bereinigung: Im Fehlerfall werden neu geschriebene Anhangsdateien vor dem Wiederherstellen der Vorsicherung physisch gelöscht.
+2. **Paket K5 (Verteilung & Ökosystem):**
+   - Maschinenlesbares `MANIFEST.json` mit SHA-256-Prüfsummen und Pfadangaben aller 18 Skill-Dateien (Format 2, Schema 26, Skill-Version 1.4).
+   - Umfassende Dokumentation `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI / Antigravity, ChatGPT/Web-LLMs sowie In-App-Export.
+   - App-Menüfunktion `export_agent_skill` unter „Datei › Datenaustausch › KI-Skill exportieren …“.
+   - GitHub Actions Release-Workflow (`.github/workflows/release.yml`): Automatischer Paketbau von `glide-to-do-skill-v$VERSION.zip` mit Prüfsummenbildung und Ausweisung in den Versionshinweisen.
+3. **Formate:** Aufgabenformat **26** und Austauschformat **2** unverändert; Fähigkeiten `"attachments": 1` und `"attachment_packages": 1` additiv in `exchange_capabilities`.
+
+**B – Umsetzung:**
+1. **App-Code (`app.pyw` und `07_Python-Versionen/`):**
+   - `EXCHANGE_ITEM_FIELDS` und `EXCHANGE_FOLDER_FIELDS` um `"attachments"` erweitert; `EXCHANGE_LIST_FIELDS` um `"attachments"` und `"cover"`.
+   - `exchange_capabilities()`: `"attachments": 1`, `"attachment_packages": 1`.
+   - `inspect_exchange_archive`: Strenge Pfadvalidierung (Schutz vor Path Traversal / Zip-Slip), Größen- und Entpackungsbegrenzung.
+   - `extract_exchange_archive` & `write_exchange_package`: Sicheres Entpacken und Exportieren von `.glideexchange`/`.zip`-Paketen.
+   - `find_agent_skill_dir` & `export_agent_skill`: Exportiert den Skill als ZIP direkt aus der Desktop-App.
+   - `read_exchange_file`: Erkennt ZIP-Container automatisch und extrahiert `exchange.json`.
+   - `apply_exchange_payload`:
+     - Sichere Container-Bereitstellung in temporärem Ordner mit automatischer Bereinigung.
+     - `loese_anhaenge`: Importiert physische Anhänge nach `ATTACHMENTS_DIR` mit Duplikaterkennung und Rollback-Verfolgung.
+     - Seiten-Cover (`cover`) verknüpft mit Anhang-ID oder Dateiimport.
+     - Lokale Markdown-Bilderverweise in Notizen werden aufgelöst, als Anhang gesichert und aktualisiert.
+     - Rollback-Cleanup: Entfernt im Fehlerfall alle neu angelegten Dateien in `ATTACHMENTS_DIR`.
+   - `show_exchange_import_dialog`: Dateifilter um `*.zip` ergänzt; Übergabe der Container-Quelle.
+   - Menü: Neuer Eintrag `KI-Skill exportieren …` im Datei-Menü.
+   - Byte-identischer Lieferabgleich via `abgleich_07.py` (0 Abweichungen).
+2. **Skill `glide-to-do`:**
+   - `SKILL.md`: Version auf 1.4 angehoben; Abschnitte zu Anhängen, Galerien, Covers, ZIP-Containern und Verteilung ergänzt.
+   - `abdeckung.json`: `listenarten.gallery`, `punkt.attachments`, `liste.attachments`, `liste.cover`, `ordner.attachments` auf `"ja"` (`"weg": "austausch"`) umgestellt; neue Fähigkeit `attachment_packages` eingetragen.
+   - `references/austauschformat.md`: Alle neuen Felder, Galerielisten und Containerlimits dokumentiert.
+   - `scripts/glide_datei.py`: ZIP-Container-Erkennung, Dateiendung `.zip` und Anhangs-/Cover-Felder integriert.
+   - `MANIFEST.json` & `VERTEILUNG.md` neu erstellt.
+3. **Tests und Systemregister:**
+   - Neuer dedizierter Integrationstest T328 `01_Repository/Glide/tests/integration/test_austausch_k4.py`: 9/9 Prüfungen bestanden (Zip-Slip, Container-Import, Anhänge für Ordner/Aufgaben, Galerie, Seiten-Cover & Bildereinbettung, `write_exchange_package`, Rollback-Cleanup).
+   - `tests/tools/ki_ausgabe.py`: `attachments` und `cover` in `vergleiche_punkte` und `vergleiche_austausch` aufgenommen.
+   - `tests/tools/test_agenten_skill.py`: Neue Tests für `MANIFEST.json`, `VERTEILUNG.md` und `export_agent_skill` ergänzt (18/18 Tests OK).
+   - Glide-Systemregister (`src/glide/README.md`) auf **V1.39** gehoben (T328 registriert, 328 Test-/Werkzeugdateien).
+   - `.github/workflows/release.yml`: Skill-Asset `glide-to-do-skill-v$VERSION.zip` in den Release-Build integriert.
+
+**C – Prüfung:**
+- `ci_grundstufe.py`: 19/19 Prüfungen bestanden (Exitcode 0).
+- `test_austausch_k4.py` (T328): 9/9 Teilprüfungen bestanden (Exitcode 0).
+- `test_austausch_k3.py` (T327): 6/6 Teilprüfungen bestanden (Exitcode 0).
+- `test_agenten_skill.py` (T321): 18/18 Tests OK.
+- `test_ki_ausgabe.py` (T324): 6/6 Tests OK.
+- `test_ki_ausgabe_darstellung.py` (T325): Vollprüfung OK (Exitcode 0).
+- `test_glide_system.py`: 5/5 Tests OK.
+- `standpruefung.py`: 0 Befunde (alle 84 Dokumente synchron).
+- `abgleich_07.py`: 0 Abweichungen.
+
 
 

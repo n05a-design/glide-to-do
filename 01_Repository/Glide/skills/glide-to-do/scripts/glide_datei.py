@@ -30,6 +30,7 @@ import json
 import os
 import re
 import sys
+import zipfile
 
 GLIDE_VERSION = "3.69.0"
 FORMAT = "glide.exchange"
@@ -41,12 +42,12 @@ SUFFIX = ".glideexchange"
 ROOT_FIELDS = frozenset({"format", "format_version", "generator", "created_for", "mode",
                          "labels", "folders", "lists", "notes"})
 LABEL_FIELDS = frozenset({"key", "name", "color"})
-FOLDER_FIELDS = frozenset({"key", "title", "description", "parent", "labels", "folder_kind"})
+FOLDER_FIELDS = frozenset({"key", "title", "description", "parent", "labels", "folder_kind", "attachments"})
 LIST_FIELDS = frozenset({"key", "title", "description", "folder", "labels", "items", "list_kind",
-                         "rich_note", "markdown", "drawing", "animation"})
+                         "rich_note", "markdown", "drawing", "animation", "attachments", "cover"})
 ITEM_FIELDS = frozenset({"key", "type", "title", "text", "description", "done", "importance", "due",
                          "due_time", "planned_date", "estimated_minutes", "labels", "checklist",
-                         "children", "repeat", "reminder"})
+                         "children", "repeat", "reminder", "attachments"})
 ITEM_TYPES = ("task", "long", "group", "heading")
 STRUCTURAL_TYPES = ("group", "heading")
 LIST_KINDS = ("tasks", "note", "drawing", "page", "gallery")
@@ -688,12 +689,26 @@ def pruefe_datei(pfad: str, kontext: dict | None = None) -> Bericht:
     if groesse > MAX_BYTES:
         bericht.f(f"Die Datei ist größer als {MAX_BYTES // (1024 * 1024)} MB.")
         return bericht
-    try:
-        with open(pfad, "r", encoding="utf-8-sig") as datei:
-            text = datei.read()
-    except (OSError, UnicodeDecodeError) as fehler:
-        bericht.f(f"Die Datei ist kein lesbares UTF-8: {fehler}")
-        return bericht
+    if zipfile.is_zipfile(pfad):
+        try:
+            with zipfile.ZipFile(pfad, "r") as archive:
+                namelist = archive.namelist()
+                target_json = "exchange.json" if "exchange.json" in namelist else ("data.json" if "data.json" in namelist else None)
+                if not target_json:
+                    bericht.f("Im Austauschpaket fehlt exchange.json.")
+                    return bericht
+                with archive.open(target_json, "r") as f:
+                    text = f.read().decode("utf-8-sig")
+        except Exception as fehler:
+            bericht.f(f"Austauschpaket konnte nicht gelesen werden: {fehler}")
+            return bericht
+    else:
+        try:
+            with open(pfad, "r", encoding="utf-8-sig") as datei:
+                text = datei.read()
+        except (OSError, UnicodeDecodeError) as fehler:
+            bericht.f(f"Die Datei ist kein lesbares UTF-8: {fehler}")
+            return bericht
     if pfad.lower().endswith((".md", ".markdown", ".txt")):
         pruefe_markdown(bericht, text, os.path.dirname(os.path.abspath(pfad)))
         return bericht
@@ -724,7 +739,7 @@ def pruefe_datei(pfad: str, kontext: dict | None = None) -> Bericht:
         pruefe_create(bericht, nutzlast)
     else:
         bericht.f(f"mode {modus!r} unbekannt (create oder patch).")
-    if not pfad.lower().endswith((SUFFIX, ".json")):
+    if not pfad.lower().endswith((SUFFIX, ".json", ".zip")):
         bericht.h(f"Glide bietet im Importdialog die Endung {SUFFIX} an.")
     return bericht
 

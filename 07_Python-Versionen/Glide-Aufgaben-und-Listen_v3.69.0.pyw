@@ -61308,11 +61308,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     EXCHANGE_ITEM_FIELDS = {
         "key", "type", "title", "text", "description", "done", "importance",
         "due", "due_time", "planned_date", "estimated_minutes", "labels",
-        "checklist", "children", "repeat", "reminder",
+        "checklist", "children", "repeat", "reminder", "attachments",
     }
     EXCHANGE_LIST_FIELDS = {"key", "title", "description", "folder", "labels", "items", "list_kind", "rich_note",
-                            "markdown", "drawing", "animation"}
-    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels", "folder_kind"}
+                            "markdown", "drawing", "animation", "attachments", "cover"}
+    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels", "folder_kind", "attachments"}
     EXCHANGE_LABEL_FIELDS = {"key", "name", "color"}
     EXCHANGE_ROOT_FIELDS = {"format", "format_version", "generator", "created_for",
                             "mode", "labels", "folders", "lists", "notes"}
@@ -61345,8 +61345,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "animations": 1,
             "max_animation_frames": glide_animation.MAX_FRAMES,
             "animation_duration_ms": [glide_animation.MIN_DURATION_MS, glide_animation.MAX_DURATION_MS],
-            # Bewusst noch nicht: Anhänge kommen als Dateien, nicht als Text.
-            "attachments": 0,
+            # Anhänge und ZIP-Austauschpakete (Paket K4, WA-61)
+            "attachments": 1,
+            "attachment_packages": 1,
             "repeat": 1,
             "reminders": 1,
             # Stufe 2 (G24, 3.35.0): Änderungsvorschläge über ein Kontextpaket.
@@ -61416,6 +61417,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                      if kennung in label_keys]
         if etiketten:
             eintrag["labels"] = etiketten
+        if item.get("attachments"):
+            anhaenge = [
+                {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                 "mime": a.get("mime", "application/octet-stream")}
+                for a in item["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+            ]
+            if anhaenge:
+                eintrag["attachments"] = anhaenge
         kinder = item.get("children") or []
         if kinder and tiefe < self.MAX_EXCHANGE_DEPTH:
             eintrag["children"] = [self.exchange_item_payload(kind, label_keys, tiefe + 1)
@@ -61463,6 +61472,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ordner_etiketten = [label_keys[k] for k in wert["labels"] if k in label_keys]
                 if ordner_etiketten:
                     eintrag["labels"] = ordner_etiketten
+            if wert.get("attachments"):
+                anhaenge = [
+                    {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                     "mime": a.get("mime", "application/octet-stream")}
+                    for a in wert["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+                ]
+                if anhaenge:
+                    eintrag["attachments"] = anhaenge
             ordner_liste.append(eintrag)
         listen = []
         for index, eintrag in enumerate(quellen, 1):
@@ -61481,7 +61498,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 listen_etiketten = [label_keys[k] for k in eintrag["labels"] if k in label_keys]
                 if listen_etiketten:
                     darstellung["labels"] = listen_etiketten
-            if eintrag.get("list_kind") in (self.LIST_KIND_PAGE, self.LIST_KIND_NOTE) or eintrag.get("rich_note", {}).get("text"):
+            if eintrag.get("attachments"):
+                anhaenge = [
+                    {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                     "mime": a.get("mime", "application/octet-stream")}
+                    for a in eintrag["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+                ]
+                if anhaenge:
+                    darstellung["attachments"] = anhaenge
+            if eintrag.get("cover"):
+                cover = copy.deepcopy(eintrag["cover"])
+                if isinstance(cover, dict) and cover.get("kind") == "image":
+                    att_id = cover.get("attachment")
+                    att = next((a for a in eintrag.get("attachments") or [] if isinstance(a, dict) and a.get("id") == att_id), None)
+                    if att and (att.get("storage") or att.get("file")):
+                        cover["file"] = att.get("storage") or att.get("file")
+                darstellung["cover"] = cover
+            if self.is_gallery_list(eintrag):
+                darstellung["list_kind"] = self.LIST_KIND_GALLERY
+            elif eintrag.get("list_kind") in (self.LIST_KIND_PAGE, self.LIST_KIND_NOTE) or eintrag.get("rich_note", {}).get("text"):
                 darstellung["list_kind"] = eintrag.get("list_kind", "tasks")
                 norm_note = RichNoteEditor.normalize(eintrag.get("rich_note"))
                 darstellung["rich_note"] = norm_note
@@ -61726,7 +61761,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return nutzlast, bericht
 
     def read_exchange_file(self, path):
-        """Liest eine Austauschdatei mit Größenprüfung."""
+        """Liest eine Austauschdatei oder das Manifest eines Austauschpakets mit Größenprüfung."""
+        if not path or not os.path.isfile(path):
+            raise OSError("Die Austauschdatei ist nicht mehr vorhanden.")
+        if zipfile.is_zipfile(path):
+            with zipfile.ZipFile(path, "r") as archive:
+                payload_info, _attachments = self.inspect_exchange_archive(archive)
+                raw = self.read_zip_member_limited(archive, payload_info, self.MAX_EXCHANGE_BYTES)
+                return raw.decode("utf-8-sig")
         groesse = os.path.getsize(path)
         if groesse > self.MAX_EXCHANGE_BYTES:
             raise ValueError(
@@ -61734,6 +61776,173 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 f"höchstens {self.MAX_EXCHANGE_BYTES // (1024 * 1024)} MB.")
         with open(path, "r", encoding="utf-8-sig") as handle:
             return handle.read()
+
+    def inspect_exchange_archive(self, archive):
+        """Sicherheitsprüfung eines .glideexchange- oder .zip-Austauschpakets.
+
+        Prüft Member-Anzahl, Gesamtgröße, Kompression, Pfadvalidität (Schutz gegen
+        Zip-Slip / Path Traversal) und stellt sicher, dass exchange.json oder data.json
+        vorhanden ist und alle Anhänge unter attachments/ liegen.
+        """
+        infos = archive.infolist()
+        if len(infos) > self.MAX_BACKUP_MEMBERS:
+            raise ValueError("Das Austauschpaket enthält zu viele Dateien.")
+        seen_names = set()
+        attachment_infos = {}
+        payload_info = None
+        total_size = 0
+        for info in infos:
+            name = info.filename
+            canonical_key = name.casefold()
+            if canonical_key in seen_names:
+                raise ValueError("Das Austauschpaket enthält doppelte Dateinamen.")
+            seen_names.add(canonical_key)
+            if info.flag_bits & 0x1:
+                raise ValueError("Verschlüsselte Einträge werden nicht unterstützt.")
+            unix_mode = (info.external_attr >> 16) & 0xFFFF
+            if unix_mode and stat.S_ISLNK(unix_mode):
+                raise ValueError("Symbolische Links sind im Austauschpaket nicht zulässig.")
+            if info.is_dir():
+                if name.rstrip("/") != "attachments":
+                    raise ValueError(f"Unbekannter Ordner im Austauschpaket: {name}")
+                continue
+            if name in ("exchange.json", "data.json"):
+                if info.file_size > self.MAX_EXCHANGE_BYTES:
+                    raise ValueError(f"{name} im Austauschpaket ist zu groß.")
+                if payload_info is None or name == "exchange.json":
+                    payload_info = info
+            else:
+                storage = self.validate_attachment_storage(name)
+                if storage != name:
+                    raise ValueError("Das Austauschpaket enthält einen nicht kanonischen Anhangspfad.")
+                if info.file_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                    raise ValueError(f"Der Anhang {name} ist zu groß.")
+                attachment_infos[storage] = info
+            total_size += info.file_size
+            if total_size > self.MAX_BACKUP_TOTAL_BYTES:
+                raise ValueError("Das Austauschpaket überschreitet die zulässige Gesamtgröße.")
+            if (
+                info.file_size > self.BACKUP_COPY_CHUNK
+                and info.compress_size > 0
+                and info.file_size / info.compress_size > self.MAX_BACKUP_COMPRESSION_RATIO
+            ):
+                raise ValueError("Das Austauschpaket weist eine unplausibel hohe Kompressionsrate auf.")
+        if payload_info is None:
+            raise ValueError("Im Austauschpaket fehlt exchange.json.")
+        return payload_info, attachment_infos
+
+    def extract_exchange_archive(self, archive_path, destination_dir):
+        """Entpackt exchange.json und alle Anhänge sicher in ein Zielverzeichnis."""
+        with zipfile.ZipFile(archive_path, "r") as archive:
+            payload_info, attachment_infos = self.inspect_exchange_archive(archive)
+            payload_bytes = self.read_zip_member_limited(archive, payload_info, self.MAX_EXCHANGE_BYTES)
+            payload_dest = os.path.join(destination_dir, "exchange.json")
+            with open(payload_dest, "wb") as f:
+                f.write(payload_bytes)
+            attachments_dest_dir = os.path.join(destination_dir, "attachments")
+            if attachment_infos:
+                os.makedirs(attachments_dest_dir, exist_ok=True)
+            for storage, info in attachment_infos.items():
+                rel_file = os.path.basename(storage)
+                target_path = os.path.join(attachments_dest_dir, rel_file)
+                self.copy_zip_member_limited(archive, info, target_path, self.MAX_BACKUP_ATTACHMENT_BYTES)
+
+    def write_exchange_package(self, path, payload, attachments=None):
+        """Erzeugt ein .glideexchange- oder .zip-Austauschpaket.
+
+        Schreibt exchange.json im Hauptverzeichnis und packt alle benötigten Anhänge
+        nach attachments/<dateiname>.
+        """
+        ziel_ordner = os.path.dirname(os.path.abspath(path)) or os.getcwd()
+        os.makedirs(ziel_ordner, exist_ok=True)
+        temp_handle, temp_path = tempfile.mkstemp(prefix=".exchange-pkg-", suffix=".tmp", dir=ziel_ordner)
+        os.close(temp_handle)
+        try:
+            with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                json_bytes = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+                archive.writestr("exchange.json", json_bytes)
+                if attachments:
+                    seen = set()
+                    for item in attachments:
+                        if isinstance(item, tuple):
+                            src, dst_name = item
+                        elif isinstance(item, str):
+                            src = self.resolve_attachment_path({"storage": item}) or item
+                            dst_name = os.path.basename(item)
+                        elif isinstance(item, dict):
+                            storage = item.get("storage") or item.get("file")
+                            src = self.resolve_attachment_path({"storage": storage}) if storage else None
+                            dst_name = os.path.basename(storage) if storage else (item.get("name") or "datei")
+                        else:
+                            continue
+                        if not src or not os.path.isfile(src):
+                            continue
+                        dst_arcname = f"attachments/{dst_name}"
+                        if dst_arcname in seen:
+                            continue
+                        seen.add(dst_arcname)
+                        archive.write(src, arcname=dst_arcname)
+            os.replace(temp_path, path)
+            temp_path = None
+        finally:
+            if temp_path:
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+
+    def find_agent_skill_dir(self):
+        """Sucht den KI-Skill-Ordner 'skills/glide-to-do' an bekannten Pfaden."""
+        base = os.path.dirname(os.path.abspath(__file__))
+        kandidaten = [
+            os.path.abspath(os.path.join(base, "..", "..", "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(base, "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(base, "..", "Resources", "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(sys.prefix, "share", "glide", "skills", "glide-to-do")),
+        ]
+        for kandidat in kandidaten:
+            if os.path.isdir(kandidat) and os.path.isfile(os.path.join(kandidat, "SKILL.md")):
+                return kandidat
+        return None
+
+    def export_agent_skill(self, target_path=None):
+        """Exportiert den Agenten-Skill glide-to-do als ZIP-Archiv für Claude, Cursor, Antigravity etc."""
+        skill_dir = self.find_agent_skill_dir()
+        if not skill_dir:
+            self.show_error("KI-Skill exportieren", "Der Skill-Ordner 'skills/glide-to-do' konnte nicht gefunden werden.")
+            return "break"
+        if not target_path:
+            target_path = filedialog.asksaveasfilename(
+                title="KI-Skill exportieren",
+                initialfile="glide-to-do-skill-v1.4.zip",
+                defaultextension=".zip",
+                filetypes=[("ZIP-Archiv", "*.zip"), ("Alle Dateien", "*.*")],
+                parent=getattr(self, "root", None),
+            )
+        if not target_path:
+            return "break"
+        try:
+            ziel_ordner = os.path.dirname(os.path.abspath(target_path)) or os.getcwd()
+            os.makedirs(ziel_ordner, exist_ok=True)
+            temp_handle, temp_path = tempfile.mkstemp(prefix=".skill-export-", suffix=".tmp", dir=ziel_ordner)
+            os.close(temp_handle)
+            with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                for wurzel, _ordner, dateien in os.walk(skill_dir):
+                    for datei in sorted(dateien):
+                        if datei.startswith(".") or datei.endswith(".pyc"):
+                            continue
+                        voll = os.path.join(wurzel, datei)
+                        rel = os.path.relpath(voll, os.path.dirname(skill_dir))
+                        archive.write(voll, arcname=rel)
+            os.replace(temp_path, target_path)
+            if getattr(self, "root", None) is not None:
+                self.show_info("KI-Skill exportieren",
+                               f"Der KI-Skill wurde erfolgreich exportiert nach:\n{target_path}\n\n"
+                               "Er kann in Claude Desktop, Cursor, Antigravity oder andere KI-Werkzeuge eingebunden werden.")
+            return True
+        except (OSError, ValueError) as fehler:
+            self.show_error("KI-Skill exportieren", f"Export fehlgeschlagen:\n{fehler}")
+            return "break"
 
     # ------------------------------------------------------------------
     # Übernahme
@@ -61808,7 +62017,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     etiketten.append(label["id"])
         return etiketten
 
-    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0):
+    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0, attachment_resolver=None):
         """Erzeugt einen Glide-Punkt aus einem Austauschobjekt."""
         art = self.EXCHANGE_ITEM_TYPES.get(str(eintrag.get("type") or "task"), self.ITEM_KIND_TASK)
         titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
@@ -61819,7 +62028,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         kinder = []
         if tiefe + 1 < self.MAX_EXCHANGE_DEPTH:
             for kind in eintrag.get("children") or []:
-                erzeugt = self.exchange_item_from_payload(kind, label_ids, tiefe + 1)
+                erzeugt = self.exchange_item_from_payload(kind, label_ids, tiefe + 1,
+                                                          attachment_resolver=attachment_resolver)
                 if erzeugt is not None:
                     kinder.append(erzeugt)
         normalized_due = None if strukturell else self.normalize_due(eintrag.get("due"))
@@ -61833,6 +62043,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     reminder = self.reminder_config(self.normalize_reminder(eintrag.get("reminder")))
                 except (ValueError, TypeError):
                     reminder = None
+        anhaenge = None
+        if not strukturell and eintrag.get("attachments"):
+            if callable(attachment_resolver):
+                anhaenge = attachment_resolver(eintrag.get("attachments"))
+            else:
+                anhaenge = self.normalize_attachments(eintrag.get("attachments"))
         return self.new_item(
             titel,
             done=bool(eintrag.get("done")) and not strukturell,
@@ -61849,16 +62065,34 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             checklist=None if strukturell else eintrag.get("checklist"),
             repeat=repeat,
             reminder=reminder,
+            attachments=anhaenge,
         )
 
-    def apply_exchange_payload(self, nutzlast, ziel_ordner_id=None):
-        """Create-Import atomar übernehmen; inklusive Labels, Vorsicherung und vollem Undo-Stapel."""
+    def apply_exchange_payload(self, nutzlast, ziel_ordner_id=None, attachment_source=None):
+        """Create-Import atomar übernehmen; inklusive Labels, Vorsicherung, Anhänge und vollem Undo-Stapel."""
         if (self.refresh_data_lock() is False or getattr(self,'_data_read_only',False)
                 or not self.prepare_inspector_switch()):
             return None
         undo_before, dirty_before = tuple(self.undo_stack), self.dirty
         self.snapshot_undo(trim=False)
         checkpoint = self.undo_stack[-1]
+        temp_staging_dir = None
+        attachment_dir = None
+        newly_created_attachment_files = []
+        try:
+            if attachment_source:
+                if isinstance(attachment_source, (str, os.PathLike)):
+                    src_str = str(attachment_source)
+                    if os.path.isfile(src_str) and zipfile.is_zipfile(src_str):
+                        temp_staging_dir = tempfile.TemporaryDirectory(prefix="glide-exchange-import-")
+                        self.extract_exchange_archive(src_str, temp_staging_dir.name)
+                        attachment_dir = temp_staging_dir.name
+                    elif os.path.isdir(src_str):
+                        attachment_dir = src_str
+        except Exception:
+            self.restore_import_checkpoint(checkpoint, undo_before, dirty_before)
+            raise
+
         try:
             os.makedirs(BACKUP_DIR, exist_ok=True)
             pre_import_path = os.path.join(
@@ -61872,8 +62106,69 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 except AttributeError:
                     pass
         except (OSError, ValueError):
+            if temp_staging_dir:
+                try:
+                    temp_staging_dir.cleanup()
+                except OSError:
+                    pass
             self.restore_import_checkpoint(checkpoint, undo_before, dirty_before)
             return None
+
+        def loese_anhaenge(roh_anhaenge):
+            if not isinstance(roh_anhaenge, list):
+                return []
+            ergebnis = []
+            for anhang in roh_anhaenge:
+                if not isinstance(anhang, dict):
+                    continue
+                name = anhang.get("name")
+                rel_pfad = anhang.get("file") or anhang.get("storage") or anhang.get("path")
+                gespeichert = None
+                if attachment_dir and isinstance(rel_pfad, str) and rel_pfad:
+                    kandidat = os.path.normpath(os.path.join(attachment_dir, rel_pfad.replace("/", os.sep)))
+                    try:
+                        echter_dir = os.path.realpath(attachment_dir)
+                        if os.path.commonpath([os.path.realpath(kandidat), echter_dir]) == echter_dir:
+                            if os.path.isfile(kandidat):
+                                gespeichert = self.store_attachment(kandidat, name=name)
+                                ziel_pfad = self.resolve_attachment_path(gespeichert)
+                                if ziel_pfad:
+                                    newly_created_attachment_files.append(ziel_pfad)
+                    except (ValueError, OSError):
+                        pass
+                if gespeichert is None:
+                    storage = anhang.get("storage")
+                    if not storage and isinstance(rel_pfad, str) and rel_pfad:
+                        if rel_pfad.startswith("attachments/"):
+                            try:
+                                storage = self.validate_attachment_storage(rel_pfad)
+                            except ValueError:
+                                storage = None
+                        else:
+                            try:
+                                storage = self.validate_attachment_storage(f"attachments/{rel_pfad}")
+                            except ValueError:
+                                storage = None
+                    if storage:
+                        try:
+                            storage = self.validate_attachment_storage(storage)
+                            gespeichert = {
+                                "id": anhang.get("id") or uuid.uuid4().hex,
+                                "name": str(name or os.path.basename(storage)).strip() or "Anhang",
+                                "storage": storage,
+                                "size": int(anhang.get("size") or 0),
+                                "mime": str(anhang.get("mime") or "application/octet-stream"),
+                                "added_at": str(anhang.get("added_at") or datetime.now().isoformat(timespec="seconds")),
+                            }
+                        except (ValueError, TypeError):
+                            gespeichert = None
+                if gespeichert:
+                    for feld in ("title", "note"):
+                        if anhang.get(feld):
+                            gespeichert[feld] = str(anhang[feld])
+                    ergebnis.append(gespeichert)
+            return self.normalize_attachments(ergebnis)
+
         try:
             label_ids = {}
             for label in nutzlast.get("labels") or []:
@@ -61897,9 +62192,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ordnerart = ordner.get("folder_kind")
                 if ordnerart not in self.FOLDER_KINDS:
                     ordnerart = "standard"
+                ordner_anhaenge = loese_anhaenge(ordner.get("attachments")) if ordner.get("attachments") else None
                 erzeugt = self.new_folder_object(titel, note=str(ordner.get("description") or ""),
                                                  parent_id=eltern, labels=etiketten,
-                                                 folder_kind=ordnerart)
+                                                 folder_kind=ordnerart, attachments=ordner_anhaenge)
                 if ordner.get("key"):
                     ordner_ids[str(ordner["key"])] = erzeugt["id"]
                 neue_ordner.append(erzeugt)
@@ -61912,13 +62208,76 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     continue
                 punkte = []
                 for roh in eintrag.get("items") or []:
-                    erzeugt = self.exchange_item_from_payload(roh, label_ids)
+                    erzeugt = self.exchange_item_from_payload(roh, label_ids, attachment_resolver=loese_anhaenge)
                     if erzeugt is not None:
                         punkte.append(erzeugt)
+                list_attachments = loese_anhaenge(eintrag.get("attachments")) if eintrag.get("attachments") else []
+                cover_raw = eintrag.get("cover")
+                cover_spec = None
+                if cover_raw is not None:
+                    if isinstance(cover_raw, str):
+                        zugeordnet = next((a for a in list_attachments if a.get("storage") == cover_raw or a.get("name") == os.path.basename(cover_raw)), None)
+                        if not zugeordnet:
+                            geladen = loese_anhaenge([{"file": cover_raw, "name": os.path.basename(cover_raw)}])
+                            if geladen:
+                                zugeordnet = geladen[0]
+                                list_attachments.append(zugeordnet)
+                        if zugeordnet:
+                            cover_spec = {"kind": "image", "attachment": zugeordnet["id"]}
+                        elif cover_raw.startswith("attachments/"):
+                            try:
+                                storage = self.validate_attachment_storage(cover_raw)
+                                pseudo = {
+                                    "id": uuid.uuid4().hex,
+                                    "name": os.path.basename(storage),
+                                    "storage": storage,
+                                    "size": 0,
+                                    "mime": "image/png",
+                                    "added_at": datetime.now().isoformat(timespec="seconds"),
+                                }
+                                list_attachments.append(pseudo)
+                                cover_spec = {"kind": "image", "attachment": pseudo["id"]}
+                            except ValueError:
+                                pass
+                    elif isinstance(cover_raw, dict):
+                        if cover_raw.get("kind") == "image":
+                            att_id = cover_raw.get("attachment")
+                            rel_file = cover_raw.get("file") or cover_raw.get("storage") or cover_raw.get("path")
+                            if not att_id and rel_file:
+                                zugeordnet = next((a for a in list_attachments if a.get("storage") == rel_file or a.get("name") == os.path.basename(rel_file)), None)
+                                if not zugeordnet:
+                                    geladen = loese_anhaenge([{"file": rel_file, "name": os.path.basename(rel_file)}])
+                                    if geladen:
+                                        zugeordnet = geladen[0]
+                                        list_attachments.append(zugeordnet)
+                                if zugeordnet:
+                                    att_id = zugeordnet["id"]
+                            if att_id:
+                                cover_spec = {"kind": "image", "attachment": att_id}
+                        elif cover_raw.get("kind") == "drawing":
+                            cover_spec = cover_raw
                 rich_note = eintrag.get("rich_note")
                 if not rich_note and isinstance(eintrag.get("markdown"), str):
                     try:
-                        md_doc = glide_page_markdown.markdown_to_page(eintrag["markdown"])
+                        def bild_loeser(beschreibung, quelle):
+                            if not attachment_dir:
+                                return None
+                            pfad = glide_page_markdown.local_image_path(quelle, attachment_dir)
+                            if not pfad or not os.path.isfile(pfad) or not glide_image_preview.is_image_name(pfad):
+                                return None
+                            titel_bild = " ".join(str(beschreibung or "").split())[:200]
+                            anhang = self.store_attachment(pfad, name=titel_bild or os.path.basename(pfad))
+                            ziel_pfad = self.resolve_attachment_path(anhang)
+                            if ziel_pfad:
+                                newly_created_attachment_files.append(ziel_pfad)
+                            list_attachments.append(anhang)
+                            return "img:" + uuid.uuid4().hex[:16], {
+                                "attachment": anhang["id"],
+                                "mode": "center",
+                                "width": 360,
+                            }
+                        md_doc = glide_page_markdown.markdown_to_page(
+                            eintrag["markdown"], image_resolver=bild_loeser if attachment_dir else None)
                         md_tasks = md_doc.pop("tasks", [])
                         if not punkte and md_tasks:
                             for task in md_tasks:
@@ -61929,8 +62288,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     except Exception:
                         rich_note = None
                 art = eintrag.get("list_kind")
-                if art is None and isinstance(eintrag.get("markdown"), str):
-                    art = self.LIST_KIND_PAGE
+                if art is None:
+                    if cover_spec is not None or isinstance(eintrag.get("markdown"), str):
+                        art = self.LIST_KIND_PAGE
+                if art == self.LIST_KIND_GALLERY:
+                    punkte = []
                 etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
                 liste = self.new_list_object(
                     titel, punkte, note=str(eintrag.get("description") or ""),
@@ -61939,19 +62301,45 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     drawing=eintrag.get("drawing"),
                     animation=copy.deepcopy(eintrag.get("animation")),
                     labels=etiketten,
+                    attachments=list_attachments,
+                    cover=cover_spec,
                 )
                 neue_listen.append(liste)
             if not neue_listen:
+                for created_file in newly_created_attachment_files:
+                    try:
+                        if os.path.isfile(created_file):
+                            os.remove(created_file)
+                    except OSError:
+                        pass
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
                 return None
             self.folders.extend(neue_ordner)
             self.lists.extend(neue_listen)
             if not self.save_items():
+                for created_file in newly_created_attachment_files:
+                    try:
+                        if os.path.isfile(created_file):
+                            os.remove(created_file)
+                    except OSError:
+                        pass
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
                 return None
         except Exception:
+            for created_file in newly_created_attachment_files:
+                try:
+                    if os.path.isfile(created_file):
+                        os.remove(created_file)
+                except OSError:
+                    pass
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
             raise
+        finally:
+            if temp_staging_dir:
+                try:
+                    temp_staging_dir.cleanup()
+                except OSError:
+                    pass
         self.trim_undo_stack()
         self.finish_import_ui([('Seitenleiste',self.update_sidebar_list),('Inhaltsansicht',self.refresh_tree)])
         return neue_listen
@@ -62423,6 +62811,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         pfad = path or filedialog.askopenfilename(
             title="KI-Ergebnis importieren",
             filetypes=[("Glide-Austauschdatei", "*" + self.EXCHANGE_SUFFIX),
+                       ("ZIP-Container", "*.zip"),
                        ("JSON-Datei", "*.json"),
                        ("Markdown-Gliederung", "*.md"),
                        ("Alle Dateien", "*.*")])
@@ -62491,7 +62880,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         knoepfe.pack(fill="x", pady=(14, 0))
 
         def uebernehmen():
-            ergebnis = self.apply_exchange_payload(nutzlast)
+            ergebnis = self.apply_exchange_payload(nutzlast, attachment_source=pfad)
             if ergebnis is None:
                 meldung.configure(text="Der Import wurde nicht gespeichert. "
                                        "Der Bestand ist unverändert.")
@@ -63589,8 +63978,8 @@ Regeln
   5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
   6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
      long für erklärende Texte und task nur dort, wo etwas zu tun ist.
-  7. Diese Fassung unterstützt keine binären Dateianhänge. Lass dieses Feld weg,
-     statt es zu erfinden.
+  7. Dateianhänge und Bilder (attachments, cover) können in einem ZIP-Austauschpaket
+     unter attachments/ mitgeliefert werden (z. B. {"file": "attachments/bild.png"}).
 
 Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
   Liegt ein Kontextpaket ({self.CONTEXT_SUFFIX}, format „{glide_exchange_patch.CONTEXT_FORMAT}“) bei,
@@ -68098,6 +68487,7 @@ Labels, Termine und Metadaten."""
                 ("Datenaustausch", (
                     ("Für KI bereitstellen …", self.show_exchange_export_dialog),
                     ("KI-Ergebnis importieren …", self.show_exchange_import_dialog),
+                    ("KI-Skill exportieren …", self.export_agent_skill),
                     ("Austauschformat anzeigen …", self.show_exchange_spec_dialog),
                 )),
                 None,

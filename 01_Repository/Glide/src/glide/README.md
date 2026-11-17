@@ -1,8 +1,8 @@
-# Glide-System V1.38
+# Glide-System V1.39
 
-Stand 17.11.2026 · Glide 3.69.0 · Glide-System V1.38 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 17.11.2026 · Glide 3.69.0 · Glide-System V1.39 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.38` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.39` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 17.11.2026 · Glide 3.69.0 · Glide-System V1.38 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.39** | 17.11.2026 | Agenten-Skill `glide-to-do` Paket K4 & K5 (WA-61, Meilenstein 1.0 Etappe 1): neuer Integrationstest T328 `test_austausch_k4.py` für Bilder, Dateianhänge, ZIP-Container (.glideexchange), Galerie-Listen, Seiten-Cover und Paket-Export. MANIFEST.json, VERTEILUNG.md und App-Export-Aktion `export_agent_skill` hinzugefügt. Format 26 unverändert. | App 3.69.0, Format 26 |
 | **V1.38** | 17.11.2026 | Agenten-Skill `glide-to-do` Paket K3 (WA-61, E-K5 Option A): neuer Integrationstest T327 `test_austausch_k3.py` für die fünf erweiterten Austauschfähigkeiten (Vorsicherung vor Create-Import, Markdown-Seiten, Ordnerarten, Wiederholungen, Erinnerungen). Module, Features und Format 26 unverändert. | App 3.69.0, Format 26 |
 | **V1.37** | 17.11.2026 | Prüfung nach PR #119: `test_desktop_adapter.py` trug irrtümlich dieselbe Kennung T313 wie `test_day_capacity.py` (seit V1.17) und führt jetzt T326; die Katalogprüfung verlangt eindeutige T-Kennungen. Zwischenablage im Test über eine Attrappe, T325 in `SUITEN` der Vollprüfung. Module, Features und Format 26 unverändert. | App 3.69.0, Format 26 |
 | **V1.36** | 16.11.2026 | Glide 3.69.0: Ganzheitliche Dokumentations- und Übergabekonsolidierung, Bereinigung des Arbeitsvorrats und Headless-CI-Absicherung für `desktop_adapter.py` (T313). 99 Module M001–M099, Format 26 unverändert. | App 3.69.0, Format 26 |
@@ -67,7 +68,7 @@ Stand 17.11.2026 · Glide 3.69.0 · Glide-System V1.38 · Aufgabenformat 26 · E
 | Features | 148 | 128 Produkt-/Oberflächeneinträge (einschließlich des Agenten-Skills F148 außerhalb der App) und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 327 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 328 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -802,6 +803,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T320 | [`test_fensterlebensdauer.py`](../../tests/integration/test_fensterlebensdauer.py) | Vertragstest für `window_lifetime` (Shell-Paket 3c) mit echtem Tk und ohne Glide: neun Fälle zu Lauf, Bestandspflege, Abbruch, Zerstörung des Widgets, Kind-`<Destroy>`, `close`, Bereich je Widget, übernommenen Aufträgen und toter Wurzel; `--gegenproben` entfernt sechs Schutzzeilen in einer Kopie des Moduls. Teil von `SUITEN` |
 | T325 | [`test_ki_ausgabe_darstellung.py`](../../tests/integration/test_ki_ausgabe_darstellung.py) | Integrationssuite in der Vollprüfung (WA-61): alle Skill-Beispiele, Formatgrenzen und fehlerhafte Ausgaben mit echter Tk-Oberfläche, Neustart in frischem Prozess und Ablesen der Anzeige prüfen |
 | T327 | [`test_austausch_k3.py`](../../tests/integration/test_austausch_k3.py) | Integrationstest für Skill-Paket K3 (WA-61 / E-K5 Option A): Automatische Vorsicherung beim Create-Import, Markdown-Seitenimport und Rundlauf-Export, Ordnerarten (library, journal, standard, Rückfall), Wiederholungsregeln (tolerant EN/DE, Rundlauf, Fälligkeitsvalidierung), Benachrichtigungen und Erinnerungen (relativ/fest, Rundlauf, Validierung) und Undo |
+| T328 | [`test_austausch_k4.py`](../../tests/integration/test_austausch_k4.py) | Integrationstest für Skill-Paket K4 (WA-61): ZIP-Container (.glideexchange), Sicherheitsprüfung (Zip-Slip-Abweisung), Import von Anhängen (Ordner, Listen, Aufgaben), Galerie-Listen, Seiten-Cover und Markdown-Bildereinbettung, Paketausgabe (write_exchange_package) und Rollback-Bereinigung |
 
 ### Werkzeuge
 
