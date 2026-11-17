@@ -74,6 +74,25 @@ jobs:
           $python = Split-Path -Parent "${{ steps.python.outputs.python-path }}"
           python -B pruefe_start_windows.py --paket "$env:RUNNER_TEMP/paket/bau/dist/Glide" --bericht "$env:RUNNER_TEMP/paket/startprobe.json" --sperren $python --sperren "$env:RUNNER_TEMP/bau-venv" --sperren "$env:RUNNER_TEMP/paket-runtime" --sperren "$env:RUNNER_TEMP/paket/bau/quelle" --sperren "$env:GITHUB_WORKSPACE"
           exit $LASTEXITCODE
+      - name: Inno Setup Installer bauen (Glide-setup.exe)
+        run: |
+          $version = (Get-Content ../../VERSION -Raw).Trim()
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup --no-progress
+          }
+          if (-not (Test-Path $iscc)) {
+            throw "Inno Setup Compiler (ISCC.exe) nicht gefunden."
+          }
+          $dist = "$env:RUNNER_TEMP/paket/bau/dist/Glide"
+          $outDir = "$env:RUNNER_TEMP/paket/installer"
+          New-Item -ItemType Directory -Force $outDir | Out-Null
+          & $iscc "/DMyAppVersion=$version" "/DSourceDir=$dist" "/DOutputFileName=Glide-$version-windows-x64-setup" "/O$outDir" ../windows/glide_setup.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $setupExe = Join-Path $outDir "Glide-$version-windows-x64-setup.exe"
+          if (-not (Test-Path $setupExe)) { throw "Erwarteter Installer fehlt: $setupExe" }
+          $hash = (Get-FileHash -Path $setupExe -Algorithm SHA256).Hash.ToLower()
+          "$hash  Glide-$version-windows-x64-setup.exe" | Out-File -FilePath "$setupExe.sha256" -Encoding ascii
       - name: Bau- und Startbelege sichern
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -95,4 +114,13 @@ jobs:
         with:
           name: paket-windows-glide
           path: ${{ runner.temp }}/paket/bau/dist/Glide
+          retention-days: 14
+      - name: Installer sichern (Inno Setup)
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: paket-windows-installer
+          path: |
+            ${{ runner.temp }}/paket/installer/*.exe
+            ${{ runner.temp }}/paket/installer/*.sha256
           retention-days: 14

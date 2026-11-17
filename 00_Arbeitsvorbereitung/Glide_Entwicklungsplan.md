@@ -3150,5 +3150,54 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - `standpruefung.py`: 0 Befunde (alle 84 Dokumente synchron).
 - `abgleich_07.py`: 0 Abweichungen.
 
+### 21.111 Glide 3.70.0: Meilenstein-Plan Release 1.0 und Versionswechsel (17.11.2026)
+
+**A – Auftrag:** Umsetzung von Etappe 1 und Versionswechsel auf 3.70.0 gemäß Meilenstein-Plan Release 1.0 (D93, Issue #129):
+1. Versionswechsel auf `3.70.0` über `scripts/pflege/versionswechsel.py`.
+2. Aktualisierung aller Schemata, Fixtures, Dokumentationen und Manifeste.
+3. Vorbereitung der Folge-Etappen für Release 1.0.
+
+**B – Umsetzung:**
+- Version 3.70.0 im gesamten Repository verankert (`VERSION`, `app.pyw`, `07_Python-Versionen/`).
+- Fixtures und Prüfstände aktualisiert, PR #133 erstellt und gemergt.
+
+### 21.112 Glide Meilenstein 1.0, Etappe 2: Mehrsprachigkeit (i18n DE/EN) (17.11.2026)
+
+**A – Auftrag:** Umsetzung von Etappe 2 aus dem Meilenstein-Plan Release 1.0 (D93, Issue #129):
+1. Neues Tk-freies Standardbibliothek-Modul `src/glide/i18n.py` (M100) im Glide-System.
+2. Vollständige Übersetzungskataloge für Deutsch (`de.json`) und Englisch (`en.json`).
+3. Integration in Einstellungsdialog (Sprachauswahl), Menüleiste (`desktop_adapter.py` / `menubar_structure`) und Seitenleiste (`sidebar`).
+4. Neuer Modultest T329 (`test_i18n.py`) mit 100 % Schlüssel- und Platzhalterparität sowie WA-50-Budgetprüfung.
+
+**B – Umsetzung:**
+- Modul `i18n.py` erstellt, Modulbudget WA-50 vollständig eingehalten (T322).
+- Lokalisierungskataloge `resources/locales/de.json` und `en.json` angelegt.
+- Einstellungsdialog um Sprachauswahl erweitert (`language`: `system`, `de`, `en`).
+- Menüleiste und Seitenleistenansichten lokalisiert.
+- Systemkatalog auf V1.40 angehoben (100 Module, 329 Tests).
+- Synchronisation mit `07_Python-Versionen/` via `abgleich_07.py`.
+- PR #134 erstellt und in `main` gemergt.
+
+### 21.113 Glide Meilenstein 1.0, Etappe 3: Paketbau, Installer & Paketmanager (17.11.2026)
+
+**A – Auftrag:** Vorbereitung automatisierter Paketierungs- und Installationsmechanismen für Release 1.0 (D93, Issue #129):
+1. **Windows Installer:** Inno-Setup-6-Skript `packaging/windows/glide_setup.iss` für unprivilegierte Benutzer-Installation nach `%LOCALAPPDATA%\Programs\Glide` mit Startmenüeintrag (`AppUserModelID: "Shaye.Glide"`), Sprachunterstützung (DE/EN) und sauberem Deinstaller (Nutzerdaten bleiben unberührt).
+2. **GitHub Actions Workflow:** `.github/workflows/windows-paket.yml` um ISCC-Kompilierschritt und Artefaktbereitstellung (`paket-windows-installer`) erweitert; `.github/workflows/release.yml` bindet `Glide-$VERSION-windows-x64-setup.exe` in die Release-Zusammenstellung ein.
+3. **Homebrew Cask:** `packaging/homebrew/Casks/glide.rb` auf Version 3.70.0 synchronisiert.
+4. **winget:** Manifestsatz unter `packaging/winget/manifests/s/Shaye/Glide/3.70.0/` auf `InstallerType: inno` angepasst und mit Metadaten für Deutsch und Englisch (`locale.de-DE.yaml`, `locale.en-US.yaml`) ausgestattet.
+
+**B – Umsetzung:**
+- `packaging/windows/glide_setup.iss` angelegt mit fester AppId `{0A756FC5-5DDB-4B0F-9EC8-B4AA85753597}`.
+- Workflows `windows-paket.yml` und `release.yml` aktualisiert.
+- Homebrew-Cask `packaging/homebrew/Casks/glide.rb` aktualisiert.
+- winget-Manifeste `3.70.0` angelegt.
+- Dokumentationen (`packaging/README.md`, `docs/10_VEROEFFENTLICHUNG.md`) aktualisiert.
+
+**C – Prüfung:**
+- `ci_grundstufe.py`: 19/19 Prüfungen bestanden.
+- `standpruefung.py`: 0 Befunde.
+- `abgleich_07.py`: 0 Abweichungen.
+
+
 
 

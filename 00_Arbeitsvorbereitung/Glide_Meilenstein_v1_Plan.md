@@ -87,16 +87,17 @@ flowchart TD
   - Systemregister auf V1.40 angehoben (`test_glide_system.py` 5/5 OK).
   - CI-Grundstufe 19/19 OK.
 
-### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – 🎯 NÄCHSTER SCHRITT
+### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – ✅ ERLEDIGT
 - **macOS:**
-  - DMG-Erzeugung in `.github/workflows/macos-paket.yml` verifizieren.
-  - Homebrew-Cask `packaging/homebrew/Casks/glide.rb` auf v1.0 vorbereiten.
+  - DMG-Erzeugung in `.github/workflows/macos-paket.yml` verifiziert.
+  - Homebrew-Cask `packaging/homebrew/Casks/glide.rb` aktualisiert auf Version 3.70.0.
 - **Windows:**
-  - Inno-Setup-Skript `packaging/windows/glide_setup.iss` für unprivilegierte Installation nach `%LOCALAPPDATA%\Programs\Glide` und Startmenüeintrag.
-  - Build-Schritt in `.github/workflows/windows-paket.yml` verankern.
-  - winget-Manifest auf `InstallerType: inno` und v1.0 anpassen.
+  - Inno-Setup-Skript `packaging/windows/glide_setup.iss` für unprivilegierte Benutzer-Installation nach `%LOCALAPPDATA%\Programs\Glide`, Startmenüeintrag (`AppUserModelID: "Shaye.Glide"`), Sprachunterstützung (DE/EN) und saubere Deinstallation ohne Nutzerdatenverlust.
+  - Build-Schritt in `.github/workflows/windows-paket.yml` verankert (Erzeugung von `Glide-$version-windows-x64-setup.exe` samt SHA-256 und Artefakt-Upload).
+  - Release-Workflow `.github/workflows/release.yml` um Installer-Einbindung und Download-Tabelleneintrag erweitert.
+  - winget-Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/3.70.0/` auf `InstallerType: inno` und zweisprachige Metadaten (de-DE, en-US) umgestellt.
 
-### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – GEPLANT
+### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – 🎯 NÄCHSTER SCHRITT
 - **Versionierung:**
   - Anheben der Version auf `1.0.0` (über `scripts/pflege/versionswechsel.py 1.0.0 <datum>`).
   - GitHub Actions `release.yml` baut automatisch alle Artefakte und berechnet SHA-256-Hashes.
@@ -113,6 +114,6 @@ Aktueller Stand in [Issue #129](https://github.com/n05a-design/glide-to-do/issue
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
 - [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 `i18n.py`, JSON-Kataloge, Einstellungen, Lokalisierung Menüs/Seitenleiste, T329)
-- [ ] **3. Paketierung & Installer** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`)
-- [ ] **4. Paketmanager** (Homebrew Cask, winget Manifest)
+- [x] **3. Paketierung & Installer** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, GitHub Workflows)
+- [x] **4. Paketmanager** (Homebrew Cask 3.70.0, winget Manifeste 3.70.0)
 - [ ] **5. Qualität & Freigabe** (100 % grüne Vollmatrix, Release Cut v1.0.0)
