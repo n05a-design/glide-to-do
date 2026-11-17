@@ -1,6 +1,17 @@
 # Änderungsverlauf
 
-Stand 16.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 17.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+
+
+## 3.70.0 – 17.11.2026
+
+Agenten-Skill `glide-to-do` komplettiert (WA-61 Pakete K3, K4, K5) und Meilensteinschnitt Release 1.0 (D93). Datenformat 26 und Austauschformat 2 unverändert.
+
+- Skill-Paket K3 (Erweiterte Austauschfähigkeiten): Automatische Vorsicherung vor Create-Import (`vor_import_*.glidebackup`), Markdown-Seiten und -Notizen (`markdown` -> `rich_note` mit Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE) und Erinnerungen (`reminder`). Neuer Integrationstest T327 (`test_austausch_k3.py`, 6/6 OK).
+- Skill-Paket K4 (Bilder & Anhänge): ZIP-Container-Erkennung (`.glideexchange`, `.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen für Ordner/Listen/Aufgaben in `ATTACHMENTS_DIR` mit automatischer Konfliktbereinigung (`store_attachment`), Galerielisten (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`) und atomare Rollback-Bereinigung. Neuer Integrationstest T328 (`test_austausch_k4.py`, 9/9 OK).
+- Skill-Paket K5 (Verteilung & Ökosystem): Maschinenlesbares `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, Verteilungsdokumentation `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI und Web-LLMs, Menüaktion Datei › Datenaustausch › KI-Skill exportieren … (`export_agent_skill`), GitHub Actions Release-Workflow packt `glide-to-do-skill-v$VERSION.zip` samt Prüfsummen.
+- Meilenstein Release 1.0 (D93): Verbindlicher Meilenstein-Fahrplan `00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md` und Tracking in GitHub Issue #129 verankert. Etappe 1 abgeschlossen, Vorbereitung für Etappe 2 (Mehrsprachigkeit i18n DE/EN).
+- Prüfung & Systemregister: Glide-System auf V1.39 gehoben (328 Test-/Werkzeugdateien), Werkzeugtest T321 (18/18 OK), CI-Grundstufe 19/19 OK, Standprüfung 0 Befunde, 07-Lieferabgleich 0 Abweichungen.
 
 
 ## 3.69.0 – 16.11.2026
