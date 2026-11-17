@@ -1,4 +1,4 @@
-# Meilenstein- und Fahrplan: Glide Version 1.0
+# Meilenstein- und Fahrplan Release 1.0 (Glide 3.69.0)
 
 Stand 17.11.2026 · Glide 3.69.0 (Ziel: Glide 1.0.0) · Aufgabenformat 26 · Glide-System V1.39
 
