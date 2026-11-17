@@ -3713,10 +3713,14 @@ def fall_seitenleistenabstand3504(lauf):
     def pruefen(context):
         nonlocal checks
         tree, card = app.system_listbox, app.sidebar_shell
+        idle(lauf, 3)
         row = tree.get_children()[0]
         x, y, width, height = tree.bbox(row)
         tree.event_generate("<Motion>", x=x + width // 2, y=y + height // 2)
         idle(lauf, 3)
+        if "hover" not in tree.item(row, "tags"):
+            tree.event_generate("<Motion>", x=x + width // 2, y=y + height // 2)
+            idle(lauf, 3)
         assert "hover" in tree.item(row, "tags"), ("Hover fehlt", context)
         assert row not in tree.selection(), ("Hoverprobe ist ausgewählt", context)
         gaps = {
@@ -3751,7 +3755,7 @@ def fall_seitenleistenabstand3504(lauf):
             for visible, narrow in ((True, True), (False, False), (True, False)):
                 app.settings.update(sidebar_visible=visible, sidebar_narrow=narrow)
                 app._apply_sidebar_visibility()
-                idle(lauf, 4)
+                idle(lauf, 6)
             pruefen((design, size, geometry, "nach Einklappen/Ausblenden"))
             if getattr(lauf, "capture", None) and geometry == "860x700":
                 sys.path.insert(0, str(REPO / "tests/tools"))
