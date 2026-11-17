@@ -64002,7 +64002,7 @@ Regeln
   6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
      long für erklärende Texte und task nur dort, wo etwas zu tun ist.
   7. Dateianhänge und Bilder (attachments, cover) können in einem ZIP-Austauschpaket
-     unter attachments/ mitgeliefert werden (z. B. {"file": "attachments/bild.png"}).
+     unter attachments/ mitgeliefert werden (z. B. {{"file": "attachments/bild.png"}}).
 
 Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
   Liegt ein Kontextpaket ({self.CONTEXT_SUFFIX}, format „{glide_exchange_patch.CONTEXT_FORMAT}“) bei,
