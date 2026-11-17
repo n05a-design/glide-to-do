@@ -61329,6 +61329,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         return {
             "item_types": sorted(cls.EXCHANGE_ITEM_TYPES),
+            "list_kinds": sorted(cls.LIST_KINDS),
             "nested_items": 1,
             "descriptions": 1,
             "labels": 1,
@@ -61411,7 +61412,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         quellen = list(lists if lists is not None else self.lists)
         ordner = list(folders if folders is not None else [])
         benutzte_labels = {}
+        for wert in ordner:
+            for kennung in wert.get("labels") or []:
+                benutzte_labels.setdefault(kennung, None)
         for eintrag in quellen:
+            for kennung in eintrag.get("labels") or []:
+                benutzte_labels.setdefault(kennung, None)
             for item in self.walk_items(eintrag.get("items", [])):
                 for kennung in item.get("labels") or []:
                     benutzte_labels.setdefault(kennung, None)
@@ -61435,6 +61441,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 eintrag["description"] = str(wert["note"])
             if wert.get("parent_id") in ordner_keys:
                 eintrag["parent"] = ordner_keys[wert["parent_id"]]
+            if wert.get("labels"):
+                ordner_etiketten = [label_keys[k] for k in wert["labels"] if k in label_keys]
+                if ordner_etiketten:
+                    eintrag["labels"] = ordner_etiketten
             ordner_liste.append(eintrag)
         listen = []
         for index, eintrag in enumerate(quellen, 1):
@@ -61449,6 +61459,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 darstellung["description"] = str(eintrag["note"])
             if eintrag.get("folder_id") in ordner_keys:
                 darstellung["folder"] = ordner_keys[eintrag["folder_id"]]
+            if eintrag.get("labels"):
+                listen_etiketten = [label_keys[k] for k in eintrag["labels"] if k in label_keys]
+                if listen_etiketten:
+                    darstellung["labels"] = listen_etiketten
             if eintrag.get("list_kind") == "note" or eintrag.get("rich_note", {}).get("text"):
                 darstellung["list_kind"] = eintrag.get("list_kind", "tasks")
                 darstellung["rich_note"] = RichNoteEditor.normalize(eintrag.get("rich_note"))
@@ -61695,15 +61709,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         return value if 1 <= value <= self.MAX_ESTIMATED_MINUTES else None
 
-    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0):
-        """Erzeugt einen Glide-Punkt aus einem Austauschobjekt."""
-        art = self.EXCHANGE_ITEM_TYPES.get(str(eintrag.get("type") or "task"), self.ITEM_KIND_TASK)
-        titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
-        if not titel:
-            return None
-        strukturell = art in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+    def exchange_labels_from_payload(self, labels_raw, label_ids):
+        """Löst Labels aus Austausch-Kennungen oder direkten Labelnamen auf."""
         etiketten = []
-        for kennung in eintrag.get("labels") or []:
+        for kennung in labels_raw or []:
             kennung = str(kennung)
             if kennung in label_ids:
                 etiketten.append(label_ids[kennung])
@@ -61712,6 +61721,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if label is not None:
                     label_ids[kennung] = label["id"]
                     etiketten.append(label["id"])
+        return etiketten
+
+    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0):
+        """Erzeugt einen Glide-Punkt aus einem Austauschobjekt."""
+        art = self.EXCHANGE_ITEM_TYPES.get(str(eintrag.get("type") or "task"), self.ITEM_KIND_TASK)
+        titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
+        if not titel:
+            return None
+        strukturell = art in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+        etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
         kinder = []
         if tiefe + 1 < self.MAX_EXCHANGE_DEPTH:
             for kind in eintrag.get("children") or []:
@@ -61748,7 +61767,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 name = str(label.get("name") or "").strip()
                 if not name:
                     continue
-                erzeugt = self.ensure_label_by_name(name)
+                color = label.get("color")
+                erzeugt = self.ensure_label_by_name(name, color=color)
                 if erzeugt is not None and label.get("key"):
                     label_ids[str(label["key"])] = erzeugt["id"]
             ordner_ids = {}
@@ -61760,8 +61780,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if not titel:
                     continue
                 eltern = ordner_ids.get(str(ordner.get("parent") or "")) or ziel_ordner_id
+                etiketten = self.exchange_labels_from_payload(ordner.get("labels"), label_ids)
                 erzeugt = self.new_folder_object(titel, note=str(ordner.get("description") or ""),
-                                                 parent_id=eltern)
+                                                 parent_id=eltern, labels=etiketten)
                 if ordner.get("key"):
                     ordner_ids[str(ordner["key"])] = erzeugt["id"]
                 neue_ordner.append(erzeugt)
@@ -61777,12 +61798,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     erzeugt = self.exchange_item_from_payload(roh, label_ids)
                     if erzeugt is not None:
                         punkte.append(erzeugt)
+                etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
                 liste = self.new_list_object(
                     titel, punkte, note=str(eintrag.get("description") or ""),
                     list_kind=eintrag.get("list_kind"), rich_note=eintrag.get("rich_note"),
                     folder_id=ordner_ids.get(str(eintrag.get("folder") or "")) or ziel_ordner_id,
                     drawing=eintrag.get("drawing"),
                     animation=copy.deepcopy(eintrag.get("animation")),
+                    labels=etiketten,
                 )
                 neue_listen.append(liste)
             if not neue_listen:
@@ -63363,6 +63386,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         faehigkeiten = self.exchange_capabilities()
         arten = ", ".join(faehigkeiten["item_types"])
+        listenarten = ", ".join(faehigkeiten.get("list_kinds") or sorted(self.LIST_KINDS))
         return f"""Erzeuge eine Glide-Austauschdatei ({self.EXCHANGE_SUFFIX}).
 
 Antworte ausschließlich mit einem JSON-Objekt, ohne Fließtext davor oder danach.
@@ -63373,10 +63397,10 @@ Aufbau
     "format_version": {self.EXCHANGE_FORMAT_VERSION},
     "mode": "create",
     "generator": {{"type": "ai"}},
-    "labels": [{{"key": "label-1", "name": "Release"}}],
-    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0"}}],
-    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1",
-                "description": "Wozu diese Liste da ist.", "items": [ ... ]}}]
+    "labels": [{{"key": "label-1", "name": "Release", "color": "flag"}}],
+    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "labels": ["label-1"]}}],
+    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1", "list_kind": "tasks",
+                "description": "Wozu diese Liste da ist.", "labels": ["label-1"], "items": [ ... ]}}]
   }}
 
 Ein Punkt
@@ -63387,13 +63411,21 @@ Ein Punkt
     "checklist": [{{"text": "Schritt", "done": false}}],
     "children": [ ... ]}}
 
-Bedeutung der Arten ({arten})
+Bedeutung der Punktarten ({arten})
   task     Eine ausführbare Handlung mit eindeutigem Ergebnis.
   long     Ein umfangreicherer, textorientierter Arbeitsgegenstand.
   group    Ein Behälter für Punkte. Nicht selbst erledigbar, ohne Termin.
   heading  Reine Gliederung. Keine Fälligkeit, keine Wichtigkeit, kein Erledigt.
 
+Listenarten ({listenarten})
+  tasks    Aufgabenliste mit Punkten (Vorgabe).
+  note     Notiz: Text in rich_note, optional Punkte darüber.
+  page     Seite: formatierter Text in rich_note.
+  drawing  Pixelzeichnung in drawing oder Bildfolge in animation.
+  gallery  Galerie: Bildsammlung (ohne Bilder leer).
+
 Bedeutung der Felder
+  title        Titel von Punkt, Liste oder Ordner (höchstens {self.CONTAINER_TITLE_MAX} Zeichen).
   description  Was die Aufgabe bedeutet und welches Ergebnis erwartet wird.
   children     Echte Unterpunkte, die eigenständig erledigt werden.
   checklist    Arbeitsschritte innerhalb eines Punkts, ohne eigene Termine.
@@ -63403,14 +63435,17 @@ Bedeutung der Felder
 Regeln
   1. Verwende Schlüssel („key“) frei wählbar, aber eindeutig. Erfinde keine
      internen Kennungen; Glide vergibt sie beim Import selbst.
-  2. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
+  2. Titel von Aufgaben, Listen und Ordnern dürfen höchstens {self.CONTAINER_TITLE_MAX}
+     Zeichen lang sein. Längere Inhalte gehören in description oder rich_note.
+  3. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
      {faehigkeiten['max_checklist_entries']} Checklistenschritte je Punkt an.
      Verschachtele höchstens {faehigkeiten['max_depth']} Ebenen tief.
-  3. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.
-  4. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
-  5. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
+  4. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.
+     Labels können an Punkten, Listen und Ordnern vergeben werden.
+  5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
+  6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
      long für erklärende Texte und task nur dort, wo etwas zu tun ist.
-  6. Diese Fassung unterstützt keine Anhänge, Wiederholungen und Erinnerungen.
+  7. Diese Fassung unterstützt keine Anhänge, Wiederholungen und Erinnerungen.
      Lass diese Felder weg, statt sie zu erfinden.
 
 Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
@@ -66256,7 +66291,7 @@ Labels, Termine und Metadaten."""
             item["text"], item["description"] = glide_design.task_title(item["text"], item["description"])
         return imported_root
 
-    def ensure_label_by_name(self, name):
+    def ensure_label_by_name(self, name, color=None):
         """Vorhandenes Label mit diesem Namen oder ein neu angelegtes Label."""
         clean = str(name or "").strip()[: self.MAX_LABEL_NAME_LENGTH]
         if not clean:
@@ -66266,10 +66301,9 @@ Labels, Termine und Metadaten."""
             return existing
         if len(self.labels) >= self.MAX_LABELS:
             return None
-        # Die Farbe rotiert über die Palette, damit importierte Labels
-        # unterscheidbar bleiben, ohne den Nutzer zu fragen.
-        color = self.LABEL_COLOR_KEYS[len(self.labels) % len(self.LABEL_COLOR_KEYS)]
-        label = self.new_label_object(clean, None, color)
+        # Die angegebene Farbe oder die nächste Palettenfarbe vergeben.
+        farb_schluessel = color if color in self.LABEL_COLOR_KEYS else self.LABEL_COLOR_KEYS[len(self.labels) % len(self.LABEL_COLOR_KEYS)]
+        label = self.new_label_object(clean, None, farb_schluessel)
         self.labels.append(label)
         return label
 

@@ -7,7 +7,7 @@ Glide gibt dir vorhandene Aufgaben nie direkt, sondern als **Kontextpaket**: Der
 ## Kontextpaket lesen
 
 ```json
-{"format": "glide.context", "format_version": 2, "application_version": "3.66.0",
+{"format": "glide.context", "format_version": 2, "application_version": "3.69.0",
  "instructions": "…", "fields": ["title", "description", "importance", "due", "due_time",
  "planned_date", "estimated_minutes", "done", "labels"],
  "lists": [{"ref": "r-…", "kind": "list", "title": "…", "description": "…"}],

@@ -1,5 +1,20 @@
 # QA-Bericht – Glide 3.69.0
 
+## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
+
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 3.69.0, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+
+| Gegenstand | Nachweis |
+|---|---|
+| Befund 1: Labels an Ordnern und Listen | `apply_exchange_payload` in `app.pyw` und `07_Python-Versionen/`: Labels werden für Ordner und Listen aufgelöst (`exchange_labels_from_payload`) und an `new_folder_object(..., labels=etiketten)` bzw. `new_list_object(..., labels=etiketten)` übergeben. Labelfarbe (`color`) wird an `ensure_label_by_name(name, color=color)` durchgereicht; ist die Farbe in `LABEL_COLOR_KEYS`, wird sie direkt zugewiesen statt über die Palette zu rotieren. `build_exchange_payload` exportiert Labels an Ordnern und Listen für vollständigen Rundlauf |
+| Befund 2: KI-Anleitung und Fähigkeiten | `exchange_prompt_text` dokumentiert die 40-Zeichen-Titelgrenze (`CONTAINER_TITLE_MAX`), alle Listenarten (`tasks`, `note`, `page`, `drawing`, `gallery`), formatierte Texte (`rich_note`), Zeichnungen und Bildfolgen (`drawing`, `animation`) sowie Ordner- und Listenlabels. `exchange_capabilities()` um `list_kinds` erweitert |
+| Skill-Synchronisation 3.69.0 | Versionssync von 3.66.0 auf 3.69.0 in `SKILL.md`, `abdeckung.json`, `glide_datei.py`, `kontextpaket.glidecontext` und `aenderungsvorschlag.md`. In `abdeckung.json` Status von `liste.labels`, `ordner.labels` und `label.color` von `"offen"` (K2) auf `"ja"` (`"weg": "austausch"`) umgestellt |
+| Hilfsskript `glide_datei.py` | `LABEL_COLORS` verankert; Warnungen vor verworfenen Listen-/Ordnerlabels entfernt und durch Typprüfung ersetzt; Farbprüfung für Labels ergänzt |
+| Dokumentation `austauschformat.md` | `labels` an Ordnern und Listen in den Spezifikationstabellen ergänzt; Labelfarbe dokumentiert |
+| Zentrale KI-Ausgabeprüfung | `ki_ausgabe.py` prüft nun auch Labels an Ordnern und Listen sowie Labelfarben. `test_ki_ausgabe.py` 6/6 grün. `test_ki_ausgabe_darstellung.py` (T325) Vollprüfung OK (Exitcode 0) |
+| Werkzeugtests T321 | `test_agenten_skill.py`: 15/15 Tests grün. `test_abdeckung_stimmt_mit_dem_austauschweg` prüft, dass Ordnerlabels, Listenlabels und Labelfarben nachweislich in Glide ankommen |
+| CI-Grundstufe lokal | `ci_grundstufe.py`: 19/19 Schritte bestanden (Exitcode 0). `standpruefung.py`: 84 Dokumente, 0 Befunde. `abgleich_07.py`: 0 Abweichungen |
+
 ## Nachpflege 3.69.0 – Windows-CI, T325 und Vollprüfungsstand (16.11.2026)
 
 Stand nach dem Merge von PR #118 (`main` `f0511dd9`); Branch `claude/glide-docs-audit-handoff-c9f50b`, kein Versionswechsel, `src/glide` und `07_Python-Versionen` unverändert. Lokal macOS arm64, Python 3.14.5 (Python.org-Framework), Tcl/Tk 9.0.3, künstliche Daten außerhalb OneDrive.

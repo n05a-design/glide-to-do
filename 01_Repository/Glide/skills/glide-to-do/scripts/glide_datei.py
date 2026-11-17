@@ -18,7 +18,7 @@ Meldungen: FEHLER (Glide lehnt ab oder verliert Inhalt), WARNUNG (Glide kürzt,
 übergeht oder ändert etwas), HINWEIS (zulässig, aber besser anders). Exitcode 1
 bei Fehlern, mit `--streng` auch bei Warnungen.
 
-Die Regeln bilden die Prüfung von Glide 3.66.0 (Austauschformat 2) nach.
+Die Regeln bilden die Prüfung von Glide 3.69.0 (Austauschformat 2) nach.
 `tests/tools/test_agenten_skill.py` vergleicht sie mit dem Glide-Code; ändert
 sich der Austauschweg, muss dieses Skript im selben Schnitt mitgehen.
 """
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-GLIDE_VERSION = "3.66.0"
+GLIDE_VERSION = "3.69.0"
 FORMAT = "glide.exchange"
 FORMAT_VERSION = 2
 CONTEXT_FORMAT = "glide.context"
@@ -61,6 +61,7 @@ TITLE_MAX = 40
 MAX_LABEL_NAME = 40
 MAX_LABELS = 80
 MAX_LABELS_PER_ITEM = 20
+LABEL_COLORS = ("accent", "clear", "due_action", "export", "flag", "delete", "import")
 
 # Änderungsvorschlag wie `exchange_patch.py`.
 PATCH_FIELDS = ("title", "description", "importance", "due", "due_time", "planned_date",
@@ -423,7 +424,9 @@ def pruefe_create(bericht: Bericht, nutzlast: dict) -> None:
             label_keys.add(str(label["key"]))
         label_namen.add(name.casefold())
         if "color" in label:
-            bericht.h(f"{wo}: Glide {GLIDE_VERSION} übernimmt die Labelfarbe nicht und vergibt sie selbst.")
+            farbe = label.get("color")
+            if farbe not in LABEL_COLORS:
+                bericht.w(f"{wo}: Farbe {farbe!r} unbekannt (erlaubt: {', '.join(LABEL_COLORS)}); Glide vergibt eine eigene Farbe.")
     if len(label_namen) > 12:
         bericht.h(f"{len(label_namen)} Labels in einer Datei; wenige, wiederverwendete Labels sind übersichtlicher "
                   f"(Glide hält insgesamt höchstens {MAX_LABELS}).")
@@ -450,8 +453,10 @@ def pruefe_create(bericht: Bericht, nutzlast: dict) -> None:
         if eltern and str(eltern) not in ordner_keys:
             bericht.w(f"{wo} „{titel}“: parent {eltern!r} ist kein weiter oben beschriebener Ordner; "
                       "Glide legt den Ordner dann auf oberster Ebene an.")
-        if eintrag.get("labels"):
-            bericht.w(f"{wo} „{titel}“: Glide {GLIDE_VERSION} übernimmt Labels an Ordnern noch nicht.")
+        labels = eintrag.get("labels")
+        if labels is not None:
+            if not isinstance(labels, list) or not all(isinstance(l, str) and l.strip() for l in labels):
+                bericht.f(f"{wo} „{titel}“: labels muss eine Liste von Label-Schlüsseln oder -Namen sein.")
         if eintrag.get("key"):
             if str(eintrag["key"]) in ordner_keys:
                 bericht.f(f"{wo}: Schlüssel {eintrag['key']!r} doppelt.")
@@ -487,8 +492,10 @@ def pruefe_create(bericht: Bericht, nutzlast: dict) -> None:
             continue
         if liste.get("folder") and str(liste["folder"]) not in ordner_keys:
             bericht.w(f"{wo}: Ordner {liste['folder']!r} ist nicht beschrieben; die Liste entsteht ohne Ordner.")
-        if liste.get("labels"):
-            bericht.w(f"{wo}: Glide {GLIDE_VERSION} übernimmt Labels an Listen noch nicht.")
+        labels = liste.get("labels")
+        if labels is not None:
+            if not isinstance(labels, list) or not all(isinstance(l, str) and l.strip() for l in labels):
+                bericht.f(f"{wo}: labels muss eine Liste von Label-Schlüsseln oder -Namen sein.")
         if "rich_note" in liste:
             _pruefe_rich_note(bericht, wo, liste["rich_note"], art)
         if liste.get("animation") is not None:

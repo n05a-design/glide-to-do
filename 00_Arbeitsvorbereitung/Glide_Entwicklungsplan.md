@@ -69,7 +69,7 @@ Offene Arbeit auf einen Blick, Stand 16.11.2026 (3.69.0). Die Zeilen verweisen a
 |---|---|---|---|---|
 | 3.69.0 | Shell-Paket 5 `desktop_adapter.py` (M099, T326), Dokumentationskonsolidierung, Headless-CI-Absicherung | ◐ in `main` (PR #118, Nachpflege PR #119); Windows-Nachweis auf `d92dece9` und vollständiger Mac-Volllauf offen | Windows-Ergebnis lesen, Mac-Volllauf | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.69: Bedienelemente und Menüs nach Paket 4/5, Fokusrückgabe D87, Entlastungsdialog mit Gründen, Datenordnermeldung, Suche nach zerlegten Umlauten, Kompaktkopf 28 px, Anzeigeknopf, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
-| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)) | K2 gemeinsame Tk-freie Quelle; E-K5 vor K3 | je Paket |
+| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 behoben, Versionsabgleich 3.69.0 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)) | E-K5 vor K3 | je Paket |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
 | Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)); WA-50 als Modulbudget in T322/analyse_statisch; Paket 4 in 3.67.0 ([§21.105](#21105-glide-3670-shell-paket-4--erscheinungsbild-und-bedienelemente-custom_controlspy-16112026)); Paket 5 in 3.68.0 ([§21.106](#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026)) | Bündelung `glide_shell` vor Paket 6 (Demonstrationshost) | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
@@ -3011,4 +3011,37 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 **Behebung der Windows-Vollprüfung 17.11.2026 (PR #123):** Die Windows-Vollprüfung stoppte in `test_modalvertrag.py` an `fokus_drittes_fenster` (16/17 grün, Exitcode 1, Vorbedingung fand `.!toplevel`). Unter Windows blockierte Tk/Win32 den Fokuswechsel zu einem dritten Toplevel, solange der modale Dialog `d` den Grab (`grab_set`) hielt. `d.grab_release()` vor `focus_force` erlaubt den sauberen Fokusübergang; `test_modalvertrag` 17/17 Fälle und 9/9 Gegenproben grün. QA-Bericht und Testplan nachgezogen. Gemergt nach `main` `31bba5a1`.
 
 **Behebung der Linux-Vollprüfung 17.11.2026 (PR #125):** Die Linux-Vollprüfung (Lauf 44053037979) stoppte in `test_arbeitsmodi_geometrie` an `seitenleistenabstand3504` (`AssertionError: ('Hover fehlt', ...)`). Unter Xvfb / Tk 9.1 traf nach dem Wiedereinblenden der Seitenleiste (`sidebar_shell.pack(...)`) ein verzögertes asynchrones Leave-/Map-Ereignis des Window-Managers während der nachfolgenden Idle-Runden ein, wodurch das Hover-Tag vorübergehend zurückgesetzt wurde. Stabilisiert durch Bounding-Box-Ermittlung nach `idle(lauf, 3)`, Angleichung der Zwischenrunden auf `idle(lauf, 6)` und Absicherung der Hover-Prüfung gegen asynchrone Manager-Ereignisse. 9/9 Fälle der Gruppe `geometrie` und Grundstufe 19/19 grün.
+
+### 21.108 Agenten-Skill: Paket K2 (Austausch-Befunde 1 & 2 behoben, Versionsabgleich 3.69.0) (17.11.2026)
+
+**A – Auftrag:** Umsetzung der Befunde 1 und 2 aus der Analyse §13.39 (WA-61 Paket K2):
+1. **Befund 1 (Labels):** Labels an Ordnern und Listen nicht mehr still verwerfen, sondern an `new_folder_object` und `new_list_object` übergeben. Labelfarbe (`color`) beim Anlegen neuer Labels über `ensure_label_by_name(name, color=color)` übernehmen und bei bekannten Farbschlüsseln (`LABEL_COLOR_KEYS`) zuweisen statt blind über die Palette zu rotieren.
+2. **Befund 2 (KI-Anleitung & Fähigkeiten):** `exchange_prompt_text` um die 40-Zeichen-Titelgrenze (`CONTAINER_TITLE_MAX`), Listenarten (`tasks`, `note`, `page`, `drawing`, `gallery`), formatierte Notizen/Seiten (`rich_note`), Zeichnungen und Bildfolgen (`drawing`, `animation`) sowie Ordner-/Listenlabels schärfen. `exchange_capabilities()` um `list_kinds` erweitern.
+3. **Synchronisation Skill & Prüfungen:** `abdeckung.json`, Hilfsskript `glide_datei.py`, Referenzen (`austauschformat.md`), zentrales Prüfwerkzeug `ki_ausgabe.py` und Vollprüfungs-Integrationssuite `test_ki_ausgabe_darstellung.py` synchron nachführen; Versionsabgleich von 3.66.0 auf 3.69.0.
+
+**B – Umsetzung:**
+1. **App-Code (`app.pyw` und `07_Python-Versionen/`):**
+   - `ensure_label_by_name(self, name, color=None)`: optionaler Farbschlüssel wird geprüft; bei Übereinstimmung mit `LABEL_COLOR_KEYS` direkt vergeben.
+   - `exchange_labels_from_payload(self, labels_raw, label_ids)`: gemeinsame Auflösung von Labelkennungen und -namen für Punkte, Listen und Ordner.
+   - `apply_exchange_payload`: Labels für Ordner (`labels=etiketten`) und Listen (`labels=etiketten`) aufgelöst und übergeben; Labelfarbe an `ensure_label_by_name` durchgereicht.
+   - `build_exchange_payload`: Export sammelt und setzt Labels auch an Ordnern und Listen für vollständigen Rundlauf.
+   - `exchange_capabilities`: `list_kinds` aufgenommen.
+   - `exchange_prompt_text`: Vollständige Formatbeschreibung inkl. aller Listenarten, 40-Zeichen-Grenze, Zeichen- und Animationsstrukturen.
+   - Lieferabgleich über `abgleich_07.py` synchronisiert (0 Abweichungen).
+2. **Skill `glide-to-do`:**
+   - Versionssynchronisation auf 3.69.0 in `SKILL.md`, `abdeckung.json`, `glide_datei.py`, `kontextpaket.glidecontext` und `aenderungsvorschlag.md`.
+   - `abdeckung.json`: `liste.labels`, `ordner.labels` und `label.color` von `"offen"` (K2) auf `"ja"` (`"weg": "austausch"`) umgestellt; `list_kinds` in `faehigkeiten` ergänzt.
+   - `scripts/glide_datei.py`: `LABEL_COLORS` als Konstante verankert; Warnungen vor fehlender Labelübernahme entfernt und durch Typ-/Farbvalidierung ersetzt.
+   - `references/austauschformat.md`: `labels` an Ordnern und Listen in den Tabellen dokumentiert; Labelfarbe dokumentiert.
+3. **Zentrale KI-Ausgabeprüfung und Testabgleich:**
+   - `tests/tools/ki_ausgabe.py`: `vergleiche_austausch` prüft nun auch die korrekte Übernahme von Labels an Ordnern und Listen sowie Labelfarben.
+   - `tests/tools/test_ki_ausgabe.py` und `tests/integration/test_ki_ausgabe_darstellung.py`: Testfälle für `FEHLERHAFT` auf K3-Grenzen (`folder_kind`, `color`) angepasst; 100 % grün.
+   - `tests/tools/test_agenten_skill.py`: 15/15 Werkzeugtests grün.
+
+**C – Prüfung:**
+- `ci_grundstufe.py`: 19/19 Prüfungen bestanden (Exitcode 0).
+- `test_agenten_skill.py`: 15/15 Tests OK.
+- `test_ki_ausgabe.py`: 6/6 Tests OK.
+- `test_ki_ausgabe_darstellung.py`: Vollprüfung OK (Exitcode 0).
+- `standpruefung.py`: 0 Befunde.
 

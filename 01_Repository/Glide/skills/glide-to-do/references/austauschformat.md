@@ -32,11 +32,11 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 
 ## Labels
 
-`{"key": "label-1", "name": "Extern"}` – `key` frei und eindeutig, `name` höchstens 40 Zeichen. Gibt es den Namen in Glide schon, wird das vorhandene Label verwendet. Eine Farbe (`color`) übernimmt diese Glide-Fassung nicht; sie vergibt die Farbe selbst. Insgesamt hält Glide höchstens 80 Labels, je Punkt 20.
+`{"key": "label-1", "name": "Extern", "color": "flag"}` – `key` frei und eindeutig, `name` höchstens 40 Zeichen. Gibt es den Namen in Glide schon, wird das vorhandene Label verwendet. `color` legt die Farbe fest (`accent`, `clear`, `due_action`, `export`, `flag`, `delete`, `import`); ohne Angabe oder bei unbekannter Farbe rotiert Glide über die Palette. Insgesamt hält Glide höchstens 80 Labels, je Punkt 20.
 
 ## Ordner
 
-`{"key": "folder-1", "title": "Büroumzug", "description": "…", "parent": "folder-0"}`
+`{"key": "folder-1", "title": "Büroumzug", "description": "…", "parent": "folder-0", "labels": ["label-1"]}`
 
 | Feld | Bedeutung |
 |---|---|
@@ -44,12 +44,13 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `title` | höchstens 40 Zeichen |
 | `description` | Zweck des Ordners |
 | `parent` | Schlüssel eines **weiter oben** in `folders` stehenden Ordners; sonst entsteht der Ordner auf oberster Ebene |
+| `labels` | Liste von Label-Schlüsseln oder -Namen |
 
-Ordnerart Buch oder Notizbuch und `labels` an Ordnern übernimmt diese Glide-Fassung noch nicht.
+Ordnerart Buch oder Notizbuch übernimmt diese Glide-Fassung noch nicht.
 
 ## Listen
 
-`{"key": "list-1", "title": "Planung", "folder": "folder-1", "description": "…", "list_kind": "tasks", "items": [ … ]}`
+`{"key": "list-1", "title": "Planung", "folder": "folder-1", "description": "…", "list_kind": "tasks", "labels": ["label-1"], "items": [ … ]}`
 
 | Feld | Bedeutung |
 |---|---|
@@ -58,6 +59,7 @@ Ordnerart Buch oder Notizbuch und `labels` an Ordnern übernimmt diese Glide-Fas
 | `description` | Zweck der Liste |
 | `folder` | Schlüssel eines Ordners aus `folders`; ohne Angabe liegt die Liste auf oberster Ebene |
 | `list_kind` | Art der Liste, siehe unten; Vorgabe `tasks` |
+| `labels` | Liste von Label-Schlüsseln oder -Namen |
 | `items` | Punkte der Liste |
 | `rich_note` | Text einer Notiz oder Seite |
 | `drawing`, `animation` | Pixelzeichnung und Bildfolge einer Zeichnung |
@@ -70,7 +72,7 @@ Ordnerart Buch oder Notizbuch und `labels` an Ordnern übernimmt diese Glide-Fas
 | `drawing` | Pixelzeichnung in `drawing`, keine `items` | nur mit dem Hilfsskript kodieren |
 | `gallery` | Galerie | sinnlos ohne Bilder, die das Format nicht trägt |
 
-`labels` an Listen übernimmt diese Glide-Fassung noch nicht. Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner. `rich_note.spans` wären Formatbereiche mit Python-Zeichenpositionen; lass sie leer.
+Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner. `rich_note.spans` wären Formatbereiche mit Python-Zeichenpositionen; lass sie leer.
 
 ## Punkte
 

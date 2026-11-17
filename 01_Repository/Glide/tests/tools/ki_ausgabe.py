@@ -236,6 +236,10 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
         if label.get("key"):
             label_namen[str(label["key"])] = _norm(label["name"])
         _unbekannt(ergebnis, f"Label „{_norm(label['name'])}“", label, app.EXCHANGE_LABEL_FIELDS, offen["label"])
+        if "color" in label and label.get("color"):
+            zugeordnet = next((l for l in app.labels if _norm(l.get("name") or "").casefold() == _norm(label["name"]).casefold()), None)
+            if zugeordnet and label["color"] in app.LABEL_COLOR_KEYS and zugeordnet.get("color") != label["color"]:
+                ergebnis.melden(ABWEICHUNG, f"Label „{_norm(label['name'])}“", f"Farbe {zugeordnet.get('color')!r} statt {label['color']!r}")
     kontext = {"labels": labels, "label_namen": label_namen, "grenzen": offen}
 
     ordner_quelle = [o for o in nutzlast.get("folders") or [] if isinstance(o, dict) and _norm(o.get("title"))]
@@ -247,6 +251,13 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
         _titel(ergebnis, ort, _norm(quelle["title"]), ordner["title"], app.CONTAINER_TITLE_MAX)
         if ordner["title"] == _norm(quelle["title"]) and str(quelle.get("description") or "") != ordner.get("note", ""):
             ergebnis.melden(ABWEICHUNG, ort, "Beschreibung weicht ab")
+        if "labels" in quelle:
+            erwartete_labels = {kontext["label_namen"].get(str(k), _norm(k)).casefold()
+                                for k in quelle.get("labels") or [] if _norm(k)}
+            eigene = {kontext["labels"][i]["name"].casefold() for i in ordner.get("labels") or []
+                      if i in kontext["labels"] and not kontext["labels"][i].get("system")}
+            if erwartete_labels != eigene:
+                ergebnis.melden(ABWEICHUNG, ort, f"Labels {sorted(eigene)} statt {sorted(erwartete_labels)}")
         eltern = quelle.get("parent")
         erwartet = ordner_id.get(str(eltern)) if eltern else None
         if eltern and erwartet is None:
@@ -270,6 +281,13 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
         _titel(ergebnis, ort, titel, liste["title"], app.CONTAINER_TITLE_MAX)
         if liste["title"] == titel and str(quelle.get("description") or "") != liste.get("note", ""):
             ergebnis.melden(ABWEICHUNG, ort, "Beschreibung weicht ab")
+        if "labels" in quelle:
+            erwartete_labels = {kontext["label_namen"].get(str(k), _norm(k)).casefold()
+                                for k in quelle.get("labels") or [] if _norm(k)}
+            eigene = {kontext["labels"][i]["name"].casefold() for i in liste.get("labels") or []
+                      if i in kontext["labels"] and not kontext["labels"][i].get("system")}
+            if erwartete_labels != eigene:
+                ergebnis.melden(ABWEICHUNG, ort, f"Labels {sorted(eigene)} statt {sorted(erwartete_labels)}")
         art = quelle.get("list_kind") or app.LIST_KIND_TASKS
         if liste["list_kind"] != art:
             ergebnis.melden(ABWEICHUNG, ort, f"Listenart „{liste['list_kind']}“ statt „{art}“")
