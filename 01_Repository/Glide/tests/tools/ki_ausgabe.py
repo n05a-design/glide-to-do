@@ -127,6 +127,7 @@ def fensterloses_glide(mod):
     app.labels, app.lists, app.folders, app.trash = [], [], [], []
     app.settings, app.undo_stack, app.dirty = {}, [], False
     app._data_read_only = False
+    app.active_list_id = None
     app.refresh_data_lock = lambda: True
     app.prepare_inspector_switch = lambda: True
     app.snapshot_undo = lambda trim=True: app.undo_stack.append(None)
@@ -134,6 +135,8 @@ def fensterloses_glide(mod):
     app.trim_undo_stack = lambda: None
     app.finish_import_ui = lambda *args: None
     app.save_items = lambda: True
+    app.write_complete_backup = lambda *args, **kwargs: None
+    app.complete_backup_payload = lambda: {}
     return app
 
 
@@ -201,6 +204,21 @@ def vergleiche_punkte(app, ergebnis: Ergebnis, ort: str, quellen, punkte, tiefe:
                 ergebnis.melden(ABWEICHUNG, hier, "Uhrzeit ohne Fälligkeitsdatum verwirft Glide")
             elif wert != quelle[feld]:
                 ergebnis.melden(ABWEICHUNG, hier, f"{feld}: Datei {quelle[feld]!r}, Glide {wert!r}")
+        if "repeat" in quelle and quelle["repeat"] and not gliederung:
+            if not punkt.get("due"):
+                ergebnis.melden(ABWEICHUNG, hier, "Wiederholung ohne Fälligkeitsdatum verwirft Glide")
+            else:
+                erwartet = app.exchange_repeat_from_payload(quelle["repeat"], punkt.get("due"))
+                if punkt.get("repeat") != erwartet:
+                    ergebnis.melden(ABWEICHUNG, hier, f"Wiederholung: Datei {quelle['repeat']!r}, Glide {punkt.get('repeat')!r}")
+        if "reminder" in quelle and quelle["reminder"] and not gliederung:
+            try:
+                erwartet = app.reminder_config(app.normalize_reminder(quelle["reminder"]))
+            except (ValueError, TypeError):
+                erwartet = None
+            ist = app.reminder_config(punkt.get("reminder"))
+            if ist != erwartet:
+                ergebnis.melden(ABWEICHUNG, hier, f"Erinnerung: Datei {quelle['reminder']!r}, Glide {ist!r}")
         erwartete_labels = {kontext["label_namen"].get(str(k), _norm(k)).casefold()
                             for k in quelle.get("labels") or [] if _norm(k)}
         eigene = {kontext["labels"][i]["name"].casefold() for i in punkt.get("labels") or []
@@ -258,6 +276,10 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
                       if i in kontext["labels"] and not kontext["labels"][i].get("system")}
             if erwartete_labels != eigene:
                 ergebnis.melden(ABWEICHUNG, ort, f"Labels {sorted(eigene)} statt {sorted(erwartete_labels)}")
+        if "folder_kind" in quelle and quelle.get("folder_kind"):
+            erwartet = quelle["folder_kind"] if quelle["folder_kind"] in app.FOLDER_KINDS else "standard"
+            if ordner.get("folder_kind", "standard") != erwartet:
+                ergebnis.melden(ABWEICHUNG, ort, f"Ordnerart „{ordner.get('folder_kind')}“ statt „{erwartet}“")
         eltern = quelle.get("parent")
         erwartet = ordner_id.get(str(eltern)) if eltern else None
         if eltern and erwartet is None:
@@ -307,6 +329,9 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
             if len(soll.get("spans") or []) != len(ist.get("spans") or []):
                 ergebnis.melden(ABWEICHUNG, ort, f"{len(soll.get('spans') or [])} Formatbereiche beschrieben, "
                                                  f"{len(ist.get('spans') or [])} in Glide")
+        if "markdown" in quelle and isinstance(quelle.get("markdown"), str) and not quelle.get("rich_note"):
+            if not liste.get("rich_note") or not liste["rich_note"].get("text"):
+                ergebnis.melden(ABWEICHUNG, ort, "Markdown-Inhalt wurde nicht in die Notiz/Seite übernommen")
         if quelle.get("drawing") is not None and liste.get("drawing") != quelle["drawing"]:
             ergebnis.melden(ABWEICHUNG, ort, "Zeichnung weicht ab")
         punkte += vergleiche_punkte(app, ergebnis, ort, quelle.get("items"), liste.get("items") or [], 0, kontext)

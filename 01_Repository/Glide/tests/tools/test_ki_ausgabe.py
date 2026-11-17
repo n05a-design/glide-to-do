@@ -25,11 +25,11 @@ BEISPIELE = ROOT / "skills" / "glide-to-do" / "assets" / "beispiele"
 FEHLERHAFT = {
     "format": "glide.exchange", "format_version": 2, "mode": "create",
     "labels": [{"key": "l1", "name": "Team", "color": "accent"}],
-    "folders": [{"key": "f2", "title": "Kind", "parent": "f1"}, {"key": "f1", "title": "Eltern", "labels": ["l1"], "folder_kind": "journal"}],
+    "folders": [{"key": "f2", "title": "Kind", "parent": "f1"}, {"key": "f1", "title": "Eltern", "labels": ["l1"], "color": "accent"}],
     "lists": [{"key": "a", "title": "Planung für das große Sommerfest im Garten", "folder": "f1", "labels": ["l1"], "color": "clear",
                "items": [
                    {"type": "task", "title": "Getränke", "due": "27.11.2026", "estimated_minutes": "60",
-                    "repeat": "weekly", "farbe": "rot"},
+                    "planned_time": "10:00", "farbe": "rot"},
                    {"type": "heading", "title": "Abschnitt", "due": "2026-11-27"},
                    {"type": "task", "title": "Uhrzeit allein", "due_time": "09:00", "labels": ["l1", "Neu"]},
                    {"type": "aufgabe", "title": "Falsche Art"},
@@ -93,13 +93,13 @@ class KiAusgabeTests(unittest.TestCase):
                          "Punktart „aufgabe“ unbekannt", "Angabe „farbe“ kennt Glide nicht"):
             self.assertIn(erwartet, abweichungen)
         grenzen = " | ".join(b.text for b in ergebnis.arten(self.ki.GRENZE))
-        for erwartet in ("„repeat“ übernimmt Glide noch nicht (Paket K3", "„color“", "„folder_kind“"):
+        for erwartet in ("„planned_time“ übernimmt Glide noch nicht (Paket K3", "„color“"):
             self.assertIn(erwartet, grenzen)
         # Grenzen stammen aus der Abdeckung des Skills, nicht aus einer zweiten Liste.
         offen = self.ki.grenzen()
-        self.assertIn("repeat", offen["punkt"])
+        self.assertIn("planned_time", offen["punkt"])
         self.assertEqual(offen["liste"]["color"][0], "K3")
-        self.assertEqual(offen["ordner"]["folder_kind"][0], "K3")
+        self.assertEqual(offen["ordner"]["color"][0], "K3")
 
     def test_zeichnung_und_seite_werden_inhaltlich_verglichen(self):
         nutzlast = json.loads((BEISPIELE / "zeichnung.glideexchange").read_text("utf-8"))

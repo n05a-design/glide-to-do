@@ -61308,11 +61308,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     EXCHANGE_ITEM_FIELDS = {
         "key", "type", "title", "text", "description", "done", "importance",
         "due", "due_time", "planned_date", "estimated_minutes", "labels",
-        "checklist", "children",
+        "checklist", "children", "repeat", "reminder",
     }
     EXCHANGE_LIST_FIELDS = {"key", "title", "description", "folder", "labels", "items", "list_kind", "rich_note",
-                            "drawing", "animation"}
-    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels"}
+                            "markdown", "drawing", "animation"}
+    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels", "folder_kind"}
     EXCHANGE_LABEL_FIELDS = {"key", "name", "color"}
     EXCHANGE_ROOT_FIELDS = {"format", "format_version", "generator", "created_for",
                             "mode", "labels", "folders", "lists", "notes"}
@@ -61330,6 +61330,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return {
             "item_types": sorted(cls.EXCHANGE_ITEM_TYPES),
             "list_kinds": sorted(cls.LIST_KINDS),
+            "folder_kinds": sorted(cls.FOLDER_KINDS),
+            "markdown_pages": 1,
             "nested_items": 1,
             "descriptions": 1,
             "labels": 1,
@@ -61343,12 +61345,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "animations": 1,
             "max_animation_frames": glide_animation.MAX_FRAMES,
             "animation_duration_ms": [glide_animation.MIN_DURATION_MS, glide_animation.MAX_DURATION_MS],
-            # Bewusst noch nicht: Anhänge kommen als Dateien, nicht als Text;
-            # Wiederholungen und Erinnerungen hätten eigene Regelwerke, die
-            # eine erzeugende Stelle kaum verlässlich trifft.
+            # Bewusst noch nicht: Anhänge kommen als Dateien, nicht als Text.
             "attachments": 0,
-            "repeat": 0,
-            "reminders": 0,
+            "repeat": 1,
+            "reminders": 1,
             # Stufe 2 (G24, 3.35.0): Änderungsvorschläge über ein Kontextpaket.
             "patch_mode": 1,
             "max_items": cls.MAX_EXCHANGE_ITEMS,
@@ -61390,6 +61390,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     eintrag[feld] = item[feld]
             if item.get("estimated_minutes") is not None:
                 eintrag["estimated_minutes"] = item["estimated_minutes"]
+            if item.get("repeat") and item.get("due"):
+                rep = copy.deepcopy(item["repeat"])
+                art = rep.get("art")
+                inv_map = {
+                    "taeglich": "daily", "woechentlich": "weekly", "monatlich": "monthly",
+                    "jaehrlich": "yearly", "wochentage": "weekdays", "tage": "every_n_days", "serie": "series",
+                }
+                if art in inv_map:
+                    rep["kind"] = inv_map[art]
+                if art == "tage" and "abstand" in rep and "interval" not in rep:
+                    rep["interval"] = rep["abstand"]
+                eintrag["repeat"] = rep
+            if item.get("reminder"):
+                config = self.reminder_config(item["reminder"])
+                if config:
+                    eintrag["reminder"] = config
             schritte = item.get("checklist") or []
             if schritte:
                 eintrag["checklist"] = [
@@ -61439,6 +61455,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             eintrag = {"key": schluessel, "title": wert.get("title", "")}
             if wert.get("note"):
                 eintrag["description"] = str(wert["note"])
+            if wert.get("folder_kind") and wert.get("folder_kind") != "standard":
+                eintrag["folder_kind"] = wert["folder_kind"]
             if wert.get("parent_id") in ordner_keys:
                 eintrag["parent"] = ordner_keys[wert["parent_id"]]
             if wert.get("labels"):
@@ -61463,9 +61481,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 listen_etiketten = [label_keys[k] for k in eintrag["labels"] if k in label_keys]
                 if listen_etiketten:
                     darstellung["labels"] = listen_etiketten
-            if eintrag.get("list_kind") == "note" or eintrag.get("rich_note", {}).get("text"):
+            if eintrag.get("list_kind") in (self.LIST_KIND_PAGE, self.LIST_KIND_NOTE) or eintrag.get("rich_note", {}).get("text"):
                 darstellung["list_kind"] = eintrag.get("list_kind", "tasks")
-                darstellung["rich_note"] = RichNoteEditor.normalize(eintrag.get("rich_note"))
+                norm_note = RichNoteEditor.normalize(eintrag.get("rich_note"))
+                darstellung["rich_note"] = norm_note
+                if norm_note.get("text"):
+                    try:
+                        darstellung["markdown"] = glide_page_markdown.page_to_markdown(norm_note)
+                    except Exception:
+                        pass
             if self.is_drawing_list(eintrag):
                 # Das Zellmodell reist vollständig mit. Die PNG-Referenz ist ein
                 # Anhang und gehört wie alle Dateien nicht in den Austausch.
@@ -61578,6 +61602,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for feld in ordner:
                 if feld not in self.EXCHANGE_FOLDER_FIELDS:
                     bericht.unknown_fields.append(f"folders.{feld}")
+            if ordner.get("folder_kind") and ordner.get("folder_kind") not in self.FOLDER_KINDS:
+                bericht.warnings.append(
+                    f"„{ordner.get('title', '')}“: Unbekannte Ordnerart {ordner['folder_kind']!r} – als Standardordner übernommen.")
             if ordner.get("key"):
                 ordner_keys.add(str(ordner["key"]))
             bericht.counts["folders"] += 1
@@ -61610,6 +61637,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                         "und bleibt leer.")
             if eintrag.get("due_time") and not self.normalize_due_time(eintrag["due_time"]):
                 bericht.warnings.append(f"„{titel}“: Uhrzeit „{eintrag['due_time']}“ unbrauchbar.")
+            if eintrag.get("repeat"):
+                if not eintrag.get("due"):
+                    bericht.warnings.append(
+                        f"„{titel}“: Wiederholung ohne Fälligkeitsdatum wird ignoriert.")
+                elif self.exchange_repeat_from_payload(eintrag["repeat"], eintrag.get("due")) is None:
+                    bericht.warnings.append(
+                        f"„{titel}“: Wiederholungsregel unbrauchbar und wird ignoriert.")
+            if eintrag.get("reminder"):
+                try:
+                    self.normalize_reminder(eintrag["reminder"])
+                except (ValueError, TypeError) as fehler:
+                    bericht.warnings.append(f"„{titel}“: Erinnerung unbrauchbar ({fehler}) – bleibt leer.")
             schritte = eintrag.get("checklist") or []
             if schritte:
                 if len(schritte) > self.MAX_CHECKLIST_ENTRIES:
@@ -61664,6 +61703,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for feld in eintrag:
                 if feld not in self.EXCHANGE_LIST_FIELDS:
                     bericht.unknown_fields.append(f"lists.{feld}")
+            if eintrag.get("markdown") is not None and not isinstance(eintrag.get("markdown"), str):
+                bericht.warnings.append(f"„{listentitel}“: Das Markdown-Feld ist kein Text und wird ignoriert.")
             if not str(eintrag.get("title") or "").strip():
                 bericht.warnings.append("Eine Liste ohne Titel wurde übersprungen.")
                 continue
@@ -61709,6 +61750,50 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         return value if 1 <= value <= self.MAX_ESTIMATED_MINUTES else None
 
+    REPEAT_KIND_MAP = {
+        "daily": "taeglich",
+        "taeglich": "taeglich",
+        "every_n_days": "tage",
+        "tage": "tage",
+        "weekdays": "wochentage",
+        "wochentage": "wochentage",
+        "weekly": "woechentlich",
+        "woechentlich": "woechentlich",
+        "monthly": "monatlich",
+        "monatlich": "monatlich",
+        "yearly": "jaehrlich",
+        "jaehrlich": "jaehrlich",
+        "series": "serie",
+        "serie": "serie",
+    }
+
+    def exchange_repeat_from_payload(self, value, default_start=None):
+        """Tolerante Annahme einer Wiederholungsregel aus einer Austauschdatei."""
+        if not isinstance(value, dict):
+            return None
+        art_raw = str(value.get("art") or value.get("kind") or "").strip().lower()
+        if art_raw not in self.REPEAT_KIND_MAP:
+            return None
+        art = self.REPEAT_KIND_MAP[art_raw]
+        regel = {"art": art}
+        if art == "serie":
+            regel["rrule"] = value.get("rrule")
+        elif art == "tage":
+            abstand = value.get("abstand") if "abstand" in value else value.get("interval")
+            if abstand is not None:
+                regel["abstand"] = abstand
+        elif art == "wochentage":
+            tage = value.get("tage") if "tage" in value else value.get("days")
+            if tage is not None:
+                regel["tage"] = tage
+        for k_src, k_dst in (("start", "start"), ("ende", "ende"), ("end", "ende"),
+                             ("bezug", "bezug"), ("reference", "bezug"),
+                             ("pausiert", "pausiert"), ("paused", "pausiert"),
+                             ("rest", "rest")):
+            if k_src in value and k_dst not in regel:
+                regel[k_dst] = value[k_src]
+        return glide_repeat.normalize(regel, default_start=default_start)
+
     def exchange_labels_from_payload(self, labels_raw, label_ids):
         """Löst Labels aus Austausch-Kennungen oder direkten Labelnamen auf."""
         etiketten = []
@@ -61737,12 +61822,23 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 erzeugt = self.exchange_item_from_payload(kind, label_ids, tiefe + 1)
                 if erzeugt is not None:
                     kinder.append(erzeugt)
+        normalized_due = None if strukturell else self.normalize_due(eintrag.get("due"))
+        repeat = None
+        reminder = None
+        if not strukturell:
+            if eintrag.get("repeat") and normalized_due:
+                repeat = self.exchange_repeat_from_payload(eintrag.get("repeat"), normalized_due)
+            if eintrag.get("reminder"):
+                try:
+                    reminder = self.reminder_config(self.normalize_reminder(eintrag.get("reminder")))
+                except (ValueError, TypeError):
+                    reminder = None
         return self.new_item(
             titel,
             done=bool(eintrag.get("done")) and not strukturell,
             children=kinder,
             importance=0 if strukturell else self.clamp_importance(eintrag.get("importance", 0)),
-            due=None if strukturell else self.normalize_due(eintrag.get("due")),
+            due=normalized_due,
             due_time=None if strukturell else self.normalize_due_time(eintrag.get("due_time")),
             description=str(eintrag.get("description") or ""),
             kind=art,
@@ -61751,16 +61847,33 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             estimated_minutes=None if strukturell else self.exchange_minutes(
                 eintrag.get("estimated_minutes")),
             checklist=None if strukturell else eintrag.get("checklist"),
+            repeat=repeat,
+            reminder=reminder,
         )
 
     def apply_exchange_payload(self, nutzlast, ziel_ordner_id=None):
-        """Create-Import atomar übernehmen; inklusive Labels und vollem Undo-Stapel."""
+        """Create-Import atomar übernehmen; inklusive Labels, Vorsicherung und vollem Undo-Stapel."""
         if (self.refresh_data_lock() is False or getattr(self,'_data_read_only',False)
                 or not self.prepare_inspector_switch()):
             return None
         undo_before, dirty_before = tuple(self.undo_stack), self.dirty
         self.snapshot_undo(trim=False)
         checkpoint = self.undo_stack[-1]
+        try:
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            pre_import_path = os.path.join(
+                BACKUP_DIR,
+                f"vor_import_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.glidebackup",
+            )
+            if hasattr(self, "write_complete_backup"):
+                try:
+                    payload = self.complete_backup_payload() if hasattr(self, "complete_backup_payload") else {}
+                    self.write_complete_backup(pre_import_path, payload)
+                except AttributeError:
+                    pass
+        except (OSError, ValueError):
+            self.restore_import_checkpoint(checkpoint, undo_before, dirty_before)
+            return None
         try:
             label_ids = {}
             for label in nutzlast.get("labels") or []:
@@ -61781,8 +61894,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     continue
                 eltern = ordner_ids.get(str(ordner.get("parent") or "")) or ziel_ordner_id
                 etiketten = self.exchange_labels_from_payload(ordner.get("labels"), label_ids)
+                ordnerart = ordner.get("folder_kind")
+                if ordnerart not in self.FOLDER_KINDS:
+                    ordnerart = "standard"
                 erzeugt = self.new_folder_object(titel, note=str(ordner.get("description") or ""),
-                                                 parent_id=eltern, labels=etiketten)
+                                                 parent_id=eltern, labels=etiketten,
+                                                 folder_kind=ordnerart)
                 if ordner.get("key"):
                     ordner_ids[str(ordner["key"])] = erzeugt["id"]
                 neue_ordner.append(erzeugt)
@@ -61798,10 +61915,26 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     erzeugt = self.exchange_item_from_payload(roh, label_ids)
                     if erzeugt is not None:
                         punkte.append(erzeugt)
+                rich_note = eintrag.get("rich_note")
+                if not rich_note and isinstance(eintrag.get("markdown"), str):
+                    try:
+                        md_doc = glide_page_markdown.markdown_to_page(eintrag["markdown"])
+                        md_tasks = md_doc.pop("tasks", [])
+                        if not punkte and md_tasks:
+                            for task in md_tasks:
+                                punkt = self.new_item(task.get("text", ""), done=bool(task.get("done")))
+                                if punkt:
+                                    punkte.append(punkt)
+                        rich_note = RichNoteEditor.normalize(md_doc)
+                    except Exception:
+                        rich_note = None
+                art = eintrag.get("list_kind")
+                if art is None and isinstance(eintrag.get("markdown"), str):
+                    art = self.LIST_KIND_PAGE
                 etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
                 liste = self.new_list_object(
                     titel, punkte, note=str(eintrag.get("description") or ""),
-                    list_kind=eintrag.get("list_kind"), rich_note=eintrag.get("rich_note"),
+                    list_kind=art, rich_note=rich_note,
                     folder_id=ordner_ids.get(str(eintrag.get("folder") or "")) or ziel_ordner_id,
                     drawing=eintrag.get("drawing"),
                     animation=copy.deepcopy(eintrag.get("animation")),
@@ -63387,6 +63520,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         faehigkeiten = self.exchange_capabilities()
         arten = ", ".join(faehigkeiten["item_types"])
         listenarten = ", ".join(faehigkeiten.get("list_kinds") or sorted(self.LIST_KINDS))
+        ordnerarten = ", ".join(faehigkeiten.get("folder_kinds") or sorted(self.FOLDER_KINDS))
         return f"""Erzeuge eine Glide-Austauschdatei ({self.EXCHANGE_SUFFIX}).
 
 Antworte ausschließlich mit einem JSON-Objekt, ohne Fließtext davor oder danach.
@@ -63398,15 +63532,16 @@ Aufbau
     "mode": "create",
     "generator": {{"type": "ai"}},
     "labels": [{{"key": "label-1", "name": "Release", "color": "flag"}}],
-    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "labels": ["label-1"]}}],
+    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "folder_kind": "standard", "labels": ["label-1"]}}],
     "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1", "list_kind": "tasks",
-                "description": "Wozu diese Liste da ist.", "labels": ["label-1"], "items": [ ... ]}}]
+                "description": "Wozu diese Liste da ist.", "markdown": "# Titel\\nNotiztext", "labels": ["label-1"], "items": [ ... ]}}]
   }}
 
 Ein Punkt
   {{"type": "task", "title": "Kurze Handlung", "description": "Ziel und Ergebnis.",
     "importance": 0-3, "due": "JJJJ-MM-TT", "due_time": "HH:MM",
     "planned_date": "JJJJ-MM-TT", "estimated_minutes": 30,
+    "repeat": {{"kind": "weekly"}}, "reminder": {{"mode": "relative", "minutes": 15}},
     "labels": ["label-1"], "done": false,
     "checklist": [{{"text": "Schritt", "done": false}}],
     "children": [ ... ]}}
@@ -63419,14 +63554,23 @@ Bedeutung der Punktarten ({arten})
 
 Listenarten ({listenarten})
   tasks    Aufgabenliste mit Punkten (Vorgabe).
-  note     Notiz: Text in rich_note, optional Punkte darüber.
-  page     Seite: formatierter Text in rich_note.
+  note     Notiz: Text in markdown oder rich_note, optional Punkte darüber.
+  page     Seite: formatierter Text in markdown oder rich_note.
   drawing  Pixelzeichnung in drawing oder Bildfolge in animation.
   gallery  Galerie: Bildsammlung (ohne Bilder leer).
+
+Ordnerarten ({ordnerarten})
+  standard Standardordner für alle Listenarten (Vorgabe).
+  library  Buch: sammelt formatierte Seiten und Dokumente.
+  journal  Notizbuch: für Tagebücher und Notizen.
 
 Bedeutung der Felder
   title        Titel von Punkt, Liste oder Ordner (höchstens {self.CONTAINER_TITLE_MAX} Zeichen).
   description  Was die Aufgabe bedeutet und welches Ergebnis erwartet wird.
+  markdown     Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides Format gewandelt).
+  folder_kind  Art des Ordners: standard, library (Buch) oder journal (Notizbuch).
+  repeat       Wiederholungsregel an Aufgaben mit due (daily, weekly, monthly, yearly, weekdays mit days: [0-6], every_n_days mit interval: n).
+  reminder     Benachrichtigung: relativ (mode "relative" mit minutes) oder fest (mode "fixed" mit ISO-Zeitstempel at).
   children     Echte Unterpunkte, die eigenständig erledigt werden.
   checklist    Arbeitsschritte innerhalb eines Punkts, ohne eigene Termine.
   due          Bis wann etwas fertig sein muss.
@@ -63436,7 +63580,7 @@ Regeln
   1. Verwende Schlüssel („key“) frei wählbar, aber eindeutig. Erfinde keine
      internen Kennungen; Glide vergibt sie beim Import selbst.
   2. Titel von Aufgaben, Listen und Ordnern dürfen höchstens {self.CONTAINER_TITLE_MAX}
-     Zeichen lang sein. Längere Inhalte gehören in description oder rich_note.
+     Zeichen lang sein. Längere Inhalte gehören in description, markdown oder rich_note.
   3. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
      {faehigkeiten['max_checklist_entries']} Checklistenschritte je Punkt an.
      Verschachtele höchstens {faehigkeiten['max_depth']} Ebenen tief.
@@ -63445,8 +63589,8 @@ Regeln
   5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
   6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
      long für erklärende Texte und task nur dort, wo etwas zu tun ist.
-  7. Diese Fassung unterstützt keine Anhänge, Wiederholungen und Erinnerungen.
-     Lass diese Felder weg, statt sie zu erfinden.
+  7. Diese Fassung unterstützt keine binären Dateianhänge. Lass dieses Feld weg,
+     statt es zu erfinden.
 
 Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
   Liegt ein Kontextpaket ({self.CONTEXT_SUFFIX}, format „{glide_exchange_patch.CONTEXT_FORMAT}“) bei,

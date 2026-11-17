@@ -36,7 +36,7 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 
 ## Ordner
 
-`{"key": "folder-1", "title": "Büroumzug", "description": "…", "parent": "folder-0", "labels": ["label-1"]}`
+`{"key": "folder-1", "title": "Büroumzug", "description": "…", "parent": "folder-0", "folder_kind": "standard", "labels": ["label-1"]}`
 
 | Feld | Bedeutung |
 |---|---|
@@ -44,13 +44,12 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `title` | höchstens 40 Zeichen |
 | `description` | Zweck des Ordners |
 | `parent` | Schlüssel eines **weiter oben** in `folders` stehenden Ordners; sonst entsteht der Ordner auf oberster Ebene |
+| `folder_kind` | Ordnerart: `standard`, `library` (Buch für Dokumente) oder `journal` (Notizbuch für Tagesnotizen); Vorgabe `standard` |
 | `labels` | Liste von Label-Schlüsseln oder -Namen |
-
-Ordnerart Buch oder Notizbuch übernimmt diese Glide-Fassung noch nicht.
 
 ## Listen
 
-`{"key": "list-1", "title": "Planung", "folder": "folder-1", "description": "…", "list_kind": "tasks", "labels": ["label-1"], "items": [ … ]}`
+`{"key": "list-1", "title": "Planung", "folder": "folder-1", "description": "…", "list_kind": "tasks", "markdown": "# Titel\n…", "labels": ["label-1"], "items": [ … ]}`
 
 | Feld | Bedeutung |
 |---|---|
@@ -61,25 +60,27 @@ Ordnerart Buch oder Notizbuch übernimmt diese Glide-Fassung noch nicht.
 | `list_kind` | Art der Liste, siehe unten; Vorgabe `tasks` |
 | `labels` | Liste von Label-Schlüsseln oder -Namen |
 | `items` | Punkte der Liste |
-| `rich_note` | Text einer Notiz oder Seite |
+| `rich_note` | Text einer Notiz oder Seite im internen Format |
+| `markdown` | Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides internes Format gewandelt) |
 | `drawing`, `animation` | Pixelzeichnung und Bildfolge einer Zeichnung |
 
 | `list_kind` | Inhalt | Hinweise |
 |---|---|---|
 | `tasks` (Vorgabe) | Aufgabenliste mit `items` | – |
-| `note` | Notiz: Text in `rich_note`, optional `items` als Aufgaben über dem Text | Text ohne Formatierung: `"rich_note": {"text": "…", "spans": [], "links": {}}` |
-| `page` | Seite | formatierte Seiten besser als [Markdown-Datei](seiten-markdown.md); `rich_note` wird nicht aus Markdown umgewandelt |
+| `note` | Notiz: Text in `markdown` oder `rich_note`, optional `items` als Aufgaben über dem Text | Text ohne Formatierung: `"rich_note": {"text": "…", "spans": [], "links": {}}` |
+| `page` | Seite | formatierte Seiten direkt über `markdown` oder als [Markdown-Datei](seiten-markdown.md) |
 | `drawing` | Pixelzeichnung in `drawing`, keine `items` | nur mit dem Hilfsskript kodieren |
 | `gallery` | Galerie | sinnlos ohne Bilder, die das Format nicht trägt |
 
-Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner. `rich_note.spans` wären Formatbereiche mit Python-Zeichenpositionen; lass sie leer.
+Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner.
 
 ## Punkte
 
 ```json
 {"type": "task", "title": "Angebote einholen", "description": "Ziel und Ergebnis.",
  "importance": 2, "due": "2026-11-27", "due_time": "14:00", "planned_date": "2026-11-23",
- "estimated_minutes": 60, "labels": ["label-1"], "done": false,
+ "estimated_minutes": 60, "repeat": {"kind": "weekly"}, "reminder": {"mode": "relative", "minutes": 15},
+ "labels": ["label-1"], "done": false,
  "checklist": [{"text": "Anfrage senden", "done": false}],
  "children": [ … ]}
 ```
@@ -94,6 +95,8 @@ Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckun
 | `due_time` | `HH:MM` | nur zusammen mit `due` |
 | `planned_date` | `JJJJ-MM-TT` | wann daran arbeiten |
 | `estimated_minutes` | ganze Zahl 1–60.000 | sonst lässt Glide den Aufwand still leer |
+| `repeat` | Objekt (`kind`: `daily`, `weekly`, `monthly`, `yearly`, `weekdays`, `every_n_days`) | nur zusammen mit `due` |
+| `reminder` | Objekt (`{"mode": "relative", "minutes": n}` oder `{"mode": "fixed", "at": "…"}`) | Benachrichtigung |
 | `labels` | Liste von Label-Schlüsseln oder -Namen | unbekannte Namen legt Glide an |
 | `done` | `true`/`false` | nur `task`/`long` |
 | `checklist` | bis 50 Schritte `{"text", "done"}`, Text bis 200 Zeichen | keine eigenen Termine |
