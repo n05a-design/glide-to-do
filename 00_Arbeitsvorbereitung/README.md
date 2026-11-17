@@ -9,6 +9,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzus
 | Dokument | Zweck |
 |---|---|
 | [Übergabe](Glide_Uebergabe.md) | Einstieg: aktueller Git-/Arbeitskopienstand, Prüfbelege, Archivstatus und offene Tore |
+| [Meilenstein-Plan v1.0](Glide_Meilenstein_v1_Plan.md) | Verbindlicher Schnittpunkt und Fahrplan für Release Version 1.0 (Homebrew, winget, i18n, D93) |
 | [Entwicklungsplan](Glide_Entwicklungsplan.md) | Einzige Roadmap mit Aufgabenstatus, Paketgrenzen und offenen Entscheidungen |
 | [Analyse](Glide_Analyse.md) | Datierte technische und fachliche Befunde mit Quellenstand und Prüfgrenzen |
 | [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md) | Herstellerquellen, Vergleiche und eingeordnete Vorschläge |
