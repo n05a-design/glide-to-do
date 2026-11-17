@@ -78,6 +78,8 @@ class LicenseContractTests(unittest.TestCase):
         # den Paketbau 3.44.0 nach PyInstaller ab (GitHub #145/#146).
         self.assertEqual(resource_components(['resources/exchange_recipes.json']),
                          {'resources/exchange_recipes.json':['Glide']})
+        self.assertEqual(resource_components(['resources/locales/de.json', 'resources/locales/en.json']),
+                         {'resources/locales/de.json': ['Glide'], 'resources/locales/en.json': ['Glide']})
         for names in (['resources/unknown/image.png'],['resources/timezones/iana-2027a.zip'],
                       ['resources/exchange_recipes_extra.json'],
                       ['resources/../outside'],['resources/logo/icon.png','resources/logo/icon.png']):

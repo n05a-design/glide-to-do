@@ -35,6 +35,12 @@ class ModulbudgetPruefung(unittest.TestCase):
         violations = analyse.check_module_budget(tree, max_length=50, max_nesting=15, allow_tk=True)
         self.assertEqual(violations, [])
 
+    def test_i18n_meets_budget(self):
+        path = SRC / "i18n.py"
+        _text, tree = analyse.load(path)
+        violations = analyse.check_module_budget(tree, max_length=50, max_nesting=15, allow_tk=False)
+        self.assertEqual(violations, [])
+
     def test_gegenprobe_tkinter_import_in_tk_freier_logik_erkannt(self):
         code = "import tkinter as tk\n\ndef helper():\n    return 42\n"
         tree = ast.parse(code)

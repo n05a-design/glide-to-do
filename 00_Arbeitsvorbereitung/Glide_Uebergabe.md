@@ -1,18 +1,18 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 17.11.2026 · Glide 3.70.0 (Ziel: 1.0.0) · Aufgabenformat 26 · Glide-System V1.39
+Stand 17.11.2026 · Glide 3.70.0 (Ziel: 1.0.0) · Aufgabenformat 26 · Glide-System V1.40
 
-Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den verbindlichen Fahrplan zu Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) sowie [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Zuletzt am 17.11.2026 gegen `main` `1cee384a` (PR #130 gemergt) geprüft; 100 % grüne Testmatrix (Grundstufe 19/19, Werkzeugtests, Integrationstests, Standprüfung 0 Befunde, Byte-Gleichheit zu `07_Python-Versionen/`). Frühere Übergabestände trägt Git.
+Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den verbindlichen Fahrplan zu Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) sowie [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Zuletzt am 17.11.2026 gegen `main` (PR #133 gemergt, Glide 3.70.0) geprüft; 100 % grüne Testmatrix (Grundstufe 19/19, Werkzeugtests, Integrationstests, Standprüfung 0 Befunde, Byte-Gleichheit zu `07_Python-Versionen/`). Frühere Übergabestände trägt Git.
 
 > [!IMPORTANT]
 > **Aktueller strategischer Fokus: Meilenstein Release 1.0 (v1.0.0 / D93)**
 > Der Inhaber hat am 17.11.2026 den verbindlichen Feature Freeze für die erste Hauptversion **Glide 1.0.0** beschlossen, um endlosen Scope Creep zu verhindern. Ziel ist die Verteilung als professionelles GitHub Release sowie über **Homebrew** (macOS Cask) und **winget** (Windows).
-> - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ **ABGESCHLOSSEN** (PR #130, V1.39, T328)
-> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** 🎯 **AKTIVER NÄCHSTER SCHRITT** (Modul M100 `i18n.py`, JSON-Kataloge, UI-Lokalisierung)
-> - **Etappe 3: Paketierung & Installer:** ⏳ Geplant (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, Homebrew Cask, winget Manifest)
+> - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ **ABGESCHLOSSEN** (PR #130, PR #133, V1.39, T328)
+> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ **ABGESCHLOSSEN** (Modul M100 `i18n.py`, JSON-Kataloge `de.json`/`en.json`, T329, V1.40)
+> - **Etappe 3: Paketierung & Installer:** 🎯 **AKTIVER NÄCHSTER SCHRITT** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, Homebrew Cask, winget Manifest)
 > - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ⏳ Geplant (Versionssprung 1.0.0, Release-Assets, Tap & winget PR)
 >
-> **Erste Handgriffe einer neuen Sitzung:** (1) `git fetch` und `main` mit diesem Stand vergleichen. (2) [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) lesen. (3) Direkt mit **Etappe 2 (Mehrsprachigkeit)** fortfahren (siehe [Abschnitt 3.1](#schritt-1-etappe-2--mehrsprachigkeit-i18n-deutsch--englisch-aktiver-schritt)).
+> **Erste Handgriffe einer neuen Sitzung:** (1) `git fetch` und `main` mit diesem Stand vergleichen. (2) [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) lesen. (3) Direkt mit **Etappe 3 (Paketbau & Installer)** fortfahren.
 
 ---
 
