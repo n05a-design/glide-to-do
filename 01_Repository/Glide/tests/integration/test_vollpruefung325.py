@@ -186,13 +186,14 @@ with tempfile.TemporaryDirectory(prefix="glide-voll325-") as folder:
         # ================================================================
         # Was den Prüflauf beenden oder den Bestand unwiederbringlich ändern
         # würde, bleibt außen vor; alles andere wird aufgerufen.
-        AUSGENOMMEN = {"Beenden", "Papierkorb leeren", "Aktive Liste löschen"}
+        AUSGENOMMEN = {"Beenden", "Glide beenden", "Quit", "Papierkorb leeren", "Aktive Liste löschen"}
         aktionen = app.app_action_entries()
         assert len(aktionen) >= 70, len(aktionen)
         app.set_active_list(liste["id"])
         root.update()
         for eintrag in aktionen:
-            if eintrag["label"] in AUSGENOMMEN:
+            if (eintrag["label"] in AUSGENOMMEN
+                    or eintrag.get("id") in ("on_close", "empty_trash", "delete_active_list")):
                 continue
             meldungen.clear()
             eintrag["menu"].invoke(eintrag["index"])

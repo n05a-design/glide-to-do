@@ -187,7 +187,7 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
             root.update_idletasks()
             root.update()
 
-    AUSGENOMMEN = ("Beenden", "leeren", "löschen", "Löschen", "Datenordner wechseln", "Papierkorb",
+    AUSGENOMMEN = ("Beenden", "Glide beenden", "Quit", "leeren", "löschen", "Löschen", "Datenordner wechseln", "Papierkorb",
                    "Zurücksetzen", "entfernen", "Entfernen")
 
     def zustand():
