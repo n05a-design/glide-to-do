@@ -118,6 +118,10 @@ jobs:
           path: ${{ runner.temp }}/win/Glide
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
+          name: paket-windows-installer
+          path: ${{ runner.temp }}/win-installer
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
           name: paket-macos-arm64-glide
           path: ${{ runner.temp }}/mac
       - name: Dateien zusammenstellen und Prüfsummen bilden
@@ -126,12 +130,14 @@ jobs:
           aus="$RUNNER_TEMP/release"
           mkdir "$aus"
           test -f "$RUNNER_TEMP/win/Glide/Glide.exe"
+          test -f "$RUNNER_TEMP/win-installer/Glide-$VERSION-windows-x64-setup.exe"
           mac_version=$(jq -r .version "$RUNNER_TEMP/mac/abschluss.json")
           if [ "$mac_version" != "$VERSION" ]; then
             echo "::error::Mac-Paket meldet $mac_version statt $VERSION"; exit 1
           fi
           (cd "$RUNNER_TEMP/mac" && shasum -a 256 -c "Glide-$VERSION-macos-arm64.tar.gz.sha256" "Glide-$VERSION-macos-arm64.dmg.sha256")
           cp "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.dmg" "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.tar.gz" "$aus/"
+          cp "$RUNNER_TEMP/win-installer/Glide-$VERSION-windows-x64-setup.exe" "$aus/"
           (cd "$RUNNER_TEMP/win" && zip -q -r -X -9 "$aus/Glide-$VERSION-windows-x64.zip" Glide)
           (cd 01_Repository/Glide/skills && zip -q -r -X -9 "$aus/glide-to-do-skill-v$VERSION.zip" glide-to-do)
           (cd "$aus" && for datei in Glide-* glide-to-do-*; do [ -f "$datei" ] && sha256sum "$datei" > "$datei.sha256"; done)
@@ -152,10 +158,11 @@ jobs:
             printf '**Entwicklungsbauten.** Beide Pakete sind unsigniert und brauchen kein installiertes Python.\n\n'
             printf '## Herunterladen und starten\n\n'
             printf '| System | Datei | Start |\n|---|---|---|\n'
-            printf '| Windows 10/11 (x64) | `Glide-%s-windows-x64.zip` | Entpacken, `Glide\\Glide.exe` starten. SmartScreen warnt, weil das Paket nicht signiert ist: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
+            printf '| Windows 10/11 (x64) Installer | `Glide-%s-windows-x64-setup.exe` | Ausführen und geführter Installation folgen (empfohlen). Startmenüeintrag und Deinstallation inklusive. SmartScreen: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
+            printf '| Windows 10/11 (x64) Portable | `Glide-%s-windows-x64.zip` | Entpacken, `Glide\\Glide.exe` starten. SmartScreen warnt, weil das Paket nicht signiert ist: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
             printf '| macOS (Apple Silicon) | `Glide-%s-macos-arm64.dmg` | Öffnen, Glide in „Programme“ ziehen. Beim ersten Start blockiert macOS die nicht notarisierte App: „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“. |\n' "$VERSION"
             printf '| Agenten-Skill | `glide-to-do-skill-v%s.zip` | Entpacken und als Skill in Claude Desktop, Cursor, Gemini CLI / Antigravity oder Web-LLMs einbinden (Details siehe `VERTEILUNG.md`). |\n\n' "$VERSION"
-            printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Der Agenten-Skill `glide-to-do` ermöglicht die nahtlose Anbindung externer KI-Assistenten. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
+            printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Der Installer für Windows richtet Glide auf Wunsch im Startmenü ein; das ZIP-Archiv bleibt als portable Version verfügbar. Der Agenten-Skill `glide-to-do` ermöglicht die nahtlose Anbindung externer KI-Assistenten. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
             printf 'Glide verbindet Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Deine Inhalte werden in deinem gewählten Datenordner gespeichert. Prüfstand und Grenzen: [QA-Bericht](https://github.com/%s/blob/%s/01_Repository/Glide/docs/07_QA_BERICHT.md).\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '**Lizenz:** Glides Projektcode steht unter MPL-2.0, einschließlich kommerzieller Nutzung nach deren Bedingungen. Es gelten die [Lizenzhinweise](https://github.com/%s/blob/%s/01_Repository/Glide/LICENSE.md), die jedem Paket als `Glide-Lizenzstatus.md` zusammen mit `Glide-MPL-2.0.txt` und `Glide-Quellcode.txt` beiliegen.\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
             printf '## Neu in %s\n\n' "$VERSION"

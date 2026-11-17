@@ -45,7 +45,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 | | Windows: winget | macOS: Homebrew Cask |
 |---|---|---|
 | Befehl für Nutzer | `winget install Shaye.Glide` | `brew install --cask n05a-design/glide/glide` |
-| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/3.62.0/`](../packaging/winget/manifests/s/Shaye/Glide/3.62.0/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
+| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/3.70.0/`](../packaging/winget/manifests/s/Shaye/Glide/3.70.0/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
 | Einreichung | Pull Request an `microsoft/winget-pkgs`, am einfachsten mit `wingetcreate new <ZIP-URL>` bzw. für Folgeversionen `wingetcreate update Shaye.Glide --version <v> --urls <ZIP-URL>` | eigenes Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
 | Prüfung durch Dritte | automatische Validierung und Moderation durch Microsoft | keine im eigenen Tap; das offizielle `homebrew/cask` setzt Signierung und Notarisierung voraus |
 | Ohne Signierung (I3) | SmartScreen warnt beim ersten Start | Gatekeeper blockiert den ersten Start, Freigabe unter Systemeinstellungen › Datenschutz & Sicherheit |
