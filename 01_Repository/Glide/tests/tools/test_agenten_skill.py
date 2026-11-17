@@ -16,6 +16,7 @@ from __future__ import annotations
 import ast
 import contextlib
 import copy
+import hashlib
 import importlib.machinery
 import importlib.util
 import io
@@ -25,6 +26,7 @@ import re
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -312,12 +314,16 @@ class AgentenSkillTests(unittest.TestCase):
                       "due": "2026-12-01", "due_time": "09:30", "planned_date": "2026-11-30",
                       "estimated_minutes": 45, "labels": ["Probe-Label"],
                       "checklist": [{"text": "Schritt", "done": False}], "children": [{"title": "Kind"}],
-                      "repeat": {"kind": "weekly"}, "reminder": {"mode": "relative", "minutes": 15}},
-            "liste": {"title": "Probeliste", "description": "Wozu", "folder": "o1", "list_kind": "note",
+                      "repeat": {"kind": "weekly"}, "reminder": {"mode": "relative", "minutes": 15},
+                      "attachments": [{"name": "datei.txt", "storage": "attachments/datei.txt"}]},
+            "liste": {"title": "Probeliste", "description": "Wozu", "folder": "o1", "list_kind": "page",
                       "items": [{"title": "Eins"}], "rich_note": {"text": "Notiz", "spans": [], "links": {}},
-                      "labels": ["Probe-Label"]},
+                      "labels": ["Probe-Label"],
+                      "attachments": [{"name": "liste.txt", "storage": "attachments/liste.txt"}],
+                      "cover": {"kind": "image", "attachment": "cover-img"}},
             "ordner": {"title": "Probeordner", "description": "Wozu", "parent": "o0", "labels": ["Probe-Label"],
-                       "folder_kind": "journal"},
+                       "folder_kind": "journal",
+                       "attachments": [{"name": "ordner.txt", "storage": "attachments/ordner.txt"}]},
             "label": {"name": "Probe-Label", "color": "flag"},
         }
         nutzlast = {"format": "glide.exchange", "format_version": 2, "mode": "create",
@@ -479,6 +485,43 @@ class AgentenSkillTests(unittest.TestCase):
             elif isinstance(knoten, ast.ImportFrom) and knoten.module:
                 module.add(knoten.module.split(".")[0])
         self.assertLessEqual(module - {"__future__"}, set(sys.stdlib_module_names))
+
+    def test_manifest_ist_vollstaendig_und_gueltig(self):
+        manifest_pfad = SKILL / "MANIFEST.json"
+        self.assertTrue(manifest_pfad.is_file(), "MANIFEST.json fehlt im Skill-Ordner")
+        manifest = json.loads(manifest_pfad.read_text(encoding="utf-8"))
+        self.assertEqual(manifest.get("version"), "1.4")
+        self.assertEqual(manifest.get("exchange_format"), 2)
+        self.assertEqual(manifest.get("data_schema"), self.app.ListApp.DATA_SCHEMA_VERSION)
+        for datei_info in manifest.get("files", []):
+            datei = SKILL / datei_info["path"]
+            self.assertTrue(datei.is_file(), f"Datei im Manifest existiert nicht: {datei_info['path']}")
+            daten = datei.read_bytes()
+            self.assertEqual(len(daten), datei_info["size"], f"Größe weicht ab: {datei_info['path']}")
+            sha = hashlib.sha256(daten).hexdigest()
+            self.assertEqual(sha, datei_info["sha256"], f"Prüfsumme weicht ab: {datei_info['path']}")
+
+    def test_verteilung_dokumentation(self):
+        verteilung_pfad = SKILL / "VERTEILUNG.md"
+        self.assertTrue(verteilung_pfad.is_file(), "VERTEILUNG.md fehlt im Skill-Ordner")
+        text = verteilung_pfad.read_text(encoding="utf-8")
+        for stichwort in ("Claude Desktop", "Cursor", "Antigravity", "ChatGPT", "KI-Skill exportieren"):
+            self.assertIn(stichwort, text)
+
+    def test_app_export_agent_skill(self):
+        app = self.kopfloses_glide()
+        skill_dir = app.find_agent_skill_dir()
+        self.assertIsNotNone(skill_dir, "find_agent_skill_dir konnte den Skill-Ordner nicht ermitteln")
+        with tempfile.TemporaryDirectory() as temp_dir:
+            ziel_zip = os.path.join(temp_dir, "skill_export.zip")
+            erfolg = app.export_agent_skill(target_path=ziel_zip)
+            self.assertTrue(erfolg)
+            self.assertTrue(os.path.isfile(ziel_zip))
+            with zipfile.ZipFile(ziel_zip, "r") as archiv:
+                namen = archiv.namelist()
+                self.assertIn("glide-to-do/SKILL.md", namen)
+                self.assertIn("glide-to-do/MANIFEST.json", namen)
+                self.assertIn("glide-to-do/VERTEILUNG.md", namen)
 
 
 if __name__ == "__main__":

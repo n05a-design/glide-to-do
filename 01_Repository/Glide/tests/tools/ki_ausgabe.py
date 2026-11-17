@@ -219,6 +219,11 @@ def vergleiche_punkte(app, ergebnis: Ergebnis, ort: str, quellen, punkte, tiefe:
             ist = app.reminder_config(punkt.get("reminder"))
             if ist != erwartet:
                 ergebnis.melden(ABWEICHUNG, hier, f"Erinnerung: Datei {quelle['reminder']!r}, Glide {ist!r}")
+        if "attachments" in quelle and quelle["attachments"] and not gliederung:
+            soll_count = len(quelle["attachments"])
+            ist_count = len(punkt.get("attachments") or [])
+            if soll_count != ist_count:
+                ergebnis.melden(ABWEICHUNG, hier, f"Anhänge: {soll_count} beschrieben, {ist_count} in Glide")
         erwartete_labels = {kontext["label_namen"].get(str(k), _norm(k)).casefold()
                             for k in quelle.get("labels") or [] if _norm(k)}
         eigene = {kontext["labels"][i]["name"].casefold() for i in punkt.get("labels") or []
@@ -287,6 +292,11 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
                                              "weiter oben beschrieben")
         elif ordner.get("parent_id") != erwartet:
             ergebnis.melden(ABWEICHUNG, ort, "liegt in einem anderen Ordner als beschrieben")
+        if "attachments" in quelle and quelle["attachments"]:
+            soll_count = len(quelle["attachments"])
+            ist_count = len(ordner.get("attachments") or [])
+            if soll_count != ist_count:
+                ergebnis.melden(ABWEICHUNG, ort, f"Anhänge: {soll_count} beschrieben, {ist_count} in Glide")
         _unbekannt(ergebnis, ort, quelle, app.EXCHANGE_FOLDER_FIELDS, offen["ordner"])
         if quelle.get("key"):
             ordner_id[str(quelle["key"])] = ordner["id"]
@@ -334,6 +344,14 @@ def vergleiche_austausch(app, ergebnis: Ergebnis, nutzlast: dict, listen: list, 
                 ergebnis.melden(ABWEICHUNG, ort, "Markdown-Inhalt wurde nicht in die Notiz/Seite übernommen")
         if quelle.get("drawing") is not None and liste.get("drawing") != quelle["drawing"]:
             ergebnis.melden(ABWEICHUNG, ort, "Zeichnung weicht ab")
+        if "attachments" in quelle and quelle["attachments"]:
+            soll_count = len(quelle["attachments"])
+            ist_count = len(liste.get("attachments") or [])
+            if soll_count != ist_count:
+                ergebnis.melden(ABWEICHUNG, ort, f"Anhänge: {soll_count} beschrieben, {ist_count} in Glide")
+        if "cover" in quelle and quelle["cover"]:
+            if not liste.get("cover"):
+                ergebnis.melden(ABWEICHUNG, ort, "Titelbild fehlt in Glide")
         punkte += vergleiche_punkte(app, ergebnis, ort, quelle.get("items"), liste.get("items") or [], 0, kontext)
     ergebnis.angelegt.update(ordner=len(neue_ordner), listen=len(listen), punkte=punkte)
 

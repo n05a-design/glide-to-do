@@ -1,0 +1,102 @@
+{
+  "manifest_version": 1,
+  "name": "glide-to-do",
+  "version": "1.4",
+  "description": "Lokaler KI-Skill für Glide – Aufgaben, Listen, Seiten, Zeichnungen und Anhänge",
+  "application": "Glide",
+  "min_glide_version": "3.69.0",
+  "data_schema": 26,
+  "exchange_format": 2,
+  "files": [
+    {
+      "path": "README.md",
+      "size": 6776,
+      "sha256": "af1c207dc237a5b161577979f8dc4bf71cfdac463ec2fb760d868407c53d47ac"
+    },
+    {
+      "path": "SKILL.md",
+      "size": 8939,
+      "sha256": "729e3e00788872ad335cac8a7107d85c9af54312747d7284831b297060de25bc"
+    },
+    {
+      "path": "VERTEILUNG.md",
+      "size": 4359,
+      "sha256": "c0f95d7132b7ad1a990392c2a8fa451736cdabc447354372abe57633dbf92b85"
+    },
+    {
+      "path": "abdeckung.json",
+      "size": 7505,
+      "sha256": "c4c26ffb9f8045959d2f39c9e43e8439e12b832f4eae14af880e6cd3c1928419"
+    },
+    {
+      "path": "assets/beispiele/aenderungsvorschlag.glideexchange",
+      "size": 579,
+      "sha256": "43f5117f1e606dc21845d30fe959b5251bcdcd17a315366c7812a7dd36dcd471"
+    },
+    {
+      "path": "assets/beispiele/einkaufsliste.glideexchange",
+      "size": 1547,
+      "sha256": "a94128a116c9474aa8b2b88c31080900d2217a1f5544989dbca586e26feff5ef"
+    },
+    {
+      "path": "assets/beispiele/kontextpaket.glidecontext",
+      "size": 1687,
+      "sha256": "1909790f5218de9300631a06f7f27bb1c6129708239a647c694288be740a96fc"
+    },
+    {
+      "path": "assets/beispiele/notiz.glideexchange",
+      "size": 796,
+      "sha256": "5945da1972ec070617ee216a6db38960aa8d33518bb766229f4ca300757e6138"
+    },
+    {
+      "path": "assets/beispiele/projekt.glideexchange",
+      "size": 3184,
+      "sha256": "ee71470aaf31018e9535aea301bdd97715ec469af0c8722712fecfbece6ce043"
+    },
+    {
+      "path": "assets/beispiele/recherchebericht.md",
+      "size": 1244,
+      "sha256": "59f5ee011867f6ffb211305d53913312b23395de36733f9dcb946a358ff5b643"
+    },
+    {
+      "path": "assets/beispiele/zeichnung-eingabe.json",
+      "size": 693,
+      "sha256": "19f960248ce35318168c69ef927941c276a5c85d098431617048a8f8d07daaeb"
+    },
+    {
+      "path": "assets/beispiele/zeichnung.glideexchange",
+      "size": 1653,
+      "sha256": "0f3ec99b07a7e4a3af40bf3d72edec793c8e350fdcdf07f4c4adc2fa58894b58"
+    },
+    {
+      "path": "references/aenderungsvorschlag.md",
+      "size": 2606,
+      "sha256": "0ebe36c60e09b9676df6bcedd230ab3152bffa5b79b445ab79e10741469fc245"
+    },
+    {
+      "path": "references/austauschformat.md",
+      "size": 6858,
+      "sha256": "d4221929f1a42083db9277f85df58c7fe455d99a84f8be1ee0097eda2c953631"
+    },
+    {
+      "path": "references/dokumentarten.md",
+      "size": 2814,
+      "sha256": "b5b1903966ba5fa6e56dea568e707c7db71c489eaa7123da3e65049441ee59b5"
+    },
+    {
+      "path": "references/glide-aufbau.md",
+      "size": 5198,
+      "sha256": "e21db0bc096404e78990d8dc3486f36326f618fb4e7a2132812711331f85467e"
+    },
+    {
+      "path": "references/seiten-markdown.md",
+      "size": 2222,
+      "sha256": "d6697ea208c55d1f9d0837275638d61507d04e20c9df3967b232e51877f9b490"
+    },
+    {
+      "path": "scripts/glide_datei.py",
+      "size": 38998,
+      "sha256": "cc9f3478848ef91ec505ede6f9419b3bec11a24ce2f0acab95f5f7e8e6cd3a3e"
+    }
+  ]
+}

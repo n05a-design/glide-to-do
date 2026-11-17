@@ -46,6 +46,7 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `parent` | Schlüssel eines **weiter oben** in `folders` stehenden Ordners; sonst entsteht der Ordner auf oberster Ebene |
 | `folder_kind` | Ordnerart: `standard`, `library` (Buch für Dokumente) oder `journal` (Notizbuch für Tagesnotizen); Vorgabe `standard` |
 | `labels` | Liste von Label-Schlüsseln oder -Namen |
+| `attachments` | Liste von Dateianhängen (`[{"name": "...", "file": "attachments/..."}]`) |
 
 ## Listen
 
@@ -63,6 +64,8 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `rich_note` | Text einer Notiz oder Seite im internen Format |
 | `markdown` | Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides internes Format gewandelt) |
 | `drawing`, `animation` | Pixelzeichnung und Bildfolge einer Zeichnung |
+| `attachments` | Liste von Dateianhängen oder Galeriebildern (`[{"name": "...", "file": "attachments/..."}]`) |
+| `cover` | Titelbild einer Seite (z. B. `"attachments/titelbild.png"` oder Zeichnungsobjekt) |
 
 | `list_kind` | Inhalt | Hinweise |
 |---|---|---|
@@ -70,7 +73,7 @@ Jedes andere Feld nennt Glide als unbekannt und schlägt „Abbrechen“ vor.
 | `note` | Notiz: Text in `markdown` oder `rich_note`, optional `items` als Aufgaben über dem Text | Text ohne Formatierung: `"rich_note": {"text": "…", "spans": [], "links": {}}` |
 | `page` | Seite | formatierte Seiten direkt über `markdown` oder als [Markdown-Datei](seiten-markdown.md) |
 | `drawing` | Pixelzeichnung in `drawing`, keine `items` | nur mit dem Hilfsskript kodieren |
-| `gallery` | Galerie | sinnlos ohne Bilder, die das Format nicht trägt |
+| `gallery` | Galerie | Bildsammlung mit Bildern in `attachments` |
 
 Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckung.json` im Skillordner.
 
@@ -101,6 +104,7 @@ Welches Glide-Feld über welchen Weg ankommt, steht maschinenlesbar in `abdeckun
 | `done` | `true`/`false` | nur `task`/`long` |
 | `checklist` | bis 50 Schritte `{"text", "done"}`, Text bis 200 Zeichen | keine eigenen Termine |
 | `children` | Punkte, bis 12 Ebenen tief | eigenständig erledigbar |
+| `attachments` | Liste von Dateianhängen (`[{"name": "...", "file": "attachments/..."}]`) |
 
 `group` und `heading` tragen weder Termine noch Wichtigkeit, Erledigt oder Checkliste; Glide verwirft solche Angaben dort.
 
@@ -112,4 +116,4 @@ Eine Liste mit `"list_kind": "drawing"` trägt `drawing` im Format `glide.drawin
 
 ## Grenzen
 
-Höchstens 5.000 Punkte, 12 MB, 12 Ebenen und 50 Checklistenschritte je Punkt. Nicht übernommen werden heute Wiederholungen, Erinnerungen, Farben, Pixelsymbole, Ordnerarten, Verknüpfungen, Anhänge, Vorlagen, Pinnwand und Ansichten.
+Höchstens 5.000 Punkte, 12 MB, 12 Ebenen und 50 Checklistenschritte je Punkt. Nicht übernommen werden heute Farben, Pixelsymbole, Verknüpfungen, Vorlagen, Pinnwand und Ansichten (Wiederholungen, Erinnerungen, Ordnerarten und Dateianhänge/Bilder werden seit Austauschformat 2 unterstützt).

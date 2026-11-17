@@ -1,10 +1,10 @@
 ---
 name: glide-to-do
-description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Berichte und Übersichten werden eine Glide-Seite (Markdown), Aufgabenlisten, Einkaufslisten, Projekte und Aufgabenübersichten eine .glideexchange-Datei mit Ordnern, Listen, Punkten, Fälligkeiten, Bearbeitungstagen, Aufwand, Wichtigkeit, Labels und Checklisten; dazu Notizen, Pixelzeichnungen und Änderungsvorschläge zu einem Glide-Kontextpaket (.glidecontext). Verwenden, wenn der Nutzer Glide nennt, etwas „für Glide“ oder „zum Import in Glide“ haben möchte oder eine Datei mit Endung .glideexchange oder .glidecontext vorliegt. Auch für englische Anfragen wie Glide task list, shopping list, project plan oder report.
+description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Berichte und Übersichten werden eine Glide-Seite (Markdown), Aufgabenlisten, Einkaufslisten, Projekte und Aufgabenübersichten eine .glideexchange-Datei mit Ordnern, Listen, Punkten, Fälligkeiten, Bearbeitungstagen, Aufwand, Wichtigkeit, Labels, Checklisten, Dateianhängen, Galeriebildern und Titelbildern; dazu Notizen, Pixelzeichnungen und Änderungsvorschläge zu einem Glide-Kontextpaket (.glidecontext). Verwenden, wenn der Nutzer Glide nennt, etwas „für Glide“ oder „zum Import in Glide“ haben möchte oder eine Datei mit Endung .glideexchange oder .glidecontext vorliegt. Auch für englische Anfragen wie Glide task list, shopping list, project plan oder report.
 license: MPL-2.0
-compatibility: Erzeugt Dateien für Glide 3.65 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
+compatibility: Erzeugt Dateien für Glide 3.69 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
-  version: "1.3"
+  version: "1.4"
   glide-version: "3.69.0"
   exchange-format: "2"
 ---
@@ -44,7 +44,7 @@ Details: [Austauschformat](references/austauschformat.md), [Seiten in Markdown](
 
 ## 3. Was Glide über diese Wege noch nicht übernimmt
 
-Farben (an Punkten, Listen und Ordnern), Pixelsymbole, Verknüpfungen („Verknüpft mit“, „Wartet auf“), binäre Dateianhänge im Austauschformat, Galerien, Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Wiederholungen (`repeat`), Erinnerungen (`reminder`), Ordnerarten (`folder_kind`: standard, library, journal) und formatierte Seiten/Notizen (`markdown`) werden direkt übernommen. Welches Glide-Feld ankommt, geplant ist oder bewusst in Glide bleibt, steht je Feld in [abdeckung.json](abdeckung.json).
+Farben (an Punkten, Listen und Ordnern), Pixelsymbole, Verknüpfungen („Verknüpft mit“, „Wartet auf“), Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Wiederholungen (`repeat`), Erinnerungen (`reminder`), Ordnerarten (`folder_kind`: standard, library, journal), formatierte Seiten/Notizen (`markdown`), Dateianhänge (`attachments`), Galerien (`gallery`) und Titelbilder (`cover`) werden direkt übernommen. Welches Glide-Feld ankommt, geplant ist oder bewusst in Glide bleibt, steht je Feld in [abdeckung.json](abdeckung.json). Details zur Verteilung und Einbindung in [VERTEILUNG.md](VERTEILUNG.md).
 
 ## 4. Datei schreiben
 
