@@ -179,6 +179,7 @@ class AgentenSkillTests(unittest.TestCase):
         self.assertEqual(hilfe.ITEM_FIELDS, glide.EXCHANGE_ITEM_FIELDS)
         self.assertEqual(set(hilfe.ITEM_TYPES), set(glide.EXCHANGE_ITEM_TYPES))
         self.assertEqual(set(hilfe.LIST_KINDS), set(glide.LIST_KINDS))
+        self.assertEqual(set(hilfe.LABEL_COLORS), set(glide.LABEL_COLOR_KEYS))
         for ihr, unser in ((glide.MAX_EXCHANGE_BYTES, hilfe.MAX_BYTES), (glide.MAX_EXCHANGE_ITEMS, hilfe.MAX_ITEMS),
                            (glide.MAX_EXCHANGE_DEPTH, hilfe.MAX_DEPTH),
                            (glide.MAX_CHECKLIST_ENTRIES, hilfe.MAX_CHECKLIST_ENTRIES),
@@ -402,7 +403,7 @@ class AgentenSkillTests(unittest.TestCase):
     def test_hilfsskript_meldet_typische_fehler(self):
         schlecht = {
             "format": "glide.exchange", "format_version": 2, "mode": "create", "extra": 1,
-            "labels": [{"key": "l1", "name": "Team", "color": "accent"}],
+            "labels": [{"key": "l1", "name": "Team", "color": "neon"}],
             "folders": [{"key": "f2", "title": "Kind", "parent": "f1"}, {"key": "f1", "title": "Eltern"}],
             "lists": [
                 {"key": "a", "title": "Liste", "folder": "f1", "labels": ["l1"], "items": [
@@ -410,7 +411,7 @@ class AgentenSkillTests(unittest.TestCase):
                     {"type": "heading", "title": "Abschnitt", "due": "2026-11-27"},
                     {"type": "task", "title": "Uhrzeit", "due_time": "09:00", "repeat": "weekly"},
                 ]},
-                {"key": "b", "title": "Bild", "list_kind": "drawing", "items": [{"title": "nein"}]},
+                {"key": "b", "title": "Bild", "list_kind": "drawing", "animation": {"frames": []}, "items": [{"title": "nein"}]},
             ],
         }
         bericht = self.hilfe.Bericht("probe")
@@ -420,9 +421,9 @@ class AgentenSkillTests(unittest.TestCase):
                          "unbekanntes Punktfeld „repeat“", "keine Punkte enthalten"):
             self.assertIn(erwartet, fehler)
         for erwartet in ("Titel hat 50 Zeichen", "kein weiter oben beschriebener Ordner",
-                         "Labels an Listen", "heading trägt keine due", "due_time ohne due"):
+                         "Farbe 'neon' unbekannt", "heading trägt keine due", "due_time ohne due"):
             self.assertIn(erwartet, warnungen)
-        self.assertIn("Labelfarbe", hinweise)
+        self.assertIn("Bildfolgen", hinweise)
         # Dieselben Fälle weist auch Glide ab oder meldet sie.
         nutzlast, glide_bericht = self.kopfloses_glide().parse_exchange_document(json.dumps(schlecht))
         self.assertIsNone(nutzlast)

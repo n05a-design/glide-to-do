@@ -96,8 +96,8 @@ code block
 FEHLERHAFT = {
     "format": "glide.exchange", "format_version": 2, "mode": "create",
     "labels": [{"key": "l1", "name": "Team", "color": "accent"}],
-    "folders": [{"key": "f2", "title": "Kind", "parent": "f1"}, {"key": "f1", "title": "Eltern"}],
-    "lists": [{"key": "a", "title": "Planung für das große Sommerfest im Garten", "folder": "f1", "labels": ["l1"],
+    "folders": [{"key": "f2", "title": "Kind", "parent": "f1"}, {"key": "f1", "title": "Eltern", "folder_kind": "journal"}],
+    "lists": [{"key": "a", "title": "Planung für das große Sommerfest im Garten", "folder": "f1", "labels": ["l1"], "color": "clear",
                "items": [{"type": "task", "title": "Getränke", "due": "27.11.2026", "repeat": "weekly"},
                          {"type": "heading", "title": "Abschnitt", "due": "2026-11-27"},
                          {"type": "task", "title": "Uhrzeit allein", "due_time": "09:00"}]}],
@@ -132,7 +132,7 @@ try:
                      "an einer Gliederung", "Uhrzeit ohne Fälligkeitsdatum"):
         assert erwartet in abweichungen, (erwartet, abweichungen)
     grenzen = " | ".join(b.text for b in fehlerhaft.arten(ki_ausgabe.GRENZE))
-    for erwartet in ("„repeat“", "„color“", "„labels“"):
+    for erwartet in ("„repeat“", "„color“", "„folder_kind“"):
         assert erwartet in grenzen, (erwartet, grenzen)
     # Auch die fehlerhafte Datei wird angezeigt, wie Glide sie gespeichert hat; die Gegenprobe greift.
     assert not [b for b in fehlerhaft.befunde if b.ort.startswith(("Anzeige", "Neustart", "Gegenprobe"))], \

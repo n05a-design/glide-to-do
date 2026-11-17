@@ -4,8 +4,8 @@ description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Beri
 license: MPL-2.0
 compatibility: Erzeugt Dateien für Glide 3.65 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
-  version: "1.1"
-  glide-version: "3.66.0"
+  version: "1.2"
+  glide-version: "3.69.0"
   exchange-format: "2"
 ---
 
@@ -85,7 +85,7 @@ Glide zeigt in der Vorschau unbekannte Angaben an und setzt dann den Fokus auf �
 
 ## Beispiele
 
-In [assets/beispiele/](assets/beispiele/): `einkaufsliste.glideexchange`, `projekt.glideexchange`, `notiz.glideexchange`, `zeichnung.glideexchange` mit `zeichnung-eingabe.json`, `recherchebericht.md`, `kontextpaket.glidecontext` mit `aenderungsvorschlag.glideexchange`. Alle bestehen die Prüfung des Hilfsskripts und die zentrale Prüfung mit Glide 3.66.0, auch in der echten Oberfläche.
+In [assets/beispiele/](assets/beispiele/): `einkaufsliste.glideexchange`, `projekt.glideexchange`, `notiz.glideexchange`, `zeichnung.glideexchange` mit `zeichnung-eingabe.json`, `recherchebericht.md`, `kontextpaket.glidecontext` mit `aenderungsvorschlag.glideexchange`. Alle bestehen die Prüfung des Hilfsskripts und die zentrale Prüfung mit Glide 3.69.0, auch in der echten Oberfläche.
 
 ## Für die Arbeit an Glide selbst
 

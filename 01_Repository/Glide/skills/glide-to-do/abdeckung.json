@@ -2,13 +2,13 @@
   "format": "glide-to-do.abdeckung",
   "version": 1,
   "zweck": "Ordnet jedes Datenfeld des Glide-Aufgabenformats ein: ja = der Skill legt es über den genannten Weg an; offen = geplant im genannten Paket von WA-61; intern = bewusst nur in Glide. tests/tools/test_agenten_skill.py vergleicht diese Datei mit dem Glide-Code. Ändert sich das Datenformat, ein Feld, eine Art oder eine Fähigkeit des Austauschformats, schlägt die Prüfung fehl, bis Skill und Datei nachgezogen sind.",
-  "glide_version": "3.66.0",
+  "glide_version": "3.69.0",
   "datenformat": 26,
   "austauschformat": 2,
   "faehigkeiten": [
     "animation_duration_ms", "animations", "attachments", "checklists", "descriptions", "due_dates",
     "due_times", "estimated_minutes", "folders", "item_types", "labels", "list_descriptions",
-    "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
+    "list_kinds", "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
     "patch_mode", "planned_date", "reminders", "repeat"
   ],
   "listenarten": {
@@ -67,8 +67,7 @@
       "drawing": {"status": "ja", "weg": "austausch", "austausch": "drawing"},
       "animation": {"status": "ja", "weg": "austausch", "austausch": "animation",
                     "hinweis": "Bildfolgen prüft erst Glide"},
-      "labels": {"status": "offen", "paket": "K2", "austausch": "labels",
-                 "hinweis": "angenommen, aber nicht übernommen"},
+      "labels": {"status": "ja", "weg": "austausch", "austausch": "labels"},
       "color": {"status": "offen", "paket": "K3", "austausch": "color"},
       "icon": {"status": "offen", "paket": "K3", "austausch": "icon", "hinweis": "Pixelsymbol"},
       "journal": {"status": "offen", "paket": "K3", "austausch": "journal", "hinweis": "Notizbuch-Angaben"},
@@ -91,8 +90,7 @@
       "title": {"status": "ja", "weg": "austausch", "austausch": "title"},
       "note": {"status": "ja", "weg": "austausch", "austausch": "description"},
       "parent_id": {"status": "ja", "weg": "austausch", "austausch": "parent"},
-      "labels": {"status": "offen", "paket": "K2", "austausch": "labels",
-                 "hinweis": "angenommen, aber nicht übernommen"},
+      "labels": {"status": "ja", "weg": "austausch", "austausch": "labels"},
       "folder_kind": {"status": "offen", "paket": "K3", "austausch": "folder_kind"},
       "color": {"status": "offen", "paket": "K3", "austausch": "color"},
       "icon": {"status": "offen", "paket": "K3", "austausch": "icon"},
@@ -104,8 +102,7 @@
     "label": {
       "id": {"status": "intern"},
       "name": {"status": "ja", "weg": "austausch", "austausch": "name"},
-      "color": {"status": "offen", "paket": "K2", "austausch": "color",
-                "hinweis": "angenommen, Glide vergibt die Farbe selbst"},
+      "color": {"status": "ja", "weg": "austausch", "austausch": "color"},
       "system": {"status": "intern", "hinweis": "feste Labels Langtext und Zwischenüberschrift"}
     }
   },
