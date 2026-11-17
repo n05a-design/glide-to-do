@@ -118,6 +118,7 @@ class AgentenSkillTests(unittest.TestCase):
         app.labels, app.lists, app.folders, app.trash = [], [], [], []
         app.settings, app.undo_stack, app.dirty = {}, [], False
         app._data_read_only = False
+        app.active_list_id = None
         app.refresh_data_lock = lambda: True
         app.prepare_inspector_switch = lambda: True
         app.snapshot_undo = lambda trim=True: app.undo_stack.append("vorher")
@@ -125,6 +126,8 @@ class AgentenSkillTests(unittest.TestCase):
         app.trim_undo_stack = lambda: None
         app.finish_import_ui = lambda *args: None
         app.save_items = lambda: True
+        app.write_complete_backup = lambda *args, **kwargs: None
+        app.complete_backup_payload = lambda: {}
         return app
 
     @staticmethod
@@ -308,11 +311,13 @@ class AgentenSkillTests(unittest.TestCase):
             "punkt": {"title": "Probe", "type": "long", "description": "Text", "done": True, "importance": 2,
                       "due": "2026-12-01", "due_time": "09:30", "planned_date": "2026-11-30",
                       "estimated_minutes": 45, "labels": ["Probe-Label"],
-                      "checklist": [{"text": "Schritt", "done": False}], "children": [{"title": "Kind"}]},
+                      "checklist": [{"text": "Schritt", "done": False}], "children": [{"title": "Kind"}],
+                      "repeat": {"kind": "weekly"}, "reminder": {"mode": "relative", "minutes": 15}},
             "liste": {"title": "Probeliste", "description": "Wozu", "folder": "o1", "list_kind": "note",
                       "items": [{"title": "Eins"}], "rich_note": {"text": "Notiz", "spans": [], "links": {}},
                       "labels": ["Probe-Label"]},
-            "ordner": {"title": "Probeordner", "description": "Wozu", "parent": "o0", "labels": ["Probe-Label"]},
+            "ordner": {"title": "Probeordner", "description": "Wozu", "parent": "o0", "labels": ["Probe-Label"],
+                       "folder_kind": "journal"},
             "label": {"name": "Probe-Label", "color": "flag"},
         }
         nutzlast = {"format": "glide.exchange", "format_version": 2, "mode": "create",
@@ -409,7 +414,7 @@ class AgentenSkillTests(unittest.TestCase):
                 {"key": "a", "title": "Liste", "folder": "f1", "labels": ["l1"], "items": [
                     {"type": "task", "title": "x" * 50, "due": "27.11.2026", "estimated_minutes": "60"},
                     {"type": "heading", "title": "Abschnitt", "due": "2026-11-27"},
-                    {"type": "task", "title": "Uhrzeit", "due_time": "09:00", "repeat": "weekly"},
+                    {"type": "task", "title": "Uhrzeit", "due_time": "09:00", "repeat": "weekly", "unbekannt": 1},
                 ]},
                 {"key": "b", "title": "Bild", "list_kind": "drawing", "animation": {"frames": []}, "items": [{"title": "nein"}]},
             ],
@@ -418,7 +423,7 @@ class AgentenSkillTests(unittest.TestCase):
         self.hilfe.pruefe_create(bericht, schlecht)
         fehler, warnungen, hinweise = " | ".join(bericht.fehler), " | ".join(bericht.warnungen), " | ".join(bericht.hinweise)
         for erwartet in ("unbekanntes Feld „extra“", "kein Datum JJJJ-MM-TT", "estimated_minutes",
-                         "unbekanntes Punktfeld „repeat“", "keine Punkte enthalten"):
+                         "unbekanntes Punktfeld „unbekannt“", "repeat muss ein Objekt sein", "keine Punkte enthalten"):
             self.assertIn(erwartet, fehler)
         for erwartet in ("Titel hat 50 Zeichen", "kein weiter oben beschriebener Ordner",
                          "Farbe 'neon' unbekannt", "heading trägt keine due", "due_time ohne due"):

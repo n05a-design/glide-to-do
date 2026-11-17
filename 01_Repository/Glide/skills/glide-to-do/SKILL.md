@@ -4,7 +4,7 @@ description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Beri
 license: MPL-2.0
 compatibility: Erzeugt Dateien für Glide 3.65 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
-  version: "1.2"
+  version: "1.3"
   glide-version: "3.69.0"
   exchange-format: "2"
 ---
@@ -35,15 +35,16 @@ Details: [Austauschformat](references/austauschformat.md), [Seiten in Markdown](
 2. **Fälligkeit und Bearbeitungstag sind verschieden.** `due` sagt, *bis wann* etwas fertig sein muss; `planned_date` sagt, *wann* man daran arbeitet. Nur setzen, was der Nutzer gesagt hat oder was sich zwingend ergibt.
 3. **Nicht jeder Absatz ist eine Aufgabe.** `task` für etwas, das man erledigen kann; `heading` für Abschnitte; `group` für einen Behälter mit Unterpunkten; `long` für erklärenden Text. Gruppen und Überschriften haben keine Termine, Wichtigkeit oder Checkliste.
 4. **Unterpunkte oder Checkliste?** `children` sind eigenständig erledigbare Punkte (höchstens 12 Ebenen). `checklist` sind kurze Schritte innerhalb eines Punkts ohne eigene Termine (höchstens 50, je 200 Zeichen).
-5. **Wenige, wiederverwendete Labels** statt eines Labels je Aufgabe. Labels gelten in dieser Glide-Fassung nur an Punkten, nicht an Listen und Ordnern.
+5. **Wenige, wiederverwendete Labels** statt eines Labels je Aufgabe. Labels können an Punkten, Listen und Ordnern vergeben werden.
 6. **Datum als `JJJJ-MM-TT`, Uhrzeit als `HH:MM`.** Relative Angaben („nächsten Freitag“) vom heutigen Datum des Nutzers aus berechnen; kennst du das Datum nicht, frag nach oder lass das Feld weg. Eine Uhrzeit braucht ein Datum.
-7. **Wichtigkeit 0–3** (0 keine, 3 hoch), sparsam vergeben. **Aufwand** `estimated_minutes` als ganze Minuten.
-8. **Nichts erfinden.** Keine Felder außerhalb des Formats, keine internen Kennungen, keine Kontodaten, keine absoluten Pfade, keine Bilder aus dem Netz. Freie Schlüssel (`key`) wählst du selbst; Glide vergibt die echten Kennungen.
-9. **Sprache des Nutzers**, sachlich und knapp. Die Seite beginnt mit `# Titel`; diese Zeile wird der Seitentitel.
+7. **Wiederholungen und Benachrichtigungen.** An Aufgaben mit Fälligkeit können Wiederholungen (`repeat`: `daily`, `weekly`, `monthly`, `yearly`, `weekdays`, `every_n_days`) und Erinnerungen (`reminder`: relativ oder fest) direkt gesetzt werden.
+8. **Wichtigkeit 0–3** (0 keine, 3 hoch), sparsam vergeben. **Aufwand** `estimated_minutes` als ganze Minuten.
+9. **Nichts erfinden.** Keine Felder außerhalb des Formats, keine internen Kennungen, keine Kontodaten, keine absoluten Pfade, keine Bilder aus dem Netz. Freie Schlüssel (`key`) wählst du selbst; Glide vergibt die echten Kennungen.
+10. **Sprache des Nutzers**, sachlich und knapp. Die Seite beginnt mit `# Titel`; diese Zeile wird der Seitentitel.
 
 ## 3. Was Glide über diese Wege noch nicht übernimmt
 
-Wiederholungen, Erinnerungen, Farben, Pixelsymbole, Ordnerarten Buch und Notizbuch, Verknüpfungen („Verknüpft mit“, „Wartet auf“), Anhänge und Bilder im Austauschformat, Galerien, Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Lass diese Felder weg. Wichtige Angaben schreibst du in die Beschreibung, etwa „Wiederholung: jeden Montag“, und sagst dem Nutzer, dass er sie in Glide setzt. Welches Glide-Feld ankommt, geplant ist oder bewusst in Glide bleibt, steht je Feld in [abdeckung.json](abdeckung.json).
+Farben (an Punkten, Listen und Ordnern), Pixelsymbole, Verknüpfungen („Verknüpft mit“, „Wartet auf“), binäre Dateianhänge im Austauschformat, Galerien, Vorlagen, Pinnwand-Anordnung und Ansichtseinstellungen. Wiederholungen (`repeat`), Erinnerungen (`reminder`), Ordnerarten (`folder_kind`: standard, library, journal) und formatierte Seiten/Notizen (`markdown`) werden direkt übernommen. Welches Glide-Feld ankommt, geplant ist oder bewusst in Glide bleibt, steht je Feld in [abdeckung.json](abdeckung.json).
 
 ## 4. Datei schreiben
 

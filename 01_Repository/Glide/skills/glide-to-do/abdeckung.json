@@ -7,8 +7,8 @@
   "austauschformat": 2,
   "faehigkeiten": [
     "animation_duration_ms", "animations", "attachments", "checklists", "descriptions", "due_dates",
-    "due_times", "estimated_minutes", "folders", "item_types", "labels", "list_descriptions",
-    "list_kinds", "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
+    "due_times", "estimated_minutes", "folder_kinds", "folders", "item_types", "labels", "list_descriptions",
+    "list_kinds", "markdown_pages", "max_animation_frames", "max_checklist_entries", "max_depth", "max_items", "nested_items",
     "patch_mode", "planned_date", "reminders", "repeat"
   ],
   "listenarten": {
@@ -20,8 +20,8 @@
   },
   "ordnerarten": {
     "standard": {"status": "ja", "weg": "austausch"},
-    "library": {"status": "offen", "paket": "K3", "hinweis": "Buch"},
-    "journal": {"status": "offen", "paket": "K3", "hinweis": "Notizbuch"}
+    "library": {"status": "ja", "weg": "austausch", "hinweis": "Buch"},
+    "journal": {"status": "ja", "weg": "austausch", "hinweis": "Notizbuch"}
   },
   "punktarten": {
     "task": {"status": "ja", "weg": "austausch"},
@@ -45,8 +45,8 @@
       "checklist": {"status": "ja", "weg": "austausch", "austausch": "checklist"},
       "children": {"status": "ja", "weg": "austausch", "austausch": "children"},
       "planned_time": {"status": "offen", "paket": "K3", "austausch": "planned_time"},
-      "repeat": {"status": "offen", "paket": "K3", "austausch": "repeat", "hinweis": "Wiederholung"},
-      "reminder": {"status": "offen", "paket": "K3", "austausch": "reminder", "hinweis": "Erinnerung"},
+      "repeat": {"status": "ja", "weg": "austausch", "austausch": "repeat", "hinweis": "Wiederholung"},
+      "reminder": {"status": "ja", "weg": "austausch", "austausch": "reminder", "hinweis": "Erinnerung"},
       "color": {"status": "offen", "paket": "K3", "austausch": "color"},
       "links": {"status": "offen", "paket": "K3", "austausch": "links", "hinweis": "Verknüpft mit"},
       "blocked_by": {"status": "offen", "paket": "K3", "austausch": "blocked_by", "hinweis": "Wartet auf"},
@@ -63,7 +63,7 @@
       "list_kind": {"status": "ja", "weg": "austausch", "austausch": "list_kind"},
       "items": {"status": "ja", "weg": "austausch", "austausch": "items"},
       "rich_note": {"status": "ja", "weg": "austausch, seite", "austausch": "rich_note",
-                    "hinweis": "im Austausch nur Text; Formatierung über die Markdown-Seite"},
+                    "hinweis": "im Austausch als Markdown (markdown) oder Text; formatiert auch als Seite"},
       "drawing": {"status": "ja", "weg": "austausch", "austausch": "drawing"},
       "animation": {"status": "ja", "weg": "austausch", "austausch": "animation",
                     "hinweis": "Bildfolgen prüft erst Glide"},
@@ -91,7 +91,7 @@
       "note": {"status": "ja", "weg": "austausch", "austausch": "description"},
       "parent_id": {"status": "ja", "weg": "austausch", "austausch": "parent"},
       "labels": {"status": "ja", "weg": "austausch", "austausch": "labels"},
-      "folder_kind": {"status": "offen", "paket": "K3", "austausch": "folder_kind"},
+      "folder_kind": {"status": "ja", "weg": "austausch", "austausch": "folder_kind"},
       "color": {"status": "offen", "paket": "K3", "austausch": "color"},
       "icon": {"status": "offen", "paket": "K3", "austausch": "icon"},
       "attachments": {"status": "offen", "paket": "K4", "austausch": "attachments"},

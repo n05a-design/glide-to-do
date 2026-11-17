@@ -41,15 +41,16 @@ SUFFIX = ".glideexchange"
 ROOT_FIELDS = frozenset({"format", "format_version", "generator", "created_for", "mode",
                          "labels", "folders", "lists", "notes"})
 LABEL_FIELDS = frozenset({"key", "name", "color"})
-FOLDER_FIELDS = frozenset({"key", "title", "description", "parent", "labels"})
+FOLDER_FIELDS = frozenset({"key", "title", "description", "parent", "labels", "folder_kind"})
 LIST_FIELDS = frozenset({"key", "title", "description", "folder", "labels", "items", "list_kind",
-                         "rich_note", "drawing", "animation"})
+                         "rich_note", "markdown", "drawing", "animation"})
 ITEM_FIELDS = frozenset({"key", "type", "title", "text", "description", "done", "importance", "due",
                          "due_time", "planned_date", "estimated_minutes", "labels", "checklist",
-                         "children"})
+                         "children", "repeat", "reminder"})
 ITEM_TYPES = ("task", "long", "group", "heading")
 STRUCTURAL_TYPES = ("group", "heading")
 LIST_KINDS = ("tasks", "note", "drawing", "page", "gallery")
+FOLDER_KINDS = ("standard", "library", "journal")
 
 MAX_BYTES = 12 * 1024 * 1024
 MAX_ITEMS = 5000
@@ -386,6 +387,16 @@ def _pruefe_punkt(bericht: Bericht, wo: str, punkt, tiefe: int, zaehler: dict, l
                 if fremd:
                     bericht.w(f"{wo}: Labels {', '.join(fremd)} stehen nicht unter labels; "
                               "Glide legt sie über ihren Namen an.")
+    if "repeat" in punkt and punkt.get("repeat") is not None:
+        if not isinstance(punkt["repeat"], dict):
+            bericht.f(f"{wo}: repeat muss ein Objekt sein.")
+        elif not punkt.get("due"):
+            bericht.w(f"{wo}: repeat ohne due – Glide verwirft die Wiederholung.")
+    if "reminder" in punkt and punkt.get("reminder") is not None:
+        if not isinstance(punkt["reminder"], dict):
+            bericht.f(f"{wo}: reminder muss ein Objekt sein.")
+        elif punkt["reminder"].get("mode") not in ("relative", "fixed"):
+            bericht.f(f"{wo}: reminder mode muss 'relative' oder 'fixed' sein.")
     kinder = punkt.get("children")
     if kinder is not None:
         if not isinstance(kinder, list):
@@ -457,6 +468,11 @@ def pruefe_create(bericht: Bericht, nutzlast: dict) -> None:
         if labels is not None:
             if not isinstance(labels, list) or not all(isinstance(l, str) and l.strip() for l in labels):
                 bericht.f(f"{wo} „{titel}“: labels muss eine Liste von Label-Schlüsseln oder -Namen sein.")
+        if "folder_kind" in eintrag:
+            art = eintrag.get("folder_kind")
+            if art not in FOLDER_KINDS:
+                bericht.w(f"{wo} „{titel}“: Ordnerart {art!r} unbekannt (erlaubt: {', '.join(FOLDER_KINDS)}); "
+                          "Glide verwendet standard.")
         if eintrag.get("key"):
             if str(eintrag["key"]) in ordner_keys:
                 bericht.f(f"{wo}: Schlüssel {eintrag['key']!r} doppelt.")
@@ -498,6 +514,8 @@ def pruefe_create(bericht: Bericht, nutzlast: dict) -> None:
                 bericht.f(f"{wo}: labels muss eine Liste von Label-Schlüsseln oder -Namen sein.")
         if "rich_note" in liste:
             _pruefe_rich_note(bericht, wo, liste["rich_note"], art)
+        if "markdown" in liste and not isinstance(liste["markdown"], str):
+            bericht.f(f"{wo}: markdown muss Text sein.")
         if liste.get("animation") is not None:
             if art != "drawing":
                 bericht.f(f"{wo}: Eine Bildfolge gehört in eine Zeichnung (list_kind „drawing“).")

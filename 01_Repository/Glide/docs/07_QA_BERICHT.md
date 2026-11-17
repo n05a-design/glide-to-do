@@ -1,5 +1,23 @@
 # QA-Bericht – Glide 3.69.0
 
+## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
+
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 3.69.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+
+| Gegenstand | Nachweis |
+|---|---|
+| Befund 5: Automatische Vorsicherung beim Import | `apply_exchange_payload` sichert vor jedem Create-Import den Ausgangsbestand atomar als dateibasiertes `vor_import_<zeitstempel>.glidebackup` in `BACKUP_DIR` via `write_complete_backup`. Schlägt das Schreiben fehl, bricht der Import ohne Datenänderung ab. Vollständiges Undo stellt den Zustand wieder her. |
+| Befund 4: Markdown-Seiten und -Notizen | Listen mit `markdown` (ohne explizites `rich_note`) werden über `glide_page_markdown.markdown_to_page` formatiert übernommen; Checkbox-Aufgaben (`- [ ]`) werden als Aufgabenpunkte erzeugt; Standard-`list_kind` ist `"page"`. `build_exchange_payload` exportiert `markdown` für formatierten Notiz-/Seitenrundlauf. |
+| Ordnerarten (`folder_kind`) | Übernahme von `library` (Buch) und `journal` (Notizbuch) neben `standard` in `new_folder_object`. Toleranter Rückfall bei unbekannter Ordnerart auf `standard` mit Warnung im `ExchangeReport`. `build_exchange_payload` exportiert nicht-standard Ordnerarten. |
+| Wiederholungsregeln (`repeat`) | Tolerante Annahme deutscher und englischer Regeln (`daily`, `weekly`, `taeglich`, `woechentlich`, etc.) via `exchange_repeat_from_payload` und `repeat_rules.py`. Prüfung: `repeat` ohne Fälligkeitsdatum (`due`) erzeugt Warnung und wird ignoriert. `build_exchange_payload` exportiert normalisierte Regeln mit `kind` und `interval`. |
+| Erinnerungen (`reminder`) | Relative Minuten (`{"mode": "relative", "minutes": 15}`) und feste ISO-Zeitpunkte (`{"mode": "fixed", "at": "..."}`) via `normalize_reminder`. Ungültige Werte erzeugen Warnung im Bericht. `build_exchange_payload` exportiert `reminder_config`. |
+| Fähigkeiten `exchange_capabilities()` | Additiv erweitert um `"repeat": 1`, `"reminders": 1`, `"folder_kinds": ["journal", "library", "standard"]` und `"markdown_pages": 1`. Formate (Aufgabenformat 26, Austauschformat 2) bleiben strikt abwärtskompatibel unverändert. |
+| Neuer Integrationstest T327 | `tests/integration/test_austausch_k3.py`: 6/6 Teilprüfungen (Vorsicherung, Markdown, Ordnerarten, Wiederholungen, Erinnerungen, Undo) isoliert mit künstlichem Datenordner bestanden (Exitcode 0). |
+| Vollprüfungs-Integrationssuite T325 | `test_ki_ausgabe_darstellung.py`: Vollprobe, Beispiele, Fehlerfall und Gegenproben bestanden (Exitcode 0). |
+| Werkzeugtests T321 & T324 | `test_agenten_skill.py`: 15/15 Tests OK. `test_ki_ausgabe.py`: 6/6 Tests OK. |
+| Systeminventar V1.38 | `test_glide_system.py`: 5/5 Tests OK; `GLIDE_SYSTEM_VERSION` 1.38, 327 Test-/Werkzeugdateien. |
+| CI-Grundstufe lokal | `ci_grundstufe.py`: 19/19 Schritte bestanden (Exitcode 0). `standpruefung.py`: 84 Dokumente, 0 Befunde. `abgleich_07.py`: 0 Abweichungen. |
+
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
 Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 3.69.0, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.

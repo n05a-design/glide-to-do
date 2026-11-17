@@ -69,7 +69,7 @@ Offene Arbeit auf einen Blick, Stand 16.11.2026 (3.69.0). Die Zeilen verweisen a
 |---|---|---|---|---|
 | 3.69.0 | Shell-Paket 5 `desktop_adapter.py` (M099, T326), Dokumentationskonsolidierung, Headless-CI-Absicherung | ◐ in `main` (PR #118, Nachpflege PR #119); Windows-Nachweis auf `d92dece9` und vollständiger Mac-Volllauf offen | Windows-Ergebnis lesen, Mac-Volllauf | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.69: Bedienelemente und Menüs nach Paket 4/5, Fokusrückgabe D87, Entlastungsdialog mit Gründen, Datenordnermeldung, Suche nach zerlegten Umlauten, Kompaktkopf 28 px, Anzeigeknopf, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
-| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 behoben, Versionsabgleich 3.69.0 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)) | E-K5 vor K3 | je Paket |
+| **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ◐ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)), K3 Erweiterte Austauschfähigkeiten ([§21.109](#21109-agenten-skill-paket-k3-erweiterte-austauschfähigkeiten-nach-e-k5-option-a--wa-61-17112026)) | K4 Bilder und Anhänge oder K5 Verteilung | je Paket |
 | WA-49 | Rest: Menüaufschub und Zeigerlesen beim Import, Python-Prüfung vor dem Direktstart | ◐ 3.55.0/3.60.0/3.61.0 | nächster Shell-Schnitt | eigener Auftrag |
 | Shell, WA-50 | Modal-Vertragstest mit echtem Grab, Fenster/Modal/Abbau, Appearance/Controls, Aktionen/Settings/Desktop-Adapter, Wiederverwendungsnachweis; Modulbudget als Werkzeugtest | ◐ 3a Modal-Modul in 3.62.0 ([§21.94](#2194-glide-3620-shell-paket-3a-modal-weg-als-eigenes-modul-14112026)); 3b Abbau-Vertragstest ([§21.95](#2195-shell-paket-3b-abbau-vertragstest-14112026)); Richtung D86–D90 ([§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)); 3c Zeitgeberbesitz in 3.64.0 ([§21.100](#21100-glide-3640-shell-paket-3c-zeitgeberbesitz-je-fenster-und-ansicht-15112026)); Fokusrückgabe in 3.65.0 ([§21.101](#21101-glide-3650-fokusrückgabe-nach-modalen-dialogen-d87-16112026)); WA-50 als Modulbudget in T322/analyse_statisch; Paket 4 in 3.67.0 ([§21.105](#21105-glide-3670-shell-paket-4--erscheinungsbild-und-bedienelemente-custom_controlspy-16112026)); Paket 5 in 3.68.0 ([§21.106](#21106-glide-3680-shell-paket-5--aktionen-menüs-und-desktop-adapter-desktop_adapterpy-16112026)) | Bündelung `glide_shell` vor Paket 6 (Demonstrationshost) | je Paket |
 | WA-12-Rest | Puffer nach Terminen, Frage bei spätem Start, Serien beim Entlasten ausnehmen | ○ Vorschlag | Reihung | Inhaber |
@@ -3044,4 +3044,52 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - `test_ki_ausgabe.py`: 6/6 Tests OK.
 - `test_ki_ausgabe_darstellung.py`: Vollprüfung OK (Exitcode 0).
 - `standpruefung.py`: 0 Befunde.
+
+### 21.109 Agenten-Skill: Paket K3 (Erweiterte Austauschfähigkeiten nach E-K5 Option A / WA-61) (17.11.2026)
+
+**A – Auftrag:** Umsetzung von Paket K3 (Teil 1 nach Inhaberentscheidung E-K5 Option A):
+1. **Befund 5 (Automatische Vorsicherung beim Import):** `apply_exchange_payload` sichert vor dem Anwenden eines Create-Imports den gesamten Ausgangsbestand atomar als dateibasiertes `vor_import_<zeitstempel>.glidebackup` in `BACKUP_DIR`.
+2. **Befund 4 (Markdown-Listen und -Notizen):** Neues Feld `markdown` an Listen; Wandlung über `glide_page_markdown.markdown_to_page` in `rich_note` mit Aufgabenextraktion; standardmäßiges `list_kind="page"`; Rundlauf-Export.
+3. **Ordnerarten (`folder_kind`):** Übernahme und Validierung von `library` (Buch) und `journal` (Notizbuch) neben `standard`; toleranter Rückfall auf `standard` mit Warnung; Export im Austauschformat.
+4. **Wiederholungsregeln (`repeat`):** Tolerante Annahme und Normalisierung deutscher und englischer Regeln (`daily`, `weekly`, `taeglich`, `woechentlich`, etc.); Prüfung gegen `due`; Rundlauf-Export mit `kind`.
+5. **Erinnerungen (`reminder`):** Relative Minuten und feste ISO-Zeitpunkte; Prüfung über `normalize_reminder`; Rundlauf-Export.
+6. **Formate:** Aufgabenformat **26** und Austauschformat **2** bleiben unverändert; Fähigkeiten additiv über `exchange_capabilities` bereitgestellt.
+
+**B – Umsetzung:**
+1. **App-Code (`app.pyw` und `07_Python-Versionen/`):**
+   - `EXCHANGE_LIST_FIELDS` um `"markdown"`, `EXCHANGE_FOLDER_FIELDS` um `"folder_kind"`, `EXCHANGE_ITEM_FIELDS` um `"repeat"` und `"reminder"` erweitert.
+   - `exchange_capabilities()`: `"repeat": 1`, `"reminders": 1`, `"folder_kinds": sorted(cls.FOLDER_KINDS)`, `"markdown_pages": 1`.
+   - `REPEAT_KIND_MAP` & `exchange_repeat_from_payload`: Tolerante Zuordnung von EN- und DE-Schlüsseln auf Glides interne `repeat_rules`.
+   - `exchange_item_from_payload`: Auflösung von `repeat` und `reminder` für `new_item(...)`.
+   - `exchange_item_payload`: Exportiert `repeat` (inkl. `kind` und `interval`) und `reminder` (via `reminder_config`).
+   - `parse_exchange_document`: Validiert `folder_kind`, `repeat` (benötigt Fälligkeitsdatum), `reminder` und `markdown`.
+   - `apply_exchange_payload`:
+     - Schreibt atomare Vorsicherung `vor_import_*.glidebackup` via `write_complete_backup` vor Datenmutation.
+     - Weist `folder_kind` an `new_folder_object` zu.
+     - Wandelt `markdown` ohne `rich_note` über `glide_page_markdown.markdown_to_page` in formatierte Notizen und extrahiert Aufgabenkästchen; setzt Standard-`list_kind` auf `"page"`.
+   - `build_exchange_payload`: Exportiert `folder_kind` (nicht-standard) und `markdown` via `page_to_markdown` für formatierte Seiten/Notizen.
+   - `exchange_prompt_text()`: Aktualisierte KI-Anleitung zu den neuen Feldern und Formatregeln.
+   - Byte-identischer Lieferabgleich via `abgleich_07.py` (0 Abweichungen).
+2. **Skill `glide-to-do`:**
+   - `SKILL.md`: Version auf 1.3 angehoben; Abschnitte 2 und 3 mit Beispielen für `repeat`, `reminder`, `folder_kind` und `markdown` aktualisiert.
+   - `abdeckung.json`: `ordnerarten.library` und `journal` sowie `felder.punkt.repeat` und `reminder` auf `"ja"` (`"weg": "austausch"`) umgestellt; `felder.ordner.folder_kind` auf `"ja"`; neue Fähigkeiten ergänzt.
+   - `references/austauschformat.md`: Alle fünf Bausteine in den Format- und Attributtabellen dokumentiert.
+   - `scripts/glide_datei.py`: `FOLDER_KINDS`, `repeat`-, `reminder`-, `folder_kind`- und `markdown`-Validierung integriert.
+3. **Tests und Systemregister:**
+   - Neuer dedizierter Integrationstest T327 `01_Repository/Glide/tests/integration/test_austausch_k3.py`: Prüft alle 5 Kernbausteine (Vorsicherung, Markdown, Ordnerarten, Wiederholungen, Erinnerungen) sowie Undo isoliert mit künstlichem Datenordner; 6/6 Prüfungen OK.
+   - `tests/tools/ki_ausgabe.py`: `vergleiche_austausch` und `vergleiche_punkte` um `folder_kind`, `markdown`, `repeat` und `reminder` erweitert.
+   - `tests/tools/test_agenten_skill.py`: Grenzfallprüfungen aktualisiert; 15/15 OK.
+   - `tests/tools/test_ki_ausgabe.py` & `tests/integration/test_ki_ausgabe_darstellung.py`: Vollprüfung angepasst; 100 % grün.
+   - Glide-Systemregister (`src/glide/README.md`) auf **V1.38** gehoben (T327 aufgenommen, 327 Test-/Werkzeugdateien).
+
+**C – Prüfung:**
+- `ci_grundstufe.py`: 19/19 Prüfungen bestanden (Exitcode 0).
+- `test_austausch_k3.py` (T327): 6/6 Teilprüfungen bestanden (Exitcode 0).
+- `test_agenten_skill.py` (T321): 15/15 Tests OK.
+- `test_ki_ausgabe.py` (T324): 6/6 Tests OK.
+- `test_ki_ausgabe_darstellung.py` (T325): Vollprüfung OK (Exitcode 0).
+- `test_glide_system.py`: 5/5 Tests OK.
+- `standpruefung.py`: 0 Befunde (alle 84 Dokumente synchron).
+- `abgleich_07.py`: 0 Abweichungen.
+
 
