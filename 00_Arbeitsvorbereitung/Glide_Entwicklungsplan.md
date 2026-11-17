@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **Nachabnahme 3.55.1 (12.11.2026).** Tagesentlastung und JSON-Canvas-Export wurden im macOS-Prüflauf nachgebessert. Die Speicherdialoge für Canvas und App-Sicherung schlagen die Dateiendung einmal vor. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokale-nachabnahme-und-prüfstand-3551-12112026) dokumentiert den Stand.
 
@@ -51,7 +51,7 @@ Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **Prüfnachtrag WA-41, 27.10.2026:** Ausdrücklich beauftragter AMD-Gegenlauf abgeschlossen, zehn von zehn ausgewerteten Prozessen grün auf Ryzen 7 5800X3D. Hauptvergleich Python 3.14.7, eine zusätzliche Vollsuite mit 3.15.1; vier Originalvollsuiten, zwei Kernproben und vier Daten-/Importproben, davon zwei mit bytegleichem Intel-Anfangsbestand. WA-41A/B unter der geprüften Last nicht reproduziert; Ursache und Freigabetore bleiben offen. [Nachweis, Vorlauf und Integritätsgrenzen](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Keine Produktions-/BIOS-/CPU-/Liefer-/Gitaktion.
 
-Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. `main` steht auf Glide 3.69.0 (`1b659d33`, Aufgabenformat 26; PR #118 mit 3.68.0 und 3.69.0, PR #119 Nachpflege, PR #122 Übergabeprüfung, PR #123 Windows-Vollprüfungsfix, [§21.107](#21107-glide-3690-ganzheitliche-dokumentations--und-übergabekonsolidierung-audit-bereinigung-und-headless-ci-absicherung-16112026)). Offen sind der Windows-Nachweis auf `main` und ein vollständiger Mac-Volllauf. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) führt die commitbezogene Plattform- und Paketabnahme. Offene Arbeit steht im [Arbeitsvorrat](#aktueller-arbeitsvorrat); [§21.98](#2198-richtungsentscheidungen-zur-shell-trennung-d86d90-15112026)–[§21.107](#21107-glide-3690-ganzheitliche-dokumentations--und-übergabekonsolidierung-audit-bereinigung-und-headless-ci-absicherung-16112026) beschreiben die jüngsten Schnitte (Shell-Pakete 3c, 4, 5, Fokusrückgabe D87, Agenten-Skill WA-61/D92 und Dokumentationskonsolidierung) und die noch offene Freigabe.
+Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. `main` steht auf Glide 1.0.0 (`1e99bf1d`, Aufgabenformat 26); der aktuelle Release-PR #138 basiert auf `156b59a2`. Die commitbezogene CI-Lage und offene Reparatur stehen in [§21.115](#21115-ci-reparatur-des-release-pr-138-18112026) sowie im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Offene Arbeit steht im [Arbeitsvorrat](#aktueller-arbeitsvorrat); historische Entwicklungs- und Abnahmebelege bleiben in ihren datierten Abschnitten erhalten.
 
 **Lesefolge:** aktueller Auftrag und Statusachsen hier → konsolidiertes [Funktionsinventar §18](#18-konsolidiertes-funktions--und-aufgabeninventar) → [Paketvertiefung §19](#19-paketgrenzen-ausbaustufen-und-aufwand) → [Entscheidungsregister §20](#20-vollständiges-entscheidungsregister). §§3–8 ordnen bestehende Kennungen fachlich; §§14–15 erhalten die ausgewählten Sprints als Vorgeschichte; §16 trägt weiterhin die FP-/WA-Aufgaben. Es entsteht kein zweiter Backlog.
 
@@ -63,10 +63,11 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 
 ## Aktueller Arbeitsvorrat
 
-Offene Arbeit auf einen Blick, Stand 16.11.2026 (3.69.0). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
+Offene Arbeit auf einen Blick, Stand 18.11.2026 (1.0.0). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
 | Kennung | Gegenstand | Status | Nächster Schritt | Freigabe |
 |---|---|---|---|---|
+| **CI 1.0.0 / PR #138** | Vollmatrix des Release-Branches nach der Release-CI-Reparatur | ◐ Lokaler Testfix in Commit `1249bd09`; Push auf den PR-Branch mit HTTP 403 abgewiesen. Linux-Volllauf des unveränderten Heads `156b59a2` rot; Folgeprüfungen übersprungen. | Schreibzugriff herstellen, Fix auf `claude/etappe4-release-v1` übertragen, vollständige Linux-/Windows-CI und Gegenproben erneut prüfen | Repository-Schreibzugriff |
 | 3.69.0 | Shell-Paket 5 `desktop_adapter.py` (M099, T326), Dokumentationskonsolidierung, Headless-CI-Absicherung | ◐ in `main` (PR #118, Nachpflege PR #119); Windows-Nachweis auf `d92dece9` und vollständiger Mac-Volllauf offen | Windows-Ergebnis lesen, Mac-Volllauf | Inhaber |
 | Abnahme | Menschliche Prüfung 3.55–3.69: Bedienelemente und Menüs nach Paket 4/5, Fokusrückgabe D87, Entlastungsdialog mit Gründen, Datenordnermeldung, Suche nach zerlegten Umlauten, Kompaktkopf 28 px, Anzeigeknopf, offene Bedien-/Sicht-/DPI-Fälle | ○ | [Prüfliste](Glide_Manuelle_Pruefung.md) | Inhaber |
 | **WA-61** | **Glide-Agenten-Skill `glide-to-do`:** gängige KI-Agenten legen Recherchen, Berichte, Notizen, Zeichnungen, Aufgaben- und Einkaufslisten und Projekte als Glide-Importdokumente an; ausbaufähig mit jeder Glide-Version | ✅ K1 Grundskill ([§21.103](#21103-agenten-skill-paket-k1-grundskill-auf-austauschformat-2-d91-16112026)), D92 zentrierter Skill & Prüfwerkzeug `ki_ausgabe.py` in 3.66.0 ([§21.104](#21104-glide-3660-zentrierte-skill-implementierung-datenformatkopplung-und-ki-darstellungsprüfung-d92-16112026)), K2 Austausch-Befunde 1 & 2 ([§21.108](#21108-agenten-skill-paket-k2-austausch-befunde-1--2-behoben-versionsabgleich-3690-17112026)), K3 Erweiterte Austauschfähigkeiten ([§21.109](#21109-agenten-skill-paket-k3-erweiterte-austauschfähigkeiten-nach-e-k5-option-a--wa-61-17112026)), K4/K5 Bilder/Anhänge & Verteilung ([§21.110](#21110-agenten-skill-pakete-k4--k5-bilderanhänge-im-austausch--verteilung-17112026)) | abgeschlossen (Etappe 1 Meilenstein 1.0) | Inhaber |
@@ -3220,6 +3221,17 @@ Gezielte Weiterentwicklung von Glide von 3.54.0 auf 3.55.0:
 - `ci_grundstufe.py`: 19/19 Prüfungen bestanden.
 - Systemstatus V1.40 (100 Module M001–M100, 329 Testdateien T001–T329).
 
+### 21.115 CI-Reparatur des Release-PR #138 (18.11.2026)
+
+**A – Auftrag:** Fortsetzung der Release-CI-Reparatur auf Basis des aktuellen Release-PR #138, ohne `main` zu verändern. Maßgeblich sind die tatsächlich ausgeführten Actions-Läufe und deren Protokolle; Ziel bleiben vollständige Linux- und Windows-Prüfungen samt Gegenproben.
+
+**B – Befund und Korrektur:** Auf `156b59a224851cebc35ed1d0b6f7bc2fb04520d1` schlug `tests/integration/test_austausch3350.py` an einer veralteten Singularannahme fehl: `aktion["path"].endswith("Sicherung")`, tatsächlich `Datei › Sicherungen`. Die Linux-Protokolle der Runs [#548](https://github.com/n05a-design/glide-to-do/actions/runs/44190761267), [#549](https://github.com/n05a-design/glide-to-do/actions/runs/44191499989) und [#550](https://github.com/n05a-design/glide-to-do/actions/runs/44191510700) bestätigen dieselbe Assertion; Run #545 auf `main` zeigt sie zusätzlich unter Linux und Windows. Das ist eine überholte Testannahme nach der Mehrsprachigkeit, kein Produktfehler. Spätere Suiten wurden nach dem Fehler ordnungsgemäß gestoppt; `test_aufgaben3380`, `test_uiux_paket` und weitere Pflichtsuiten sind dadurch nicht belegt. Entsprechende „NICHT BELEGT“-Defektgegenproben sind Folge der fehlenden positiven Baseline.
+
+Der lokale Fix in Commit `1249bd09e0204a5e66871bd70b73ca11ad37ac7c` prüft die Aktion über die stabile Kennung `show_backup_compare_dialog` und die exakten Menüpfade `Datei › Sicherungen` sowie `File › Backups`. Keine Produktlogik oder Assertion wurde entfernt. Der [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md) nennt die neue DE/EN-Abdeckung.
+
+**C – Prüfung und Lieferstatus:** Auf macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3 und künstlichen Daten bestanden `test_austausch3350.py`, `test_i18n.py` (11/11), `test_sicherungszentrale.py` und `test_wiederholen.py` (9/9); `ci_grundstufe.py --protokoll <kurzer Temp-Pfad>` endete mit Exitcode 0. Das ist kein Linux-/Windows-Vollprüfungsnachweis. Der neue Commit ließ sich nicht auf den Release-Branch übertragen: GitHub lehnte den Push von Konto `design-shaye` mit HTTP 403 ab. PR #138 bleibt offen und auf Head `156b59a`; die Windows-Vollprüfungen der Runs #548–#550 waren bei der Statusaufnahme noch in Arbeit. Keine Vollmatrix oder Veröffentlichung ist für den lokalen Fix als grün belegt.
+
+**Nächster Schritt:** Nach Wiederherstellung des Repository-Schreibzugriffs den lokalen Fix auf `claude/etappe4-release-v1` übertragen (`git push origin HEAD:refs/heads/claude/etappe4-release-v1`), anschließend alle vorgeschriebenen Checks samt vollständigen positiven Suiten und Gegenproben abwarten und neue Befunde anhand der Actions-Protokolle beheben. Commit, geprüfte Läufe und PR-Status danach in diesem Abschnitt und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) fortschreiben.
 
 
 

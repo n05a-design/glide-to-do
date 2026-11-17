@@ -6,9 +6,10 @@ ausgewählten Punkte (Verweise statt Kennungen, Ausgangsstand je Aufgabe). Ein
 Änderungsvorschlag kommt über „KI-Ergebnis importieren …“ in eine eigene Prüfung:
 jede Änderung Feld für Feld, Konflikte, Unbekanntes und Ungültiges benannt; übernommen
 wird nur Anwendbares, nach einer Vorsicherung und als ein Rückgängig-Schritt.
-F-03: Datei › Sicherung › „Sicherungen vergleichen …“ legt eine automatische
+F-03: Datei › Sicherungen › „Sicherungen vergleichen …“ legt eine automatische
 Sicherung neben den aktuellen Bestand und eine Sicherungsdatei neben sich selbst;
-nichts wird geschrieben.
+nichts wird geschrieben. Der Menüpfad wird über die stabile Aktionskennung in
+deutscher und englischer Sprache geprüft.
 
 --app wählt den Quellstand; mit der unveränderten 3.34.0 muss die Suite rot sein
 (Gegenprobe). Künstliche Daten in einem temporären GLIDE_DATA_DIR.
@@ -245,8 +246,25 @@ with tempfile.TemporaryDirectory(prefix="glide-austausch-") as ordner:
         ruhe()
         datei = os.path.join(ordner, "stand.glidebackup")
         app.write_complete_backup(datei, app.complete_backup_payload())
-        aktion = next(eintrag for eintrag in app.app_action_entries() if eintrag["id"] == "show_backup_compare_dialog")
-        assert aktion["path"].endswith("Sicherung"), aktion["path"]
+        original_sprache = mod.glide_i18n.get_language()
+        menuepfade = {"de": ("Datei", "Sicherungen"), "en": ("File", "Backups")}
+        try:
+            for sprache, erwarteter_pfad in menuepfade.items():
+                mod.glide_i18n.set_language(sprache)
+                app.create_menubar()
+                aktion = next(
+                    eintrag for eintrag in app.app_action_entries()
+                    if eintrag["id"] == "show_backup_compare_dialog"
+                )
+                assert aktion["id"] == "show_backup_compare_dialog", aktion
+                assert tuple(aktion["path"].split(" › ")) == erwarteter_pfad, (sprache, aktion)
+        finally:
+            mod.glide_i18n.set_language(original_sprache)
+            app.create_menubar()
+        aktion = next(
+            eintrag for eintrag in app.app_action_entries()
+            if eintrag["id"] == "show_backup_compare_dialog"
+        )
         stand = dateistand(ordner)
         bestand = copy.deepcopy(app.lists)
         ergebnisse = []

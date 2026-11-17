@@ -1,4 +1,16 @@
-# QA-Bericht – Glide 3.70.0
+# QA-Bericht – Glide 1.0.0
+
+## CI-Nachpflege Release-PR #138 – Menüpfad Austausch (18.11.2026)
+
+**Ausgangsstand:** PR #138 (`claude/etappe4-release-v1`) auf `156b59a224851cebc35ed1d0b6f7bc2fb04520d1`, Glide 1.0.0, Aufgabenformat 26. Die Actions-Protokolle der Runs [#548](https://github.com/n05a-design/glide-to-do/actions/runs/44190761267), [#549](https://github.com/n05a-design/glide-to-do/actions/runs/44191499989) und [#550](https://github.com/n05a-design/glide-to-do/actions/runs/44191510700) zeigen denselben Linux-Fehler in `test_austausch3350.py`: Die Assertion erwartete `aktion["path"].endswith("Sicherung")`, der tatsächliche lokalisierte Pfad lautete `Datei › Sicherungen`. Run [#545 auf main](https://github.com/n05a-design/glide-to-do/actions/runs/44171418610) enthält dieselbe Abweichung unter Linux und Windows. Damit ist die Testannahme veraltet; ein Produktdefekt ist nicht belegt.
+
+Der Fehler stoppt die positive Integrationsfolge. In #550 weisen `ergebnis.json` und das Einzelprotokoll `test_austausch3350.log` Exitcode 1 aus; danach wurden `test_aufgaben3380`, `test_uiux_paket` und weitere Pflichtsuiten übersprungen. Die entsprechenden `NICHT BELEGT`-Meldungen der Linux-Defektgegenproben sind Folge der fehlenden grünen Baseline und kein bestätigter Defekt. In den geprüften PR-Läufen waren Grundstufe und CodeQL erfolgreich, Linux-Vollprüfung fehlerhaft; Windows-Vollprüfung lief bei der Statusaufnahme noch. Die zusätzlichen UI-/Screenreader-Prüfjobs waren übersprungen und gelten nicht als Nachweis.
+
+**Lokale Korrektur:** Commit `1249bd09e0204a5e66871bd70b73ca11ad37ac7c` ersetzt den fragilen Beschriftungssuffix durch die stabile Aktionskennung `show_backup_compare_dialog` und prüft Menüpfade in beiden Sprachen exakt: `Datei › Sicherungen` und `File › Backups`. Produktcode, Releaseversion und Datenformat sind unverändert; die Regressionserwartung ist im [Prüfplan](05_QA_TESTPLAN.md) nachgeführt.
+
+**Lokaler Prüfstand:** macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche und isolierte Daten. `test_austausch3350.py`, `test_i18n.py` (11/11), `test_sicherungszentrale.py` und `test_wiederholen.py` (9/9) bestanden; `ci_grundstufe.py --protokoll …` Exitcode 0. Das Grundstufenprotokoll enthielt einen Hinweis, dass das Originalpaket `tkinterdnd2` wegen eines Zertifikatsfehlers nicht abrufbar war; der Schritt blieb ausdrücklich ein Hinweis und die Grundstufe erfolgreich. Kein lokaler Linux-/Windows-Vollprüfungsnachweis.
+
+**Offen:** Der Push des lokalen Fixes auf `claude/etappe4-release-v1` wurde von GitHub für Konto `design-shaye` mit HTTP 403 abgelehnt. Daher enthält PR #138 weiterhin nur Head `156b59a`; der lokale Commit wurde noch nicht von GitHub Actions geprüft. PR #138 ist offen und nicht mergefähig. Linux-/Windows-Vollprüfung, vollständige Pflichtsuiten, Defektgegenproben und erforderlicher Windows-Paketbau bleiben unbestätigt. Nächster Schritt nach Wiederherstellung des Schreibzugriffs: `git push origin HEAD:refs/heads/claude/etappe4-release-v1`, danach alle PR-Checks und deren Protokolle neu auswerten. Weitere Einzelheiten und der genaue Branchstatus stehen in [Entwicklungsplan §21.115](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21115-ci-reparatur-des-release-pr-138-18112026).
 
 ## Agenten-Skill `glide-to-do`, Pakete K4 & K5 – Bilder/Anhänge & Verteilung (17.11.2026)
 
