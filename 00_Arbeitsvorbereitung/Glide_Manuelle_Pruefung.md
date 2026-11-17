@@ -2,6 +2,15 @@
 
 Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26
 
+## Offene Sichtprüfung 3.67.0/3.68.0: ausgelagerte Bedienelemente und Menüs
+
+Prüfbasis ist `main` ab 3.69.0 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen Testordner). Paket 4 (`custom_controls.py`) und Paket 5 (`desktop_adapter.py`) haben Code verschoben, nicht Verhalten geändert; automatische Tests decken die Verträge ab, nicht den Anblick und die echte Bedienung. Am Mac und unter Windows prüfen; Plattform, Tcl/Tk und Ergebnis festhalten.
+
+- [ ] **Bedienelemente:** In Einstellungen und Dialogen Häkchen, Auswahlpunkte, Listen, Schieberegler und Bildlaufleisten in hellem und dunklem Design ansehen und bedienen (Maus, Tab, Leertaste, Pfeiltasten). Aussehen und Verhalten wie vor 3.67.0.
+- [ ] **Menüleiste:** Alle Hauptmenüs öffnen; Tastenkürzel stehen als `Cmd+…` (Mac) bzw. `Strg+…` (Windows), Wiederholen als `Cmd+Shift+Z` bzw. `Strg+Y`. Unter Windows die eigene Kopfleiste mit Alt-Buchstaben bedienen.
+- [ ] **Menüknöpfe (Windows):** Ein Knopf der eigenen Kopfleiste öffnet sein Menü direkt darunter; Esc oder Klick daneben schließt es, danach liegt der Fokus wieder im vorher aktiven Feld und das Fenster reagiert sofort auf Tastatur.
+- [ ] **System:** Einen Anhang oder Ordner „im System öffnen“ und einen Verweis kopieren und in eine andere App einfügen.
+
 ## Offene Sichtprüfung 3.65.0: Fokusrückgabe (D87)
 
 Prüfbasis ist der Quellstand 3.65.0 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen Testordner). D87 verlangt diese Prüfung am Mac von Hand; Plattform, Tcl/Tk und Ergebnis festhalten.
