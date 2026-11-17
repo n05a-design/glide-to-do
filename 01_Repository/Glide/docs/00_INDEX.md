@@ -8,7 +8,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 
 - **Erster Einstieg und Mitwirkung:** [Projektübersicht](../../../README.md) und [An Glide arbeiten](../../../CONTRIBUTING.md).
 - **Neue Sitzung und aktueller Stand:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](../AGENTS.md).
-- **Aufgaben und nächste Auswahl:** [einzige Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
+- **Aufgaben und nächste Auswahl:** [einzige Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) und [Meilenstein-Plan v1.0](../../../00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md).
 - **System-und-Modulpflege:** [Glide-System](../src/glide/README.md) – verbindliches vollständiges Modul-, Feature-, Baustein-, QA- und Testinventar; unabhängig versioniert über [`GLIDE_SYSTEM_VERSION`](../GLIDE_SYSTEM_VERSION) (Start V1.0), Änderungen samt Versionsverlauf im selben Commit.
 - **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
