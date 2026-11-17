@@ -2,7 +2,7 @@
 
 Stand 17.11.2026 · Glide 1.0.0 · aktuelle Python-Lieferung 1.0.0
 
-Hier liegen die abgelösten Hauptdateien `Glide-Aufgaben-und-Listen_v<Version>.pyw`: 3.64.0, 3.65.0, 3.66.0, 3.67.0, 3.68.0 und 3.69.0. Die aktuelle 3.70.0 liegt eine Ebene höher. Für die nie gelieferte 3.48.0 wird keine Archivdatei erzeugt.
+Hier liegen die abgelösten Hauptdateien `Glide-Aufgaben-und-Listen_v<Version>.pyw`: 3.65.0, 3.66.0, 3.67.0, 3.68.0, 3.69.0 und 3.70.0 (letzte Version der Entwicklungsreihe). Die aktuelle 1.0.0 liegt eine Ebene höher; sie gilt trotz kleinerer Nummer als neueste Version (offizieller Versionsschnitt, `release_notes.release_rank`). 3.64.0 fiel damit aus den sieben neuesten Versionen und bleibt in der Git-Historie. Für die nie gelieferte 3.48.0 wird keine Archivdatei erzeugt.
 
 Aufbewahrt werden höchstens die sieben neuesten Projektversionen. Die überalterte 3.45.0 wurde beim Versionswechsel 3.50.2 nach der bestehenden Regel lokal bytegleich gesichert und aus dem aktiven Baum genommen; sämtliche Vorfassungen bleiben über Git abrufbar. `scripts/pflege/ablage_kuerzen.py` prüft die Altersgrenze. Diese README wird als aktuelle Ablageübersicht gepflegt; sie ist kein eingefrorener Altversionsbeleg.
 

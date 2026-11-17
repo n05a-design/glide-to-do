@@ -118,6 +118,21 @@ class Ablagegroesse(unittest.TestCase):
         self.assertIn("Archivalter", text)
         self.assertIn("ablage_kuerzen.py", text)
 
+    def test_official_release_1_0_0_counts_as_newest(self):
+        # D93: Der Schnitt 3.70.0 → 1.0.0 folgt der Release-Abfolge, nicht der Zahl.
+        planung = lambda v: Q + f"tests/fixtures/beispiele/glide_releaseplanung_{v}.glidebackup"
+        alt = [f"3.{n}.0" for n in range(64, 71)]
+        eintraege = [(planung(v), MB) for v in alt + ["1.0.0"]]
+        self.assertEqual(regeln(*eintraege, aktuell="1.0.0"), [("Archivalter", planung("3.64.0"))])
+        self.assertIn("1.0.0", ablage.neueste_versionen(eintraege, "1.0.0"))
+        # Spätere Releases verdrängen weiter die ältesten Entwicklungsstände.
+        spaeter = eintraege + [(planung("1.0.1"), MB), (planung("1.1.0"), MB)]
+        self.assertEqual(sorted(p for _r, p in regeln(*spaeter, aktuell="1.1.0")),
+                         sorted(planung(v) for v in ("3.64.0", "3.65.0", "3.66.0")))
+        # Dauerhafte und geschützte Referenzen bleiben geschützt.
+        geschuetzt = [(planung("3.30.0"), MB), (planung("3.50.7"), MB)]
+        self.assertEqual(regeln(*geschuetzt, *eintraege[1:], aktuell="1.0.0"), [])
+
 
 if __name__ == "__main__":
     unittest.main()

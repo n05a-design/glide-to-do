@@ -57,7 +57,7 @@ python3 -B packaging/macos/baue_app.py --ziel build/macos-vorstufe [--symbol and
 
 Baut `Glide.app` mit Quellen und Modulen (Start über `glide_start.py`), Ressourcen, dem macOS-Teil von `vendor/tkinterdnd2`, einer Kopie des Python-Starters aus dem installierten python.org-Framework, `Glide.icns` und Ad-hoc-Signatur. macOS führt den Prozess als „Glide“ mit `de.shaye.glide`. Das Bundle braucht das installierte Python mit Tk und ist nicht zur Weitergabe gedacht.
 
-**Installation per Terminal – [`winget/`](winget/manifests/s/Shaye/Glide/3.70.0/Shaye.Glide.installer.yaml) und [`homebrew/`](homebrew/Casks/glide.rb):** Entwürfe für `winget install Shaye.Glide` (Inno-Setup-Installer) und einen Homebrew-Cask aus den Release-Dateien; nicht eingereicht. Ablauf und offene Freigaben in [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf).
+**Installation per Terminal – [`winget/`](winget/manifests/s/Shaye/Glide/1.0.0/Shaye.Glide.installer.yaml) und [`homebrew/`](homebrew/Casks/glide.rb):** Entwürfe für `winget install Shaye.Glide` (Inno-Setup-Installer) und einen Homebrew-Cask aus den Release-Dateien; nicht eingereicht. Ablauf und offene Freigaben in [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf).
 
 **Windows-Installer & Verknüpfung – [`windows/glide_setup.iss`](windows/glide_setup.iss) und [`windows/verknuepfung_anlegen.ps1`](windows/verknuepfung_anlegen.ps1):** Inno-Setup-6-Skript zur Erzeugung von `Glide-<v>-windows-x64-setup.exe` für unprivilegierte Benutzerinstallation nach `%LOCALAPPDATA%\Programs\Glide` mit Startmenüeintrag (`AppUserModelID: "Shaye.Glide"`) und Deinstallation. Das PowerShell-Skript dient alternativ für Entwickler-Startmenüverknüpfungen am Quellstand.
 

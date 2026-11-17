@@ -151,8 +151,12 @@ class AgentenSkillTests(unittest.TestCase):
         self.assertRegex(metadaten["version"], r"^\d+\.\d+$")
         self.assertEqual(metadaten["glide-version"], self.hilfe.GLIDE_VERSION)
         self.assertEqual(metadaten["exchange-format"], str(self.app.ListApp.EXCHANGE_FORMAT_VERSION))
-        geprueft = tuple(int(t) for t in self.hilfe.GLIDE_VERSION.split("."))
-        aktuell = tuple(int(t) for t in (ROOT / "VERSION").read_text(encoding="utf-8").strip().split("."))
+        # Release-Abfolge statt Zahlenvergleich: 3.70.0 liegt vor 1.0.0 (D93).
+        sys.path.insert(0, str(ROOT / "src/glide"))
+        from release_notes import release_rank
+        geprueft = release_rank(self.hilfe.GLIDE_VERSION)
+        aktuell = release_rank((ROOT / "VERSION").read_text(encoding="utf-8").strip())
+        self.assertIsNotNone(geprueft)
         self.assertLessEqual(geprueft, aktuell, "Skill nennt eine neuere Glide-Fassung als VERSION")
         self.assertLess(len(text.splitlines()), 500, "SKILL.md unter 500 Zeilen halten")
 
