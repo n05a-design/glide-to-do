@@ -534,7 +534,14 @@ def fall_fokus_drittes_fenster(u):
         drittes.geometry("240x100+200+200")
         eingabe = u.tk.Entry(drittes)
         eingabe.pack()
+        drittes.deiconify()
+        drittes.lift()
         drittes.update()
+        try:
+            d.grab_release()
+        except u.tk.TclError:
+            pass
+        drittes.focus_force()
         eingabe.focus_force()
         drittes.update()
         stand["drittes"] = drittes

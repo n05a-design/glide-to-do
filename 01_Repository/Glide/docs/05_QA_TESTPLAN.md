@@ -76,7 +76,7 @@ Eigene Austauschaufträge zusätzlich an beiden Eingängen prüfen: Feldvalidier
 
 Stand 16.11.2026 · Glide 3.69.0 · Aufgabenformat 26
 
-**3.69.0-Nachpflege:** Unit-Tests fassen keine Systemressourcen des Prüfrechners an; `test_desktop_adapter.py` prüft die Zwischenablage über eine Attrappe (Windows-CI-Absturz `0xC0000005`). `test_ki_ausgabe_darstellung.py` (T325) gehört zu `SUITEN` der Vollprüfung. [Nachweis](07_QA_BERICHT.md#nachpflege-3690--windows-ci-t325-und-vollprüfungsstand-16112026).
+**3.69.0-Nachpflege:** Unit-Tests fassen keine Systemressourcen des Prüfrechners an; `test_desktop_adapter.py` prüft die Zwischenablage über eine Attrappe (Windows-CI-Absturz `0xC0000005`). `test_ki_ausgabe_darstellung.py` (T325) gehört zu `SUITEN` der Vollprüfung. In `test_modalvertrag.py` gibt `fall_fokus_drittes_fenster` vor dem Fokussieren des Drittfensters den Dialoggriff frei (`d.grab_release()`), sodass Windows-Tk den Fokuswechsel verarbeitet. [Nachweis](07_QA_BERICHT.md#nachpflege-3690--windows-ci-t325-und-vollprüfungsstand-16112026).
 
 **3.69.0 – Dokumentationskonsolidierung und Headless-CI-Absicherung:** `test_desktop_adapter.py` (T326, bis 17.11.2026 irrtümlich als T313 geführt) fängt fehlende Tk-Displays in headless Linux-CI mit `SkipTest` ab. Unit-Suite läuft headless (1.230 Tests, 3 Skips) sowie auf Desktopsystemen (13/13 Fälle) fehlerfrei durch. Vollständige Link- und Dokumentenprüfung über alle 85 Markdown-Dateien belegt 0 defekte Links. [Nachweis](07_QA_BERICHT.md#prüfstand-3690--dokumentations--und-übergabekonsolidierung-headless-ci-absicherung-16112026).
 
