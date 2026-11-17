@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 17.11.2026 · Glide 3.69.0 (Ziel: 1.0.0) · Aufgabenformat 26 · Glide-System V1.39
+Stand 17.11.2026 · Glide 3.70.0 (Ziel: 1.0.0) · Aufgabenformat 26 · Glide-System V1.39
 
 Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den verbindlichen Fahrplan zu Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) sowie [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Zuletzt am 17.11.2026 gegen `main` `1cee384a` (PR #130 gemergt) geprüft; 100 % grüne Testmatrix (Grundstufe 19/19, Werkzeugtests, Integrationstests, Standprüfung 0 Befunde, Byte-Gleichheit zu `07_Python-Versionen/`). Frühere Übergabestände trägt Git.
 

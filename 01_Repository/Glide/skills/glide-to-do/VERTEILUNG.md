@@ -1,6 +1,6 @@
 # Verteilung und Einbindung des KI-Skills `glide-to-do`
 
-Stand: 17.11.2026 · Skill-Version 1.4 · Glide 3.69.0 · Austauschformat 2
+Stand: 17.11.2026 · Skill-Version 1.4 · Glide 3.70.0 · Austauschformat 2
 
 Der Skill `glide-to-do` befähigt Sprachmodelle und KI-Agenten, strukturierte Ergebnisse direkt im nativen Glide-Austauschformat (`.glideexchange`, ZIP-Pakete oder Markdown-Seiten `.md`) bereitzustellen. Der Nutzer kann diese Dateien mit einem Klick in Glide importieren.
 

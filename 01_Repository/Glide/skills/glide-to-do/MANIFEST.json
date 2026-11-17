@@ -11,7 +11,7 @@
     {
       "path": "README.md",
       "size": 6776,
-      "sha256": "af1c207dc237a5b161577979f8dc4bf71cfdac463ec2fb760d868407c53d47ac"
+      "sha256": "3be41a02499d6ca8222d91cccc46c6f0542080e2f8021af7339c2c98cb6cdf19"
     },
     {
       "path": "SKILL.md",
@@ -21,7 +21,7 @@
     {
       "path": "VERTEILUNG.md",
       "size": 4359,
-      "sha256": "c0f95d7132b7ad1a990392c2a8fa451736cdabc447354372abe57633dbf92b85"
+      "sha256": "638ef338529153ef09f75a84e7f8e065561d845280613e1dee52e36a72c5f6fc"
     },
     {
       "path": "abdeckung.json",
@@ -71,27 +71,27 @@
     {
       "path": "references/aenderungsvorschlag.md",
       "size": 2606,
-      "sha256": "0ebe36c60e09b9676df6bcedd230ab3152bffa5b79b445ab79e10741469fc245"
+      "sha256": "d01fd50f2b8f650013db1767f747298c6ae50f1d80157f46101fe668fdfc2471"
     },
     {
       "path": "references/austauschformat.md",
       "size": 6858,
-      "sha256": "d4221929f1a42083db9277f85df58c7fe455d99a84f8be1ee0097eda2c953631"
+      "sha256": "b01b97100412a17c69607cd712463634de0310171993b9ba9d8d8de0156f469a"
     },
     {
       "path": "references/dokumentarten.md",
       "size": 2814,
-      "sha256": "b5b1903966ba5fa6e56dea568e707c7db71c489eaa7123da3e65049441ee59b5"
+      "sha256": "329f59b0fd2a15ca29cdafe4168a7550e0ec58b89e946da0f32cd6090451ce7d"
     },
     {
       "path": "references/glide-aufbau.md",
       "size": 5198,
-      "sha256": "e21db0bc096404e78990d8dc3486f36326f618fb4e7a2132812711331f85467e"
+      "sha256": "4d2bed997864d0bacb0101eaec07e324c9c31fe0f6feaf4aa4a061e60b812eee"
     },
     {
       "path": "references/seiten-markdown.md",
       "size": 2222,
-      "sha256": "d6697ea208c55d1f9d0837275638d61507d04e20c9df3967b232e51877f9b490"
+      "sha256": "5e87e604145e5d385c6f3b0e22657a595239c4aefe388cd1c208f6d8477710ce"
     },
     {
       "path": "scripts/glide_datei.py",

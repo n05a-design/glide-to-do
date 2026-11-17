@@ -1,8 +1,8 @@
 {
-  "app_version": "3.69.0",
+  "app_version": "3.70.0",
   "format_version": 26,
   "thema": "Werkhaus West",
-  "bearbeitungstag": "2026-11-16",
+  "bearbeitungstag": "2026-11-17",
   "dokumente": [
     {
       "titel": "Offene Werkstatt",
@@ -67,20 +67,20 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 8388421,
-      "sha256": "7a107cff76cf021215840e891dadf091c1a235b3cf7ec40bea512c4cf6e87cec"
+      "bytes": 8388416,
+      "sha256": "384bfe33b21f2b1f57fd87c58c262b8860bcef38f38e5de022a650c405fb271e"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 10016552,
-      "sha256": "3c77edc1414e0fe7502a64b1412323f3013bcd88e6dbb547ebefb5722f9271aa"
+      "bytes": 10016563,
+      "sha256": "a0810f54b10c18dc072b97da8921771c9c31b9273333cf0c6c118a0bb35814f6"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 2105104,
-      "sha256": "043779e8c6d734b88326251207f7a7c14b33f772649dd66f3ef59a97f47bf4e7"
+      "sha256": "9bd57a5bce05d0c56563e4abcfff8f57bf45036ea1eb9cd60d6b138f2bc73b67"
     },
     "Werkhaus-West.canvas": {
       "bytes": 4502,
-      "sha256": "1a3c6105ddd2b849b0dbf969a6f7d522784319db6305b2020b7872513e8203fb"
+      "sha256": "3c2e6e7d868612f8d15c6b4dca725da3ad19b7f605152c53a11141640755f9b1"
     }
   }
 }
