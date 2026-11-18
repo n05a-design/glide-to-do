@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 17.11.2026 · Glide 3.70.0 · Aufgabenformat 26
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 ## Offene Sichtprüfung 3.67.0/3.68.0: ausgelagerte Bedienelemente und Menüs
 

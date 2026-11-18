@@ -4,7 +4,7 @@
 ; Startmenüeintrag mit fester AppUserModelID: Shaye.Glide (docs/10_VEROEFFENTLICHUNG.md).
 
 #ifndef MyAppVersion
-#define MyAppVersion "3.70.0"
+#define MyAppVersion "1.0.0"
 #endif
 
 #define MyAppName "Glide"

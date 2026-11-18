@@ -29,7 +29,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 17.11.2026 · Glide 3.70.0 · Aufgabenformat 26
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 

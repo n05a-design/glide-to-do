@@ -2,10 +2,10 @@
 name: glide-to-do
 description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Berichte und Übersichten werden eine Glide-Seite (Markdown), Aufgabenlisten, Einkaufslisten, Projekte und Aufgabenübersichten eine .glideexchange-Datei mit Ordnern, Listen, Punkten, Fälligkeiten, Bearbeitungstagen, Aufwand, Wichtigkeit, Labels, Checklisten, Dateianhängen, Galeriebildern und Titelbildern; dazu Notizen, Pixelzeichnungen und Änderungsvorschläge zu einem Glide-Kontextpaket (.glidecontext). Verwenden, wenn der Nutzer Glide nennt, etwas „für Glide“ oder „zum Import in Glide“ haben möchte oder eine Datei mit Endung .glideexchange oder .glidecontext vorliegt. Auch für englische Anfragen wie Glide task list, shopping list, project plan oder report.
 license: MPL-2.0
-compatibility: Erzeugt Dateien für Glide 3.69 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
+compatibility: Erzeugt Dateien für Glide 1.0 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
   version: "1.4"
-  glide-version: "3.69.0"
+  glide-version: "1.0.0"
   exchange-format: "2"
 ---
 

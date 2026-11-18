@@ -68,7 +68,7 @@ class Neuerungen(unittest.TestCase):
             for punkt in punkte:
                 self.assertTrue(punkt.endswith((".", "“")), punkt)
                 self.assertLess(len(punkt), 140, punkt)
-        self.assertLess(rn.version_tuple(rn.BEFORE_CATALOG), min(rn.version_tuple(v) for v in rn.CATALOG))
+        self.assertLess(rn.release_rank(rn.BEFORE_CATALOG), min(rn.release_rank(v) for v in rn.CATALOG))
 
     def test_history_lists_every_version_up_to_current_newest_first(self):
         # B18 (15.10.2026): „Über Glide › Neuerungen“ liest denselben Katalog.
@@ -85,6 +85,40 @@ class Neuerungen(unittest.TestCase):
         self.assertNotIn("1.0.3", rn.history_text("1.1.0", KATALOG))
         self.assertEqual(rn.history_text("0.9", KATALOG), "Für diese Version sind keine Neuerungen hinterlegt.")
         self.assertIn("Version 3.36.0", rn.history_text("3.42.0"))
+
+    def test_official_release_cut_ranks_1_0_0_after_development_series(self):
+        # D93 (17.11.2026): 3.70.0 war die letzte Entwicklungsversion, 1.0.0 der erste offizielle Release.
+        folge = ["3.33.18", "3.63.0", "3.70.0", "1.0.0", "1.0.1", "1.1.0", "2.0.0"]
+        self.assertEqual(sorted(reversed(folge), key=rn.release_rank), folge)
+        self.assertIsNone(rn.release_rank("3.x"))
+
+    def test_update_from_development_series_shows_1_0_0_once(self):
+        # Bestand mit gemerkter 3.x-Version bekommt die 1.0.0-Karte, danach nie wieder.
+        for gemerkt in ("3.70.0", "3.63.0", rn.BEFORE_CATALOG):
+            karte = rn.notes_since(gemerkt, "1.0.0")
+            self.assertEqual(karte[0][0], "1.0.0", gemerkt)
+            self.assertTrue(all(rn.release_rank(v) <= rn.release_rank("1.0.0") for v, _ in karte))
+        settings = rn.remember_seen({"release_notes_seen": "3.70.0"}, "1.0.0")
+        self.assertFalse(rn.should_show(settings, "1.0.0", existing_install=True))
+        # Bestand ohne gemerkte Version zählt als Vorkatalogstand; Erststart zeigt nichts.
+        self.assertTrue(rn.should_show({}, "1.0.0", existing_install=True))
+        self.assertFalse(rn.should_show({}, "1.0.0", existing_install=False))
+        # Rückwärts (1.0.0 gemerkt, 3.x läuft) bleibt leer – keine wiederkehrende Karte.
+        self.assertEqual(rn.notes_since("1.0.0", "3.70.0"), [])
+
+    def test_later_official_updates_follow_1_0_0(self):
+        katalog = dict(rn.CATALOG, **{"1.0.1": ("x",), "1.1.0": ("y",)})
+        self.assertEqual([v for v, _ in rn.notes_since("1.0.0", "1.1.0", katalog)], ["1.1.0", "1.0.1"])
+        self.assertEqual([v for v, _ in rn.notes_since("3.70.0", "1.0.1", katalog)][:2], ["1.0.1", "1.0.0"])
+        verlauf = [v for v, _ in rn.history("1.0.0")]
+        self.assertEqual(verlauf[0], "1.0.0")
+        self.assertIn("3.63.0", verlauf)
+        self.assertNotIn("1.0.0", [v for v, _ in rn.history("3.70.0")])
+
+    def test_catalog_has_entry_for_running_version(self):
+        version = (Path(__file__).resolve().parents[2] / "VERSION").read_text().strip()
+        self.assertIn(version, rn.CATALOG)
+        self.assertTrue(rn.notes_since(rn.BEFORE_CATALOG, version))
 
 
 if __name__ == "__main__":

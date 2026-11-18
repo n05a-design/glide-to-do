@@ -3,6 +3,19 @@
 Stand 17.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## 1.0.0 – 17.11.2026
+
+Offizieller Meilenstein-Release 1.0 (D93) von Glide. Vollständige Mehrsprachigkeit (Deutsch und Englisch), standardkonforme Paketierung und Installer für macOS und Windows, Paketmanager-Unterstützung (Homebrew Cask, winget) und integrierter KI-Agenten-Skill `glide-to-do`. Datenformat 26 und Austauschformat 2 unverändert.
+
+- Vollständige Mehrsprachigkeit (i18n DE/EN, Etappe 2): Zentrales i18n-Subsystem (`src/glide/i18n.py`, `de.json`, `en.json`) mit dynamischer Spracherkennung, Menü- und Tastaturschaltung (`Ctrl+Shift+L` / `Cmd+Shift+L`) ohne Neustart. Vollständige Lokalisierung aller UI-Texte, Menüs, Statusmeldungen, Standardlisten und Dialoge. Neuer i18n-Test T329 (`test_i18n.py`, 11/11 OK).
+- Installer & Paketierung (Etappe 3):
+  - macOS: Signiertes DMG-Image und Homebrew Cask (`packaging/homebrew/Casks/glide.rb`).
+  - Windows: Professioneller Inno-Setup-Installer (`packaging/windows/glide_setup.iss`) mit silent Installation (`/VERYSILENT`), Deinstallationsroutine und winget-Manifesten (`packaging/winget/manifests/s/Shaye/Glide/1.0.0/`).
+- KI-Agenten-Skill `glide-to-do` (Etappe 1): Exportierbarer und standardisierter KI-Skill für Claude Desktop, Cursor, Gemini CLI und Web-LLMs mit automatischer Prüfsummenvalidierung (`MANIFEST.json`).
+- Veröffentlichung & CI/CD (Etappe 4): Automatisierte GitHub Actions Release-Pipeline (`.github/workflows/release.yml`), die bei Release-Tags (`v*`) plattformspezifische Artefakte (macOS DMG, Windows Inno Setup EXE, Standalone ZIPs, Agent-Skill ZIP) baut, prüft und dem GitHub Release beifügt.
+- Qualitätssicherung & Systemregister: 100 Module (M001–M100), 329 Testdateien (T001–T329), Glide-System V1.40, Modulbudget WA-50 eingehalten, 0 Befunde in der Standprüfung, byte-identischer 07-Lieferabgleich.
+
+
 ## 3.70.0 – 17.11.2026
 
 Agenten-Skill `glide-to-do` komplettiert (WA-61 Pakete K3, K4, K5) und Meilensteinschnitt Release 1.0 (D93). Datenformat 26 und Austauschformat 2 unverändert.

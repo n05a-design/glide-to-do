@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 17.11.2026 · Glide 3.70.0 · Aufgabenformat 26
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
 

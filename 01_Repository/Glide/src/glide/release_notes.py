@@ -20,6 +20,12 @@ ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "1.0.0": (
+        "Glide spricht Deutsch und Englisch; Strg+Umschalt+L (Mac: Cmd+Umschalt+L) wechselt die Sprache ohne Neustart.",
+        "Für Windows gibt es einen Installer mit Deinstallation, für macOS ein DMG-Abbild.",
+        "Glide lässt sich über Homebrew (macOS) und winget (Windows) installieren.",
+        "Der KI-Skill „glide-to-do“ lässt sich für Claude Desktop, Cursor, Gemini CLI und Web-Assistenten exportieren.",
+    ),
     "3.63.0": (
         "Gefüllte Dreiecke sind in der Seitenleiste und bei Vor-/Zurück-Pfeilen besser lesbar.",
         "Randlose Aufgabenaktionen übernehmen den Hintergrund der ganzen überfahrenen oder ausgewählten Zeile.",
@@ -203,21 +209,41 @@ def version_tuple(text):
     return tuple(int(teil) for teil in teile)
 
 
+# Offizieller Versionsschnitt (D93, 17.11.2026): Die Entwicklungsreihe endete
+# mit 3.70.0, die offizielle Reihe beginnt mit 1.0.0. Versionen der Reihe
+# 3.0.0 bis einschließlich LAST_DEVELOPMENT_VERSION liegen daher zeitlich vor
+# 1.0.0, obwohl sie numerisch größer sind. Erreicht die offizielle Reihe je
+# die Hauptversion 3, ist dieser Schnitt neu zu entscheiden (siehe Test).
+LAST_DEVELOPMENT_VERSION = (3, 70, 0)
+
+
+def release_rank(text):
+    """Sortierschlüssel in tatsächlicher Release-Abfolge; Unlesbares → None.
+
+    Entwicklungsreihe (3.x bis 3.70.0) → (0, Tupel), offizielle Reihe ab 1.0.0
+    → (1, Tupel). So gilt 3.33.18 < 3.70.0 < 1.0.0 < 1.0.1 < 1.1.0.
+    """
+    stand = version_tuple(text)
+    if stand is None:
+        return None
+    return (0 if stand[:1] == (3,) and stand <= LAST_DEVELOPMENT_VERSION else 1, stand)
+
+
 def notes_since(last_seen, current, catalog=None):
     """Neuerungen der Versionen nach `last_seen` bis einschließlich `current`.
 
     Ohne gemerkte Version (erster Start) oder bei gleicher bzw. neuerer
-    gemerkter Version: leer. Neueste Version zuerst, höchstens fünf Punkte je
+    gemerkter Version: leer. Neueste Version zuerst (Release-Abfolge nach `release_rank`), höchstens fünf Punkte je
     Version und höchstens `CARD_VERSIONS` Versionen; ältere Einträge bleiben
     über `history` nachlesbar.
     """
     katalog = CATALOG if catalog is None else catalog
-    alt, neu = version_tuple(last_seen), version_tuple(current)
+    alt, neu = release_rank(last_seen), release_rank(current)
     if alt is None or neu is None or alt >= neu:
         return []
     treffer = []
     for version, punkte in katalog.items():
-        stand = version_tuple(version)
+        stand = release_rank(version)
         if stand is not None and alt < stand <= neu and punkte:
             treffer.append((stand, version, list(punkte)[:5]))
     neueste = sorted(treffer, reverse=True)[:CARD_VERSIONS]
@@ -252,10 +278,10 @@ def remember_seen(settings, current):
 def history(current, catalog=None):
     """Alle Neuerungen bis einschließlich `current`, neueste Version zuerst."""
     katalog = CATALOG if catalog is None else catalog
-    neu = version_tuple(current)
+    neu = release_rank(current)
     treffer = []
     for version, punkte in katalog.items():
-        stand = version_tuple(version)
+        stand = release_rank(version)
         if stand is not None and punkte and (neu is None or stand <= neu):
             treffer.append((stand, version, list(punkte)[:5]))
     return [(version, punkte) for _stand, version, punkte in sorted(treffer, reverse=True)]

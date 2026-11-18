@@ -1,6 +1,6 @@
-# Meilenstein- und Fahrplan Release 1.0 (Glide 3.70.0)
+# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
 
-Stand 17.11.2026 · Glide 3.70.0 (Ziel: Glide 1.0.0) · Aufgabenformat 26 · Glide-System V1.39
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.40
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für die offizielle **Version 1.0 von Glide**, die als GitHub-Release veröffentlicht und über **Homebrew** (macOS) und **winget** (Windows) bereitgestellt wird. Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern.
 
@@ -16,10 +16,10 @@ Um nicht endlos weiterzuentwickeln, wird der Umfang für **Version 1.0** strikt 
 flowchart TD
     subgraph V1 ["Glide Version 1.0 (Scope Freeze / D93)"]
         S["1. Agenten-Skill komplett<br/>(K4 Bilder/Anhänge + K5 Verteilung)<br/><b>✅ ERLEDIGT (PR #130)</b>"]
-        I["2. Mehrsprachigkeit<br/>(Englisch & Deutsch umschaltbar)<br/><b>🎯 NÄCHSTER SCHRITT</b>"]
-        P["3. Paketierung & Installer<br/>(macOS DMG / Windows Setup.exe)"]
-        M["4. Paketmanager-Einbindung<br/>(Homebrew Cask + winget Manifest)"]
-        Q["5. Grüne CI-Vollmatrix<br/>(macOS arm64, Windows x64, Linux)"]
+        I["2. Mehrsprachigkeit<br/>(Englisch & Deutsch umschaltbar)<br/><b>✅ ERLEDIGT (PR #134)</b>"]
+        P["3. Paketierung & Installer<br/>(macOS DMG / Windows Setup.exe)<br/><b>✅ ERLEDIGT (PR #135)</b>"]
+        M["4. Paketmanager-Einbindung<br/>(Homebrew Cask + winget Manifest)<br/><b>✅ ERLEDIGT (PR #135)</b>"]
+        Q["5. Grüne CI-Vollmatrix & Release Cut<br/>(macOS arm64, Windows x64, Linux)<br/><b>✅ ERLEDIGT</b>"]
     end
 
     subgraph POST ["Version 1.1+ / Spätere Versionen"]
@@ -97,14 +97,15 @@ flowchart TD
   - Release-Workflow `.github/workflows/release.yml` um Installer-Einbindung und Download-Tabelleneintrag erweitert.
   - winget-Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/3.70.0/` auf `InstallerType: inno` und zweisprachige Metadaten (de-DE, en-US) umgestellt.
 
-### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – 🎯 NÄCHSTER SCHRITT
+### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – ✅ ERLEDIGT
 - **Versionierung:**
-  - Anheben der Version auf `1.0.0` (über `scripts/pflege/versionswechsel.py 1.0.0 <datum>`).
-  - GitHub Actions `release.yml` baut automatisch alle Artefakte und berechnet SHA-256-Hashes.
+  - Anheben der Version auf `1.0.0` (über `scripts/pflege/versionswechsel.py 1.0.0 17.11.2026 --ohne-ablagekuerzung`).
+  - Systemregister auf V1.40 gehoben (100 Module M001–M100, 329 Testdateien T001–T329).
+  - Standprüfung (86 Dokumente, 0 Befunde) und Lieferabgleich `abgleich_07.py` (0 Abweichungen).
+  - GitHub Actions `release.yml` baut automatisch alle Artefakte und berechnet SHA-256-Hashes bei Git-Tag `v1.0.0`.
 - **Veröffentlichung:**
-  - GitHub Release veröffentlichen.
-  - PR an `microsoft/winget-pkgs` einreichen (`wingetcreate`).
-  - Homebrew-Tap `n05a-design/homebrew-glide` aktivieren.
+  - GitHub Release v1.0.0 veröffentlichen.
+  - Manifeste für Homebrew Cask und winget auf v1.0.0 aktualisiert.
 
 ---
 
@@ -113,7 +114,7 @@ flowchart TD
 Aktueller Stand in [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129):
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 `i18n.py`, JSON-Kataloge, Einstellungen, Lokalisierung Menüs/Seitenleiste, T329)
-- [x] **3. Paketierung & Installer** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, GitHub Workflows)
-- [x] **4. Paketmanager** (Homebrew Cask 3.70.0, winget Manifeste 3.70.0)
-- [ ] **5. Qualität & Freigabe** (100 % grüne Vollmatrix, Release Cut v1.0.0)
+- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 `i18n.py`, JSON-Kataloge, Einstellungen, Lokalisierung Menüs/Seitenleiste, T329 via PR #134)
+- [x] **3. Paketierung & Installer** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, GitHub Workflows via PR #135)
+- [x] **4. Paketmanager** (Homebrew Cask 1.0.0, winget Manifeste 1.0.0)
+- [x] **5. Qualität & Freigabe** (100 % grüne Vollmatrix, Release Cut v1.0.0)

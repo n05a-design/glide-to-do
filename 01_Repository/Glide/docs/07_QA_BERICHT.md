@@ -1,4 +1,20 @@
-# QA-Bericht – Glide 3.70.0
+# QA-Bericht – Glide 1.0.0
+
+## CI-Nachpflege Release-PR #138 – Menüpfad Austausch (18.11.2026)
+
+**Ausgangsstand:** PR #138 (`claude/etappe4-release-v1`) auf `156b59a224851cebc35ed1d0b6f7bc2fb04520d1`, Glide 1.0.0, Aufgabenformat 26. Die Actions-Protokolle der Runs [#548](https://github.com/n05a-design/glide-to-do/actions/runs/44190761267), [#549](https://github.com/n05a-design/glide-to-do/actions/runs/44191499989) und [#550](https://github.com/n05a-design/glide-to-do/actions/runs/44191510700) zeigen denselben Linux-Fehler in `test_austausch3350.py`: Die Assertion erwartete `aktion["path"].endswith("Sicherung")`, der tatsächliche lokalisierte Pfad lautete `Datei › Sicherungen`. Run [#545 auf main](https://github.com/n05a-design/glide-to-do/actions/runs/44171418610) enthält dieselbe Abweichung unter Linux und Windows. Damit ist die Testannahme veraltet; ein Produktdefekt ist nicht belegt.
+
+Der Fehler stoppt die positive Integrationsfolge. In #550 weisen `ergebnis.json` und das Einzelprotokoll `test_austausch3350.log` Exitcode 1 aus; danach wurden `test_aufgaben3380`, `test_uiux_paket` und weitere Pflichtsuiten übersprungen. Die entsprechenden `NICHT BELEGT`-Meldungen der Linux-Defektgegenproben sind Folge der fehlenden grünen Baseline und kein bestätigter Defekt. In den geprüften PR-Läufen waren Grundstufe und CodeQL erfolgreich, Linux-Vollprüfung fehlerhaft; Windows-Vollprüfung lief bei der Statusaufnahme noch. Die zusätzlichen UI-/Screenreader-Prüfjobs waren übersprungen und gelten nicht als Nachweis.
+
+**Lokale Korrektur:** Commit `1249bd09e0204a5e66871bd70b73ca11ad37ac7c` ersetzt den fragilen Beschriftungssuffix durch die stabile Aktionskennung `show_backup_compare_dialog` und prüft Menüpfade in beiden Sprachen exakt: `Datei › Sicherungen` und `File › Backups`. Produktcode, Releaseversion und Datenformat sind unverändert; die Regressionserwartung ist im [Prüfplan](05_QA_TESTPLAN.md) nachgeführt.
+
+**Lokaler Prüfstand:** macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche und isolierte Daten. `test_austausch3350.py`, `test_i18n.py` (11/11), `test_sicherungszentrale.py` und `test_wiederholen.py` (9/9) bestanden; `ci_grundstufe.py --protokoll …` Exitcode 0. Das Grundstufenprotokoll enthielt einen Hinweis, dass das Originalpaket `tkinterdnd2` wegen eines Zertifikatsfehlers nicht abrufbar war; der Schritt blieb ausdrücklich ein Hinweis und die Grundstufe erfolgreich. Kein lokaler Linux-/Windows-Vollprüfungsnachweis.
+
+**Folgeprüfung nach Merge von PR #140:** Der direkte Push auf den Release-Zweig wurde durch eine Repository-Regel abgewiesen („Changes must be made through a pull request“). Deshalb wurde PR #140 gegen `claude/etappe4-release-v1` erstellt und am 18.11.2026 in PR #138 integriert (Merge-Commit `d92474a68e81b08ca0d0cb6bcbd24f476e544e25`). Die Linux- und Windows-Vollprüfung des PR-Laufs [#44201143049](https://github.com/n05a-design/glide-to-do/actions/runs/44201143049) scheiterte anschließend in `test_arbeitsmodi.py`, Fall `kompakt`: Die Gestaltungsvorgabe und Test erwarteten „Kompaktmodus“, die deutsche Übersetzung lieferte „Kompaktmodus umschalten“. Die englische Übersetzung „Toggle compact mode“ verletzte dieselbe Vorgabe für knappe Umschaltbefehle. Es ist ein Text-/Prüfvertragsfehler, kein belegter Funktionsfehler des Kompaktmodus. Neuere Linux-Läufe auf PR #138, [#44203066197](https://github.com/n05a-design/glide-to-do/actions/runs/44203066197) und [#44203075422](https://github.com/n05a-design/glide-to-do/actions/runs/44203075422), zeigen denselben roten Fall; die Windows-Jobs liefen bei der letzten Statusaufnahme noch.
+
+**Lokale Folgekorrektur:** Commit `ed9f230b3eef9c12dde21061a9687586007c5011` setzt die Menütexte wieder auf die verbindlichen knappen Formen „Kompaktmodus“ und „Compact mode“. `test_arbeitsmodi.py --fall kompakt` prüft jetzt Position und Beschriftung in beiden Sprachen und stellt danach die ursprüngliche Sprache wieder her. Der Prüfplan nennt die zweisprachige Erwartung. Auf macOS arm64, Python 3.14.5 und Tcl/Tk 9.0.3 bestand der gezielte Kompaktmodusfall (1/1), `test_i18n.py` (11/11) und `ci_grundstufe.py` mit Exitcode 0; JSON- und Diff-Prüfung waren sauber. Die Grundstufe meldete nur die erwarteten zwei Locale-Abweichungen zum separat versionierten Auslieferungsstand und den nicht abrufbaren Fremdcode `tkinterdnd2` als Hinweis. Die Folgekorrektur ist lokal geprüft, aber noch nicht durch GitHub Actions gelaufen.
+
+**Offen:** PR #138 bleibt offen und nicht mergefähig. Die Folgekorrektur muss über einen neuen Pull Request in `claude/etappe4-release-v1` eingespielt werden; direkte Branch-Pushes sind durch die Repository-Regel gesperrt. Danach sind Linux- und Windows-Vollprüfungen, alle wegen des Kompaktmodusfalls übersprungenen Pflichtsuiten, Defektgegenproben und der erforderliche Windows-Paketbau anhand der neuen Actions-Protokolle zu bestätigen. Frühere Statusdetails und Ursachen stehen in [Entwicklungsplan §21.115](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21115-ci-reparatur-des-release-pr-138-18112026).
 
 ## Agenten-Skill `glide-to-do`, Pakete K4 & K5 – Bilder/Anhänge & Verteilung (17.11.2026)
 
@@ -23,7 +39,7 @@ Stand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pakete K4 
 
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
-Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 3.70.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -41,7 +57,7 @@ Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skil
 
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
-Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 3.70.0, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.0, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -603,7 +619,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 17.11.2026 · Glide 3.70.0 · Aufgabenformat 26
+Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

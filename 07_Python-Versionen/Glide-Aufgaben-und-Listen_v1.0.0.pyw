@@ -161,6 +161,7 @@ import interaction_policy as glide_interaction
 import runtime_config as glide_runtime_config
 import object_references as glide_objects
 import exchange_recipes as glide_recipes
+import i18n as glide_i18n
 import week_planning as glide_week
 import markdown_tree as glide_markdown_tree
 import pinboard_pages as glide_pinboard_pages
@@ -237,47 +238,22 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.64.0"
+APP_VERSION = "1.0.0"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
 APP_BUNDLE_ID = "de.shaye.glide"
 APP_USER_MODEL_ID = "Shaye.Glide"
-IS_MACOS = sys.platform == "darwin"
-IS_WINDOWS = os.name == "nt"
-IS_LINUX = sys.platform.startswith("linux")
+
+import desktop_adapter
+
+IS_MACOS = desktop_adapter.is_macos()
+IS_WINDOWS = desktop_adapter.is_windows()
+IS_LINUX = desktop_adapter.is_linux()
 
 
-def rounded_rect_points(x1, y1, x2, y2, radius):
-    """Stützpunkte eines abgerundeten Rechtecks für `create_polygon`.
-
-    Dieselbe Punktliste stand dreimal im
-    Quelltext – in `RoundedButton`, `RoundedContainer` und
-    `ThemedAutoScrollbar`. Unterschiedlich war an den drei Stellen nur, was
-    danach mit den Punkten geschieht: Umriss ja oder nein, wie fein die Kurve
-    unterteilt wird, welche Marke das Element trägt. Die Geometrie selbst ist
-    überall dieselbe – eine Ecke, die in drei Fassungen existiert, ist eine
-    Ecke, die in drei Fassungen falsch werden kann.
-
-    `smooth=True` zieht durch diese zwölf Punkte eine Bézierkurve; die
-    doppelten Eckpunkte sind die Steuerpunkte, die aus der Kurve eine
-    Rundung mit dem gewünschten Radius machen.
-    """
-    return [
-        x1 + radius, y1,
-        x2 - radius, y1,
-        x2, y1,
-        x2, y1 + radius,
-        x2, y2 - radius,
-        x2, y2,
-        x2 - radius, y2,
-        x1 + radius, y2,
-        x1, y2,
-        x1, y2 - radius,
-        x1, y1 + radius,
-        x1, y1,
-    ]
+from custom_controls import rounded_rect_points
 
 
 def root_after(root, delay, callback):
@@ -2636,1402 +2612,44 @@ class RoundedContainer(DeferredDrawCanvas):
             )
 
 
-def paint_canvas_backdrop(canvas):
-    """Legt den Hintergrundverlauf als unterste Ebene in eine Canvas-Fläche.
+from custom_controls import (
+    CanvasLabel,
+    GlideCheckbutton,
+    GlideRadiobutton,
+    GlideListbox,
+    GlideScale,
+    ThemedAutoScrollbar,
+    bind_resize,
+    paint_canvas_backdrop,
+    set_backdrop_painter as _set_control_backdrop_painter,
+    set_font_provider as _set_control_font_provider,
+    set_ink_provider as _set_control_ink_provider,
+)
 
-    `canvas._backdrop` ist eine Folge von Stücken (Bild, x, y) oder None – nur
-    die sichtbaren Teile der Fläche, bei Karten etwa nur die Ecken. Flächen, die
-    beim Neuzeichnen alles löschen (Knöpfe, Scrollleisten), rufen das am Ende
-    ihres Zeichnens.
-    """
+
+def _app_control_ink_provider(canvas, font_spec, text, wrap_width):
     try:
-        canvas.delete("backdrop")
-        info = getattr(canvas, "_backdrop", None)
-        if not info:
-            return
-        for bild, x, y in info:
-            canvas.create_image(x, y, image=bild, anchor="nw", tags=("backdrop",))
-        canvas.tag_lower("backdrop")
-    except tk.TclError:
-        pass
-
-
-class CanvasLabel(tk.Canvas):
-    """Beschriftung ohne eigene Fläche: Text auf einer Canvas statt in einem Label.
-
-    Ein Tk-Label malt immer ein deckendes Rechteck. Auf dem Hintergrundverlauf
-    stünde der Seitentitel dann in einem Kasten. Diese Klasse zeichnet nur den
-    Text; darunter liegt der Verlauf (`paint_canvas_backdrop`). Sie versteht die
-    Label-Optionen, die Glide für Titel, Unterzeile, Kennzahlen und Hinweise
-    benutzt: text, font, fg, bg, anchor, justify, wraplength, padx, pady.
-
-    Reicht der Kontrast auf dem Verlauf unter dem Text nicht, legt
-    `set_halo` eine Milchglas-Pille darunter.
-
-    Gemessen wird wie bei einem Label (Rand 2 plus padx/pady um die
-    Schrift). Die Textbox der Canvas ist waagrecht 1 Pixel je Seite breiter
-    als die Schrift, senkrecht genau eine Zeilenhöhe; daher die Zuschläge
-    `LABEL_INSET_X` und `LABEL_INSET_Y`. So bleiben Kopfzeile und Mindestgrößen
-    so groß wie mit den früheren Labels.
-    """
-
-    LABEL_INSET_X = 1
-    LABEL_INSET_Y = 2
-    TEXT_OPTIONS = ("text", "font", "fg", "foreground", "anchor", "justify", "wraplength", "padx", "pady")
-
-    def __init__(self, master, text="", font=None, fg=None, foreground=None, bg=None, background=None,
-                 anchor="center", justify="left", wraplength=0, padx=1, pady=1, cursor="", takefocus=0,
-                 inset_y=None, fit_ink=False, **kwargs):
-        self._fit_ink = bool(fit_ink)
-        if inset_y is not None:
-            self.LABEL_INSET_Y = max(0, int(inset_y))
-        farbe = bg or background
-        if farbe is None:
-            try:
-                farbe = master.cget("bg")
-            except tk.TclError:
-                farbe = "#FFFFFF"
-        optionen = {"highlightthickness": 0, "bd": 0, "bg": farbe, "cursor": cursor, "takefocus": takefocus,
-                    "width": 1, "height": 1}
-        optionen.update(kwargs)
-        super().__init__(master, **optionen)
-        self._opts = {"text": str(text), "font": font or "TkDefaultFont", "fg": fg or foreground or "#000000",
-                      "anchor": anchor, "justify": justify, "wraplength": wraplength, "padx": padx, "pady": pady}
-        self._halo = None
-        self._fg_override = None
-        self._text_ids = []
-        self.bind("<Configure>", lambda _event: self._place_text(), add="+")
-        self._render()
-
-    # --- Label-Schnittstelle ---------------------------------------------
-    def configure(self, cnf=None, **kwargs):
-        if isinstance(cnf, dict):
-            kwargs = {**cnf, **kwargs}
-        elif isinstance(cnf, str) and not kwargs:
-            if cnf in self.TEXT_OPTIONS:
-                return (cnf, cnf, cnf, None, self.cget(cnf))
-            return super().configure(cnf)
-        eigene = {key: kwargs.pop(key) for key in list(kwargs) if key in self.TEXT_OPTIONS}
-        if "background" in kwargs:
-            kwargs["bg"] = kwargs.pop("background")
-        if kwargs:
-            super().configure(**kwargs)
-        if eigene:
-            if "foreground" in eigene:
-                eigene["fg"] = eigene.pop("foreground")
-            if "text" in eigene:
-                eigene["text"] = str(eigene["text"])
-            self._opts.update(eigene)
-            self._render()
+        font = ui_font_object(root=canvas, font=font_spec)
+        metrics = bundled_glyph_metrics(font.actual("weight") == "bold", font.cget("family"),
+                                        font.actual("slant") == "italic")
+        size = font.actual("size")
+        pixels = -size if size < 0 else size * float(canvas.tk.call("tk", "scaling"))
+        einzeilig = "\n" not in text and (wrap_width <= 0 or font.measure(text) <= wrap_width)
+        return (glide_glyphs.label_ink_box(metrics, text + "ÄÖÜgjpqß", pixels, font.metrics("ascent"))
+                if einzeilig else None)
+    except Exception:
         return None
 
-    config = configure
 
-    def cget(self, key):
-        if key == "foreground":
-            key = "fg"
-        if key in self._opts:
-            return self._opts[key]
-        if key == "background":
-            key = "bg"
-        return super().cget(key)
+def _app_control_font_provider(size, *styles):
+    try:
+        return ui_font(size, *styles)
+    except Exception:
+        return "TkDefaultFont"
 
-    def __getitem__(self, key):
-        return self.cget(key)
 
-    def __setitem__(self, key, value):
-        self.configure(**{key: value})
-
-    def keys(self):
-        opts = set(super().keys())
-        opts.update(self._opts.keys())
-        opts.update(("text", "font", "fg", "foreground", "bg", "background", "anchor", "justify", "wraplength", "padx", "pady"))
-        return sorted(opts)
-
-    # --- Zeichnen --------------------------------------------------------
-    def set_halo(self, farbe):
-        """Farbe einer dezenten Glas-Pille hinter dem Text – oder None.
-
-        Eine Kontur um jeden Buchstaben wirkte fett und unruhig. Die Pille
-        liegt wie ein Stück Milchglas unter der Zeile.
-        """
-        if farbe != self._halo:
-            self._halo = farbe
-            self._render()
-
-    def set_contrast_fg(self, farbe):
-        """Schriftfarbe für den Verlauf darunter – oder None für die Farbe des Designs.
-
-        Die Rolle (etwa „muted“) bleibt in `cget("fg")` erhalten; nur die
-        Darstellung weicht im eigenen Farbton so weit aus, wie der Verlauf an
-        dieser Stelle es für 4,5:1 verlangt.
-        """
-        if farbe != self._fg_override:
-            self._fg_override = farbe
-            try:
-                self.itemconfigure("text", fill=farbe or self._opts["fg"])
-            except tk.TclError:
-                pass
-
-    def text_size(self):
-        """(Breite, Höhe) des Texts einschließlich Innenabstand – wie `winfo_reqwidth` eines Labels."""
-        return self._required
-
-    def _render(self):
-        self.delete("text")
-        o = self._opts
-        breite = int(float(o["wraplength"] or 0))
-        gemeinsam = {"text": o["text"], "font": o["font"], "justify": o["justify"], "anchor": "nw",
-                     "tags": ("text",)}
-        if breite > 0:
-            gemeinsam["width"] = breite
-        self._text_ids = []
-        haupt = self.create_text(0, 0, fill=self._fg_override or o["fg"], **gemeinsam)
-        self._text_ids.append((haupt, 0, 0))
-        box = self.bbox(haupt) or (0, 0, 0, 0)
-        padx = int(float(o["padx"] or 0)) + self.LABEL_INSET_X
-        pady = int(float(o["pady"] or 0)) + self.LABEL_INSET_Y
-        self._text_w, self._text_h = box[2] - box[0], box[3] - box[1]
-        self._text_ink_top = 0
-        if self._fit_ink:
-            font = ui_font_object(root=self, font=o["font"])
-            metrics = bundled_glyph_metrics(font.actual("weight") == "bold", font.cget("family"),
-                                            font.actual("slant") == "italic")
-            size = font.actual("size")
-            pixels = -size if size < 0 else size * float(self.tk.call("tk", "scaling"))
-            # Ein gemeinsamer Buchstabenrahmen hält Kopf/Logo beim Wechsel
-            # zwischen Titeln still; zusätzlicher tatsächlicher Inhalt darf
-            # den Rahmen nur erweitern, niemals eine Glyphe abschneiden.
-            einzeilig = "\n" not in o["text"] and (breite <= 0 or font.measure(o["text"]) <= breite)
-            ink = (glide_glyphs.label_ink_box(metrics, o["text"] + "ÄÖÜgjpqß", pixels, font.metrics("ascent"))
-                   if einzeilig else None)
-            if ink is not None:
-                self._text_ink_top, self._text_h = ink
-                self._text_ids = [(haupt, 0, -self._text_ink_top)]
-        self._required = (self._text_w + 2 * padx, self._text_h + 2 * pady)
-        super().configure(width=max(1, self._required[0]), height=max(1, self._required[1]))
-        self._place_text()
-        paint_canvas_backdrop(self)
-
-    def _place_text(self):
-        o = self._opts
-        breite = self.winfo_width() if self.winfo_width() > 1 else self._required[0]
-        hoehe = self.winfo_height() if self.winfo_height() > 1 else self._required[1]
-        padx = int(float(o["padx"] or 0)) + self.LABEL_INSET_X
-        pady = int(float(o["pady"] or 0)) + self.LABEL_INSET_Y
-        anker = str(o["anchor"] or "center")
-        if "w" in anker:
-            x = padx
-        elif "e" in anker:
-            x = breite - padx - self._text_w
-        else:
-            x = (breite - self._text_w) / 2
-        if anker.startswith("n"):
-            y = pady
-        elif anker.startswith("s"):
-            y = hoehe - pady - self._text_h
-        else:
-            y = (hoehe - self._text_h) / 2
-        for kennung, dx, dy in self._text_ids:
-            self.coords(kennung, x + dx, y + dy)
-        self.delete("pill")
-        if self._halo:
-            rand_x, rand_y = 6, 2
-            self.create_polygon(
-                rounded_rect_points(x - rand_x, y - rand_y, x + self._text_w + rand_x, y + self._text_h + rand_y, 8),
-                smooth=True, splinesteps=16, fill=self._halo, outline="", tags=("pill", "text"))
-            self.tag_lower("pill", "text")
-
-
-class GlideCheckbutton(tk.Canvas):
-    """Themebares Auswahlkästchen auf Canvas-Grundlage ohne native Systemkästchen."""
-
-    BOX_SIZE = 16
-    BOX_GAP = 8
-    PAD_X = 4
-    PAD_Y = 3
-
-    def __init__(self, master, **kwargs):
-        self._variable = kwargs.pop("variable", None)
-        self._command = kwargs.pop("command", None)
-        self._onvalue = kwargs.pop("onvalue", True)
-        self._offvalue = kwargs.pop("offvalue", False)
-        name = kwargs.pop("name", None)
-        cursor = kwargs.pop("cursor", "hand2")
-        takefocus = kwargs.pop("takefocus", 1)
-        bg = kwargs.pop("bg", kwargs.pop("background", None))
-        if bg is None:
-            try:
-                bg = master.cget("bg")
-            except Exception:
-                bg = "#1e1e1e"
-        self._opts = {
-            "text": str(kwargs.pop("text", "") or ""),
-            "font": kwargs.pop("font", None) or app_font(10),
-            "bg": bg,
-            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
-            "activebackground": kwargs.pop("activebackground", bg),
-            "activeforeground": kwargs.pop("activeforeground", "#e5e5e5"),
-            "selectcolor": kwargs.pop("selectcolor", bg),
-            "disabledforeground": kwargs.pop("disabledforeground", "#888888"),
-            "anchor": kwargs.pop("anchor", "w"),
-            "justify": kwargs.pop("justify", "left"),
-            "wraplength": kwargs.pop("wraplength", 0),
-            "padx": kwargs.pop("padx", self.PAD_X),
-            "pady": kwargs.pop("pady", self.PAD_Y),
-            "state": kwargs.pop("state", "normal"),
-            "relief": kwargs.pop("relief", "flat"),
-            "bd": kwargs.pop("bd", kwargs.pop("borderwidth", 0)),
-        }
-        highlightthickness = kwargs.pop("highlightthickness", 0)
-        highlightbackground = kwargs.pop("highlightbackground", bg)
-        highlightcolor = kwargs.pop("highlightcolor", self._opts["fg"])
-        for Rest in list(kwargs):
-            self._opts[Rest] = kwargs.pop(Rest)
-        init_kw = dict(
-            bg=bg, bd=0, highlightthickness=highlightthickness,
-            highlightbackground=highlightbackground, highlightcolor=highlightcolor,
-            cursor=cursor, takefocus=takefocus,
-        )
-        if name is not None:
-            init_kw["name"] = name
-        super().__init__(master, **init_kw)
-        self._trace_id = None
-        self._focused = False
-        self._hovered = False
-        self._required = (1, 1)
-        self._attach_variable(self._variable)
-        self.bind("<Button-1>", self._on_click)
-        self.bind("<space>", self._on_key_toggle)
-        self.bind("<Return>", self._on_key_toggle)
-        self.bind("<FocusIn>", self._on_focus_in, add="+")
-        self.bind("<FocusOut>", self._on_focus_out, add="+")
-        self.bind("<Enter>", self._on_enter, add="+")
-        self.bind("<Leave>", self._on_leave, add="+")
-        self.bind("<Configure>", self._on_configure, add="+")
-        self.bind("<Destroy>", self._on_destroy, add="+")
-        self._render()
-
-    def _attach_variable(self, variable):
-        if self._variable is not None and self._trace_id is not None:
-            try:
-                self._variable.trace_remove("write", self._trace_id)
-            except Exception:
-                pass
-        self._variable = variable
-        self._trace_id = None
-        if variable is not None and hasattr(variable, "trace_add"):
-            try:
-                self._trace_id = variable.trace_add("write", lambda *_: self._safe_render())
-            except Exception:
-                self._trace_id = None
-
-    def _on_destroy(self, event):
-        if event.widget is self:
-            self._attach_variable(None)
-
-    def _safe_render(self):
-        if getattr(self, "_rendering", False):
-            return
-        self._rendering = True
-        try:
-            if self.winfo_exists():
-                self._render()
-        except tk.TclError:
-            pass
-        finally:
-            self._rendering = False
-
-    def _is_checked(self):
-        if self._variable is None:
-            return bool(getattr(self, "_internal_checked", False))
-        try:
-            val = self._variable.get()
-        except Exception:
-            return False
-        if isinstance(self._onvalue, bool):
-            return bool(val) is self._onvalue
-        return val == self._onvalue or bool(val)
-
-    def select(self):
-        if self._variable is not None:
-            try:
-                self._variable.set(self._onvalue)
-            except Exception:
-                pass
-        else:
-            self._internal_checked = True
-        self._safe_render()
-
-    def deselect(self):
-        if self._variable is not None:
-            try:
-                self._variable.set(self._offvalue)
-            except Exception:
-                pass
-        else:
-            self._internal_checked = False
-        self._safe_render()
-
-    def toggle(self):
-        if self._is_checked():
-            self.deselect()
-        else:
-            self.select()
-
-    def invoke(self):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        # Checklisten-Punkte im Inspektor schalten ihren Modellwert über den
-        # eigenen Rückruf um und synchronisieren danach `_accessible_variable`.
-        if getattr(self, "_accessible_step_index", None) is not None and callable(self._command):
-            return self._command()
-        self.toggle()
-        if callable(self._command):
-            return self._command()
-        return None
-
-    def _on_click(self, _event=None):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        try:
-            self.focus_set()
-        except tk.TclError:
-            pass
-        self.invoke()
-        return "break"
-
-    def _on_key_toggle(self, _event=None):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        if getattr(self, "_accessible_step_index", None) is not None:
-            return None
-        self.invoke()
-        return "break"
-
-    def _on_focus_in(self, _event=None):
-        self._focused = True
-        self._safe_render()
-
-    def _on_focus_out(self, _event=None):
-        self._focused = False
-        self._safe_render()
-
-    def _on_enter(self, _event=None):
-        self._hovered = True
-        self._safe_render()
-
-    def _on_leave(self, _event=None):
-        self._hovered = False
-        self._safe_render()
-
-    def _on_configure(self, event=None):
-        if event is not None:
-            w, h = getattr(event, "width", None), getattr(event, "height", None)
-            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
-                return
-            self._last_conf_w = w
-            self._last_conf_h = h
-        self._safe_render()
-
-    def configure(self, cnf=None, **kwargs):
-        werte = dict(cnf or {}, **kwargs)
-        if not werte:
-            return super().configure()
-        canvas_kw = {}
-        for k in ("highlightthickness", "highlightbackground", "highlightcolor", "cursor", "takefocus"):
-            if k in werte:
-                canvas_kw[k] = werte.pop(k)
-        if "background" in werte:
-            werte["bg"] = werte.pop("background")
-        if "foreground" in werte:
-            werte["fg"] = werte.pop("foreground")
-        if "variable" in werte:
-            self._attach_variable(werte.pop("variable"))
-        if "command" in werte:
-            self._command = werte.pop("command")
-        if "onvalue" in werte:
-            self._onvalue = werte.pop("onvalue")
-        if "offvalue" in werte:
-            self._offvalue = werte.pop("offvalue")
-        if "bg" in werte:
-            canvas_kw["bg"] = werte["bg"]
-            if "highlightbackground" not in canvas_kw and int(float(super().cget("highlightthickness") or 0)) == 0:
-                canvas_kw["highlightbackground"] = werte["bg"]
-        changed = any(self._opts.get(k) != v for k, v in werte.items()) or bool(canvas_kw)
-        self._opts.update(werte)
-        if canvas_kw:
-            super().configure(**canvas_kw)
-        if changed:
-            self._safe_render()
-
-    config = configure
-
-    def cget(self, key):
-        if key == "background":
-            key = "bg"
-        elif key == "foreground":
-            key = "fg"
-        if key == "variable":
-            return str(self._variable) if self._variable is not None else ""
-        if key == "command":
-            return self._command
-        if key == "onvalue":
-            return self._onvalue
-        if key == "offvalue":
-            return self._offvalue
-        if key in self._opts:
-            return self._opts[key]
-        return super().cget(key)
-
-    def __getitem__(self, key):
-        return self.cget(key)
-
-    def __setitem__(self, key, value):
-        self.configure(**{key: value})
-
-    def keys(self):
-        opts = set(super().keys())
-        opts.update(self._opts.keys())
-        opts.update(("text", "variable", "command", "onvalue", "offvalue", "font", "state", "justify", "wraplength", "padx", "pady"))
-        return sorted(opts)
-
-    def _render(self):
-        self.delete("all")
-        o = self._opts
-        disabled = str(o.get("state", "normal")) == "disabled"
-        checked = self._is_checked()
-        padx = max(0, int(float(o.get("padx") or 0)))
-        pady = max(0, int(float(o.get("pady") or 0)))
-        box_s = self.BOX_SIZE
-        gap = self.BOX_GAP if o.get("text") else 0
-        wrap = int(float(o.get("wraplength") or 0))
-        text_wrap = max(40, wrap - box_s - gap - 2 * padx) if wrap > 0 else 0
-        fg = o["disabledforeground"] if disabled else o["fg"]
-        text_kw = {
-            "text": str(o.get("text") or ""),
-            "font": o["font"],
-            "fill": fg,
-            "anchor": "nw",
-            "justify": o.get("justify", "left"),
-            "tags": ("text",),
-        }
-        if text_wrap > 0:
-            text_kw["width"] = text_wrap
-        tid = self.create_text(padx + box_s + gap, pady, **text_kw)
-        tbox = self.bbox(tid) or (padx + box_s + gap, pady, padx + box_s + gap, pady + box_s)
-        tw = max(0, tbox[2] - tbox[0])
-        th = max(box_s, tbox[3] - tbox[1])
-        req_w = padx * 2 + box_s + gap + tw + 4
-        req_h = pady * 2 + max(box_s, th)
-        if (req_w, req_h) != self._required:
-            self._required = (req_w, req_h)
-            self._last_conf_w = max(1, req_w)
-            self._last_conf_h = max(1, req_h)
-            super().configure(width=max(1, req_w), height=max(1, req_h))
-        h = self.winfo_height() if self.winfo_height() > 1 else req_h
-        if "\n" in str(o.get("text") or "") or th > box_s + 6:
-            by = pady + 2
-            ty = pady
-        else:
-            by = max(pady, (h - box_s) / 2)
-            ty = max(pady, (h - (tbox[3] - tbox[1])) / 2)
-        self.coords(tid, padx + box_s + gap, ty)
-        bx = padx
-        box_fill = o.get("selectcolor") or o["bg"]
-        border_col = fg if (checked or self._focused or self._hovered) and not disabled else o.get("disabledforeground", fg)
-        self.create_polygon(
-            rounded_rect_points(bx, by, bx + box_s, by + box_s, 4),
-            smooth=True, splinesteps=12, fill=box_fill, outline=border_col, width=1.4 if self._focused else 1,
-            tags=("box",),
-        )
-        if checked:
-            self.create_line(
-                bx + 3.5, by + box_s * 0.52,
-                bx + box_s * 0.44, by + box_s - 4,
-                bx + box_s - 3.2, by + 4,
-                fill=fg, width=2, capstyle="round", joinstyle="round", tags=("check",),
-            )
-        paint_canvas_backdrop(self)
-
-
-class GlideRadiobutton(GlideCheckbutton):
-    """Themebarer Radioschalter auf Canvas-Grundlage."""
-
-    def __init__(self, master, **kwargs):
-        self._value = kwargs.pop("value", "")
-        super().__init__(master, **kwargs)
-
-    def _is_checked(self):
-        if self._variable is None:
-            return False
-        try:
-            return self._variable.get() == self._value
-        except Exception:
-            return False
-
-    def select(self):
-        if self._variable is not None:
-            try:
-                self._variable.set(self._value)
-            except Exception:
-                pass
-        self._safe_render()
-
-    def deselect(self):
-        pass
-
-    def toggle(self):
-        self.select()
-
-    def configure(self, cnf=None, **kwargs):
-        werte = dict(cnf or {}, **kwargs)
-        if "value" in werte:
-            self._value = werte.pop("value")
-        return super().configure(werte)
-
-    config = configure
-
-    def cget(self, key):
-        if key == "value":
-            return self._value
-        return super().cget(key)
-
-    def keys(self):
-        opts = set(super().keys())
-        opts.add("value")
-        return sorted(opts)
-
-    def _render(self):
-        super()._render()
-        self.delete("box", "check")
-        o = self._opts
-        disabled = str(o.get("state", "normal")) == "disabled"
-        checked = self._is_checked()
-        padx = max(0, int(float(o.get("padx") or 0)))
-        pady = max(0, int(float(o.get("pady") or 0)))
-        box_s = self.BOX_SIZE
-        h = self.winfo_height() if self.winfo_height() > 1 else self._required[1]
-        by = max(pady, (h - box_s) / 2)
-        bx = padx
-        fg = o["disabledforeground"] if disabled else o["fg"]
-        box_fill = o.get("selectcolor") or o["bg"]
-        border_col = fg if (checked or self._focused or self._hovered) and not disabled else o.get("disabledforeground", fg)
-        self.create_oval(
-            bx, by, bx + box_s, by + box_s,
-            fill=box_fill, outline=border_col, width=1.4 if self._focused else 1, tags=("box",),
-        )
-        if checked:
-            inset = 4
-            self.create_oval(
-                bx + inset, by + inset, bx + box_s - inset, by + box_s - inset,
-                fill=fg, outline="", tags=("check",),
-            )
-
-
-class GlideListbox(tk.Canvas):
-    """Themebare Listenauswahl auf Canvas-Grundlage mit kompatibler Listbox-Schnittstelle."""
-
-    ROW_PAD_X = 6
-    ROW_PAD_Y = 3
-
-    def __init__(self, master, **kwargs):
-        self._height_rows = int(kwargs.pop("height", 6) or 6)
-        self._width_chars = int(kwargs.pop("width", 36) or 36)
-        name = kwargs.pop("name", None)
-        bg = kwargs.pop("bg", kwargs.pop("background", "#1e1e1e"))
-        self._opts = {
-            "bg": bg,
-            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
-            "selectbackground": kwargs.pop("selectbackground", "#335588"),
-            "selectforeground": kwargs.pop("selectforeground", "#ffffff"),
-            "font": kwargs.pop("font", None) or app_font(10),
-            "activestyle": kwargs.pop("activestyle", "none"),
-            "relief": kwargs.pop("relief", "flat"),
-            "bd": kwargs.pop("bd", kwargs.pop("borderwidth", 0)),
-            "state": kwargs.pop("state", "normal"),
-            "height": self._height_rows,
-            "width": self._width_chars,
-        }
-        highlightthickness = kwargs.pop("highlightthickness", 0)
-        takefocus = kwargs.pop("takefocus", 1)
-        for k in list(kwargs):
-            self._opts[k] = kwargs.pop(k)
-        self._items = []
-        self._item_styles = {}
-        self._selected = set()
-        self._active_index = 0
-        self._top_index = 0
-        self._yscrollcommand = self._opts.pop("yscrollcommand", None)
-        row_h = self._row_height()
-        char_w = self._char_width()
-        init_kw = dict(
-            bg=bg, bd=0, highlightthickness=highlightthickness, takefocus=takefocus,
-            width=max(60, self._width_chars * char_w),
-            height=max(24, self._height_rows * row_h),
-        )
-        if name is not None:
-            init_kw["name"] = name
-        super().__init__(master, **init_kw)
-        self.bind("<Button-1>", self._on_click)
-        self.bind("<Up>", lambda _e: self._move_selection(-1))
-        self.bind("<Down>", lambda _e: self._move_selection(1))
-        self.bind("<Home>", lambda _e: self._jump_selection(0))
-        self.bind("<End>", lambda _e: self._jump_selection(max(0, len(self._items) - 1)))
-        self.bind("<Configure>", self._on_configure, add="+")
-        self._render()
-
-    def _on_configure(self, event=None):
-        if event is not None:
-            w, h = getattr(event, "width", None), getattr(event, "height", None)
-            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
-                return
-            self._last_conf_w = w
-            self._last_conf_h = h
-        self._safe_render()
-
-    def _row_height(self):
-        try:
-            f = ui_font_object(root=self, font=self._opts["font"])
-            return max(20, int(f.metrics("linespace")) + 2 * self.ROW_PAD_Y)
-        except Exception:
-            return 22
-
-    def _char_width(self):
-        try:
-            f = ui_font_object(root=self, font=self._opts["font"])
-            return max(6, int(f.measure("0")))
-        except Exception:
-            return 8
-
-    def _resolve_index(self, index):
-        if index in (tk.END, "end"):
-            return max(0, len(self._items) - 1)
-        if index == "active":
-            return max(0, min(self._active_index, max(0, len(self._items) - 1)))
-        try:
-            idx = int(index)
-        except (TypeError, ValueError):
-            idx = 0
-        if idx < 0:
-            idx = max(0, len(self._items) + idx)
-        return idx
-
-    def size(self):
-        return len(self._items)
-
-    def delete(self, first, last=None):
-        if first == "all":
-            return super().delete("all")
-        start = self._resolve_index(first)
-        if last is None:
-            if 0 <= start < len(self._items):
-                self._items.pop(start)
-        else:
-            end = len(self._items) - 1 if last in (tk.END, "end") else self._resolve_index(last)
-            if start <= end:
-                del self._items[start:end + 1]
-        if not self._items:
-            self._selected.clear()
-            self._item_styles.clear()
-            self._active_index = 0
-            self._top_index = 0
-        else:
-            self._selected = {i for i in self._selected if 0 <= i < len(self._items)}
-            self._active_index = min(self._active_index, len(self._items) - 1)
-            self._top_index = max(0, min(self._top_index, len(self._items) - 1))
-        self._safe_render()
-
-    def insert(self, index, *elements):
-        if index in (tk.END, "end"):
-            pos = len(self._items)
-        else:
-            pos = max(0, min(self._resolve_index(index), len(self._items)))
-        for offset, text in enumerate(elements):
-            self._items.insert(pos + offset, str(text))
-        self._safe_render()
-
-    def get(self, first, last=None):
-        if not self._items:
-            return () if last is not None else ""
-        start = max(0, min(self._resolve_index(first), len(self._items) - 1))
-        if last is None:
-            return self._items[start]
-        end = len(self._items) - 1 if last in (tk.END, "end") else max(0, min(self._resolve_index(last), len(self._items) - 1))
-        return tuple(self._items[start:end + 1])
-
-    def curselection(self):
-        return tuple(sorted(i for i in self._selected if 0 <= i < len(self._items)))
-
-    def selection_set(self, first, last=None):
-        if not self._items:
-            return
-        start = max(0, min(self._resolve_index(first), len(self._items) - 1))
-        end = start if last is None else max(0, min(self._resolve_index(last), len(self._items) - 1))
-        for i in range(min(start, end), max(start, end) + 1):
-            self._selected.add(i)
-        self._safe_render()
-
-    select_set = selection_set
-
-    def selection_clear(self, first, last=None):
-        if first == 0 and last in (tk.END, "end"):
-            self._selected.clear()
-        else:
-            start = self._resolve_index(first)
-            end = start if last is None else self._resolve_index(last)
-            for i in range(min(start, end), max(start, end) + 1):
-                self._selected.discard(i)
-        self._safe_render()
-
-    select_clear = selection_clear
-
-    def selection_includes(self, index):
-        return self._resolve_index(index) in self._selected
-
-    def activate(self, index):
-        if self._items:
-            self._active_index = max(0, min(self._resolve_index(index), len(self._items) - 1))
-            self._safe_render()
-
-    def see(self, index):
-        if not self._items:
-            return
-        idx = max(0, min(self._resolve_index(index), len(self._items) - 1))
-        vis = max(1, self._visible_rows())
-        if idx < self._top_index:
-            self._top_index = idx
-        elif idx >= self._top_index + vis:
-            self._top_index = max(0, idx - vis + 1)
-        self._safe_render()
-
-    def itemconfig(self, index, cnf=None, **kwargs):
-        idx = self._resolve_index(index)
-        werte = dict(cnf or {}, **kwargs)
-        if "fg" in werte:
-            werte["foreground"] = werte.pop("fg")
-        if "bg" in werte:
-            werte["background"] = werte.pop("bg")
-        self._item_styles.setdefault(idx, {}).update(werte)
-        self._safe_render()
-
-    itemconfigure = itemconfig
-
-    def itemcget(self, index, option):
-        if isinstance(index, str) and not index.isdigit() and index not in ("end", "active"):
-            return super().itemcget(index, option)
-        idx = self._resolve_index(index)
-        if option == "fg":
-            option = "foreground"
-        elif option == "bg":
-            option = "background"
-        styles = self._item_styles.get(idx, {})
-        if option in styles:
-            return styles[option]
-        if option == "foreground":
-            return self._opts["fg"]
-        if option == "background":
-            return self._opts["bg"]
-        if option in ("selectforeground", "selectbackground"):
-            return self._opts[option]
-        return ""
-
-    def bbox(self, *args):
-        if len(args) == 1 and (isinstance(args[0], int) or str(args[0]).isdigit() or args[0] in ("end", "active")):
-            if not self._items:
-                return None
-            idx = max(0, min(self._resolve_index(args[0]), len(self._items) - 1))
-            row_h = self._row_height()
-            y = (idx - self._top_index) * row_h
-            w = max(1, self.winfo_width() if self.winfo_width() > 1 else self._width_chars * self._char_width())
-            return (0, y, w, row_h)
-        return super().bbox(*args)
-
-    def nearest(self, y):
-        if not self._items:
-            return 0
-        row_h = max(1, self._row_height())
-        idx = self._top_index + int(y // row_h)
-        return max(0, min(idx, len(self._items) - 1))
-
-    def _visible_rows(self):
-        row_h = max(1, self._row_height())
-        h = self.winfo_height()
-        if h > 1:
-            return max(1, h // row_h)
-        return max(1, self._height_rows)
-
-    def yview(self, *args):
-        total = len(self._items)
-        vis = self._visible_rows()
-        if not args:
-            if total <= vis or total == 0:
-                return (0.0, 1.0)
-            first = max(0.0, min(1.0, self._top_index / total))
-            last = max(0.0, min(1.0, (self._top_index + vis) / total))
-            return (first, last)
-        cmd = args[0]
-        if cmd == "moveto" and len(args) >= 2:
-            frac = max(0.0, min(1.0, float(args[1])))
-            self._top_index = max(0, min(max(0, total - vis), int(round(frac * total))))
-        elif cmd == "scroll" and len(args) >= 2:
-            delta = int(float(args[1]))
-            unit = args[2] if len(args) >= 3 else "units"
-            step = delta * (max(1, vis - 1) if unit == "pages" else 1)
-            self._top_index = max(0, min(max(0, total - vis), self._top_index + step))
-        self._safe_render()
-        return None
-
-    def yview_moveto(self, fraction):
-        self.yview("moveto", fraction)
-
-    def yview_scroll(self, number, what):
-        self.yview("scroll", number, what)
-
-    def configure(self, cnf=None, **kwargs):
-        werte = dict(cnf or {}, **kwargs)
-        if not werte:
-            return super().configure()
-        if "background" in werte:
-            werte["bg"] = werte.pop("background")
-        if "foreground" in werte:
-            werte["fg"] = werte.pop("foreground")
-        if "yscrollcommand" in werte:
-            self._yscrollcommand = werte.pop("yscrollcommand")
-        if "height" in werte:
-            self._height_rows = int(werte["height"] or 6)
-        if "width" in werte:
-            self._width_chars = int(werte["width"] or 36)
-        canvas_kw = {}
-        if "bg" in werte:
-            canvas_kw["bg"] = werte["bg"]
-        if "height" in werte or "font" in werte:
-            canvas_kw["height"] = max(24, self._height_rows * self._row_height())
-        if "width" in werte or "font" in werte:
-            canvas_kw["width"] = max(60, self._width_chars * self._char_width())
-        self._opts.update(werte)
-        if canvas_kw:
-            super().configure(**canvas_kw)
-        self._safe_render()
-
-    config = configure
-
-    def cget(self, key):
-        if key == "background":
-            key = "bg"
-        elif key == "foreground":
-            key = "fg"
-        if key == "yscrollcommand":
-            return self._yscrollcommand
-        if key == "selectmode":
-            return self._opts.get("selectmode", "browse")
-        if key in self._opts:
-            return self._opts[key]
-        return super().cget(key)
-
-    def __getitem__(self, key):
-        return self.cget(key)
-
-    def __setitem__(self, key, value):
-        self.configure(**{key: value})
-
-    def keys(self):
-        opts = set(super().keys())
-        opts.update(self._opts.keys())
-        opts.update(("yscrollcommand", "selectmode", "activestyle"))
-        return sorted(opts)
-
-    def _on_click(self, event):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        try:
-            self.focus_set()
-        except tk.TclError:
-            pass
-        if not self._items:
-            return "break"
-        idx = self.nearest(event.y)
-        self._selected = {idx}
-        self._active_index = idx
-        self._safe_render()
-        self.event_generate("<<ListboxSelect>>")
-        return "break"
-
-    def _move_selection(self, delta):
-        if not self._items:
-            return "break"
-        cur = self.curselection()
-        base = cur[0] if cur else self._active_index
-        target = max(0, min(len(self._items) - 1, base + delta))
-        self._selected = {target}
-        self._active_index = target
-        self.see(target)
-        self.event_generate("<<ListboxSelect>>")
-        return "break"
-
-    def _jump_selection(self, target):
-        if not self._items:
-            return "break"
-        target = max(0, min(len(self._items) - 1, target))
-        self._selected = {target}
-        self._active_index = target
-        self.see(target)
-        self.event_generate("<<ListboxSelect>>")
-        return "break"
-
-    def _safe_render(self):
-        if getattr(self, "_rendering", False):
-            return
-        self._rendering = True
-        try:
-            if self.winfo_exists():
-                self._render()
-        except tk.TclError:
-            pass
-        finally:
-            self._rendering = False
-
-    def _render(self):
-        super().delete("all")
-        o = self._opts
-        row_h = self._row_height()
-        w = max(1, self.winfo_width() if self.winfo_width() > 1 else self._width_chars * self._char_width())
-        vis = self._visible_rows()
-        total = len(self._items)
-        if self._top_index > max(0, total - vis):
-            self._top_index = max(0, total - vis)
-        for row_offset in range(vis + 1):
-            idx = self._top_index + row_offset
-            if idx >= total:
-                break
-            y0 = row_offset * row_h
-            y1 = y0 + row_h
-            st = self._item_styles.get(idx, {})
-            selected = idx in self._selected
-            bg = st.get("selectbackground", o["selectbackground"]) if selected else st.get("background", o["bg"])
-            fg = st.get("selectforeground", o["selectforeground"]) if selected else st.get("foreground", o["fg"])
-            if selected or bg != o["bg"]:
-                self.create_rectangle(0, y0, w, y1, fill=bg, outline="", tags=("row",))
-            self.create_text(
-                0, (y0 + y1) / 2,
-                text=self._items[idx], font=o["font"], fill=fg, anchor="w", tags=("text",),
-            )
-        if callable(self._yscrollcommand):
-            try:
-                first, last = self.yview()
-                self._yscrollcommand(first, last)
-            except Exception:
-                pass
-
-
-class GlideScale(tk.Canvas):
-    """Themebarer Schieberegler auf Canvas-Grundlage mit kompatibler Scale-Schnittstelle."""
-
-    def __init__(self, master, **kwargs):
-        self._from = float(kwargs.pop("from_", kwargs.pop("from", 0.0)))
-        self._to = float(kwargs.pop("to", 100.0))
-        self._resolution = float(kwargs.pop("resolution", 1.0) or 1.0)
-        self._orient = kwargs.pop("orient", "horizontal")
-        self._variable = kwargs.pop("variable", None)
-        self._command = kwargs.pop("command", None)
-        length = int(kwargs.pop("length", 240) or 240)
-        bar_w = int(kwargs.pop("width", 12) or 12)
-        self._slider_len = int(kwargs.pop("sliderlength", 22) or 22)
-        bg = kwargs.pop("bg", kwargs.pop("background", "#335588"))
-        try:
-            parent_bg = master.cget("bg")
-        except Exception:
-            parent_bg = bg
-        self._opts = {
-            "bg": bg,
-            "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
-            "troughcolor": kwargs.pop("troughcolor", "#444444"),
-            "activebackground": kwargs.pop("activebackground", bg),
-            "showvalue": kwargs.pop("showvalue", False),
-            "sliderrelief": kwargs.pop("sliderrelief", "flat"),
-            "state": kwargs.pop("state", "normal"),
-            "length": length,
-            "width": bar_w,
-        }
-        highlightthickness = kwargs.pop("highlightthickness", 0)
-        bd = kwargs.pop("bd", kwargs.pop("borderwidth", 0))
-        for k in list(kwargs):
-            self._opts[k] = kwargs.pop(k)
-        self._value = self._from
-        self._trace_id = None
-        super().__init__(
-            master, bg=parent_bg, bd=bd, highlightthickness=highlightthickness,
-            width=length, height=max(22, bar_w + 10), cursor="hand2", takefocus=1,
-        )
-        self._attach_variable(self._variable)
-        self.bind("<Button-1>", self._on_pointer)
-        self.bind("<B1-Motion>", self._on_pointer)
-        self.bind("<Left>", lambda _e: self._step(-1))
-        self.bind("<Right>", lambda _e: self._step(1))
-        self.bind("<Configure>", self._on_configure, add="+")
-        self.bind("<Destroy>", self._on_destroy, add="+")
-        self._render()
-
-    def _on_configure(self, event=None):
-        if event is not None:
-            w, h = getattr(event, "width", None), getattr(event, "height", None)
-            if w is not None and h is not None and w == getattr(self, "_last_conf_w", None) and h == getattr(self, "_last_conf_h", None):
-                return
-            self._last_conf_w = w
-            self._last_conf_h = h
-        self._safe_render()
-
-    def _attach_variable(self, variable):
-        if self._variable is not None and self._trace_id is not None:
-            try:
-                self._variable.trace_remove("write", self._trace_id)
-            except Exception:
-                pass
-        self._variable = variable
-        self._trace_id = None
-        if variable is not None:
-            try:
-                self._value = float(variable.get())
-            except Exception:
-                pass
-            if hasattr(variable, "trace_add"):
-                try:
-                    self._trace_id = variable.trace_add("write", lambda *_: self._sync_from_var())
-                except Exception:
-                    self._trace_id = None
-
-    def _on_destroy(self, event):
-        if event.widget is self:
-            self._attach_variable(None)
-
-    def _sync_from_var(self):
-        if self._variable is not None:
-            try:
-                self._value = float(self._variable.get())
-            except Exception:
-                pass
-        self._safe_render()
-
-    def _clamp(self, value):
-        lo, hi = min(self._from, self._to), max(self._from, self._to)
-        val = max(lo, min(hi, float(value)))
-        if self._resolution > 0:
-            steps = round((val - self._from) / self._resolution)
-            val = max(lo, min(hi, self._from + steps * self._resolution))
-            if self._resolution == int(self._resolution):
-                return int(round(val))
-        return val
-
-    def get(self):
-        if self._variable is not None:
-            try:
-                return self._clamp(self._variable.get())
-            except Exception:
-                pass
-        return self._clamp(self._value)
-
-    def set(self, value, *, invoke_command=False):
-        clamped = self._clamp(value)
-        self._value = clamped
-        if self._variable is not None:
-            try:
-                self._variable.set(clamped)
-            except Exception:
-                pass
-        self._safe_render()
-        if invoke_command and callable(self._command):
-            self._command(str(clamped))
-
-    def _on_pointer(self, event):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        try:
-            self.focus_set()
-        except tk.TclError:
-            pass
-        w = max(1, self.winfo_width())
-        pad = self._slider_len / 2
-        usable = max(1.0, w - 2 * pad)
-        frac = max(0.0, min(1.0, (event.x - pad) / usable))
-        self.set(self._from + frac * (self._to - self._from), invoke_command=True)
-        return "break"
-
-    def _step(self, direction):
-        if str(self._opts.get("state", "normal")) == "disabled":
-            return "break"
-        step = self._resolution if self._resolution > 0 else 1
-        self.set(self.get() + direction * step, invoke_command=True)
-        return "break"
-
-    def configure(self, cnf=None, **kwargs):
-        werte = dict(cnf or {}, **kwargs)
-        if not werte:
-            return super().configure()
-        if "from_" in werte:
-            self._from = float(werte.pop("from_"))
-        if "to" in werte:
-            self._to = float(werte.pop("to"))
-        if "resolution" in werte:
-            self._resolution = float(werte.pop("resolution") or 1.0)
-        if "orient" in werte:
-            self._orient = werte.pop("orient")
-        if "variable" in werte:
-            self._attach_variable(werte.pop("variable"))
-        if "command" in werte:
-            self._command = werte.pop("command")
-        self._opts.update(werte)
-        self._safe_render()
-
-    config = configure
-
-    def cget(self, key):
-        if key in ("from", "from_"):
-            return self._from
-        if key == "to":
-            return self._to
-        if key == "resolution":
-            return self._resolution
-        if key == "orient":
-            return self._orient
-        if key == "variable":
-            return str(self._variable) if self._variable is not None else ""
-        if key == "command":
-            return self._command
-        if key in self._opts:
-            return self._opts[key]
-        return super().cget(key)
-
-    def __getitem__(self, key):
-        return self.cget(key)
-
-    def __setitem__(self, key, value):
-        self.configure(**{key: value})
-
-    def keys(self):
-        opts = set(super().keys())
-        opts.update(self._opts.keys())
-        opts.update(("from", "from_", "to", "resolution", "variable", "command", "orient", "length"))
-        return sorted(opts)
-
-    def _safe_render(self):
-        if getattr(self, "_rendering", False):
-            return
-        self._rendering = True
-        try:
-            if self.winfo_exists():
-                self._render()
-        except tk.TclError:
-            pass
-        finally:
-            self._rendering = False
-
-    def _render(self):
-        super().delete("all")
-        o = self._opts
-        w = max(40, self.winfo_width() if self.winfo_width() > 1 else int(o["length"]))
-        h = max(18, self.winfo_height() if self.winfo_height() > 1 else 22)
-        cy = h / 2
-        pad = self._slider_len / 2
-        usable = max(1.0, w - 2 * pad)
-        span = (self._to - self._from) or 1.0
-        frac = max(0.0, min(1.0, (float(self.get()) - self._from) / span))
-        sx = pad + frac * usable
-        self.create_polygon(
-            rounded_rect_points(4, cy - 3, w - 4, cy + 3, 3),
-            smooth=True, splinesteps=8, fill=o["troughcolor"], outline="",
-        )
-        self.create_polygon(
-            rounded_rect_points(sx - pad, cy - 6, sx + pad, cy + 6, 5),
-            smooth=True, splinesteps=10, fill=o["bg"], outline=o["fg"], width=1,
-        )
-
-
-class ThemedAutoScrollbar(tk.Canvas):
-    """Themebare Canvas-Scrollbar ohne native weiße Windows-/Tk-Hintergründe.
-
-    „Auto“ heißt seit 3.0 auch: Sie zeigt sich nur, wenn es etwas zu scrollen
-    gibt. Vorher zeichnete sie bei vollständig sichtbarem Inhalt einen Regler
-    über die ganze Höhe – optisch eine Leiste, die nichts tat.
-    """
-
-    # Ab diesem sichtbaren Anteil gilt der Inhalt als vollständig sichtbar.
-    # Knapp unter 1, weil Tk gerundete Gleitkommawerte liefert.
-    FULLY_VISIBLE_RATIO = 0.999
-
-    def __init__(
-        self,
-        master,
-        bg_color,
-        track_color,
-        thumb_color,
-        active_thumb_color,
-        width=14,
-        radius=7,
-        orient="vertical",
-        length=None,
-    ):
-        # 3.22.0: dieselbe Leiste auch waagerecht. „width" bleibt die Dicke der
-        # Leiste – quer ist das ihre Höhe. Die Pinnwand hatte als einzige
-        # Fläche der App noch eine native ttk-Leiste im Systemstil.
-        self.orient = "horizontal" if orient == "horizontal" else "vertical"
-        super().__init__(
-            master,
-            bg=bg_color,
-            highlightthickness=0,
-            bd=0,
-            cursor="hand2",
-            **({"width": width} if self.orient == "vertical" else {"height": width}),
-            # `length`: Wunschlänge entlang der Leiste. Ohne Angabe beansprucht ein
-            # Canvas 7 cm (265 px); als Ersatz einer Systemleiste blähte das die
-            # Live-Liste einer Seite auf (Mac-Abnahme 07.11.2026, Lücke über den Zeilen).
-            **({} if length is None else ({"height": length} if self.orient == "vertical" else {"width": length})),
-        )
-        self.bg_color = bg_color
-        self.track_color = track_color
-        self.thumb_color = thumb_color
-        self.active_thumb_color = active_thumb_color
-        self.bar_width = width
-        self.radius = radius
-        self.command = None
-        self.first = 0.0
-        self.last = 1.0
-        self.dragging = False
-        self.drag_offset = 0
-        self.is_hovered = False
-
-        bind_resize(self, lambda _event: self._draw())
-        self.bind("<Enter>", self._on_enter)
-        self.bind("<Leave>", self._on_leave)
-        self.bind("<ButtonPress-1>", self._on_press)
-        self.bind("<B1-Motion>", self._on_motion)
-        self.bind("<ButtonRelease-1>", self._on_release)
-
-    def set_command(self, command):
-        self.command = command
-
-    def set_theme(self, bg_color, track_color, thumb_color, active_thumb_color):
-        self.bg_color = bg_color
-        self.track_color = track_color
-        self.thumb_color = thumb_color
-        self.active_thumb_color = active_thumb_color
-        self.configure(bg=bg_color)
-        self._draw()
-
-    def set(self, first, last):
-        try:
-            self.first = max(0.0, min(1.0, float(first)))
-            self.last = max(0.0, min(1.0, float(last)))
-        except (TypeError, ValueError):
-            self.first = 0.0
-            self.last = 1.0
-        self._draw()
-
-    def _rounded_rect(self, x1, y1, x2, y2, radius, fill):
-        return self.create_polygon(
-            rounded_rect_points(x1, y1, x2, y2, radius),
-            smooth=True, splinesteps=18, fill=fill, outline="",
-        )
-
-    def _metrics(self):
-        """Maße der Leiste: quer (Dicke) und längs (Laufrichtung).
-
-        Die Rückgabe heißt weiterhin x/y, meint aber „quer/längs". Waagerecht
-        tauscht `_draw` beide Achsen; alles andere bleibt gleich.
-        """
-        if self.orient == "vertical":
-            quer = max(self.winfo_width(), self.bar_width)
-            laengs = max(self.winfo_height(), 30)
-        else:
-            quer = max(self.winfo_height(), self.bar_width)
-            laengs = max(self.winfo_width(), 30)
-        track_pad_x = max(3, int(quer * 0.28))
-        track_pad_y = 4
-        track_x1 = track_pad_x
-        track_x2 = quer - track_pad_x
-        track_y1 = track_pad_y
-        track_y2 = laengs - track_pad_y
-        track_h = max(1, track_y2 - track_y1)
-        visible_ratio = max(0.05, min(1.0, self.last - self.first))
-        thumb_h = max(28, int(track_h * visible_ratio))
-        thumb_h = min(thumb_h, track_h)
-        max_y = max(track_y1, track_y2 - thumb_h)
-        thumb_y1 = track_y1 + int((track_h - thumb_h) * self.first / max(0.0001, 1.0 - visible_ratio)) if visible_ratio < 1 else track_y1
-        thumb_y1 = max(track_y1, min(max_y, thumb_y1))
-        thumb_y2 = thumb_y1 + thumb_h
-        return track_x1, track_y1, track_x2, track_y2, thumb_y1, thumb_y2
-
-    def _along(self, event):
-        """Position eines Ereignisses in Laufrichtung."""
-        return event.y if self.orient == "vertical" else event.x
-
-    def _place(self, quer1, laengs1, quer2, laengs2, radius, fill):
-        if self.orient == "vertical":
-            self._rounded_rect(quer1, laengs1, quer2, laengs2, radius, fill)
-        else:
-            self._rounded_rect(laengs1, quer1, laengs2, quer2, radius, fill)
-
-    def is_scrollable(self):
-        """Gibt es überhaupt etwas zu scrollen?
-
-        Tk meldet über set() den sichtbaren Anteil. Deckt er den ganzen Inhalt
-        ab, gibt es nichts zu bewegen – dann bleibt die Leiste leer.
-        """
-        return (self.last - self.first) < self.FULLY_VISIBLE_RATIO
-
-    def _draw(self):
-        self.delete("all")
-        paint_canvas_backdrop(self)
-        # Nichts zu scrollen: nur die Fläche, keine Leiste. Der Platz bleibt
-        # reserviert, damit der Inhalt daneben nicht springt, sobald er wächst.
-        if not self.is_scrollable():
-            return
-        track_x1, track_y1, track_x2, track_y2, thumb_y1, thumb_y2 = self._metrics()
-        track_radius = max(2, (track_x2 - track_x1) / 2)
-        self._place(track_x1, track_y1, track_x2, track_y2, track_radius, self.track_color)
-        thumb_color = self.active_thumb_color if self.is_hovered or self.dragging else self.thumb_color
-        self._place(track_x1, thumb_y1, track_x2, thumb_y2, track_radius, thumb_color)
-
-    def _on_enter(self, _event):
-        if not self.is_scrollable():
-            return
-        self.is_hovered = True
-        self._draw()
-
-    def _on_leave(self, _event):
-        self.is_hovered = False
-        if not self.dragging:
-            self._draw()
-
-    def _on_press(self, event):
-        if not self.is_scrollable():
-            return
-        _tx1, track_y1, _tx2, track_y2, thumb_y1, thumb_y2 = self._metrics()
-        position = self._along(event)
-        if thumb_y1 <= position <= thumb_y2:
-            self.dragging = True
-            self.drag_offset = position - thumb_y1
-        else:
-            thumb_h = thumb_y2 - thumb_y1
-            self._moveto_from_thumb_y(position - thumb_h / 2, track_y1, track_y2, thumb_h)
-        self._draw()
-
-    def _on_motion(self, event):
-        if not self.dragging:
-            return
-        _tx1, track_y1, _tx2, track_y2, thumb_y1, thumb_y2 = self._metrics()
-        thumb_h = thumb_y2 - thumb_y1
-        self._moveto_from_thumb_y(self._along(event) - self.drag_offset, track_y1, track_y2, thumb_h)
-
-    def _on_release(self, _event):
-        self.dragging = False
-        self._draw()
-
-    def _moveto_from_thumb_y(self, proposed_y, track_y1, track_y2, thumb_h):
-        available = max(1, (track_y2 - track_y1) - thumb_h)
-        fraction = (proposed_y - track_y1) / available
-        fraction = max(0.0, min(1.0, fraction))
-        if callable(self.command):
-            self.command("moveto", fraction)
+_set_control_ink_provider(_app_control_ink_provider)
+_set_control_font_provider(_app_control_font_provider)
 
 
 class RoundedSurface(DeferredDrawCanvas):
@@ -18926,6 +17544,7 @@ class ListApp:
         self._storage_health = glide_storage.Health()
         self._storage_blocked_files = set()
         self.settings = self.load_settings()
+        glide_i18n.set_language(self.settings.get("language", "system"))
         self.saved_filters = SavedFilters(self)
         self._registered_fonts = register_private_fonts()
         self.templates = self.load_templates()
@@ -21138,6 +19757,7 @@ class ListApp:
             except tk.TclError:
                 pass
         self.settings = self.load_settings()
+        glide_i18n.set_language(self.settings.get("language", "system"))
         self.theme_name = self.design_info()["base"]
         self._ui_font_family = None
         self.apply_ui_font()
@@ -21522,6 +20142,8 @@ class ListApp:
         for key, default in (("start_on_home", False), ("show_home_stats", True)):
             value = result.get(key, default)
             result[key] = value if isinstance(value, bool) else default
+        lang = result.get("language", "system")
+        result["language"] = lang if lang in ("system", "de", "en") else "system"
         # B03 (15.10.2026): Gismo heißt fest so und behält seine Spielereien.
         # Frühere Namen und „Spielereien aus“ wirken nicht mehr und entfallen.
         result = glide_home.retire_mascot_settings(result)
@@ -32698,6 +31320,10 @@ class ListApp:
             if self.settings.get("action_feedback") in self.ACTION_FEEDBACK_KEYS
             else self.ACTION_FEEDBACK_DEFAULT])
         week_start = tk.StringVar(value="Sonntag" if self.settings.get("week_start") == "sunday" else "Montag")
+        lang_names = glide_i18n.get_language_display_names()
+        lang_keys = {name: code for code, name in lang_names.items()}
+        current_lang = self.settings.get("language", "system")
+        language_var = tk.StringVar(value=lang_names.get(current_lang, lang_names["system"]))
         # eine Auswahl statt dreier. Der Dialog führt den
         # Anzeigenamen, gespeichert wird der Schlüssel.
         design_namen = {key: self.DESIGNS[key]["name"] for key in self.DESIGN_ORDER}
@@ -32967,6 +31593,13 @@ class ListApp:
                          name="setting_design_auto", bg=self.theme["bg"], fg=self.theme["text"],
                          activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                          selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
+        self._make_field_label(appearance, glide_i18n.t("settings.language", "Sprache")).pack(
+            anchor="w", pady=(glide_design.SPACING[8], self.FIELD_LABEL_GAP)
+        )
+        lang_frame, _lang_button = self._make_option_menu(
+            appearance, language_var, [lang_names[code] for code in ("system", "de", "en")]
+        )
+        lang_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
 
         def design_hinweis_nachziehen(*_args):
             schluessel = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
@@ -33154,6 +31787,8 @@ class ListApp:
             previous = dict(self.settings)
             previous_theme = self.theme_name
             previous_design = self.design_name()
+            previous_lang = self.settings.get("language", "system")
+            chosen_lang_code = lang_keys.get(language_var.get(), "system")
             week_value = "sunday" if week_start.get() == "Sonntag" else "monday"
             startup_value = next((key for key, label in startup_labels.items() if label == startup.get()), "last")
             startliste_value = listen_namen.get(startliste.get(), "") if startup_value == "list" else (
@@ -33183,7 +31818,9 @@ class ListApp:
                                  week_start=week_value,
                                  ui_font_size=font_size.get(), ui_font_family=glide_fonts.style_for(font_family.get()).family,
                                  ui_font_weight=font_weight.get(),
+                                 language=chosen_lang_code,
                                  )
+            glide_i18n.set_language(chosen_lang_code)
             gewaehlt = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
             if hell_dunkel.get():
                 paar = glide_appearance.pair_for(gewaehlt, self.DESIGNS)
@@ -33199,8 +31836,11 @@ class ListApp:
                 self.settings = previous
                 self.theme_name = previous_theme
                 self.set_design(previous_design, apply_now=False)
+                glide_i18n.set_language(previous_lang)
                 return "break"
             dialog.destroy()
+            if chosen_lang_code != previous_lang:
+                self.create_menubar()
             self._ui_font_family = None
             self._font_families = None
             self._header_cap_font = None
@@ -34966,13 +33606,7 @@ class ListApp:
                 path, origin=glide_attachment_policy.origin_text(path, BASE_DIR))
             if question and not self.ask_yes_no("Ausführbaren Anhang öffnen?", question, default="no"):
                 return False
-            if IS_WINDOWS:
-                os.startfile(path)  # type: ignore[attr-defined]
-            elif IS_MACOS:
-                subprocess.Popen(["open", path])
-            else:
-                subprocess.Popen(["xdg-open", path])
-            return True
+            return desktop_adapter.launch_path(path)
         except Exception as exc:
             self.show_error("Datei öffnen", f"Die Datei konnte nicht geöffnet werden:\n{exc}")
             return False
@@ -39941,7 +38575,7 @@ class ListApp:
             # Labels, Vorlagen, Papierkorb. „Verspätet“ bleibt erhalten und
             # steht direkt hinter der Ansicht, deren Teilmenge es ist.
             self.system_listbox.insert("", "end", iid=self.HOME_ROW_ID,
-                text=self.sidebar_display_title(("view", self.HOME_VIEW), "Startseite"),
+                text=self.sidebar_display_title(("view", self.HOME_VIEW), glide_i18n.t("sidebar.home", "Startseite")),
                 values=(self.sidebar_row_icon(("view", self.HOME_VIEW)), ""), tags=("system",))
             self.sidebar_rows.append(("view", self.HOME_VIEW))
             self.sidebar_iid_to_row[self.HOME_ROW_ID] = ("view", self.HOME_VIEW)
@@ -39954,7 +38588,7 @@ class ListApp:
                 iid=self.PLAN_DAY_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.PLAN_DAY_VIEW)), f"({self.count_today_view()})"),
                 text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), "Heute"),
+                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), glide_i18n.t("sidebar.today", "Heute")),
                     self.count_today_view(),
                     tree=self.system_listbox,
                 ),
@@ -39976,7 +38610,7 @@ class ListApp:
                 count = self.list_item_count(inbox)
                 self.system_listbox.insert(
                     "", "end", iid=iid,
-                    text=self.sidebar_row_text("Eingang", count, tree=self.system_listbox),
+                    text=self.sidebar_row_text(glide_i18n.t("sidebar.inbox", "Eingang"), count, tree=self.system_listbox),
                     values=(self.sidebar_row_icon(row), f"({count})"), tags=("system",))
                 self.sidebar_rows.append(row)
                 self.sidebar_iid_to_row[iid] = row
@@ -39996,7 +38630,7 @@ class ListApp:
                 "end",
                 iid=self.LABELS_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.LABELS_VIEW)), f"({self.count_labelled_items()})"),                text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.LABELS_VIEW), "Labels"),
+                    self.sidebar_display_title(("view", self.LABELS_VIEW), glide_i18n.t("sidebar.labels", "Labels")),
                     self.count_labelled_items(),
                     tree=self.system_listbox,
                 ),
@@ -40009,7 +38643,7 @@ class ListApp:
                 "", "end", iid=self.TEMPLATE_ROW_ID,
                 values=(self.sidebar_row_icon(("view", self.TEMPLATE_VIEW)), f"({len(getattr(self, 'templates', []))})"),
                 text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.TEMPLATE_VIEW), "Vorlagen"),
+                    self.sidebar_display_title(("view", self.TEMPLATE_VIEW), glide_i18n.t("sidebar.templates", "Vorlagen")),
                     len(getattr(self, "templates", [])), tree=self.system_listbox,
                 ), tags=("system",),
             )
@@ -40025,7 +38659,7 @@ class ListApp:
                 "end",
                 iid=self.TRASH_ROW_ID,
                 values=(self.sidebar_row_icon(("view", "trash")), f"({len(self.trash)})"),                text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", "trash"), "Papierkorb"),
+                    self.sidebar_display_title(("view", "trash"), glide_i18n.t("sidebar.trash", "Papierkorb")),
                     len(self.trash),
                     tree=self.system_listbox,
                 ),
@@ -62697,11 +61331,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     EXCHANGE_ITEM_FIELDS = {
         "key", "type", "title", "text", "description", "done", "importance",
         "due", "due_time", "planned_date", "estimated_minutes", "labels",
-        "checklist", "children",
+        "checklist", "children", "repeat", "reminder", "attachments",
     }
     EXCHANGE_LIST_FIELDS = {"key", "title", "description", "folder", "labels", "items", "list_kind", "rich_note",
-                            "drawing", "animation"}
-    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels"}
+                            "markdown", "drawing", "animation", "attachments", "cover"}
+    EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels", "folder_kind", "attachments"}
     EXCHANGE_LABEL_FIELDS = {"key", "name", "color"}
     EXCHANGE_ROOT_FIELDS = {"format", "format_version", "generator", "created_for",
                             "mode", "labels", "folders", "lists", "notes"}
@@ -62718,6 +61352,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         return {
             "item_types": sorted(cls.EXCHANGE_ITEM_TYPES),
+            "list_kinds": sorted(cls.LIST_KINDS),
+            "folder_kinds": sorted(cls.FOLDER_KINDS),
+            "markdown_pages": 1,
             "nested_items": 1,
             "descriptions": 1,
             "labels": 1,
@@ -62731,12 +61368,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "animations": 1,
             "max_animation_frames": glide_animation.MAX_FRAMES,
             "animation_duration_ms": [glide_animation.MIN_DURATION_MS, glide_animation.MAX_DURATION_MS],
-            # Bewusst noch nicht: Anhänge kommen als Dateien, nicht als Text;
-            # Wiederholungen und Erinnerungen hätten eigene Regelwerke, die
-            # eine erzeugende Stelle kaum verlässlich trifft.
-            "attachments": 0,
-            "repeat": 0,
-            "reminders": 0,
+            # Anhänge und ZIP-Austauschpakete (Paket K4, WA-61)
+            "attachments": 1,
+            "attachment_packages": 1,
+            "repeat": 1,
+            "reminders": 1,
             # Stufe 2 (G24, 3.35.0): Änderungsvorschläge über ein Kontextpaket.
             "patch_mode": 1,
             "max_items": cls.MAX_EXCHANGE_ITEMS,
@@ -62778,6 +61414,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     eintrag[feld] = item[feld]
             if item.get("estimated_minutes") is not None:
                 eintrag["estimated_minutes"] = item["estimated_minutes"]
+            if item.get("repeat") and item.get("due"):
+                rep = copy.deepcopy(item["repeat"])
+                art = rep.get("art")
+                inv_map = {
+                    "taeglich": "daily", "woechentlich": "weekly", "monatlich": "monthly",
+                    "jaehrlich": "yearly", "wochentage": "weekdays", "tage": "every_n_days", "serie": "series",
+                }
+                if art in inv_map:
+                    rep["kind"] = inv_map[art]
+                if art == "tage" and "abstand" in rep and "interval" not in rep:
+                    rep["interval"] = rep["abstand"]
+                eintrag["repeat"] = rep
+            if item.get("reminder"):
+                config = self.reminder_config(item["reminder"])
+                if config:
+                    eintrag["reminder"] = config
             schritte = item.get("checklist") or []
             if schritte:
                 eintrag["checklist"] = [
@@ -62788,6 +61440,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                      if kennung in label_keys]
         if etiketten:
             eintrag["labels"] = etiketten
+        if item.get("attachments"):
+            anhaenge = [
+                {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                 "mime": a.get("mime", "application/octet-stream")}
+                for a in item["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+            ]
+            if anhaenge:
+                eintrag["attachments"] = anhaenge
         kinder = item.get("children") or []
         if kinder and tiefe < self.MAX_EXCHANGE_DEPTH:
             eintrag["children"] = [self.exchange_item_payload(kind, label_keys, tiefe + 1)
@@ -62800,7 +61460,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         quellen = list(lists if lists is not None else self.lists)
         ordner = list(folders if folders is not None else [])
         benutzte_labels = {}
+        for wert in ordner:
+            for kennung in wert.get("labels") or []:
+                benutzte_labels.setdefault(kennung, None)
         for eintrag in quellen:
+            for kennung in eintrag.get("labels") or []:
+                benutzte_labels.setdefault(kennung, None)
             for item in self.walk_items(eintrag.get("items", [])):
                 for kennung in item.get("labels") or []:
                     benutzte_labels.setdefault(kennung, None)
@@ -62822,8 +61487,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             eintrag = {"key": schluessel, "title": wert.get("title", "")}
             if wert.get("note"):
                 eintrag["description"] = str(wert["note"])
+            if wert.get("folder_kind") and wert.get("folder_kind") != "standard":
+                eintrag["folder_kind"] = wert["folder_kind"]
             if wert.get("parent_id") in ordner_keys:
                 eintrag["parent"] = ordner_keys[wert["parent_id"]]
+            if wert.get("labels"):
+                ordner_etiketten = [label_keys[k] for k in wert["labels"] if k in label_keys]
+                if ordner_etiketten:
+                    eintrag["labels"] = ordner_etiketten
+            if wert.get("attachments"):
+                anhaenge = [
+                    {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                     "mime": a.get("mime", "application/octet-stream")}
+                    for a in wert["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+                ]
+                if anhaenge:
+                    eintrag["attachments"] = anhaenge
             ordner_liste.append(eintrag)
         listen = []
         for index, eintrag in enumerate(quellen, 1):
@@ -62838,9 +61517,37 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 darstellung["description"] = str(eintrag["note"])
             if eintrag.get("folder_id") in ordner_keys:
                 darstellung["folder"] = ordner_keys[eintrag["folder_id"]]
-            if eintrag.get("list_kind") == "note" or eintrag.get("rich_note", {}).get("text"):
+            if eintrag.get("labels"):
+                listen_etiketten = [label_keys[k] for k in eintrag["labels"] if k in label_keys]
+                if listen_etiketten:
+                    darstellung["labels"] = listen_etiketten
+            if eintrag.get("attachments"):
+                anhaenge = [
+                    {"name": a.get("name", "Anhang"), "file": a.get("storage", ""),
+                     "mime": a.get("mime", "application/octet-stream")}
+                    for a in eintrag["attachments"] if isinstance(a, dict) and (a.get("storage") or a.get("file"))
+                ]
+                if anhaenge:
+                    darstellung["attachments"] = anhaenge
+            if eintrag.get("cover"):
+                cover = copy.deepcopy(eintrag["cover"])
+                if isinstance(cover, dict) and cover.get("kind") == "image":
+                    att_id = cover.get("attachment")
+                    att = next((a for a in eintrag.get("attachments") or [] if isinstance(a, dict) and a.get("id") == att_id), None)
+                    if att and (att.get("storage") or att.get("file")):
+                        cover["file"] = att.get("storage") or att.get("file")
+                darstellung["cover"] = cover
+            if self.is_gallery_list(eintrag):
+                darstellung["list_kind"] = self.LIST_KIND_GALLERY
+            elif eintrag.get("list_kind") in (self.LIST_KIND_PAGE, self.LIST_KIND_NOTE) or eintrag.get("rich_note", {}).get("text"):
                 darstellung["list_kind"] = eintrag.get("list_kind", "tasks")
-                darstellung["rich_note"] = RichNoteEditor.normalize(eintrag.get("rich_note"))
+                norm_note = RichNoteEditor.normalize(eintrag.get("rich_note"))
+                darstellung["rich_note"] = norm_note
+                if norm_note.get("text"):
+                    try:
+                        darstellung["markdown"] = glide_page_markdown.page_to_markdown(norm_note)
+                    except Exception:
+                        pass
             if self.is_drawing_list(eintrag):
                 # Das Zellmodell reist vollständig mit. Die PNG-Referenz ist ein
                 # Anhang und gehört wie alle Dateien nicht in den Austausch.
@@ -62953,6 +61660,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for feld in ordner:
                 if feld not in self.EXCHANGE_FOLDER_FIELDS:
                     bericht.unknown_fields.append(f"folders.{feld}")
+            if ordner.get("folder_kind") and ordner.get("folder_kind") not in self.FOLDER_KINDS:
+                bericht.warnings.append(
+                    f"„{ordner.get('title', '')}“: Unbekannte Ordnerart {ordner['folder_kind']!r} – als Standardordner übernommen.")
             if ordner.get("key"):
                 ordner_keys.add(str(ordner["key"]))
             bericht.counts["folders"] += 1
@@ -62985,6 +61695,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                         "und bleibt leer.")
             if eintrag.get("due_time") and not self.normalize_due_time(eintrag["due_time"]):
                 bericht.warnings.append(f"„{titel}“: Uhrzeit „{eintrag['due_time']}“ unbrauchbar.")
+            if eintrag.get("repeat"):
+                if not eintrag.get("due"):
+                    bericht.warnings.append(
+                        f"„{titel}“: Wiederholung ohne Fälligkeitsdatum wird ignoriert.")
+                elif self.exchange_repeat_from_payload(eintrag["repeat"], eintrag.get("due")) is None:
+                    bericht.warnings.append(
+                        f"„{titel}“: Wiederholungsregel unbrauchbar und wird ignoriert.")
+            if eintrag.get("reminder"):
+                try:
+                    self.normalize_reminder(eintrag["reminder"])
+                except (ValueError, TypeError) as fehler:
+                    bericht.warnings.append(f"„{titel}“: Erinnerung unbrauchbar ({fehler}) – bleibt leer.")
             schritte = eintrag.get("checklist") or []
             if schritte:
                 if len(schritte) > self.MAX_CHECKLIST_ENTRIES:
@@ -63039,6 +61761,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for feld in eintrag:
                 if feld not in self.EXCHANGE_LIST_FIELDS:
                     bericht.unknown_fields.append(f"lists.{feld}")
+            if eintrag.get("markdown") is not None and not isinstance(eintrag.get("markdown"), str):
+                bericht.warnings.append(f"„{listentitel}“: Das Markdown-Feld ist kein Text und wird ignoriert.")
             if not str(eintrag.get("title") or "").strip():
                 bericht.warnings.append("Eine Liste ohne Titel wurde übersprungen.")
                 continue
@@ -63060,7 +61784,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return nutzlast, bericht
 
     def read_exchange_file(self, path):
-        """Liest eine Austauschdatei mit Größenprüfung."""
+        """Liest eine Austauschdatei oder das Manifest eines Austauschpakets mit Größenprüfung."""
+        if not path or not os.path.isfile(path):
+            raise OSError("Die Austauschdatei ist nicht mehr vorhanden.")
+        if zipfile.is_zipfile(path):
+            with zipfile.ZipFile(path, "r") as archive:
+                payload_info, _attachments = self.inspect_exchange_archive(archive)
+                raw = self.read_zip_member_limited(archive, payload_info, self.MAX_EXCHANGE_BYTES)
+                return raw.decode("utf-8-sig")
         groesse = os.path.getsize(path)
         if groesse > self.MAX_EXCHANGE_BYTES:
             raise ValueError(
@@ -63068,6 +61799,173 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 f"höchstens {self.MAX_EXCHANGE_BYTES // (1024 * 1024)} MB.")
         with open(path, "r", encoding="utf-8-sig") as handle:
             return handle.read()
+
+    def inspect_exchange_archive(self, archive):
+        """Sicherheitsprüfung eines .glideexchange- oder .zip-Austauschpakets.
+
+        Prüft Member-Anzahl, Gesamtgröße, Kompression, Pfadvalidität (Schutz gegen
+        Zip-Slip / Path Traversal) und stellt sicher, dass exchange.json oder data.json
+        vorhanden ist und alle Anhänge unter attachments/ liegen.
+        """
+        infos = archive.infolist()
+        if len(infos) > self.MAX_BACKUP_MEMBERS:
+            raise ValueError("Das Austauschpaket enthält zu viele Dateien.")
+        seen_names = set()
+        attachment_infos = {}
+        payload_info = None
+        total_size = 0
+        for info in infos:
+            name = info.filename
+            canonical_key = name.casefold()
+            if canonical_key in seen_names:
+                raise ValueError("Das Austauschpaket enthält doppelte Dateinamen.")
+            seen_names.add(canonical_key)
+            if info.flag_bits & 0x1:
+                raise ValueError("Verschlüsselte Einträge werden nicht unterstützt.")
+            unix_mode = (info.external_attr >> 16) & 0xFFFF
+            if unix_mode and stat.S_ISLNK(unix_mode):
+                raise ValueError("Symbolische Links sind im Austauschpaket nicht zulässig.")
+            if info.is_dir():
+                if name.rstrip("/") != "attachments":
+                    raise ValueError(f"Unbekannter Ordner im Austauschpaket: {name}")
+                continue
+            if name in ("exchange.json", "data.json"):
+                if info.file_size > self.MAX_EXCHANGE_BYTES:
+                    raise ValueError(f"{name} im Austauschpaket ist zu groß.")
+                if payload_info is None or name == "exchange.json":
+                    payload_info = info
+            else:
+                storage = self.validate_attachment_storage(name)
+                if storage != name:
+                    raise ValueError("Das Austauschpaket enthält einen nicht kanonischen Anhangspfad.")
+                if info.file_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                    raise ValueError(f"Der Anhang {name} ist zu groß.")
+                attachment_infos[storage] = info
+            total_size += info.file_size
+            if total_size > self.MAX_BACKUP_TOTAL_BYTES:
+                raise ValueError("Das Austauschpaket überschreitet die zulässige Gesamtgröße.")
+            if (
+                info.file_size > self.BACKUP_COPY_CHUNK
+                and info.compress_size > 0
+                and info.file_size / info.compress_size > self.MAX_BACKUP_COMPRESSION_RATIO
+            ):
+                raise ValueError("Das Austauschpaket weist eine unplausibel hohe Kompressionsrate auf.")
+        if payload_info is None:
+            raise ValueError("Im Austauschpaket fehlt exchange.json.")
+        return payload_info, attachment_infos
+
+    def extract_exchange_archive(self, archive_path, destination_dir):
+        """Entpackt exchange.json und alle Anhänge sicher in ein Zielverzeichnis."""
+        with zipfile.ZipFile(archive_path, "r") as archive:
+            payload_info, attachment_infos = self.inspect_exchange_archive(archive)
+            payload_bytes = self.read_zip_member_limited(archive, payload_info, self.MAX_EXCHANGE_BYTES)
+            payload_dest = os.path.join(destination_dir, "exchange.json")
+            with open(payload_dest, "wb") as f:
+                f.write(payload_bytes)
+            attachments_dest_dir = os.path.join(destination_dir, "attachments")
+            if attachment_infos:
+                os.makedirs(attachments_dest_dir, exist_ok=True)
+            for storage, info in attachment_infos.items():
+                rel_file = os.path.basename(storage)
+                target_path = os.path.join(attachments_dest_dir, rel_file)
+                self.copy_zip_member_limited(archive, info, target_path, self.MAX_BACKUP_ATTACHMENT_BYTES)
+
+    def write_exchange_package(self, path, payload, attachments=None):
+        """Erzeugt ein .glideexchange- oder .zip-Austauschpaket.
+
+        Schreibt exchange.json im Hauptverzeichnis und packt alle benötigten Anhänge
+        nach attachments/<dateiname>.
+        """
+        ziel_ordner = os.path.dirname(os.path.abspath(path)) or os.getcwd()
+        os.makedirs(ziel_ordner, exist_ok=True)
+        temp_handle, temp_path = tempfile.mkstemp(prefix=".exchange-pkg-", suffix=".tmp", dir=ziel_ordner)
+        os.close(temp_handle)
+        try:
+            with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                json_bytes = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+                archive.writestr("exchange.json", json_bytes)
+                if attachments:
+                    seen = set()
+                    for item in attachments:
+                        if isinstance(item, tuple):
+                            src, dst_name = item
+                        elif isinstance(item, str):
+                            src = self.resolve_attachment_path({"storage": item}) or item
+                            dst_name = os.path.basename(item)
+                        elif isinstance(item, dict):
+                            storage = item.get("storage") or item.get("file")
+                            src = self.resolve_attachment_path({"storage": storage}) if storage else None
+                            dst_name = os.path.basename(storage) if storage else (item.get("name") or "datei")
+                        else:
+                            continue
+                        if not src or not os.path.isfile(src):
+                            continue
+                        dst_arcname = f"attachments/{dst_name}"
+                        if dst_arcname in seen:
+                            continue
+                        seen.add(dst_arcname)
+                        archive.write(src, arcname=dst_arcname)
+            os.replace(temp_path, path)
+            temp_path = None
+        finally:
+            if temp_path:
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+
+    def find_agent_skill_dir(self):
+        """Sucht den KI-Skill-Ordner 'skills/glide-to-do' an bekannten Pfaden."""
+        base = os.path.dirname(os.path.abspath(__file__))
+        kandidaten = [
+            os.path.abspath(os.path.join(base, "..", "..", "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(base, "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(base, "..", "Resources", "skills", "glide-to-do")),
+            os.path.abspath(os.path.join(sys.prefix, "share", "glide", "skills", "glide-to-do")),
+        ]
+        for kandidat in kandidaten:
+            if os.path.isdir(kandidat) and os.path.isfile(os.path.join(kandidat, "SKILL.md")):
+                return kandidat
+        return None
+
+    def export_agent_skill(self, target_path=None):
+        """Exportiert den Agenten-Skill glide-to-do als ZIP-Archiv für Claude, Cursor, Antigravity etc."""
+        skill_dir = self.find_agent_skill_dir()
+        if not skill_dir:
+            self.show_error("KI-Skill exportieren", "Der Skill-Ordner 'skills/glide-to-do' konnte nicht gefunden werden.")
+            return "break"
+        if not target_path:
+            target_path = filedialog.asksaveasfilename(
+                title="KI-Skill exportieren",
+                initialfile="glide-to-do-skill-v1.4.zip",
+                defaultextension=".zip",
+                filetypes=[("ZIP-Archiv", "*.zip"), ("Alle Dateien", "*.*")],
+                parent=getattr(self, "root", None),
+            )
+        if not target_path:
+            return "break"
+        try:
+            ziel_ordner = os.path.dirname(os.path.abspath(target_path)) or os.getcwd()
+            os.makedirs(ziel_ordner, exist_ok=True)
+            temp_handle, temp_path = tempfile.mkstemp(prefix=".skill-export-", suffix=".tmp", dir=ziel_ordner)
+            os.close(temp_handle)
+            with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                for wurzel, _ordner, dateien in os.walk(skill_dir):
+                    for datei in sorted(dateien):
+                        if datei.startswith(".") or datei.endswith(".pyc"):
+                            continue
+                        voll = os.path.join(wurzel, datei)
+                        rel = os.path.relpath(voll, os.path.dirname(skill_dir))
+                        archive.write(voll, arcname=rel)
+            os.replace(temp_path, target_path)
+            if getattr(self, "root", None) is not None:
+                self.show_info("KI-Skill exportieren",
+                               f"Der KI-Skill wurde erfolgreich exportiert nach:\n{target_path}\n\n"
+                               "Er kann in Claude Desktop, Cursor, Antigravity oder andere KI-Werkzeuge eingebunden werden.")
+            return True
+        except (OSError, ValueError) as fehler:
+            self.show_error("KI-Skill exportieren", f"Export fehlgeschlagen:\n{fehler}")
+            return "break"
 
     # ------------------------------------------------------------------
     # Übernahme
@@ -63084,15 +61982,54 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         return value if 1 <= value <= self.MAX_ESTIMATED_MINUTES else None
 
-    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0):
-        """Erzeugt einen Glide-Punkt aus einem Austauschobjekt."""
-        art = self.EXCHANGE_ITEM_TYPES.get(str(eintrag.get("type") or "task"), self.ITEM_KIND_TASK)
-        titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
-        if not titel:
+    REPEAT_KIND_MAP = {
+        "daily": "taeglich",
+        "taeglich": "taeglich",
+        "every_n_days": "tage",
+        "tage": "tage",
+        "weekdays": "wochentage",
+        "wochentage": "wochentage",
+        "weekly": "woechentlich",
+        "woechentlich": "woechentlich",
+        "monthly": "monatlich",
+        "monatlich": "monatlich",
+        "yearly": "jaehrlich",
+        "jaehrlich": "jaehrlich",
+        "series": "serie",
+        "serie": "serie",
+    }
+
+    def exchange_repeat_from_payload(self, value, default_start=None):
+        """Tolerante Annahme einer Wiederholungsregel aus einer Austauschdatei."""
+        if not isinstance(value, dict):
             return None
-        strukturell = art in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+        art_raw = str(value.get("art") or value.get("kind") or "").strip().lower()
+        if art_raw not in self.REPEAT_KIND_MAP:
+            return None
+        art = self.REPEAT_KIND_MAP[art_raw]
+        regel = {"art": art}
+        if art == "serie":
+            regel["rrule"] = value.get("rrule")
+        elif art == "tage":
+            abstand = value.get("abstand") if "abstand" in value else value.get("interval")
+            if abstand is not None:
+                regel["abstand"] = abstand
+        elif art == "wochentage":
+            tage = value.get("tage") if "tage" in value else value.get("days")
+            if tage is not None:
+                regel["tage"] = tage
+        for k_src, k_dst in (("start", "start"), ("ende", "ende"), ("end", "ende"),
+                             ("bezug", "bezug"), ("reference", "bezug"),
+                             ("pausiert", "pausiert"), ("paused", "pausiert"),
+                             ("rest", "rest")):
+            if k_src in value and k_dst not in regel:
+                regel[k_dst] = value[k_src]
+        return glide_repeat.normalize(regel, default_start=default_start)
+
+    def exchange_labels_from_payload(self, labels_raw, label_ids):
+        """Löst Labels aus Austausch-Kennungen oder direkten Labelnamen auf."""
         etiketten = []
-        for kennung in eintrag.get("labels") or []:
+        for kennung in labels_raw or []:
             kennung = str(kennung)
             if kennung in label_ids:
                 etiketten.append(label_ids[kennung])
@@ -63101,18 +62038,46 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if label is not None:
                     label_ids[kennung] = label["id"]
                     etiketten.append(label["id"])
+        return etiketten
+
+    def exchange_item_from_payload(self, eintrag, label_ids, tiefe=0, attachment_resolver=None):
+        """Erzeugt einen Glide-Punkt aus einem Austauschobjekt."""
+        art = self.EXCHANGE_ITEM_TYPES.get(str(eintrag.get("type") or "task"), self.ITEM_KIND_TASK)
+        titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
+        if not titel:
+            return None
+        strukturell = art in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+        etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
         kinder = []
         if tiefe + 1 < self.MAX_EXCHANGE_DEPTH:
             for kind in eintrag.get("children") or []:
-                erzeugt = self.exchange_item_from_payload(kind, label_ids, tiefe + 1)
+                erzeugt = self.exchange_item_from_payload(kind, label_ids, tiefe + 1,
+                                                          attachment_resolver=attachment_resolver)
                 if erzeugt is not None:
                     kinder.append(erzeugt)
+        normalized_due = None if strukturell else self.normalize_due(eintrag.get("due"))
+        repeat = None
+        reminder = None
+        if not strukturell:
+            if eintrag.get("repeat") and normalized_due:
+                repeat = self.exchange_repeat_from_payload(eintrag.get("repeat"), normalized_due)
+            if eintrag.get("reminder"):
+                try:
+                    reminder = self.reminder_config(self.normalize_reminder(eintrag.get("reminder")))
+                except (ValueError, TypeError):
+                    reminder = None
+        anhaenge = None
+        if not strukturell and eintrag.get("attachments"):
+            if callable(attachment_resolver):
+                anhaenge = attachment_resolver(eintrag.get("attachments"))
+            else:
+                anhaenge = self.normalize_attachments(eintrag.get("attachments"))
         return self.new_item(
             titel,
             done=bool(eintrag.get("done")) and not strukturell,
             children=kinder,
             importance=0 if strukturell else self.clamp_importance(eintrag.get("importance", 0)),
-            due=None if strukturell else self.normalize_due(eintrag.get("due")),
+            due=normalized_due,
             due_time=None if strukturell else self.normalize_due_time(eintrag.get("due_time")),
             description=str(eintrag.get("description") or ""),
             kind=art,
@@ -63121,23 +62086,120 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             estimated_minutes=None if strukturell else self.exchange_minutes(
                 eintrag.get("estimated_minutes")),
             checklist=None if strukturell else eintrag.get("checklist"),
+            repeat=repeat,
+            reminder=reminder,
+            attachments=anhaenge,
         )
 
-    def apply_exchange_payload(self, nutzlast, ziel_ordner_id=None):
-        """Create-Import atomar übernehmen; inklusive Labels und vollem Undo-Stapel."""
+    def apply_exchange_payload(self, nutzlast, ziel_ordner_id=None, attachment_source=None):
+        """Create-Import atomar übernehmen; inklusive Labels, Vorsicherung, Anhänge und vollem Undo-Stapel."""
         if (self.refresh_data_lock() is False or getattr(self,'_data_read_only',False)
                 or not self.prepare_inspector_switch()):
             return None
         undo_before, dirty_before = tuple(self.undo_stack), self.dirty
         self.snapshot_undo(trim=False)
         checkpoint = self.undo_stack[-1]
+        temp_staging_dir = None
+        attachment_dir = None
+        newly_created_attachment_files = []
+        try:
+            if attachment_source:
+                if isinstance(attachment_source, (str, os.PathLike)):
+                    src_str = str(attachment_source)
+                    if os.path.isfile(src_str) and zipfile.is_zipfile(src_str):
+                        temp_staging_dir = tempfile.TemporaryDirectory(prefix="glide-exchange-import-")
+                        self.extract_exchange_archive(src_str, temp_staging_dir.name)
+                        attachment_dir = temp_staging_dir.name
+                    elif os.path.isdir(src_str):
+                        attachment_dir = src_str
+        except Exception:
+            self.restore_import_checkpoint(checkpoint, undo_before, dirty_before)
+            raise
+
+        try:
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            pre_import_path = os.path.join(
+                BACKUP_DIR,
+                f"vor_import_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.glidebackup",
+            )
+            if hasattr(self, "write_complete_backup"):
+                try:
+                    payload = self.complete_backup_payload() if hasattr(self, "complete_backup_payload") else {}
+                    self.write_complete_backup(pre_import_path, payload)
+                except AttributeError:
+                    pass
+        except (OSError, ValueError):
+            if temp_staging_dir:
+                try:
+                    temp_staging_dir.cleanup()
+                except OSError:
+                    pass
+            self.restore_import_checkpoint(checkpoint, undo_before, dirty_before)
+            return None
+
+        def loese_anhaenge(roh_anhaenge):
+            if not isinstance(roh_anhaenge, list):
+                return []
+            ergebnis = []
+            for anhang in roh_anhaenge:
+                if not isinstance(anhang, dict):
+                    continue
+                name = anhang.get("name")
+                rel_pfad = anhang.get("file") or anhang.get("storage") or anhang.get("path")
+                gespeichert = None
+                if attachment_dir and isinstance(rel_pfad, str) and rel_pfad:
+                    kandidat = os.path.normpath(os.path.join(attachment_dir, rel_pfad.replace("/", os.sep)))
+                    try:
+                        echter_dir = os.path.realpath(attachment_dir)
+                        if os.path.commonpath([os.path.realpath(kandidat), echter_dir]) == echter_dir:
+                            if os.path.isfile(kandidat):
+                                gespeichert = self.store_attachment(kandidat, name=name)
+                                ziel_pfad = self.resolve_attachment_path(gespeichert)
+                                if ziel_pfad:
+                                    newly_created_attachment_files.append(ziel_pfad)
+                    except (ValueError, OSError):
+                        pass
+                if gespeichert is None:
+                    storage = anhang.get("storage")
+                    if not storage and isinstance(rel_pfad, str) and rel_pfad:
+                        if rel_pfad.startswith("attachments/"):
+                            try:
+                                storage = self.validate_attachment_storage(rel_pfad)
+                            except ValueError:
+                                storage = None
+                        else:
+                            try:
+                                storage = self.validate_attachment_storage(f"attachments/{rel_pfad}")
+                            except ValueError:
+                                storage = None
+                    if storage:
+                        try:
+                            storage = self.validate_attachment_storage(storage)
+                            gespeichert = {
+                                "id": anhang.get("id") or uuid.uuid4().hex,
+                                "name": str(name or os.path.basename(storage)).strip() or "Anhang",
+                                "storage": storage,
+                                "size": int(anhang.get("size") or 0),
+                                "mime": str(anhang.get("mime") or "application/octet-stream"),
+                                "added_at": str(anhang.get("added_at") or datetime.now().isoformat(timespec="seconds")),
+                            }
+                        except (ValueError, TypeError):
+                            gespeichert = None
+                if gespeichert:
+                    for feld in ("title", "note"):
+                        if anhang.get(feld):
+                            gespeichert[feld] = str(anhang[feld])
+                    ergebnis.append(gespeichert)
+            return self.normalize_attachments(ergebnis)
+
         try:
             label_ids = {}
             for label in nutzlast.get("labels") or []:
                 name = str(label.get("name") or "").strip()
                 if not name:
                     continue
-                erzeugt = self.ensure_label_by_name(name)
+                color = label.get("color")
+                erzeugt = self.ensure_label_by_name(name, color=color)
                 if erzeugt is not None and label.get("key"):
                     label_ids[str(label["key"])] = erzeugt["id"]
             ordner_ids = {}
@@ -63149,8 +62211,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if not titel:
                     continue
                 eltern = ordner_ids.get(str(ordner.get("parent") or "")) or ziel_ordner_id
+                etiketten = self.exchange_labels_from_payload(ordner.get("labels"), label_ids)
+                ordnerart = ordner.get("folder_kind")
+                if ordnerart not in self.FOLDER_KINDS:
+                    ordnerart = "standard"
+                ordner_anhaenge = loese_anhaenge(ordner.get("attachments")) if ordner.get("attachments") else None
                 erzeugt = self.new_folder_object(titel, note=str(ordner.get("description") or ""),
-                                                 parent_id=eltern)
+                                                 parent_id=eltern, labels=etiketten,
+                                                 folder_kind=ordnerart, attachments=ordner_anhaenge)
                 if ordner.get("key"):
                     ordner_ids[str(ordner["key"])] = erzeugt["id"]
                 neue_ordner.append(erzeugt)
@@ -63163,28 +62231,138 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     continue
                 punkte = []
                 for roh in eintrag.get("items") or []:
-                    erzeugt = self.exchange_item_from_payload(roh, label_ids)
+                    erzeugt = self.exchange_item_from_payload(roh, label_ids, attachment_resolver=loese_anhaenge)
                     if erzeugt is not None:
                         punkte.append(erzeugt)
+                list_attachments = loese_anhaenge(eintrag.get("attachments")) if eintrag.get("attachments") else []
+                cover_raw = eintrag.get("cover")
+                cover_spec = None
+                if cover_raw is not None:
+                    if isinstance(cover_raw, str):
+                        zugeordnet = next((a for a in list_attachments if a.get("storage") == cover_raw or a.get("name") == os.path.basename(cover_raw)), None)
+                        if not zugeordnet:
+                            geladen = loese_anhaenge([{"file": cover_raw, "name": os.path.basename(cover_raw)}])
+                            if geladen:
+                                zugeordnet = geladen[0]
+                                list_attachments.append(zugeordnet)
+                        if zugeordnet:
+                            cover_spec = {"kind": "image", "attachment": zugeordnet["id"]}
+                        elif cover_raw.startswith("attachments/"):
+                            try:
+                                storage = self.validate_attachment_storage(cover_raw)
+                                pseudo = {
+                                    "id": uuid.uuid4().hex,
+                                    "name": os.path.basename(storage),
+                                    "storage": storage,
+                                    "size": 0,
+                                    "mime": "image/png",
+                                    "added_at": datetime.now().isoformat(timespec="seconds"),
+                                }
+                                list_attachments.append(pseudo)
+                                cover_spec = {"kind": "image", "attachment": pseudo["id"]}
+                            except ValueError:
+                                pass
+                    elif isinstance(cover_raw, dict):
+                        if cover_raw.get("kind") == "image":
+                            att_id = cover_raw.get("attachment")
+                            rel_file = cover_raw.get("file") or cover_raw.get("storage") or cover_raw.get("path")
+                            if not att_id and rel_file:
+                                zugeordnet = next((a for a in list_attachments if a.get("storage") == rel_file or a.get("name") == os.path.basename(rel_file)), None)
+                                if not zugeordnet:
+                                    geladen = loese_anhaenge([{"file": rel_file, "name": os.path.basename(rel_file)}])
+                                    if geladen:
+                                        zugeordnet = geladen[0]
+                                        list_attachments.append(zugeordnet)
+                                if zugeordnet:
+                                    att_id = zugeordnet["id"]
+                            if att_id:
+                                cover_spec = {"kind": "image", "attachment": att_id}
+                        elif cover_raw.get("kind") == "drawing":
+                            cover_spec = cover_raw
+                rich_note = eintrag.get("rich_note")
+                if not rich_note and isinstance(eintrag.get("markdown"), str):
+                    try:
+                        def bild_loeser(beschreibung, quelle):
+                            if not attachment_dir:
+                                return None
+                            pfad = glide_page_markdown.local_image_path(quelle, attachment_dir)
+                            if not pfad or not os.path.isfile(pfad) or not glide_image_preview.is_image_name(pfad):
+                                return None
+                            titel_bild = " ".join(str(beschreibung or "").split())[:200]
+                            anhang = self.store_attachment(pfad, name=titel_bild or os.path.basename(pfad))
+                            ziel_pfad = self.resolve_attachment_path(anhang)
+                            if ziel_pfad:
+                                newly_created_attachment_files.append(ziel_pfad)
+                            list_attachments.append(anhang)
+                            return "img:" + uuid.uuid4().hex[:16], {
+                                "attachment": anhang["id"],
+                                "mode": "center",
+                                "width": 360,
+                            }
+                        md_doc = glide_page_markdown.markdown_to_page(
+                            eintrag["markdown"], image_resolver=bild_loeser if attachment_dir else None)
+                        md_tasks = md_doc.pop("tasks", [])
+                        if not punkte and md_tasks:
+                            for task in md_tasks:
+                                punkt = self.new_item(task.get("text", ""), done=bool(task.get("done")))
+                                if punkt:
+                                    punkte.append(punkt)
+                        rich_note = RichNoteEditor.normalize(md_doc)
+                    except Exception:
+                        rich_note = None
+                art = eintrag.get("list_kind")
+                if art is None:
+                    if cover_spec is not None or isinstance(eintrag.get("markdown"), str):
+                        art = self.LIST_KIND_PAGE
+                if art == self.LIST_KIND_GALLERY:
+                    punkte = []
+                etiketten = self.exchange_labels_from_payload(eintrag.get("labels"), label_ids)
                 liste = self.new_list_object(
                     titel, punkte, note=str(eintrag.get("description") or ""),
-                    list_kind=eintrag.get("list_kind"), rich_note=eintrag.get("rich_note"),
+                    list_kind=art, rich_note=rich_note,
                     folder_id=ordner_ids.get(str(eintrag.get("folder") or "")) or ziel_ordner_id,
                     drawing=eintrag.get("drawing"),
                     animation=copy.deepcopy(eintrag.get("animation")),
+                    labels=etiketten,
+                    attachments=list_attachments,
+                    cover=cover_spec,
                 )
                 neue_listen.append(liste)
             if not neue_listen:
+                for created_file in newly_created_attachment_files:
+                    try:
+                        if os.path.isfile(created_file):
+                            os.remove(created_file)
+                    except OSError:
+                        pass
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
                 return None
             self.folders.extend(neue_ordner)
             self.lists.extend(neue_listen)
             if not self.save_items():
+                for created_file in newly_created_attachment_files:
+                    try:
+                        if os.path.isfile(created_file):
+                            os.remove(created_file)
+                    except OSError:
+                        pass
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
                 return None
         except Exception:
+            for created_file in newly_created_attachment_files:
+                try:
+                    if os.path.isfile(created_file):
+                        os.remove(created_file)
+                except OSError:
+                    pass
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
             raise
+        finally:
+            if temp_staging_dir:
+                try:
+                    temp_staging_dir.cleanup()
+                except OSError:
+                    pass
         self.trim_undo_stack()
         self.finish_import_ui([('Seitenleiste',self.update_sidebar_list),('Inhaltsansicht',self.refresh_tree)])
         return neue_listen
@@ -63656,6 +62834,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         pfad = path or filedialog.askopenfilename(
             title="KI-Ergebnis importieren",
             filetypes=[("Glide-Austauschdatei", "*" + self.EXCHANGE_SUFFIX),
+                       ("ZIP-Container", "*.zip"),
                        ("JSON-Datei", "*.json"),
                        ("Markdown-Gliederung", "*.md"),
                        ("Alle Dateien", "*.*")])
@@ -63724,7 +62903,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         knoepfe.pack(fill="x", pady=(14, 0))
 
         def uebernehmen():
-            ergebnis = self.apply_exchange_payload(nutzlast)
+            ergebnis = self.apply_exchange_payload(nutzlast, attachment_source=pfad)
             if ergebnis is None:
                 meldung.configure(text="Der Import wurde nicht gespeichert. "
                                        "Der Bestand ist unverändert.")
@@ -64752,6 +63931,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         faehigkeiten = self.exchange_capabilities()
         arten = ", ".join(faehigkeiten["item_types"])
+        listenarten = ", ".join(faehigkeiten.get("list_kinds") or sorted(self.LIST_KINDS))
+        ordnerarten = ", ".join(faehigkeiten.get("folder_kinds") or sorted(self.FOLDER_KINDS))
         return f"""Erzeuge eine Glide-Austauschdatei ({self.EXCHANGE_SUFFIX}).
 
 Antworte ausschließlich mit einem JSON-Objekt, ohne Fließtext davor oder danach.
@@ -64762,28 +63943,46 @@ Aufbau
     "format_version": {self.EXCHANGE_FORMAT_VERSION},
     "mode": "create",
     "generator": {{"type": "ai"}},
-    "labels": [{{"key": "label-1", "name": "Release"}}],
-    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0"}}],
-    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1",
-                "description": "Wozu diese Liste da ist.", "items": [ ... ]}}]
+    "labels": [{{"key": "label-1", "name": "Release", "color": "flag"}}],
+    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "folder_kind": "standard", "labels": ["label-1"]}}],
+    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1", "list_kind": "tasks",
+                "description": "Wozu diese Liste da ist.", "markdown": "# Titel\\nNotiztext", "labels": ["label-1"], "items": [ ... ]}}]
   }}
 
 Ein Punkt
   {{"type": "task", "title": "Kurze Handlung", "description": "Ziel und Ergebnis.",
     "importance": 0-3, "due": "JJJJ-MM-TT", "due_time": "HH:MM",
     "planned_date": "JJJJ-MM-TT", "estimated_minutes": 30,
+    "repeat": {{"kind": "weekly"}}, "reminder": {{"mode": "relative", "minutes": 15}},
     "labels": ["label-1"], "done": false,
     "checklist": [{{"text": "Schritt", "done": false}}],
     "children": [ ... ]}}
 
-Bedeutung der Arten ({arten})
+Bedeutung der Punktarten ({arten})
   task     Eine ausführbare Handlung mit eindeutigem Ergebnis.
   long     Ein umfangreicherer, textorientierter Arbeitsgegenstand.
   group    Ein Behälter für Punkte. Nicht selbst erledigbar, ohne Termin.
   heading  Reine Gliederung. Keine Fälligkeit, keine Wichtigkeit, kein Erledigt.
 
+Listenarten ({listenarten})
+  tasks    Aufgabenliste mit Punkten (Vorgabe).
+  note     Notiz: Text in markdown oder rich_note, optional Punkte darüber.
+  page     Seite: formatierter Text in markdown oder rich_note.
+  drawing  Pixelzeichnung in drawing oder Bildfolge in animation.
+  gallery  Galerie: Bildsammlung (ohne Bilder leer).
+
+Ordnerarten ({ordnerarten})
+  standard Standardordner für alle Listenarten (Vorgabe).
+  library  Buch: sammelt formatierte Seiten und Dokumente.
+  journal  Notizbuch: für Tagebücher und Notizen.
+
 Bedeutung der Felder
+  title        Titel von Punkt, Liste oder Ordner (höchstens {self.CONTAINER_TITLE_MAX} Zeichen).
   description  Was die Aufgabe bedeutet und welches Ergebnis erwartet wird.
+  markdown     Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides Format gewandelt).
+  folder_kind  Art des Ordners: standard, library (Buch) oder journal (Notizbuch).
+  repeat       Wiederholungsregel an Aufgaben mit due (daily, weekly, monthly, yearly, weekdays mit days: [0-6], every_n_days mit interval: n).
+  reminder     Benachrichtigung: relativ (mode "relative" mit minutes) oder fest (mode "fixed" mit ISO-Zeitstempel at).
   children     Echte Unterpunkte, die eigenständig erledigt werden.
   checklist    Arbeitsschritte innerhalb eines Punkts, ohne eigene Termine.
   due          Bis wann etwas fertig sein muss.
@@ -64792,15 +63991,18 @@ Bedeutung der Felder
 Regeln
   1. Verwende Schlüssel („key“) frei wählbar, aber eindeutig. Erfinde keine
      internen Kennungen; Glide vergibt sie beim Import selbst.
-  2. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
+  2. Titel von Aufgaben, Listen und Ordnern dürfen höchstens {self.CONTAINER_TITLE_MAX}
+     Zeichen lang sein. Längere Inhalte gehören in description, markdown oder rich_note.
+  3. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
      {faehigkeiten['max_checklist_entries']} Checklistenschritte je Punkt an.
      Verschachtele höchstens {faehigkeiten['max_depth']} Ebenen tief.
-  3. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.
-  4. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
-  5. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
+  4. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.
+     Labels können an Punkten, Listen und Ordnern vergeben werden.
+  5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
+  6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
      long für erklärende Texte und task nur dort, wo etwas zu tun ist.
-  6. Diese Fassung unterstützt keine Anhänge, Wiederholungen und Erinnerungen.
-     Lass diese Felder weg, statt sie zu erfinden.
+  7. Dateianhänge und Bilder (attachments, cover) können in einem ZIP-Austauschpaket
+     unter attachments/ mitgeliefert werden (z. B. {{"file": "attachments/bild.png"}}).
 
 Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
   Liegt ein Kontextpaket ({self.CONTEXT_SUFFIX}, format „{glide_exchange_patch.CONTEXT_FORMAT}“) bei,
@@ -67645,7 +66847,7 @@ Labels, Termine und Metadaten."""
             item["text"], item["description"] = glide_design.task_title(item["text"], item["description"])
         return imported_root
 
-    def ensure_label_by_name(self, name):
+    def ensure_label_by_name(self, name, color=None):
         """Vorhandenes Label mit diesem Namen oder ein neu angelegtes Label."""
         clean = str(name or "").strip()[: self.MAX_LABEL_NAME_LENGTH]
         if not clean:
@@ -67655,10 +66857,9 @@ Labels, Termine und Metadaten."""
             return existing
         if len(self.labels) >= self.MAX_LABELS:
             return None
-        # Die Farbe rotiert über die Palette, damit importierte Labels
-        # unterscheidbar bleiben, ohne den Nutzer zu fragen.
-        color = self.LABEL_COLOR_KEYS[len(self.labels) % len(self.LABEL_COLOR_KEYS)]
-        label = self.new_label_object(clean, None, color)
+        # Die angegebene Farbe oder die nächste Palettenfarbe vergeben.
+        farb_schluessel = color if color in self.LABEL_COLOR_KEYS else self.LABEL_COLOR_KEYS[len(self.labels) % len(self.LABEL_COLOR_KEYS)]
+        label = self.new_label_object(clean, None, farb_schluessel)
         self.labels.append(label)
         return label
 
@@ -67927,17 +67128,13 @@ Labels, Termine und Metadaten."""
 
     @staticmethod
     def accel(*keys):
-        """Plattformgerechte Beschriftung eines Tastenkürzels.
-
-        Unter macOS heißt der Modifikator Cmd; „Strg+E“ wäre dort schlicht falsch.
-        """
-        modifier = "Cmd" if IS_MACOS else "Strg"
-        return "+".join([modifier] + [str(key) for key in keys])
+        """Plattformgerechte Beschriftung eines Tastenkürzels."""
+        return desktop_adapter.format_accelerator(*keys)
 
     @classmethod
     def redo_accel(cls):
         """Beschriftung für „Wiederholen“ nach Systemkonvention (Windows: Strg+Y)."""
-        return cls.accel("Y") if IS_WINDOWS else cls.accel("Shift", "Z")
+        return desktop_adapter.format_redo_accelerator()
 
     SIDEBAR_RAIL_WIDTH = 64
 
@@ -69247,42 +68444,15 @@ Labels, Termine und Metadaten."""
                 pass
 
     def build_menu(self, parent, eintraege, tearoff=0):
-        """Baut ein Menü aus einer Beschreibung und meldet es dem Theme an.
-
-        Die Menüzeile wurde Eintrag für Eintrag von Hand
-        zusammengesetzt – jede Zeile ein Aufruf, jedes Untermenü zusätzlich ein
-        eigener Name, der am Ende in `self.menus` nachgetragen werden musste.
-        Wurde das vergessen, blieb genau dieses Untermenü ungefärbt. Die
-        Beschreibung nennt nur noch Struktur und Befehl; Anlegen, Verschachteln
-        und Anmelden erledigt diese Stelle.
-
-        Eintragsformen: `None` für eine Trennlinie, `(Beschriftung, Befehl)`,
-        `(Beschriftung, Befehl, Tastenkürzel)` und `(Beschriftung, Liste)` für
-        ein Untermenü.
-        """
-        menu = tk.Menu(parent, tearoff=tearoff)
-        menu._glide_action_ids = {}
-        self.menus.append(menu)
-        for eintrag in eintraege:
-            if eintrag is None:
-                menu.add_separator()
-                continue
-            beschriftung, ziel = eintrag[0], eintrag[1]
-            if isinstance(ziel, str):
-                # Ein Untermenü, das sich selbst füllt (etwa „Hintergrund“ je
-                # Design): Der Name wird zum Attribut der App.
-                untermenue = tk.Menu(menu, tearoff=0)
-                self.menus.append(untermenue)
-                setattr(self, ziel, untermenue)
-                menu.add_cascade(label=beschriftung, menu=untermenue)
-            elif isinstance(ziel, (list, tuple)):
-                menu.add_cascade(label=beschriftung, menu=self.build_menu(menu, ziel))
-            else:
-                menu.add_command(label=beschriftung, command=ziel,
-                                 accelerator=eintrag[2] if len(eintrag) > 2 else "")
-                menu._glide_action_ids[menu.index("end")] = (
-                    eintrag[3] if len(eintrag) > 3 else glide_actions.method_id(ziel))
-        return menu
+        """Baut ein Menü aus einer Beschreibung und meldet es dem Theme an."""
+        return desktop_adapter.build_menu_tree(
+            parent,
+            eintraege,
+            menus_out=self.menus,
+            tearoff=tearoff,
+            attr_target=self,
+            action_resolver=glide_actions.method_id,
+        )
 
     def menubar_structure(self):
         """Die vier Menüs als Beschreibung – Struktur getrennt vom Aufbau.
@@ -69299,21 +68469,21 @@ Labels, Termine und Metadaten."""
         """
         loeschen = "Rückschritt" if IS_MACOS else "Entf"
         return (
-            ("Datei", (
-                ("Neu anlegen", (
-                    ("Schnellerfassung …", self.show_quick_capture, self.accel("Alt", "N")),
+            (glide_i18n.t("menu.file", "Datei"), (
+                (glide_i18n.t("menu.file.new", "Neu anlegen"), (
+                    (glide_i18n.t("menu.file.quick_capture", "Schnellerfassung …"), self.show_quick_capture, self.accel("Alt", "N")),
                     # Seit 3.33.20 (U04) ohne Dauerknopf neben der Eingabezeile;
                     # in der Zeile selbst führt Umschalt+Enter hierher.
-                    ("Neuer Punkt mit allen Angaben …", self.add_item_advanced),
-                    ("Neue Liste", self.create_new_list, self.accel("Shift", "N")),
-                    ("Neue Zeichnung", self.create_new_drawing),
-                    ("Neue Seite", self.create_new_page),
-                    ("Neue Galerie", self.create_new_gallery),
-                    ("Neuer Ordner", self.create_new_folder),
+                    (glide_i18n.t("menu.file.new_task_advanced", "Neuer Punkt mit allen Angaben …"), self.add_item_advanced),
+                    (glide_i18n.t("menu.file.new_list", "Neue Liste"), self.create_new_list, self.accel("Shift", "N")),
+                    (glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), self.create_new_drawing),
+                    (glide_i18n.t("menu.file.new_page", "Neue Seite"), self.create_new_page),
+                    (glide_i18n.t("menu.file.new_gallery", "Neue Galerie"), self.create_new_gallery),
+                    (glide_i18n.t("menu.file.new_folder", "Neuer Ordner"), self.create_new_folder),
                 )),
                 None,
-                ("Importieren", (
-                    ("TXT importieren …", self.import_from_txt, self.accel("I")),
+                (glide_i18n.t("menu.file.import", "Importieren"), (
+                    (glide_i18n.t("menu.file.import.txt", "TXT importieren …"), self.import_from_txt, self.accel("I")),
                     ("TXT als neue Liste(n) …", self.import_txt_as_new_lists),
                     ("CSV importieren …", self.show_csv_import_dialog),
                     ("Kalenderdatei (ICS) importieren …", self.show_ics_import_dialog),
@@ -69323,13 +68493,13 @@ Labels, Termine und Metadaten."""
                     ("Seite aus Zwischenablage", self.new_page_from_clipboard),
                     ("Glide-Seiten importieren …", self.import_glide_pages),
                 )),
-                ("Exportieren", (
-                    ("Als TXT …", self.export_as_txt, self.accel("E")),
-                    ("Als Markdown …", self.export_as_markdown),
+                (glide_i18n.t("menu.file.export", "Exportieren"), (
+                    (glide_i18n.t("menu.file.export.txt", "Als TXT …"), self.export_as_txt, self.accel("E")),
+                    (glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), self.export_as_markdown),
                     ("Alles als Markdown-Ordner …", self.export_all_markdown),
-                    ("Als CSV …", self.export_as_csv),
+                    (glide_i18n.t("menu.file.export.csv", "Als CSV …"), self.export_as_csv),
                     ("Als Glide-Seite …", self.export_glide_pages),
-                    ("Pinnwand als JSON Canvas (.canvas) …", self.export_board_json_canvas),
+                    (glide_i18n.t("menu.file.export.board_canvas", "Pinnwand als JSON Canvas (.canvas) …"), self.export_board_json_canvas),
                     None,
                     ("Kalenderdatei (ICS) …", self.show_calendar_export_dialog),
                     ("Drucken und PDF …", self.show_print_dialog, self.accel("P")),
@@ -69340,10 +68510,11 @@ Labels, Termine und Metadaten."""
                 ("Datenaustausch", (
                     ("Für KI bereitstellen …", self.show_exchange_export_dialog),
                     ("KI-Ergebnis importieren …", self.show_exchange_import_dialog),
+                    ("KI-Skill exportieren …", self.export_agent_skill),
                     ("Austauschformat anzeigen …", self.show_exchange_spec_dialog),
                 )),
                 None,
-                ("Sicherung", (
+                (glide_i18n.t("menu.file.backup", "Sicherung"), (
                     ("Speicherstatus …", self.show_storage_status),
                     ("Sicherungsübersicht …", self.show_backup_catalog),
                     None,
@@ -69370,16 +68541,16 @@ Labels, Termine und Metadaten."""
                     ("Standardordner benutzen", self.use_default_data_folder),
                 )),
                 None,
-                ("Beenden", self.on_close, self.accel("Q")),
+                (glide_i18n.t("menu.file.quit", "Beenden"), self.on_close, self.accel("Q")),
             )),
-            ("Bearbeiten", (
-                ("Rückgängig", self.undo_last_change, self.accel("Z")),
-                ("Wiederholen", self.redo_last_change, self.redo_accel()),
+            (glide_i18n.t("menu.edit", "Bearbeiten"), (
+                (glide_i18n.t("menu.edit.undo", "Rückgängig"), self.undo_last_change, self.accel("Z")),
+                (glide_i18n.t("menu.edit.redo", "Wiederholen"), self.redo_last_change, self.redo_accel()),
                 None,
                 ("Zwischenablage", (
-                    ("Kopieren", self.copy_selected_to_clipboard, self.accel("C")),
-                    ("Einfügen", self.paste_items_from_clipboard, self.accel("V")),
-                    ("Alle auswählen", self.select_all_items, self.accel("A")),
+                    (glide_i18n.t("menu.edit.copy", "Kopieren"), self.copy_selected_to_clipboard, self.accel("C")),
+                    (glide_i18n.t("menu.edit.paste", "Einfügen"), self.paste_items_from_clipboard, self.accel("V")),
+                    (glide_i18n.t("menu.edit.select_all", "Alle auswählen"), self.select_all_items, self.accel("A")),
                 )),
                 None,
                 ("Aufgabendetails …", self.edit_item, "F2"),
@@ -69399,23 +68570,23 @@ Labels, Termine und Metadaten."""
                     ("In Aufgabe zurückwandeln", lambda: self.convert_selected_kind(self.ITEM_KIND_TASK), "", 'convert_selected_kind.task'),
                     ("Gruppe auflösen", self.dissolve_selected_group),
                     None,
-                    ("Duplizieren", self.duplicate_selected_items),
+                    (glide_i18n.t("menu.edit.duplicate", "Duplizieren"), self.duplicate_selected_items),
                     ("In Liste verschieben …", self.move_selected_to_list_dialog),
                 )),
-                ("Löschen", self.delete_item, loeschen),
+                (glide_i18n.t("menu.edit.delete", "Löschen"), self.delete_item, loeschen),
                 ("Erledigte Aufgaben löschen", lambda: self.remove_done_items(), "", 'remove_done_items'),
                 ("Papierkorb leeren", self.empty_trash),
                 None,
-                ("Einstellungen …", self.show_settings_dialog),
+                (glide_i18n.t("menu.file.settings", "Einstellungen …"), self.show_settings_dialog),
             )),
-            ("Ansicht", (
-                ("Kompaktmodus", self.toggle_compact_mode, self.accel("Shift", "K")),
+            (glide_i18n.t("menu.view", "Ansicht"), (
+                (glide_i18n.t("menu.view.compact_mode", "Kompaktmodus"), self.toggle_compact_mode, self.accel("Shift", "K")),
                 None,
                 ("Ansichten", (
                     ("Seite, Punkt oder Aktion suchen …", self.show_quick_open, self.accel("O")),
                     None,
-                    ("Startseite", self.set_home_view),
-                    ("Heute", self.set_today_view),
+                    (glide_i18n.t("sidebar.home", "Startseite"), self.set_home_view),
+                    (glide_i18n.t("sidebar.today", "Heute"), self.set_today_view),
                     ("Demnächst", self.set_in_progress_view),
                     ("Nächste Aufgabe", self.open_next_task),
                     ("Tagesbeginn …", self.start_day_review),
@@ -69440,12 +68611,12 @@ Labels, Termine und Metadaten."""
                     # „Verspätet“ und der Eingang
                     # haben keine eigene Seitenleistenzeile mehr. Eine Ansicht
                     # ohne Weg dorthin gibt es nicht.
-                    ("Verspätet", self.set_overdue_view),
+                    (glide_i18n.t("menu.view.overdue", "Verspätet"), self.set_overdue_view),
                     ("Eingang öffnen", self.open_inbox_list),
                     None,
-                    ("Vorlagen", self.set_template_view),
+                    (glide_i18n.t("sidebar.templates", "Vorlagen"), self.set_template_view),
                     ("Kalender …", self.open_calendar_view, self.accel("K")),
-                    ("Papierkorb", self.set_trash_view),
+                    (glide_i18n.t("sidebar.trash", "Papierkorb"), self.set_trash_view),
                 )),
                 ("Heute", (
                     ("Heute: Tag zurück", self.plan_day_backward),
@@ -69511,16 +68682,22 @@ Labels, Termine und Metadaten."""
                 ("Verweise und Rückverweise", self.show_object_references, None),
                 ("Fundorte anzeigen …", self.show_usage_locations_dialog),
             )),
-            ("Hilfe", (
-                ("Handbuch …", self.show_manual_dialog, "F1"),
-                ("Tastenkürzel anzeigen", self.show_shortcuts_dialog),
+            (glide_i18n.t("menu.help", "Hilfe"), (
+                (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
+                (glide_i18n.t("menu.help.shortcuts", "Tastenkürzel anzeigen"), self.show_shortcuts_dialog),
                 None,
-                ("Fehlerprotokoll öffnen", self.open_error_log),
-                (f"Über {APP_NAME}", self.show_about_dialog),
+                (glide_i18n.t("menu.help.error_log", "Fehlerprotokoll öffnen"), self.open_error_log),
+                (glide_i18n.t("menu.help.about", f"Über {APP_NAME}", app_name=APP_NAME), self.show_about_dialog),
             )),
         )
 
     def create_menubar(self):
+        if getattr(self, "custom_menubar", None) is not None:
+            try:
+                self.custom_menubar.destroy()
+            except Exception:
+                pass
+            self.custom_menubar = None
         menubar = tk.Menu(self.root)
         self.menus = [menubar]
         self.action_menus = []
@@ -69538,7 +68715,8 @@ Labels, Termine und Metadaten."""
             self.custom_menubar.pack(side="right", padx=(8, 0))
             self.title_label.pack_forget()
             self.title_label.pack(side="left", anchor="w")
-            kuerzel = {"Datei": "d", "Bearbeiten": "b", "Ansicht": "a", "Hilfe": "h"}
+            kuerzel = {"Datei": "d", "File": "f", "Bearbeiten": "b", "Edit": "e",
+                       "Ansicht": "a", "View": "v", "Hilfe": "h", "Help": "h"}
             menu_specs = [(titel, menu, kuerzel.get(titel, titel[:1].lower()))
                           for titel, menu in self.action_menus]
             for label, menu, mnemonic in menu_specs:
@@ -69576,16 +68754,9 @@ Labels, Termine und Metadaten."""
 
     def _post_custom_menu(self, button, menu):
         previous_focus = self.current_focus_widget()
-        try:
-            button.focus_set()
-            menu.tk_popup(button.winfo_rootx(), button.winfo_rooty() + button.winfo_height())
-        finally:
-            try:
-                menu.grab_release()
-            except tk.TclError:
-                pass
-            self.restore_focus(previous_focus)
-        return "break"
+        return desktop_adapter.DesktopMenuBar.post_popup_menu(
+            button, menu, previous_focus=previous_focus, restore_cb=self.restore_focus
+        )
 
     def open_backup_folder(self):
         self.open_external_path(BACKUP_DIR)

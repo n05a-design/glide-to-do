@@ -54,7 +54,7 @@
   "menu.view.history": "Verlauf",
   "menu.view.sidebar": "Seitenleiste ein-/ausblenden",
   "menu.view.inspector": "Inspektor ein-/ausblenden",
-  "menu.view.compact_mode": "Kompaktmodus umschalten",
+  "menu.view.compact_mode": "Kompaktmodus",
   "menu.view.zoom_in": "Vergrößern",
   "menu.view.zoom_out": "Verkleinern",
   "menu.view.zoom_reset": "Standardgröße",
