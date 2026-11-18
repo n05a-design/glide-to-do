@@ -2,7 +2,7 @@
 
 ## Soll-Ist-Abgleich und Dokumentationspakete (18.11.2026)
 
-**Stand:** Topic-Branch `design-shaye-v1-0-0-documentation-analysis`; PR #144 zielt direkt auf `main`. PR #142 wurde am 18.11.2026 gemergt (Merge-Commit `f55f6b0a`). Die drei Merge-Konflikte in Entwicklungsplan, Übergabe und QA-Bericht sind im Arbeitsbaum aufgelöst; Remote-Prüfung des Konfliktbereinigungs-Commits steht aus. Glide 1.0.0; kein neuer App-/Datenformat-Build.
+**Stand:** PR #144 wurde am 18.11.2026 in `main` gemergt (Merge `2c4b7499`). Seine drei Dokumentationspakete sind enthalten. Eine erneute Prüfung des 906-Zeilen-Masterprompts ergab, dass weitere internationale GitHub-, App-i18n-, Shell- und Release-Aspekte offen sind. Glide 1.0.0; kein neuer App-/Datenformat-Build.
 
 **Release- und GitHub-Abgleich:** PR #138 ist auf dem geprüften Head `7d2d5cf7` in `main` gemergt; Grundstufe, CodeQL, Linux-/Windows-Vollprüfung und Windows-Paketbau waren erfolgreich. Der lokale macOS-Volllauf samt Paketstart ist separat weiter unten dokumentiert. Am 18.11.2026 ergaben `gh release list --repo n05a-design/glide-to-do --limit 10 --json tagName,name,isDraft,isPrerelease,publishedAt` und `git ls-remote --tags origin` keine Releases bzw. Tags. Issue #129 ist offen. Homebrew- und winget-Vorlagen wurden nicht extern eingereicht. Die menschliche Sicht-/Bedienabnahme sowie übersprungene UI-/Barrierefreiheitsjobs bleiben offen.
 
@@ -14,7 +14,29 @@
 
 **Community-Vorlagen:** Die Issue-Formulare sind zweisprachig und nutzen die verifizierten Labels `bug` und `enhancement`; `.github/PULL_REQUEST_TEMPLATE.md` ergänzt Prüf-, Dokumentations-, Datenschutz- und Abnahmepunkte. Issue #129 wurde mit dem Soll-/Ist-Status synchronisiert und bleibt offen; damit wurde kein Release oder Konto-Feature aktiviert.
 
-**Grenzen:** PR #142 ist am 18.11.2026 nach `main` gemergt; seine CodeQL-, Grundstufen-, Linux-/Windows-Vollprüfungen und der Windows-Paketbau waren erfolgreich. PR #144 zielt direkt auf `main`. Die CodeQL-Prüfungen auf dessen bisherigem Head `f0d033d0` waren grün; die Grundstufe des manuellen Remote-Laufs ist grün, die Linux-Vollprüfung läuft noch. Die Merge-Konflikte sind lokal bereinigt; die Remote-Prüfung des neuen Heads steht aus. UI-Diagnose und Tk-9.1-/Screenreader-Jobs wurden übersprungen. Die lokale Grundstufe enthält keine Integrationsvollprüfung. Es wurden weder vollständige UI-Lokalisierung, native Abnahme, Installationen aus Homebrew/winget noch Tag/Release durchgeführt.
+**Grenzen:** PR #142 und PR #144 sind am 18.11.2026 in `main` gemergt. Für PR #144 waren CodeQL, Linux-Grund-/Vollprüfung, Windows-Vollprüfung und Windows-Paketbau auf Head `c7a099d6` grün. UI-Diagnose und Tk-9.1-/NVDA-/AT-SPI-/Orca-Jobs wurden übersprungen. Die lokale Grundstufe enthält keine Integrationsvollprüfung. Es wurden weder vollständige UI-Lokalisierung, native Abnahme, Installationen aus Homebrew/winget noch Tag/Release durchgeführt.
+
+## Masterprompt-Nachprüfung und verbleibender Umfang (18.11.2026)
+
+**Geprüfte GitHub-Bereiche:** Öffentliche README, Community-Vorlagen, Wiki-Schalter, Discussions, GitHub Projects, Funding-Datei, Dependabot, Tags, Releases und Release-Workflow wurden gegen den Live-Stand bzw. Repository-Inhalt abgeglichen.
+
+| Bereich | Tatsächlicher Nachweis |
+|---|---|
+| README | Deutsch geführte Hauptseite mit einem kurzen englischen Anhang. Keine gleichwertige vollständige englische Start-/Installations-/Funktionsdokumentation nachgewiesen. |
+| Wiki | Wiki ist im Repository aktiviert; versionierte Wiki-Quellseiten oder eine geprüfte Synchronisation sind nicht vorhanden. |
+| Issues | `bug` und `enhancement` sowie zweisprachige Fehler-/Wunschformulare vorhanden. Keine Dokumentations-, Lokalisierungs-, Barrierefreiheits- und Technische-Schulden-Formulare. |
+| PR/Governance | Zweisprachige PR-Vorlage und Pflegematrix vorhanden; Automatisierung für Projektstatus, Issue-Typen, Priorität und vollständige Sprach-/Wiki-/Fundingprüfung fehlt. |
+| Discussions | Aktiviert; sechs Kategorien wurden verifiziert. Keine Diskussionen oder Discussion-Templates/Richtlinien als versionierte Projektquelle nachgewiesen. |
+| Projects | Kein GitHub-Projects-V2-Projekt gefunden. |
+| Funding | Keine `.github/FUNDING.yml` und keine verifizierten Sponsorkonten oder Zahlungs-URLs. |
+| Dependabot | `.github/dependabot.yml` ist für GitHub Actions und Python-Baukette vorhanden. Fremdcode bleibt ausdrücklich ausgeschlossen. |
+| Tags/Releases | Kein Tag und kein öffentliches Release gefunden. `release.yml` und Paketworkflows sind Vorbereitungen, keine Veröffentlichung. |
+
+**App-i18n:** `test_i18n.py` bestand mit 12/12. Beide Kataloge enthalten je 102 Schlüssel und decken die 42 direkt in `app.pyw` verwendeten Literalschlüssel ab. Das ist keine komplette Oberflächenabdeckung: zahlreiche feste deutsche Menü-, Dialog-, Inspektor-, Platzhalter-, Status-, Toast- und Fehlermeldungen bleiben vorhanden. OS-Spracherkennung, persistente Auswahl und Laufzeitumschaltung sind technisch vorhanden; vollständige Layout-, Datums-/Zahlen-, Tastatur- und native Accessibility-Abnahme ist nicht belegt.
+
+**Glide-Shell:** Die vier Shell-Bausteine und das Shell-Konzept sind vorhanden. Ein wiederverwendbarer Host-/Locale-Kontext, Shell-Übersetzungsschnittstelle, Namespaces, Sprachwechselereignisse und Shell-Accessibility-/Fehlerkataloge sind nicht nachgewiesen.
+
+**Gesamtfazit:** Der 906-Zeilen-Masterprompt ist nicht vollständig umgesetzt. Die verbleibenden Arbeiten gehören in eigene, isolierte PRs: öffentliche EN/DE-Dokumentation und Wiki-Quellen; vollständige App-i18n; Shell-Lokalisierungsvertrag; begrenzte GitHub-Automatisierung; externe GitHub-/Paket-/Funding-Freigaben. Keine dieser Lücken darf als abgeschlossen oder veröffentlicht gelten.
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 

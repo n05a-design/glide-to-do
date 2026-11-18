@@ -4,7 +4,7 @@ Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Aktueller Quell-, Prüf- und Lieferstand: [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Aufgabenstatus und konkrete Gitautorisierung stehen im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) sowie im [Meilenstein-Plan v1.0](00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md).
 
-Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
+Sprache: Deutsch für interne Antworten und autoritative Projektdokumente. Öffentliche README-, Wiki-, Community-, Issue-, Release- und Benutzertexte benötigen kontrollierte englische und deutsche Fassungen, ohne dass interne Fachautorität dupliziert wird. Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
 ## Struktur
 

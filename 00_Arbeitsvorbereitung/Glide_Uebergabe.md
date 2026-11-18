@@ -197,6 +197,20 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
    - `glide-to-do-skill-v1.0.0.zip` + `.sha256`
 3. **Veröffentlichung:** Noch offen: Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren. Vorher verbleibende Lokalisierungs- und Abnahmegates abschließen; Kontofreigaben liegen beim Inhaber.
 
+#### Nachprüfung des 906-Zeilen-Masterprompts (18.11.2026)
+
+PR #144 hat drei eng begrenzte Dokumentationspakete umgesetzt. Der gesamte Masterprompt ist nicht vollständig umgesetzt. Verbleibender Soll-Ist-Umfang:
+
+- Eine gleichwertige englische öffentliche README-Navigation und öffentliche Wiki-Quellen fehlen.
+- Weitere Issue-Formulare, Projektansichten, Discussion-Richtlinien und belastbare Governance-Automatisierung fehlen.
+- Die App ist nur teilweise zweisprachig; Dialoge, Inspektoren, Status-, Fehler-, Platzhalter- und weitere feste UI-Texte bleiben teilweise deutsch.
+- Die Shell besitzt kein dokumentiertes oder geprüftes Host-/Locale-Übersetzungskonzept.
+- Funding ist nicht eingerichtet. Keine externe Sponsoring- oder Zahlungsfreigabe ist erfolgt.
+- Tag, GitHub-Release, externe Homebrew-/winget-Einreichung und saubere öffentliche Installationsprüfungen fehlen.
+- Menschliche Sicht-/Bedien- und Accessibility-Abnahmen bleiben offen.
+
+Die vollständige Matrix und die Priorisierung stehen in Entwicklungsplan §21.118 und QA-Bericht „Masterprompt-Nachprüfung und verbleibender Umfang“. Diese Punkte sind nicht durch den grünen CI-Lauf oder PR #144 als erledigt anzusehen.
+
 ---
 
 ### Schritt 4: Post-1.0 Arbeiten (Zurückgestellt bis Version 1.1+)
