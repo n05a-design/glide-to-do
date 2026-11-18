@@ -2,7 +2,7 @@
 
 ## DE/EN-Lokalisierung des Einstellungsdialogs (19.11.2026)
 
-**Stand:** PR #148, basierend auf `main`/PR #147, Merge-Commit `172b0924`; die Änderungen umfassen App, Kataloge, Tests und führende Dokumentation. Datenformat 26 und App-Version 1.0.0 unverändert. PR #148 ist offen und nicht gemergt; CodeQL und Grundstufe liefen bei letzter Abfrage, Ergebnisse standen noch aus.
+**Stand:** PR #148 ist auf `main` gemergt (Merge-Commit `3f4f2219`); die Änderungen umfassen App, Kataloge und Tests. Datenformat 26 und App-Version 1.0.0 unverändert. CodeQL und Grundstufe waren erfolgreich; die Linux-Vollprüfung lief bei letzter Abfrage noch. Die Führungsdokumente werden in diesem Nachtrag mit dem gemergten Stand synchronisiert.
 
 **Gezielte Prüfung:** Auf macOS mit CPython 3.14.5 und isoliertem künstlichem `GLIDE_DATA_DIR` bestanden `tests/unit/test_i18n.py` (**13/13**), `tests/integration/test_arbeitsmodi.py --fall schriftstile` (**1/1**) sowie `tests/tools/test_glide_system.py` (**5/5**). `py_compile` für `app.pyw` und die beiden geänderten Tests sowie `git diff --check` bestanden.
 
