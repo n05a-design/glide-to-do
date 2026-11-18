@@ -6,7 +6,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 ## Aktueller GitHub-Stand 19.11.2026
 
-`main` enthält PR #147 auf Merge-Commit `172b0924`; CodeQL und Grundstufe waren erfolgreich, die Linux-Vollprüfung lief bei letzter Abfrage noch. UI-Diagnose und Tk-/Accessibility-Jobs wurden übersprungen. Issue #129 bleibt offen; es gibt keine Tags oder GitHub-Releases und keinen offenen PR. Der lokale Einstellungs-i18n-Paketschnitt ist noch nicht auf GitHub. Diese Statusangaben müssen vor einem öffentlichen Release erneut anhand des Live-Standes geprüft werden.
+`main` enthält PR #148 auf Merge-Commit `3f4f2219`; CodeQL und Grundstufe waren erfolgreich, die Linux-Vollprüfung lief bei letzter Abfrage noch. UI-Diagnose und Tk-/Accessibility-Jobs wurden übersprungen. Issue #129 bleibt offen; es gibt keine Tags oder GitHub-Releases. Diese Statusangaben müssen vor einem öffentlichen Release erneut anhand des Live-Standes geprüft werden.
 
 ## Release-Cut-Prüfung vom 18.11.2026
 

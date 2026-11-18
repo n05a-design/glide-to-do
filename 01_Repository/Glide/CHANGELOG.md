@@ -5,7 +5,7 @@ Stand 19.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der R
 
 ## 1.0.0 – 17.11.2026 (Quellstand, nicht veröffentlicht)
 
-Der Meilenstein-Schnitt D93 ist in `main` gemergt; der aktuelle Main-Stand enthält PR #147 (Merge-Commit `172b0924`). Am 19.11.2026 waren kein Tag und kein GitHub Release veröffentlicht; die Einreichung bei Homebrew und winget sowie die abschließende menschliche Abnahme stehen aus. Datenformat 26 und Austauschformat 2 unverändert. Der lokale Folgeschnitt zur DE/EN-Lokalisierung der Einstellungen ist noch nicht auf GitHub.
+Der Meilenstein-Schnitt D93 ist in `main` gemergt; der aktuelle Main-Stand enthält PR #148 (Merge-Commit `3f4f2219`). Am 19.11.2026 waren kein Tag und kein GitHub Release veröffentlicht; die Einreichung bei Homebrew und winget sowie die abschließende menschliche Abnahme stehen aus. Datenformat 26 und Austauschformat 2 unverändert. PR #148 ergänzt die DE/EN-Lokalisierung des Einstellungsdialogs; der laufende Dokumentennachtrag gleicht die führenden Statusquellen ab.
 
 - Öffentliche GitHub-Projektseite: Die deutsche README wurde auf den Einstieg gekürzt; `README.en.md` ergänzt eine vollständige englische Fassung. Der Downloadstatus bleibt ausdrücklich unveröffentlicht.
 - Werkzeugtest T299 prüft die Sprachumschaltung, Kernabschnitte und lokalen Datei-Links beider öffentlichen README-Seiten.

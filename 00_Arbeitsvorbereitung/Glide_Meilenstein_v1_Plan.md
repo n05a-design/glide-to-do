@@ -116,7 +116,7 @@ flowchart TD
 
 ## 3. GitHub Issue Tracking (#129)
 
-Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. Der Einstellungsdialog ist im aktuellen lokalen Paketschnitt zweisprachig; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen. Dieser Paketschnitt ist noch nicht auf GitHub.
+Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. PR #148 hat den zweisprachigen Einstellungsdialog gemergt; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
 - [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und erste Bereiche via PR #134; Einstellungsdialog im lokalen Folgeschnitt zweisprachig, vollständige UI-/Status-/Shell-Lokalisierung offen)
