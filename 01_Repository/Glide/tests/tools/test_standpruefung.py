@@ -5,11 +5,71 @@ import unittest
 from pathlib import Path
 import tempfile
 import subprocess
+from html.parser import HTMLParser
+import re
+from urllib.parse import unquote, urlsplit
 
 import standpruefung as stand
 
 
 class Einstiegspruefung(unittest.TestCase):
+    def test_public_readmes_keep_mirrored_sections_and_resolve_local_links(self):
+        project = stand.REPO.parents[1]
+        pages = {
+            "README.md": (project / "README.md").read_text(encoding="utf-8"),
+            "README.en.md": (project / "README.en.md").read_text(encoding="utf-8"),
+        }
+        self.assertIn('href="README.en.md">English</a>', pages["README.md"])
+        self.assertIn('href="README.md">Deutsch</a>', pages["README.en.md"])
+
+        section_pairs = (
+            ("Warum Glide?", "Why Glide?"),
+            ("Ein Blick in Glide", "A look at Glide"),
+            ("Was Glide kann", "What Glide does"),
+            ("Was Glide bewusst nicht ist", "What Glide is not"),
+            ("Herunterladen", "Download"),
+            ("Deine Daten", "Your data"),
+            ("Häufige Fragen", "Frequently asked questions"),
+            ("Rückmeldung und Mitwirkung", "Feedback and contributions"),
+            ("Entwicklung und Qualität", "Development and quality"),
+            ("Lizenz", "License"),
+        )
+        for path, headings in (
+            ("README.md", [pair[0] for pair in section_pairs]),
+            ("README.en.md", [pair[1] for pair in section_pairs]),
+        ):
+            actual = re.findall(r"(?m)^## (.+)$", pages[path])
+            with self.subTest(path=path):
+                self.assertEqual(actual, headings)
+
+        class LinkCollector(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.targets = []
+
+            def handle_starttag(self, _tag, attrs):
+                for name, value in attrs:
+                    if name in ("href", "src") and value:
+                        self.targets.append(value)
+                    elif name == "srcset" and value:
+                        self.targets.extend(candidate.strip().split()[0]
+                                            for candidate in value.split(",") if candidate.strip())
+
+        for name, text in pages.items():
+            source = re.sub(r"```.*?```", "", text, flags=re.S)
+            targets = re.findall(r"\[[^\]]*\]\(([^)]+)\)", source)
+            html_links = LinkCollector()
+            html_links.feed(source)
+            targets.extend(html_links.targets)
+            for target in targets:
+                target = target.strip().strip("<>").split(' "', 1)[0]
+                parsed = urlsplit(target)
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    continue
+                resolved = (project / unquote(parsed.path)).resolve()
+                with self.subTest(path=name, target=target):
+                    self.assertTrue(resolved.exists(), f"Broken local public link: {target}")
+
     def test_public_readme_uses_dated_authoritative_version_link_without_allowing_stale_or_missing_stands(self):
         for path,target in (("README.md","01_Repository/Glide/VERSION"),
                             ("01_Repository/Glide/README.md","VERSION")):

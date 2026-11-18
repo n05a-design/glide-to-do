@@ -2,11 +2,13 @@
 
 ## GitHub-Projektseite DE/EN (18.11.2026)
 
-**Kandidat:** Auf Basis von `main` nach PR #145 (`9a91660a`) sind `README.md` gekürzt und `README.en.md` als vollständige englische Gegenfassung ergänzt. Die englische Seite kennzeichnet deutschsprachige Showcase- und Handbuchlinks ausdrücklich. Beide Seiten weisen die Aufnahmen aus Glide 3.60.0 als Showcase-Beispiele aus, nicht als Prüf- oder Paketnachweis für 1.0.0.
+**Stand:** PR #146 wurde am 18.11.2026 in `main` gemergt (Merge-Commit `6d373719`). `README.md` ist gekürzt; `README.en.md` ergänzt die vollständige englische Gegenfassung und kennzeichnet deutschsprachige Showcase- und Handbuchlinks ausdrücklich. Beide Seiten weisen die Aufnahmen aus Glide 3.60.0 als Showcase-Beispiele aus, nicht als Prüf- oder Paketnachweis für 1.0.0.
 
-**Lokale Prüfung:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>` endete auf macOS mit CPython 3.14.5 mit Exitcode 0. Syntaxprüfung (447 Python-Dateien), Dokumentationsindex und 541 lokale Markdown-Dateilinks, Werkzeugtests, Fachlogik-Unit-Tests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. `git diff --check` war sauber; der Impeccable-Detektor meldete keine Befunde. Nicht blockierende Hinweise: die zwei zulässigen Locale-Abweichungen in `07_Python-Versionen` und das wegen eines Zertifikatsfehlers nicht abrufbare Fremdpaket `tkinterdnd2`.
+**Lokale Prüfung:** Der dokumentierte Befehl `cd 01_Repository/Glide && GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>` endete auf macOS mit CPython 3.14.5 mit Exitcode 0. Syntaxprüfung (447 Python-Dateien), Dokumentationsindex und 541 lokale Markdown-Dateilinks, Werkzeugtests, Fachlogik-Unit-Tests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. `git diff --check` war sauber; der Impeccable-Detektor meldete keine Befunde. Nicht blockierende Hinweise: die zwei zulässigen Locale-Abweichungen in `07_Python-Versionen` und das wegen eines Zertifikatsfehlers nicht abrufbare Fremdpaket `tkinterdnd2`.
 
-**Grenzen:** Der README-Kandidat ist lokal und noch nicht gemergt. Die CI-Grundstufe ist kein Linux-/Windows-Volllauf; für diesen Kandidaten liegt kein Remote-CI- oder Windows-Paketnachweis vor. Neue 1.0.0-Aufnahmen und ein kurzes GIF fehlen weiterhin. Die grünen PR-#145-Prüfungen gelten nicht für diesen Stand.
+**Remote-Prüfung:** Auf PR-#146-Head `7905f0b2` bestanden Grundstufe, CodeQL und Linux-Vollprüfung; die Windows-Vollprüfung war bei der letzten Abfrage noch in Arbeit. UI-Diagnose und Tk-/Screenreader-Jobs wurden übersprungen. PR-#145-Ergebnisse wurden nicht auf diesen Stand übertragen.
+
+**Grenzen:** Neue 1.0.0-Aufnahmen und ein kurzes GIF fehlen weiterhin. CI-Ergebnisse gelten jeweils nur für den geprüften Head; Paketbau und menschliche Sicht-/Bedienabnahme sind durch diese Dokumentänderung nicht nachgewiesen.
 
 ## Soll-Ist-Abgleich und Dokumentationspakete (18.11.2026)
 
@@ -30,7 +32,7 @@
 
 | Bereich | Tatsächlicher Nachweis |
 |---|---|
-| README | Der lokale Folge-Kandidat kürzt die deutsche Hauptseite und ergänzt eine vollständige englische Fassung mit entsprechender Navigation, Funktionen, Grenzen und Downloadstatus. Die Seiten sind noch nicht gemergt; die Screenshots stammen aus 3.60.0 und sind keine 1.0.0-Prüfbelege. |
+| README | PR #146 hat die deutsche Hauptseite gekürzt und eine vollständige englische Fassung mit entsprechender Navigation, Funktionen, Grenzen und Downloadstatus ergänzt. Die Screenshots stammen aus 3.60.0 und sind keine 1.0.0-Prüfbelege. |
 | Wiki | Wiki ist im Repository aktiviert; versionierte Wiki-Quellseiten oder eine geprüfte Synchronisation sind nicht vorhanden. |
 | Issues | `bug` und `enhancement` sowie zweisprachige Fehler-/Wunschformulare vorhanden. Keine Dokumentations-, Lokalisierungs-, Barrierefreiheits- und Technische-Schulden-Formulare. |
 | PR/Governance | Zweisprachige PR-Vorlage und Pflegematrix vorhanden; Automatisierung für Projektstatus, Issue-Typen, Priorität und vollständige Sprach-/Wiki-/Fundingprüfung fehlt. |
@@ -44,7 +46,11 @@
 
 **Glide-Shell:** Die vier Shell-Bausteine und das Shell-Konzept sind vorhanden. Ein wiederverwendbarer Host-/Locale-Kontext, Shell-Übersetzungsschnittstelle, Namespaces, Sprachwechselereignisse und Shell-Accessibility-/Fehlerkataloge sind nicht nachgewiesen.
 
-**Gesamtfazit:** Der 906-Zeilen-Masterprompt ist nicht vollständig umgesetzt. Der lokale README-Kandidat schließt einen Teil der öffentlichen EN/DE-Projektseitendokumentation, ist aber noch nicht gemergt; die verlinkten Handbücher sind nicht vollständig englisch. Offen bleiben Wiki-Quellen, vollständige App-i18n, Shell-Lokalisierungsvertrag, begrenzte GitHub-Automatisierung und externe GitHub-/Paket-/Funding-Freigaben. Keine dieser Lücken darf als abgeschlossen oder veröffentlicht gelten.
+**Gesamtfazit:** Der 906-Zeilen-Masterprompt ist nicht vollständig umgesetzt. PR #146 schließt einen Teil der öffentlichen EN/DE-Projektseitendokumentation; die verlinkten Handbücher sind nicht vollständig englisch. Offen bleiben vollständige App-i18n, Shell-Lokalisierungsvertrag, begrenzte GitHub-Automatisierung und externe GitHub-/Paket-/Funding-Freigaben. Wiki-Inhalte/Synchronisation sind nach der Inhaberwahl I11 B („vorerst nur Dokumentationsstand pflegen“) nicht ausgewählt. Keine dieser Lücken darf als abgeschlossen oder veröffentlicht gelten.
+
+## Öffentliche README-Prüfung in der CI (18.11.2026)
+
+Der Werkzeugtest T299 (`tests/tools/test_standpruefung.py`) prüft jetzt die Sprachumschaltung beider öffentlichen READMEs, die parallele Kernabschnittsstruktur sowie lokale Datei-Links aus Markdown und HTML (einschließlich Bildquellen). Der gezielte T299-Lauf bestand mit 22/22 Tests; `test_glide_system.py` bestand mit 5/5. Die CI-Grundstufe bestand lokal auf macOS mit CPython 3.14.5 und isoliertem `GLIDE_DATA_DIR` (Exitcode 0; 447 Python-Dateien, 541 Markdown-Dateilinks und Werkzeug-/Fachlogiktests eingeschlossen). Zwei zulässige Lieferstands-Locale-Abweichungen und ein TLS-Zertifikatsfehler beim Fremdpaket `tkinterdnd2` blieben Hinweise. Die Prüfung läuft über die vorhandene Werkzeugtestsammlung; es wurde keine Abhängigkeit oder Workflow-Berechtigung ergänzt. Sie belegt weder Übersetzungsqualität noch externe Weblinks und ersetzt keine manuelle Inhaltsprüfung. Die 329 Test-/Werkzeugdateien bleiben unverändert; die Dokumentationsänderung ist noch nicht in `main`.
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
