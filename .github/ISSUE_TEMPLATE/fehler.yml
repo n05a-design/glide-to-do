@@ -1,25 +1,28 @@
-name: Fehler melden
-description: Etwas in Glide funktioniert nicht wie beschrieben.
-title: "Fehler: "
-labels: ["Fehler"]
+name: Fehler melden / Report a bug
+description: Etwas funktioniert nicht wie beschrieben / Something does not work as described.
+title: "[Fehler/Bug] "
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
         Danke für die Meldung! Bitte keine echten Inhalte, Namen oder Pfade anhängen – nur künstliche Beispieldaten oder den Showcase.
         Sicherheitslücken bitte nicht hier, sondern vertraulich nach der Sicherheitsrichtlinie (SECURITY.md) melden.
+
+        Thank you for reporting this! Do not include real content, names, or paths—use synthetic data or the Showcase only.
+        Do not report security vulnerabilities here; use the confidential process in SECURITY.md.
   - type: input
     id: version
     attributes:
-      label: Glide-Version
-      description: Hilfe › Über Glide
-      placeholder: "Versionsnummer aus Hilfe › Über Glide"
+      label: Glide-Version / Glide version
+      description: Hilfe › Über Glide / Help › About Glide
+      placeholder: "Versionsnummer / Version number"
     validations:
       required: true
   - type: dropdown
     id: system
     attributes:
-      label: System
+      label: System / Operating system
       options:
         - Windows
         - macOS
@@ -29,31 +32,31 @@ body:
   - type: dropdown
     id: fassung
     attributes:
-      label: Fassung
+      label: Fassung / Distribution
       options:
-        - Eigenständiges Paket
-        - Python-Fassung
+        - Eigenständiges Paket / Standalone package
+        - Python-Fassung / Python distribution
     validations:
       required: true
   - type: textarea
     id: schritte
     attributes:
-      label: Was hast du gemacht?
-      description: Schritte, mit denen sich der Fehler wiederholen lässt.
+      label: Was hast du gemacht? / What did you do?
+      description: Schritte, mit denen sich der Fehler wiederholen lässt / Steps to reproduce the issue
       placeholder: |
-        1. Heute öffnen
+        1. Schritte zur Wiederholung / Steps to reproduce
         2. …
     validations:
       required: true
   - type: textarea
     id: erwartet
     attributes:
-      label: Was hast du erwartet, und was ist passiert?
+      label: Was hast du erwartet, und was ist passiert? / What did you expect, and what happened?
     validations:
       required: true
   - type: textarea
     id: protokoll
     attributes:
-      label: Fehlerprotokoll (optional)
-      description: Hilfe › Fehlerprotokoll öffnen – bitte vor dem Einfügen auf persönliche Angaben prüfen.
+      label: Fehlerprotokoll (optional) / Error log (optional)
+      description: Hilfe › Fehlerprotokoll öffnen / Help › Open error log. Bitte vor dem Einfügen auf persönliche Angaben prüfen / Review for personal information before pasting.
       render: text

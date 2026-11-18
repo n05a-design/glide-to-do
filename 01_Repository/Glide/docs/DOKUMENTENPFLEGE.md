@@ -2,7 +2,7 @@
 
 **Schutzauftrag 08.11.2026:** Im laufenden Gesamt-/Steps-Audit bleiben die historischen Originalnachweise erhalten. Die vorbereitete Alterskürzung von `tests/qa-3.50.0` und der zugehörigen Releaseplanungsfixture wurde zurückgenommen; 225 Dateien gegen die Git-Blobs von Main `d7e017f` geprüft. `ablagegroesse.GESCHUETZTE_QA_VERSIONEN` und `GESCHUETZTE_REFERENZEN` schützen diesen konkreten Bestand auch vor `ablage_kuerzen.py`. Die Größen-, Bild- und Fremdrestprüfungen gelten weiter. Der ursprüngliche Kürzungsnachweis bleibt datierte Vorgeschichte, der [Bewahrungsnachtrag](../tests/qa-3.50.7/validierung_2026-11-07/bewahrung_nachtrag.json) belegt die Rücknahme. Allgemeine neue Archivkopien entstehen dadurch nicht.
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 
@@ -30,7 +30,8 @@ Diese Tabelle ist die zentrale Pflegematrix. Sie verbindet den jeweils führende
 
 | Geänderter Aspekt | Führende Quelle | Zusätzlich auf Auswirkungen prüfen |
 |---|---|---|
-| Öffentlicher Projekteinstieg und Navigation | [Projekt-README](../../../README.md), [Contributing-Einstieg](../../../CONTRIBUTING.md) für Mitwirkung | [Dokumentationsindex](00_INDEX.md), [technischer Einstieg](../README.md), [GitHub-Auftritt](10_VEROEFFENTLICHUNG.md#github-auftritt); jeweils Einstieg und Links pflegen, keine eigenen Fachregister |
+| Öffentlicher Projekteinstieg und Navigation | [Projekt-README](../../../README.md), [Contributing-Einstieg](../../../CONTRIBUTING.md) für Mitwirkung, zweisprachige Formulare unter [`.github/ISSUE_TEMPLATE/`](../../../.github/ISSUE_TEMPLATE/), [`PULL_REQUEST_TEMPLATE.md`](../../../.github/PULL_REQUEST_TEMPLATE.md) | [Dokumentationsindex](00_INDEX.md), [technischer Einstieg](../README.md), [GitHub-Auftritt](10_VEROEFFENTLICHUNG.md#github-auftritt); Formularlabels gegen die vorhandenen Repository-Labels prüfen, Sicherheits-/Handbuchkontakte aktuell halten; keine eigenen Fachregister |
+| GitHub Community-Prozess, Labels und Issue-/PR-Vorlagen | [Repository-Labels](10_VEROEFFENTLICHUNG.md#verifizierter-github-stand-18112026), [Issue-Formulare](../../../.github/ISSUE_TEMPLATE/), [Pull-Request-Vorlage](../../../.github/PULL_REQUEST_TEMPLATE.md) | [Contributing-Einstieg](../../../CONTRIBUTING.md), Projekt-README und Sicherheitsrichtlinie; nur tatsächlich konfigurierte Labels verwenden, Vorlagen zweisprachig und mit den Produktgrenzen konsistent halten |
 | Aufgaben, Prioritäten, Auftrag und Restumfang | [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) als einzige Roadmap | [Arbeitsrichtung](ARBEITSRICHTUNG.md) bei Entscheidungen; [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) für die nächste Sitzung; Implementierungs- und Abnahmestatus mit [QA](07_QA_BERICHT.md) abgleichen |
 | Arbeitsstand und nächste Sitzung | [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) | Auf Roadmap und QA verweisen; keine zweite Aufgaben-, Messwert- oder Paketstatusliste aufbauen |
 | Produktentscheidung und Arbeitsablauf | [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Arbeitsregeln](../AGENTS.md) als Einstieg | Roadmap, [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), betroffene Fachverträge und Contributing-Einstieg; [CLAUDE.md](../../../CLAUDE.md) verweist auf die Regeln |

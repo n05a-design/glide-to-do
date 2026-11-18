@@ -2,17 +2,17 @@
 
 Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.40
 
-Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick über den tatsächlichen Entwicklungsstand, die verbindliche Dokumentenautorität, die nächsten priorisierten Schritte und die verbindlichen Arbeitsregeln für KI-Agenten. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den verbindlichen Fahrplan zu Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) sowie [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129), Prüfergebnisse der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). **Getrennte Prüfstände:** PR [#141](https://github.com/n05a-design/glide-to-do/pull/141) wurde in den Release-Branch und PR [#138](https://github.com/n05a-design/glide-to-do/pull/138) am 18.11.2026 in `main` gemergt (Merge-Commit `a303e405`). PR #138 hatte auf Head `7d2d5cf7` grüne Pflichtchecks; die nachgelagerten `main`-Workflows liefen bei der Erfassung noch. Der lokale macOS-Volllauf des Worktrees `d894e2a` bestand mit 135/135 ausgeführten Schritten; das native macOS-Paket samt isoliertem Start ist geprüft. Die lokalen Test-/Dokumentnachträge liegen bereits als Commit `e03f651f` auf GitHub und werden in [Folge-PR #142](https://github.com/n05a-design/glide-to-do/pull/142) sauber auf `main` weitergeführt; dessen CI-Läufe sind gestartet. Auf die nachgelagerten Main-Workflows wird nicht gewartet. Screenshots wurden auf macOS übersprungen; menschliche Sicht-/Bedienabnahme sowie NVDA-, AT-SPI/Orca- und UI-Diagnosejobs sind nicht belegt. Siehe [Plan §21.115](Glide_Entwicklungsplan.md#21115-ci-reparatur-des-release-pr-138-18112026), [§21.116](Glide_Entwicklungsplan.md#21116-lokaler-macos-volllauf-und-paketbau-18112026) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokaler-macos-volllauf-und-paketbau-18112026). Frühere Übergabestände trägt Git.
+Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). **Getrennte Prüfstände:** PR [#141](https://github.com/n05a-design/glide-to-do/pull/141) und Release-PR [#138](https://github.com/n05a-design/glide-to-do/pull/138) wurden am 18.11.2026 nach `main` gemergt (Merge-Commit `a303e405`). PR #138 hatte auf Head `7d2d5cf7` grüne Pflichtchecks. Der lokale macOS-Volllauf des Worktrees `d894e2a` bestand mit 135/135 ausgeführten Schritten; das native macOS-Paket samt isoliertem Start ist gesondert geprüft. Der Quellstand 1.0.0 ist kein öffentlicher Release: am 18.11. wurden weder Tags noch GitHub-Releases gefunden. Vollständige UI-Lokalisierung, externe Homebrew-/winget-Einreichungen, menschliche Sicht-/Bedienabnahme und übersprungene UI-/Barrierefreiheitsjobs bleiben offen. Der aktuelle Dokumentationsschnitt ergänzt drei Pakete (i18n-Abgleich, zweisprachige Community-Vorlagen, Release-/Governance-Konsolidierung); Umsetzung und offene Nachweise stehen in Plan §21.117 und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Frühere Übergabestände trägt Git.
 
 > [!IMPORTANT]
-> **Aktueller strategischer Fokus: Meilenstein Release 1.0 (v1.0.0 / D93)**
-> Der Inhaber hat am 17.11.2026 den verbindlichen Feature Freeze für die erste Hauptversion **Glide 1.0.0** beschlossen, um endlosen Scope Creep zu verhindern. Ziel ist die Verteilung als professionelles GitHub Release sowie über **Homebrew** (macOS Cask) und **winget** (Windows).
+> **Aktueller strategischer Fokus: Soll-Ist-Abschluss Release 1.0 (v1.0.0 / D93)**
+> Der Inhaber beschloss am 17.11.2026 den Feature Freeze für Glide 1.0.0. Der Quellstand wurde gemergt, aber nicht öffentlich veröffentlicht. Das Soll – vollständige DE/EN-Oberfläche und bereitgestellte GitHub-/Homebrew-/winget-Releases – ist noch nicht vollständig erfüllt.
 > - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ **ABGESCHLOSSEN** (PR #130, PR #133, V1.39, T328)
-> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ **ABGESCHLOSSEN** (Modul M100 `i18n.py`, JSON-Kataloge `de.json`/`en.json`, T329, V1.40, PR #134)
-> - **Etappe 3: Paketierung & Installer:** ✅ **ABGESCHLOSSEN** (macOS DMG, Windows Inno-Setup `Glide-setup.exe`, Homebrew Cask, winget Manifeste, PR #135)
-> - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ◐ PR #138 wurde in `main` gemergt; die nachgelagerten `main`-Workflows laufen, menschliche Sicht-/Bedienabnahme bleibt offen
+> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ◐ Spracheinstellung, Kataloge und ausgewählte Menüs/Seitenleistenbeschriftungen; große Teile der Oberfläche nicht lokalisiert.
+> - **Etappe 3: Paketierung & Installer:** ◐ Bauwege, Installer und Paketmanager-Manifeste technisch vorbereitet; Homebrew-/winget-Vorlagen nicht eingereicht.
+> - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ◐ Quellstand in `main`, Pflichtchecks auf PR #138 grün; kein Tag/Release, öffentliche Einreichung und menschliche Abnahme offen.
 >
-> **Erste Handgriffe einer neuen Sitzung:** (1) Lokalen Mac-Nachweis in [Plan §21.116](Glide_Entwicklungsplan.md#21116-lokaler-macos-volllauf-und-paketbau-18112026) und [QA](../01_Repository/Glide/docs/07_QA_BERICHT.md#lokaler-macos-volllauf-und-paketbau-18112026) sowie den aktuellen Stand in [§21.115](Glide_Entwicklungsplan.md#21115-ci-reparatur-des-release-pr-138-18112026) lesen. (2) CI-Ergebnis von [PR #142](https://github.com/n05a-design/glide-to-do/pull/142) auswerten; die nachgelagerten Main-Workflows sind keine Voraussetzung dafür. (3) Übersprungene Barrierefreiheits-/UI-Diagnosejobs und menschliche Sicht-/Bedienabnahme getrennt offen halten; erst nach vollständiger Freigabe mit Post-1.0 Aufgaben fortfahren.
+> **Erste Handgriffe einer neuen Sitzung:** (1) Plan §21.117 und den aktuellen QA-Bericht lesen. (2) Den Live-Status des aktuellen Folge-PR samt Checks frisch abfragen. (3) Issue #129 und Veröffentlichungsvoraussetzungen mit den tatsächlich erledigten Lokalisierungs-, Paketmanager- und Abnahmegates abgleichen. Kontoaktionen und Release-Freigaben bleiben beim Inhaber.
 
 ---
 
@@ -36,7 +36,7 @@ Einstieg für die nächste Sitzung: ganzheitlicher, kontextbasierter Überblick 
 | Achse | Stand |
 |---|---|
 | **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.40** (100 Source-Module M001–M100, 115 Integrationssuiten, 329 Test-/Werkzeugdateien, 5 Analysen). `main` enthält den Release-Cut 1.0.0 aus PR #138 (Merge-Commit `a303e405`); nachgelagerte Main-Workflows liefen bei der Erfassung noch. PR #141 ist ebenfalls gemergt. Der lokale macOS-Nachweis auf `d894e2a` ist separat grün; lokale Test-/Dokumentnachträge sind als Commit `e03f651f` auf GitHub veröffentlicht und in Folge-PR #142 auf `main` eingereicht. |
-| **Meilenstein Release 1.0** | Verbindlicher Feature Freeze (D93). Vier geordnete Etappen gemäß [`Glide_Meilenstein_v1_Plan.md`](Glide_Meilenstein_v1_Plan.md) und [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129): Alle 4 Etappen (Skill K4/K5, i18n DE/EN, Installer/Paketmanager, Release Cut v1.0.0) vollständig umgesetzt. |
+| **Meilenstein Release 1.0** | Verbindlicher Feature Freeze (D93). Etappe 1 Skill K4/K5 ist erledigt. Etappe 2 i18n ist teilweise integriert; vollständige UI-Lokalisierung fehlt. Etappe 3 ist technisch vorbereitet, aber Homebrew-/winget-Vorlagen sind nicht eingereicht. Etappe 4 Quellcut ist in `main`; Tag, GitHub-Release und menschliche Abnahme fehlen. Issue #129 bleibt offen. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
 | **Shell-Pakete (3a, 3c, 4, 5)** | Vier anwendungsneutrale Shell-Bausteine flach in `src/glide`, Modulbudget WA-50 vollständig eingehalten:<br/>1. `modal_session.py` (M096, 3.62.0, T317): Entkoppelter modaler Warteweg.<br/>2. `window_lifetime.py` (M097, 3.64.0, T318/T320): Zeitgeberbesitz je Fenster/Ansicht (`after_scope`).<br/>3. `custom_controls.py` (M098, 3.67.0, T312): Thementaugliche Canvas-Bedienelemente.<br/>4. `desktop_adapter.py` (M099, 3.68.0, T326): Menüleiste, Tastaturkürzel, OS-Aktionen.<br/>Fokusrückgabe D87 (3.65.0) in modalen Dialogen aktiv. Bündelung zu `glide_shell` und Demonstrationshost (Paket 6) sind Post-1.0. |
 | **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Lokaler macOS-Volllauf für Glide 1.0.0: 135 ausgeführte Schritte grün, 2 begründete Übersprünge; natives macOS-Paket und isolierter Start ebenfalls grün ([§21.116](Glide_Entwicklungsplan.md#21116-lokaler-macos-volllauf-und-paketbau-18112026)). Gilt für den lokalen Worktree `d894e2a` mit den damals lokalen Testkorrekturen. PR #141 und PR #138 sind gemergt; PR #138 hatte auf `7d2d5cf7` grüne Pflichtchecks. PR #142 ist gegen `main` offen und CI läuft; menschliche Sicht-/Bedienabnahme sowie gesonderte Barrierefreiheits-/UI-Diagnosejobs bleiben offen. |
@@ -82,15 +82,17 @@ flowchart TD
 
 ## 3. Nächste Arbeit und Handlungsanweisungen
 
-Die Arbeiten folgten strikt dem [Meilenstein-Plan Release 1.0](Glide_Meilenstein_v1_Plan.md):
+Der aktuelle Folgeauftrag ist der Soll-Ist-Abschluss von Release 1.0 und die Konsolidierung der drei beauftragten Dokumentationspakete. Führender Arbeits- und Prüfstand steht in Entwicklungsplan §21.117 und im aktuellen QA-Bericht. E-P1–E-P5 sowie sonstige Funktionsvorschläge werden dadurch nicht ausgewählt. Release-, Konto- und Produktentscheidungen bleiben beim Inhaber.
+
+Der verbindliche Soll-Umfang steht im [Meilenstein-Plan Release 1.0](Glide_Meilenstein_v1_Plan.md); der aktuelle Iststand und die drei Dokumentationspakete stehen im Entwicklungsplan [§21.117](Glide_Entwicklungsplan.md#21117-soll-ist-abgleich-release-100-und-dokumentationspakete-18112026). Die nachfolgende technische Beschreibung ist Zielumfang, keine Behauptung, dass alle Punkte bereits umgesetzt oder veröffentlicht sind.
 
 ```mermaid
 flowchart TD
     subgraph MEILENSTEIN ["Meilenstein Version 1.0 (v1.0.0)"]
         E1["Etappe 1: Skill komplettieren (K4 & K5)<br/><b>✅ ERLEDIGT (PR #130, V1.39)</b>"]
-        E2["Etappe 2: Mehrsprachigkeit i18n DE/EN<br/><b>✅ ERLEDIGT (PR #134, V1.40)</b>"]
-        E3["Etappe 3: Paketbau, Installer & Paketmanager<br/><b>✅ ERLEDIGT (PR #135)</b>"]
-        E4["Etappe 4: Release Cut v1.0.0 & Veröffentlichung<br/><b>✅ ERLEDIGT</b>"]
+        E2["Etappe 2: Mehrsprachigkeit i18n DE/EN<br/><b>◐ TEILWEISE</b>"]
+        E3["Etappe 3: Paketbau, Installer & Paketmanager<br/><b>◐ VORBEREITET, NICHT EINGEREICHT</b>"]
+        E4["Etappe 4: Release Cut v1.0.0 & Veröffentlichung<br/><b>◐ QUELLCUT GEMERGT, RELEASE OFFEN</b>"]
         E1 --> E2 --> E3 --> E4
     end
 
@@ -105,19 +107,19 @@ flowchart TD
 
 ---
 
-### Abgeschlossene Etappen bis Release 1.0
+### Status der Etappen bis Release 1.0
 
 - **Etappe 1 (Skill K4 & K5):** Vollständige Dateianhang-Unterstützung im ZIP-Container, Bildauflösung, Export-Aktion, Manifest-Hashprüfung.
-- **Etappe 2 (Mehrsprachigkeit i18n DE/EN):** Modul `src/glide/i18n.py` (M100), Übersetzungskataloge `de.json` und `en.json`, Einstellungsdialog, Menü- und Tastaturschaltung (`Ctrl+Shift+L` / `Cmd+Shift+L`), T329.
-- **Etappe 3 (Paketbau & Installer):** macOS DMG, Windows Inno-Setup Installer (`glide_setup.iss`), Homebrew Cask, winget Manifeste, CI-Workflows.
-- **Etappe 4 (Release Cut v1.0.0):** Versionssprung auf 1.0.0, Aktualisierung aller Begleitdokumente, Test-Fixtures, Standprüfung 0 Befunde, Byte-Gleichheit `07_Python-Versionen/`.
+- **Etappe 2 (Mehrsprachigkeit i18n DE/EN) – teilweise:** i18n-Modul, Kataloge, Spracheinstellung sowie ausgewählte Menü- und Seitenleistenbeschriftungen sind vorhanden. Vollständige Lokalisierung aller Bereiche ist nicht erreicht.
+- **Etappe 3 (Paketbau & Installer) – technische Vorbereitung erledigt:** Bauwege, Windows-Installer und Homebrew-/winget-Manifeste sind vorbereitet; externe Einreichung und Installationsprüfung fehlen.
+- **Etappe 4 (Release Cut v1.0.0) – teilweise:** Quellstand 1.0.0 und Pflichtchecks von PR #138 sind in `main`; Tag, GitHub-Release, menschliche Abnahme sowie öffentliche Paketmanager-Einreichung fehlen.
 
 ---
 
-### Nächste Schritte: Post-1.0 Arbeiten (Version 1.1+)
+### Offene Soll-Lokalisierung (Etappe 2)
 
 #### Motivation & Ziel
-Für eine offizielle Verteilung über Homebrew (international) und winget sowie den professionellen Einsatz ist eine vollständige Zweisprachigkeit (**Englisch und Deutsch**) zwingend erforderlich. Nutzer können die Sprache in den Einstellungen wählen; Standard ist die automatische Erkennung anhand des Betriebssystems.
+Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenstein vollständige Zweisprachigkeit (**Englisch und Deutsch**). Die Spracheinstellung existiert, aber der Integrationsstand deckt die Oberfläche nicht vollständig ab. Die folgenden Bereiche beschreiben den Soll-Umfang; die noch fehlende Arbeit ist im Entwicklungsplan nachgeführt.
 
 #### Architektur & Moduldesign M100 (`src/glide/i18n.py`)
 1. **Modulstatus:** Neues Modul M100 im [Glide-System](../01_Repository/Glide/src/glide/README.md), abgelegt unter `01_Repository/Glide/src/glide/i18n.py`.
@@ -157,7 +159,7 @@ Für eine offizielle Verteilung über Homebrew (international) und winget sowie 
 
 ---
 
-### Schritt 2: Etappe 3 – Paketbau, Installer & Paketmanager-Vorbereitung [GEPLANT]
+### Schritt 2: Etappe 3 – Paketbau, Installer & Paketmanager-Vorbereitung [TECHNISCH VORBEREITET; NICHT VERÖFFENTLICHT]
 
 #### 1. macOS (Homebrew Cask)
 - **Paket:** `.dmg` und `.tar.gz` werden über `.github/workflows/macos-paket.yml` gebaut (arm64 Apple Silicon).
@@ -185,15 +187,15 @@ Für eine offizielle Verteilung über Homebrew (international) und winget sowie 
 
 ---
 
-### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [GEPLANT]
+### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [QUELLCUT GEMERGT; ÖFFENTLICHE VERÖFFENTLICHUNG OFFEN]
 
-1. **Versionswechsel:** `python3 scripts/pflege/versionswechsel.py 1.0.0 <datum>` hebt die App-Version von 3.69.0 auf `1.0.0`.
+1. **Versionswechsel:** Der Quellstand wurde am 17.11.2026 auf `1.0.0` angehoben und PR #138 am 18.11.2026 nach `main` gemergt.
 2. **Release-Artefakte:**
    - `Glide-1.0.0-macos-arm64.dmg` + `.sha256`
    - `Glide-1.0.0-windows-x64-setup.exe` + `.sha256`
    - `Glide-1.0.0-windows-x64.zip` + `.sha256`
    - `glide-to-do-skill-v1.0.0.zip` + `.sha256`
-3. **Veröffentlichung:** Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren.
+3. **Veröffentlichung:** Noch offen: Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren. Vorher verbleibende Lokalisierungs- und Abnahmegates abschließen; Kontofreigaben liegen beim Inhaber.
 
 ---
 
