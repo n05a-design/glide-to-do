@@ -1058,9 +1058,22 @@ def fall_kompakt(lauf):
         taste(text, sequence, lauf)
         assert not app.compact_mode_active(), ("Falsche Modifiertasten schalten um", sequence)
     assert text.get("1.0", "end-1c") == vorher, "Kürzel verändert den Seitentext"
-    ansicht = next(menu for titel, menu in app.action_menus if titel == "Ansicht")
-    assert ansicht.type(0) == "command" and ansicht.entrycget(0, "label") == "Kompaktmodus", \
-        "Kompaktmodus muss im Menü Ansicht direkt an erster Stelle stehen"
+    originale_sprache = lauf.mod.glide_i18n.get_language()
+    try:
+        for sprache, erwarteter_titel, erwartete_beschriftung in (
+            ("de", "Ansicht", "Kompaktmodus"),
+            ("en", "View", "Compact mode"),
+        ):
+            lauf.mod.glide_i18n.set_language(sprache)
+            app.create_menubar()
+            ansicht = next(menu for titel, menu in app.action_menus if titel == erwarteter_titel)
+            assert ansicht.type(0) == "command" and ansicht.entrycget(0, "label") == erwartete_beschriftung, \
+                f"Kompaktmodus muss im Menü Ansicht direkt an erster Stelle stehen ({sprache})"
+    finally:
+        lauf.mod.glide_i18n.set_language(originale_sprache)
+        app.create_menubar()
+    ansichtstitel = lauf.mod.glide_i18n.t("menu.view", "Ansicht")
+    ansicht = next(menu for titel, menu in app.action_menus if titel == ansichtstitel)
     ansicht.invoke(0)
     idle(lauf)
     assert app.compact_mode_active(), "Menüeintrag schaltet nicht in den Kompaktmodus"
