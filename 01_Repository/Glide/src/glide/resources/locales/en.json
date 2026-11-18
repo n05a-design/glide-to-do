@@ -54,7 +54,7 @@
   "menu.view.history": "History",
   "menu.view.sidebar": "Toggle sidebar",
   "menu.view.inspector": "Toggle inspector",
-  "menu.view.compact_mode": "Toggle compact mode",
+  "menu.view.compact_mode": "Compact mode",
   "menu.view.zoom_in": "Zoom in",
   "menu.view.zoom_out": "Zoom out",
   "menu.view.zoom_reset": "Actual size",
