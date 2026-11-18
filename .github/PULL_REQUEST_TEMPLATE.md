@@ -1,5 +1,7 @@
 ## Überblick / Summary
 
+Stand / Version: Glide 1.0.0
+
 <!-- Was ändert sich, und warum? / What changes, and why? -->
 
 ## Änderungen / Changes
