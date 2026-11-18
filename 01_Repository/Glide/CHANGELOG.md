@@ -1,18 +1,18 @@
 # Änderungsverlauf
 
-Stand 17.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 18.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
-## 1.0.0 – 17.11.2026
+## 1.0.0 – 17.11.2026 (Quellstand, nicht veröffentlicht)
 
-Offizieller Meilenstein-Release 1.0 (D93) von Glide. Vollständige Mehrsprachigkeit (Deutsch und Englisch), standardkonforme Paketierung und Installer für macOS und Windows, Paketmanager-Unterstützung (Homebrew Cask, winget) und integrierter KI-Agenten-Skill `glide-to-do`. Datenformat 26 und Austauschformat 2 unverändert.
+Der Meilenstein-Schnitt D93 ist in `main` gemergt. Am 18.11.2026 waren kein Tag und kein GitHub Release veröffentlicht; die Einreichung bei Homebrew und winget sowie die abschließende menschliche Abnahme stehen aus. Datenformat 26 und Austauschformat 2 unverändert.
 
-- Vollständige Mehrsprachigkeit (i18n DE/EN, Etappe 2): Zentrales i18n-Subsystem (`src/glide/i18n.py`, `de.json`, `en.json`) mit dynamischer Spracherkennung, Menü- und Tastaturschaltung (`Ctrl+Shift+L` / `Cmd+Shift+L`) ohne Neustart. Vollständige Lokalisierung aller UI-Texte, Menüs, Statusmeldungen, Standardlisten und Dialoge. Neuer i18n-Test T329 (`test_i18n.py`, 11/11 OK).
+- Mehrsprachigkeit (i18n DE/EN, Etappe 2): Zentrales i18n-Subsystem (`src/glide/i18n.py`, `de.json`, `en.json`) mit dynamischer Spracherkennung, Spracheinstellung, Menü-/Tastatur- und ausgewählten Seitenleistenbeschriftungen. Die vollständige Lokalisierung der Oberfläche ist nicht umgesetzt; Dialoge, Werkzeugleisten, Status- und Rückmeldetexte sind teilweise weiterhin deutsch. T329 prüft die Kataloge und direkt referenzierte App-Schlüssel.
 - Installer & Paketierung (Etappe 3):
-  - macOS: Signiertes DMG-Image und Homebrew Cask (`packaging/homebrew/Casks/glide.rb`).
-  - Windows: Professioneller Inno-Setup-Installer (`packaging/windows/glide_setup.iss`) mit silent Installation (`/VERYSILENT`), Deinstallationsroutine und winget-Manifesten (`packaging/winget/manifests/s/Shaye/Glide/1.0.0/`).
+  - macOS: DMG-/TAR-Bauweg vorbereitet; die lokale Ad-hoc-Signatur ist keine Developer-ID-Signatur oder Notarisierung. Homebrew-Cask (`packaging/homebrew/Casks/glide.rb`) ist eine nicht eingereichte Vorlage.
+  - Windows: Inno-Setup-Installer (`packaging/windows/glide_setup.iss`) mit stiller Installation (`/VERYSILENT`), Deinstallationsroutine und winget-Manifesten (`packaging/winget/manifests/s/Shaye/Glide/1.0.0/`) als technische Vorbereitung.
 - KI-Agenten-Skill `glide-to-do` (Etappe 1): Exportierbarer und standardisierter KI-Skill für Claude Desktop, Cursor, Gemini CLI und Web-LLMs mit automatischer Prüfsummenvalidierung (`MANIFEST.json`).
-- Veröffentlichung & CI/CD (Etappe 4): Automatisierte GitHub Actions Release-Pipeline (`.github/workflows/release.yml`), die bei Release-Tags (`v*`) plattformspezifische Artefakte (macOS DMG, Windows Inno Setup EXE, Standalone ZIPs, Agent-Skill ZIP) baut, prüft und dem GitHub Release beifügt.
+- Veröffentlichung & CI/CD (Etappe 4): Automatisierte GitHub Actions Release-Pipeline (`.github/workflows/release.yml`) ist für Tags vorbereitet. Ein öffentliches Release und Release-Artefakte wurden nicht veröffentlicht.
 - Qualitätssicherung & Systemregister: 100 Module (M001–M100), 329 Testdateien (T001–T329), Glide-System V1.40, Modulbudget WA-50 eingehalten, 0 Befunde in der Standprüfung, byte-identischer 07-Lieferabgleich.
 
 

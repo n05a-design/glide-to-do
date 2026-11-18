@@ -1,8 +1,25 @@
 # Veröffentlichung – Glide
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
+
+## Verifizierter GitHub-Stand 18.11.2026
+
+Der Quellstand 1.0.0 wurde über PR #138 am 18.11.2026 in `main` gemergt (Merge-Commit `a303e405`). Das ist ein Release-Cut im Repository, keine erfolgte öffentliche Veröffentlichung. Die Prüfung dieses Stands ergab:
+
+| Bereich | Beobachteter Stand |
+|---|---|
+| GitHub Release und Tags | Keine veröffentlichten Releases und keine Git-Tags gefunden. |
+| Meilenstein | Issue [#129](https://github.com/n05a-design/glide-to-do/issues/129) ist offen; die vollständige UI-Lokalisierung, externe Paketmanager-Einreichungen und Freigabe bleiben offen. |
+| Pflichtprüfungen PR #138 | Grundstufe, CodeQL, Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem geprüften PR-Head erfolgreich. Nachgelagerte `main`-Workflows und PR #142 sind davon getrennt; deren aktuellen Status im [QA-Bericht](07_QA_BERICHT.md) prüfen. |
+| Native und menschliche Abnahme | Der lokale macOS-Volllauf und Paketstart sind gesondert belegt. Menschliche Sicht-/Bedienabnahme sowie übersprungene UI-/Barrierefreiheitsjobs sind nicht belegt. |
+| Issue- und PR-Vorlagen | Die damals vorhandenen deutschsprachigen Issue-Formulare verwendeten die Labels `Fehler` und `Wunsch`, während die Repository-Labels `bug` und `enhancement` heißen; eine PR-Vorlage fehlte. Die zweisprachige Korrektur und die PR-Vorlage werden in der aktuellen Nachpflege ergänzt. |
+| Community- und Kontofunktionen | Discussions sind aktiviert (sechs Kategorien, keine Diskussionen); `gh project list` ergab kein Projekt. Die Wiki-Funktion ist aktiviert, ein Wiki-Inhalt wurde nicht bestätigt. Keine Aktivierung oder Veröffentlichung daraus ableiten. |
+| Pflege und Finanzierung | Dependabot ist für GitHub Actions und pip wöchentlich konfiguriert. Eine `FUNDING.yml` fehlt. Funding, Wiki, Discussions und weitere Kontoeinstellungen bleiben Inhaberentscheidungen. |
+| Paketmanager | Homebrew- und winget-Manifeste sind Vorlagen im Hauptrepository, nicht in externe Repositories eingereicht. Ohne öffentliches Release gibt es keine erreichbaren Release-URLs oder Installationsabnahmen. |
+
+Die Aufnahme beruht auf GitHub-API/CLI-Abfragen vom 18.11.2026 und dem dokumentierten CI-Nachweis. Einstellungen, Kontostatus und Freigaben können sich ändern und sind vor einer tatsächlichen Veröffentlichung erneut zu prüfen.
 
 ## Releasecheckliste
 
@@ -87,7 +104,7 @@ Untersucht wurden rund 20 Aufgaben-, Notiz- und Produktivitäts-Apps auf GitHub 
 - **Verteilung [H]:** Keine untersuchte Desktop-App schickt Endnutzer zu Actions-Artefakten. Alle nutzen [Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases) (öffentlich, dauerhaft, ohne Anmeldung, stabiler Link `releases/latest/download/<datei>`) oder Stores/Flathub. Asset-Namen `Name-Version-OS-Arch.ext`, oft mit `SHA256SUMS.txt`. Artefakte verfallen in öffentlichen Repos nach höchstens 90 Tagen und verlangen eine Anmeldung. Seit Oktober 2025 gibt es unveränderliche Releases mit signierten Attestierungen.
 - **Unsignierte Pakete [H]:** Übliches Muster ist ein klarer Hinweis mit den Schritten je System und Prüfsummen. macOS: Systemeinstellungen › Datenschutz & Sicherheit › „Dennoch öffnen“, laut [Apple](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unknown-developer-mh40616/mac) etwa eine Stunde nach dem Startversuch verfügbar; Windows SmartScreen: „Weitere Informationen“ › „Trotzdem ausführen“ (Sekundärquelle). LocalSend liefert zusätzlich eine ausdrücklich unsignierte EXE; Mindwtr signiert kostenlos über die SignPath Foundation, was nach allgemeiner Kenntnis eine Open-Source-Lizenz voraussetzt [A].
 - **Auffindbarkeit [H]:** Die GitHub-Suche liest ohne Zusatz nur [Name, Beschreibung und Topics](https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories); höchstens [20 Topics](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics) zu je 50 Zeichen. `task-management-app` (55 Repos, Spitze 95 Sterne) und `productivity-app` (567 Repos) sind dünn besetzt und damit ein sofortiger Hebel; `task-manager` und `task-scheduler` führen überwiegend zu Job-Queues. Ein Längenlimit der Beschreibung ist nicht dokumentiert; 120–160 Zeichen gelten als Faustwert [A]. Social-Preview: PNG/JPG/GIF unter 1 MB, ideal 1280 × 640.
-- **Sprache [H/A]:** Kein untersuchtes Repo über 500 Sterne hat ein nicht-englisches Haupt-README; Übersetzungen erscheinen als `README.xx.md`. Weil Glides Oberfläche nur deutsch ist (Produktgrenze), ist ein deutsches Haupt-README mit englischer Kurzfassung und englischen Topics der ehrliche Mittelweg; die Entscheidung liegt beim Inhaber.
+- **Sprache [H/A]:** Kein untersuchtes Repo über 500 Sterne hat ein nicht-englisches Haupt-README; Übersetzungen erscheinen als `README.xx.md`. Glides Oberfläche bietet eine Sprachauswahl und übersetzt ausgewählte Menü-, Seitenleisten- und Einstellungsbeschriftungen, ist aber nicht vollständig lokalisiert. Ein deutsches Haupt-README mit englischer Kurzfassung und englischen Topics bleibt der dokumentierte Mittelweg; die Entscheidung über einen Sprachwechsel liegt beim Inhaber.
 - **Community [H]:** Das [Community-Profil](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/about-community-profiles-for-public-repositories) prüft README, CODE_OF_CONDUCT, LICENSE, CONTRIBUTING, SECURITY und Issue-Vorlagen; Sterne bringen diese Dateien nicht (build-your-own-x hat nur ein Issue-Template), wohl aber klare Kanäle (paperless-ngx). Discussions sind bei 15 von 21 Vergleichsrepos aktiv; ein leerer Bereich, Star-History oder Contributor-Raster wirken bei einem Ein-Personen-Projekt eher verlassen [A]. Ein Wiki wird erst ab 500 Sternen indexiert und widerspräche „ein Thema, ein Dokument“.
 - **Reichweite [H/A]:** Frühe Sterne entstehen selten im Repo selbst. LocalSend erreichte auf Hacker News bis 923 Punkte mit dem Anker „alternative to AirDrop“; Super Productivity und Mindwtr wuchsen über Stores, ladbare Releases und hohen Release-Takt. Bei allen erfolgreichen Indies steht ein ladbares Release vor jeder Reichweitenmaßnahme; für Glide passen deutschsprachige Communitys, Heise-Softwareverzeichnis und winget aus der eigenen Kanalliste besser als Trending oder Show HN.
 

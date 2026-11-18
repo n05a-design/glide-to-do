@@ -174,13 +174,13 @@ Unter Windows startet die Python-Fassung mit `python 07_Python-Versionen\Schnell
 
 ## Rückmeldung
 
-Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/glide-to-do/issues/new/choose) mit kurzen Formularen entgegen. Bitte nur künstliche Beispieldaten anhängen, keine echten Inhalte. Sicherheitslücken meldest du vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md).
+Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/glide-to-do/issues/new/choose) mit kurzen deutsch- und englischsprachigen Formularen entgegen. Bitte nur künstliche Beispieldaten anhängen, keine echten Inhalte. Sicherheitslücken meldest du vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md).
 
 <a id="qualität-und-sicherheit"></a>
 
 ## Entwicklung und Qualität
 
-Stand 17.11.2026 · Glide 1.0.0
+Stand 18.11.2026 · Glide 1.0.0
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

@@ -128,6 +128,32 @@ class I18nTests(unittest.TestCase):
         self.assertEqual(missing_in_en, set(), f"Schlüssel fehlen in en.json: {missing_in_en}")
         self.assertEqual(missing_in_de, set(), f"Schlüssel fehlen in de.json: {missing_in_de}")
 
+    def test_app_translation_keys_exist_in_both_catalogs(self):
+        source_path = SRC / "app.pyw"
+        tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+        app_keys = {
+            node.args[0].value
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "glide_i18n"
+            and node.func.attr == "t"
+            and node.args
+            and isinstance(node.args[0], ast.Constant)
+            and isinstance(node.args[0].value, str)
+        }
+        locales_dir = i18n.get_locales_dir()
+        catalogs = {
+            locale: json.loads((locales_dir / f"{locale}.json").read_text(encoding="utf-8"))
+            for locale in ("de", "en")
+        }
+
+        self.assertTrue(app_keys, "Keine direkten Übersetzungsschlüssel in app.pyw gefunden")
+        for locale, catalog in catalogs.items():
+            missing = app_keys - catalog.keys()
+            self.assertEqual(missing, set(), f"Direkte App-Schlüssel fehlen in {locale}.json: {missing}")
+
     def test_catalog_placeholder_parity(self):
         locales_dir = i18n.get_locales_dir()
         de_data = json.loads((locales_dir / "de.json").read_text(encoding="utf-8"))
