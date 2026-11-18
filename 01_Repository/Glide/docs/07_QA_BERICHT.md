@@ -1,5 +1,13 @@
 # QA-Bericht – Glide 1.0.0
 
+## GitHub-Projektseite DE/EN (18.11.2026)
+
+**Kandidat:** Auf Basis von `main` nach PR #145 (`9a91660a`) sind `README.md` gekürzt und `README.en.md` als vollständige englische Gegenfassung ergänzt. Die englische Seite kennzeichnet deutschsprachige Showcase- und Handbuchlinks ausdrücklich. Beide Seiten weisen die Aufnahmen aus Glide 3.60.0 als Showcase-Beispiele aus, nicht als Prüf- oder Paketnachweis für 1.0.0.
+
+**Lokale Prüfung:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>` endete auf macOS mit CPython 3.14.5 mit Exitcode 0. Syntaxprüfung (447 Python-Dateien), Dokumentationsindex und 541 lokale Markdown-Dateilinks, Werkzeugtests, Fachlogik-Unit-Tests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. `git diff --check` war sauber; der Impeccable-Detektor meldete keine Befunde. Nicht blockierende Hinweise: die zwei zulässigen Locale-Abweichungen in `07_Python-Versionen` und das wegen eines Zertifikatsfehlers nicht abrufbare Fremdpaket `tkinterdnd2`.
+
+**Grenzen:** Der README-Kandidat ist lokal und noch nicht gemergt. Die CI-Grundstufe ist kein Linux-/Windows-Volllauf; für diesen Kandidaten liegt kein Remote-CI- oder Windows-Paketnachweis vor. Neue 1.0.0-Aufnahmen und ein kurzes GIF fehlen weiterhin. Die grünen PR-#145-Prüfungen gelten nicht für diesen Stand.
+
 ## Soll-Ist-Abgleich und Dokumentationspakete (18.11.2026)
 
 **Stand:** PR #144 wurde am 18.11.2026 in `main` gemergt (Merge `2c4b7499`). Seine drei Dokumentationspakete sind enthalten. Eine erneute Prüfung des 906-Zeilen-Masterprompts ergab, dass weitere internationale GitHub-, App-i18n-, Shell- und Release-Aspekte offen sind. Glide 1.0.0; kein neuer App-/Datenformat-Build.
@@ -22,7 +30,7 @@
 
 | Bereich | Tatsächlicher Nachweis |
 |---|---|
-| README | Deutsch geführte Hauptseite mit einem kurzen englischen Anhang. Keine gleichwertige vollständige englische Start-/Installations-/Funktionsdokumentation nachgewiesen. |
+| README | Der lokale Folge-Kandidat kürzt die deutsche Hauptseite und ergänzt eine vollständige englische Fassung mit entsprechender Navigation, Funktionen, Grenzen und Downloadstatus. Die Seiten sind noch nicht gemergt; die Screenshots stammen aus 3.60.0 und sind keine 1.0.0-Prüfbelege. |
 | Wiki | Wiki ist im Repository aktiviert; versionierte Wiki-Quellseiten oder eine geprüfte Synchronisation sind nicht vorhanden. |
 | Issues | `bug` und `enhancement` sowie zweisprachige Fehler-/Wunschformulare vorhanden. Keine Dokumentations-, Lokalisierungs-, Barrierefreiheits- und Technische-Schulden-Formulare. |
 | PR/Governance | Zweisprachige PR-Vorlage und Pflegematrix vorhanden; Automatisierung für Projektstatus, Issue-Typen, Priorität und vollständige Sprach-/Wiki-/Fundingprüfung fehlt. |
@@ -36,7 +44,7 @@
 
 **Glide-Shell:** Die vier Shell-Bausteine und das Shell-Konzept sind vorhanden. Ein wiederverwendbarer Host-/Locale-Kontext, Shell-Übersetzungsschnittstelle, Namespaces, Sprachwechselereignisse und Shell-Accessibility-/Fehlerkataloge sind nicht nachgewiesen.
 
-**Gesamtfazit:** Der 906-Zeilen-Masterprompt ist nicht vollständig umgesetzt. Die verbleibenden Arbeiten gehören in eigene, isolierte PRs: öffentliche EN/DE-Dokumentation und Wiki-Quellen; vollständige App-i18n; Shell-Lokalisierungsvertrag; begrenzte GitHub-Automatisierung; externe GitHub-/Paket-/Funding-Freigaben. Keine dieser Lücken darf als abgeschlossen oder veröffentlicht gelten.
+**Gesamtfazit:** Der 906-Zeilen-Masterprompt ist nicht vollständig umgesetzt. Der lokale README-Kandidat schließt einen Teil der öffentlichen EN/DE-Projektseitendokumentation, ist aber noch nicht gemergt; die verlinkten Handbücher sind nicht vollständig englisch. Offen bleiben Wiki-Quellen, vollständige App-i18n, Shell-Lokalisierungsvertrag, begrenzte GitHub-Automatisierung und externe GitHub-/Paket-/Funding-Freigaben. Keine dieser Lücken darf als abgeschlossen oder veröffentlicht gelten.
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
