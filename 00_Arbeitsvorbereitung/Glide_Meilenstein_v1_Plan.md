@@ -1,6 +1,6 @@
 # Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
 
-Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.40
+Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.42
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 
@@ -41,7 +41,7 @@ flowchart TD
    - Soll: Komplette App-Oberfläche umschaltbar: Automatisch (nach OS), Deutsch, Englisch.
    - Menüs (`desktop_adapter.py`), Werkzeugleiste, Seitenleiste, Kern-Dialoge, Einstellungen, Status- und Fehlermeldungen.
    - Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Modulbudget-konform).
-   - Ist: Spracheinstellung, Kataloge, Menü-/Tastatur- und ausgewählte Seitenleisten-/Einstellungsbeschriftungen sind vorhanden. Große Teile der Dialoge, Werkzeugleisten, Status- und Rückmeldetexte bleiben deutsch; vollständige Oberflächenlokalisierung ist nicht belegt und Etappe 2 bleibt offen.
+   - Ist: Spracheinstellung, Kataloge, Menü-/Tastaturbeschriftungen, ausgewählte Seitenleistenbereiche und der Einstellungsdialog sind zweisprachig. Weitere Dialoge, Werkzeugleisten, Inspektoren, Status- und Rückmeldetexte bleiben teilweise deutsch; vollständige Oberflächenlokalisierung ist nicht belegt und Etappe 2 bleibt offen.
 3. **Plattformpakete & Installer:**
    - **macOS:** `.app`-Bundle, `.dmg` und `.tar.gz` (Ad-hoc signiert, arm64).
    - **Windows:** Inno-Setup-Installer `Glide-setup.exe` (Startmenü-Icon, saubere Deinstallation, AppUserModelID `Shaye.Glide`, unprivilegiert nach `%LOCALAPPDATA%\Programs\Glide`) + portable `.zip`.
@@ -84,12 +84,12 @@ flowchart TD
 - **Tatsächlicher Übersetzungsumfang:**
   - Spracheinstellung, Kataloge und `t()`-Hilfsfunktionen sind implementiert; Menüleiste/Tastaturkürzel und ausgewählte Beschriftungen in Seitenleiste und Einstellungen nutzen die Kataloge.
   - Die vollständige Oberfläche ist nicht lokalisiert: unter anderem bleiben weitere Dialoge, Werkzeugleisten, Inspektoren, Status- und Fehlermeldungen teilweise deutsch.
-  - Der Test `test_i18n.py` prüft Katalogparität und Platzhalter; ein zusätzlicher Test für direkt in `app.pyw` verwendete Literalschlüssel ist Teil der Dokumentationsnachpflege.
+  - `test_i18n.py` prüft Katalogparität, Platzhalter, direkt verwendete Übersetzungsschlüssel und dynamische Schlüssel aller Hintergrund-Presets.
 - **Nachweis:**
   - Test T329 (`test_i18n.py`): Spracherkennung, Auflösung, Fallbacks, Schlüssel- und Platzhalterparität zwischen `de.json` und `en.json`, WA-50-Budget.
   - Werkzeugtest `test_modulbudget.py` um `i18n.py` erweitert.
-  - Systemregister auf V1.40 angehoben (`test_glide_system.py` 5/5 OK).
-  - CI-Grundstufe 19/19 OK.
+  - Systemregister auf V1.42 angehoben; `test_i18n.py` besteht mit 13/13 Tests.
+  - Die CI-Grundstufe für den aktuellen Lokalisierungsschnitt ist noch auszuführen.
 
 ### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – ✅ TECHNISCH VORBEREITET; EINREICHUNG OFFEN
 - **macOS:**
@@ -104,7 +104,7 @@ flowchart TD
 ### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – ◐ QUELLCUT ERLEDIGT, VERÖFFENTLICHUNG OFFEN
 - **Versionierung:**
   - Anheben der Version auf `1.0.0` (über `scripts/pflege/versionswechsel.py 1.0.0 17.11.2026 --ohne-ablagekuerzung`).
-  - Systemregister auf V1.40 gehoben (100 Module M001–M100, 329 Testdateien T001–T329).
+  - Beim Release-Cut am 18.11.2026 stand das Systemregister auf V1.40 (100 Module M001–M100, 329 Testdateien T001–T329); aktueller Stand V1.42.
   - Standprüfung (86 Dokumente, 0 Befunde) und Lieferabgleich `abgleich_07.py` (0 Abweichungen).
   - GitHub Actions `release.yml` ist für den Bau von Artefakten und SHA-256-Prüfsummen bei einem Tag `v1.0.0` vorbereitet; ein solcher Tag wurde nicht veröffentlicht.
 - **Veröffentlichung:**
@@ -116,10 +116,10 @@ flowchart TD
 
 ## 3. GitHub Issue Tracking (#129)
 
-Statusabgleich vom 18.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. Der Quellstand und die technischen Vorlagen belegen keine vollständige Lokalisierung oder externe Veröffentlichung.
+Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. Der Einstellungsdialog ist im aktuellen lokalen Paketschnitt zweisprachig; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen. Dieser Paketschnitt ist noch nicht auf GitHub.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100, Kataloge, Einstellung, Menüs und ausgewählte Seitenleistenbeschriftungen via PR #134; vollständige UI-Lokalisierung und Status-/Dialogabdeckung offen)
+- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und erste Bereiche via PR #134; Einstellungsdialog im lokalen Folgeschnitt zweisprachig, vollständige UI-/Status-/Shell-Lokalisierung offen)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
 - [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
 - [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. Öffentlicher Tag/Release, vollständige menschliche Abnahme und übersprungene UI-/Barrierefreiheitsjobs offen)

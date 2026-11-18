@@ -4019,10 +4019,43 @@ def fall_menschen3503(lauf):
 def fall_schriftstile(lauf):
     """Vier Stilklassen über die echten Einstellungen speichern und neu laden."""
     mod = lauf.mod
+    app = lauf.app
+    previous_language = app.settings.get("language", "system")
+    had_background_color = "background_color" in app.settings
+    previous_background_color = app.settings.get("background_color")
+    app.settings["language"] = "en"
+    mod.glide_i18n.set_language("en")
+    assert app.save_settings(), "Englische Testsprache konnte nicht isoliert gespeichert werden"
     assert lauf.app.ui_font_family() == "Rubik", lauf.app.ui_font_family()
-    expected = ("Modern: Rubik", "Technisch: DM Mono",
-                "Kreativ: DM Serif Display", "Klassisch: Charis SIL")
-    assert mod.glide_fonts.LABELS == expected
+    expected = tuple(
+        mod.glide_i18n.t(f"settings.font_style.{style.key}", style.label)
+        for style in mod.glide_fonts.STYLES
+    )
+    size_options = tuple(
+        mod.glide_i18n.t(f"settings.font_size.{translation_key}")
+        for translation_key in ("small", "medium", "large")
+    )
+    weight_options = tuple(
+        mod.glide_i18n.t(f"settings.font_weight.{key}", key)
+        for key in ("auto", "standard", "bold")
+    )
+    background_options = tuple(
+        mod.glide_i18n.t(f"settings.background.{key}")
+        for key in ("default", "surface")
+    ) + tuple(
+        mod.glide_i18n.t(f"settings.color.{key}")
+        for key in ("purple", "blue", "turquoise", "green", "yellow", "red", "brown", "contrast_gray")
+    )
+    settings_options = {
+        size_options,
+        weight_options,
+        background_options,
+        tuple(mod.glide_i18n.t(f"settings.startup.{key}") for key in
+              ("last", "home", "planday", "in_progress", "library", "templates", "globalboard", "list")),
+        tuple(mod.glide_i18n.t(f"settings.feedback.{key}") for key in ("auto", "milestones", "all")),
+        tuple(mod.glide_i18n.t(f"settings.week_start.{key}") for key in ("monday", "sunday")),
+        tuple(mod.glide_i18n.t(f"settings.design.{key}.name") for key in app.DESIGN_ORDER),
+    }
     gewicht_index = 0
     for index in (1, 2, 3, 0):
         app = lauf.app
@@ -4031,22 +4064,32 @@ def fall_schriftstile(lauf):
         def auswaehlen(dialog, parent=None):
             dialog.update_idletasks()
             felder = knoepfe(dialog, mod.AppOptionMenu)
+            optionen = {tuple(feld.options) for feld in felder}
+            assert settings_options <= optionen, settings_options - optionen
             auswahl = next(feld for feld in felder if tuple(feld.options) == expected)
-            assert auswahl.variable.get() == mod.glide_fonts.style_for(app.settings.get("ui_font_family")).label
+            style_key = mod.glide_fonts.style_for(app.settings.get("ui_font_family")).key
+            assert auswahl.variable.get() == expected[
+                next(i for i, value in enumerate(mod.glide_fonts.STYLES) if value.key == style_key)]
             auswahl.menu.invoke(index)
             idle(lauf)
-            assert auswahl.variable.get() == style.label, (index, auswahl.variable.get(), style.label)
-            groesse = next(feld for feld in felder if tuple(feld.options) == tuple(app.UI_FONT_SIZE_CHOICES))
+            assert auswahl.variable.get() == expected[index], (index, auswahl.variable.get(), expected[index])
+            groesse = next(feld for feld in felder if tuple(feld.options) == size_options)
             groesse.menu.invoke(0 if style.automatic_bold else 1)
-            gewichte = next(feld for feld in felder if tuple(feld.options) == app.UI_FONT_WEIGHT_CHOICES)
+            gewichte = next(feld for feld in felder if tuple(feld.options) == weight_options)
             gewichte.menu.invoke(gewicht_index)
+            hintergrund = next(feld for feld in felder if tuple(feld.options) == background_options)
+            hintergrund.menu.invoke(hintergrund.options.index(
+                mod.glide_i18n.t("settings.color.contrast_gray")))
             idle(lauf)
-            speichern = next(knopf for knopf in knoepfe(dialog, mod.RoundedButton) if knopf.text == "Speichern")
+            speichern = next(
+                knopf for knopf in knoepfe(dialog, mod.RoundedButton)
+                if knopf.text == mod.glide_i18n.t("button.save", "Speichern"))
             speichern.command()
 
         with patch.object(app, "run_modal", auswaehlen):
             app.show_settings_dialog()
         idle(lauf)
+        assert app.settings["background_color"] == "muted"
         assert app.settings["ui_font_family"] == style.family
         assert app.ui_font_family() == style.default_family, (
             style.label, app.ui_font_family(), style.default_family,
@@ -4129,6 +4172,16 @@ def fall_schriftstile(lauf):
         lauf.neustart()
         assert lauf.app.settings["ui_font_weight"] == gewicht
         assert lauf.app.task_row_font().actual("weight") == ("bold" if gewicht_index == 2 else "normal")
+    app = lauf.app
+    app.settings["language"] = previous_language
+    if had_background_color:
+        app.settings["background_color"] = previous_background_color
+    else:
+        app.settings.pop("background_color", None)
+    mod.glide_i18n.set_language(previous_language)
+    assert app.save_settings(), "Ursprüngliche Sprache konnte nicht wiederhergestellt werden"
+    app.create_menubar()
+    app.apply_theme()
     return "Vier Stilklassen und Schriftgewicht gespeichert; DM Serif Display und Charis SIL automatisch Bold, Standard und Kräftig nach Neustart"
 
 

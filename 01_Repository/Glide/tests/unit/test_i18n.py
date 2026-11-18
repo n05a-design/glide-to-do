@@ -23,6 +23,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 import i18n
+import backdrop
 
 
 class I18nTests(unittest.TestCase):
@@ -153,6 +154,23 @@ class I18nTests(unittest.TestCase):
         for locale, catalog in catalogs.items():
             missing = app_keys - catalog.keys()
             self.assertEqual(missing, set(), f"Direkte App-Schlüssel fehlen in {locale}.json: {missing}")
+
+    def test_settings_backdrop_names_exist_in_both_catalogs(self):
+        locales_dir = i18n.get_locales_dir()
+        catalogs = {
+            locale: json.loads((locales_dir / f"{locale}.json").read_text(encoding="utf-8"))
+            for locale in ("de", "en")
+        }
+        preset_keys = {
+            f"settings.backdrop.{design}.{preset.key}"
+            for design, presets in backdrop.PRESETS.items()
+            for preset in presets
+        }
+
+        self.assertTrue(preset_keys, "Keine Hintergrund-Presets für die Einstellungen gefunden")
+        for locale, catalog in catalogs.items():
+            missing = preset_keys - catalog.keys()
+            self.assertEqual(missing, set(), f"Hintergrundnamen fehlen in {locale}.json: {missing}")
 
     def test_catalog_placeholder_parity(self):
         locales_dir = i18n.get_locales_dir()

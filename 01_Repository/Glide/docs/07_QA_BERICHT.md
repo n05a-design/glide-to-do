@@ -1,5 +1,15 @@
 # QA-Bericht – Glide 1.0.0
 
+## DE/EN-Lokalisierung des Einstellungsdialogs (19.11.2026)
+
+**Stand:** Lokaler Folgepaket-Kandidat auf Basis von `main`/PR #147, Merge-Commit `172b0924`; die Änderungen umfassen App, Kataloge, Tests und führende Dokumentation. Datenformat 26 und App-Version 1.0.0 unverändert. Der Quellstand ist noch nicht gemergt.
+
+**Gezielte Prüfung:** Auf macOS mit CPython 3.14.5 und isoliertem künstlichem `GLIDE_DATA_DIR` bestanden `tests/unit/test_i18n.py` (**13/13**), `tests/integration/test_arbeitsmodi.py --fall schriftstile` (**1/1**) sowie `tests/tools/test_glide_system.py` (**5/5**). `py_compile` für `app.pyw` und die beiden geänderten Tests sowie `git diff --check` bestanden.
+
+**CI-Grundstufe:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>` bestand auf macOS/CPython 3.14.5. Syntaxprüfung (447 Python-Dateien), Dokumentationsindex und 543 lokale Markdown-Links, Werkzeug- und Fachtests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. Nicht blockierende Hinweise: drei erwartete Abweichungen zwischen Prüfkandidat und separat versioniertem `07_Python-Versionen` (`app.pyw`-Lieferkopie und die beiden Locale-Kataloge); Fremdpaket `tkinterdnd2` wegen Zertifikatsfehlers nicht abrufbar. `07_Python-Versionen` wurde gemäß Produktionsrundenregel nicht geändert.
+
+**Grenzen:** Dieser Lauf ist keine vollständige Plattformmatrix oder menschliche Sicht-/Bedienabnahme; UI- und Accessibility-Jobs wurden nicht ausgeführt. Die Hintergrund-Presetnamen, Auswahltexte und stabil gespeicherten Schlüssel sind automatisiert geprüft; Umbruch/Geometrie, Betriebssystemverhalten und Screenreader bleiben manuell offen.
+
 ## GitHub-Projektseite DE/EN (18.11.2026)
 
 **Stand:** PR #146 wurde am 18.11.2026 in `main` gemergt (Merge-Commit `6d373719`). `README.md` ist gekürzt; `README.en.md` ergänzt die vollständige englische Gegenfassung und kennzeichnet deutschsprachige Showcase- und Handbuchlinks ausdrücklich. Beide Seiten weisen die Aufnahmen aus Glide 3.60.0 als Showcase-Beispiele aus, nicht als Prüf- oder Paketnachweis für 1.0.0.

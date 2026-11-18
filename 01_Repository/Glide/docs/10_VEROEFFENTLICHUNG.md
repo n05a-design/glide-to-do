@@ -1,10 +1,14 @@
 # Veröffentlichung – Glide
 
-Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
-## Verifizierter GitHub-Stand 18.11.2026
+## Aktueller GitHub-Stand 19.11.2026
+
+`main` enthält PR #147 auf Merge-Commit `172b0924`; CodeQL und Grundstufe waren erfolgreich, die Linux-Vollprüfung lief bei letzter Abfrage noch. UI-Diagnose und Tk-/Accessibility-Jobs wurden übersprungen. Issue #129 bleibt offen; es gibt keine Tags oder GitHub-Releases und keinen offenen PR. Der lokale Einstellungs-i18n-Paketschnitt ist noch nicht auf GitHub. Diese Statusangaben müssen vor einem öffentlichen Release erneut anhand des Live-Standes geprüft werden.
+
+## Release-Cut-Prüfung vom 18.11.2026
 
 Der Quellstand 1.0.0 wurde über PR #138 am 18.11.2026 in `main` gemergt (Merge-Commit `a303e405`). Das ist ein Release-Cut im Repository, keine erfolgte öffentliche Veröffentlichung. Die Prüfung dieses Stands ergab:
 
@@ -197,7 +201,7 @@ Nach der Bestätigung: Produktregister mit Datum nachführen, Sicherheitskontakt
 | GitHub-Topics, freigegeben und gesetzt | `desktop-app`, `daily-planner`, `task-management`, `productivity`, `kanban`, `note-taking`, `pinboard`, `pixel-art`, `pomodoro`, `time-management`, `python`, `tkinter`, `cross-platform`, `open-source`, `mpl-2-0` |
 | Website-/Store-Suchthemen | Desktop-Planer, Aufgabenplanung, Tagesplanung, Pinnwand, Notizen, Pixel-Zeichnungen; international zusätzlich desktop planner, day planning, task management, pinboard, pixel art |
 
-Beschreibung und die hier genannten 15 Topics wurden am 07.11.2026 nach konkreter Freigabe des Inhabers öffentlich aktualisiert und zurückgelesen. Eine erreichbare eigene Glide-Website/Store-Seite wurde in den Projektquellen nicht nachgewiesen; das Produktdatenblatt dient als Textvorlage, nicht als Nachweis einer Veröffentlichung. Die derzeitige Oberflächensprache bleibt eine technische Ist-Angabe; Internationalisierung ist vorgesehen, ohne bestätigten Termin oder implementierte Übersetzung.
+Beschreibung und die hier genannten 15 Topics wurden am 07.11.2026 nach konkreter Freigabe des Inhabers öffentlich aktualisiert und zurückgelesen. Eine erreichbare eigene Glide-Website/Store-Seite wurde in den Projektquellen nicht nachgewiesen; das Produktdatenblatt dient als Textvorlage, nicht als Nachweis einer Veröffentlichung. Glide bietet eine DE/EN-Sprachauswahl; Menüs und der Einstellungsdialog sind teilweise lokalisiert. Eine vollständige Übersetzung der Oberfläche ist weiterhin offen; der [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21121-deen-lokalisierung-des-einstellungsdialogs-und-stabile-speicherwerte-19112026) dokumentiert den aktuellen Schnitt.
 
 **Technischer Name:** `APP_PRODUCT_NAME` („Glide – Aufgaben und Listen“) bleibt für Fenster, Druck/Export und Paketmetadaten stabil. Der öffentliche Beschreibungstext steht in `brand.DESCRIPTION` und „Über Glide“. Bundle-ID, AppUserModelID, Datenordner, Paketnamen und vorhandene Startdateinamen ändern sich nicht durch Marketing.
 
