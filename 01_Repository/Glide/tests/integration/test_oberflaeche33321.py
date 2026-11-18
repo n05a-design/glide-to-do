@@ -171,6 +171,9 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         assert leiste.winfo_manager() == "place" and kachel.winfo_height() == hoehe, (leiste.winfo_manager(), hoehe)
         figur = next(w for w in descendants(kachel) if isinstance(w, mod.MascotCanvas))
         app.root.focus_set()
+        # Die App prüft beim Leave zusätzlich die echte Zeigerposition. Ein
+        # synthetisches Leave allein bewegt den Mac-Zeiger nicht aus der Kachel.
+        root.event_generate("<Motion>", x=1, y=1, warp=True)
         kachel.event_generate("<Leave>")
         ruhe(0.25)
         assert leiste.winfo_manager() == "", "Leiste bleibt nach dem Verlassen stehen"
