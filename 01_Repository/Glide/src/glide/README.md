@@ -1,6 +1,6 @@
-# Glide-System V1.40
+# Glide-System V1.41
 
-Stand 17.11.2026 · Glide 1.0.0 · Glide-System V1.40 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 18.11.2026 · Glide 1.0.0 · Glide-System V1.41 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Eigenständige Katalogversion:** `V1.40` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
@@ -12,6 +12,7 @@ Stand 17.11.2026 · Glide 1.0.0 · Glide-System V1.40 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.41** | 18.11.2026 | Der Werkzeugtest T299 `test_standpruefung.py` prüft die zweisprachigen öffentlichen READMEs auf Sprachumschaltung, parallele Abschnittsstruktur und erreichbare lokale Markdown-/HTML-Datei-Links. App, Format und Testdateibestand unverändert. | App 1.0.0, Format 26 |
 | **V1.40** | 17.11.2026 | Mehrsprachigkeit (i18n DE/EN, Meilenstein 1.0 Etappe 2, D93): neues Modul M100 `i18n.py` (nur Standardbibliothek, Modulbudget WA-50 konform), JSON-Kataloge `resources/locales/de.json` und `en.json`, Umschaltung in den Einstellungen, lokalisierte Menüs und Seitenleistenzeilen. Neuer Unit- und Vertragstest T329 `test_i18n.py` mit 100 % Schlüssel- und Platzhalterparität. Format 26 unverändert. | App 3.70.0, Format 26 |
 | **V1.39** | 17.11.2026 | Agenten-Skill `glide-to-do` Paket K4 & K5 (WA-61, Meilenstein 1.0 Etappe 1): neuer Integrationstest T328 `test_austausch_k4.py` für Bilder, Dateianhänge, ZIP-Container (.glideexchange), Galerie-Listen, Seiten-Cover und Paket-Export. MANIFEST.json, VERTEILUNG.md und App-Export-Aktion `export_agent_skill` hinzugefügt. Format 26 unverändert. | App 3.70.0, Format 26 |
 | **V1.38** | 17.11.2026 | Agenten-Skill `glide-to-do` Paket K3 (WA-61, E-K5 Option A): neuer Integrationstest T327 `test_austausch_k3.py` für die fünf erweiterten Austauschfähigkeiten (Vorsicherung vor Create-Import, Markdown-Seiten, Ordnerarten, Wiederholungen, Erinnerungen). Module, Features und Format 26 unverändert. | App 3.69.0, Format 26 |
@@ -69,7 +70,7 @@ Stand 17.11.2026 · Glide 1.0.0 · Glide-System V1.40 · Aufgabenformat 26 · Ei
 | Features | 148 | 128 Produkt-/Oberflächeneinträge (einschließlich des Agenten-Skills F148 außerhalb der App) und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 329 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 329 | Einschließlich öffentlicher DE/EN-README-Prüfung (T299), Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -887,7 +888,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T296 | [`test_release_workflow.py`](../../tests/tools/test_release_workflow.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T297 | [`test_runtime_contract.py`](../../tests/tools/test_runtime_contract.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T298 | [`test_runtime_patches.py`](../../tests/tools/test_runtime_patches.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T299 | [`test_standpruefung.py`](../../tests/tools/test_standpruefung.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
+| T299 | [`test_standpruefung.py`](../../tests/tools/test_standpruefung.py) | Prüft gepflegte Einstiege; zusätzlich Sprachumschaltung, spiegelgleiche öffentliche DE/EN-Abschnitte und erreichbare lokale Markdown-/HTML-Datei-Links |
 | T300 | [`test_synchronisationswaechter.py`](../../tests/tools/test_synchronisationswaechter.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T301 | [`test_ui_nachlauf_workflow.py`](../../tests/tools/test_ui_nachlauf_workflow.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T302 | [`test_versionspflege.py`](../../tests/tools/test_versionspflege.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
