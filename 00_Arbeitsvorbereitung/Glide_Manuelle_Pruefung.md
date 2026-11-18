@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 ## Offene Sichtprüfung 3.67.0/3.68.0: ausgelagerte Bedienelemente und Menüs
 
@@ -559,6 +559,7 @@ Automatisch belegt mit `test_uiux_paket.py` (17 Fälle, Windows 11/Tk 9.0.4, kü
 - [ ] Kachel „Galeriebilder“: Vorschauen erscheinen nach kurzer Zeit, Hoch-/Querformat unverzerrt, Klick öffnet die Galerie beim Bild; Galerie ohne Bilder und gelöschte Bilddatei verständlich.
 - [ ] Kopfzeile: Logo endet auf Höhe der Grundlinie von „2 offen · 1 überfällig“; kein Datum, kein „?“; Windows-Menüs und Symbolknöpfe auf einer Linie (auch Hover, Fokus, gedrückt); Lupe ⌕ gut erkennbar (macOS/Linux: Lupe oder „Su“ notieren), Tooltip „Suchen …“, Strg/Cmd+O.
 - [ ] Einstellungen › Darstellung und Bedienung › „Ergänzende Bedienhinweise …“: aus → Papierkorb nur „Der Papierkorb ist leer.“, an → zusätzlicher Satz; Fenster verkleinern: „Zur Startseite“ wird nie überdeckt; Wahl bleibt nach Neustart. Spaltenboard bei 860 × 700: „Nur offene“ vollständig lesbar, die Zeile bricht um; der Hinweis „Ziehen setzt das Feld …“ nur bei eingeschalteten Bedienhinweisen.
+- [ ] Sprache in den Einstellungen: mit Deutsch und Englisch bei kleinem Fenster und großer Schrift alle Beschriftungen, Auswahlwerte, Hinweise, Hintergrundkarten und Fußknöpfe auf Umbruch/Überdeckung prüfen. Akzentfarbe, Hintergrundfarbe, Design, Wochenbeginn, Schriftstil und Sprache ändern; nach Speichern und Neustart prüfen, dass die sichtbaren Namen übersetzt sind und die Auswahlwerte erhalten bleiben. Betriebssystem- und Bildschirmleserprüfung getrennt dokumentieren.
 - [ ] Hilfe › Fehlerprotokoll (leer): Überschrift und Text beginnen an derselben Kante; „OK“ erreichbar.
 - [ ] Seitenleiste: Aufklapppfeile von Seiten/Listen/Notizen/Zeichnungen und das Papierkorbsymbol wirken mittig zum Text (auch ausgewählt/Hover); Startseitenkachel „Pinnwände“: „›“ in „Showcase · Parkquartier › …“ steht auf der Mitte der Großbuchstaben, auch beim Überfahren.
 - [ ] Labels/Heute: Titel deutlich länger lesbar, Datum mit Uhrzeit vollständig; „Nächste Aufgabe“ und „Verspätet“ ohne zweites Dreieck, nur der Titel der nächsten Aufgabe fett in normaler Größe.

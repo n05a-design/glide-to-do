@@ -1,18 +1,18 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 18.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.41
+Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.42
 
-Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). **Aktueller Main-Stand:** PR #146 ist am 18.11.2026 auf Merge-Commit `6d373719` gemergt; er enthält die vollständige englische README und den gekürzten deutschen Einstieg. PR #146 bestand lokal und remote die Grundstufe sowie CodeQL und Linux-Vollprüfung; Windows-Vollprüfung war bei letzter Abfrage noch in Arbeit. UI-/Accessibility-Jobs wurden übersprungen. PR #144–#146 dokumentieren Fortschritt, aber nicht die vollständige Erfüllung des Masterprompts. Der lokale macOS-Volllauf des Worktrees `d894e2a` bestand mit 135/135 ausgeführten Schritten; das native macOS-Paket samt isoliertem Start ist gesondert geprüft. Der Quellstand 1.0.0 ist kein öffentlicher Release: am 18.11.2026 waren keine Tags oder GitHub-Releases vorhanden. Vollständige UI-Lokalisierung, Shell-Locale-Vertrag, externe Homebrew-/winget-Einreichungen und menschliche Sicht-/Bedienabnahme bleiben offen. Wiki-Quellen/Synchronisation sind nach I11 B nicht ausgewählt. Die neue README-Regressionsprüfung und der nächste i18n-Schwerpunkt stehen in Plan §21.120; der übrige Masterprompt-Rest in §21.118. Frühere Übergabestände trägt Git.
+Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). **Aktueller Main-Stand:** PR #147 ist am 18.11.2026 auf Merge-Commit `172b0924` gemergt. CodeQL und Grundstufe waren erfolgreich; die Linux-Vollprüfung lief bei letzter Abfrage noch. UI-Diagnose und Tk-/Accessibility-Jobs wurden übersprungen. PR #144–#147 dokumentieren Fortschritt, aber nicht die vollständige Erfüllung des Masterprompts. Der lokale macOS-Volllauf des Worktrees `d894e2a` bestand mit 135/135 ausgeführten Schritten; das native macOS-Paket samt isoliertem Start ist gesondert geprüft. Der Quellstand 1.0.0 ist kein öffentlicher Release; am 19.11.2026 waren keine Tags oder GitHub-Releases vorhanden. Die Lokalisierung des Einstellungsdialogs ist lokal umgesetzt und geprüft, aber dieser neue Paketschnitt ist noch nicht auf GitHub; übrige App-/Shell-Lokalisierung, externe Homebrew-/winget-Einreichungen und menschliche Sicht-/Bedienabnahme bleiben offen. Wiki-Quellen/Synchronisation sind nach I11 B nicht ausgewählt. Der aktuelle Lokalisierungsschnitt steht in Plan §21.121; der übrige Masterprompt-Rest in §21.118. Frühere Übergabestände trägt Git.
 
 > [!IMPORTANT]
 > **Aktueller strategischer Fokus: Soll-Ist-Abschluss Release 1.0 (v1.0.0 / D93)**
 > Der Inhaber beschloss am 17.11.2026 den Feature Freeze für Glide 1.0.0. Der Quellstand wurde gemergt, aber nicht öffentlich veröffentlicht. Das Soll – vollständige DE/EN-Oberfläche und bereitgestellte GitHub-/Homebrew-/winget-Releases – ist noch nicht vollständig erfüllt.
 > - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ **ABGESCHLOSSEN** (PR #130, PR #133, V1.39, T328)
-> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ◐ Spracheinstellung, Kataloge und ausgewählte Menüs/Seitenleistenbeschriftungen; große Teile der Oberfläche nicht lokalisiert.
+> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ◐ Spracheinstellung, Menüs, ausgewählte Seitenleistenbereiche und der Einstellungsdialog sind zweisprachig; weitere Dialoge, Werkzeugleisten, Status-/Fehlertexte und Shell bleiben teilweise deutsch.
 > - **Etappe 3: Paketierung & Installer:** ◐ Bauwege, Installer und Paketmanager-Manifeste technisch vorbereitet; Homebrew-/winget-Vorlagen nicht eingereicht.
 > - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ◐ Quellstand in `main`, Pflichtchecks auf PR #138 grün; kein Tag/Release, öffentliche Einreichung und menschliche Abnahme offen.
 >
-> **Erste Handgriffe einer neuen Sitzung:** (1) T299 und CI-Grundstufe auf dem aktuellen Arbeitsstand verifizieren; Remote-Ergebnisse nur dem zugehörigen SHA zurechnen. (2) Die vollständige App-i18n-Inventur nach Meilensteinplan/QA-Abdeckung fortsetzen. Wiki-, Konto- und Releaseaktionen nur nach ausdrücklicher Auswahl/Freigabe.
+> **Erste Handgriffe einer neuen Sitzung:** (1) Den lokalen Einstellungs-i18n-Schnitt samt Dokumentenstand vollständig prüfen, CI-Grundstufe ausführen und erst nach eindeutiger Zuordnung zum Head remote veröffentlichen. (2) Danach die vollständige App-i18n-Inventur nach Meilensteinplan/QA-Abdeckung fortsetzen. Wiki-, Konto- und Releaseaktionen nur nach ausdrücklicher Auswahl/Freigabe.
 
 ---
 
@@ -35,7 +35,7 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.41** (100 Source-Module M001–M100, 115 Integrationssuiten, 329 Test-/Werkzeugdateien, 5 Analysen). `main` enthält PR #146 auf Merge-Commit `6d373719`; Grundstufe, CodeQL und Linux-Vollprüfung für seinen Head waren erfolgreich, Windows-Vollprüfung lief bei letzter Abfrage noch. |
+| **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.42** (100 Source-Module M001–M100, 115 Integrationssuiten, 329 Test-/Werkzeugdateien, 5 Analysen). `main` enthält PR #147 auf Merge-Commit `172b0924`; CodeQL und Grundstufe waren erfolgreich, Linux-Vollprüfung lief bei letzter Abfrage noch. |
 | **Meilenstein Release 1.0** | Verbindlicher Feature Freeze (D93). Etappe 1 Skill K4/K5 ist erledigt. Etappe 2 i18n ist teilweise integriert; vollständige UI-Lokalisierung fehlt. Etappe 3 ist technisch vorbereitet, aber Homebrew-/winget-Vorlagen sind nicht eingereicht. Etappe 4 Quellcut ist in `main`; Tag, GitHub-Release und menschliche Abnahme fehlen. Issue #129 bleibt offen. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
 | **Shell-Pakete (3a, 3c, 4, 5)** | Vier anwendungsneutrale Shell-Bausteine flach in `src/glide`, Modulbudget WA-50 vollständig eingehalten:<br/>1. `modal_session.py` (M096, 3.62.0, T317): Entkoppelter modaler Warteweg.<br/>2. `window_lifetime.py` (M097, 3.64.0, T318/T320): Zeitgeberbesitz je Fenster/Ansicht (`after_scope`).<br/>3. `custom_controls.py` (M098, 3.67.0, T312): Thementaugliche Canvas-Bedienelemente.<br/>4. `desktop_adapter.py` (M099, 3.68.0, T326): Menüleiste, Tastaturkürzel, OS-Aktionen.<br/>Fokusrückgabe D87 (3.65.0) in modalen Dialogen aktiv. Bündelung zu `glide_shell` und Demonstrationshost (Paket 6) sind Post-1.0. |
@@ -82,7 +82,7 @@ flowchart TD
 
 ## 3. Nächste Arbeit und Handlungsanweisungen
 
-Der aktuelle Folgeauftrag ist die schrittweise Umsetzung des verbleibenden Masterprompt-Umfangs aus Plan §21.118. Die DE/EN-GitHub-Startseite (§21.119) ist mit PR #146 gemergt; T299 sichert ihre Struktur und lokalen Datei-Links in der CI-Grundstufe ab. Als Nächstes die vollständige App-i18n inventarisieren und lokalisieren. Wiki-Inhalte/Synchronisation sind nach I11 B nicht ausgewählt; E-P1–E-P5 sowie sonstige Funktionsvorschläge werden dadurch nicht ausgewählt. Release-, Konto- und Produktentscheidungen bleiben beim Inhaber.
+Der aktuelle lokale Folgeauftrag ist die Lokalisierung des Einstellungsdialogs samt stabiler Rückspeicherung der Einstellungen (Plan §21.121); noch nicht auf GitHub. Die DE/EN-GitHub-Startseite (§21.119) ist mit PR #146 gemergt; T299 sichert ihre Struktur und lokalen Datei-Links in der CI-Grundstufe ab. Danach die vollständige App-i18n inventarisieren und lokalisieren. Wiki-Inhalte/Synchronisation sind nach I11 B nicht ausgewählt; E-P1–E-P5 sowie sonstige Funktionsvorschläge werden dadurch nicht ausgewählt. Release-, Konto- und Produktentscheidungen bleiben beim Inhaber.
 
 Der verbindliche Soll-Umfang steht im [Meilenstein-Plan Release 1.0](Glide_Meilenstein_v1_Plan.md); der aktuelle Masterprompt-Rest und die README-Nachpflege stehen im Entwicklungsplan [§21.118](Glide_Entwicklungsplan.md#21118-masterprompt-github-internationalisierung-und-verbleibender-soll-ist-umfang-18112026) und [§21.119](Glide_Entwicklungsplan.md#21119-github-projektseite-deen-und-windows-prüftakt-18112026). Die nachfolgende technische Beschreibung ist Zielumfang, keine Behauptung, dass alle Punkte bereits umgesetzt oder veröffentlicht sind.
 
@@ -155,7 +155,7 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
      - Platzhalterkonsistenz: Platzhalter (`{count}`, `{name}`) müssen in beiden Sprachen übereinstimmen.
      - Fallback-Verhalten: Unbekannte Schlüssel geben `default` oder `key` zurück (nie Abbruch).
      - Umschaltung und Locale-Erkennung isoliert getestet.
-   - Systemregister auf **V1.40** heben (M100, T329, 329 Test-/Werkzeugdateien).
+   - Systemregister steht auf **V1.42** (M100, T329, 329 Test-/Werkzeugdateien).
 
 ---
 
@@ -197,15 +197,15 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
    - `glide-to-do-skill-v1.0.0.zip` + `.sha256`
 3. **Veröffentlichung:** Noch offen: Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren. Vorher verbleibende Lokalisierungs- und Abnahmegates abschließen; Kontofreigaben liegen beim Inhaber.
 
-#### Nachprüfung des 906-Zeilen-Masterprompts (18.11.2026)
+#### Nachprüfung des 906-Zeilen-Masterprompts (19.11.2026)
 
 PR #144 hat drei eng begrenzte Dokumentationspakete umgesetzt. Der gesamte Masterprompt ist nicht vollständig umgesetzt. Verbleibender Soll-Ist-Umfang:
 
-**Nachpflege 18.11.2026:** Die deutsche Startseite wurde gekürzt und eine vollständige englische `README.en.md` ergänzt. Dieser README-Kandidat ist noch nicht gemergt; Wiki-Quellen, App-/Shell-i18n und Governance-Automatisierung bleiben offen. Siehe Plan §21.119 und den aktuellen [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+**Nachpflege 19.11.2026:** PR #146 hat die gekürzte deutsche Startseite und die vollständige englische `README.en.md` gemergt; PR #147 hat T299 zur README-Regressionsprüfung gemergt. Der Einstellungsdialog ist im aktuellen lokalen Paketschnitt zweisprachig; dieser Schnitt ist noch nicht auf GitHub. Wiki-Quellen, übrige App-/Shell-i18n und Governance-Automatisierung bleiben offen. Siehe Plan §§21.119–21.121 und den aktuellen [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
-- Eine gleichwertige englische öffentliche README-Navigation und öffentliche Wiki-Quellen fehlen.
+- Die öffentliche README-Navigation ist mit PR #146 zweisprachig; öffentliche Wiki-Quellen fehlen (nicht ausgewählt, I11 B).
 - Weitere Issue-Formulare, Projektansichten, Discussion-Richtlinien und belastbare Governance-Automatisierung fehlen.
-- Die App ist nur teilweise zweisprachig; Dialoge, Inspektoren, Status-, Fehler-, Platzhalter- und weitere feste UI-Texte bleiben teilweise deutsch.
+- Die App ist nur teilweise zweisprachig; trotz lokalisierter Einstellungen bleiben weitere Dialoge, Inspektoren, Werkzeugleisten, Status-, Fehler-, Platzhalter- und weitere feste UI-Texte teilweise deutsch.
 - Die Shell besitzt kein dokumentiertes oder geprüftes Host-/Locale-Übersetzungskonzept.
 - Funding ist nicht eingerichtet. Keine externe Sponsoring- oder Zahlungsfreigabe ist erfolgt.
 - Tag, GitHub-Release, externe Homebrew-/winget-Einreichung und saubere öffentliche Installationsprüfungen fehlen.

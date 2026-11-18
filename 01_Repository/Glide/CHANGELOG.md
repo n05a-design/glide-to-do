@@ -1,21 +1,21 @@
 # Änderungsverlauf
 
-Stand 18.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 19.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
 ## 1.0.0 – 17.11.2026 (Quellstand, nicht veröffentlicht)
 
-Der Meilenstein-Schnitt D93 ist in `main` gemergt. Am 18.11.2026 waren kein Tag und kein GitHub Release veröffentlicht; die Einreichung bei Homebrew und winget sowie die abschließende menschliche Abnahme stehen aus. Datenformat 26 und Austauschformat 2 unverändert.
+Der Meilenstein-Schnitt D93 ist in `main` gemergt; der aktuelle Main-Stand enthält PR #147 (Merge-Commit `172b0924`). Am 19.11.2026 waren kein Tag und kein GitHub Release veröffentlicht; die Einreichung bei Homebrew und winget sowie die abschließende menschliche Abnahme stehen aus. Datenformat 26 und Austauschformat 2 unverändert. Der lokale Folgeschnitt zur DE/EN-Lokalisierung der Einstellungen ist noch nicht auf GitHub.
 
 - Öffentliche GitHub-Projektseite: Die deutsche README wurde auf den Einstieg gekürzt; `README.en.md` ergänzt eine vollständige englische Fassung. Der Downloadstatus bleibt ausdrücklich unveröffentlicht.
 - Werkzeugtest T299 prüft die Sprachumschaltung, Kernabschnitte und lokalen Datei-Links beider öffentlichen README-Seiten.
-- Mehrsprachigkeit (i18n DE/EN, Etappe 2): Zentrales i18n-Subsystem (`src/glide/i18n.py`, `de.json`, `en.json`) mit dynamischer Spracherkennung, Spracheinstellung, Menü-/Tastatur- und ausgewählten Seitenleistenbeschriftungen. Die vollständige Lokalisierung der Oberfläche ist nicht umgesetzt; Dialoge, Werkzeugleisten, Status- und Rückmeldetexte sind teilweise weiterhin deutsch. T329 prüft die Kataloge und direkt referenzierte App-Schlüssel.
+- Mehrsprachigkeit (i18n DE/EN, Etappe 2): Zentrales i18n-Subsystem (`src/glide/i18n.py`, `de.json`, `en.json`) mit dynamischer Spracherkennung, Spracheinstellung, lokalisierten Menüs und ausgewählten Seitenleistenbeschriftungen. Seit 19.11.2026 sind auch der Einstellungsdialog, seine Auswahlwerte, Hilfen, Design-/Hintergrundnamen und Validierungsfehler zweisprachig; gespeicherte Einstellungswerte bleiben unverändert. Die vollständige Lokalisierung der Oberfläche ist weiterhin offen: weitere Dialoge, Werkzeugleisten, Status- und Rückmeldetexte sind teilweise deutsch. T329 prüft Katalogparität, Platzhalter, direkte App-Schlüssel und dynamische Hintergrundnamen.
 - Installer & Paketierung (Etappe 3):
   - macOS: DMG-/TAR-Bauweg vorbereitet; die lokale Ad-hoc-Signatur ist keine Developer-ID-Signatur oder Notarisierung. Homebrew-Cask (`packaging/homebrew/Casks/glide.rb`) ist eine nicht eingereichte Vorlage.
   - Windows: Inno-Setup-Installer (`packaging/windows/glide_setup.iss`) mit stiller Installation (`/VERYSILENT`), Deinstallationsroutine und winget-Manifesten (`packaging/winget/manifests/s/Shaye/Glide/1.0.0/`) als technische Vorbereitung.
 - KI-Agenten-Skill `glide-to-do` (Etappe 1): Exportierbarer und standardisierter KI-Skill für Claude Desktop, Cursor, Gemini CLI und Web-LLMs mit automatischer Prüfsummenvalidierung (`MANIFEST.json`).
 - Veröffentlichung & CI/CD (Etappe 4): Automatisierte GitHub Actions Release-Pipeline (`.github/workflows/release.yml`) ist für Tags vorbereitet. Ein öffentliches Release und Release-Artefakte wurden nicht veröffentlicht.
-- Qualitätssicherung & Systemregister: 100 Module (M001–M100), 329 Testdateien (T001–T329), Glide-System V1.40, Modulbudget WA-50 eingehalten, 0 Befunde in der Standprüfung, byte-identischer 07-Lieferabgleich.
+- Qualitätssicherung & Systemregister: 100 Module (M001–M100), 329 Testdateien (T001–T329), Glide-System V1.42, Modulbudget WA-50 eingehalten, 0 Befunde in der Standprüfung, byte-identischer 07-Lieferabgleich.
 
 
 ## 3.70.0 – 17.11.2026
