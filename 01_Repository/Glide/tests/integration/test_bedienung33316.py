@@ -141,9 +141,16 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
             # Klappen, Auswahlfelder, Sortierung und Verspätet. Gleiche Nutzung
             # soll nicht in unterschiedlichen Zeichen auseinanderlaufen; diese
             # Rollen teilen ihr Zeichen deshalb ausdrücklich (Inhaber 15.11.2026).
-            assert duplicate_roles <= {frozenset(('move_up', 'overdue', 'dropdown_open', 'sort_ascending')),
-                                       frozenset(('move_down', 'dropdown_closed', 'sort_descending')),
-                                       frozenset(('group', 'next'))}, duplicate_roles
+            dreieckrollen = (("move_up", "overdue", "dropdown_open", "sort_ascending"),
+                             ("move_down", "dropdown_closed", "sort_descending"),
+                             ("group", "next"))
+            d84_dopplungen = {frozenset(rollen) for rollen in dreieckrollen}
+            text_rueckfaelle = {frozenset(("move_up", "sort_ascending")),
+                                frozenset(("move_down", "sort_descending"))}
+            assert duplicate_roles <= d84_dopplungen | text_rueckfaelle, duplicate_roles
+            for rollen in dreieckrollen:
+                if all(app.ICONS[key] == mod.ListApp.ICONS[key] for key in rollen):
+                    assert frozenset(rollen) in duplicate_roles, rollen
             actions = app.app_action_entries()
             assert not [a for a in actions if a['group'] == 'Weitere Aktionen']
             app.apply_reminder_badge(1); idle()
