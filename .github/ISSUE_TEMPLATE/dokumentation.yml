@@ -1,0 +1,33 @@
+name: Documentation issue / Dokumentationsfehler
+description: Report outdated or missing documentation / Fehler, veraltete Texte oder fehlende Hinweise melden
+title: "[Documentation] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please report documentation-only findings. / Bitte nur dokumentationsbezogene Befunde melden.
+  - type: textarea
+    id: betroffener-bereich
+    attributes:
+      label: Affected area / Betroffener Bereich
+      description: File, section or GitHub page / Datei, Abschnitt oder GitHub-Seite
+    validations:
+      required: true
+  - type: textarea
+    id: erwartung
+    attributes:
+      label: Expected content / Erwarteter Inhalt
+      description: What should be correct or present? / Was sollte stimmen oder fehlen?
+    validations:
+      required: true
+  - type: textarea
+    id: istzustand
+    attributes:
+      label: Current text / Aktueller Text
+      description: Link or short quote / Verlinkung oder kurzer Wortlaut
+  - type: checkboxes
+    id: pruefung
+    attributes:
+      label: Verification / Prüfung
+      options:
+        - label: I checked whether history or a newer document describes this differently. / Ich habe geprüft, ob die Ursache bereits in einer historischen oder neuen Dokumentversion anders beschrieben wird.

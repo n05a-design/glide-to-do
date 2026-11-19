@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Sicherheitslücke vertraulich melden / Report a security vulnerability privately
+  - name: Report a security vulnerability privately / Sicherheitslücke vertraulich melden
     url: https://github.com/n05a-design/glide-to-do/blob/main/SECURITY.md
-    about: Bitte Sicherheitsprobleme nicht öffentlich als Issue melden / Do not report security issues publicly.
-  - name: Handbuch und Funktionsübersicht / User guide and feature overview
-    url: https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/20_FUNKTIONEN.md
-    about: Bedienung, Grenzen und bekannte Einschränkungen / Read about usage, boundaries, and known limitations.
+    about: Do not report security issues publicly / Bitte Sicherheitsprobleme nicht öffentlich als Issue melden
+  - name: User guide and feature overview / Handbuch und Funktionsübersicht
+    url: https://github.com/n05a-design/glide-to-do
+    about: Start with the English README; the detailed feature guide is currently in German / Englische README als Einstieg, ausführliches Handbuch derzeit auf Deutsch

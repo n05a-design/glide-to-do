@@ -1,0 +1,35 @@
+name: Accessibility / Barrierefreiheit
+description: Report keyboard, focus, contrast, font or reader issues / Tastatur, Fokus, Kontrast, Schrift, Reader oder Bedienbarkeit melden
+title: "[Accessibility] "
+body:
+  - type: dropdown
+    id: bereich
+    attributes:
+      label: Affected area / Betroffener Bereich
+      options:
+        - Keyboard and focus / Tastatur und Fokus
+        - Large text or scaling / Großschrift oder Skalierung
+        - Contrast or color / Kontrast oder Farbraum
+        - Screen reader / Screenreader
+        - Mouse or touch / Maus oder Touch
+        - Other area / Anderer Bereich
+    validations:
+      required: true
+  - type: textarea
+    id: erwartung
+    attributes:
+      label: Expected interaction / Erwartete Bedienung
+    validations:
+      required: true
+  - type: textarea
+    id: reproduktion
+    attributes:
+      label: Reproduction / Reproduktion
+      description: Steps, component, OS and assistive technology. / Schritte, Komponente, System und assistive Technologie.
+    validations:
+      required: true
+  - type: textarea
+    id: umgebung
+    attributes:
+      label: Environment / Umgebung
+      description: Glide version, OS, window size and text size / Glide-Version, Betriebssystem, Fenstergröße und Schriftgröße.

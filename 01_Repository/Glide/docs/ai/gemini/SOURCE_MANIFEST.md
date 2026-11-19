@@ -46,7 +46,7 @@ This collection describes the application/code baseline at topic-branch commit `
 | Localization code | [`src/glide/i18n.py`](../../../src/glide/i18n.py) | Locale and catalog behavior | Referenced; requires code-level refresh after changes |
 | Locale catalogs | [`resources/locales/de.json`](../../../src/glide/resources/locales/de.json), [`en.json`](../../../src/glide/resources/locales/en.json) | German and English strings | Referenced; coverage is not full-app acceptance |
 | Shell target | [`docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](../../GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Planned Shell boundaries and migration | Reviewed; distinct from current architecture |
-| Public docs | [`README.md`](../../../../../README.md), [`README.en.md`](../../../../../README.en.md) | German/English project homepage | Structural test documented; live visual acceptance open |
+| Public docs | [`README.md`](../../../../../README.md), [`README.de.md`](../../../../../README.de.md) | English-default/German project homepage | Structural test documented; live visual acceptance open |
 | Community process | [`.github/ISSUE_TEMPLATE/`](../../../../../.github/ISSUE_TEMPLATE/), [PR template](../../../../../.github/PULL_REQUEST_TEMPLATE.md) | Public GitHub workflows | Current repository source; external settings not inferred |
 | Security model | [`SECURITY.md`](../../../SECURITY.md), [`SECURITY.md`](../../../../../SECURITY.md) | Local security boundaries and reporting | Reviewed; not a security audit |
 | Market research | [`00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md`](../../../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md) | Dated external comparisons and suggestions | Indexed only; facts require refresh at use time |

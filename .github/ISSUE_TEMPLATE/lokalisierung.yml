@@ -1,0 +1,33 @@
+name: Localization issue / Lokalisierungsfehler
+description: Report translation or language-switch issues / Übersetzungs-, Schlüssel-, Platzhalter- oder Sprachwechselfehler melden
+title: "[Localization] "
+body:
+  - type: dropdown
+    id: sprache
+    attributes:
+      label: Affected language / Betroffene Sprache
+      options:
+        - English
+        - Deutsch
+        - Both / Beide
+    validations:
+      required: true
+  - type: textarea
+    id: bereich
+    attributes:
+      label: View or dialog / Ansicht oder Dialog
+      description: Menu, page, dialog, tooltip or message / Menü, Seite, Dialog, Tooltip oder Meldung
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: Current and expected text / Aktueller und erwarteter Text
+      description: Include current text, expected text and screenshot/log. / Aktuellen Text, erwarteten Text und Screenshot-Protokoll angeben.
+    validations:
+      required: true
+  - type: textarea
+    id: umgebung
+    attributes:
+      label: Environment / Umgebung
+      description: Glide version, OS and language source (German, English or system) / Glide-Version, System und Sprachquelle (Deutsch, English oder System).

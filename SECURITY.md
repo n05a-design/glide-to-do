@@ -1,33 +1,35 @@
-# Sicherheitsrichtlinie
+# Security policy
 
-Stand 16.11.2026 · Glide 3.68.0 · Aufgabenformat 26
+Status as of 19.11.2026 · Glide 1.0.0 · data format 26
 
-Glide verarbeitet Aufgaben, Notizen, Seiten, Pinnwände und Anhänge lokal. Die Kernanwendung benötigt weder Konto noch Netzwerkzugriff. Bewusst angeklickte Weblinks und Anhänge werden an das jeweilige Standardprogramm übergeben; die dortige Verarbeitung liegt außerhalb von Glide. Die verbindlichen [technischen Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) ergänzen diese Richtlinie.
+[Read this policy in German](SECURITY.de.md).
 
-## Unterstützte Fassungen
+Glide handles tasks, notes, pages, pinboards, and attachments locally. Core functionality needs neither an account nor network access. Links and attachments opened by the user are handed to the operating system's default application; their processing is outside Glide. The [technical security boundaries (German)](01_Repository/Glide/SECURITY.md) provide additional detail.
 
-Sicherheitskorrekturen gehen in den aktuellen Quellstand auf `main` und anschließend in die Python-Fassung und die nativen Pakete. Der tatsächliche Paket- und Prüfstand ist im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) dokumentiert. Frühere Entwicklungsfassungen erhalten keine eigene Wartungszusage.
+## Supported versions
 
-## Schwachstelle melden
+Security fixes are made for the current source baseline on `main` and then carried into the Python distribution and native packages. The [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) records the actual package and test status. Earlier development versions are not maintained separately.
 
-Bitte vertraulich über [Security → Report a vulnerability](https://github.com/n05a-design/glide-to-do/security/advisories/new) melden. Sicherheitsfunde gehören nicht in öffentliche Issues.
+## Report a vulnerability
 
-Hilfreich sind die betroffene App- und Paketversion, Betriebssystem, gegebenenfalls Python-/Tk-Version, reproduzierbare Schritte sowie erwartetes und tatsächliches Verhalten. Verwende künstliche Beispieldaten und entferne Zugangsdaten, echte Inhalte, Benutzerpfade und private Anhänge aus Belegen.
+Please report vulnerabilities privately through [Security → Report a vulnerability](https://github.com/n05a-design/glide-to-do/security/advisories/new). Do not disclose security findings in public issues.
 
-Nach Eingang wird der Befund bewertet, mit künstlichen Daten nachvollzogen und bei Bestätigung mit einer geprüften Korrektur bearbeitet. Bei Bedarf folgt ein Security Advisory. Feste Reaktionsfristen werden derzeit nicht zugesagt.
+Include the affected app and package version, operating system, Python/Tk version if relevant, reproducible steps, and expected versus observed behavior. Use synthetic examples and remove credentials, real user content, personal paths, and private attachments from evidence.
 
-## Umfang und Vertrauensgrenzen
+Reports are assessed and reproduced with synthetic data. Confirmed findings are addressed with a tested fix; a Security Advisory may follow when appropriate. No fixed response time is currently promised.
 
-- Anwendung unter `01_Repository/Glide/src/glide` und ihre Lieferkopie in `07_Python-Versionen`.
-- Unvertrauenswürdige Eingaben: Sicherungen, Vorlagen, Austauschdateien, Notion-Archive, CSV, ICS, Markdown und Anhänge. Auch lokale Dateien können manipuliert sein.
-- Datenhaltung: Originalbestand, Sicherungen, Einstellungen, Sperrbesitz und Wiederherstellung; Schutz vor unbemerktem Überschreiben oder Datenverlust.
-- Mitgelieferter nativer Code, Systemdecoder, Paketierung, Bauabhängigkeiten, Prüf-/Pflegewerkzeuge und GitHub-Workflows.
-- Berichtenswert sind erreichbare Verletzungen dieser Grenzen mit nachvollziehbarem Einfluss auf Vertraulichkeit, Integrität oder Verfügbarkeit. Die lokale Ausführung allein macht einen Befund nicht unerheblich.
+## Scope and trust boundaries
 
-Reine Fehler in unverändertem Python, Tcl/Tk oder dem Betriebssystem bitte zusätzlich dem jeweiligen Hersteller melden. Fehler in Glides Nutzung oder Paketierung dieser Komponenten bleiben im Umfang. Diese Richtlinie führt keine weiteren Befundausnahmen oder akzeptierten Risiken ein.
+- The application in `01_Repository/Glide/src/glide` and its delivery copy in `07_Python-Versionen`.
+- Untrusted inputs: backups, templates, exchange files, Notion archives, CSV, ICS, Markdown, and attachments. Local files can also be manipulated.
+- Data handling: source data, backups, settings, lock ownership, and recovery; protection against unnoticed overwrites or data loss.
+- Bundled native code, system decoders, packaging, build dependencies, maintenance tools, and GitHub workflows.
+- Reportable issues include reachable violations of these boundaries with a substantiated impact on confidentiality, integrity, or availability. Local execution alone does not make a finding irrelevant.
 
-## Schutz der Projektablage
+Please also report defects in unmodified Python, Tcl/Tk, or the operating system to their respective maintainers. Issues in Glide's use or packaging of those components remain in scope. This policy does not add other exclusions or accepted risks.
 
-GitHub Actions verwendet begrenzte Berechtigungen, Checkout ohne gespeicherte Zugangsdaten und unveränderliche Action-Commits. Bauabhängigkeiten sind mit Version und Original-SHA-256 festgelegt; pip erzwingt ihre Hashprüfung. Die CI prüft unter anderem Tests, Lieferabgleich, Fremdcodeherkunft, Benutzerpfade und Ablagegrenzen. Laufberichte belegen jeweils nur ihren tatsächlichen Quellstand.
+## Protecting the project
 
-Schlüssel, Zertifikate, Tokens, echte Nutzerbestände, Rohlogs und lokale Arbeitskopien gehören nicht in die öffentliche Ablage. `.gitignore` schützt vor versehentlichem Hinzufügen neuer Dateien; bereits versionierte Dateien, `git add -f` und Webuploads erfordern weiterhin Prüfung. Paketprüfungen und Signaturen sind im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md) getrennt ausgewiesen.
+GitHub Actions uses limited permissions, checkout without persisted credentials, and immutable action commits. Build dependencies are pinned by version and original SHA-256; pip enforces hash checking. CI checks include tests, delivery alignment, third-party code provenance, user paths, and repository storage limits. Each run documents only the source revision it actually tested.
+
+Keys, certificates, tokens, real user data, raw logs, and local working copies do not belong in the public repository. `.gitignore` helps prevent accidental addition of new files, but already tracked files, `git add -f`, and web uploads still require review. Package checks and signatures are documented separately in the [delivery report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md).
