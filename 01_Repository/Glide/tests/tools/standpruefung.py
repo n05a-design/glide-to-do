@@ -116,7 +116,7 @@ VERSIONSZEILE = re.compile(r"^\|\s*App-Version\s*\|")
 # Zeilen, die einen Stand behaupten. Absichtlich eng: „Prüfstand: 3.15.0 bis
 # 3.18.0 …" nennt viele Versionen zu Recht und beginnt nicht mit „Stand".
 STANDZEILE = re.compile(
-    r"(^\s*(>\s*)?(\*\*)?(Stand|Arbeitsstand)\b"
+    r"(^\s*(>\s*)?(\*\*)?(Stand|Arbeitsstand|Status\s+as\s+of)\b"
     r"|Entwicklungsstand"
     r"|Aufgabenstand"
     r"|aktueller\s+Glide-Stand"
