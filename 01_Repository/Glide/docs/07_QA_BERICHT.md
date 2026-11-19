@@ -7,7 +7,6 @@
 **Korrektur:** Die Tooltip-Bindung für `<Motion>` ist jetzt ereignisneutral und ruft `schedule()` auch ohne Eventobjekt auf. Der Regressionsteil in `test_features315.py` erzeugt das gebundene Tcl-Motion-Kommando direkt und ruft es ohne Argument auf. Auf macOS/CPython 3.14.5/Tk 9.0.3 bestanden `test_features315.py`, `test_custom_controls.py` 12/12 und `test_arbeitsmodi.py --fall schriftstile` 1/1. Diese Ergebnisse ersetzen weder die Linux-/Windows-Remote-Nachprüfung noch die macOS-Vollprüfung.
 
 **Freigabegrenze:** Glide-System V1.54 ist der lokale Kandidat. Er wird erst mit einem neuen PR-Head geliefert; nach grünen Linux-/Windows-Matrixläufen folgen macOS-Vollprüfung und Paketbau. Keine Assertion, Timeout oder Prüfsuite wurde gelockert.
-
 ## PR #152 – Linux-Timeout in ButtonFlow und Folgekorrektur (19.11.2026)
 
 **Remote-Befund:** Der PR-Vollworkflow [#44538664389](https://github.com/n05a-design/glide-to-do/actions/runs/44538664389) auf Head `dd469d12` bestand die Grundstufe, scheiterte aber in der Linux-Vollprüfung unter Tk 9.1. In `test_arbeitsmodi_bedienung` blieb der Fall `schriftstile` beim initialen Einstellungsdialog in `_center_dialog().update_idletasks()` hängen; die wiederholten Stacks führen durch `ButtonFlow.reflow()` bis `button.grid`. `kartenflaechen` war vorher erfolgreich. Der Windows-Volljob lief bei der letzten Statusabfrage noch; sein Ergebnis ist offen. Dieser Lauf prüft den V1.52-Stand, nicht die folgende lokale Korrektur.
