@@ -44,7 +44,7 @@ def run(destination, app_path):
             child = subprocess.Popen([sys.executable, '-B', str(Path(__file__).with_name('reader_app400.py')),
                                       '--app', str(app_path), '--diagnose', str(exchange)],
                                      stdout=app_log, stderr=subprocess.STDOUT,
-                                     env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'))
+                                     env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1', LANGUAGE='de'))
             ready = wait_value(exchange/'bereit.json', lambda value: value.get('tk') == '9.1.0')
             wait_value(exchange/'zustand.json', lambda value: value.get('pid') == child.pid)
             pid = ready['pid']
