@@ -1884,6 +1884,8 @@ class ButtonFlow(tk.Frame):
         self._layout_signature = None
         self._reflowing = False
         self._last_reflow_width = None
+        self._wrap_seen_widths = set()
+        self._wrap_window_width = None
         self.bind("<Configure>", self._on_configure, add="+")
         self.bind("<Destroy>", self.cancel_reflow, add="+")
 
@@ -1932,9 +1934,15 @@ class ButtonFlow(tk.Frame):
         try:
             self.cancel_reflow()
             w = self.winfo_width()
-            width = 999999 if w <= 1 else w
             if w > 1:
+                window_width = self.winfo_toplevel().winfo_width()
+                if self._wrap_window_width != window_width:
+                    self._wrap_window_width = window_width
+                    self._wrap_seen_widths.clear()
+                width = glide_design.settled_wrap_width(w, self._wrap_seen_widths)
                 self._last_reflow_width = w
+            else:
+                width = 999999
             compact = self.compact_keys is not None and width < self.compact_below
             bg = self.cget("bg")
             visible, hidden = [], []
