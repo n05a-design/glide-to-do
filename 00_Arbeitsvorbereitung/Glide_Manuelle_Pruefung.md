@@ -2,6 +2,17 @@
 
 Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
+<a id="offene-sicht-und-bedienabnahme-deen-release-10-etappe-2"></a>
+## Offene Sicht- und Bedienabnahme DE/EN – Release 1.0, Etappe 2
+
+Prüfbasis: aktueller `main`-Quellstand Glide 1.0.0 / Glide-System V1.54 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen kurzen Testordner). Die automatisierten Locale-Fälle stehen im [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md#deen-lokalisierung--release-10-etappe-2); sie belegen weder sichtbare Textpassung noch Bedienbarkeit oder native Screenreader-Unterstützung. Pro Lauf Plattform, Paket-/Quellhash, Tcl/Tk, Skalierung, Fenstergröße, Sprache und Ergebnis festhalten.
+
+- [ ] **Spracheinstellung:** Unter Einstellungen › Darstellung und Bedienung „Automatisch (System)“, „Deutsch“ und „English“ wählen. Speichern und Neustart prüfen; Beschriftungen der Einstellungen folgen der aktiven Sprache und die Auswahl bleibt erhalten.
+- [ ] **Seiteneditor und Rückmeldungen:** In beiden Sprachen Werkzeugleiste, Format-/Blockmenü, Kontextmenü und Mehr-Menü öffnen; Status-, Such- und Aktionsrückmeldungen sowie Undo/Redo prüfen. Lange Texte dürfen Menüs und Knöpfe nicht überdecken oder unzugänglich machen.
+- [ ] **Aufgabeninspektor und Kalender:** In beiden Sprachen Art, Wichtigkeit, Wiederholung, Erinnerung und Fälligkeit bearbeiten. Kalender-Monats-/Wochentagsnamen und Accessibility-Namen prüfen; nach Speichern müssen die vorhandenen stabilen Werte erhalten bleiben.
+- [ ] **Tastatur, Fokus und Accessibility-Namen:** Alle genannten Felder ohne Maus erreichen und bedienen; nach Unterdialogen muss der Fokus sinnvoll zurückkehren. Die zugänglichen Namen der lokalisierten Datums-/Kalenderfelder müssen zur sichtbaren Sprache passen. Dies ist keine vollständige native Screenreader-Abnahme.
+- [ ] **Umbruch und Darstellung:** Einstellungsdialog, Editor und Inspektor in Hell/Dunkel, bei Mindestfenstergröße sowie normaler und großer Schrift ansehen. Beschriftungen, Auswahlwerte und Hinweise dürfen weder abgeschnitten noch überlagert sein.
+
 ## Offene Sichtprüfung 3.67.0/3.68.0: ausgelagerte Bedienelemente und Menüs
 
 Prüfbasis ist `main` ab 3.69.0 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen Testordner). Paket 4 (`custom_controls.py`) und Paket 5 (`desktop_adapter.py`) haben Code verschoben, nicht Verhalten geändert; automatische Tests decken die Verträge ab, nicht den Anblick und die echte Bedienung. Am Mac und unter Windows prüfen; Plattform, Tcl/Tk und Ergebnis festhalten.
