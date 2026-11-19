@@ -1,0 +1,45 @@
+name: Glide-Dokumentation
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "README.md"
+      - "README.en.md"
+      - "CONTRIBUTING.md"
+      - "CODE_OF_CONDUCT.md"
+      - "SUPPORT.md"
+      - "SECURITY.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/PULL_REQUEST_TEMPLATE.md"
+      - ".github/workflows/documentation.yml"
+      - "01_Repository/Glide/docs/**"
+      - "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      - "00_Arbeitsvorbereitung/Glide_Uebergabe.md"
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dokumentation:
+    name: Dokumentation, YAML und Stand
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.14"
+      - name: Issue-/Community-Dateien und YAML prüfen
+        run: |
+          ruby -e 'require "yaml"; Dir[".github/ISSUE_TEMPLATE/*.yml"].each { |f| YAML.load_file(f) }'
+          test -f CODE_OF_CONDUCT.md
+          test -f SUPPORT.md
+      - name: Stand-, Link- und Systemprüfung
+        run: |
+          cd 01_Repository/Glide
+          python3 -B tests/tools/test_standpruefung.py
+          python3 -B tests/tools/test_glide_system.py

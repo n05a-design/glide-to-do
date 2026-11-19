@@ -1,6 +1,6 @@
 # An Glide arbeiten
 
-Stand 18.11.2026 · Glide 1.0.0
+Stand 19.11.2026 · Glide 1.0.0
 
 Du möchtest einen Fehler melden, eine Idee einbringen, die Dokumentation verbessern oder an Glide entwickeln? Hier findest du den Einstieg und die zuständigen Unterlagen.
 
@@ -22,11 +22,17 @@ Der Entwicklungsplan bleibt die zentrale Roadmap. Funktionsbeschreibungen, Archi
 
 ## Fehler melden und Ideen vorschlagen
 
-Nutze die zweisprachigen [Formulare für Fehler und Wünsche](https://github.com/n05a-design/glide-to-do/issues/new/choose). Beschreibe bei einem Fehler die Glide-Version, das Betriebssystem, die Schritte zur Wiederholung sowie das erwartete und das beobachtete Verhalten. Verwende für Bilder und Beispieldateien künstliche Inhalte oder den [Showcase](05_Probelisten_Testdaten/Showcase/README.md). Für Codeänderungen gilt die zweisprachige [Pull-Request-Vorlage](.github/PULL_REQUEST_TEMPLATE.md).
+Nutze die zweisprachigen [Formulare für Fehler und Wünsche](https://github.com/n05a-design/glide-to-do/issues/new/choose) oder wähle gezielt:
+
+- [Dokumentationsfehler](.github/ISSUE_TEMPLATE/dokumentation.yml)
+- [Lokalisierungsfehler](.github/ISSUE_TEMPLATE/lokalisierung.yml)
+- [Barrierefreiheit](.github/ISSUE_TEMPLATE/accessibility.yml)
+
+Beschreibe bei einem Fehler die Glide-Version, das Betriebssystem, die Schritte zur Wiederholung sowie das erwartete und das beobachtete Verhalten. Verwende für Bilder und Beispieldateien künstliche Inhalte oder den [Showcase](05_Probelisten_Testdaten/Showcase/README.md). Für Codeänderungen gilt die zweisprachige [Pull-Request-Vorlage](.github/PULL_REQUEST_TEMPLATE.md).
 
 Bei einer Idee hilft die konkrete Arbeitssituation: Was möchtest du erreichen, und wo fehlt dir etwas? Prüfe zuvor die Roadmap und die [Produktgrenzen](01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). Größere Änderungen und neue Abhängigkeiten werden vor der Umsetzung mit dem Inhaber abgestimmt; Vorschläge und Prioritäten werden im Entwicklungsplan festgehalten.
 
-Sicherheitslücken bitte vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md) melden.
+Sicherheitslücken bitte vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md) melden. Allgemeine Unterstützung steht in [SUPPORT.md](SUPPORT.md); gemeinsam gelten die [Verhaltensgrundsätze](CODE_OF_CONDUCT.md).
 
 ## Entwicklungsablauf
 

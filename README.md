@@ -146,7 +146,11 @@ Glide bietet Tastaturwege, anpassbare Schriftgrößen und Kontrastdesigns. Eine 
 
 ## Rückmeldung und Mitwirkung
 
-Nutze die [zweisprachigen Formulare für Fehler und Ideen](https://github.com/n05a-design/glide-to-do/issues/new/choose). Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md).
+Nutze die [zweisprachigen Formulare für Fehler und Ideen](https://github.com/n05a-design/glide-to-do/issues/new/choose). Gezielt melden:
+[Dokumentation](.github/ISSUE_TEMPLATE/dokumentation.yml) ·
+[Lokalisierung](.github/ISSUE_TEMPLATE/lokalisierung.yml) ·
+[Barrierefreiheit](.github/ISSUE_TEMPLATE/accessibility.yml).
+Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md). Unterstützung findest du in [SUPPORT.md](SUPPORT.md), gemeinschaftliche Regeln in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Entwicklung und Qualität
 

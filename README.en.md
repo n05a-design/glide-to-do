@@ -145,7 +145,11 @@ Glide offers keyboard access, adjustable text sizes, and contrast themes. A comp
 
 ## Feedback and contributions
 
-Use the [bilingual issue forms for bugs and ideas](https://github.com/n05a-design/glide-to-do/issues/new/choose). Please use synthetic example data only. Report security vulnerabilities confidentially through the [security policy](SECURITY.md).
+Use the [bilingual issue forms for bugs and ideas](https://github.com/n05a-design/glide-to-do/issues/new/choose). Target a specific area:
+[Documentation](.github/ISSUE_TEMPLATE/dokumentation.yml) ·
+[Localization](.github/ISSUE_TEMPLATE/lokalisierung.yml) ·
+[Accessibility](.github/ISSUE_TEMPLATE/accessibility.yml).
+Please use synthetic example data only. Report security vulnerabilities confidentially through the [security policy](SECURITY.md). Find help in [SUPPORT.md](SUPPORT.md) and community rules in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Development and quality
 
