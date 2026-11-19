@@ -175,3 +175,7 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 | `accessibility`, `accessibility_bindings`, `core_accessibility` | `Attributes`, `set_attributes`, `Binding`, allgemeine Binder | `task_value`, alle Binder mit `app` |
 | `undo_history` | `RedoHistory` | Board-Einträge |
 | `runtime_config` | Auflösungsmechanik | Produktname, Dateinamen, Umgebungsvariablen |
+
+### Locale-Vertrag für sichtbare Shell-Beschriftungen
+
+Shell-Module erhalten bereits angezeigte Menütexte, Aktionen und Beschriftungen vom Host; sie laden keine Glide-Kataloge und wählen keine Produktsprache. `desktop_adapter` ergänzt dafür bei `primary_modifier`, `format_accelerator` und `format_redo_accelerator` den optionalen Parameter `modifier_labels` (`command`, `control`, `shift`). Glide reicht die aktiven DE/EN-Katalogwerte ein. Bestehende Aufrufer ohne diesen Parameter behalten ihre bisherigen Beschriftungen (`Cmd`, `Strg`, `Shift`). Dieser kleine Host→Shell-Vertrag führt weder einen eigenen Übersetzungsdienst noch eine neue Shell-Abstraktion ein. T319 und T326 sichern Imports, öffentliche Signaturen und den rückwärtskompatiblen Fallback; T329 prüft die beiden Katalogwerte.

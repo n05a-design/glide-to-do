@@ -28,6 +28,11 @@ class TestPlattformUndModifikatoren(unittest.TestCase):
     def test_primary_modifier(self):
         self.assertEqual(desktop_adapter.primary_modifier(macos_override=True), "Cmd")
         self.assertEqual(desktop_adapter.primary_modifier(macos_override=False), "Strg")
+        labels = {"command": "Cmd", "control": "Ctrl"}
+        self.assertEqual(
+            desktop_adapter.primary_modifier(macos_override=False, modifier_labels=labels),
+            "Ctrl",
+        )
 
     def test_format_accelerator(self):
         self.assertEqual(
@@ -46,6 +51,12 @@ class TestPlattformUndModifikatoren(unittest.TestCase):
             desktop_adapter.format_accelerator("Shift", "N", macos_override=False),
             "Strg+Shift+N",
         )
+        self.assertEqual(
+            desktop_adapter.format_accelerator(
+                "P", macos_override=False, modifier_labels={"control": "Ctrl"}
+            ),
+            "Ctrl+P",
+        )
 
     def test_format_redo_accelerator(self):
         self.assertEqual(
@@ -63,6 +74,13 @@ class TestPlattformUndModifikatoren(unittest.TestCase):
                 windows_override=False, macos_override=False
             ),
             "Strg+Shift+Z",
+        )
+        self.assertEqual(
+            desktop_adapter.format_redo_accelerator(
+                windows_override=False, macos_override=False,
+                modifier_labels={"control": "Ctrl", "shift": "Shift"},
+            ),
+            "Ctrl+Shift+Z",
         )
 
 

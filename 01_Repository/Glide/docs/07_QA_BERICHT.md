@@ -1,5 +1,59 @@
 # QA-Bericht – Glide 1.0.0
 
+## PR #149 – Remote-CI-Status (19.11.2026)
+
+PR #149 ist in `main` gemergt (Merge-Commit `84cdd04a`). Der zugehörige Workflow [#44420225118](https://github.com/n05a-design/glide-to-do/actions/runs/44420225118) prüfte PR-Head `99deb8c4` und endete auch nach dem Retry insgesamt **fehlgeschlagen**:
+
+- Linux-Grundstufe bestanden; Windows-Vollprüfung und eigenständiger Windows-Paketbau bestanden.
+- Linux-Vollprüfung und erneuter Lauf des fehlgeschlagenen Jobs scheiterten beide: `test_arbeitsmodi_bedienung` überschritt jeweils das 900-Sekunden-Limit. Im Retry war `kartenflaechen` erfolgreich; der Timeout begann im Fall `schriftstile` bei `show_settings_dialog`/`_center_dialog().update_idletasks()`. Wiederholte Stacktraces führen durch `GlideCheckbutton._render` und Configure-Ereignisse. Das grenzt die Fehlerstelle ein, beweist aber noch keine vollständige Ursache.
+- UI-Diagnose und Tk-/Screenreader-Jobs wurden übersprungen; CodeQL wurde in diesem Workflow übersprungen. Die separaten Analyze-Jobs für Actions, Python und Ruby bestanden.
+
+Der Lauf gehört zum gemergten PR-Stand vor dem lokalen V1.46-Kandidaten und prüfte diesen Kandidaten nicht. Er ist zugleich kein grüner Linux-Nachweis für den Main-Stand. Der erneute Versuch dauerte bis 07:21 UTC; der nachgelagerte Windows-Volltest und Windows-Paketbau bestanden. UI-Diagnose und Tk-/Accessibility-Jobs wurden übersprungen.
+
+**Gezielte lokale Gegenprobe:** Auf dem aktuellen Kandidaten bestand auf macOS/CPython 3.14.5 `tests/integration/test_arbeitsmodi.py --fall schriftstile` mit **1/1** in 11,636 s. Das korrespondierende Linux-Verhalten ist damit nicht widerlegt; die Gegenprobe ersetzt den fehlgeschlagenen Linux-Gruppenlauf nicht.
+
+## Linux-Timeout in der initialen Umbruchmessung des Einstellungsdialogs (V1.46 lokal)
+
+**Befund:** Beide Linux-Versuche hingen im Fall `schriftstile` beim initialen Aufbau des Einstellungsdialogs. Die Stacktraces zeigen `update_idletasks()` in `_center_dialog`, wiederholt ausgelöste Configure-Ereignisse und `GlideCheckbutton._render`. Der Code setzte die Menge beobachteter Umbruchbreiten zurück, sobald sich die Dialogbreite änderte; während der natürlichen Größenmessung wird diese Breite selbst durch den Umbruch beeinflusst. Das ist eine plausible Ursache, aber ohne Linux-Lauf des Fixes kein bestätigter Root Cause.
+
+**Lokaler Fix:** `app.pyw` behält die beobachteten Zwischenbreiten bis `dialog._glide_layout_measured` gesetzt ist; erst dann wird die Schaukel-Erkennung bei einer tatsächlichen Dialogbreitenänderung zurückgesetzt. Keine Daten-, Fenstermaß- oder Texteinstellungen wurden geändert. Glide-System V1.46; keine neue Datei.
+
+**Gezielte lokale Prüfungen:** Auf macOS/CPython 3.14.5 bestand `tests/integration/test_arbeitsmodi.py --fall schriftstile` mit **1/1** in 12,956 s; `tests/unit/test_ui_design.py` bestand mit **23/23**. Die Integration deckt den echten Dialogaufbau über vier Schriftstile ab.
+
+**CI-Grundstufe nach Fix und Dokumentpflege:** `GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>` bestand auf macOS/CPython 3.14.5 mit Exitcode 0. Syntax über 447 Quelldateien, Versionskonsistenz, Dokumentindex und 543 lokale Markdown-Links, Werkzeuge, Fachlogik-Tests, Zeitzonengegenlauf, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. Nicht blockierende Hinweise: fünf erwartete Prüfkandidat-/Lieferstand-Abweichungen in `07_Python-Versionen` sowie `tkinterdnd2` wegen Zertifikatsprüfung nicht abrufbar. `git diff --check` bestand.
+
+**Grenze:** Es gibt noch keinen Linux-Remote-Lauf mit dem lokalen Fix. Die zwei roten PR-#149-Läufe bleiben als historische Prüfergebnisse bestehen. Vollprüfung und nativer macOS-Paketbau für den V1.46-Kandidaten stehen aus.
+
+## DE/EN-Statusmeldungen in Seiten- und Notizeditor (19.11.2026)
+
+**Lokaler Stand:** Statische Statusrückmeldungen zu Speichern, Fehlern, Format-/Linkauswahl, Suchtreffern, Leseschutz, Bildern und Zwischenablage sowie die Einträge im gemeinsamen Editor-Mehr-Menü verwenden DE/EN-Katalogschlüssel. Keine Änderung an App-Version 1.0.0, Datenformat 26 oder Dokumentinhalt. Glide-System V1.45, 100 Quellmodule und 329 Test-/Werkzeugdateien; keine neue Datei.
+
+**Gezielte Prüfungen:** Auf macOS/CPython 3.14.5 mit künstlichem `GLIDE_DATA_DIR` bestand nach der Mehr-Menü-Assertion `tests/integration/test_arbeitsmodi.py --fall editor_locale` mit **1/1** (3,413 s), `tests/unit/test_i18n.py` mit **17/17** (2,507 s) und `tests/tools/test_glide_system.py` mit **5/5** (0,032 s). Der Integrationstest prüft in Deutsch und Englisch gespeicherten/ungespeicherten Status, Auswahlhinweise, Suchtreffer im Singular/Plural und repräsentative Einträge des Mehr-Menüs.
+
+**CI-Grundstufe:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=<temporärer Ordner> python3 -B tests/tools/ci_grundstufe.py --protokoll <temporärer Ordner>/protokoll` bestand nach der Mehr-Menü-Assertion auf macOS/CPython 3.14.5 mit Exitcode 0. Syntax (447 Python-Dateien), Dokumentationsindex und 543 lokale Markdown-Dateilinks, Werkzeug-/Fachtests, Zeitzonen-Gegenlauf, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz, Ablageprüfung und Synchronisationsprüfung bestanden. Nicht blockierende Hinweise: fünf erwartete Prüfkandidat-/Lieferstand-Abweichungen in `07_Python-Versionen` (App, `core_accessibility.py`, `desktop_adapter.py`, beide Locale-Kataloge) und `tkinterdnd2` wegen Zertifikatsprüfung nicht abrufbar. `git diff --check` bestand.
+
+**Grenzen:** Gesamtvollprüfung, Remote-CI dieses lokalen Kandidaten und menschliche Sicht-/Bedien-/Accessibility-Abnahme sind für diesen Stand noch nicht belegt. Der PR-#149-Linux-Timeout ist separat dokumentiert und wird durch lokale macOS-Prüfungen nicht aufgehoben. Dynamische Validierungsausnahmen, Undo-Toasts außerhalb des Aktionsfeedbacks, weitere Appdialoge und Status-/Fehlertexte bleiben teilweise deutsch. Kein Merge-, Release- oder Liefernachweis.
+
+## DE/EN-Lokalisierung des Aufgabeninspektors und der Kalenderfelder (19.11.2026)
+
+**Lokaler Stand:** Nach dem Seiteneditor-/Feedback-Schnitt (§21.122) lokalisiert Glide den Aufgabeninspektor einschließlich Wichtigkeits-, Wiederholungs-, Erinnerungs- und Datumsfeldern. Englische Auswahltexte werden auf dieselben internen numerischen und strukturierten Werte wie die deutsche Ansicht zurückgeführt; Datenformat 26 und App-Version 1.0.0 bleiben unverändert. Glide-System V1.44 (100 Quellmodule, 329 Test-/Werkzeugdateien). Nicht in `main`; keine Versionslieferung.
+
+**Gezielte Prüfungen:** Auf macOS/CPython 3.14.5 mit künstlichem `GLIDE_DATA_DIR` bestanden `tests/unit/test_i18n.py` (**17/17**), `tests/unit/test_core_accessibility.py` (**38/38**), `tests/tools/test_glide_system.py` (**5/5**) sowie `tests/integration/test_arbeitsmodi.py --fall inspector_locale`, `--fall editor_locale` und `--fall feedback_locale` (**je 1/1**). `inspector_locale` prüft Deutsch und Englisch, stabile Speicherwerte, Wiederholungs-/Erinnerungs-/Wochentagswerte und Datums-/Accessibility-Beschriftungen.
+
+**CI-Grundstufe:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=/tmp/glide-ci-data python3 -B tests/tools/ci_grundstufe.py --protokoll /tmp/glide-ci-protokoll` bestand auf macOS/CPython 3.14.5 mit Exitcode 0. Syntax (447 Python-Dateien), Dokumentationsindex und 543 lokale Markdown-Dateilinks, Werkzeug-/Fachtests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung bestanden. Nicht blockierende Hinweise: fünf erwartete Prüfkandidat-/Lieferstand-Abweichungen in `07_Python-Versionen` (App, `core_accessibility.py`, `desktop_adapter.py`, beide Locale-Kataloge) und `tkinterdnd2` wegen Zertifikatsprüfung nicht abrufbar. `git diff --check` bestand.
+
+**Grenzen:** Gesamtvollprüfung, Remote-CI und menschliche Sicht-/Bedien-/Accessibility-Abnahme sind für diesen lokalen Stand nicht belegt. Weitere Dialoge und Status-/Fehlertexte, dynamische Undo-Toasts, großer Schriftgrad und native Screenreader-Prüfung bleiben offen. Kein Merge-, Release- oder Liefernachweis.
+
+## DE/EN-Lokalisierung von Seiteneditor, Aktionsfeedback und Shell-Modifier (19.11.2026)
+
+**Lokaler Stand:** Nach PR #148 wurden Seiteneditor-Beschriftungen, Aktionsfeedbacktexte und Shell-Modifier-Beschriftungen ergänzt. Keine App-Version, Datenformatstufe oder Einstellungskennung geändert; der Shell-Aufruf bleibt für bestehende Hosts rückwärtskompatibel.
+
+**Gezielte Prüfungen:** Auf macOS/CPython 3.14.5 mit künstlichem `GLIDE_DATA_DIR` bestanden `tests/unit/test_i18n.py` (**16/16**), `tests/integration/test_arbeitsmodi.py --fall feedback_locale`, `--fall editor_locale` und `--fall blockaktionen` (**je 1/1**), `tests/unit/test_desktop_adapter.py` (**13/13**), `tests/unit/test_shell_importregel.py` (**7/7**) und `tests/tools/test_glide_system.py` (**5/5**). `feedback_locale` prüft deutsche und englische Einzel-/Mehrzahltexte sowie Undo-/Redo-Beschriftungen.
+
+**CI-Grundstufe:** `cd 01_Repository/Glide && GLIDE_DATA_DIR=/tmp/glide-ci-data python3 -B tests/tools/ci_grundstufe.py --protokoll /tmp/glide-ci-protokoll` bestand auf macOS/CPython 3.14.5. Syntax (447 Python-Dateien), Dokumentationsindex und 543 lokale Markdown-Dateilinks, Werkzeug-/Fachtests, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablagegröße bestanden. Hinweise: vier erwartete Prüfkandidat-/Lieferstand-Abweichungen in `07_Python-Versionen` und `tkinterdnd2` wegen Zertifikatsfehler nicht abrufbar. `git diff --check` bestand.
+
+**Grenzen:** Gesamtvollprüfung, Remote-CI und menschliche Sicht-/Bedien-/Accessibility-Abnahme sind für diesen lokalen Stand nicht belegt. Weitere Dialoge, Inspektor, Status-/Fehlertexte und die dynamischen Texte der meisten Undo-Toasts sind weiterhin teilweise deutsch. Kein Merge-, Release- oder Liefernachweis.
+
 ## DE/EN-Lokalisierung des Einstellungsdialogs (19.11.2026)
 
 **Stand:** PR #148 ist auf `main` gemergt (Merge-Commit `3f4f2219`); die Änderungen umfassen App, Kataloge und Tests. Datenformat 26 und App-Version 1.0.0 unverändert. CodeQL und Grundstufe waren erfolgreich; die Linux-Vollprüfung lief bei letzter Abfrage noch. Die Führungsdokumente werden in diesem Nachtrag mit dem gemergten Stand synchronisiert.

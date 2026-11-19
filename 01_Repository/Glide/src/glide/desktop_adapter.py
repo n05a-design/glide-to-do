@@ -37,24 +37,31 @@ def platform_name():
     return "linux"
 
 
-def primary_modifier(macos_override=None):
-    """Liefert den primären Modifikator-Namen (Cmd unter macOS, sonst Strg)."""
+def primary_modifier(macos_override=None, modifier_labels=None):
+    """Liefert den vom Host benannten primären Modifikator."""
     mac = is_macos() if macos_override is None else macos_override
-    return "Cmd" if mac else "Strg"
+    labels = modifier_labels or {}
+    name = "command" if mac else "control"
+    fallback = "Cmd" if mac else "Strg"
+    return labels.get(name, fallback)
 
 
-def format_accelerator(*keys, macos_override=None):
+def format_accelerator(*keys, macos_override=None, modifier_labels=None):
     """Plattformgerechte Textdarstellung eines Tastenkürzels."""
-    mod = primary_modifier(macos_override)
+    mod = primary_modifier(macos_override, modifier_labels)
     return "+".join([mod] + [str(k) for k in keys])
 
 
-def format_redo_accelerator(windows_override=None, macos_override=None):
+def format_redo_accelerator(windows_override=None, macos_override=None,
+                            modifier_labels=None):
     """Beschriftung für „Wiederholen“ nach Systemkonvention (Strg+Y unter Windows)."""
     win = is_windows() if windows_override is None else windows_override
     if win:
-        return format_accelerator("Y", macos_override=False)
-    return format_accelerator("Shift", "Z", macos_override=macos_override)
+        return format_accelerator("Y", macos_override=False, modifier_labels=modifier_labels)
+    labels = modifier_labels or {}
+    shift = labels.get("shift", "Shift")
+    return format_accelerator(shift, "Z", macos_override=macos_override,
+                              modifier_labels=modifier_labels)
 
 
 def _append_command_entry(menu, entry, action_resolver=None):

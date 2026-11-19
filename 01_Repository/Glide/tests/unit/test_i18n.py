@@ -24,6 +24,7 @@ if str(SRC) not in sys.path:
 
 import i18n
 import backdrop
+import desktop_adapter
 
 
 class I18nTests(unittest.TestCase):
@@ -186,6 +187,112 @@ class I18nTests(unittest.TestCase):
                 de_vars, en_vars,
                 f"Platzhalter stimmen für Schlüssel '{key}' nicht überein: de={de_vars}, en={en_vars}"
             )
+
+    def test_shell_accelerator_labels_follow_host_locale(self):
+        expected = {
+            "de": ("Strg+P", "Strg+Umschalt+Z"),
+            "en": ("Ctrl+P", "Ctrl+Shift+Z"),
+        }
+        for language, (accelerator, redo) in expected.items():
+            i18n.set_language(language)
+            labels = {
+                name: i18n.t(f"keyboard.modifier.{name}")
+                for name in ("command", "control", "shift")
+            }
+            self.assertEqual(
+                desktop_adapter.format_accelerator(
+                    "P", macos_override=False, modifier_labels=labels
+                ),
+                accelerator,
+            )
+            self.assertEqual(
+                desktop_adapter.format_redo_accelerator(
+                    windows_override=False, macos_override=False,
+                    modifier_labels=labels,
+                ),
+                redo,
+            )
+
+    def test_editor_translation_keys_exist_in_both_catalogs(self):
+        editor_keys = {
+            "editor.toolbar.list", "editor.toolbar.numbered", "editor.toolbar.task",
+            "editor.toolbar.quote", "editor.toolbar.image", "editor.toolbar.more",
+            "editor.tooltip.more", "editor.tooltip.rename_page",
+            "editor.format_bar.block_menu", "editor.menu.cut", "editor.menu.copy",
+            "editor.menu.paste", "editor.menu.paste_plain", "editor.menu.select_all",
+            "editor.menu.link", "editor.menu.link_short", "editor.menu.remove_format",
+            "editor.menu.format", "editor.menu.convert", "editor.menu.line_up",
+            "editor.menu.line_down", "editor.menu.duplicate_line", "editor.menu.delete_line",
+            "editor.menu.divider", "editor.menu.insert_image", "editor.menu.paste_page",
+            "editor.block_actions.search", "editor.block_actions.title",
+        }
+        editor_keys.update(f"editor.block.{tag}" for tag in (
+            "text", "h1", "h2", "h3", "h4", "bullet", "number", "task",
+            "toggle", "toggle_h2", "quote", "callout", "codeblock",
+        ))
+        editor_keys.update(f"editor.format.{tag}" for tag in (
+            "bold", "italic", "underline", "strike", "code", "highlight",
+        ))
+        editor_keys.update(f"editor.format_bar.{tag}" for tag in (
+            "bold", "italic", "underline", "strike", "code", "highlight",
+        ))
+        editor_keys.update(f"editor.block_actions.section.{name}" for name in (
+            "edit", "task", "format", "line",
+        ))
+        editor_keys.update(f"editor.block_actions.order.{name}" for name in (
+            "convert", "line", "format", "edit", "task",
+        ))
+        locales_dir = i18n.get_locales_dir()
+        for language in ("de", "en"):
+            catalog = json.loads((locales_dir / f"{language}.json").read_text(encoding="utf-8"))
+            self.assertEqual(editor_keys - catalog.keys(), set(),
+                             f"Editor-Schlüssel fehlen in {language}.json")
+
+    def test_inspector_dynamic_translation_keys_exist_in_both_catalogs(self):
+        inspector_keys = {
+            *(f"inspector.kind.{kind}" for kind in ("task", "group", "long", "heading")),
+            *(f"inspector.repeat.{kind}" for kind in (
+                "none", "taeglich", "tage", "wochentage", "woechentlich", "monatlich",
+                "jaehrlich", "serie_woche", "serie_monat", "serie_jahr", "serie_position",
+                "serie_letzter", "serie_werktag",
+            )),
+            *(f"inspector.relation.{kind}" for kind in ("links", "blocked_by")),
+            *(f"inspector.relation.add.{kind}" for kind in ("links", "blocked_by")),
+            *(f"inspector.relation.backlink.{kind}" for kind in ("links", "blocked_by")),
+            *(f"calendar.month.{month}" for month in range(1, 13)),
+        }
+        locales_dir = i18n.get_locales_dir()
+        for language in ("de", "en"):
+            catalog = json.loads((locales_dir / f"{language}.json").read_text(encoding="utf-8"))
+            self.assertEqual(inspector_keys - catalog.keys(), set(),
+                             f"Dynamische Inspektor-/Kalenderschlüssel fehlen in {language}.json")
+
+    def test_action_feedback_translation_keys_cover_every_action(self):
+        source_path = SRC / "app.pyw"
+        tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+        tables = [
+            node.value
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Assign)
+            and any(isinstance(target, ast.Name) and target.id == "ACTION_FEEDBACK_TEXTS"
+                    for target in node.targets)
+        ]
+        self.assertEqual(len(tables), 1, "Rückmelderegister nicht eindeutig gefunden")
+        action_keys = ast.literal_eval(tables[0]).keys()
+        required = {f"feedback.{key}{suffix}" for key in action_keys
+                    for suffix in ("", ".plural")}
+        locales_dir = i18n.get_locales_dir()
+        catalogs = {
+            language: json.loads((locales_dir / f"{language}.json").read_text(encoding="utf-8"))
+            for language in ("de", "en")
+        }
+        for language, catalog in catalogs.items():
+            self.assertEqual(required - catalog.keys(), set(),
+                             f"Rückmeldungen fehlen in {language}.json")
+        self.assertEqual(i18n.safe_format(catalogs["de"]["feedback.item_created.plural"], {"n": 3}),
+                         "3 Punkte angelegt")
+        self.assertEqual(i18n.safe_format(catalogs["en"]["feedback.item_created.plural"], {"n": 3}),
+                         "3 items created")
 
     def test_module_budget_wa50(self):
         source_path = SRC / "i18n.py"
