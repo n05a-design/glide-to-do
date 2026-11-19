@@ -1,5 +1,15 @@
 # QA-Bericht – Glide 1.0.0
 
+## PR #152 – erneuter Linux-Timeout und Dialogfolgefix (19.11.2026)
+
+Der Linux-Vollprüflauf [#44498011031](https://github.com/n05a-design/glide-to-do/actions/runs/44498011031) auf PR-Head `f34fb73d` bestand die Grundstufe, scheiterte aber in `test_arbeitsmodi_bedienung`, Fall `schriftstile`, nach dem erfolgreichen Fall `kartenflaechen`. Die wiederholten Stacktraces enden in `show_settings_dialog` → `_center_dialog` → `dialog.update_idletasks()`; der Undo-/Redo-Test war in diesem Lauf nicht die Fehlerstelle. Der Windows-Volltest desselben Workflows lief zuletzt noch. Dieser Lauf enthält den nachfolgenden lokalen Dialogfix nicht.
+
+**Befund und lokaler Fix V1.48:** Die Spalten-Configure-Rückrufe passten `wraplength` während `_center_dialog` noch die natürliche Wunschgröße maß an. Diese Rückkopplung konnte die Idle-Messung unter Linux/Tk 9.1 festhalten. Umbruchanpassungen werden jetzt bis zur festgelegten Dialoggeometrie ausgesetzt und anschließend für beide Spalten gezielt eingeplant; die vorhandene Schaukel-Erkennung bleibt für spätere Größenwechsel erhalten. `test_arbeitsmodi.py --fall schriftstile` verlangt nun, dass beide Spalten nach dem Layout einen aktiven Umbruch haben.
+
+**Gezielte lokale Prüfung:** Auf macOS/CPython 3.14.5 bestand der Fall `schriftstile` vor der Änderung mit **1/1** in 12,622 s und nachher mit **1/1** in 10,129 s. `tests/unit/test_ui_design.py` bestand nachher mit **23/23**; Syntaxprüfung der beiden geänderten Python-Dateien und `git diff --check` bestanden. Das bestätigt die lokale Bedienwirkung, ersetzt aber keinen Linux/Tk-9.1-Nachweis.
+
+**Nachprüfung:** Die CI-Grundstufe bestand lokal auf macOS/CPython 3.14.5 am 19.11.2026 mit Exitcode 0; die Prüfschritte für Tests, Syntax, Dokumentation, Datenschutz und Lieferstand waren grün. Die externe Herkunftsprüfung für `tkinterdnd2` blieb wegen eines lokalen SSL-Zertifikatsfehlers ohne Netzprüfung. Der CI-Schritt bestätigte außerdem, dass `07_Python-Versionen` bytegleich zu `src/glide` ist. Eine neue Linux-Vollprüfung auf dem aktualisierten PR-Head steht noch aus; die vollständige native macOS-Prüfung samt Paketbau und die menschliche Sicht-/Bedienabnahme folgen erst nach grünen Pflichtläufen. PR #152 ist nicht gemergt.
+
 ## macOS-Paketstart auf Merge-Commit PR #150 (19.11.2026)
 
 Der Nutzer merge PR #150 (Commit `7260d100`); der Push-Workflow [#44490262390](https://github.com/n05a-design/glide-to-do/actions/runs/44490262390) baute die native App und verglich die Paketquellen erfolgreich, scheiterte jedoch in der isolierten Startprobe. Der vollständige native macOS-Prüflauf war bei diesem Push nicht angefordert und wurde übersprungen.

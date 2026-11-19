@@ -4260,6 +4260,14 @@ def fall_schriftstile(lauf):
 
         def auswaehlen(dialog, parent=None):
             dialog.update_idletasks()
+            umbruchspalten = [
+                panel for panel in knoepfe(dialog, mod.tk.Frame)
+                if hasattr(panel, "_glide_wrap_seen")
+            ]
+            assert len(umbruchspalten) == 2, "Einstellungsdialog muss beide Spalten umbrechen"
+            assert all(getattr(panel, "_glide_wrap", 0) >= 160 for panel in umbruchspalten), (
+                "Spaltenumbruch muss nach dem Festlegen der Dialoggeometrie aktiv sein"
+            )
             felder = knoepfe(dialog, mod.AppOptionMenu)
             optionen = {tuple(feld.options) for feld in felder}
             assert settings_options <= optionen, settings_options - optionen
