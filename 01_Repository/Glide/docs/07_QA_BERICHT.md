@@ -1,5 +1,15 @@
 # QA-Bericht – Glide 1.0.0
 
+## macOS-Paketstart auf Merge-Commit PR #150 (19.11.2026)
+
+Der Nutzer merge PR #150 (Commit `7260d100`); der Push-Workflow [#44490262390](https://github.com/n05a-design/glide-to-do/actions/runs/44490262390) baute die native App und verglich die Paketquellen erfolgreich, scheiterte jedoch in der isolierten Startprobe. Der vollständige native macOS-Prüflauf war bei diesem Push nicht angefordert und wurde übersprungen.
+
+**Fehler:** `startprobe.json` belegt, dass der gebaute App-Prozess lief und bis zur Accessibility-Kernprobe kam. Diese suchte fest nach `Neuer Checklistenpunkt`; die App lieferte entsprechend dem aktiven englischen Katalog `New checklist item` (`inspector.checklist.new_step`). Daher ist der konkrete Abbruch ein veralteter deutscher Erwartungswert im Paketprüfwerkzeug, kein nachgewiesener Paket-/App-Startfehler. Sandbox-Positivkontrolle Exit 0; die gesperrte externe-Python-Gegenprobe Exit 71 bestätigte die Prozesssperre.
+
+**Folgekorrektur V1.47 lokal:** `packaging/paket/start_glide.py` löst den erwarteten Feldnamen über `mod.glide_i18n.t("inspector.checklist.new_step", ...)` auf. Kein Nutzerdaten-, Datenformat- oder App-Verhaltenswechsel. Der korrigierte native Paketstart und die macOS-Vollprüfung sind noch nicht remote belegt.
+
+**Lokale Folgeprüfung:** Auf macOS/CPython 3.14.5 bestanden `tests/integration/test_arbeitsmodi.py --fall inspector_locale` (**1/1**), `tests/integration/test_startwege.py --fall paket_quelle_leer` (**1/1**) mit geerbtem `PYTHONDONTWRITEBYTECODE=1`, sowie `tests/tools/test_glide_system.py` (**5/5**). Die CI-Grundstufe mit künstlichem `GLIDE_DATA_DIR` bestand mit Exitcode 0: 447 Quelldateien, Versionskonsistenz, 543 lokale Markdown-Links, Werkzeuge, Fachtests, Zeitzonengegenlauf, statische Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung. Nicht blockierende Hinweise: fünf erwartete Prüfkandidat-/Lieferstand-Abweichungen und `tkinterdnd2` wegen Zertifikatsprüfung nicht abrufbar. Ein erster Startwege-Aufruf ohne geerbte Bytecode-Sperre erzeugte im Kindprozess zwei `.pyc`-Dateien, worauf die Quellbaumsauberkeitsprüfung rot meldete; die genau erzeugten Dateien wurden entfernt, der isolierte Wiederholungslauf bestand. `git diff --check` bestand.
+
 ## PR #149 – Remote-CI-Status (19.11.2026)
 
 PR #149 ist in `main` gemergt (Merge-Commit `84cdd04a`). Der zugehörige Workflow [#44420225118](https://github.com/n05a-design/glide-to-do/actions/runs/44420225118) prüfte PR-Head `99deb8c4` und endete auch nach dem Retry insgesamt **fehlgeschlagen**:

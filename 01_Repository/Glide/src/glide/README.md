@@ -1,8 +1,8 @@
-# Glide-System V1.46
+# Glide-System V1.47
 
-Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.46 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.47 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.46` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.47` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.46 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.47** | 19.11.2026 | Der isolierte Paketstart prüft den Checklistenpunkt mit dem aktiven DE/EN-Katalogschlüssel statt eines fest codierten deutschen Namens. Der macOS-Paketbau auf Merge-Commit `7260d100` war erfolgreich, die Startprobe scheiterte am bisherigen deutschen Erwartungswert bei englischer Anzeige. Kein neues Modul, Testdatei oder Datenformat. | App 1.0.0 |
 | **V1.46** | 19.11.2026 | Der Einstellungsdialog behält während der initialen Geometriemessung die bereits beobachteten Umbruchbreiten bei; erst nach gesetzter Dialoggeometrie wird die Schaukel-Erkennung für echte Größenwechsel zurückgesetzt. Gezielter `schriftstile`-Fall und UI-Layout-Unit-Tests; Linux-Remote-Nachprüfung steht aus. Keine neue Modul- oder Testdatei, Format 26 unverändert. | App 1.0.0 |
 | **V1.45** | 19.11.2026 | Der Seiten- und Notizeditor lokalisieren zentrale Statusrückmeldungen zu Speichern, Auswahl, Suchtreffern, Leseschutz, Bildern und Zwischenablage sowie die Einträge des gemeinsamen Mehr-Menüs. T118 prüft DE/EN-Status- und Menütexte; T329 prüft direkte App-Schlüssel und Katalogparität. Keine neue Modul- oder Testdatei, Format 26 unverändert. | App 1.0.0 |
 | **V1.44** | 19.11.2026 | Der Aufgabeninspektor und seine Kalender-, Wiederholungs- und Erinnerungsfelder werden DE/EN lokalisiert. Auswahlbeschriftungen werden auf stabile Wichtigkeits-, Art-, Wiederholungs- und Erinnerungswerte zurückgeführt; T118 prüft den Inspektor auf Deutsch und Englisch, T329 dynamische Übersetzungsschlüssel. Keine neue Modul- oder Testdatei, Format 26 unverändert. | App 1.0.0 |
