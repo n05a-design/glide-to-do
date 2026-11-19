@@ -1630,8 +1630,8 @@ class RoundedButton(DeferredDrawCanvas):
         self.bind("<ButtonRelease-1>", self._on_release)
         self.bind("<space>", self._on_keyboard_activate)
         self.bind("<Return>", self._on_keyboard_activate)
-        self.bind("<FocusIn>", lambda _event: self._draw())
-        self.bind("<FocusOut>", lambda _event: self._draw())
+        self.bind("<FocusIn>", lambda _event=None: self._draw())
+        self.bind("<FocusOut>", lambda _event=None: self._draw())
 
         self._draw()
 
@@ -67369,9 +67369,9 @@ Labels, Termine und Metadaten."""
         """Tk 8-Mausrad und Tk 9-Trackpad; Bindungen bleiben am jeweiligen Widget."""
         target = target if target is not None else widget
         for sequence in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
-            self.bind_optional(widget, sequence, lambda event: self._on_mousewheel(event, target))
+            self.bind_optional(widget, sequence, lambda event=None: self._on_mousewheel(event, target))
         self.bind_optional(widget, "<TouchpadScroll>",
-                           lambda event: self._on_mousewheel(event, target, precise=True))
+                           lambda event=None: self._on_mousewheel(event, target, precise=True))
 
     def _scroll_text_like_class(self, widget, delta, precise=False):
         """Scrollt ein Textfeld genau wie seine eigene Tk-Klassenbindung – in Pixeln (B16).
@@ -67393,6 +67393,8 @@ Labels, Termine und Metadaten."""
             return False
 
     def _on_mousewheel(self, event, widget, precise=False):
+        if event is None:
+            return "break"
         self.note_scrolling()
         try:
             if isinstance(widget, tk.Text):

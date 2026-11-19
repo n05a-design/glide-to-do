@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import traceback
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
@@ -40,12 +41,15 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
     root = mod.tk.Tk()
     root.withdraw()
     errors = []
-    root.report_callback_exception = lambda *error: errors.append(error)
     app = mod.ListApp(root)
+    def report_callback_exception(*error):
+        errors.append(error)
+        traceback.print_exception(*error)
+    # Install after ListApp: it replaces the root handler and schedules a modal
+    # notice, which can block this test before its callback-error assertion.
+    root.report_callback_exception = report_callback_exception
     progress('app created')
     app.show_info = lambda *a, **kw: None
-    # Callback errors are asserted below; a modal notice would hide them in wait_window.
-    app._show_error_notice = lambda: None
     root.geometry('1280x940+10+10')
     root.deiconify(); root.lift(); root.focus_force(); root.update()
     try:

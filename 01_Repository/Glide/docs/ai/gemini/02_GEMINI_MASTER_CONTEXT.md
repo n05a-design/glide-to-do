@@ -17,7 +17,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## What Glide is
 
-Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source release target is 1.0.0; the checked code baseline has schema 26, exchange format 2, and a V1.48 settings-dialog candidate. PR #152 head `042a8d7` includes V1.49 test diagnostics; this QA/documentation refresh records the diagnostic result in Glide-System V1.50.
+Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source release target is 1.0.0; the checked code baseline has schema 26, exchange format 2, and a V1.48 settings-dialog candidate. PR #152 is open at remote head `cada01b`; earlier V1.49 diagnostics and V1.50 evidence refreshes are already on the branch. The local V1.52 follow-up installs the UI39 test collector after app initialization and safely ignores wheel/focus callback invocations without an event object. `test_befunde330.py` passed and `test_ui39.py` passed six times locally on macOS/Tk 9.0.3; why Tk/Tcl invoked bindings with no event fields remains unexplained, and remote verification is pending.
 
 ## How it works
 
@@ -25,11 +25,11 @@ The canonical app starts through `src/glide/glide_start.py` or `src/glide/app.py
 
 ## Facts versus plans
 
-- **Current branch snapshot:** PR #152 is open at `042a8d742d8d130496867ae782707d683f732803`; its app/code baseline for product descriptions is `5631333a1c5a80c11c48226016ab115c434b0a64`, with the V1.49 test-diagnostic and documentation follow-up on top. This is not `main`.
+- **Current branch snapshot:** PR #152 is open at remote head `cada01bfcf561c242f20590862892219399048eb`; its app/code baseline for product descriptions is `5631333a1c5a80c11c48226016ab115c434b0a64`, with the V1.49 test-diagnostic and V1.50 evidence/documentation follow-ups on top. The local V1.52 candidate adds safe handling for wheel/focus callbacks without event objects and remains unverified remotely. This is not `main`.
 - **App/data versions:** 1.0.0 / 26. Settings 2, templates 2, exchange format 2.
 - **Localization:** German default and English supported in the i18n mechanism; only some UI areas are translated end-to-end.
 - **Release:** source cut is merged on `main`, but the checked state reported no tag or GitHub release. Public package-manager submissions and owner acceptance are not complete.
-- **QA:** local macOS basic suite passed on the candidate. On PR head `042a8d7`, the isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with the callback-error assertion intact. The earlier full run timed out at 900 seconds on both platforms at the previous head `5631333a`. The automatic PR run on `042a8d7` passed basic CI, Analyze, and CodeQL; Linux `apt-get update/install` received HTTP 503 responses from Ubuntu package sources and stopped before tests, then the calibration step failed because the suite-result file was absent. Windows full validation was still running at last check. The original callback cause remains unknown.
+- **QA:** local macOS basic suite passed on the V1.52 candidate. On earlier PR head `042a8d7`, isolated `test_ui39.py` passed on Linux/Tk 9.1 and Windows/Tk 9.1 with the callback-error assertion intact. The local V1.52 callback handling accepts absent event objects without scroll/focus side effects; regression checks passed locally, including six uninstrumented `test_ui39.py` runs. The historical full run timed out at 900 seconds on both platforms at `5631333a`. At current remote head `cada01bf`, full workflow #44530090137 reports Linux failed and Windows still running; focused workflow #44518533866 also reports Linux failed and Windows still running. Failure logs were unavailable while those workflows remained active, so the current Linux causes are unknown. The earlier automatic run #44523300465 on `042a8d7` passed basic CI, Analyze, and CodeQL but Linux `apt-get update/install` received HTTP 503 responses before tests. Remote verification of V1.52 is pending. Why Tk/Tcl invoked the bound callbacks without substitution values remains unknown.
 
 ## Architecture and critical rules
 

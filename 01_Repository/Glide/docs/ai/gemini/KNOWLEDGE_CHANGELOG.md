@@ -33,6 +33,9 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 ## 1.0.2 — 2026-11-19 — remote diagnostic status refresh
 
 - Recorded PR #152 head `042a8d7`, delivery of the V1.49 diagnostic follow-up, and the V1.50 evidence/catalog refresh.
+- Added the local V1.51/V1.52 callback correction, its local test/CI evidence, and a fresh status snapshot for PR head `cada01bf` and workflows #44530090137/#44518533866. Current Linux failures are recorded without guessing their causes because logs were unavailable while the workflows were active.
+- Added the local V1.51 UI39 test correction: reinstall the callback collector after `ListApp` initialization, retain callback-error assertions, and record five later macOS/Tk 9.0.3 passes. The triggering `bind_mousewheel` callback remains unexplained; remote verification is pending.
+- Added the local V1.52 no-event callback handling: wheel/trackpad callbacks and `RoundedButton` focus redraw now tolerate missing event objects; direct Tcl regression checks passed and `test_ui39.py` passed 6/6 locally. The reason Tk/Tcl omitted event substitutions remains unknown; remote verification is pending.
 - The isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with callback-error assertions retained.
 - Distinguished the historical full-suite timeout from the newer Linux setup failure: Ubuntu package sources returned HTTP 503 during native prerequisite installation, and the later calibration step had no suite-result file. The Windows full run and focused work-mode run were still active at last check.
 - Kept the callback exception from the local macOS modal path and full platform-matrix completion explicitly unresolved.
