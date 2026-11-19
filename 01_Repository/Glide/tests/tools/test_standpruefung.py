@@ -13,6 +13,24 @@ import standpruefung as stand
 
 
 class Einstiegspruefung(unittest.TestCase):
+    def test_github_government_issue_forms_cover_docs_localization_accessibility(self):
+        project = stand.REPO.parents[1]
+        forms = {
+            "dokumentation.yml": ("Dokumentationsfehler", "Documentation issue"),
+            "lokalisierung.yml": ("Lokalisierungsfehler", "Localization issue"),
+            "accessibility.yml": ("Barrierefreiheit", "Accessibility"),
+        }
+        for filename, (german, english) in forms.items():
+            with self.subTest(filename=filename):
+                path = project / ".github/ISSUE_TEMPLATE" / filename
+                self.assertTrue(path.is_file(), f"Fehlendes GitHub-Issueformular: {filename}")
+                text = path.read_text(encoding="utf-8")
+                self.assertIn(german, text)
+                self.assertIn(english, text)
+                self.assertIn("body:", text)
+                self.assertIn("validations:", text)
+                self.assertIn("required:", text)
+
     def test_active_technical_readme_uses_release_1_0_current_stand(self):
         project = stand.REPO.parents[1]
         readme = (project / "01_Repository/Glide/README.md").read_text(encoding="utf-8")
