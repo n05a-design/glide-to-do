@@ -29,6 +29,8 @@ class Lauf:
     def __init__(self, app_path, data):
         os.environ["GLIDE_DATA_DIR"] = data
         os.environ["GLIDE_TEST_MODE"] = "1"
+        # Die UI-Erwartungen dieses Tests sind deutsch; die Prüfsprache bleibt stabil.
+        os.environ["LANGUAGE"] = "de"
         sys.path.insert(0, str(Path(app_path).parent))
         loader = importlib.machinery.SourceFileLoader("glide_redo_" + str(abs(hash(str(app_path)))), str(app_path))
         self.mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
@@ -470,8 +472,10 @@ def fall_bedienwege(lauf):
     assert eintraege, "Bearbeiten › Wiederholen fehlt"
     menue = eintraege[0]
     assert menue["group"] == "Bearbeiten" and menue["shortcut"] == app.redo_accel(), menue
-    erwartet = "Strg+Y" if mod.IS_WINDOWS else ("Cmd+Shift+Z" if mod.IS_MACOS else "Strg+Shift+Z")
-    assert app.redo_accel() == erwartet, app.redo_accel()
+    erwartet = "Strg+Y" if mod.IS_WINDOWS else (
+        "Cmd+Umschalt+Z" if mod.IS_MACOS else "Strg+Umschalt+Z"
+    )
+    assert app.redo_accel() == erwartet, (erwartet, app.redo_accel())
 
     loeschen(lauf, ids)
     lauf.idle()
