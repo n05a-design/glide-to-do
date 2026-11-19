@@ -7,38 +7,32 @@
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Aufgaben planen. Ideen verbinden. Selbst gestalten.</strong><br>
-  Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.
+  <strong>Aufgaben planen. Ideen verbinden.</strong><br>
+  Ein lokaler Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.
 </p>
 
 <p align="center">
   <img alt="Windows, macOS und Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Version 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-6A3CC4">
+  <img alt="Quellstand 1.0.0" src="https://img.shields.io/badge/Quellstand-1.0.0-9E4AC8">
   <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
-  <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 </p>
 
 <p align="center">
-  <a href="#herunterladen"><strong>Herunterladen</strong></a> ·
-  <a href="#schnellstart-und-systemanforderungen">Schnellstart</a> ·
+  <a href="#schnellstart-und-systemanforderungen"><strong>Aus dem Quellstand starten</strong></a> ·
+  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase ansehen</a> ·
   <a href="#was-glide-kann">Funktionen</a> ·
   <a href="#ein-blick-in-glide">Bilder</a> ·
-  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> ·
-  <a href="01_Repository/Glide/docs/20_FUNKTIONEN.md">Handbuch</a> ·
   <a href="CONTRIBUTING.de.md">Mitwirken</a>
 </p>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/github-social-preview.png">
-  <img alt="Glide-Pinnwand mit Aufgaben, Notizen und verbundenen Ideen" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
-</picture>
+<img alt="Glide-Pinnwand mit Aufgaben, Notizen und verbundenen Ideen" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
 
-<p align="center"><sub>Die Aufnahmen wurden mit Glide 3.60.0 am fiktiven Showcase erstellt. Sie sind kein Prüf- oder Paketnachweis für 1.0.0.</sub></p>
+<p align="center"><sub>Die englische Oberfläche ist teilweise übersetzt; einige Bereiche und ausführliche Anleitungen sind noch auf Deutsch. Die Aufnahmen zeigen Glide 3.60.0 mit künstlichen Daten und sind kein Prüf- oder Paketnachweis für 1.0.0.</sub></p>
 
 ## Warum Glide?
 
-Glide bringt Planung und Projektwissen an einem lokalen Desktop-Arbeitsplatz zusammen. Aufgaben bleiben dieselben, egal ob du sie in einer Liste, auf einer Seite oder an anderer Stelle öffnest. Notizen und Bilder geben ihnen Kontext; Pinnwand und Pixel-Werkstatt machen Zusammenhänge sichtbar.
+Glide verbindet Aufgaben und Projektnotizen an einem lokalen Arbeitsplatz. Dieselbe Aufgabe bleibt erhalten, wenn du zwischen Listen, Seiten, Kalendern und Pinnwänden wechselst.
 
 - **Plane deinen Tag:** Bearbeitungstage, Fristen, Zeitaufwand und freie Kapazität getrennt betrachten.
 - **Arbeite mit deinen eigenen Inhalten:** Aufgaben, Seiten, Notizen und Pinnwände lassen sich miteinander verbinden.
@@ -50,16 +44,16 @@ Alle Aufnahmen stammen aus einem künstlichen Showcase-Datensatz.
 
 <table>
   <tr>
-    <td><strong>Startseite</strong><br><img alt="Glide-Startseite mit Tagesplan und Projektkacheln" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"></td>
-    <td><strong>Kalender</strong><br><img alt="Glide-Wochenkalender mit geplanten Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"></td>
+    <td><strong>Startseite</strong><br><img alt="Glide-Startseite mit Tagesplan und Projektkacheln" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png" width="100%"></td>
+    <td><strong>Kalender</strong><br><img alt="Glide-Wochenkalender mit geplanten Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Heute</strong><br><img alt="Tagesplan mit Aufgaben und Zeitblöcken im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"></td>
-    <td><strong>Seiten</strong><br><img alt="Projektseite mit formatiertem Text, Bildern und Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"></td>
+    <td><strong>Heute</strong><br><img alt="Tagesplan mit Aufgaben und Zeitblöcken im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png" width="100%"></td>
+    <td><strong>Seiten</strong><br><img alt="Projektseite mit formatiertem Text, Bildern und Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Aufgabenliste</strong><br><img alt="Aufgabenliste mit Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"></td>
-    <td><strong>Pixel-Werkstatt</strong><br><img alt="Pixel-Werkstatt mit einem selbst gezeichneten Wegweiser" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"></td>
+    <td><strong>Aufgabenliste</strong><br><img alt="Aufgabenliste mit Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png" width="100%"></td>
+    <td><strong>Pixel-Werkstatt</strong><br><img alt="Pixel-Werkstatt mit einem selbst gezeichneten Wegweiser" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png" width="100%"></td>
   </tr>
 </table>
 
@@ -156,12 +150,14 @@ Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vert
 
 Stand 19.11.2026 · Glide 1.0.0
 
+<a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen auf main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
+
 Mehr zum Quellcode, Entwicklungsablauf und Prüfstand:
 [An Glide arbeiten](CONTRIBUTING.de.md) ·
 [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) ·
 [Qualität und Prüfungen](01_Repository/Glide/docs/07_QA_BERICHT.md)
 
-Der Quellstand für Glide 1.0.0 liegt in `main`; ein öffentlicher Release ist nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`; der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
+Der Quellstand für Glide 1.0.0 liegt in `main`; ein öffentlicher Release ist nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`, nicht auf diesen README-Branch oder einen anderen Pull Request. Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
 
 ## Lizenz
 

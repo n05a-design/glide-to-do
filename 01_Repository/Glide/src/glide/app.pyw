@@ -3828,13 +3828,20 @@ class FilterSelection(LabelDropdown):
 
 class SavedFilters:
     MAX_FILTERS = 100
-    STATUS = {"Alle Aufgaben": "all", "Nur offene Aufgaben": "open", "Nur erledigte Aufgaben": "done"}
-    IMPORTANCE = {"Jede Wichtigkeit": "all", "Keine Wichtigkeit": "0", "Niedrig": "1", "Mittel": "2", "Hoch": "3"}
-    DUE = {"Jede Fälligkeit": "any", "Ohne Fälligkeit": "none", "Überfällig": "overdue",
-           "Heute": "today", "Morgen": "tomorrow", "Nächste 7 Tage (ab heute)": "next7",
-           "Nächste 30 Tage (ab heute)": "next30"}
-    LABEL_MODE = {"Mindestens eines der Labels": "any", "Alle ausgewählten Labels": "all"}
-    SOURCE = {"Alle Aufgabenquellen": "all", "Aus Seiten": "pages"}
+    STATUS = {"all": "saved_view.choice.status_all", "open": "saved_view.choice.status_open", "done": "saved_view.choice.status_done"}
+    IMPORTANCE = {"all": "saved_view.choice.importance_all", "0": "saved_view.choice.importance_none",
+                  "1": "saved_view.choice.importance_low", "2": "saved_view.choice.importance_medium",
+                  "3": "saved_view.choice.importance_high"}
+    DUE = {"any": "saved_view.choice.due_any", "none": "saved_view.choice.due_none",
+           "overdue": "saved_view.choice.due_overdue", "today": "saved_view.choice.due_today",
+           "tomorrow": "saved_view.choice.due_tomorrow", "next7": "saved_view.choice.due_next7",
+           "next30": "saved_view.choice.due_next30"}
+    LABEL_MODE = {"any": "saved_view.choice.label_any", "all": "saved_view.choice.label_all"}
+    SOURCE = {"all": "saved_view.choice.source_all", "pages": "saved_view.choice.source_pages"}
+
+    @classmethod
+    def choices(cls, mapping):
+        return {glide_i18n.t(key): value for value, key in mapping.items()}
 
     def __init__(self, app):
         self.app = app
@@ -3895,7 +3902,8 @@ class SavedFilters:
     def update_layout(self, **values):
         current = self.current()
         if current is None or glide_view_definition.layout_errors(self.raw_layout(current)):
-            self.app.show_warning('Darstellung nicht gespeichert', 'Bitte die ungültige Darstellung zuerst über den Ansichtstitel bearbeiten.')
+            self.app.show_warning(glide_i18n.t("saved_view.invalid_layout.title", "Darstellung nicht gespeichert"),
+                                  glide_i18n.t("saved_view.invalid_layout.body", "Bitte die ungültige Darstellung zuerst über den Ansichtstitel bearbeiten."))
             return False
         return self.save(dict(current, _layout={**self.layout(current), **values}))
 
@@ -3953,14 +3961,17 @@ class SavedFilters:
             workspace = app.workspace
             scope = workspace.context()
             if app.view_mode not in ('list', app.TABLE_VIEW, 'folder') or not app.lists:
-                app.show_info('Als Ansicht speichern', 'Öffne zuerst eine Aufgabenliste, Tabelle, ein Spaltenboard oder eine gespeicherte Ansicht.')
+                app.show_info(glide_i18n.t("saved_view.save.title", "Als Ansicht speichern"),
+                              glide_i18n.t("saved_view.save.requires_view", "Öffne zuerst eine Aufgabenliste, Tabelle, ein Spaltenboard oder eine gespeicherte Ansicht."))
                 return 'break'
             sources = workspace.eligible_lists(scope) if scope else [app.current_list()]
             if not sources or any(not isinstance(source, dict) for source in sources):
-                app.show_info('Als Ansicht speichern', 'Dieser Bereich enthält keine Aufgabenlisten.')
+                app.show_info(glide_i18n.t("saved_view.save.title", "Als Ansicht speichern"),
+                              glide_i18n.t("saved_view.save.no_lists", "Dieser Bereich enthält keine Aufgabenlisten."))
                 return 'break'
             if workspace.visible and workspace.board()['layout'] != 'columns':
-                app.show_info('Als Ansicht speichern', 'Wähle zuerst die Liste, Tabelle oder das Spaltenboard als Darstellung.')
+                app.show_info(glide_i18n.t("saved_view.save.title", "Als Ansicht speichern"),
+                              glide_i18n.t("saved_view.save.choose_presentation", "Wähle zuerst die Liste, Tabelle oder das Spaltenboard als Darstellung."))
                 return 'break'
             value = dict(query=app.current_search_query(), list_ids=[v['id'] for v in sources], label_ids=[],
                          status='open' if app.hide_done_var.get() else 'all', importance='all', due='any',
@@ -4021,7 +4032,7 @@ class SavedFilters:
                             tags=('done' if item.get('done') else 'open',))
         if not entries:
             empty = [''] * len(columns)
-            empty[columns.index('title')] = 'Keine Aufgaben passen zu dieser Ansicht.'
+            empty[columns.index('title')] = glide_i18n.t("saved_view.empty_matches", "Keine Aufgaben passen zu dieser Ansicht.")
             tree.insert('', 'end', iid=app.EMPTY_ROW_ID, values=empty, tags=('empty',))
         app.update_stats_label()
         app.fit_table_columns()
@@ -4131,38 +4142,49 @@ class SavedFilters:
 
     def summary(self, criteria):
         if not criteria:
-            return "Gespeicherte Filter öffnen und eine Ansicht auswählen."
-        parts = [next(name for name, key in self.STATUS.items() if key == criteria["status"]),
-                 next(name for name, key in self.DUE.items() if key == criteria["due"])]
-        parts.append(f"{len(criteria['list_ids'])} ausgewählte Listen" if criteria["list_ids"] else "Alle Listen")
+            return glide_i18n.t("saved_view.summary.open_view", "Gespeicherte Filter öffnen und eine Ansicht auswählen.")
+        parts = [glide_i18n.t(next(key for value, key in self.STATUS.items() if value == criteria["status"])),
+                 glide_i18n.t(next(key for value, key in self.DUE.items() if value == criteria["due"]))]
+        parts.append(glide_i18n.t("saved_view.summary.selected_lists", "{count} ausgewählte Listen",
+                                  count=len(criteria['list_ids'])) if criteria["list_ids"]
+                     else glide_i18n.t("saved_view.summary.all_lists", "Alle Listen"))
         if criteria["label_ids"]:
-            parts.append(f"{len(criteria['label_ids'])} Labels ({'alle' if criteria['label_mode'] == 'all' else 'mindestens eines'})")
+            label_mode = glide_i18n.t("saved_view.summary.all_labels", "alle") if criteria['label_mode'] == 'all' else glide_i18n.t(
+                "saved_view.summary.any_label", "mindestens eines")
+            parts.append(glide_i18n.t("saved_view.summary.labels", "{count} Labels ({mode})",
+                                      count=len(criteria['label_ids']), mode=label_mode))
         if criteria["importance"] != "all":
-            parts.append("Wichtigkeit: " + next(name for name, key in self.IMPORTANCE.items() if key == criteria["importance"]))
+            parts.append(glide_i18n.t("saved_view.summary.importance", "Wichtigkeit: ") +
+                         glide_i18n.t(next(key for value, key in self.IMPORTANCE.items() if value == criteria["importance"])))
         if criteria.get('source') == 'pages':
-            parts.append('Aus Seiten (Heimat oder Textverweis)')
+            parts.append(glide_i18n.t("saved_view.summary.source_pages", "Aus Seiten (Heimat oder Textverweis)"))
         if criteria["query"]:
-            parts.append("Suchtext: " + criteria["query"])
+            parts.append(glide_i18n.t("saved_view.summary.query", "Suchtext: ") + criteria["query"])
         existing_lists = {entry["id"] for entry in self.app.lists}
         existing_labels = {entry["id"] for entry in self.app.labels}
         missing_lists = set(criteria["list_ids"]) - existing_lists
         missing_labels = set(criteria["label_ids"]) - existing_labels
         if missing_lists:
-            parts.append("Enthält entfernte Listen – Filter bei Bedarf bearbeiten")
+            parts.append(glide_i18n.t("saved_view.summary.removed_lists", "Enthält entfernte Listen – Filter bei Bedarf bearbeiten"))
         if missing_labels:
-            parts.append("Enthält entfernte Labels – Filter bei Bedarf bearbeiten")
+            parts.append(glide_i18n.t("saved_view.summary.removed_labels", "Enthält entfernte Labels – Filter bei Bedarf bearbeiten"))
         definition = self.definition(criteria)
         if definition:
             problems = glide_view_definition.errors(definition)
-            parts.append('Ansicht ungültig: ' + ' '.join(problems) if problems else
-                         ('Mindestens eine Bedingung' if definition.get('mode') == 'any' else 'Alle Bedingungen')
-                         + ' · Weitere Bedingungen aktiv')
+            parts.append(glide_i18n.t("saved_view.summary.invalid", "Ansicht ungültig: ") + ' '.join(problems) if problems else
+                         (glide_i18n.t("saved_view.choice.mode_any", "Mindestens eine Bedingung")
+                          if definition.get('mode') == 'any' else glide_i18n.t("saved_view.choice.mode_all", "Alle Bedingungen"))
+                         + glide_i18n.t("saved_view.summary.additional_active", " · Weitere Bedingungen aktiv"))
         problems = glide_view_definition.layout_errors(self.raw_layout(criteria))
         if problems:
-            parts.append('Darstellung ungültig (Liste als Rückweg): ' + ' '.join(problems))
+            parts.append(glide_i18n.t("saved_view.summary.invalid_layout", "Darstellung ungültig (Liste als Rückweg): ") + ' '.join(problems))
         elif self.raw_layout(criteria):
             presentation = self.layout(criteria)
-            parts.append({'list': 'Liste', 'table': 'Tabelle', 'columns': 'Spaltenboard'}[presentation['display']])
+            parts.append({
+                'list': glide_i18n.t("saved_view.choice.display_list", "Liste"),
+                'table': glide_i18n.t("saved_view.choice.display_table", "Tabelle"),
+                'columns': glide_i18n.t("saved_view.choice.display_columns", "Spaltenboard"),
+            }[presentation['display']])
         return " · ".join(parts)
 
     def save(self, criteria):
@@ -4173,7 +4195,7 @@ class SavedFilters:
         presentation = criteria.pop('_layout', self.raw_layout(criteria))
         problems = glide_view_definition.errors(definition) + glide_view_definition.layout_errors(presentation)
         if problems:
-            app.show_warning('Ansicht nicht gespeichert', ' '.join(problems))
+            app.show_warning(glide_i18n.t("saved_view.not_saved.title", "Ansicht nicht gespeichert"), ' '.join(problems))
             return False
         app.settings.setdefault(glide_view_definition.KEY, {})[criteria['id']] = glide_view_definition.compact(definition)
         app.settings.setdefault(glide_view_definition.LAYOUT_KEY, {})[criteria['id']] = copy.deepcopy(presentation)
@@ -4181,7 +4203,8 @@ class SavedFilters:
         index = next((index for index, entry in enumerate(values) if entry["id"] == criteria["id"]), None)
         if index is None and len(values) >= self.MAX_FILTERS:
             app.settings = before
-            app.show_warning("Gespeicherte Filter", f"Es sind maximal {self.MAX_FILTERS} Filter möglich.")
+            app.show_warning(glide_i18n.t("saved_view.limit.title", "Gespeicherte Filter"),
+                             glide_i18n.t("saved_view.limit.body", "Es sind maximal {max} Filter möglich.", max=self.MAX_FILTERS))
             return False
         if index is None:
             values.append(criteria)
@@ -4199,7 +4222,8 @@ class SavedFilters:
             return True
         app.settings = before
         if getattr(app, "_data_read_only", False):
-            app.show_warning("Filter nicht gespeichert", "Die Datenablage ist schreibgeschützt.")
+            app.show_warning(glide_i18n.t("saved_view.filter_not_saved.title", "Filter nicht gespeichert"),
+                             glide_i18n.t("saved_view.read_only.body", "Die Datenablage ist schreibgeschützt."))
         return False
 
     def delete(self, identity):
@@ -4229,13 +4253,14 @@ class SavedFilters:
     def show_manager(self):
         app, theme = self.app, self.app.theme
         dialog = tk.Toplevel(app.root)
-        dialog.title("Gespeicherte Filter")
+        dialog.title(glide_i18n.t("saved_view.manager.title", "Gespeicherte Filter"))
         dialog.configure(bg=theme["bg"]); dialog.transient(app.root)
         dialog.minsize(560, 420)
         body = tk.Frame(dialog, bg=theme["bg"], padx=24, pady=18)
         body.pack(fill="both", expand=True)
-        tk.Label(body, text="Gespeicherte Filter", bg=theme["bg"], fg=theme["text"], font=app_font(16, "bold")).pack(anchor="w")
-        tk.Label(body, text="Eigene Ansichten über alle Listen. Die Aufgaben bleiben an ihrem Platz.",
+        tk.Label(body, text=glide_i18n.t("saved_view.manager.title", "Gespeicherte Filter"),
+                 bg=theme["bg"], fg=theme["text"], font=app_font(16, "bold")).pack(anchor="w")
+        tk.Label(body, text=glide_i18n.t("saved_view.manager.description", "Eigene Ansichten über alle Listen. Die Aufgaben bleiben an ihrem Platz."),
                  bg=theme["bg"], fg=theme["muted"], wraplength=540, justify="left", anchor="w").pack(anchor="w", pady=(6, 14))
         actions = ButtonFlow(body, bg=theme["bg"], gap=8)
         actions.pack(side="bottom", fill="x", pady=(14, 0))
@@ -4247,7 +4272,8 @@ class SavedFilters:
         # auch der Zähler steht links. Eine rechtsbündige
         # Zahl neben linksbündigem Text erzeugt eine zweite Flucht, ohne dass
         # sie etwas erklärt.
-        app.prepare_table(tree, (("#0", "Filter", 370), ("count", "Aufgaben", 110)), stretch="#0")
+        app.prepare_table(tree, (("#0", glide_i18n.t("saved_view.manager.filter", "Filter"), 370),
+                                 ("count", glide_i18n.t("saved_view.manager.tasks", "Aufgaben"), 110)), stretch="#0")
         app._attach_field_scrollbar(area, tree)
         tree.pack(fill="both", expand=True)
         app.bind_mousewheel(tree)
@@ -4255,7 +4281,8 @@ class SavedFilters:
             return next((value for value in app.settings["saved_filters"] if value["id"] in tree.selection()), None)
         def selection_changed(_event=None):
             value = selected()
-            info.configure(text=self.summary(value) if value else "Noch kein Filter ausgewählt. Mit „Neu“ eine Ansicht anlegen.")
+            info.configure(text=self.summary(value) if value else glide_i18n.t(
+                "saved_view.manager.no_selection", "Noch kein Filter ausgewählt. Mit „Neu“ eine Ansicht anlegen."))
         def refresh(identity=None):
             tree.delete(*tree.get_children())
             for entry in app.settings["saved_filters"]:
@@ -4273,7 +4300,10 @@ class SavedFilters:
                 refresh(result["id"])
         def remove():
             value = selected()
-            if value and app.ask_yes_no("Filter entfernen", f"„{value['name']}“ entfernen? Die Aufgaben bleiben erhalten.", parent=dialog):
+            if value and app.ask_yes_no(glide_i18n.t("saved_view.manager.remove_title", "Filter entfernen"),
+                                        glide_i18n.t("saved_view.manager.remove_body",
+                                                     "„{name}“ entfernen? Die Aufgaben bleiben erhalten.",
+                                                     name=value["name"]), parent=dialog):
                 if self.delete(value["id"]):
                     refresh()
         def open_selected(_event=None):
@@ -4282,9 +4312,12 @@ class SavedFilters:
                 dialog.destroy()
                 self.open(value["id"])
             return "break"
-        for title, command, color in (("Neu", lambda: edit(True), "accent"), ("Bearbeiten", edit, "accent"),
-                                      ("Entfernen", remove, "delete"), ("Öffnen", open_selected, "confirm"),
-                                      ("Schließen", dialog.destroy, "muted")):
+        for title, command, color in (
+                (glide_i18n.t("saved_view.manager.new", "Neu"), lambda: edit(True), "accent"),
+                (glide_i18n.t("saved_view.manager.edit", "Bearbeiten"), edit, "accent"),
+                (glide_i18n.t("saved_view.manager.remove", "Entfernen"), remove, "delete"),
+                (glide_i18n.t("saved_view.manager.open", "Öffnen"), open_selected, "confirm"),
+                (glide_i18n.t("saved_view.manager.close", "Schließen"), dialog.destroy, "muted")):
             actions.add(app._make_dialog_button(actions, title, command, color, width=110))
         tree.bind("<<TreeviewSelect>>", selection_changed)
         tree.bind("<Return>", open_selected); tree.bind("<Double-Button-1>", open_selected)
@@ -4297,10 +4330,11 @@ class SavedFilters:
 
     def edit_dialog(self, criteria=None, parent=None):
         app, theme = self.app, self.app.theme
-        initial = criteria or {"id": uuid.uuid4().hex, "name": "Neuer Filter", "query": "", "list_ids": [], "label_ids": [],
+        initial = criteria or {"id": uuid.uuid4().hex, "name": glide_i18n.t("saved_view.new.title", "Neuer Filter"), "query": "", "list_ids": [], "label_ids": [],
                                "status": "open", "importance": "all", "due": "any", "label_mode": "any"}
         dialog = tk.Toplevel(parent or app.root)
-        dialog.title("Filter bearbeiten" if criteria else "Neuer Filter")
+        dialog.title(glide_i18n.t("saved_view.edit.title", "Filter bearbeiten") if criteria
+                     else glide_i18n.t("saved_view.new.title", "Neuer Filter"))
         dialog.configure(bg=theme["bg"]); dialog.transient(parent or app.root)
         # Bei großer Schrift auf eine Spalte wechseln; die nötige Breite
         # zweier Spalten darf das Fenster nicht über die Bildschirmbreite zwingen.
@@ -4318,17 +4352,23 @@ class SavedFilters:
         tk.Label(body, text=dialog.title(), bg=theme["bg"], fg=theme["text"], font=app_font(16, "bold")).pack(anchor="w", pady=(0, 10))
         fields, pickers = {}, {}
         fields["name"] = tk.StringVar(value=initial["name"])
-        name_entry = app._capture_text_field(body, "Name der Ansicht", fields["name"])
+        name_entry = app._capture_text_field(body, glide_i18n.t("saved_view.field.name", "Name der Ansicht"), fields["name"])
         app.limit_title_entry(name_entry)
         fields["query"] = tk.StringVar(value=initial["query"])
-        app._capture_text_field(body, "Suchtext (optional)", fields["query"])
+        app._capture_text_field(body, glide_i18n.t("saved_view.field.query", "Suchtext (optional)"), fields["query"])
         columns = tk.Frame(body, bg=theme["bg"]); columns.pack(fill="x")
         left, right = tk.Frame(columns, bg=theme["bg"]), tk.Frame(columns, bg=theme["bg"])
         left.grid(row=0, column=0, sticky="new", padx=(0, 12)); right.grid(row=0, column=1, sticky="new")
         columns.columnconfigure((0, 1), weight=1, uniform="filters")
-        mappings = {"status": self.STATUS, "importance": self.IMPORTANCE, "due": self.DUE, "label_mode": self.LABEL_MODE, "source": self.SOURCE}
-        for key, title, panel in (("status", "Status", left), ("importance", "Wichtigkeit", left),
-                                  ("due", "Fälligkeit", left), ("source", "Aufgabenquelle", left), ("label_mode", "Labels verknüpfen", right)):
+        mappings = {"status": self.choices(self.STATUS), "importance": self.choices(self.IMPORTANCE),
+                    "due": self.choices(self.DUE), "label_mode": self.choices(self.LABEL_MODE),
+                    "source": self.choices(self.SOURCE)}
+        for key, title, panel in (
+                ("status", glide_i18n.t("saved_view.field.status", "Status"), left),
+                ("importance", glide_i18n.t("saved_view.field.importance", "Wichtigkeit"), left),
+                ("due", glide_i18n.t("saved_view.field.due", "Fälligkeit"), left),
+                ("source", glide_i18n.t("saved_view.field.source", "Aufgabenquelle"), left),
+                ("label_mode", glide_i18n.t("saved_view.field.label_mode", "Labels verknüpfen"), right)):
             choices = mappings[key]
             fields[key] = tk.StringVar(value=next(name for name, value in choices.items() if value == initial.get(key, "all")))
             app._make_field_label(panel, title).pack(anchor="w", pady=(10, 5))
@@ -4336,10 +4376,13 @@ class SavedFilters:
             border.pack(fill="x")
         lists = [{"id": entry["id"], "name": app.list_path_title(entry), "color": app.inherited_list_color(entry)} for entry in app.lists]
         labels = [dict(label) for label in app.labels if not app.is_system_label(label)]
-        for key, title, values, empty in (("label_ids", "Labels (Mehrfachauswahl)", labels, "Alle Labels / auch ohne Label"),
-                                          ("list_ids", "Listen (Mehrfachauswahl)", lists, "Alle Listen")):
+        for key, title, values, empty in (
+                ("label_ids", glide_i18n.t("saved_view.field.labels", "Labels (Mehrfachauswahl)"), labels,
+                 glide_i18n.t("saved_view.field.all_labels", "Alle Labels / auch ohne Label")),
+                ("list_ids", glide_i18n.t("saved_view.field.lists", "Listen (Mehrfachauswahl)"), lists,
+                 glide_i18n.t("saved_view.field.all_lists", "Alle Listen"))):
             known = {value["id"] for value in values}
-            values += [{"id": identity, "name": f"Entfernt ({identity[:12]})", "color": "muted"}
+            values += [{"id": identity, "name": glide_i18n.t("saved_view.field.removed", "Entfernt ({id})", id=identity[:12]), "color": "muted"}
                        for identity in initial[key] if identity not in known]
             app._make_field_label(right, title).pack(anchor="w", pady=(10, 5))
             picker = FilterSelection(right, app, values, initial[key], empty_text=empty, dialog_parent=dialog)
@@ -4352,32 +4395,47 @@ class SavedFilters:
         def toggle_advanced():
             expanded['value'] = not expanded['value']
             advanced.pack(fill='x', before=preview) if expanded['value'] else advanced.pack_forget()
-        app._make_dialog_button(body, 'Weitere Bedingungen', toggle_advanced, 'muted').pack(anchor='w', pady=(12, 4))
+        app._make_dialog_button(body, glide_i18n.t("saved_view.field.advanced", "Weitere Bedingungen"),
+                                toggle_advanced, 'muted').pack(anchor='w', pady=(12, 4))
         extra_maps = {
-            'mode': {'Alle Bedingungen': 'all', 'Mindestens eine Bedingung': 'any'},
-            'planned': {'Jeder Bearbeitungstag': 'any', 'Ohne Bearbeitungstag': 'none', 'Heute': 'today',
-                        'Liegen geblieben': 'overdue', 'Diese Woche (Mo–So)': 'this_week',
-                        'Nächste Woche (Mo–So)': 'next_week', 'Zeitraum': 'range'},
-            'effort': {'Jeder Aufwand': 'any', 'Ohne Schätzung': 'none', 'Höchstens': 'at_most', 'Mindestens': 'at_least'},
-            'blocked': {'Jeder Abhängigkeitsstatus': 'any', 'Blockiert': 'yes', 'Frei': 'no'},
-            'importance_min': {'Keine Mindestwichtigkeit': 'all', 'Mindestens niedrig': '1',
-                               'Mindestens mittel': '2', 'Mindestens hoch': '3'}}
+            'mode': {glide_i18n.t("saved_view.choice.mode_all", "Alle Bedingungen"): 'all',
+                     glide_i18n.t("saved_view.choice.mode_any", "Mindestens eine Bedingung"): 'any'},
+            'planned': {glide_i18n.t("saved_view.choice.planned_any", "Jeder Bearbeitungstag"): 'any',
+                        glide_i18n.t("saved_view.choice.planned_none", "Ohne Bearbeitungstag"): 'none',
+                        glide_i18n.t("saved_view.choice.planned_today", "Heute"): 'today',
+                        glide_i18n.t("saved_view.choice.planned_overdue", "Liegen geblieben"): 'overdue',
+                        glide_i18n.t("saved_view.choice.planned_this_week", "Diese Woche (Mo–So)"): 'this_week',
+                        glide_i18n.t("saved_view.choice.planned_next_week", "Nächste Woche (Mo–So)"): 'next_week',
+                        glide_i18n.t("saved_view.choice.planned_range", "Zeitraum"): 'range'},
+            'effort': {glide_i18n.t("saved_view.choice.effort_any", "Jeder Aufwand"): 'any',
+                       glide_i18n.t("saved_view.choice.effort_none", "Ohne Schätzung"): 'none',
+                       glide_i18n.t("saved_view.choice.effort_at_most", "Höchstens"): 'at_most',
+                       glide_i18n.t("saved_view.choice.effort_at_least", "Mindestens"): 'at_least'},
+            'blocked': {glide_i18n.t("saved_view.choice.blocked_any", "Jeder Abhängigkeitsstatus"): 'any',
+                        glide_i18n.t("saved_view.choice.blocked_yes", "Blockiert"): 'yes',
+                        glide_i18n.t("saved_view.choice.blocked_no", "Frei"): 'no'},
+            'importance_min': {glide_i18n.t("saved_view.choice.importance_min_all", "Keine Mindestwichtigkeit"): 'all',
+                               glide_i18n.t("saved_view.choice.importance_min_low", "Mindestens niedrig"): '1',
+                               glide_i18n.t("saved_view.choice.importance_min_medium", "Mindestens mittel"): '2',
+                               glide_i18n.t("saved_view.choice.importance_min_high", "Mindestens hoch"): '3'}}
         extra_fields = {}
-        for key, title in (('mode', 'Bedingungen verknüpfen (einschließlich der bisherigen Felder)'),
-                           ('planned', 'Bearbeitungstag'), ('effort', 'Aufwand'),
-                           ('blocked', 'Wartet auf'), ('importance_min', 'Mindestwichtigkeit')):
+        for key, title in (('mode', glide_i18n.t("saved_view.field.condition_mode", "Bedingungen verknüpfen (einschließlich der bisherigen Felder)")),
+                           ('planned', glide_i18n.t("saved_view.field.planned", "Bearbeitungstag")),
+                           ('effort', glide_i18n.t("saved_view.field.effort", "Aufwand")),
+                           ('blocked', glide_i18n.t("saved_view.field.blocked", "Wartet auf")),
+                           ('importance_min', glide_i18n.t("saved_view.field.importance_min", "Mindestwichtigkeit"))):
             mapping = extra_maps[key]
             extra_fields[key] = tk.StringVar(master=dialog, value=next(
                 (name for name, value in mapping.items() if value == extension.get(key)), next(iter(mapping))))
             app._make_field_label(advanced, title).pack(anchor='w', pady=(10, 5))
             border, _ = app._make_option_menu(advanced, extra_fields[key], list(mapping))
             border.pack(fill='x')
-        for key, title, default in (('start', 'Zeitraum von (JJJJ-MM-TT)', ''),
-                                    ('end', 'Zeitraum bis (JJJJ-MM-TT)', ''),
-                                    ('minutes', 'Aufwand in Minuten (für höchstens/mindestens)', 30)):
+        for key, title, default in (('start', glide_i18n.t("saved_view.field.range_start", "Zeitraum von (JJJJ-MM-TT)"), ''),
+                                    ('end', glide_i18n.t("saved_view.field.range_end", "Zeitraum bis (JJJJ-MM-TT)"), ''),
+                                    ('minutes', glide_i18n.t("saved_view.field.minutes", "Aufwand in Minuten (für höchstens/mindestens)"), 30)):
             extra_fields[key] = tk.StringVar(master=dialog, value=str(extension.get(key, default)))
             app._capture_text_field(advanced, title, extra_fields[key])
-        app._make_field_label(advanced, 'Labels ausschließen').pack(anchor='w', pady=(10, 5))
+        app._make_field_label(advanced, glide_i18n.t("saved_view.field.exclude_labels", "Labels ausschließen")).pack(anchor='w', pady=(10, 5))
         excluded = extension.get('exclude_labels', [])
         excluded = [value for value in excluded if isinstance(value, str)] if isinstance(excluded, list) else []
         excluded_values = list(labels)
@@ -4385,7 +4443,7 @@ class SavedFilters:
         excluded_values += [{'id': value, 'name': f'Entfernt ({value[:12]})', 'color': 'muted'}
                             for value in excluded if isinstance(value, str) and value not in known]
         exclude_picker = FilterSelection(advanced, app, excluded_values, excluded,
-                                         empty_text='Keine Labels ausschließen', dialog_parent=dialog)
+                                         empty_text=glide_i18n.t("saved_view.field.exclude_none", "Keine Labels ausschließen"), dialog_parent=dialog)
         exclude_picker.pack(fill='x')
         if expanded['value']:
             advanced.pack(fill='x')
@@ -4393,7 +4451,7 @@ class SavedFilters:
         if original_problems:
             tk.Label(advanced, text=' '.join(original_problems), bg=theme['bg'], fg=theme['delete'],
                      wraplength=560, justify='left').pack(fill='x')
-            GlideCheckbutton(advanced, text='Ungültige Definition durch diese Auswahl ersetzen', variable=repair,
+            GlideCheckbutton(advanced, text=glide_i18n.t("saved_view.field.replace_invalid", "Ungültige Definition durch diese Auswahl ersetzen"), variable=repair,
                              bg=theme['bg'], fg=theme['text'], selectcolor=theme['card']).pack(anchor='w')
         presentation_raw = self.raw_layout(initial)
         presentation = self.layout(initial)
@@ -4406,38 +4464,51 @@ class SavedFilters:
                 appearance.pack(fill='x', before=preview)
             else:
                 appearance.pack_forget()
-        app._make_dialog_button(body, 'Darstellung und Sortierung …', toggle_appearance,
+        app._make_dialog_button(body, glide_i18n.t("saved_view.field.appearance", "Darstellung und Sortierung …"), toggle_appearance,
                                 'muted', width=300).pack(anchor='w', pady=(12, 0))
         appearance_maps = {
-            'display': {'Liste': 'list', 'Tabelle': 'table', 'Spaltenboard': 'columns'},
-            'group': {'Ohne Gruppierung': 'none', 'Liste': 'list', 'Status': 'done',
-                      'Wichtigkeit': 'importance', 'Fälligkeit': 'due', 'Bearbeitungstag': 'planned',
-                      'Label': 'label', 'Eisenhower': 'eisenhower'},
-            'sort': {'Listenreihenfolge': 'manual', **{('Liste' if key == 'source' else app.TABLE_COLUMN_LABELS[key]): key
-                     for key in glide_view_definition.COLUMNS}},
-            'direction': {'Aufsteigend': 'asc', 'Absteigend': 'desc'}}
+            'display': {glide_i18n.t("saved_view.choice.display_list", "Liste"): 'list',
+                        glide_i18n.t("saved_view.choice.display_table", "Tabelle"): 'table',
+                        glide_i18n.t("saved_view.choice.display_columns", "Spaltenboard"): 'columns'},
+            'group': {glide_i18n.t("saved_view.choice.group_none", "Ohne Gruppierung"): 'none',
+                      glide_i18n.t("saved_view.choice.group_list", "Liste"): 'list',
+                      glide_i18n.t("saved_view.choice.group_done", "Status"): 'done',
+                      glide_i18n.t("saved_view.choice.group_importance", "Wichtigkeit"): 'importance',
+                      glide_i18n.t("saved_view.choice.group_due", "Fälligkeit"): 'due',
+                      glide_i18n.t("saved_view.choice.group_planned", "Bearbeitungstag"): 'planned',
+                      glide_i18n.t("saved_view.choice.group_label", "Label"): 'label',
+                      glide_i18n.t("saved_view.choice.group_eisenhower", "Eisenhower"): 'eisenhower'},
+            'sort': {glide_i18n.t("saved_view.choice.sort_manual", "Listenreihenfolge"): 'manual',
+                     **{glide_i18n.t("saved_view.choice.sort_source", "Liste") if key == 'source'
+                        else app.TABLE_COLUMN_LABELS[key]: key
+                        for key in glide_view_definition.COLUMNS}},
+            'direction': {glide_i18n.t("saved_view.choice.direction_asc", "Aufsteigend"): 'asc',
+                          glide_i18n.t("saved_view.choice.direction_desc", "Absteigend"): 'desc'}}
         appearance_fields = {}
-        for key, title in (('display', 'Darstellung'), ('group', 'Gruppieren nach'),
-                           ('sort', 'Sortieren nach'), ('direction', 'Sortierrichtung')):
+        for key, title in (('display', glide_i18n.t("saved_view.field.display", "Darstellung")),
+                           ('group', glide_i18n.t("saved_view.field.group", "Gruppieren nach")),
+                           ('sort', glide_i18n.t("saved_view.field.sort", "Sortieren nach")),
+                           ('direction', glide_i18n.t("saved_view.field.direction", "Sortierrichtung"))):
             mapping = appearance_maps[key]
             appearance_fields[key] = tk.StringVar(master=dialog,
                 value=next(name for name, value in mapping.items() if value == presentation[key]))
             app._make_field_label(appearance, title).pack(anchor='w', pady=(10, 5))
             border, _ = app._make_option_menu(appearance, appearance_fields[key], list(mapping))
             border.pack(fill='x')
-        app._make_field_label(appearance, 'Tabellenspalten (Aufgabe bleibt sichtbar)').pack(anchor='w', pady=(12, 5))
+        app._make_field_label(appearance, glide_i18n.t("saved_view.field.table_columns", "Tabellenspalten (Aufgabe bleibt sichtbar)")).pack(anchor='w', pady=(12, 5))
         column_fields = {}
         for key in glide_view_definition.COLUMNS:
             variable = tk.BooleanVar(master=dialog, value=key in presentation['columns'])
             column_fields[key] = variable
-            check = GlideCheckbutton(appearance, text='Liste' if key == 'source' else app.TABLE_COLUMN_LABELS[key],
+            check = GlideCheckbutton(appearance, text=glide_i18n.t("saved_view.choice.sort_source", "Liste") if key == 'source' else app.TABLE_COLUMN_LABELS[key],
                 variable=variable, bg=theme['bg'], fg=theme['text'], selectcolor=theme['input'],
                 activebackground=theme['bg'], activeforeground=theme['text'], font=app_font(11), anchor='w')
             check.pack(fill='x', pady=2)
             if key == 'title':
                 check.configure(state='disabled')
         option_fields = {}
-        for key, title in (('hide_empty', 'Leere Gruppen ausblenden'), ('only_open', 'In der Darstellung nur offene Aufgaben')):
+        for key, title in (('hide_empty', glide_i18n.t("saved_view.field.hide_empty", "Leere Gruppen ausblenden")),
+                           ('only_open', glide_i18n.t("saved_view.field.only_open", "In der Darstellung nur offene Aufgaben"))):
             variable = tk.BooleanVar(master=dialog, value=presentation[key])
             option_fields[key] = variable
             GlideCheckbutton(appearance, text=title, variable=variable, bg=theme['bg'], fg=theme['text'],
@@ -4446,7 +4517,7 @@ class SavedFilters:
         if presentation_problems:
             tk.Label(appearance, text=' '.join(presentation_problems), wraplength=560,
                      bg=theme['bg'], fg=theme['delete'], justify='left').pack(fill='x')
-            GlideCheckbutton(appearance, text='Ungültige Darstellung durch diese Auswahl ersetzen',
+            GlideCheckbutton(appearance, text=glide_i18n.t("saved_view.field.replace_invalid_layout", "Ungültige Darstellung durch diese Auswahl ersetzen"),
                              variable=layout_repair, bg=theme['bg'], fg=theme['text'],
                              selectcolor=theme['card']).pack(anchor='w')
         if appearance_open['value']:
@@ -4478,8 +4549,10 @@ class SavedFilters:
             value = read()
             problems = glide_view_definition.errors(value['_view'])
             error.configure(text=' '.join(problems))
-            preview.configure(text=f"{len(self.entries(value))} passende Aufgaben · Gruppen und Überschriften werden nicht mitgezählt.\n"
-                                   "Leere Auswahl bedeutet alle Listen bzw. keine Einschränkung nach Label.")
+            preview.configure(text=glide_i18n.t("saved_view.preview.matches",
+                                                "{count} passende Aufgaben · Gruppen und Überschriften werden nicht mitgezählt.\n"
+                                                "Leere Auswahl bedeutet alle Listen bzw. keine Einschränkung nach Label.",
+                                                count=len(self.entries(value))))
         traces = [(var, var.trace_add("write", update)) for var in (*fields.values(), *extra_fields.values(),
                   *appearance_fields.values(), *column_fields.values(), *option_fields.values())]
         for picker in pickers.values():
@@ -4493,16 +4566,19 @@ class SavedFilters:
                 error.configure(text='Bitte das Ersetzen der ungültigen Darstellung bestätigen.')
                 return 'break'
             if problems or original_problems and not repair.get():
-                error.configure(text=' '.join(problems) or 'Bitte das Ersetzen der ungültigen Definition bestätigen.')
+                error.configure(text=' '.join(problems) or glide_i18n.t(
+                    "saved_view.field.confirm_definition_replacement", "Bitte das Ersetzen der ungültigen Definition bestätigen."))
                 return 'break'
             if not value["name"] or (value["name"] != initial["name"] and len(value["name"]) > glide_design.TITLE_MAX_CHARS):
-                error.configure(text="Bitte einen Namen mit 1 bis 40 Zeichen eingeben."); return "break"
+                error.configure(text=glide_i18n.t("saved_view.field.name_length", "Bitte einen Namen mit 1 bis 40 Zeichen eingeben.")); return "break"
             if any(entry["id"] != value["id"] and entry["name"].casefold() == value["name"].casefold()
                    for entry in app.settings["saved_filters"]):
-                error.configure(text="Dieser Name ist bereits vergeben."); return "break"
+                error.configure(text=glide_i18n.t("saved_view.field.name_duplicate", "Dieser Name ist bereits vergeben.")); return "break"
             result["value"] = value; dialog.destroy(); return "break"
-        app._make_dialog_button(actions, "Speichern", submit, "confirm").pack(side="right")
-        app._make_dialog_button(actions, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 8))
+        app._make_dialog_button(actions, glide_i18n.t("saved_view.field.save", "Speichern"),
+                                submit, "confirm").pack(side="right")
+        app._make_dialog_button(actions, glide_i18n.t("saved_view.field.cancel", "Abbrechen"),
+                                dialog.destroy, "muted").pack(side="right", padx=(0, 8))
         dialog.bind("<Escape>", lambda e: dialog.destroy())
         dialog.bind("<Control-Return>", submit)
         if IS_MACOS:
@@ -5002,7 +5078,8 @@ class ItemWorkspace:
         item_id = item_id or (self.selected_id if self.visible else app.get_selected_item_id())
         found = app.find_item_in_lists(item_id)
         if not found or app.is_heading_item(found[0]):
-            app.show_warning("Reiter öffnen", "Zuerst eine Aufgabe, einen Langtext oder eine Gruppe auswählen.")
+            app.show_warning(glide_i18n.t("board.open_tab.title", "Reiter öffnen"),
+                             glide_i18n.t("board.open_tab.body", "Zuerst eine Aufgabe, einen Langtext oder eine Gruppe auswählen."))
             return "break"
         source_id = found[3]["id"]
         evicted = []
@@ -5027,7 +5104,8 @@ class ItemWorkspace:
                 app.refresh_tree()
             self.focus_active_tab()
             if evicted:
-                self.notice.configure(text="Der am längsten unbenutzte Reiter wurde geschlossen (maximal 12).")
+                self.notice.configure(text=glide_i18n.t(
+                    "board.open_tab.evicted", "Der am längsten unbenutzte Reiter wurde geschlossen (maximal 12)."))
         return "break"
 
     def set_mode(self, mode):
@@ -5035,9 +5113,11 @@ class ItemWorkspace:
         if not scope:
             if self.app.view_mode == "list" and self.app.is_surface_list(self.app.current_list()):
                 if mode != "list":
-                    self.app.show_info("Pinnwand", "Zeichnungen und Galerien haben keine Pinnwand und keine Reiter.")
+                    self.app.show_info(glide_i18n.t("board.title", "Pinnwand"),
+                                       glide_i18n.t("board.no_supported_content", "Zeichnungen und Galerien haben keine Pinnwand und keine Reiter."))
                 return "break"
-            self.app.show_warning("Pinnwand", "Zuerst eine Liste oder einen Ordner öffnen.")
+            self.app.show_warning(glide_i18n.t("board.title", "Pinnwand"),
+                                  glide_i18n.t("board.open_scope", "Zuerst eine Liste oder einen Ordner öffnen."))
             return "break"
         if self.save_view_change(lambda: self.app.settings["active_tab"].__setitem__(scope, mode)):
             self.selected_id = mode if mode not in ("board", "list") else None
@@ -5107,7 +5187,8 @@ class ItemWorkspace:
                                            "scale": self.CARD_SCALE_DEFAULT})
                     existing.add(identity)
             self.app.settings["active_tab"][scope] = "board"
-        commit = (lambda op: self.board_view_change(op, "Karten angeheftet")) if any(
+        commit = (lambda op: self.board_view_change(op, glide_i18n.t(
+            "toast.cards_pinned", "Karten angeheftet"))) if any(
             self.is_page_card(identity) for identity in item_ids) else self.save_view_change
         if commit(change):
             self.selected_id = item_ids[-1]
@@ -5156,10 +5237,13 @@ class ItemWorkspace:
                 ergebnis["angelegt"] = True
 
         if ergebnis["angelegt"] is None and len(self.board().get("connections", [])) >= self.MAX_CONNECTIONS:
-            self.app.show_warning("Pinnwand",
-                                  f"Je Pinnwand sind höchstens {self.MAX_CONNECTIONS} Verbindungen möglich.")
+            self.app.show_warning(glide_i18n.t("board.title", "Pinnwand"),
+                                  glide_i18n.t("board.max_connections",
+                                               "Je Pinnwand sind höchstens {max} Verbindungen möglich.",
+                                               max=self.MAX_CONNECTIONS))
             return False
-        commit = (lambda op: self.board_view_change(op, "Verbindung geändert")) if (
+        commit = (lambda op: self.board_view_change(op, glide_i18n.t(
+            "toast.connection_changed", "Verbindung geändert"))) if (
             self.is_page_card(erste) or self.is_page_card(zweite)) else self.save_view_change
         if not commit(change):
             return False
@@ -5194,10 +5278,12 @@ class ItemWorkspace:
             anker, ziele = auswahl[0], auswahl[1:]
             gesetzt = sum(1 for ziel in ziele if self.toggle_connection(anker, ziel, umschalten=False))
             if not gesetzt:
-                self.app.show_info("Verbinden", "Diese Verbindungen bestehen bereits.")
+                self.app.show_info(glide_i18n.t("board.connect.title", "Verbinden"),
+                                   glide_i18n.t("board.connect.existing", "Diese Verbindungen bestehen bereits."))
             return "break"
         if not self.selected_id:
-            self.app.show_warning("Verbinden", "Zuerst eine Karte auswählen.")
+            self.app.show_warning(glide_i18n.t("board.connect.title", "Verbinden"),
+                                  glide_i18n.t("board.connect.select", "Zuerst eine Karte auswählen."))
             return "break"
         self._connect_from = self.selected_id
         self.draw_board()
@@ -5232,7 +5318,8 @@ class ItemWorkspace:
                 board["connections"] = [eintrag for eintrag in board.get("connections", [])
                                         if not kennungen & {eintrag["from"], eintrag["to"]}]
         page_cards = any(self.is_page_card(identity) for identity in kennungen)
-        commit = (lambda op: self.board_view_change(op, "Karten gelöst")) if page_cards else self.save_view_change
+        commit = (lambda op: self.board_view_change(op, glide_i18n.t(
+            "toast.cards_unpinned.short", "Karten gelöst"))) if page_cards else self.save_view_change
         if commit(change):
             self.selected_id = None
             self.selected_ids = []
@@ -5240,14 +5327,20 @@ class ItemWorkspace:
             self.focus_card(self.card_ids[0] if self.card_ids else None)
             self.app.feedback("unpinned", len(kennungen))
             if not page_cards:
-                self.app.show_undo_toast(f"{len(kennungen)} Karte(n) von der Pinnwand gelöst", restore=zurueck)
+                self.app.show_undo_toast(glide_i18n.t(
+                    "toast.cards_unpinned", "{n} Karte(n) von der Pinnwand gelöst",
+                    n=len(kennungen)), restore=zurueck)
         return "break"
 
     # Die Gliederung der Pinnwandaktionen an einer Stelle.
     # Jede Aktion steht in genau einer Gruppe, und die Reihenfolge der Gruppen
     # ist die Reihenfolge im Menü: erst was auf die Fläche kommt, dann was mit
     # der ausgewählten Karte geschieht, zuletzt die Fläche selbst.
-    BOARD_ACTION_GROUPS = ("Inhalt", "Ausgewählte Karte", "Fläche")
+    BOARD_ACTION_GROUPS = (
+        glide_i18n.t("board.group.content", "Inhalt"),
+        glide_i18n.t("board.group.selected_card", "Ausgewählte Karte"),
+        glide_i18n.t("board.group.surface", "Fläche"),
+    )
 
     def board_action_groups(self):
         """Die Aktionen je Gruppe als (Beschriftung, Befehl)."""
@@ -5256,45 +5349,45 @@ class ItemWorkspace:
         auswahl = len(self.selection())
         zusatz = f" ({auswahl} Karten)" if auswahl > 1 else ""
         return {
-            "Inhalt": [
-                ("Anheften", self.choose_cards),
-                ("Alle Punkte anheften", self.pin_all),
-                ("Neue Aufgabe", lambda: self.create_card_item(24, 24)),
-                ("Neue Notiz", lambda: self.create_card_item(24, 24, app.ITEM_KIND_LONG)),
-                ("Neuer Bereich", self.create_area),
+            glide_i18n.t("board.group.content", "Inhalt"): [
+                (glide_i18n.t("board.action.pin", "Anheften"), self.choose_cards),
+                (glide_i18n.t("board.action.pin_all", "Alle Punkte anheften"), self.pin_all),
+                (glide_i18n.t("board.action.new_task", "Neue Aufgabe"), lambda: self.create_card_item(24, 24)),
+                (glide_i18n.t("board.action.new_note", "Neue Notiz"), lambda: self.create_card_item(24, 24, app.ITEM_KIND_LONG)),
+                (glide_i18n.t("board.action.new_area", "Neuer Bereich"), self.create_area),
             ],
-            "Ausgewählte Karte": [
-                ("Bearbeiten" + zusatz.replace(f" ({auswahl} Karten)", ""), self.edit),
-                ("Erledigt umschalten" + zusatz, self.toggle),
-                ("Verbinden" + zusatz, self.start_connect_mode),
-                ("Kartengröße" + zusatz, self.show_card_scale_menu),
-                ("Auf dieser Karte zeigen …", self.show_card_show_menu),
-                ("Aufräumen" + zusatz, self.tidy_selection),
-                ("Neue Karte daneben", self.quick_next_card),
-                ("Als Reiter öffnen", self.open_tab),
-                ("In Liste zeigen", self.open_source),
-                ("Von Pinnwand entfernen" + zusatz, self.unpin),
+            glide_i18n.t("board.group.selected_card", "Ausgewählte Karte"): [
+                (glide_i18n.t("board.action.edit", "Bearbeiten") + zusatz.replace(f" ({auswahl} Karten)", ""), self.edit),
+                (glide_i18n.t("board.action.toggle_done", "Erledigt umschalten") + zusatz, self.toggle),
+                (glide_i18n.t("board.action.connect", "Verbinden") + zusatz, self.start_connect_mode),
+                (glide_i18n.t("board.action.card_scale", "Kartengröße") + zusatz, self.show_card_scale_menu),
+                (glide_i18n.t("board.action.show_card", "Auf dieser Karte zeigen …"), self.show_card_show_menu),
+                (glide_i18n.t("board.action.tidy", "Aufräumen") + zusatz, self.tidy_selection),
+                (glide_i18n.t("board.action.new_card", "Neue Karte daneben"), self.quick_next_card),
+                (glide_i18n.t("board.action.open_tab", "Als Reiter öffnen"), self.open_tab),
+                (glide_i18n.t("board.action.open_source", "In Liste zeigen"), self.open_source),
+                (glide_i18n.t("board.action.unpin", "Von Pinnwand entfernen") + zusatz, self.unpin),
             ],
-            "Fläche": [
-                (("Raster aus" if board["snap"] else "Raster ein"),
+            glide_i18n.t("board.group.surface", "Fläche"): [
+                ((glide_i18n.t("board.action.grid_off", "Raster aus") if board["snap"] else glide_i18n.t("board.action.grid_on", "Raster ein")),
                  lambda: self.configure_board("snap", not self.board()["snap"])),
-                (("Bildvorschau aus" if board["preview"] else "Bildvorschau ein"),
+                ((glide_i18n.t("board.action.preview_off", "Bildvorschau aus") if board["preview"] else glide_i18n.t("board.action.preview_on", "Bildvorschau ein")),
                  lambda: self.configure_board("preview", not self.board()["preview"])),
-                (("Automatisch anheften aus" if board["auto"] else "Automatisch anheften ein"),
+                ((glide_i18n.t("board.action.auto_off", "Automatisch anheften aus") if board["auto"] else glide_i18n.t("board.action.auto_on", "Automatisch anheften ein")),
                  lambda: self.configure_board("auto", not self.board()["auto"])),
-                ("Alle Karten finden", self.find_cards),
-                ("Karteninhalt …", self.show_card_content_menu),
-                ("Kartenfarbe …", self.show_card_color_menu),
-                ("Hintergrund …", self.show_background_menu),
-                ("Zu Bereich springen …", self.show_area_jump_menu),
-                ("Präsentieren (Bereiche als Folien)", self.start_presentation),
-                ("Präsentation als PDF …", self.print_presentation),
-                (("Neue Karten verbinden aus" if board.get("auto_connect") else "Neue Karten verbinden ein"),
+                (glide_i18n.t("board.action.find_cards", "Alle Karten finden"), self.find_cards),
+                (glide_i18n.t("board.action.card_content", "Karteninhalt …"), self.show_card_content_menu),
+                (glide_i18n.t("board.action.card_color", "Kartenfarbe …"), self.show_card_color_menu),
+                (glide_i18n.t("board.action.background", "Hintergrund …"), self.show_background_menu),
+                (glide_i18n.t("board.action.area_jump", "Zu Bereich springen …"), self.show_area_jump_menu),
+                (glide_i18n.t("board.action.present", "Präsentieren (Bereiche als Folien)"), self.start_presentation),
+                (glide_i18n.t("board.action.present_pdf", "Präsentation als PDF …"), self.print_presentation),
+                ((glide_i18n.t("board.action.auto_connect_off", "Neue Karten verbinden aus") if board.get("auto_connect") else glide_i18n.t("board.action.auto_connect_on", "Neue Karten verbinden ein")),
                  lambda: self.configure_board("auto_connect", not self.board().get("auto_connect"))),
-                (("Vollbild beenden" if self.board_focus_active() else "Vollbild"),
+                ((glide_i18n.t("board.action.fullscreen_exit", "Vollbild beenden") if self.board_focus_active() else glide_i18n.t("board.action.fullscreen", "Vollbild")),
                  self.toggle_board_focus),
-                ("Als JSON Canvas (.canvas) …", self.export_board_json_canvas),
-                ("Drucken und PDF …", self.print_board),
+                (glide_i18n.t("board.action.export_canvas", "Als JSON Canvas (.canvas) …"), self.export_board_json_canvas),
+                (glide_i18n.t("board.action.print_pdf", "Drucken und PDF …"), self.print_board),
             ],
         }
 
@@ -5330,25 +5423,32 @@ class ItemWorkspace:
         gruppen = self.board_action_groups()
         menu = app._new_themed_popup_menu()
         if self.selection():
-            titel = "AUSGEWÄHLTE KARTE" if len(self.selection()) == 1 else f"{len(self.selection())} KARTEN"
+            titel = (glide_i18n.t("board.context.selected_card", "AUSGEWÄHLTE KARTE").upper()
+                     if len(self.selection()) == 1
+                     else glide_i18n.t("board.context.selected_cards", "{count} KARTEN",
+                                           count=len(self.selection())).upper())
             menu.add_command(label=titel, state="disabled")
-            for beschriftung, befehl in gruppen.get("Ausgewählte Karte", ()):
+            selected_group = glide_i18n.t("board.group.selected_card", "Ausgewählte Karte")
+            for beschriftung, befehl in gruppen.get(selected_group, ()):
                 menu.add_command(label="   " + beschriftung, command=befehl)
             menu.add_separator()
         stelle = getattr(self, "_context_point", None) or (24, 24)
-        menu.add_command(label="FLÄCHE", state="disabled")
-        menu.add_command(label="   Neue Aufgabe hier",
+        menu.add_command(label=glide_i18n.t("board.group.surface", "Fläche").upper(), state="disabled")
+        menu.add_command(label="   " + glide_i18n.t("board.context.new_task_here", "Neue Aufgabe hier"),
                          command=lambda: self.create_card_item(*stelle))
-        menu.add_command(label="   Neue Notiz hier",
+        menu.add_command(label="   " + glide_i18n.t("board.context.new_note_here", "Neue Notiz hier"),
                          command=lambda: self.create_card_item(*stelle, app.ITEM_KIND_LONG))
-        menu.add_command(label="   Anheften", command=self.choose_cards)
+        menu.add_command(label="   " + glide_i18n.t("board.action.pin", "Anheften"), command=self.choose_cards)
         if self.areas_visible():
-            menu.add_command(label="   Neuer Bereich hier",
+            menu.add_command(label="   " + glide_i18n.t("board.context.new_area_here", "Neuer Bereich hier"),
                              command=lambda: self.create_area(around_selection=False, point=stelle))
         menu.add_separator()
-        menu.add_command(label="An Karten ausrichten: " + ("Ein" if self.board().get("object_snap") else "Aus"),
+        align_value = (glide_i18n.t("board.context.align_on", "Ein") if self.board().get("object_snap")
+                       else glide_i18n.t("board.context.align_off", "Aus"))
+        menu.add_command(label=glide_i18n.t("board.context.align_cards", "An Karten ausrichten") + ": " + align_value,
                              command=lambda: self.configure_board("object_snap", not self.board().get("object_snap", False)))
-        menu.add_command(label="   Aktionen", command=self.show_board_actions_menu)
+        menu.add_command(label="   " + glide_i18n.t("board.action.actions", "Aktionen"),
+                             command=self.show_board_actions_menu)
         try:
             if event is not None:
                 menu.tk_popup(event.x_root, event.y_root)
@@ -5379,7 +5479,8 @@ class ItemWorkspace:
         """Die drei Stufen der Kartengröße als Menü an der Schaltfläche."""
         app = self.app
         if not self.selection():
-            app.show_warning("Kartengröße", "Zuerst eine Karte auswählen.")
+            app.show_warning(glide_i18n.t("board.card_scale.title", "Kartengröße"),
+                             glide_i18n.t("board.card_scale.select", "Zuerst eine Karte auswählen."))
             return "break"
         aktuelle = {card["item_id"]: card.get("scale", self.CARD_SCALE_DEFAULT)
                     for card in self.board()["cards"]}
@@ -5407,7 +5508,8 @@ class ItemWorkspace:
             return "break"
         kennungen = set(self.selection())
         if not kennungen:
-            self.app.show_warning("Kartengröße", "Zuerst eine Karte auswählen.")
+            self.app.show_warning(glide_i18n.t("board.card_scale.title", "Kartengröße"),
+                                  glide_i18n.t("board.card_scale.select", "Zuerst eine Karte auswählen."))
             return "break"
         scope = self.context()
 
@@ -7135,7 +7237,8 @@ class ItemWorkspace:
         def change():
             board = app.settings["pinboards"].setdefault(scope, copy.deepcopy(self.board(scope)))
             board.setdefault("areas", []).append(neu)
-        if self.board_view_change(change, f"Bereich „{neu['name']}“ angelegt"):
+        if self.board_view_change(change, glide_i18n.t(
+                "toast.board_area_created", "Bereich „{name}“ angelegt", name=neu["name"])):
             self.selected_area = neu["id"]
             self.draw_board()
         return "break"
@@ -7183,7 +7286,8 @@ class ItemWorkspace:
             board = self.app.settings["pinboards"].setdefault(scope, copy.deepcopy(self.board(scope)))
             board["areas"] = [value for value in board.get("areas", []) if value["id"] != area["id"]]
         # Die Karten bleiben liegen – ein Bereich besitzt sie nicht.
-        if self.board_view_change(change, f"Bereich „{area['name']}“ entfernt"):
+        if self.board_view_change(change, glide_i18n.t(
+                "toast.board_area_removed", "Bereich „{name}“ entfernt", name=area["name"])):
             self.selected_area = None
             self.draw_board()
         return "break"
@@ -7302,7 +7406,8 @@ class ItemWorkspace:
                 for value in board.get("areas", []):
                     if value["id"] == area["id"]:
                         value["w"], value["h"] = int(breite), int(hoehe)
-            self.board_view_change(change, f"Bereich „{area['name']}“ verändert")
+            self.board_view_change(change, glide_i18n.t(
+                "toast.board_area_changed", "Bereich „{name}“ verändert", name=area["name"]))
             self.draw_board()
             return "break"
         ziel_x = max(0, min(20000, round((area["x"] + dx) / schritt) * schritt))
@@ -7320,7 +7425,8 @@ class ItemWorkspace:
                     card["x"] = max(0, min(20000, int(card["x"] + versatz_x)))
                     card["y"] = max(0, min(20000, int(card["y"] + versatz_y)))
         # Bereich und Karten wandern in einem Rückgängig-Schritt.
-        self.board_view_change(change, f"Bereich „{area['name']}“ verschoben")
+        self.board_view_change(change, glide_i18n.t(
+            "toast.board_area_moved", "Bereich „{name}“ verschoben", name=area["name"]))
         self.draw_board()
         return "break"
 
@@ -7373,7 +7479,8 @@ class ItemWorkspace:
             for card in board["cards"]:
                 if card["item_id"] in positionen:
                     card["x"], card["y"] = (max(0, min(20000, value)) for value in positionen[card["item_id"]])
-        if self.board_view_change(change, f"{len(positionen)} Karten aufgeräumt"):
+        if self.board_view_change(change, glide_i18n.t(
+                "toast.cards_tidied", "{n} Karten aufgeräumt", n=len(positionen))):
             self.draw_board()
         return "break"
 
@@ -8139,7 +8246,10 @@ class ItemWorkspace:
                     name = dict(self.BOARD_GROUP_FIELDS).get(feld, "Feld")
                     titel = str(gefunden[0].get("text") or "Karte") if gefunden else "Karte"
                     titel = titel if len(titel) <= 40 else titel[:39] + "…"
-                    self.app.show_undo_toast(f"„{titel}“ → Spalte „{spalte.get('title', '')}“ · {name} gesetzt")
+                    self.app.show_undo_toast(glide_i18n.t(
+                        "toast.board_field_set",
+                        "„{title}“ → Spalte „{column}“ · {field} gesetzt",
+                        title=titel, column=spalte.get("title", ""), field=name))
                 self.focus_card(self.selected_id)
                 return "break"
             index += step
@@ -9476,7 +9586,8 @@ class ItemWorkspace:
                     card["y"] = ziel_y
         # Seit 3.30 zurücknehmbar wie Bereiche und Aufräumen – vorher war
         # ausgerechnet das häufigste Verschieben der einzige Weg ohne Rückgängig.
-        if self.board_view_change(change, "Karte verschoben"):
+        if self.board_view_change(change, glide_i18n.t(
+                "toast.card_moved", "Karte verschoben")):
             # Kein vollständiger Aufbau der Oberfläche: Die Position einer
             # Karte betrifft ausschließlich die Pinnwand.
             self._signature = None
@@ -21953,8 +22064,11 @@ class ListApp:
             self.tree.selection_set(vorhanden)
             self.tree.focus(vorhanden[0])
             self.tree.see(vorhanden[0])
-        text = "Uhrzeit entfernt" if geaendert[0] is None else f"Zeitplan: {geaendert[0]}"
-        self.show_undo_toast(text + (f" · {len(geaendert)} Punkte" if len(geaendert) > 1 else ""))
+        text = (glide_i18n.t("toast.clock_removed", "Uhrzeit entfernt")
+                if geaendert[0] is None
+                else glide_i18n.t("toast.time_plan", "Zeitplan: {time}", time=geaendert[0]))
+        self.show_undo_toast(text + (glide_i18n.t(
+            "toast.points_count", " · {n} Punkte", n=len(geaendert)) if len(geaendert) > 1 else ""))
         return True
 
     def apply_clock_assignments(self, assignments):
@@ -21980,8 +22094,12 @@ class ListApp:
         if not change.saved:
             return 0
         target = changed[0]
-        self.show_undo_toast("Uhrzeit entfernt" if target[2] is None else
-                            f"Zeitblock {self.relative_day_text(target[1])} {target[2]} · {len(changed)} Aufgaben")
+        self.show_undo_toast(
+            glide_i18n.t("toast.clock_removed", "Uhrzeit entfernt")
+            if target[2] is None
+            else glide_i18n.t(
+                "toast.time_block", "Zeitblock {day} {time} · {n} Aufgaben",
+                day=self.relative_day_text(target[1]), time=target[2], n=len(changed)))
         return len(changed)
 
     def choose_time_block(self, event=None):
@@ -22506,10 +22624,11 @@ class ListApp:
         if change.changed and change.saved:
             if len(plan) == 1:
                 termin = self.format_due_display(next(iter(plan.values()))["due"])
-                text = (f"Verpasste Termine übersprungen · nächster {termin}" if missed
-                        else f"Termin übersprungen · nächster {termin}")
+                text = (glide_i18n.t("toast.missed_repetitions_skipped", "Verpasste Termine übersprungen · nächster {date}", date=termin)
+                        if missed
+                        else glide_i18n.t("toast.repetition_skipped", "Termin übersprungen · nächster {date}", date=termin))
             else:
-                text = f"{len(plan)} Wiederholungen vorgerückt"
+                text = glide_i18n.t("toast.repetitions_advanced", "{n} Wiederholungen vorgerückt", n=len(plan))
             self.show_undo_toast(text)
         return "break"
 
@@ -22578,9 +22697,14 @@ class ListApp:
         if not change.saved:
             return 0
         if toast:
-            count = "1 Aufgabe" if len(changed) == 1 else f"{len(changed)} Aufgaben"
-            text = f"{count} ohne Bearbeitungstag" if day is None else (
-                f"{count} für {self.relative_day_text(day)} eingeplant · {self.planning_available_text(day)}")
+            text = (glide_i18n.t("toast.task_without_workday", "1 Aufgabe ohne Bearbeitungstag")
+                    if len(changed) == 1 and day is None
+                    else (glide_i18n.t("toast.tasks_without_workday", "{n} Aufgaben ohne Bearbeitungstag", n=len(changed))
+                          if day is None
+                          else glide_i18n.t(
+                              "toast.tasks_planned", "{n} Aufgaben für {day} eingeplant · {available}",
+                              n=len(changed), day=self.relative_day_text(day),
+                              available=self.planning_available_text(day))))
             self.show_undo_toast(text)
         return len(changed)
 
@@ -23113,7 +23237,11 @@ class ListApp:
                 for key, value in next((felder for _item, felder in plaene if felder), {}).items():
                     teile.append(f"Wichtigkeit {self.IMPORTANCE_NAMES.get(value, value)}" if key == "importance"
                                  else f"Bearbeitungstag {self.format_due_display(value)}")
-                self.show_undo_toast("Eingeordnet · " + " · ".join(teile) if teile else "Eingeordnet")
+                self.show_undo_toast(
+                    glide_i18n.t("toast.ordered_with_details", "Eingeordnet · {details}",
+                                 details=" · ".join(teile))
+                    if teile
+                    else glide_i18n.t("toast.ordered", "Eingeordnet"))
             return geaendert, gruende[0] if gruende else None
         if field == "done":
             erledigt = target == "done"
@@ -24003,14 +24131,14 @@ class ListApp:
     def toggle_side_view_task(self, item_id):
         """Abhaken nebenan: derselbe Weg wie in einer Kachel, ein Rückgängig-Schritt."""
         if getattr(self, "_data_read_only", False):
-            self.set_side_view_status("Schreibgeschützter Bestand · nur ansehen.")
+            self.set_side_view_status(glide_i18n.t("side_view.status.read_only", "Schreibgeschützter Bestand · nur ansehen."))
             return "break"
         found = self.find_item_in_lists(item_id) if item_id else None
         if not found or not self.is_schedulable_item(found[0]):
             return "break"
         self._side_view_selected = item_id
         if not self.toggle_item_done_anywhere(item_id):
-            self.set_side_view_status("Die Änderung wurde nicht gespeichert.")
+            self.set_side_view_status(glide_i18n.t("side_view.status.change_not_saved", "Die Änderung wurde nicht gespeichert."))
         self.sync_side_view(force=True)
         return "break"
 
@@ -24329,7 +24457,10 @@ class ListApp:
         matches = getattr(self, "_side_search_matches", [])
         if (entry is None or entry["id"] != identity or query != getattr(self, "_side_search_query", "")
                 or not 0 <= index < len(matches)):
-            self.set_side_view_status("Die Treffer haben sich geändert. Bitte die Übersicht erneut öffnen.")
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.matches_changed",
+                "Die Treffer haben sich geändert. Bitte die Übersicht erneut öffnen.",
+            ))
             return "break"
         self._side_search_index = index
         self.move_side_search(0)
@@ -24358,9 +24489,15 @@ class ListApp:
                 body.focus(target)
                 body.see(target)
             suffix = '+' if getattr(self, "_side_search_more", False) else ''
-            text = f"{index + 1} / {len(matches)}{suffix} Treffer"
+            text = glide_i18n.t(
+                "side_view.status.search_position",
+                "{position} Treffer",
+                position=f"{index + 1} / {len(matches)}{suffix}",
+            )
         else:
-            text = "Keine Treffer." if getattr(self, "_side_search_query", "") else "Suchbegriff eingeben."
+            text = (glide_i18n.t("side_view.status.no_matches", "Keine Treffer.")
+                    if getattr(self, "_side_search_query", "")
+                    else glide_i18n.t("side_view.status.enter_search", "Suchbegriff eingeben."))
         counter.configure(text=text)
         return "break"
 
@@ -24394,7 +24531,10 @@ class ListApp:
         if entry is None or entry["id"] != identity:
             return "break"
         if section not in glide_side_view.sections(entry):
-            self.set_side_view_status("Der Abschnitt hat sich geändert. Bitte die Abschnitte erneut öffnen.")
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.section_changed",
+                "Der Abschnitt hat sich geändert. Bitte die Abschnitte erneut öffnen.",
+            ))
             return "break"
         body = getattr(self, "_side_view_body", None)
         if body is not None and body.winfo_exists():
@@ -24427,14 +24567,22 @@ class ListApp:
             return "break"
         abschnitte = glide_side_view.sections(entry)
         if not abschnitte:
-            self.set_side_view_status("Diese Ansicht hat keine Abschnitte.")
+            self.set_side_view_status(glide_i18n.t("side_view.status.no_sections", "Diese Ansicht hat keine Abschnitte."))
             return "break"
         stelle, folge = self.side_view_position()
         ziel = glide_side_view.section_step(abschnitte, stelle, step, folge)
         if ziel is None:
-            self.set_side_view_status("Kein weiterer Abschnitt." if step > 0 else "Kein vorheriger Abschnitt.")
+            self.set_side_view_status(
+                glide_i18n.t("side_view.status.no_next_section", "Kein weiterer Abschnitt.")
+                if step > 0
+                else glide_i18n.t("side_view.status.no_previous_section", "Kein vorheriger Abschnitt.")
+            )
             return "break"
-        self.set_side_view_status(f"Abschnitt: {ziel['title'][:90]}")
+        self.set_side_view_status(glide_i18n.t(
+            "side_view.status.section",
+            "Abschnitt: {title}",
+            title=ziel["title"][:90],
+        ))
         return self.jump_side_section(entry["id"], ziel)
 
     def build_side_view_shell(self):
@@ -24731,15 +24879,19 @@ class ListApp:
         baum.configure(displaycolumns=())
         baum.bind("<Configure>", fit_columns, add="+")
         if not zeilen:
-            baum.insert("", "end", iid="_empty", text="Noch keine Aufgaben.", tags=("done",))
+            baum.insert("", "end", iid="_empty",
+                        text=glide_i18n.t("side_view.status.no_tasks", "Noch keine Aufgaben."),
+                        tags=("done",))
         gewaehlt = getattr(self, "_side_view_selected", None)
         if gewaehlt and baum.exists(gewaehlt):
             baum.selection_set(gewaehlt)
             baum.focus(gewaehlt)
             baum.see(gewaehlt)
         elif gewaehlt:
-            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
-                                      '„Öffnen“ zeigt den ganzen Inhalt.')
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.task_not_in_preview",
+                "Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. „Öffnen“ zeigt den ganzen Inhalt.",
+            ))
 
         def marke_getroffen(event):
             iid = baum.identify_row(event.y)
@@ -24800,17 +24952,23 @@ class ListApp:
             return False
         target = glide_objects.parse(value)
         if target not in (outgoing.get(source, set()) | incoming.get(source, set())):
-            self.set_side_view_status("Dieser Verweis ist inzwischen nicht mehr vorhanden.")
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.reference_missing",
+                "Dieser Verweis ist inzwischen nicht mehr vorhanden.",
+            ))
             return False
         if action == 'copy':
             self.root.clipboard_clear()
             self.root.clipboard_append(glide_objects.uri(*target))
-            self.set_side_view_status('Verweis kopiert.')
+            self.set_side_view_status(glide_i18n.t("side_view.status.reference_copied", "Verweis kopiert."))
             return True
         if action not in ('side', 'main'):
             return False
         if action == 'side' and glide_side_view.reference_target(target, index) is None:
-            self.set_side_view_status("Das Verweisziel ist nicht mehr in der Nebenansicht verfügbar.")
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.reference_target_unavailable",
+                "Das Verweisziel ist nicht mehr in der Nebenansicht verfügbar.",
+            ))
             return False
         return self.open_object_reference(value, side=action == 'side')
 
@@ -24990,8 +25148,10 @@ class ListApp:
         if reference_start is not None:
             text.see(reference_start)
         elif getattr(self, '_side_view_selected', None) and entry.get('list_kind') == 'page':
-            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
-                                      '„Öffnen“ zeigt den ganzen Inhalt.')
+            self.set_side_view_status(glide_i18n.t(
+                "side_view.status.task_not_in_preview",
+                "Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. „Öffnen“ zeigt den ganzen Inhalt.",
+            ))
         self.bind_mousewheel(text, text)
         glide_core_accessibility.bind_focus_traversal(text)
         self._side_search_bodies.append(text)
@@ -27091,7 +27251,7 @@ class ListApp:
         if self.view_mode == self.HOME_VIEW:
             self.refresh_home()
         if item.get("done") and change.changed and change.saved is not False:
-            self.show_undo_toast("Erledigt")
+            self.show_undo_toast(glide_i18n.t("toast.completed", "Erledigt"))
             self.schedule_checklist_reset([item_id])
         return change.saved is not False
 
@@ -27112,7 +27272,9 @@ class ListApp:
                 entry.pop("recurring_checklist", None)
             change.mark()
         if on and change.saved is not False:
-            self.show_undo_toast("Wiederkehrende Checkliste: öffnet sich wieder, wenn alles erledigt ist")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.recurring_checklist_reopened",
+                "Wiederkehrende Checkliste: öffnet sich wieder, wenn alles erledigt ist"))
             self.schedule_checklist_reset([], list_ids=[list_id])
         return bool(change.changed)
 
@@ -27128,7 +27290,10 @@ class ListApp:
             self.settings["today_routines"] = vorher
             return "break"
         gezeigt = list_id in self.settings["today_routines"]
-        self.show_undo_toast("Routine in „Heute“" if gezeigt else "Routine nicht mehr in „Heute“")
+        self.show_undo_toast(
+            glide_i18n.t("toast.routine_added", "Routine in „Heute“")
+            if gezeigt
+            else glide_i18n.t("toast.routine_removed", "Routine nicht mehr in „Heute“"))
         if self.view_mode == self.PLAN_DAY_VIEW:
             self.refresh_tree()
         return "break"
@@ -27189,7 +27354,10 @@ class ListApp:
         if change.changed and change.saved is not False:
             if list_id == self.active_list_id:
                 self.refresh_tree()
-            self.show_undo_toast("Checkliste wieder offen" if automatic else f"{len(ids)} Punkte wieder offen")
+            self.show_undo_toast(
+                glide_i18n.t("toast.checklist_reopened", "Checkliste wieder offen")
+                if automatic
+                else glide_i18n.t("toast.points_reopened", "{n} Punkte wieder offen", n=len(ids)))
         return bool(change.changed)
 
     def toggle_home_editing(self):
@@ -28955,7 +29123,8 @@ class ListApp:
                     item.update(plan[item["id"]])
                     change.mark(item["id"])
         if change.changed and change.saved:
-            self.show_undo_toast(f"{len(plan)} Aufgaben geändert")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.tasks_changed", "{n} Aufgaben geändert", n=len(plan)))
             return True
         return False
 
@@ -30507,7 +30676,9 @@ class ListApp:
                 self._activate_system_view(self.LIBRARY_VIEW, refresh=False)
         self.feedback("archived" if archived else "unarchived")
         if archived:
-            self.show_undo_toast(f"„{holder.get('title', '')}“ archiviert")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.title_archived", "„{title}“ archiviert",
+                title=holder.get("title", "")))
         return True
 
     def library_entries(self, archived=False):
@@ -41538,8 +41709,13 @@ class ListApp:
                 self.items = kept
             change.mark()
         if change.saved:
-            text = (f'{len(removed)} erledigte Aufgabe(n) in den Papierkorb gelegt' if len(removed) <= self.MAX_TRASH_ENTRIES
-                    else f'{len(removed)} erledigte Aufgabe(n) entfernt · Papierkorbgrenze berücksichtigt')
+            text = (glide_i18n.t(
+                        "toast.completed_tasks_trashed", "{n} erledigte Aufgabe(n) in den Papierkorb gelegt",
+                        n=len(removed))
+                    if len(removed) <= self.MAX_TRASH_ENTRIES
+                    else glide_i18n.t(
+                        "toast.completed_tasks_limit", "{n} erledigte Aufgabe(n) entfernt · Papierkorbgrenze berücksichtigt",
+                        n=len(removed)))
             self.finish_change_ui(change, [('Rückgängig-Hinweis', lambda: self.show_undo_toast(text))])
         return 'break'
 
@@ -41603,7 +41779,8 @@ class ListApp:
             if self._move_lists_to_trash([list_id]):
                 change.mark()
         if change.changed:
-            self.show_undo_toast(f"„{title}“ in den Papierkorb gelegt")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.title_trashed", "„{title}“ in den Papierkorb gelegt", title=title))
         return "break"
 
     # -----------------------------
@@ -41733,7 +41910,8 @@ class ListApp:
             if self._move_folder_to_trash(folder_id):
                 change.mark()
         if change.saved:
-            self.show_undo_toast(f"Ordner „{title}“ in den Papierkorb gelegt")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.folder_trashed", "Ordner „{title}“ in den Papierkorb gelegt", title=title))
         return "break"
 
     def _move_folder_to_trash(self, folder_id):
@@ -42464,10 +42642,20 @@ class ListApp:
         name = name if len(name) <= 40 else name[:39] + "…"
         if nachher[0] != vorher[0]:
             ziel = self.get_folder(nachher[0]) if nachher[0] else None
-            text = (f"„{name}“ in „{ziel.get('title') or 'Ordner'}“ verschoben" if ziel
-                    else f"„{name}“ aus dem Ordner heraus verschoben")
+            text = (glide_i18n.t(
+                        "toast.moved_into_folder", "„{name}“ in „{folder}“ verschoben",
+                        name=name, folder=ziel.get("title") or "Ordner")
+                    if ziel
+                    else glide_i18n.t(
+                        "toast.moved_out_folder", "„{name}“ aus dem Ordner heraus verschoben", name=name))
         else:
-            text = f"„{name}“ nach {'oben' if (nachher[1] or 0) < (vorher[1] or 0) else 'unten'} verschoben"
+            text = glide_i18n.t(
+                "toast.moved_position",
+                "„{name}“ nach {position} verschoben",
+                name=name,
+                position=(glide_i18n.t("toast.position_up", "oben")
+                          if (nachher[1] or 0) < (vorher[1] or 0)
+                          else glide_i18n.t("toast.position_down", "unten")))
         self.show_undo_toast(text)
         return "break"
 
@@ -51495,7 +51683,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         markdown = self.page_markdown(list_id, image_links="file")
         self.root.clipboard_clear()
         self.root.clipboard_append(markdown)
-        self.show_undo_toast("Seite kopiert")
+        self.show_undo_toast(glide_i18n.t("toast.page_copied", "Seite kopiert"))
         return "break"
 
     def new_page_from_markdown(self, markdown, title=None, folder_id=None, base_dir=None):
@@ -53189,7 +53377,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if len(entry["attachments"]) != len(vorher):
                 change.mark()
         if change.changed:
-            self.show_undo_toast("Bild entfernt")
+            self.show_undo_toast(glide_i18n.t("toast.image_removed", "Bild entfernt"))
         return bool(change.changed)
 
     def set_gallery_caption(self, list_id, attachment_id, title, note):
@@ -57710,7 +57898,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.finish_change_ui(change, [
             ('Eingefügte Aufgaben',lambda:self.refresh_tree(selected_id=neue[-1]["id"])),
             ('Rückmeldung',lambda:self.feedback("pasted",len(neue))),
-            ('Undo-Hinweis',lambda:self.show_undo_toast(f"{len(neue)} Aufgaben angelegt"))])
+            ('Undo-Hinweis',lambda:self.show_undo_toast(glide_i18n.t(
+                "toast.tasks_created", "{n} Aufgaben angelegt", n=len(neue))))])
         return "break"
 
     def capture_item_fields(self, felder):
@@ -57862,7 +58051,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             operations = [('Eingabe', self.clear_entry_text), ('Eingabehinweis', self.hide_slash_hint),
                           ('Anlegerückmeldung', lambda: self.feedback('item_created'))]
             if recognized:
-                operations.append(('Erkannte Angaben', lambda: self.show_undo_toast('Angelegt · ' + ' · '.join(recognized))))
+                operations.append(('Erkannte Angaben', lambda: self.show_undo_toast(
+                    glide_i18n.t("toast.created_with_details", "Angelegt · {details}",
+                                 details=' · '.join(recognized)))))
             self.finish_change_ui(change, operations)
 
     def clear_entry_text(self):
@@ -58242,7 +58433,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     geloescht += 1
         if geloescht:
             self.feedback("deleted", geloescht)
-            self.show_undo_toast(f"{geloescht} Punkt(e) in den Papierkorb gelegt")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.points_trashed", "{n} Punkt(e) in den Papierkorb gelegt", n=geloescht))
 
     TEXT_INPUT_CLASSES = glide_design.TEXT_INPUT_CLASSES
 
@@ -58453,7 +58645,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # Der Wächter hat zurückgenommen und gemeldet; keine Erfolgsmeldung.
             return "break"
         self.feedback("grouped", len(moved))
-        self.show_undo_toast(f"{len(moved)} Punkte gruppiert")
+        self.show_undo_toast(glide_i18n.t(
+            "toast.points_grouped", "{n} Punkte gruppiert", n=len(moved)))
         return "break"
 
     def keep_branch_expanded(self, items):
@@ -59987,7 +60180,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     self.book_completions(vorgerueckt)
                     change.mark()
         if new_state and change.changed and change.saved is not False:
-            self.show_undo_toast(f"{len(item_ids)} erledigt" if len(item_ids) > 1 else "Erledigt")
+            self.show_undo_toast(
+                glide_i18n.t("toast.items_completed", "{n} erledigt", n=len(item_ids))
+                if len(item_ids) > 1
+                else glide_i18n.t("toast.completed", "Erledigt"))
             self.schedule_checklist_reset(item_ids)
         return "break"
 
@@ -60658,7 +60854,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 target.setdefault("items", []).extend(moved_items)
                 change.mark()
         if moved_items and change.saved is not False:
-            self.show_undo_toast(f"{len(moved_items)} Punkt(e) nach „{target.get('title', 'Liste')}“ verschoben")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.points_moved", "{n} Punkt(e) nach „{target}“ verschoben",
+                n=len(moved_items), target=target.get("title", "Liste")))
         return bool(moved_items)
 
     def on_drag_motion(self, event):
@@ -63635,7 +63833,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             anzahl, _vorsicherung = ergebnis
             self.record_data_operation("imported", pfad)
             dialog.destroy()
-            self.show_undo_toast(f"{anzahl} Aufgabe(n) nach Vorschlag geändert")
+            self.show_undo_toast(glide_i18n.t(
+                "toast.tasks_changed_by_suggestion", "{n} Aufgabe(n) nach Vorschlag geändert",
+                n=anzahl))
             return "break"
 
         knoepfe.add(self._make_dialog_button(knoepfe, "Abbrechen", dialog.destroy, "muted", width=120))
@@ -63931,7 +64131,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 return False
             staged.keep()
         self.refresh_tree()
-        self.show_undo_toast('Notion-Seiten übernommen · Importbericht und Vorsicherung angelegt')
+        self.show_undo_toast(glide_i18n.t(
+            "toast.notion_imported",
+            "Notion-Seiten übernommen · Importbericht und Vorsicherung angelegt"))
         return True
 
     def read_page_restore_backup(self, path):
@@ -64086,7 +64288,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 return False
             staged.keep()
         self.refresh_tree()
-        self.show_undo_toast('Seite wiederhergestellt · Vorsicherung angelegt')
+        self.show_undo_toast(glide_i18n.t(
+            "toast.page_restored",
+            "Seite wiederhergestellt · Vorsicherung angelegt"))
         namen = {anhang.get('name') for anhang in (plan.page.get('attachments') or []) if isinstance(anhang, dict)}
         gekuerzt = [paar for paar in getattr(self, '_page_restore_shortened', None) or [] if paar[1] in namen]
         self._page_restore_shortened = None
@@ -69165,9 +69369,9 @@ Labels, Termine und Metadaten."""
                 ("Pinnwand", (
                     # Über open_board_view, damit es auch aus der Tabelle wirkt; direkt
                     # meldete es dort „Zuerst eine Liste oder einen Ordner öffnen“.
-                    ("Pinnwand öffnen", self.open_board_view),
-                    ("Globale Pinnwand öffnen", self.open_global_board),
-                    ("Auf Pinnwand anheften", lambda: self.workspace.pin(), "", 'workspace.pin'),
+                    (glide_i18n.t("board.menu.open", "Pinnwand öffnen"), self.open_board_view),
+                    (glide_i18n.t("board.menu.global_open", "Globale Pinnwand öffnen"), self.open_global_board),
+                    (glide_i18n.t("board.menu.pin", "Auf Pinnwand anheften"), lambda: self.workspace.pin(), "", 'workspace.pin'),
                 )),
                 None,
                 ("Oberfläche", (
@@ -69180,9 +69384,9 @@ Labels, Termine und Metadaten."""
                     None,
                     ("Startseite einrichten …", self.show_home_tiles_dialog),
                     ("Aus Seiten", self.show_tasks_from_pages),
-                    ("Gespeicherte Filter …", self.saved_filters.show_manager),
-                    ("Als Ansicht speichern …", self.saved_filters.capture_current),
-                    ("Filter erklären …", self.explain_saved_filter),
+                    (glide_i18n.t("menu.view.saved_filters", "Gespeicherte Filter …"), self.saved_filters.show_manager),
+                    (glide_i18n.t("menu.view.save_as_view", "Als Ansicht speichern …"), self.saved_filters.capture_current),
+                    (glide_i18n.t("menu.view.explain_filter", "Filter erklären …"), self.explain_saved_filter),
                 )),
                 None,
                 ("Benachrichtigungen …", self.open_reminders),
