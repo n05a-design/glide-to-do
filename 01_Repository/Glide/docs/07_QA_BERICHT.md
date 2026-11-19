@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## GitHub-Marketing-Nachpflege und README-Kritik (19.11.2026)
+
+Der öffentliche Einstiegsnarrativ wurde anhand der lokalen Glide-Gestaltungsregeln und einer separaten README-Kritik geschärft. Das „Version 1.0.0“-Badge konnte neben dem Hinweis auf noch nicht freigegebene Installer irreführend wirken; in beiden Sprachen bezeichnet es jetzt den Quellstand. Die Hauptnavigation ersetzt „Download“ bis zur Veröffentlichung durch „Aus dem Quellstand starten“ beziehungsweise „Run from source“ und „Showcase ansehen“; der Downloadabschnitt bleibt als nicht freigegeben erkennbar. Die englische README enthält keine offene Wettbewerbsaussage, die DE/EN-Kernabschnitte bleiben parallel und die sechs Screenshotbreiten sind explizit. Die Social-Preview-Datei wurde in der Projektmarke violett/gelb neu aufgebaut und misst 1280 × 640 px. Die Prüfung `test_standpruefung.py` bestand mit 27/27. Die Reproduktion des GitHub-Rendering erfolgt über den Branch-PR und nicht als behauptete Main-Veröffentlichung.
+
 ## English-first GitHub-Einstieg nach Steps-Muster (19.11.2026)
 
 Der Abruf der GitHub-README auf `main` bestätigte den Nutzerbefund: `README.md` war deutsch; die englische Fassung lag nur unter `README.en.md`, anders als Steps mit englischem `README.md` und deutschem `README.de.md`. Der lokale Folge-PR-Kandidat stellt `README.md` auf Englisch um und führt die vollständige deutsche Fassung als `README.de.md`. `CONTRIBUTING.md` und `SECURITY.md` sind englische Standardseiten mit jeweils verlinkter deutscher Fassung. Support, Verhaltensgrundsätze, PR-Vorlage und Issue-Formulare führen Englisch zuerst; T299 prüft Standardsprache, Übersetzungsnavigation, Abschnittsparität und lokale Ziele.

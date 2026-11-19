@@ -3530,6 +3530,16 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **E – Verbleibende Grenzen:** Die lokalen Remote-Tracking-Refs für gemergte Branches sind teilweise veraltet bzw. die GitHub-Branches gelöscht; die `git ls-remote`-Prüfung bestätigt diese alten Branches nicht als aktuell vorhanden. Der separat gelistete Hauptcheckout auf `claude/etappe4-release-v1` wurde gemäß Workspace-Schutz nicht geöffnet; sein Arbeitsbaum könnte uncommitted oder untracked Inhalt enthalten. Finder bestätigt lokale Ablage unter OneDrive und Offlineverfügbarkeit, aber keinen abgeschlossenen Cloud-Upload. Daher ist nicht belegt, dass jede lokale Ablage cloud-synchronisiert und frei von exklusiven Arbeitsdateien ist. PR #154 bleibt offen; Merge, Lieferabgleich und menschliche Abnahme sind nicht durch diesen Dokumentationsschnitt erledigt.
 
+### 21.142 GitHub-Marketing-Nachpflege und Social-Preview-Karte (19.11.2026)
+
+**A – Auftrag:** Die öffentliche README als Marketing-Einstieg verbessern, die Branch-/PR-Kritik aus einer separaten Designprüfung umsetzen und den GitHub-Auftritt deutsch/englisch konsistent halten.
+
+**B – Umsetzung:** Die englische Hauptnavigation führt bis zur öffentlichen Freigabe mit „Run from source“ und „Explore the showcase“ zu konkreten nächsten Handlungen. Das Versionsbadge heißt „Source baseline 1.0.0“, damit es nicht als veröffentlichtes Release missverstanden wird. Beide Sprachfassungen führen sachlich auf den 1.0.0-Quellstand und kennzeichnen 3.60.0-Aufnahmen als Showcase, nicht als Paket- oder Prüfbeleg. Die Screenshotgalerie besitzt responsive Bildbreiten, die Social-Preview-Karte ist als 1280 × 640 px große violett-gelbe Marketingkarte mit App-Symbol und englischem Leitsatz neu gebaut.
+
+**C – Verifikation:** `test_standpruefung.py` bestand mit 27/27; `git diff --check` ist grün. Die Karte misst 1280 × 640 px und bleibt unter 1 MB. Eine separate Designkritik ordnet das README als glaubwürdig, aber weiterhin textintensiv ein und hält neue 1.0.0-Aufnahmen, vollständige englische Fachdokumentation und menschliche Sichtprüfung offen.
+
+**D – Grenze:** Die Änderungen sind Teil des offenen PR #154 und nicht in `main`; das GitHub-Repositoryfeld „About“ und das Social-Preview-Feld bleiben Inhaber-/GitHub-Einstellungen und wurden nicht überschrieben. Kein Release, kein Tag, kein Installer und keine öffentliche Freigabe wurden angelegt.
+
 
 ### 21.141 Englisch-primärer GitHub-Einstieg nach Steps-Muster (19.11.2026)
 

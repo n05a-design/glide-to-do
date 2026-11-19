@@ -110,6 +110,47 @@ class I18nTests(unittest.TestCase):
         self.assertEqual(i18n.t("menu.help.about", app_name="Glide"), "About Glide")
         self.assertEqual(i18n.t("toast.undo", action="Task"), "Undone: Task")
 
+    def test_saved_view_menu_translations(self):
+        i18n.set_language("de")
+        self.assertEqual(i18n.t("menu.view.saved_filters"), "Gespeicherte Filter …")
+        self.assertEqual(i18n.t("menu.view.save_as_view"), "Als Ansicht speichern …")
+        self.assertEqual(i18n.t("menu.view.explain_filter"), "Filter erklären …")
+
+        i18n.set_language("en")
+        self.assertEqual(i18n.t("menu.view.saved_filters"), "Saved filters …")
+        self.assertEqual(i18n.t("menu.view.save_as_view"), "Save as view …")
+        self.assertEqual(i18n.t("menu.view.explain_filter"), "Explain filter …")
+
+    def test_saved_view_and_board_translations(self):
+        i18n.set_language("de")
+        self.assertEqual(i18n.t("saved_view.manager.title"), "Gespeicherte Filter")
+        self.assertEqual(i18n.t("saved_view.limit.body", max=100), "Es sind maximal 100 Filter möglich.")
+        self.assertEqual(i18n.t("board.open_tab.title"), "Reiter öffnen")
+        self.assertEqual(i18n.t("board.connect.select"), "Zuerst eine Karte auswählen.")
+        self.assertEqual(i18n.t("board.action.open_tab"), "Als Reiter öffnen")
+        i18n.set_language("en")
+        self.assertEqual(i18n.t("saved_view.manager.title"), "Saved filters")
+        self.assertEqual(i18n.t("saved_view.limit.body", max=100), "A maximum of 100 filters is supported.")
+        self.assertEqual(i18n.t("board.open_tab.title"), "Open tab")
+        self.assertEqual(i18n.t("board.connect.select"), "Select a card first.")
+        self.assertEqual(i18n.t("board.action.open_tab"), "Open as tab")
+
+    def test_side_view_status_translations(self):
+        i18n.set_language("de")
+        self.assertEqual(i18n.t("side_view.status.read_only"), "Schreibgeschützter Bestand · nur ansehen.")
+        self.assertEqual(i18n.t("side_view.status.change_not_saved"), "Die Änderung wurde nicht gespeichert.")
+        self.assertEqual(i18n.t("side_view.status.no_matches"), "Keine Treffer.")
+        self.assertEqual(i18n.t("side_view.status.no_tasks"), "Noch keine Aufgaben.")
+        self.assertEqual(i18n.t("side_view.status.search_position", position="1 / 3"), "1 / 3 Treffer")
+        self.assertEqual(i18n.t("side_view.status.section", title="Inhalt"), "Abschnitt: Inhalt")
+        i18n.set_language("en")
+        self.assertEqual(i18n.t("side_view.status.read_only"), "Read-only data · view only.")
+        self.assertEqual(i18n.t("side_view.status.change_not_saved"), "The change was not saved.")
+        self.assertEqual(i18n.t("side_view.status.no_matches"), "No matches.")
+        self.assertEqual(i18n.t("side_view.status.no_tasks"), "No tasks yet.")
+        self.assertEqual(i18n.t("side_view.status.search_position", position="1 / 3"), "1 / 3 matches")
+        self.assertEqual(i18n.t("side_view.status.section", title="Content"), "Section: Content")
+
     def test_safe_format_resilience(self):
         # Fehlende Variablen werfen keinen Fehler
         self.assertEqual(i18n.safe_format("Hallo {name}", {}), "Hallo {name}")
@@ -293,6 +334,45 @@ class I18nTests(unittest.TestCase):
                          "3 Punkte angelegt")
         self.assertEqual(i18n.safe_format(catalogs["en"]["feedback.item_created.plural"], {"n": 3}),
                          "3 items created")
+
+    def test_undo_toasts_use_translated_or_prepared_text(self):
+        source_path = SRC / "app.pyw"
+        tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+        calls = [
+            node for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "show_undo_toast"
+        ]
+        self.assertEqual(len(calls), 29)
+        for call in calls:
+            self.assertTrue(call.args, "show_undo_toast needs a text argument")
+            self.assertNotIsInstance(call.args[0], ast.Constant,
+                                     "Undo-Toast darf keinen direkten String verwenden")
+            self.assertNotIsInstance(call.args[0], ast.JoinedStr,
+                                     "Undo-Toast darf keinen direkten F-String verwenden")
+
+        locales_dir = i18n.get_locales_dir()
+        catalogs = {
+            language: json.loads((locales_dir / f"{language}.json").read_text(encoding="utf-8"))
+            for language in ("de", "en")
+        }
+        toast_keys = {
+            key for key in catalogs["de"] if key.startswith("toast.")
+        } | {
+            key for key in catalogs["en"] if key.startswith("toast.")
+        }
+        for language in ("de", "en"):
+            catalog = catalogs[language]
+            missing = {key for key in toast_keys if key not in catalog}
+            self.assertEqual(missing, set(), f"Toast-Schlüssel fehlen in {language}.json")
+
+        i18n.set_language("de")
+        self.assertEqual(i18n.t("toast.completed"), "Erledigt")
+        self.assertEqual(i18n.t("toast.points_reopened", n=3), "3 Punkte wieder offen")
+        i18n.set_language("en")
+        self.assertEqual(i18n.t("toast.completed"), "Completed")
+        self.assertEqual(i18n.t("toast.points_reopened", n=3), "3 items reopened")
 
     def test_module_budget_wa50(self):
         source_path = SRC / "i18n.py"
