@@ -200,14 +200,17 @@ def bind_task_completion(widget, app, identity):
                         action=lambda: widget.command())
 
 
-def bind_due(field):
-    name = 'Bearbeitungstag' if field.purpose == 'planned' else 'Fälligkeit'
-    bind_entry(field.date_entry, name, help='Datum als Tag, Monat und Jahr eingeben, zum Beispiel 13.10.2026.')
+def bind_due(field, name=None, date_help=None, time_help=None, calendar_action=None):
+    name = name or ('Bearbeitungstag' if field.purpose == 'planned' else 'Fälligkeit')
+    date_help = date_help or 'Datum als Tag, Monat und Jahr eingeben, zum Beispiel 13.10.2026.'
+    time_help = time_help or 'Freiwillige Uhrzeit als Stunde und Minute eingeben, zum Beispiel 09:30.'
+    calendar_action = calendar_action or name + ' im Kalender wählen'
+    bind_entry(field.date_entry, name, help=date_help)
     time = getattr(field, 'time_entry', None)
     if time is not None:
-        bind_entry(time, name + ': Uhrzeit', help='Freiwillige Uhrzeit als Stunde und Minute eingeben, zum Beispiel 09:30.')
+        bind_entry(time, name + ': Uhrzeit', help=time_help)
     if field.calendar_button is not None:
-        field.calendar_button._accessible_name = name + ' im Kalender wählen'
+        field.calendar_button._accessible_name = calendar_action
         refresh(field.calendar_button)
 
 

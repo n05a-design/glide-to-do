@@ -228,6 +228,13 @@ def fall_seitenaktionen(lauf):
 def fall_blockaktionen(lauf):
     """Strg+/ und Griff öffnen dieselben Blockaktionen; ein Undo je Umwandlung."""
     app, mod = lauf.app, lauf.mod
+    title_pattern = mod.glide_i18n.t("editor.block_actions.title", "Blockaktionen · {kind}")
+    bullet_label = mod.glide_i18n.t("editor.block.bullet", "Aufzählung")
+    heading_label = mod.glide_i18n.t("editor.block.h2", "Überschrift 2")
+    copy_label = mod.glide_i18n.t("editor.menu.copy", "Kopieren")
+    convert_label = mod.glide_i18n.t("editor.block_actions.order.convert", "Umwandeln in")
+    line_label = mod.glide_i18n.t("editor.block_actions.order.line", "Zeile")
+    search_label = mod.glide_i18n.t("editor.block_actions.search", "Blockaktionen suchen …")
     _seite, editor = seite_anlegen(lauf)
     text = editor.text
     zeile = zeile_mit(text, "• Grundriss Haus B prüfen")
@@ -236,19 +243,19 @@ def fall_blockaktionen(lauf):
     zustand = app._action_chooser
     assert zustand, "Strg+/ öffnet keine Blockaktionen"
     assert zustand["stage"].nametowidget(zustand["stage"].winfo_children()[0]).winfo_children()[0].cget(
-        "text") == "Blockaktionen · Aufzählung"
+        "text") == title_pattern.format(kind=bullet_label)
     eintraege = {wert.label: wert for wert in zustand["entries"]}
-    assert eintraege["Aufzählung"].checked and eintraege["Aufzählung"].section == "Umwandeln in"
-    assert not eintraege["Kopieren"].enabled and eintraege["Kopieren"].reason == mod.glide_action_menu.SELECTION_REASON
-    assert "Blockaktionen suchen …" not in eintraege
+    assert eintraege[bullet_label].checked and eintraege[bullet_label].section == convert_label
+    assert not eintraege[copy_label].enabled and eintraege[copy_label].reason == mod.glide_action_menu.SELECTION_REASON
+    assert search_label not in eintraege
     # Reihenfolge: zuerst „Umwandeln in“ (wie Notion), dann die Zeilenaktionen.
     abschnitte = [zustand["tree"].set(iid, "label") for iid in zustand["tree"].get_children()
                   if iid.startswith("group:")]
-    assert abschnitte[:2] == ["Umwandeln in", "Zeile"], abschnitte
+    assert abschnitte[:2] == [convert_label, line_label], abschnitte
     tiefe = len(app.undo_stack)
-    zustand["entry"].insert(0, "ueberschrift 2")
+    zustand["entry"].insert(0, heading_label)
     idle(lauf)
-    assert chooser_labels(app)[0] == "Überschrift 2"
+    assert chooser_labels(app)[0] == heading_label
     taste(zustand["entry"], "<Return>", lauf)
     idle(lauf)
     assert "h2" in editor.line_blocks(f"{zeile}.0"), editor.line_blocks(f"{zeile}.0")
@@ -299,8 +306,198 @@ def fall_blockaktionen(lauf):
     editor.popup = menus.append
     editor.show_context_menu(None)
     labels = [menus[0].entrycget(i, "label") for i in range(menus[0].index("end") + 1) if menus[0].type(i) != "separator"]
-    assert "Blockaktionen suchen …" in labels and "Umwandeln in" in labels
+    assert search_label in labels and convert_label in labels
     return "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg"
+
+
+def fall_editor_locale(lauf):
+    """Der Seiteneditor übersetzt Werkzeuge und Status, ohne Blockkennungen zu ändern."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    previous_preference = app.settings.get("language", "system")
+    expected = {
+        "de": {
+            "more": "Mehr", "heading": "Überschrift 2", "bold": "Fett",
+            "cut": "Ausschneiden", "convert": "Umwandeln in",
+            "timestamp": "Zeitstempel", "journal_prompt": "Schreibimpuls", "undo": "Rückgängig",
+            "saved": "Gespeichert", "save_failed": "Nicht gespeichert – erneut versuchen",
+            "select_text": "Zuerst Text zum Formatieren markieren.",
+            "select_link_text": "Zuerst den Linktext markieren.",
+            "search_hit": "1 Fundstelle markiert · Tippen oder Esc hebt die Markierung auf",
+            "search_hits": "2 Fundstellen markiert · Tippen oder Esc hebt die Markierung auf",
+        },
+        "en": {
+            "more": "More", "heading": "Heading 2", "bold": "Bold",
+            "cut": "Cut", "convert": "Convert to",
+            "timestamp": "Timestamp", "journal_prompt": "Writing prompt", "undo": "Undo",
+            "saved": "Saved", "save_failed": "Not saved — try again",
+            "select_text": "Select text to format first.",
+            "select_link_text": "Select the link text first.",
+            "search_hit": "1 match marked · Type or press Esc to clear",
+            "search_hits": "2 matches marked · Type or press Esc to clear",
+        },
+    }
+    try:
+        for language, expected_labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            _page, editor = seite_anlegen(lauf)
+            idle(lauf)
+            assert editor._toolbar_buttons["Mehr"].text == expected_labels["more"]
+            blocks = {tag: label for label, tag in editor.block_choices()}
+            formats = {tag: label for label, tag in editor.inline_formats()}
+            assert blocks["h2"] == expected_labels["heading"]
+            assert formats["bold"] == expected_labels["bold"]
+            menu = editor.build_context_menu()
+            menu_labels = [menu.entrycget(index, "label")
+                           for index in range(menu.index("end") + 1)
+                           if menu.type(index) != "separator"]
+            assert expected_labels["cut"] in menu_labels and expected_labels["convert"] in menu_labels, (
+                language, menu_labels)
+            assert set(editor._toolbar_buttons) == {"Liste", "Nummeriert", "Aufgabe", "Zitat", "Bild", "Mehr"}
+            menu.destroy()
+            with patch.object(editor, "add_object_reference_menu"), patch.object(mod.tk, "Menu") as menu_factory:
+                editor.show_more_menu()
+            more_menu = menu_factory.return_value
+            more_labels = [call.kwargs["label"] for call in more_menu.add_command.call_args_list]
+            assert {expected_labels["timestamp"], expected_labels["journal_prompt"], expected_labels["undo"]} <= set(
+                more_labels), (language, more_labels)
+            prior_document = editor.document()
+            prior_on_change = editor.on_change
+            try:
+                editor.on_change = lambda _value: True
+                editor.changed(prior_document)
+                assert editor.status.cget("text") == expected_labels["saved"]
+                editor.on_change = lambda _value: False
+                editor.changed(prior_document)
+                assert editor.status.cget("text") == expected_labels["save_failed"]
+                editor.format("bold")
+                assert editor.status.cget("text") == expected_labels["select_text"]
+                editor.insert_link()
+                assert editor.status.cget("text") == expected_labels["select_link_text"]
+                editor.load({"text": "Glide Glide", "spans": [], "links": {}})
+                assert editor.highlight_matches("glide") == 2
+                assert editor.status.cget("text") == expected_labels["search_hits"]
+                editor.load({"text": "Glide", "spans": [], "links": {}})
+                assert editor.highlight_matches("glide") == 1
+                assert editor.status.cget("text") == expected_labels["search_hit"]
+                editor.load(prior_document)
+            finally:
+                editor.on_change = prior_on_change
+                editor.load(prior_document)
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+        app.settings["language"] = previous_preference
+    return "DE/EN-Werkzeugleiste, Formatierungs-/Mehr-Menü und Editorstatus, stabile Aktionskennungen"
+
+
+def fall_feedback_locale(lauf):
+    """Aktionsrückmeldungen und Undo/Redo-Schaltflächen folgen der aktiven Sprache."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    had_feedback_preference = "action_feedback" in app.settings
+    previous_feedback_preference = app.settings.get("action_feedback")
+    expected_feedback = {
+        "de": ("Punkt angelegt", "3 Punkte angelegt", "Rückgängig", "Wiederholen", "Rückgängig gemacht"),
+        "en": ("Item created", "3 items created", "Undo", "Redo", "Undone"),
+    }
+    try:
+        app.settings["action_feedback"] = "all"
+        feedbacks = []
+        with patch.object(app, "animations_enabled", return_value=True), \
+                patch.object(app, "play_celebration", side_effect=feedbacks.append):
+            for language, expected in expected_feedback.items():
+                mod.glide_i18n.set_language(language)
+                app.feedback("item_created")
+                app.feedback("item_created", count=3)
+                assert feedbacks[-2].endswith(expected[0]), (language, feedbacks[-2])
+                assert feedbacks[-1].endswith(expected[1]), (language, feedbacks[-1])
+
+        toasts = []
+        with patch.object(app, "_place_history_toast",
+                          side_effect=lambda text, label, _command: toasts.append((text, label))):
+            for language, expected in expected_feedback.items():
+                mod.glide_i18n.set_language(language)
+                app.show_undo_toast("Änderung", restore=lambda: None)
+                app.show_redo_toast(object())
+                assert toasts[-2:] == [("Änderung", expected[2]), (expected[4], expected[3])]
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+        if had_feedback_preference:
+            app.settings["action_feedback"] = previous_feedback_preference
+        else:
+            app.settings.pop("action_feedback", None)
+    return "DE/EN-Aktionsrückmeldung mit Einzahl/Mehrzahl sowie Rückgängig-/Wiederholen-Hinweise"
+
+
+def fall_inspector_locale(lauf):
+    """Der Aufgabeninspektor übersetzt Felder, ohne gespeicherte Kennungen umzuschreiben."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    item = app.new_item("Lokalisierung prüfen", importance=3, due="2026-11-20")
+    listing = app.new_list_object("Lokalisierung", [item])
+    app.lists.append(listing)
+    assert app.save_items()
+    app.set_active_list(listing["id"])
+    idle(lauf, 4)
+    expected = {
+        "de": ("hoch", "Aufgabe", "keine Wiederholung", "Keine Benachrichtigung", "Fälligkeit"),
+        "en": ("high", "Task", "No repeat", "No reminder", "Due date"),
+    }
+
+    def descendants(widget):
+        for child in widget.winfo_children():
+            yield child
+            yield from descendants(child)
+
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            item["importance"] = 3
+            item["repeat"] = None
+            item["reminder"] = None
+            assert app.open_task_inspector(item["id"])
+            idle(lauf, 3)
+            fields = app._detail_state["fields"]
+            assert fields["importance"].get() == labels[0], (
+                language, fields["importance"].get(), mod.glide_i18n.get_language())
+            kind, kind_names = fields["kind"]
+            assert kind.get() == labels[1] and kind_names[kind.get()] == app.ITEM_KIND_TASK
+            repeat = fields["repeat"]
+            assert repeat["art"].get() == labels[2], (language, repeat["art"].get())
+            reminder_editor = next(
+                child for child in descendants(app.detail_pane)
+                if child.winfo_name() == "reminder_editor")
+            assert reminder_editor.mode_var.get() == labels[3]
+            due_field = fields["due"]
+            assert due_field.date_entry._glide_accessibility.attributes().name == labels[4]
+            assert due_field.MONTHS[0] == ("Januar" if language == "de" else "January")
+            fields["importance"].set(
+                mod.glide_i18n.t("inspector.importance.2", "mittel" if language == "de" else "medium"))
+            details, error = app.detail_pane_values(item)
+            assert error is None, error
+            assert details["importance"] == 2, (language, details["importance"])
+            assert kind_names[kind.get()] == app.ITEM_KIND_TASK, "Artkennung bleibt sprachunabhängig"
+            assert repeat["namen"][repeat["art"].get()] == app.REPEAT_NONE
+            repeat["art"].set(mod.glide_i18n.t(
+                "inspector.repeat.woechentlich", "wöchentlich" if language == "de" else "Weekly"))
+            details, error = app.detail_pane_values(item)
+            assert error is None, error
+            assert details["repeat"]["art"] == app.REPEAT_WEEKLY
+            repeat["position"][0].set(mod.glide_i18n.t(
+                "inspector.repeat.last", "letzter" if language == "de" else "last"))
+            repeat["position"][1].set(mod.glide_i18n.t(
+                "settings.weekday.short.wed", "Mi" if language == "de" else "Wed"))
+            assert app.repeat_position_values(
+                repeat["position"], weekday_names=repeat["weekday_names"]) == (-1, 2)
+            reminder_editor.mode_var.set(mod.glide_i18n.t(
+                "inspector.reminder.choice.1_day", "1 Tag vorher" if language == "de" else "1 day before"))
+            details, error = app.detail_pane_values(item)
+            assert error is None, error
+            assert details["reminder"]["minutes"] == 1440
+            app.close_task_inspector()
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+    return "Inspektorfelder, Kalender- und Barrierefreiheitstexte DE/EN; Auswahl bleibt auf stabilen Werten"
 
 
 def fall_schreibschutz(lauf):
@@ -5221,7 +5418,7 @@ def fall_fensterende3507(lauf):
     return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
 
 
-FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",
