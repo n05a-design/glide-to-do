@@ -13,6 +13,15 @@ import standpruefung as stand
 
 
 class Einstiegspruefung(unittest.TestCase):
+    def test_active_technical_readme_uses_release_1_0_current_stand(self):
+        project = stand.REPO.parents[1]
+        readme = (project / "01_Repository/Glide/README.md").read_text(encoding="utf-8")
+        self.assertIn("Stand 19.11.2026", readme)
+        self.assertIn("Quellstand 1.0.0", readme)
+        self.assertIn("Quellstand Glide 1.0.0", readme)
+        self.assertNotIn("Quellstand Glide 3.61.0", readme)
+        self.assertNotIn("Stand 17.11.2026", readme)
+
     def test_public_readmes_keep_mirrored_sections_and_resolve_local_links(self):
         project = stand.REPO.parents[1]
         pages = {

@@ -280,6 +280,20 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
             vorher = copy.deepcopy(app.settings)
             app.show_settings_dialog()
             assert app.settings == vorher, "Abbrechen verändert keine Einstellung."
+
+        # Tk kann an Tooltip-Bindungen auch Kommandos ohne Eventobjekt
+        # übergeben. Der <Motion>-Schatten darf dann nicht als Callbackfehler
+        # gemeldet werden.
+        tooltip_probe = mod.tk.Label(root, text="Tooltip-Probe")
+        tooltip_probe.pack()
+        root.update()
+        app.add_tooltip(tooltip_probe, "Tooltip-Inhalt")
+        motion_script = tooltip_probe.bind("<Motion>")
+        if motion_script:
+            command = motion_script.split("[", 1)[1].split(None, 1)[0]
+            root.tk.call(command)
+        tooltip_probe.destroy()
+        root.update()
         assert not callbacks, callbacks
     finally:
         app.cancel_pending_callbacks()

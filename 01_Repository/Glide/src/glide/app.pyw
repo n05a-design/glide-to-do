@@ -31024,7 +31024,7 @@ class ListApp:
 
         for event in ("<Enter>", "<FocusIn>"):
             widget.bind(event, schedule, add="+")
-        widget.bind("<Motion>", lambda _event: schedule()
+        widget.bind("<Motion>", lambda _event=None: schedule()
                     if callable(state["source"]) and quelle() != state["text"] else None, add="+")
         for event in ("<Leave>", "<FocusOut>", "<ButtonPress>", "<Destroy>", "<Unmap>"):
             widget.bind(event, hide, add="+")
