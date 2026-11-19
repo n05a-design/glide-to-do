@@ -1,5 +1,7 @@
 # Verhaltensgrundsätze / Code of Conduct
 
+Stand 19.11.2026 · Glide 1.0.0
+
 ## Deutsch
 
 In diesem Projekt respektieren wir einander unabhängig von Erfahrung, Sprache, Herkunft, Identität oder technischen Voraussetzungen.

@@ -1,5 +1,7 @@
 # Unterstützung / Support
 
+Stand 19.11.2026 · Glide 1.0.0
+
 ## Deutsch
 
 Verwendung, Installation und Fehler:
@@ -16,7 +18,7 @@ Bitte füge nur künstliche Daten und reproduzierbare Schritte hinzu.
 
 Installation and usage support:
 
-1. Read the [project README](README.md) and [feature guide](01_Repository/Glide/docs/20_FUNKTIONEN.md).
+1. Read the [project README](README.en.md) and [feature guide](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 2. Search existing [GitHub issues](https://github.com/n05a-design/glide-to-do/issues).
 3. Report defects with the [bug form](.github/ISSUE_TEMPLATE/fehler.yml).
 4. Use the dedicated [documentation, localization and accessibility forms](.github/ISSUE_TEMPLATE/).

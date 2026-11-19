@@ -13,6 +13,21 @@ import standpruefung as stand
 
 
 class Einstiegspruefung(unittest.TestCase):
+    def test_support_guide_links_resolve_to_existing_project_files(self):
+        project = stand.REPO.parents[1]
+        support = (project / "SUPPORT.md").read_text(encoding="utf-8")
+        for target in (
+            "README.md",
+            "README.en.md",
+            "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+            ".github/ISSUE_TEMPLATE/fehler.yml",
+            ".github/ISSUE_TEMPLATE/",
+            "SECURITY.md",
+        ):
+            with self.subTest(target=target):
+                self.assertIn(f"]({target})", support)
+                self.assertTrue((project / target).exists(), f"Broken support link: {target}")
+
     def test_github_government_issue_forms_cover_docs_localization_accessibility(self):
         project = stand.REPO.parents[1]
         forms = {
