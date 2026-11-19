@@ -29,7 +29,7 @@ The canonical app starts through `src/glide/glide_start.py` or `src/glide/app.py
 - **App/data versions:** 1.0.0 / 26. Settings 2, templates 2, exchange format 2.
 - **Localization:** German default and English supported in the i18n mechanism; only some UI areas are translated end-to-end.
 - **Release:** source cut is merged on `main`, but the checked state reported no tag or GitHub release. Public package-manager submissions and owner acceptance are not complete.
-- **QA:** local macOS basic suite passed on the candidate. On PR head `042a8d7`, the isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with the callback-error assertion intact. The earlier full run timed out at 900 seconds on both platforms at the previous head `5631333a`. The automatic PR run on `042a8d7` passed basic CI, Analyze, and CodeQL; Linux full validation stopped during native prerequisite setup before tests, and Windows full validation was still running at last check. The original callback cause remains unknown.
+- **QA:** local macOS basic suite passed on the candidate. On PR head `042a8d7`, the isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with the callback-error assertion intact. The earlier full run timed out at 900 seconds on both platforms at the previous head `5631333a`. The automatic PR run on `042a8d7` passed basic CI, Analyze, and CodeQL; Linux `apt-get update/install` received HTTP 503 responses from Ubuntu package sources and stopped before tests, then the calibration step failed because the suite-result file was absent. Windows full validation was still running at last check. The original callback cause remains unknown.
 
 ## Architecture and critical rules
 

@@ -34,7 +34,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 
 - Recorded PR #152 head `042a8d7`, delivery of the V1.49 diagnostic follow-up, and the V1.50 evidence/catalog refresh.
 - The isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with callback-error assertions retained.
-- Distinguished the historical full-suite timeout from the newer Linux full-run setup failure before tests; the Windows full run and focused work-mode run were still active at last check.
+- Distinguished the historical full-suite timeout from the newer Linux setup failure: Ubuntu package sources returned HTTP 503 during native prerequisite installation, and the later calibration step had no suite-result file. The Windows full run and focused work-mode run were still active at last check.
 - Kept the callback exception from the local macOS modal path and full platform-matrix completion explicitly unresolved.
 
 ## Maintenance rule
