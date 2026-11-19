@@ -143,7 +143,8 @@ def accessible_core_probe(app, mod, settle):
     settle()
     title.event_generate('<Control-s>')
     wait(lambda: fresh()['text'] == 'Paketprobe bearbeitet 🏠')
-    field = named('Neuer Checklistenpunkt')
+    field = named(mod.glide_i18n.t(
+        "inspector.checklist.new_step", "Neuer Checklistenpunkt"))
     field.focus_force()
     settle()
     field.insert(0, 'Paket-Unterlagen prüfen')

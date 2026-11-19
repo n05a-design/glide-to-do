@@ -134,7 +134,8 @@ def run(destination, app):
             raise RuntimeError('Native Reader-Bauvoraussetzung fehlt: '+command)
     if subprocess.run(['pgrep','-x','orca'],capture_output=True).returncode==0:
         raise RuntimeError('Vorhandene fremde Orca-Instanz im Prüfstand; keine Übernahme.')
-    env=dict(os.environ,LANG='C.UTF-8',LC_ALL='C.UTF-8',PYTHONDONTWRITEBYTECODE='1')
+    env=dict(os.environ,LANG='C.UTF-8',LC_ALL='C.UTF-8',LANGUAGE='de',
+             PYTHONDONTWRITEBYTECODE='1')
     for key,folder in (('XDG_CONFIG_HOME','config'),('XDG_CACHE_HOME','cache'),
                        ('XDG_DATA_HOME','data'),('XDG_RUNTIME_DIR','runtime')):
         path=destination/folder;path.mkdir(mode=0o700);env[key]=str(path)
