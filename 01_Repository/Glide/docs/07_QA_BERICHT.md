@@ -6,9 +6,11 @@
 
 **Korrektur:** Die Tooltip-Bindung für `<Motion>` ist jetzt ereignisneutral und ruft `schedule()` auch ohne Eventobjekt auf. Der Regressionsteil in `test_features315.py` erzeugt das gebundene Tcl-Motion-Kommando direkt und ruft es ohne Argument auf. Auf macOS/CPython 3.14.5/Tk 9.0.3 bestanden `test_features315.py`, `test_custom_controls.py` 12/12 und `test_arbeitsmodi.py --fall schriftstile` 1/1. Diese Ergebnisse ersetzen weder die Linux-/Windows-Remote-Nachprüfung noch die macOS-Vollprüfung.
 
-**Freigabegrenze:** Glide-System V1.54 ist der lokale Kandidat. Er wird erst mit einem neuen PR-Head geliefert; nach grünen Linux-/Windows-Matrixläufen folgen macOS-Vollprüfung und Paketbau. Keine Assertion, Timeout oder Prüfsuite wurde gelockert.
+**Freigabegrenze:** Der vorherige V1.54-Head `03cbc197` bestand Linux, Windows und das eigenständige Windows-Paket. Der final gepushte Head `db3bc6ca` wird in Workflow [#44585014542](https://github.com/n05a-design/glide-to-do/actions/runs/44585014542) erneut geprüft; Grundstufe besteht, die Linux-Vollprüfung läuft. MacOS-Vollprüfung und Paketbau folgen erst nach Grün dieses finalen Heads und Merge. Keine Assertion, Timeout oder Prüfsuite wurde gelockert.
 
 **Ganzheitsaudit und Prüfung der 737-Prüfangabe:** Der Masterprompt wurde gegen Git-Historie, Worktrees, Stashes, PR-/Main-Stand, Dokumentation, Code, Tests, Governance und Releasegrenzen abgeglichen. Die Angabe 737 ist weder als Testfallzahl noch als Prüfschrittsumme oder ausführbarer Bestand nachweisbar und wird nicht als Soll oder Ergebnis übernommen. Der tatsächliche Dateibestand enthält 277 Python-Dateien mit `test*.py`- oder `test_*.py`-Namen; kanonisch sind konkrete Testkennungen T001–T329 sowie ausgeführte Befehle mit Plattform, Commit, Exitcode und Fall-/Suiteprotokoll. Offen bleiben Windows-Abschluss von PR #153, macOS-Vollprüfung/Paketbau, Lieferkopie-/SHA-Abgleich nach dem finalen Merge, menschliche Abnahme sowie externe Release-, Signatur-, Marken- und Paketmanager-Freigaben.
+
+**Sentinel-Befund der lokalen Grundstufe:** Die Ausgabe `SECRET_TASK_CONTENT` ist ein absichtlich erwarteter Fehlertext im Unit-Test `test_supervisor_handles_failure_before_module_import`; der gezielte Lauf unter `PYTHONTZPATH=''` bestand mit Exitcode 0 und bestätigt, dass der Supervisor den Importfehler testet, ohne Geheimtext in den Diagnosebeleg zu schreiben. Dieser Text ist kein App-/CI-Produktfehler.
 
 ## PR #152 – Linux-Timeout in ButtonFlow und Folgekorrektur (19.11.2026)
 
