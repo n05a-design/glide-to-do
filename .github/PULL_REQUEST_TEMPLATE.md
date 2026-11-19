@@ -1,28 +1,28 @@
-## Überblick / Summary
+## Summary / Überblick
 
-Stand / Version: Glide 1.0.0
+Status as of / Stand: Glide 1.0.0
 
-<!-- Was ändert sich, und warum? / What changes, and why? -->
+<!-- What changes, and why? / Was ändert sich, und warum? -->
 
-## Änderungen / Changes
+## Changes / Änderungen
 
-<!-- Betroffene Bereiche und Nutzerwirkung / Affected areas and user impact -->
+<!-- Affected areas and user impact / Betroffene Bereiche und Nutzerwirkung -->
 
-## Prüfungen / Validation
+## Validation / Prüfungen
 
-- [ ] Passende Tests und Prüfungen ausgeführt / Relevant tests and checks run
-- [ ] Ergebnisse, Plattformen und offene Grenzen dokumentiert / Results, platforms, and remaining limitations documented
+- [ ] Relevant tests and checks run / Passende Tests und Prüfungen ausgeführt
+- [ ] Results, platforms, and remaining limitations documented / Ergebnisse, Plattformen und offene Grenzen dokumentiert
 
-## Dokumentation / Documentation
+## Documentation / Dokumentation
 
-- [ ] Führende Quellen und Folgebezüge nach der Pflegematrix aktualisiert / Updated source-of-truth docs and dependent references
-- [ ] Nicht zutreffend; Grund: / Not applicable; reason:
+- [ ] Updated source-of-truth docs and dependent references / Führende Quellen und Folgebezüge nach der Pflegematrix aktualisiert
+- [ ] Not applicable; reason: / Nicht zutreffend; Grund:
 
-## Daten und Sicherheit / Data and security
+## Data and security / Daten und Sicherheit
 
-- [ ] Keine echten Nutzerdaten in Tests, Protokollen oder Belegen / No real user data in tests, logs, or evidence
-- [ ] Datenformat, Migration und Sicherung geprüft, falls betroffen / Reviewed data format, migration, and backup if affected
+- [ ] No real user data in tests, logs, or evidence / Keine echten Nutzerdaten in Tests, Protokollen oder Belegen
+- [ ] Reviewed data format, migration, and backup if affected / Datenformat, Migration und Sicherung geprüft, falls betroffen
 
-## Offene Punkte / Follow-ups
+## Follow-ups / Offene Punkte
 
-<!-- Ungeprüfte Annahmen, übersprungene Prüfungen oder nötige Freigaben / Unverified assumptions, skipped checks, or required approvals -->
+<!-- Unverified assumptions, skipped checks, or required approvals / Ungeprüfte Annahmen, übersprungene Prüfungen oder nötige Freigaben -->

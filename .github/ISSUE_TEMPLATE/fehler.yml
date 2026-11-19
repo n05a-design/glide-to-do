@@ -1,28 +1,28 @@
-name: Fehler melden / Report a bug
-description: Etwas funktioniert nicht wie beschrieben / Something does not work as described.
-title: "[Fehler/Bug] "
+name: Report a bug / Fehler melden
+description: Something does not work as described / Etwas funktioniert nicht wie beschrieben.
+title: "[Bug] "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Danke für die Meldung! Bitte keine echten Inhalte, Namen oder Pfade anhängen – nur künstliche Beispieldaten oder den Showcase.
-        Sicherheitslücken bitte nicht hier, sondern vertraulich nach der Sicherheitsrichtlinie (SECURITY.md) melden.
-
         Thank you for reporting this! Do not include real content, names, or paths—use synthetic data or the Showcase only.
         Do not report security vulnerabilities here; use the confidential process in SECURITY.md.
+
+        Danke für die Meldung! Bitte keine echten Inhalte, Namen oder Pfade anhängen – nur künstliche Beispieldaten oder den Showcase.
+        Sicherheitslücken bitte nicht hier, sondern vertraulich nach der Sicherheitsrichtlinie (SECURITY.md) melden.
   - type: input
     id: version
     attributes:
-      label: Glide-Version / Glide version
-      description: Hilfe › Über Glide / Help › About Glide
-      placeholder: "Versionsnummer / Version number"
+      label: Glide version / Glide-Version
+      description: Help › About Glide / Hilfe › Über Glide
+      placeholder: "Version number / Versionsnummer"
     validations:
       required: true
   - type: dropdown
     id: system
     attributes:
-      label: System / Operating system
+      label: Operating system / System
       options:
         - Windows
         - macOS
@@ -32,31 +32,31 @@ body:
   - type: dropdown
     id: fassung
     attributes:
-      label: Fassung / Distribution
+      label: Distribution / Fassung
       options:
-        - Eigenständiges Paket / Standalone package
-        - Python-Fassung / Python distribution
+        - Standalone package / Eigenständiges Paket
+        - Python distribution / Python-Fassung
     validations:
       required: true
   - type: textarea
     id: schritte
     attributes:
-      label: Was hast du gemacht? / What did you do?
-      description: Schritte, mit denen sich der Fehler wiederholen lässt / Steps to reproduce the issue
+      label: What did you do? / Was hast du gemacht?
+      description: Steps to reproduce the issue / Schritte, mit denen sich der Fehler wiederholen lässt
       placeholder: |
-        1. Schritte zur Wiederholung / Steps to reproduce
+        1. Steps to reproduce / Schritte zur Wiederholung
         2. …
     validations:
       required: true
   - type: textarea
     id: erwartet
     attributes:
-      label: Was hast du erwartet, und was ist passiert? / What did you expect, and what happened?
+      label: What did you expect, and what happened? / Was hast du erwartet, und was ist passiert?
     validations:
       required: true
   - type: textarea
     id: protokoll
     attributes:
-      label: Fehlerprotokoll (optional) / Error log (optional)
-      description: Hilfe › Fehlerprotokoll öffnen / Help › Open error log. Bitte vor dem Einfügen auf persönliche Angaben prüfen / Review for personal information before pasting.
+      label: Error log (optional) / Fehlerprotokoll (optional)
+      description: Help › Open error log. Review for personal information before pasting. / Hilfe › Fehlerprotokoll öffnen. Bitte vor dem Einfügen auf persönliche Angaben prüfen.
       render: text

@@ -1,59 +1,61 @@
-# An Glide arbeiten
+# Contributing to Glide
 
-Stand 19.11.2026 · Glide 1.0.0
+Status as of 19.11.2026 · Glide 1.0.0
 
-Du möchtest einen Fehler melden, eine Idee einbringen, die Dokumentation verbessern oder an Glide entwickeln? Hier findest du den Einstieg und die zuständigen Unterlagen.
+[Read this guide in German](CONTRIBUTING.de.md).
 
-[Projektübersicht](README.md) · [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Aufbau der App](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Entwicklungsablauf](#entwicklungsablauf) · [Qualität](01_Repository/Glide/docs/07_QA_BERICHT.md)
+Want to report a bug, suggest an idea, improve the documentation, or contribute code? This page links to the right starting points and project references.
 
-## Den passenden Einstieg finden
+[Project overview](README.md) · [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Features (German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Application architecture (German)](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Development process](#development-process) · [Quality report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md)
 
-| Du möchtest … | Hier geht es weiter |
+## Find the right starting point
+
+| If you want to … | Start here |
 |---|---|
-| wissen, woran gearbeitet wird und was geplant ist | [Roadmap und Aufgabenstatus](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) |
-| verstehen, wie eine Funktion arbeitet | [Funktionen und Bedienung](01_Repository/Glide/docs/20_FUNKTIONEN.md) |
-| den technischen Aufbau kennenlernen | [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md), [Glide-System als Bestandsregister](01_Repository/Glide/src/glide/README.md) und [Shell-Konzept als Entkopplungsziel](01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) |
-| eine Entwicklungsumgebung einrichten und Glide starten | [Voraussetzungen und Schnellstart](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) |
-| eine bestehende Arbeit fortsetzen | [Übergabe und aktueller Arbeitsstand](00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](01_Repository/Glide/AGENTS.md) |
-| Prüfungen ausführen oder Ergebnisse einordnen | [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md), [Prüfwerkzeuge](01_Repository/Glide/tests/README.md) und [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) |
-| Texte, Verweise oder Anleitungen verbessern | [Zuständigkeiten und Änderungsbezüge](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md) |
+| see current work and what is planned | [Roadmap and task status](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) |
+| understand how a feature works | [Feature guide (German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) |
+| learn how the application is structured | [Architecture (German)](01_Repository/Glide/docs/02_ARCHITECTURE.md), [system inventory (German)](01_Repository/Glide/src/glide/README.md), and [Shell target architecture (German)](01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) |
+| set up a development environment and run Glide | [Requirements and quickstart (German)](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) |
+| continue existing work | [Handoff and current status (German)](00_Arbeitsvorbereitung/Glide_Uebergabe.md), then [repository rules (German)](01_Repository/Glide/AGENTS.md) |
+| run checks or understand results | [Test plan (German)](01_Repository/Glide/docs/05_QA_TESTPLAN.md), [test tools (German)](01_Repository/Glide/tests/README.md), and [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) |
+| improve text, links, or instructions | [Documentation ownership and change matrix (German)](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) and [documentation index (German)](01_Repository/Glide/docs/00_INDEX.md) |
 
-Der Entwicklungsplan bleibt die zentrale Roadmap. Funktionsbeschreibungen, Architektur und Prüfergebnisse werden in den jeweils verlinkten Fachunterlagen gepflegt.
+The development plan is the single roadmap. Feature behavior, architecture, and test results are maintained in their linked source documents.
 
-## Fehler melden und Ideen vorschlagen
+## Report bugs and suggest ideas
 
-Nutze die zweisprachigen [Formulare für Fehler und Wünsche](https://github.com/n05a-design/glide-to-do/issues/new/choose) oder wähle gezielt:
+Use the [bilingual issue forms](https://github.com/n05a-design/glide-to-do/issues/new/choose), or choose a focused form:
 
-- [Dokumentationsfehler](.github/ISSUE_TEMPLATE/dokumentation.yml)
-- [Lokalisierungsfehler](.github/ISSUE_TEMPLATE/lokalisierung.yml)
-- [Barrierefreiheit](.github/ISSUE_TEMPLATE/accessibility.yml)
+- [Documentation issue](.github/ISSUE_TEMPLATE/dokumentation.yml)
+- [Localization issue](.github/ISSUE_TEMPLATE/lokalisierung.yml)
+- [Accessibility issue](.github/ISSUE_TEMPLATE/accessibility.yml)
 
-Beschreibe bei einem Fehler die Glide-Version, das Betriebssystem, die Schritte zur Wiederholung sowie das erwartete und das beobachtete Verhalten. Verwende für Bilder und Beispieldateien künstliche Inhalte oder den [Showcase](05_Probelisten_Testdaten/Showcase/README.md). Für Codeänderungen gilt die zweisprachige [Pull-Request-Vorlage](.github/PULL_REQUEST_TEMPLATE.md).
+For a bug report, include the Glide version, operating system, reproduction steps, and expected versus observed behavior. Use synthetic content or the [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) for screenshots and sample files. Code changes should follow the bilingual [pull request template](.github/PULL_REQUEST_TEMPLATE.md).
 
-Bei einer Idee hilft die konkrete Arbeitssituation: Was möchtest du erreichen, und wo fehlt dir etwas? Prüfe zuvor die Roadmap und die [Produktgrenzen](01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). Größere Änderungen und neue Abhängigkeiten werden vor der Umsetzung mit dem Inhaber abgestimmt; Vorschläge und Prioritäten werden im Entwicklungsplan festgehalten.
+For a feature idea, describe the situation you are trying to handle before proposing a solution. Check the roadmap and [product boundaries (German)](01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) first. Larger changes and new dependencies require owner review; suggestions and priorities are tracked in the development plan.
 
-Sicherheitslücken bitte vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md) melden. Allgemeine Unterstützung steht in [SUPPORT.md](SUPPORT.md); gemeinsam gelten die [Verhaltensgrundsätze](CODE_OF_CONDUCT.md).
+Report security vulnerabilities privately according to the [security policy](SECURITY.md). General help is available in [SUPPORT.md](SUPPORT.md); the project follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Entwicklungsablauf
+## Development process
 
-1. **Aufgabe und Umfang klären.** Übergabe und Roadmap lesen, den betroffenen Bereich eingrenzen und vorhandene Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) berücksichtigen. Produktentscheidungen liegen beim Inhaber.
-2. **Ausgangsstand verstehen und prüfen.** Die [Arbeitsregeln](01_Repository/Glide/AGENTS.md), betroffene Funktionsbeschreibungen und Architektur lesen, im Code auch die Aufrufer ansehen und eine passende bestehende Prüfung als Ausgangspunkt ausführen. Bei Oberflächenarbeit gelten die [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
-3. **Zusammenhängende Änderung umsetzen.** Bestehendes Verhalten, Nutzerdaten und Datenformate bewahren. Fachlogik und Oberfläche nach den Arbeitsregeln trennen; Formatänderungen benötigen Migration, Sicherung und passende Tests.
-4. **Wirkung prüfen und dokumentieren.** Die passenden Prüfungen ausführen, Ergebnisse und Grenzen festhalten und die betroffenen Fachunterlagen anhand der zentralen [Pflegematrix](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) abgleichen. Dort stehen auch die Beziehungen zwischen Roadmap, Glide-System und Shell-Konzept. Der [verbindliche Arbeitsablauf](01_Repository/Glide/docs/ARBEITSRICHTUNG.md#arbeitsablauf-einer-implementierung) beschreibt die Prüfphasen; für reine Dokumentations- und Werkzeugarbeit gelten die dortigen [Nachlaufregeln](01_Repository/Glide/docs/ARBEITSRICHTUNG.md#nachläufe-ohne-neue-app-version).
-5. **Änderung zur Prüfung vorlegen.** Ein Pull Request erläutert Anlass, tatsächliche Änderungen, ausgeführte Prüfungen, offene Punkte und Risiken. Die Zusammenführung benötigt eine ausdrückliche Freigabe; Lieferung und Veröffentlichung folgen ihren eigenen Prüfschritten.
+1. **Clarify the task and scope.** Read the handoff and roadmap, narrow the affected area, and account for existing decisions in the [project direction (German)](01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Product decisions belong to the owner.
+2. **Understand and check the baseline.** Read the [repository rules (German)](01_Repository/Glide/AGENTS.md), relevant feature contracts, and architecture. Inspect callers as well as the implementation, then run a suitable existing check. UI work must follow the [design guidelines (German)](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
+3. **Make a focused change.** Preserve existing behavior, user data, and data formats. Keep domain logic and UI concerns separated as required by the repository rules. Format changes require migration, backup, and appropriate tests.
+4. **Verify and document the result.** Run relevant checks, record results and limitations, and update affected source documents using the central [documentation change matrix (German)](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge). It describes the relationships between the roadmap, system inventory, and Shell target. The [implementation process (German)](01_Repository/Glide/docs/ARBEITSRICHTUNG.md#arbeitsablauf-einer-implementierung) defines validation phases; documentation-only and tooling work follow the documented [follow-up rules (German)](01_Repository/Glide/docs/ARBEITSRICHTUNG.md#nachläufe-ohne-neue-app-version).
+5. **Submit the change for review.** A pull request should explain the reason, actual changes, checks run, open items, and risks. Merging requires explicit approval; packaging and release have separate gates.
 
-## Lokal entwickeln und sicher prüfen
+## Develop and test locally
 
-Der Quellcode liegt unter `01_Repository/Glide/src/glide`. Der [technische Einstieg](01_Repository/Glide/README.md) enthält Voraussetzungen, Startbefehle und die CI-Grundstufe. Die [Modulübersicht](01_Repository/Glide/src/glide/README.md) hilft, die zuständige Codestelle und vorhandene Tests zu finden.
+The source code is under `01_Repository/Glide/src/glide`. The [technical entry point (German)](01_Repository/Glide/README.md) lists prerequisites, launch commands, and the CI baseline. The [module inventory (German)](01_Repository/Glide/src/glide/README.md) helps locate relevant code and tests.
 
-Für Tests muss `GLIDE_DATA_DIR` auf einen eigenen temporären Datenordner zeigen. Echte Nutzerdaten dürfen dabei nicht verwendet werden. Die sichere Testumgebung, Prüfmodi und Befehle stehen im [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md) und in der [Prüfwerkzeugübersicht](01_Repository/Glide/tests/README.md).
+Tests must use a dedicated temporary data directory through `GLIDE_DATA_DIR`. Never use real user data. The [test plan (German)](01_Repository/Glide/docs/05_QA_TESTPLAN.md) and [test-tool overview (German)](01_Repository/Glide/tests/README.md) describe safe test environments, modes, and commands.
 
-## Qualität, Lieferung und Freigabe
+## Quality, packaging, and release
 
-Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse ihrem jeweiligen Quellstand und ihrer Plattform zu. Gezielte Tests, vollständige Prüfungen, native Paketbauten und menschliche Abnahme werden getrennt ausgewiesen. Fehlgeschlagene oder übersprungene Prüfungen und offene manuelle Fälle bleiben sichtbar.
+The [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to their source revision and platform. Focused tests, full suites, native packaging, and human acceptance are reported separately. Failed or skipped checks and open manual cases remain visible.
 
-Ein grüner CI-Lauf ist keine Veröffentlichungsfreigabe. Die [manuelle Prüfliste](00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) beschreibt die menschliche Abnahme; die [Veröffentlichungsanleitung](01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md) führt die weiteren Schritte für Pakete und Veröffentlichung auf.
+A green CI run is not release approval. The [manual checklist (German)](00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) describes owner acceptance; the [release guide (German)](01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md) covers packaging and publication steps.
 
-## Lizenz
+## License
 
-Der Projektcode steht unter der [Mozilla Public License 2.0](LICENSE). Beachte auch die [Hinweise zu Geltungsbereich, Drittkomponenten und Weitergabe](01_Repository/Glide/LICENSE.md).
+The project code is licensed under the [Mozilla Public License 2.0](LICENSE). See the [license scope and third-party notices (German)](01_Repository/Glide/LICENSE.md) as well.

@@ -1,168 +1,162 @@
-<p align="right"><a href="README.md">Deutsch</a> · <a href="README.en.md">English</a></p>
+<p align="right"><a href="README.de.md">Deutsch</a></p>
 
 <p align="center">
-  <img src="01_Repository/Glide/assets/icons/glide_512.png" alt="Glide-Symbol" width="88">
+  <img src="01_Repository/Glide/assets/icons/glide_512.png" alt="Glide app icon" width="88">
 </p>
 
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Aufgaben planen. Ideen verbinden. Selbst gestalten.</strong><br>
-  Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.
+  <strong>Plan tasks. Connect ideas. Create your own.</strong><br>
+  A desktop planner for projects, tasks, day planning, pinboards, and pixel drawings.
 </p>
 
 <p align="center">
-  <img alt="Windows, macOS und Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
+  <img alt="Windows, macOS, and Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
   <img alt="Version 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-6A3CC4">
-  <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
-  <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
+  <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/License-MPL--2.0-2E7D32"></a>
+  <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 </p>
 
 <p align="center">
-  <a href="#herunterladen"><strong>Herunterladen</strong></a> ·
-  <a href="#schnellstart-und-systemanforderungen">Schnellstart</a> ·
-  <a href="#was-glide-kann">Funktionen</a> ·
-  <a href="#ein-blick-in-glide">Bilder</a> ·
-  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> ·
-  <a href="01_Repository/Glide/docs/20_FUNKTIONEN.md">Handbuch</a> ·
-  <a href="CONTRIBUTING.md">Mitwirken</a>
+  <a href="#download"><strong>Download</strong></a> ·
+  <a href="#quickstart-and-system-requirements">Quickstart</a> ·
+  <a href="#what-glide-does">Features</a> ·
+  <a href="#a-look-at-glide">Screenshots</a> ·
+  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase (DE)</a> ·
+  <a href="01_Repository/Glide/docs/20_FUNKTIONEN.md">User guide (DE)</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/github-social-preview.png">
-  <img alt="Glide-Pinnwand mit Aufgaben, Notizen und verbundenen Ideen" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
+  <img alt="Glide pinboard with tasks, notes, and connected ideas" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
 </picture>
 
-<p align="center"><sub>Die Aufnahmen wurden mit Glide 3.60.0 am fiktiven Showcase erstellt. Sie sind kein Prüf- oder Paketnachweis für 1.0.0.</sub></p>
+<p align="center"><sub>Screenshots were captured with Glide 3.60.0 using synthetic showcase data. They are not test or package evidence for 1.0.0.</sub></p>
 
-## Warum Glide?
+## Why Glide?
 
-Glide bringt Planung und Projektwissen an einem lokalen Desktop-Arbeitsplatz zusammen. Aufgaben bleiben dieselben, egal ob du sie in einer Liste, auf einer Seite oder an anderer Stelle öffnest. Notizen und Bilder geben ihnen Kontext; Pinnwand und Pixel-Werkstatt machen Zusammenhänge sichtbar.
+Glide brings planning and project knowledge together on a local desktop. A task stays the same whether you open it in a list, on a page, or elsewhere. Notes and images add context; pinboards and pixel drawings make relationships visible.
 
-- **Plane deinen Tag:** Bearbeitungstage, Fristen, Zeitaufwand und freie Kapazität getrennt betrachten.
-- **Arbeite mit deinen eigenen Inhalten:** Aufgaben, Seiten, Notizen und Pinnwände lassen sich miteinander verbinden.
-- **Behalte die Kontrolle:** Deine Daten bleiben in einem Ordner deiner Wahl; Sicherungen und lesbare Exporte unterstützen den Umzug.
+- **Plan your day:** See work dates, due dates, effort, and available time separately.
+- **Work with your own material:** Connect tasks, pages, notes, and pinboards.
+- **Stay in control:** Keep your data in a folder you choose, with backups and readable exports to support a move.
 
-## Ein Blick in Glide
+## A look at Glide
 
-Alle Aufnahmen stammen aus einem künstlichen Showcase-Datensatz.
+All images show a synthetic showcase dataset.
 
 <table>
   <tr>
-    <td><strong>Startseite</strong><br><img alt="Glide-Startseite mit Tagesplan und Projektkacheln" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"></td>
-    <td><strong>Kalender</strong><br><img alt="Glide-Wochenkalender mit geplanten Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"></td>
+    <td><strong>Home</strong><br><img alt="Glide home with day plan and project tiles" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"></td>
+    <td><strong>Calendar</strong><br><img alt="Glide week calendar with planned tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"></td>
   </tr>
   <tr>
-    <td><strong>Heute</strong><br><img alt="Tagesplan mit Aufgaben und Zeitblöcken im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"></td>
-    <td><strong>Seiten</strong><br><img alt="Projektseite mit formatiertem Text, Bildern und Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"></td>
+    <td><strong>Today</strong><br><img alt="Day plan with tasks and time blocks in dark theme" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"></td>
+    <td><strong>Pages</strong><br><img alt="Project page with formatted text, images, and tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"></td>
   </tr>
   <tr>
-    <td><strong>Aufgabenliste</strong><br><img alt="Aufgabenliste mit Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"></td>
-    <td><strong>Pixel-Werkstatt</strong><br><img alt="Pixel-Werkstatt mit einem selbst gezeichneten Wegweiser" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"></td>
+    <td><strong>Task list</strong><br><img alt="Task list with labels and repeating tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"></td>
+    <td><strong>Pixel workshop</strong><br><img alt="Pixel workshop with a hand-drawn direction sign" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"></td>
   </tr>
 </table>
 
-[Das vollständige Showcase öffnen](05_Probelisten_Testdaten/Showcase/README.md) · [Weitere Screenshots und Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
+[Open the complete showcase](05_Probelisten_Testdaten/Showcase/README.md) · [More screenshots and features](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 
-## Was Glide kann
+## What Glide does
 
-- **Aufgaben verwalten:** Listen, Ordner, Unteraufgaben, Checklisten, Labels, eigene Farben, Fälligkeiten, Wiederholungen, Abhängigkeiten und gespeicherte Ansichten.
-- **Tag und Woche planen:** Bearbeitungstage, Fristen, Aufwand, Kalendertermine, Routinen, Fokuszeiten und freie Kapazität getrennt sehen; Planungsvorschläge vor dem Übernehmen vergleichen.
-- **Wissen verbinden:** Formatierte Seiten und Blöcke, Notizen, Notizbücher, Anhänge, lokale Verweise, Rückverweise und Fundorte.
-- **Ansichten gestalten:** Liste, Tabelle, Board, Pinnwand, Wochen- und Monatskalender sowie eine anpassbare Startseite; mehrere Designs, Schriftstile und die Pixel-Werkstatt.
-- **Mitnehmen und sichern:** Markdown, CSV, Kalenderdateien, JSON Canvas und Glide-Austauschdateien importieren oder exportieren; automatische Sicherungen und Wiederherstellungen unterstützen den Rückweg.
+- **Manage tasks:** Lists, folders, subtasks, checklists, labels, custom colors, due dates, recurrence, dependencies, and saved views.
+- **Plan days and weeks:** See work dates, due dates, effort, calendar events, routines, focus sessions, and available time separately; compare planning suggestions before applying them.
+- **Connect knowledge:** Formatted pages and blocks, notes, journals, attachments, local references, backlinks, and usage locations.
+- **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home screen; multiple themes, font styles, and a pixel workshop.
+- **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
 
-Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md).
+The [user guide (in German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) explains the complete feature set and its limits.
 
-## Was Glide bewusst nicht ist
+## What Glide is not
 
-- **Keine Handy- oder Tablet-App.** Glide ist für die Arbeit am Desktop gemacht. Für mobile Erinnerungen und unterwegs geplante Aufgaben eignet sich eine mobile Aufgaben-App besser.
-- **Kein Cloud-Teamdienst.** Es gibt kein Glide-Konto und keine Echtzeit-Zusammenarbeit. Ein freigegebener Cloudordner führt Änderungen mehrerer Geräte nicht zusammen; für gemeinsam bearbeitete Projekte ist ein dafür gebauter Teamdienst die passendere Wahl.
-- **Kein eingebauter KI-Dienst.** Glide sendet keine Inhalte an ein KI-Angebot. Du kannst Dateien selbst mit einem Werkzeug deiner Wahl austauschen; der [Agenten-Skill `glide-to-do`](01_Repository/Glide/skills/glide-to-do/README.md) kann Glide-Importdokumente vorbereiten.
+- **Not a phone or tablet app.** Glide is made for desktop work. A mobile task app is a better fit for mobile-first reminders and planning on the go.
+- **Not a cloud team service.** There is no Glide account or real-time collaboration. A shared cloud folder does not merge simultaneous changes from multiple devices; choose a team service built for shared projects when that is your main need.
+- **Not an AI service.** Glide does not send content to an AI provider. You can exchange files manually with a tool of your choice; the [`glide-to-do` agent skill](01_Repository/Glide/skills/glide-to-do/README.md) can prepare Glide import documents.
 
-## Herunterladen
+## Download
 
-**Ein öffentlicher Release-Download ist noch nicht freigegeben.** Die geprüften Actions-Artefakte sind Entwicklungsbauten, erfordern eine GitHub-Anmeldung und sind kein Ersatz für ein veröffentlichtes Installationspaket.
+**A public release download has not been approved yet.** GitHub Actions artifacts are development builds, require a GitHub sign-in, and are not a substitute for a published installer.
 
-| Plattform | Derzeit verfügbar | Hinweise |
+| Platform | Available now | Notes |
 |---|---|---|
-| Windows x64 | Prüf- und Paket-Artefakte in [GitHub Actions](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) | Anmeldung erforderlich; kein öffentlicher Installer |
-| macOS Apple Silicon | [Prüf- und Paketstand](01_Repository/Glide/docs/07_QA_BERICHT.md) | Kein öffentlich freigegebenes Paket |
-| Linux | [Python-Quellstand](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) | Python 3.14 und Tk erforderlich; kein eigenständiges Paket |
+| Windows x64 | Test and package artifacts in [GitHub Actions](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) | Sign-in required; no public installer |
+| macOS Apple Silicon | [Test and package status](01_Repository/Glide/docs/07_QA_BERICHT.md) | No publicly approved package |
+| Linux | [Python source](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) | Python 3.14 and Tk required; no standalone package |
 
-Wenn ein öffentlicher Download freigegeben ist, erscheint er unter [Releases](https://github.com/n05a-design/glide-to-do/releases). Prüfe dort Version, Plattform, Prüfsumme und Signaturhinweise.
+Once a public download is approved, it will appear under [Releases](https://github.com/n05a-design/glide-to-do/releases). Check the version, platform, checksum, and signing notes there.
 
-## Schnellstart und Systemanforderungen
+## Quickstart and system requirements
 
-Für den Quellstart wird Python 3.14 mit Tk 9 empfohlen; Tk 8.6 startet mit bekannten Einschränkungen. Zusätzliche Laufzeitpakete sind nicht erforderlich. Aus dem Repository-Hauptordner:
+Python 3.14 with Tk 9 is recommended for running from source; Tk 8.6 starts with known limitations. No additional runtime packages are required. From the repository root:
 
 ```text
 cd 01_Repository/Glide
 python3 src/glide/app.pyw
 ```
 
-Unter Windows lautet der zweite Befehl `python src\glide\app.pyw`. Das Hauptfenster benötigt mindestens **860 × 700 px**; im Kompaktmodus sind **480 × 560 px** möglich. Weitere Startwege und Voraussetzungen stehen im [technischen Schnellstart](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand). Zum Ausprobieren mit künstlichen Daten dient der [Showcase](05_Probelisten_Testdaten/Showcase/README.md).
+On Windows, use `python src\glide\app.pyw` for the second command. The main window requires at least **860 × 700 px**; compact mode can use **480 × 560 px**. See the [technical quickstart (German)](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) for other start options and prerequisites. Try the [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) with synthetic data.
 
-## Deine Daten
+## Your data
 
-Glide speichert Inhalte und Anhänge in einem Datenordner außerhalb des Programmordners. Du bestimmst, wo er liegt. Automatische Sicherungen, Papierkorb und Rückgängig schützen die Arbeit; Markdown- und JSON-Canvas-Exporte helfen, Inhalte mitzunehmen. Glide lädt deine Daten nicht zu einem eigenen Cloud-Dienst hoch.
+Glide stores content and attachments in a data folder outside the program directory. You choose where it lives. Automatic backups, a trash folder, and undo help protect your work; Markdown and JSON Canvas exports make it easier to take content elsewhere. Glide does not upload your data to its own cloud service.
 
-| Bereich | Ablage und Zweck |
+| Area | Storage and purpose |
 |---|---|
-| Eigene Inhalte und Einstellungen | Im gewählten lokalen Datenordner; Details und Plattformpfade stehen unter [Daten und Migration](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ablage). |
-| Anhänge und Sicherungen | Werden mit dem Datenordner verwaltet; ein freigegebener Cloudordner führt gleichzeitige Änderungen mehrerer Geräte nicht zusammen. |
-| Beispieldaten | Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) nutzt künstliche Inhalte und einen eigenen Datenordner. |
+| Your content and settings | In the local data folder you choose; see [data and migration (German)](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ablage) for details and platform paths. |
+| Attachments and backups | Managed with the data folder; a shared cloud folder does not merge simultaneous changes from multiple devices. |
+| Sample data | The [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) uses synthetic content and its own data folder. |
 
-## Projektstruktur
+## Project structure
 
-| Pfad | Inhalt |
+| Path | Contents |
 |---|---|
-| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Anwendung, Tests, technische Dokumentation und Paketierung |
-| [`07_Python-Versionen/`](07_Python-Versionen/) | Separater Python-Lieferstand; Prüfstatus und Quellabgleich im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) |
-| [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Künstlicher Showcase-Datensatz zum Ausprobieren |
-| [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Entwicklungsplan und Übergabe |
-| [`20_Grafik_Master/`](20_Grafik_Master/README.md) | Quelldateien der Projektgrafik |
-
-## Häufige Fragen
+| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Application, tests, technical documentation, and packaging |
+| [`07_Python-Versionen/`](07_Python-Versionen/) | Separate Python delivery; see the [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) for validation and source alignment |
+| [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Synthetic showcase dataset |
+| [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Development plan and handover |
+| [`20_Grafik_Master/`](20_Grafik_Master/README.md) | Source files for project artwork |
+## Frequently asked questions
 
 <details>
-<summary><strong>Kann ich Glide auf zwei Rechnern verwenden?</strong></summary>
+<summary><strong>Can I use Glide on two computers?</strong></summary>
 
-Du kannst den Datenordner in einer Cloudablage deiner Wahl speichern. Glide führt jedoch keine gleichzeitigen Änderungen mehrerer Geräte zusammen.
+You can keep the data folder in a cloud storage service of your choice. Glide does not merge simultaneous changes from multiple devices.
 </details>
 
 <details>
-<summary><strong>Verbindet sich Glide mit einem KI-Anbieter?</strong></summary>
+<summary><strong>Does Glide connect to an AI provider?</strong></summary>
 
-Nein. Der Datei-Austausch bleibt unter deiner Kontrolle; Glide sendet nichts automatisch an einen KI-Dienst.
+No. File exchange stays under your control; Glide does not automatically send anything to an AI service.
 </details>
 
 <details>
-<summary><strong>Ist Glide barrierefrei geprüft?</strong></summary>
+<summary><strong>Has Glide been accessibility-tested?</strong></summary>
 
-Glide bietet Tastaturwege, anpassbare Schriftgrößen und Kontrastdesigns. Eine vollständige native Tastatur- und Screenreader-Abnahme ist noch offen; der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nennt den geprüften Umfang.
+Glide offers keyboard access, adjustable text sizes, and contrast themes. A complete native keyboard and screen-reader acceptance test remains open; the [QA report](01_Repository/Glide/docs/07_QA_BERICHT.md) lists what has been tested.
 </details>
 
-## Rückmeldung und Mitwirkung
+## Feedback and contributions
 
-Nutze die [zweisprachigen Formulare für Fehler und Ideen](https://github.com/n05a-design/glide-to-do/issues/new/choose). Gezielt melden:
-[Dokumentation](.github/ISSUE_TEMPLATE/dokumentation.yml) ·
-[Lokalisierung](.github/ISSUE_TEMPLATE/lokalisierung.yml) ·
-[Barrierefreiheit](.github/ISSUE_TEMPLATE/accessibility.yml).
-Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vertraulich nach der [Sicherheitsrichtlinie](SECURITY.md). Unterstützung findest du in [SUPPORT.md](SUPPORT.md), gemeinschaftliche Regeln in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Use the [bilingual issue forms for bugs and ideas](https://github.com/n05a-design/glide-to-do/issues/new/choose). Target a specific area:
+[Documentation](.github/ISSUE_TEMPLATE/dokumentation.yml) ·
+[Localization](.github/ISSUE_TEMPLATE/lokalisierung.yml) ·
+[Accessibility](.github/ISSUE_TEMPLATE/accessibility.yml).
+Please use synthetic example data only. Report security vulnerabilities confidentially through the [security policy](SECURITY.md). Find help in [SUPPORT.md](SUPPORT.md) and community rules in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-## Entwicklung und Qualität
+## Development and quality
 
-Stand 19.11.2026 · Glide 1.0.0
+Status as of 19.11.2026 · Glide 1.0.0
 
-Mehr zum Quellcode, Entwicklungsablauf und Prüfstand:
-[An Glide arbeiten](CONTRIBUTING.md) ·
-[Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) ·
-[Qualität und Prüfungen](01_Repository/Glide/docs/07_QA_BERICHT.md)
+The Glide 1.0.0 source baseline is in `main`; no public release has been approved. The check badge above tracks `main`; the [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
 
-Der Quellstand für Glide 1.0.0 liegt in `main`; ein öffentlicher Release ist nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`; der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
+## License
 
-## Lizenz
-
-Der Projektcode steht unter der [Mozilla Public License 2.0](LICENSE). Für Drittkomponenten, Schriften und fremde Ressourcen können eigene Lizenzbedingungen gelten.
+The project code is licensed under the [Mozilla Public License 2.0](LICENSE). Third-party components, fonts, and other resources may have separate license terms.

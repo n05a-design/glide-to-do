@@ -18,7 +18,7 @@ class Einstiegspruefung(unittest.TestCase):
         support = (project / "SUPPORT.md").read_text(encoding="utf-8")
         for target in (
             "README.md",
-            "README.en.md",
+            "README.de.md",
             "01_Repository/Glide/docs/20_FUNKTIONEN.md",
             ".github/ISSUE_TEMPLATE/fehler.yml",
             ".github/ISSUE_TEMPLATE/",
@@ -59,10 +59,11 @@ class Einstiegspruefung(unittest.TestCase):
         project = stand.REPO.parents[1]
         pages = {
             "README.md": (project / "README.md").read_text(encoding="utf-8"),
-            "README.en.md": (project / "README.en.md").read_text(encoding="utf-8"),
+            "README.de.md": (project / "README.de.md").read_text(encoding="utf-8"),
         }
-        self.assertIn('href="README.en.md">English</a>', pages["README.md"])
-        self.assertIn('href="README.md">Deutsch</a>', pages["README.en.md"])
+        self.assertIn('href="README.de.md">Deutsch</a>', pages["README.md"])
+        self.assertIn('href="README.md">English</a>', pages["README.de.md"])
+        self.assertFalse((project / "README.en.md").exists())
 
         section_pairs = (
             ("Warum Glide?", "Why Glide?"),
@@ -79,8 +80,8 @@ class Einstiegspruefung(unittest.TestCase):
             ("Lizenz", "License"),
         )
         for path, headings in (
-            ("README.md", [pair[0] for pair in section_pairs]),
-            ("README.en.md", [pair[1] for pair in section_pairs]),
+            ("README.md", [pair[1] for pair in section_pairs]),
+            ("README.de.md", [pair[0] for pair in section_pairs]),
         ):
             actual = re.findall(r"(?m)^## (.+)$", pages[path])
             with self.subTest(path=path):
@@ -128,11 +129,44 @@ class Einstiegspruefung(unittest.TestCase):
         other=self.check("docs/README.md","# Intern\nStand 08.11.2026\n[Version](VERSION)\n")
         self.assertTrue(any('(R1)' in error for error in other.fehler))
 
-    def test_english_public_readme_accepts_english_status_label(self):
-        current=self.check("README.en.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.3\n")
+    def test_default_public_readme_accepts_english_status_label(self):
+        current=self.check("README.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.3\n")
         self.assertEqual(current.fehler,[])
-        stale=self.check("README.en.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.2\n")
+        stale=self.check("README.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.2\n")
         self.assertTrue(any('(R1)' in error for error in stale.fehler))
+
+    def test_public_github_entry_points_are_english_first(self):
+        project = stand.REPO.parents[1]
+        readme = (project / "README.md").read_text(encoding="utf-8")
+        contributing = (project / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        security = (project / "SECURITY.md").read_text(encoding="utf-8")
+        support = (project / "SUPPORT.md").read_text(encoding="utf-8")
+        conduct = (project / "CODE_OF_CONDUCT.md").read_text(encoding="utf-8")
+        pr_template = (project / ".github/PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
+
+        self.assertIn("Plan tasks. Connect ideas.", readme)
+        self.assertTrue(contributing.startswith("# Contributing to Glide"))
+        self.assertTrue(security.startswith("# Security policy"))
+        self.assertLess(support.index("## English"), support.index("## Deutsch"))
+        self.assertLess(conduct.index("## English"), conduct.index("## Deutsch"))
+        self.assertLess(pr_template.index("## Summary"), pr_template.index("## Changes"))
+
+        for filename, prefix in (
+            ("fehler.yml", "name: Report a bug"),
+            ("wunsch.yml", "name: Feature request"),
+            ("dokumentation.yml", "name: Documentation issue"),
+            ("lokalisierung.yml", "name: Localization issue"),
+            ("accessibility.yml", "name: Accessibility"),
+        ):
+            content = (project / ".github/ISSUE_TEMPLATE" / filename).read_text(encoding="utf-8")
+            with self.subTest(filename=filename):
+                self.assertTrue(content.startswith(prefix))
+
+        bug_form = (project / ".github/ISSUE_TEMPLATE/fehler.yml").read_text(encoding="utf-8")
+        localization_form = (project / ".github/ISSUE_TEMPLATE/lokalisierung.yml").read_text(encoding="utf-8")
+        self.assertIn("Standalone package / Eigenständiges Paket", bug_form)
+        self.assertIn("Python distribution / Python-Fassung", bug_form)
+        self.assertIn("Both / Beide", localization_form)
 
     def check(self, path, text):
         result = stand.Befund("3.32.3", {"DATA_SCHEMA_VERSION": 20}, suiten=58)

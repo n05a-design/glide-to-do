@@ -12,6 +12,8 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 **GitHub-Governance-Folgepaket:** PR #154 bündelt zweisprachige Issue-Formulare für Dokumentation, Lokalisierung und Accessibility, Verhaltensgrundsätze, Supportleitfaden, Dokumentationsworkflow sowie verknüpfte DE/EN-Einstiege. Issue #129 bleibt offen; Release/Tags, vollständige Lokalisierung, externe Homebrew-/winget-Einreichungen und menschliche Sicht-/Bedienabnahme bleiben Inhaber- bzw. Folgeaufgaben. About-Beschreibung (live weiter nur deutsch), neue 1.0.0-Aufnahmen und GIF bleiben offen. Wiki-Quellen/Synchronisation sind nach I11 B nicht ausgewählt.
 
+**English-first Korrektur nach Steps (Plan §21.141):** `main/README.md` war beim Live-Abruf noch deutsch, obwohl `README.en.md` existierte. Die lokale PR-#154-Nachführung macht `README.md` zur englischen Primärseite, verschiebt Deutsch nach `README.de.md`, ergänzt deutsche Gegenfassungen für CONTRIBUTING und SECURITY und stellt die öffentlichen Community-Einstiege auf Englisch zuerst. Lokale Regressionen bestanden; diese Nachführung muss noch gepusht und auf dem resultierenden PR-Head remote geprüft werden. `gh repo edit` zur About-Beschreibung antwortete mit HTTP 404; das Metadatenfeld bleibt deutsch.
+
 > [!IMPORTANT]
 > **Aktueller strategischer Fokus: Soll-Ist-Abschluss Release 1.0 (v1.0.0 / D93)**
 > Der Inhaber beschloss am 17.11.2026 den Feature Freeze für Glide 1.0.0. Der Quellstand wurde gemergt, aber nicht öffentlich veröffentlicht. Das Soll – vollständige DE/EN-Oberfläche und bereitgestellte GitHub-/Homebrew-/winget-Releases – ist noch nicht vollständig erfüllt.
@@ -21,6 +23,8 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ◐ Quellstand in `main`, Pflichtchecks auf PR #138 grün; kein Tag/Release, öffentliche Einreichung und menschliche Abnahme offen.
 >
 > **Erste Handgriffe einer neuen Sitzung:** (1) Entwicklungsplan §21.140 und aktuellen PR #154-Head samt Checks lesen; der vorherige Head `42fa060f` ist nicht der Nachweis für spätere Commits. (2) Prüfen, ob die nachgeführten Dokumentations- und Lokalisierungsprüfungen auf dem aktuellen PR-Head bestanden sind. (3) Keine Assertions oder Timeoutgrenzen lockern und PR #154 nicht ohne ausdrückliche Freigabe mergen. Die getrennte OneDrive-Cloud-Synchronisation und der Dirty-/Untracked-Zustand des Hauptcheckouts bleiben offen. About-Beschreibung, neue 1.0.0-Aufnahmen und GIF bleiben offen. Wiki-, Release- und Paketmanageraktionen nur nach ausdrücklicher Auswahl/Freigabe.
+>
+> **Nachtrag für die aktuelle Sitzung:** §21.141 und den Live-PR-Head nach dem Push lesen; der bestätigte Head `3276e329` ist nur der Stand vor der English-first-Nachführung. PR #154 nicht ohne ausdrückliche Freigabe mergen.
 
 ---
 

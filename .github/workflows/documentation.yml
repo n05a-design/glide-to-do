@@ -5,11 +5,13 @@ on:
     branches: ["main"]
     paths:
       - "README.md"
-      - "README.en.md"
+      - "README.de.md"
       - "CONTRIBUTING.md"
+      - "CONTRIBUTING.de.md"
       - "CODE_OF_CONDUCT.md"
       - "SUPPORT.md"
       - "SECURITY.md"
+      - "SECURITY.de.md"
       - ".github/ISSUE_TEMPLATE/**"
       - ".github/PULL_REQUEST_TEMPLATE.md"
       - ".github/workflows/documentation.yml"
