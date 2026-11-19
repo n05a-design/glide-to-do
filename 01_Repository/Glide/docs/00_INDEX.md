@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 
@@ -30,9 +30,36 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D91 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
+| [Gemini-Wissensbasis](ai/gemini/README.md) | Englischsprachige, quellengebundene Wissensbasis für Gemini; abgeleitete Zusammenfassung, keine zusätzliche Fachautorität |
 | [Glide Shell Framework](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur- und Entkopplungskonzept für das wiederverwendbare Desktop-Fundament, Fensterorchestrierung und Migrationspfad |
 | [Arbeitsvorlage zur Shell-Migration](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | Arbeitsübergabe für die Shell-Migration: Abschnitt 1 und die Pakete 1–2c sind mit 3.60.0 umgesetzt; jedes Folgepaket braucht eine eigene Freigabe ([Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)) |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |
+
+### Gemini-Wissensbasis – Einzelmodule
+
+| Modul | Dokument |
+|---|---|
+| 01 | [Project overview](ai/gemini/01_PROJECT_OVERVIEW.md) |
+| 02 | [Gemini master context](ai/gemini/02_GEMINI_MASTER_CONTEXT.md) |
+| 03 | [Glossary and ontology](ai/gemini/03_GLOSSARY_AND_ONTOLOGY.md) |
+| 04 | [System architecture](ai/gemini/04_SYSTEM_ARCHITECTURE.md) |
+| 05 | [Codebase reference](ai/gemini/05_CODEBASE_REFERENCE.md) |
+| 06 | [Data model and persistence](ai/gemini/06_DATA_MODEL_AND_PERSISTENCE.md) |
+| 07 | [Feature inventory](ai/gemini/07_FEATURE_INVENTORY.md) |
+| 08 | [User workflows](ai/gemini/08_USER_WORKFLOWS.md) |
+| 09 | [UX/UI design system](ai/gemini/09_UX_UI_DESIGN_SYSTEM.md) |
+| 10 | [Internationalization](ai/gemini/10_INTERNATIONALIZATION.md) |
+| 11 | [Development guide](ai/gemini/11_DEVELOPMENT_GUIDE.md) |
+| 12 | [Testing and quality](ai/gemini/12_TESTING_AND_QUALITY.md) |
+| 13 | [Security, privacy, and reliability](ai/gemini/13_SECURITY_PRIVACY_RELIABILITY.md) |
+| 14 | [Roadmap and backlog](ai/gemini/14_ROADMAP_AND_BACKLOG.md) |
+| 15 | [Product research and competition](ai/gemini/15_PRODUCT_RESEARCH_AND_COMPETITION.md) |
+| 16 | [Product strategy and marketing](ai/gemini/16_PRODUCT_STRATEGY_AND_MARKETING.md) |
+| 17 | [Decisions and history](ai/gemini/17_DECISIONS_AND_HISTORY.md) |
+| 18 | [Known issues and technical debt](ai/gemini/18_KNOWN_ISSUES_AND_TECH_DEBT.md) |
+| 19 | [Integrations and ecosystem](ai/gemini/19_INTEGRATIONS_AND_ECOSYSTEM.md) |
+| 20 | [AI development playbook](ai/gemini/20_AI_DEVELOPMENT_PLAYBOOK.md) |
+| Support | [Core Knowledge Pack](ai/gemini/GEMINI_CORE_KNOWLEDGE_PACK.md), [Source Manifest](ai/gemini/SOURCE_MANIFEST.md), [Knowledge Gaps](ai/gemini/KNOWLEDGE_GAPS.md), [Import Guide](ai/gemini/GEMINI_IMPORT_GUIDE.md), [Knowledge Changelog](ai/gemini/KNOWLEDGE_CHANGELOG.md), [Final Audit](ai/gemini/FINAL_AUDIT.md) |
 
 ## Einzelentscheidungen
 

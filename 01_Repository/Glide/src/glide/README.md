@@ -1,8 +1,8 @@
-# Glide-System V1.48
+# Glide-System V1.49
 
-Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.48 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.49 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.48` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.49` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Glide-System V1.48 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.49** | 19.11.2026 | Der T207-Test `test_ui39.py` schreibt bei App-/Theme-/Dropdown-/Dialog-/Abschlussphasen sofort sichtbare Fortschrittsmarken und wiederholt Python-Stack-Dumps. Ein im Test unterdrückter modaler Fehlerhinweis lässt die bereits erfassten Tk-Callback-Fehler bis zur Assertion durchlaufen, statt den Test hinter `wait_window` hängen zu lassen; ein `atexit`-Fallback beendet den Stackdump-Timer auch bei vorzeitigem Fehler. Manueller `ui39`-Dispatch prüft die Suite isoliert unter Linux/Tk 9.1 und Windows/Tk 9.1, ohne die 900-s-Vollsuitegrenze, Assertions oder Paketfreigabe zu verändern. T301 sichert Dispatch-Isolation und unveränderte Voll-/Paketgates. Der auf PR #152 beobachtete 900-s-Timeout bleibt bis zur gezielten Diagnose UNKNOWN. Keine neue Modul- oder Testdatei, App-Version 1.0.0 und Datenformat 26 unverändert. | App 1.0.0 |
 | **V1.48** | 19.11.2026 | Lokaler Kandidat: Der Einstellungsdialog legt Spaltenumbrüche erst nach der initialen Fenstergeometrie fest und startet sie anschließend gezielt; so kann die Umbruchanpassung die natürliche Größenmessung nicht rückkoppeln. `test_arbeitsmodi.py --fall schriftstile` prüft beide Spalten nach dem Layout. Linux/Tk-9.1-Nachprüfung steht aus. Keine neue Modul- oder Testdatei, Datenformat 26 unverändert. | App 1.0.0 |
 | **V1.47** | 19.11.2026 | PR #151 (Merge-Commit `98f4b816`) korrigiert die paketierte DE/EN-Startprobe und legt `LANGUAGE=de` für die deutschsprachigen NVDA-/Orca-Proben fest. Der nachgelagerte Topic-Branch-Commit `0a61a08f` fixiert zusätzlich die Locale-Annahme im Undo-/Redo-Integrationstest. Der macOS-Paketbau auf Merge-Commit `7260d100` war erfolgreich, die Startprobe scheiterte am bisherigen deutschen Erwartungswert bei englischer Anzeige. Keine neuen Module oder Testdateien, Datenformat unverändert. | App 1.0.0 |
 | **V1.46** | 19.11.2026 | Der Einstellungsdialog behält während der initialen Geometriemessung die bereits beobachteten Umbruchbreiten bei; erst nach gesetzter Dialoggeometrie wird die Schaukel-Erkennung für echte Größenwechsel zurückgesetzt. Gezielter `schriftstile`-Fall und UI-Layout-Unit-Tests; Linux-Remote-Nachprüfung steht aus. Keine neue Modul- oder Testdatei, Format 26 unverändert. | App 1.0.0 |
@@ -790,7 +791,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T204 | [`test_tempo330.py`](../../tests/integration/test_tempo330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T205 | [`test_tempo33319.py`](../../tests/integration/test_tempo33319.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T206 | [`test_titel33312.py`](../../tests/integration/test_titel33312.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T207 | [`test_ui39.py`](../../tests/integration/test_ui39.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T207 | [`test_ui39.py`](../../tests/integration/test_ui39.py) | Reale Dropdown-Ereignisse, Dialoggeometrie, Aktionsparität und Persistenz; Fortschrittsmarken/Stack-Dumps, kein blockierender Fehlerdialog im Test und weiterhin Fehlerassertionen für die Hängerdiagnose. Vollprüfung auf PR-#152-Head `5631333a` scheiterte auf Linux/Tk 9.1 und Windows/Tk 9.1 jeweils nach 900 s in dieser Suite; blockierender Callback UNKNOWN. |
 | T208 | [`test_ui_followup36.py`](../../tests/integration/test_ui_followup36.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T209 | [`test_ui_polish36.py`](../../tests/integration/test_ui_polish36.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T210 | [`test_ui_updates.py`](../../tests/integration/test_ui_updates.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
@@ -897,7 +898,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T298 | [`test_runtime_patches.py`](../../tests/tools/test_runtime_patches.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T299 | [`test_standpruefung.py`](../../tests/tools/test_standpruefung.py) | Prüft gepflegte Einstiege; zusätzlich Sprachumschaltung, spiegelgleiche öffentliche DE/EN-Abschnitte und erreichbare lokale Markdown-/HTML-Datei-Links |
 | T300 | [`test_synchronisationswaechter.py`](../../tests/tools/test_synchronisationswaechter.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T301 | [`test_ui_nachlauf_workflow.py`](../../tests/tools/test_ui_nachlauf_workflow.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
+| T301 | [`test_ui_nachlauf_workflow.py`](../../tests/tools/test_ui_nachlauf_workflow.py) | Prüft native UI-/Arbeitsmodi-Dispatches und den isolierten `ui39`-Diagnoselauf auf beiden Plattformen; Vollmatrix-, Kalibrierungs- und Paketgates bleiben getrennt. |
 | T302 | [`test_versionspflege.py`](../../tests/tools/test_versionspflege.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T303 | [`test_windows_sandbox.py`](../../tests/tools/test_windows_sandbox.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T304 | [`test_zugang_pruefvertrag.py`](../../tests/tools/test_zugang_pruefvertrag.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |

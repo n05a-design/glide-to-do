@@ -2,6 +2,8 @@
 """3.9: reale Dropdown-Ereignisse, Dialoggeometrie, Aktionsparität und Persistenz."""
 import copy
 import argparse
+import atexit
+import faulthandler
 import importlib.machinery
 import importlib.util
 import json
@@ -16,6 +18,9 @@ parser.add_argument('--app', type=Path, default=REPO/'src/glide/app.pyw')
 parser.add_argument('--dropdown-only', action='store_true')
 args = parser.parse_args()
 
+def progress(message):
+    print(f'UI39: {message}', flush=True)
+
 def descendants(widget):
     for child in widget.winfo_children():
         yield child
@@ -24,21 +29,29 @@ def descendants(widget):
 with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
     os.environ['GLIDE_DATA_DIR'] = temp
     os.environ['GLIDE_TEST_MODE'] = '1'
+    faulthandler.dump_traceback_later(120, repeat=True)
+    atexit.register(faulthandler.cancel_dump_traceback_later)
+    progress('loading app')
     loader = importlib.machinery.SourceFileLoader('glide_ui39', str(args.app))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
+    progress('creating app')
     root = mod.tk.Tk()
     root.withdraw()
     errors = []
     root.report_callback_exception = lambda *error: errors.append(error)
     app = mod.ListApp(root)
+    progress('app created')
     app.show_info = lambda *a, **kw: None
+    # Callback errors are asserted below; a modal notice would hide them in wait_window.
+    app._show_error_notice = lambda: None
     root.geometry('1280x940+10+10')
     root.deiconify(); root.lift(); root.focus_force(); root.update()
     try:
         original = copy.deepcopy(app.lists)
         for theme in ('light', 'dark'):
+            progress(f'theme={theme}')
             app.set_design(theme, apply_now=False); app.apply_theme(); root.update()
             app.settings['sidebar_visible'] = True; app._apply_sidebar_visibility(); root.update()
             before = app.content_frame.winfo_width()
@@ -71,6 +84,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             owner.lift(); owner.focus_force(); owner.update()
             top_count = sum(isinstance(w, mod.tk.Toplevel) for w in descendants(root))
             for index in range(15):
+                progress(f'theme={theme} popup={index + 1}/15')
                 # focus_force liefert unter Windows auch verzögerte native
                 # Ereignisse. Vor dem Popup vollständig abarbeiten, sonst
                 # kann die alte Anforderung dessen neuen Fokus verdrängen.
@@ -123,6 +137,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             assert root.grab_current() is None
             assert not getattr(app, '_active_dropdown', None)
 
+            progress(f'theme={theme} settings dialog')
             if args.dropdown_only:
                 print('OK: echte Dropdown-Baseline')
                 raise SystemExit(0)
@@ -176,6 +191,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             # Die abgeleiteten Werte bleiben für ältere Fassungen mitgeschrieben.
             assert gespeichert['color_mode'] == 'standard' and gespeichert['glass_mode'] is False
 
+        progress('final action checks')
         entries = app.app_action_entries()
         assert len(entries) >= 50
         assert {'Datei','Bearbeiten','Ansicht','Hilfe'} == {a['category'] for a in entries}
@@ -204,4 +220,5 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
         assert not errors, errors
         print('UI 3.9: OK (beide Themes, eingebettete Dropdowns, Außerklick, Tastatur, Grabs, Geometrie, Aktionen, Speicherung)')
     finally:
+        faulthandler.cancel_dump_traceback_later()
         app.cancel_pending_callbacks(); app.release_data_lock(); root.destroy()
