@@ -30,6 +30,13 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 - A local macOS diagnostic run exposed a modal error-notice block in `wait_window`; the triggering callback exception remains unknown. The test now suppresses that notice while retaining the callback-error assertion.
 - The Linux/Windows full-suite timeout is still unresolved; no platform or release gate is claimed green by this documentation update.
 
+## 1.0.2 — 2026-11-19 — remote diagnostic status refresh
+
+- Recorded PR #152 head `042a8d7`, delivery of the V1.49 diagnostic follow-up, and the V1.50 evidence/catalog refresh.
+- The isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with callback-error assertions retained.
+- Distinguished the historical full-suite timeout from the newer Linux full-run setup failure before tests; the Windows full run and focused work-mode run were still active at last check.
+- Kept the callback exception from the local macOS modal path and full platform-matrix completion explicitly unresolved.
+
 ## Maintenance rule
 
 Record each meaningful update with date, source commit, documents affected, reason, and evidence. Do not rewrite older source QA results; update present status in the current plan/QA sources first.

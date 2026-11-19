@@ -19,9 +19,9 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 
 | Gap | Current state | What would close it |
 |---|---|---|
-| Full Linux/Windows timeout | `test_ui39.py` reached 900 seconds on both PR #152 platforms; logs for the suite were empty. Local macOS run shows a modal `_show_error_notice` blocking `root.update()` after the light theme; triggering callback exception UNKNOWN | Use updated test capture and the isolated Linux/Windows diagnostic dispatch to expose the exception; fix the proven cause, then green full matrix on updated head |
+| Full Linux/Windows timeout | Historical `test_ui39.py` runs reached 900 seconds on both platforms at `5631333a`; the updated isolated test passed on Linux/Tk 9.1 and Windows/Tk 9.1 at `042a8d7`, with its callback-error assertion enabled. Local macOS still shows a modal `_show_error_notice` blocking `root.update()` after the light theme; triggering callback exception UNKNOWN. The new Linux full run stopped during native prerequisite setup before tests; Windows full run was still in progress at last check. | Keep historical red evidence; rerun the Linux full job after prerequisite installation succeeds, complete Windows full run, and investigate the macOS callback cause only if reproducible |
 | Focused workflow final result | #44518533866 passed UI/UX contracts but its work-mode step was still running at last check | Read its completed status and record exact run result; it is not the full `test_ui39` validation |
-| V1.48 Linux evidence | Targeted macOS case passed; current Linux full run stopped earlier in the independent UI39 suite | Updated Linux full run including working-mode case |
+| V1.48 Linux evidence | Targeted macOS case passed; current Linux full run stopped during prerequisite package installation before any test suite | Updated Linux full run including working-mode case |
 | Native current-head Mac package | Prior package probe used an older commit and failed on a localized expectation; a fix was pushed but current head is not proven here | Native package build, isolated start test, artifact digest and package/source comparison on the current accepted head |
 | Full DE/EN coverage | Catalog mechanism and selected UI are localized; remaining dialogs/messages exist | Complete approved scope inventory with DE/EN visible tests and native review |
 | GitHub homepage visual fidelity | User reports the live page still does not match the requested prompt; only structural/link validation is cited | Compare live repository page against original prompt/design refs and verify at intended viewport; owner visual approval |
@@ -34,8 +34,8 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 
 | Topic | Evidence A | Evidence B | Correct interpretation |
 |---|---|---|---|
-| Version on `main` vs PR | `main` at `98f4b816`, System V1.47 | PR #152 code head `5631333a` had V1.48; current worktree has a V1.49 catalog candidate | Different refs; neither V1.48 nor V1.49 is on `main` |
-| Targeted local vs remote full test | Local macOS `test_ui39.py` also blocked in a modal error notice; triggering callback exception UNKNOWN | Linux and Windows full jobs timed out | Common modal path is supported by a local stack; callback cause and cross-platform behavior remain unresolved |
+| Version on `main` vs PR | `main` at `98f4b816`, System V1.47 | PR #152 head `042a8d7` includes the V1.48 code candidate and V1.49 diagnostic follow-up | Different refs; V1.48 and V1.49 are not on `main` |
+| Targeted local vs remote full test | Local macOS `test_ui39.py` blocked in a modal error notice; triggering callback exception UNKNOWN | Updated isolated Linux/Windows diagnostic passed, while older full jobs timed out | Targeted test is green on those two platforms; it does not identify the macOS callback cause or clear the full-matrix gap |
 | V1.48 fix vs PR check | Dialog fix passed targeted macOS tests | New full jobs timed out in `test_ui39.py` before later suites | The timeout is not proof the fix failed or passed remotely |
 | Release | Source cut merged to `main` | No tag/Release or package-manager submission observed | “Source cut” is not “published release” |
 | Localization | DE/EN framework and some views | Other UI strings still German/English-incomplete | Partial, not full |

@@ -21,7 +21,9 @@ The collection has a file for each requested topic ID 01–20 and supporting ind
 
 **Content audit: partial / bounded.** The broad source domains are represented, but this is not an exhaustive independent verification of every feature row, data field, UI string, external claim, license, security property, test, or historical decision. Known absences and contradictions are explicitly listed in `KNOWLEDGE_GAPS.md`.
 
-**Technical audit: passed for the local documentation/tooling baseline only.** The repository CI basic stage passed after the central documentation index was expanded to list every Gemini file. It checked Markdown links, stand rules, privacy, and the repository's tool and unit-test gates. This does not certify exhaustive content accuracy, the full platform matrix, the unresolved remote `test_ui39.py` timeout, release readiness, or human acceptance.
+**Technical audit: passed for the local documentation/tooling baseline only.** The repository CI basic stage passed after the central documentation index was expanded to list every Gemini file. It checked Markdown links, stand rules, privacy, and the repository's tool and unit-test gates. This does not certify exhaustive content accuracy, the full platform matrix, release readiness, or human acceptance.
+
+**Remote status refresh:** On PR #152 head `042a8d7`, the isolated `test_ui39.py` diagnostic passed on Linux/Tk 9.1 and Windows/Tk 9.1 with the callback-error assertion enabled. The earlier full-run timeout on head `5631333a` remains historical red evidence. The automatic PR run's Linux full job stopped during native prerequisite setup before tests; Windows full validation was in progress at the latest check. The original local macOS callback cause remains unknown.
 
 **Validation evidence (19 Nov 2026, macOS / Python 3.14.5):**
 

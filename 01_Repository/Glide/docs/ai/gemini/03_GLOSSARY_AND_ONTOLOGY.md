@@ -47,7 +47,7 @@ Terms below are aligned with [`skills/glide-to-do/references/glide-aufbau.md`](.
 | Undo / redo | Rückgängig / Wiederholen | In-memory history with explicit save/guard semantics; not an archival version history |
 | Exchange format | Austauschformat | `glide.exchange`, version 2; not the same as data schema 26 |
 | Data schema | Aufgabenformat / Datenformat | Main persisted-list schema, currently 26 |
-| System catalog | Glide-System | Independent module/feature/test inventory version; current PR #152 worktree candidate V1.49 |
+| System catalog | Glide-System | Independent module/feature/test inventory version; PR #152 diagnostic candidate V1.49, current evidence/catalog update V1.50 |
 | Glide Shell | Glide-Shell | Set of extracted shell-oriented modules inside Glide; not yet a separately released/shared package |
 
 ## Ontology notes
