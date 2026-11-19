@@ -1630,8 +1630,8 @@ class RoundedButton(DeferredDrawCanvas):
         self.bind("<ButtonRelease-1>", self._on_release)
         self.bind("<space>", self._on_keyboard_activate)
         self.bind("<Return>", self._on_keyboard_activate)
-        self.bind("<FocusIn>", lambda _event: self._draw())
-        self.bind("<FocusOut>", lambda _event: self._draw())
+        self.bind("<FocusIn>", lambda _event=None: self._draw())
+        self.bind("<FocusOut>", lambda _event=None: self._draw())
 
         self._draw()
 
@@ -1884,6 +1884,8 @@ class ButtonFlow(tk.Frame):
         self._layout_signature = None
         self._reflowing = False
         self._last_reflow_width = None
+        self._wrap_seen_widths = set()
+        self._wrap_window_width = None
         self.bind("<Configure>", self._on_configure, add="+")
         self.bind("<Destroy>", self.cancel_reflow, add="+")
 
@@ -1932,9 +1934,15 @@ class ButtonFlow(tk.Frame):
         try:
             self.cancel_reflow()
             w = self.winfo_width()
-            width = 999999 if w <= 1 else w
             if w > 1:
+                window_width = self.winfo_toplevel().winfo_width()
+                if self._wrap_window_width != window_width:
+                    self._wrap_window_width = window_width
+                    self._wrap_seen_widths.clear()
+                width = glide_design.settled_wrap_width(w, self._wrap_seen_widths)
                 self._last_reflow_width = w
+            else:
+                width = 999999
             compact = self.compact_keys is not None and width < self.compact_below
             bg = self.cget("bg")
             visible, hidden = [], []
@@ -32315,20 +32323,17 @@ class ListApp:
         # jede Beschriftung ihn in einem eigenen Größenrückruf; jede Änderung
         # stieß eine weitere Layoutrunde an, beim Einblenden unter macOS
         # mehrere hundert Rückrufe. Die Beschriftungen füllen die Spaltenbreite.
-        def umbrechen(event, panel):
-            breite = max(160, event.width - 8)
-            if getattr(panel, "_glide_wrap", None) == breite:
-                return
+        def umbruch_einstellen(panel, panel_breite):
+            breite = max(160, panel_breite - 8)
             # Mit DM Serif Display in kleiner Schrift kreiste die Spaltenbreite vor dem ersten
             # Anzeigen endlos über drei Werte, weil jeder Umbruch die Wunschbreite änderte
             # (macOS, Tk 9.0.3, 13.11.2026). Eine wiederkehrende Breite beendet die Runde.
             if not hasattr(panel, "_glide_wrap_seen"):
                 panel._glide_wrap_seen = set()
-            if getattr(dialog, "_glide_layout_measured", False):
-                fenster = dialog.winfo_width()
-                if getattr(panel, "_glide_wrap_window", None) != fenster:
-                    panel._glide_wrap_window = fenster
-                    panel._glide_wrap_seen.clear()
+            fenster = dialog.winfo_width()
+            if getattr(panel, "_glide_wrap_window", None) != fenster:
+                panel._glide_wrap_window = fenster
+                panel._glide_wrap_seen.clear()
             breite = glide_design.settled_wrap_width(breite, panel._glide_wrap_seen)
             if getattr(panel, "_glide_wrap", None) == breite:
                 return
@@ -32336,6 +32341,13 @@ class ListApp:
             for widget in panel.winfo_children():
                 if isinstance(widget, (tk.Label, GlideCheckbutton)):
                     widget.configure(wraplength=breite)
+
+        def umbrechen(event, panel):
+            # Die Umbruchbreite darf die Wunschgröße nicht während der Messung
+            # in _center_dialog rückkoppeln; sie folgt der festgelegten Geometrie.
+            if not getattr(dialog, "_glide_layout_measured", False):
+                return
+            umbruch_einstellen(panel, event.width)
 
         for panel in (personal, appearance):
             for widget in panel.winfo_children():
@@ -32365,6 +32377,8 @@ class ListApp:
             if first_open[0]:
                 self._center_dialog(dialog, min_width=1080, min_height=760)
                 first_open[0] = False
+                for panel in (personal, appearance):
+                    dialog.after_idle(lambda ziel=panel: umbruch_einstellen(ziel, ziel.winfo_width()))
             self._schedule_windows_chrome_theme(dialog)
             fields[0].focus_set()
             self.run_modal(dialog)
@@ -67363,9 +67377,9 @@ Labels, Termine und Metadaten."""
         """Tk 8-Mausrad und Tk 9-Trackpad; Bindungen bleiben am jeweiligen Widget."""
         target = target if target is not None else widget
         for sequence in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
-            self.bind_optional(widget, sequence, lambda event: self._on_mousewheel(event, target))
+            self.bind_optional(widget, sequence, lambda event=None: self._on_mousewheel(event, target))
         self.bind_optional(widget, "<TouchpadScroll>",
-                           lambda event: self._on_mousewheel(event, target, precise=True))
+                           lambda event=None: self._on_mousewheel(event, target, precise=True))
 
     def _scroll_text_like_class(self, widget, delta, precise=False):
         """Scrollt ein Textfeld genau wie seine eigene Tk-Klassenbindung – in Pixeln (B16).
@@ -67387,6 +67401,8 @@ Labels, Termine und Metadaten."""
             return False
 
     def _on_mousewheel(self, event, widget, precise=False):
+        if event is None:
+            return "break"
         self.note_scrolling()
         try:
             if isinstance(widget, tk.Text):

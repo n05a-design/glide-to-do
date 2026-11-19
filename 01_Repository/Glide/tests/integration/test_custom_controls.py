@@ -340,6 +340,31 @@ class TestCustomControlsInteractions(unittest.TestCase):
         finally:
             root.destroy()
 
+    def test_buttonflow_reflow_ends_nonconsecutive_width_cycle(self):
+        root = tk.Tk()
+        root.withdraw()
+        try:
+            widths = [320]
+            window_width = [800]
+            reflows = []
+            root.winfo_width = lambda: window_width[0]
+            flow = gapp.ButtonFlow(root, bg="#ffffff", gap=8, on_layout=lambda: reflows.append(True))
+            flow.winfo_width = lambda: widths[0]
+
+            for width in (320, 400, 320, 400):
+                widths[0] = width
+                flow.reflow()
+
+            self.assertEqual(len(reflows), 3, "Eine wiederkehrende Breite muss die Reflow-Schaukel beenden")
+            self.assertEqual(flow._layout_signature[0], 320, "Die stabilisierte Leiste muss die engste Breite verwenden")
+
+            window_width[0] = 900
+            widths[0] = 400
+            flow.reflow()
+            self.assertEqual(flow._layout_signature[0], 400, "Eine echte Fensterbreitenänderung muss neu messen")
+        finally:
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])

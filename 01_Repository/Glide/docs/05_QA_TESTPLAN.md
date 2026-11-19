@@ -82,7 +82,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **3.68.0 – Shell-Paket 5, Desktop-Adapter:** `test_desktop_adapter.py` (T313, 13 Fälle) prüft Plattform-Erkennung, Menüleisten, Beschleuniger, Popups und Zwischenablage. M099 erfüllt Modulbudget WA-50 und Shell-Importregel D86 (`test_shell_importregel.py` 7/7). [Nachweis](07_QA_BERICHT.md#prüfstand-3680--shell-paket-5-desktop_adapterpy-16112026).
 
-**3.67.0 – Shell-Paket 4, Erscheinungsbild und Bedienelemente:** `test_custom_controls.py` (T312, 11 Fälle) prüft eigene Canvas-Steuerelemente (`custom_controls.py`, M098). Entkopplung über Host-Hooks, Modulbudget WA-50 und Shell-Importregel D86. [Nachweis](07_QA_BERICHT.md#prüfstand-3670--shell-paket-4-custom_controlspy-16112026).
+**3.67.0 – Shell-Paket 4, Erscheinungsbild und Bedienelemente:** `test_custom_controls.py` (T312, aktuell 12 Fälle) prüft eigene Canvas-Steuerelemente (`custom_controls.py`, M098), einschließlich wiederkehrender ButtonFlow-Breiten und Neuvermessung nach echter Fenstergrößenänderung. Entkopplung über Host-Hooks, Modulbudget WA-50 und Shell-Importregel D86. [Nachweis](07_QA_BERICHT.md#prüfstand-3670--shell-paket-4-custom_controlspy-16112026).
 
 **3.66.0 – Agenten-Skill-Zentrierung (D92):** `test_agenten_skill.py` (T321, 15 Fälle) sichert die Formatbindung an Aufgabenformat 26; `test_ki_ausgabe_darstellung.py` (T325) prüft die optische Darstellung von KI-Ausgaben im GUI. [Nachweis](07_QA_BERICHT.md#prüfstand-3660--agenten-skill-zentrierung-und-ki-darstellungsprüfung-16112026).
 

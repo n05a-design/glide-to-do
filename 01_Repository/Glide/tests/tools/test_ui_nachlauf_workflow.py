@@ -10,7 +10,7 @@ SOURCE = Path(__file__).resolve().parents[4] / ".github/workflows/python-app.yml
 class UINachlaufWorkflow(unittest.TestCase):
     def test_manual_ui_has_separate_concurrency_and_full_ui_reports_on_both_platforms(self):
         text = SOURCE.read_text(encoding="utf-8")
-        self.assertIn("options: [voll, ui-nachlauf,", text)
+        self.assertIn("options: [voll, ui39, ui-nachlauf,", text)
         self.assertIn("github.event.inputs.bereich || 'voll'", text)
         self.assertEqual(text.count("- name: Arbeitsmodi vollständig nativ prüfen"), 2)
         self.assertEqual(text.count("tests/integration/test_arbeitsmodi.py --fall alle --report"), 2)
@@ -25,13 +25,26 @@ class UINachlaufWorkflow(unittest.TestCase):
     def test_full_modes_and_positive_calibration_gate_are_preserved(self):
         text = SOURCE.read_text(encoding="utf-8")
         for name in ("Vollprüfstand Linux", "Vollprüfstand Windows"):
-            self.assertIn(f"- name: {name}\n        if: github.event.inputs.bereich != 'ui-nachlauf'", text)
+            self.assertIn(
+                f"- name: {name}\n        if: github.event.inputs.bereich != 'ui-nachlauf' "
+                "&& github.event.inputs.bereich != 'ui39'",
+                text,
+            )
         self.assertEqual(text.count("tests/tools/pruefen.py --zugang-nativ --modus voll"), 2)
         calibration = text.split("- name: Kalibrierte Erwartungen gegen Defekte prüfen", 1)[1].split("- name:", 1)[0]
         self.assertIn("github.event.inputs.bereich != 'ui-nachlauf'", calibration)
+        self.assertIn("github.event.inputs.bereich != 'ui39'", calibration)
         self.assertIn('--basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"', calibration)
         package = text.split("  paket-windows:", 1)[1].split("    runs-on:", 1)[0]
         self.assertIn("needs.vollpruefung-windows.result == 'success' && github.event.inputs.bereich != 'ui-nachlauf'", package)
+        self.assertIn("github.event.inputs.bereich != 'ui39'", package)
+
+    def test_ui39_dispatch_runs_only_the_diagnostic_suite_on_both_platforms(self):
+        text = SOURCE.read_text(encoding="utf-8")
+        self.assertEqual(text.count("- name: Diagnose test_ui39 ("), 2)
+        self.assertEqual(text.count("tests/integration/test_ui39.py"), 2)
+        self.assertEqual(text.count("timeout-minutes: 15\n"), 2)
+        self.assertIn("github.event.inputs.bereich == 'ui39'", text)
 
 
 if __name__ == "__main__":

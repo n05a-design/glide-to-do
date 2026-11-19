@@ -7,8 +7,8 @@
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Plan tasks. Connect ideas.</strong><br>
-  A local desktop planner for projects, tasks, notes, and visual ideas.
+  <strong>Plan tasks. Connect ideas. Create your own.</strong><br>
+  A desktop planner for projects, tasks, day planning, pinboards, and pixel drawings.
 </p>
 
 <p align="center">
@@ -21,6 +21,7 @@
 
 <p align="center">
   <a href="#download"><strong>Download</strong></a> ·
+  <a href="#quickstart-and-system-requirements">Quickstart</a> ·
   <a href="#what-glide-does">Features</a> ·
   <a href="#a-look-at-glide">Screenshots</a> ·
   <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase (DE)</a> ·
@@ -66,11 +67,11 @@ All images show a synthetic showcase dataset.
 
 ## What Glide does
 
-- **Organize tasks:** Lists, folders, subtasks, checklists, labels, due dates, recurrence, and saved views.
-- **Plan days and weeks:** Schedule work, see capacity, track focus time, and review changes before easing an overloaded day.
-- **Connect knowledge:** Pages with formatted blocks, notes, journals, attachments, local references, and pinboards.
-- **Shape your workspace:** Calendar, table, boards, multiple themes and fonts, and pixel drawings.
-- **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files.
+- **Manage tasks:** Lists, folders, subtasks, checklists, labels, custom colors, due dates, recurrence, dependencies, and saved views.
+- **Plan days and weeks:** See work dates, due dates, effort, calendar events, routines, focus sessions, and available time separately; compare planning suggestions before applying them.
+- **Connect knowledge:** Formatted pages and blocks, notes, journals, attachments, local references, backlinks, and usage locations.
+- **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home screen; multiple themes, font styles, and a pixel workshop.
+- **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
 
 The [user guide (in German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) explains the complete feature set and its limits.
 
@@ -92,10 +93,36 @@ The [user guide (in German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) explains
 
 Once a public download is approved, it will appear under [Releases](https://github.com/n05a-design/glide-to-do/releases). Check the version, platform, checksum, and signing notes there.
 
+## Quickstart and system requirements
+
+Python 3.14 with Tk 9 is recommended for running from source; Tk 8.6 starts with known limitations. No additional runtime packages are required. From the repository root:
+
+```text
+cd 01_Repository/Glide
+python3 src/glide/app.pyw
+```
+
+On Windows, use `python src\glide\app.pyw` for the second command. The main window requires at least **860 × 700 px**; compact mode can use **480 × 560 px**. See the [technical quickstart (German)](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) for other start options and prerequisites. Try the [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) with synthetic data.
+
 ## Your data
 
 Glide stores content and attachments in a data folder outside the program directory. You choose where it lives. Automatic backups, a trash folder, and undo help protect your work; Markdown and JSON Canvas exports make it easier to take content elsewhere. Glide does not upload your data to its own cloud service.
 
+| Area | Storage and purpose |
+|---|---|
+| Your content and settings | In the local data folder you choose; see [data and migration (German)](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ablage) for details and platform paths. |
+| Attachments and backups | Managed with the data folder; a shared cloud folder does not merge simultaneous changes from multiple devices. |
+| Sample data | The [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) uses synthetic content and its own data folder. |
+
+## Project structure
+
+| Path | Contents |
+|---|---|
+| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Application, tests, technical documentation, and packaging |
+| [`07_Python-Versionen/`](07_Python-Versionen/) | Separate Python delivery; see the [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) for validation and source alignment |
+| [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Synthetic showcase dataset |
+| [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Development plan and handover |
+| [`20_Grafik_Master/`](20_Grafik_Master/README.md) | Source files for project artwork |
 ## Frequently asked questions
 
 <details>
@@ -122,9 +149,9 @@ Use the [bilingual issue forms for bugs and ideas](https://github.com/n05a-desig
 
 ## Development and quality
 
-Stand 18.11.2026 · Glide 1.0.0
+Status as of 19.11.2026 · Glide 1.0.0
 
-The source is merged but has not been publicly released. The [contributing guide](CONTRIBUTING.md), [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), and [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) describe the development process and current evidence.
+The Glide 1.0.0 source baseline is in `main`; no public release has been approved. The check badge above tracks `main`; the [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
 
 ## License
 

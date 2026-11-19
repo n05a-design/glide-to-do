@@ -7,8 +7,8 @@
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Aufgaben planen. Ideen verbinden.</strong><br>
-  Ein lokaler Desktop-Planer für Projekte, Aufgaben, Notizen und visuelle Ideen.
+  <strong>Aufgaben planen. Ideen verbinden. Selbst gestalten.</strong><br>
+  Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.
 </p>
 
 <p align="center">
@@ -21,6 +21,7 @@
 
 <p align="center">
   <a href="#herunterladen"><strong>Herunterladen</strong></a> ·
+  <a href="#schnellstart-und-systemanforderungen">Schnellstart</a> ·
   <a href="#was-glide-kann">Funktionen</a> ·
   <a href="#ein-blick-in-glide">Bilder</a> ·
   <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> ·
@@ -66,11 +67,11 @@ Alle Aufnahmen stammen aus einem künstlichen Showcase-Datensatz.
 
 ## Was Glide kann
 
-- **Aufgaben organisieren:** Listen, Ordner, Unteraufgaben, Checklisten, Labels, Fristen, Wiederholungen und gespeicherte Ansichten.
-- **Tages- und Wochenplanung:** Aufgaben einplanen, Kapazität sehen, Fokuszeiten erfassen und Überlastung mit einer Vorschau entschärfen.
-- **Wissen verbinden:** Seiten mit formatierten Blöcken, Notizen, Notizbücher, Anhänge, lokale Verweise und Pinnwände.
-- **Eigene Perspektiven gestalten:** Kalender, Tabelle, Board, mehrere Designs, Schriftstile und Pixel-Zeichnungen.
-- **Daten mitnehmen:** Markdown, CSV, Kalenderdateien, JSON Canvas und Glide-Austauschdateien importieren oder exportieren.
+- **Aufgaben verwalten:** Listen, Ordner, Unteraufgaben, Checklisten, Labels, eigene Farben, Fälligkeiten, Wiederholungen, Abhängigkeiten und gespeicherte Ansichten.
+- **Tag und Woche planen:** Bearbeitungstage, Fristen, Aufwand, Kalendertermine, Routinen, Fokuszeiten und freie Kapazität getrennt sehen; Planungsvorschläge vor dem Übernehmen vergleichen.
+- **Wissen verbinden:** Formatierte Seiten und Blöcke, Notizen, Notizbücher, Anhänge, lokale Verweise, Rückverweise und Fundorte.
+- **Ansichten gestalten:** Liste, Tabelle, Board, Pinnwand, Wochen- und Monatskalender sowie eine anpassbare Startseite; mehrere Designs, Schriftstile und die Pixel-Werkstatt.
+- **Mitnehmen und sichern:** Markdown, CSV, Kalenderdateien, JSON Canvas und Glide-Austauschdateien importieren oder exportieren; automatische Sicherungen und Wiederherstellungen unterstützen den Rückweg.
 
 Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 
@@ -92,9 +93,36 @@ Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](0
 
 Wenn ein öffentlicher Download freigegeben ist, erscheint er unter [Releases](https://github.com/n05a-design/glide-to-do/releases). Prüfe dort Version, Plattform, Prüfsumme und Signaturhinweise.
 
+## Schnellstart und Systemanforderungen
+
+Für den Quellstart wird Python 3.14 mit Tk 9 empfohlen; Tk 8.6 startet mit bekannten Einschränkungen. Zusätzliche Laufzeitpakete sind nicht erforderlich. Aus dem Repository-Hauptordner:
+
+```text
+cd 01_Repository/Glide
+python3 src/glide/app.pyw
+```
+
+Unter Windows lautet der zweite Befehl `python src\glide\app.pyw`. Das Hauptfenster benötigt mindestens **860 × 700 px**; im Kompaktmodus sind **480 × 560 px** möglich. Weitere Startwege und Voraussetzungen stehen im [technischen Schnellstart](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand). Zum Ausprobieren mit künstlichen Daten dient der [Showcase](05_Probelisten_Testdaten/Showcase/README.md).
+
 ## Deine Daten
 
 Glide speichert Inhalte und Anhänge in einem Datenordner außerhalb des Programmordners. Du bestimmst, wo er liegt. Automatische Sicherungen, Papierkorb und Rückgängig schützen die Arbeit; Markdown- und JSON-Canvas-Exporte helfen, Inhalte mitzunehmen. Glide lädt deine Daten nicht zu einem eigenen Cloud-Dienst hoch.
+
+| Bereich | Ablage und Zweck |
+|---|---|
+| Eigene Inhalte und Einstellungen | Im gewählten lokalen Datenordner; Details und Plattformpfade stehen unter [Daten und Migration](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ablage). |
+| Anhänge und Sicherungen | Werden mit dem Datenordner verwaltet; ein freigegebener Cloudordner führt gleichzeitige Änderungen mehrerer Geräte nicht zusammen. |
+| Beispieldaten | Der [Showcase](05_Probelisten_Testdaten/Showcase/README.md) nutzt künstliche Inhalte und einen eigenen Datenordner. |
+
+## Projektstruktur
+
+| Pfad | Inhalt |
+|---|---|
+| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Anwendung, Tests, technische Dokumentation und Paketierung |
+| [`07_Python-Versionen/`](07_Python-Versionen/) | Separater Python-Lieferstand; Prüfstatus und Quellabgleich im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) |
+| [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Künstlicher Showcase-Datensatz zum Ausprobieren |
+| [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Entwicklungsplan und Übergabe |
+| [`20_Grafik_Master/`](20_Grafik_Master/README.md) | Quelldateien der Projektgrafik |
 
 ## Häufige Fragen
 
@@ -122,14 +150,14 @@ Nutze die [zweisprachigen Formulare für Fehler und Ideen](https://github.com/n0
 
 ## Entwicklung und Qualität
 
-Stand 18.11.2026 · Glide 1.0.0
+Stand 19.11.2026 · Glide 1.0.0
 
 Mehr zum Quellcode, Entwicklungsablauf und Prüfstand:
 [An Glide arbeiten](CONTRIBUTING.md) ·
 [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) ·
 [Qualität und Prüfungen](01_Repository/Glide/docs/07_QA_BERICHT.md)
 
-Der Quellstand ist gemergt, aber noch nicht öffentlich veröffentlicht. CI-Ergebnisse, verfügbare Entwicklungsbauten und offene menschliche Abnahmen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) getrennt ausgewiesen.
+Der Quellstand für Glide 1.0.0 liegt in `main`; ein öffentlicher Release ist nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`; der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
 
 ## Lizenz
 

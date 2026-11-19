@@ -28,7 +28,9 @@ class Einstiegspruefung(unittest.TestCase):
             ("Was Glide kann", "What Glide does"),
             ("Was Glide bewusst nicht ist", "What Glide is not"),
             ("Herunterladen", "Download"),
+            ("Schnellstart und Systemanforderungen", "Quickstart and system requirements"),
             ("Deine Daten", "Your data"),
+            ("Projektstruktur", "Project structure"),
             ("Häufige Fragen", "Frequently asked questions"),
             ("Rückmeldung und Mitwirkung", "Feedback and contributions"),
             ("Entwicklung und Qualität", "Development and quality"),
@@ -83,6 +85,12 @@ class Einstiegspruefung(unittest.TestCase):
                     self.assertTrue(any('(R1)' in error for error in self.check(path,text).fehler))
         other=self.check("docs/README.md","# Intern\nStand 08.11.2026\n[Version](VERSION)\n")
         self.assertTrue(any('(R1)' in error for error in other.fehler))
+
+    def test_english_public_readme_accepts_english_status_label(self):
+        current=self.check("README.en.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.3\n")
+        self.assertEqual(current.fehler,[])
+        stale=self.check("README.en.md","# Glide\nStatus as of 08.11.2026 · Glide 3.32.2\n")
+        self.assertTrue(any('(R1)' in error for error in stale.fehler))
 
     def check(self, path, text):
         result = stand.Befund("3.32.3", {"DATA_SCHEMA_VERSION": 20}, suiten=58)

@@ -49,6 +49,7 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    root.report_callback_exception = lambda *args: fehler.append(args)
 
     def ruhe(runden=6):
         for _ in range(runden):
@@ -150,6 +151,24 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
         assert flaeche.yview()[0] != vorher_y or flaeche.yview() == (0.0, 1.0)
         app.workspace.set_mode("list")
         ruhe()
+        # Tk kann für diese Bindungen eine Callback-Ausführung ohne Event
+        # melden; ohne Ereignisdaten muss sie folgenlos beendet werden.
+        rad_probe = mod.tk.Canvas(root)
+        app.bind_mousewheel(rad_probe)
+        for sequenz in ("<MouseWheel>", "<Button-4>", "<Button-5>", "<TouchpadScroll>"):
+            bind_script = rad_probe.bind(sequenz)
+            if not bind_script:
+                continue
+            command = bind_script.split("[", 1)[1].split(None, 1)[0]
+            assert root.tk.call(command) == "break", sequenz
+        focus_probe = mod.RoundedButton(
+            root, "Probe", lambda: None, "#000000", "#FFFFFF", "#000000")
+        focus_script = focus_probe.bind("<FocusIn>")
+        focus_command = focus_script.split("[", 1)[1].split(None, 1)[0]
+        root.tk.call(focus_command)
+        assert not fehler, fehler
+        focus_probe.destroy()
+        rad_probe.destroy()
 
         # --- R3: Suche ohne Schatten, Klick außerhalb schließt ------------------
         app.set_home_view()
