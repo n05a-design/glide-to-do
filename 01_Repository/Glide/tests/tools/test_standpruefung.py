@@ -115,6 +115,68 @@ class Einstiegspruefung(unittest.TestCase):
                 with self.subTest(path=name, target=target):
                     self.assertTrue(resolved.exists(), f"Broken local public link: {target}")
 
+    USER_GUIDE_PAGES = (
+        "01-getting-started.md", "02-installation.md", "03-tasks-and-lists.md",
+        "04-day-planning.md", "05-calendar.md", "06-pages-and-notes.md",
+        "07-pinboards.md", "08-pixel-workshop.md", "09-import-and-export.md",
+        "10-backups.md", "11-keyboard-shortcuts.md", "12-troubleshooting.md",
+    )
+
+    @staticmethod
+    def markdown_anchors(text):
+        """GitHub-Überschriftenanker samt expliziter HTML-Anker einer Datei."""
+        anchors = set(re.findall(r'<a id="([^"]+)"', text))
+        seen = {}
+        source = re.sub(r"```.*?```", "", text, flags=re.S)
+        for heading in re.findall(r"(?m)^#{1,6} (.+?)\s*$", source):
+            slug = re.sub(r"[^\w\- ]", "", heading.strip().lower()).replace(" ", "-")
+            count = seen.get(slug, 0)
+            seen[slug] = count + 1
+            anchors.add(slug if count == 0 else f"{slug}-{count}")
+        return anchors
+
+    def test_english_user_guide_mirrors_german_source_with_resolvable_anchors(self):
+        docs = stand.REPO / "docs"
+        guide = docs / "user-guide"
+        index = (guide / "README.md").read_text(encoding="utf-8")
+        listed = list(dict.fromkeys(re.findall(r"\]\((\d\d-[a-z-]+\.md)\)", index)))
+        self.assertEqual(listed, list(self.USER_GUIDE_PAGES))
+        self.assertEqual(sorted(p.name for p in guide.glob("*.md")),
+                         sorted(("README.md",) + self.USER_GUIDE_PAGES))
+        german = (docs / "20_FUNKTIONEN.md").read_text(encoding="utf-8")
+        self.assertIn("](user-guide/README.md)", german, "Fehlender DE-Verweis auf den englischen Guide")
+        project = stand.REPO.parents[1]
+        self.assertIn("](01_Repository/Glide/docs/user-guide/README.md)",
+                      (project / "README.md").read_text(encoding="utf-8"))
+        self.assertIn("](01_Repository/Glide/docs/user-guide/README.md)",
+                      (project / "README.de.md").read_text(encoding="utf-8"))
+        anchor_cache = {}
+        for name in ("README.md",) + self.USER_GUIDE_PAGES:
+            path = guide / name
+            text = path.read_text(encoding="utf-8")
+            with self.subTest(page=name):
+                self.assertTrue(text.startswith("# "))
+                self.assertIn("Status as of", text)
+                self.assertIn("](../20_FUNKTIONEN.md", text, "Englische Seite ohne deutsche Quelle")
+                if name != "README.md":
+                    self.assertIn("](README.md)", text)
+                    self.assertIn("Controlled translation", text)
+            source = re.sub(r"```.*?```", "", text, flags=re.S)
+            for target in re.findall(r"\[[^\]]*\]\(([^)\s]+)\)", source):
+                parsed = urlsplit(target)
+                if parsed.scheme or parsed.netloc:
+                    continue
+                file_part = unquote(parsed.path)
+                resolved = (path.parent / file_part).resolve() if file_part else path
+                with self.subTest(page=name, target=target):
+                    self.assertTrue(resolved.exists(), f"Totes Linkziel: {target}")
+                    if parsed.fragment and resolved.suffix == ".md":
+                        if resolved not in anchor_cache:
+                            anchor_cache[resolved] = self.markdown_anchors(
+                                resolved.read_text(encoding="utf-8"))
+                        self.assertIn(unquote(parsed.fragment), anchor_cache[resolved],
+                                      f"Fehlender Abschnittsanker: {target}")
+
     def test_public_readme_uses_dated_authoritative_version_link_without_allowing_stale_or_missing_stands(self):
         for path,target in (("README.md","01_Repository/Glide/VERSION"),
                             ("01_Repository/Glide/README.md","VERSION")):

@@ -67,7 +67,7 @@ Alle Aufnahmen stammen aus einem künstlichen Showcase-Datensatz.
 - **Ansichten gestalten:** Liste, Tabelle, Board, Pinnwand, Wochen- und Monatskalender sowie eine anpassbare Startseite; mehrere Designs, Schriftstile und die Pixel-Werkstatt.
 - **Mitnehmen und sichern:** Markdown, CSV, Kalenderdateien, JSON Canvas und Glide-Austauschdateien importieren oder exportieren; automatische Sicherungen und Wiederherstellungen unterstützen den Rückweg.
 
-Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md).
+Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md). Eine kontrollierte englische Übersetzung ist der [English user guide](01_Repository/Glide/docs/user-guide/README.md).
 
 ## Was Glide bewusst nicht ist
 
