@@ -4,6 +4,30 @@ from pathlib import Path
 from package_sources import TARGETS
 
 
+# Ordner im Bau-Quellordner, die keine App-Pakete sind.
+NICHT_APP_PAKETE = frozenset({"vendor", "resources", "licenses"})
+
+
+def stage_modules(stage, bootstrap_name):
+    """App-Module im Bau-Quellordner als {Importname: Pfad}.
+
+    Flache Module heißen nach ihrem Dateinamen; App-Pakete wie `glide_shell`
+    (D95) erscheinen als Paket und als `paket.modul`. PyInstaller sieht die
+    Importe von `glide_app.py` nicht, weil es als Datei geladen wird; ohne
+    diese Liste fehlte das Paket im Bundle.
+    """
+    stage = Path(stage)
+    found = {p.stem: p for p in stage.glob("*.py") if p.name != bootstrap_name}
+    for package in sorted(stage.iterdir()):
+        init = package / "__init__.py"
+        if package.is_dir() and package.name not in NICHT_APP_PAKETE and init.is_file():
+            found[package.name] = init
+            for module in sorted(package.glob("*.py")):
+                if module.name != "__init__.py":
+                    found[package.name + "." + module.stem] = module
+    return found
+
+
 def specification(stage, target, product, icon, *, modules=()):
     if target not in TARGETS:
         raise ValueError('Unbeauftragte Paketplattform.')

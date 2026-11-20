@@ -3667,4 +3667,6 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten):** T330 grün mit kopiertem Paket ohne `src/glide`; `test_modalvertrag` 18/18 und Gegenproben 10/10, `test_fensterlebensdauer` 10/10 und Gegenproben 7/7, `test_abbauvertrag`, `test_startwege` (17 Startfälle, Quellbaum ohne Bytecode), `test_custom_controls`, `test_fenster330`, `test_dialog_theme`, `test_glide`, alle Shell-Unit-Tests und die CI-Grundstufe grün. Ein lokaler `quellbaum`-Befund ging auf von mir mit `py_compile` erzeugte `__pycache__` zurück und ist nach dem Entfernen grün.
 
+**C2 – Nativer Paketbefund:** Der erste macOS-Paketlauf scheiterte im isolierten Start an `No module named 'glide_shell'`: `baue_paket.py` gab PyInstaller nur flache Module als `hiddenimports`. `package_spec.stage_modules` nimmt jetzt App-Pakete mit; Regression in T319 (`Paketbau`). Betrifft macOS und Windows.
+
 **D – Grenzen und Rest:** Die Lieferstand-Prüfung meldet die noch fehlenden `glide_shell/…`-Dateien in `07_Python-Versionen` nicht als Abweichung; die Lieferkopie folgt mit der nächsten Produktionsrunde über `abgleich_07.py`. Offen bleiben die teilneutralen Module, Undo beim Host, ein eigenes Repository oder eine eigene Veröffentlichung des Pakets (nicht beauftragt) und die menschliche Sichtprüfung des Demohosts.
