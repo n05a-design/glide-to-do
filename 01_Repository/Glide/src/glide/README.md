@@ -1,7 +1,7 @@
-# Glide-System V1.55
+# Glide-System V1.56
 
-Stand 20.11.2026 · Glide 1.0.0 · Glide-System V1.55 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
-**Eigenständige Katalogversion:** `V1.55` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+Stand 20.11.2026 · Glide 1.0.0 · Glide-System V1.56 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+**Eigenständige Katalogversion:** `V1.56` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -11,6 +11,7 @@ Stand 20.11.2026 · Glide 1.0.0 · Glide-System V1.55 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.56** | 20.11.2026 | Englische Benutzerdokumentation `docs/user-guide/` als kontrollierte Übersetzung von `docs/20_FUNKTIONEN.md`. T299 `test_standpruefung.py` prüft zusätzlich Seitenliste, DE↔EN-Gegenverweise, tote Links und Abschnittsanker in die deutschen Quellen. Keine neue Modul- oder Testdatei, kein App-Code, Format 26 unverändert. | App 1.0.0 |
 | **V1.55** | 20.11.2026 | PR-#156-Regressionsbefund: Die gemeinsame `SavedFilters.normalize_settings`-Normalisierung prüft gültige Speicherkennungen statt lokalisierter Anzeigenamen. T217 besteht lokal auf dem Reparaturkopf; `test_wissen33315.py`, alle 14 Ansichtenfälle und die lokale CI-Grundstufe sind grün. Keine neue Testdatei oder neues Modul; Remote-PR-Wiederlauf und native Menschenabnahmen bleiben offen. | App 1.0.0 |
 | **V1.54** | 19.11.2026 | Der `<Motion>`-Callback der Tooltip-Bindung toleriert eventlose Tcl-Aufrufe; `test_features315.py` prüft den ereignislosen direkten Tooltip-Aufruf. Der vorherige Windows-Fehler war eine `TypeError`-Callback-Ausnahme in `test_features315`; eine lokale Gegenprobe bestand. Linux- und Windows-Remote-Nachprüfung des Kandidaten steht aus. App-Version 1.0.0 und Datenformat 26 unverändert. | App 1.0.0 |
 | **V1.53** | 19.11.2026 | `ButtonFlow` stabilisiert wiederkehrende, nicht aufeinanderfolgende Breiten innerhalb derselben Fenstergeometrie über `settled_wrap_width`; eine echte Toplevel-Breitenänderung startet die Messung neu. T312 ergänzt eine A-B-A-B-Regressionsprüfung samt Fensteränderung. Linux/Tk-9.1- und Windows-Nachlauf auf dem lokalen Stand waren zuvor rot bzw. offen; der V1.53-Schnitt wurde als Commit `143c738b` auf PR #152 geliefert und anschließend gemergt. App-Version 1.0.0 und Datenformat 26 unverändert. | App 1.0.0 |
@@ -901,7 +902,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T296 | [`test_release_workflow.py`](../../tests/tools/test_release_workflow.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T297 | [`test_runtime_contract.py`](../../tests/tools/test_runtime_contract.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T298 | [`test_runtime_patches.py`](../../tests/tools/test_runtime_patches.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T299 | [`test_standpruefung.py`](../../tests/tools/test_standpruefung.py) | Prüft gepflegte Einstiege; zusätzlich Sprachumschaltung, spiegelgleiche öffentliche DE/EN-Abschnitte und erreichbare lokale Markdown-/HTML-Datei-Links |
+| T299 | [`test_standpruefung.py`](../../tests/tools/test_standpruefung.py) | Prüft gepflegte Einstiege; zusätzlich Sprachumschaltung, spiegelgleiche öffentliche DE/EN-Abschnitte und erreichbare lokale Markdown-/HTML-Datei-Links; seit V1.56 auch die Seitenliste des englischen User Guide, seine DE↔EN-Gegenverweise und Abschnittsanker in die deutschen Quellen |
 | T300 | [`test_synchronisationswaechter.py`](../../tests/tools/test_synchronisationswaechter.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T301 | [`test_ui_nachlauf_workflow.py`](../../tests/tools/test_ui_nachlauf_workflow.py) | Prüft native UI-/Arbeitsmodi-Dispatches und den isolierten `ui39`-Diagnoselauf auf beiden Plattformen; Vollmatrix-, Kalibrierungs- und Paketgates bleiben getrennt. |
 | T302 | [`test_versionspflege.py`](../../tests/tools/test_versionspflege.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |

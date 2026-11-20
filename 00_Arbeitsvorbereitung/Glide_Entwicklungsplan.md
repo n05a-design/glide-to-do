@@ -3577,5 +3577,5 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung:** T299 `test_standpruefung.py` prüft zusätzlich die Seitenliste in der Übersicht, Sprachverweise in beide Richtungen und dass jeder Abschnittsanker in `20_FUNKTIONEN.md` und `06_DATA_BACKUP_MIGRATION.md` existiert. CI-Grundstufe lokal auf macOS mit isoliertem `GLIDE_DATA_DIR`; Ergebnis im PR. Die fachliche Übersetzungsprüfung durch einen Menschen bleibt offen.
 
-**D – Grenzen:** Der Katalogeintrag von T299 im [Glide-System](../01_Repository/Glide/src/glide/README.md) wird nicht geändert, weil `src/glide` nur in einer Produktionsrunde angefasst wird und PR #157/#158 die Systemversion parallel anheben; die Ergänzung folgt mit der nächsten Systemversion. Nach dem Merge von PR #157/#158 die Seiten Pixel workshop und „Interface language“ nachführen.
+**D – Grenzen:** Nach AGENTS.md (System-und-Modulpflege im selben Commit) führt das [Glide-System](../01_Repository/Glide/src/glide/README.md) die erweiterte T299-Abdeckung als V1.56; nur der Registertext ändert sich, kein Code. PR #157/#158 belegen parallel V1.56–V1.58; der zuletzt gemergte PR nummeriert seine Systemversion neu. Nach dem Merge von PR #157/#158 die Seiten Pixel workshop und „Interface language“ nachführen.
 
