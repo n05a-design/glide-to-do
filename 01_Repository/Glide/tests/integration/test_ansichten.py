@@ -88,10 +88,18 @@ def fall_oder(run):
 
 def fall_persistenz(run):
     app=run.app;source, other, a, b, c=seed(run)
-    value=criterion(_view={'planned':'today','effort':'none'})
+    value=criterion(status='done', importance='3', due='today', label_mode='all', source='pages',
+                    _view={'planned':'today','effort':'none'})
     assert app.saved_filters.save(value)
     raw=json.loads(Path(run.mod.SETTINGS_FILE).read_text(encoding='utf-8'))
     assert '_view' not in raw['saved_filters'][-1]
+    stored=raw['saved_filters'][-1]
+    assert {key: stored[key] for key in ('status','importance','due','label_mode','source')} == {
+        'status':'done','importance':'3','due':'today','label_mode':'all','source':'pages'}
+    normalized=run.mod.SavedFilters.normalize_settings(copy.deepcopy(raw))
+    assert {key: normalized['saved_filters'][0][key]
+            for key in ('status','importance','due','label_mode','source')} == {
+        'status':'done','importance':'3','due':'today','label_mode':'all','source':'pages'}
     assert raw['saved_view_conditions_v1']['view']==value['_view']
     payload=app.app_backup_payload()['app_backup']['settings']
     assert payload['saved_view_conditions_v1']==raw['saved_view_conditions_v1']

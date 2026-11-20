@@ -3561,7 +3561,9 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 ### 21.143 Abschlussprüfung von PR #156 (20.11.2026)
 
-**Befund:** PR #156 ist auf Head `56a81e0884fc96ab3bd45db27763a6dbfd8c85b7` offen und nicht gemergt. Dokumentation/YAML/Stand sowie CodeQL und die drei Analyze-Läufe bestanden. Die Linux-Grundstufe scheiterte vor Glide-Tests beim Ubuntu-Paketmirror `security.ubuntu.com`; beide Vollprüfungen scheiterten in `test_wissen33315.py`, Zeile 219, an derselben Assertion für `saved_filter`/`pages`. Das Windows-Paket und die nach dem Integritätsbefund übersprungenen Restfälle sind deshalb keine grünen Nachweise.
+**Befund:** PR #156 ist auf Head `92255dc0647b1b4b63706dca9be51fa28552ecf7` offen und nicht gemergt. Dokumentation/YAML/Stand, Linux-Grundstufe, CodeQL und die drei Analyze-Läufe bestanden. Beide Linux- und Windows-Vollprüfungen scheiterten in `test_wissen33315.py`, Zeile 219, an derselben Assertion für `saved_filter`/`pages`. Das Windows-Paket und die nach dem Integritätsbefund übersprungenen Restfälle sind deshalb keine grünen Nachweise.
+
+**Lokale Reparatur:** Auf dem Arbeitskopf wurde die gemeinsame Enum-Normalisierung in `SavedFilters.normalize_settings` korrigiert. Die gespeicherten Kennungen werden jetzt gegen die gültigen Enum-Schlüssel statt gegen lokalisierte Anzeigenamen geprüft. `test_wissen33315.py`, alle 14 Fälle von `test_ansichten.py` einschließlich Persistenz sowie die CI-Grundstufe bestanden lokal. Die gezielte Persistenzprobe behielt alle geprüften Filterwerte unverändert. Diese Ergebnisse belegen die Reparatur, noch keinen Remote-Head.
 
 **Metadaten und Dokumentabgleich:** Live-`gh repo view` bestätigt weiterhin die deutsche About-Beschreibung, 15 Topics und aktivierte Issues, Discussions, Wiki und Projects. Homepage, Tags und Releases bleiben unverändert. Der geplante bilinguale About-Text kann mit dem aktuellen Konto nicht geschrieben werden.
 

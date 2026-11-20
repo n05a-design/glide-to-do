@@ -1,11 +1,13 @@
 # Änderungsverlauf
 
-Stand 19.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 20.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
 ## 1.0.0 – 17.11.2026 (Quellstand, nicht veröffentlicht)
 
 Der Meilenstein-Schnitt D93 ist in `main`; PR #153 wurde am 19.11.2026 auf Merge-Commit `a53e7790` integriert und hebt das Glide-System auf V1.54. Sein finaler PR-Head `db3bc6ca` bestand Grundstufe, CodeQL, Linux-/Windows-Vollprüfung und Windows-Paketbau in Workflow [#44585014542](https://github.com/n05a-design/glide-to-do/actions/runs/44585014542). Auf dem Merge-SHA `a53e7790` bestanden Main-Grundstufe/CodeQL und das macOS-arm64-Paket samt isoliertem Start; die native macOS-Vollsuite wurde übersprungen. Die Linux/Tk-9.1-Vollprüfung läuft noch; ihr Endstatus steht im [QA-Bericht](docs/07_QA_BERICHT.md). Kein Tag und kein GitHub Release sind veröffentlicht; Homebrew-/winget-Einreichung und menschliche Abnahme bleiben offen. Datenformat 26 und Austauschformat 2 unverändert. PR #148 ergänzt die DE/EN-Lokalisierung des Einstellungsdialogs; PR #150 integriert Seiteneditor, Aktionsfeedback, Shell-Modifier, Aufgabeninspektor, Kalenderfelder, Editorstatus und Mehr-Menü sowie den Dialogumbruchfix. Frühere rote Läufe und ihre damaligen Prüfkandidaten bleiben im QA-Bericht historisch dokumentiert und sind nicht der aktuelle Status.
+
+- **Lokale PR-#156-Reparatur (20.11.2026):** Die gemeinsame `SavedFilters`-Enum-Normalisierung prüft gültige Speicherkennungen statt lokalisierter Anzeigenamen. Damit bleiben gespeicherte Status-, Wichtigkeits-, Fälligkeits-, Beschriftungs- und Quellenwerte über Persistierung und Normalisierung erhalten. `test_wissen33315.py`, alle 14 Ansichtenfälle einschließlich Persistenz und die lokale CI-Grundstufe bestanden. Der Remote-PR-Head ist noch nicht mit diesem Arbeitsstand neu geprüft; kein Commit, Merge oder Release ist daraus abgeleitet.
 
 PR #154 bündelt Community- und Übergabeunterlagen sowie strukturelle Prüfungen. Die GitHub-Einstiege und Vorlagen werden nach dem Steps-Muster englisch zuerst angeboten; vollständige deutsche Gegenfassungen bleiben verlinkt. PR #154 ist offen und nicht gemergt; Remote-Prüfungen sind dem aktuellen Head zuzuordnen. Diese Änderungen aktivieren weder Wiki, Project, Funding, Tag/Release noch externe Kontofunktionen.
 
