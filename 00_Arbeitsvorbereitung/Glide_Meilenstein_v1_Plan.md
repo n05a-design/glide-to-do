@@ -1,6 +1,6 @@
 # Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
 
-Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.55 auf `main`; V1.57 in PR #157; V1.58 auf Folgezweig `claude/d93-drawing-animation-more-i18n`
+Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.57 auf `main` (PR #157 gemergt); V1.58 in PR #158
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 
@@ -119,7 +119,7 @@ flowchart TD
 Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. PR #148 hat den zweisprachigen Einstellungsdialog gemergt; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und weitere Bereiche in `main`; PR #157 ergänzt Zeicheneditor-Status und zentrale Steuerungen, der Folgezweig V1.58 Animationsleiste, Mehr-Menü, Paletten und Export, vollständige UI-/Status-/Shell-Lokalisierung und menschliche Abnahme offen)
+- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und weitere Bereiche in `main`; PR #157 (gemergt) ergänzt Zeicheneditor-Status und zentrale Steuerungen, PR #158 (offen) Animationsleiste, Mehr-Menü, Paletten und Export, vollständige UI-/Status-/Shell-Lokalisierung und menschliche Abnahme offen)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
 - [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
 - [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. Öffentlicher Tag/Release, vollständige menschliche Abnahme und übersprungene UI-/Barrierefreiheitsjobs offen)

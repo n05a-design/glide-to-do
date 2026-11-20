@@ -10,7 +10,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 Der Live-Nachweis des PR-#156-Heads `f1d00bc9461819e7d366230ac85c8d08079257d3` bestätigt die gemeinsame Reparatur in Merge-Commit `4b6bce08`. Dokumentation, YAML, Stand, Linux-Grundstufe, alle Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung bestanden. Bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung; CodeQL und mehrere native UI-/Accessibility-Jobs wurden übersprungen. Die früheren roten Läufe auf `92255dc0647b1b4b63706dca9be51fa28552ecf7` gehören zum ursprünglichen Fehlerstand und bleiben historische Belege.
 
-Die Enum-Normalisierung wurde auf PR #156 geliefert. Der D93-Etappe-2-Schnitt V1.57 mit DE/EN-Statusmeldungen und Kernsteuerungen des Zeicheneditors liegt in [PR #157](https://github.com/n05a-design/glide-to-do/pull/157), derzeit offen; die GitHub-Prüfungen laufen. Das ist weder ein Release noch eine Änderung an About-Beschreibung, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
+Die Enum-Normalisierung wurde auf PR #156 geliefert. Der D93-Etappe-2-Schnitt V1.57 mit DE/EN-Statusmeldungen und Kernsteuerungen des Zeicheneditors wurde mit [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) als `55ad7e95` nach `main` gemergt; V1.58 liegt in [PR #158](https://github.com/n05a-design/glide-to-do/pull/158). Das ist weder ein Release noch eine Änderung an About-Beschreibung, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
 
 ## Release-Cut-Prüfung vom 18.11.2026
 
