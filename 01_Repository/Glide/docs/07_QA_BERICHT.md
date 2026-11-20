@@ -2,13 +2,43 @@
 
 ## PR #156 Live-Abschlussprüfung (20.11.2026)
 
-Der offene PR-Head `92255dc0647b1b4b63706dca9be51fa28552ecf7` endet nach Abschluss des vollständigen Remote-Laufs mit `UNSTABLE`- bzw. insgesamt rotem Prüfzustand. Dokumentation, YAML und Stand bestanden in [Workflow #44652672505](https://github.com/n05a-design/glide-to-do/actions/runs/44652672505); CodeQL und die drei Analyze-Läufe bestanden in [Workflow #44652667609](https://github.com/n05a-design/glide-to-do/actions/runs/44652667609). Die Linux-Grundstufe bestand in [Workflow #44652672636](https://github.com/n05a-design/glide-to-do/actions/runs/44652672636).
+Der ursprüngliche PR-Head `92255dc0647b1b4b63706dca9be51fa28552ecf7` endete nach Abschluss des vollständigen Remote-Laufs mit `UNSTABLE`- bzw. insgesamt rotem Prüfzustand. Dokumentation, YAML und Stand bestanden in [Workflow #44652672505](https://github.com/n05a-design/glide-to-do/actions/runs/44652672505); CodeQL und die drei Analyze-Läufe bestanden in [Workflow #44652667609](https://github.com/n05a-design/glide-to-do/actions/runs/44652667609). Die Linux-Grundstufe bestand in [Workflow #44652672636](https://github.com/n05a-design/glide-to-do/actions/runs/44652672636).
 
 Die Linux- und Windows-Xvfb-/Tk-9.1-Vollprüfung waren auf diesem neuen Head beide rot. Beide stoppten identisch in `test_wissen33315.py`, Zeile 219, bei der Forderung `app.view_mode == 'saved_filter' and app.saved_filters.current()['source'] == 'pages'`; die Assertion machte Linux- und Windows-Lauf zu einem Integritätsbefund mit Exitcode 1. Danach stoppte die Prüffolge und übersprang die folgenden Integrationsfälle. Das eigenständige Windows-Paket wurde wegen des roten Vollstands übersprungen. Die UI-Diagnose, Tk-9.1-AT-SPI/Orca- und Tk-9.1-NVDA-Jobs waren bereits als übersprungen markiert. Die Linux-Vollprüfung ist [Job #136012147619](https://github.com/n05a-design/glide-to-do/actions/runs/44652672636/job/136012147619), die Windows-Vollprüfung [Job #136018552622](https://github.com/n05a-design/glide-to-do/actions/runs/44652672636/job/136018552622).
 
-Die Live-Repositoriumsabfrage bestätigt weiterhin die deutsche GitHub-About-Beschreibung und unveränderte 15 Topics, öffentliche Issues sowie aktivierte Discussions, Wiki und Projects. Die vorgesehene bilinguale Fassung bleibt dokumentiert, ist aber weiterhin nur über Repository-Administration oder den Inhaber änderbar; das aktive CLI-Konto hat keinen administrativen Zugriffsweg. PR #156 wurde nicht gemergt. Es bleibt offen, ob der integritätsbezogene Vollbefund auf PR-Inhalt, Sequenz oder Plattform-/Runner-Zustand zurückgeht; ein neuer grüner Volllauf ist dafür Voraussetzung.
+Die Live-Repositoriumsabfrage bestätigte die deutsche GitHub-About-Beschreibung und unveränderte 15 Topics, öffentliche Issues sowie aktivierte Discussions, Wiki und Projects. Die vorgesehene bilinguale Fassung bleibt dokumentiert, ist aber weiterhin nur über Repository-Administration oder den Inhaber änderbar; das aktive CLI-Konto hat keinen administrativen Zugriffsweg. Bei dieser Abfrage war PR #156 noch offen. Es blieb offen, ob der integritätsbezogene Vollbefund auf PR-Inhalt, Sequenz oder Plattform-/Runner-Zustand zurückgeht.
 
 **Lokaler Reparaturbefund (20.11.2026):** Die Reproduktion bestätigte die gemeinsame Enum-Normalisierung als Ursache: `SavedFilters.normalize_settings` prüfte Speicherwerte fälschlich gegen lokalisierte Anzeigenamen statt gegen die gültigen Speicherkennungen. Die Reparatur prüft jetzt direkt die Enum-Schlüssel. `test_wissen33315.py` bestand lokal im isolierten Lauf; `test_ansichten.py` bestand mit allen 14 Fällen einschließlich Persistenz; die gezielte Persistenzprobe erhielt `status='done'`, `importance='3'`, `due='today'`, `label_mode='all'` und `source='pages'` über Speicherung und Normalisierung unverändert. Die lokale CI-Grundstufe bestand mit 19/19 und 284 Werkzeugtests; sie enthält 3 zulässige Lieferabweichungen zwischen dem Prüfkandidaten und `07_Python-Versionen`, da Produktionslieferstand und Reparaturquellstand getrennt bleiben. Dieser Befund belegt keinen Remote-PR-Head und ersetzt keinen Live-Wiederlauf.
+
+**Nachtrag nach Merge (20.11.2026):** PR #154 wurde am 19.11. auf `448eee7f`, PR #156 am 20.11. auf `4b6bce08` gemergt; der aktuelle PR-#156-Head `f1d00bc9461819e7d366230ac85c8d08079257d3` hat denselben Baum wie `main`. Dokumentation/YAML/Stand, Linux-Grundstufe und alle drei Analyze-Läufe bestanden. Die Linux/Tk-9.1-Vollprüfung bestand in 31:07 min; die Windows/Tk-9.1-Vollprüfung [Job #136248611305](https://github.com/n05a-design/glide-to-do/actions/runs/44719992687/job/136248611305) lief bei letzter Abfrage noch. UI-Diagnose, NVDA und Orca wurden übersprungen. Diese Remote-Prüfungen beziehen sich auf den gemergten Reparaturstand, nicht auf den lokalen V1.57-Kandidaten.
+
+## D93 Etappe 2: Zeicheneditor-Status (V1.56, 20.11.2026)
+
+Der damalige V1.56-Kandidat basierte auf `f1d00bc9` und umfasste die Zeicheneditor-Statuszeile sowie Kernmeldungen für Auswahl, Kopieren, Pipette, Undo und Redo. Der zunächst lokale Teilstand ist inzwischen zusammen mit der V1.57-Fortsetzung in PR #157 enthalten. Werkzeug-, Symmetrie-, Muster-, Farb-, Zellen-, Zoom-, Undo- und Speicherdarstellung folgt der aktiven Sprache; stabile Zeichen-/Aktionskennungen, Daten und Bearbeitungsabläufe bleiben unverändert. Der App-Quellhash des damaligen Teilstands lautet `c617a9e1b865b82cce1de4a687d4cdcaa6ddbd85f1d15ebe3feafe62c407ab69`.
+
+Gezielt bestanden: `tests/unit/test_i18n.py` (**22/22**), `tests/integration/test_arbeitsmodi.py --fall feedback_locale` (**1/1**), `--fall drawing_locale` (**1/1**), `tests/integration/test_pixel3350.py` (bestanden), `tests/tools/test_glide_system.py` (**5/5**) und `tests/tools/test_standpruefung.py` (**27/27**). Die vollständige lokale CI-Grundstufe bestand mit Exitcode 0:
+
+```text
+cd 01_Repository/Glide && GLIDE_DATA_DIR=/tmp/glide-roadmap-next/ci-data \
+python3 -B tests/tools/ci_grundstufe.py --protokoll /tmp/glide-roadmap-next/ci-protokoll
+```
+
+Sie prüfte 447 Python-Dateien, 716 aktuelle Markdown-Links, Werkzeuge, Fachtests, Analysen, Stand-/Attribut-/Duplikatprüfungen, Tk-Startprobe, Datenschutz und Ablageprüfung. Nicht blockierend: drei zulässige Prüfkandidat-/Lieferstandabweichungen (App-Kopie und Locale-Kataloge) sowie ein lokal wegen Zertifikatsprüfung nicht abrufbares Fremdpaket `tkinterdnd2`. `git diff --check` bestand. Der PR-#156-Remote-Volltest ist ein anderer, bereits gemergter Stand und belegt keine Plattformprüfung dieses lokalen Kandidaten. Weitere Zeichenwerkzeug-/Dialogtexte, externe Referenz-/Exportmeldungen, vollständige UI-Lokalisierung und menschliche Sicht-/Bedien-/Accessibility-Abnahme bleiben offen.
+
+## D93 Etappe 2: Zeicheneditor-Steuerung (V1.57, 20.11.2026)
+
+Der V1.57-Schnitt ergänzt die Statuslokalisierung um Werkzeugwahl, Anzeigeprofile, Referenz-/Vorschauknöpfe, Zoom und Kontextmenüs. Beim Sprachwechsel aktualisiert sich der offene Editor. Werkzeug-, Profil-, Muster- und Befehlswerte bleiben stabile interne Kennungen. Der Schnitt wurde auf Commit `e76a27be` in [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) gegen `main` gepusht. App-Quellhash: `496e3a2129fe5a927225fa6fdd97c3e2c119a452fce04d345ec47f0544f487a3`.
+
+Gezielt bestanden: `tests/unit/test_i18n.py` (**22/22**); `tests/integration/test_arbeitsmodi.py --fall feedback_locale`, `--fall drawing_locale` und `--fall drawing_controls_locale` (je **1/1**). Der Steuerungsfall prüft beide Sprachen, stabile Kennungen und die Pflichtknöpfe bei 860 × 700 für alle vier Anzeigeprofile. `tests/integration/test_features330.py` und `tests/integration/test_pixel3350.py` bestanden; `tests/tools/test_glide_system.py` **5/5**, `tests/tools/test_standpruefung.py` **27/27**.
+
+Die komplette lokale CI-Grundstufe bestand mit Exitcode 0:
+
+```text
+cd 01_Repository/Glide && GLIDE_DATA_DIR=/tmp/glide-roadmap-v157/final-data \
+python3 -B tests/tools/ci_grundstufe.py --protokoll /tmp/glide-roadmap-v157/final-protokoll
+```
+
+Der Lauf prüfte 447 Python-Dateien und 716 aktuelle Markdown-Links sowie Werkzeuge, Fachtests, Analysen, Tk-Startprobe, Datenschutz und Ablage. Nicht blockierend: drei zulässige Prüfkandidat-/Lieferstandabweichungen (App-Kopie und Locale-Kataloge) und ein lokal wegen Zertifikatsprüfung nicht abrufbares Fremdpaket `tkinterdnd2`. `git diff --check` bestand. PR #157 führt seine plattformabhängigen GitHub-Prüfungen am Live-PR; diese ändern sich mit jedem Folgecommit. Native Screenreader-/UI-Jobs sind übersprungen. Eine menschliche Sicht-/Screenreaderabnahme erfolgte nicht. Die Animationsleiste und Inhalte des Mehr-Menüs, weitere Zeichnungsdialoge und externe Zeichen-/Exportmeldungen bleiben offen.
 
 ## Live-GitHub-Nachprüfung nach PR #155 (20.11.2026)
 

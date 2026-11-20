@@ -429,6 +429,185 @@ def fall_feedback_locale(lauf):
     return "DE/EN-Aktionsrückmeldung mit Einzahl/Mehrzahl sowie Rückgängig-/Wiederholen-Hinweise"
 
 
+def fall_drawing_locale(lauf):
+    """Die Zeicheneditor-Statuszeile und Kernaktionen folgen der aktiven Sprache."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None
+    expected = {
+        "de": ("Füllen", "Symmetrie beide", "Schachbrett", "Farbe ", "Zelle 2, 3:",
+               "Auswahl 2 × 3", "Zoom 5×", "Nichts rückgängig zu machen", "Ungespeichert",
+               "Ganze Fläche ausgewählt", "Auswahl aufgehoben", "Füllen: 1 Zelle geändert",
+               "Zurückgenommen: Füllen (1 Zelle)", "Wiederhergestellt: Füllen (1 Zelle)"),
+        "en": ("Fill", "Symmetry both", "Checkerboard", "Color ", "Cell 2, 3:",
+               "Selection 2 × 3", "Zoom 5×", "Nothing to undo", "Unsaved",
+               "Whole canvas selected", "Selection cleared", "Fill: 1 cell changed",
+               "Undid: Fill (1 cell)", "Redid: Fill (1 cell)"),
+    }
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            editor.model.clear_history()
+            editor.tool = "fill"
+            editor.fill_pattern = "checker"
+            editor.symmetry = "xy"
+            editor.selection = (0, 0, 1, 2)
+            editor.cursor = (1, 2)
+            editor.zoom = 5
+            editor.save_state = "unsaved"
+            editor.update_status()
+            status, message = editor.status.cget("text").splitlines()
+            assert all(label in status for label in labels[:9]), (language, status)
+            assert message == " "
+
+            editor.select_all()
+            assert editor.status.cget("text").splitlines()[1] == labels[9]
+            editor.deselect()
+            assert editor.status.cget("text").splitlines()[1] == labels[10]
+
+            editor.model.begin_action("Füllen")
+            editor.model.paint_cells([(0, 0) if language == "de" else (1, 0)], "#C43BFF")
+            editor._finish_action({})
+            assert editor.status.cget("text").splitlines()[1] == labels[11]
+            editor.undo()
+            assert editor.status.cget("text").splitlines()[1] == labels[12]
+            editor.redo()
+            assert editor.status.cget("text").splitlines()[1] == labels[13]
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+    return "Zeicheneditor-Statuszeile, Auswahl-, Undo- und Redo-Rückmeldungen DE/EN"
+
+
+def fall_drawing_controls_locale(lauf):
+    """Zeicheneditor-Werkzeuge, Profile und Kernmenüs lokalisieren ohne IDs umzuschreiben."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None
+    previous_tool = editor.tool
+    previous_profile = editor.display_profile
+    previous_pattern = editor.fill_pattern
+    previous_symmetry = editor.symmetry
+    root = app.root
+    previous_geometry = root.geometry()
+    expected = {
+        "de": {
+            "buttons": ("Pinsel ▾", "Erweitert ▾", "Vorschau", "Mehr", "Zoom 5×", "Palette"),
+            "tools": {"Pinsel (B)", "Füllen (F)", "Pipette (I)", "Linie (L)",
+                      "Rechteck (U)", "Ellipse (E)", "Auswahl (S)"},
+            "zoom": {"Verkleinern (−)", "Vergrößern (+)", "An Fläche anpassen"},
+            "brush": {"Größe 1×1", "Symmetrie: Links/rechts", "Pixelgenaue 1×1-Linie"},
+            "fill": {"Muster: Voll", "Muster: Schachbrett", "Muster: Raster 25 %", "Muster: Raster 75 %"},
+            "select": {"Kopieren", "Ausschneiden", "Einfügen", "Leeren", "Alles auswählen", "Auswahl aufheben"},
+            "profiles": {"standard": "Standard", "extended": "Erweitert",
+                         "animation": "Animation", "pixelate": "Bilder pixeln"},
+            "preview": ("Vorschau", "Kachel", "Grau"),
+        },
+        "en": {
+            "buttons": ("Brush ▾", "Extended ▾", "Preview", "More", "Zoom 5×", "Palette"),
+            "tools": {"Brush (B)", "Fill (F)", "Eyedropper (I)", "Line (L)",
+                      "Rectangle (U)", "Ellipse (E)", "Selection (S)"},
+            "zoom": {"Zoom out (−)", "Zoom in (+)", "Fit to canvas"},
+            "brush": {"Size 1×1", "Symmetry: Left/right", "Pixel-perfect 1×1 line"},
+            "fill": {"Pattern: Solid", "Pattern: Checkerboard", "Pattern: 25% dots", "Pattern: 75% dots"},
+            "select": {"Copy", "Cut", "Paste", "Clear", "Select all", "Deselect"},
+            "profiles": {"standard": "Standard", "extended": "Extended",
+                         "animation": "Animation", "pixelate": "Pixelate"},
+            "preview": ("Preview", "Tile", "Grayscale"),
+        },
+    }
+
+    def choices(method):
+        entries = []
+        original = editor._popup_drawing_choices
+        editor._popup_drawing_choices = lambda _anchor, items: entries.extend(items) or "break"
+        try:
+            method()
+        finally:
+            editor._popup_drawing_choices = original
+        return entries
+
+    try:
+        root.geometry("860x700")
+        for _attempt in range(25):
+            root.update()
+            if root.winfo_width() == 860 and root.winfo_height() == 700:
+                break
+            root.after(20, root.quit)
+            root.mainloop()
+        assert (root.winfo_width(), root.winfo_height()) == (860, 700), root.geometry()
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            editor.tool = "brush"
+            editor.display_profile = "extended"
+            editor.zoom = 5
+            editor.refresh_locale()
+            assert tuple(button.text for button in (
+                editor.tool_choice, editor.display_button, editor.preview_button,
+                editor.more_button, editor.zoom_choice, editor.palette_button,
+            )) == labels["buttons"], language
+            assert editor.display_profile == "extended", "Anzeigeprofilkennung wird nicht übersetzt"
+            assert tuple(button.text for button in editor.reference_buttons.values()) == (
+                ("Bild laden", "Rahmen", "Bild pixeln") if language == "de"
+                else ("Load image", "Reframe", "Trace pixels"))
+            assert (editor.preview_title.cget("text"), editor.tiled_button.text,
+                    editor.gray_button.text) == labels["preview"]
+            assert editor.tool_choice._glide_tooltip["source"] == (
+                "Zeichenwerkzeug wählen; Kürzel im Menü" if language == "de"
+                else "Choose a drawing tool; shortcuts are shown in the menu")
+            for profile, label in labels["profiles"].items():
+                editor.display_profile = profile
+                editor.refresh_locale()
+                root.update()
+                editor.toolbar.reflow()
+                assert editor.display_button.text == label + " ▾"
+                assert not {"tool", "display", "more"} & set(editor.toolbar.hidden_keys)
+            editor.display_profile = "extended"
+            editor.refresh_locale()
+
+            tool_entries = choices(editor.show_tool_menu)
+            assert {text for text, _command, _active in tool_entries} == labels["tools"]
+            fill_command = next(command for text, command, _active in tool_entries
+                                if text.startswith("Füllen" if language == "de" else "Fill"))
+            fill_command()
+            assert editor.tool == "fill", "Werkzeugkennung bleibt stabil"
+
+            assert {text for text, _command, _active in choices(editor.show_zoom_menu)} == labels["zoom"]
+            editor.set_tool("brush")
+            assert labels["brush"] <= {text for text, _command, _active in choices(editor.show_tool_options)}
+            editor.set_tool("fill")
+            assert labels["fill"] <= {text for text, _command, _active in choices(editor.show_tool_options)}
+            editor.set_tool("select")
+            assert labels["select"] <= {text for text, _command, _active in choices(editor.show_tool_options)}
+
+            profile_entries = []
+            with patch.object(
+                    mod.tk.Menu, "add_radiobutton", autospec=True,
+                    side_effect=lambda _menu, *args, **kwargs: profile_entries.append(
+                        (kwargs["label"], kwargs["value"]))), \
+                    patch.object(mod.tk.Menu, "tk_popup", autospec=True):
+                editor.show_display_profiles()
+            assert {text for text, _value in profile_entries} == set(labels["profiles"].values())
+            assert {value for _text, value in profile_entries} == {
+                "standard", "extended", "animation", "pixelate"}
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+        root.geometry(previous_geometry)
+        editor.tool = previous_tool
+        editor.display_profile = previous_profile
+        editor.fill_pattern = previous_pattern
+        editor.symmetry = previous_symmetry
+        editor.refresh_locale()
+    return "Zeichenwerkzeug-, Anzeigeprofil-, Zoom- und Optionsmenüs DE/EN; Kennungen stabil"
+
+
 def fall_inspector_locale(lauf):
     """Der Aufgabeninspektor übersetzt Felder, ohne gespeicherte Kennungen umzuschreiben."""
     app, mod = lauf.app, lauf.mod
@@ -5426,7 +5605,7 @@ def fall_fensterende3507(lauf):
     return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
 
 
-FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

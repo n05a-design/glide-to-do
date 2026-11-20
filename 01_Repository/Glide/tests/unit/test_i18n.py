@@ -308,6 +308,55 @@ class I18nTests(unittest.TestCase):
             self.assertEqual(inspector_keys - catalog.keys(), set(),
                              f"Dynamische Inspektor-/Kalenderschlüssel fehlen in {language}.json")
 
+    def test_drawing_translation_keys_exist_in_both_catalogs(self):
+        drawing_keys = {
+            "drawing.status.symmetry", "drawing.status.symmetry.left_right",
+            "drawing.status.symmetry.top_bottom", "drawing.status.symmetry.both",
+            "drawing.status.pattern.checkerboard", "drawing.status.pattern.dots_25",
+            "drawing.status.pattern.dots_75", "drawing.status.colors", "drawing.status.cell",
+            "drawing.status.selection", "drawing.status.dimensions", "drawing.status.undo_pending",
+            "drawing.status.undo_empty", "drawing.status.cells_changed.one",
+            "drawing.status.cells_changed.many", "drawing.status.selection_cleared",
+            "drawing.status.select_all", "drawing.status.no_selection", "drawing.status.copied",
+            "drawing.status.nothing_to_paste", "drawing.status.cancelled", "drawing.status.anchor_set",
+            "drawing.status.eyedropper_guide", "drawing.status.source.drawing",
+            "drawing.status.source.reference", "drawing.status.foreground", "drawing.status.background",
+            "drawing.status.picked_color", "drawing.status.undo_done.one", "drawing.status.undo_done.many",
+            "drawing.status.redo_done.one", "drawing.status.redo_done.many", "drawing.status.redo_empty",
+            *(f"drawing.status.tool.{tool}" for tool in (
+                "brush", "fill", "eyedropper", "line", "rectangle", "ellipse", "selection",
+            )),
+            *(f"drawing.status.save.{state}" for state in ("saved", "unsaved", "saving", "error")),
+            *(f"drawing.action.{action}" for action in (
+                "brush_stroke", "brush", "fill", "line", "rectangle", "ellipse", "move", "cut",
+                "clear_selection", "paste", "replace_color",
+            )),
+            *(f"drawing.tool.{tool}" for tool in (
+                "brush", "fill", "eyedropper", "line", "rectangle", "ellipse", "selection",
+            )),
+            *(f"drawing.profile.{profile}" for profile in (
+                "standard", "extended", "animation", "pixelate",
+            )),
+            *(f"drawing.pattern.{pattern}" for pattern in ("solid", "checker", "dots25", "dots75")),
+            *(f"drawing.button.{button}" for button in ("preview", "more", "zoom", "palette")),
+            *(f"drawing.reference.{reference}" for reference in ("load", "reframe", "pixelate")),
+            *(f"drawing.preview.{preview}" for preview in ("title", "tile", "grayscale")),
+            *(f"drawing.zoom.{zoom}" for zoom in ("out", "in", "fit")),
+            *(f"drawing.option.symmetry.{mode}" for mode in ("none", "x", "y", "xy")),
+            *(f"drawing.option.{option}" for option in (
+                "caption", "size", "filled", "pattern", "pixel_perfect", "wrap", "copy", "cut",
+                "paste", "clear", "select_all", "deselect",
+            )),
+            *(f"drawing.tooltip.{tooltip}" for tooltip in (
+                "tool", "profile", "preview", "foreground", "background", "swap_colors", "tile", "grayscale",
+            )),
+        }
+        locales_dir = i18n.get_locales_dir()
+        for language in ("de", "en"):
+            catalog = json.loads((locales_dir / f"{language}.json").read_text(encoding="utf-8"))
+            self.assertEqual(drawing_keys - catalog.keys(), set(),
+                             f"Zeicheneditor-Schlüssel fehlen in {language}.json")
+
     def test_action_feedback_translation_keys_cover_every_action(self):
         source_path = SRC / "app.pyw"
         tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
