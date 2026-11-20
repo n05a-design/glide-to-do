@@ -236,5 +236,32 @@ class Sperrklinke(unittest.TestCase):
                              f"{name}: nur noch {gezaehlt[name]} – Grenze in RESTKOPPLUNG senken")
 
 
+class Paketbau(unittest.TestCase):
+    """Das eigenständige Paket muss `glide_shell` als Paket mitnehmen (D95).
+
+    `glide_app.py` wird im Bundle als Datei geladen; PyInstaller sieht seine
+    Importe nicht. Fehlte das Paket in `hiddenimports`, scheiterte der native
+    Start mit `No module named 'glide_shell'` (macOS-Lauf 44812703263).
+    """
+
+    def test_stage_modules_enthaelt_das_shell_paket(self):
+        import importlib.util
+        pfad = SRC.parents[1] / "packaging" / "paket" / "package_spec.py"
+        sys.path.insert(0, str(pfad.parent))
+        try:
+            spec = importlib.util.spec_from_file_location("glide_package_spec_pruefling", pfad)
+            modul = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(modul)
+        finally:
+            sys.path.remove(str(pfad.parent))
+        gefunden = modul.stage_modules(SRC, "start_glide.py")
+        erwartet = {PAKET} | {f"{PAKET}.{name}" for name in SHELL_MODULE}
+        self.assertLessEqual(erwartet, set(gefunden), sorted(erwartet - set(gefunden)))
+        self.assertIn("i18n", gefunden)
+        self.assertFalse({n for n in gefunden if n.startswith(("vendor", "resources", "licenses"))})
+        for name in erwartet:
+            self.assertTrue(gefunden[name].is_file(), name)
+
+
 if __name__ == "__main__":
     unittest.main()

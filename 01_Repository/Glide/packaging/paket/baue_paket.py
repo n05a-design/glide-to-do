@@ -21,7 +21,7 @@ import tempfile
 
 from compiled_contract import inspect_archive
 from package_sources import TARGETS, identity, in_onedrive, manifest
-from package_spec import specification, windows_version
+from package_spec import specification, stage_modules, windows_version
 from license_contract import macos_native_components, windows_native_components, pure_components, resource_components, validate_components
 from sbom import make_bom, validate_bom
 from runtime_provenance import validate_runtime_proof
@@ -170,7 +170,8 @@ def build(source, repo_version, destination, target, licenses, runtime_manifest=
         icon_source = dict(file="assets/icons/glide.ico", sha256=sha(original), generated_sha256=sha(icon))
     input_proof["icon"] = icon_source
     write(stage / "glide-input.json", input_proof)
-    modules = sorted(p.stem for p in stage.glob("*.py") if p.name != bootstrap.name)
+    app_modules = stage_modules(stage, bootstrap.name)
+    modules = sorted(app_modules)
     spec = destination / "Glide.spec"
     spec.write_text(specification(stage, target, product, icon, modules=modules), encoding="utf-8")
     command = [sys.executable, "-B", "-m", "PyInstaller", "--noconfirm", "--clean",
@@ -182,7 +183,7 @@ def build(source, repo_version, destination, target, licenses, runtime_manifest=
         raise RuntimeError("Paketbau fehlgeschlagen; siehe bau.log im Bauordner.")
     package = (destination / "dist/Glide.app" if target == "macos-arm64" else destination / "dist/Glide")
     executable = package / ("Contents/MacOS/Glide" if target == "macos-arm64" else "Glide.exe")
-    sources = {p.stem: p.read_bytes() for p in stage.glob("*.py") if p.name != bootstrap.name}
+    sources = {name: path.read_bytes() for name, path in app_modules.items()}
     compiled = inspect_archive(executable, sources, entry=(bootstrap.stem, bootstrap.read_bytes()))
     if manifest(source, target) != files:
         raise ValueError("Quellen wurden während des Baus verändert.")
