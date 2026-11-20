@@ -3646,3 +3646,15 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten):** `test_shell_importregel.py`, `test_modal_session.py`, `test_modalvertrag` 18/18, `test_abbauvertrag`, `test_fensterlebensdauer`, `test_fenster330`, `test_dialog_theme`, `test_ui39`, `test_ansichten`, `test_sicherungszentrale`, `test_wissen33315`, `test_reminders`, `test_startseite3332`, `test_glide`, `test_features330`, `test_austausch3350`, `test_template_workflows` und `test_arbeitsmodi --gruppe navigation` (14/14) grün. Die Gruppe `abschluss` hing lokal im Fall `anhangsnamen`, ebenso auf R1, R2 und dem unveränderten `main`; ein Umgebungsbefund dieses Macs (Fokus im Hintergrundmodus), Einzelheiten im QA-Bericht.
 
 **D – Rest:** Die Restkopplung nach der Bestandsaufnahme ist aufgelöst. Nächste Schritte sind eigene Entscheidungen: Paket `glide_shell` (D86; Importwege, Lieferabgleich, Paketbau) und Demonstrationshost (Paket 6). Weiter offen sind die teilneutralen Module (`appearance`, `ui_design`, `compact_mode`, `action_menu`, Barrierefreiheit) und Undo beim Host.
+
+### 21.151 D93-Etappe 2: Zeichendialoge DE/EN (V1.63, 20.11.2026)
+
+**A – Auftrag:** Fortsetzung „vollständige Oberfläche DE/EN“ (D93) nach §21.146; keine Auswahl aus E-P1–E-P5.
+
+**B – Umsetzung:** Elf Funktionen des Zeicheneditors folgen der Sprache: Farbe ersetzen, unbenutzte Farben entfernen, Zwischenstand merken, Zwischenstände-Dialog, Zeichnung leeren, Referenzbild laden (Dateidialog, Status, Fehler), neu rahmen, entfernen, Nachzeichnung zurücksetzen, Rahmen-Dialog und Nachzeichnung prüfen. Einzahl/Mehrzahl ersetzen „Zelle(n)“ und „Farbe(n)“. Der gespeicherte Anhangsname `Zwischenstand – … .json`, mit dem der Dialog Zwischenstände erkennt, und Aktionskennungen wie `begin_action("Farbe ersetzen")` bleiben deutsche Datenwerte. Gemeinsame Schlüssel `button.cancel/close/delete/restore` werden wiederverwendet. Glide-System V1.63, App 1.0.0, Datenformat 26.
+
+**C – Prüfung:** `test_i18n.py` 22/22; `test_arbeitsmodi.py --fall drawing_dialogs_locale` sowie die vier übrigen Zeichenfälle je 1/1; `test_pixel3350` (Erwartung auf „64 Zellen wechseln“ nachgeführt), `test_animation3400`, `test_features329`, `test_fenster330`, `test_befunde330`, `test_bildkonversion`, `test_glide` und die Shell-Sperrklinke grün. Einzelheiten im QA-Bericht.
+
+**C2 – macOS-Workflow:** Der native Lauf scheiterte zuerst an der Referenzsprache: Der Mac-Runner hat `LANG=en_US.UTF-8`, ein frischer Datenordner folgt der Systemsprache, deutsche Texterwartungen liefen ins Leere. `pruefen.py` und `macos-paket.yml` setzen jetzt `LANGUAGE=de`; `test_i18n.py` isoliert seinen Umgebungstest. Einzelheiten im QA-Bericht.
+
+**D – Rest:** Import- und Einfügevorschau, Bildfolgen-Dialog und -Export, Symbolvorschau, Farbwahl, das mit Seiten geteilte Journal-Untermenü, Fehlertexte aus `glide_drawing`, die Kurzformen in `RoundedButton.action_text` sowie zwei „(n)“-Texte in Import (`drawing_import_preview_dialog`) und Austausch.
