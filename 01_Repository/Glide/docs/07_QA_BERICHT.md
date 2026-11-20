@@ -1,5 +1,11 @@
 # QA-Bericht – Glide 1.0.0
 
+## Shell-Restkopplung R3/R4 abgeschlossen (V1.62, 20.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/shell-r3-r4-rest` (über R2). Grün: `test_shell_importregel.py` (Sperrklinke 1 Fenster / 0 Zeitgeber), `test_modal_session.py`, `test_modalvertrag` 18/18, `test_abbauvertrag`, `test_fensterlebensdauer`, `test_fenster330`, `test_dialog_theme`, `test_ui39`, `test_ansichten`, `test_sicherungszentrale`, `test_wissen33315`, `test_reminders`, `test_startseite3332`, `test_glide`, `test_features330`, `test_austausch3350`, `test_template_workflows` und `test_arbeitsmodi --gruppe navigation` (14/14).
+
+**Lokaler Umgebungsbefund, kein Schnittfehler:** `test_arbeitsmodi --gruppe abschluss` hing im Fall `anhangsnamen` (Zeile 5335, `warte` nach `open_task_inspector`; der Zeitwächter-Stack endet in `tkraise`). Der Einzelfall hängt identisch auf R3/R4, auf R2, auf R1 und auf dem unveränderten `main` `bde7fa12`, jeweils während eine andere App vorn lag. Er ist damit älter als die Shell-Schnitte und hängt am Hintergrundmodus und Fokus dieses Macs; die Gruppe `abschluss` bestand auf GitHub für `main` unter Linux und Windows. Die Gruppe ist für diesen Stand lokal nicht nachgewiesen; maßgeblich sind die GitHub-Vollprüfungen.
+
 ## Shell-Restkopplung R2: Zeitgeber in Bereiche (V1.61, 20.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/shell-r2-planer` (über R1). Grün: `test_shell_importregel.py` (Sperrklinke 17/11, Gegenprobe rot erkannt), `test_abbauvertrag` 5/5, `test_fensterlebensdauer` 9/9, `test_modalvertrag` 18/18, `test_fenster330` (68 Fenster), `test_dialog_theme`, `test_ui39`, `test_reminders`, `test_startseite3332`, `test_sicherungszentrale`, `test_animation3400`, `test_pixel3350`, `test_glide`.
