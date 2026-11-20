@@ -26,6 +26,7 @@ SHELL_MODULE = {
         "remember_focus": ["root", "dialog", "parent"],
         "return_focus": ["root", "dialog", "remembered"],
         "wait_modal": ["root", "dialog", "parent", "log_error"],
+        "create_dialog": ["parent", "title", "background", "transient", "withdrawn", "resizable", "minsize"],
         "run_modal": ["root", "dialog", "parent", "background", "max_screen_share", "log_error"],
     },
     "window_lifetime": {
@@ -179,6 +180,39 @@ class Schnittstelle(unittest.TestCase):
                 for ziel in knoten.targets:
                     werte[ziel.id] = knoten.value.value
         self.assertEqual(werte.get("SCOPE_ATTRIBUTE"), "_glide_after_scope")
+
+
+# Sperrklinke der Restkopplung (D94, 20.11.2026): Diese Zahlen dürfen nur
+# sinken. Wer einen Dialog auf `create_dialog` oder einen Zeitgeber auf einen
+# `AfterScope` umstellt, senkt die Grenze im selben Commit; neue direkte
+# Fenster oder Zeitgeber ohne Bereich lässt der Test nicht zu.
+RESTKOPPLUNG = {
+    "direkte tk.Toplevel": 17,
+    "Zeitgeber ohne AfterScope": 98,
+}
+
+
+def restkopplung(pfad):
+    zahlen = dict.fromkeys(RESTKOPPLUNG, 0)
+    for knoten in ast.walk(ast.parse(pfad.read_text(encoding="utf-8"), filename=str(pfad))):
+        if not (isinstance(knoten, ast.Call) and isinstance(knoten.func, ast.Attribute)):
+            continue
+        ziel = ast.unparse(knoten.func.value)
+        if knoten.func.attr == "Toplevel" and ziel == "tk":
+            zahlen["direkte tk.Toplevel"] += 1
+        elif knoten.func.attr in ("after", "after_idle") and "after_scope" not in ziel:
+            zahlen["Zeitgeber ohne AfterScope"] += 1
+    return zahlen
+
+
+class Sperrklinke(unittest.TestCase):
+    def test_restkopplung_steigt_nicht_und_grenze_ist_aktuell(self):
+        gezaehlt = restkopplung(SRC / "app.pyw")
+        for name, grenze in RESTKOPPLUNG.items():
+            self.assertLessEqual(gezaehlt[name], grenze,
+                                 f"{name}: {gezaehlt[name]} statt höchstens {grenze} – Shell-Weg benutzen")
+            self.assertEqual(gezaehlt[name], grenze,
+                             f"{name}: nur noch {gezaehlt[name]} – Grenze in RESTKOPPLUNG senken")
 
 
 if __name__ == "__main__":

@@ -21317,12 +21317,7 @@ class ListApp:
 
 
     def _daily_dialog(self, title, width=700, height=480):
-        dialog = tk.Toplevel(self.root)
-        dialog.withdraw()
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(width, height)
+        dialog = self._new_dialog(title, withdrawn=True, minsize=(width, height))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         footer = tk.Frame(outer, bg=self.theme["bg"])
@@ -26445,12 +26440,7 @@ class ListApp:
             return "break"
         baseline = self.item_details_snapshot(found[0])
         previous_focus = self.current_focus_widget()
-        dialog = tk.Toplevel(self.root)
-        dialog.withdraw()
-        dialog.title(titles[field])
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog(titles[field], withdrawn=True, resizable=(False, False))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(body, text=titles[field], font=app_font(13,"bold"),
@@ -28819,10 +28809,7 @@ class ListApp:
 
     def show_home_tiles_dialog(self, event=None):
         """Kacheln der Startseite ein- und ausschalten und ordnen."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Startseite einrichten")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Startseite einrichten")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Startseite einrichten", bg=self.theme["bg"], fg=self.theme["text"],
@@ -30697,11 +30684,7 @@ class ListApp:
         size = self.PAGE_ICON_SIZE
         state = {"document": copy.deepcopy(holder.get("icon")) or glide_drawing.DrawingModel.blank(size).to_document(),
                  "result": None}
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Pixelsymbol")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(620, 620)
+        dialog = self._new_dialog("Pixelsymbol", minsize=(620, 620))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(body, text=f"Pixelsymbol für „{holder.get('title', '')}“", bg=self.theme["bg"],
@@ -31649,11 +31632,7 @@ class ListApp:
 
     def ask_template_fields(self, fields, title=""):
         """Ein Dialog für alle Platzhalter. Rückgabe: {Name: Text} oder None bei Abbruch."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Vorlage ausfüllen")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog("Vorlage ausfüllen", resizable=(False, False))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(body, text=f"„{title}“ ausfüllen" if title else "Vorlage ausfüllen", bg=self.theme["bg"],
@@ -31853,12 +31832,7 @@ class ListApp:
                     return
                 previous_dialog.destroy()
             self._settings_dialog_cache = None
-        dialog = tk.Toplevel(self.root)
-        dialog.title(glide_i18n.t("settings.title", "Einstellungen"))
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(True, True)
-        dialog.minsize(720, 580)
+        dialog = self._new_dialog(glide_i18n.t("settings.title", "Einstellungen"), resizable=(True, True), minsize=(720, 580))
         buttons = tk.Frame(dialog, bg=self.theme["bg"])
         buttons.pack(side="bottom", fill="x", padx=glide_design.SPACING[24], pady=glide_design.SPACING[12])
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -33553,11 +33527,7 @@ class ListApp:
         """
         result = {"value": None}
 
-        dialog = tk.Toplevel(self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog(title, resizable=(False, False))
 
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
@@ -33857,11 +33827,7 @@ class ListApp:
                                    title_editable=True, page=None):
         """Seitendetails; Änderungen und Dateikopien erst beim Speichern übernehmen."""
         result = {"value": None}
-        dialog = tk.Toplevel(self.root)
-        dialog.title(heading)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(900 if page is not None else 600, 490)
+        dialog = self._new_dialog(heading, minsize=(900 if page is not None else 600, 490))
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(container, text=heading, bg=self.theme["bg"], fg=self.theme["text"],
@@ -33996,11 +33962,7 @@ class ListApp:
         if not choices:
             return None
         result = {"value": None}
-        dialog = tk.Toplevel(self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog(title, resizable=(False, False))
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(
@@ -34079,11 +34041,7 @@ class ListApp:
     # -----------------------------
     def open_label_manager(self, event=None):
         """Zentrale Verwaltung: Labels anlegen, umbenennen, einfärben, entfernen."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Labels")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(560, 480)
+        dialog = self._new_dialog("Labels", minsize=(560, 480))
 
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
@@ -34651,10 +34609,7 @@ class ListApp:
         if not items:
             self.show_warning("Planung", "Bitte mindestens eine Aufgabe oder einen Langtext auswählen.")
             return "break"
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Bearbeitungstag und Aufwand")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Bearbeitungstag und Aufwand")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Bearbeitungstag und Aufwand", font=app_font(15, "bold"),
@@ -34767,10 +34722,7 @@ class ListApp:
         result = {"value": None}
         attachments = copy.deepcopy(source.get("attachments", []) or [])
 
-        dialog = tk.Toplevel(self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog(title)
         # Bewusst niedrig: Auf kleinen Bildschirmen scrollt die Maske,
         # statt unten aus dem Bild zu laufen.
         # Die Maske steht in zwei Spalten. Ihre
@@ -38258,10 +38210,7 @@ class ListApp:
             self.set_table_view()
             if self.view_mode != self.TABLE_VIEW:
                 return "break"
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Tabellenspalten")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Tabellenspalten")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=24, pady=22)
         self.register_theme_widget(outer, "bg")
@@ -42410,10 +42359,7 @@ class ListApp:
             # In einer Bibliothek entsteht standardmäßig eine Seite.
             list_kind = self.FOLDER_KINDS.get(eltern.get("folder_kind"), {}).get("list_kind")
         title_text = "Neue Liste" if is_list else "Neuer Ordner"
-        dialog = tk.Toplevel(self.root)
-        dialog.title(title_text)
-        dialog.transient(self.root)
-        dialog.configure(bg=self.theme["bg"])
+        dialog = self._new_dialog(title_text)
         actions = tk.Frame(dialog, bg=self.theme["bg"])
         actions.pack(side="bottom", fill="x", padx=24, pady=12)
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -50151,11 +50097,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def open_reminders(self):
         self.process_reminders()
         self.process_daily_hints()
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Benachrichtigungen")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(700, 480)
+        dialog = self._new_dialog("Benachrichtigungen", minsize=(700, 480))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Benachrichtigungen", font=app_font(16, "bold"),
@@ -54015,12 +53957,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return "break"
 
     # Dialoge -------------------------------------------------------------------
+    def _new_dialog(self, title, parent=None, *, withdrawn=False, resizable=None, minsize=None):
+        """Fassade für `modal_session.create_dialog` (R1, D94): Theme-Hintergrund und Hauptfenster als Besitzer."""
+        return glide_modal_session.create_dialog(
+            parent or self.root, title, background=self.theme["bg"], withdrawn=withdrawn,
+            resizable=resizable, minsize=minsize)
+
     def _drawing_dialog(self, title, parent=None):
-        dialog = tk.Toplevel(parent or self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(parent or self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog(title, parent=parent or self.root, resizable=(False, False))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(body, text=title, bg=self.theme["bg"], fg=self.theme["text"],
@@ -56163,11 +56107,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not folder_id:
             return "break"
         von, bis = self.journal_filter_range(folder_id)
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Notizbuch filtern")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(False, False)
+        dialog = self._new_dialog("Notizbuch filtern", resizable=(False, False))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(body, text="Notizbuch filtern", bg=self.theme["bg"], fg=self.theme["text"],
@@ -59739,11 +59679,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def choose_items_dialog(self, title, heading, exclude_ids=(), multiple=True, parent=None, only_tasks=False):
         """Punkte aus allen Listen suchen und auswählen. Rückgabe: Kennungen."""
         index = self.item_index()
-        dialog = tk.Toplevel(parent or self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(parent or self.root)
-        dialog.minsize(460, 360)
+        dialog = self._new_dialog(title, parent=parent or self.root, minsize=(460, 360))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text=heading, bg=self.theme["bg"], fg=self.theme["text"],
@@ -63471,10 +63407,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         zwecke = [("create", "Neues anlegen lassen (Austauschdatei)"),
                   ("context", "Vorhandene Aufgaben überarbeiten lassen (Kontextpaket)")]
         zweck = tk.StringVar(master=self.root, value=zwecke[0][1])
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Für KI bereitstellen")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Für KI bereitstellen")
         footer = tk.Frame(dialog, bg=self.theme['bg'])
         footer.pack(side='bottom', fill='x', padx=self.DIALOG_PAD_X, pady=(4, self.DIALOG_PAD_Y))
         scroll_host = tk.Frame(dialog, bg=self.theme['bg'])
@@ -63753,10 +63686,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                             or "Die Datei konnte nicht gelesen werden.")
             return "break"
 
-        dialog = tk.Toplevel(self.root)
-        dialog.title("KI-Ergebnis importieren")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("KI-Ergebnis importieren")
         aussen = tk.Frame(dialog, bg=self.theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         self.dialog_label(aussen, "KI-Ergebnis importieren", bold=True, size=16)
@@ -63819,10 +63749,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def show_exchange_spec_dialog(self, event=None):
         """Zeigt die Kurzbeschreibung des Austauschformats zum Kopieren."""
         text = self.exchange_prompt_text()
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Austauschformat anzeigen")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Austauschformat anzeigen")
         aussen = tk.Frame(dialog, bg=self.theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         self.dialog_label(aussen, "Austauschformat", bold=True, size=16)
@@ -64932,11 +64859,7 @@ Labels, Termine und Metadaten."""
         zustand["table"] = tabelle
         zustand["mapping"] = self.csv_auto_mapping(tabelle)
 
-        dialog = tk.Toplevel(self.root)
-        dialog.title("CSV importieren")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(True, True)
+        dialog = self._new_dialog("CSV importieren", resizable=(True, True))
         fuss = tk.Frame(dialog, bg=self.theme["bg"])
         fuss.pack(side="bottom", fill="x", padx=self.DIALOG_PAD_X, pady=12)
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -65746,10 +65669,7 @@ Labels, Termine und Metadaten."""
 
     def show_print_dialog(self, event=None, fmt=None):
         """Druckansicht wählen, erzeugen und im Standardprogramm öffnen."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Drucken und PDF")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Drucken und PDF")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Drucken und PDF", font=app_font(15, "bold"),
@@ -66124,10 +66044,7 @@ Labels, Termine und Metadaten."""
 
     def show_calendar_export_dialog(self, event=None, scope=None):
         """Umfang und Inhalt wählen, Kalenderdatei schreiben und öffnen."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Kalenderdatei (ICS)")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("Kalenderdatei (ICS)")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Kalenderdatei (ICS)", font=app_font(15, "bold"),
@@ -66731,11 +66648,7 @@ Labels, Termine und Metadaten."""
             self.show_error("Kalenderimport", str(fehler))
             return "break"
 
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Kalenderdatei importieren")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.resizable(True, True)
+        dialog = self._new_dialog("Kalenderdatei importieren", resizable=(True, True))
         fuss = tk.Frame(dialog, bg=self.theme["bg"])
         fuss.pack(side="bottom", fill="x", padx=self.DIALOG_PAD_X, pady=12)
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -67135,10 +67048,7 @@ Labels, Termine und Metadaten."""
 
     def ask_app_backup_sections(self, summary, path):
         """Inhaltsvorschau mit einzeln zuschaltbaren Bereichen."""
-        dialog = tk.Toplevel(self.root)
-        dialog.title("App-Sicherung wiederherstellen")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
+        dialog = self._new_dialog("App-Sicherung wiederherstellen")
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Das steckt in diesem Archiv", font=app_font(15, "bold"),
@@ -69689,11 +69599,7 @@ Labels, Termine und Metadaten."""
             except tk.TclError:
                 owner = self.root
 
-        dialog = tk.Toplevel(owner)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(owner)
-        dialog.minsize(380, 220)
+        dialog = self._new_dialog(title, parent=owner, minsize=(380, 220))
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         heading_color = {"warning": "flag", "error": "delete"}.get(kind, "text")
@@ -69914,11 +69820,7 @@ Labels, Termine und Metadaten."""
         Spalten, weil man mal den Namen, mal die Wirkung und mal den Ort kennt.
         """
         previous_focus = self.current_focus_widget()
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Handbuch")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(620, 420)
+        dialog = self._new_dialog("Handbuch", minsize=(620, 420))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Handbuch", bg=self.theme["bg"], fg=self.theme["text"],
@@ -70128,11 +70030,7 @@ Labels, Termine und Metadaten."""
             ]),
         ]
         previous_focus = self.current_focus_widget()
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Tastenkürzel")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(500, 360)
+        dialog = self._new_dialog("Tastenkürzel", minsize=(500, 360))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(

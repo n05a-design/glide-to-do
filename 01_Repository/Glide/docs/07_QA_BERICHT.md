@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Shell-Restkopplung R1: Dialogfabrik und Sperrklinke (V1.60, 20.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR` und künstlichen Daten, auf dem Zweig `claude/shell-r1-dialogfabrik` von `main` `bde7fa12`. `test_modal_session.py` und `test_shell_importregel.py` (8 Tests einschließlich Sperrklinke) grün; die Gegenprobe mit einem zusätzlichen `tk.Toplevel` wurde rot erkannt. `test_modalvertrag.py` 18/18 mit echtem Grab, `--gegenproben` 10/10. `test_fenster330` öffnete 68 Fenster (24 über die Menüleiste): sichtbar, im Bildschirm, Knöpfe erreichbar, Esc schließt. `test_dialog_theme`, `test_abbauvertrag` 5/5, `test_fensterlebensdauer` 9/9, `test_ui39` und `test_features330` bestanden. Die GitHub-Vollprüfungen dieses Stands und eine menschliche Sichtprüfung stehen aus; native Screenreaderjobs bleiben übersprungen.
+
 ## D93 Etappe 2: Zeicheneditor-Animation, Mehr-Menü, Paletten und Export (V1.58, 20.11.2026)
 
 Der Schnitt liegt im ersten Commit über `2f10ba9d` auf dem Folgezweig `claude/d93-drawing-animation-more-i18n`. Der Zweig ist von PR-#157-Head `2f10ba9d` abgeleitet und enthält dessen V1.57-Stand. Geprüfter Quellbaum `src`: Git-Tree `87c1ac88`, identisch mit dem Commit. Animationsleiste, Bildauswahl, Abspieldialog, Pipettenhinweis der Kontextleiste, das gesamte Mehr-Menü, Palettenmenü und -aktionen sowie Dateidialoge, Status- und Fehlertitel des PNG-, ICO-, SVG- und JSON-Exports folgen der aktiven Sprache. Menübefehle, Paletten-IDs, Exportformate und Standard-Dateinamen bleiben unverändert. App-Quellhash: `5c2bb26fc6470357ba5962f5b2875f138f2251617744c71a95eea753feb52599`.

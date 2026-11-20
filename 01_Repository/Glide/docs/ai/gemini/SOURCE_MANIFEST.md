@@ -27,7 +27,7 @@ This collection describes the application/code baseline at topic-branch commit `
 |---|---|---|---|
 | Workspace rules | [`AGENTS.md`](../../../AGENTS.md) | Product boundaries, work rules, completion gates | Reviewed; normative |
 | Handoff | [`00_Arbeitsvorbereitung/Glide_Uebergabe.md`](../../../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) | Active state and next actions | Reviewed; dated operational pointer |
-| Working direction | [`docs/ARBEITSRICHTUNG.md`](../../ARBEITSRICHTUNG.md) | Owner decisions D01–D93 | Reviewed; normative |
+| Working direction | [`docs/ARBEITSRICHTUNG.md`](../../ARBEITSRICHTUNG.md) | Owner decisions D01–D94 | Reviewed; normative |
 | Roadmap | [`00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Selected packages and implementation state | Reviewed; sole backlog |
 | v1 milestone | [`00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md`](../../../../../00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md) | D93 release target and stages | Reviewed; normative |
 | Product constraints | [`docs/01_PRODUCT_CONSTRAINTS.md`](../../01_PRODUCT_CONSTRAINTS.md) | Identity, boundaries, principles | Reviewed; normative |

@@ -26,6 +26,12 @@ Vertrag (festgehalten in `tests/integration/test_modalvertrag.py`):
 
 Die Attributnamen `_glide_modal_active` und `_glide_modal_finished` bleiben
 aus Kompatibilität: Einstellungsdialog und Fensterwechsel der App lesen sie.
+
+Dialogfabrik (R1, D94, 20.11.2026): `create_dialog` ist der gemeinsame
+Erzeugungsweg für Dialogfenster. Sie legt das Fenster an, verbirgt es auf
+Wunsch bis zur Platzierung, setzt Titel und Hintergrund, ordnet es dem
+Besitzer zu und übernimmt Größenregeln. Farbe und Besitzer liefert der Host;
+Platzieren, Themenrahmen und Warten bleiben eigene Schritte.
 """
 
 import contextlib
@@ -226,6 +232,28 @@ def wait_modal(root, dialog, parent=None, *, log_error=None):
                     pass
     finally:
         return_focus(root, dialog, remembered)
+
+
+def create_dialog(parent, title, *, background=None, transient=True, withdrawn=False,
+                  resizable=None, minsize=None):
+    """Legt ein Dialogfenster einheitlich an und gibt es zurück.
+
+    `resizable` und `minsize` sind Paare (Breite, Höhe). `withdrawn` hält das
+    Fenster bis zur Platzierung unsichtbar; der Host zeigt es selbst an.
+    """
+    dialog = tk.Toplevel(parent)
+    if withdrawn:
+        dialog.withdraw()
+    dialog.title(title)
+    if background is not None:
+        dialog.configure(bg=background)
+    if transient:
+        dialog.transient(parent)
+    if resizable is not None:
+        dialog.resizable(*resizable)
+    if minsize is not None:
+        dialog.minsize(*minsize)
+    return dialog
 
 
 def run_modal(root, dialog, parent=None, *, background=None,
