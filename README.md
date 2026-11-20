@@ -70,7 +70,7 @@ All images show a synthetic showcase dataset.
 - **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home screen; multiple themes, font styles, and a pixel workshop.
 - **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
 
-The [user guide (in German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) explains the complete feature set and its limits.
+The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.0, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
 
 ## What Glide is not
 

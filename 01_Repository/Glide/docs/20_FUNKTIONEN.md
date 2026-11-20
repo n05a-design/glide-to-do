@@ -1,5 +1,7 @@
 # Funktionen – Glide
 
+**English:** [Glide user guide](user-guide/README.md) – kontrollierte Übersetzung dieser Quelle in zwölf Themenseiten; bei Abweichungen gilt der deutsche Text. Jede Änderung am Bedienverhalten hier wird im selben Schnitt gegen die passende englische Seite geprüft ([Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge)).
+
 **Dokumentationsbezug:** Hier steht das Bedienverhalten. Modul-/Testzuordnung und Wiederverwendung gehören ins [Glide-System](../src/glide/README.md); die [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet Funktionsänderungen mit Roadmap, Architektur, Prüfungen und öffentlichen Texten.
 
 ## Einstieg in Glide 3.60.0

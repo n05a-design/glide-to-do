@@ -1,12 +1,13 @@
 # Dokumentationsindex
 
-Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 
 ## Einstieg nach Aufgabe
 
 - **Erster Einstieg und Mitwirkung:** [Projektübersicht](../../../README.md) und [An Glide arbeiten](../../../CONTRIBUTING.md).
+- **Englische Benutzerdokumentation:** [Glide user guide](user-guide/README.md) als kontrollierte Übersetzung von [20 Funktionen](20_FUNKTIONEN.md).
 - **Neue Sitzung und aktueller Stand:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](../AGENTS.md).
 - **Aufgaben und nächste Auswahl:** [einzige Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) und [Meilenstein-Plan v1.0](../../../00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md).
 - **System-und-Modulpflege:** [Glide-System](../src/glide/README.md) – verbindliches vollständiges Modul-, Feature-, Baustein-, QA- und Testinventar; unabhängig versioniert über [`GLIDE_SYSTEM_VERSION`](../GLIDE_SYSTEM_VERSION) (Start V1.0), Änderungen samt Versionsverlauf im selben Commit.
@@ -27,6 +28,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [07 QA-Bericht](07_QA_BERICHT.md) | Commitbezogene Prüfstände, plattformübergreifende CI, native Lieferstände, Archivabgleich, historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben, Produktkommunikation und Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
+| [English user guide](user-guide/README.md) | Kontrollierte englische Übersetzung von 20 Funktionen für Nutzer, keine zweite Fachautorität; Lokalisierungsstand der Oberfläche |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D91 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
@@ -34,6 +36,23 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [Glide Shell Framework](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur- und Entkopplungskonzept für das wiederverwendbare Desktop-Fundament, Fensterorchestrierung und Migrationspfad |
 | [Arbeitsvorlage zur Shell-Migration](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | Arbeitsübergabe für die Shell-Migration: Abschnitt 1 und die Pakete 1–2c sind mit 3.60.0 umgesetzt; jedes Folgepaket braucht eine eigene Freigabe ([Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)) |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |
+
+### English user guide – Themenseiten
+
+| Nr. | Seite |
+|---|---|
+| 1 | [Getting started](user-guide/01-getting-started.md) |
+| 2 | [Installation](user-guide/02-installation.md) |
+| 3 | [Tasks and lists](user-guide/03-tasks-and-lists.md) |
+| 4 | [Day planning](user-guide/04-day-planning.md) |
+| 5 | [Calendar](user-guide/05-calendar.md) |
+| 6 | [Pages and notes](user-guide/06-pages-and-notes.md) |
+| 7 | [Pinboards](user-guide/07-pinboards.md) |
+| 8 | [Pixel workshop](user-guide/08-pixel-workshop.md) |
+| 9 | [Import and export](user-guide/09-import-and-export.md) |
+| 10 | [Backups](user-guide/10-backups.md) |
+| 11 | [Keyboard shortcuts](user-guide/11-keyboard-shortcuts.md) |
+| 12 | [Troubleshooting](user-guide/12-troubleshooting.md) |
 
 ### Gemini-Wissensbasis – Einzelmodule
 
