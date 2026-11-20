@@ -262,6 +262,20 @@ class Paketbau(unittest.TestCase):
         for name in erwartet:
             self.assertTrue(gefunden[name].is_file(), name)
 
+    def test_paketmanifest_kopiert_das_shell_paket(self):
+        """Ohne diesen Eintrag kopierte der Paketbau `glide_shell/` nicht in den Bauordner."""
+        import importlib.util
+        pfad = SRC.parents[1] / "packaging" / "paket" / "package_sources.py"
+        spec = importlib.util.spec_from_file_location("glide_package_sources_pruefling", pfad)
+        modul = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(modul)
+        erwartet = {f"{PAKET}/__init__.py"} | {f"{PAKET}/{name}.py" for name in SHELL_MODULE}
+        for ziel in modul.TARGETS:
+            with self.subTest(ziel=ziel):
+                dateien = modul.manifest(SRC, ziel)
+                self.assertLessEqual(erwartet, set(dateien), sorted(erwartet - set(dateien)))
+                self.assertFalse({n for n in dateien if n.startswith(PAKET + "/") and not n.endswith(".py")})
+
 
 if __name__ == "__main__":
     unittest.main()
