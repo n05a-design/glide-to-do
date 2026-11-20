@@ -608,6 +608,228 @@ def fall_drawing_controls_locale(lauf):
     return "Zeichenwerkzeug-, Anzeigeprofil-, Zoom- und Optionsmenüs DE/EN; Kennungen stabil"
 
 
+def fall_drawing_more_locale(lauf):
+    """Animationsleiste, Abspieldialog und Mehr-Menü des Zeicheneditors folgen der Sprache."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None and editor.animated
+    previous_tool = editor.tool
+    # Das Journal-Untermenü teilen Seiten und Zeichnungen; es ist ein eigener offener Schnitt.
+    journal_prefixes = ("Als Favorit", "Favorit entfernen", "Stimmung: ", "Ort: ", "Schreibimpuls")
+    expected = {
+        "de": {
+            "bar": ("Bild", "Bilder", "Abspielen"),  # Knöpfe zeigen „…“ nicht (action_text)
+            "frame": ("Bild 1 von 1 · ", "Bild 1 · "),
+            "eyedropper": "Linksklick: Vordergrund · Rechtsklick: Hintergrund",
+            "dialog": ("Bildfolge abspielen", {"Abspielen", "Von vorn", "Schließen", "Wiederholen"}, "Bild 1 von 1 · "),
+            "menu": {"Referenzbild laden …", "Zwischenstand merken …", "Zwischenstände … (0)",
+                     "Vordergrundfarbe in der Zeichnung ersetzen …", "Ansicht", "Raster", "Graustufen",
+                     "Kachelvorschau 3 × 3", "Bildfolge", "Bildfolge exportieren", "PNG-Spritesheet …",
+                     "PNG-Einzelbildfolge …", "Als PNG exportieren", "1× · 16 × 16 Pixel",
+                     "Als Symbol exportieren (ICO)", "Grund durchsichtig …", "Grund weiß …",
+                     "Als SVG exportieren …", "Als JSON exportieren …", "SVG/JSON importieren …",
+                     "Aus der Zwischenablage einfügen …", "Jetzt speichern", "Zeichnung leeren …"},
+            "save_now": "Jetzt speichern",
+        },
+        "en": {
+            "bar": ("Frame", "Frames", "Play"),
+            "frame": ("Frame 1 of 1 · ", "Frame 1 · "),
+            "eyedropper": "Left click: foreground · Right click: background",
+            "dialog": ("Play animation", {"Play", "Restart", "Close", "Loop"}, "Frame 1 of 1 · "),
+            "menu": {"Load reference image …", "Save snapshot …", "Snapshots … (0)",
+                     "Replace foreground color in drawing …", "View", "Grid", "Grayscale",
+                     "Tiled preview 3 × 3", "Animation", "Export animation", "PNG sprite sheet …",
+                     "PNG frame sequence …", "Export as PNG", "1× · 16 × 16 pixels",
+                     "Export as icon (ICO)", "Transparent background …", "White background …",
+                     "Export as SVG …", "Export as JSON …", "Import SVG/JSON …",
+                     "Paste from clipboard …", "Save now", "Clear drawing …"},
+            "save_now": "Save now",
+        },
+    }
+    german_menu = expected["de"]["menu"] - expected["en"]["menu"]
+
+    def menu_entries(action):
+        entries = []
+
+        def record(kind):
+            def add(_menu, *args, **kwargs):
+                entries.append((kind, kwargs.get("label"), kwargs.get("command")))
+            return add
+
+        with patch.object(mod.tk.Menu, "add_command", autospec=True, side_effect=record("command")), \
+                patch.object(mod.tk.Menu, "add_cascade", autospec=True, side_effect=record("cascade")), \
+                patch.object(mod.tk.Menu, "add_checkbutton", autospec=True, side_effect=record("check")), \
+                patch.object(mod.tk.Menu, "add_radiobutton", autospec=True, side_effect=record("radio")), \
+                patch.object(mod.tk.Menu, "tk_popup", autospec=True):
+            action()
+        return entries
+
+    def texts(widget):
+        found = []
+        for child in widget.winfo_children():
+            text = getattr(child, "text", None)
+            if isinstance(text, str):
+                found.append(text)
+            elif isinstance(child, (mod.tk.Label, mod.GlideCheckbutton)):
+                found.append(child.cget("text"))
+            found.extend(texts(child))
+        return found
+
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            editor.refresh_locale()
+            bar = (editor.animation_label.cget("text"), editor.frames_button.text,
+                   editor.play_animation_button.text)
+            assert bar == labels["bar"], (language, bar)
+            assert editor.frame_choice.text.startswith(labels["frame"][0]), editor.frame_choice.text
+            assert editor.frame_choice.text.endswith(" ms ▾"), editor.frame_choice.text
+            frame_items = menu_entries(editor.frame_menu)
+            assert [kind for kind, _label, _command in frame_items] == ["radio"]
+            assert frame_items[0][1].startswith(labels["frame"][1]), frame_items
+
+            editor.set_tool("eyedropper")
+            assert labels["eyedropper"] in texts(editor.context_row), texts(editor.context_row)
+            editor.set_tool("brush")
+
+            items = menu_entries(lambda: app.show_drawing_menu(editor, editor.more_button))
+            shown = {label for _kind, label, _command in items
+                     if label and not label.startswith(journal_prefixes)}
+            assert labels["menu"] <= shown, (language, sorted(labels["menu"] - shown))
+            if language == "en":
+                assert not german_menu & shown, sorted(german_menu & shown)
+            save_now = [command for _kind, label, command in items if label == labels["save_now"]]
+            assert save_now == [editor.flush], "„Jetzt speichern“ bleibt an flush gebunden"
+
+            dialogs = []
+            with patch.object(app, "run_modal", side_effect=dialogs.append):
+                editor.show_animation_preview()
+            assert len(dialogs) == 1
+            dialog = dialogs[0]
+            try:
+                title, buttons, frame_text = labels["dialog"]
+                assert dialog.title() == title, dialog.title()
+                shown_texts = texts(dialog)
+                assert buttons <= set(shown_texts), (language, shown_texts)
+                assert any(text.startswith(frame_text) for text in shown_texts), shown_texts
+            finally:
+                dialog.destroy()
+                idle(lauf, 2)
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+        editor.set_tool(previous_tool)
+        editor.refresh_locale()
+    return "Animationsleiste, Bildmenü, Abspieldialog, Pipettenhinweis und Mehr-Menü DE/EN; Befehle stabil"
+
+
+def fall_drawing_export_locale(lauf):
+    """Palettenmenü, Palettenaktionen und Zeichnungsexport melden DE/EN; Dateinamen bleiben stabil."""
+    import shutil
+
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None
+    editor.model.paint_cells([(0, 0)], "#C43BFF")
+    editor.mark_unsaved()
+    assert editor.flush()
+    previous_tools = copy.deepcopy(app.drawing_tool_settings())
+    target = Path(tempfile.mkdtemp(prefix="glide-zeichenexport-"))
+    expected = {
+        "de": {
+            "menu": {"Farben dieser Zeichnung", "Farben dieser Zeichnung als Palette speichern …",
+                     "Palette importieren (.gpl, .hex, .ase) …", "Gewählte Palette exportieren …"},
+            "glide": " · Glide-Inhaltspalette",
+            "saved": "Palette gespeichert: {count} Farben", "png_title": "Als PNG exportieren (16 Pixel)",
+            "png": "PNG exportiert: zeichnung_de.png · 16 × 16 Pixel",
+            "ico": "Symbol exportiert: zeichnung_de.ico · ", "svg": "Exportiert: zeichnung_de.svg",
+            "svg_title": "Glide-SVG exportieren", "error": "Zeichnung exportieren",
+            "delete": ("Palette löschen", "wird gelöscht"), "cancelled": "Symbolexport abgebrochen",
+        },
+        "en": {
+            "menu": {"Colors in this drawing", "Save this drawing's colors as a palette …",
+                     "Import palette (.gpl, .hex, .ase) …", "Export selected palette …"},
+            "glide": " · Glide content palette",
+            "saved": "Palette saved: {count} colors", "png_title": "Export as PNG (16 pixels)",
+            "png": "PNG exported: zeichnung_en.png · 16 × 16 pixels",
+            "ico": "Icon exported: zeichnung_en.ico · ", "svg": "Exported: zeichnung_en.svg",
+            "svg_title": "Export Glide SVG", "error": "Export drawing",
+            "delete": ("Delete palette", "will be deleted"), "cancelled": "Icon export cancelled",
+        },
+    }
+
+    def message():
+        return editor.status.cget("text").splitlines()[1]
+
+    def palette_menu_labels():
+        labels = []
+        with patch.object(mod.tk.Menu, "add_command", autospec=True,
+                          side_effect=lambda _m, *a, **k: labels.append(k.get("label"))), \
+                patch.object(mod.tk.Menu, "add_radiobutton", autospec=True,
+                             side_effect=lambda _m, *a, **k: labels.append(k.get("label"))), \
+                patch.object(mod.tk.Menu, "tk_popup", autospec=True):
+            app.show_drawing_palette_menu(editor, editor.palette_button)
+        return labels
+
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            shown = palette_menu_labels()
+            assert labels["menu"] <= set(shown), (language, shown)
+            assert any(label and label.endswith(labels["glide"]) for label in shown), shown
+
+            with patch.object(app, "themed_input_dialog", return_value=f"Test {language}"):
+                app.drawing_save_palette(editor)
+            colors = len(editor.model.used_colors())
+            assert colors > 1, "Grundfarbe und Malfarbe zählen als Palettenfarben"
+            assert message() == labels["saved"].format(count=colors), (language, message())
+            assert app.drawing_tool_settings()["palette"].startswith("user-"), "Palettenkennung bleibt stabil"
+            asked = []
+            with patch.object(app, "ask_yes_no", side_effect=lambda title, text, **k: asked.append((title, text))):
+                app.drawing_delete_palette(editor)
+            assert asked and asked[0][0] == labels["delete"][0] and labels["delete"][1] in asked[0][1], asked
+
+            dialogs = []
+
+            def save_as(**kwargs):
+                dialogs.append(kwargs)
+                return str(target / f"zeichnung_{language}{kwargs['defaultextension']}")
+
+            with patch.object(mod.filedialog, "asksaveasfilename", side_effect=save_as):
+                app.drawing_export_png(editor, 1)
+                assert message() == labels["png"], (language, message())
+                assert dialogs[-1]["title"] == labels["png_title"], dialogs[-1]
+                assert dialogs[-1]["initialfile"].endswith("_16px.png"), "PNG-Dateinamensmuster bleibt"
+                with patch.object(app, "drawing_icon_preview", return_value=False):
+                    app.drawing_export_ico(editor, True)
+                assert message() == labels["cancelled"], message()
+                with patch.object(app, "drawing_icon_preview", return_value=True):
+                    app.drawing_export_ico(editor, True)
+                assert message().startswith(labels["ico"]), (language, message())
+                app.drawing_export(editor, "svg")
+                assert message() == labels["svg"], (language, message())
+                assert dialogs[-1]["title"] == labels["svg_title"], dialogs[-1]
+                errors = []
+                with patch.object(app, "write_text_atomic", side_effect=OSError("kein Zugriff")), \
+                        patch.object(app, "show_error", side_effect=lambda title, text, **k: errors.append(title)):
+                    app.drawing_export(editor, "json")
+                assert errors == [labels["error"]], errors
+            for suffix in (".png", ".ico", ".svg"):
+                assert (target / f"zeichnung_{language}{suffix}").stat().st_size > 0
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+        app.remember_drawing_tools(palettes=previous_tools["palettes"], palette=previous_tools["palette"])
+        shutil.rmtree(target, ignore_errors=True)
+    return "Palettenmenü, Palettenspeichern/-löschen sowie PNG-/ICO-/SVG-Export und Exportfehler DE/EN"
+
+
 def fall_inspector_locale(lauf):
     """Der Aufgabeninspektor übersetzt Felder, ohne gespeicherte Kennungen umzuschreiben."""
     app, mod = lauf.app, lauf.mod
@@ -5605,7 +5827,7 @@ def fall_fensterende3507(lauf):
     return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
 
 
-FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "drawing_more_locale", "drawing_export_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

@@ -3592,3 +3592,15 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** `test_i18n.py` 22/22; `test_arbeitsmodi.py --fall feedback_locale`, `--fall drawing_locale` und `--fall drawing_controls_locale` jeweils 1/1; `test_features330.py` und `test_pixel3350.py` bestanden; Systemkatalog 5/5, Standprüfung 27/27. Der Steuerungsfall prüft beide Sprachen, stabile Kennungen und sichtbare Pflichtknöpfe bei 860 × 700 für alle vier Anzeigeprofile. Die komplette lokale CI-Grundstufe bestand mit Exitcode 0; Einzelheiten und nicht blockierende Hinweise stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#d93-etappe-2-zeicheneditor-steuerung-v157-20112026). `git diff --check` bestand.
 
 **D – Grenzen und Git:** Animationsleiste, Inhalte des Mehr-Menüs, weitere Zeichnungsdialoge und externe Zeichen-/Exportmeldungen bleiben offen. Der V1.57-Schnitt ist in [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) gepusht; dessen aktuelle Remote-Prüfungen sind live am PR nachzuverfolgen. Kein Release- oder Lieferabgleich.
+
+### 21.146 D93-Etappe 2: Zeicheneditor-Animation, Mehr-Menü, Paletten und Export (20.11.2026)
+
+**A – Roadmap-Auftrag:** Fortsetzung des Muss-Ziels „vollständige Oberfläche DE/EN“ aus D93 nach §21.145; keine Auswahl aus E-P1–E-P5. Vorher wurde die OneDrive-Hauptablage auf GitHub-`main` gebracht (siehe Übergabe).
+
+**B – Umsetzung:** Animationsleiste, Bildauswahl, Abspieldialog, Pipettenhinweis der Kontextleiste (in §21.145 übersehen), Mehr-Menü, Palettenmenü mit Speichern/Importieren/Exportieren/Löschen sowie Dateidialoge, Status- und Fehlertitel des PNG-, ICO-, SVG- und JSON-Exports folgen der aktiven Sprache. Palettenmeldungen unterscheiden Einzahl und Mehrzahl. Befehle, Paletten-IDs, Exportformate und Standard-Dateinamen unverändert; App 1.0.0, Datenformat 26, Glide-System V1.58.
+
+**C – Prüfung:** gezielte Unit-, Arbeitsmodi- und Zeichensuiten sowie die CI-Grundstufe grün; zwei lokale Mac-Vollprüfungen rot durch fokusabhängige Suiten, die einzeln grün sind. Einzelheiten im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#d93-etappe-2-zeicheneditor-animation-mehr-menü-paletten-und-export-v158-20112026).
+
+**D – Shell-Sprachvertrag (Phase D, Bestandsaufnahme):** `modal_session.py`, `window_lifetime.py`, `custom_controls.py`, `desktop_adapter.py` und `core_accessibility.py` enthalten keine eigenen sichtbaren Fachtexte und importieren `i18n` nicht. Übersetzte Beschriftungen gibt der Host hinein (zum Beispiel `modifier_labels` in `desktop_adapter`); die Shell hält nur neutrale Rückfallwerte. Für 1.0 ist keine Codeänderung nötig; ein gemeinsamer Locale-Vertrag für `glide_shell` bleibt eine Entscheidungsvorlage nach 1.0.
+
+**E – Grenzen und Git:** Offen bleiben Journal-Untermenü, Import-, Referenz-, Nachzeichen-, Zwischenstands-, Bildfolgen- und Farbdialoge, Fehlertexte aus `glide_drawing`, die deutschen Kurzformen in `RoundedButton.action_text`, weitere App-Dialoge und die menschliche Abnahme. Der Schnitt liegt auf dem Folgezweig `claude/d93-drawing-animation-more-i18n` über PR #157; kein Merge, Release oder Lieferabgleich.
