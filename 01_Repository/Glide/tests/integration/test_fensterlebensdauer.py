@@ -190,6 +190,19 @@ def fall_wurzel(shell, root):
     gleich(gelaufen, [], "kein Rückruf der toten Wurzel")
 
 
+def fall_fremd_abgebrochen(shell, root):
+    """Am Widget abgebrochene Aufträge (Entprellung) lassen den Bestand nicht wachsen."""
+    bereich = shell.AfterScope(root)
+    auftrag = None
+    for _ in range(5000):
+        if auftrag is not None:
+            root.after_cancel(auftrag)
+        auftrag = bereich.after(10000, lambda: None)
+    gleich(len(bereich.jobs) <= 2 * shell.PRUNE_START, True, f"Bestand nach 5000 Entprellungen: {len(bereich.jobs)}")
+    gleich(bereich.pending(), frozenset({auftrag}), "nur der letzte Auftrag lebt")
+    bereich.cancel_all()
+
+
 FAELLE = {
     "laeuft_und_raeumt": fall_laeuft_und_raeumt,
     "lesbarer_name": fall_lesbarer_name,
@@ -200,6 +213,7 @@ FAELLE = {
     "ein_bereich_je_widget": fall_ein_bereich_je_widget,
     "uebernehmen": fall_uebernehmen,
     "wurzel": fall_wurzel,
+    "fremd_abgebrochen": fall_fremd_abgebrochen,
 }
 
 # Name: (Funktion oder Methode im Modul, entfernte Schutzzeile, Ersatz, Fall, der rot werden muss)
@@ -211,6 +225,7 @@ GEGENPROBEN = {
     "ohne_abbruch": ("cancel", "self.widget.after_cancel(job)", "pass", "abbrechen"),
     "ohne_bestandspflege": ("run", "self.jobs.discard(holder[0])", "pass", "laeuft_und_raeumt"),
     "ohne_namen": ("_schedule", "run.__name__ = getattr(callback, \"__name__\", \"run\")", "pass", "lesbarer_name"),
+    "ohne_aufraeumen": ("_schedule", "self.jobs.intersection_update(self._live())", "pass", "fremd_abgebrochen"),
 }
 
 

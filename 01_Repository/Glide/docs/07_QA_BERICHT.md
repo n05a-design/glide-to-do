@@ -4,6 +4,8 @@
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/shell-r2-planer` (über R1). Grün: `test_shell_importregel.py` (Sperrklinke 17/11, Gegenprobe rot erkannt), `test_abbauvertrag` 5/5, `test_fensterlebensdauer` 9/9, `test_modalvertrag` 18/18, `test_fenster330` (68 Fenster), `test_dialog_theme`, `test_ui39`, `test_reminders`, `test_startseite3332`, `test_sicherungszentrale`, `test_animation3400`, `test_pixel3350`, `test_glide`.
 
+**Nachtrag Codex-Befund (PR #162):** `AfterScope` behielt am Widget abgebrochene Kennungen; reproduziert mit 10 000 Entprellungen (10 000 Einträge bei einem lebenden Auftrag). Nach der Korrektur 16 Einträge. `test_fensterlebensdauer` 10/10, Gegenproben 7/7 (neu `ohne_aufraeumen`), `test_abbauvertrag`, `test_modalvertrag`, `test_glide` und `test_pixel3350` grün.
+
 **Offener Befund:** `test_features330` bestand auf R2 nur 4 von 6 Läufen; beide roten Läufe scheiterten an `test_features330.py:702` (Schnellsuche schließt nach Enter nicht), während der Rechner parallel bedient wurde und eine andere App vorn lag. In drei Diagnoseläufen lag der Fokus korrekt im Suchfeld, alle grün. Auf R1 war der Test 4/4 grün. Ein Zusammenhang mit R2 ist nicht belegt, aber nicht ausgeschlossen; R2 gilt erst nach grüner GitHub-Vollprüfung als nachgewiesen.
 
 ## Shell-Restkopplung R1: Dialogfabrik und Sperrklinke (V1.60, 20.11.2026)
