@@ -3868,7 +3868,7 @@ class SavedFilters:
                                           ("due", cls.DUE, "any"), ("label_mode", cls.LABEL_MODE, "any"),
                                           ("source", cls.SOURCE, "all")):
                 option = value.get(key)
-                entry[key] = option if isinstance(option, str) and option in choices.values() else default
+                entry[key] = option if isinstance(option, str) and option in choices else default
             cleaned.append(glide_settings_compat.preserve(value, entry, glide_settings_compat.FILTER_FIELDS))
             seen.add(identity)
             if len(cleaned) >= cls.MAX_FILTERS:
