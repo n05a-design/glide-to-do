@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Live-GitHub-Nachprüfung nach PR #155 (20.11.2026)
+
+Die Live-Abfrage bestätigte PR #155 als gemergten Stand auf `main` (`d1708565`). Die öffentliche Projektseite führt `README.md` als englische Standardseite und `README.de.md` als deutsche Gegenfassung. Repository-Metadaten zeigen 15 Topics, öffentliche Issues und aktivierte Discussions/Wiki/Projects. Tags und GitHub-Releases bleiben unveröffentlicht. Der konkrete Rest „About-Beschreibung bilingual nachführen“ ist kein Repository-Inhaltsproblem: `gh repo edit` und REST-PATCH wurden am 20.11.2026 erneut mit HTTP 404 geprüft; das aktive `it568`-Konto hat Push-Zugriff, aber keine Repository-Administration. Die vorgesehene Fassung ist dokumentiert und wartet auf eine GitHub-Inhaberaktion. Keine fehlgeschlagene Metadatenänderung wird als erfolgreiche Live-Nachführung ausgegeben.
+
 ## GitHub-Marketing-Nachpflege und README-Kritik (19.11.2026)
 
 Der öffentliche Einstiegsnarrativ wurde anhand der lokalen Glide-Gestaltungsregeln und einer separaten README-Kritik geschärft. Das „Version 1.0.0“-Badge konnte neben dem Hinweis auf noch nicht freigegebene Installer irreführend wirken; in beiden Sprachen bezeichnet es jetzt den Quellstand. Die Hauptnavigation ersetzt „Download“ bis zur Veröffentlichung durch „Aus dem Quellstand starten“ beziehungsweise „Run from source“ und „Showcase ansehen“; der Downloadabschnitt bleibt als nicht freigegeben erkennbar. Die englische README enthält keine offene Wettbewerbsaussage, die DE/EN-Kernabschnitte bleiben parallel und die sechs Screenshotbreiten sind explizit. Die Social-Preview-Datei wurde in der Projektmarke violett/gelb neu aufgebaut und misst 1280 × 640 px. Die Prüfung `test_standpruefung.py` bestand mit 27/27. Die Reproduktion des GitHub-Rendering erfolgt über den Branch-PR und nicht als behauptete Main-Veröffentlichung.
