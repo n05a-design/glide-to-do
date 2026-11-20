@@ -7,26 +7,23 @@
 <h1 align="center">Glide</h1>
 
 <p align="center">
-  <strong>Plan tasks. Connect ideas. Create your own.</strong><br>
-  A desktop planner for projects, tasks, day planning, pinboards, and pixel drawings.
+  <strong>Plan tasks. Connect ideas.</strong><br>
+  A local desktop planner for projects, tasks, day planning, pinboards, and pixel drawings.
 </p>
 
 <p align="center">
   <img alt="Windows, macOS, and Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Version 1.0.0" src="https://img.shields.io/badge/Version-1.0.0-6A3CC4">
+  <img alt="Source baseline 1.0.0" src="https://img.shields.io/badge/Source%20baseline-1.0.0-9E4AC8">
   <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/License-MPL--2.0-2E7D32"></a>
-  <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 </p>
 
 <p align="center">
-  <a href="#download"><strong>Download</strong></a> ·
-  <a href="#quickstart-and-system-requirements">Quickstart</a> ·
+  <a href="#quickstart-and-system-requirements"><strong>Run from source</strong></a> ·
+  <a href="05_Probelisten_Testdaten/Showcase/README.md">Explore the showcase</a> ·
   <a href="#what-glide-does">Features</a> ·
   <a href="#a-look-at-glide">Screenshots</a> ·
-  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase (DE)</a> ·
-  <a href="01_Repository/Glide/docs/20_FUNKTIONEN.md">User guide (DE)</a> ·
-  <a href="CONTRIBUTING.md">Contributing</a>
+  <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 <picture>
@@ -34,11 +31,11 @@
   <img alt="Glide pinboard with tasks, notes, and connected ideas" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
 </picture>
 
-<p align="center"><sub>Screenshots were captured with Glide 3.60.0 using synthetic showcase data. They are not test or package evidence for 1.0.0.</sub></p>
+<p align="center"><sub>The English interface is partially translated; some areas and detailed guides remain in German. Screenshots show Glide 3.60.0 with synthetic data and are not test or package evidence for 1.0.0.</sub></p>
 
 ## Why Glide?
 
-Glide brings planning and project knowledge together on a local desktop. A task stays the same whether you open it in a list, on a page, or elsewhere. Notes and images add context; pinboards and pixel drawings make relationships visible.
+Glide brings tasks and project notes into one local workspace. The same task stays connected as you move between lists, pages, calendars, and pinboards.
 
 - **Plan your day:** See work dates, due dates, effort, and available time separately.
 - **Work with your own material:** Connect tasks, pages, notes, and pinboards.
@@ -50,16 +47,16 @@ All images show a synthetic showcase dataset.
 
 <table>
   <tr>
-    <td><strong>Home</strong><br><img alt="Glide home with day plan and project tiles" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png"></td>
-    <td><strong>Calendar</strong><br><img alt="Glide week calendar with planned tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png"></td>
+    <td><strong>Home</strong><br><img alt="Glide home with day plan and project tiles" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png" width="100%"></td>
+    <td><strong>Calendar</strong><br><img alt="Glide week calendar with planned tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Today</strong><br><img alt="Day plan with tasks and time blocks in dark theme" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png"></td>
-    <td><strong>Pages</strong><br><img alt="Project page with formatted text, images, and tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png"></td>
+    <td><strong>Today</strong><br><img alt="Day plan with tasks and time blocks in dark theme" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png" width="100%"></td>
+    <td><strong>Pages</strong><br><img alt="Project page with formatted text, images, and tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Task list</strong><br><img alt="Task list with labels and repeating tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png"></td>
-    <td><strong>Pixel workshop</strong><br><img alt="Pixel workshop with a hand-drawn direction sign" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png"></td>
+    <td><strong>Task list</strong><br><img alt="Task list with labels and repeating tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png" width="100%"></td>
+    <td><strong>Pixel workshop</strong><br><img alt="Pixel workshop with a hand-drawn direction sign" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png" width="100%"></td>
   </tr>
 </table>
 
@@ -83,7 +80,7 @@ The [user guide (in German)](01_Repository/Glide/docs/20_FUNKTIONEN.md) explains
 
 ## Download
 
-**A public release download has not been approved yet.** GitHub Actions artifacts are development builds, require a GitHub sign-in, and are not a substitute for a published installer.
+**No public installer is available yet.** Use the quickstart to run Glide from source. GitHub Actions artifacts are development builds, require a GitHub sign-in, and are not a substitute for a published installer.
 
 | Platform | Available now | Notes |
 |---|---|---|
@@ -155,7 +152,9 @@ Please use synthetic example data only. Report security vulnerabilities confiden
 
 Status as of 19.11.2026 · Glide 1.0.0
 
-The Glide 1.0.0 source baseline is in `main`; no public release has been approved. The check badge above tracks `main`; the [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
+<a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks on main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
+
+The Glide 1.0.0 source baseline is in `main`; no public release has been approved. The badge above tracks checks on `main`, not this README's branch or another pull request. The [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
 
 ## License
 
