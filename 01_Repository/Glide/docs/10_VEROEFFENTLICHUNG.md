@@ -8,6 +8,8 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 `main` enthält PR #155 auf Merge-Commit `d1708565` (Saved-View-/Pinnwand-i18n-Schnitt); PR #155 wurde am 20.11.2026 gemergt. Die englische README liegt in `main/README.md`, die deutsche Gegenfassung in `README.de.md`. Das Repository zeigt 15 Topics, öffentliche Issues und die bilingualen Community-Vorlagen; keine Tags oder GitHub-Releases sind veröffentlicht. Die About-Beschreibung ist weiterhin deutschsprachig; ein Live-Update über `gh repo edit` und REST-PATCH erhielt mit dem aktuellen CLI-Konto HTTP 404, weil dessen Repository-Berechtigung nur Push, nicht Repository-Administration enthält. Die beschränkte Beschreibung kann deshalb nur über ein Konto mit Repository-Admin-Berechtigung oder die GitHub-Oberfläche durch den Inhaber geändert werden. Vor einem öffentlichen Release alle Metadaten und Prüfstände erneut live verifizieren.
 
+Der abschließende Live-Nachweis von PR #156 auf Head `56a81e0884fc96ab3bd45db27763a6dbfd8c85b7` bestätigt die Metadaten unverändert. Dokumentation, YAML, Stand und alle CodeQL-/Analyze-Prüfer waren grün. Rot waren die Linux-Grundstufe wegen eines Ubuntu-Paketmirror-/Verbindungsfehlers sowie die Linux-/Windows-Vollprüfung wegen identischer Assertionsfehler in `test_wissen33315.py` bei `saved_filter`/`pages`. Das Windows-Paket blieb daher übersprungen. Diese PR-Prüfungen ändern weder die About-Beschreibung noch Release-, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
+
 ## Release-Cut-Prüfung vom 18.11.2026
 
 Der Quellstand 1.0.0 wurde über PR #138 am 18.11.2026 in `main` gemergt (Merge-Commit `a303e405`). Das ist ein Release-Cut im Repository, keine erfolgte öffentliche Veröffentlichung. Die Prüfung dieses Stands ergab:

@@ -3558,3 +3558,11 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **Offener Metadatenpunkt:** Die CLI-Kennung `it568` hat Repo-Push-Zugriff, aber keine Repository-Administration. `gh repo edit` und REST-PATCH erhalten für die About-Beschreibung HTTP 404. Die vorgesehene bilinguale Fassung bleibt auf Englisch zuerst: `Desktop planner for projects, tasks, day planning, pinboards and pixel drawings. / Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen.` Sie wird erst durch den Inhaber oder ein administratives Token auf GitHub gesetzt.
 
 **Nicht als erledigt ausgeben:** Projektreleases, Social-Preview-Feld, Homepage, vollständige englische Funktionsdokumentation, native Pakete und menschliche Plattformabnahme bleiben eigene Freigaben und Nachweise. Die lokalen Dokument-, README-, Community-Vorlagen- und Statusprüfungen sind getrennt von diesen GitHub-Inhabereinstellungen zu bewerten.
+
+### 21.143 Abschlussprüfung von PR #156 (20.11.2026)
+
+**Befund:** PR #156 ist auf Head `56a81e0884fc96ab3bd45db27763a6dbfd8c85b7` offen und nicht gemergt. Dokumentation/YAML/Stand sowie CodeQL und die drei Analyze-Läufe bestanden. Die Linux-Grundstufe scheiterte vor Glide-Tests beim Ubuntu-Paketmirror `security.ubuntu.com`; beide Vollprüfungen scheiterten in `test_wissen33315.py`, Zeile 219, an derselben Assertion für `saved_filter`/`pages`. Das Windows-Paket und die nach dem Integritätsbefund übersprungenen Restfälle sind deshalb keine grünen Nachweise.
+
+**Metadaten und Dokumentabgleich:** Live-`gh repo view` bestätigt weiterhin die deutsche About-Beschreibung, 15 Topics und aktivierte Issues, Discussions, Wiki und Projects. Homepage, Tags und Releases bleiben unverändert. Der geplante bilinguale About-Text kann mit dem aktuellen Konto nicht geschrieben werden.
+
+**Abschlussgrenze:** Keine App-, Datenformat-, Versions-, Release-, Merge- oder Metadatenaktion wird aus dem roten PR zugeschrieben. Der nächste technische Abschluss benötigt einen getrennten Integritätsbefund beziehungsweise einen grünen Wiederlauf von PR #156; Repository-Administration bleibt ein eigener Inhaber-/Accountblocker.
