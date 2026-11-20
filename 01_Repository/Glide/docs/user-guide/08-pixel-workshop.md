@@ -4,7 +4,7 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 
 **Deutsch:** [Funktionen §9 Pixel-Werkstatt](../20_FUNKTIONEN.md#9-pixel-werkstatt), [Bildfolgen](../20_FUNKTIONEN.md#bildfolgen-seit-3400), [Anzeigeprofile](../20_FUNKTIONEN.md#nachabnahme-3630-zeilenaktionen-aufschub-und-zeichenprofile) · [Guide contents](README.md) · Previous: [Pinboards](07-pinboards.md) · Next: [Import and export](09-import-and-export.md)
 
-> Controlled translation of the German function reference. If the texts differ, the German text applies. **In the 1.0.0 baseline the drawing editor is still German.** Its English translation is in open pull requests [#157](https://github.com/n05a-design/glide-to-do/pull/157) and [#158](https://github.com/n05a-design/glide-to-do/pull/158). German labels are therefore given first on this page.
+> Controlled translation of the German function reference. If the texts differ, the German text applies. Since PR [#157](https://github.com/n05a-design/glide-to-do/pull/157), the drawing editor's tools, display profiles, reference and preview buttons, zoom, option menus and status line are available in English. The animation bar, the *Mehr* (More) menu entries, palettes and export dialogs are still German; their translation is in open PR [#158](https://github.com/n05a-design/glide-to-do/pull/158). German labels are given in italics where they still appear.
 
 A **drawing** (*Zeichnung*) is a pixel canvas inside the main window. Its size is 16, 32, 64 or 128 cells per side and is fixed when you create it (**File › New › New drawing**).
 
@@ -12,14 +12,14 @@ A **drawing** (*Zeichnung*) is a pixel canvas inside the main window. Its size i
 
 | Tool | Key |
 |---|---|
-| Brush (*Pinsel*) | B |
-| Fill (*Füllen*) | F |
-| Eyedropper (*Pipette*) | I |
-| Line (*Linie*) | L |
-| Rectangle (*Rechteck*) | U |
+| Brush | B |
+| Fill | F |
+| Eyedropper | I |
+| Line | L |
+| Rectangle | U |
 | Ellipse | E |
-| Selection (*Auswahl*) | S |
-| Symmetry (*Symmetrie*) | M |
+| Selection | S |
+| Symmetry | M |
 
 Tool options set the size (1/2/4/8), outline or filled, symmetry and fill patterns. Shift keeps angles and squares.
 
@@ -29,9 +29,9 @@ The left swatch is the foreground color, the right one the background color. X s
 
 ## View and reference
 
-- Ctrl+mouse wheel zooms around the pointer. The middle mouse button pans. P shows a preview at original size. There are also a 3 × 3 tile preview and a grayscale preview.
-- A **reference image** (PNG, JPEG, HEIC, SVG …) can be shown with adjustable opacity, reframed and traced.
-- **Display profiles** (*Anzeigeprofil*): *Standard*, *Erweitert* (extended), *Animation* and *Bilder pixeln* (pixelate images) decide which tool rows are visible. Hidden functions stay under **More** (*Mehr*). The profile does not change the drawing.
+- Ctrl+mouse wheel zooms around the pointer, and the **Zoom** menu offers zoom in, zoom out and fit to canvas. The middle mouse button pans. **Preview** (P) shows original size, with **Tile** (3 × 3) and **Grayscale** previews.
+- A **reference image** (PNG, JPEG, HEIC, SVG …) can be loaded (**Load image**), shown with adjustable opacity, reframed (**Reframe**) and traced (**Trace pixels**).
+- **Display profiles:** **Standard**, **Extended**, **Animation** and **Pixelate** decide which tool rows are visible. Hidden functions stay under **More**. The profile does not change the drawing.
 
 ## History and snapshots
 
@@ -39,7 +39,7 @@ Each action is an undo step, up to 50 steps. Up to 10 **named snapshots** (*Zwis
 
 ## Animation
 
-**Images …** (*Bilder …*) manages the frames: add, duplicate, delete and reorder, up to 120 frames of the same size. Each frame can have its own duration between 20 and 60,000 ms. **Play …** (*Abspielen …*) shows a copy of the sequence and changes nothing. In the Standard profile, both are under **More › Image sequence** (*Mehr › Bildfolge*).
+*Bilder …* (images) manages the frames: add, duplicate, delete and reorder, up to 120 frames of the same size. Each frame can have its own duration between 20 and 60,000 ms. *Abspielen …* (play) shows a copy of the sequence and changes nothing. In the Standard profile, both are under **More › *Bildfolge*** (image sequence).
 
 ## Palettes and export
 
