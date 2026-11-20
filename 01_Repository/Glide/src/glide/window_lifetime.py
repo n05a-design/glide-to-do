@@ -17,6 +17,7 @@ import tkinter as tk
 import weakref
 
 SCOPE_ATTRIBUTE = "_glide_after_scope"
+PRUNE_START = 64
 
 _SCOPES = weakref.WeakSet()
 
@@ -28,6 +29,10 @@ class AfterScope:
         self.widget = widget
         self.jobs = set()
         self.closed = False
+        # Wer einen Auftrag am Widget selbst abbricht (`widget.after_cancel`),
+        # hinterlässt seine Kennung im Bestand. Ab dieser Größe räumt der
+        # Bereich beim Planen gegen `after info` auf; die Schwelle wächst mit.
+        self._prune_at = PRUNE_START
         _SCOPES.add(self)
         if close_on_destroy:
             try:
@@ -59,6 +64,9 @@ class AfterScope:
             return None
         holder.append(job)
         self.jobs.add(job)
+        if len(self.jobs) > self._prune_at:
+            self.jobs.intersection_update(self._live())
+            self._prune_at = max(PRUNE_START, 2 * len(self.jobs))
         return job
 
     def after(self, delay_ms, callback, *args):

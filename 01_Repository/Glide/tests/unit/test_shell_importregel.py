@@ -185,22 +185,31 @@ class Schnittstelle(unittest.TestCase):
 # Sperrklinke der Restkopplung (D94, 20.11.2026): Diese Zahlen dürfen nur
 # sinken. Wer einen Dialog auf `create_dialog` oder einen Zeitgeber auf einen
 # `AfterScope` umstellt, senkt die Grenze im selben Commit; neue direkte
-# Fenster oder Zeitgeber ohne Bereich lässt der Test nicht zu.
+# Fenster oder Zeitgeber ohne Bereich lässt der Test nicht zu. Im Bereich ist
+# ein Zeitgeber über `after_scope()` oder `scope_for(...)` oder direkt in
+# `_register_after(...)` bzw. `.adopt(...)` (R2, V1.61).
 RESTKOPPLUNG = {
     "direkte tk.Toplevel": 17,
-    "Zeitgeber ohne AfterScope": 98,
+    "Zeitgeber ohne AfterScope": 11,
 }
 
 
 def restkopplung(pfad):
     zahlen = dict.fromkeys(RESTKOPPLUNG, 0)
-    for knoten in ast.walk(ast.parse(pfad.read_text(encoding="utf-8"), filename=str(pfad))):
+    baum = ast.parse(pfad.read_text(encoding="utf-8"), filename=str(pfad))
+    umhuellt = set()
+    for knoten in ast.walk(baum):
+        if (isinstance(knoten, ast.Call) and isinstance(knoten.func, ast.Attribute)
+                and knoten.func.attr in ("_register_after", "adopt")):
+            umhuellt.update(id(arg) for arg in knoten.args)
+    for knoten in ast.walk(baum):
         if not (isinstance(knoten, ast.Call) and isinstance(knoten.func, ast.Attribute)):
             continue
         ziel = ast.unparse(knoten.func.value)
         if knoten.func.attr == "Toplevel" and ziel == "tk":
             zahlen["direkte tk.Toplevel"] += 1
-        elif knoten.func.attr in ("after", "after_idle") and "after_scope" not in ziel:
+        elif (knoten.func.attr in ("after", "after_idle") and id(knoten) not in umhuellt
+              and "after_scope" not in ziel and "scope_for(" not in ziel):
             zahlen["Zeitgeber ohne AfterScope"] += 1
     return zahlen
 
