@@ -40,6 +40,9 @@ concurrency:
 env:
   PYTHONDONTWRITEBYTECODE: "1"
   PYTHONUTF8: "1"
+  # Referenzsprache der Prüfungen; der Runner hat LANG=en_US.UTF-8 und ein
+  # frischer Glide-Datenordner folgt der Systemsprache (wie pruefen.py).
+  LANGUAGE: "de"
   MAC_PYTHON: /Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14
   MAC_PYTHON_PKG_URL: https://www.python.org/ftp/python/3.14.5/python-3.14.5-macos11.pkg
   MAC_PYTHON_PKG_SHA256: b28a8dc33c456dd06c97024697d63ca916cfb494594c06fa3e4ef4d41fa82335
