@@ -13751,6 +13751,16 @@ class DrawingEditor(tk.Frame):
         ("line", "Linie", "l"), ("rect", "Rechteck", "u"), ("ellipse", "Ellipse", "e"),
         ("select", "Auswahl", "s"),
     )
+    STATUS_TOOL_KEYS = {
+        "brush": "brush", "fill": "fill", "eyedropper": "eyedropper", "line": "line",
+        "rect": "rectangle", "ellipse": "ellipse", "select": "selection",
+    }
+    STATUS_ACTION_KEYS = {
+        "Pinselzug": "brush_stroke", "Pinsel": "brush", "Füllen": "fill",
+        "Linie": "line", "Rechteck": "rectangle", "Ellipse": "ellipse",
+        "Verschieben": "move", "Ausschneiden": "cut", "Auswahl leeren": "clear_selection",
+        "Einfügen": "paste", "Farbe ersetzen": "replace_color",
+    }
     DISPLAY_PROFILES = glide_design.DRAWING_DISPLAY_PROFILES
     SHAPE_TOOLS = ("line", "rect", "ellipse")
     SIZED_TOOLS = ("brush", "line", "rect", "ellipse")
@@ -13867,6 +13877,21 @@ class DrawingEditor(tk.Frame):
         return self.app._make_dialog_button(parent, text, command, color_key, width=width, height=30)
 
     @staticmethod
+    def _drawing_text(key, fallback, **values):
+        return glide_i18n.t(f"drawing.{key}", fallback, **values)
+
+    def _tool_label(self, tool):
+        fallback = next(label for key, label, _shortcut in self.TOOLS if key == tool)
+        name = self.STATUS_TOOL_KEYS.get(tool)
+        return self._drawing_text(f"tool.{name}", fallback) if name else fallback
+
+    def _profile_label(self, profile):
+        return self._drawing_text(f"profile.{profile}", self.DISPLAY_PROFILES[profile])
+
+    def _pattern_label(self, pattern):
+        return self._drawing_text(f"pattern.{pattern}", dict(self.PATTERN_CHOICES)[pattern])
+
+    @staticmethod
     def _secondary_buttons():
         """Rechte Maustaste; Tk 8 meldet sie unter macOS als Knopf 2."""
         return (3, 2) if IS_MACOS else (3,)
@@ -13884,29 +13909,37 @@ class DrawingEditor(tk.Frame):
         top.pack(fill="x", pady=(0, 2))
         self.bind("<Destroy>", lambda e, w=top: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add="+")
-        self.tool_choice = self._button(top, "Pinsel ▾", self.show_tool_menu, width=130)
-        self.app.add_tooltip(self.tool_choice, "Zeichenwerkzeug wählen; Kürzel im Menü")
+        self.tool_choice = self._button(top, self._tool_label(self.tool) + " ▾",
+                                        self.show_tool_menu, width=130)
         top.add(self.tool_choice, key="tool")
         # Nur der Profilname mit Menümarker wie „Pinsel ▾“: Mit „Anzeige: …“
         # passten die drei Pflichtknöpfe bei 860 × 700 nicht in die Leiste.
-        self.display_button = self._button(top, "Standard ▾", self.show_display_profiles, width=64)
-        self.app.add_tooltip(self.display_button, "Anzeigeprofil: welche Werkzeugleisten sichtbar sind")
+        self.display_button = self._button(top, self._profile_label(self.display_profile) + " ▾",
+                                           self.show_display_profiles, width=64)
         top.add(self.display_button, key="display")
-        self.preview_button = self._button(top, "Vorschau", self.toggle_preview, width=80)
-        self.more_button = self._button(top, "Mehr", self.show_more_menu, width=60)
-        self.zoom_choice = self._button(top, "Zoom", self.show_zoom_menu, width=92)
+        self.preview_button = self._button(
+            top, self._drawing_text("button.preview", "Vorschau"), self.toggle_preview, width=80)
+        self.more_button = self._button(top, self._drawing_text("button.more", "Mehr"),
+                                        self.show_more_menu, width=60)
+        self.zoom_choice = self._button(
+            top, self._drawing_text("button.zoom", "Zoom {value}×", value=self.zoom),
+            self.show_zoom_menu, width=92)
         for key, widget in (("zoom", self.zoom_choice), ("preview", self.preview_button),
                             ("more", self.more_button)):
             top.add(widget, key=key)
-        self.app.add_tooltip(self.preview_button, "Vorschau in Originalgröße (Taste P)")
 
         if self.animated:
             self._build_animation_controls()
         self.reference_toolbar = ButtonFlow(self, theme["card"], gap=6, single_line=True)
-        for text, command in (("Bild laden", lambda: self.app.drawing_load_reference(self)),
-                              ("Rahmen", lambda: self.app.drawing_reframe_reference(self)),
-                              ("Bild pixeln", lambda: self.app.drawing_reframe_reference(self, trace=True))):
-            self.reference_toolbar.add(self._button(self.reference_toolbar, text, command, width=128))
+        self.reference_buttons = {}
+        for key, fallback, command in (
+                ("load", "Bild laden", lambda: self.app.drawing_load_reference(self)),
+                ("reframe", "Rahmen", lambda: self.app.drawing_reframe_reference(self)),
+                ("pixelate", "Bild pixeln", lambda: self.app.drawing_reframe_reference(self, trace=True))):
+            button = self._button(self.reference_toolbar, self._drawing_text(f"reference.{key}", fallback),
+                                  command, width=128)
+            self.reference_buttons[key] = button
+            self.reference_toolbar.add(button)
 
         # Die Kontextleiste zeigt nur, was das aktive Werkzeug braucht.
         self.context_row = ButtonFlow(self, theme["card"], gap=6, single_line=True)
@@ -13928,11 +13961,9 @@ class DrawingEditor(tk.Frame):
         self.secondary_swatch.pack(side="left", padx=(4, 0), anchor="s")
         self.swap_button = self._button(colors, icons["swap"], self.swap_colors, width=34)
         self.swap_button.pack(side="left", padx=(6, 0))
-        self.app.add_tooltip(self.swatch, "Vordergrundfarbe – Linksklick malt (Taste C: Farbe wählen)")
-        self.app.add_tooltip(self.secondary_swatch, "Hintergrundfarbe – Rechtsklick malt")
-        self.app.add_tooltip(self.swap_button, "Farben tauschen (X) · Schwarz/Weiß (D)")
         # Die Farbfelder öffnen schon dieselbe Auswahl; kein zweiter Farbknopf.
-        self.palette_button = self._button(colors, "Palette", self.show_palette_menu, width=70)
+        self.palette_button = self._button(
+            colors, self._drawing_text("button.palette", "Palette"), self.show_palette_menu, width=70)
         self.palette_button.pack(side="left", padx=(6, 0))
         self.strip = tk.Canvas(colors, height=26, bg=theme["card"], highlightthickness=0, takefocus=0)
         self.strip.pack(side="left", fill="x", expand=True, padx=(10, 0))
@@ -14042,22 +14073,23 @@ class DrawingEditor(tk.Frame):
             canvas.bind(f"<{modifier}-v>", lambda _event: self.paste_clipboard())
             canvas.bind(f"<{modifier}-a>", lambda _event: self.select_all())
         self.bind("<Configure>", self._place_preview, add="+")
-        self.build_context_row()
-        self.sync_controls()
+        self.refresh_locale()
 
     def _build_preview(self, surface):
         theme = self.app.theme
         panel = tk.Frame(surface, bg=theme["card"])
         head = tk.Frame(panel, bg=theme["card"])
         head.pack(fill="x")
-        tk.Label(head, text="Vorschau", bg=theme["card"], fg=theme["text"],
-                 font=app_font(10, "bold"), anchor="w").pack(side="left")
-        self.tiled_button = self._button(head, "Kachel", self.toggle_tiled, width=62)
+        self.preview_title = tk.Label(
+            head, text=self._drawing_text("preview.title", "Vorschau"),
+            bg=theme["card"], fg=theme["text"], font=app_font(10, "bold"), anchor="w")
+        self.preview_title.pack(side="left")
+        self.tiled_button = self._button(
+            head, self._drawing_text("preview.tile", "Kachel"), self.toggle_tiled, width=62)
         self.tiled_button.pack(side="right")
-        self.gray_button = self._button(head, "Grau", self.toggle_grayscale, width=52)
+        self.gray_button = self._button(
+            head, self._drawing_text("preview.grayscale", "Grau"), self.toggle_grayscale, width=52)
         self.gray_button.pack(side="right", padx=(0, 4))
-        self.app.add_tooltip(self.tiled_button, "Muster als 3 × 3 wiederholen")
-        self.app.add_tooltip(self.gray_button, "Tonwerte ohne Farbe prüfen")
         self.preview_canvas = tk.Canvas(panel, bg=theme["card"], highlightthickness=0, takefocus=0)
         self.preview_canvas.pack(anchor="nw", pady=(4, 0))
         self.preview_panel = panel
@@ -14119,41 +14151,64 @@ class DrawingEditor(tk.Frame):
 
     def show_tool_menu(self):
         return self._popup_drawing_choices(self.tool_choice, [
-            (f"{label} ({shortcut.upper()})", lambda value=key: self.set_tool(value), key == self.tool)
-            for key, label, shortcut in self.TOOLS])
+            (f"{self._tool_label(key)} ({shortcut.upper()})",
+             lambda value=key: self.set_tool(value), key == self.tool)
+            for key, _label, shortcut in self.TOOLS])
 
     def show_zoom_menu(self):
-        entries = [("Verkleinern (−)", lambda: self.change_zoom(-1), None),
-                   ("Vergrößern (+)", lambda: self.change_zoom(1), None),
-                   ("An Fläche anpassen", lambda: self.fit_zoom(auto=True), None)]
+        entries = [
+            (self._drawing_text("zoom.out", "Verkleinern (−)"), lambda: self.change_zoom(-1), None),
+            (self._drawing_text("zoom.in", "Vergrößern (+)"), lambda: self.change_zoom(1), None),
+            (self._drawing_text("zoom.fit", "An Fläche anpassen"), lambda: self.fit_zoom(auto=True), None),
+        ]
         return self._popup_drawing_choices(self.zoom_choice, entries)
 
     def show_tool_options(self):
         entries = []
         if self.tool in self.SIZED_TOOLS:
-            entries += [(f"Größe {size}×{size}", lambda value=size: self.set_brush_size(value),
+            entries += [(self._drawing_text("option.size", "Größe {size}×{size}", size=size),
+                         lambda value=size: self.set_brush_size(value),
                          size == self.brush_size) for size in glide_drawing.BRUSH_SIZES]
         if self.tool in self.SYMMETRIC_TOOLS:
             if entries:
                 entries.append((None, None, None))
-            entries += [("Symmetrie: " + label, lambda value=key: self.set_symmetry(value), key == self.symmetry)
-                        for key, label in (("none", "Aus"), ("x", "Links/rechts"),
-                                          ("y", "Oben/unten"), ("xy", "Beide Richtungen"))]
+            entries += [
+                (self._drawing_text(f"option.symmetry.{key}", fallback),
+                 lambda value=key: self.set_symmetry(value), key == self.symmetry)
+                for key, fallback in (("none", "Aus"), ("x", "Links/rechts"),
+                                      ("y", "Oben/unten"), ("xy", "Beide Richtungen"))
+            ]
         if self.tool in ("rect", "ellipse"):
-            entries.append(("Gefüllt", self.toggle_filled, self.shape_filled))
+            entries.append((self._drawing_text("option.filled", "Gefüllt"),
+                            self.toggle_filled, self.shape_filled))
         if self.tool == "fill":
-            entries += [("Muster: " + label, lambda value=key: self.set_fill_pattern(value),
-                         key == self.fill_pattern) for key, label in self.PATTERN_CHOICES]
+            entries += [
+                (self._drawing_text("option.pattern", "Muster: {pattern}",
+                                    pattern=self._pattern_label(key)),
+                 lambda value=key: self.set_fill_pattern(value), key == self.fill_pattern)
+                for key, label in self.PATTERN_CHOICES
+            ]
         if self.tool == "brush":
-            entries += [("Pixelgenaue 1×1-Linie", self.toggle_pixel_perfect, self.pixel_perfect),
-                        ("Über den Rand malen", self.toggle_wrap, self.wrap)]
+            entries += [
+                (self._drawing_text("option.pixel_perfect", "Pixelgenaue 1×1-Linie"),
+                 self.toggle_pixel_perfect, self.pixel_perfect),
+                (self._drawing_text("option.wrap", "Über den Rand malen"), self.toggle_wrap, self.wrap),
+            ]
         if self.tool == "select":
-            entries += [(label, command, None) for label, command in (
-                ("Kopieren", self.copy_selection), ("Ausschneiden", self.cut_selection),
-                ("Einfügen", self.paste_clipboard), ("Leeren", self.clear_selection),
-                ("Alles auswählen", self.select_all), ("Auswahl aufheben", self.deselect))]
+            entries += [
+                (self._drawing_text(f"option.{key}", fallback), command, None)
+                for key, fallback, command in (
+                    ("copy", "Kopieren", self.copy_selection),
+                    ("cut", "Ausschneiden", self.cut_selection),
+                    ("paste", "Einfügen", self.paste_clipboard),
+                    ("clear", "Leeren", self.clear_selection),
+                    ("select_all", "Alles auswählen", self.select_all),
+                    ("deselect", "Auswahl aufheben", self.deselect),
+                )
+            ]
         if self.tool == "eyedropper":
-            self.update_status("Linksklick: Vordergrund · Rechtsklick: Hintergrund")
+            self.update_status(glide_i18n.t(
+                "drawing.status.eyedropper_guide", "Linksklick: Vordergrund · Rechtsklick: Hintergrund"))
             return "break"
         return self._popup_drawing_choices(self.options_button, entries)
 
@@ -14164,8 +14219,8 @@ class DrawingEditor(tk.Frame):
         self._clear_flow(row)
         self.size_buttons = {}
         self.option_buttons = {}
-        tool = next(label for key, label, _shortcut in self.TOOLS if key == self.tool)
-        caption = f"{tool}optionen"
+        tool = self._tool_label(self.tool)
+        caption = self._drawing_text("option.caption", "{tool}optionen", tool=tool)
         if self.tool in self.SIZED_TOOLS:
             caption += f" · {self.brush_size}×{self.brush_size}"
         if self.tool == "eyedropper":
@@ -14179,6 +14234,39 @@ class DrawingEditor(tk.Frame):
         self.sync_controls()
         row.reflow()
         self.reserve_context_rows()
+
+    def refresh_locale(self):
+        self.tool_choice.set_text(self._tool_label(self.tool) + " ▾")
+        self.preview_button.set_text(self._drawing_text("button.preview", "Vorschau"))
+        self.more_button.set_text(self._drawing_text("button.more", "Mehr"))
+        self.palette_button.set_text(self._drawing_text("button.palette", "Palette"))
+        for key, fallback in (("load", "Bild laden"), ("reframe", "Rahmen"), ("pixelate", "Bild pixeln")):
+            self.reference_buttons[key].set_text(self._drawing_text(f"reference.{key}", fallback))
+        self.preview_title.configure(text=self._drawing_text("preview.title", "Vorschau"))
+        self.tiled_button.set_text(self._drawing_text("preview.tile", "Kachel"))
+        self.gray_button.set_text(self._drawing_text("preview.grayscale", "Grau"))
+        self.app.add_tooltip(
+            self.tool_choice, self._drawing_text("tooltip.tool", "Zeichenwerkzeug wählen; Kürzel im Menü"))
+        self.app.add_tooltip(
+            self.display_button,
+            self._drawing_text("tooltip.profile", "Anzeigeprofil: welche Werkzeugleisten sichtbar sind"))
+        self.app.add_tooltip(
+            self.preview_button, self._drawing_text("tooltip.preview", "Vorschau in Originalgröße (Taste P)"))
+        self.app.add_tooltip(
+            self.swatch,
+            self._drawing_text("tooltip.foreground", "Vordergrundfarbe – Linksklick malt (Taste C: Farbe wählen)"))
+        self.app.add_tooltip(
+            self.secondary_swatch,
+            self._drawing_text("tooltip.background", "Hintergrundfarbe – Rechtsklick malt"))
+        self.app.add_tooltip(
+            self.swap_button,
+            self._drawing_text("tooltip.swap_colors", "Farben tauschen (X) · Schwarz/Weiß (D)"))
+        self.app.add_tooltip(
+            self.tiled_button, self._drawing_text("tooltip.tile", "Muster als 3 × 3 wiederholen"))
+        self.app.add_tooltip(
+            self.gray_button, self._drawing_text("tooltip.grayscale", "Tonwerte ohne Farbe prüfen"))
+        self.apply_display_profile()
+        self.build_context_row()
 
     # Die Kontextleiste hat je Werkzeug eine andere Länge und bricht bei
     # schmaler Fläche verschieden oft um. Bis 26.09.2026 wuchs und schrumpfte
@@ -14242,12 +14330,13 @@ class DrawingEditor(tk.Frame):
                 mark(button, self.pixel_perfect)
             elif key == "wrap":
                 mark(button, self.wrap)
-        self.tool_choice.set_text(next(label for key, label, _shortcut in self.TOOLS if key == self.tool) + " ▾")
-        self.zoom_choice.set_text(f"Zoom {self.zoom}×")
+        self.tool_choice.set_text(self._tool_label(self.tool) + " ▾")
+        self.zoom_choice.set_text(self._drawing_text("button.zoom", "Zoom {value}×", value=self.zoom))
         if getattr(self, "options_button", None) is not None:
-            tool = next(label for key, label, _shortcut in self.TOOLS if key == self.tool)
+            tool = self._tool_label(self.tool)
             suffix = f" · {self.brush_size}×{self.brush_size}" if self.tool in self.SIZED_TOOLS else ""
-            self.options_button.set_text(f"{tool}optionen{suffix} …")
+            caption = self._drawing_text("option.caption", "{tool}optionen", tool=tool)
+            self.options_button.set_text(f"{caption}{suffix} …")
         mark(self.preview_button, self.preview_visible)
         mark(self.tiled_button, self.tiled_preview)
         mark(self.gray_button, self.grayscale)
@@ -14261,23 +14350,43 @@ class DrawingEditor(tk.Frame):
 
     def update_status(self, message=None):
         tool = next(label for key, label, _shortcut in self.TOOLS if key == self.tool)
+        tool_key = self.STATUS_TOOL_KEYS.get(self.tool)
         x, y = self.cursor
-        parts = [tool]
+        parts = [glide_i18n.t(f"drawing.status.tool.{tool_key}", tool) if tool_key else tool]
         if self.tool in self.SIZED_TOOLS:
             parts.append(f"{self.brush_size}×{self.brush_size}")
         if self.tool in self.SYMMETRIC_TOOLS and self.symmetry != "none":
-            parts.append("Symmetrie " + {"x": "links/rechts", "y": "oben/unten", "xy": "beide"}[self.symmetry])
+            direction_key, direction_fallback = {
+                "x": ("left_right", "links/rechts"),
+                "y": ("top_bottom", "oben/unten"),
+                "xy": ("both", "beide"),
+            }[self.symmetry]
+            direction = glide_i18n.t(f"drawing.status.symmetry.{direction_key}", direction_fallback)
+            parts.append(glide_i18n.t("drawing.status.symmetry", "Symmetrie {direction}",
+                                       direction=direction))
         if self.tool == "fill" and self.fill_pattern != "solid":
-            parts.append(dict(self.PATTERN_CHOICES)[self.fill_pattern])
-        parts.append(f"Farbe {self.color} / {self.secondary}")
-        parts.append(f"Zelle {x + 1}, {y + 1}: {self.model.color_at(x, y)}")
+            pattern_key = {"checker": "checkerboard", "dots25": "dots_25", "dots75": "dots_75"}[self.fill_pattern]
+            pattern_fallback = dict(self.PATTERN_CHOICES)[self.fill_pattern]
+            parts.append(glide_i18n.t(f"drawing.status.pattern.{pattern_key}", pattern_fallback))
+        parts.append(glide_i18n.t("drawing.status.colors", "Farbe {foreground} / {background}",
+                                  foreground=self.color, background=self.secondary))
+        parts.append(glide_i18n.t("drawing.status.cell", "Zelle {x}, {y}: {color}",
+                                  x=x + 1, y=y + 1, color=self.model.color_at(x, y)))
         if self.selection:
             x0, y0, x1, y1 = self.selection
-            parts.append(f"Auswahl {x1 - x0 + 1} × {y1 - y0 + 1}")
-        parts.append(f"{self.model.width} × {self.model.height} · Zoom {self.zoom}×")
+            parts.append(glide_i18n.t("drawing.status.selection", "Auswahl {width} × {height}",
+                                      width=x1 - x0 + 1, height=y1 - y0 + 1))
+        parts.append(glide_i18n.t("drawing.status.dimensions", "{width} × {height} · Zoom {zoom}×",
+                                  width=self.model.width, height=self.model.height, zoom=self.zoom))
         pending = self.model.peek_undo()
-        parts.append(f"Rückgängig: {pending.label}" if pending else "Nichts rückgängig zu machen")
-        parts.append(self.SAVE_STATES.get(self.save_state, ""))
+        if pending:
+            action_key = self.STATUS_ACTION_KEYS.get(pending.label)
+            action = glide_i18n.t(f"drawing.action.{action_key}", pending.label) if action_key else pending.label
+            parts.append(glide_i18n.t("drawing.status.undo_pending", "Rückgängig: {action}", action=action))
+        else:
+            parts.append(glide_i18n.t("drawing.status.undo_empty", "Nichts rückgängig zu machen"))
+        save_state = self.SAVE_STATES.get(self.save_state, "")
+        parts.append(glide_i18n.t(f"drawing.status.save.{self.save_state}", save_state) if save_state else "")
         # Immer genau zwei Zeilen: oben der Zustand, darunter Meldung und
         # Referenzhinweis. Bis 26.09.2026 kam für jede Meldung eine Zeile dazu
         # und ging mit der nächsten Mausbewegung wieder weg; die Fläche darüber
@@ -15016,7 +15125,13 @@ class DrawingEditor(tk.Frame):
             used = state.get("color") if isinstance(state, dict) else None
             if used:
                 self.remember_color(used)
-            self.update_status(f"{action.label}: {action.count} Zelle(n) geändert")
+            action_key = self.STATUS_ACTION_KEYS.get(action.label)
+            action_label = glide_i18n.t(f"drawing.action.{action_key}", action.label) if action_key else action.label
+            count_key = "one" if action.count == 1 else "many"
+            fallback = ("{action}: 1 Zelle geändert" if count_key == "one"
+                        else "{action}: {count} Zellen geändert")
+            self.update_status(glide_i18n.t(f"drawing.status.cells_changed.{count_key}", fallback,
+                                            action=action_label, count=action.count))
         else:
             self.update_status()
 
@@ -15129,7 +15244,7 @@ class DrawingEditor(tk.Frame):
         if self.selection:
             self.selection = None
             self._draw_overlays()
-            self.update_status("Auswahl aufgehoben")
+            self.update_status(glide_i18n.t("drawing.status.selection_cleared", "Auswahl aufgehoben"))
         self._sync_select_cursor(None)
         return "break"
 
@@ -15174,16 +15289,18 @@ class DrawingEditor(tk.Frame):
         self.selection = (0, 0, size - 1, size - 1)
         self.set_tool("select")
         self._draw_overlays()
-        self.update_status("Ganze Fläche ausgewählt")
+        self.update_status(glide_i18n.t("drawing.status.select_all", "Ganze Fläche ausgewählt"))
         return "break"
 
     def copy_selection(self):
         if not self.selection:
-            self.update_status("Keine Auswahl · Werkzeug „Auswahl“ (S) und Rechteck aufziehen")
+            self.update_status(glide_i18n.t(
+                "drawing.status.no_selection", "Keine Auswahl · Werkzeug „Auswahl“ (S) und Rechteck aufziehen"))
             return "break"
         self.app.drawing_clipboard = self.model.copy_region(*self.selection)
         region = self.app.drawing_clipboard
-        self.update_status(f"Kopiert: {region.width} × {region.height} Zellen")
+        self.update_status(glide_i18n.t("drawing.status.copied", "Kopiert: {width} × {height} Zellen",
+                                        width=region.width, height=region.height))
         return "break"
 
     def cut_selection(self):
@@ -15206,7 +15323,8 @@ class DrawingEditor(tk.Frame):
     def paste_clipboard(self):
         region = getattr(self.app, "drawing_clipboard", None)
         if region is None:
-            self.update_status("Nichts zum Einfügen · zuerst einen Bereich kopieren")
+            self.update_status(glide_i18n.t(
+                "drawing.status.nothing_to_paste", "Nichts zum Einfügen · zuerst einen Bereich kopieren"))
             return "break"
         x, y = (self.selection[0], self.selection[1]) if self.selection else self.cursor
         try:
@@ -15233,7 +15351,7 @@ class DrawingEditor(tk.Frame):
             self._key_anchor = None
             self.render_changes()
             self._draw_overlays()
-            self.update_status("Abgebrochen")
+            self.update_status(glide_i18n.t("drawing.status.cancelled", "Abgebrochen"))
         elif self._stroke is not None:
             self._release()
         elif self.selection:
@@ -15345,7 +15463,9 @@ class DrawingEditor(tk.Frame):
                         self._draw_overlays()
                     else:
                         self._begin_shape((x, y), button)
-                    self.update_status("Anfang gesetzt · Pfeiltasten führen · Leertaste bestätigt · Escape bricht ab")
+                    self.update_status(glide_i18n.t(
+                        "drawing.status.anchor_set",
+                        "Anfang gesetzt · Pfeiltasten führen · Leertaste bestätigt · Escape bricht ab"))
                 else:
                     self._key_anchor = None
                     if self.tool == "select":
@@ -15369,22 +15489,25 @@ class DrawingEditor(tk.Frame):
 
     def pick_color(self, x, y, secondary=False):
         color = self.model.color_at(x, y)
-        source = "Zeichnung"
+        source = glide_i18n.t("drawing.status.source.drawing", "Zeichnung")
         if (color == glide_drawing.BACKGROUND and self.reference_visible
                 and self.reference_colors is not None):
             color = self.reference_colors[y * self.model.width + x]
-            source = "Referenz"
+            source = glide_i18n.t("drawing.status.source.reference", "Referenz")
         self.set_color(color, secondary=secondary)
-        target = "Hintergrund" if secondary else "Vordergrund"
-        self.update_status(f"Pipette: {color} aus {source}, Zelle {x + 1}, {y + 1} → {target}")
+        target = glide_i18n.t("drawing.status.background", "Hintergrund") if secondary else \
+            glide_i18n.t("drawing.status.foreground", "Vordergrund")
+        self.update_status(glide_i18n.t("drawing.status.picked_color",
+                                        "Pipette: {color} aus {source}, Zelle {x}, {y} → {target}",
+                                        color=color, source=source, x=x + 1, y=y + 1, target=target))
 
     def undo(self, _event=None):
-        return self._history_step(self.model.undo, "Zurückgenommen", "Kein weiterer Rückgängig-Schritt")
+        return self._history_step(self.model.undo, "undo_done", "undo_empty")
 
     def redo(self, _event=None):
-        return self._history_step(self.model.redo, "Wiederhergestellt", "Kein weiterer Wiederholen-Schritt")
+        return self._history_step(self.model.redo, "redo_done", "redo_empty")
 
-    def _history_step(self, step, done_text, empty_text):
+    def _history_step(self, step, done_key, empty_key):
         if self._busy():
             return "break"
         action = step()
@@ -15392,7 +15515,21 @@ class DrawingEditor(tk.Frame):
         if action:
             self.mark_unsaved()
             self.schedule_save()
-        self.update_status(f"{done_text}: {action.label} ({action.count} Zellen)" if action else empty_text)
+            action_key = self.STATUS_ACTION_KEYS.get(action.label)
+            action_label = glide_i18n.t(f"drawing.action.{action_key}", action.label) if action_key else action.label
+            count_key = "one" if action.count == 1 else "many"
+            fallback = {
+                ("undo_done", "one"): "Zurückgenommen: {action} (1 Zelle)",
+                ("undo_done", "many"): "Zurückgenommen: {action} ({count} Zellen)",
+                ("redo_done", "one"): "Wiederhergestellt: {action} (1 Zelle)",
+                ("redo_done", "many"): "Wiederhergestellt: {action} ({count} Zellen)",
+            }[(done_key, count_key)]
+            self.update_status(glide_i18n.t(f"drawing.status.{done_key}.{count_key}", fallback,
+                                            action=action_label, count=action.count))
+        else:
+            fallback = ("Kein weiterer Rückgängig-Schritt" if empty_key == "undo_empty"
+                        else "Kein weiterer Wiederholen-Schritt")
+            self.update_status(glide_i18n.t(f"drawing.status.{empty_key}", fallback))
         return "break"
 
     def show_more_menu(self):
@@ -15413,8 +15550,8 @@ class DrawingEditor(tk.Frame):
                        activebackground=self.app.theme["selection"],
                        activeforeground=self.app.theme["selection_text"])
         menu._profile = tk.StringVar(menu, value=self.display_profile)
-        for key, title in self.DISPLAY_PROFILES.items():
-            menu.add_radiobutton(label=title, value=key, variable=menu._profile,
+        for key in self.DISPLAY_PROFILES:
+            menu.add_radiobutton(label=self._profile_label(key), value=key, variable=menu._profile,
                                  command=lambda value=key: self.set_display_profile(value))
         try:
             menu.tk_popup(self.display_button.winfo_rootx(),
@@ -15431,7 +15568,7 @@ class DrawingEditor(tk.Frame):
         return True
 
     def apply_display_profile(self):
-        self.display_button.set_text(self.DISPLAY_PROFILES[self.display_profile] + " ▾")
+        self.display_button.set_text(self._profile_label(self.display_profile) + " ▾")
         controls = glide_design.drawing_controls(self.display_profile)
         if self.animated:
             if "animation" in controls:
@@ -32461,6 +32598,10 @@ class ListApp:
             self._due_column_width = None
             self.apply_ui_font()
             self.apply_theme()
+            if chosen_lang_code != previous_lang:
+                editor = self.current_drawing_editor()
+                if editor is not None:
+                    editor.refresh_locale()
             self.update_sidebar_list()
             self.update_header_title()
             self.refresh_tree()

@@ -1,6 +1,6 @@
 # Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
 
-Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.42
+Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.55 auf `main`; V1.57 lokaler Kandidat
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 
@@ -41,7 +41,7 @@ flowchart TD
    - Soll: Komplette App-Oberfläche umschaltbar: Automatisch (nach OS), Deutsch, Englisch.
    - Menüs (`desktop_adapter.py`), Werkzeugleiste, Seitenleiste, Kern-Dialoge, Einstellungen, Status- und Fehlermeldungen.
    - Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Modulbudget-konform).
-   - Ist: Spracheinstellung, Kataloge, Menü-/Tastaturbeschriftungen, ausgewählte Seitenleistenbereiche und der Einstellungsdialog sind zweisprachig. Weitere Dialoge, Werkzeugleisten, Inspektoren, Status- und Rückmeldetexte bleiben teilweise deutsch; vollständige Oberflächenlokalisierung ist nicht belegt und Etappe 2 bleibt offen.
+   - Ist: Spracheinstellung, Kataloge, Menü-/Tastaturbeschriftungen, ausgewählte Seitenleistenbereiche, Einstellungsdialog, Seiteneditor, Aktionsfeedback und Aufgabeninspektor sind in den geprüften Bereichen zweisprachig. Der lokale Stand 20.11.2026 ergänzt Statuszeile, Kernmeldungen und zentrale Zeichensteuerungen (V1.57-Kandidat); Animations-/Mehr-Menüs, weitere Dialoge, Zeichen-/Exportmeldungen, dynamische Undo-Texte und einzelne Status-/Fehlertexte bleiben teilweise deutsch. Vollständige Oberflächenlokalisierung und menschliche Sicht-/Bedienabnahme sind offen.
 3. **Plattformpakete & Installer:**
    - **macOS:** `.app`-Bundle, `.dmg` und `.tar.gz` (Ad-hoc signiert, arm64).
    - **Windows:** Inno-Setup-Installer `Glide-setup.exe` (Startmenü-Icon, saubere Deinstallation, AppUserModelID `Shaye.Glide`, unprivilegiert nach `%LOCALAPPDATA%\Programs\Glide`) + portable `.zip`.
@@ -119,7 +119,7 @@ flowchart TD
 Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. PR #148 hat den zweisprachigen Einstellungsdialog gemergt; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und erste Bereiche via PR #134; Einstellungsdialog im lokalen Folgeschnitt zweisprachig, vollständige UI-/Status-/Shell-Lokalisierung offen)
+- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und weitere Bereiche in `main`; lokaler V1.57-Kandidat ergänzt Zeicheneditor-Status und zentrale Steuerungen, vollständige UI-/Status-/Shell-Lokalisierung und menschliche Abnahme offen)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
 - [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
 - [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. Öffentlicher Tag/Release, vollständige menschliche Abnahme und übersprungene UI-/Barrierefreiheitsjobs offen)
