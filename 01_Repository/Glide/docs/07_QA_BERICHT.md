@@ -14,7 +14,7 @@ Die Live-Repositoriumsabfrage bestätigte die deutsche GitHub-About-Beschreibung
 
 ## D93 Etappe 2: Zeicheneditor-Status (V1.56, 20.11.2026)
 
-Der lokale V1.56-Kandidat basiert auf `f1d00bc9`, ist nicht committet oder gepusht und betrifft nur die vorhandene Zeicheneditor-Statuszeile sowie Kernmeldungen für Auswahl, Kopieren, Pipette, Undo und Redo. Werkzeug-, Symmetrie-, Muster-, Farb-, Zellen-, Zoom-, Undo- und Speicherdarstellung folgt der aktiven Sprache; stabile Zeichen-/Aktionskennungen, Daten und Bearbeitungsabläufe bleiben unverändert. Der App-Quellhash lautet `c617a9e1b865b82cce1de4a687d4cdcaa6ddbd85f1d15ebe3feafe62c407ab69`.
+Der damalige V1.56-Kandidat basierte auf `f1d00bc9` und umfasste die Zeicheneditor-Statuszeile sowie Kernmeldungen für Auswahl, Kopieren, Pipette, Undo und Redo. Der zunächst lokale Teilstand ist inzwischen zusammen mit der V1.57-Fortsetzung in PR #157 enthalten. Werkzeug-, Symmetrie-, Muster-, Farb-, Zellen-, Zoom-, Undo- und Speicherdarstellung folgt der aktiven Sprache; stabile Zeichen-/Aktionskennungen, Daten und Bearbeitungsabläufe bleiben unverändert. Der App-Quellhash des damaligen Teilstands lautet `c617a9e1b865b82cce1de4a687d4cdcaa6ddbd85f1d15ebe3feafe62c407ab69`.
 
 Gezielt bestanden: `tests/unit/test_i18n.py` (**22/22**), `tests/integration/test_arbeitsmodi.py --fall feedback_locale` (**1/1**), `--fall drawing_locale` (**1/1**), `tests/integration/test_pixel3350.py` (bestanden), `tests/tools/test_glide_system.py` (**5/5**) und `tests/tools/test_standpruefung.py` (**27/27**). Die vollständige lokale CI-Grundstufe bestand mit Exitcode 0:
 
@@ -27,7 +27,7 @@ Sie prüfte 447 Python-Dateien, 716 aktuelle Markdown-Links, Werkzeuge, Fachtest
 
 ## D93 Etappe 2: Zeicheneditor-Steuerung (V1.57, 20.11.2026)
 
-Der lokale V1.57-Kandidat basiert auf `f1d00bc9`, bleibt uncommittet und ungepusht und ergänzt die Statuslokalisierung um Werkzeugwahl, Anzeigeprofile, Referenz-/Vorschauknöpfe, Zoom und Kontextmenüs. Beim Sprachwechsel aktualisiert sich der offene Editor. Werkzeug-, Profil-, Muster- und Befehlswerte bleiben stabile interne Kennungen. App-Quellhash: `496e3a2129fe5a927225fa6fdd97c3e2c119a452fce04d345ec47f0544f487a3`.
+Der V1.57-Schnitt ergänzt die Statuslokalisierung um Werkzeugwahl, Anzeigeprofile, Referenz-/Vorschauknöpfe, Zoom und Kontextmenüs. Beim Sprachwechsel aktualisiert sich der offene Editor. Werkzeug-, Profil-, Muster- und Befehlswerte bleiben stabile interne Kennungen. Der Schnitt wurde auf Commit `e76a27be` in [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) gegen `main` gepusht. App-Quellhash: `496e3a2129fe5a927225fa6fdd97c3e2c119a452fce04d345ec47f0544f487a3`.
 
 Gezielt bestanden: `tests/unit/test_i18n.py` (**22/22**); `tests/integration/test_arbeitsmodi.py --fall feedback_locale`, `--fall drawing_locale` und `--fall drawing_controls_locale` (je **1/1**). Der Steuerungsfall prüft beide Sprachen, stabile Kennungen und die Pflichtknöpfe bei 860 × 700 für alle vier Anzeigeprofile. `tests/integration/test_features330.py` und `tests/integration/test_pixel3350.py` bestanden; `tests/tools/test_glide_system.py` **5/5**, `tests/tools/test_standpruefung.py` **27/27**.
 
@@ -38,7 +38,7 @@ cd 01_Repository/Glide && GLIDE_DATA_DIR=/tmp/glide-roadmap-v157/final-data \
 python3 -B tests/tools/ci_grundstufe.py --protokoll /tmp/glide-roadmap-v157/final-protokoll
 ```
 
-Der Lauf prüfte 447 Python-Dateien und 716 aktuelle Markdown-Links sowie Werkzeuge, Fachtests, Analysen, Tk-Startprobe, Datenschutz und Ablage. Nicht blockierend: drei zulässige Prüfkandidat-/Lieferstandabweichungen (App-Kopie und Locale-Kataloge) und ein lokal wegen Zertifikatsprüfung nicht abrufbares Fremdpaket `tkinterdnd2`. `git diff --check` bestand. Es erfolgte keine native Sicht-/Screenreaderabnahme. Die Animationsleiste und Inhalte des Mehr-Menüs, weitere Zeichnungsdialoge und externe Zeichen-/Exportmeldungen bleiben offen.
+Der Lauf prüfte 447 Python-Dateien und 716 aktuelle Markdown-Links sowie Werkzeuge, Fachtests, Analysen, Tk-Startprobe, Datenschutz und Ablage. Nicht blockierend: drei zulässige Prüfkandidat-/Lieferstandabweichungen (App-Kopie und Locale-Kataloge) und ein lokal wegen Zertifikatsprüfung nicht abrufbares Fremdpaket `tkinterdnd2`. `git diff --check` bestand. PR #157 führt seine plattformabhängigen GitHub-Prüfungen am Live-PR; diese ändern sich mit jedem Folgecommit. Native Screenreader-/UI-Jobs sind übersprungen. Eine menschliche Sicht-/Screenreaderabnahme erfolgte nicht. Die Animationsleiste und Inhalte des Mehr-Menüs, weitere Zeichnungsdialoge und externe Zeichen-/Exportmeldungen bleiben offen.
 
 ## Live-GitHub-Nachprüfung nach PR #155 (20.11.2026)
 
