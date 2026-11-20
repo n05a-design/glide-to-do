@@ -189,8 +189,9 @@ class Schnittstelle(unittest.TestCase):
 # ein Zeitgeber über `after_scope()` oder `scope_for(...)` oder direkt in
 # `_register_after(...)` bzw. `.adopt(...)` (R2, V1.61).
 RESTKOPPLUNG = {
-    "direkte tk.Toplevel": 17,
-    "Zeitgeber ohne AfterScope": 11,
+    # Einzig der Tooltip (`overrideredirect`) ist kein Dialog und bleibt direkt (R4, V1.62).
+    "direkte tk.Toplevel": 1,
+    "Zeitgeber ohne AfterScope": 0,
 }
 
 

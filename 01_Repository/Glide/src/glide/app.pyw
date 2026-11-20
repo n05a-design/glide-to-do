@@ -72,7 +72,7 @@ def defer_window_menu_commands():
             # Am Hauptfenster aufhängen: Kontextmenüs werden oft direkt nach
             # dem Klick zerstört, und mit ihnen ihre ausstehenden Aufrufe.
             def spaeter(b=befehl, m=menu):
-                m._root().after_idle(b)
+                glide_window_lifetime.scope_for(m._root()).after_idle(b)
             spaeter._glide_aufgeschoben = True
             optionen["command"] = spaeter
         return optionen
@@ -259,7 +259,7 @@ from custom_controls import rounded_rect_points
 def root_after(root, delay, callback):
     """`after` ohne Ausnahme, wenn das Fenster gerade verschwindet."""
     try:
-        return root.after(delay, callback)
+        return glide_window_lifetime.scope_for(root).after(delay, callback)
     except tk.TclError:
         return None
 
@@ -4252,10 +4252,8 @@ class SavedFilters:
 
     def show_manager(self):
         app, theme = self.app, self.app.theme
-        dialog = tk.Toplevel(app.root)
-        dialog.title(glide_i18n.t("saved_view.manager.title", "Gespeicherte Filter"))
-        dialog.configure(bg=theme["bg"]); dialog.transient(app.root)
-        dialog.minsize(560, 420)
+        dialog = glide_modal_session.create_dialog(app.root, glide_i18n.t("saved_view.manager.title", "Gespeicherte Filter"),
+                                                 background=theme["bg"], minsize=(560, 420))
         body = tk.Frame(dialog, bg=theme["bg"], padx=24, pady=18)
         body.pack(fill="both", expand=True)
         tk.Label(body, text=glide_i18n.t("saved_view.manager.title", "Gespeicherte Filter"),
@@ -4332,10 +4330,11 @@ class SavedFilters:
         app, theme = self.app, self.app.theme
         initial = criteria or {"id": uuid.uuid4().hex, "name": glide_i18n.t("saved_view.new.title", "Neuer Filter"), "query": "", "list_ids": [], "label_ids": [],
                                "status": "open", "importance": "all", "due": "any", "label_mode": "any"}
-        dialog = tk.Toplevel(parent or app.root)
-        dialog.title(glide_i18n.t("saved_view.edit.title", "Filter bearbeiten") if criteria
-                     else glide_i18n.t("saved_view.new.title", "Neuer Filter"))
-        dialog.configure(bg=theme["bg"]); dialog.transient(parent or app.root)
+        dialog = glide_modal_session.create_dialog(
+            parent or app.root,
+            glide_i18n.t("saved_view.edit.title", "Filter bearbeiten") if criteria
+            else glide_i18n.t("saved_view.new.title", "Neuer Filter"),
+            background=theme["bg"])
         # Bei großer Schrift auf eine Spalte wechseln; die nötige Breite
         # zweier Spalten darf das Fenster nicht über die Bildschirmbreite zwingen.
         dialog.minsize(min(640, ResponsiveColumns.required_width(gap=12, chrome=88)), 440)
@@ -5529,11 +5528,8 @@ class ItemWorkspace:
         app = self.app
         valid = self.valid_cards(scope)
         already = {card["item_id"] for card in self.board(scope)["cards"]}
-        dialog = tk.Toplevel(app.root)
-        dialog.title("Inhalte anheften")
-        dialog.configure(bg=app.theme["bg"])
-        dialog.transient(app.root)
-        dialog.minsize(460, 360)
+        dialog = glide_modal_session.create_dialog(app.root, "Inhalte anheften", background=app.theme["bg"],
+                                                 minsize=(460, 360))
         outer = tk.Frame(dialog, bg=app.theme["bg"])
         outer.pack(fill="both", expand=True, padx=24, pady=24)
         self.label(outer, "Vorhandene Inhalte anheften", bold=True, size=16, bg="bg")
@@ -5936,7 +5932,7 @@ class ItemWorkspace:
 
             self._board_controls_narrow = None
             line.bind("<Configure>", pinnwand_dichte, add="+")
-            line.after_idle(pinnwand_dichte)
+            glide_window_lifetime.scope_for(line).after_idle(pinnwand_dichte)
         # Die drei Darstellungen Liste/Tabelle/Pinnwand werden ausschließlich
         # in der gemeinsamen Suchzeile geschaltet. In dieser Reiterzeile stehen
         # nur tatsächlich geöffnete Punkt-Reiter – dadurch erscheint „Pinnwand“
@@ -7063,7 +7059,7 @@ class ItemWorkspace:
             except tk.TclError:
                 pass
         try:
-            self.canvas.after_idle(anwenden)
+            glide_window_lifetime.scope_for(self.canvas).after_idle(anwenden)
         except tk.TclError:
             pass
 
@@ -7746,7 +7742,7 @@ class ItemWorkspace:
         if canvas is None or not canvas.winfo_exists() or self.board().get("background", "none") == "none":
             return
         if getattr(self, "_background_job", None) is None:
-            self._background_job = canvas.after_idle(self.draw_background)
+            self._background_job = glide_window_lifetime.scope_for(canvas).after_idle(self.draw_background)
 
     # ------------------------------------------------------------------
     # Menüs für Karteninhalt, Kartenfarbe und Hintergrund
@@ -20457,8 +20453,7 @@ class ListApp:
 
     def show_storage_status(self, event=None):
         self.refresh_storage_sizes()
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Speicherstatus")
+        dialog = glide_modal_session.create_dialog(self.root, "Speicherstatus", transient=False)
         dialog.geometry("680x480")
         dialog.minsize(480, 360)
         outer = tk.Frame(dialog, bg=self.theme["bg"])
@@ -25892,7 +25887,7 @@ class ListApp:
                     glide_core_accessibility.refresh(widget)
         glide_core_accessibility.bind_inspector_focus(leinwand, self.iter_descendants(huelle))
         if position:
-            leinwand.after_idle(lambda: leinwand.winfo_exists() and leinwand.yview_moveto(position))
+            glide_window_lifetime.scope_for(leinwand).after_idle(lambda: leinwand.winfo_exists() and leinwand.yview_moveto(position))
 
     @staticmethod
     def iter_descendants(widget):
@@ -27652,7 +27647,7 @@ class ListApp:
             row.bind("<Button-1>", lambda _event, frame=row: frame.focus_set(), add="+")
             rows.append((key, row))
             if key == focus_key:
-                row.after_idle(row.focus_set)
+                glide_window_lifetime.scope_for(row).after_idle(row.focus_set)
         versteckt = [key for key in self.home_tile_order() if not self.home_tile_visible(key)]
         if versteckt:
             CanvasLabel(self.home_content, text="AUSGEBLENDET", bg=theme["bg"], fg=theme["muted"],
@@ -31329,7 +31324,7 @@ class ListApp:
 
         def schedule(_event=None):
             hide()
-            state["after"] = widget.after(500, show)
+            state["after"] = glide_window_lifetime.scope_for(widget).after(500, show)
 
         for event in ("<Enter>", "<FocusIn>"):
             widget.bind(event, schedule, add="+")
@@ -36046,11 +36041,8 @@ class ListApp:
         pinboards = getattr(self.workspace, "pinboards", None) if hasattr(self, "workspace") else None
 
         theme = self.theme
-        dialog = tk.Toplevel(self.root)
-        dialog.title(f"Fundorte: {target_title}")
-        dialog.configure(bg=theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(560, 380)
+        dialog = glide_modal_session.create_dialog(self.root, f"Fundorte: {target_title}", background=theme["bg"],
+                                                 minsize=(560, 380))
         body = tk.Frame(dialog, bg=theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(
@@ -39844,7 +39836,7 @@ class ListApp:
             return
         try:
             rahmen.configure(bg=self.theme["card"])
-            rahmen.after_idle(lambda: rahmen.winfo_exists() and rahmen.configure(bg=self.theme["card"]))
+            glide_window_lifetime.scope_for(rahmen).after_idle(lambda: rahmen.winfo_exists() and rahmen.configure(bg=self.theme["card"]))
         except tk.TclError:
             pass
 
@@ -51328,7 +51320,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return self.create_template_in_section(identity, folder_id, section) if section else self.create_list_from_template(identity)
 
     def confirm_template_preview(self, template):
-        dialog = tk.Toplevel(self.root); dialog.title('Vorlage prüfen und anlegen'); dialog.transient(self.root)
+        dialog = glide_modal_session.create_dialog(self.root, 'Vorlage prüfen und anlegen')
         body = tk.Frame(dialog, bg=self.theme['bg']); body.pack(fill='both', expand=True, padx=20, pady=16)
         tk.Label(body, text='Gefüllte Vorschau', bg=self.theme['bg'], fg=self.theme['text'],
                  font=app_font(15, 'bold'), anchor='w').pack(fill='x')
@@ -58306,9 +58298,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if existing is not None and existing.winfo_exists():
             existing.lift(); return "break"
         theme = self.theme
-        dialog = self._quick_capture_dialog = tk.Toplevel(self.root)
-        dialog.title("Schnellerfassung"); dialog.configure(bg=theme["bg"]); dialog.transient(self.root)
-        dialog.minsize(500, 400)
+        dialog = self._quick_capture_dialog = glide_modal_session.create_dialog(
+            self.root, "Schnellerfassung", background=theme["bg"], minsize=(500, 400))
         actions = tk.Frame(dialog, bg=theme["bg"])
         actions.pack(side="bottom", fill="x", padx=glide_design.SPACING[24], pady=glide_design.SPACING[16])
         body = tk.Frame(dialog, bg=theme["bg"], padx=glide_design.SPACING[24], pady=glide_design.SPACING[18])
@@ -60387,11 +60378,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         result = {"value": None}
         purpose = purpose or ("planned" if title == "Bearbeitungstag" else "due")
         owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
-        dialog = tk.Toplevel(self.root)
-        dialog.title(title)
-        dialog.configure(bg=self.theme["bg"])
+        dialog = glide_modal_session.create_dialog(self.root, title, background=self.theme["bg"], transient=False,
+                                                 resizable=(False, False))
         dialog.transient(owner)
-        dialog.resizable(False, False)
 
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
@@ -61381,9 +61370,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             target = os.path.join(parent, "Glide-Markdown-"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
         snapshot = copy.deepcopy({"lists": self.lists, "folders": self.folders, "labels": self.labels,
                                   "trash": self.trash, "pinboards": self.settings.get("pinboards", {})})
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Alles als Markdown-Ordner")
-        dialog.configure(bg=self.theme["bg"])
+        dialog = glide_modal_session.create_dialog(self.root, "Alles als Markdown-Ordner", background=self.theme["bg"],
+                                                 transient=False)
         status = tk.Label(dialog, text="Gesamtausgabe wird erstellt …", bg=self.theme["bg"], fg=self.theme["text"], font=app_font(11))
         status.pack(padx=28, pady=24)
         cancel = threading.Event()
@@ -63336,9 +63324,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         editing = initial.get('id') in own_ids
         identity = initial.get('id') if editing else 'own-' + uuid.uuid4().hex
         result = {'value': None}
-        dialog = tk.Toplevel(self.root)
-        dialog.title('Eigener Auftrag')
-        dialog.configure(bg=self.theme['bg']); dialog.transient(self.root)
+        dialog = glide_modal_session.create_dialog(self.root, 'Eigener Auftrag', background=self.theme['bg'])
         body = tk.Frame(dialog, bg=self.theme['bg'])
         body.pack(fill='both', expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         self.dialog_label(body, 'Eigener Auftrag', bold=True, size=16)
@@ -63567,11 +63553,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return 'break'
 
         def preview_paket(paket):
-            window = tk.Toplevel(dialog)
-            window.title('Vorschau für KI')
-            window.configure(bg=self.theme['bg'])
-            window.transient(dialog)
-            window.minsize(460, 360)
+            window = glide_modal_session.create_dialog(dialog, 'Vorschau für KI', background=self.theme['bg'],
+                                                     minsize=(460, 360))
             body = tk.Frame(window, bg=self.theme['bg'])
             body.pack(fill='both', expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
             self.dialog_label(body, 'Auftrag und Kontext', bold=True, size=16)
@@ -63906,10 +63889,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return "break"
         theme = self.theme
         anwendbar = sum(1 for eintrag in vorschau if eintrag["status"] == "ok")
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Änderungsvorschlag prüfen")
-        dialog.configure(bg=theme["bg"])
-        dialog.transient(self.root)
+        dialog = glide_modal_session.create_dialog(self.root, "Änderungsvorschlag prüfen", background=theme["bg"])
         aussen = tk.Frame(dialog, bg=theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         self.dialog_label(aussen, "Änderungsvorschlag prüfen", bold=True, size=16)
@@ -64420,10 +64400,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def show_backup_catalog(self, event=None):
         """Sicherungen finden, lesend prüfen und bestehende Vergleichs-/Restorewege öffnen."""
         theme = self.theme
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Sicherungsübersicht")
-        dialog.configure(bg=theme["bg"])
-        dialog.transient(self.root)
+        dialog = glide_modal_session.create_dialog(self.root, "Sicherungsübersicht", background=theme["bg"])
         dialog.geometry("800x600")
         dialog.minsize(600, 480)
         outer = tk.Frame(dialog, bg=theme["bg"])
@@ -64659,10 +64636,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             alt_var.set(glide_backup_catalog.choice_label(list(pfade.items()), older_path))
         if newer_path is not None:
             neu_var.set(glide_backup_catalog.choice_label(list(pfade.items()), newer_path))
-        dialog = tk.Toplevel(self.root)
-        dialog.title("Sicherungen vergleichen")
-        dialog.configure(bg=theme["bg"])
-        dialog.transient(self.root)
+        dialog = glide_modal_session.create_dialog(self.root, "Sicherungen vergleichen", background=theme["bg"])
         aussen = tk.Frame(dialog, bg=theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         self.dialog_label(aussen, "Sicherungen vergleichen", bold=True, size=16)
@@ -67779,7 +67753,7 @@ Labels, Termine und Metadaten."""
         canvas._glide_scroll_pending = getattr(canvas, "_glide_scroll_pending", 0) + pixel
         if not getattr(canvas, "_glide_scroll_job", None):
             try:
-                canvas._glide_scroll_job = canvas.after_idle(lambda c=canvas: self._apply_canvas_scroll(c))
+                canvas._glide_scroll_job = glide_window_lifetime.scope_for(canvas).after_idle(lambda c=canvas: self._apply_canvas_scroll(c))
             except tk.TclError:
                 canvas._glide_scroll_job = None
         return "break"
@@ -67891,7 +67865,7 @@ Labels, Termine und Metadaten."""
             except (tk.TclError, ValueError, TypeError):
                 pass
             try:
-                state["job"] = widget.after(32, tick)
+                state["job"] = glide_window_lifetime.scope_for(widget).after(32, tick)
             except tk.TclError:
                 state["aktiv"] = False
 
@@ -68330,9 +68304,7 @@ Labels, Termine und Metadaten."""
             dialog = karte.inner
             grund = self.theme["card"]
         else:
-            dialog = tk.Toplevel(self.root)
-            dialog.title("Änderungsverlauf")
-            dialog.transient(self.root)
+            dialog = glide_modal_session.create_dialog(self.root, "Änderungsverlauf")
             grund = self.theme["bg"]
         dialog.configure(bg=grund)
         if not embedded:
@@ -70246,11 +70218,8 @@ class TemplateDraft(ListApp):
         return record
 
     def edit(self):
-        dialog = self.dialog = tk.Toplevel(self.root)
-        dialog.title("Vorlage bearbeiten")
-        dialog.configure(bg=self.theme["bg"])
-        dialog.transient(self.root)
-        dialog.minsize(800, 640)
+        dialog = self.dialog = glide_modal_session.create_dialog(self.root, "Vorlage bearbeiten", background=self.theme["bg"],
+                                                             minsize=(800, 640))
         footer = tk.Frame(dialog, bg=self.theme["bg"])
         footer.pack(side="bottom", fill="x", padx=24, pady=16)
         body = tk.Frame(dialog, bg=self.theme["bg"])
