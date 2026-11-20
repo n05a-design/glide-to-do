@@ -3655,4 +3655,6 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung:** `test_i18n.py` 22/22; `test_arbeitsmodi.py --fall drawing_dialogs_locale` sowie die vier übrigen Zeichenfälle je 1/1; `test_pixel3350` (Erwartung auf „64 Zellen wechseln“ nachgeführt), `test_animation3400`, `test_features329`, `test_fenster330`, `test_befunde330`, `test_bildkonversion`, `test_glide` und die Shell-Sperrklinke grün. Einzelheiten im QA-Bericht.
 
+**C2 – macOS-Workflow:** Der native Lauf scheiterte zuerst an der Referenzsprache: Der Mac-Runner hat `LANG=en_US.UTF-8`, ein frischer Datenordner folgt der Systemsprache, deutsche Texterwartungen liefen ins Leere. `pruefen.py` und `macos-paket.yml` setzen jetzt `LANGUAGE=de`; `test_i18n.py` isoliert seinen Umgebungstest. Einzelheiten im QA-Bericht.
+
 **D – Rest:** Import- und Einfügevorschau, Bildfolgen-Dialog und -Export, Symbolvorschau, Farbwahl, das mit Seiten geteilte Journal-Untermenü, Fehlertexte aus `glide_drawing`, die Kurzformen in `RoundedButton.action_text` sowie zwei „(n)“-Texte in Import (`drawing_import_preview_dialog`) und Austausch.

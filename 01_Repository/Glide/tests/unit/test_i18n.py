@@ -48,17 +48,26 @@ class I18nTests(unittest.TestCase):
                     os.environ[k] = v
 
     def test_detect_system_language_with_env(self):
-        orig_lang = os.environ.get("LANG")
+        # Alle vier Variablen selbst setzen: Die Prüfumgebung gibt LANGUAGE=de
+        # als Referenzsprache vor, und LANGUAGE hat Vorrang vor LANG.
+        names = ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG")
+        orig_env = {k: os.environ.get(k) for k in names}
         try:
+            for k in names:
+                os.environ.pop(k, None)
             os.environ["LANG"] = "en_US.UTF-8"
             self.assertEqual(i18n.detect_system_language(), "en")
             os.environ["LANG"] = "de_DE.UTF-8"
             self.assertEqual(i18n.detect_system_language(), "de")
+            os.environ["LANG"] = "en_US.UTF-8"
+            os.environ["LANGUAGE"] = "de"
+            self.assertEqual(i18n.detect_system_language(), "de", "LANGUAGE hat Vorrang vor LANG")
         finally:
-            if orig_lang is not None:
-                os.environ["LANG"] = orig_lang
-            elif "LANG" in os.environ:
-                del os.environ["LANG"]
+            for k, v in orig_env.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
     def test_resolve_language(self):
         self.assertEqual(i18n.resolve_language("de"), "de")

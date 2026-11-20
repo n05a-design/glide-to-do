@@ -1,5 +1,13 @@
 # QA-Bericht – Glide 1.0.0
 
+## macOS-Workflow mit Vollprüfung: Referenzsprache (20.11.2026)
+
+Der native Workflow `macos-paket.yml` mit Vollprüfung auf `17c06424` ([Lauf #44804469006](https://github.com/n05a-design/glide-to-do/actions/runs/44804469006)) baute Tk 9.1 und die Lizenzbasis, bestand den gezielten Kompaktfokus (`kompakt_verlorenes_loslassen` auf eigenem Desktop grün) und `test_seitenkarten --fall druck_tempo`, scheiterte dann aber in `test_bedienung33316.py`, Zeile 123: Die Aktionspalette fand mit „> Kopieren“ keine Aktion `copy_selected_to_clipboard` (`StopIteration`). Vollprüfung und Paketbau liefen deshalb nicht.
+
+**Ursache:** Der GitHub-Mac-Runner hat `LANG=en_US.UTF-8`; ein frischer Datenordner steht auf „system“, also lief Glide auf Englisch („Copy“). Lokal mit deutscher Systemsprache ist der Test auf Zweig und `main` grün. Reproduziert: mit `LANG=en_US.UTF-8` ohne `LANGUAGE` lokal rot (`StopIteration`), mit zusätzlich `LANGUAGE=de` grün. Unter Linux (`C.UTF-8`) und Windows ergab die Erkennung zufällig Deutsch.
+
+**Korrektur:** Prüfumgebung statt Produkt: `pruefen.py` setzt `LANGUAGE=de` für alle Suiten, `macos-paket.yml` ebenso auf Job-Ebene. `test_i18n.py` isoliert seinen Umgebungstest (er setzte nur `LANG` und wäre unter `LANGUAGE=de` falsch rot geworden) und prüft den Vorrang von `LANGUAGE`. Die Produktlogik bleibt: Ein englisches System startet Glide englisch. `test_i18n.py` 22/22 ohne Vorgabe, mit `LANGUAGE=de` und mit `LANG=en_US.UTF-8`.
+
 ## Lokaler macOS-Volllauf auf dem Stapelende `17c06424` (20.11.2026)
 
 `pruefen.py --zugang-nativ --modus voll` lief auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0 im Hintergrundmodus auf `17c06424` (#164, enthält `main` `bde7fa12` sowie Shell R1–R4 und V1.63) und endete mit Exitcode 1: 107 Schritte ausgeführt, danach Stopp in `test_arbeitsmodi --gruppe bedienung` (24/25), 27 Schritte ungeprüft. Rot war nur `kompakt_verlorenes_loslassen` mit `focus: None`, während der Finder vorn lag. Der Fall war einzeln 2/2 rot und auf dem unveränderten `main` `bde7fa12` ebenfalls 2/2 rot mit identischem Befund; er ist ein bekannter Mac-Fokusfall (siehe unten, Tk meldet den App-Wechsel nicht) und kein Schnittfehler. Der macOS-Workflow prüft ihn gezielt auf eigenem Desktop.
