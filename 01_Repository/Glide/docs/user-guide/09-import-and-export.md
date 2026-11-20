@@ -6,7 +6,7 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 
 > Controlled translation of the German function reference. If the texts differ, the German text applies. Most import, export and exchange menu entries are still German; see [how this guide names controls](README.md#interface-language).
 
-**Principles:** every import shows a preview first and is one undo step. An import never overwrites existing items; it only adds new ones. The single exception is a reviewed AI change proposal (see below). Exports write to a file or folder you choose. They never write into Glide's own data files.
+**Principles:** every import shows a preview first and is one undo step. Imports add new content and do not overwrite existing items, with two exceptions: a reviewed AI change proposal (see below), and re-importing a Notion page that was imported before, which updates that page (see the table). Exports write to a file or folder you choose. They never write into Glide's own data files.
 
 ## Import
 
@@ -19,7 +19,7 @@ All imports are under **File › Import**.
 | *Kalenderdatei (ICS) importieren …* | Events become tasks; see [Calendar](05-calendar.md#importing-and-exporting-calendar-files). |
 | *Zeichnung (SVG/JSON) importieren …* | A Glide drawing file becomes a new drawing. |
 | *Seite aus Datei …* / *Seite aus Zwischenablage* | Markdown becomes a page. Local images become page images. |
-| *Notion-Export übernehmen …* | A "Markdown & CSV" ZIP from Notion. Nothing is preselected: you choose each page. Pages you changed in Glide need an extra conflict release. CSV databases stay in the original archive, which is kept as an attachment. Glide does not sync live with Notion. |
+| *Notion-Export übernehmen …* | A "Markdown & CSV" ZIP from Notion. The preview compares each page with Glide (new, source changed, changed only in Glide, conflict, unchanged, Glide page missing). Nothing is preselected: you choose each page. **A page imported before is updated in place:** its title, text, tasks and imported attachments are replaced, and its previous tasks move to the trash. A page you also changed in Glide needs an extra conflict release, and approving it replaces your local changes. Glide writes a pre-backup first, and the whole import is one undo step. CSV databases stay in the original archive, which is kept as an attachment. Glide does not sync live with Notion. |
 | *Glide-Seiten importieren …* | Pages and books from `.glidepage`, with their attachments and new IDs. |
 
 ## Export
