@@ -1,5 +1,11 @@
 # QA-Bericht – Glide 1.0.0
 
+## Lokaler macOS-Volllauf auf dem Stapelende `17c06424` (20.11.2026)
+
+`pruefen.py --zugang-nativ --modus voll` lief auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0 im Hintergrundmodus auf `17c06424` (#164, enthält `main` `bde7fa12` sowie Shell R1–R4 und V1.63) und endete mit Exitcode 1: 107 Schritte ausgeführt, danach Stopp in `test_arbeitsmodi --gruppe bedienung` (24/25), 27 Schritte ungeprüft. Rot war nur `kompakt_verlorenes_loslassen` mit `focus: None`, während der Finder vorn lag. Der Fall war einzeln 2/2 rot und auf dem unveränderten `main` `bde7fa12` ebenfalls 2/2 rot mit identischem Befund; er ist ein bekannter Mac-Fokusfall (siehe unten, Tk meldet den App-Wechsel nicht) und kein Schnittfehler. Der macOS-Workflow prüft ihn gezielt auf eigenem Desktop.
+
+Der lokale Paketbau kam nicht zustande: `lizenzen_tk91_macos.py` verlangt Git-Checkouts von Tcl, Tk und Python auf den Pins; die Quellordner der Laufzeit von 3.55.1 haben kein `.git` mehr, und `hole_runtimequellen.py` erlaubt den Abruf ausdrücklich nur im Hosted-CI. Diese Schutzregel wurde nicht umgangen. Der native Nachweis läuft deshalb über `macos-paket.yml` mit Vollprüfung ([Lauf #44804469006](https://github.com/n05a-design/glide-to-do/actions/runs/44804469006)); sein Ergebnis ist hier nachzutragen.
+
 ## D93 Etappe 2: Zeichendialoge DE/EN (V1.63, 20.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/d93-drawing-dialogs-i18n` über R3/R4. Grün: `test_i18n.py` 22/22 (171 konstante Schlüssel-/Fallback-Paare ohne Abweichung, Platzhalter DE/EN gleich); `test_arbeitsmodi.py --fall drawing_dialogs_locale` 1/1 (Titel, Knöpfe, Rückfragen beider Sprachen, verworfenes Ersetzen ohne Zellenänderung, Anhangsname `Zwischenstand – Probe de/en.json` stabil) sowie `drawing_locale`, `drawing_controls_locale`, `drawing_more_locale`, `drawing_export_locale`; `test_pixel3350`, `test_animation3400`, `test_features329`, `test_fenster330`, `test_befunde330`, `test_bildkonversion`, `test_glide`, `test_shell_importregel.py`. `test_pixel3350` erwartete den alten Text „64 Zelle(n)“; die Erwartung prüft jetzt die neue Mehrzahl „64 Zellen wechseln“. Menschliche Sichtprüfung und GitHub-Vollprüfung stehen aus.
