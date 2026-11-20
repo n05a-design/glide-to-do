@@ -17,7 +17,7 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## Where decisions live
 
-The complete decision register D01–D93 and working procedure are in [`docs/ARBEITSRICHTUNG.md`](../../ARBEITSRICHTUNG.md). Do not reconstruct or renumber decisions from this summary. The development plan holds implementation/status chronologically; QA holds the actual test evidence. Historical records retain the source version and cannot be rewritten as current evidence.
+The complete decision register D01–D94 and working procedure are in [`docs/ARBEITSRICHTUNG.md`](../../ARBEITSRICHTUNG.md). Do not reconstruct or renumber decisions from this summary. The development plan holds implementation/status chronologically; QA holds the actual test evidence. Historical records retain the source version and cannot be rewritten as current evidence.
 
 ## Design and engineering principles affecting changes
 

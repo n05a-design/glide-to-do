@@ -40,7 +40,7 @@ These are not interchangeable. In particular, "workflow started," "test exists,"
 ## Safe work procedure
 
 1. Read handoff, repository rules, working direction, plan, document-maintenance matrix, primary behavior contract, and callers before changing code or authoritative docs.
-2. Quote the assigned user scope, distinguish authorized choices from proposals, and preserve D01–D93 and the freeze.
+2. Quote the assigned user scope, distinguish authorized choices from proposals, and preserve D01–D94 and the freeze.
 3. Set `GLIDE_DATA_DIR` to an isolated short temporary directory before importing Glide; use synthetic data only and `python3 -B`.
 4. Keep domain logic Tk-free and unit-tested; reuse existing mutation, save, modal, lifecycle, localization, and UI helpers.
 5. Inspect current callers, stable IDs, data formats, side effects, platform bounds, and the product Skill coupling before editing.

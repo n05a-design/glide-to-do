@@ -620,6 +620,30 @@ def fall_hauptfenster_abbau(u):
     u.pruefe(not lebt, "Hauptfenster besteht noch")
 
 
+def fall_dialogfabrik(u):
+    """R1 (D94): `create_dialog` legt Dialoge einheitlich an; sie laufen danach wie jeder Dialog modal."""
+    d = u.app._new_dialog("Fabrikdialog", withdrawn=True, resizable=(False, False), minsize=(320, 200))
+    u.app.root.update_idletasks()
+    u.pruefe(d.state() == "withdrawn", f"Fabrikdialog nicht verborgen: {d.state()!r}")
+    u.pruefe(d.title() == "Fabrikdialog", f"Titel: {d.title()!r}")
+    u.pruefe(d.cget("background") == u.app.theme["bg"], "Fabrikdialog folgt nicht dem Theme")
+    u.pruefe(str(d.transient()) == str(u.app.root), f"Besitzer: {d.transient()!r}")
+    u.pruefe(tuple(bool(x) for x in d.resizable()) == (False, False), f"Größenänderung: {d.resizable()!r}")
+    u.pruefe(tuple(d.minsize()) == (320, 200), f"Mindestgröße: {d.minsize()!r}")
+    d.deiconify()
+    beobachtet = {}
+
+    def waehrend():
+        beobachtet["grab"] = u.grab()
+        d.destroy()
+
+    u.ablauf([waehrend])
+    u.laufen(lambda: u.app.run_modal(d))
+    u.pruefe(beobachtet.get("grab") is d, f"Griff während des Wartens: {beobachtet.get('grab')!r}")
+    u.pruefe(u.grab() is None, f"Griff nach dem Schließen nicht frei: {u.grab()!r}")
+    u.pruefe(not u.protokoll, f"unerwarteter Protokolleintrag: {u.protokoll}")
+
+
 FAELLE = {
     "grundvertrag": fall_grundvertrag,
     "escape": fall_escape,
@@ -638,6 +662,7 @@ FAELLE = {
     "fokus_drittes_fenster": fall_fokus_drittes_fenster,
     "menue": fall_menue,
     "hauptfenster_abbau": fall_hauptfenster_abbau,
+    "dialogfabrik": fall_dialogfabrik,
 }
 
 
@@ -653,6 +678,7 @@ GEGENPROBEN = {
     "ohne_wartevariable": ("wait_modal", "finished = getattr(dialog, FINISHED_ATTRIBUTE, None)",
                            "finished = None", "wiederverwendbar"),
     "ohne_rueckgabe": ("modal_over", "owner.grab_set()", "pass", "verschachtelt"),
+    "ohne_dialogbesitzer": ("create_dialog", "dialog.transient(parent)", "pass", "dialogfabrik"),
     "ohne_fokusrueckgabe": ("return_focus", "target.focus_set()", "pass", "fokus_verschoben"),
     "ohne_fokusmerken": ("remember_focus", "widget = window.focus_lastfor()", "widget = None",
                          "fokus_verschoben"),

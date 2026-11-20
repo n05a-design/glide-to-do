@@ -21,6 +21,7 @@ SCHNITTSTELLE = {
     "remember_focus": ["root", "dialog", "parent"],
     "return_focus": ["root", "dialog", "remembered"],
     "wait_modal": ["root", "dialog", "parent", "log_error"],
+    "create_dialog": ["parent", "title", "background", "transient", "withdrawn", "resizable", "minsize"],
     "run_modal": ["root", "dialog", "parent", "background", "max_screen_share", "log_error"],
 }
 
