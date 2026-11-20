@@ -944,6 +944,93 @@ def fall_drawing_dialogs_locale(lauf):
     return "Farb-, Paletten-, Zwischenstands-, Leer-, Rahmen- und Nachzeichendialoge DE/EN; Anhangsname stabil"
 
 
+def fall_drawing_import_locale(lauf):
+    """Symbolvorschau, Import-/Einfügevorschau, Farbwahl und Importfehler des Zeicheneditors DE/EN."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None
+    editor.model.paint_cells([(0, 0)], "#C43BFF")
+    expected = {
+        "de": {
+            "icon": ("Symbol vor dem Export prüfen", {"Exportieren", "Abbrechen", "Heller Grund", "Dunkler Grund"},
+                     "Grund durchsichtig · links Originalgröße"),
+            "import": ("Zeichnung übernehmen?", {"Als neue Zeichnung", "„Probe“ ersetzen", "Abbrechen"},
+                       "Quelle · 16 × 16 Zellen · 2 Farben · 1 bemalte Zelle", "Hinweis: Achtung"),
+            "color": ("Zeichenfarbe", {"Übernehmen", "Abbrechen", "Farbton waagerecht, Sättigung senkrecht",
+                                       "#RGB, #RRGGBB oder Farbname"}),
+            "paste": "Zeichnung einfügen", "importfile": "Zeichnung importieren",
+        },
+        "en": {
+            "icon": ("Check icon before export", {"Export", "Cancel", "Light background", "Dark background"},
+                     "Transparent background · original size on the left"),
+            "import": ("Take over drawing?", {"As new drawing", "Replace “Probe”", "Cancel"},
+                       "Quelle · 16 × 16 cells · 2 colors · 1 painted cell", "Note: Achtung"),
+            "color": ("Drawing color", {"Apply", "Cancel", "Hue horizontally, saturation vertically",
+                                        "#RGB, #RRGGBB or color name"}),
+            "paste": "Paste drawing", "importfile": "Import drawing",
+        },
+    }
+
+    def texts(widget):
+        found = []
+        for child in widget.winfo_children():
+            text = getattr(child, "text", None)
+            if isinstance(text, str):
+                found.append(text)
+            elif isinstance(child, (mod.tk.Label, mod.GlideCheckbutton)):
+                found.append(child.cget("text"))
+            found.extend(texts(child))
+        return found
+
+    def modal_texts(action):
+        seen = []
+
+        def capture(dialog, *args, **kwargs):
+            seen.append((dialog.title(), texts(dialog)))
+            dialog.destroy()
+
+        with patch.object(app, "run_modal", side_effect=capture):
+            action()
+        idle(lauf, 2)
+        assert len(seen) == 1, seen
+        return seen[0]
+
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            title, shown = modal_texts(lambda: app.drawing_icon_preview(editor.model.copy(), True))
+            assert title == labels["icon"][0] and labels["icon"][1] <= set(shown), (language, title, shown)
+            assert any(t.startswith(labels["icon"][2]) for t in shown), shown
+
+            title, shown = modal_texts(lambda: app.drawing_import_preview_dialog(
+                editor.model.copy(), "Quelle", ["Achtung"], allow_replace=True, current_title="Probe"))
+            assert title == labels["import"][0] and labels["import"][1] <= set(shown), (language, title, shown)
+            assert labels["import"][2] in shown and labels["import"][3] in shown, shown
+
+            title, shown = modal_texts(lambda: app.drawing_color_dialog("#C43BFF", editor.model.palette))
+            assert title == labels["color"][0] and labels["color"][1] <= set(shown), (language, title, shown)
+
+            fehler = []
+            with patch.object(app, "show_error", side_effect=lambda t, text, **k: fehler.append(t)), \
+                    patch.object(app.root, "clipboard_get", return_value="kein Bild"):
+                app.drawing_paste_text(editor)
+            assert fehler == [labels["paste"]], fehler
+            fehler.clear()
+            kaputt = Path(tempfile.mkdtemp(prefix="glide-zeichenimport-")) / "kaputt.json"
+            kaputt.write_text("{", encoding="utf-8")
+            with patch.object(app, "show_error", side_effect=lambda t, text, **k: fehler.append(t)), \
+                    patch.object(app, "ask_drawing_file", return_value=str(kaputt)):
+                app.drawing_import_replace(editor)
+            assert fehler == [labels["importfile"]], fehler
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+    return "Symbolvorschau, Import-/Einfügevorschau mit Einzahl/Mehrzahl, Farbwahl und Importfehler DE/EN"
+
+
 def fall_inspector_locale(lauf):
     """Der Aufgabeninspektor übersetzt Felder, ohne gespeicherte Kennungen umzuschreiben."""
     app, mod = lauf.app, lauf.mod
@@ -5941,7 +6028,7 @@ def fall_fensterende3507(lauf):
     return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
 
 
-FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "drawing_more_locale", "drawing_export_locale", "drawing_dialogs_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "drawing_more_locale", "drawing_export_locale", "drawing_dialogs_locale", "drawing_import_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

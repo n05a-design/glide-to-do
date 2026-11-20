@@ -52719,16 +52719,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         result = {"ok": False}
         theme = self.theme
-        dialog, body = self._drawing_dialog("Symbol vor dem Export prüfen")
+        dialog, body = self._drawing_dialog(glide_i18n.t("drawing.icon.title", "Symbol vor dem Export prüfen"))
         dialog._glide_icon_previews = {}
-        tk.Label(body, text=("Grund durchsichtig" if transparent else "Grund weiß")
-                 + " · links Originalgröße, rechts doppelt. 256 px entsteht ebenso ohne Glättung.",
+        tk.Label(body, text=(glide_i18n.t("drawing.icon.hint_transparent",
+                                          "Grund durchsichtig · links Originalgröße, rechts doppelt. "
+                                          "256 px entsteht ebenso ohne Glättung.") if transparent else
+                             glide_i18n.t("drawing.icon.hint_white",
+                                          "Grund weiß · links Originalgröße, rechts doppelt. "
+                                          "256 px entsteht ebenso ohne Glättung.")),
                  bg=theme["bg"], fg=theme["muted"], font=app_font(10), anchor="w", justify="left",
                  wraplength=self.DIALOG_TEXT_WIDTH).pack(anchor="w")
         raster = tk.Frame(body, bg=theme["bg"])
         raster.pack(anchor="w", pady=(10, 0))
         for zeile, (name, grund) in enumerate(self.ICON_PREVIEW_GROUNDS):
-            tk.Label(raster, text=name, bg=theme["bg"], fg=theme["text"], font=app_font(10),
+            tk.Label(raster, text=glide_i18n.t(("drawing.icon.ground.light", "drawing.icon.ground.dark")[zeile], name),
+                     bg=theme["bg"], fg=theme["text"], font=app_font(10),
                      anchor="w").grid(row=zeile, column=0, sticky="w", padx=(0, 12))
             for spalte, groesse in enumerate(self.ICON_PREVIEW_SIZES, 1):
                 zeilen = glide_drawing.icon_preview_rows(model.width, model.palette, model.cells, groesse,
@@ -52756,8 +52761,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(body, bg=theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Exportieren …", exportieren, "muted").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 8))
+        self._make_dialog_button(footer, glide_i18n.t("drawing.icon.export", "Exportieren …"), exportieren,
+                                 "muted").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy,
+                                 "muted").pack(side="right", padx=(0, 8))
         dialog.bind("<Return>", exportieren)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
@@ -52839,11 +52846,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def drawing_import_preview_dialog(self, model, source, warnings=(), allow_replace=False, current_title=""):
         """Zeigt eine Zeichnung vor der Übernahme. Rückgabe: "new", "replace" oder None."""
         result = {"value": None}
-        dialog, body = self._drawing_dialog("Zeichnung übernehmen?")
+        dialog, body = self._drawing_dialog(glide_i18n.t("drawing.import.title", "Zeichnung übernehmen?"))
         colors = len(set(model.cells))
         painted = sum(1 for value in model.cells if value)
-        tk.Label(body, text=f"{source} · {model.width} × {model.height} Zellen · {colors} Farbe(n) · "
-                            f"{painted} bemalte Zellen",
+        farben = (glide_i18n.t("drawing.import.colors.one", "1 Farbe") if colors == 1 else
+                  glide_i18n.t("drawing.import.colors.many", "{count} Farben", count=colors))
+        bemalt = (glide_i18n.t("drawing.import.painted.one", "1 bemalte Zelle") if painted == 1 else
+                  glide_i18n.t("drawing.import.painted.many", "{count} bemalte Zellen", count=painted))
+        tk.Label(body, text=glide_i18n.t("drawing.import.summary",
+                                         "{source} · {width} × {height} Zellen · {colors} · {painted}",
+                                         source=source, width=model.width, height=model.height,
+                                         colors=farben, painted=bemalt),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w",
                  wraplength=460, justify="left").pack(anchor="w")
         image = glide_drawing_image.thumbnail_photo(model, 256, master=dialog)
@@ -52851,7 +52864,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         preview.image = image
         preview.pack(pady=(8, 8))
         if warnings:
-            tk.Label(body, text="Hinweis: " + "; ".join(warnings), bg=self.theme["bg"], fg=self.theme["delete"],
+            tk.Label(body, text=glide_i18n.t("drawing.import.warnings", "Hinweis: {warnings}",
+                                             warnings="; ".join(warnings)),
+                     bg=self.theme["bg"], fg=self.theme["delete"],
                      font=app_font(9), wraplength=460, justify="left", anchor="w").pack(fill="x")
 
         def finish(value):
@@ -52860,12 +52875,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Als neue Zeichnung", lambda: finish("new"), "confirm",
-                                 width=170).pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("drawing.snapshot.as_new", "Als neue Zeichnung"),
+                                 lambda: finish("new"), "confirm", width=170).pack(side="right")
         if allow_replace:
-            self._make_dialog_button(footer, f"„{current_title[:24]}“ ersetzen", lambda: finish("replace"),
+            self._make_dialog_button(footer, glide_i18n.t("drawing.import.replace", "„{title}“ ersetzen",
+                                                          title=current_title[:24]), lambda: finish("replace"),
                                      "accent", width=210).pack(side="right", padx=(0, 8))
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted", width=110).pack(side="right",
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted",
+                                 width=110).pack(side="right",
                                                                                             padx=(0, 8))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
@@ -52883,11 +52900,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             model, warnings = self.parse_drawing_text(text)
         except glide_drawing.DrawingFormatError as exc:
-            self.show_error("Zeichnung einfügen", f"Die Zwischenablage enthält keine gültige Glide-Zeichnung; "
-                                                  f"der Bestand ist unverändert.\n\n{exc}")
+            self.show_error(glide_i18n.t("drawing.paste.title", "Zeichnung einfügen"), glide_i18n.t(
+                "drawing.paste.invalid",
+                "Die Zwischenablage enthält keine gültige Glide-Zeichnung; der Bestand ist unverändert.\n\n{error}",
+                error=exc))
             return "break"
         entry = self.drawing_entry(editor) if editor is not None else None
-        choice = self.drawing_import_preview_dialog(model, "Aus der Zwischenablage", warnings,
+        choice = self.drawing_import_preview_dialog(model, glide_i18n.t("drawing.paste.source", "Aus der Zwischenablage"),
+                                                    warnings,
                                                     allow_replace=entry is not None,
                                                     current_title=str(entry.get("title", "")) if entry else "")
         if choice == "replace" and entry is not None:
@@ -53946,14 +53966,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        path = self.ask_drawing_file("Zeichnung importieren")
+        path = self.ask_drawing_file(glide_i18n.t("drawing.import.file_title", "Zeichnung importieren"))
         if not path:
             return
         try:
             model, warnings = self.read_drawing_file(path)
         except (OSError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("Zeichnung importieren", f"Die Datei wurde nicht übernommen; der Bestand "
-                                                      f"ist unverändert.\n\n{exc}")
+            self.show_error(glide_i18n.t("drawing.import.file_title", "Zeichnung importieren"), glide_i18n.t(
+                "drawing.import.failed",
+                "Die Datei wurde nicht übernommen; der Bestand ist unverändert.\n\n{error}", error=exc))
             return
         choice = self.drawing_import_preview_dialog(model, os.path.basename(path), warnings, allow_replace=True,
                                                     current_title=str(entry.get("title", "Zeichnung")))
@@ -53973,14 +53994,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Standardweg: Eine Datei wird nach Vorschau als neue Zeichnungsseite angelegt."""
         if not self.editor_switch_allowed():
             return "break"
-        path = self.ask_drawing_file("Zeichnung importieren")
+        path = self.ask_drawing_file(glide_i18n.t("drawing.import.file_title", "Zeichnung importieren"))
         if not path:
             return "break"
         try:
             model, warnings = self.read_drawing_file(path)
         except (OSError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("Zeichnung importieren", f"Die Datei wurde nicht übernommen; der Bestand "
-                                                      f"ist unverändert.\n\n{exc}")
+            self.show_error(glide_i18n.t("drawing.import.file_title", "Zeichnung importieren"), glide_i18n.t(
+                "drawing.import.failed",
+                "Die Datei wurde nicht übernommen; der Bestand ist unverändert.\n\n{error}", error=exc))
             return "break"
         if self.drawing_import_preview_dialog(model, os.path.basename(path), warnings) != "new":
             return "break"
@@ -54239,11 +54261,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.run_modal(dialog, parent=parent)
         return result["value"]
 
-    def drawing_color_dialog(self, initial, palette=(), title="Zeichenfarbe"):
+    def drawing_color_dialog(self, initial, palette=(), title=None):
         """Farbspektrum, Helligkeit, Direkteingabe und die Farben der Zeichnung."""
         width, height = 256, 144
         result = {"value": None}
-        dialog, body = self._drawing_dialog(title)
+        dialog, body = self._drawing_dialog(title or glide_i18n.t("drawing.color.title", "Zeichenfarbe"))
         red, green, blue = (int(initial[index:index + 2], 16) / 255 for index in (1, 3, 5))
         hue, saturation, _value = colorsys.rgb_to_hsv(red, green, blue)
         state = {"hue": hue, "saturation": saturation, "color": initial, "image": None, "marker": None}
@@ -54251,7 +54273,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         # aktueller Farbe sah es sonst wie ein leerer schwarzer Kasten aus.
         # Die aktuelle Farbe bleibt trotzdem im Feld und in der Vorschau stehen.
         brightness = tk.IntVar(value=100)
-        tk.Label(body, text="Farbton waagerecht, Sättigung senkrecht", bg=self.theme["bg"],
+        tk.Label(body, text=glide_i18n.t("drawing.color.hint", "Farbton waagerecht, Sättigung senkrecht"),
+                 bg=self.theme["bg"],
                  fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         canvas = tk.Canvas(body, width=width, height=height, highlightthickness=1,
                            highlightbackground=self.theme["line"], cursor="crosshair")
@@ -54304,7 +54327,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         canvas.bind("<Button-1>", pick)
         canvas.bind("<B1-Motion>", pick)
-        self._drawing_scale(body, "Helligkeit", brightness, 5, 100, " %", draw_spectrum)
+        self._drawing_scale(body, glide_i18n.t("drawing.color.brightness", "Helligkeit"), brightness, 5, 100, " %",
+                            draw_spectrum)
         row = tk.Frame(body, bg=self.theme["bg"])
         row.pack(fill="x", pady=(8, 0))
         swatch.pack(in_=row, side="left")
@@ -54315,7 +54339,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                bd=0, highlightthickness=0, bg=self.theme["input"], fg=self.theme["text"],
                                insertbackground=self.theme["text"])
         color_entry.pack(padx=self.FIELD_PAD_X, pady=4)
-        tk.Label(row, text="#RGB, #RRGGBB oder Farbname", bg=self.theme["bg"], fg=self.theme["muted"],
+        tk.Label(row, text=glide_i18n.t("drawing.color.format", "#RGB, #RRGGBB oder Farbname"),
+                 bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(9)).pack(side="left", padx=(10, 0))
 
         def typed(_event=None):
@@ -54329,7 +54354,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if color not in (glide_drawing.BACKGROUND, glide_drawing.OPAQUE_WHITE)][-24:]
         # Grund und Deckweiß stehen immer vorn (03.11.2026): Der Grund ist im
         # Symbol durchsichtig (Schachbrett), Deckweiß füllt sichtbar weiß.
-        tk.Label(body, text="Farben dieser Zeichnung" if used else "Grund und Weiß", bg=self.theme["bg"],
+        tk.Label(body, text=(glide_i18n.t("drawing.palette.drawing_colors", "Farben dieser Zeichnung") if used
+                             else glide_i18n.t("drawing.color.base", "Grund und Weiß")), bg=self.theme["bg"],
                  fg=self.theme["muted"], font=app_font(9), anchor="w").pack(anchor="w", pady=(8, 2))
         flow = ButtonFlow(body, self.theme["bg"], gap=4)
         flow.pack(fill="x")
@@ -54339,9 +54365,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if color == glide_drawing.BACKGROUND:
                 for x, y in ((0, 0), (12, 12)):
                     chip.create_rectangle(x, y, x + 12, y + 12, fill="#D9D9D9", outline="")
-                self.add_tooltip(chip, "Grund · im Symbol und beim Export durchsichtig")
+                self.add_tooltip(chip, glide_i18n.t("drawing.color.tooltip_ground",
+                                                    "Grund · im Symbol und beim Export durchsichtig"))
             elif color == glide_drawing.OPAQUE_WHITE:
-                self.add_tooltip(chip, "Weiß · deckend, auch im Symbol")
+                self.add_tooltip(chip, glide_i18n.t("drawing.color.tooltip_white", "Weiß · deckend, auch im Symbol"))
             chip.bind("<Button-1>", lambda _event, value=color: set_color(value))
             flow.add(chip)
 
@@ -54356,8 +54383,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Übernehmen", apply, "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 8))
+        self._make_dialog_button(footer, glide_i18n.t("drawing.color.apply", "Übernehmen"), apply,
+                                 "confirm").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy,
+                                 "muted").pack(side="right", padx=(0, 8))
         color_entry.bind("<Return>", apply)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)

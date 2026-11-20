@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.63 auf `main` (PR #161–#164 gemergt, `09be5717`); V1.64 Shell-Paket `glide_shell` in PR #167
+Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.63 auf `main` (PR #161–#164 gemergt, `09be5717`); V1.64 Shell-Paket `glide_shell` in PR #167, V1.65 Zeichenimport/Symbol/Farbwahl auf `claude/d93-drawing-import-i18n`
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
