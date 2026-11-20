@@ -52425,12 +52425,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         color = color or editor.color
         if color not in editor.model.palette or color not in editor.model.used_colors():
             # Vorher nur ein Satz in der Statuszeile – der Menüeintrag wirkte tot (R11).
-            editor.update_status(f"{color} kommt in der Zeichnung nicht vor")
-            self.show_info("Farbe ersetzen", f"Die Vordergrundfarbe {color} kommt in der Zeichnung nicht vor. "
-                           "Wähle zuerst eine Farbe aus der Zeichnung, etwa mit der Pipette (I).")
+            editor.update_status(glide_i18n.t("drawing.replace.missing_status", "{color} kommt in der Zeichnung nicht vor",
+                                              color=color))
+            self.show_info(glide_i18n.t("drawing.replace.title", "Farbe ersetzen"), glide_i18n.t(
+                "drawing.replace.missing",
+                "Die Vordergrundfarbe {color} kommt in der Zeichnung nicht vor. "
+                "Wähle zuerst eine Farbe aus der Zeichnung, etwa mit der Pipette (I).", color=color))
             return
         replacement = self.drawing_color_dialog(color, editor.model.palette,
-                                                title=f"{color} ersetzen durch …")
+                                                title=glide_i18n.t("drawing.replace.dialog_title",
+                                                                   "{color} ersetzen durch …", color=color))
         if not replacement or replacement == color:
             return
         model = editor.model
@@ -52442,31 +52446,46 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             editor._abort_action(str(exc))
             return
         editor.render_full()
-        editor.update_status(f"Vorschau: {anzahl} Zelle(n) {color} → {replacement}")
-        if not self.ask_yes_no("Farbe ersetzen",
-                               f"{anzahl} Zelle(n) wechseln von {color} zu {replacement}. Die Zeichnung zeigt "
-                               "das Ergebnis bereits. Übernehmen?"):
+        count_key = "one" if anzahl == 1 else "many"
+        editor.update_status(glide_i18n.t(
+            f"drawing.replace.preview.{count_key}",
+            "Vorschau: 1 Zelle {old} → {new}" if anzahl == 1 else "Vorschau: {count} Zellen {old} → {new}",
+            count=anzahl, old=color, new=replacement))
+        if not self.ask_yes_no(glide_i18n.t("drawing.replace.title", "Farbe ersetzen"), glide_i18n.t(
+                f"drawing.replace.confirm.{count_key}",
+                ("1 Zelle wechselt von {old} zu {new}. Die Zeichnung zeigt das Ergebnis bereits. Übernehmen?"
+                 if anzahl == 1 else
+                 "{count} Zellen wechseln von {old} zu {new}. Die Zeichnung zeigt das Ergebnis bereits. Übernehmen?"),
+                count=anzahl, old=color, new=replacement)):
             model.discard_open_action(palette_vorher)
             editor.render_full()
-            editor.update_status("Farbe ersetzen verworfen – Zeichnung unverändert")
+            editor.update_status(glide_i18n.t("drawing.replace.discarded",
+                                              "Farbe ersetzen verworfen – Zeichnung unverändert"))
             return
         editor._finish_action({"color": replacement})
 
     def drawing_compact_palette(self, editor):
         unused = editor.model.unused_palette_count()
         if not unused:
-            editor.update_status("Alle Palettenfarben kommen in der Zeichnung vor")
+            editor.update_status(glide_i18n.t("drawing.compact.none", "Alle Palettenfarben kommen in der Zeichnung vor"))
             return
-        if not self.ask_yes_no("Unbenutzte Farben entfernen",
-                               f"{unused} Farbe(n) kommen in der Zeichnung nicht mehr vor und werden aus "
-                               "ihrer Palette entfernt. Danach ist Platz für neue Farben; der bisherige "
-                               "Rückgängig-Verlauf dieser Seite entfällt."):
+        unused_key = "one" if unused == 1 else "many"
+        if not self.ask_yes_no(glide_i18n.t("drawing.compact.title", "Unbenutzte Farben entfernen"), glide_i18n.t(
+                f"drawing.compact.confirm.{unused_key}",
+                ("1 Farbe kommt in der Zeichnung nicht mehr vor und wird aus ihrer Palette entfernt. "
+                 "Danach ist Platz für neue Farben; der bisherige Rückgängig-Verlauf dieser Seite entfällt."
+                 if unused == 1 else
+                 "{count} Farben kommen in der Zeichnung nicht mehr vor und werden aus ihrer Palette entfernt. "
+                 "Danach ist Platz für neue Farben; der bisherige Rückgängig-Verlauf dieser Seite entfällt."),
+                count=unused)):
             return
         removed = editor.model.compact_palette()
         editor.render_full()
         editor.mark_unsaved()
         editor.schedule_save()
-        editor.update_status(f"{removed} unbenutzte Farbe(n) entfernt")
+        editor.update_status(glide_i18n.t(
+            f"drawing.compact.done.{'one' if removed == 1 else 'many'}",
+            "1 unbenutzte Farbe entfernt" if removed == 1 else "{count} unbenutzte Farben entfernt", count=removed))
 
     # Zwischenstände als Anhänge (ZD-080) ---------------------------------------
     def drawing_snapshots(self, entry):
@@ -52477,11 +52496,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if entry is None or getattr(self, "_data_read_only", False):
             return False
         if len(self.drawing_snapshots(entry)) >= self.MAX_DRAWING_SNAPSHOTS:
-            self.show_info("Zwischenstand merken", f"Eine Zeichnung behält höchstens "
-                                                   f"{self.MAX_DRAWING_SNAPSHOTS} Zwischenstände. Bitte zuerst "
-                                                   "einen älteren löschen.")
+            self.show_info(glide_i18n.t("drawing.snapshot.save_title", "Zwischenstand merken"), glide_i18n.t(
+                "drawing.snapshot.limit",
+                "Eine Zeichnung behält höchstens {limit} Zwischenstände. Bitte zuerst einen älteren löschen.",
+                limit=self.MAX_DRAWING_SNAPSHOTS))
             return False
-        name = self.themed_input_dialog("Zwischenstand merken", "Name des Zwischenstands:",
+        name = self.themed_input_dialog(glide_i18n.t("drawing.snapshot.save_title", "Zwischenstand merken"),
+                                        glide_i18n.t("drawing.snapshot.name_prompt", "Name des Zwischenstands:"),
                                         initial=datetime.now().strftime("%d.%m.%Y %H:%M"), title_limit=True)
         if name is None or not editor.flush():
             return False
@@ -52492,7 +52513,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 file.write(editor.animation.to_json() + "\n")
             stored = self.store_attachment(temporary)
         except OSError as exc:
-            self.show_error("Zwischenstand merken", str(exc))
+            self.show_error(glide_i18n.t("drawing.snapshot.save_title", "Zwischenstand merken"), str(exc))
             return False
         finally:
             try:
@@ -52525,11 +52546,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if path:
                     os.remove(path)
             except OSError as exc:
-                cleanup = " Der neue Anhang blieb zum Aufräumen erhalten: " + str(exc)
-            self.show_error("Zwischenstand merken", "Der Zwischenstand konnte nicht gespeichert werden. "
-                            "Die Zeichnung und vorhandene Zwischenstände bleiben erhalten." + cleanup)
+                cleanup = " " + glide_i18n.t("drawing.snapshot.cleanup_kept",
+                                             "Der neue Anhang blieb zum Aufräumen erhalten: {error}", error=exc)
+            self.show_error(glide_i18n.t("drawing.snapshot.save_title", "Zwischenstand merken"), glide_i18n.t(
+                "drawing.snapshot.save_failed",
+                "Der Zwischenstand konnte nicht gespeichert werden. "
+                "Die Zeichnung und vorhandene Zwischenstände bleiben erhalten.") + cleanup)
             return False
-        editor.update_status(f"Zwischenstand „{name}“ gemerkt · „Mehr“ → „Zwischenstände …“")
+        editor.update_status(glide_i18n.t("drawing.snapshot.saved",
+                                          "Zwischenstand „{name}“ gemerkt · „Mehr“ → „Zwischenstände …“", name=name))
         return True
 
 
@@ -52551,8 +52576,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        dialog, body = self._drawing_dialog("Zwischenstände")
-        tk.Label(body, text="Wiederherstellen legt den aktuellen Stand als Rückgängig-Schritt ab.",
+        dialog, body = self._drawing_dialog(glide_i18n.t("drawing.snapshot.dialog_title", "Zwischenstände"))
+        tk.Label(body, text=glide_i18n.t("drawing.snapshot.restore_hint",
+                                         "Wiederherstellen legt den aktuellen Stand als Rückgängig-Schritt ab."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         rows = tk.Frame(body, bg=self.theme["bg"])
         rows.pack(fill="both", expand=True, pady=(8, 0))
@@ -52564,7 +52590,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             images.clear()
             snapshots = self.drawing_snapshots(entry)
             if not snapshots:
-                tk.Label(rows, text="Noch keine Zwischenstände. „Mehr“ → „Zwischenstand merken …“",
+                tk.Label(rows, text=glide_i18n.t("drawing.snapshot.empty",
+                                                 "Noch keine Zwischenstände. „Mehr“ → „Zwischenstand merken …“"),
                          bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10)).pack(anchor="w")
             for attachment in snapshots:
                 row = tk.Frame(rows, bg=self.theme["bg"])
@@ -52576,7 +52603,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     tk.Label(row, image=image, **self.thumbnail_frame_options()).pack(side="left")
                 except (OSError, glide_drawing.DrawingFormatError) as exc:
                     model = None
-                    tk.Label(row, text=f"nicht lesbar: {exc}", bg=self.theme["bg"], fg=self.theme["delete"],
+                    tk.Label(row, text=glide_i18n.t("drawing.snapshot.unreadable", "nicht lesbar: {error}", error=exc),
+                             bg=self.theme["bg"], fg=self.theme["delete"],
                              font=app_font(9)).pack(side="left")
                 name = str(attachment.get("name") or "Zwischenstand")
                 name = name.removeprefix("Zwischenstand – ").removesuffix(".json")
@@ -52586,13 +52614,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 buttons = tk.Frame(row, bg=self.theme["bg"])
                 buttons.pack(side="right")
                 if model is not None:
-                    self._make_dialog_button(buttons, "Wiederherstellen",
+                    self._make_dialog_button(buttons, glide_i18n.t("button.restore", "Wiederherstellen"),
                                              lambda value=model: restore(value), "confirm",
                                              width=140, height=30).pack(side="left")
-                    self._make_dialog_button(buttons, "Als neue Zeichnung",
+                    self._make_dialog_button(buttons, glide_i18n.t("drawing.snapshot.as_new", "Als neue Zeichnung"),
                                              lambda value=model, label=name: as_new(value, label), "muted",
                                              width=150, height=30).pack(side="left", padx=(6, 0))
-                self._make_dialog_button(buttons, "Löschen", lambda value=attachment: delete(value), "muted",
+                self._make_dialog_button(buttons, glide_i18n.t("button.delete", "Löschen"),
+                                         lambda value=attachment: delete(value), "muted",
                                          width=80, height=30).pack(side="left", padx=(6, 0))
 
         def restore(model):
@@ -52603,7 +52632,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 dialog.destroy()
                 current = self.current_drawing_editor()
                 if current is not None:
-                    current.update_status("Zwischenstand wiederhergestellt · Rückgängig holt den vorherigen Stand")
+                    current.update_status(glide_i18n.t(
+                        "drawing.snapshot.restored", "Zwischenstand wiederhergestellt · Rückgängig holt den vorherigen Stand"))
 
         def as_new(model, label):
             dialog.destroy()
@@ -52611,8 +52641,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                            entry.get("folder_id"))
 
         def delete(attachment):
-            if not self.ask_yes_no("Zwischenstand löschen", "Der Zwischenstand wird aus den Anhängen "
-                                   "dieser Zeichnung entfernt.", parent=dialog):
+            if not self.ask_yes_no(glide_i18n.t("drawing.snapshot.delete_title", "Zwischenstand löschen"),
+                                   glide_i18n.t("drawing.snapshot.delete_confirm",
+                                                "Der Zwischenstand wird aus den Anhängen dieser Zeichnung entfernt."),
+                                   parent=dialog):
                 return
             with self.sidebar_change(refresh_tree=False, feedback=False) as change:
                 entry["attachments"] = [item for item in entry.get("attachments", []) if item is not attachment]
@@ -52622,7 +52654,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         fill()
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted", width=110).pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted",
+                                 width=110).pack(side="right")
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
         self._center_dialog(dialog, min_width=560)
@@ -53669,8 +53702,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if entry is None:
             return
         path = filedialog.askopenfilename(
-            parent=self.root, title="Referenzbild wählen",
-            filetypes=[("Bilder", glide_image_preview.FILE_PATTERN), ("Alle Dateien", "*.*")])
+            parent=self.root, title=glide_i18n.t("drawing.reference.choose_title", "Referenzbild wählen"),
+            filetypes=[(glide_i18n.t("drawing.filetype.images", "Bilder"), glide_image_preview.FILE_PATTERN),
+                       (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return
         self.previews.cancel_requests(editor)
@@ -53679,14 +53713,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if (editor.winfo_exists() and getattr(editor, '_reference_conversion_request', None) is request
                     and self.drawing_entry(editor) is entry):
                 if result:
-                    editor.update_status('Referenzbild geladen.')
+                    editor.update_status(glide_i18n.t("drawing.reference.loaded", "Referenzbild geladen."))
                     self._drawing_load_reference_ready(editor, entry, path)
                 else:
-                    editor.update_status('Referenzbild konnte nicht geladen werden.')
-                    self.show_error('Referenzbild', 'Das Bild konnte nicht umgewandelt werden. '
-                                    'Bitte erneut wählen oder als PNG speichern.')
+                    editor.update_status(glide_i18n.t("drawing.reference.load_failed",
+                                                      "Referenzbild konnte nicht geladen werden."))
+                    self.show_error(glide_i18n.t("drawing.reference.title", "Referenzbild"), glide_i18n.t(
+                        "drawing.reference.convert_failed",
+                        "Das Bild konnte nicht umgewandelt werden. Bitte erneut wählen oder als PNG speichern."))
         if glide_image_preview.extension(path) in glide_image_preview.CONVERTIBLE:
-            editor.update_status('Referenzbild wird geladen …')
+            editor.update_status(glide_i18n.t("drawing.reference.loading", "Referenzbild wird geladen …"))
             self.previews.request_conversion(editor, path, ready, retry=True)
             return
         self._drawing_load_reference_ready(editor, entry, path)
@@ -53698,7 +53734,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             path = self.reference_png_path(path)
             source = self.read_reference_png(path)
         except (OSError, tk.TclError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("PNG-Referenz", f"Das Bild kann nicht verwendet werden:\n{exc}")
+            self.show_error(glide_i18n.t("drawing.reference.png_title", "PNG-Referenz"),
+                            glide_i18n.t("drawing.reference.unusable", "Das Bild kann nicht verwendet werden:\n{error}",
+                                         error=exc))
             return
         choice = self.drawing_reference_frame_dialog(source, os.path.basename(path), None,
                                                      replaces_existing=any(editor.model.cells),
@@ -53711,7 +53749,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             stored = self.store_attachment(*bestaetigt[0])
         except OSError as exc:
-            self.show_error("PNG-Referenz", f"Das Bild konnte nicht als Anhang gespeichert werden:\n{exc}")
+            self.show_error(glide_i18n.t("drawing.reference.png_title", "PNG-Referenz"), glide_i18n.t(
+                "drawing.reference.store_failed", "Das Bild konnte nicht als Anhang gespeichert werden:\n{error}",
+                error=exc))
             return
         stored["mime"] = "image/png"
         self._apply_reference_choice(editor, entry, choice, stored)
@@ -53726,10 +53766,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         path = self.resolve_attachment_path(attachment) if attachment else None
         try:
             if not path or not os.path.isfile(path):
-                raise OSError("Die Referenzdatei fehlt auf diesem Gerät. Bitte die Referenz neu laden.")
+                raise OSError(glide_i18n.t("drawing.reference.file_missing",
+                                           "Die Referenzdatei fehlt auf diesem Gerät. Bitte die Referenz neu laden."))
             source = self.read_reference_png(path)
         except (OSError, tk.TclError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("PNG-Referenz", str(exc))
+            self.show_error(glide_i18n.t("drawing.reference.png_title", "PNG-Referenz"), str(exc))
             return
         choice = self.drawing_reference_frame_dialog(source, attachment.get("name", "PNG"), reference,
                                                      replaces_existing=any(editor.model.cells),
@@ -53796,16 +53837,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if self.apply_drawing_change(entry, mutate):
             current = self.current_drawing_editor()
             if current is not None:
-                current.update_status("Referenz entfernt · die Zeichnung ist unverändert")
+                current.update_status(glide_i18n.t("drawing.reference.removed",
+                                                   "Referenz entfernt · die Zeichnung ist unverändert"))
 
     def drawing_reset_trace(self, editor):
         entry = self.drawing_entry(editor)
         backup = editor.trace_backup
         if entry is None or backup is None:
             return
-        if not self.ask_yes_no("Nachzeichnung zurücksetzen",
-                               "Die Zeichnung erhält wieder ihren Stand vor der Nachzeichnung. "
-                               "Spätere Striche gehen dabei verloren. Fortfahren?"):
+        if not self.ask_yes_no(glide_i18n.t("drawing.menu.reference.reset_trace", "Nachzeichnung zurücksetzen"),
+                               glide_i18n.t("drawing.trace.reset_confirm",
+                                            "Die Zeichnung erhält wieder ihren Stand vor der Nachzeichnung. "
+                                            "Spätere Striche gehen dabei verloren. Fortfahren?")):
             return
 
         def mutate():
@@ -53816,14 +53859,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if current is not None:
                 current.trace_backup = None
                 current.remember_view()
-                current.update_status("Stand vor der Nachzeichnung wiederhergestellt")
+                current.update_status(glide_i18n.t("drawing.trace.reset_done",
+                                                   "Stand vor der Nachzeichnung wiederhergestellt"))
 
     def drawing_clear(self, editor):
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        if not self.ask_yes_no("Zeichnung leeren",
-                               "Alle Zellen werden weiß. Rückgängig stellt den vorherigen Stand wieder her."):
+        if not self.ask_yes_no(glide_i18n.t("drawing.clear.title", "Zeichnung leeren"),
+                               glide_i18n.t("drawing.clear.confirm",
+                                            "Alle Zellen werden weiß. Rückgängig stellt den vorherigen Stand wieder her.")):
             return
 
         def mutate():
@@ -53997,8 +54042,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         frame = frame or {}
         zoom_preview = max(1, 384 // size)
         result = {"value": None}
-        dialog, body = self._drawing_dialog(f"PNG auf {size} × {size} einpassen")
-        tk.Label(body, text=f"{name} · {source.width()} × {source.height()} Pixel",
+        dialog, body = self._drawing_dialog(glide_i18n.t("drawing.frame.title", "PNG auf {size} × {size} einpassen",
+                                                         size=size))
+        tk.Label(body, text=glide_i18n.t("drawing.frame.source", "{name} · {width} × {height} Pixel",
+                                         name=name, width=source.width(), height=source.height()),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         preview = tk.Canvas(body, width=size * zoom_preview, height=size * zoom_preview, bg="#FFFFFF",
                             highlightthickness=1, highlightbackground=self.theme["line"])
@@ -54038,15 +54085,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 button.set_active(self.theme["active"] if key == value else None,
                                   self.theme["active_text"] if key == value else None)
             schedule()
-        for key, label in (("fill", "Fläche füllen (zuschneiden)"), ("fit", "Ganzes Bild zeigen")):
+        for key, label in (("fill", glide_i18n.t("drawing.frame.mode.fill", "Fläche füllen (zuschneiden)")),
+                           ("fit", glide_i18n.t("drawing.frame.mode.fit", "Ganzes Bild zeigen"))):
             mode_buttons[key] = self._make_dialog_button(modes, label, lambda value=key: set_mode(value),
                                                          "muted", width=180, height=32)
             modes.add(mode_buttons[key])
-        self._drawing_scale(body, "Größe", zoom, 25, 400, " %", schedule)
-        self._drawing_scale(body, "Horizontal", offset_x, -size, size, " Zellen", schedule)
-        self._drawing_scale(body, "Vertikal", offset_y, -size, size, " Zellen", schedule)
-        tk.Label(body, text="„Nur als Referenz“ legt das Bild als blasse, nicht bemalbare Hilfsebene "
-                            "hinter die Zeichnung. „Nachzeichnen“ erzeugt zuerst eine Vorschau.",
+        cells_unit = glide_i18n.t("drawing.frame.unit_cells", " Zellen")
+        self._drawing_scale(body, glide_i18n.t("drawing.frame.size", "Größe"), zoom, 25, 400, " %", schedule)
+        self._drawing_scale(body, glide_i18n.t("drawing.frame.horizontal", "Horizontal"), offset_x, -size, size,
+                            cells_unit, schedule)
+        self._drawing_scale(body, glide_i18n.t("drawing.frame.vertical", "Vertikal"), offset_y, -size, size,
+                            cells_unit, schedule)
+        tk.Label(body, text=glide_i18n.t(
+            "drawing.frame.hint",
+            "„Nur als Referenz“ legt das Bild als blasse, nicht bemalbare Hilfsebene "
+            "hinter die Zeichnung. „Nachzeichnen“ erzeugt zuerst eine Vorschau."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), wraplength=420,
                  justify="left", anchor="w").pack(fill="x", pady=(8, 0))
 
@@ -54073,11 +54126,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Zurücksetzen", reset, "muted", width=120).pack(side="left")
-        self._make_dialog_button(footer, "Nachzeichnen …", trace, "confirm", width=140).pack(side="right")
-        self._make_dialog_button(footer, "Nur als Referenz", as_reference, "accent", width=150).pack(
-            side="right", padx=(0, 8))
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted", width=110).pack(
+        self._make_dialog_button(footer, glide_i18n.t("drawing.frame.reset", "Zurücksetzen"), reset, "muted",
+                                 width=120).pack(side="left")
+        self._make_dialog_button(footer, glide_i18n.t("drawing.frame.trace", "Nachzeichnen …"), trace, "confirm",
+                                 width=140).pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("drawing.frame.reference_only", "Nur als Referenz"),
+                                 as_reference, "accent", width=150).pack(side="right", padx=(0, 8))
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted",
+                                 width=110).pack(
             side="right", padx=(0, 8))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
@@ -54095,8 +54151,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         size = trace_source.width()
         zoom_preview = max(1, 384 // size)
         result = {"value": None}
-        dialog, body = self._drawing_dialog("Nachzeichnung prüfen", parent=parent)
-        tk.Label(body, text=f"{size} × {size} Zellen · höchstens 64 Farben · Hintergrund Weiß",
+        dialog, body = self._drawing_dialog(glide_i18n.t("drawing.trace.title", "Nachzeichnung prüfen"), parent=parent)
+        tk.Label(body, text=glide_i18n.t("drawing.trace.summary",
+                                         "{size} × {size} Zellen · höchstens 64 Farben · Hintergrund Weiß", size=size),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         preview = tk.Canvas(body, width=size * zoom_preview, height=size * zoom_preview, bg="#FFFFFF",
                             highlightthickness=1, highlightbackground=self.theme["line"])
@@ -54125,7 +54182,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 trace_source, max_colors=glide_drawing_image.TRACE_MAX_COLORS, white_threshold=white.get())
             state["model"] = model
             state["image"] = glide_drawing_image.model_to_photo(model).zoom(zoom_preview, zoom_preview)
-            status.configure(text=f"{len(set(model.cells))} Farben verwendet · breite Konturen bleiben erhalten")
+            status.configure(text=glide_i18n.t("drawing.trace.colors_used",
+                                               "{count} Farben verwendet · breite Konturen bleiben erhalten",
+                                               count=len(set(model.cells))))
             draw()
 
         def schedule():
@@ -54133,7 +54192,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 dialog.after_cancel(state["job"])
             state["job"] = glide_window_lifetime.scope_for(dialog).after(60, refresh)
 
-        self._drawing_scale(body, "Weiß ab", white, 220, 255, " je Kanal", schedule)
+        self._drawing_scale(body, glide_i18n.t("drawing.trace.white_from", "Weiß ab"), white, 220, 255,
+                            glide_i18n.t("drawing.trace.unit_channel", " je Kanal"), schedule)
         grid_row = ButtonFlow(body, self.theme["bg"], gap=8)
         grid_row.pack(fill="x", pady=(6, 0))
         grid_buttons = {}
@@ -54145,14 +54205,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                   self.theme["active_text"] if key == value else None)
             if state["image"] is not None:
                 draw()
-        for key, label in (("none", "Raster aus"), ("cells", "Jede Zelle"), ("groups", "8er-Gruppen")):
+        for key, label in (("none", glide_i18n.t("drawing.trace.grid.none", "Raster aus")),
+                           ("cells", glide_i18n.t("drawing.trace.grid.cells", "Jede Zelle")),
+                           ("groups", glide_i18n.t("drawing.trace.grid.groups", "8er-Gruppen"))):
             grid_buttons[key] = self._make_dialog_button(grid_row, label, lambda value=key: set_grid(value),
                                                          "muted", width=110, height=32)
             grid_row.add(grid_buttons[key])
         status.pack(fill="x", pady=(8, 0))
         if replaces_existing:
-            tk.Label(body, text="Die Übernahme ersetzt den aktuellen Inhalt. Rückgängig und "
-                                "„Nachzeichnung zurücksetzen“ holen ihn zurück.",
+            tk.Label(body, text=glide_i18n.t(
+                "drawing.trace.replace_warning",
+                "Die Übernahme ersetzt den aktuellen Inhalt. Rückgängig und „Nachzeichnung zurücksetzen“ holen ihn zurück."),
                      bg=self.theme["bg"], fg=self.theme["delete"], font=app_font(9), wraplength=420,
                      justify="left", anchor="w").pack(fill="x", pady=(4, 0))
 
@@ -54162,8 +54225,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Nachzeichnung übernehmen", apply, "confirm", width=210).pack(side="right")
-        self._make_dialog_button(footer, "Zurück zum Rahmen", dialog.destroy, "muted", width=160).pack(
+        self._make_dialog_button(footer, glide_i18n.t("drawing.trace.apply", "Nachzeichnung übernehmen"), apply,
+                                 "confirm", width=210).pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("drawing.trace.back", "Zurück zum Rahmen"), dialog.destroy,
+                                 "muted", width=160).pack(
             side="right", padx=(0, 8))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)

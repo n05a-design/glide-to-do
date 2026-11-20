@@ -830,6 +830,120 @@ def fall_drawing_export_locale(lauf):
     return "Palettenmenü, Palettenspeichern/-löschen sowie PNG-/ICO-/SVG-Export und Exportfehler DE/EN"
 
 
+def fall_drawing_dialogs_locale(lauf):
+    """Referenz-, Nachzeichen-, Zwischenstands-, Farb- und Leerdialoge des Zeicheneditors DE/EN."""
+    app, mod = lauf.app, lauf.mod
+    previous_language = mod.glide_i18n.get_language()
+    entry = app.create_new_drawing(size=16)
+    app.set_active_list(entry if isinstance(entry, str) else entry["id"])
+    idle(lauf, 4)
+    editor = app.current_drawing_editor()
+    assert editor is not None
+    drawing = app.drawing_entry(editor)
+    editor.model.paint_cells([(0, 0)], "#C43BFF")
+    editor.mark_unsaved()
+    assert editor.flush()
+    expected = {
+        "de": {
+            "missing": ("Farbe ersetzen", "kommt in der Zeichnung nicht vor"),
+            "replace": ("1 Zelle wechselt von #C43BFF zu #00FF00", "Farbe ersetzen verworfen – Zeichnung unverändert"),
+            "compact": ("Unbenutzte Farben entfernen", "Alle Palettenfarben kommen in der Zeichnung vor"),
+            "saved": "Zwischenstand „Probe de“ gemerkt",
+            "snapshots": ("Zwischenstände", {"Wiederherstellen", "Als neue Zeichnung", "Löschen", "Schließen"}),
+            "clear": "Zeichnung leeren",
+            "frame": ("PNG auf 16 × 16 einpassen", {"Zurücksetzen", "Nachzeichnen", "Nur als Referenz", "Abbrechen",
+                                                     "Fläche füllen (zuschneiden)", "Ganzes Bild zeigen", "Größe"}),
+            "trace": ("Nachzeichnung prüfen", {"Nachzeichnung übernehmen", "Zurück zum Rahmen", "Raster aus",
+                                               "Jede Zelle", "8er-Gruppen", "Weiß ab"}),
+        },
+        "en": {
+            "missing": ("Replace color", "does not appear in the drawing"),
+            "replace": ("1 cell changes from #C43BFF to #00FF00", "Color replacement discarded – drawing unchanged"),
+            "compact": ("Remove unused colors", "All palette colors appear in the drawing"),
+            "saved": "Snapshot “Probe en” saved",
+            "snapshots": ("Snapshots", {"Restore", "As new drawing", "Delete", "Close"}),
+            "clear": "Clear drawing",
+            "frame": ("Fit PNG to 16 × 16", {"Reset", "Trace", "Reference only", "Cancel",
+                                             "Fill area (crop)", "Show whole image", "Size"}),
+            "trace": ("Review tracing", {"Apply tracing", "Back to framing", "Grid off",
+                                         "Every cell", "Groups of 8", "White from"}),
+        },
+    }
+
+    def message():
+        return editor.status.cget("text").splitlines()[1]
+
+    def texts(widget):
+        found = []
+        for child in widget.winfo_children():
+            text = getattr(child, "text", None)
+            if isinstance(text, str):
+                found.append(text)
+            elif isinstance(child, (mod.tk.Label, mod.GlideCheckbutton)):
+                found.append(child.cget("text"))
+            found.extend(texts(child))
+        return found
+
+    def modal_texts(action):
+        seen = []
+
+        def capture(dialog, *args, **kwargs):
+            seen.append((dialog.title(), texts(dialog)))
+            dialog.destroy()
+
+        with patch.object(app, "run_modal", side_effect=capture):
+            action()
+        idle(lauf, 2)
+        assert len(seen) == 1, seen
+        return seen[0]
+
+    source = mod.tk.PhotoImage(master=app.root, width=16, height=16)
+    source.put("#FFFFFF", to=(0, 0, 16, 16))
+    source.put("#202020", to=(4, 4, 12, 12))
+    try:
+        for language, labels in expected.items():
+            mod.glide_i18n.set_language(language)
+            infos = []
+            with patch.object(app, "show_info", side_effect=lambda title, text, **k: infos.append((title, text))):
+                app.drawing_replace_color(editor, "#123456")
+            assert infos and infos[0][0] == labels["missing"][0] and labels["missing"][1] in infos[0][1], infos
+
+            asked = []
+            with patch.object(app, "drawing_color_dialog", return_value="#00FF00"), \
+                    patch.object(app, "ask_yes_no", side_effect=lambda title, text, **k: asked.append(text) or False):
+                app.drawing_replace_color(editor, "#C43BFF")
+            assert asked and asked[0].startswith(labels["replace"][0]), asked
+            assert message() == labels["replace"][1], message()
+            assert editor.model.color_at(0, 0) == "#C43BFF", "Verworfenes Ersetzen ändert keine Zelle"
+
+            asked = []
+            with patch.object(app, "ask_yes_no", side_effect=lambda title, text, **k: asked.append(title) or False):
+                app.drawing_compact_palette(editor)
+            assert asked == [labels["compact"][0]] or message() == labels["compact"][1], (asked, message())
+
+            with patch.object(app, "themed_input_dialog", return_value=f"Probe {language}"):
+                assert app.drawing_snapshot_save(editor)
+            assert message().startswith(labels["saved"]), message()
+            names = [item.get("name") for item in drawing.get("attachments", [])]
+            assert f"Zwischenstand – Probe {language}.json" in names, "Anhangsname bleibt Datenwert"
+            title, shown = modal_texts(lambda: app.drawing_snapshot_dialog(editor))
+            assert title == labels["snapshots"][0] and labels["snapshots"][1] <= set(shown), (language, title, shown)
+            assert f"Probe {language}" in "\n".join(shown), shown
+
+            asked = []
+            with patch.object(app, "ask_yes_no", side_effect=lambda title, text, **k: asked.append(title) or False):
+                app.drawing_clear(editor)
+            assert asked == [labels["clear"]], asked
+
+            title, shown = modal_texts(lambda: app.drawing_reference_frame_dialog(source, "probe.png", None, size=16))
+            assert title == labels["frame"][0] and labels["frame"][1] <= set(shown), (language, title, shown)
+            title, shown = modal_texts(lambda: app.drawing_trace_preview_dialog(source))
+            assert title == labels["trace"][0] and labels["trace"][1] <= set(shown), (language, title, shown)
+    finally:
+        mod.glide_i18n.set_language(previous_language)
+    return "Farb-, Paletten-, Zwischenstands-, Leer-, Rahmen- und Nachzeichendialoge DE/EN; Anhangsname stabil"
+
+
 def fall_inspector_locale(lauf):
     """Der Aufgabeninspektor übersetzt Felder, ohne gespeicherte Kennungen umzuschreiben."""
     app, mod = lauf.app, lauf.mod
@@ -5827,7 +5941,7 @@ def fall_fensterende3507(lauf):
     return "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert"
 
 
-FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "drawing_more_locale", "drawing_export_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "editor_locale", "feedback_locale", "drawing_locale", "drawing_controls_locale", "drawing_more_locale", "drawing_export_locale", "drawing_dialogs_locale", "inspector_locale", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

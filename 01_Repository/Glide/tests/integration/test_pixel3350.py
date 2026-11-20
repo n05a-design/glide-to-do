@@ -129,7 +129,7 @@ with tempfile.TemporaryDirectory(prefix="glide-pixel-") as ordner:
         doppelklick()
         ruhe(0.2)
         titel, text, farbe, pixel = gesehen[-1]
-        assert titel == "Farbe ersetzen" and "64 Zelle(n)" in text and "#C43BFF" in text, text
+        assert titel == "Farbe ersetzen" and "64 Zellen wechseln" in text and "#C43BFF" in text, text  # Mehrzahl seit V1.63
         assert farbe == pixel == "#22813A", (farbe, pixel)
         assert (bytes(modell.cells), modell.palette, modell.undo_count) == (zellen, palette, schritte)
         assert "#{:02X}{:02X}{:02X}".format(*editor._base.get(5, 5)) == "#C43BFF"
