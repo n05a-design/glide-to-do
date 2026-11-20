@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Shell-Paket `glide_shell` und Demonstrationshost (V1.64, 20.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/shell-paket-glide-shell` über #164. Grün: `test_shell_demohost.py` (T330, nur kopiertes `glide_shell`, kein Modul aus `src/glide` geladen, Menü-Aktionskennungen, Uhr im `AfterScope`, modaler Dialog mit Griff, Hostfarbe und Besitzer, Abbau ohne offene Zeitgeber); `test_modalvertrag` 18/18 und `--gegenproben` 10/10 mit dem ganzen Paket neben der App; `test_fensterlebensdauer` 10/10 und 7/7; `test_abbauvertrag`; `test_startwege` mit allen 17 Startfällen (Direktstart, Schnellstart, Paketstarter aus Quellen) und sauberem Quellbaum; `test_custom_controls`, `test_fenster330`, `test_dialog_theme`, `test_glide`; `test_shell_importregel.py`, `test_modal_session.py`, `test_desktop_adapter.py`, `test_i18n.py`, `test_modulbudget.py`, `test_glide_system.py`, `test_standpruefung.py`; CI-Grundstufe Exitcode 0. Prüfgrenze: Die Lieferstand-Prüfung meldet fehlende Unterordnerdateien in `07_Python-Versionen` nicht; GitHub-Vollprüfungen und Paketbau dieses Stands stehen aus.
+
 ## macOS-Workflow mit Vollprüfung: Referenzsprache (20.11.2026)
 
 Der native Workflow `macos-paket.yml` mit Vollprüfung auf `17c06424` ([Lauf #44804469006](https://github.com/n05a-design/glide-to-do/actions/runs/44804469006)) baute Tk 9.1 und die Lizenzbasis, bestand den gezielten Kompaktfokus (`kompakt_verlorenes_loslassen` auf eigenem Desktop grün) und `test_seitenkarten --fall druck_tempo`, scheiterte dann aber in `test_bedienung33316.py`, Zeile 123: Die Aktionspalette fand mit „> Kopieren“ keine Aktion `copy_selected_to_clipboard` (`StopIteration`). Vollprüfung und Paketbau liefen deshalb nicht.

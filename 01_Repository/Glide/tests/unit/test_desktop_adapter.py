@@ -15,7 +15,7 @@ SRC = Path(__file__).resolve().parents[2] / "src" / "glide"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-import desktop_adapter
+from glide_shell import desktop_adapter
 
 
 class TestPlattformUndModifikatoren(unittest.TestCase):

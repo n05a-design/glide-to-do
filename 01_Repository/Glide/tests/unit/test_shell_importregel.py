@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MPL-2.0
 """Zentrale Liste der Shell-Module und ihre Importregel (D86, ohne Tk-Import).
 
-Die Shell liegt bis zum Paket `glide_shell` flach neben den Glide-Modulen in
-`src/glide`. Was zur Shell gehört, steht deshalb hier in `SHELL_MODULE`. Jedes
+Die Shell liegt seit D95 als Unterpaket `src/glide/glide_shell` neben den
+Glide-Modulen. Was zur Shell gehört, steht hier in `SHELL_MODULE`. Jedes
 dieser Module darf nur die Standardbibliothek, `tkinter` und andere
 Shell-Module importieren und keinen Glide-Wert kennen
 (Abhängigkeitsrichtung Host → Shell → Tk). Ein Modul, das sich im Kopf als
@@ -18,6 +18,9 @@ import sys
 import unittest
 
 SRC = Path(__file__).resolve().parents[2] / "src" / "glide"
+# Seit D95 liegt die Shell als Unterpaket `glide_shell` neben den Glide-Modulen.
+SHELL = SRC / "glide_shell"
+PAKET = "glide_shell"
 
 # Modul: öffentliche Schnittstelle (Funktion oder Klasse.Methode: Parameter ohne self)
 SHELL_MODULE = {
@@ -67,6 +70,13 @@ SHELL_MODULE = {
         "ThemedAutoScrollbar.set": ["first", "last"],
         "ThemedAutoScrollbar.is_scrollable": [],
     },
+    "demo": {
+        "DemoHost.__init__": ["root", "texts", "colors"],
+        "DemoHost.tick": [],
+        "DemoHost.open_dialog": [],
+        "DemoHost.close": [],
+        "main": [],
+    },
     "desktop_adapter": {
         "is_macos": [],
         "is_windows": [],
@@ -89,7 +99,7 @@ VERBOTENE_ANFAENGE = ("glide_", "APP_", "ERROR_LOG", "THEMES", "theme")
 
 
 def baum(modul):
-    quelle = SRC / f"{modul}.py"
+    quelle = SHELL / f"{modul}.py"
     return ast.parse(quelle.read_text(encoding="utf-8"), filename=str(quelle))
 
 
@@ -122,11 +132,12 @@ def parameter(funktion):
 class Modulliste(unittest.TestCase):
     def test_jedes_gelistete_modul_existiert(self):
         for modul in SHELL_MODULE:
-            self.assertTrue((SRC / f"{modul}.py").is_file(), modul)
+            self.assertTrue((SHELL / f"{modul}.py").is_file(), modul)
+            self.assertFalse((SRC / f"{modul}.py").exists(), f"{modul}: flache Kopie neben dem Paket")
 
     def test_gekennzeichnete_module_stehen_in_der_liste(self):
         gekennzeichnet = set()
-        for quelle in sorted(SRC.glob("*.py")):
+        for quelle in sorted(SRC.glob("*.py")) + sorted(SHELL.glob("*.py")):
             kopf = ast.get_docstring(ast.parse(quelle.read_text(encoding="utf-8"))) or ""
             if kopf and KENNZEICHEN in kopf.splitlines()[0]:
                 gekennzeichnet.add(quelle.stem)
@@ -138,8 +149,8 @@ class Importregel(unittest.TestCase):
         for modul in SHELL_MODULE:
             for name in importe(baum(modul)):
                 with self.subTest(modul=modul, importiert=name):
-                    self.assertFalse(name.startswith("."), "relative Importe gibt es in der flachen Ablage nicht")
-                    self.assertTrue(name in sys.stdlib_module_names or name in SHELL_MODULE, name)
+                    self.assertFalse(name.startswith("."), "Shell-Module importieren einander absolut über glide_shell")
+                    self.assertTrue(name in sys.stdlib_module_names or name in SHELL_MODULE or name == PAKET, name)
 
     def test_keine_glide_bezeichner_und_kein_dynamischer_import(self):
         for modul in SHELL_MODULE:

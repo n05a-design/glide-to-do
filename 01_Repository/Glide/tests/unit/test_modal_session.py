@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
 import unittest
 
-QUELLE = Path(__file__).resolve().parents[2] / "src" / "glide" / "modal_session.py"
+QUELLE = Path(__file__).resolve().parents[2] / "src" / "glide" / "glide_shell" / "modal_session.py"
 ERLAUBT = {"contextlib", "tkinter"}
 SCHNITTSTELLE = {
     "modal_over": ["root", "parent"],

@@ -34,6 +34,7 @@ import importlib.machinery
 import importlib.util
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -668,7 +669,7 @@ FAELLE = {
 
 # Name: (Funktion in modal_session.py, entfernte Schutzzeile, Ersatz, Fall, der rot werden muss)
 NL = "\n"
-SHELL_MODUL = "modal_session.py"
+SHELL_MODUL = "glide_shell/modal_session.py"  # seit D95 im Paket glide_shell
 GEGENPROBEN = {
     "ohne_griff": ("wait_modal", "dialog.grab_set()", "pass", "grundvertrag"),
     "ohne_freigabe": ("wait_modal", "dialog.grab_release()", "pass", "wiederverwendbar"),
@@ -716,6 +717,10 @@ def gegenproben():
             ziel = pathlib.Path(ordner) / name
             ziel.mkdir()
             (ziel / "app.pyw").write_bytes(app)
+            # Das ganze Paket daneben legen: `from glide_shell import …` findet
+            # dann die veränderte Kopie zuerst, alle übrigen Bausteine unverändert.
+            shutil.copytree(SOURCE.parent / "glide_shell", ziel / "glide_shell",
+                            ignore=shutil.ignore_patterns("__pycache__"))
             (ziel / SHELL_MODUL).write_bytes(mutiere(modul, funktion, alt, neu).encode("utf-8"))
             try:
                 lauf = subprocess.run([sys.executable, "-B", __file__, "--quelle", str(ziel / "app.pyw"),
