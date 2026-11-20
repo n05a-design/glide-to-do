@@ -16,7 +16,7 @@ Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.55 auf `
 
 **Ganzheitsaudit des Übergabestands (19.11.2026):** Der aktive OneDrive-Arbeitsbaum und GitHub wurden abgeglichen. Keine ungetrackten Projektdateien und kein Stash im aktiven Worktree; die zugänglichen Neben-Worktrees `glide_ci_recovery` und `copilot-prewarm-didactic-chainsaw` waren sauber. Ein separat aufgeführter Hauptcheckout auf `claude/etappe4-release-v1` wurde nicht geöffnet; der lokale OneDrive-Syncstatus lässt sich aus dieser Sitzung nicht nachweisen. Daher keine uneingeschränkte Aussage zur Synchronisation aller lokalen Ablagen.
 
-**Git-/Remote-Handoff:** PR #154 und PR #156 sind gemergt. Der Arbeitsbranch `copilot/glide-v1-internationalization-qa-governance` steht auf `e76a27be`; V1.57 ist gepusht und als PR #157 offen. `main` wurde nicht direkt geändert; kein Release oder Lieferabgleich.
+**Git-/Remote-Handoff:** PR #154, PR #156 und PR #157 sind gemergt; PR #157 wurde am 20.11.2026 als Squash-Commit `55ad7e95` nach `main` gemergt; sein geprüfter Head `2f10ba9d` hat denselben Baum. V1.58 liegt auf `claude/d93-drawing-animation-more-i18n` in [PR #158](https://github.com/n05a-design/glide-to-do/pull/158) gegen `main`. `main` wurde nicht direkt geändert; kein Release oder Lieferabgleich.
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
@@ -79,7 +79,7 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 
 Offene Arbeit auf einen Blick, Stand 20.11.2026 (1.0.0). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
-**Aktueller D93-Schnitt (20.11.2026):** PR #157 ergänzt die in §21.144 dokumentierte Zeicheneditor-Statuslokalisierung um zentrale Werkzeuge, Anzeigeprofile, Referenz-/Vorschauknöpfe, Zoom und Kontextmenüs (§21.145). Animationsleiste und Mehr-Menü-Inhalte bleiben offen.
+**Aktueller D93-Schnitt (20.11.2026):** PR #157 (gemergt) ergänzt die in §21.144 dokumentierte Zeicheneditor-Statuslokalisierung um zentrale Werkzeuge, Anzeigeprofile, Referenz-/Vorschauknöpfe, Zoom und Kontextmenüs (§21.145). PR #158 (offen) ergänzt Animationsleiste, Mehr-Menü, Paletten und Export (§21.146).
 
 | Kennung | Gegenstand | Status | Nächster Schritt | Freigabe |
 |---|---|---|---|---|
@@ -3593,6 +3593,20 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **D – Grenzen und Git:** Animationsleiste, Inhalte des Mehr-Menüs, weitere Zeichnungsdialoge und externe Zeichen-/Exportmeldungen bleiben offen. Der V1.57-Schnitt ist in [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) gepusht; dessen aktuelle Remote-Prüfungen sind live am PR nachzuverfolgen. Kein Release- oder Lieferabgleich.
 
+### 21.146 D93-Etappe 2: Zeicheneditor-Animation, Mehr-Menü, Paletten und Export (20.11.2026)
+
+**A – Roadmap-Auftrag:** Fortsetzung des Muss-Ziels „vollständige Oberfläche DE/EN“ aus D93 nach §21.145; keine Auswahl aus E-P1–E-P5. Vorher wurde die OneDrive-Hauptablage auf GitHub-`main` gebracht (siehe Übergabe).
+
+**B – Umsetzung:** Animationsleiste, Bildauswahl, Abspieldialog, Pipettenhinweis der Kontextleiste (in §21.145 übersehen), Mehr-Menü, Palettenmenü mit Speichern/Importieren/Exportieren/Löschen sowie Dateidialoge, Status- und Fehlertitel des PNG-, ICO-, SVG- und JSON-Exports folgen der aktiven Sprache. Palettenmeldungen unterscheiden Einzahl und Mehrzahl. Befehle, Paletten-IDs, Exportformate und Standard-Dateinamen unverändert; App 1.0.0, Datenformat 26, Glide-System V1.58.
+
+**C – Prüfung:** gezielte Unit-, Arbeitsmodi- und Zeichensuiten sowie die CI-Grundstufe grün; zwei lokale Mac-Vollprüfungen rot durch fokusabhängige Suiten, die einzeln grün sind. Einzelheiten im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#d93-etappe-2-zeicheneditor-animation-mehr-menü-paletten-und-export-v158-20112026).
+
+**D – Shell-Sprachvertrag (Phase D, Bestandsaufnahme):** `modal_session.py`, `window_lifetime.py`, `custom_controls.py`, `desktop_adapter.py` und `core_accessibility.py` enthalten keine eigenen sichtbaren Fachtexte und importieren `i18n` nicht. Übersetzte Beschriftungen gibt der Host hinein (zum Beispiel `modifier_labels` in `desktop_adapter`); die Shell hält nur neutrale Rückfallwerte. Für 1.0 ist keine Codeänderung nötig; ein gemeinsamer Locale-Vertrag für `glide_shell` bleibt eine Entscheidungsvorlage nach 1.0.
+
+**E – GitHub-Metadaten:** Die About-Beschreibung ist nach Inhaberfreigabe englisch und live bestätigt; damit ist der offene Metadatenpunkt aus §21.142 erledigt.
+
+**F – Grenzen und Git:** Offen bleiben Journal-Untermenü, Import-, Referenz-, Nachzeichen-, Zwischenstands-, Bildfolgen- und Farbdialoge, Fehlertexte aus `glide_drawing`, die deutschen Kurzformen in `RoundedButton.action_text`, weitere App-Dialoge und die menschliche Abnahme. Der Schnitt liegt nach dem Merge von PR #157 auf `main` umgesetzt in PR #158; Auf dem Head `28e68167` bestand Workflow [#44745571619](https://github.com/n05a-design/glide-to-do/actions/runs/44745571619) vollständig: Grundstufe, Linux- und Windows-Vollprüfung mit Tk 9.1 sowie Windows-Paketbau; UI-Diagnose, NVDA und Orca wurden übersprungen. Kein Merge, Release oder Lieferabgleich.
+
 ### 21.147 Englische Benutzerdokumentation als kontrollierte Übersetzung (20.11.2026)
 
 **A – Auftrag:** Englische Benutzerdokumentation für Glide 1.0.0 als kontrollierte Übersetzung von [`20_FUNKTIONEN.md`](../01_Repository/Glide/docs/20_FUNKTIONEN.md), keine zweite Produktwahrheit; Themen Getting Started, Installation, Tasks and Lists, Day Planning, Calendar, Pages and Notes, Pinboards, Pixel Workshop, Import and Export, Backups, Keyboard Shortcuts, Troubleshooting. Keine Auswahl aus E-P1–E-P5, kein App-Code, kein Datenformat, keine Wiki-Veröffentlichung (I11 B), kein Release. §21.144/§21.145 stammen aus PR #157 (gemergt), §21.146 belegt der offene PR #158.
@@ -3601,4 +3615,4 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung:** T299 `test_standpruefung.py` prüft zusätzlich die Seitenliste in der Übersicht, Sprachverweise in beide Richtungen und dass jeder Abschnittsanker in `20_FUNKTIONEN.md` und `06_DATA_BACKUP_MIGRATION.md` existiert. CI-Grundstufe lokal auf macOS mit isoliertem `GLIDE_DATA_DIR`; Ergebnis im PR. Die fachliche Übersetzungsprüfung durch einen Menschen bleibt offen.
 
-**D – Grenzen:** Nach AGENTS.md (System-und-Modulpflege im selben Commit) führt das [Glide-System](../01_Repository/Glide/src/glide/README.md) die erweiterte T299-Abdeckung als V1.58 (nach dem Merge von PR #157 mit V1.56/V1.57); nur der Registertext ändert sich, kein Code. PR #158 belegt ebenfalls V1.58; der zuletzt gemergte PR nummeriert neu. Die Zeicheneditor-Steuerung aus PR #157 ist in Pixel workshop und „Interface language“ nachgeführt; nach PR #158 Animation, Mehr-Menü, Paletten und Export nachziehen.
+**D – Grenzen:** Nach AGENTS.md (System-und-Modulpflege im selben Commit) führt das [Glide-System](../01_Repository/Glide/src/glide/README.md) die erweiterte T299-Abdeckung als V1.59 (nach dem Merge von PR #158 mit V1.58); nur der Registertext ändert sich, kein Code. PR #158 belegt ebenfalls V1.58; der zuletzt gemergte PR nummeriert neu. Die Zeicheneditor-Steuerung aus PR #157 ist in Pixel workshop und „Interface language“ nachgeführt; nach PR #158 Animation, Mehr-Menü, Paletten und Export nachziehen.

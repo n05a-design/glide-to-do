@@ -14225,7 +14225,8 @@ class DrawingEditor(tk.Frame):
             caption += f" · {self.brush_size}×{self.brush_size}"
         if self.tool == "eyedropper":
             self.options_button = None
-            row.add(tk.Label(row, text="Linksklick: Vordergrund · Rechtsklick: Hintergrund",
+            row.add(tk.Label(row, text=glide_i18n.t(
+                "drawing.status.eyedropper_guide", "Linksklick: Vordergrund · Rechtsklick: Hintergrund"),
                              bg=self.app.theme["card"], fg=self.app.theme["muted"], font=app_font(9)))
         else:
             button = self._button(row, caption + " …", self.show_tool_options, width=160)
@@ -14265,6 +14266,11 @@ class DrawingEditor(tk.Frame):
             self.tiled_button, self._drawing_text("tooltip.tile", "Muster als 3 × 3 wiederholen"))
         self.app.add_tooltip(
             self.gray_button, self._drawing_text("tooltip.grayscale", "Tonwerte ohne Farbe prüfen"))
+        if self.animated:
+            self.animation_label.configure(text=self._drawing_text("animation.frame_label", "Bild"))
+            self.frames_button.set_text(self._drawing_text("animation.frames", "Bilder …"))
+            self.play_animation_button.set_text(self._drawing_text("animation.play_dialog", "Abspielen …"))
+            self._sync_frame_choices()
         self.apply_display_profile()
         self.build_context_row()
 
@@ -15705,24 +15711,28 @@ class DrawingEditor(tk.Frame):
         row = ButtonFlow(self, self.app.theme["card"], gap=6, single_line=True, required=("frame",))
         self.animation_toolbar = row
         row.pack(fill="x", pady=(0, 4))
-        label = tk.Label(row, text="Bild", bg=self.app.theme["card"], fg=self.app.theme["text"],
-                         font=app_font(10))
+        label = tk.Label(row, text=self._drawing_text("animation.frame_label", "Bild"),
+                         bg=self.app.theme["card"], fg=self.app.theme["text"], font=app_font(10))
+        self.animation_label = label
         # Glide-eigener Auswahlknopf mit Menü wie beim Export: Eine native
         # Combobox bliebe im dunklen Design hellgrau.
         self.frame_choice = self._button(row, "Bild 1", self.frame_menu, width=150)
         row.add(label)
         row.add(self.frame_choice, key="frame")
-        self.frames_button = self._button(row, "Bilder …",
+        self.frames_button = self._button(row, self._drawing_text("animation.frames", "Bilder …"),
             lambda: self.app.drawing_animation_dialog(self), width=112)
-        self.play_animation_button = self._button(row, "Abspielen …", self.show_animation_preview, width=112)
+        self.play_animation_button = self._button(
+            row, self._drawing_text("animation.play_dialog", "Abspielen …"), self.show_animation_preview, width=112)
         row.add(self.frames_button, key="frames")
         row.add(self.play_animation_button, key="play")
         self._sync_frame_choices()
 
     def _sync_frame_choices(self):
         index = self.animation.index(self.frame_id)
-        self.frame_choice.set_text(f"Bild {index + 1} von {len(self.animation.frames)} · "
-                                   f"{self.animation.durations()[index]} ms ▾")
+        self.frame_choice.set_text(self._drawing_text(
+            "animation.frame_position", "Bild {index} von {count} · {duration} ms",
+            index=index + 1, count=len(self.animation.frames),
+            duration=self.animation.durations()[index]) + " ▾")
 
     def frame_menu(self):
         """Bildauswahl als Glide-Menü; das aktive Bild trägt die Markierung."""
@@ -15732,7 +15742,9 @@ class DrawingEditor(tk.Frame):
         # Die Variable muss so lange leben wie das Menü, sonst fehlt die Markierung.
         menu._active_frame = tk.IntVar(menu, value=self.animation.index(self.frame_id))
         for index, milliseconds in enumerate(self.animation.durations()):
-            menu.add_radiobutton(label=f"Bild {index + 1} · {milliseconds} ms", variable=menu._active_frame,
+            menu.add_radiobutton(label=self._drawing_text("animation.frame_item", "Bild {index} · {duration} ms",
+                                                          index=index + 1, duration=milliseconds),
+                                 variable=menu._active_frame,
                                  value=index, command=lambda value=index: self._frame_chosen(value))
         try:
             anchor = self.frame_choice
@@ -15764,7 +15776,8 @@ class DrawingEditor(tk.Frame):
         if self.animated:
             self._sync_frame_choices()
         self.remember_view()
-        self.update_status(f"Bild {index + 1} von {len(self.animation.frames)}")
+        self.update_status(self._drawing_text("animation.frame_selected", "Bild {index} von {count}",
+                                              index=index + 1, count=len(self.animation.frames)))
         return True
 
     def show_animation_preview(self):
@@ -15776,7 +15789,8 @@ class DrawingEditor(tk.Frame):
         if not self.flush():
             return "break"
         animation = glide_animation.Animation.from_document(self.animation.to_document())
-        dialog, body, footer = self.app._daily_dialog("Bildfolge abspielen", 560, 510)
+        dialog, body, footer = self.app._daily_dialog(
+            self._drawing_text("animation.preview_title", "Bildfolge abspielen"), 560, 510)
         self._animation_preview_dialog = dialog
         self._animation_windows.add(dialog)
         canvas = tk.Canvas(body, width=320, height=320, bg=self.app.theme["card"],
@@ -15785,7 +15799,8 @@ class DrawingEditor(tk.Frame):
         label = tk.Label(body, bg=self.app.theme["bg"], fg=self.app.theme["text"], font=app_font(11))
         label.pack(fill="x", pady=(8, 0))
         loop = tk.BooleanVar(dialog, value=True)
-        self.app._daily_toggle(body, "Wiederholen", loop).pack(anchor="w", pady=(8, 0))
+        self.app._daily_toggle(body, self._drawing_text("animation.loop", "Wiederholen"),
+                               loop).pack(anchor="w", pady=(8, 0))
         state = dict(job=None, running=False, elapsed=0.0, started=0.0, images={})
         dialog._animation_preview_state = state
         dialog._animation_preview_source = animation.to_document()
@@ -15809,8 +15824,10 @@ class DrawingEditor(tk.Frame):
             canvas.delete("all")
             canvas.create_image(canvas.winfo_width() // 2, canvas.winfo_height() // 2,
                                 image=images[frame.id], anchor="center")
-            label.configure(text=f"Bild {position.index + 1} von {len(animation.frames)} · "
-                                 f"{animation.durations()[position.index]} ms")
+            label.configure(text=self._drawing_text(
+                "animation.frame_position", "Bild {index} von {count} · {duration} ms",
+                index=position.index + 1, count=len(animation.frames),
+                duration=animation.durations()[position.index]))
             dialog._animation_preview_frame = frame.id
             return position
 
@@ -15824,7 +15841,7 @@ class DrawingEditor(tk.Frame):
             position = draw(elapsed)
             if position.finished:
                 state.update(running=False, elapsed=elapsed)
-                play.set_text("Abspielen")
+                play.set_text(self._drawing_text("animation.play", "Abspielen"))
                 return
             state["job"] = dialog.after(position.remaining_ms, tick)
             self.app._after_ids.add(state["job"])
@@ -15834,7 +15851,7 @@ class DrawingEditor(tk.Frame):
                 state["elapsed"] += (time.perf_counter() - state["started"]) * 1000
             state["running"] = False
             cancel_timer()
-            play.set_text("Abspielen")
+            play.set_text(self._drawing_text("animation.play", "Abspielen"))
 
         def toggle():
             if state["running"]:
@@ -15843,7 +15860,7 @@ class DrawingEditor(tk.Frame):
                 if not loop.get() and state["elapsed"] >= sum(animation.durations()):
                     state["elapsed"] = 0.0
                 state.update(running=True, started=time.perf_counter())
-                play.set_text("Pause")
+                play.set_text(self._drawing_text("animation.pause", "Pause"))
                 tick()
 
         def restart():
@@ -15860,9 +15877,10 @@ class DrawingEditor(tk.Frame):
 
         flow = ButtonFlow(footer, self.app.theme["bg"], gap=8)
         flow.pack(fill="x")
-        play = self._button(flow, "Abspielen", toggle, width=112)
-        for button in (play, self._button(flow, "Von vorn", restart, width=112),
-                       self._button(flow, "Schließen", dialog.destroy, width=112)):
+        play = self._button(flow, self._drawing_text("animation.play", "Abspielen"), toggle, width=112)
+        for button in (play, self._button(flow, self._drawing_text("animation.restart", "Von vorn"),
+                                          restart, width=112),
+                       self._button(flow, glide_i18n.t("button.close", "Schließen"), dialog.destroy, width=112)):
             flow.add(button)
         dialog.bind("<Destroy>", destroyed, add="+")
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
@@ -52337,18 +52355,24 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.remember_drawing_tools(palette=choice.get())
             editor.draw_strip()
 
-        entries = [("drawing", "Farben dieser Zeichnung"),
-                   (glide_drawing.GLIDE_PALETTE_ID, f"{glide_drawing.GLIDE_PALETTE_NAME} · Glide-Inhaltspalette")]
+        entries = [("drawing", glide_i18n.t("drawing.palette.drawing_colors", "Farben dieser Zeichnung")),
+                   (glide_drawing.GLIDE_PALETTE_ID, glide_i18n.t(
+                       "drawing.palette.glide", "{name} · Glide-Inhaltspalette",
+                       name=glide_drawing.GLIDE_PALETTE_NAME))]
         entries += [(palette["id"], palette["name"]) for palette in tools["palettes"]]
         for value, label in entries:
             menu.add_radiobutton(label=label, value=value, variable=choice, command=choose)
         menu.add_separator()
-        menu.add_command(label="Farben dieser Zeichnung als Palette speichern …",
+        menu.add_command(label=glide_i18n.t("drawing.palette.save_menu",
+                                            "Farben dieser Zeichnung als Palette speichern …"),
                          command=lambda: self.drawing_save_palette(editor))
-        menu.add_command(label="Palette importieren (.gpl, .hex, .ase) …", command=lambda: self.drawing_import_palette(editor))
-        menu.add_command(label="Gewählte Palette exportieren …", command=lambda: self.drawing_export_palette(editor))
+        menu.add_command(label=glide_i18n.t("drawing.palette.import_menu", "Palette importieren (.gpl, .hex, .ase) …"),
+                         command=lambda: self.drawing_import_palette(editor))
+        menu.add_command(label=glide_i18n.t("drawing.palette.export_menu", "Gewählte Palette exportieren …"),
+                         command=lambda: self.drawing_export_palette(editor))
         if tools["palette"].startswith("user-"):
-            menu.add_command(label="Gewählte Palette löschen …", command=lambda: self.drawing_delete_palette(editor))
+            menu.add_command(label=glide_i18n.t("drawing.palette.delete_menu", "Gewählte Palette löschen …"),
+                             command=lambda: self.drawing_delete_palette(editor))
         try:
             menu.tk_popup(anchor.winfo_rootx(), anchor.winfo_rooty() + anchor.winfo_height())
         finally:
@@ -52361,30 +52385,38 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         tools = self.drawing_tool_settings()
         if len(tools["palettes"]) >= self.MAX_DRAWING_PALETTES:
             raise glide_drawing.DrawingFormatError(
-                f"Es können höchstens {self.MAX_DRAWING_PALETTES} eigene Paletten gespeichert werden.")
+                glide_i18n.t("drawing.palette.limit", "Es können höchstens {limit} eigene Paletten gespeichert werden.",
+                             limit=self.MAX_DRAWING_PALETTES))
         palette = {"id": "user-" + uuid.uuid4().hex[:12], "name": name, "colors": list(colors)}
         self.remember_drawing_tools(palettes=tools["palettes"] + [palette], palette=palette["id"])
         return palette
 
     def drawing_save_palette(self, editor):
         colors = [color for color in editor.model.used_colors()]
-        name = self.themed_input_dialog("Palette speichern", "Name der Palette:",
-                                        initial=glide_design.clip_title(f"Palette aus „{self.drawing_title(editor)}“"), title_limit=True)
+        save_title = glide_i18n.t("drawing.palette.save_title", "Palette speichern")
+        name = self.themed_input_dialog(
+            save_title, glide_i18n.t("drawing.palette.name_prompt", "Name der Palette:"),
+            initial=glide_design.clip_title(glide_i18n.t("drawing.palette.default_name", "Palette aus „{title}“",
+                                                         title=self.drawing_title(editor))), title_limit=True)
         if not name or not name.strip():
             return
         try:
             self._add_drawing_palette(" ".join(name.split())[:60], colors)
         except glide_drawing.DrawingFormatError as exc:
-            self.show_error("Palette speichern", str(exc))
+            self.show_error(save_title, str(exc))
             return
         editor.draw_strip()
-        editor.update_status(f"Palette gespeichert: {len(colors)} Farben")
+        count_key, fallback = (("one", "Palette gespeichert: 1 Farbe") if len(colors) == 1
+                               else ("many", "Palette gespeichert: {count} Farben"))
+        editor.update_status(glide_i18n.t(f"drawing.palette.saved.{count_key}", fallback, count=len(colors)))
 
     def drawing_import_palette(self, editor):
         path = filedialog.askopenfilename(
-            parent=self.root, title="Palette importieren",
-            filetypes=[("Paletten", "*.gpl *.hex *.txt *.ase *.aseprite"), ("GIMP-Palette", "*.gpl"),
-                       ("Hex-Liste", "*.hex"), ("Aseprite oder Adobe-Farbfelder", "*.ase *.aseprite")])
+            parent=self.root, title=glide_i18n.t("drawing.palette.import_title", "Palette importieren"),
+            filetypes=[(glide_i18n.t("drawing.filetype.palettes", "Paletten"), "*.gpl *.hex *.txt *.ase *.aseprite"),
+                       (glide_i18n.t("drawing.filetype.gimp_palette", "GIMP-Palette"), "*.gpl"),
+                       (glide_i18n.t("drawing.filetype.hex_list", "Hex-Liste"), "*.hex"),
+                       (glide_i18n.t("drawing.filetype.ase", "Aseprite oder Adobe-Farbfelder"), "*.ase *.aseprite")])
         if not path:
             return
         stem = os.path.splitext(os.path.basename(path))[0]
@@ -52400,10 +52432,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 name, colors = glide_drawing.parse_palette(text, stem)
             self._add_drawing_palette(name, colors)
         except (OSError, UnicodeError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("Palette importieren", f"Die Datei wurde nicht übernommen.\n\n{exc}")
+            self.show_error(glide_i18n.t("drawing.palette.import_title", "Palette importieren"),
+                            glide_i18n.t("drawing.palette.import_failed", "Die Datei wurde nicht übernommen.\n\n{error}",
+                                         error=exc))
             return
         editor.draw_strip()
-        editor.update_status(f"Palette „{name}“ importiert: {len(colors)} Farben")
+        count_key, fallback = (("one", "Palette „{name}“ importiert: 1 Farbe") if len(colors) == 1
+                               else ("many", "Palette „{name}“ importiert: {count} Farben"))
+        editor.update_status(glide_i18n.t(f"drawing.palette.imported.{count_key}", fallback,
+                                          name=name, count=len(colors)))
 
     def drawing_export_palette(self, editor):
         palette_id, name, colors = self.drawing_palette(self.drawing_tool_settings()["palette"], editor.model)
@@ -52411,8 +52448,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         stem = re.sub(r"[^\w .()-]+", "_", name, flags=re.UNICODE).strip(" .")[:60] or "Palette"
         path = filedialog.asksaveasfilename(
-            parent=self.root, title="Palette exportieren", initialfile=stem + ".gpl", defaultextension=".gpl",
-            filetypes=[("GIMP-Palette", "*.gpl"), ("Hex-Liste", "*.hex")])
+            parent=self.root, title=glide_i18n.t("drawing.palette.export_title", "Palette exportieren"),
+            initialfile=stem + ".gpl", defaultextension=".gpl",
+            filetypes=[(glide_i18n.t("drawing.filetype.gimp_palette", "GIMP-Palette"), "*.gpl"),
+                       (glide_i18n.t("drawing.filetype.hex_list", "Hex-Liste"), "*.hex")])
         if not path:
             return
         text = glide_drawing.palette_to_hex(colors) if path.lower().endswith(".hex") else \
@@ -52420,15 +52459,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             self.write_text_atomic(path, text)
         except (OSError, ValueError) as exc:
-            self.show_error("Palette exportieren", str(exc))
+            self.show_error(glide_i18n.t("drawing.palette.export_title", "Palette exportieren"), str(exc))
             return
-        editor.update_status(f"Palette exportiert: {os.path.basename(path)}")
+        editor.update_status(glide_i18n.t("drawing.palette.exported", "Palette exportiert: {file}",
+                                          file=os.path.basename(path)))
 
     def drawing_delete_palette(self, editor):
         tools = self.drawing_tool_settings()
         palette = next((entry for entry in tools["palettes"] if entry["id"] == tools["palette"]), None)
-        if palette is None or not self.ask_yes_no("Palette löschen", f"Die Palette „{palette['name']}“ "
-                                                  "wird gelöscht. Zeichnungen behalten ihre Farben."):
+        if palette is None or not self.ask_yes_no(
+                glide_i18n.t("drawing.palette.delete_title", "Palette löschen"),
+                glide_i18n.t("drawing.palette.delete_confirm",
+                             "Die Palette „{name}“ wird gelöscht. Zeichnungen behalten ihre Farben.",
+                             name=palette["name"])):
             return
         self.remember_drawing_tools(palettes=[entry for entry in tools["palettes"] if entry is not palette],
                                     palette="drawing")
@@ -52680,18 +52723,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         title = str(entry.get("title") or "Zeichnung")
         stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Zeichnung"
         path = filedialog.asksaveasfilename(
-            parent=self.root, title=f"Als PNG exportieren ({model.width * scale} Pixel)",
+            parent=self.root, title=glide_i18n.t("drawing.export.png_title", "Als PNG exportieren ({edge} Pixel)",
+                                                 edge=model.width * scale),
             defaultextension=".png", initialfile=f"{stem}_{model.width * scale}px.png",
-            filetypes=[("PNG-Bild", "*.png")])
+            filetypes=[(glide_i18n.t("drawing.filetype.png", "PNG-Bild"), "*.png")])
         if not path:
             return
         try:
             self.write_bytes_atomic(path, model.to_png(scale))
         except (OSError, ValueError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("Als PNG exportieren", str(exc))
+            self.show_error(glide_i18n.t("drawing.menu.export.png", "Als PNG exportieren"), str(exc))
             return
-        editor.update_status(f"PNG exportiert: {os.path.basename(path)} · {model.width * scale} × "
-                             f"{model.height * scale} Pixel")
+        editor.update_status(glide_i18n.t("drawing.export.png_done", "PNG exportiert: {file} · {width} × {height} Pixel",
+                                          file=os.path.basename(path), width=model.width * scale,
+                                          height=model.height * scale))
 
     # Symbol (G16, 30.09.2026) ---------------------------------------------------
     ICON_PREVIEW_GROUNDS = (("Heller Grund", "#FFFFFF"), ("Dunkler Grund", "#1C1C1E"))
@@ -52769,23 +52814,27 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         model = editor.model.copy()
         if not self.drawing_icon_preview(model, transparent):
-            editor.update_status("Symbolexport abgebrochen")
+            editor.update_status(glide_i18n.t("drawing.export.ico_cancelled", "Symbolexport abgebrochen"))
             return
         title = str(entry.get("title") or "Zeichnung")
         stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Zeichnung"
         path = filedialog.asksaveasfilename(
-            parent=self.root, title="Als Symbol exportieren (ICO)", defaultextension=".ico",
-            initialfile=f"{stem}.ico", filetypes=[("Symbol", "*.ico")])
+            parent=self.root, title=glide_i18n.t("drawing.menu.export.ico", "Als Symbol exportieren (ICO)"),
+            defaultextension=".ico", initialfile=f"{stem}.ico",
+            filetypes=[(glide_i18n.t("drawing.filetype.icon", "Symbol"), "*.ico")])
         if not path:
             return
         try:
             self.write_bytes_atomic(path, model.to_ico(transparent_background=transparent))
         except (OSError, ValueError, glide_drawing.DrawingFormatError) as exc:
-            self.show_error("Als Symbol exportieren", str(exc))
+            self.show_error(glide_i18n.t("drawing.export.ico_error_title", "Als Symbol exportieren"), str(exc))
             return
         groessen = ", ".join(str(size) for size in glide_drawing.ICON_SIZES)
-        hinweis = "" if model.width in (16, 32) else " · verkleinert ohne Glättung"
-        editor.update_status(f"Symbol exportiert: {os.path.basename(path)} · {groessen} Pixel{hinweis}")
+        key, fallback = (("drawing.export.ico_done", "Symbol exportiert: {file} · {sizes} Pixel")
+                         if model.width in (16, 32) else
+                         ("drawing.export.ico_done_scaled",
+                          "Symbol exportiert: {file} · {sizes} Pixel · verkleinert ohne Glättung"))
+        editor.update_status(glide_i18n.t(key, fallback, file=os.path.basename(path), sizes=groessen))
 
     def write_bytes_atomic(self, path, data):
         """Binärexport atomar schreiben; Nutzdatendateien sind als Ziel ausgeschlossen."""
@@ -53596,81 +53645,82 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                             activeforeground=self.theme["selection_text"], bd=0)
         menu = tk.Menu(self.root, **menu_options)
         self.add_journal_menu(menu)
-        menu.add_command(label="Referenzbild laden …", command=lambda: self.drawing_load_reference(editor))
+        menu.add_command(label=glide_i18n.t("drawing.menu.reference.load", "Referenzbild laden …"), command=lambda: self.drawing_load_reference(editor))
         if has_reference:
-            menu.add_command(label="Referenz neu rahmen …", command=lambda: self.drawing_reframe_reference(editor))
-            menu.add_command(label="Referenz nachzeichnen …", command=lambda: self.drawing_reframe_reference(editor, trace=True))
-            menu.add_command(label="Referenz entfernen", command=lambda: self.drawing_remove_reference(editor))
+            menu.add_command(label=glide_i18n.t("drawing.menu.reference.reframe", "Referenz neu rahmen …"), command=lambda: self.drawing_reframe_reference(editor))
+            menu.add_command(label=glide_i18n.t("drawing.menu.reference.trace", "Referenz nachzeichnen …"), command=lambda: self.drawing_reframe_reference(editor, trace=True))
+            menu.add_command(label=glide_i18n.t("drawing.menu.reference.remove", "Referenz entfernen"), command=lambda: self.drawing_remove_reference(editor))
             opacity = tk.Menu(menu, **menu_options)
             editor._opacity_choice = tk.IntVar(value=editor.reference_opacity)
             for percent in (10, 20, 33, 50, 70, 90):
-                opacity.add_radiobutton(label=f"{percent} %", value=percent, variable=editor._opacity_choice,
+                opacity.add_radiobutton(label=glide_i18n.t("drawing.menu.reference.opacity_value", "{percent} %", percent=percent), value=percent, variable=editor._opacity_choice,
                                         command=lambda value=percent: editor.set_reference_opacity(value))
-            menu.add_cascade(label="Deckkraft der Referenz", menu=opacity)
+            menu.add_cascade(label=glide_i18n.t("drawing.menu.reference.opacity", "Deckkraft der Referenz"), menu=opacity)
         if editor.trace_backup is not None:
-            menu.add_command(label="Nachzeichnung zurücksetzen", command=lambda: self.drawing_reset_trace(editor))
+            menu.add_command(label=glide_i18n.t("drawing.menu.reference.reset_trace", "Nachzeichnung zurücksetzen"), command=lambda: self.drawing_reset_trace(editor))
         menu.add_separator()
-        menu.add_command(label="Zwischenstand merken …", command=lambda: self.drawing_snapshot_save(editor))
+        menu.add_command(label=glide_i18n.t("drawing.menu.snapshot.save", "Zwischenstand merken …"), command=lambda: self.drawing_snapshot_save(editor))
         count = len(self.drawing_snapshots(entry))
-        menu.add_command(label=f"Zwischenstände … ({count})", command=lambda: self.drawing_snapshot_dialog(editor))
+        menu.add_command(label=glide_i18n.t("drawing.menu.snapshot.list", "Zwischenstände … ({count})", count=count), command=lambda: self.drawing_snapshot_dialog(editor))
         menu.add_separator()
-        menu.add_command(label="Vordergrundfarbe in der Zeichnung ersetzen …",
+        menu.add_command(label=glide_i18n.t("drawing.menu.color.replace", "Vordergrundfarbe in der Zeichnung ersetzen …"),
                          command=lambda: self.drawing_replace_color(editor))
         if editor.model.unused_palette_count():
-            menu.add_command(label="Unbenutzte Farben entfernen …", command=lambda: self.drawing_compact_palette(editor))
+            menu.add_command(label=glide_i18n.t("drawing.menu.color.compact", "Unbenutzte Farben entfernen …"), command=lambda: self.drawing_compact_palette(editor))
         view = tk.Menu(menu, **menu_options)
         editor._view_choices = {key: tk.BooleanVar(value=value) for key, value in (
             ("gray", editor.grayscale), ("tiled", editor.tiled_preview),
             ("grid", editor.grid_visible), ("reference", editor.reference_visible))}
-        view.add_checkbutton(label="Raster", variable=editor._view_choices["grid"],
+        view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.grid", "Raster"), variable=editor._view_choices["grid"],
                              command=editor.toggle_grid)
         if has_reference:
-            view.add_checkbutton(label="Referenz einblenden", variable=editor._view_choices["reference"],
+            view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.reference", "Referenz einblenden"), variable=editor._view_choices["reference"],
                                  command=editor.toggle_reference)
-        view.add_checkbutton(label="Graustufen", variable=editor._view_choices["gray"],
+        view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.grayscale", "Graustufen"), variable=editor._view_choices["gray"],
                              command=editor.toggle_grayscale)
-        view.add_checkbutton(label="Kachelvorschau 3 × 3", variable=editor._view_choices["tiled"],
+        view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.tiled", "Kachelvorschau 3 × 3"), variable=editor._view_choices["tiled"],
                              command=editor.toggle_tiled)
         if "zoom" in editor.toolbar.hidden_keys:
-            view.add_command(label="Verkleinern", command=lambda: editor.change_zoom(-1))
-            view.add_command(label="Vergrößern", command=lambda: editor.change_zoom(1))
-            view.add_command(label="An Fläche anpassen", command=lambda: editor.fit_zoom(auto=True))
+            view.add_command(label=glide_i18n.t("drawing.menu.view.zoom_out", "Verkleinern"), command=lambda: editor.change_zoom(-1))
+            view.add_command(label=glide_i18n.t("drawing.menu.view.zoom_in", "Vergrößern"), command=lambda: editor.change_zoom(1))
+            view.add_command(label=glide_i18n.t("drawing.menu.view.fit", "An Fläche anpassen"), command=lambda: editor.fit_zoom(auto=True))
         if "preview" in editor.toolbar.hidden_keys:
-            view.add_command(label="Vorschau", command=editor.toggle_preview)
-        menu.add_cascade(label="Ansicht", menu=view)
+            view.add_command(label=glide_i18n.t("drawing.menu.view.preview", "Vorschau"), command=editor.toggle_preview)
+        menu.add_cascade(label=glide_i18n.t("drawing.menu.view", "Ansicht"), menu=view)
         if editor.animated:
             animation = tk.Menu(menu, **menu_options)
             if not editor.animation_toolbar.winfo_manager() or "frames" in editor.animation_toolbar.hidden_keys:
-                animation.add_command(label="Bilder …", command=lambda: self.drawing_animation_dialog(editor))
+                animation.add_command(label=glide_i18n.t("drawing.animation.frames", "Bilder …"), command=lambda: self.drawing_animation_dialog(editor))
             if not editor.animation_toolbar.winfo_manager() or "play" in editor.animation_toolbar.hidden_keys:
-                animation.add_command(label="Abspielen …", command=editor.show_animation_preview)
+                animation.add_command(label=glide_i18n.t("drawing.animation.play_dialog", "Abspielen …"), command=editor.show_animation_preview)
             # Ein Untermenü statt eines zweiten Popups aus dem Menüeintrag:
             # Einträge mit „…“ öffnen in Glide immer ein Fenster.
             export = tk.Menu(animation, **menu_options)
-            export.add_command(label="PNG-Spritesheet …", command=lambda: self.drawing_animation_export(editor))
-            export.add_command(label="PNG-Einzelbildfolge …",
+            export.add_command(label=glide_i18n.t("drawing.menu.animation.export_sheet", "PNG-Spritesheet …"), command=lambda: self.drawing_animation_export(editor))
+            export.add_command(label=glide_i18n.t("drawing.menu.animation.export_sequence", "PNG-Einzelbildfolge …"),
                                command=lambda: self.drawing_animation_export(editor, sequence=True))
-            animation.add_cascade(label="Bildfolge exportieren", menu=export)
-            menu.add_cascade(label="Bildfolge", menu=animation)
+            animation.add_cascade(label=glide_i18n.t("drawing.menu.animation.export", "Bildfolge exportieren"), menu=export)
+            menu.add_cascade(label=glide_i18n.t("drawing.menu.animation", "Bildfolge"), menu=animation)
         menu.add_separator()
         png = tk.Menu(menu, **menu_options)
         for scale in glide_drawing.PNG_SCALES:
             edge = editor.model.width * scale
             if edge <= glide_drawing.MAX_PNG_EDGE:
-                png.add_command(label=f"{scale}× · {edge} × {edge} Pixel",
+                png.add_command(label=glide_i18n.t("drawing.menu.export.png_scale", "{scale}× · {edge} × {edge} Pixel",
+                                                   scale=scale, edge=edge),
                                 command=lambda value=scale: self.drawing_export_png(editor, value))
-        menu.add_cascade(label="Als PNG exportieren", menu=png)
+        menu.add_cascade(label=glide_i18n.t("drawing.menu.export.png", "Als PNG exportieren"), menu=png)
         symbol = tk.Menu(menu, **menu_options)
-        symbol.add_command(label="Grund durchsichtig …", command=lambda: self.drawing_export_ico(editor, True))
-        symbol.add_command(label="Grund weiß …", command=lambda: self.drawing_export_ico(editor, False))
-        menu.add_cascade(label="Als Symbol exportieren (ICO)", menu=symbol)
-        menu.add_command(label="Als SVG exportieren …", command=lambda: self.drawing_export(editor, "svg"))
-        menu.add_command(label="Als JSON exportieren …", command=lambda: self.drawing_export(editor, "json"))
-        menu.add_command(label="SVG/JSON importieren …", command=lambda: self.drawing_import_replace(editor))
-        menu.add_command(label="Aus der Zwischenablage einfügen …", command=lambda: self.drawing_paste_text(editor))
+        symbol.add_command(label=glide_i18n.t("drawing.menu.export.ico_transparent", "Grund durchsichtig …"), command=lambda: self.drawing_export_ico(editor, True))
+        symbol.add_command(label=glide_i18n.t("drawing.menu.export.ico_white", "Grund weiß …"), command=lambda: self.drawing_export_ico(editor, False))
+        menu.add_cascade(label=glide_i18n.t("drawing.menu.export.ico", "Als Symbol exportieren (ICO)"), menu=symbol)
+        menu.add_command(label=glide_i18n.t("drawing.menu.export.svg", "Als SVG exportieren …"), command=lambda: self.drawing_export(editor, "svg"))
+        menu.add_command(label=glide_i18n.t("drawing.menu.export.json", "Als JSON exportieren …"), command=lambda: self.drawing_export(editor, "json"))
+        menu.add_command(label=glide_i18n.t("drawing.menu.import.replace", "SVG/JSON importieren …"), command=lambda: self.drawing_import_replace(editor))
+        menu.add_command(label=glide_i18n.t("drawing.menu.import.clipboard", "Aus der Zwischenablage einfügen …"), command=lambda: self.drawing_paste_text(editor))
         menu.add_separator()
-        menu.add_command(label="Jetzt speichern", command=editor.flush)
-        menu.add_command(label="Zeichnung leeren …", command=lambda: self.drawing_clear(editor))
+        menu.add_command(label=glide_i18n.t("drawing.menu.save_now", "Jetzt speichern"), command=editor.flush)
+        menu.add_command(label=glide_i18n.t("drawing.menu.clear", "Zeichnung leeren …"), command=lambda: self.drawing_clear(editor))
         try:
             menu.tk_popup(anchor.winfo_rootx(), anchor.winfo_rooty() + anchor.winfo_height())
         finally:
@@ -53870,7 +53920,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Zeichnung"
         extension = ".svg" if fmt == "svg" else ".json"
         path = filedialog.asksaveasfilename(
-            parent=self.root, title="Glide-SVG exportieren" if fmt == "svg" else "Zeichnung als JSON exportieren",
+            parent=self.root, title=(glide_i18n.t("drawing.export.svg_title", "Glide-SVG exportieren") if fmt == "svg"
+                                     else glide_i18n.t("drawing.export.json_title", "Zeichnung als JSON exportieren")),
             defaultextension=extension, initialfile=stem + extension,
             filetypes=[("SVG", "*.svg")] if fmt == "svg" else [("JSON", "*.json")])
         if not path:
@@ -53880,9 +53931,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             self.write_text_atomic(path, text)
         except (OSError, ValueError) as exc:
-            self.show_error("Zeichnung exportieren", str(exc))
+            self.show_error(glide_i18n.t("drawing.export.error_title", "Zeichnung exportieren"), str(exc))
             return
-        editor.update_status(f"Exportiert: {os.path.basename(path)}")
+        editor.update_status(glide_i18n.t("drawing.export.done", "Exportiert: {file}", file=os.path.basename(path)))
 
     def write_text_atomic(self, path, text):
         """Exporttext atomar schreiben; Nutzdatendateien sind als Ziel ausgeschlossen."""
