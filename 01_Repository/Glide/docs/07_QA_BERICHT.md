@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## D93 Etappe 2: Zeichendialoge DE/EN (V1.63, 20.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/d93-drawing-dialogs-i18n` über R3/R4. Grün: `test_i18n.py` 22/22 (171 konstante Schlüssel-/Fallback-Paare ohne Abweichung, Platzhalter DE/EN gleich); `test_arbeitsmodi.py --fall drawing_dialogs_locale` 1/1 (Titel, Knöpfe, Rückfragen beider Sprachen, verworfenes Ersetzen ohne Zellenänderung, Anhangsname `Zwischenstand – Probe de/en.json` stabil) sowie `drawing_locale`, `drawing_controls_locale`, `drawing_more_locale`, `drawing_export_locale`; `test_pixel3350`, `test_animation3400`, `test_features329`, `test_fenster330`, `test_befunde330`, `test_bildkonversion`, `test_glide`, `test_shell_importregel.py`. `test_pixel3350` erwartete den alten Text „64 Zelle(n)“; die Erwartung prüft jetzt die neue Mehrzahl „64 Zellen wechseln“. Menschliche Sichtprüfung und GitHub-Vollprüfung stehen aus.
+
 ## Shell-Restkopplung R3/R4 abgeschlossen (V1.62, 20.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/shell-r3-r4-rest` (über R2). Grün: `test_shell_importregel.py` (Sperrklinke 1 Fenster / 0 Zeitgeber), `test_modal_session.py`, `test_modalvertrag` 18/18, `test_abbauvertrag`, `test_fensterlebensdauer`, `test_fenster330`, `test_dialog_theme`, `test_ui39`, `test_ansichten`, `test_sicherungszentrale`, `test_wissen33315`, `test_reminders`, `test_startseite3332`, `test_glide`, `test_features330`, `test_austausch3350`, `test_template_workflows` und `test_arbeitsmodi --gruppe navigation` (14/14).
