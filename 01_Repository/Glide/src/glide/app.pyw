@@ -1379,7 +1379,7 @@ class AnalogClock(tk.Canvas):
             if not self.winfo_exists():
                 return
             self._draw_hands()
-            self._tick_id = self.after(1000, self._tick)
+            self._tick_id = glide_window_lifetime.scope_for(self).after(1000, self._tick)
         except tk.TclError:
             self._tick_id = None
 
@@ -1462,7 +1462,7 @@ class DeferredDrawCanvas(tk.Canvas):
 
     def _schedule_draw(self, _event=None):
         if self._draw_pending is None:
-            self._draw_pending = self.after_idle(self._draw_scheduled)
+            self._draw_pending = glide_window_lifetime.scope_for(self).after_idle(self._draw_scheduled)
             if not getattr(self, "_draw_cancel_bound", False):
                 self.bind("<Destroy>", self._cancel_draw, add="+")
                 self._draw_cancel_bound = True
@@ -1915,7 +1915,7 @@ class ButtonFlow(tk.Frame):
     def schedule_reflow(self, _event=None):
         """Mehrere neue Knöpfe und Größenmeldungen ergeben einen Layoutdurchlauf."""
         if self._reflow_pending is None:
-            self._reflow_pending = self.after_idle(self.reflow)
+            self._reflow_pending = glide_window_lifetime.scope_for(self).after_idle(self.reflow)
 
     def cancel_reflow(self, event=None):
         if event is not None and event.widget is not self:
@@ -2228,7 +2228,7 @@ class MascotCanvas(tk.Canvas):
                 self._jobs.remove(job)
             callback()
         try:
-            job = self.after(delay, finished)
+            job = glide_window_lifetime.scope_for(self).after(delay, finished)
             self._jobs.append(job)
         except tk.TclError:
             pass
@@ -3159,7 +3159,7 @@ class DropdownPopup(tk.Frame):
 
     def _focus_out(self, _event=None):
         if self._focus_job is None:
-            self._focus_job = self.after_idle(self._check_focus)
+            self._focus_job = glide_window_lifetime.scope_for(self).after_idle(self._check_focus)
 
     def _check_focus(self):
         self._focus_job = None
@@ -10016,7 +10016,7 @@ class RichNoteEditor(tk.Frame):
         self.text.edit_modified(False)
         if self._job is not None:
             self.after_cancel(self._job)
-        self._job = self.after(400, self.flush)
+        self._job = glide_window_lifetime.scope_for(self).after(400, self.flush)
 
     def flush(self):
         if self._job is not None:
@@ -12460,7 +12460,7 @@ class PageEditor(RichNoteEditor):
 
     def schedule_format_bar(self):
         try:
-            self.after_idle(self.sync_format_bar)
+            glide_window_lifetime.scope_for(self).after_idle(self.sync_format_bar)
         except tk.TclError:
             pass
 
@@ -12683,7 +12683,7 @@ class PageEditor(RichNoteEditor):
                 self.after_cancel(self._image_job)
             except tk.TclError:
                 pass
-        self._image_job = self.after(delay, self.layout_images)
+        self._image_job = glide_window_lifetime.scope_for(self).after(delay, self.layout_images)
 
     def ypixels(self, a, b):
         try:
@@ -13047,7 +13047,7 @@ class PageEditor(RichNoteEditor):
             view.create_rectangle(1, 1, breite - 2, hoehe - 2, outline=self.app.theme['ui_accent'], width=2,
                                   tags=('rahmen',))
             if zug.get('render_job') is None:
-                zug['render_job'] = self.after(self.IMAGE_DRAG_RENDER_MS,
+                zug['render_job'] = glide_window_lifetime.scope_for(self).after(self.IMAGE_DRAG_RENDER_MS,
                                                lambda k=key, v=view: self._render_drag_image(k, v))
             return 'break'
         if zug['art'] == 'warten' and abs(dx) + abs(dy) < 6:
@@ -14297,7 +14297,7 @@ class DrawingEditor(tk.Frame):
                 self.after_cancel(auftrag)
             except tk.TclError:
                 pass
-        self._context_rows_job = self.after(120, self.reserve_context_rows)
+        self._context_rows_job = glide_window_lifetime.scope_for(self).after(120, self.reserve_context_rows)
 
     # --- Ansichtszustand ------------------------------------------------------
     def remember_view(self):
@@ -14643,7 +14643,7 @@ class DrawingEditor(tk.Frame):
             # 29.09.2026 stand nur ein leicht übersehbarer Satz im Status, und
             # der Klick wirkte wie ohne Folge (R10).
             self.reference_visible = False
-            self.after_idle(lambda: self.app.drawing_load_reference(self))
+            glide_window_lifetime.scope_for(self).after_idle(lambda: self.app.drawing_load_reference(self))
         else:
             self.reference_visible = not self.reference_visible
             self.render_full()
@@ -14822,7 +14822,7 @@ class DrawingEditor(tk.Frame):
         if self._preview_job is not None:
             return
         try:
-            self._preview_job = self.after(self.PREVIEW_DELAY_MS, self._render_preview)
+            self._preview_job = glide_window_lifetime.scope_for(self).after(self.PREVIEW_DELAY_MS, self._render_preview)
         except tk.TclError:
             self._preview_job = None
 
@@ -14923,7 +14923,7 @@ class DrawingEditor(tk.Frame):
                     self.after_cancel(self._fit_job)
                 except tk.TclError:
                     pass
-            self._fit_job = self.after(30, lambda: self._auto_fit(viewport_width, viewport_height))
+            self._fit_job = glide_window_lifetime.scope_for(self).after(30, lambda: self._auto_fit(viewport_width, viewport_height))
         extent = self.model.width * self.zoom
         visible_width, visible_height = self._visible_size(viewport_width, viewport_height)
 
@@ -15600,7 +15600,7 @@ class DrawingEditor(tk.Frame):
             except tk.TclError:
                 pass
         try:
-            self._save_job = self.after(self.SAVE_DELAY_MS, self.flush)
+            self._save_job = glide_window_lifetime.scope_for(self).after(self.SAVE_DELAY_MS, self.flush)
         except tk.TclError:
             self._save_job = None
 
@@ -15843,7 +15843,7 @@ class DrawingEditor(tk.Frame):
                 state.update(running=False, elapsed=elapsed)
                 play.set_text(self._drawing_text("animation.play", "Abspielen"))
                 return
-            state["job"] = dialog.after(position.remaining_ms, tick)
+            state["job"] = glide_window_lifetime.scope_for(dialog).after(position.remaining_ms, tick)
             self.app._after_ids.add(state["job"])
 
         def pause():
@@ -17944,7 +17944,7 @@ class ListApp:
             # damit sie auch unter Windows thematisch als Glide-Dialog erscheint.
             try:
                 if self.root.state() != "withdrawn":
-                    self.root.after(250, self.show_data_lock_warning)
+                    self.after_scope().after(250, self.show_data_lock_warning)
             except tk.TclError:
                 pass
         # Die Pixelschrift kennt macOS erst nach einem Durchlauf der
@@ -18092,7 +18092,7 @@ class ListApp:
             try:
                 # Auch das läuft innerhalb der Menüverfolgung von macOS; eine
                 # Rückfrage beim Beenden hinge dort fest (30.09.2026).
-                self.root.createcommand("::tk::mac::Quit", lambda *_args: self.root.after_idle(self.on_close))
+                self.root.createcommand("::tk::mac::Quit", lambda *_args: self.after_scope().after_idle(self.on_close))
             except tk.TclError:
                 pass
         self.root.bind("<Control-Alt-n>", self.show_quick_capture)
@@ -18391,7 +18391,7 @@ class ListApp:
             except tk.TclError:
                 pass
         try:
-            self._backdrop_settle_job = self.root.after(self.BACKDROP_THROTTLE_MS, self._backdrop_settled)
+            self._backdrop_settle_job = self.after_scope().after(self.BACKDROP_THROTTLE_MS, self._backdrop_settled)
         except tk.TclError:
             self._backdrop_settle_job = None
 
@@ -18402,7 +18402,7 @@ class ListApp:
         rest = getattr(self, "_scrolling_until", 0) - time.monotonic()
         if rest > 0:
             try:
-                self._backdrop_settle_job = self.root.after(int(rest * 1000) + 20, self._backdrop_settled)
+                self._backdrop_settle_job = self.after_scope().after(int(rest * 1000) + 20, self._backdrop_settled)
             except tk.TclError:
                 pass
             return
@@ -19530,13 +19530,13 @@ class ListApp:
             if state is None or state["frame"] is not toast:
                 return
             if paused["on"]:
-                state["job"] = self.root.after(1000, expire)
+                state["job"] = self.after_scope().after(1000, expire)
                 return
             self.hide_undo_toast()
 
         toast.bind("<Enter>", lambda _event: paused.update(on=True))
         toast.bind("<Leave>", lambda _event: paused.update(on=False))
-        self._undo_toast["job"] = self.root.after(self.UNDO_TOAST_MS, expire)
+        self._undo_toast["job"] = self.after_scope().after(self.UNDO_TOAST_MS, expire)
         return toast
 
     def hide_undo_toast(self):
@@ -27073,7 +27073,7 @@ class ListApp:
             knopf = tk.Label(baum, text=text, font=app_font(11, "bold"), cursor="hand2", width=2,
                              bg=theme["hover"], fg=theme["text"])
             knopf.bind("<Button-1>", lambda event, run=befehl: run(event) or "break")
-            knopf.bind("<Leave>", lambda _event: self.root.after(60, self.hide_sidebar_quick_actions_unless_hovered))
+            knopf.bind("<Leave>", lambda _event: self.after_scope().after(60, self.hide_sidebar_quick_actions_unless_hovered))
             self.add_tooltip(knopf, hinweis)
             knoepfe.append(knopf)
         paare = getattr(self, "sidebar_quick_buttons", None) or {}
@@ -27082,7 +27082,7 @@ class ListApp:
         if baum is getattr(self, "sidebar_listbox", None):
             self.sidebar_quick_add_button, self.sidebar_quick_more_button = knoepfe
         baum.bind("<Motion>", self.on_sidebar_quick_motion, add="+")
-        baum.bind("<Leave>", lambda _event: self.root.after(60, self.hide_sidebar_quick_actions_unless_hovered),
+        baum.bind("<Leave>", lambda _event: self.after_scope().after(60, self.hide_sidebar_quick_actions_unless_hovered),
                   add="+")
         baum.bind("<B1-Motion>", lambda _event: self.hide_sidebar_quick_actions(), add="+")
 
@@ -30138,7 +30138,7 @@ class ListApp:
                         except tk.TclError:
                             pass
 
-                    self.root.after(900, settle_reaction)
+                    self.after_scope().after(900, settle_reaction)
                 return "break"
 
             def beruehren(_event=None):
@@ -32682,7 +32682,7 @@ class ListApp:
                 self._center_dialog(dialog, min_width=1080, min_height=760)
                 first_open[0] = False
                 for panel in (personal, appearance):
-                    dialog.after_idle(lambda ziel=panel: umbruch_einstellen(ziel, ziel.winfo_width()))
+                    glide_window_lifetime.scope_for(dialog).after_idle(lambda ziel=panel: umbruch_einstellen(ziel, ziel.winfo_width()))
             self._schedule_windows_chrome_theme(dialog)
             fields[0].focus_set()
             self.run_modal(dialog)
@@ -36614,7 +36614,7 @@ class ListApp:
         def capture():
             if pool.winfo_exists() and self.home_mode() == 'calendar':
                 self.calendar_drag_start(event, pool.selection())
-        self.root.after_idle(capture)
+        self.after_scope().after_idle(capture)
     def add_task_with_due(self, day, parent_dialog=None, restore_grab=None):
         """Kalenderanlage: frisches gewähltes Ziel; True nur nach Hauptdateierfolg."""
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
@@ -36809,7 +36809,7 @@ class ListApp:
             # dem Leerlauf zerstört, löscht tkinter dessen Befehle, Tcl behielte
             # aber den geplanten Aufruf – ein neu vergebener Befehlsname erhielte
             # ihn dann ohne Argument (gefunden in test_kompression330, 07.11.2026).
-            self.root.after_idle(rueckruf)
+            self.after_scope().after_idle(rueckruf)
 
         def zaehlen(_event=None):
             if not counter.winfo_exists() or not entry.winfo_exists():
@@ -36906,9 +36906,9 @@ class ListApp:
                 counter.place_forget()
 
         # Nachläufe am Hauptfenster (siehe `limit_title_entry`).
-        self.root.after_idle(platzieren)
+        self.after_scope().after_idle(platzieren)
         entry.bind("<Map>", platzieren, add="+")
-        entry.bind("<Unmap>", lambda _event: self.root.after_idle(verbergen), add="+")
+        entry.bind("<Unmap>", lambda _event: self.after_scope().after_idle(verbergen), add="+")
         entry.bind("<Destroy>", lambda _event: counter.destroy() if counter.winfo_exists() else None, add="+")
 
     def new_list_object(
@@ -39690,8 +39690,8 @@ class ListApp:
         baum.bind("<Alt-Left>", lambda _event: self.keyboard_sidebar_move(self.outdent_selected_sidebar_list))
         self.bind_sidebar_drag(baum)
         baum.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
-        baum.bind("<<TreeviewOpen>>", lambda _event: self.root.after_idle(self.sync_pages_sidebar_height), add="+")
-        baum.bind("<<TreeviewClose>>", lambda _event: self.root.after_idle(self.sync_pages_sidebar_height), add="+")
+        baum.bind("<<TreeviewOpen>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
+        baum.bind("<<TreeviewClose>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
         self.bind_hover_highlight(baum)
         self.bind_mousewheel(baum)
         self.build_sidebar_quick_actions(baum)
@@ -40699,7 +40699,7 @@ class ListApp:
             return
         if self.sidebar_rename_row(iid) is None:
             return
-        self._sidebar_rename_timer = self.root.after(
+        self._sidebar_rename_timer = self.after_scope().after(
             self.SIDEBAR_RENAME_DELAY_MS, lambda: self.begin_sidebar_rename(iid)
         )
 
@@ -44101,7 +44101,7 @@ class ListApp:
         self.timer_button = self.make_button(self.header_controls, "", self.stop_time_tracking_from_header,
                                              "due_action", width=120, height=self.HEADER_CONTROL_HEIGHT)
         self.add_tooltip(self.timer_button, "Zeiterfassung stoppen und auf den Punkt buchen")
-        self.root.after_idle(self.update_timer_indicator)
+        self.after_scope().after_idle(self.update_timer_indicator)
         self.add_tooltip(self.print_button, "Drucken und als PDF speichern · " + self.accel("Strg", "P"))
 
         # Das Überlaufmenü nimmt auf, was bei
@@ -44228,7 +44228,7 @@ class ListApp:
             tk.Label(self.entry_inner, text="", font=app_font(9), bd=0, padx=0, pady=0,
                      bg=self.theme["input"], fg=self.theme["muted"], anchor="e"), "input", "muted")
         self.entry.bind("<KeyRelease>", self.update_entry_limit, add="+")
-        self.entry.bind("<<Paste>>", lambda _event: self.root.after_idle(self.update_entry_limit), add="+")
+        self.entry.bind("<<Paste>>", lambda _event: self.after_scope().after_idle(self.update_entry_limit), add="+")
         self.entry.bind("<FocusOut>", self.update_entry_limit, add="+")
 
         # Seit 3.33.20 (U04) ein runder „+“-Knopf statt zweier Textknöpfe: Die
@@ -47401,7 +47401,7 @@ class ListApp:
         bericht.append((original, kurz))
         if len(bericht) == 1 and getattr(self, "root", None) is not None:
             try:
-                self.root.after(500, self.show_attachment_name_notice)
+                self.after_scope().after(500, self.show_attachment_name_notice)
             except tk.TclError:
                 pass
 
@@ -47902,7 +47902,7 @@ class ListApp:
                 # Hinweise an/aus, Schrift), rücken Knopf und Gismo nach – auch
                 # wenn Tk die Größe erst nach dem Platzieren meldet (B15).
                 for ereignis in ("<Configure>", "<Map>"):
-                    hinweis.bind(ereignis, lambda _event, b=baum, h=hinweis: self.root.after_idle(
+                    hinweis.bind(ereignis, lambda _event, b=baum, h=hinweis: self.after_scope().after_idle(
                         lambda: self._follow_empty_text(b, h) if h.winfo_exists() and h.winfo_manager() == "place" else None),
                         add="+")
             hinweis.configure(text=text, bg=grund, fg=farbe, font=schrift, wraplength=breite - 48)
@@ -47912,10 +47912,10 @@ class ListApp:
             # und der Leertext stand zweimal versetzt da (27.09.2026).
             if not getattr(baum, "_empty_text_bound", False):
                 baum._empty_text_bound = True
-                baum.bind("<Configure>", lambda _event, b=baum: self.root.after_idle(
+                baum.bind("<Configure>", lambda _event, b=baum: self.after_scope().after_idle(
                     lambda: self._place_empty_text(b, getattr(self, "empty_text_label", None), nur_nachziehen=True)),
                     add="+")
-            self.root.after_idle(lambda: self._place_empty_text(baum, hinweis, nur_nachziehen=True))
+            self.after_scope().after_idle(lambda: self._place_empty_text(baum, hinweis, nur_nachziehen=True))
         except tk.TclError:
             return None
         return hinweis
@@ -48450,7 +48450,7 @@ class ListApp:
             pass
         self._format_migration_notice = (version, sicherungen[-1] if sicherungen else "")
         try:
-            self.root.after(700, self.show_format_migration_notice)
+            self.after_scope().after(700, self.show_format_migration_notice)
         except tk.TclError:
             pass
         return True
@@ -48818,7 +48818,7 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
             return False
         self._title_clip_notice = (gekuerzt, ziel)
         self.dirty = True
-        self.root.after(600, self.show_title_clip_notice)
+        self.after_scope().after(600, self.show_title_clip_notice)
         return True
 
     def back_up_before_attachment_renaming(self):
@@ -48921,7 +48921,7 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                                            "storage": kopiert, "backup": ziel, "owners": halter,
                                            "sources": quellen_vorher}
         self.dirty = True
-        self.root.after(650, self.finish_attachment_renaming)
+        self.after_scope().after(650, self.finish_attachment_renaming)
         return True
 
     def reanchor_sources_after_attachment_move(self, vorher):
@@ -52267,7 +52267,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             except tk.TclError:
                 pass
         try:
-            self._drawing_tools_job = self.root.after(400, self._save_drawing_tools)
+            self._drawing_tools_job = self.after_scope().after(400, self._save_drawing_tools)
         except tk.TclError:
             self._drawing_tools_job = None
 
@@ -54034,7 +54034,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def schedule():
             if state["job"] is not None:
                 dialog.after_cancel(state["job"])
-            state["job"] = dialog.after(40, render)
+            state["job"] = glide_window_lifetime.scope_for(dialog).after(40, render)
 
         modes = ButtonFlow(body, self.theme["bg"], gap=8)
         modes.pack(fill="x")
@@ -54094,7 +54094,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self._center_dialog(dialog, min_width=520)
         self._schedule_windows_chrome_theme(dialog)
         if start_trace:
-            dialog.after(60, trace)
+            glide_window_lifetime.scope_for(dialog).after(60, trace)
         self.run_modal(dialog)
         return result["value"]
 
@@ -54139,7 +54139,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def schedule():
             if state["job"] is not None:
                 dialog.after_cancel(state["job"])
-            state["job"] = dialog.after(60, refresh)
+            state["job"] = glide_window_lifetime.scope_for(dialog).after(60, refresh)
 
         self._drawing_scale(body, "Weiß ab", white, 220, 255, " je Kanal", schedule)
         grid_row = ButtonFlow(body, self.theme["bg"], gap=8)
@@ -60209,7 +60209,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                             (" · Pause" if timer.get("focus") and timer["started_at"] is None else ""))
             self._timer_indicator_visible = not (timer.get("focus") and self.view_mode == self.PLAN_DAY_VIEW)
             self.pack_header_controls()
-            self._timer_job = self.root.after(1000 if timer.get("focus") else 30_000, self.update_timer_indicator)
+            self._timer_job = self.after_scope().after(1000 if timer.get("focus") else 30_000, self.update_timer_indicator)
             self._after_ids.add(self._timer_job)
             self.sync_focus_panel(now=instant)
         except tk.TclError:
@@ -61079,7 +61079,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if shift_pressed:
                 self.select_range_from_click(event)
             elif getattr(self, "_rename_candidate", None) == source_id:
-                self._item_rename_timer = self.root.after(
+                self._item_rename_timer = self.after_scope().after(
                     self.SIDEBAR_RENAME_DELAY_MS, lambda: self.begin_item_rename(source_id))
             return
 
@@ -61403,11 +61403,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         worker = threading.Thread(target=work, name="Glide-Markdown-Ausgabe", daemon=True)
         def poll():
             if worker.is_alive():
-                dialog.after(50, poll)
+                glide_window_lifetime.scope_for(dialog).after(50, poll)
             else:
                 dialog.destroy()
         worker.start()
-        dialog.after(50, poll)
+        glide_window_lifetime.scope_for(dialog).after(50, poll)
         self._center_dialog(dialog, min_width=420)
         self.run_modal(dialog)
         if worker.is_alive():
@@ -64414,7 +64414,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         gekuerzt = [paar for paar in getattr(self, '_page_restore_shortened', None) or [] if paar[1] in namen]
         self._page_restore_shortened = None
         if gekuerzt:
-            self.root.after(500, lambda: self.show_attachment_name_notice(gekuerzt))
+            self.after_scope().after(500, lambda: self.show_attachment_name_notice(gekuerzt))
         return True
 
     def show_backup_catalog(self, event=None):
@@ -64734,7 +64734,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self._center_dialog(dialog, min_width=680, min_height=560)
         self._schedule_windows_chrome_theme(dialog)
         if len(namen) > 1:
-            dialog.after_idle(vergleichen)
+            glide_window_lifetime.scope_for(dialog).after_idle(vergleichen)
         self.run_modal(dialog)
         return "break"
 
@@ -68888,7 +68888,7 @@ Labels, Termine und Metadaten."""
         if widget is getattr(self, "search_button", None) or str(widget).startswith(
                 str(getattr(self, "search_button", "")) + "."):
             return None
-        self.root.after_idle(self.close_quick_open)
+        self.after_scope().after_idle(self.close_quick_open)
         return None
 
     def close_quick_open(self):
@@ -69223,7 +69223,7 @@ Labels, Termine und Metadaten."""
             return None
         # Nur diese Auswahl schließen: Öffnet der Klick sofort eine neue (Griff,
         # „Mehr“), bleibt die neue stehen.
-        self.root.after_idle(lambda: self._action_chooser is state and self.close_action_chooser(restore_focus=False))
+        self.after_scope().after_idle(lambda: self._action_chooser is state and self.close_action_chooser(restore_focus=False))
         return None
 
     def close_action_chooser(self, restore_focus=True, notify=True):
