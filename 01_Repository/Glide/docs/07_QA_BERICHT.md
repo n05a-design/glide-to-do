@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Glide Shell für Folgeprojekte: Selbsttest, Demohost und Anleitung (V1.68, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v168-shell-selbsttest` über V1.67. Grün: CI-Grundstufe; `test_glide_system.py`; alle Unit-Tests; `test_shell_uebernahme.py` (T331, beide Anleitungen kopiert); `test_shell_importregel.py` (T319); `test_shell_demohost.py` (T330, Lage auf dem Bildschirm, Rückgängig/Wiederholen, Hostfarben-Vorrang); `test_shell_selbsttest.py` (T333, Kopie 7/7, Gegenprobe genau `window_geometry` rot); `test_startwege.py` 17/17; `test_glide.py`; `test_modalvertrag.py` 18; `test_fensterlebensdauer.py` 10. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sichtprüfung des Demohosts.
+
 ## Shell-Bausteine nach D96 (V1.67, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/shell-d96-bausteine` über V1.66 (übertragen nach `claude/v167-shell-d96-main`). Grün: CI-Grundstufe; `test_shell_d96.py` (T332, 9 Fälle); `test_shell_importregel.py` (T319, neue Signaturen, englische Laufzeittexte mit Gegenprobe); `test_compact_mode`, `test_appearance`, `test_undo_history`; `test_shell_demohost.py` (T330); `test_startwege.py` 17/17; `test_glide.py`; `test_wiederholen.py` 9/9; `test_mutationsreste.py`; `test_bedienung33316.py`; `test_festlayout330.py`; `test_hintergrund330.py`; `test_oberflaeche33321.py`; `test_abbauvertrag.py`. `test_arbeitsmodi.py`: `kompakt_verlorenes_loslassen` rot mit `focus: None` und `anhangsnamen` hängt, beide auf dem Basisstand V1.66 identisch (fremder Fensterfokus); `kompakt` und `kompakt_ansichten` einzeln grün. Nicht geprüft: Windows und Linux (GitHub-Matrix).

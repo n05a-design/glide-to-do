@@ -10,6 +10,8 @@ Folgeprojekt, das nur dieses Paket übernimmt, bekommt damit dasselbe Ergebnis:
 - der modale Dialog aus `create_dialog` hält den Griff, folgt der Hostfarbe und
   gibt ihn frei;
 - `window_geometry`, `system_appearance` und `redo_history` laden aus der Kopie;
+- die Lage bleibt auf dem Bildschirm, Rückgängig/Wiederholen am Zähler, eine
+  neue Änderung verwirft den Wiederholen-Stapel;
 - nach dem Schließen ist kein Zeitgeber des Hosts mehr offen.
 
 Aufruf: python3 -B tests/integration/test_shell_demohost.py
@@ -42,7 +44,7 @@ root.geometry("420x240+40+40")
 host = demo.DemoHost(root, colors={"bg": "#FAFAF0"})
 root.update()
 ids = [m._glide_action_ids for m in host.menus]
-assert {"open_dialog", "quit"} <= {a for d in ids for a in d.values()}, ids
+assert {"open_dialog", "quit", "undo", "redo"} <= {a for d in ids for a in d.values()}, ids
 assert host.clock.cget("text").count(":") == 2, host.clock.cget("text")
 assert len(host.scope.pending()) == 1, host.scope.pending()
 host.seconds.set(False); host.tick(); root.update()
@@ -70,6 +72,17 @@ host.open_dialog()
 assert gesehen.get("titel") == "Example dialog", gesehen
 assert gesehen.get("grab") is True and gesehen.get("bg") == "#FAFAF0", gesehen
 assert gesehen.get("besitzer") == str(root), gesehen
+lage = host.place("9000x9000+-20000+-20000"); root.update()
+breite, hoehe, x, y = window_geometry.parse(lage)
+assert breite <= max(360, root.winfo_screenwidth()) and x > -breite and y >= 0, lage
+host.add(); host.add()
+assert host.undo_step() and host.count == 1 and host.redo_step() and host.count == 2
+assert host.undo_step() and not host.redo.peek() is None
+host.add()
+assert host.count == 2 and not host.redo_step(), "neue Änderung verwirft Wiederholen"
+assert host.counter.cget("text") == "Count: 2", host.counter.cget("text")
+assert host.system_dark is None, "mit Hostfarben folgt der Demohost nicht dem System"
+
 assert root.grab_current() is None and host.dialogs_opened == 1
 fremd = sorted(n for n, m in sys.modules.items()
                if getattr(m, "__file__", None) and "src" + __import__("os").sep + "glide" in m.__file__

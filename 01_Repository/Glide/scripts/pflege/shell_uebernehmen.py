@@ -7,7 +7,8 @@ Aufruf (Ziel ist der Quellordner des Folgeprojekts, in dem `glide_shell/` liegen
     python3 -B scripts/pflege/shell_uebernehmen.py --pruefen <Ziel>   # nur prüfen, nichts schreiben
     python3 -B scripts/pflege/shell_uebernehmen.py --ersetzen <Ziel>  # lokale Änderungen überschreiben
 
-Das Werkzeug kopiert alle `*.py` aus `src/glide/glide_shell` nach
+Das Werkzeug kopiert alle `*.py` und die Anleitungen `README.md`/`README.de.md`
+aus `src/glide/glide_shell` nach
 `<Ziel>/glide_shell` und schreibt daneben `SHELL_MANIFEST.json` mit
 `SHELL_VERSION`, Glide-Systemversion, Quell-Commit (falls bekannt), ob das
 Paket diesem Commit entspricht (`quelle_unveraendert`), und SHA-256 jeder Datei. Beim Aktualisieren gilt:
@@ -41,6 +42,8 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide" / "glide_shell"
 PAKET = "glide_shell"
 MANIFEST = "SHELL_MANIFEST.json"
+# Quelltext und die Anleitung für Folgeprojekte (README.md, README.de.md).
+ANTEILE = (".py", ".md")
 
 
 def sha(pfad):
@@ -76,7 +79,7 @@ def quelle_unveraendert():
 
 
 def quelldateien():
-    return {p.name: sha(p) for p in sorted(QUELLE.glob("*.py")) if p.is_file()}
+    return {p.name: sha(p) for p in sorted(QUELLE.iterdir()) if p.is_file() and p.suffix in ANTEILE}
 
 
 def manifest_lesen(ordner):
