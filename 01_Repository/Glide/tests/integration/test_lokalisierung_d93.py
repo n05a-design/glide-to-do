@@ -224,7 +224,31 @@ def fall_l4_menues_und_anlegen(lauf):
     return f"Listen-, Ordner- und Ansichtsmenü, Anlegen-Dialog: {en} englische, {de} deutsche Texte"
 
 
-FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen")
+def fall_l5_erinnerungen_und_erfassung(lauf):
+    """L5: Benachrichtigungen, Schnellerfassung und das Kontextmenü der leeren Liste."""
+    app = lauf.app
+    item = app.new_item("Delta 1")
+    app.items.append(item)
+    assert app.save_items()
+    lauf.idle(2)
+
+    def pruefung(sprache):
+        texte = modal_texte(lauf, app.open_reminders)
+        texte += modal_texte(lauf, app.show_quick_capture)
+        texte += menue_texte(app.build_tree_background_menu())
+        erwartet = {"en": {"Notifications", "Close", "Quick capture", "Capture", "Cancel", "Sort", "Alphabetical"},
+                    "de": {"Benachrichtigungen", "Schließen", "Schnellerfassung", "Erfassen", "Abbrechen", "Sortieren",
+                           "Alphabetisch"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt, texte)
+        return [text for text in texte if "Delta" not in text]
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Benachrichtigungen, Schnellerfassung, Listenmenü: {en} englische, {de} deutsche Texte"
+
+
+FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
+          "l5_erinnerungen_und_erfassung")
 
 
 def main():

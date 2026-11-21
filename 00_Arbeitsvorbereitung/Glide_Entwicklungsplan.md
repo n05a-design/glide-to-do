@@ -3760,3 +3760,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
 
 **D – Rest und Git:** Paket L5 folgt auf diesem Zweig. Offen als Produktfrage: zweisprachiger TXT- und CSV-Austausch (heute bewusst deutsch). Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.162 D93-Volllokalisierung, Paket L5: Benachrichtigungen, Übersichten und Kontextmenüs (V1.74, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 520 Texte von `schedule_reminder_check` bis `build_in_progress_context_menu`: Benachrichtigungsglocke und -übersicht, Inspektorübernahme, Statuszeile aller Ansichten, Live-Listen, Titelbild, Vorlagenauswahl und gefüllte Vorschau, Textquelle, Seiten als Markdown und Druck, Seiten aus Markdown, Anlegen in Bereichen, Seiten- und Notizübersicht mit Favoriten, Notizbuch mit Stimmung und Schreibimpuls, Paletten, Symbol- und PNG-Export, Bildfolge, Referenz nachzeichnen, Galerie, Flächenhinweise, Listen-, Tabellen- und Heute-Übersicht mit Zeitplan, Labels, Papierkorb, Ordner-, Notizbuch- und Bibliotheksübersicht, Notizbuchfilter, Einstellungs- und Speicherwarnungen, Rückgängig und Wiederholen, Zwischenablage, Mehrzeilen-Einfügen, Eingabe und Schnellerfassung, Gruppieren, Verschieben, Wichtigkeits-, Fälligkeits-, Farb- und Labelmenüs, Kontextmenüs von Punkt und Liste. Gespeicherte Werte (Zwischenstand-Anhänge, Standardtitel, eingefügte Zeichnungen, Tagesnotiz- und Notizbuchtitel, Rohzeilen-IDs) bleiben unverändert. Die Notizbuchübersicht vergleicht den Pinnwand-Typ mit dem Katalogtext; „1 Block“ hat eine eigene Einzahl.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L6 folgt auf diesem Zweig. Lieferkopie mit der nächsten Produktionsrunde.
