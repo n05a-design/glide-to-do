@@ -30551,7 +30551,7 @@ class ListApp:
             symbol = self.ICONS["folder" if template.get("kind") == "folder" else "list"]
             kind = tk.Label(card, text=symbol, bg=theme["card"], fg=theme["muted"], font=app_font(13))
             kind.grid(row=0, column=0, padx=(0, 4), pady=6, sticky="n")
-            self.add_tooltip(kind, "Ordner" if template.get("kind") == "folder" else "Liste")
+            self.add_tooltip(kind, glide_i18n.t("ui.kachel_boards.folder", "Ordner") if template.get("kind") == "folder" else glide_i18n.t("editor.toolbar.list", "Liste"))
             title = tk.Label(card, text=template.get("title", "Vorlage"), bg=theme["card"],
                              fg=theme["text"], font=app_font(11, "bold"), anchor="w", justify="left")
             title.grid(row=0, column=1, sticky="new", padx=6, pady=8)
@@ -30562,14 +30562,14 @@ class ListApp:
             actions.grid(row=0, column=3, sticky="e", pady=8)
             if editing:
                 for icon, label, command, color in (
-                    ("trash", "Vorlage löschen", self.delete_template, "delete"),
-                    ("edit", "Vorlage bearbeiten", self.edit_template, "accent"),
+                    ("trash", glide_i18n.t("ui.refresh_template_page.delete_template", "Vorlage löschen"), self.delete_template, "delete"),
+                    ("edit", glide_i18n.t("ui.refresh_template_page.edit_template", "Vorlage bearbeiten"), self.edit_template, "accent"),
                 ):
                     button = self._make_dialog_button(actions, self.ICONS[icon],
                                 lambda value=template["id"], fn=command: fn(value), color, width=38, height=38)
                     button.pack(side="left", padx=(0, 4))
                     self.add_tooltip(button, label)
-            use = self._make_dialog_button(actions, "Verwenden",
+            use = self._make_dialog_button(actions, glide_i18n.t("ui.refresh_template_page.use", "Verwenden"),
                         lambda value=template["id"]: self.create_list_from_template(value), "confirm", width=118, height=38)
             use.pack(side="left")
 
@@ -30593,8 +30593,8 @@ class ListApp:
             for widget in (surface, card, title, note, kind):
                 self._bind_home_wheel(widget)
         if not templates:
-            tk.Label(self.home_content, text="Keine passenden Vorlagen." if self.templates else
-                     "Noch keine Vorlagen. Unten kannst du Vorlagen hinzufügen.",
+            tk.Label(self.home_content, text=glide_i18n.t("ui.refresh_template_page.no_matching_templates", "Keine passenden Vorlagen.") if self.templates else
+                     glide_i18n.t("ui.refresh_template_page.no_templates_yet_you", "Noch keine Vorlagen. Unten kannst du Vorlagen hinzufügen."),
                      bg=theme["bg"], fg=theme["muted"], anchor="w").pack(fill="x", pady=20)
         self.refresh_template_actions()
         self.home_content.update_idletasks()
@@ -30651,12 +30651,12 @@ class ListApp:
         size = self.PAGE_ICON_SIZE
         state = {"document": copy.deepcopy(holder.get("icon")) or glide_drawing.DrawingModel.blank(size).to_document(),
                  "result": None}
-        dialog = self._new_dialog("Pixelsymbol", minsize=(620, 620))
+        dialog = self._new_dialog(glide_i18n.t("ui.page_icon_dialog.pixel_icon", "Pixelsymbol"), minsize=(620, 620))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(body, text=f"Pixelsymbol für „{holder.get('title', '')}“", bg=self.theme["bg"],
+        tk.Label(body, text=glide_i18n.t("ui.page_icon_dialog.pixel_icon_for", 'Pixelsymbol für „{get}“', get=holder.get('title', '')), bg=self.theme["bg"],
                  fg=self.theme["text"], font=app_font(15, "bold"), anchor="w").pack(anchor="w")
-        tk.Label(body, text="16 × 16 Zellen. Es erscheint in der Seitenleiste, in Übersichten und in der Suche.",
+        tk.Label(body, text=glide_i18n.t("ui.page_icon_dialog.16_16_cells_it", "16 × 16 Zellen. Es erscheint in der Seitenleiste, in Übersichten und in der Suche."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         holder_frame = tk.Frame(body, bg=self.theme["card"])
         holder_frame.pack(fill="both", expand=True, pady=(10, 0))
@@ -30673,7 +30673,7 @@ class ListApp:
 
         def from_drawing():
             if not drawings:
-                self.show_info("Pixelsymbol", "Es gibt noch keine Zeichnung zum Übernehmen.", parent=dialog)
+                self.show_info(glide_i18n.t("ui.from_drawing.pixel_icon", "Pixelsymbol"), glide_i18n.t("ui.from_drawing.there_is_no_drawing", "Es gibt noch keine Zeichnung zum Übernehmen."), parent=dialog)
                 return
             menu = self._new_themed_popup_menu(dialog)
             for entry in drawings[:40]:
@@ -30694,7 +30694,7 @@ class ListApp:
             editor.model = editor.animation.frames[0].model
             editor.render_full()
             editor.mark_unsaved()
-            editor.update_status(f"Aus „{entry.get('title', 'Zeichnung')}“ verkleinert – nach Belieben nachbessern")
+            editor.update_status(glide_i18n.t("ui.adopt.scaled_down_from_touch", 'Aus „{get}“ verkleinert – nach Belieben nachbessern', get=entry.get('title', 'Zeichnung')))
 
         def finish(value):
             editor.flush()
@@ -30703,12 +30703,12 @@ class ListApp:
 
         footer = tk.Frame(body, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(12, 0))
-        adopt_button = self._make_dialog_button(footer, "Aus Zeichnung übernehmen …", from_drawing, "muted", width=230)
+        adopt_button = self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.take_over_from_drawing", "Aus Zeichnung übernehmen …"), from_drawing, "muted", width=230)
         adopt_button.pack(side="left")
-        self._make_dialog_button(footer, "Übernehmen", lambda: finish("set"), "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 10))
+        self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), lambda: finish("set"), "confirm").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=(0, 10))
         if holder.get("icon"):
-            self._make_dialog_button(footer, "Symbol entfernen", lambda: finish("remove"), "muted",
+            self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.remove_icon", "Symbol entfernen"), lambda: finish("remove"), "muted",
                                      width=150).pack(side="right", padx=(0, 10))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=640, min_height=680)
@@ -30833,7 +30833,7 @@ class ListApp:
             previews = [(self.ICONS[child_kind], " ".join(str(value.get("title") or "").split()), "")
                         for child_kind, value in children[:preview_rows]]
             remaining = max(0, len(children) - len(previews))
-            summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
+            summary = glide_i18n.t("ui.library_card_preview.lists_subfolders", '{len} Listen · {wert} Unterordner', len=len(lists), wert=len(nested) - 1)
         elif self.is_drawing_list(entry):
             items, previews, remaining = [], [], 0
             summary = self.drawing_summary(entry)
@@ -30863,9 +30863,9 @@ class ListApp:
         entries = self.library_entries(archived=showing_archive)
         list_count = sum(kind == "list" for kind, _entry in entries)
         archived_count = len(self.archived_entries())
-        self._set_stats_text((f"Archiv · {len(entries)} Einträge" if showing_archive else
-                              f"{list_count} Listen · {len(entries) - list_count} Ordner")
-                             + (f" · {archived_count} im Archiv" if archived_count and not showing_archive else ""))
+        self._set_stats_text((glide_i18n.t("ui.refresh_library_page.archive_entries", 'Archiv · {len} Einträge', len=len(entries)) if showing_archive else
+                              glide_i18n.t("ui.refresh_library_page.lists_folders", '{list_count} Listen · {wert} Ordner', list_count=list_count, wert=len(entries) - list_count))
+                             + (glide_i18n.t("ui.refresh_library_page.archived", ' · {archived_count} im Archiv', archived_count=archived_count) if archived_count and not showing_archive else ""))
         card_size = self.settings.get("library_card_size", "medium")
         # Kartengröße S/M/L: Spaltenbreite und Zahl der Vorschauzeilen.
         column_width = {"small": 260, "medium": 352, "large": 480}.get(card_size, 352)
@@ -30965,13 +30965,13 @@ class ListApp:
                 _ui.pack(_ui.make(self.make_page_cover, panel, entry, height=100, retention_key="cover"), fill='x', pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
             is_drawing = kind == "list" and self.is_drawing_list(entry)
             symbol = self.ICONS["drawing"] if is_drawing else self.ICONS[kind]
-            heading = label(f"{symbol}  {entry.get('title') or ('Ordner' if kind == 'folder' else 'Liste')}",
+            heading = label(f"{symbol}  {entry.get('title') or (glide_i18n.t("ui.kachel_boards.folder", 'Ordner') if kind == 'folder' else glide_i18n.t("editor.toolbar.list", 'Liste'))}",
                             11, True, color, key="heading")
             icon_image = self.page_icon_image(entry)
             if icon_image is None and heading.cget("image"):
                 heading.configure(image="")
             if icon_image is not None:
-                heading.configure(text=f"  {entry.get('title') or 'Liste'}", image=icon_image, compound="left")
+                heading.configure(text=f"  {entry.get('title') or glide_i18n.t("editor.toolbar.list", 'Liste')}", image=icon_image, compound="left")
                 self._library_images.append(icon_image)
             parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
             if parent_id:
@@ -30995,7 +30995,7 @@ class ListApp:
                     label(text[:40 * preview_rows] + ("…" if len(text) > 40 * preview_rows else ""), 9,
                           foreground="text")
             if not is_drawing:
-                label(f"{total - done} offen   ·   {done} erledigt" + (f"   ·   {_overdue} überfällig" if _overdue else ""),
+                label(glide_i18n.t("ui.refresh_library_page.open_done", '{wert} offen   ·   {done} erledigt{wert2}', wert=total - done, done=done, wert2=glide_i18n.t("ui.refresh_library_page.overdue", '   ·   {overdue} überfällig', overdue=_overdue) if _overdue else ""),
                       9, foreground="delete" if _overdue else "muted")
             progress = _ui.make(tk.Canvas, panel, retention_key="progress", height=4, bg=theme["line"], highlightthickness=0)
             _ui.pack(progress, fill="x", pady=(glide_design.SPACING[3], glide_design.SPACING[10]))
@@ -31014,9 +31014,9 @@ class ListApp:
                 label(" · ".join(assigned[:3]) + (f" +{len(assigned)-3}" if len(assigned) > 3 else ""),
                       8, foreground=color, pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
             if not is_drawing:
-                label("ENTHALTEN" if kind == "folder" else "NÄCHSTE AUFGABEN", 8, True, "muted", pady=(glide_design.SPACING[7], glide_design.SPACING[5]))
+                label(glide_i18n.t("ui.refresh_library_page.contains", "ENTHALTEN") if kind == "folder" else glide_i18n.t("ui.refresh_library_page.next_tasks", "NÄCHSTE AUFGABEN"), 8, True, "muted", pady=(glide_design.SPACING[7], glide_design.SPACING[5]))
             if not previews and not is_drawing:
-                label("Noch keine Inhalte." if not total else "Alle Aufgaben erledigt.", 9, foreground="text")
+                label(glide_i18n.t("ui.refresh_library_page.no_content_yet", "Noch keine Inhalte.") if not total else glide_i18n.t("ui.refresh_library_page.all_tasks_done", "Alle Aufgaben erledigt."), 9, foreground="text")
             for marker, text, due in previews:
                 text = " ".join(text.split())
                 short = text[:76] + ("…" if len(text) > 76 else "")
@@ -31024,7 +31024,7 @@ class ListApp:
                                     9, foreground="text", pady=(glide_design.SPACING[0], glide_design.SPACING[6]))
                 self.add_tooltip(preview_row, text)
             if remaining:
-                label(f"+ {remaining} weitere " + ("Einträge" if kind == "folder" else "offene Aufgaben"), 8)
+                label(glide_i18n.t("ui.refresh_library_page.more", '+ {remaining} weitere {wert}', remaining=remaining, wert=glide_i18n.t("ui.refresh_library_page.entries", "Einträge") if kind == "folder" else glide_i18n.t("ui.refresh_library_page.open_tasks", "offene Aufgaben")), 8)
             button = heading
             button.configure(takefocus=True)
             button.command = command
@@ -31092,8 +31092,8 @@ class ListApp:
                 _ui.pack(grid, fill="x")
         if not entries:
             grid.pack_forget()
-            empty_text = ("Das Archiv ist leer. Archivieren steht im Kontextmenü einer Liste oder eines Ordners."
-                          if showing_archive else "Noch keine Listen oder Ordner. Lege unten deine erste Liste an.")
+            empty_text = (glide_i18n.t("ui.refresh_library_page.the_archive_is_empty", "Das Archiv ist leer. Archivieren steht im Kontextmenü einer Liste oder eines Ordners.")
+                          if showing_archive else glide_i18n.t("ui.refresh_library_page.no_lists_or_folders", "Noch keine Listen oder Ordner. Lege unten deine erste Liste an."))
             empty_hint = cache["empty_hint"]
             if empty_hint is None:
                 empty_hint = cache["empty_hint"] = tk.Label(self.home_content, text=empty_text,
@@ -31103,10 +31103,10 @@ class ListApp:
                 self._bind_home_wheel(empty_hint)
         size_names = {"small": "S", "medium": "M", "large": "L"}
         self.refresh_page_actions((
-            ("Neu ▾", self.show_library_new_menu, "accent", 110),
-            ("Importieren ▾", self.show_library_import_menu, "import", 154),
-            ("Aktive zeigen" if showing_archive else f"Archiv ({archived_count})", self.toggle_library_archive, "muted", 150),
-            (f"Kartengröße: {size_names.get(card_size, 'M')}", self.cycle_library_card_size, "muted", 150),
+            (glide_i18n.t("ui.refresh_library_page.new", "Neu ▾"), self.show_library_new_menu, "accent", 110),
+            (glide_i18n.t("ui.refresh_library_page.import", "Importieren ▾"), self.show_library_import_menu, "import", 154),
+            (glide_i18n.t("ui.refresh_library_page.show_active", "Aktive zeigen") if showing_archive else glide_i18n.t("ui.refresh_library_page.archive", 'Archiv ({archived_count})', archived_count=archived_count), self.toggle_library_archive, "muted", 150),
+            (glide_i18n.t("ui.refresh_library_page.card_size", 'Kartengröße: {get}', get=size_names.get(card_size, 'M')), self.cycle_library_card_size, "muted", 150),
         ))
         if created_grid:
             self._bind_home_wheel(grid)
@@ -31116,28 +31116,28 @@ class ListApp:
         self.home_canvas.yview_moveto(scroll_position)
 
     def show_library_new_menu(self, event=None):
-        menu = self.build_menu(self.root, (("Neue Liste", self.create_new_list),
-            ("Neuer Ordner", self.create_new_folder), ("Neue Notiz", self.create_new_note),
-            ("Neue Seite", self.create_new_page), ("Neue Zeichnung", self.create_new_drawing),
-            ("Aus Vorlage …", self.choose_creation_template)))
+        menu = self.build_menu(self.root, ((glide_i18n.t("menu.file.new_list", "Neue Liste"), self.create_new_list),
+            (glide_i18n.t("menu.file.new_folder", "Neuer Ordner"), self.create_new_folder), (glide_i18n.t("board.action.new_note", "Neue Notiz"), self.create_new_note),
+            (glide_i18n.t("menu.file.new_page", "Neue Seite"), self.create_new_page), (glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), self.create_new_drawing),
+            (glide_i18n.t("ui.folder_quick_add_menu.from_template", "Aus Vorlage …"), self.choose_creation_template)))
         self._popup_at_widget(menu, self.template_actions)
         return "break"
 
     def show_library_import_menu(self, event=None):
-        menu = self.build_menu(self.root, (("TXT als Liste …", self.import_txt_as_new_lists),
-            ("Listen/Ordner hinzufügen …", self.import_partial_backup),
-            ("Notion-Export übernehmen …", self.import_notion_archive),
-            ("Seite aus Datei …", self.import_markdown_page), ("Glide-Seiten …", self.import_glide_pages)))
+        menu = self.build_menu(self.root, ((glide_i18n.t("ui.show_library_import_menu.txt_as_list", "TXT als Liste …"), self.import_txt_as_new_lists),
+            (glide_i18n.t("ui.show_library_import_menu.add_lists_folders", "Listen/Ordner hinzufügen …"), self.import_partial_backup),
+            (glide_i18n.t("ui.show_library_import_menu.take_over_notion_export", "Notion-Export übernehmen …"), self.import_notion_archive),
+            (glide_i18n.t("menu.file.import.page", "Seite aus Datei …"), self.import_markdown_page), (glide_i18n.t("ui.show_library_import_menu.glide_pages", "Glide-Seiten …"), self.import_glide_pages)))
         self._popup_at_widget(menu, self.template_actions)
         return "break"
 
     def refresh_template_actions(self):
         editing = bool(getattr(self, "_templates_editing", False))
         specs = (
-            ("Vorlagen speichern" if editing else "Bearbeiten", self.toggle_template_editing, "accent", 186 if editing else 128),
-            ("Vorlagen exportieren …", self.export_templates_file, "export", 222),
-            ("Vorlagen hinzufügen …", self.import_templates_file, "import", 222),
-            ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
+            (glide_i18n.t("ui.refresh_template_actions.save_templates", "Vorlagen speichern") if editing else glide_i18n.t("button.edit", "Bearbeiten"), self.toggle_template_editing, "accent", 186 if editing else 128),
+            (glide_i18n.t("ui.refresh_template_actions.export_templates", "Vorlagen exportieren …"), self.export_templates_file, "export", 222),
+            (glide_i18n.t("ui.refresh_template_actions.add_templates", "Vorlagen hinzufügen …"), self.import_templates_file, "import", 222),
+            (glide_i18n.t("ui.refresh_template_actions.add_lists_folders", "Listen/Ordner hinzufügen …"), self.import_partial_backup, "clear", 252),
         )
         self.refresh_page_actions(specs)
 
@@ -31322,7 +31322,7 @@ class ListApp:
     def toggle_template_editing(self):
         if getattr(self, "_templates_editing", False):
             if not self.save_templates():
-                self.show_error("Vorlagen speichern", "Die Vorlagen konnten nicht gespeichert werden.")
+                self.show_error(glide_i18n.t("ui.toggle_template_editing.save_templates", "Vorlagen speichern"), glide_i18n.t("ui.toggle_template_editing.the_templates_could_not", "Die Vorlagen konnten nicht gespeichert werden."))
                 return
             self._templates_editing = False
         else:
@@ -31344,12 +31344,12 @@ class ListApp:
                 self.templates[index] = updated
                 self.refresh_tree()
         except (OSError, ValueError, TypeError, KeyError) as exc:
-            self.show_error("Vorlage bearbeiten", str(exc))
+            self.show_error(glide_i18n.t("ui.edit_template.edit_template", "Vorlage bearbeiten"), str(exc))
 
     def delete_template(self, template_id):
         if not getattr(self, "_templates_editing", False):
             return
-        if self.ask_yes_no("Vorlage löschen", "Diese Vorlage wirklich löschen?"):
+        if self.ask_yes_no(glide_i18n.t("ui.delete_template.delete_template", "Vorlage löschen"), glide_i18n.t("ui.delete_template.really_delete_this_template", "Diese Vorlage wirklich löschen?")):
             self.templates = [item for item in self.templates if item["id"] != template_id]
             self.refresh_tree()
 
@@ -31387,33 +31387,33 @@ class ListApp:
         try:
             template = self.capture_template(list_id=list_id or self.active_list_id)
             if template:
-                self.show_info("Vorlage gespeichert", f"„{template['title']}“ steht jetzt unter Vorlagen bereit.")
+                self.show_info(glide_i18n.t("ui.save_list_as_template.template_saved", "Vorlage gespeichert"), glide_i18n.t("ui.save_list_as_template.is_now_available_under", '„{title}“ steht jetzt unter Vorlagen bereit.', title=template['title']))
             return template
         except (OSError, ValueError) as exc:
-            self.show_error("Vorlage", str(exc))
+            self.show_error(glide_i18n.t("ui.save_list_as_template.template", "Vorlage"), str(exc))
 
     def save_folder_as_template(self, folder_id):
         try:
             template = self.capture_template(folder_id=folder_id)
             if template:
-                self.show_info("Vorlage gespeichert", f"„{template['title']}“ steht jetzt unter Vorlagen bereit.")
+                self.show_info(glide_i18n.t("ui.save_folder_as_template.template_saved", "Vorlage gespeichert"), glide_i18n.t("ui.save_folder_as_template.is_now_available_under", '„{title}“ steht jetzt unter Vorlagen bereit.', title=template['title']))
             return template
         except (OSError, ValueError) as exc:
-            self.show_error("Vorlage", str(exc))
+            self.show_error(glide_i18n.t("ui.save_folder_as_template.template", "Vorlage"), str(exc))
 
     def export_templates_file(self):
-        path = filedialog.asksaveasfilename(title="Vorlagen exportieren", defaultextension=".glidetemplates",
+        path = filedialog.asksaveasfilename(title=glide_i18n.t("ui.export_templates_file.export_templates", "Vorlagen exportieren"), defaultextension=".glidetemplates",
                                             initialfile="glide_vorlagen.glidetemplates",
-                                            filetypes=[("Glide-Vorlagen", "*.glidetemplates"), ("Alle Dateien", "*.*")])
+                                            filetypes=[("Glide-Vorlagen", "*.glidetemplates"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return
         payload = {"format_version": self.TEMPLATE_FORMAT_VERSION, "templates": self.templates}
         try:
             self.write_json_atomic(path, payload)
             self.record_data_operation("exported", path)
-            self.show_info("Vorlagen exportiert", f"{len(self.templates)} Vorlage(n) gespeichert.")
+            self.show_info(glide_i18n.t("ui.export_templates_file.templates_exported", "Vorlagen exportiert"), glide_i18n.t("ui.export_templates_file.template_s_saved", '{len} Vorlage(n) gespeichert.', len=len(self.templates)))
         except OSError as exc:
-            self.show_error("Vorlagenexport", str(exc))
+            self.show_error(glide_i18n.t("ui.export_templates_file.template_export", "Vorlagenexport"), str(exc))
 
     def validate_template_payload(self, template):
         referenced = self.validate_backup_schema(template["payload"], portable=True)
@@ -31435,7 +31435,7 @@ class ListApp:
         return referenced
 
     def import_templates_file(self):
-        path = filedialog.askopenfilename(title="Vorlagen hinzufügen", filetypes=[("Glide-Vorlagen", "*.glidetemplates"), ("JSON", "*.json"), ("Alle Dateien", "*.*")])
+        path = filedialog.askopenfilename(title=glide_i18n.t("ui.import_templates_file.add_templates", "Vorlagen hinzufügen"), filetypes=[("Glide-Vorlagen", "*.glidetemplates"), ("JSON", "*.json"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return
         try:
@@ -31457,10 +31457,10 @@ class ListApp:
                 raise OSError("Die Vorlagen konnten nicht gespeichert werden.")
             self.update_sidebar_list()
             self.refresh_tree()
-            self.show_info("Vorlagen hinzugefügt", f"{len(incoming)} Vorlage(n) ergänzt.")
+            self.show_info(glide_i18n.t("ui.import_templates_file.templates_added", "Vorlagen hinzugefügt"), glide_i18n.t("ui.import_templates_file.template_s_added", '{len} Vorlage(n) ergänzt.', len=len(incoming)))
             self.record_data_operation("imported", path)
         except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
-            self.show_error("Vorlagenimport", str(exc))
+            self.show_error(glide_i18n.t("ui.import_templates_file.template_import", "Vorlagenimport"), str(exc))
 
     # -----------------------------
     # Vorlagen mit Eingabefeldern (3.30)
@@ -31599,13 +31599,13 @@ class ListApp:
 
     def ask_template_fields(self, fields, title=""):
         """Ein Dialog für alle Platzhalter. Rückgabe: {Name: Text} oder None bei Abbruch."""
-        dialog = self._new_dialog("Vorlage ausfüllen", resizable=(False, False))
+        dialog = self._new_dialog(glide_i18n.t("ui.ask_template_fields.fill_in_template", "Vorlage ausfüllen"), resizable=(False, False))
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(body, text=f"„{title}“ ausfüllen" if title else "Vorlage ausfüllen", bg=self.theme["bg"],
+        tk.Label(body, text=glide_i18n.t("ui.ask_template_fields.fill_in", '„{title}“ ausfüllen', title=title) if title else glide_i18n.t("ui.ask_template_fields.fill_in_template", "Vorlage ausfüllen"), bg=self.theme["bg"],
                  fg=self.theme["text"], font=app_font(15, "bold"), anchor="w").pack(fill="x")
-        tk.Label(body, text="Die Angaben ersetzen die Platzhalter in Titeln, Punkten, Beschreibungen und "
-                            "Notizen. Leere Felder bleiben leer.", bg=self.theme["bg"], fg=self.theme["muted"],
+        tk.Label(body, text=glide_i18n.t("ui.ask_template_fields.the_entries_replace_the", "Die Angaben ersetzen die Platzhalter in Titeln, Punkten, Beschreibungen und "
+                            "Notizen. Leere Felder bleiben leer."), bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), wraplength=440, justify="left", anchor="w").pack(fill="x", pady=(4, 12))
         eingaben = {}
         for name in fields:
@@ -31626,8 +31626,8 @@ class ListApp:
 
         leiste = tk.Frame(body, bg=self.theme["bg"])
         leiste.pack(fill="x", pady=(16, 0))
-        self._make_dialog_button(leiste, "Übernehmen", uebernehmen, "confirm").pack(side="right")
-        self._make_dialog_button(leiste, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 8))
+        self._make_dialog_button(leiste, glide_i18n.t("button.apply", "Übernehmen"), uebernehmen, "confirm").pack(side="right")
+        self._make_dialog_button(leiste, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=(0, 8))
         dialog.bind("<Return>", uebernehmen)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=480)
@@ -31735,7 +31735,7 @@ class ListApp:
                         self.set_active_folder(created[0]["id"])
                 return created[0] if created else None
             except (OSError, ValueError, TypeError, KeyError) as exc:
-                self.show_error("Vorlage verwenden", str(exc))
+                self.show_error(glide_i18n.t("ui.create_list_from_template.use_template", "Vorlage verwenden"), str(exc))
                 return None
         if template is not None:
             title = template.get("title") or "Neue Liste"
@@ -32670,39 +32670,39 @@ class ListApp:
 
     def get_display_title(self):
         if self.view_mode == self.HISTORY_VIEW:
-            return "Änderungsverlauf"
+            return glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf")
         if self.view_mode == self.PAGES_VIEW:
-            return "Seiten"
+            return glide_i18n.t("sidebar.pages", "Seiten")
         if self.view_mode == self.DRAWINGS_VIEW:
-            return "Zeichnungen"
+            return glide_i18n.t("sidebar.drawings", "Zeichnungen")
         if self.view_mode == self.NOTES_VIEW:
-            return "Notizen"
+            return glide_i18n.t("sidebar.notes", "Notizen")
         if self.view_mode == "saved_filter":
             return (self.saved_filters.current() or {}).get("name", "Gespeicherte Filter")
         if self.view_mode == self.HOME_VIEW:
-            return {"day_review": "Tagesbeginn", "day_close": "Tagesabschluss", "day_proposal": "Tagesvorschlag",
-                    "week_review": "Wochenrückblick", "calendar": "Kalender"}.get(
+            return {"day_review": glide_i18n.t("ui.refresh.day_start", "Tagesbeginn"), "day_close": glide_i18n.t("ui.refresh.day_close", "Tagesabschluss"), "day_proposal": glide_i18n.t("ui.apply_day_proposal.day_proposal", "Tagesvorschlag"),
+                    "week_review": glide_i18n.t("ui.get_display_title.week_review", "Wochenrückblick"), "calendar": glide_i18n.t("ui.update_preview.calendar", "Kalender")}.get(
                 self.home_mode(), "Startseite")
         if self.view_mode == self.TEMPLATE_VIEW:
-            return "Vorlagen"
+            return glide_i18n.t("menu.view.templates", "Vorlagen")
         if self.view_mode == self.LIBRARY_VIEW:
-            return "Listen und Ordner"
+            return glide_i18n.t("ui.get_display_title.lists_and_folders", "Listen und Ordner")
         if self.view_mode == self.GLOBAL_BOARD_VIEW:
             return self.GLOBAL_BOARD_TITLE
         if self.view_mode == "in_progress":
-            return "Demnächst"
+            return glide_i18n.t("ui.get_display_title.upcoming", "Demnächst")
         if self.view_mode == self.PLAN_DAY_VIEW:
             return self.plan_day_title()
         if self.view_mode == self.LABELS_VIEW:
-            return "Labels"
+            return glide_i18n.t("menu.view.labels", "Labels")
         if self.view_mode == "overdue":
-            return "Verspätet"
+            return glide_i18n.t("ui.get_display_title.late", "Verspätet")
         if self.view_mode == "trash":
-            return "Papierkorb"
+            return glide_i18n.t("menu.view.trash", "Papierkorb")
         if self.view_mode == "folder" and self.active_folder_id:
             folder = self.get_folder(self.active_folder_id)
             if folder:
-                return str(folder.get("title") or "Ordner").strip() or "Ordner"
+                return str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         return self.app_title
 
     def get_active_page(self):
@@ -32719,33 +32719,32 @@ class ListApp:
             # Zeichnung und Galerie haben keinen Aufgabenbereich; Schnellanlage,
             # Einfügen und Tastenkürzel dürfen dort keine Punkte ablegen.
             if message:
-                art = "Galerie" if self.is_gallery_list(self.current_list()) else "Zeichnung"
-                self.show_info(art, f"Eine {art} enthält keine Listenpunkte. "
-                               "Lege Aufgaben in einer Aufgaben- oder Notizliste an.")
+                art = glide_i18n.t("ui.kachel_gallery.gallery_2", "Galerie") if self.is_gallery_list(self.current_list()) else glide_i18n.t("drawing.status.source.drawing", "Zeichnung")
+                self.show_info(art, glide_i18n.t("ui.require_list_view.a_contains_no_list", 'Eine {art} enthält keine Listenpunkte. Lege Aufgaben in einer Aufgaben- oder Notizliste an.', art=art))
             return False
         if self.view_mode in ("list", self.TABLE_VIEW):
             return True
         if message:
             if self.view_mode == self.HOME_VIEW:
-                self.show_info("Startseite", "Öffne zuerst eine Liste oder wähle eine Vorlage aus.")
+                self.show_info(glide_i18n.t("menu.view.home", "Startseite"), glide_i18n.t("ui.require_list_view.open_a_list_first", "Öffne zuerst eine Liste oder wähle eine Vorlage aus."))
             elif self.view_mode == self.TEMPLATE_VIEW:
-                self.show_info("Vorlagen", "Wähle zuerst eine Vorlage aus oder öffne eine Liste.")
+                self.show_info(glide_i18n.t("menu.view.templates", "Vorlagen"), glide_i18n.t("ui.require_list_view.choose_a_template_first", "Wähle zuerst eine Vorlage aus oder öffne eine Liste."))
             elif self.view_mode == self.LIBRARY_VIEW:
-                self.show_info("Listen und Ordner", "Öffne zuerst eine Liste aus der Übersicht.")
+                self.show_info(glide_i18n.t("ui.require_list_view.lists_and_folders", "Listen und Ordner"), glide_i18n.t("ui.require_list_view.open_a_list_from", "Öffne zuerst eine Liste aus der Übersicht."))
             elif self.view_mode in self.DERIVED_ITEM_VIEWS:
                 self.show_info(
                     self.get_display_title(),
-                    "Öffne die Aufgabe per Doppelklick in ihrer Quellliste.",
+                    glide_i18n.t("ui.require_list_view.open_the_task_by", "Öffne die Aufgabe per Doppelklick in ihrer Quellliste."),
                 )
             elif self.view_mode == "trash":
                 self.show_info(
-                    "Papierkorb",
-                    "Im Papierkorb lassen sich Einträge nur wiederherstellen oder endgültig entfernen.",
+                    glide_i18n.t("menu.view.trash", "Papierkorb"),
+                    glide_i18n.t("ui.require_list_view.in_the_trash_entries", "Im Papierkorb lassen sich Einträge nur wiederherstellen oder endgültig entfernen."),
                 )
             elif self.view_mode == self.TABLE_VIEW:
-                self.show_info("Tabellenansicht", "Diese Ansicht zeigt die Punkte kompakt. Neue Punkte legst du über die Schnellerfassung an.")
+                self.show_info(glide_i18n.t("ui.require_list_view.table_view", "Tabellenansicht"), glide_i18n.t("ui.require_list_view.this_view_shows_the", "Diese Ansicht zeigt die Punkte kompakt. Neue Punkte legst du über die Schnellerfassung an."))
             else:
-                self.show_info("Ordnerübersicht", "Öffne zuerst eine Liste in diesem Ordner.")
+                self.show_info(glide_i18n.t("ui.require_list_view.folder_overview", "Ordnerübersicht"), glide_i18n.t("ui.require_list_view.open_a_list_in", "Öffne zuerst eine Liste in diesem Ordner."))
         return False
 
     def kind_color_key(self, kind):
@@ -33452,33 +33451,33 @@ class ListApp:
         """Label anlegen; None bei Abbruch/Schreibfehler, Fehler bleibt rücknehmbar."""
         owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
-            self.show_warning('Label anlegen', self.read_only_notice(), parent=owner)
+            self.show_warning(glide_i18n.t("ui.create_label_interactively.create_label", 'Label anlegen'), self.read_only_notice(), parent=owner)
             return None
         if len(self.labels) >= self.MAX_LABELS:
-            self.show_info('Labels', f'Es sind höchstens {self.MAX_LABELS} Labels möglich.', parent=owner)
+            self.show_info(glide_i18n.t("menu.view.labels", 'Labels'), glide_i18n.t("ui.create_label_interactively.at_most_labels_are", 'Es sind höchstens {max_labels} Labels möglich.', max_labels=self.MAX_LABELS), parent=owner)
             return None
         with self.modal_over(parent):
-            name = self.themed_input_dialog('Neues Label', 'Name des Labels:', ok_text='Anlegen')
+            name = self.themed_input_dialog(glide_i18n.t("ui.create_label_interactively.new_label", 'Neues Label'), glide_i18n.t("ui.create_label_interactively.label_name", 'Name des Labels:'), ok_text=glide_i18n.t("ui.create_area.create", 'Anlegen'))
         if name is None:
             return None
         try:
             name = glide_task_editing.new_label_name(self.labels, name,
                 max_labels=self.MAX_LABELS, max_length=self.LABEL_NAME_INPUT_LIMIT)
         except ValueError as exc:
-            self.show_warning('Hinweis', str(exc), parent=owner)
+            self.show_warning(glide_i18n.t("info.title", 'Hinweis'), str(exc), parent=owner)
             return None
         with self.modal_over(parent):
             color = self.choose_label_color(preview_name=name)
         if color is None:
             return None
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
-            self.show_warning('Label anlegen', self.read_only_notice(), parent=owner)
+            self.show_warning(glide_i18n.t("ui.create_label_interactively.create_label", 'Label anlegen'), self.read_only_notice(), parent=owner)
             return None
         try:
             name = glide_task_editing.new_label_name(self.labels, name,
                 max_labels=self.MAX_LABELS, max_length=self.LABEL_NAME_INPUT_LIMIT)
         except ValueError as exc:
-            self.show_warning('Hinweis', str(exc), parent=owner)
+            self.show_warning(glide_i18n.t("info.title", 'Hinweis'), str(exc), parent=owner)
             return None
         label = self.new_label_object(name, None, color)
         with self.sidebar_change(refresh_tree=True, feedback=False) as change:
@@ -33549,7 +33548,7 @@ class ListApp:
 
         def submit(event=None):
             if title_limit and entry.get() != initial and len(entry.get()) > self.CONTAINER_TITLE_MAX:
-                self.show_warning("Titel", "Der geänderte Titel darf höchstens 40 Zeichen enthalten.", parent=dialog)
+                self.show_warning(glide_i18n.t("ui.submit.title", "Titel"), glide_i18n.t("ui.submit.the_changed_title_may", "Der geänderte Titel darf höchstens 40 Zeichen enthalten."), parent=dialog)
                 return "break"
             result["value"] = entry.get()
             dialog.destroy()
@@ -33561,7 +33560,7 @@ class ListApp:
             return "break"
 
         ok_button = self._make_dialog_button(button_row, ok_text, submit, accent_key)
-        cancel_button = self._make_dialog_button(button_row, "Abbrechen", cancel, "muted")
+        cancel_button = self._make_dialog_button(button_row, glide_i18n.t("button.cancel", "Abbrechen"), cancel, "muted")
         ok_button.pack(side="right")
         cancel_button.pack(side="right", padx=(0, 10))
 
@@ -33606,7 +33605,7 @@ class ListApp:
                         size = attachment.get("size", 0)
                 else:
                     size = attachment.get("size", 0)
-                state = "" if exists else "  ·  nicht gefunden"
+                state = "" if exists else glide_i18n.t("ui.render_attachments.not_found", "  ·  nicht gefunden")
                 attachment_list.insert(
                     tk.END,
                     f"{self.ICONS['attachment']}  {attachment.get('name', 'Anhang')}"
@@ -33625,7 +33624,7 @@ class ListApp:
             except tk.TclError:
                 pass
             try:
-                paths = filedialog.askopenfilenames(title="Dateien oder Bilder anhängen", parent=dialog)
+                paths = filedialog.askopenfilenames(title=glide_i18n.t("ui.add_detail_pane_attachments.attach_files_or_images", "Dateien oder Bilder anhängen"), parent=dialog)
             finally:
                 try:
                     dialog.grab_set()
@@ -33663,9 +33662,9 @@ class ListApp:
 
         action_row = tk.Frame(inner, bg=self.theme["bg"])
         action_row.pack(fill="x", pady=(9, 0))
-        self._make_dialog_button(action_row, "+ Datei", add_attachments, "due_action", width=104, height=36).pack(side="left")
-        self._make_dialog_button(action_row, "Öffnen", open_attachment, "export", width=104, height=36).pack(side="left", padx=(8, 0))
-        self._make_dialog_button(action_row, "Entfernen", remove_attachment, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, glide_i18n.t("ui.make_attachment_editor.file", "+ Datei"), add_attachments, "due_action", width=104, height=36).pack(side="left")
+        self._make_dialog_button(action_row, glide_i18n.t("saved_view.manager.open", "Öffnen"), open_attachment, "export", width=104, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, glide_i18n.t("saved_view.manager.remove", "Entfernen"), remove_attachment, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
         attachment_list.bind("<Double-Button-1>", open_attachment)
         render_attachments()
 
@@ -33681,7 +33680,7 @@ class ListApp:
         """
         kopf = tk.Frame(inner, bg=self.theme["bg"])
         kopf.pack(fill="x", pady=(14, self.FIELD_LABEL_GAP))
-        self._make_field_label(kopf, "Checkliste").pack(side="left")
+        self._make_field_label(kopf, glide_i18n.t("ui.add_detail_pane_step.checklist", "Checkliste")).pack(side="left")
         fortschritt_label = tk.Label(
             kopf, text="", bg=self.theme["bg"], fg=self.theme["placeholder"],
             font=app_font(8), anchor="e",
@@ -33708,8 +33707,8 @@ class ListApp:
                 liste.insert(tk.END, f"{marke}  {eintrag.get('text', '')}")
             fortschritt = self.checklist_progress({"checklist": checklist})
             fortschritt_label.configure(
-                text=f"{fortschritt['done']} von {fortschritt['total']} erledigt"
-                if fortschritt["total"] else f"Noch keine Schritte · bis zu {self.MAX_CHECKLIST_ENTRIES}")
+                text=glide_i18n.t("ui.zeichnen.of_done", '{done} von {total} erledigt', done=fortschritt['done'], total=fortschritt['total'])
+                if fortschritt["total"] else glide_i18n.t("ui.zeichnen.no_steps_yet_up", 'Noch keine Schritte · bis zu {max_checklist_entries}', max_checklist_entries=self.MAX_CHECKLIST_ENTRIES))
             if checklist:
                 index = max(0, min(auswahl if auswahl is not None else 0, len(checklist) - 1))
                 liste.selection_clear(0, tk.END)
@@ -33739,9 +33738,8 @@ class ListApp:
                 return "break"
             if len(checklist) >= self.MAX_CHECKLIST_ENTRIES:
                 self.show_warning(
-                    "Checkliste",
-                    f"Eine Checkliste fasst {self.MAX_CHECKLIST_ENTRIES} Schritte. "
-                    "Für mehr Struktur eignen sich Unterpunkte.",
+                    glide_i18n.t("ui.add_detail_pane_step.checklist", "Checkliste"),
+                    glide_i18n.t("ui.add_detail_pane_step.a_checklist_holds_steps", 'Eine Checkliste fasst {max_checklist_entries} Schritte. Für mehr Struktur eignen sich Unterpunkte.', max_checklist_entries=self.MAX_CHECKLIST_ENTRIES),
                     parent=dialog,
                 )
                 return "break"
@@ -33777,11 +33775,11 @@ class ListApp:
         aktionen = ButtonFlow(inner, bg=self.theme["bg"])
         aktionen.pack(fill="x", pady=(4, 0))
         for text, command, color, width in (
-                ("+ Schritt", hinzufuegen, "due_action", 104),
-                ("Abhaken", umschalten, "confirm", 98),
+                (glide_i18n.t("ui.make_checklist_editor.step", "+ Schritt"), hinzufuegen, "due_action", 104),
+                (glide_i18n.t("ui.make_checklist_editor.check_off", "Abhaken"), umschalten, "confirm", 98),
                 (self.ICONS["move_up"], lambda: verschieben(-1), "accent", 44),
                 (self.ICONS["move_down"], lambda: verschieben(1), "accent", 44),
-                ("Entfernen", entfernen, "delete", 104)):
+                (glide_i18n.t("saved_view.manager.remove", "Entfernen"), entfernen, "delete", 104)):
             aktionen.add(self._make_dialog_button(aktionen, text, command, color, width=width, height=36))
         eingabe.bind("<Return>", hinzufuegen)
         liste.bind("<Double-Button-1>", umschalten)
@@ -33790,7 +33788,7 @@ class ListApp:
         zeichnen()
         return liste
 
-    def themed_page_details_dialog(self, heading, title_value, note_value, title_label="Titel",
+    def themed_page_details_dialog(self, heading, title_value, note_value, title_label=None,
                                    title_editable=True, page=None):
         """Seitendetails; Änderungen und Dateikopien erst beim Speichern übernehmen."""
         result = {"value": None}
@@ -33807,7 +33805,7 @@ class ListApp:
         body.rowconfigure(0, weight=1)
         left = tk.Frame(body, bg=self.theme["bg"])
         left.grid(row=0, column=0, sticky="nsew")
-        self._make_field_label(left, title_label).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(left, (title_label if title_label is not None else glide_i18n.t("ui.themed_page_details_dialog.title", "Titel"))).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
         title_border, title_field = self._make_field(left)
         title_border.pack(fill="x", pady=(0, 14))
         title_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -33823,7 +33821,7 @@ class ListApp:
             zaehler = tk.Label(left, bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), anchor="e")
             zaehler.pack(anchor="e", before=title_border, pady=(0, 2))
             self.limit_title_entry(title_entry, zaehler)
-        self._make_field_label(left, "Beschreibungstext").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(left, glide_i18n.t("ui.themed_page_details_dialog.description", "Beschreibungstext")).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
         note_border, note_field = self._make_field(left)
         note_border.pack(fill="both", expand=True)
         note_field.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -33849,31 +33847,31 @@ class ListApp:
             # Umwandlung könnte Notiztext, Zellbild oder Tagebuchordnung nicht
             # verlustfrei in die andere Art übertragen; die Art wird nur gezeigt.
             if is_list_page or is_folder_page:
-                self._make_field_label(right, "Listenart" if is_list_page else "Ordnerart").pack(
+                self._make_field_label(right, glide_i18n.t("ui.themed_page_details_dialog.list_type", "Listenart") if is_list_page else glide_i18n.t("ui.themed_page_details_dialog.folder_type", "Ordnerart")).pack(
                     anchor="w", pady=(0, self.FIELD_LABEL_GAP))
                 kind_text = (self.list_kind_label(page) if is_list_page else folder_kind_var.get())
-                tk.Label(right, text=f"{kind_text} · nach dem Anlegen fest", bg=self.theme["bg"],
+                tk.Label(right, text=glide_i18n.t("ui.themed_page_details_dialog.fixed_after_creation", '{kind_text} · nach dem Anlegen fest', kind_text=kind_text), bg=self.theme["bg"],
                          fg=self.theme["text"], font=app_font(11), anchor="w").pack(fill="x", pady=(0, 12))
-            self._make_field_label(right, "Farbe").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+            self._make_field_label(right, glide_i18n.t("inspector.color", "Farbe")).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
             color_names = {"Keine Farbe": None, **dict(self.LIST_COLOR_CHOICES)}
             color_var = tk.StringVar(value=next((name for name, key in color_names.items()
-                                               if key == page.get("color")), "Keine Farbe"))
+                                               if key == page.get("color")), glide_i18n.t("inspector.color.none", "Keine Farbe")))
             color_frame, _ = self._make_option_menu(right, color_var, list(color_names),
                                                    option_colors={name: key or "text" for name, key in color_names.items()})
             color_frame.pack(fill="x")
-            self._make_field_label(right, "Labels (Mehrfachauswahl)").pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
+            self._make_field_label(right, glide_i18n.t("ui.themed_page_details_dialog.labels_multiple_choice", "Labels (Mehrfachauswahl)")).pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
             label_dropdown = LabelDropdown(right, self, self.labels, selected_ids=page.get("labels", []),
                                            dialog_parent=dialog, allow_create=True)
             label_dropdown.pack(fill="x")
-            self._make_field_label(right, "Anhänge").pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
+            self._make_field_label(right, glide_i18n.t("ui.render_detail.attachments", "Anhänge")).pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
             self._make_attachment_editor(right, dialog, attachments)
-            tk.Label(right, text="Dateien werden beim Speichern als lokale Kopie angehängt.",
+            tk.Label(right, text=glide_i18n.t("ui.themed_page_details_dialog.files_are_attached_as", "Dateien werden beim Speichern als lokale Kopie angehängt."),
                      bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(8),
                      wraplength=330, justify="left", anchor="w").pack(fill="x", pady=(8, 0))
         def submit(event=None):
             title = title_entry.get().strip() if title_editable else str(title_value or "")
             if title_editable and not title:
-                self.show_warning("Hinweis", "Bitte einen Titel eingeben.", parent=dialog)
+                self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.submit.please_enter_a_title", "Bitte einen Titel eingeben."), parent=dialog)
                 title_entry.focus_set()
                 return "break"
             details = {"title": title, "note": note_text.get("1.0", "end-1c")}
@@ -33889,8 +33887,8 @@ class ListApp:
         def cancel(event=None):
             dialog.destroy()
             return "break"
-        self._make_dialog_button(footer, "Speichern", submit, "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        self._make_dialog_button(footer, glide_i18n.t("button.save", "Speichern"), submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), cancel, "muted").pack(side="right", padx=(0, 10))
         dialog.bind("<Control-Return>", submit)
         if IS_MACOS:
             dialog.bind("<Command-Return>", submit)
@@ -33991,8 +33989,8 @@ class ListApp:
             dialog.destroy()
             return "break"
 
-        self._make_dialog_button(footer, "Auswählen", submit, "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        self._make_dialog_button(footer, glide_i18n.t("ui.themed_choice_dialog.select", "Auswählen"), submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), cancel, "muted").pack(side="right", padx=(0, 10))
         listbox.bind("<Double-Button-1>", submit)
         dialog.bind("<Return>", submit)
         dialog.bind("<Escape>", cancel)
@@ -34008,21 +34006,21 @@ class ListApp:
     # -----------------------------
     def open_label_manager(self, event=None):
         """Zentrale Verwaltung: Labels anlegen, umbenennen, einfärben, entfernen."""
-        dialog = self._new_dialog("Labels", minsize=(560, 480))
+        dialog = self._new_dialog(glide_i18n.t("menu.view.labels", "Labels"), minsize=(560, 480))
 
         container = tk.Frame(dialog, bg=self.theme["bg"])
         container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(
-            container, text="Labels", bg=self.theme["bg"], fg=self.theme["text"],
+            container, text=glide_i18n.t("menu.view.labels", "Labels"), bg=self.theme["bg"], fg=self.theme["text"],
             font=app_font(16, "bold"), anchor="w",
         ).pack(anchor="w", pady=(0, 6))
         tk.Label(
             container,
             text=(
-                "Labels sind unabhängig von der Aufgabenfarbe. Sie werden im Rechtsklickmenü eines Punkts "
+                glide_i18n.t("ui.open_label_manager.labels_are_independent_of", "Labels sind unabhängig von der Aufgabenfarbe. Sie werden im Rechtsklickmenü eines Punkts "
                 "zugewiesen und stehen in der Liste rechts neben der Fälligkeit. "
                 "„Langtext“ und „Überschrift“ gehören fest zum Programm: Sie tragen die Art eines Punkts, "
-                "lassen sich nicht entfernen oder umbenennen – die Farbe ist frei wählbar."
+                "lassen sich nicht entfernen oder umbenennen – die Farbe ist frei wählbar.")
             ),
             bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
             anchor="w", justify="left", wraplength=520,
@@ -34061,7 +34059,7 @@ class ListApp:
                 chip.pack(side="left", padx=(6, 10), pady=2)
                 meta = tk.Label(
                     row_frame,
-                    text=f"{color_name}   ·   {usage}\u00d7 verwendet{fixed_suffix}",
+                    text=glide_i18n.t("ui.render.used", '{color_name}   ·   {usage}× verwendet{fixed_suffix}', color_name=color_name, usage=usage, fixed_suffix=fixed_suffix),
                     bg=self.theme["input"], fg=self.theme[self.label_color_key(label)],
                     font=app_font(9), anchor="w",
                 )
@@ -34095,14 +34093,13 @@ class ListApp:
             label = self.labels[index]
             if self.is_system_label(label):
                 self.show_info(
-                    "Festes Label",
-                    f"„{label.get('name', '')}“ gehört fest zum Programm und trägt die Art eines Punkts. "
-                    "Der Name lässt sich deshalb nicht ändern – die Farbe schon.",
+                    glide_i18n.t("ui.rename_label.built_in_label", "Festes Label"),
+                    glide_i18n.t("ui.rename_label.is_built_in_and", '„{get}“ gehört fest zum Programm und trägt die Art eines Punkts. Der Name lässt sich deshalb nicht ändern – die Farbe schon.', get=label.get('name', '')),
                     parent=dialog,
                 )
                 return
             name = self.themed_input_dialog(
-                "Label umbenennen", "Neuer Name:", initial=label.get("name", ""), ok_text="Speichern"
+                glide_i18n.t("ui.rename_label.rename_label", "Label umbenennen"), glide_i18n.t("ui.rename_label.new_name", "Neuer Name:"), initial=label.get("name", ""), ok_text=glide_i18n.t("button.save", "Speichern")
             )
             if name is None or self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
                 return
@@ -34112,25 +34109,24 @@ class ListApp:
             name = name.strip()
             if len(name) > self.LABEL_NAME_INPUT_LIMIT:
                 self.show_warning(
-                    "Hinweis",
-                    f"Labelnamen dürfen höchstens {self.LABEL_NAME_INPUT_LIMIT} Zeichen lang sein "
-                    "– so viel zeigt die Labelspalte einer Liste.",
+                    glide_i18n.t("info.title", "Hinweis"),
+                    glide_i18n.t("ui.rename_label.label_names_may_be", 'Labelnamen dürfen höchstens {label_name_input_limit} Zeichen lang sein – so viel zeigt die Labelspalte einer Liste.', label_name_input_limit=self.LABEL_NAME_INPUT_LIMIT),
                     parent=dialog,
                 )
                 return
             if not name:
-                self.show_warning("Hinweis", "Bitte einen Namen eingeben.", parent=dialog)
+                self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.rename_label.please_enter_a_name", "Bitte einen Namen eingeben."), parent=dialog)
                 return
             existing = self.get_label_by_name(name)
             if existing is not None and existing is not label:
-                self.show_warning("Hinweis", "Es gibt bereits ein Label mit diesem Namen.", parent=dialog)
+                self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.rename_label.a_label_with_this", "Es gibt bereits ein Label mit diesem Namen."), parent=dialog)
                 return
             if name == label.get("name"):
                 return
             with self.sidebar_change(refresh_tree=True) as change:
                 label['name'] = name
                 change.mark()
-            self.finish_change_ui(change, [('Labelmanager',lambda:render(index))])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.rename_label.label_manager", 'Labelmanager'),lambda:render(index))])
 
         def recolor_label():
             if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
@@ -34150,7 +34146,7 @@ class ListApp:
             with self.sidebar_change(refresh_tree=True) as change:
                 label['color'] = color
                 change.mark()
-            self.finish_change_ui(change, [('Labelmanager',lambda:render(index))])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.recolor_label.label_manager", 'Labelmanager'),lambda:render(index))])
 
         def remove_label():
             if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
@@ -34161,17 +34157,15 @@ class ListApp:
             label = self.labels[index]
             if self.is_system_label(label):
                 self.show_info(
-                    "Festes Label",
-                    f"„{label.get('name', '')}“ gehört fest zum Programm und lässt sich nicht entfernen. "
-                    "Nimm das Label einem Punkt ab, um ihn wieder in eine gewöhnliche Aufgabe zu wandeln.",
+                    glide_i18n.t("ui.remove_label.built_in_label", "Festes Label"),
+                    glide_i18n.t("ui.remove_label.is_built_in_and", '„{get}“ gehört fest zum Programm und lässt sich nicht entfernen. Nimm das Label einem Punkt ab, um ihn wieder in eine gewöhnliche Aufgabe zu wandeln.', get=label.get('name', '')),
                     parent=dialog,
                 )
                 return
             usage = self.count_label_usage(label.get("id"))
             if not self.ask_yes_no(
-                "Label entfernen",
-                f"Label '{label.get('name', '')}' entfernen?\n\n"
-                f"Es wird von {usage} Punkt(en) gelöst; die Punkte selbst bleiben unverändert.",
+                glide_i18n.t("ui.build_home_batch_menu.remove_label", "Label entfernen"),
+                glide_i18n.t("ui.remove_label.remove_label_it_will", "Label '{get}' entfernen?\n\nEs wird von {usage} Punkt(en) gelöst; die Punkte selbst bleiben unverändert.", get=label.get('name', ''), usage=usage),
                 parent=dialog,
             ):
                 return
@@ -34184,14 +34178,14 @@ class ListApp:
                 self.labels = [entry for entry in self.labels if entry.get('id') != label['id']]
                 self.prune_unknown_item_labels()
                 change.mark()
-            self.finish_change_ui(change, [('Labelmanager',lambda:render(max(0,index-1)))])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.remove_label.label_manager", 'Labelmanager'),lambda:render(max(0,index-1)))])
 
         action_row = tk.Frame(container, bg=self.theme["bg"])
         action_row.pack(fill="x", pady=(10, 0))
         self._make_dialog_button(action_row, "+ Label", add_label, "confirm", width=104, height=36).pack(side="left")
-        self._make_dialog_button(action_row, "Umbenennen", rename_label, "accent", width=112, height=36).pack(side="left", padx=(8, 0))
-        self._make_dialog_button(action_row, "Farbe", recolor_label, "due_action", width=96, height=36).pack(side="left", padx=(8, 0))
-        self._make_dialog_button(action_row, "Entfernen", remove_label, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, glide_i18n.t("ui.open_label_manager.rename", "Umbenennen"), rename_label, "accent", width=112, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, glide_i18n.t("inspector.color", "Farbe"), recolor_label, "due_action", width=96, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, glide_i18n.t("saved_view.manager.remove", "Entfernen"), remove_label, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
         render()
 
         footer = tk.Frame(container, bg=self.theme["bg"])
@@ -34201,7 +34195,7 @@ class ListApp:
             dialog.destroy()
             return "break"
 
-        self._make_dialog_button(footer, "Schließen", close, "muted").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), close, "muted").pack(side="right")
         dialog.bind("<Escape>", close)
         dialog.protocol("WM_DELETE_WINDOW", close)
         self._center_dialog(dialog, min_width=620)
@@ -34220,8 +34214,8 @@ class ListApp:
             for name, key in self.LABEL_COLOR_CHOICES
         ]
         return self.themed_choice_dialog(
-            "Labelfarbe",
-            "Welche Farbe soll das Label tragen?",
+            glide_i18n.t("ui.choose_label_color.label_color", "Labelfarbe"),
+            glide_i18n.t("ui.choose_label_color.which_color_should_the", "Welche Farbe soll das Label tragen?"),
             choices,
             item_colors=[key for _name, key in self.LABEL_COLOR_CHOICES],
         )
@@ -34303,15 +34297,15 @@ class ListApp:
     def open_external_path(self, path):
         try:
             if not path or not os.path.exists(path):
-                self.show_warning("Datei öffnen", "Die Datei ist nicht mehr vorhanden.")
+                self.show_warning(glide_i18n.t("ui.open_external_path.open_file", "Datei öffnen"), glide_i18n.t("ui.open_external_path.the_file_no_longer", "Die Datei ist nicht mehr vorhanden."))
                 return False
             question = glide_attachment_policy.question(
                 path, origin=glide_attachment_policy.origin_text(path, BASE_DIR))
-            if question and not self.ask_yes_no("Ausführbaren Anhang öffnen?", question, default="no"):
+            if question and not self.ask_yes_no(glide_i18n.t("ui.open_external_path.open_executable_attachment", "Ausführbaren Anhang öffnen?"), question, default="no"):
                 return False
             return desktop_adapter.launch_path(path)
         except Exception as exc:
-            self.show_error("Datei öffnen", f"Die Datei konnte nicht geöffnet werden:\n{exc}")
+            self.show_error(glide_i18n.t("ui.open_external_path.open_file", "Datei öffnen"), glide_i18n.t("ui.open_external_path.the_file_could_not", 'Die Datei konnte nicht geöffnet werden:\n{exc}', exc=exc))
             return False
 
     def _make_option_menu(self, master, variable, options, option_colors=None):
@@ -34519,14 +34513,14 @@ class ListApp:
         row.pack(fill="x")
         day_label_cell, day = row.cell(0, 0)
         effort_label_cell, effort = row.cell(1, 0)
-        for block, key, label in ((day_label_cell, "planned_date", "Bearbeitungstag"),
-                                  (effort_label_cell, "estimated_minutes", "Geschätzter Aufwand")):
+        for block, key, label in ((day_label_cell, "planned_date", glide_i18n.t("ui.edit_task_field.work_day", "Bearbeitungstag")),
+                                  (effort_label_cell, "estimated_minutes", glide_i18n.t("ui.make_planning_editor.estimated_effort", "Geschätzter Aufwand"))):
             if apply_fields is None:
                 self._make_field_label(block, label).pack(
                     side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
             else:
                 GlideCheckbutton(
-                    block, name="apply_" + key, text=label + " ändern", variable=apply_fields[key],
+                    block, name="apply_" + key, text=glide_i18n.t("ui.make_planning_editor.change", '{label} ändern', label=label), variable=apply_fields[key],
                     bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                     activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                     font=app_font(10), highlightthickness=0, anchor="w",
@@ -34534,7 +34528,7 @@ class ListApp:
         day_field = DueField(day, self, due=source.get("planned_date"), compact=True,
                              dialog_parent=dialog, show_time=False)
         day_field.pack(fill="x")
-        self._make_field_label(effort, "Minuten (optional)").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(effort, glide_i18n.t("ui.make_planning_editor.minutes_optional", "Minuten (optional)")).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
         border, field = self._make_field(effort)
         border.pack(fill="x")
         field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -34545,7 +34539,7 @@ class ListApp:
         entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
         if source.get("estimated_minutes") is not None:
             entry.insert(0, str(source["estimated_minutes"]))
-        planning_hint = tk.Label(parent, text="Der Bearbeitungstag steuert den Tagesplan in „Heute“; die Fälligkeit bleibt davon unberührt. Leere Felder entfernen die jeweilige Angabe.",
+        planning_hint = tk.Label(parent, text=glide_i18n.t("ui.make_planning_editor.the_work_day_controls", "Der Bearbeitungstag steuert den Tagesplan in „Heute“; die Fälligkeit bleibt davon unberührt. Leere Felder entfernen die jeweilige Angabe."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), justify="left",
                  wraplength=620, anchor="w")
         planning_hint.pack(fill="x", pady=(6, 0))
@@ -34574,15 +34568,14 @@ class ListApp:
         items = [found[0] for item_id in item_ids if (found := self.find_item(item_id))
                  and self.is_schedulable_item(found[0])]
         if not items:
-            self.show_warning("Planung", "Bitte mindestens eine Aufgabe oder einen Langtext auswählen.")
+            self.show_warning(glide_i18n.t("ui.set_planning_selected.planning", "Planung"), glide_i18n.t("ui.set_planning_selected.please_select_at_least", "Bitte mindestens eine Aufgabe oder einen Langtext auswählen."))
             return "break"
-        dialog = self._new_dialog("Bearbeitungstag und Aufwand")
+        dialog = self._new_dialog(glide_i18n.t("ui.set_planning_selected.work_day_and_effort", "Bearbeitungstag und Aufwand"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Bearbeitungstag und Aufwand", font=app_font(15, "bold"),
+        tk.Label(outer, text=glide_i18n.t("ui.set_planning_selected.work_day_and_effort", "Bearbeitungstag und Aufwand"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
-        tk.Label(outer, text=f"{len(items)} Aufgabe(n). Nur angehakte Angaben werden übernommen.\n"
-                 "Bei unterschiedlichen Werten bleibt das Eingabefeld zunächst leer.",
+        tk.Label(outer, text=glide_i18n.t("ui.set_planning_selected.task_s_only_checked", '{len} Aufgabe(n). Nur angehakte Angaben werden übernommen.\nBei unterschiedlichen Werten bleibt das Eingabefeld zunächst leer.', len=len(items)),
                  font=app_font(10), bg=self.theme["bg"], fg=self.theme["muted"], justify="left",
                  wraplength=620, anchor="w").pack(anchor="w", pady=(6, 18))
         keys = ("planned_date", "estimated_minutes")
@@ -34596,15 +34589,15 @@ class ListApp:
             try:
                 result["value"] = read()
             except ValueError as exc:
-                self.show_warning("Planung", str(exc), parent=dialog)
+                self.show_warning(glide_i18n.t("ui.submit.planning", "Planung"), str(exc), parent=dialog)
                 return "break"
             dialog.destroy()
             return "break"
 
         footer = ButtonFlow(outer, bg=self.theme["bg"], gap=10)
         footer.pack(fill="x", pady=(20, 0))
-        footer.add(self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted"))
-        footer.add(self._make_dialog_button(footer, "Übernehmen", submit, "confirm"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), submit, "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.bind("<Return>", submit)
         self._center_dialog(dialog, min_width=700)
@@ -34680,11 +34673,11 @@ class ListApp:
 
         if title is None:
             if editing:
-                title = "Punktdetails (Langtext)" if is_long else "Punktdetails"
+                title = glide_i18n.t("ui.item_form_dialog.item_details_long_text", "Punktdetails (Langtext)") if is_long else glide_i18n.t("ui.item_form_dialog.item_details", "Punktdetails")
             else:
-                title = "Neuer Punkt"
+                title = glide_i18n.t("ui.item_form_dialog.new_item", "Neuer Punkt")
         if ok_text is None:
-            ok_text = "Speichern" if editing else "Anlegen"
+            ok_text = glide_i18n.t("button.save", "Speichern") if editing else glide_i18n.t("ui.create_area.create", "Anlegen")
 
         result = {"value": None}
         attachments = copy.deepcopy(source.get("attachments", []) or [])
@@ -34751,12 +34744,10 @@ class ListApp:
         ).pack(anchor="w", pady=(0, 6))
         if is_long:
             hint = (
-                f"Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. "
-                f"In der Liste erscheinen die ersten {self.LONG_TASK_MAX_LINES} Zeilen. "
-                f"Speichern: {self.accel('↵')}."
+                glide_i18n.t("ui.item_form_dialog.the_title_may_have", 'Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. In der Liste erscheinen die ersten {long_task_max_lines} Zeilen. Speichern: {accel}.', long_task_max_lines=self.LONG_TASK_MAX_LINES, accel=self.accel('↵'))
             )
         else:
-            hint = prompt or "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar."
+            hint = prompt or glide_i18n.t("ui.item_form_dialog.enter_a_title_everything", "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar.")
         hint_label = tk.Label(
             inner, text=hint, bg=self.theme["bg"], fg=self.theme["muted"],
             font=app_font(10), anchor="w", justify="left", wraplength=640,
@@ -34764,7 +34755,7 @@ class ListApp:
         hint_label.pack(anchor="w", pady=(0, 14))
 
         # --- Titel ---
-        self._make_field_label(inner, "Titel").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(inner, glide_i18n.t("ui.item_form_dialog.title", "Titel")).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
         title_border, title_field = self._make_field(inner)
         title_border.pack(fill="x", pady=(0, 14))
         title_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -34788,7 +34779,7 @@ class ListApp:
         title_text.insert("1.0", initial_title)
         title_entry.insert(0, self.normalize_item_text(initial_title, self.ITEM_KIND_TASK))
         self.limit_title_entry(title_entry)
-        tk.Label(inner, text="Titel: höchstens 40 Zeichen; längere Inhalte gehören in die Beschreibung.",
+        tk.Label(inner, text=glide_i18n.t("ui.item_form_dialog.title_at_most_40", "Titel: höchstens 40 Zeichen; längere Inhalte gehören in die Beschreibung."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), anchor="w").pack(fill="x")
         title_draft = {"collapsed_long": self.normalize_item_text(initial_title, self.ITEM_KIND_TASK)}
         title_widget = title_text if is_long else title_entry
@@ -34812,11 +34803,11 @@ class ListApp:
             tk.Label(frame, text=subtitle, bg=self.theme["bg"], fg=self.theme["muted"],
                      font=app_font(9), anchor="e").pack(side="right", fill="x", expand=True)
 
-        section_heading("Einordnung", "Art, Wichtigkeit, Farbe und Ziel")
+        section_heading(glide_i18n.t("ui.item_form_dialog.classification", "Einordnung"), glide_i18n.t("ui.item_form_dialog.type_importance_color_and", "Art, Wichtigkeit, Farbe und Ziel"))
         grid = FieldPairGrid(inner, bg=self.theme["bg"], gap=16,
                              uniform="item_form_fields", responsive=True)
         grid.pack(fill="x")
-        section_heading("Planung und Inhalt", "Termine, Beschreibung, Schritte und Dateien")
+        section_heading(glide_i18n.t("ui.item_form_dialog.planning_and_content", "Planung und Inhalt"), glide_i18n.t("ui.item_form_dialog.dates_description_steps_and", "Termine, Beschreibung, Schritte und Dateien"))
         details_grid = FieldPairGrid(inner, bg=self.theme["bg"], gap=16,
                                      uniform="item_form_details", responsive=True)
         details_grid.pack(fill="x")
@@ -34830,11 +34821,11 @@ class ListApp:
         importance_var = tk.StringVar(
             value=self.importance_choice_text(self.clamp_importance(source.get("importance", 0)))
         )
-        color_names = ["Keine Farbe"] + [name for name, _key in self.ITEM_COLOR_CHOICES]
+        color_names = [glide_i18n.t("inspector.color.none", "Keine Farbe")] + [name for name, _key in self.ITEM_COLOR_CHOICES]
         color_by_name = {name: key for name, key in self.ITEM_COLOR_CHOICES}
         current_color = source.get("color") if source.get("color") in self.ITEM_COLOR_KEYS else None
         color_var = tk.StringVar(value=next(
-            (name for name, key in self.ITEM_COLOR_CHOICES if key == current_color), "Keine Farbe"
+            (name for name, key in self.ITEM_COLOR_CHOICES if key == current_color), glide_i18n.t("inspector.color.none", "Keine Farbe")
         ))
 
         kind_label_cell, left = grid.cell(0, 0)
@@ -34846,7 +34837,7 @@ class ListApp:
             option_colors={name: self.kind_color_key(kind) for name, kind in kind_by_name.items()})
         kind_border.pack(fill="x")
 
-        self._make_field_label(importance_label_cell, "Wichtigkeit").pack(
+        self._make_field_label(importance_label_cell, glide_i18n.t("inspector.importance", "Wichtigkeit")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         importance_border, _importance_button = self._make_option_menu(
             right, importance_var, importance_names, option_colors=importance_colors,
@@ -34854,7 +34845,7 @@ class ListApp:
         importance_border.pack(fill="x")
 
         color_label_cell, left_low = grid.cell(0, 1, pady=(12, 0))
-        self._make_field_label(color_label_cell, "Farbe des Listenpunkts").pack(
+        self._make_field_label(color_label_cell, glide_i18n.t("ui.item_form_dialog.color_of_the_list", "Farbe des Listenpunkts")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         color_border, _color_button = self._make_option_menu(left_low, color_var, color_names, option_colors=color_by_name)
         color_border.pack(fill="x")
@@ -34873,7 +34864,7 @@ class ListApp:
             preferred = next((name for list_id, name in list_choices if list_id == default_list_id), names[0])
             list_var.set(preferred)
             list_label_cell, right_low = grid.cell(1, 1, pady=(12, 0))
-            self._make_field_label(list_label_cell, "Zugehörige Liste").pack(
+            self._make_field_label(list_label_cell, glide_i18n.t("ui.item_form_dialog.list", "Zugehörige Liste")).pack(
                 side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
             list_border, _list_button = self._make_option_menu(right_low, list_var, names,
                 option_colors={self.list_path_title(entry): self.inherited_list_color(entry) or "text" for entry in self.lists})
@@ -34881,7 +34872,7 @@ class ListApp:
 
         # --- Fälligkeit mit Kalender und Uhrzeit ---
         due_label, due_block = details_grid.cell(0, 0)
-        self._make_field_label(due_label, "Fälligkeit").pack(side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(due_label, glide_i18n.t("calendar.title.due", "Fälligkeit")).pack(side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         due_field = DueField(
             due_block, self,
             due=source.get("due") if editing else default_due,
@@ -34894,7 +34885,7 @@ class ListApp:
         # Steht unmittelbar unter der Fälligkeit: Eine Wiederholung ohne Datum
         # gibt es nicht, und die Maske soll das durch ihre Anordnung sagen.
         repeat_label, repeat_block = details_grid.cell(0, 1, pady=(14, 0))
-        self._make_field_label(repeat_label, "Wiederholung").pack(
+        self._make_field_label(repeat_label, glide_i18n.t("ui.skip_repeat_occurrences.repeat", "Wiederholung")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         vorhandene_regel = self.normalize_repeat(source.get("repeat")) if editing else None
         repeat_form = glide_repeat.form_values(vorhandene_regel)
@@ -34918,7 +34909,7 @@ class ListApp:
         # bündig. Ein eingerücktes Feld in einer Textzeile säße daneben – der
         # Integrationstest misst genau das.
         interval_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
-        self._make_field_label(interval_row, f"Abstand (1 bis {self.REPEAT_MAX_INTERVAL}; Einheit wie Auswahl)").pack(
+        self._make_field_label(interval_row, glide_i18n.t("ui.item_form_dialog.interval_1_to_unit", 'Abstand (1 bis {repeat_max_interval}; Einheit wie Auswahl)', repeat_max_interval=self.REPEAT_MAX_INTERVAL)).pack(
             anchor="w", pady=(0, self.FIELD_LABEL_GAP)
         )
         interval_var = tk.StringVar(value=str(repeat_form.get("abstand", 2)))
@@ -34932,7 +34923,7 @@ class ListApp:
         interval_border.pack(fill="x")
 
         weekday_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
-        self._make_field_label(weekday_row, "Wochentage").pack(
+        self._make_field_label(weekday_row, glide_i18n.t("ui.item_form_dialog.weekdays", "Wochentage")).pack(
             anchor="w", pady=(0, self.FIELD_LABEL_GAP)
         )
         weekday_boxes = tk.Frame(weekday_row, bg=self.theme["bg"])
@@ -34950,7 +34941,7 @@ class ListApp:
         position_row, position_vars = self.make_repeat_position_editor(repeat_detail, vorhandene_regel, self.theme["bg"])
         repeat_options_row, repeat_options = self.make_repeat_options_editor(repeat_detail, vorhandene_regel, self.theme["bg"])
         end_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
-        self._make_field_label(end_row, "Endet am (leer lassen für kein Ende)").pack(
+        self._make_field_label(end_row, glide_i18n.t("ui.item_form_dialog.ends_on_leave_empty", "Endet am (leer lassen für kein Ende)")).pack(
             anchor="w", pady=(0, self.FIELD_LABEL_GAP)
         )
         end_var = tk.StringVar(value=self.format_due_display((vorhandene_regel or {}).get("ende") or ""))
@@ -34968,7 +34959,7 @@ class ListApp:
         # bestimmen, weil es einen Termin in der Zukunft begrenzt.
         # Vor das dehnbare Feld gepackt, damit der Knopf nie gequetscht wird.
         self.attach_calendar_picker(
-            end_row, end_var, with_time=False, title="Serienende",
+            end_row, end_var, with_time=False, title=glide_i18n.t("ui.item_form_dialog.end_of_series", "Serienende"),
             dialog_parent=dialog,
             formatter=lambda datum, _zeit: self.format_due_display(datum),
         ).pack(side="right", padx=(8, 0), before=end_border)
@@ -35052,7 +35043,7 @@ class ListApp:
             if any(label["id"] == label_id for label in selectable_labels)
         ]
         label_heading, label_block = details_grid.cell(1, 0)
-        self._make_field_label(label_heading, "Labels (Mehrfachauswahl)").pack(
+        self._make_field_label(label_heading, glide_i18n.t("ui.item_form_dialog.labels_multiple_choice", "Labels (Mehrfachauswahl)")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         label_dropdown = LabelDropdown(
             label_block, self, selectable_labels,
@@ -35082,8 +35073,7 @@ class ListApp:
                 kind_var.set(self.ITEM_KIND_NAMES[form_state["kind"]])
                 form_state["syncing"] = False
                 self.show_warning(
-                    "Labels", f"Das Artlabel benötigt einen freien Platz unter den {self.MAX_LABELS_PER_ITEM} Labels. "
-                    "Bitte zuerst ein anderes Label abwählen.", parent=dialog,
+                    glide_i18n.t("menu.view.labels", "Labels"), glide_i18n.t("ui.sync_kind.the_type_label_needs", 'Das Artlabel benötigt einen freien Platz unter den {max_labels_per_item} Labels. Bitte zuerst ein anderes Label abwählen.', max_labels_per_item=self.MAX_LABELS_PER_ITEM), parent=dialog,
                 )
                 return
             label_dropdown.set_selected_ids(assigned)
@@ -35114,10 +35104,8 @@ class ListApp:
                 details_grid.set_cell_visible(0, row, schedulable)
             details_grid.set_cell_visible(1, 2, schedulable)
             hint_label.configure(text=(
-                f"Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. "
-                f"In der Liste erscheinen die ersten {self.LONG_TASK_MAX_LINES} Zeilen. "
-                f"Speichern: {self.accel('↵')}."
-                if is_long else prompt or "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar."
+                glide_i18n.t("ui.sync_kind.the_title_may_have", 'Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. In der Liste erscheinen die ersten {long_task_max_lines} Zeilen. Speichern: {accel}.', long_task_max_lines=self.LONG_TASK_MAX_LINES, accel=self.accel('↵'))
+                if is_long else prompt or glide_i18n.t("ui.sync_kind.enter_a_title_everything", "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar.")
             ))
             form_state["kind"] = chosen_kind
             if label_dropdown._popup is not None:
@@ -35144,7 +35132,7 @@ class ListApp:
 
         # --- Beschreibung ---
         description_heading, description_cell = details_grid.cell(1, 1, pady=(14, 0))
-        self._make_field_label(description_heading, "Beschreibung").pack(side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(description_heading, glide_i18n.t("ui.render_detail.description", "Beschreibung")).pack(side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         description_border, description_field = self._make_field(description_cell)
         description_border.pack(fill="x")
         description_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -35168,17 +35156,17 @@ class ListApp:
 
         # --- Anhänge ---
         attachment_heading, attachment_cell = details_grid.cell(1, 3, pady=(14, 0))
-        self._make_field_label(attachment_heading, "Anhänge").pack(side="left")
+        self._make_field_label(attachment_heading, glide_i18n.t("ui.render_detail.attachments", "Anhänge")).pack(side="left")
         tk.Label(
             attachment_heading,
-            text="Bilder und andere Dateien werden als lokale Kopie gespeichert.",
+            text=glide_i18n.t("ui.item_form_dialog.images_and_other_files", "Bilder und andere Dateien werden als lokale Kopie gespeichert."),
             bg=self.theme["bg"], fg=self.theme["placeholder"], font=app_font(8), anchor="e",
         ).pack(side="right")
 
         self._make_attachment_editor(attachment_cell, dialog, attachments)
 
         # --- Beziehungen und Zeit (Format 20) ---
-        section_heading("Beziehungen und Zeit", "Uhrzeit, erfasste Zeit, Verknüpfungen, Voraussetzungen")
+        section_heading(glide_i18n.t("ui.item_form_dialog.relations_and_time", "Beziehungen und Zeit"), glide_i18n.t("ui.item_form_dialog.time_tracked_time_links", "Uhrzeit, erfasste Zeit, Verknüpfungen, Voraussetzungen"))
         relations_grid = FieldPairGrid(inner, bg=self.theme["bg"], gap=16,
                                        uniform="item_form_relations", responsive=True)
         relations_grid.pack(fill="x")
@@ -35197,19 +35185,19 @@ class ListApp:
             return variable
 
         time_label, time_cell = relations_grid.cell(0, 0)
-        self._make_field_label(time_label, "Uhrzeit am Bearbeitungstag (HH:MM)").pack(
+        self._make_field_label(time_label, glide_i18n.t("ui.item_form_dialog.time_on_the_work", "Uhrzeit am Bearbeitungstag (HH:MM)")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         planned_time_var = small_entry(time_cell, source.get("planned_time") or "")
-        tk.Label(time_cell, text="Ordnet den Punkt im Tagesplan ein; nur mit Bearbeitungstag.",
+        tk.Label(time_cell, text=glide_i18n.t("ui.item_form_dialog.places_the_item_in", "Ordnet den Punkt im Tagesplan ein; nur mit Bearbeitungstag."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(8), anchor="w").pack(fill="x")
         spent_label, spent_cell = relations_grid.cell(1, 0)
-        self._make_field_label(spent_label, "Erfasste Zeit in Minuten").pack(
+        self._make_field_label(spent_label, glide_i18n.t("ui.item_form_dialog.tracked_time_in_minutes", "Erfasste Zeit in Minuten")).pack(
             side="bottom", fill="x", pady=(0, self.FIELD_LABEL_GAP))
         spent_value = source.get("time_spent_minutes")
         spent_var = small_entry(spent_cell, str(spent_value) if spent_value else "")
         estimate = source.get("estimated_minutes")
-        comparison = (f"Geschätzt: {self.format_estimated_minutes(estimate)}" if estimate else
-                      "Wird über „Zeiterfassung starten“ gebucht oder hier eingetragen.")
+        comparison = (glide_i18n.t("ui.item_form_dialog.estimated", 'Geschätzt: {format_estimated_minutes}', format_estimated_minutes=self.format_estimated_minutes(estimate)) if estimate else
+                      glide_i18n.t("ui.item_form_dialog.booked_via_start_time", "Wird über „Zeiterfassung starten“ gebucht oder hier eingetragen."))
         tk.Label(spent_cell, text=comparison, bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(8),
                  anchor="w").pack(fill="x")
         relation_state = {"links": list(source.get("links") or []),
@@ -35228,16 +35216,16 @@ class ListApp:
                     pair = relation_index.get(target)
                     row = tk.Frame(rows, bg=self.theme["bg"])
                     row.pack(fill="x", pady=1)
-                    text = self.relation_label(pair[1], relation_index) if pair else "(im Papierkorb)"
+                    text = self.relation_label(pair[1], relation_index) if pair else glide_i18n.t("ui.render.in_the_trash", "(im Papierkorb)")
                     if pair and field == "blocked_by" and pair[1].get("done"):
                         text = f"{self.ICONS['check']} {text}"
                     tk.Label(row, text=text, bg=self.theme["bg"], fg=self.theme["text"], font=app_font(10),
                              anchor="w").pack(side="left", fill="x", expand=True)
-                    remove = self._make_dialog_button(row, "Entfernen", lambda value=target: drop(value),
+                    remove = self._make_dialog_button(row, glide_i18n.t("saved_view.manager.remove", "Entfernen"), lambda value=target: drop(value),
                                                       "muted", width=90, height=26)
                     remove.pack(side="right")
                 if not relation_state[field]:
-                    tk.Label(rows, text="Keine", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
+                    tk.Label(rows, text=glide_i18n.t("ui.render_detail.none", "Keine"), bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
                              anchor="w").pack(fill="x")
                 sync_scroll()
 
@@ -35252,8 +35240,8 @@ class ListApp:
                 relation_state[field], rejected = self.add_relation_targets(
                     own_id, field, relation_state[field], chosen, relation_index)
                 if rejected:
-                    self.show_warning("Abhängigkeit abgelehnt", "Mindestens eine Voraussetzung wartet selbst "
-                                      "auf diesen Punkt. Die Punkte würden dann aufeinander warten.",
+                    self.show_warning(glide_i18n.t("ui.add_detail_pane_relation.dependency_rejected", "Abhängigkeit abgelehnt"), glide_i18n.t("ui.add_detail_pane_relation.at_least_one_prerequisite", "Mindestens eine Voraussetzung wartet selbst "
+                                      "auf diesen Punkt. Die Punkte würden dann aufeinander warten."),
                                       parent=dialog)
                 render()
 
@@ -35266,21 +35254,21 @@ class ListApp:
                          justify="left", anchor="w").pack(fill="x", pady=(4, 0))
             render()
 
-        relation_block(0, "Verknüpfte Punkte", "links", "Punkt verknüpfen …", False, "Verweist hierher",
+        relation_block(0, glide_i18n.t("ui.item_form_dialog.linked_items", "Verknüpfte Punkte"), "links", glide_i18n.t("ui.item_form_dialog.link_item", "Punkt verknüpfen …"), False, glide_i18n.t("ui.item_form_dialog.refers_here", "Verweist hierher"),
                        self.item_backlinks(own_id, relation_index) if own_id else [])
-        relation_block(1, "Wartet auf", "blocked_by", "Voraussetzung wählen …", True, "Darauf warten",
+        relation_block(1, glide_i18n.t("ui.item_form_dialog.waits_for", "Wartet auf"), "blocked_by", glide_i18n.t("ui.item_form_dialog.choose_prerequisite", "Voraussetzung wählen …"), True, glide_i18n.t("ui.item_form_dialog.wait_for_it", "Darauf warten"),
                        self.item_dependents(own_id, relation_index) if own_id else [])
         form_state["relations_grid"] = relations_grid
 
         def submit(event=None):
             text = read_title()
             if not text:
-                self.show_warning("Hinweis", "Bitte einen Titel eingeben.", parent=dialog)
+                self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.submit.please_enter_a_title", "Bitte einen Titel eingeben."), parent=dialog)
                 title_widget.focus_set()
                 return "break"
 
             if text != initial_title and len(text) > self.CONTAINER_TITLE_MAX:
-                self.show_warning("Titel", "Der Titel darf höchstens 40 Zeichen enthalten. Bitte die Beschreibung für längere Inhalte nutzen.", parent=dialog)
+                self.show_warning(glide_i18n.t("ui.submit.title", "Titel"), glide_i18n.t("ui.submit.the_title_may_contain", "Der Titel darf höchstens 40 Zeichen enthalten. Bitte die Beschreibung für längere Inhalte nutzen."), parent=dialog)
                 title_widget.focus_set()
                 return "break"
 
@@ -35290,30 +35278,30 @@ class ListApp:
                 try:
                     planning = read_planning()
                 except ValueError as exc:
-                    self.show_warning("Planung", str(exc), parent=dialog)
+                    self.show_warning(glide_i18n.t("ui.submit.planning", "Planung"), str(exc), parent=dialog)
                     return "break"
                 parsed, error = due_field.read()
                 if error:
-                    self.show_warning("Fälligkeit", error, parent=dialog)
+                    self.show_warning(glide_i18n.t("calendar.title.due", "Fälligkeit"), error, parent=dialog)
                     return "break"
                 due_value, due_time_value = parsed
 
             wiederholung, wiederholungsfehler = gelesene_wiederholung()
             if wiederholungsfehler:
-                self.show_warning("Hinweis", wiederholungsfehler, parent=dialog)
+                self.show_warning(glide_i18n.t("info.title", "Hinweis"), wiederholungsfehler, parent=dialog)
                 return "break"
             if wiederholung and not due_value:
                 self.show_warning(
-                    "Hinweis",
-                    "Eine Wiederholung braucht ein Fälligkeitsdatum – sonst gibt es "
-                    "keinen Termin, von dem aus gerechnet werden könnte.",
+                    glide_i18n.t("info.title", "Hinweis"),
+                    glide_i18n.t("ui.submit.a_repeat_needs_a", "Eine Wiederholung braucht ein Fälligkeitsdatum – sonst gibt es "
+                    "keinen Termin, von dem aus gerechnet werden könnte."),
                     parent=dialog,
                 )
                 return "break"
             try:
                 reminder_value = read_reminder(due_value) if schedulable else None
             except (ValueError, OverflowError, OSError) as exc:
-                self.show_warning("Benachrichtigung", str(exc), parent=dialog)
+                self.show_warning(glide_i18n.t("inspector.reminder.notification", "Benachrichtigung"), str(exc), parent=dialog)
                 return "break"
             stored_attachments = self._store_pending_attachments(attachments, dialog)
             if stored_attachments is None:
@@ -35322,11 +35310,11 @@ class ListApp:
             raw_time = planned_time_var.get().strip()
             planned_time_value = self.normalize_due_time(raw_time) if raw_time else None
             if raw_time and planned_time_value is None:
-                self.show_warning("Uhrzeit", "Bitte die Uhrzeit als HH:MM eingeben, etwa 09:30.", parent=dialog)
+                self.show_warning(glide_i18n.t("ui.submit.time", "Uhrzeit"), glide_i18n.t("ui.submit.please_enter_the_time", "Bitte die Uhrzeit als HH:MM eingeben, etwa 09:30."), parent=dialog)
                 return "break"
             raw_spent = spent_var.get().strip()
             if raw_spent and (not raw_spent.isdigit() or int(raw_spent) > self.MAX_TIME_SPENT_MINUTES):
-                self.show_warning("Erfasste Zeit", "Bitte ganze Minuten eingeben.", parent=dialog)
+                self.show_warning(glide_i18n.t("ui.submit.tracked_time", "Erfasste Zeit"), glide_i18n.t("ui.submit.please_enter_whole_minutes", "Bitte ganze Minuten eingeben."), parent=dialog)
                 return "break"
             chosen_kind = kind_by_name.get(kind_var.get(), self.ITEM_KIND_TASK)
             target_list_id = None
@@ -35364,7 +35352,7 @@ class ListApp:
             return "break"
 
         self._make_dialog_button(footer, ok_text, submit, "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), cancel, "muted").pack(side="right", padx=(0, 10))
         # Enter im einzeiligen Titelfeld schließt ab; im mehrzeiligen Titel und
         # in der Beschreibung setzt Enter eine Zeile, deshalb dort Strg+Enter.
         dialog.bind("<Control-Return>", submit)
@@ -35417,8 +35405,8 @@ class ListApp:
                         except OSError:
                             pass
                     self.show_error(
-                        "Anhang speichern",
-                        f"'{attachment.get('name', 'Datei')}' konnte nicht gespeichert werden:\n{exc}",
+                        glide_i18n.t("ui.store_pending_attachments.save_attachment", "Anhang speichern"),
+                        glide_i18n.t("ui.store_pending_attachments.could_not_be_saved", "'{get}' konnte nicht gespeichert werden:\n{exc}", get=attachment.get('name', 'Datei'), exc=exc),
                         parent=parent_dialog,
                     )
                     return None
@@ -35439,7 +35427,7 @@ class ListApp:
 
     def new_item_dialog(
         self,
-        title="Neuer Punkt",
+        title=None,
         prompt="",
         kind=None,
         allow_list_choice=False,
@@ -35449,12 +35437,12 @@ class ListApp:
         default_planned=None,
         default_labels=None,
         initial_text="",
-        ok_text="Anlegen",
+        ok_text=None,
     ):
         """Erweiterte Eingabe für einen neuen Punkt – dieselbe Maske wie beim Bearbeiten."""
         return self.item_form_dialog(
             mode="create",
-            title=title,
+            title=(title if title is not None else glide_i18n.t("ui.new_item_dialog.new_item", "Neuer Punkt")),
             prompt=prompt,
             kind=kind,
             allow_list_choice=allow_list_choice,
@@ -35464,7 +35452,7 @@ class ListApp:
             default_planned=default_planned,
             default_labels=default_labels,
             initial_text=initial_text,
-            ok_text=ok_text,
+            ok_text=(ok_text if ok_text is not None else glide_i18n.t("ui.create_area.create", "Anlegen")),
         )
 
 
@@ -35753,7 +35741,7 @@ class ListApp:
                 value = glide_objects.uri(*key)
             except ValueError:
                 continue
-            kind = 'Aufgabe' if key[0] == 'item' else self.LIST_KINDS.get(holder.get('list_kind'), {}).get('label', 'Liste')
+            kind = glide_i18n.t("editor.toolbar.task", 'Aufgabe') if key[0] == 'item' else self.LIST_KINDS.get(holder.get('list_kind'), {}).get('label', 'Liste')
             label = kind + ' · ' + glide_objects.caption(key, index)[1]
             if entry and entry.get('folder_id'):
                 label += ' · ' + self.list_path_title(entry)
@@ -35763,14 +35751,14 @@ class ListApp:
     def open_object_reference(self, value, *, side=False):
         key = glide_objects.parse(value)
         index, _, _ = self.object_graph()
-        state, label = glide_objects.caption(key, index) if key else ('missing', 'Ungültiger Verweis')
+        state, label = glide_objects.caption(key, index) if key else ('missing', glide_i18n.t("ui.open_object_reference.invalid_reference", 'Ungültiger Verweis'))
         if state in ('missing', 'trash'):
-            self.show_warning('Verweis', label)
+            self.show_warning(glide_i18n.t("ui.insert_object_reference.reference", 'Verweis'), label)
             return False
         if side:
             target = glide_side_view.reference_target(key, index)
             if target is None:
-                self.show_info('Nebenansicht', 'Dieses Verweisziel lässt sich nur im Hauptbereich öffnen.')
+                self.show_info(glide_i18n.t("ui.render_side_view_rows.side_view", 'Nebenansicht'), glide_i18n.t("ui.open_object_reference.this_reference_target_can", 'Dieses Verweisziel lässt sich nur im Hauptbereich öffnen.'))
                 return False
             opened = self.open_side_view(target['list_id'], item_id=target['item_id'])
             body = getattr(self, '_side_view_body', None)
@@ -35788,7 +35776,7 @@ class ListApp:
         if getattr(self, '_data_read_only', False) or source not in index or index[source][0] != 'active':
             return False
         if value is None:
-            value = self.themed_choice_dialog('Verknüpfen', 'Seite, Liste oder Aufgabe auswählen:',
+            value = self.themed_choice_dialog(glide_i18n.t("ui.render_mentions.link", 'Verknüpfen'), glide_i18n.t("ui.insert_object_reference.select_a_page_list", 'Seite, Liste oder Aufgabe auswählen:'),
                                              self.object_reference_choices(source))
         if value is None:
             return False
@@ -35797,13 +35785,13 @@ class ListApp:
         if source not in index or index[source][0] != 'active' or target is None:
             return False
         if not remove and (target == source or target not in index or index[target][0] != 'active'):
-            self.show_warning('Verweis', 'Das Ziel ist inzwischen nicht mehr verfügbar.')
+            self.show_warning(glide_i18n.t("ui.insert_object_reference.reference", 'Verweis'), glide_i18n.t("ui.insert_object_reference.the_target_is_no", 'Das Ziel ist inzwischen nicht mehr verfügbar.'))
             return False
         value = glide_objects.uri(*target)
         holder = index[source][1]
         old = list(holder.get('references', []))
         if not remove and len(old) >= 200 and value not in old:
-            self.show_warning('Verweis', 'Maximal 200 Verweise je Objekt.')
+            self.show_warning(glide_i18n.t("ui.insert_object_reference.reference", 'Verweis'), glide_i18n.t("ui.change_object_reference.at_most_200_references", 'Maximal 200 Verweise je Objekt.'))
             return False
         new = [entry for entry in old if entry != value] if remove else glide_objects.normalize(old + [value])
         if new == old:
@@ -35839,19 +35827,19 @@ class ListApp:
         menu = self._new_themed_popup_menu(parent or self.root)
         index, outgoing, incoming = self.object_graph()
         if source not in index:
-            menu.add_command(label='Kein Objekt ausgewählt', state='disabled')
+            menu.add_command(label=glide_i18n.t("ui.build_object_reference_menu.no_object_selected", 'Kein Objekt ausgewählt'), state='disabled')
             return menu
-        menu.add_command(label='Fundorte anzeigen …', command=lambda: self.show_usage_locations_dialog(source))
+        menu.add_command(label=glide_i18n.t("ui.build_object_reference_menu.show_locations", 'Fundorte anzeigen …'), command=lambda: self.show_usage_locations_dialog(source))
         if index[source][0] == 'active':
-            menu.add_command(label='Verknüpfen …', command=lambda: self.change_object_reference(source))
-        for label, keys in [('Verweise', outgoing.get(source, set())), ('Rückverweise', incoming.get(source, set()))]:
+            menu.add_command(label=glide_i18n.t("inspector.relation.add.links", 'Verknüpfen …'), command=lambda: self.change_object_reference(source))
+        for label, keys in [(glide_i18n.t("ui.build_object_reference_menu.references", 'Verweise'), outgoing.get(source, set())), (glide_i18n.t("ui.build_object_reference_menu.backlinks", 'Rückverweise'), incoming.get(source, set()))]:
             sub = self._new_themed_popup_menu(menu)
             for key in sorted(keys, key=lambda key: glide_objects.caption(key, index)[1].casefold()):
                 state, title = glide_objects.caption(key, index)
                 sub.add_command(label=title, state='disabled' if state in ('trash', 'missing') else 'normal',
                                 command=lambda target=key: self.open_object_reference(glide_objects.uri(*target)))
             if not keys:
-                sub.add_command(label='Keine', state='disabled')
+                sub.add_command(label=glide_i18n.t("ui.render_detail.none", 'Keine'), state='disabled')
             menu.add_cascade(label=f'{label} ({len(keys)})', menu=sub)
         targets = outgoing.get(source, set()) | incoming.get(source, set())
         if targets:
@@ -35863,18 +35851,18 @@ class ListApp:
                 preview.add_command(label=glide_objects.caption(key, index)[1],
                                     state='normal' if enabled else 'disabled',
                                     command=lambda target=value: self.open_object_reference(target, side=True))
-            menu.add_cascade(label='In Nebenansicht öffnen', menu=preview)
+            menu.add_cascade(label=glide_i18n.t("ui.build_object_reference_menu.open_in_side_view", 'In Nebenansicht öffnen'), menu=preview)
         explicit = index[source][1].get('references', [])
         if explicit and index[source][0] == 'active':
             remove = self._new_themed_popup_menu(menu)
             for value in explicit:
                 remove.add_command(label=glide_objects.caption(glide_objects.parse(value), index)[1],
                                    command=lambda value=value: self.change_object_reference(source, value, remove=True))
-            menu.add_cascade(label='Verweis entfernen', menu=remove)
+            menu.add_cascade(label=glide_i18n.t("ui.build_object_reference_menu.remove_reference", 'Verweis entfernen'), menu=remove)
         if source[0] == 'list':
             mentions = self._new_themed_popup_menu(menu)
             mentions.configure(postcommand=lambda: self.fill_mentions_menu(mentions, source))
-            menu.add_cascade(label='Erwähnt ohne Verweis …', menu=mentions)
+            menu.add_cascade(label=glide_i18n.t("ui.init.mentioned_without_reference", 'Erwähnt ohne Verweis …'), menu=mentions)
         return menu
 
     def fill_mentions_menu(self, menu, target):
@@ -35883,16 +35871,16 @@ class ListApp:
         menu.delete(0, 'end')
         index, _, _ = self.object_graph()
         hits = glide_objects.unlinked_mentions(target, index)
-        menu.add_command(label=f'Erwähnt ohne Verweis ({len(hits)})', state='disabled')
+        menu.add_command(label=glide_i18n.t("ui.render_mentions.mentioned_without_reference", 'Erwähnt ohne Verweis ({len})', len=len(hits)), state='disabled')
         for hit in hits[:100]:
             sub = self._new_themed_popup_menu(menu)
             sub.add_command(label=''.join(hit.excerpt()).replace('\n', ' '), state='disabled')
-            sub.add_command(label='Verknüpfen', command=lambda h=hit: self.link_unlinked_mention(target, h),
+            sub.add_command(label=glide_i18n.t("ui.render_mentions.link", 'Verknüpfen'), command=lambda h=hit: self.link_unlinked_mention(target, h),
                             state='disabled' if getattr(self, '_data_read_only', False) else 'normal')
-            sub.add_command(label='Öffnen', command=lambda h=hit: self.open_mention(h))
+            sub.add_command(label=glide_i18n.t("saved_view.manager.open", 'Öffnen'), command=lambda h=hit: self.open_mention(h))
             menu.add_cascade(label=glide_objects.caption(hit.source, index)[1], menu=sub)
         if len(hits) > 100:
-            menu.add_command(label='Die ersten 100 Fundstellen werden angezeigt.', state='disabled')
+            menu.add_command(label=glide_i18n.t("ui.render_mentions.the_first_100_matches", 'Die ersten 100 Fundstellen werden angezeigt.'), state='disabled')
 
     def open_mention(self, hit):
         if not self.open_object_reference(glide_objects.uri(*hit.source)):
@@ -35922,13 +35910,13 @@ class ListApp:
             return False
         index, _, _ = self.object_graph()
         if hit not in glide_objects.unlinked_mentions(target, index):
-            self.show_warning('Erwähnung', 'Die Fundstelle oder das Ziel hat sich inzwischen geändert. Bitte erneut aufklappen.')
+            self.show_warning(glide_i18n.t("ui.link_unlinked_mention.mention", 'Erwähnung'), glide_i18n.t("ui.link_unlinked_mention.the_match_or_the", 'Die Fundstelle oder das Ziel hat sich inzwischen geändert. Bitte erneut aufklappen.'))
             return False
         if self.flush_rich_note() is False:
             return False
         index, _, _ = self.object_graph()
         if hit not in glide_objects.unlinked_mentions(target, index):
-            self.show_warning('Erwähnung', 'Die Fundstelle hat sich beim Speichern geändert. Bitte erneut aufklappen.')
+            self.show_warning(glide_i18n.t("ui.link_unlinked_mention.mention", 'Erwähnung'), glide_i18n.t("ui.link_unlinked_mention.the_match_changed_while", 'Die Fundstelle hat sich beim Speichern geändert. Bitte erneut aufklappen.'))
             return False
         value = glide_objects.uri(*target)
         if hit.field != 'rich_note':
@@ -35944,7 +35932,7 @@ class ListApp:
             document = RichNoteEditor.normalize(glide_objects.linked_mention_document(
                 holder, hit, target, 'link:' + uuid.uuid4().hex))
         except ValueError as exc:
-            self.show_warning('Erwähnung', str(exc))
+            self.show_warning(glide_i18n.t("ui.link_unlinked_mention.mention", 'Erwähnung'), str(exc))
             return False
         # Genau das Link-/Spannenformat von RichNoteEditor.insert_object_reference.
         with self.sidebar_change(refresh_tree=True, feedback=False) as change:
@@ -36005,21 +35993,21 @@ class ListApp:
         index, _, _ = self.object_graph()
         if not target or target not in index:
             self.show_info(
-                "Fundorte anzeigen",
-                "Bitte zuerst eine Aufgabe, eine Liste, eine Seite, eine Notiz oder eine Zeichnung auswählen.",
+                glide_i18n.t("ui.show_usage_locations_dialog.show_locations", "Fundorte anzeigen"),
+                glide_i18n.t("ui.show_usage_locations_dialog.please_select_a_task", "Bitte zuerst eine Aufgabe, eine Liste, eine Seite, eine Notiz oder eine Zeichnung auswählen."),
             )
             return "break"
         _state, target_title = glide_objects.caption(target, index)
         pinboards = getattr(self.workspace, "pinboards", None) if hasattr(self, "workspace") else None
 
         theme = self.theme
-        dialog = glide_modal_session.create_dialog(self.root, f"Fundorte: {target_title}", background=theme["bg"],
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.show_usage_locations_dialog.locations", 'Fundorte: {target_title}', target_title=target_title), background=theme["bg"],
                                                  minsize=(560, 380))
         body = tk.Frame(dialog, bg=theme["bg"])
         body.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(
             body,
-            text=f"Fundorte: {target_title}",
+            text=glide_i18n.t("ui.show_usage_locations_dialog.locations", 'Fundorte: {target_title}', target_title=target_title),
             bg=theme["bg"],
             fg=theme["text"],
             font=app_font(15, "bold"),
@@ -36107,23 +36095,23 @@ class ListApp:
         def update_detail(_event=None):
             loc = current_selection()
             if loc is None:
-                detail_var.set("Fundort auswählen, um Details zu sehen oder direkt dorthin zu springen.")
+                detail_var.set(glide_i18n.t("ui.update_detail.select_a_location_to", "Fundort auswählen, um Details zu sehen oder direkt dorthin zu springen."))
                 return
             state_map = {
-                "active": "Aktiv",
-                "archived": "Archiviert",
-                "trash": "Im Papierkorb",
-                "missing": "Nicht gefunden",
+                "active": glide_i18n.t("ui.update_detail.active", "Aktiv"),
+                "archived": glide_i18n.t("feedback.archived", "Archiviert"),
+                "trash": glide_i18n.t("ui.refresh_tasks.in_the_trash", "Im Papierkorb"),
+                "missing": glide_i18n.t("ui.update_detail.not_found", "Nicht gefunden"),
             }
             parts = [
                 f"Art: {loc.kind_label}",
-                f"Fundort: {loc.title}",
+                glide_i18n.t("ui.update_detail.location", 'Fundort: {title}', title=loc.title),
                 f"Status: {state_map.get(loc.state, loc.state)}",
             ]
             if loc.context:
-                parts.append(f"Kontext: {loc.context}")
+                parts.append(glide_i18n.t("ui.update_detail.context", 'Kontext: {context}', context=loc.context))
             if loc.detail:
-                parts.append(f"Hinweis: {loc.detail}")
+                parts.append(glide_i18n.t("ui.update_detail.note", 'Hinweis: {detail}', detail=loc.detail))
             detail_var.set("  ·  ".join(parts))
 
         def reload_locations(*_args):
@@ -36144,16 +36132,15 @@ class ListApp:
                 if loc.detail:
                     row_text += f" ({loc.detail})"
                 if loc.state == "archived":
-                    row_text += " [Archiv]"
+                    row_text += glide_i18n.t("ui.reload_locations.archive", " [Archiv]")
                 elif loc.state == "trash":
-                    row_text += " [Papierkorb]"
+                    row_text += glide_i18n.t("ui.reload_locations.trash", " [Papierkorb]")
                 if q and q not in row_text.casefold():
                     continue
                 visible_locations.append(loc)
                 listbox.insert("end", row_text)
             header_var.set(
-                f"{len(all_locs)} Fundort(e) für {target_title} im gesamten Bestand gefunden"
-                + (f" ({len(visible_locations)} sichtbar)." if q else ".")
+                glide_i18n.t("ui.reload_locations.location_s_for_found", '{len} Fundort(e) für {target_title} im gesamten Bestand gefunden{wert}', len=len(all_locs), target_title=target_title, wert=glide_i18n.t("ui.reload_locations.visible", ' ({len} sichtbar).', len=len(visible_locations)) if q else ".")
             )
             if visible_locations:
                 listbox.selection_set(0)
@@ -36164,7 +36151,7 @@ class ListApp:
             if loc is None:
                 return
             if loc.state in ("trash", "missing") and loc.kind != "pinboard":
-                self.show_info("Fundort öffnen", "Einträge im Papierkorb können hier nicht direkt geöffnet werden.", parent=dialog)
+                self.show_info(glide_i18n.t("ui.jump_to_selected.open_location", "Fundort öffnen"), glide_i18n.t("ui.jump_to_selected.entries_in_the_trash", "Einträge im Papierkorb können hier nicht direkt geöffnet werden."), parent=dialog)
                 return
             dialog.destroy()
             self.open_usage_location(loc, side=side)
@@ -36172,7 +36159,7 @@ class ListApp:
         def link_selected_mention():
             loc = current_selection()
             if loc is None or loc.kind != "mention" or loc.mention is None:
-                self.show_info("Erwähnung verknüpfen", "Bitte eine unverknüpfte Text-Erwähnung in der Liste auswählen.", parent=dialog)
+                self.show_info(glide_i18n.t("ui.link_selected_mention.link_mention", "Erwähnung verknüpfen"), glide_i18n.t("ui.link_selected_mention.please_select_an_unlinked", "Bitte eine unverknüpfte Text-Erwähnung in der Liste auswählen."), parent=dialog)
                 return
             if self.link_unlinked_mention(target, loc.mention):
                 reload_locations()
@@ -36185,22 +36172,22 @@ class ListApp:
 
         buttons = tk.Frame(body, bg=theme["bg"])
         buttons.pack(fill="x", pady=(12, 0))
-        self._make_dialog_button(buttons, "Schließen", dialog.destroy, "muted").pack(side="right", padx=(6, 0))
+        self._make_dialog_button(buttons, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted").pack(side="right", padx=(6, 0))
         if target[0] == "list" and not getattr(self, "_data_read_only", False):
-            self._make_dialog_button(buttons, "Erwähnung verknüpfen", link_selected_mention, "muted", width=175).pack(
+            self._make_dialog_button(buttons, glide_i18n.t("ui.show_usage_locations_dialog.link_mention", "Erwähnung verknüpfen"), link_selected_mention, "muted", width=175).pack(
                 side="right", padx=(6, 0)
             )
         if not getattr(self, "_compact", None):
             self._make_dialog_button(
                 buttons,
-                "In Nebenansicht",
+                glide_i18n.t("ui.show_usage_locations_dialog.in_side_view", "In Nebenansicht"),
                 lambda: jump_to_selected(side=True),
                 "muted",
                 width=145,
             ).pack(side="right", padx=(6, 0))
         self._make_dialog_button(
             buttons,
-            "Öffnen",
+            glide_i18n.t("saved_view.manager.open", "Öffnen"),
             lambda: jump_to_selected(side=False),
             "confirm",
             width=110,
@@ -36242,17 +36229,17 @@ class ListApp:
                                highlightthickness=2 if value == day else 1)
         status = getattr(self, '_calendar_status', None)
         if status and status.winfo_exists():
-            status.configure(text='Bearbeitungstag: ' + self.format_due_display(day) + ' · Fälligkeit bleibt erhalten')
+            status.configure(text=glide_i18n.t("ui.calendar_choose_day.work_day_due_date", 'Bearbeitungstag: {format_due_display} · Fälligkeit bleibt erhalten', format_due_display=self.format_due_display(day)))
         if changed:
             self.refresh_page_actions(self.calendar_footer_actions())
 
     def calendar_footer_actions(self):
         day = self.format_due_display(self._calendar_selected_day)
-        return (('Einplanen · ' + day, self.calendar_plan_selection, 'accent', 190),
-                ('Tag entlasten …', self.show_day_relief, 'muted', 170),
-                ('Kalender als Belegzeiten …', self.show_busy_calendar_dialog, 'muted', 240),
-                ('Freies Zeitfenster …', self.calendar_free_slot, 'muted', 190),
-                ('Zur Startseite', self.set_home_view, 'muted', 150))
+        return ((glide_i18n.t("ui.calendar_footer_actions.schedule", 'Einplanen · {day}', day=day), self.calendar_plan_selection, 'accent', 190),
+                (glide_i18n.t("ui.render_day_proposal.lighten_the_day", 'Tag entlasten …'), self.show_day_relief, 'muted', 170),
+                (glide_i18n.t("ui.calendar_footer_actions.calendar_as_busy_times", 'Kalender als Belegzeiten …'), self.show_busy_calendar_dialog, 'muted', 240),
+                (glide_i18n.t("ui.calendar_footer_actions.free_time_slot", 'Freies Zeitfenster …'), self.calendar_free_slot, 'muted', 190),
+                (glide_i18n.t("ui.render_week_review.to_home", 'Zur Startseite'), self.set_home_view, 'muted', 150))
 
     def calendar_plan_selection(self, item_ids=None, day=None):
         if item_ids is None:
@@ -36339,26 +36326,24 @@ class ListApp:
         tree = getattr(self, '_calendar_pool', None)
         selected = list(tree.selection()) if tree and tree.winfo_exists() else []
         if len(selected) != 1:
-            self.show_warning('Zeitfenster', 'Eine Aufgabe aus der Planungsauswahl markieren.')
+            self.show_warning(glide_i18n.t("ui.calendar_free_slot.time_slot", 'Zeitfenster'), glide_i18n.t("ui.calendar_free_slot.mark_a_task_from", 'Eine Aufgabe aus der Planungsauswahl markieren.'))
             return False
         identity = selected[0]
         found = self.find_item_in_lists(identity)
         duration = found[0].get('estimated_minutes') if found else None
         if not duration:
-            self.show_warning('Zeitfenster', 'Zuerst den Aufwand der Aufgabe schätzen. Ohne Schätzung gibt es keinen Zeitvorschlag.')
+            self.show_warning(glide_i18n.t("ui.calendar_free_slot.time_slot", 'Zeitfenster'), glide_i18n.t("ui.calendar_free_slot.estimate_the_task_s", 'Zuerst den Aufwand der Aufgabe schätzen. Ohne Schätzung gibt es keinen Zeitvorschlag.'))
             return False
         day = self._calendar_selected_day
         items = [item for entry in self.planning_lists() for item in self.walk_items(entry.get('items', [])) if item['id'] != identity]
         try:
             slots = self.calendar_free_slots(items, day, duration)
         except ValueError as exc:
-            self.show_warning("Zeitfenster", str(exc))
+            self.show_warning(glide_i18n.t("ui.calendar_free_slot.time_slot", "Zeitfenster"), str(exc))
             return False
-        clock = self.themed_choice_dialog('Freie Zeitfenster',
-            '08:00–18:00 · Glide-Zeitblöcke mit Schätzung und gewählte ICS-Belegzeiten belegen Zeit.\n'
-            'Aufgaben ohne Schätzung sind nicht berücksichtigt; der gewählte Kalenderstand ist rein lesend.\n'
-            f'{self.format_due_display(day)} · {duration} Minuten · Auswählen plant die Aufgabe ein.',
-            [(start, f'{start}–{end} · Vorschlag: {start} für {duration} Minuten') for start, end in slots])
+        clock = self.themed_choice_dialog(glide_i18n.t("ui.calendar_free_slot.free_time_slots", 'Freie Zeitfenster'),
+            glide_i18n.t("ui.calendar_free_slot.08_00_18_00", '08:00–18:00 · Glide-Zeitblöcke mit Schätzung und gewählte ICS-Belegzeiten belegen Zeit.\nAufgaben ohne Schätzung sind nicht berücksichtigt; der gewählte Kalenderstand ist rein lesend.\n{format_due_display} · {duration} Minuten · Auswählen plant die Aufgabe ein.', format_due_display=self.format_due_display(day), duration=duration),
+            [(start, glide_i18n.t("ui.calendar_free_slot.suggestion_for_minutes", '{start}–{end} · Vorschlag: {start2} für {duration} Minuten', start=start, end=end, start2=start, duration=duration)) for start, end in slots])
         if clock is None:
             return False
         # Die modale Vorschau darf keine veraltete Belegung überschreiben.
@@ -36368,10 +36353,10 @@ class ListApp:
         try:
             current_slots = self.calendar_free_slots(current_items, day, duration)
         except ValueError as exc:
-            self.show_warning("Zeitfenster", str(exc))
+            self.show_warning(glide_i18n.t("ui.calendar_free_slot.time_slot", "Zeitfenster"), str(exc))
             return False
         if not found or identity not in active_ids or found[0].get('done') or found[0].get('estimated_minutes') != duration or (clock, next((end for start,end in slots if start == clock), '')) not in current_slots:
-            self.show_warning('Zeitfenster', 'Die Planung hat sich geändert. Bitte den Vorschlag neu öffnen.')
+            self.show_warning(glide_i18n.t("ui.calendar_free_slot.time_slot", 'Zeitfenster'), glide_i18n.t("ui.calendar_free_slot.the_planning_has_changed", 'Die Planung hat sich geändert. Bitte den Vorschlag neu öffnen.'))
             return False
         item = found[0]
         previous = (item.get('planned_date'), item.get('planned_time'))
@@ -36432,11 +36417,11 @@ class ListApp:
         title = f'{week[0]:%d.%m.}–{week[-1]:%d.%m.%Y}' if mode == 'week' else f'{self.MONTH_NAMES[anchor.month-1]} {anchor.year}'
         label(panel, title, 15, True)
         nav = ButtonFlow(panel, bg=theme['bg']); nav.pack(fill='x', pady=(0, 10))
-        for text, command in [('Vorherige', lambda: self.calendar_change_view(-1)), ('Heute', lambda: self.calendar_change_view(today=True)),
-                              ('Nächste', lambda: self.calendar_change_view(1)), ('Woche', lambda: self.calendar_change_view(mode='week')),
-                              ('Monat', lambda: self.calendar_change_view(mode='month')), ('Wochenrückblick', self.calendar_open_week_review)]:
+        for text, command in [(glide_i18n.t("ui.render_calendar.previous", 'Vorherige'), lambda: self.calendar_change_view(-1)), (glide_i18n.t("menu.view.today", 'Heute'), lambda: self.calendar_change_view(today=True)),
+                              (glide_i18n.t("ui.render_calendar.next", 'Nächste'), lambda: self.calendar_change_view(1)), (glide_i18n.t("ui.render_calendar.week", 'Woche'), lambda: self.calendar_change_view(mode='week')),
+                              (glide_i18n.t("ui.render_calendar.month", 'Monat'), lambda: self.calendar_change_view(mode='month')), (glide_i18n.t("ui.render_calendar.week_review", 'Wochenrückblick'), self.calendar_open_week_review)]:
             nav.add(self._make_dialog_button(nav, text, command, 'muted', width=130, height=32))
-        self._calendar_status = label(panel, 'Bearbeitungstag: ' + self.format_due_display(getattr(self, '_calendar_selected_day', date.today().isoformat())) + ' · Fälligkeit bleibt erhalten', 9, color='muted')
+        self._calendar_status = label(panel, glide_i18n.t("ui.render_calendar.work_day_due_date", 'Bearbeitungstag: {format_due_display} · Fälligkeit bleibt erhalten', format_due_display=self.format_due_display(getattr(self, '_calendar_selected_day', date.today().isoformat()))), 9, color='muted')
         days_panel = tk.Frame(panel, bg=theme['bg']); days_panel.pack(fill='x', pady=(0, 12))
         if mode == 'month':
             for column in range(7):
@@ -36469,27 +36454,27 @@ class ListApp:
                     ProgressBar(card, value=summary['minutes'], maximum=summary['capacity'],
                         bg_color=theme['card'], track_color=theme['input'], fill_color=theme['delete'] if summary['remaining'] < 0 else theme.get('ui_accent', theme['accent']), height=6).pack(fill='x', padx=10, pady=(2, 4))
                 else:
-                    label(card, '0 Minuten frei' if summary.get('remaining') is not None else
-                          'Kalenderzeit unbekannt' if summary.get('calendar_state') in ('loading','error','closed') else
-                          'Kapazität unbekannt', 8, color='muted', surface='card')
+                    label(card, glide_i18n.t("ui.render_calendar.0_minutes_free", '0 Minuten frei') if summary.get('remaining') is not None else
+                          glide_i18n.t("ui.render_calendar.calendar_time_unknown", 'Kalenderzeit unbekannt') if summary.get('calendar_state') in ('loading','error','closed') else
+                          glide_i18n.t("ui.render_calendar.capacity_unknown", 'Kapazität unbekannt'), 8, color='muted', surface='card')
             day_items = buckets[iso]
             if mode == 'month':
                 planned = sum(item.get('planned_date') == iso for _,item in day_items)
                 due = sum(self.normalize_due(item.get('due')) == iso for _,item in day_items)
-                label(card, f'{planned} geplant\n{due} fällig', 8, color='muted', surface='card')
+                label(card, glide_i18n.t("ui.render_calendar.planned_due", '{planned} geplant\n{due} fällig', planned=planned, due=due), 8, color='muted', surface='card')
                 tk.Frame(card, bg=theme['card'], height=18).pack(fill='x')
                 moon = moon_events.get(day)
                 if moon:
                     marker = tk.Label(card, text=self.ICONS[moon['icon']], bg=theme['card'], fg=theme['muted'], font=icon_font(10))
                     marker.place(relx=1, rely=1, x=-5, y=-5, anchor='se')
                     marker.moon_day, marker.moon_name = day, moon['name']
-                    self.add_tooltip(marker, moon['name'] + ' · berechneter lokaler Kalendertag')
+                    self.add_tooltip(marker, glide_i18n.t("ui.render_calendar.calculated_local_calendar_day", '{name} · berechneter lokaler Kalendertag', name=moon['name']))
             else:
                 for entry, item in day_items[:5]:
-                    fields = ('Geplant ' + (item.get('planned_time') or '') if item.get('planned_date') == iso else '')
+                    fields = (glide_i18n.t("ui.render_calendar.planned", 'Geplant {wert}', wert=item.get('planned_time') or '') if item.get('planned_date') == iso else '')
                     if self.normalize_due(item.get('due')) == iso:
-                        fields += (' · ' if fields else '') + 'Fällig ' + (item.get('due_time') or '')
-                    title = ('Erledigt · ' if item.get('done') else '') + item['text'].splitlines()[0] + ' · ' + fields.strip()
+                        fields += glide_i18n.t("ui.render_calendar.due", '{wert}Fällig {wert2}', wert=' · ' if fields else '', wert2=item.get('due_time') or '')
+                    title = (glide_i18n.t("ui.render_calendar.done", 'Erledigt · ') if item.get('done') else '') + item['text'].splitlines()[0] + ' · ' + fields.strip()
                     widget = label(card, title, 9, surface='card')
                     widget.configure(cursor='hand2', takefocus=True)
                     self._calendar_task_widgets[(iso,item['id'])] = widget
@@ -36499,19 +36484,19 @@ class ListApp:
                     widget.bind('<B1-Motion>', self.calendar_drag_motion)
                     widget.bind('<ButtonRelease-1>', self.calendar_drag_end)
                 if len(day_items) > 5:
-                    more = self._make_dialog_button(card, f'Alle {len(day_items)} Aufgaben …', lambda day=iso: self.calendar_show_day(day), 'muted', width=180, height=30)
+                    more = self._make_dialog_button(card, glide_i18n.t("ui.render_calendar.all_tasks", 'Alle {len} Aufgaben …', len=len(day_items)), lambda day=iso: self.calendar_show_day(day), 'muted', width=180, height=30)
                     more.pack(anchor='w', padx=8, pady=4)
-        label(panel, 'Planungsauswahl · markieren, Tag wählen und einplanen; oder auf einen Tag ziehen.', 10, True)
+        label(panel, glide_i18n.t("ui.render_calendar.planning_selection_mark_choose", 'Planungsauswahl · markieren, Tag wählen und einplanen; oder auf einen Tag ziehen.'), 10, True)
         pool_frame = tk.Frame(panel, bg=theme['bg']); pool_frame.pack(fill='x', pady=(0, 8))
         pool = GlideTreeview(pool_frame, columns=('date',), show='tree headings', height=5, selectmode='extended', style=self.tree.cget('style'))
         self._calendar_pool = pool
         self._calendar_pool_bar = self._attach_field_scrollbar(pool_frame, pool, pad_y=0)
-        pool.heading('#0', text='Offene Aufgabe'); pool.heading('date', text='Bearbeitungstag')
+        pool.heading('#0', text=glide_i18n.t("ui.render_calendar.open_task", 'Offene Aufgabe')); pool.heading('date', text=glide_i18n.t("ui.edit_task_field.work_day", 'Bearbeitungstag'))
         pool.column('#0', width=260, minwidth=130, stretch=True); pool.column('date', width=130, minwidth=100, stretch=False)
         pool.pack(side='left', fill='x', expand=True)
         for entry,item in entries:
             if not item.get('done'):
-                pool.insert('', 'end', iid=item['id'], text=item['text'].splitlines()[0] + ' · ' + entry['title'], values=(self.format_due_display(item.get('planned_date')) if item.get('planned_date') else 'Ohne Tag',))
+                pool.insert('', 'end', iid=item['id'], text=item['text'].splitlines()[0] + ' · ' + entry['title'], values=(self.format_due_display(item.get('planned_date')) if item.get('planned_date') else glide_i18n.t("ui.render_calendar.no_day", 'Ohne Tag'),))
         pool.bind('<Return>', lambda event: self.calendar_plan_selection())
         pool.bind('<ButtonPress-1>', self.calendar_pool_press)
         pool.bind('<B1-Motion>', self.calendar_drag_motion); pool.bind('<ButtonRelease-1>', self.calendar_drag_end)
@@ -36523,8 +36508,8 @@ class ListApp:
         values = [(entry, item) for entry in self.planning_lists() for item in self.walk_items(entry.get('items', []))
                   if self.is_schedulable_item(item) and (item.get('planned_date') == day or self.normalize_due(item.get('due')) == day)]
         choices = [(item['id'], item['text'].splitlines()[0] + ' · ' + entry['title'] + ' · '
-                    + ('geplant' if item.get('planned_date') == day else 'fällig')) for entry,item in values]
-        identity = self.themed_choice_dialog('Aufgaben am ' + self.format_due_display(day), 'Aufgabe auswählen und öffnen:', choices)
+                    + (glide_i18n.t("ui.calendar_show_day.planned", 'geplant') if item.get('planned_date') == day else glide_i18n.t("ui.calendar_show_day.due", 'fällig'))) for entry,item in values]
+        identity = self.themed_choice_dialog(glide_i18n.t("ui.calendar_show_day.tasks_on", 'Aufgaben am {format_due_display}', format_due_display=self.format_due_display(day)), glide_i18n.t("ui.calendar_show_day.select_and_open_a", 'Aufgabe auswählen und öffnen:'), choices)
         if identity:
             self.open_object_reference(glide_objects.uri('item', identity))
 
@@ -36534,15 +36519,15 @@ class ListApp:
         target = self.calendar_target_list()
         if target is None:
             return False
-        details = self.new_item_dialog('Neue Aufgabe am ' + self.format_due_display(day),
-            'Fälligkeit und Bearbeitungstag sind unabhängig.', allow_list_choice=True,
+        details = self.new_item_dialog(glide_i18n.t("ui.calendar_add_task.new_task_on", 'Neue Aufgabe am {format_due_display}', format_due_display=self.format_due_display(day)),
+            glide_i18n.t("ui.calendar_add_task.due_date_and_work", 'Fälligkeit und Bearbeitungstag sind unabhängig.'), allow_list_choice=True,
             default_list_id=target['id'], default_due=day if due else None,
             default_planned=None if due else day)
         if details is None:
             return False
         target = next((entry for entry in self.planning_lists() if entry['id'] == (details.get('list_id') or target['id'])), None)
         if target is None:
-            self.show_warning('Neue Aufgabe', 'Die Zielliste ist inzwischen nicht mehr verfügbar.')
+            self.show_warning(glide_i18n.t("board.action.new_task", 'Neue Aufgabe'), glide_i18n.t("ui.calendar_add_task.the_target_list_is", 'Die Zielliste ist inzwischen nicht mehr verfügbar.'))
             return False
         old = copy.deepcopy(self.lists)
         created = self.build_item_from_dialog(details)
@@ -36565,9 +36550,9 @@ class ListApp:
     def calendar_day_menu(self, day, event):
         self.calendar_choose_day(day)
         menu = self._new_themed_popup_menu()
-        menu.add_command(label='Aufgaben dieses Tages …', command=lambda: self.calendar_show_day(day))
-        menu.add_command(label='Aufgabe für diesen Bearbeitungstag …', command=lambda: self.calendar_add_task(day))
-        menu.add_command(label='Aufgabe mit dieser Fälligkeit …', command=lambda: self.calendar_add_task(day, due=True))
+        menu.add_command(label=glide_i18n.t("ui.calendar_day_menu.tasks_of_this_day", 'Aufgaben dieses Tages …'), command=lambda: self.calendar_show_day(day))
+        menu.add_command(label=glide_i18n.t("ui.calendar_day_menu.task_for_this_work", 'Aufgabe für diesen Bearbeitungstag …'), command=lambda: self.calendar_add_task(day))
+        menu.add_command(label=glide_i18n.t("ui.calendar_day_menu.task_with_this_due", 'Aufgabe mit dieser Fälligkeit …'), command=lambda: self.calendar_add_task(day, due=True))
         try:
             menu.tk_popup(event.x_root, event.y_root)
         finally:
@@ -36585,7 +36570,7 @@ class ListApp:
             return False
         target = self.calendar_target_list()
         if target is None:
-            self.show_info('Neue Aufgabe', 'Es gibt noch keine Liste, in der die Aufgabe angelegt werden könnte.')
+            self.show_info(glide_i18n.t("board.action.new_task", 'Neue Aufgabe'), glide_i18n.t("ui.add_task_with_due.there_is_no_list", 'Es gibt noch keine Liste, in der die Aufgabe angelegt werden könnte.'))
             return False
         default_id = target.get('id')
         if parent_dialog is not None:
@@ -36594,8 +36579,8 @@ class ListApp:
             except tk.TclError:
                 pass
         try:
-            details = self.new_item_dialog(f"Neue Aufgabe am {day.strftime('%d.%m.%Y')}",
-                'Die Fälligkeit ist bereits eingetragen. Zielliste, Wichtigkeit, Farbe und Labels lassen sich hier gleich mitgeben.',
+            details = self.new_item_dialog(glide_i18n.t("ui.add_task_with_due.new_task_on", 'Neue Aufgabe am {strftime}', strftime=day.strftime('%d.%m.%Y')),
+                glide_i18n.t("ui.add_task_with_due.the_due_date_is", 'Die Fälligkeit ist bereits eingetragen. Zielliste, Wichtigkeit, Farbe und Labels lassen sich hier gleich mitgeben.'),
                 allow_list_choice=True, default_list_id=default_id, default_due=day.isoformat())
         finally:
             if callable(restore_grab):
@@ -36852,7 +36837,7 @@ class ListApp:
                     x, y = int(float(info.get("x") or 0)), int(float(info.get("y") or 0))
                     breite = int(float(info.get("width") or entry.winfo_reqwidth()))
                     hoehe = int(float(info.get("height") or entry.winfo_reqheight()))
-                    platz = max(44, ui_font_object(root=self.root, font=counter.cget("font")).measure("12 zu viel") + 8)
+                    platz = max(44, ui_font_object(root=self.root, font=counter.cget("font")).measure(glide_i18n.t("ui.platzieren.12_too_many", "12 zu viel")) + 8)
                     entry.place_configure(width=max(60, breite - platz))
                     counter.configure(bg=entry.cget("bg"))
                     counter.place(in_=master, x=x + max(60, breite - platz), y=y, width=platz, height=hoehe)
@@ -37027,11 +37012,11 @@ class ListApp:
         try:
             cells = bytes.fromhex("".join(document["rows"]))
         except (TypeError, KeyError, ValueError):
-            return "Zeichnung"
+            return glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung")
         painted = len(cells) - cells.count(0)
         if not painted:
-            return "Zeichnung · leer"
-        return f"Zeichnung · {painted:,} von {len(cells):,} Zellen bemalt".replace(",", ".")
+            return glide_i18n.t("ui.drawing_summary.drawing_empty", "Zeichnung · leer")
+        return glide_i18n.t("ui.drawing_summary.drawing_of_cells_painted", 'Zeichnung · {painted} von {len} Zellen bemalt', painted=f'{painted:,}', len=f'{len(cells):,}').replace(",", ".")
 
     @classmethod
     def list_accepts_items(cls, entry):
@@ -37125,10 +37110,10 @@ class ListApp:
         for ancestor in reversed(self.folder_ancestor_ids(folder_id)):
             folder = self.get_folder(ancestor)
             if folder:
-                titles.append(str(folder.get("title") or "Ordner").strip() or "Ordner")
+                titles.append(str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
         folder = self.get_folder(folder_id)
         if folder:
-            titles.append(str(folder.get("title") or "Ordner").strip() or "Ordner")
+            titles.append(str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
         return titles
 
     def list_path_title(self, entry, ellipsize=False):
@@ -37140,7 +37125,7 @@ class ListApp:
         """
         if not isinstance(entry, dict):
             return ""
-        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
         parts = self.folder_path_titles(entry.get("folder_id")) + [title]
         if ellipsize:
             parts = [self.ellipsize_sidebar_title(part) for part in parts]
@@ -37731,7 +37716,7 @@ class ListApp:
         self.active_folder_id = None
         self.active_list_id = target["id"]
         self.items = target.setdefault("items", [])
-        self.app_title = target.get("title", "Meine Liste").strip() or "Meine Liste"
+        self.app_title = target.get("title", "Meine Liste").strip() or glide_i18n.t("ui.set_active_list.my_list", "Meine Liste")
         if not self.is_inbox_list(target):
             self.note_page_opened("list", target["id"])
         self.finish_page_switch(refresh=refresh)
@@ -37749,13 +37734,13 @@ class ListApp:
         current = self.current_list()
         if self.is_surface_list(current):
             # Zeichnung und Galerie haben keine Zeilen; die Tabelle bliebe leer.
-            self.show_info("Tabellenansicht", "Zeichnungen und Galerien haben keine Tabellenansicht.")
+            self.show_info(glide_i18n.t("ui.set_table_view.table_view", "Tabellenansicht"), glide_i18n.t("ui.set_table_view.drawings_and_galleries_have", "Zeichnungen und Galerien haben keine Tabellenansicht."))
             return "break"
         self.view_mode = self.TABLE_VIEW
         self.active_folder_id = None
         self.settings.setdefault("active_tab", {})["list:" + str(self.active_list_id)] = "list"
         self.items = current.setdefault("items", [])
-        self.app_title = str(current.get("title") or "Meine Liste").strip() or "Meine Liste"
+        self.app_title = str(current.get("title") or glide_i18n.t("ui.set_table_view.my_list", "Meine Liste")).strip() or glide_i18n.t("ui.set_table_view.my_list", "Meine Liste")
         self.finish_page_switch(refresh=refresh)
         return "break"
 
@@ -37924,9 +37909,9 @@ class ListApp:
         if knopf is None:
             return
         compact = not getattr(self, "filters_visible", True)
-        knopf.set_text(self.ICONS["details"] if compact else f"Anzeige: {self.detail_mode_name()}")
+        knopf.set_text(self.ICONS["details"] if compact else glide_i18n.t("ui.sync_detail_button.display", 'Anzeige: {detail_mode_name}', detail_mode_name=self.detail_mode_name()))
         knopf.configure(width=44 if compact else 176)
-        self.add_tooltip(knopf, "Wie viel eine Zeile zeigt – Checklisten, Anhänge und Beschreibung")
+        self.add_tooltip(knopf, glide_i18n.t("ui.sync_detail_button.how_much_a_row", "Wie viel eine Zeile zeigt – Checklisten, Anhänge und Beschreibung"))
 
     def is_saved_table_view(self):
         return (self.view_mode == 'saved_filter' and hasattr(self, 'saved_filters')
@@ -38123,7 +38108,7 @@ class ListApp:
             elif column == "checklist":
                 values.append(self.format_checklist_progress(item) or "—")
             elif column == "status":
-                values.append("Erledigt" if item.get("done") else "Offen")
+                values.append(glide_i18n.t("inspector.done", "Erledigt") if item.get("done") else glide_i18n.t("ui.refresh.open", "Offen"))
         return tuple(values)
 
     DIALOG_TEXT_WIDTH = 460
@@ -38169,19 +38154,19 @@ class ListApp:
             # Bis 29.09.2026 blieb der Menüeintrag außerhalb der Tabelle still
             # (R11). Jetzt wechselt er in die Tabelle und öffnet das Fenster.
             if self.view_mode != "list" or not self.lists or not self.list_accepts_items(self.current_list()):
-                self.show_info("Tabellenspalten", "Öffne zuerst eine Aufgaben- oder Notizliste.")
+                self.show_info(glide_i18n.t("ui.show_table_columns_dialog.table_columns", "Tabellenspalten"), glide_i18n.t("ui.show_table_columns_dialog.open_a_task_or", "Öffne zuerst eine Aufgaben- oder Notizliste."))
                 return "break"
             self.set_table_view()
             if self.view_mode != self.TABLE_VIEW:
                 return "break"
-        dialog = self._new_dialog("Tabellenspalten")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_table_columns_dialog.table_columns", "Tabellenspalten"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=24, pady=22)
         self.register_theme_widget(outer, "bg")
-        self.dialog_label(outer, "Tabellenspalten", bold=True, size=16)
-        self.dialog_label(outer, "Die Auswahl gilt nur für die aktuell geöffnete Liste. "
+        self.dialog_label(outer, glide_i18n.t("ui.show_table_columns_dialog.table_columns", "Tabellenspalten"), bold=True, size=16)
+        self.dialog_label(outer, glide_i18n.t("ui.show_table_columns_dialog.the_choice_applies_only", "Die Auswahl gilt nur für die aktuell geöffnete Liste. "
                                  "Spaltenbreiten lassen sich in der Tabelle an den Trennlinien ziehen; "
-                                 "ein Klick auf eine Überschrift sortiert auf-, ab- und wieder in Listenreihenfolge.",
+                                 "ein Klick auf eine Überschrift sortiert auf-, ab- und wieder in Listenreihenfolge."),
                           color="muted", pady=(4, 14))
         selected = set(self.table_columns_for_list())
         variables = {}
@@ -38214,10 +38199,10 @@ class ListApp:
         def reset_and_close():
             dialog.destroy()
             self.reset_table_columns()
-        buttons.add(self._make_dialog_button(buttons, "Breiten und Sortierung zurücksetzen",
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.show_table_columns_dialog.reset_widths_and_sorting", "Breiten und Sortierung zurücksetzen"),
                                              reset_and_close, "clear", width=280))
-        buttons.add(self._make_dialog_button(buttons, "Abbrechen", dialog.destroy, "muted"))
-        buttons.add(self._make_dialog_button(buttons, "Speichern", submit, "confirm"))
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("button.save", "Speichern"), submit, "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=520, min_height=320)
         self._schedule_windows_chrome_theme(dialog)
@@ -38503,16 +38488,16 @@ class ListApp:
             return target
         text = f"{self.WEEKDAY_NAMES[parsed.weekday()]}, {parsed.strftime('%d.%m.%Y')}"
         if target == date.today().isoformat():
-            text += " · heute"
+            text += glide_i18n.t("ui.format_plan_day.today", " · heute")
         return text
 
     def plan_day_title(self, day=None):
         """Titel der Tagesansicht: „Heute“ am heutigen Tag, sonst der Tagesplan des Tags (D14)."""
         target = self.normalize_due(day) or self.plan_day()
         if target != date.today().isoformat():
-            return f"Tagesplan · {self.format_plan_day(target)}"
+            return glide_i18n.t("ui.plan_day_title.day_plan", 'Tagesplan · {format_plan_day}', format_plan_day=self.format_plan_day(target))
         parsed = date.today()
-        return f"Heute · {self.WEEKDAY_NAMES[parsed.weekday()]}, {parsed.strftime('%d.%m.%Y')}"
+        return glide_i18n.t("ui.plan_day_title.today", 'Heute · {wert}, {strftime}', wert=self.WEEKDAY_NAMES[parsed.weekday()], strftime=parsed.strftime('%d.%m.%Y'))
 
     def count_today_view(self):
         """Zahl hinter „Heute“: alle Aufgaben, die „Heute“ ohne Filter zeigt – ohne den Eingang."""
@@ -38534,14 +38519,14 @@ class ListApp:
                 "proposal": self.start_day_proposal, "focus": self.start_focus_selected}
         return self.show_option_panel(
             knopf,
-            (("review", "Tagesbeginn …", "Überfälliges, Liegengebliebenes und den Eingang Punkt für Punkt entscheiden"),
-             ("proposal", "Was passt heute?", "Begründeten Vorschlag für die freie Tageskapazität auswählen"),
-             ("focus", "Fokus starten", "Auswahl oder nächste Aufgabe mit pausierbarer Zeiterfassung"),
-             ("close", "Tagesabschluss …", "Offen Gebliebenes weitergeben und den Tag in die Tagesnotiz übernehmen"),
-             ("relief", "Tag entlasten …", "Ausgewählte Aufgaben mit Vorher-/Nachher-Bilanz umplanen"),
-             ("hints", "Tageshinweise …", "Verpasste oder verschobene Hinweise ausdrücklich öffnen"),
-             ("grid", "Raster umschalten", "Tagesraster ein- oder ausblenden"),
-             ("display", "Anzeige", "Informationsumfang der Aufgabenzeilen wählen")),
+            (("review", glide_i18n.t("ui.show_plan_day_mode_menu.day_start", "Tagesbeginn …"), glide_i18n.t("ui.show_plan_day_mode_menu.decide_overdue_items_leftovers", "Überfälliges, Liegengebliebenes und den Eingang Punkt für Punkt entscheiden")),
+             ("proposal", glide_i18n.t("ui.render_day_proposal.what_fits_today", "Was passt heute?"), glide_i18n.t("ui.show_plan_day_mode_menu.choose_a_reasoned_suggestion", "Begründeten Vorschlag für die freie Tageskapazität auswählen")),
+             ("focus", glide_i18n.t("ui.build_home_task_menu.start_focus", "Fokus starten"), glide_i18n.t("ui.show_plan_day_mode_menu.selection_or_next_task", "Auswahl oder nächste Aufgabe mit pausierbarer Zeiterfassung")),
+             ("close", glide_i18n.t("ui.show_plan_day_mode_menu.day_close", "Tagesabschluss …"), glide_i18n.t("ui.show_plan_day_mode_menu.pass_on_what_stayed", "Offen Gebliebenes weitergeben und den Tag in die Tagesnotiz übernehmen")),
+             ("relief", glide_i18n.t("ui.render_day_proposal.lighten_the_day", "Tag entlasten …"), glide_i18n.t("ui.show_plan_day_mode_menu.reschedule_selected_tasks_with", "Ausgewählte Aufgaben mit Vorher-/Nachher-Bilanz umplanen")),
+             ("hints", glide_i18n.t("ui.show_plan_day_mode_menu.daily_hints", "Tageshinweise …"), glide_i18n.t("ui.show_plan_day_mode_menu.open_missed_or_postponed", "Verpasste oder verschobene Hinweise ausdrücklich öffnen")),
+             ("grid", glide_i18n.t("ui.show_plan_day_mode_menu.toggle_grid", "Raster umschalten"), glide_i18n.t("ui.show_plan_day_mode_menu.show_or_hide_the", "Tagesraster ein- oder ausblenden")),
+             ("display", glide_i18n.t("ui.show_plan_day_mode_menu.display", "Anzeige"), glide_i18n.t("ui.show_plan_day_mode_menu.choose_how_much_information", "Informationsumfang der Aufgabenzeilen wählen"))),
             None, lambda schluessel: modi[schluessel]())
 
     def set_plan_day_view(self, refresh=True, day=None):
@@ -38774,7 +38759,7 @@ class ListApp:
         self.sidebar_title = self.register_theme_widget(
             tk.Label(
                 self.sidebar_heading_frame,
-                text="Listen",
+                text=glide_i18n.t("sidebar.lists", "Listen"),
                 font=self.sidebar_section_font(),
                 bg=self.theme["card"],
                 fg=self.theme["text"],
@@ -38799,7 +38784,7 @@ class ListApp:
                 widget.bind("<Button-1>", lambda _event: self.set_library_view())
             widget.bind("<Enter>", lambda _event: self.update_sidebar_heading(hover=True))
             widget.bind("<Leave>", lambda _event: self.update_sidebar_heading(hover=False))
-        self.add_tooltip(self.sidebar_heading_icon, "Listen ein- oder ausklappen")
+        self.add_tooltip(self.sidebar_heading_icon, glide_i18n.t("ui.create_list_sidebar.expand_or_collapse_lists", "Listen ein- oder ausklappen"))
         for sequence in ("<Return>", "<space>"):
             self.sidebar_heading_icon.bind(sequence, lambda _event: self.toggle_sidebar_section("lists"))
         self.sidebar_heading_icon.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
@@ -38808,7 +38793,7 @@ class ListApp:
             self.sidebar_title.bind(sequence, lambda _event: self.set_library_view())
         self.sidebar_title.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
         self.sidebar_title.bind("<FocusOut>", lambda _event: self.update_sidebar_heading(hover=False))
-        self.add_tooltip(self.sidebar_title, "Alle Listen und Ordner als Kacheln anzeigen")
+        self.add_tooltip(self.sidebar_title, glide_i18n.t("ui.create_list_sidebar.show_all_lists_and", "Alle Listen und Ordner als Kacheln anzeigen"))
 
         self.add_list_button = self.make_button(
             title_row,
@@ -38823,7 +38808,7 @@ class ListApp:
             outline=False,
         )
         self.add_list_button.pack(side="right")
-        self.add_tooltip(self.add_list_button, "Neu anlegen oder importieren")
+        self.add_tooltip(self.add_list_button, glide_i18n.t("ui.create_list_sidebar.create_new_or_import", "Neu anlegen oder importieren"))
         # 3.30 (AO-020) stand hier ein Pfeil zum Einklappen von „Listen und
         # Ordner“. Er ist seit dem 26.09.2026 entfernt (SIDEBAR_SECTIONS).
 
@@ -39192,7 +39177,7 @@ class ListApp:
                 entry = next((value for value in self.lists if value.get("id") == row_id), None)
                 if entry is None:
                     continue
-                title = str(entry.get("title") or "Meine Liste").strip() or "Meine Liste"
+                title = str(entry.get("title") or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")).strip() or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")
                 count = (len(entry.get("attachments") or []) if self.is_gallery_list(entry)
                          else self.list_item_count(entry))
                 if tree is not system_tree and entry.get("folder_id"):
@@ -39201,27 +39186,27 @@ class ListApp:
                 folder = self.get_folder(row_id)
                 if folder is None:
                     continue
-                title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+                title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
                 count = self.folder_task_count(row_id)
                 depth = self.folder_depth(row_id)
             elif row == ("view", "in_progress"):
-                title, count = "Demnächst", self.count_due_tasks()
+                title, count = glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), self.count_due_tasks()
             elif row == ("view", self.PLAN_DAY_VIEW):
-                title, count = "Heute", self.count_today_view()
+                title, count = glide_i18n.t("menu.view.today", "Heute"), self.count_today_view()
             elif row == ("view", "overdue"):
-                title, count = "Verspätet", len(self.get_overdue_items(apply_filters=False))
+                title, count = glide_i18n.t("ui.refresh_sidebar_row_texts.late", "Verspätet"), len(self.get_overdue_items(apply_filters=False))
             elif row == ("view", self.HOME_VIEW):
-                title, count = "Startseite", None
+                title, count = glide_i18n.t("menu.view.home", "Startseite"), None
             elif row == ("view", self.HISTORY_VIEW):
-                title, count = "Verlauf", len(self.normalize_history_entries(self.history))
+                title, count = glide_i18n.t("menu.view.history", "Verlauf"), len(self.normalize_history_entries(self.history))
             elif row == ("view", self.PAGES_VIEW):
-                title, count = "Seiten", len(self.page_entries())
+                title, count = glide_i18n.t("sidebar.pages", "Seiten"), len(self.page_entries())
             elif row == ("view", self.TEMPLATE_VIEW):
-                title, count = "Vorlagen", len(getattr(self, "templates", []))
+                title, count = glide_i18n.t("menu.view.templates", "Vorlagen"), len(getattr(self, "templates", []))
             elif row == ("view", self.LABELS_VIEW):
-                title, count = "Labels", self.count_labelled_items()
+                title, count = glide_i18n.t("menu.view.labels", "Labels"), self.count_labelled_items()
             elif row == ("view", "trash"):
-                title, count = "Papierkorb", len(self.trash)
+                title, count = glide_i18n.t("menu.view.trash", "Papierkorb"), len(self.trash)
             else:
                 continue
             try:
@@ -39492,8 +39477,8 @@ class ListApp:
         """
         (self.pages_title_row, self.pages_heading_frame, self.pages_heading_icon, self.pages_title,
          self.add_pages_button, self.pages_listbox) = self.build_sidebar_section(
-            "pages", "Seiten", self.set_pages_view, "Alle Seiten mit Favoriten und Zuletzt geöffnet",
-            self.show_pages_add_menu, "Neue Seite, Buch oder Import", self.SIDEBAR_SECTION_GAP)
+            "pages", glide_i18n.t("sidebar.pages", "Seiten"), self.set_pages_view, glide_i18n.t("ui.create_pages_sidebar.all_pages_with_favorites", "Alle Seiten mit Favoriten und Zuletzt geöffnet"),
+            self.show_pages_add_menu, glide_i18n.t("ui.create_pages_sidebar.new_page_book_or", "Neue Seite, Buch oder Import"), self.SIDEBAR_SECTION_GAP)
 
     def create_notes_sidebar(self):
         """„Notizen +“ unter den Listen (29.09.2026), gebaut wie „Seiten +“.
@@ -39504,14 +39489,14 @@ class ListApp:
         """
         (self.notes_title_row, self.notes_heading_frame, self.notes_heading_icon, self.notes_title,
          self.add_notes_button, self.notes_listbox) = self.build_sidebar_section(
-            "notes", "Notizen", self.set_notes_view, "Alle Notizen und Notizbücher",
-            self.show_notes_add_menu, "Neue Notiz, Vorlage oder Notizbuch", self.SIDEBAR_LISTS_GAP)
+            "notes", glide_i18n.t("sidebar.notes", "Notizen"), self.set_notes_view, glide_i18n.t("ui.create_notes_sidebar.all_notes_and_notebooks", "Alle Notizen und Notizbücher"),
+            self.show_notes_add_menu, glide_i18n.t("ui.create_notes_sidebar.new_note_template_or", "Neue Notiz, Vorlage oder Notizbuch"), self.SIDEBAR_LISTS_GAP)
 
     def create_drawings_sidebar(self):
         (self.drawings_title_row, self.drawings_heading_frame, self.drawings_heading_icon, self.drawings_title,
          self.add_drawings_button, self.drawings_listbox) = self.build_sidebar_section(
-            "drawings", "Zeichnungen", self.set_drawings_view, "Alle Zeichnungen",
-            self.show_drawings_add_menu, "Neue Zeichnung oder Ordner", self.SIDEBAR_LISTS_GAP)
+            "drawings", glide_i18n.t("sidebar.drawings", "Zeichnungen"), self.set_drawings_view, glide_i18n.t("ui.create_drawings_sidebar.all_drawings", "Alle Zeichnungen"),
+            self.show_drawings_add_menu, glide_i18n.t("ui.create_drawings_sidebar.new_drawing_or_folder", "Neue Zeichnung oder Ordner"), self.SIDEBAR_LISTS_GAP)
 
     def sidebar_policy(self):
         return self.render_cached("sidebar_policy", lambda: glide_sidebar.SidebarPolicy(
@@ -39562,8 +39547,8 @@ class ListApp:
 
     def show_drawings_add_menu(self, event=None):
         menu = self._new_themed_popup_menu()
-        menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", None, "drawings"))
-        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog(
+        menu.add_command(label=glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), command=lambda: self.create_in_sidebar_section("drawing", None, "drawings"))
+        menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_folder", "Neuer Ordner …"), command=lambda: self.create_container_dialog(
             "folder", sidebar_section="drawings"))
         self._popup_at_widget(menu, self.add_drawings_button)
         return "break"
@@ -39580,12 +39565,12 @@ class ListApp:
         card.pack(fill="x")
         body = tk.Frame(card.inner, bg=self.theme["card"])
         body.pack(fill="both", expand=True, padx=14, pady=12)
-        self._make_dialog_button(body, "Neue Zeichnung", lambda: self.create_in_sidebar_section("drawing", None, "drawings"), "confirm").pack(anchor="w", pady=(0, 12))
+        self._make_dialog_button(body, glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), lambda: self.create_in_sidebar_section("drawing", None, "drawings"), "confirm").pack(anchor="w", pady=(0, 12))
         entries = sorted((e for e in self.lists if self.is_drawing_list(e) and not self.is_archived_entry(e)),
                          key=lambda e: str(e.get("title", "")).casefold())
-        rows = [(None, e.get("title") or "Zeichnung", lambda lid=e["id"]: self.set_active_list(lid),
+        rows = [(None, e.get("title") or glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung"), lambda lid=e["id"]: self.set_active_list(lid),
                  self.drawing_summary(e)) for e in entries]
-        self.render_overview_sections(body, [("Alle Zeichnungen", rows, "Noch keine Zeichnungen. „Neue Zeichnung“ legt eine an.")])
+        self.render_overview_sections(body, [(glide_i18n.t("ui.render_drawings_page.all_drawings", "Alle Zeichnungen"), rows, glide_i18n.t("ui.render_drawings_page.no_drawings_yet_new", "Noch keine Zeichnungen. „Neue Zeichnung“ legt eine an."))])
         self._bind_home_wheel(card)
 
     def build_sidebar_section(self, key, titel, oeffnen, titel_hinweis, plus_befehl, plus_hinweis, abstand):
@@ -39618,7 +39603,7 @@ class ListApp:
                 widget.bind("<Button-1>", lambda _event: oeffnen())
             widget.bind("<Enter>", lambda _event: self.update_section_heading(key, hover=True))
             widget.bind("<Leave>", lambda _event: self.update_section_heading(key, hover=False))
-        self.add_tooltip(pfeil, f"{titel} ein- oder ausklappen")
+        self.add_tooltip(pfeil, glide_i18n.t("ui.build_sidebar_section.expand_or_collapse", '{titel} ein- oder ausklappen', titel=titel))
         for sequence in ("<Return>", "<space>"):
             pfeil.bind(sequence, lambda _event: self.toggle_sidebar_section(key))
         pfeil.bind("<FocusIn>", lambda _event: self.update_section_heading(key, hover=True))
@@ -39866,15 +39851,15 @@ class ListApp:
         aktiv = self.get_folder(self.active_folder_id) if self.view_mode == "folder" else None
         ordner = aktiv.get("id") if aktiv and self.sidebar_section_for("folder", aktiv["id"]) == "pages" else None
         menu = self._new_themed_popup_menu()
-        menu.add_command(label="Neue Seite", command=lambda: self.create_in_sidebar_section("page", ordner, "pages"))
-        menu.add_cascade(label="Aus Vorlage", menu=self.page_template_menu(menu, ordner))
-        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog("folder", sidebar_section="pages"))
-        menu.add_command(label="Neues Buch …", command=lambda: self.create_container_dialog(
+        menu.add_command(label=glide_i18n.t("menu.file.new_page", "Neue Seite"), command=lambda: self.create_in_sidebar_section("page", ordner, "pages"))
+        menu.add_cascade(label=glide_i18n.t("ui.show_pages_add_menu.from_template", "Aus Vorlage"), menu=self.page_template_menu(menu, ordner))
+        menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_folder", "Neuer Ordner …"), command=lambda: self.create_container_dialog("folder", sidebar_section="pages"))
+        menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_book", "Neues Buch …"), command=lambda: self.create_container_dialog(
             "folder", parent_id=None, folder_kind="library", sidebar_section="pages"))
         menu.add_separator()
-        menu.add_command(label="Seite aus Zwischenablage", command=self.new_page_from_clipboard)
-        menu.add_command(label="Seite aus Datei …", command=self.import_markdown_page)
-        menu.add_command(label="Glide-Seiten importieren …", command=self.import_glide_pages)
+        menu.add_command(label=glide_i18n.t("menu.file.import.clipboard_page", "Seite aus Zwischenablage"), command=self.new_page_from_clipboard)
+        menu.add_command(label=glide_i18n.t("menu.file.import.page", "Seite aus Datei …"), command=self.import_markdown_page)
+        menu.add_command(label=glide_i18n.t("menu.file.import.glide_pages", "Glide-Seiten importieren …"), command=self.import_glide_pages)
         self._popup_at_widget(menu, self.add_pages_button)
         return "break"
 
@@ -39888,10 +39873,10 @@ class ListApp:
         if eigene:
             vorlagen.add_separator()
             for vorlage in eigene:
-                vorlagen.add_command(label=str(vorlage.get("title") or "Vorlage"),
+                vorlagen.add_command(label=str(vorlage.get("title") or glide_i18n.t("ui.page_template_menu.template", "Vorlage")),
                                      command=lambda key=vorlage["id"]: self.create_template_in_section(key, ordner, section))
         vorlagen.add_separator()
-        vorlagen.add_command(label="Geöffnete Seite als Vorlage speichern",
+        vorlagen.add_command(label=glide_i18n.t("ui.page_template_menu.save_open_page_as", "Geöffnete Seite als Vorlage speichern"),
                              command=self.save_list_as_template,
                              state="normal" if self.view_mode == "list" and self.lists
                              and self.is_page_list(self.current_list()) else "disabled")
@@ -39917,23 +39902,23 @@ class ListApp:
         menu = self._new_themed_popup_menu()
         notizbuch = self.active_journal_folder_id()
         if notizbuch:
-            titel = str((self.get_folder(notizbuch) or {}).get("title") or "Notizbuch")
-            menu.add_command(label=f"Tagesnotiz in „{self.ellipsize_sidebar_title(titel)}“",
+            titel = str((self.get_folder(notizbuch) or {}).get("title") or glide_i18n.t("ui.show_notes_add_menu.notebook", "Notizbuch"))
+            menu.add_command(label=glide_i18n.t("ui.show_notes_add_menu.daily_note_in", 'Tagesnotiz in „{ellipsize_sidebar_title}“', ellipsize_sidebar_title=self.ellipsize_sidebar_title(titel)),
                              command=lambda: self.create_journal_entry(notizbuch))
-        menu.add_command(label="Neue Notiz", command=self.create_new_note)
+        menu.add_command(label=glide_i18n.t("board.action.new_note", "Neue Notiz"), command=self.create_new_note)
         vorlagen = self._new_themed_popup_menu(menu)
         for vorlage in self.note_templates():
-            vorlagen.add_command(label=str(vorlage.get("title") or "Vorlage"),
+            vorlagen.add_command(label=str(vorlage.get("title") or glide_i18n.t("ui.show_notes_add_menu.template", "Vorlage")),
                                  command=lambda key=vorlage["id"]: self.create_list_from_template(key))
         jahresordner = self.template_by_id("journal-folder")
         if jahresordner:
             if self.note_templates():
                 vorlagen.add_separator()
-            vorlagen.add_command(label=str(jahresordner.get("title") or "Notizbuch – Jahresordner"),
+            vorlagen.add_command(label=str(jahresordner.get("title") or glide_i18n.t("ui.show_notes_add_menu.notebook_year_folder", "Notizbuch – Jahresordner")),
                                  command=lambda: self.create_list_from_template("journal-folder"))
-        menu.add_cascade(label="Aus Vorlage", menu=vorlagen)
-        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog("folder", sidebar_section="notes"))
-        menu.add_command(label="Neues Notizbuch …", command=lambda: self.create_container_dialog(
+        menu.add_cascade(label=glide_i18n.t("ui.show_notes_add_menu.from_template", "Aus Vorlage"), menu=vorlagen)
+        menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_folder", "Neuer Ordner …"), command=lambda: self.create_container_dialog("folder", sidebar_section="notes"))
+        menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_notebook", "Neues Notizbuch …"), command=lambda: self.create_container_dialog(
             "folder", parent_id=None, folder_kind="journal", sidebar_section="notes"))
         self._popup_at_widget(menu, self.add_notes_button)
         return "break"
@@ -39944,7 +39929,7 @@ class ListApp:
         In einem Notizbuch entsteht wie bisher ein datierter Eintrag.
         """
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "note"):
-            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            self.show_info(glide_i18n.t("ui.create_area.create", "Anlegen"), glide_i18n.t("ui.create_new_note.this_document_type_does", "Diese Dokumentart gehört nicht in diesen Bereich."))
             return "break"
         if not self.editor_switch_allowed():
             return "break"
@@ -39994,8 +39979,8 @@ class ListApp:
         innen.pack(fill="both", expand=True, padx=14, pady=12)
         leiste = ButtonFlow(innen, bg=theme["card"], gap=8)
         leiste.pack(fill="x", pady=(0, 12))
-        leiste.add(self._make_dialog_button(leiste, "Neue Notiz", self.create_new_note, "confirm", width=128))
-        leiste.add(self._make_dialog_button(leiste, "Neues Notizbuch …", lambda: self.create_container_dialog(
+        leiste.add(self._make_dialog_button(leiste, glide_i18n.t("board.action.new_note", "Neue Notiz"), self.create_new_note, "confirm", width=128))
+        leiste.add(self._make_dialog_button(leiste, glide_i18n.t("ui.folder_quick_add_menu.new_notebook", "Neues Notizbuch …"), lambda: self.create_container_dialog(
             "folder", parent_id=None, folder_kind="journal"), "muted", width=176))
         notizen = self.note_entries()
         zuletzt = sorted(notizen, key=lambda entry: str(entry.get("updated_at") or ""),
@@ -40005,25 +39990,25 @@ class ListApp:
         def notizzeile(entry):
             pfad = " › ".join(self.folder_path_titles(entry.get("folder_id"))) if entry.get("folder_id") else ""
             stand = self.format_due_display(str(entry.get("updated_at") or "")[:10])
-            return (None, str(entry.get("title") or "Notiz"), lambda lid=entry["id"]: self.set_active_list(lid),
+            return (None, str(entry.get("title") or glide_i18n.t("ui.render.note", "Notiz")), lambda lid=entry["id"]: self.set_active_list(lid),
                     " · ".join(teil for teil in (pfad, stand) if teil))
 
         def buchzeile(folder):
             zweig = {value["id"] for value in self.iter_folder_subtree(folder["id"])}
             anzahl = sum(1 for entry in self.lists if entry.get("folder_id") in zweig and not entry.get("archived"))
-            return (None, str(folder.get("title") or "Notizbuch"),
+            return (None, str(folder.get("title") or glide_i18n.t("ui.buchzeile.notebook", "Notizbuch")),
                     lambda fid=folder["id"]: self.set_active_folder(fid),
-                    "1 Eintrag" if anzahl == 1 else f"{anzahl} Einträge")
+                    glide_i18n.t("ui.buchzeile.1_entry", "1 Eintrag") if anzahl == 1 else glide_i18n.t("ui.buchzeile.entries", '{anzahl} Einträge', anzahl=anzahl))
 
         abschnitte = []
         # „Zuletzt bearbeitet“ erst, wenn es mehr Notizen gibt, als der
         # Abschnitt zeigt – sonst stünden dieselben Zeilen zweimal da.
         if len(notizen) > self.NOTES_RECENT_LIMIT:
-            abschnitte.append(("Zuletzt bearbeitet", [notizzeile(entry) for entry in zuletzt], ""))
-        abschnitte.append(("Notizbücher", [buchzeile(folder) for folder in self.notebook_folders()],
-                           "Noch kein Notizbuch. Ein Notizbuch sammelt datierte Einträge – „Neues Notizbuch …“."))
-        abschnitte.append(("Alle Notizen", [notizzeile(entry) for entry in alle],
-                           "Noch keine Notizen. „Neue Notiz“ legt eine an."))
+            abschnitte.append((glide_i18n.t("ui.kachel_recent.recently_edited", "Zuletzt bearbeitet"), [notizzeile(entry) for entry in zuletzt], ""))
+        abschnitte.append((glide_i18n.t("ui.render_notes_page.notebooks", "Notizbücher"), [buchzeile(folder) for folder in self.notebook_folders()],
+                           glide_i18n.t("ui.render_notes_page.no_notebook_yet_a", "Noch kein Notizbuch. Ein Notizbuch sammelt datierte Einträge – „Neues Notizbuch …“.")))
+        abschnitte.append((glide_i18n.t("ui.render_notes_page.all_notes", "Alle Notizen"), [notizzeile(entry) for entry in alle],
+                           glide_i18n.t("ui.render_notes_page.no_notes_yet_new", "Noch keine Notizen. „Neue Notiz“ legt eine an.")))
         self.render_overview_sections(innen, abschnitte)
         self._bind_home_wheel(karte)
 

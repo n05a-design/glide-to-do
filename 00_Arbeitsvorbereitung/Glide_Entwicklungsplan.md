@@ -3740,3 +3740,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
 
 **D – Rest und Git:** Paket L3 folgt auf diesem Zweig. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.160 D93-Volllokalisierung, Paket L3: Vorlagen, Labels, Punktmaske und Kalender (V1.72, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 490 Texte von `refresh_template_page` bis `page_templates`: Vorlagenseite, Vorlagenexport und -import, Vorlage ausfüllen, Pixelsymbol, Bibliothekskarten und -menüs, Ansichtstitel, Hinweise ohne Listenansicht, Labels anlegen, umbenennen, färben und entfernen, Eingabe- und Auswahldialoge, Anhang- und Checklisteneditor, Seitendetails, Planung mehrerer Aufgaben, Punktmaske mit allen Abschnitten und Prüfmeldungen, Verweise, Erwähnungen und Fundorte, Kalender mit Planungsauswahl und freien Zeitfenstern, Zeichnungs- und Ordnerpfade, Tabellenspalten, Tagesplanmenü und die Bereiche der Seitenleiste. Gespeicherte Werte (Standardtitel, Tagesnotiz- und Notizbuchnamen, Einstellungswerte, Notizvorlagen, deutsche Datumsangaben in Notizbüchern) bleiben unverändert. Übersetzte Parametervorgaben (`new_item_dialog`, `themed_page_details_dialog`; in L1 die Labelauswahl) wurden beim Import einmal auf Deutsch ausgewertet; sie werden jetzt beim Aufruf aufgelöst.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L4 folgt auf diesem Zweig. Offen für L8: die deutsche Datumsformatierung von Notizbucheinträgen (`_german_note_date`). Lieferkopie mit der nächsten Produktionsrunde.

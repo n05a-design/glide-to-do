@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## D93-Volllokalisierung, Paket L3 (V1.72, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v172-i18n-l3` über Paket L2. Grün: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 (Fälle L1–L3). Vollprüfung gemeinsam am Ende (D51). Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme.
+
 ## D93-Volllokalisierung, Paket L2 (V1.71, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v171-i18n-l2` über Paket L1. Grün: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 (`l1_tageshinweise`, `l2_tag_und_start`). Die Vollprüfung folgt gemeinsam am Ende der acht Pakete (D51). Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme.
