@@ -126,7 +126,7 @@ python3 -m glide_shell.selftest      # Exitcode 0 ok, 1 Befund, 2 kein Tk-Fenste
 python3 -O -m glide_shell.selftest   # muss dasselbe melden
 ```
 
-Bekannter Umgebungsbefund auf dem Referenz-Mac: `kompakt_verlorenes_loslassen`, `anhangsnamen` und `ruecktaste` aus `test_arbeitsmodi` brauchen echten Tastaturfokus und scheitern bei bedientem Rechner auch auf unverändertem `main`. Maßgeblich sind dann die GitHub-Vollprüfungen (QA-Bericht).
+Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hintergrund` im `PYTHONPATH` laufen lassen, wie der macOS-Workflow: Im Hintergrundmodus bekommen die Prüffenster keinen Tastaturfokus, und Fälle wie `kompakt_verlorenes_loslassen` melden `focus: None`. Während des Laufs Maus und Tastatur nicht benutzen. Der frühere Hänger in `anhangsnamen` war eine echte Umbruchschaukel und ist seit V1.69 behoben (QA-Bericht).
 
 ## 6. Versionierung
 

@@ -56918,6 +56918,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             width = self.task_text_available_width()
             if width == getattr(self, "_long_reflow_width", None):
                 return
+            now = time.monotonic()
+            seen = getattr(self, "_long_reflow_seen", None)
+            if seen is None:
+                seen = self._long_reflow_seen = set()
+            repeats = glide_design.reflow_repeats(width, seen, now, getattr(self, "_long_reflow_at", 0.0))
+            self._long_reflow_at = now
+            if repeats:
+                return
             self._long_reflow_width = width
             # Reiner Layoutumbruch: vollständige Auswahl, Fokus und Bildlauf
             # erhalten; die Aufgabenbearbeitung darf dabei nicht umschalten.

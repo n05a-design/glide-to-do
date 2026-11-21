@@ -128,6 +128,25 @@ def delete_key_edits_text(widget_class, path, input_paths=(), pane_path=None):
     return widget_within(path, pane_path)
 
 
+def reflow_repeats(width, seen, now, last_at, quiet=1.0):
+    """Ob eine Neuumbruch-Breite in einer schnellen Folge schon an der Reihe war.
+
+    Die Aufgabenliste bricht Langtexte nach jeder Breitenänderung neu um. Bei
+    geöffnetem Inspektor schaukelten Umbruch, Zeilenaktionen und Spaltenbreite
+    einander auf (Mac 1710 × 1112, 21.11.2026: 209 → 215 → 221 → 225 → 209 …
+    ohne Ende). Kommt eine Breite innerhalb von `quiet` Sekunden nach dem
+    letzten Umbruch wieder, ist das diese Schaukel: kein weiterer Umbruch.
+    Nach einer ruhigen Pause gilt jede Breite wieder als neu, so dass Öffnen
+    und Schließen des Inspektors normal umbrechen. `seen` gehört dem Aufrufer.
+    """
+    if now - last_at > quiet:
+        seen.clear()
+    if width in seen:
+        return True
+    seen.add(width)
+    return False
+
+
 def stale_empty_frame(has_slaves, configured_width, configured_height, requested_width, requested_height):
     """Ob ein leerer Rahmen noch die Größe seiner entfernten Kinder beansprucht.
 
