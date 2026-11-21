@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import unittest
-import motion
+from glide_shell import motion
 
 class Scheduler:
     def __init__(self): self.now=0.0;self.jobs={};self.serial=0

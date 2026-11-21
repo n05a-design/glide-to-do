@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Shell-Paket 7: `motion` und Übernahmewerkzeug (V1.66, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/shell-motion-export` über V1.65 (übertragen nach `claude/v166-shell-motion-main`). Grün: CI-Grundstufe; `test_motion.py` (T055, Import aus `glide_shell`); `test_shell_importregel.py` (T319, `motion` mit Signaturen, Paketbau und Manifest); `test_shell_uebernahme.py` (T331, 6 Fälle); `test_shell_demohost.py` (T330, `motion`-Übergang im `AfterScope`, neuer Puls bricht den alten ab); `test_startwege.py` 17/17; `test_modalvertrag.py` 18; `test_fensterlebensdauer.py` 10; `test_abbauvertrag.py` 5; `test_aufgaben3380.py`; `test_glide.py`. Probeübernahme in einen leeren Ordner außerhalb des Repos mit Import aus der Kopie. Nicht geprüft: Windows und Linux (folgen über die GitHub-Matrix), menschliche Sichtprüfung des Demohosts.
+
 ## D93 Etappe 2: Zeichenimport, Symbolvorschau und Farbwahl DE/EN (V1.65, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/d93-drawing-import-i18n` über PR #167. Grün: `test_i18n.py`; `test_arbeitsmodi.py --fall drawing_import_locale` (Symbolvorschau, Importvorschau mit „2 Farben · 1 bemalte Zelle“ bzw. „2 colors · 1 painted cell“, Warnhinweis, Ersetzen-Knopf, Farbwahl, Fehlertitel bei ungültiger Zwischenablage und kaputter Importdatei) sowie `drawing_locale`, `drawing_controls_locale`, `drawing_more_locale`, `drawing_export_locale`, `drawing_dialogs_locale`; `test_pixel3350`, `test_features330`, `test_features329`, `test_animation3400`, `test_befunde330`, `test_etappe1_332`, `test_glide`; `test_fenster330` im Wiederholungslauf (erster Lauf: bekannter Fokusbefund „Esc schließt nicht“ beim Handbuch, andere App vorn). GitHub-Vollprüfung und menschliche Sichtprüfung stehen aus.

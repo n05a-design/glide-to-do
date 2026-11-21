@@ -70,10 +70,18 @@ SHELL_MODULE = {
         "ThemedAutoScrollbar.set": ["first", "last"],
         "ThemedAutoScrollbar.is_scrollable": [],
     },
+    "motion": {
+        "progress": ["elapsed", "duration_ms"],
+        "Transitions.__init__": ["schedule", "unschedule", "clock"],
+        "Transitions.start": ["key", "update", "finish", "enabled", "duration_ms"],
+        "Transitions.cancel": ["key"],
+        "Transitions.close": [],
+    },
     "demo": {
         "DemoHost.__init__": ["root", "texts", "colors"],
         "DemoHost.tick": [],
         "DemoHost.open_dialog": [],
+        "DemoHost.pulse": [],
         "DemoHost.close": [],
         "main": [],
     },

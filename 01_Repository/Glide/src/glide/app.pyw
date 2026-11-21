@@ -135,7 +135,7 @@ import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
 import home_dashboard as glide_home_dashboard  # noqa: E402
 import home_task_tiles as glide_task_tiles  # noqa: E402
-import motion as glide_motion
+from glide_shell import motion as glide_motion
 import task_editing as glide_task_editing
 import core_accessibility as glide_core_accessibility
 import daily_hints

@@ -12,12 +12,13 @@ Bausteine:
 - `window_lifetime`: Zeitgeberbesitz je Widget (`AfterScope`, `scope_for`).
 - `custom_controls`: thementaugliche Canvas-Bedienelemente.
 - `desktop_adapter`: Menüleiste, Tastaturkürzel und Betriebssystemaktionen.
+- `motion`: kurze, unterbrechbare Übergänge mit injizierter Zeitplanung.
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
 einzeln, etwa `from glide_shell import modal_session`. Ein lauffähiges
 Beispiel ohne Glide ist `python -m glide_shell.demo`.
 """
 
-SHELL_VERSION = "0.1.0"
+SHELL_VERSION = "0.2.0"
 
-__all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "demo"]
+__all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion", "demo"]

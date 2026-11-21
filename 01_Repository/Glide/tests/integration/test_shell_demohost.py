@@ -6,6 +6,7 @@ Temporärverzeichnis und startet den Host dort in einem eigenen Prozess. Ein
 Folgeprojekt, das nur dieses Paket übernimmt, bekommt damit dasselbe Ergebnis:
 - `glide_shell` kommt aus der Kopie, kein Modul aus `src/glide` wird geladen;
 - Menüleiste mit Aktionskennungen, Uhr im eigenen `AfterScope`, Bedienelement;
+- ein Übergang aus `motion` läuft im selben Bereich, ein neuer bricht den alten ab;
 - der modale Dialog aus `create_dialog` hält den Griff, folgt der Hostfarbe und
   gibt ihn frei;
 - nach dem Schließen ist kein Zeitgeber des Hosts mehr offen.
@@ -43,6 +44,16 @@ assert len(host.scope.pending()) == 1, host.scope.pending()
 host.seconds.set(False); host.tick(); root.update()
 assert host.clock.cget("text").count(":") == 1, host.clock.cget("text")
 assert len(host.scope.pending()) == 1, "Uhr plant genau einen Folgelauf"
+host.pulse(); root.update()
+assert "clock" in host.transitions.active and len(host.scope.pending()) == 2, host.scope.pending()
+host.pulse()
+assert len(host.transitions.active) == 1 and len(host.scope.pending()) == 2, "neuer Puls bricht den alten ab"
+import time as _zeit
+_ende = _zeit.monotonic() + 2
+while host.transitions.active and _zeit.monotonic() < _ende:
+    root.update(); _zeit.sleep(0.01)
+assert not host.transitions.active and host.clock.cget("fg") == "#15243C", host.clock.cget("fg")
+assert len(host.scope.pending()) == 1, "nach dem Puls bleibt nur die Uhr"
 gesehen = {}
 def im_dialog():
     dialog = [w for w in root.winfo_children() if isinstance(w, tk.Toplevel)][-1]
@@ -78,7 +89,7 @@ def main():
         print(ausgabe)
         print("Shell-Demohost: ROT")
         return 1
-    print("Shell-Demohost: OK (nur glide_shell und tkinter, Menü, Uhr im AfterScope, modaler Dialog, Abbau ohne offene Zeitgeber)")
+    print("Shell-Demohost: OK (nur glide_shell und tkinter, Menü, Uhr und Übergang im AfterScope, modaler Dialog, Abbau ohne offene Zeitgeber)")
     return 0
 
 
