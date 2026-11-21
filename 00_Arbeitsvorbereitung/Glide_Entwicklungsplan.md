@@ -3800,3 +3800,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: alle 1283 Unit-Tests, `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 (acht Fälle, streng) grün. Gemeinsamer Volllauf mit macOS-Paketbau folgt (D51).
 
 **D – Rest und Git:** Offen als Produktfragen, nicht entschieden: zweisprachiger TXT- und CSV-Austausch, englische KI-Formatbeschreibung, englische Datumswörter der Schnellerfassung, übersetzte Anzeige der Systemlabelnamen und englische mitgelieferte Vorlagen. Menschliche Sprach- und Sichtabnahme der englischen Oberfläche und Abnahme des übersetzten „Über Glide“-Texts durch den Inhaber. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.167 CI-Nachtrag: Mitternachtsschutz in `fall_altfilter` (21.11.2026)
+
+**A – Auftrag:** Inhaber am 21.11.2026: Exitcode 1 in den GitHub-Branches klären und den Mitternachtsfehler beheben.
+
+**B – Befund und Umsetzung:** Die Glide-Prüfung zu PR #164 (`claude/d93-drawing-dialogs-i18n`) scheiterte am 20.11.2026 im Push-Lauf 44830631612 an `test_ansichten` → `fall_altfilter`. Die Ergebnisse des alten Lesers waren um genau einen Tag verschoben: Die Fristen entstanden vor 0 Uhr CET, der alte Leser wertete danach aus. `tageswechsel_abwarten()` wartet jetzt bis kurz nach Mitternacht, wenn weniger als 240 s bis 0 Uhr bleiben. Wechselt das Datum trotzdem, meldet eine eigene Zusicherung den Tageswechsel. Der PR-Lauf 44830635542 desselben Commits scheiterte dagegen an `seitenleistenabstand3504` („Hover fehlt“, Xvfb-Timing); er bleibt unter Beobachtung. Der Merge-Lauf auf `main` (`09be5717`) und alle späteren `main`-Läufe waren grün.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, eigene Tk 9.1, künstliche Daten: `test_ansichten.py --fall altfilter` grün; Wartehilfe mit simulierter Uhrzeit (23:58:30 wartet 92 s, 23:50:00 und 0:00:10 warten nicht). Kein echter Lauf über Mitternacht.
+
+**D – Rest und Git:** Eigener PR nur für Testcode und Plan; `src/glide` und `07_Python-Versionen` bleiben unberührt. Hover-Fall `seitenleistenabstand3504` nur beobachten.
