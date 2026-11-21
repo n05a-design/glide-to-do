@@ -69762,7 +69762,7 @@ Labels, Termine und Metadaten."""
     def manual_html(self):
         from html import escape
         sections = []
-        for title, entries in self.manual_sections():
+        for title, entries in self.manual_sections(self.MANUAL_SECTIONS):
             rows = ''.join('<tr><th>'+escape(name)+'</th><td>'+escape(purpose)+'</td><td>'+escape(place)+'</td></tr>'
                            for name, purpose, place in entries)
             sections.append('<section><h2>'+escape(title)+'</h2><table>'+rows+'</table></section>')
@@ -69899,23 +69899,24 @@ Labels, Termine und Metadaten."""
         return "break"
 
     @classmethod
-    def manual_sections(cls):
+    def manual_sections(cls, source=None):
         """Handbuch in der aktiven Sprache: Englisch aus `manual.en.json`, sonst `MANUAL_SECTIONS`.
 
         Die englische Fassung ist eine kontrollierte Übersetzung mit gleichem Aufbau; weicht er ab
         (Abschnitte oder Einträge), gilt das deutsche Handbuch.
         """
+        base = cls.MANUAL_SECTIONS if source is None else source
         if glide_i18n.get_language() != "en":
-            return cls.MANUAL_SECTIONS
+            return base
         try:
             data = json.loads((glide_i18n.get_locales_dir() / "manual.en.json").read_text(encoding="utf-8"))
             sections = tuple((str(title), tuple(tuple(str(part) for part in entry) for entry in entries))
                              for title, entries in data)
         except (OSError, ValueError, TypeError):
-            return cls.MANUAL_SECTIONS
-        if [len(entries) for _title, entries in sections] != [len(entries) for _title, entries in cls.MANUAL_SECTIONS] \
+            return base
+        if [len(entries) for _title, entries in sections] != [len(entries) for _title, entries in base] \
                 or any(len(entry) != 3 for _title, entries in sections for entry in entries):
-            return cls.MANUAL_SECTIONS
+            return base
         return sections
 
     @classmethod
