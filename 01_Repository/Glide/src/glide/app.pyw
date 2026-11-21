@@ -12168,15 +12168,15 @@ class PageEditor(RichNoteEditor):
                 for label, tag in self.INLINE_FORMATS]
 
     def toolbar_items(self):
-        eintraege = [(glide_i18n.t("editor.toolbar.list", 'Liste'), lambda: self.set_block('bullet')),
-                     (glide_i18n.t("editor.toolbar.numbered", 'Nummeriert'), lambda: self.set_block('number'))]
+        eintraege = [('Liste', lambda: self.set_block('bullet')),
+                     ('Nummeriert', lambda: self.set_block('number'))]
         if self.ALLOW_TASKS:
             # B14 (15.10.2026): ohne Kästchen davor – kein anderer Knopf der
             # Leiste trägt ein Symbol. Echte Aufgabenkästchen im Text bleiben.
-            eintraege.append((glide_i18n.t("editor.toolbar.task", "Aufgabe"), lambda: self.set_block('task')))
-        eintraege += [(glide_i18n.t("editor.toolbar.quote", 'Zitat'), lambda: self.set_block('quote')),
-                      (glide_i18n.t("editor.toolbar.image", 'Bild'), self.choose_images),
-                      (glide_i18n.t("editor.toolbar.more", 'Mehr'), self.show_page_actions)]
+            eintraege.append(("Aufgabe", lambda: self.set_block('task')))
+        eintraege += [('Zitat', lambda: self.set_block('quote')),
+                      ('Bild', self.choose_images),
+                      ('Mehr', self.show_page_actions)]
         return eintraege
 
     def convert_block(self, tag):
