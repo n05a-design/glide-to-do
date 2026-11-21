@@ -16,6 +16,8 @@ Paket diesem Commit entspricht (`quelle_unveraendert`), und SHA-256 jeder Datei.
 - Stimmt die Kopie mit ihrem eigenen Manifest überein, wird sie ersetzt.
   Dateien, die das alte Manifest nennt und die es in der Quelle nicht mehr
   gibt, werden entfernt; Dateien ohne Manifesteintrag bleiben stehen.
+  Liefert die Shell neu eine Datei, die es in der Kopie schon ohne
+  Manifesteintrag und mit anderem Inhalt gibt, bricht das Werkzeug ab.
 - Weicht eine Datei von ihrem Manifest ab oder fehlt das Manifest bei einem
   nicht leeren Ordner, bricht das Werkzeug mit Exitcode 2 ab; `--ersetzen`
   überschreibt dann bewusst.
@@ -115,6 +117,12 @@ def lokale_abweichungen(ordner, manifest):
     return abweichend
 
 
+def fremde_kollisionen(ordner, manifest, quelle):
+    """Eigene Dateien ohne Manifesteintrag, die eine neue Shell-Datei gleichen Namens überschreiben würde."""
+    return [name for name in sorted(quelle) if name not in manifest["dateien"]
+            and (ordner / name).is_file() and sha(ordner / name) != quelle[name]]
+
+
 def pruefen(ordner):
     quelle = quelldateien()
     manifest = manifest_lesen(ordner)
@@ -147,6 +155,11 @@ def uebernehmen(ordner, ersetzen=False):
             return 2, [f"{name}: {art} gegenüber {MANIFEST} – mit --ersetzen bewusst überschreiben"
                        for name, art in abweichend]
     quelle = quelldateien()
+    if manifest is not None and not ersetzen:
+        kollision = fremde_kollisionen(ordner, manifest, quelle)
+        if kollision:
+            return 2, [f"{name}: eigene Datei ohne Manifesteintrag, die Shell liefert jetzt dieselbe Datei – "
+                       "mit --ersetzen bewusst überschreiben" for name in kollision]
     meldungen = []
     for name in quelle:
         schreiben_atomar(ordner / name, (QUELLE / name).read_bytes())

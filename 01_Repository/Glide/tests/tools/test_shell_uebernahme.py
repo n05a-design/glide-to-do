@@ -4,7 +4,8 @@
 Prüft `scripts/pflege/shell_uebernehmen.py` gegen Temporärordner, nie gegen
 den Quellbaum: Erstkopie mit Manifest, Prüfung „aktuell“, verweigerte
 Übernahme bei lokaler Änderung, bewusstes Ersetzen, veraltete Kopie,
-Entfernen nicht mehr gelieferter Dateien bei Erhalt fremder Dateien und die
+Entfernen nicht mehr gelieferter Dateien bei Erhalt fremder Dateien, Schutz
+eigener Dateien vor neuen Shell-Dateien gleichen Namens und die
 Sperre gegen ein Ziel im Glide-Quellbaum. Ohne Tk-Import.
 
 Aufruf: python3 -B -m unittest tests/tools/test_shell_uebernahme.py
@@ -125,6 +126,24 @@ class Uebernahme(unittest.TestCase):
         self.assertTrue((self.kopie / "notizen.txt").is_file())
         self.assertIn("notizen.txt: bleibt stehen", text)
         self.assertEqual(lauf("--pruefen", self.projekt)[0], 0)
+
+    def test_eigene_datei_mit_neuem_shellnamen_bleibt_geschuetzt(self):
+        lauf(self.projekt)
+        pfad = self.kopie / "SHELL_MANIFEST.json"
+        manifest = json.loads(pfad.read_text(encoding="utf-8"))
+        # Älteres Manifest ohne motion.py; das Folgeprojekt hat eine eigene motion.py angelegt.
+        del manifest["dateien"]["motion.py"]
+        pfad.write_text(json.dumps(manifest), encoding="utf-8")
+        datei = self.kopie / "motion.py"
+        datei.write_text("# eigenes Modul des Folgeprojekts\n", encoding="utf-8")
+        code, text = lauf(self.projekt)
+        self.assertEqual(code, 2, text)
+        self.assertIn("motion.py: eigene Datei ohne Manifesteintrag", text)
+        self.assertEqual(datei.read_text(encoding="utf-8"), "# eigenes Modul des Folgeprojekts\n")
+        self.assertNotIn("motion.py", json.loads(pfad.read_text(encoding="utf-8"))["dateien"])
+        code, text = lauf("--ersetzen", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertEqual(werkzeug.sha(datei), werkzeug.sha(QUELLE / "motion.py"))
 
     def test_ziel_im_glide_quellbaum_wird_abgelehnt(self):
         for ziel in (QUELLE.parent, QUELLE, QUELLE / "unter"):
