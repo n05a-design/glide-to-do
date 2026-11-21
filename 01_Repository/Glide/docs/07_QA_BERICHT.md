@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Integration V1.65–V1.68 auf `main` (21.11.2026)
+
+PRs #168–#171 sind per Squash gemergt; `main` `0ba533af` ist dateigleich mit dem lokal geprüften Zweigstand `claude/v168-shell-selbsttest` samt Kollisionsschutz der Shell-Übernahme. Vor dem Merge bestanden auf GitHub Grundstufe und Linux-/Windows-Vollprüfung je Zweig. Lokale Mac-Vollprüfung (macOS arm64, Python 3.14.5, eigene Tk 9.1.0, isoliertes `GLIDE_DATA_DIR`, künstliche Daten) auf V1.68 `12a9d3d6`: 106 Schritte grün, nach dem Stopp 29 Schritte nachgeholt und grün (darunter Startwege 17/17, Shell-Suiten, Showcase, Analysen, Beispiel- und Releasedaten gleich). Nicht grün: `kompakt_verlorenes_loslassen` (rot, `focus: None`), `anhangsnamen` und `ruecktaste` (Zeitgrenze); alle drei scheitern auf unverändertem `main` `db2c6f80` gleich und hängen am Tastaturfokus dieser Mac-Umgebung. Nach dem Merge auf `main` `0ba533af` lokal grün: CI-Grundstufe; nach dem Codex-Hinweis T331 (7 Fälle), T319, T332 und T333 (Kopie 7/7). Der Hauptlauf auf `main` steht im Actions-Verlauf.
+
 ## Glide Shell für Folgeprojekte: Selbsttest, Demohost und Anleitung (V1.68, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v168-shell-selbsttest` über V1.67. Grün: CI-Grundstufe; `test_glide_system.py`; alle Unit-Tests; `test_shell_uebernahme.py` (T331, beide Anleitungen kopiert); `test_shell_importregel.py` (T319); `test_shell_demohost.py` (T330, Lage auf dem Bildschirm, Rückgängig/Wiederholen, Hostfarben-Vorrang); `test_shell_selbsttest.py` (T333, Kopie 7/7, Gegenprobe genau `window_geometry` rot); `test_startwege.py` 17/17; `test_glide.py`; `test_modalvertrag.py` 18; `test_fensterlebensdauer.py` 10. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sichtprüfung des Demohosts.
