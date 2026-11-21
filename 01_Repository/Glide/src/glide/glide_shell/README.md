@@ -1,10 +1,10 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 21.11.2026 · Glide 1.0.0 · Glide Shell 0.4.0
+Status as of 21.11.2026 · Glide 1.0.0 · Glide Shell 0.5.0
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
-The Glide Shell is the reusable Tk foundation from [Glide](../../../README.md): dialogs, timer ownership, transitions, controls, menu bar, window geometry, system appearance and a redo stack. It knows nothing about Glide content. Your application supplies texts, colours, fonts and action IDs.
+The Glide Shell is the reusable Tk foundation from [Glide](../../../README.md): dialogs, timer ownership, transitions, controls, menu bar, window geometry, system appearance, a redo stack, text fitting, a searchable action picker and data folder resolution. It knows nothing about Glide content. Your application supplies texts, colours, fonts and action IDs.
 
 This guide is a **controlled translation** of [`README.de.md`](README.de.md). The German text applies if the two ever differ. Limits and decisions are set in the [shell concept §7](../../../docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md#7-paket-glide_shell-und-übernahme-in-folgeprojekte-d95-20112026) (German).
 
@@ -58,6 +58,9 @@ Import the building blocks one by one, for example `from glide_shell import moda
 | `window_geometry` | Geometry strings, keep windows on the work area | `parse`, `format_geometry`, `clamp`, `keep_visible` |
 | `system_appearance` | Interpret the system's light/dark mode | `tk_is_dark`, `windows_is_dark`, `linux_is_dark`, `resolve` |
 | `redo_history` | Redo stack next to your undo stack | `RedoHistory` |
+| `text_fit` | Fit text to a character limit or pixel width, align marker widths | `clip`, `fit`, `settled_wrap_width`, `aligned_markers` |
+| `action_picker` | Searchable picker over the entries of an existing menu | `entries`, `search`, `grouped`, `first_enabled` |
+| `runtime_paths` | Data and cache folders by platform convention, environment variable and pointer file | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
 
 A pattern from the demo host: schedule a window's timers and transitions through the same scope so that nothing keeps running after it closes.
 

@@ -5,7 +5,10 @@ Seite und Block behalten ihre bisherigen Menüs. Die eingebettete Auswahl liest
 dieselben Einträge (Beschriftung, Pfad, Zustand) aus dem fertigen Menü und
 führt beim Wählen genau diesen Menüeintrag aus. So gibt es keine zweite
 Befehlsliste, die auseinanderlaufen könnte. Dieses Modul ordnet, filtert und
-erklärt gesperrte Einträge; den Menübaum liest die Oberfläche.
+erklärt gesperrte Einträge; den Menübaum liest die Oberfläche. Seit V1.69
+liegen Eintragsmodell, Ordnen, Suchen und Gruppieren in
+`glide_shell.action_picker` (D98); hier bleiben Sperrgründe, Platzhalter,
+Zustandstexte, Kopfverweise und die Glide-Suchsemantik aus `content_search`.
 
 Eine Zeile aus der Oberfläche ist ein Tupel
 ``(schluessel, beschriftung, pfad, aktiv, gruppe, art)``:
@@ -17,17 +20,12 @@ Eine Zeile aus der Oberfläche ist ein Tupel
   Öffnen füllt und deshalb als Ganzes gewählt wird).
 """
 
-from dataclasses import dataclass
-
 import content_search
+from glide_shell import action_picker as _menu
+from glide_shell.action_picker import (CHECK_MARK, CHECK_PAD, MAX_ENTRIES, PATH_SEPARATOR, Entry,  # noqa: F401
+                                       check_label, clean_label, first_enabled, grouped)
 
-CHECK_MARK = "✓"
-# Vier Leerzeichen sind in der macOS-Menüschrift genau so breit wie „✓ “
-# (15 px), in DejaVu Sans 1 px schmaler; so beginnen alle Beschriftungen an einer Kante.
-CHECK_PAD = "    "
-PATH_SEPARATOR = " › "
 FALLBACK_SECTION = "Weitere"
-MAX_ENTRIES = 240
 
 # Gründe für gesperrte Einträge. Die Menüs kennen nur „gesperrt“; die Auswahl
 # sagt zusätzlich, warum (Design Richtlinien: deaktiviert mit Grund).
@@ -47,40 +45,6 @@ PLACEHOLDER_LABELS = frozenset({"Keine", "Kein Objekt ausgewählt"})
 _SELECTION_LABELS = frozenset({"Ausschneiden", "Kopieren"})
 _LINE_LABELS = frozenset({"Zeile nach oben", "Zeile nach unten", "Zeile duplizieren", "Zeile löschen"})
 _WRITE_LABELS = frozenset({"Aufgabe verknüpfen …", "In Liste übernehmen …"})
-
-
-@dataclass(frozen=True)
-class Entry:
-    """Ein wählbarer Menüeintrag mit Anzeige- und Ausführungsangaben."""
-
-    key: tuple
-    label: str
-    path: tuple = ()
-    enabled: bool = True
-    checked: bool = False
-    reason: str = ""
-    section: str = ""
-    kind: str = "command"
-
-    @property
-    def location(self):
-        """Pfad unterhalb des Abschnitts, etwa „Gliederung“ in einer flachen Trefferliste."""
-        return PATH_SEPARATOR.join(self.path)
-
-
-def check_label(label, checked):
-    """Menübeschriftung mit Häkchenspalte: „✓ “ oder gleich breite Leerstelle davor."""
-    return (CHECK_MARK + " " if checked else CHECK_PAD) + label
-
-
-def clean_label(raw):
-    """Beschriftung ohne Häkchen und Ausrichtungsleerzeichen; dazu, ob ein Häkchen stand."""
-    text = str(raw or "")
-    stripped = text.lstrip()
-    checked = stripped.startswith(CHECK_MARK)
-    if checked:
-        stripped = stripped[len(CHECK_MARK):]
-    return " ".join(stripped.split()), checked
 
 
 def reason_for(label, path, context=None):
@@ -117,26 +81,9 @@ def entries(rows, sections=(), context=None, skip=()):
     obersten Ebene; Einträge in Untermenüs gehören zum Abschnitt ihres ersten
     Untermenüs („Umwandeln in“, „Formatieren“, „Gliederung“).
     """
-    result = []
-    skip = set(skip)
-    for row in rows:
-        key, raw, path, enabled, group, kind = row
-        label, checked = clean_label(raw)
-        path = tuple(clean_label(part)[0] for part in (path or ()))
-        if not label or label in skip or (not enabled and label in PLACEHOLDER_LABELS):
-            continue
-        if path:
-            section = path[0]
-        elif 0 <= int(group) < len(sections):
-            section = sections[int(group)]
-        else:
-            section = FALLBACK_SECTION
-        result.append(Entry(key=tuple(key), label=label, path=path, enabled=bool(enabled), checked=checked,
-                            reason="" if enabled else reason_for(label, path, context),
-                            section=section, kind=kind if kind in ("command", "submenu") else "command"))
-        if len(result) >= MAX_ENTRIES:
-            break
-    return result
+    return _menu.entries(rows, sections, skip=skip, placeholders=PLACEHOLDER_LABELS,
+                         reason=lambda label, path: reason_for(label, path, context),
+                         fallback_section=FALLBACK_SECTION)
 
 
 def search(values, query):
@@ -146,48 +93,17 @@ def search(values, query):
     beginnt damit, irgendwo enthalten) und innerhalb gleicher Güte die
     Menüreihenfolge. Umlaute zählen gleich ae/oe/ue/ss.
     """
-    key = content_search.search_key(query)
-    values = list(values)
-    if not key:
-        return values
-    ranked = []
-    for position, entry in enumerate(values):
-        rank = content_search.title_rank(entry.label, key)
-        if rank is None and key in content_search.search_key(" ".join((entry.section,) + entry.path)):
-            rank = 3
-        if rank is not None:
-            ranked.append((rank, position, entry))
-    ranked.sort(key=lambda value: (value[0], value[1]))
-    return [entry for _rank, _position, entry in ranked]
-
-
-def grouped(values, order=()):
-    """Einträge je Abschnitt; ``order`` stellt gewünschte Abschnitte nach vorn.
-
-    Innerhalb eines Abschnitts bleibt die Reihenfolge erhalten. Abschnitte, die
-    ``order`` nicht nennt, folgen in der Reihenfolge ihres ersten Eintrags.
-    """
-    groups = {}
-    for entry in values:
-        groups.setdefault(entry.section, []).append(entry)
-    first = [name for name in order if name in groups]
-    rest = [name for name in groups if name not in first]
-    return [(name, groups[name]) for name in first + rest]
-
-
-def first_enabled(values):
-    """Erster wählbarer Eintrag oder None (Startauswahl der Liste)."""
-    return next((entry for entry in values if entry.enabled), None)
+    return _menu.search(values, query, content_search.search_key)
 
 
 def summary(values, query):
     """Kurze Zustandszeile unter der Liste."""
     if not values:
         return "Keine passende Aktion" if str(query or "").strip() else "Keine Aktionen"
-    usable = sum(1 for entry in values if entry.enabled)
-    if usable == len(values):
+    usable, total = _menu.counts(values)
+    if usable == total:
         return f"{usable} Aktionen" if usable != 1 else "1 Aktion"
-    return f"{usable} von {len(values)} Aktionen verfügbar"
+    return f"{usable} von {total} Aktionen verfügbar"
 
 
 def header_affordances(entry, read_only=False):

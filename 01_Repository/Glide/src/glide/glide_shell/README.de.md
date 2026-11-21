@@ -1,10 +1,10 @@
 # Glide Shell – Anleitung für Folgeprojekte
 
-Stand 21.11.2026 · Glide 1.0.0 · Glide Shell 0.4.0
+Stand 21.11.2026 · Glide 1.0.0 · Glide Shell 0.5.0
 
 <p align="right"><a href="README.md">English</a></p>
 
-Die Glide Shell ist das wiederverwendbare Tk-Fundament aus [Glide](../../../README.md): Dialoge, Zeitgeberbesitz, Übergänge, Bedienelemente, Menüleiste, Fenstergeometrie, Systemdesign und Wiederholen-Stapel. Sie kennt keine Glide-Inhalte. Texte, Farben, Schriften und Aktionskennungen liefert deine Anwendung.
+Die Glide Shell ist das wiederverwendbare Tk-Fundament aus [Glide](../../../README.md): Dialoge, Zeitgeberbesitz, Übergänge, Bedienelemente, Menüleiste, Fenstergeometrie, Systemdesign, Wiederholen-Stapel, Textkürzung, durchsuchbare Aktionsauswahl und Auflösung des Datenordners. Sie kennt keine Glide-Inhalte. Texte, Farben, Schriften und Aktionskennungen liefert deine Anwendung.
 
 Diese Anleitung beschreibt die Nutzung. Maßgeblich für Grenzen und Entscheidungen ist das [Shell-Konzept §7](../../../docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md#7-paket-glide_shell-und-übernahme-in-folgeprojekte-d95-20112026).
 
@@ -58,6 +58,9 @@ Importiere die Bausteine einzeln, etwa `from glide_shell import modal_session, w
 | `window_geometry` | Geometrietexte, Fenster auf der Arbeitsfläche halten | `parse`, `format_geometry`, `clamp`, `keep_visible` |
 | `system_appearance` | Hell/Dunkel des Systems deuten | `tk_is_dark`, `windows_is_dark`, `linux_is_dark`, `resolve` |
 | `redo_history` | Wiederholen-Stapel neben deinem Rückgängig-Stapel | `RedoHistory` |
+| `text_fit` | Text auf Zeichengrenze oder Pixelbreite kürzen, Zeichen auf gleiche Breite bringen | `clip`, `fit`, `settled_wrap_width`, `aligned_markers` |
+| `action_picker` | Durchsuchbare Auswahl über die Einträge eines fertigen Menüs | `entries`, `search`, `grouped`, `first_enabled` |
+| `runtime_paths` | Daten- und Cacheordner nach Plattformkonvention, Umgebungsvariable und Zeigerdatei | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
 
 Ein Muster aus dem Demohost: Zeitgeber und Übergänge eines Fensters über denselben Bereich planen, damit beim Schließen nichts weiterläuft.
 

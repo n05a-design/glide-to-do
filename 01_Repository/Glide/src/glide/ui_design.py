@@ -2,9 +2,15 @@
 """Gemeinsame Gestaltungsskalen und reine Regeln für Titel und Herkunft.
 
 Vier Inhaltsstufen: Seitentitel, Abschnitt, Inhalt und Zusatzangabe.
-Bestehende Symbol- und Bediengrößen bleiben unabhängig davon.
+Bestehende Symbol- und Bediengrößen bleiben unabhängig davon. Die neutralen
+Textregeln (Kürzen, Breitenausgleich, ruhige Umbruchbreite) liegen seit V1.69
+in `glide_shell.text_fit` (S10, D98); dieses Modul reicht sie weiter und
+behält Grenzen, Skalen und Glide-Layouts.
 """
 from types import MappingProxyType
+
+from glide_shell import text_fit as _text_fit
+from glide_shell.text_fit import HAIR_SPACE, aligned_markers, pad_to_width, settled_wrap_width  # noqa: F401
 
 SPACING = MappingProxyType({value: value for value in
                            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 18, 22, 24, 28, 30)})
@@ -35,12 +41,8 @@ def limit_message(limit=TITLE_MAX_CHARS, dropped=0, short=False):
 
 def clip_title(text, limit=TITLE_MAX_CHARS, ellipsis="..."):
     """Zeichengrenze einschließlich Auslassung; keine Änderung am Quellobjekt."""
-    text = str(text or "")
-    if len(text) <= limit:
-        return text
-    if limit < len(ellipsis):
-        return ""
-    return text[:limit - len(ellipsis)].rstrip() + ellipsis
+    return _text_fit.clip(text, limit, ellipsis)
+
 
 
 def edited_title(text, previous):
@@ -76,22 +78,8 @@ def page_icon_layout(left_padding, line_height, preferred_scale, cell_size=16, g
     return scale, -size - gap, (int(line_height) - size) // 2
 
 
-def fit_text(text, measure, width, ellipsis="…"):
-    """Einzeilig kürzen; vollständiger Text bleibt beim Aufrufer erhalten."""
-    if not text or width <= 0:
-        return ""
-    if measure(text) <= width:
-        return text
-    if measure(ellipsis) > width:
-        return ""
-    low, high = 0, len(text)
-    while low < high:
-        mid = (low + high + 1) // 2
-        if measure(text[:mid] + ellipsis) <= width:
-            low = mid
-        else:
-            high = mid - 1
-    return text[:low].rstrip() + ellipsis
+fit_text = _text_fit.fit
+
 
 
 def today_columns(width, due, labels):
@@ -152,50 +140,6 @@ def stale_empty_frame(has_slaves, configured_width, configured_height, requested
     if has_slaves or configured_width or configured_height:
         return False
     return requested_width > 1 or requested_height > 1
-
-
-def settled_wrap_width(width, seen):
-    """Umbruchbreite, die auch bei einer Layoutschaukel zur Ruhe kommt.
-
-    `seen` sammelt die Breiten, die bei unveränderter Fensterbreite schon
-    gesetzt wurden. Eine neue Breite gilt wie gemeldet. Kehrt eine gesehene
-    wieder, schaukeln Umbruch und Spaltenbreite einander auf; dann gilt die
-    engste gesehene Breite, und jede weitere gesehene Breite ändert nichts.
-    Der Aufrufer leert `seen`, sobald das Fenster seine Breite ändert.
-    """
-    if width in seen:
-        return min(seen)
-    seen.add(width)
-    return width
-
-
-HAIR_SPACE = "\u200a"
-
-
-def pad_to_width(text, target, measure, filler=HAIR_SPACE, limit=12):
-    """`text` mit schmalen Leerzeichen so nah wie möglich auf `target` Pixel bringen."""
-    best, best_error = text, abs(target - measure(text))
-    current = text
-    for _ in range(limit):
-        if measure(current) >= target:
-            break
-        current += filler
-        error = abs(target - measure(current))
-        if error < best_error:
-            best, best_error = current, error
-    return best
-
-
-def aligned_markers(markers, measure, filler=HAIR_SPACE):
-    """Erledigt-/Offen-Zeichen auf gleiche Breite bringen (Mac-Abnahme 07.11.2026).
-
-    „✓“ und „□“ sind in den meisten Schriften unterschiedlich breit; vor
-    Zeilentext gesetzt, sprang die Textkante erledigter Punkte nach rechts.
-    """
-    markers = tuple(dict.fromkeys(markers))
-    target = max(measure(marker) for marker in markers)
-    return {marker: pad_to_width(marker, target, measure, filler) for marker in markers}
-
 
 
 DRAWING_DISPLAY_PROFILES = MappingProxyType({
