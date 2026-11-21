@@ -9,6 +9,7 @@ Folgeprojekt, das nur dieses Paket übernimmt, bekommt damit dasselbe Ergebnis:
 - ein Übergang aus `motion` läuft im selben Bereich, ein neuer bricht den alten ab;
 - der modale Dialog aus `create_dialog` hält den Griff, folgt der Hostfarbe und
   gibt ihn frei;
+- `window_geometry`, `system_appearance` und `redo_history` laden aus der Kopie;
 - nach dem Schließen ist kein Zeitgeber des Hosts mehr offen.
 
 Aufruf: python3 -B tests/integration/test_shell_demohost.py
@@ -30,9 +31,12 @@ sys.path[:] = [p for p in sys.path if "src" + __import__("os").sep + "glide" not
 ordner = sys.argv[1]
 sys.path.insert(0, ordner)
 import glide_shell
-from glide_shell import demo, window_lifetime
+from glide_shell import demo, redo_history, system_appearance, window_geometry, window_lifetime
 assert glide_shell.__file__.startswith(ordner), glide_shell.__file__
 assert glide_shell.SHELL_VERSION.count(".") == 2, glide_shell.SHELL_VERSION
+assert window_geometry.parse(window_geometry.format_geometry(420, 240, -40, 40)) == (420, 240, -40, 40)
+assert system_appearance.resolve({"light": "a", "dark": "b"}, True, "a") == "b"
+assert len(redo_history.RedoHistory(3)) == 0
 root = tk.Tk()
 root.geometry("420x240+40+40")
 host = demo.DemoHost(root, colors={"bg": "#FAFAF0"})

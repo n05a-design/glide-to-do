@@ -5,6 +5,7 @@ Die Shell bündelt anwendungsneutrale Desktop-Bausteine für Tk-Anwendungen.
 Jedes Modul importiert ausschließlich die Standardbibliothek, `tkinter` und
 andere Module dieses Pakets; Werte, Texte und Farben liefert der Host als
 Argumente oder Rückrufe (Abhängigkeitsrichtung Host → Shell → Tk).
+Meldungen für Entwickler (Ausnahmen, Protokolltexte) sind Englisch (D96).
 
 Bausteine:
 - `modal_session`: Dialogfabrik `create_dialog`, modaler Warteweg mit Griff,
@@ -13,12 +14,16 @@ Bausteine:
 - `custom_controls`: thementaugliche Canvas-Bedienelemente.
 - `desktop_adapter`: Menüleiste, Tastaturkürzel und Betriebssystemaktionen.
 - `motion`: kurze, unterbrechbare Übergänge mit injizierter Zeitplanung.
+- `window_geometry`: Geometrietexte lesen/schreiben, Fenster auf der Arbeitsfläche halten.
+- `system_appearance`: Hell/Dunkel des Systems auf macOS, Windows und Linux deuten.
+- `redo_history`: Wiederholen-Stapel neben dem Rückgängig-Stapel des Hosts.
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
 einzeln, etwa `from glide_shell import modal_session`. Ein lauffähiges
 Beispiel ohne Glide ist `python -m glide_shell.demo`.
 """
 
-SHELL_VERSION = "0.2.0"
+SHELL_VERSION = "0.3.0"
 
-__all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion", "demo"]
+__all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
+           "window_geometry", "system_appearance", "redo_history", "demo"]

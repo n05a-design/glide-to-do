@@ -8,8 +8,13 @@ helles Gegenstück gilt bei hellem System „Hell“ – neue Farben entstehen n
 
 Erkannt wird der Systemmodus über Tk (macOS), die Registrierung (Windows) oder
 die Desktop-Einstellung (Linux). Jede Erkennung darf scheitern; dann bleibt
-das zuletzt gewählte Design stehen.
+das zuletzt gewählte Design stehen. Die Erkennung und `resolve` liegen seit
+V1.67 in `glide_shell.system_appearance` (D96); hier bleiben Designpaare und
+Hintergrundwahl.
 """
+
+from glide_shell.system_appearance import (  # noqa: F401 – bisherige Aufrufstellen
+    linux_is_dark, resolve, tk_is_dark, windows_is_dark)
 
 LIGHT_FALLBACK = "light"
 
@@ -39,46 +44,6 @@ def normalize_auto(value, designs):
     return {"light": hell, "dark": dunkel}
 
 
-def resolve(auto, system_dark, current):
-    """Wirksames Design: aus dem Paar nach Systemmodus, sonst das aktuelle."""
-    if not auto or system_dark is None:
-        return current
-    return auto["dark"] if system_dark else auto["light"]
-
-
-# --- Erkennung -----------------------------------------------------------
-def windows_is_dark(read_value):
-    """`read_value()` liefert AppsUseLightTheme (0 = dunkel) oder wirft OSError."""
-    try:
-        wert = read_value()
-    except (OSError, ValueError, TypeError):
-        return None
-    if isinstance(wert, bool) or not isinstance(wert, int):
-        return None
-    return wert == 0
-
-
-def linux_is_dark(color_scheme=None, gtk_theme=None):
-    """Ausgabe von `gsettings get …` deuten: color-scheme zuerst, dann der GTK-Name."""
-    schema = str(color_scheme or "").strip().strip("'\"").lower()
-    if schema == "prefer-dark":
-        return True
-    if schema in ("prefer-light", "default") and not gtk_theme:
-        return False
-    thema = str(gtk_theme or "").strip().strip("'\"").lower()
-    if thema:
-        return thema.endswith("-dark") or ":dark" in thema
-    return False if schema else None
-
-
-def tk_is_dark(answer):
-    """Antwort von `tk::unsupported::MacWindowStyle isdark` oder `winfo isdark` deuten."""
-    text = str(answer).strip().lower()
-    if text in ("1", "true", "yes"):
-        return True
-    if text in ("0", "false", "no"):
-        return False
-    return None
 BACKGROUND_CHOICES = (
     ('Designvorgabe', 'default'), ('Wie die Fensterfläche · ohne Schatten', 'surface'),
     ('Lila', 'accent'), ('Blau', 'clear'), ('Türkis', 'due_action'),

@@ -14,6 +14,7 @@ Der Test liest die Quellen nur als Syntaxbaum. Das Verhalten prüfen
 """
 import ast
 from pathlib import Path
+import re
 import sys
 import unittest
 
@@ -76,6 +77,29 @@ SHELL_MODULE = {
         "Transitions.start": ["key", "update", "finish", "enabled", "duration_ms"],
         "Transitions.cancel": ["key"],
         "Transitions.close": [],
+    },
+    "window_geometry": {
+        "parse": ["geometry"],
+        "format_geometry": ["width", "height", "x", "y"],
+        "clamp": ["width", "height", "x", "y", "screen_width", "screen_height", "minimum", "origin"],
+        "keep_visible": ["x", "y", "width", "bounds", "margin"],
+    },
+    "system_appearance": {
+        "resolve": ["auto", "system_dark", "current"],
+        "windows_is_dark": ["read_value"],
+        "linux_is_dark": ["color_scheme", "gtk_theme"],
+        "tk_is_dark": ["answer"],
+    },
+    "redo_history": {
+        "RedoHistory.__init__": ["limit"],
+        "RedoHistory.note_write": [],
+        "RedoHistory.clear": [],
+        "RedoHistory.mark": ["undo_stack"],
+        "RedoHistory.validate": ["undo_stack"],
+        "RedoHistory.peek": [],
+        "RedoHistory.push": ["entry", "undo_stack"],
+        "RedoHistory.pop": [],
+        "RedoHistory.restore": ["entry"],
     },
     "demo": {
         "DemoHost.__init__": ["root", "texts", "colors"],
@@ -174,6 +198,34 @@ class Importregel(unittest.TestCase):
                 if isinstance(knoten, ast.Call):
                     with self.subTest(modul=modul):
                         self.assertNotIn(ast.unparse(knoten.func), {"exec", "eval", "import_module"})
+
+
+DEUTSCH = re.compile(r"[äöüÄÖÜß]|\b(der|die|das|und|nicht|kein|keine|fehlt|Fehler|ungültig)\b")
+
+
+class Entwicklermeldungen(unittest.TestCase):
+    """D96: Laufzeittexte der Shell für Entwickler sind Englisch.
+
+    Geprüft werden alle Zeichenketten im Code außer Docstrings; Kommentare
+    und Docstrings bleiben in der Projektsprache. Sichtbare Texte liefert
+    der Host als Argument.
+    """
+
+    def test_keine_deutschen_zeichenketten_ausser_docstrings(self):
+        for modul in SHELL_MODULE:
+            tree = baum(modul)
+            docs = {id(k.body[0].value) for k in ast.walk(tree)
+                    if isinstance(k, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+                    and k.body and isinstance(k.body[0], ast.Expr) and isinstance(k.body[0].value, ast.Constant)}
+            for knoten in ast.walk(tree):
+                if isinstance(knoten, ast.Constant) and isinstance(knoten.value, str) and id(knoten) not in docs:
+                    with self.subTest(modul=modul, zeile=knoten.lineno):
+                        self.assertIsNone(DEUTSCH.search(knoten.value), knoten.value[:80])
+
+    def test_gegenprobe_erkennt_deutsche_meldung(self):
+        probe = ast.parse('def f():\n    """Doku auf Deutsch."""\n    raise ValueError("Rolle fehlt")\n')
+        texte = [k.value for k in ast.walk(probe) if isinstance(k, ast.Constant) and isinstance(k.value, str)]
+        self.assertTrue(any(DEUTSCH.search(t) for t in texte[1:]))
 
 
 class Schnittstelle(unittest.TestCase):
