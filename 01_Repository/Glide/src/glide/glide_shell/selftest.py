@@ -6,7 +6,8 @@ Suchpfad. Der Test öffnet ein kleines, sofort wieder geschlossenes Tk-Fenster
 und prüft jeden Baustein mit echtem Tk: Paketversion, Geometrie, Systemmodus,
 Wiederholen-Stapel, Zeitgeberbereich, Übergang, Menüleiste, Bedienelement und
 modalen Dialog mit Griff und Freigabe. Ausgabe je Prüfung `ok` oder `FAIL`,
-Exitcode 0 nur, wenn alles bestanden ist; 2, wenn kein Tk-Fenster möglich ist
+Die Prüfungen greifen auch unter
+`python -O`. Exitcode 0 nur, wenn alles bestanden ist; 2, wenn kein Tk-Fenster möglich ist
 (etwa ohne Anzeige). Meldungen sind Englisch (D96). Vertrag:
 `tests/integration/test_shell_selbsttest.py`.
 """
@@ -20,18 +21,24 @@ from glide_shell import (custom_controls, desktop_adapter, modal_session, motion
                          system_appearance, window_geometry, window_lifetime)
 
 
+def expect(condition, detail):
+    """Prüft auch unter `python -O`, wo `assert` entfällt."""
+    if not condition:
+        raise AssertionError(detail)
+
+
 def check_version(_root):
     parts = SHELL_VERSION.split(".")
-    assert len(parts) == 3 and all(p.isdigit() for p in parts), SHELL_VERSION
+    expect(len(parts) == 3 and all(p.isdigit() for p in parts), SHELL_VERSION)
     return SHELL_VERSION
 
 
 def check_geometry(root):
     text = window_geometry.format_geometry(420, 240, -40, 40)
-    assert window_geometry.parse(text) == (420, 240, -40, 40), text
+    expect(window_geometry.parse(text) == (420, 240, -40, 40), text)
     width, height = root.winfo_screenwidth(), root.winfo_screenheight()
     placed = window_geometry.clamp(9000, 9000, 99999, 99999, width, height, (200, 120))
-    assert placed[0] <= max(200, width) and placed[2] < width, placed
+    expect(placed[0] <= max(200, width) and placed[2] < width, placed)
     return f"screen {width}x{height}"
 
 
@@ -43,16 +50,16 @@ def check_appearance(root):
         except tk.TclError:
             answer = None
     dark = system_appearance.tk_is_dark(answer) if answer is not None else None
-    assert system_appearance.resolve({"light": "a", "dark": "b"}, dark, "a") in ("a", "b")
+    expect(system_appearance.resolve({"light": "a", "dark": "b"}, dark, "a") in ("a", "b"), "resolve returned no pair value")
     return {True: "system dark", False: "system light", None: "system mode not reported"}[dark]
 
 
 def check_redo(_root):
     history, undo = redo_history.RedoHistory(2), ["step"]
     history.push("redo", undo)
-    assert history.validate(undo) and history.peek() == "redo"
+    expect(history.validate(undo) and history.peek() == "redo", "redo entry not available")
     history.note_write()
-    assert not history.validate(undo), "a write must invalidate redo"
+    expect(not history.validate(undo), "a write must invalidate redo")
     return "valid until the next write"
 
 
@@ -72,11 +79,12 @@ def check_scope_and_motion(root):
     transitions = motion.Transitions(scope.after, scope.cancel)
     values = []
     transitions.start("probe", values.append, duration_ms=40)
-    assert pump(root, lambda: fired and not transitions.active), (fired, transitions.active)
-    assert values[-1] == 1.0, values
+    finished = pump(root, lambda: fired and not transitions.active)
+    expect(finished, (fired, transitions.active))
+    expect(values[-1] == 1.0, values)
     scope.after(10000, lambda: None)
     frame.destroy()
-    assert scope.closed and not scope.jobs, scope.jobs
+    expect(scope.closed and not scope.jobs, scope.jobs)
     return f"{len(values)} transition steps, scope closed with widget"
 
 
@@ -86,11 +94,11 @@ def check_controls(root):
     bar = desktop_adapter.build_menu_tree(root, [("File", [("Run", lambda: actions.append("run"), "", "run")])],
                                           menus_out=menus)
     ids = {action for menu in menus for action in menu._glide_action_ids.values()}
-    assert "run" in ids, ids
+    expect("run" in ids, ids)
     value = tk.BooleanVar(root, value=False)
     box = custom_controls.GlideCheckbutton(root, text="Probe", variable=value, command=lambda: actions.append("box"))
     box.invoke()
-    assert value.get() and "box" in actions, (value.get(), actions)
+    expect(value.get() and "box" in actions, (value.get(), actions))
     box.destroy()
     bar.destroy()
     return f"platform {desktop_adapter.platform_name()}"
@@ -107,8 +115,8 @@ def check_modal(root):
     dialog.deiconify()
     root.after(100, inside)
     modal_session.run_modal(root, dialog)
-    assert seen.get("grab") is True, seen
-    assert root.grab_current() is None, "grab not released"
+    expect(seen.get("grab") is True, seen)
+    expect(root.grab_current() is None, "grab not released")
     return "grab held and released"
 
 
