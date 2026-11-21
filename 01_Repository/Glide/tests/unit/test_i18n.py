@@ -206,6 +206,30 @@ class I18nTests(unittest.TestCase):
             missing = app_keys - catalog.keys()
             self.assertEqual(missing, set(), f"Direkte App-Schlüssel fehlen in {locale}.json: {missing}")
 
+    def test_ui_defaults_match_german_catalog_and_are_translated(self):
+        """D93-Volllokalisierung: `ui.*`-Vorgaben im Code gleichen de.json, en.json übersetzt sie."""
+        source_path = SRC / "app.pyw"
+        tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+        locales_dir = i18n.get_locales_dir()
+        de = json.loads((locales_dir / "de.json").read_text(encoding="utf-8"))
+        en = json.loads((locales_dir / "en.json").read_text(encoding="utf-8"))
+        abweichend, gefunden = [], 0
+        for node in ast.walk(tree):
+            if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and getattr(node.func.value, "id", None) == "glide_i18n" and node.func.attr == "t"
+                    and len(node.args) >= 2
+                    and all(isinstance(arg, ast.Constant) and isinstance(arg.value, str) for arg in node.args[:2])
+                    and node.args[0].value.startswith("ui.")):
+                continue
+            gefunden += 1
+            key, default = node.args[0].value, node.args[1].value
+            if de.get(key) != default:
+                abweichend.append((node.lineno, key))
+        self.assertGreater(gefunden, 0)
+        self.assertEqual(abweichend, [], "Codevorgabe und de.json weichen ab")
+        unuebersetzt = sorted(key for key in de if key.startswith("ui.") and en.get(key) == de[key])
+        self.assertEqual(unuebersetzt, [], "ui.*-Schlüssel ohne englischen Text")
+
     def test_settings_backdrop_names_exist_in_both_catalogs(self):
         locales_dir = i18n.get_locales_dir()
         catalogs = {
