@@ -14,6 +14,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 - **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Architektur, Bestand und Zielbild:** [Architektur](02_ARCHITECTURE.md), [Glide-System](../src/glide/README.md) und [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) haben getrennte Zuständigkeiten.
+- **An der Glide Shell arbeiten:** [Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md), Nutzung für Folgeprojekte in [`glide_shell/README.de.md`](../src/glide/glide_shell/README.de.md).
 - **Shell-Migration vorbereiten:** [Fable-Masterprompt](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) mit Quellstand, Planungsauftrag und Freigabegrenzen.
 - **Änderungen übergreifend abgleichen und Dokumente konsolidieren:** [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und [Abgleich ohne doppelte Pflege](DOKUMENTENPFLEGE.md#abgleich-ohne-doppelte-pflege).
 
@@ -33,6 +34,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D91 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
 | [Gemini-Wissensbasis](ai/gemini/README.md) | Englischsprachige, quellengebundene Wissensbasis für Gemini; abgeleitete Zusammenfassung, keine zusätzliche Fachautorität |
+| [Glide Shell – Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md) | Einstieg für Agenten: Bausteine, Host-Verträge, erzwungene Regeln, Tests T055/T312–T334, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Prüfliste für neue Bausteine; verweist auf die führenden Quellen |
 | [Glide Shell Framework](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur- und Entkopplungskonzept für das wiederverwendbare Desktop-Fundament, Fensterorchestrierung und Migrationspfad |
 | [Arbeitsvorlage zur Shell-Migration](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | Arbeitsübergabe für die Shell-Migration: Abschnitt 1 und die Pakete 1–2c sind mit 3.60.0 umgesetzt; jedes Folgepaket braucht eine eigene Freigabe ([Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)) |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |

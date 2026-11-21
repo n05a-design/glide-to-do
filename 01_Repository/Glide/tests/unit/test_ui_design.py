@@ -212,6 +212,36 @@ class BeruhigterUmbruchTest(unittest.TestCase):
         self.assertEqual(design.settled_wrap_width(483, gesehen), 483)
 
 
+class NeuumbruchSchaukelTest(unittest.TestCase):
+    """Langtext-Neuumbruch: eine schnell wiederkehrende Breite beendet die Schaukel."""
+
+    def test_gemessene_schaukel_endet_nach_einer_runde(self):
+        gesehen, jetzt, zuletzt, umgebrochen = set(), 100.0, 0.0, []
+        for breite in (209, 215, 221, 225, 209, 215, 221, 225):
+            if not design.reflow_repeats(breite, gesehen, jetzt, zuletzt):
+                umgebrochen.append(breite)
+            zuletzt, jetzt = jetzt, jetzt + 0.13
+        self.assertEqual(umgebrochen, [209, 215, 221, 225])
+
+    def test_aeussere_groessenaenderung_ist_keine_schaukel(self):
+        # Codex-Hinweis #174: Fenster 300 → 400 → 300 innerhalb einer Sekunde bricht jedes Mal um.
+        gesehen, umgebrochen, letztes = set(), [], None
+        for schritt, (spalte, fenster) in enumerate(((300, 900), (400, 1000), (300, 900))):
+            if not design.reflow_repeats(spalte, gesehen, 5.0 + schritt * 0.2, 5.0 + (schritt - 1) * 0.2,
+                                         window=fenster, last_window=letztes):
+                umgebrochen.append(spalte)
+            letztes = fenster
+        self.assertEqual(umgebrochen, [300, 400, 300])
+
+    def test_nach_ruhiger_pause_gilt_jede_breite_wieder(self):
+        gesehen = set()
+        self.assertFalse(design.reflow_repeats(425, gesehen, 10.0, 0.0))
+        self.assertFalse(design.reflow_repeats(209, gesehen, 10.2, 10.0))
+        # Inspektor zwei Sekunden später geschlossen: die alte Breite bricht normal um.
+        self.assertFalse(design.reflow_repeats(425, gesehen, 12.2, 10.2))
+        self.assertEqual(gesehen, {425})
+
+
 class DrawingDisplayTests(unittest.TestCase):
     def test_profiles_only_change_extra_controls(self):
         self.assertEqual(design.drawing_controls("standard"), ())

@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Langtext-Umbruchschaukel behoben (V1.69, 21.11.2026)
+
+Der lokale Mac-Hänger in `test_arbeitsmodi --gruppe abschluss` (Fall `anhangsnamen`, seit mehreren Ständen als Umgebungsbefund geführt) war ein echter Fehler: Nach `open_task_inspector` brach `schedule_long_task_reflow` die Langtexte bei gleicher Fensterbreite (1280) im Kreis um (389 Umbrüche in 60 s, Breiten 207–225 px), `root.update()` kehrte nie zurück. Auf dem GitHub-Runner (1920 × 1080) trat die Schaukel nicht auf. `ui_design.reflow_repeats` beendet sie nach einer Runde. Danach lokal grün (macOS arm64, Python 3.14.5, eigene Tk 9.1.0, künstliche Daten, Vordergrund): `anhangsnamen` einzeln, Gruppe `abschluss` 10/10 (auch `ruecktaste`), `test_ui_design.py`.
+
 ## Shell-Bausteine D98: `text_fit`, `action_picker`, `runtime_paths` (V1.69, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v169-shell-text-menu-paths` über PR #172. Grün: CI-Grundstufe; `test_shell_d98.py` (T334); `test_shell_importregel.py` (T319); `test_shell_d96.py`; `test_ui_design.py`; `test_action_menu.py`; `test_runtime_config.py` (Plattformsimulation unverändert); `test_shell_uebernahme.py`; `test_shell_demohost.py`; `test_shell_selbsttest.py` (Kopie 10/10, Gegenprobe ohne und mit `-O`). Nicht geprüft: Windows und Linux (GitHub-Matrix), lokale Vollprüfung.
