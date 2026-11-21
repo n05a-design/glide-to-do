@@ -311,9 +311,93 @@ def fall_l8_handbuch_und_bericht(lauf):
     return f"Handbuch, Speicherstatus und Pinnwand-Anordnungen: {en} englische, {de} deutsche Texte"
 
 
+def fall_v178_austausch_und_vorlagen(lauf):
+    """V1.78: mitgelieferte Vorlagen, Standardtitel, Eingang und TXT/CSV-Austausch in beiden Sprachen.
+
+    Unveränderte mitgelieferte Vorlagen wechseln mit der Sprache, neue Objekte
+    tragen Standardtitel der Sprache, und TXT/CSV-Exporte in einer Sprache
+    lassen sich in beiden Sprachen wieder einlesen.
+    """
+    app, mod = lauf.app, lauf.mod
+    csv_pfad = Path(tempfile.mkdtemp(prefix="glide-csv-")) / "export.csv"
+
+    def austausch():
+        punkt = app.new_item("Alpha")
+        punkt.update(description="Zeile", due="2026-12-01", planned_date="2026-11-30", estimated_minutes=30)
+        punkt["repeat"] = app.normalize_repeat({"art": app.REPEAT_WEEKDAYS, "tage": [0, 2]}, default_start="2026-12-01")
+        zeilen = []
+
+        class Datei:
+            def write(self, text):
+                zeilen.append(text)
+        app.write_items_to_txt(Datei(), [punkt], [])
+        txt = "".join(zeilen)
+        with open(csv_pfad, "w", encoding="utf-8-sig", newline="") as datei:
+            schreiber = mod.csv.writer(datei, delimiter=";")
+            schreiber.writerow([mod.glide_i18n.t(f"csv.header.{key}", name) for key, name in app.CSV_EXPORT_HEADERS])
+            app.write_items_to_csv(schreiber, [punkt], [])
+        return punkt, txt
+
+    def einlesen(punkt, txt):
+        """Beide Sprachen lesen den Export: gleiche Felder wie vorher."""
+        ergebnis = app.parse_txt_items(txt.splitlines(True))
+        gelesen = (ergebnis[0] if isinstance(ergebnis, tuple) else ergebnis)[0]
+        for feld in ("text", "description", "due", "planned_date", "estimated_minutes"):
+            assert gelesen.get(feld) == punkt.get(feld), ("TXT", feld, gelesen.get(feld), punkt.get(feld))
+        assert (gelesen.get("repeat") or {}).get("tage") == [0, 2], ("TXT", gelesen.get("repeat"))
+        tabelle = app.read_csv_table(str(csv_pfad))
+        zuordnung = app.csv_auto_mapping(tabelle)
+        punkte, _bericht = app.csv_rows_to_items(tabelle, zuordnung, dry_run=True)
+        for feld in ("text", "description", "due", "planned_date", "estimated_minutes"):
+            assert punkte[0].get(feld) == punkt.get(feld), ("CSV", feld, punkte[0].get(feld), punkt.get(feld))
+
+    exporte = {}
+
+    def pruefung(sprache):
+        app.templates = app.localize_builtin_templates(app.templates)
+        vorlagen = {vorlage["id"]: vorlage for vorlage in app.templates}
+        texte = [vorlagen[key][feld] for key in ("daily", "shopping", "folder-project", "construction", "journal-note")
+                 for feld in ("title", "note")]
+        texte += [titel for _key, titel, _markdown in app.page_template_entries()]
+        texte += [app.journal_note_document(key)["text"] for key in ("journal-note", "journal-gratitude", "journal-weekly")]
+        with patch.object(app, "confirm_template_preview", return_value=True):
+            liste = app.create_list_from_template("daily")
+        assert liste is not None, "Vorlage „daily“ nicht angelegt"
+        texte += [liste["title"].rsplit(" ", 1)[0]] + [punkt["text"] for punkt in liste.get("items", [])]
+        texte += [punkt.get("description", "") for punkt in liste.get("items", [])]
+        texte += [mod.glide_i18n.t("ui.default_title.daily_note", "Tagesnotiz · {date}", date="01.12.2026"),
+                  mod.glide_i18n.t("ui.default_title.new_list", "Neue Liste")]
+        app.ensure_inbox_list()
+        eingang = next(entry for entry in app.lists if app.is_inbox_list(entry))
+        texte.append(eingang["title"])
+        punkt, txt = austausch()
+        exporte[sprache] = (punkt, txt, csv_pfad.read_text(encoding="utf-8-sig"))
+        texte += [zeile for zeile in txt.splitlines() if zeile.strip() and "Alpha" not in zeile and "Zeile" not in zeile]
+        texte += csv_pfad.read_text(encoding="utf-8-sig").splitlines()[:1]
+        erwartet = {"en": {"Daily plan", "Shopping", "Project", "Inbox", "Report", "New list"},
+                    "de": {"Tagesplanung", "Einkauf", "Projekt", "Eingang", "Bericht", "Neue Liste"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt)
+        return texte
+
+    en, de = beide_sprachen(lauf, pruefung)
+    i18n = mod.glide_i18n
+    vorher = i18n.get_language()
+    try:
+        for leser in ("de", "en"):
+            i18n.set_language(leser)
+            for schreiber, (punkt, txt, csv_text) in exporte.items():
+                csv_pfad.write_text(csv_text, encoding="utf-8-sig")
+                einlesen(punkt, txt)
+    finally:
+        i18n.set_language(vorher)
+    return (f"Vorlagen, Standardtitel, Eingang und TXT/CSV: {en} englische, {de} deutsche Texte; "
+            "Export in beiden Sprachen in beiden Sprachen wieder eingelesen")
+
+
 FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
           "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen", "l7_kalender_verlauf_kuerzel",
-          "l8_handbuch_und_bericht")
+          "l8_handbuch_und_bericht", "v178_austausch_und_vorlagen")
 
 
 def main():
