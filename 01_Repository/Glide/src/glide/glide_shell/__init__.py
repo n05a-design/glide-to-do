@@ -17,13 +17,15 @@ Bausteine:
 - `window_geometry`: Geometrietexte lesen/schreiben, Fenster auf der Arbeitsfläche halten.
 - `system_appearance`: Hell/Dunkel des Systems auf macOS, Windows und Linux deuten.
 - `redo_history`: Wiederholen-Stapel neben dem Rückgängig-Stapel des Hosts.
+- `selftest`: Prüfung einer übernommenen Kopie auf dem Zielrechner (`python -m glide_shell.selftest`).
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
 einzeln, etwa `from glide_shell import modal_session`. Ein lauffähiges
-Beispiel ohne Glide ist `python -m glide_shell.demo`.
+Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
+Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.3.0"
+SHELL_VERSION = "0.4.0"
 
 __all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
-           "window_geometry", "system_appearance", "redo_history", "demo"]
+           "window_geometry", "system_appearance", "redo_history", "selftest", "demo"]

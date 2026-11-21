@@ -104,7 +104,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 
 - Arbeitsregeln: [AGENTS.md](../AGENTS.md) · Änderungsverlauf: [CHANGELOG.md](../CHANGELOG.md) · Sicherheit und Vertrauensgrenzen: [SECURITY.md](../SECURITY.md#vertrauensgrenzen)
 - Prüfwerkzeuge: [tests/README.md](../tests/README.md), [tests/tools/README.md](../tests/tools/README.md) · Pflegewerkzeuge: [scripts/pflege/README.md](../scripts/pflege/README.md)
-- Code: [src/glide/README.md](../src/glide/README.md) · Paketierung: [packaging/README.md](../packaging/README.md) · Lizenzstatus: [LICENSE.md](../LICENSE.md)
+- Code: [src/glide/README.md](../src/glide/README.md) · Glide Shell für Folgeprojekte: [Anleitung](../src/glide/glide_shell/README.de.md) ([English](../src/glide/glide_shell/README.md)) · Paketierung: [packaging/README.md](../packaging/README.md) · Lizenzstatus: [LICENSE.md](../LICENSE.md)
 - Showcase: [tests/fixtures/showcase/README.md](../tests/fixtures/showcase/README.md)
 - Planung, Markt und Vorbilder, manuelle Prüfung: [00_Arbeitsvorbereitung](../../../00_Arbeitsvorbereitung/README.md)
 - Neuer UI-/UX-Auftrag: [Ausführungsprompt mit Originalauftrag und 28 Bildreferenzen](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md); Aufgabenstatus im Entwicklungsplan §17. Originalbilder nur in der lokalen Ablage.

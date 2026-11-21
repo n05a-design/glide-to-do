@@ -50,8 +50,11 @@ class Uebernahme(unittest.TestCase):
     def test_erstkopie_mit_manifest_und_pruefung_aktuell(self):
         code, text = lauf(self.projekt)
         self.assertEqual(code, 0, text)
-        quelle = sorted(p.name for p in QUELLE.glob("*.py"))
-        self.assertEqual(sorted(p.name for p in self.kopie.glob("*.py")), quelle)
+        quelle = sorted(p.name for p in QUELLE.iterdir() if p.suffix in (".py", ".md"))
+        self.assertIn("README.md", quelle)
+        self.assertIn("README.de.md", quelle)
+        self.assertIn("selftest.py", quelle)
+        self.assertEqual(sorted(p.name for p in self.kopie.iterdir() if p.name != "SHELL_MANIFEST.json"), quelle)
         manifest = json.loads((self.kopie / "SHELL_MANIFEST.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["paket"], "glide_shell")
         self.assertEqual(manifest["shell_version"], werkzeug.shell_version())
