@@ -128,7 +128,7 @@ def delete_key_edits_text(widget_class, path, input_paths=(), pane_path=None):
     return widget_within(path, pane_path)
 
 
-def reflow_repeats(width, seen, now, last_at, quiet=1.0):
+def reflow_repeats(width, seen, now, last_at, quiet=1.0, window=None, last_window=None):
     """Ob eine Neuumbruch-Breite in einer schnellen Folge schon an der Reihe war.
 
     Die Aufgabenliste bricht Langtexte nach jeder Breitenänderung neu um. Bei
@@ -137,9 +137,13 @@ def reflow_repeats(width, seen, now, last_at, quiet=1.0):
     ohne Ende). Kommt eine Breite innerhalb von `quiet` Sekunden nach dem
     letzten Umbruch wieder, ist das diese Schaukel: kein weiterer Umbruch.
     Nach einer ruhigen Pause gilt jede Breite wieder als neu, so dass Öffnen
-    und Schließen des Inspektors normal umbrechen. `seen` gehört dem Aufrufer.
+    und Schließen des Inspektors normal umbrechen. Ändert sich die
+    Fensterbreite (`window` gegenüber `last_window`), ist das eine äußere
+    Größenänderung und keine Schaukel: Jede Breite gilt dann wieder als neu,
+    auch wenn der Nutzer die Größe innerhalb einer Sekunde zurücknimmt.
+    `seen` gehört dem Aufrufer.
     """
-    if now - last_at > quiet:
+    if now - last_at > quiet or window != last_window:
         seen.clear()
     if width in seen:
         return True

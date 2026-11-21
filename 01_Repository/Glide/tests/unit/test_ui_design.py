@@ -223,6 +223,16 @@ class NeuumbruchSchaukelTest(unittest.TestCase):
             zuletzt, jetzt = jetzt, jetzt + 0.13
         self.assertEqual(umgebrochen, [209, 215, 221, 225])
 
+    def test_aeussere_groessenaenderung_ist_keine_schaukel(self):
+        # Codex-Hinweis #174: Fenster 300 → 400 → 300 innerhalb einer Sekunde bricht jedes Mal um.
+        gesehen, umgebrochen, letztes = set(), [], None
+        for schritt, (spalte, fenster) in enumerate(((300, 900), (400, 1000), (300, 900))):
+            if not design.reflow_repeats(spalte, gesehen, 5.0 + schritt * 0.2, 5.0 + (schritt - 1) * 0.2,
+                                         window=fenster, last_window=letztes):
+                umgebrochen.append(spalte)
+            letztes = fenster
+        self.assertEqual(umgebrochen, [300, 400, 300])
+
     def test_nach_ruhiger_pause_gilt_jede_breite_wieder(self):
         gesehen = set()
         self.assertFalse(design.reflow_repeats(425, gesehen, 10.0, 0.0))
