@@ -240,6 +240,23 @@ class I18nTests(unittest.TestCase):
                               and not gleichlautend(de[key]))
         self.assertEqual(unuebersetzt, [], "ui.*-Schlüssel ohne englischen Text")
 
+    def test_english_template_catalog_matches_german(self):
+        """D93: englischer Vorlagenkatalog ist aktuell und weicht nur in Texten ab."""
+        import importlib.util
+        werkzeug = Path(__file__).resolve().parents[2] / "scripts/pflege/vorlagen_englisch.py"
+        spec = importlib.util.spec_from_file_location("vorlagen_englisch", werkzeug)
+        modul = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(modul)
+        self.assertEqual(modul.ZIEL.read_text(encoding="utf-8"), modul.erzeugen(),
+                         "glide_vorlagen.en.glidetemplates veraltet: scripts/pflege/vorlagen_englisch.py ausführen")
+        deutsch = json.loads(modul.QUELLE.read_text(encoding="utf-8"))["templates"]
+        englisch = json.loads(modul.ZIEL.read_text(encoding="utf-8"))["templates"]
+        self.assertEqual([v["id"] for v in deutsch], [v["id"] for v in englisch])
+        umlaute = re.compile(r"[äöüÄÖÜß]")
+        for vorlage in englisch:
+            for feld in ("title", "note"):
+                self.assertIsNone(umlaute.search(vorlage[feld]), (vorlage["id"], vorlage[feld]))
+
     def test_settings_backdrop_names_exist_in_both_catalogs(self):
         locales_dir = i18n.get_locales_dir()
         catalogs = {

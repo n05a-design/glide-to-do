@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## D93: zweisprachiger Austausch und englische Vorlagen (V1.78, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/v178-austausch-zweisprachig` über `main` `3a7e9170`. Grün: 1.284 Unit-Tests einschließlich `test_i18n.py` mit dem neuen Abgleich des englischen Vorlagenkatalogs, T335 mit allen neun Fällen (L1–L8 und `v178_austausch_und_vorlagen`) auf Englisch und Deutsch sowie die Schnellprüfung `pruefen.py --modus schnell --vordergrund`. Die englischen Vorlagentexte wurden in der Sitzung übersetzt und auf die Titelgrenze von 40 Zeichen gekürzt, sodass kein „Originaltitel“-Nachsatz entsteht. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme der englischen Vorlagen und Exporte.
+
 ## D93-Volllokalisierung, Paket L8 (Abschluss) (V1.77, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v177-i18n-l8` über Paket L7. Grün: alle 1283 Unit-Tests, `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 mit allen acht Fällen ohne deutsche Reste. Gefunden und behoben: Die Startmodule `runtime_check` und `runtime_diagnostics` dürfen `i18n` nicht laden, weil der Startweg mit drei kopierten Dateien läuft (T264-Fall `test_real_source_launcher_keeps_child_phase_and_native_exit`); `action_catalog` behält seine deutschen Gruppennamen als Ordnungsschlüssel. Nicht geprüft: Windows und Linux (GitHub-Matrix), Vollprüfung und Paketbau (folgen gemeinsam), menschliche Sprach- und Sichtabnahme.

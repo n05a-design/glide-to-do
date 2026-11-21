@@ -3567,7 +3567,7 @@ class LabelDropdown(tk.Frame):
 
     def _update_summary(self):
         names = [
-            str(label.get("name", ""))
+            str(self.app.label_display_name(label))
             for label in self.labels
             if label.get("id") in self.selected_ids
         ]
@@ -4126,7 +4126,7 @@ class SavedFilters:
 
     def names(self):
         werte = {entry.get("id"): str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")) for entry in self.app.lists}
-        werte.update({label.get("id"): str(label.get("name") or "Label") for label in self.app.labels})
+        werte.update({label.get("id"): str(self.app.label_display_name(label, "Label")) for label in self.app.labels})
         return werte
 
     def page_ids(self, criteria):
@@ -6519,7 +6519,7 @@ class ItemWorkspace:
             fortschritt = app.format_checklist_progress(item)
             if fortschritt:
                 teile.append(glide_i18n.t("ui.board_region_lines.checklist", 'Checkliste: {fortschritt}', fortschritt=fortschritt))
-            namen = [str(label.get("name") or "") for label in app.item_labels(item)]
+            namen = [str(app.label_display_name(label)) for label in app.item_labels(item)]
             if any(namen):
                 teile.append(", ".join(name for name in namen if name))
             zeilen.append(
@@ -6897,7 +6897,7 @@ class ItemWorkspace:
         buttons.append(vollbild)
         mehr = app._make_dialog_button(parent, "…", lambda: self.show_board_settings_menu(mehr), "muted",
                                        width=56, height=34)
-        filter_name = next((label.get("name") for label in app.labels if label.get("id") == self.filter_label), None)
+        filter_name = next((app.label_display_name(label) for label in app.labels if label.get("id") == self.filter_label), None)
         if filter_name:
             # Ein aktiver Labelfilter bleibt sichtbar, auch wenn er im Menü steht.
             mehr.set_active(app.theme["active"], app.theme["active_text"])
@@ -7685,7 +7685,7 @@ class ItemWorkspace:
         if entry is None:
             return "break"
         menu = app._new_themed_popup_menu()
-        menu.add_command(label="VERBINDUNG", state="disabled")
+        menu.add_command(label=glide_i18n.t("ui.show_connection_menu.heading", "VERBINDUNG"), state="disabled")
         menu.add_command(label=glide_i18n.t("ui.show_connection_menu.label", "   Beschriften …"), command=lambda: self.label_connection(pair))
         menu.add_command(label="   " + (glide_i18n.t("ui.show_connection_menu.solid", "Durchgezogen") if entry.get("dash") else glide_i18n.t("ui.show_connection_menu.dashed", "Gestrichelt")),
                          command=lambda: self.update_connection(pair, dash=not entry.get("dash")))
@@ -8685,7 +8685,7 @@ class ItemWorkspace:
                     remaining = x + width - self.CARD_PAD - left
                     if remaining < 60:
                         break
-                    name = self.truncate_lines(label["name"], block["font"], min(160, remaining-18), 1)
+                    name = self.truncate_lines(app.label_display_name(label), block["font"], min(160, remaining-18), 1)
                     chip_width = block["font"].measure(name)+16
                     fill, text_color = app.label_chip_colors(label)
                     canvas.create_oval(left, cursor, left+20, cursor+20, fill=fill, outline=fill, tags=tags)
@@ -15551,8 +15551,9 @@ class DrawingEditor(tk.Frame):
         self.app.show_drawing_menu(self, self.more_button)
         return "break"
 
-    def replace_model(self, model, label="Geändert"):
+    def replace_model(self, model, label=None):
         """Übernimmt ein neues Zellmodell derselben Größe, etwa nach Farbersetzung."""
+        label = label or glide_i18n.t("ui.replace_model.changed", "Geändert")
         self.animation.replace_model(self.frame_id, model)
         self.model = self.animation.frames[self.animation.index(self.frame_id)].model
         self.render_full()
@@ -17379,13 +17380,17 @@ class ListApp:
                    "category", "categories", "schlagwort", "schlagworte", "bereich"),
         "planned_date": ("bearbeitungstag", "bearbeitung", "geplant", "geplant am",
                          "plandatum", "planned", "planned date", "plan", "startdatum",
-                         "start", "scheduled"),
+                         "start", "scheduled", "planned day"),
         "estimated_minutes": ("aufwand", "minuten", "dauer", "schaetzung", "estimate",
                               "estimated", "duration", "effort", "zeitaufwand",
-                              "time estimate", "aufwand minuten"),
+                              "time estimate", "aufwand minuten", "effort minutes"),
         "level": ("ebene", "level", "tiefe", "depth", "einrueckung", "indent"),
         "number": ("nummer", "nr", "position", "pos", "number", "index"),
     }
+    CSV_EXPORT_HEADERS = (("number", "Nummer"), ("level", "Ebene"), ("text", "Aufgabe"), ("description", "Beschreibung"),
+                          ("attachments", "Anhänge"), ("done", "Erledigt"), ("importance", "Wichtigkeit"),
+                          ("due", "Fällig"), ("kind", "Art"), ("labels", "Labels"), ("due_time", "Uhrzeit"),
+                          ("planned_date", "Bearbeitungstag"), ("estimated_minutes", "Aufwand (Minuten)"))
     CSV_TRUE_WORDS = ("ja", "j", "x", "1", "wahr", "true", "yes", "y", "erledigt",
                       "done", "abgeschlossen", "fertig", "ok", "✓", "✔")
     CSV_FALSE_WORDS = ("nein", "n", "0", "falsch", "false", "no", "offen", "open",
@@ -17750,6 +17755,10 @@ class ListApp:
     TXT_TEXT_CONTINUATION = "Text:"
     TXT_NOTE_BLOCK_START = "[Seitennotiz]"
     TXT_NOTE_BLOCK_END = "[/Seitennotiz]"
+    # TXT-Austausch zweisprachig (D93): Feldnamen in der aktiven Sprache schreiben, beide lesen.
+    TXT_FIELDS = {"description": "Beschreibung", "due": "Fällig", "planned": "Bearbeitungstag", "effort": "Aufwand",
+                  "repeat": "Wiederholung", "labels": "Labels", "attachment": "Anhang", "exported": "Exportiert am",
+                  "note_start": "[Seitennotiz]", "note_end": "[/Seitennotiz]"}
 
     # Listen lassen sich einfärben – ausschließlich mit Farben, die ohnehin schon
     # im Einsatz sind (Theme-Schlüssel, damit die Farbe in Hell und Dunkel passt).
@@ -19696,20 +19705,54 @@ class ListApp:
 
         zeichnen()
 
+    TEMPLATE_RESOURCES = {"de": "glide_vorlagen.glidetemplates", "en": "glide_vorlagen.en.glidetemplates"}
+
     @staticmethod
-    def default_template_records():
-        resource = os.path.join(os.path.dirname(__file__), "resources", "templates", "glide_vorlagen.glidetemplates")
+    def default_template_records(language=None):
+        """Mitgelieferte Vorlagen in der eingestellten oder angegebenen Sprache (D93).
+
+        Englisch liest `glide_vorlagen.en.glidetemplates` (erzeugt von
+        `scripts/pflege/vorlagen_englisch.py`); Kennungen, Farben und Termine
+        gleichen der deutschen Fassung. Die Notizbuchvorlagen kommen aus
+        `legacy_template_records` und folgen dem Katalog.
+        """
+        language = language or glide_i18n.get_language()
+        name = ListApp.TEMPLATE_RESOURCES.get(language, ListApp.TEMPLATE_RESOURCES["de"])
+        resource = os.path.join(os.path.dirname(__file__), "resources", "templates", name)
+
+        def lokal(entry):
+            entry = copy.deepcopy(entry)
+            if language != "de" and str(entry.get("id") or "").startswith("journal-"):
+                for feld in ("title", "note"):
+                    entry[feld] = glide_i18n.load_catalog(language).get(f"template.{entry['id']}.{feld}", entry[feld])
+            return entry
         try:
             with open(resource, "r", encoding="utf-8") as file:
                 records = ListApp.normalize_template_records(glide_storage.read_stream(file))
             ids = {entry.get("id") for entry in records}
             for entry in ListApp.legacy_template_records():
                 if str(entry.get("id") or "").startswith("journal-") and entry.get("id") not in ids:
-                    records.append(copy.deepcopy(entry))
+                    records.extend(ListApp.normalize_template_records([lokal(entry)]))
             return records
         except (OSError, ValueError, TypeError):
             pass
-        return ListApp.legacy_template_records()
+        return ListApp.normalize_template_records([lokal(entry) for entry in ListApp.legacy_template_records()])
+
+    @classmethod
+    def localize_builtin_templates(cls, records):
+        """Unveränderte mitgelieferte Vorlagen in die eingestellte Sprache tauschen.
+
+        Eine Vorlage gilt als unverändert, wenn sie einer der Sprachfassungen
+        derselben Kennung genau gleicht; eigene Bearbeitungen bleiben stehen.
+        """
+        current = {entry["id"]: entry for entry in cls.default_template_records()}
+        fassungen = {}
+        for language in cls.TEMPLATE_RESOURCES:
+            for entry in cls.default_template_records(language):
+                fassungen.setdefault(entry["id"], []).append(entry)
+        return [copy.deepcopy(current[entry.get("id")])
+                if entry.get("id") in current and entry in fassungen.get(entry.get("id"), ()) else entry
+                for entry in records]
 
     @staticmethod
     def legacy_template_records():
@@ -19799,7 +19842,7 @@ class ListApp:
                 for template_id in ("journal-note", "journal-gratitude", "journal-weekly", "journal-folder"):
                     if template_id in current and template_id not in ids:
                         records.append(copy.deepcopy(current[template_id]))
-                return records
+                return self.localize_builtin_templates(records)
         except glide_storage.SizeLimitError as exc:
             self.storage_load_blocked("templates", exc)
         except (OSError, ValueError, TypeError):
@@ -23290,7 +23333,7 @@ class ListApp:
                       "q3": theme["due_action"], "q4": theme["muted"]}
             return [gruppe(key, titel, farben[key]) for key, titel, _wichtig, _dringend in glide_eisenhower.QUADRANTEN]
         if field == "label":
-            result = [gruppe(label["id"], str(label.get("name") or "Label"), self.label_color(label))
+            result = [gruppe(label["id"], str(self.label_display_name(label, "Label")), self.label_color(label))
                       for label in self.labels if not self.is_system_label(label)]
             result.append(gruppe("none", glide_i18n.t("ui.group_columns.no_label", "Ohne Label"), theme["muted"]))
             return result
@@ -29285,7 +29328,7 @@ class ListApp:
             labels = self._new_themed_popup_menu(menu)
             regular = [label for label in self.labels if not self.is_system_label(label)]
             for label in regular:
-                labels.add_command(label=label.get("name", "Label"),
+                labels.add_command(label=self.label_display_name(label, "Label"),
                     foreground=self.theme[self.label_color_key(label)],
                     command=lambda op=operation, identity=label["id"]:
                         self.apply_home_batch(identities, day, op, identity))
@@ -30953,7 +30996,7 @@ class ListApp:
             is_drawing = kind == "list" and self.is_drawing_list(entry)
             rich_text = " ".join(str((entry.get("rich_note") or {}).get("text") or "").split()) if entry.get("list_kind") in (
                 self.LIST_KIND_NOTE, self.LIST_KIND_PAGE) else ""
-            assigned = [(self.get_label(value) or {}).get("name", "") for value in entry.get("labels", [])]
+            assigned = [self.label_display_name(self.get_label(value) or {}) for value in entry.get("labels", [])]
             # Signatur enthält die sichtbaren Werte, keine dauerhaften Datenzähler.
             signature = json.dumps((entry.get("title"), entry.get("list_kind"), color, path, entry.get("icon"), summary, stats,
                 rich_text[:40 * preview_rows], len(rich_text) > 40 * preview_rows,
@@ -31033,7 +31076,7 @@ class ListApp:
             note = " ".join(str(entry.get("note") or "").split())
             if note:
                 label(note[:100] + ("…" if len(note) > 100 else ""), 9)
-            assigned = [(self.get_label(value) or {}).get("name", "") for value in entry.get("labels", [])]
+            assigned = [self.label_display_name(self.get_label(value) or {}) for value in entry.get("labels", [])]
             if assigned:
                 label(" · ".join(assigned[:3]) + (f" +{len(assigned)-3}" if len(assigned) > 3 else ""),
                       8, foreground=color, pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
@@ -31664,7 +31707,7 @@ class ListApp:
     def _create_list_from_template(self, template_key, template, reference_date, folder_id=None):
         if template_key == "journal-note":
             today = reference_date
-            title = f"Tagesnotiz · {today:%d.%m.%Y}"
+            title = glide_i18n.t("ui.default_title.daily_note", "Tagesnotiz · {date}", date=f"{today:%d.%m.%Y}")
             existing = {entry.get("title") for entry in self.lists}
             candidate, number = title, 2
             while candidate in existing:
@@ -31685,7 +31728,7 @@ class ListApp:
 
         if template_key == "journal-folder":
             today = reference_date
-            base_title = f"Notizbuch {today.year}"
+            base_title = glide_i18n.t("ui.default_title.notebook_year", "Notizbuch {year}", year=today.year)
             existing = {folder.get("title") for folder in self.folders}
             title, number = base_title, 2
             while title in existing:
@@ -31704,7 +31747,7 @@ class ListApp:
                     self.folders.append(folder)
                     quarter_folders.append(folder)
                 entry = self.new_list_object(
-                    f"Tagesnotiz · {today:%d.%m.%Y}", [],
+                    glide_i18n.t("ui.default_title.daily_note", "Tagesnotiz · {date}", date=f"{today:%d.%m.%Y}"), [],
                     folder_id=quarter_folders[quarter - 1]["id"],
                     color=(template or {}).get("color"), list_kind="note",
                     rich_note=self.journal_note_document(),
@@ -31762,7 +31805,7 @@ class ListApp:
                 self.show_error(glide_i18n.t("ui.create_list_from_template.use_template", "Vorlage verwenden"), str(exc))
                 return None
         if template is not None:
-            title = template.get("title") or "Neue Liste"
+            title = template.get("title") or glide_i18n.t("ui.default_title.new_list", "Neue Liste")
             note = template.get("note") or ""
             task_texts = template.get("items", [])
             template_color = template.get("color")
@@ -31782,7 +31825,7 @@ class ListApp:
             folder = self.new_folder_object(title, parent_id=folder_id, color=template_color, note=note, labels=template_labels)
             with self.sidebar_change(refresh_tree=True) as change:
                 self.folders.append(folder)
-                for text in task_texts or ["Neue Liste"]:
+                for text in task_texts or [glide_i18n.t("ui.default_title.new_list", "Neue Liste")]:
                     entry = self.new_list_object(str(text), [], folder_id=folder["id"], color=template_color, note=note)
                     self.lists.append(entry)
                 self.set_active_folder(folder["id"], refresh=False)
@@ -32570,6 +32613,7 @@ class ListApp:
             dialog.destroy()
             if chosen_lang_code != previous_lang:
                 self.create_menubar()
+                self.templates = self.localize_builtin_templates(getattr(self, "templates", []))
             self._ui_font_family = None
             self._font_families = None
             self._header_cap_font = None
@@ -34166,7 +34210,7 @@ class ListApp:
                 return
             label = self.labels[index]
             color = self.choose_label_color(
-                self.label_color_key(label), preview_name=str(label.get("name") or "Label")
+                self.label_color_key(label), preview_name=str(self.label_display_name(label, "Label"))
             )
             if color is None or self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
                 return
@@ -36060,7 +36104,7 @@ class ListApp:
         filter_row.pack(fill="x", pady=(0, 8))
         tk.Label(
             filter_row,
-            text="Filtern:",
+            text=glide_i18n.t("ui.filter_row.filter", "Filtern:"),
             bg=theme["bg"],
             fg=theme["text"],
             font=app_font(glide_design.FONT_SIZES["body"]),
@@ -36711,11 +36755,13 @@ class ListApp:
                 "Was hat Energie gekostet?\n\nWas habe ich gelernt?\n\nWas ist nächste Woche wichtig?\n"
             ),
         }
+        texts["journal-note"] = (
+            "Tagesrückblick\n\nWas ist heute passiert?\n\nGedanken & Beobachtungen\n\n"
+            "Ideen\n\nFür morgen\n"
+        )
+        key = template_key if template_key in texts else "journal-note"
         return RichNoteEditor.normalize({
-            "text": texts.get(template_key, (
-                "Tagesrückblick\n\nWas ist heute passiert?\n\nGedanken & Beobachtungen\n\n"
-                "Ideen\n\nFür morgen\n"
-            )),
+            "text": glide_i18n.t(f"journal.document.{key}", texts[key]),
             "spans": [], "links": {},
         })
 
@@ -36924,7 +36970,7 @@ class ListApp:
         animation=None,
         notion_source=None,
     ):
-        title = self._clip_and_note_title((title or "Neue Liste").strip() or "Neue Liste")
+        title = self._clip_and_note_title((title or glide_i18n.t("ui.default_title.new_list", "Neue Liste")).strip() or glide_i18n.t("ui.default_title.new_list", "Neue Liste"))
         created = self._list_timestamp(created_at, default_now=created_at is None)
         updated = self._list_timestamp(updated_at, default_now=False) or created
         kind = self.normalize_list_kind(list_kind)
@@ -37118,7 +37164,7 @@ class ListApp:
     def new_folder_object(self, title=None, folder_id=None, color=None, note="", labels=None,
                           parent_id=None, attachments=None, folder_kind="standard", icon=None,
                           archived=False, archived_at=None, notion_source_key=None):
-        title = self._clip_and_note_title((title or "Neuer Ordner").strip() or "Neuer Ordner")
+        title = self._clip_and_note_title((title or glide_i18n.t("ui.default_title.new_folder", "Neuer Ordner")).strip() or glide_i18n.t("ui.default_title.new_folder", "Neuer Ordner"))
         folder = {
             "id": folder_id or uuid.uuid4().hex,
             "title": title,
@@ -37308,6 +37354,18 @@ class ListApp:
     def is_system_label(cls, label):
         return cls.system_label_role(label) is not None
 
+    @classmethod
+    def label_display_name(cls, label, fallback=""):
+        """Angezeigter Labelname: feste Labels in der aktiven Sprache, eigene Labels wie gespeichert.
+
+        Gespeichert bleibt der deutsche Name, damit Austausch und Wiedererkennung gleich bleiben.
+        """
+        if not isinstance(label, dict):
+            return fallback
+        role = cls.system_label_role(label)
+        name = str(label.get("name") or fallback)
+        return glide_i18n.t(f"label.system.{role}", name) if role else name
+
     def get_system_label(self, role):
         return next((label for label in self.labels if self.system_label_role(label) == role), None)
 
@@ -37447,7 +37505,7 @@ class ListApp:
         overflow = 0
         total = len(labels)
         for index, label in enumerate(labels):
-            width, _height = LabelChip.measure(label.get("name", ""), self.LABEL_CHIP_FONT)
+            width, _height = LabelChip.measure(self.label_display_name(label), self.LABEL_CHIP_FONT)
             width += self.LABEL_CHIP_GAP
             # Platz für den Zähler freihalten, solange noch Labels folgen.
             reserve = self.LABEL_OVERFLOW_WIDTH if (max_rows is not None and index < total - 1) else 0
@@ -37485,7 +37543,7 @@ class ListApp:
         fill, text = self.label_chip_colors(label)
         return LabelChip(
             master,
-            str(label.get("name", "")),
+            str(self.label_display_name(label)),
             fill,
             text,
             self.theme[bg_key],
@@ -37552,7 +37610,7 @@ class ListApp:
             return ""
         visible = labels[: self.LABEL_COLUMN_MAX_VISIBLE]
         text = self.LABEL_SEPARATOR.join(
-            self.shorten_label_name(label.get("name", "")) for label in visible
+            self.shorten_label_name(self.label_display_name(label)) for label in visible
         )
         remaining = len(labels) - len(visible)
         if remaining:
@@ -37561,7 +37619,7 @@ class ListApp:
 
     def format_item_label_names(self, item):
         """Reine Namen für Export und Zwischenablage."""
-        return ", ".join(str(label.get("name", "")) for label in self.item_labels(item))
+        return ", ".join(str(self.label_display_name(label)) for label in self.item_labels(item))
 
     def normalize_labels_data(self, data):
         """Bereinigt die Labelverwaltung: eindeutige IDs, gültige Farben, feste Obergrenze."""
@@ -37697,9 +37755,9 @@ class ListApp:
             for duplicate in inboxes[1:]:
                 duplicate["system_role"] = None
         else:
-            inbox = self.new_list_object("Eingang", [], system_role="inbox", color="due_action")
+            inbox = self.new_list_object(glide_i18n.t("sidebar.inbox", "Eingang"), [], system_role="inbox", color="due_action")
             self.lists.insert(0, inbox)
-        inbox["title"] = "Eingang"
+        inbox["title"] = glide_i18n.t("sidebar.inbox", "Eingang")
         inbox["folder_id"] = None
         self.lists = [inbox] + [entry for entry in self.lists if entry is not inbox]
         after = [
@@ -39903,7 +39961,7 @@ class ListApp:
         """Untermenü „Aus Vorlage“ für Seiten: mitgelieferte und eigene Vorlagen."""
         section = sidebar_section or (self.sidebar_section_for("folder", ordner) if ordner else "pages")
         vorlagen = self._new_themed_popup_menu(menu)
-        for schluessel, titel, _markdown in self.PAGE_TEMPLATES:
+        for schluessel, titel, _markdown in self.page_template_entries():
             vorlagen.add_command(label=titel, command=lambda key=schluessel: self.run_sidebar_creation(lambda: self.create_page_from_template(key, ordner), section))
         eigene = self.page_templates()
         if eigene:
@@ -40063,6 +40121,13 @@ class ListApp:
          "## Meilensteine\n\n- [ ] Erster Meilenstein\n\n## Offene Fragen\n\n- \n"),
     )
 
+    @classmethod
+    def page_template_entries(cls):
+        """Mitgelieferte Seitenvorlagen in der eingestellten Sprache (D93)."""
+        return tuple((key, glide_i18n.t(f"page_template.{key}.title", title),
+                      glide_i18n.t(f"page_template.{key}.markdown", markdown))
+                     for key, title, markdown in cls.PAGE_TEMPLATES)
+
     def page_templates(self):
         """Eigene Vorlagen, die eine Seite anlegen."""
         return self.templates_of_list_kind(self.LIST_KIND_PAGE)
@@ -40083,7 +40148,7 @@ class ListApp:
         """Neue Seite aus einer mitgelieferten Seitenvorlage."""
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False): return None
         reference_time = datetime.now()
-        markdown = next((text for schluessel, _titel, text in self.PAGE_TEMPLATES if schluessel == key), None)
+        markdown = next((text for schluessel, _titel, text in self.page_template_entries() if schluessel == key), None)
         if markdown is None:
             return None
         # {{Wochentag}}, {{KW}} usw. füllen sich auch in Seitenvorlagen (G11).
@@ -40091,7 +40156,7 @@ class ListApp:
             lambda match: self.template_auto_value(match.group(1), reference_time) or match.group(0), markdown)
         markdown = markdown.replace("{Datum}", reference_time.strftime("%d.%m.%Y"))
         document = glide_page_markdown.markdown_to_page(markdown)
-        first = next((line.strip() for line in markdown.splitlines() if line.strip()), 'Neue Seite')
+        first = next((line.strip() for line in markdown.splitlines() if line.strip()), glide_i18n.t("ui.default_title.new_page", "Neue Seite"))
         title = self.clip_container_title(re.sub(r'^#{1,6}\s+', '', first))
         if not self.confirm_template_preview({'title': title,
                                              'rich_note': document, 'items': []}):
@@ -41320,7 +41385,7 @@ class ListApp:
         values = {key: details.get(key, page.get(key)) for key in keys}
         values["title"] = self.clip_container_title(values["title"])
         if self.is_inbox_list(page):
-            values["title"] = "Eingang"
+            values["title"] = glide_i18n.t("sidebar.inbox", "Eingang")
         if all(page.get(key) == value for key, value in values.items()):
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
@@ -41413,7 +41478,7 @@ class ListApp:
         folder = self.get_folder(folder_id) if folder_id else None
         journal = bool(folder and folder.get("folder_kind") == "journal")
         today = date.today()
-        base = f"Zeichnung · {today:%d.%m.%Y}" if journal else "Neue Zeichnung"
+        base = glide_i18n.t("ui.default_title.dated_drawing", "Zeichnung · {date}", date=f"{today:%d.%m.%Y}") if journal else glide_i18n.t("ui.default_title.new_drawing", "Neue Zeichnung")
         siblings = {str(entry.get("title") or "") for entry in self.lists
                     if entry.get("folder_id") == (folder_id if folder else None)}
         title, number = base, 2
@@ -41448,7 +41513,7 @@ class ListApp:
     def create_journal_entry(self, folder_id=None, *, document=None, prompt=""):
         """Erzeugt einen datierten, durchsuchbaren Tagebucheintrag."""
         today = date.today()
-        base_title = f"Tagesnotiz · {today:%d.%m.%Y}"
+        base_title = glide_i18n.t("ui.default_title.daily_note", "Tagesnotiz · {date}", date=f"{today:%d.%m.%Y}")
         sibling_titles = {
             str(entry.get("title") or "") for entry in self.lists
             if entry.get("folder_id") == folder_id
@@ -41526,7 +41591,7 @@ class ListApp:
                 copy_items = self.copy_items_with_new_ids(entry.get("items", []), mapping=zuordnung,
                                                          preserve_titles=False)
                 new_entry = self.new_list_object(
-                    f"{str(entry.get('title') or 'Liste').strip()} (Kopie)",
+                    glide_i18n.t("ui.default_title.copy_of", "{title} (Kopie)", title=str(entry.get('title') or glide_i18n.t("ui.default_title.list", "Liste")).strip()),
                     copy_items,
                     folder_id=entry.get("folder_id"),
                     color=entry.get("color"),
@@ -41631,14 +41696,14 @@ class ListApp:
                 else:
                     file.write(f"{title}\n{'=' * max(12, len(title))}\n\n")
                     if note:
-                        file.write(self.TXT_NOTE_BLOCK_START + "\n" + note + "\n" + self.TXT_NOTE_BLOCK_END + "\n\n")
+                        file.write(self.txt_field("note_start") + "\n" + note + "\n" + self.txt_field("note_end") + "\n\n")
                     for entry in lists:
                         list_title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
                         file.write(f"\n{list_title}\n{'-' * max(12, len(list_title))}\n")
                         if entry.get("note"):
-                            file.write(self.TXT_NOTE_BLOCK_START + "\n" + str(entry.get("note")).strip() + "\n" + self.TXT_NOTE_BLOCK_END + "\n")
+                            file.write(self.txt_field("note_start") + "\n" + str(entry.get("note")).strip() + "\n" + self.txt_field("note_end") + "\n")
                         self.write_items_to_txt(file, entry.get("items", []), [])
-                    file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
+                    file.write(f"\n{self.txt_field('exported')}: {datetime.now().strftime(glide_i18n.t('ui.export_as_txt.date_format', '%d.%m.%Y um %H:%M Uhr'))}\n")
             self.show_info(glide_i18n.t("ui.export_folder_as.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_folder_as.folder_exported_to", 'Ordner exportiert nach:\n{path}', path=path))
         except OSError as exc:
             self.show_error(glide_i18n.t("ui.export_folder_as.folder_export", "Ordnerexport"), str(exc))
@@ -47948,7 +48013,7 @@ class ListApp:
             abstand = regel["abstand"]
             text = "jeden zweiten Tag" if abstand == 2 else f'alle {abstand} Tage'
         elif art == cls.REPEAT_WEEKDAYS:
-            namen = ", ".join(tr_table(cls.REPEAT_WEEKDAY_NAMES)[tag] for tag in regel["tage"])
+            namen = ", ".join(cls.REPEAT_WEEKDAY_NAMES[tag] for tag in regel["tage"])
             text = f'jeden {namen}'
         elif art == cls.REPEAT_WEEKLY:
             text = "wöchentlich"
@@ -47985,7 +48050,7 @@ class ListApp:
             text = (tr("repeat.every_other_day", "jeden zweiten Tag") if abstand == 2
                     else tr("repeat.every_n_days", "alle {abstand} Tage", abstand=abstand))
         elif art == cls.REPEAT_WEEKDAYS:
-            namen = ", ".join(tr(f"repeat.weekday.short.{tag}", tr_table(cls.REPEAT_WEEKDAY_NAMES)[tag]) for tag in regel["tage"])
+            namen = ", ".join(tr(f"repeat.weekday.short.{tag}", cls.REPEAT_WEEKDAY_NAMES[tag]) for tag in regel["tage"])
             text = tr("repeat.every_weekdays", "jeden {namen}", namen=namen)
         elif art == cls.REPEAT_WEEKLY:
             text = tr("repeat.weekly", "wöchentlich")
@@ -48042,8 +48107,8 @@ class ListApp:
             tage = []
             for kuerzel in roh[6:].split(","):
                 kuerzel = kuerzel.strip()
-                if kuerzel in tr_table(cls.REPEAT_WEEKDAY_NAMES):
-                    tage.append(tr_table(cls.REPEAT_WEEKDAY_NAMES).index(kuerzel))
+                if kuerzel in cls.REPEAT_WEEKDAY_NAMES:
+                    tage.append(cls.REPEAT_WEEKDAY_NAMES.index(kuerzel))
             if tage:
                 regel = {"art": cls.REPEAT_WEEKDAYS, "tage": tage}
         if regel is None:
@@ -51375,9 +51440,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 template['payload']['lists'][0]['title'] = template['title']
             preview = copy.deepcopy(template)
         if template_key in ('journal-note', 'journal-folder'):
-            preview['title'] = f'Tagesnotiz · {reference_date:%d.%m.%Y}'
+            preview['title'] = glide_i18n.t("ui.default_title.daily_note", "Tagesnotiz · {date}", date=f"{reference_date:%d.%m.%Y}")
             preview['rich_note'] = self.journal_note_document()
-            if template_key == 'journal-folder': preview['note'] = f'Notizbuch {reference_date.year} mit vier Quartalen'
+            if template_key == 'journal-folder': preview['note'] = glide_i18n.t("ui.default_title.notebook_year_note", "Notizbuch {year} mit vier Quartalen", year=reference_date.year)
         if not self.confirm_template_preview(preview): return None
         if self.flush_rich_note() is False: return None
         if folder_id and (not self.get_folder(folder_id) or self.is_archived_folder(folder_id)): return None
@@ -51766,12 +51831,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         markdown = str(markdown or "")
         if not markdown.strip():
-            self.show_warning("Neue Seite", glide_i18n.t("ui.new_page_from_markdown.there_is_no_text", "Es gibt keinen Text, aus dem eine Seite werden kann."))
+            self.show_warning(glide_i18n.t("ui.default_title.new_page", "Neue Seite"), glide_i18n.t("ui.new_page_from_markdown.there_is_no_text", "Es gibt keinen Text, aus dem eine Seite werden kann."))
             return None
         if not title:
-            erste = next((zeile for zeile in markdown.splitlines() if zeile.strip()), "Neue Seite")
+            erste = next((zeile for zeile in markdown.splitlines() if zeile.strip()), glide_i18n.t("ui.default_title.new_page", "Neue Seite"))
             treffer = re.match(r"^#{1,6}\s+(.*)$", erste.strip())
-            title = (treffer.group(1) if treffer else erste).strip()[:120] or "Neue Seite"
+            title = (treffer.group(1) if treffer else erste).strip()[:120] or glide_i18n.t("ui.default_title.new_page", "Neue Seite")
             if treffer:
                 # Die erste Überschrift wird zum Seitentitel und steht nicht doppelt da.
                 markdown = markdown.split(erste, 1)[1]
@@ -51877,7 +51942,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
             self.show_info(glide_i18n.t("ui.create_area.create", "Anlegen"), glide_i18n.t("ui.create_new_note.this_document_type_does", "Diese Dokumentart gehört nicht in diesen Bereich."))
             return "break"
-        entry = self.new_list_object("Neue Seite", [], folder_id=folder_id, list_kind=self.LIST_KIND_PAGE)
+        entry = self.new_list_object(glide_i18n.t("ui.default_title.new_page", "Neue Seite"), [], folder_id=folder_id, list_kind=self.LIST_KIND_PAGE)
         with self.sidebar_change(refresh_tree=True) as change:
             if not entry.get("folder_id") and getattr(self, "_creating_sidebar_section", None):
                 self.locate_sidebar_root("list", entry["id"], self._creating_sidebar_section)
@@ -52499,7 +52564,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 os.remove(temporary)
             except OSError:
                 pass
-        stored.update(name=f"Zwischenstand – {name}.json", mime=self.DRAWING_SNAPSHOT_MIME)
+        stored.update(name=glide_i18n.t("ui.default_title.snapshot_file", "Zwischenstand – {name}.json", name=name), mime=self.DRAWING_SNAPSHOT_MIME)
         before = copy.deepcopy(entry)
         undo, dirty = list(self.undo_stack), self.dirty
         history = copy.deepcopy(self.history)
@@ -52585,8 +52650,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     tk.Label(row, text=glide_i18n.t("drawing.snapshot.unreadable", "nicht lesbar: {error}", error=exc),
                              bg=self.theme["bg"], fg=self.theme["delete"],
                              font=app_font(9)).pack(side="left")
-                name = str(attachment.get("name") or "Zwischenstand")
-                name = name.removeprefix("Zwischenstand – ").removesuffix(".json")
+                name = str(attachment.get("name") or glide_i18n.t("ui.default_title.snapshot", "Zwischenstand"))
+                name = name.removeprefix("Zwischenstand – ").removeprefix("Snapshot – ").removesuffix(".json")
                 when = str(attachment.get("added_at") or "")[:16].replace("T", " ")
                 tk.Label(row, text=f"{name}\n{when}", bg=self.theme["bg"], fg=self.theme["text"],
                          font=app_font(10), justify="left", anchor="w").pack(side="left", padx=(10, 0))
@@ -52893,7 +52958,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.apply_drawing_change(entry, lambda: self.set_drawing_frame(entry, model))
         elif choice == "new":
             folder_id = entry.get("folder_id") if entry else None
-            self.create_drawing_from_model(model, "Eingefügte Zeichnung", folder_id)
+            self.create_drawing_from_model(model, glide_i18n.t("ui.default_title.pasted_drawing", "Eingefügte Zeichnung"), folder_id)
         return "break"
 
     def current_drawing_editor(self):
@@ -56173,7 +56238,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         tk.Label(body, text=glide_i18n.t("ui.show_journal_filter_dialog.from", "Von"), bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10)).pack(anchor="w")
         von_feld = DueField(body, self, due=von, compact=True, dialog_parent=dialog, show_time=False)
         von_feld.pack(fill="x", pady=(2, 8))
-        tk.Label(body, text="Bis", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10)).pack(anchor="w")
+        tk.Label(body, text=glide_i18n.t("ui.date_range.until", "Bis"), bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10)).pack(anchor="w")
         bis_feld = DueField(body, self, due=bis if bis != von else None, compact=True, dialog_parent=dialog,
                             show_time=False)
         bis_feld.pack(fill="x", pady=(2, 8))
@@ -59297,7 +59362,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         )
         for index, kind in enumerate((self.ITEM_KIND_TASK, self.ITEM_KIND_LONG, self.ITEM_KIND_HEADING, self.ITEM_KIND_GROUP)):
             kind_menu.entryconfigure(index, foreground=self.theme[self.kind_color_key(kind)])
-        menu.add_cascade(label="Art", menu=kind_menu)
+        menu.add_cascade(label=glide_i18n.t("inspector.kind", "Art"), menu=kind_menu)
 
         # Gruppieren steht auf der obersten Ebene: Es ist der Weg, den man
         # sucht, wenn mehrere Punkte zusammengehören.
@@ -61275,7 +61340,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return 'break'
         if not created:
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-            self.show_warning('Import',glide_i18n.t("ui.import_txt_as_new_lists.no_tasks_or_descriptions", 'In den ausgewählten Dateien wurden keine Aufgaben oder Beschreibungstexte gefunden.'))
+            self.show_warning(glide_i18n.t("dialog.title.import", "Import"), glide_i18n.t("ui.import_txt_as_new_lists.no_tasks_or_descriptions", 'In den ausgewählten Dateien wurden keine Aufgaben oder Beschreibungstexte gefunden.'))
             return 'break'
         self.lists.extend(created)
         if not self.save_items():
@@ -61287,9 +61352,61 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             (glide_i18n.t("ui.import_txt_as_new_lists.import_feedback", 'Importrückmeldung'),lambda:self.show_info(glide_i18n.t("ui.import_txt_as_new_lists.import_successful", 'Import erfolgreich'),glide_i18n.t("ui.import_txt_as_new_lists.list_s_imported", '{len} Liste(n) importiert.', len=len(created))))])
         return 'break'
 
+    @classmethod
+    def txt_field(cls, key):
+        """Feldname einer TXT-Ausgabe in der aktiven Sprache."""
+        return glide_i18n.t(f"txt.field.{key}", cls.TXT_FIELDS[key])
+
+    @classmethod
+    def txt_line_to_german(cls, text):
+        """Englische TXT-Zeile auf die deutsche Form bringen, die der Import liest; Deutsch bleibt unverändert."""
+        englisch = glide_i18n.load_catalog("en")
+        stripped = text.strip()
+        for key, deutsch in cls.TXT_FIELDS.items():
+            fremd = englisch.get(f"txt.field.{key}")
+            if not fremd or fremd == deutsch:
+                continue
+            if key.startswith("note_"):
+                if stripped == fremd:
+                    return text.replace(fremd, deutsch, 1)
+            elif stripped.startswith(fremd + ":"):
+                rest = stripped[len(fremd) + 1:]
+                if key == "repeat":
+                    rest = " " + cls.repeat_text_to_german(rest.strip())
+                return text[:len(text) - len(text.lstrip())] + deutsch + ":" + rest
+        return text
+
+    @classmethod
+    def repeat_text_to_german(cls, text):
+        """Englische Wiederholungsanzeige (`describe_repeat_display`) zurück in den deutschen TXT-Wortlaut."""
+        deutsch, englisch = glide_i18n.load_catalog("de"), glide_i18n.load_catalog("en")
+        tage = {englisch.get(f"repeat.weekday.short.{i}"): deutsch.get(f"repeat.weekday.short.{i}") for i in range(7)}
+        stuecke = text.split(" · ")
+        vorlagen = sorted(((k, v) for k, v in englisch.items() if k.startswith("repeat.") and k in deutsch
+                           and not k.startswith("repeat.weekday.")), key=lambda kv: -len(kv[1]))
+
+        def zurueck(stueck):
+            for key, vorlage in vorlagen:
+                muster = "^" + re.sub(r"\\\{(\w+)\\\}", r"(?P<\1>.+?)", re.escape(vorlage)) + "$"
+                treffer = re.match(muster, stueck)
+                if treffer:
+                    werte = {name: wert for name, wert in treffer.groupdict().items()}
+                    for name in ("namen", "tage"):
+                        if name in werte:
+                            werte[name] = ", ".join(tage.get(tag.strip(), tag.strip()) for tag in werte[name].split(","))
+                    return glide_i18n.safe_format(deutsch[key], werte)
+            return stueck
+
+        ende = ""
+        bis = englisch.get("repeat.until", " until {datum}").replace("{datum}", "")
+        if stuecke and bis.strip() and bis in stuecke[0]:
+            stuecke[0], datum = stuecke[0].split(bis, 1)
+            ende = glide_i18n.safe_format(deutsch.get("repeat.until", " bis {datum}"), {"datum": datum})
+        return " · ".join([zurueck(stuecke[0]) + ende] + [zurueck(stueck) for stueck in stuecke[1:]])
+
     def extract_txt_list_title(self, lines, path):
         for raw_line in lines:
-            line = raw_line.strip()
+            line = self.txt_line_to_german(raw_line).strip()
             if not line or line.startswith("===") or line.startswith("Exportiert am:"):
                 continue
             if re.match(r"^\d+(?:\.\d+)*\.\s+", line):
@@ -61297,13 +61414,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return line[:80]
         base = os.path.splitext(os.path.basename(path))[0]
         base = base.replace("_", " ").replace("-", " ").strip()
-        return base.title() or "Importierte Liste"
+        return base.title() or glide_i18n.t("ui.default_title.imported_list", "Importierte Liste")
 
     @classmethod
     def extract_txt_note(cls, lines):
         note_lines = []
         inside_note_block = False
         for raw_line in lines:
+            raw_line = cls.txt_line_to_german(raw_line)
             stripped = raw_line.strip()
             if stripped == cls.TXT_NOTE_BLOCK_START:
                 inside_note_block = True
@@ -61338,11 +61456,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 file.write(f"{self.app_title}\n")
                 file.write("=" * 30 + "\n\n")
                 if note:
-                    file.write(self.TXT_NOTE_BLOCK_START + "\n")
+                    file.write(self.txt_field("note_start") + "\n")
                     file.write(note + "\n")
-                    file.write(self.TXT_NOTE_BLOCK_END + "\n\n")
+                    file.write(self.txt_field("note_end") + "\n\n")
                 self.write_items_to_txt(file, self.items, [])
-                file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
+                file.write(f"\n{self.txt_field('exported')}: {datetime.now().strftime(glide_i18n.t('ui.export_as_txt.date_format', '%d.%m.%Y um %H:%M Uhr'))}\n")
             self.record_data_operation("exported", path)
             self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_as_txt.list_exported_to", 'Liste exportiert nach:\n{path}', path=path))
         except Exception as e:
@@ -61368,12 +61486,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 file.write(f"{indent}{number_text}. {self.GROUP_MARKER}{item.get('text', '')}\n")
                 description = str(item.get("description") or "").strip()
                 for line in description.splitlines():
-                    file.write(f"{indent}   Beschreibung: {line}\n")
+                    file.write(f"{indent}   {self.txt_field("description")}: {line}\n")
                 label_names = self.format_item_label_names(item)
                 if label_names:
-                    file.write(f"{indent}   Labels: {label_names}\n")
+                    file.write(f"{indent}   {self.txt_field("labels")}: {label_names}\n")
                 for attachment in item.get("attachments", []):
-                    file.write(f"{indent}   Anhang: {attachment.get('name', glide_i18n.t("menu.file", 'Datei'))}\n")
+                    file.write(f"{indent}   {self.txt_field("attachment")}: {attachment.get('name', glide_i18n.t("menu.file", 'Datei'))}\n")
                 self.write_items_to_txt(file, item.get("children", []), current_number)
                 continue
             flag_prefix = self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get("importance", 0)), "")
@@ -61390,22 +61508,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 file.write(f"{indent}   {self.TXT_TEXT_CONTINUATION} {line}\n")
             description = str(item.get("description") or "").strip()
             for line in description.splitlines():
-                file.write(f"{indent}   Beschreibung: {line}\n")
+                file.write(f"{indent}   {self.txt_field("description")}: {line}\n")
             due_text = self.format_due_full(item.get("due"), item.get("due_time"))
             if due_text:
-                file.write(f"{indent}   Fällig: {due_text}\n")
+                file.write(f"{indent}   {self.txt_field("due")}: {due_text}\n")
             if item.get("planned_date"):
-                file.write(f"{indent}   Bearbeitungstag: {self.format_due_display(item['planned_date'])}\n")
+                file.write(f"{indent}   {self.txt_field("planned")}: {self.format_due_display(item['planned_date'])}\n")
             if item.get("estimated_minutes") is not None:
-                file.write(f"{indent}   Aufwand: {item['estimated_minutes']} min\n")
-            wiederholung = self.describe_repeat(item.get("repeat"))
+                file.write(f"{indent}   {self.txt_field("effort")}: {item['estimated_minutes']} min\n")
+            wiederholung = self.describe_repeat_display(item.get("repeat"))
             if wiederholung:
-                file.write(f"{indent}   Wiederholung: {wiederholung}\n")
+                file.write(f"{indent}   {self.txt_field("repeat")}: {wiederholung}\n")
             label_names = self.format_item_label_names(item)
             if label_names:
-                file.write(f"{indent}   Labels: {label_names}\n")
+                file.write(f"{indent}   {self.txt_field("labels")}: {label_names}\n")
             for attachment in item.get("attachments", []):
-                file.write(f"{indent}   Anhang: {attachment.get('name', glide_i18n.t("menu.file", 'Datei'))}\n")
+                file.write(f"{indent}   {self.txt_field("attachment")}: {attachment.get('name', glide_i18n.t("menu.file", 'Datei'))}\n")
             self.write_items_to_txt(file, item.get("children", []), current_number)
 
     def pin_page_on_board(self, list_id):
@@ -61571,11 +61689,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 writer = csv.writer(file, delimiter=";")
                 # Neue Spalten werden ausschließlich angehängt; die Position
                 # aller bisherigen Spalten bleibt dadurch stabil.
-                writer.writerow([
-                    "Nummer", "Ebene", "Aufgabe", "Beschreibung", "Anhänge",
-                    "Erledigt", "Wichtigkeit", "Fällig", "Art", "Labels", "Uhrzeit",
-                    "Bearbeitungstag", "Aufwand (Minuten)",
-                ])
+                # Kopfzeile in der aktiven Sprache; der Import erkennt deutsche und englische Namen.
+                writer.writerow([glide_i18n.t(f"csv.header.{key}", name) for key, name in self.CSV_EXPORT_HEADERS])
                 self.write_items_to_csv(writer, self.items, [])
             self.record_data_operation("exported", path)
             self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_as_csv.list_exported_to", 'Liste exportiert nach:\n{path}', path=path))
@@ -61602,7 +61717,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.safe_csv_cell(
                     " | ".join(str(attachment.get("name", "")) for attachment in item.get("attachments", []))
                 ),
-                "-" if not self.is_schedulable_item(item) else ("ja" if item.get("done") else "nein"),
+                "-" if not self.is_schedulable_item(item) else (glide_i18n.t("csv.value.yes", "ja") if item.get("done") else glide_i18n.t("csv.value.no", "nein")),
                 "-" if not self.is_schedulable_item(item)
                 else tr_table(self.IMPORTANCE_NAMES).get(self.clamp_importance(item.get("importance", 0)), glide_i18n.t("inspector.importance.0", "keine")),
                 self.format_due_display(item.get("due")),
@@ -61829,7 +61944,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Klartext und Schlüssel jeder Art, normalisiert für den Vergleich."""
         wörter = {}
         for kind in cls.ITEM_KINDS:
-            for text in (kind, tr_table(cls.ITEM_KIND_NAMES).get(kind, ""), tr_table(cls.ITEM_KIND_LABELS).get(kind, "")):
+            deutsch = (cls.ITEM_KIND_NAMES.get(kind, ""), cls.ITEM_KIND_LABELS.get(kind, ""))
+            englisch = tuple(glide_i18n.load_catalog("en").get("table." + hashlib.sha1(name.encode("utf-8")).hexdigest()[:12], "")
+                             for name in deutsch if name)
+            for text in (kind,) + deutsch + englisch:
                 name = cls.normalize_csv_header(text).replace(" ", "")
                 if name:
                     wörter[name] = kind
@@ -62119,7 +62237,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             ziel_liste = self.current_list()
         else:
             titel = os.path.splitext(os.path.basename(table.get("path") or ""))[0]
-            titel = titel.replace("_", " ").strip()[:80] or "Importierte Liste"
+            titel = titel.replace("_", " ").strip()[:80] or glide_i18n.t("ui.default_title.imported_list", "Importierte Liste")
             ordner = self.active_folder_id if self.view_mode == "folder" else None
             ziel_liste = self.new_list_object(titel, punkte, folder_id=ordner)
             self.lists.append(ziel_liste)
@@ -63284,7 +63402,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     ziel["description"] = (bisher + "\n" + zeile.strip()).strip()
                 continue
             if aktuelle_liste is None:
-                aktuelle_liste = {"key": "list-1", "title": "Importierte Liste", "items": []}
+                aktuelle_liste = {"key": "list-1", "title": glide_i18n.t("ui.default_title.imported_list", "Importierte Liste"), "items": []}
                 listen.append(aktuelle_liste)
             einzug = len(treffer.group(1).replace("\t", "  "))
             erledigt = bool(treffer.group(2) and treffer.group(2).lower() == "x")
@@ -63324,6 +63442,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         path = os.path.join(os.path.dirname(__file__), 'resources', 'exchange_recipes.json')
         with open(path, encoding='utf-8') as source:
             resource = glide_storage.read_stream(source)
+        # Mitgelieferte Aufträge in der aktiven Sprache; eigene Aufträge bleiben wie gespeichert.
+        for recipe in resource.get('recipes', []) if isinstance(resource, dict) else ():
+            if isinstance(recipe, dict) and isinstance(recipe.get('id'), str):
+                for field in ('title', 'instruction'):
+                    if isinstance(recipe.get(field), str):
+                        recipe[field] = glide_i18n.t(f"recipe.{recipe['id']}.{field}", recipe[field])
         return glide_recipes.catalog(resource, self.settings.get('exchange_recipes', []))
 
     def save_exchange_recipe(self, recipe, remove=False):
@@ -63691,7 +63815,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             roh = self.read_exchange_file(pfad)
         except (OSError, ValueError) as fehler:
-            self.show_error("KI-Import", str(fehler))
+            self.show_error(glide_i18n.t("dialog.title.ai_import", "KI-Import"), str(fehler))
             return "break"
         try:
             vorab = json.loads(roh)
@@ -63711,7 +63835,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 nutzlast, bericht = self.parse_exchange_document(
                     json.dumps(aus_markdown, ensure_ascii=False))
         if nutzlast is None:
-            self.show_error("KI-Import", "\n".join(bericht.errors)
+            self.show_error(glide_i18n.t("dialog.title.ai_import", "KI-Import"), "\n".join(bericht.errors)
                             or glide_i18n.t("ui.show_exchange_import_dialog.the_file_could_not", "Die Datei konnte nicht gelesen werden."))
             return "break"
 
@@ -63753,7 +63877,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.record_data_operation("imported", pfad)
             dialog.destroy()
             self.set_active_list(ergebnis[0]["id"])
-            self.show_info("KI-Import",
+            self.show_info(glide_i18n.t("dialog.title.ai_import", "KI-Import"),
                            glide_i18n.t("ui.uebernehmen.list_s_with_items", '{len} Liste(n) mit {total_items} Punkten angelegt.', len=len(ergebnis), total_items=bericht.total_items))
             return "break"
 
@@ -64762,95 +64886,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         arten = ", ".join(faehigkeiten["item_types"])
         listenarten = ", ".join(faehigkeiten.get("list_kinds") or sorted(tr_table(self.LIST_KINDS)))
         ordnerarten = ", ".join(faehigkeiten.get("folder_kinds") or sorted(tr_table(self.FOLDER_KINDS)))
-        return f"""Erzeuge eine Glide-Austauschdatei ({self.EXCHANGE_SUFFIX}).
-
-Antworte ausschließlich mit einem JSON-Objekt, ohne Fließtext davor oder danach.
-
-Aufbau
-  {{
-    "format": "{self.EXCHANGE_FORMAT_NAME}",
-    "format_version": {self.EXCHANGE_FORMAT_VERSION},
-    "mode": "create",
-    "generator": {{"type": "ai"}},
-    "labels": [{{"key": "label-1", "name": "Release", "color": "flag"}}],
-    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "folder_kind": "standard", "labels": ["label-1"]}}],
-    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1", "list_kind": "tasks",
-                "description": "Wozu diese Liste da ist.", "markdown": "# Titel\\nNotiztext", "labels": ["label-1"], "items": [ ... ]}}]
-  }}
-
-Ein Punkt
-  {{"type": "task", "title": "Kurze Handlung", "description": "Ziel und Ergebnis.",
-    "importance": 0-3, "due": "JJJJ-MM-TT", "due_time": "HH:MM",
-    "planned_date": "JJJJ-MM-TT", "estimated_minutes": 30,
-    "repeat": {{"kind": "weekly"}}, "reminder": {{"mode": "relative", "minutes": 15}},
-    "labels": ["label-1"], "done": false,
-    "checklist": [{{"text": "Schritt", "done": false}}],
-    "children": [ ... ]}}
-
-Bedeutung der Punktarten ({arten})
-  task     Eine ausführbare Handlung mit eindeutigem Ergebnis.
-  long     Ein umfangreicherer, textorientierter Arbeitsgegenstand.
-  group    Ein Behälter für Punkte. Nicht selbst erledigbar, ohne Termin.
-  heading  Reine Gliederung. Keine Fälligkeit, keine Wichtigkeit, kein Erledigt.
-
-Listenarten ({listenarten})
-  tasks    Aufgabenliste mit Punkten (Vorgabe).
-  note     Notiz: Text in markdown oder rich_note, optional Punkte darüber.
-  page     Seite: formatierter Text in markdown oder rich_note.
-  drawing  Pixelzeichnung in drawing oder Bildfolge in animation.
-  gallery  Galerie: Bildsammlung (ohne Bilder leer).
-
-Ordnerarten ({ordnerarten})
-  standard Standardordner für alle Listenarten (Vorgabe).
-  library  Buch: sammelt formatierte Seiten und Dokumente.
-  journal  Notizbuch: für Tagebücher und Notizen.
-
-Bedeutung der Felder
-  title        Titel von Punkt, Liste oder Ordner (höchstens {self.CONTAINER_TITLE_MAX} Zeichen).
-  description  Was die Aufgabe bedeutet und welches Ergebnis erwartet wird.
-  markdown     Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides Format gewandelt).
-  folder_kind  Art des Ordners: standard, library (Buch) oder journal (Notizbuch).
-  repeat       Wiederholungsregel an Aufgaben mit due (daily, weekly, monthly, yearly, weekdays mit days: [0-6], every_n_days mit interval: n).
-  reminder     Benachrichtigung: relativ (mode "relative" mit minutes) oder fest (mode "fixed" mit ISO-Zeitstempel at).
-  children     Echte Unterpunkte, die eigenständig erledigt werden.
-  checklist    Arbeitsschritte innerhalb eines Punkts, ohne eigene Termine.
-  due          Bis wann etwas fertig sein muss.
-  planned_date Wann daran gearbeitet werden soll. Das ist nicht dasselbe.
-
-Regeln
-  1. Verwende Schlüssel („key“) frei wählbar, aber eindeutig. Erfinde keine
-     internen Kennungen; Glide vergibt sie beim Import selbst.
-  2. Titel von Aufgaben, Listen und Ordnern dürfen höchstens {self.CONTAINER_TITLE_MAX}
-     Zeichen lang sein. Längere Inhalte gehören in description, markdown oder rich_note.
-  3. Lege höchstens {faehigkeiten['max_items']} Punkte und höchstens
-     {faehigkeiten['max_checklist_entries']} Checklistenschritte je Punkt an.
-     Verschachtele höchstens {faehigkeiten['max_depth']} Ebenen tief.
-  4. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.
-     Labels können an Punkten, Listen und Ordnern vergeben werden.
-  5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.
-  6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,
-     long für erklärende Texte und task nur dort, wo etwas zu tun ist.
-  7. Dateianhänge und Bilder (attachments, cover) können in einem ZIP-Austauschpaket
-     unter attachments/ mitgeliefert werden (z. B. {{"file": "attachments/bild.png"}}).
-
-Vorhandenes überarbeiten (ab Glide 3.35, Austauschformat {glide_exchange_patch.VERSION})
-  Liegt ein Kontextpaket ({self.CONTEXT_SUFFIX}, format „{glide_exchange_patch.CONTEXT_FORMAT}“) bei,
-  antworte mit einem Änderungsvorschlag statt neuer Listen:
-  {{
-    "format": "{self.EXCHANGE_FORMAT_NAME}",
-    "format_version": {glide_exchange_patch.VERSION},
-    "mode": "patch",
-    "changes": [{{"ref": "r-…", "base": "…", "set": {{"due": "JJJJ-MM-TT", "importance": 2}}}}]
-  }}
-  ref und base kopierst du unverändert aus dem Paket. In set stehen nur Felder, die
-  sich ändern sollen: {", ".join(glide_exchange_patch.FIELDS)}.
-  Glide zeigt jede Änderung vor der Übernahme; hat sich eine Aufgabe inzwischen
-  geändert, bleibt deine Änderung als Konflikt liegen.
-
-Alternativ – wenn kein JSON verlangt ist: eine Gliederung in Markdown mit
-„# Liste“, „## Abschnitt“, „- Aufgabe“, eingerückten „- Unterpunkten“ und
-„- [ ] Schritten“ unter einer Aufgabe. Glide liest auch das, aber ohne
-Labels, Termine und Metadaten."""
+        return glide_i18n.t("ui.exchange_prompt_text.create_a_glide_exchange", 'Erzeuge eine Glide-Austauschdatei ({exchange_suffix}).\n\nAntworte ausschließlich mit einem JSON-Objekt, ohne Fließtext davor oder danach.\n\nAufbau\n  {{\n    "format": "{exchange_format_name}",\n    "format_version": {exchange_format_version},\n    "mode": "create",\n    "generator": {{"type": "ai"}},\n    "labels": [{{"key": "label-1", "name": "Release", "color": "flag"}}],\n    "folders": [{{"key": "folder-1", "title": "Projekt", "parent": "folder-0", "folder_kind": "standard", "labels": ["label-1"]}}],\n    "lists": [{{"key": "list-1", "title": "Titel", "folder": "folder-1", "list_kind": "tasks",\n                "description": "Wozu diese Liste da ist.", "markdown": "# Titel\\nNotiztext", "labels": ["label-1"], "items": [ ... ]}}]\n  }}\n\nEin Punkt\n  {{"type": "task", "title": "Kurze Handlung", "description": "Ziel und Ergebnis.",\n    "importance": 0-3, "due": "JJJJ-MM-TT", "due_time": "HH:MM",\n    "planned_date": "JJJJ-MM-TT", "estimated_minutes": 30,\n    "repeat": {{"kind": "weekly"}}, "reminder": {{"mode": "relative", "minutes": 15}},\n    "labels": ["label-1"], "done": false,\n    "checklist": [{{"text": "Schritt", "done": false}}],\n    "children": [ ... ]}}\n\nBedeutung der Punktarten ({arten})\n  task     Eine ausführbare Handlung mit eindeutigem Ergebnis.\n  long     Ein umfangreicherer, textorientierter Arbeitsgegenstand.\n  group    Ein Behälter für Punkte. Nicht selbst erledigbar, ohne Termin.\n  heading  Reine Gliederung. Keine Fälligkeit, keine Wichtigkeit, kein Erledigt.\n\nListenarten ({listenarten})\n  tasks    Aufgabenliste mit Punkten (Vorgabe).\n  note     Notiz: Text in markdown oder rich_note, optional Punkte darüber.\n  page     Seite: formatierter Text in markdown oder rich_note.\n  drawing  Pixelzeichnung in drawing oder Bildfolge in animation.\n  gallery  Galerie: Bildsammlung (ohne Bilder leer).\n\nOrdnerarten ({ordnerarten})\n  standard Standardordner für alle Listenarten (Vorgabe).\n  library  Buch: sammelt formatierte Seiten und Dokumente.\n  journal  Notizbuch: für Tagebücher und Notizen.\n\nBedeutung der Felder\n  title        Titel von Punkt, Liste oder Ordner (höchstens {container_title_max} Zeichen).\n  description  Was die Aufgabe bedeutet und welches Ergebnis erwartet wird.\n  markdown     Formatierter Markdown-Text für Seiten oder Notizen (wird automatisch in Glides Format gewandelt).\n  folder_kind  Art des Ordners: standard, library (Buch) oder journal (Notizbuch).\n  repeat       Wiederholungsregel an Aufgaben mit due (daily, weekly, monthly, yearly, weekdays mit days: [0-6], every_n_days mit interval: n).\n  reminder     Benachrichtigung: relativ (mode "relative" mit minutes) oder fest (mode "fixed" mit ISO-Zeitstempel at).\n  children     Echte Unterpunkte, die eigenständig erledigt werden.\n  checklist    Arbeitsschritte innerhalb eines Punkts, ohne eigene Termine.\n  due          Bis wann etwas fertig sein muss.\n  planned_date Wann daran gearbeitet werden soll. Das ist nicht dasselbe.\n\nRegeln\n  1. Verwende Schlüssel („key“) frei wählbar, aber eindeutig. Erfinde keine\n     internen Kennungen; Glide vergibt sie beim Import selbst.\n  2. Titel von Aufgaben, Listen und Ordnern dürfen höchstens {container_title_max2}\n     Zeichen lang sein. Längere Inhalte gehören in description, markdown oder rich_note.\n  3. Lege höchstens {max_items} Punkte und höchstens\n     {max_checklist_entries} Checklistenschritte je Punkt an.\n     Verschachtele höchstens {max_depth} Ebenen tief.\n  4. Verwende wenige, wiederverwendete Labels statt eines Labels je Aufgabe.\n     Labels können an Punkten, Listen und Ordnern vergeben werden.\n  5. Datumsangaben immer als JJJJ-MM-TT, Uhrzeiten als HH:MM.\n  6. Nicht jeder Absatz ist eine Aufgabe. Verwende heading für Abschnitte,\n     long für erklärende Texte und task nur dort, wo etwas zu tun ist.\n  7. Dateianhänge und Bilder (attachments, cover) können in einem ZIP-Austauschpaket\n     unter attachments/ mitgeliefert werden (z. B. {{"file": "attachments/bild.png"}}).\n\nVorhandenes überarbeiten (ab Glide 3.35, Austauschformat {version})\n  Liegt ein Kontextpaket ({context_suffix}, format „{context_format}“) bei,\n  antworte mit einem Änderungsvorschlag statt neuer Listen:\n  {{\n    "format": "{exchange_format_name2}",\n    "format_version": {version2},\n    "mode": "patch",\n    "changes": [{{"ref": "r-…", "base": "…", "set": {{"due": "JJJJ-MM-TT", "importance": 2}}}}]\n  }}\n  ref und base kopierst du unverändert aus dem Paket. In set stehen nur Felder, die\n  sich ändern sollen: {join}.\n  Glide zeigt jede Änderung vor der Übernahme; hat sich eine Aufgabe inzwischen\n  geändert, bleibt deine Änderung als Konflikt liegen.\n\nAlternativ – wenn kein JSON verlangt ist: eine Gliederung in Markdown mit\n„# Liste“, „## Abschnitt“, „- Aufgabe“, eingerückten „- Unterpunkten“ und\n„- [ ] Schritten“ unter einer Aufgabe. Glide liest auch das, aber ohne\nLabels, Termine und Metadaten.', exchange_suffix=self.EXCHANGE_SUFFIX, exchange_format_name=self.EXCHANGE_FORMAT_NAME, exchange_format_version=self.EXCHANGE_FORMAT_VERSION, arten=arten, listenarten=listenarten, ordnerarten=ordnerarten, container_title_max=self.CONTAINER_TITLE_MAX, container_title_max2=self.CONTAINER_TITLE_MAX, max_items=faehigkeiten['max_items'], max_checklist_entries=faehigkeiten['max_checklist_entries'], max_depth=faehigkeiten['max_depth'], version=glide_exchange_patch.VERSION, context_suffix=self.CONTEXT_SUFFIX, context_format=glide_exchange_patch.CONTEXT_FORMAT, exchange_format_name2=self.EXCHANGE_FORMAT_NAME, version2=glide_exchange_patch.VERSION, join=", ".join(glide_exchange_patch.FIELDS))
 
     def show_csv_import_dialog(self, event=None, path=None, append_to_current=None):
         """CSV-Datei wählen, Spalten zuordnen, Vorschau prüfen, übernehmen."""
@@ -64864,7 +64900,7 @@ Labels, Termine und Metadaten."""
         try:
             tabelle = self.read_csv_table(path)
         except Exception as fehler:
-            self.show_error("CSV-Import", str(fehler))
+            self.show_error(glide_i18n.t("dialog.title.csv_import", "CSV-Import"), str(fehler))
             return "break"
         zustand["table"] = tabelle
         zustand["mapping"] = self.csv_auto_mapping(tabelle)
@@ -65042,7 +65078,7 @@ Labels, Termine und Metadaten."""
                 return "break"
             dialog.destroy()
             if ziel is None:
-                self.show_warning("CSV-Import", glide_i18n.t("ui.importiere.this_mapping_created_no", 'Mit dieser Zuordnung entstand kein Punkt.\n{csv_import_summary}', csv_import_summary=self.csv_import_summary(bericht)))
+                self.show_warning(glide_i18n.t("dialog.title.csv_import", "CSV-Import"), glide_i18n.t("ui.importiere.this_mapping_created_no", 'Mit dieser Zuordnung entstand kein Punkt.\n{csv_import_summary}', csv_import_summary=self.csv_import_summary(bericht)))
             else:
                 self.record_data_operation("imported", path)
                 self.show_info(glide_i18n.t("ui.importiere.import_successful", "Import erfolgreich"), self.csv_import_summary(bericht, ziel))
@@ -65415,9 +65451,9 @@ Labels, Termine und Metadaten."""
             for duplicate in inboxes[1:]:
                 duplicate["system_role"] = None
         else:
-            inbox = self.new_list_object("Eingang", [], system_role="inbox", color="due_action")
+            inbox = self.new_list_object(glide_i18n.t("sidebar.inbox", "Eingang"), [], system_role="inbox", color="due_action")
             lists.insert(0, inbox)
-        inbox["title"] = "Eingang"
+        inbox["title"] = glide_i18n.t("sidebar.inbox", "Eingang")
         inbox["folder_id"] = None
         return [inbox] + [entry for entry in lists if entry is not inbox]
 
@@ -67021,7 +67057,7 @@ Labels, Termine und Metadaten."""
                 return
         gewaehlt = {name: bool(sections.get(name)) for name in self.APP_BACKUP_SECTIONS}
         if not any(gewaehlt.values()):
-            self.show_warning("App-Sicherung", glide_i18n.t("ui.restore_app_backup.no_area_to_restore", "Es wurde kein Bereich zum Wiederherstellen ausgewählt."))
+            self.show_warning(glide_i18n.t("mod.backup_catalog.type.glideapp", "App-Sicherung"), glide_i18n.t("ui.restore_app_backup.no_area_to_restore", "Es wurde kein Bereich zum Wiederherstellen ausgewählt."))
             return
         angewendet = []
         if gewaehlt["tasks"]:
@@ -67102,7 +67138,7 @@ Labels, Termine und Metadaten."""
         def submit(event=None):
             gewaehlt = {name: bool(variablen[name].get()) for name in self.APP_BACKUP_SECTIONS}
             if not any(gewaehlt.values()):
-                self.show_warning("App-Sicherung", glide_i18n.t("ui.submit.please_select_at_least", "Bitte mindestens einen Bereich auswählen."), parent=dialog)
+                self.show_warning(glide_i18n.t("mod.backup_catalog.type.glideapp", "App-Sicherung"), glide_i18n.t("ui.submit.please_select_at_least", "Bitte mindestens einen Bereich auswählen."), parent=dialog)
                 return "break"
             ergebnis["value"] = gewaehlt
             dialog.destroy()
@@ -67458,7 +67494,7 @@ Labels, Termine und Metadaten."""
             imported, note = self.parse_txt_items(lines), self.extract_txt_note(lines)
             if not imported and not note:
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-                self.show_warning('Import',glide_i18n.t("ui.import_from_txt.the_file_contains_neither", 'Die Datei enthält weder erkennbare Aufgaben noch einen Beschreibungstext.'))
+                self.show_warning(glide_i18n.t("dialog.title.import", "Import"), glide_i18n.t("ui.import_from_txt.the_file_contains_neither", 'Die Datei enthält weder erkennbare Aufgaben noch einen Beschreibungstext.'))
                 return
             self.items.extend(imported)
             if note:
@@ -67495,6 +67531,7 @@ Labels, Termine und Metadaten."""
         for line_index, raw_line in enumerate(lines):
             if line_index in skip_indices:
                 continue
+            raw_line = self.txt_line_to_german(raw_line)
             stripped = raw_line.strip()
             if stripped == self.TXT_NOTE_BLOCK_START:
                 inside_note_block = True
@@ -70362,7 +70399,7 @@ class TemplateDraft(ListApp):
         def insert(kind, obj, parent="", siblings=None):
             identity = obj["id"]
             self.nodes[identity] = (kind, obj, siblings)
-            label_names = ", ".join((self.get_label(value) or {}).get("name", "") for value in obj.get("labels", []))
+            label_names = ", ".join(ListApp.label_display_name(self.get_label(value) or {}) for value in obj.get("labels", []))
             due = self.format_due_full(obj.get("due"), obj.get("due_time"))
             art = tr_table(self.ITEM_KIND_NAMES)[self.item_kind(obj)] if kind == "item" else glide_i18n.t("editor.toolbar.list", "Liste") if kind == "list" else glide_i18n.t("ui.kachel_boards.folder", "Ordner")
             text = " ".join(str(obj.get("text" if kind == "item" else "title") or "").split())
@@ -70391,7 +70428,7 @@ class TemplateDraft(ListApp):
             tree.selection_set(selected)
             tree.focus(selected)
             tree.see(selected)
-        labels = ", ".join((self.get_label(value) or {}).get("name", "") for value in self.holder.get("labels", [])) or glide_i18n.t("ui.render_editor.no_labels", "Keine Labels")
+        labels = ", ".join(ListApp.label_display_name(self.get_label(value) or {}) for value in self.holder.get("labels", [])) or glide_i18n.t("ui.render_editor.no_labels", "Keine Labels")
         color = next((name for name, key in tr_table(self.LIST_COLOR_CHOICES) if key == self.holder.get("color")), glide_i18n.t("inspector.color.none", "Keine Farbe"))
         note = " ".join(str(self.holder.get("note") or glide_i18n.t("ui.render_editor.no_description", "Keine Beschreibung")).split())
         self.summary_var.set(glide_i18n.t("ui.render_editor.attachments", '{color} · {labels} · {len} Anhänge\n{wert}', color=color, labels=labels, len=len(self.holder.get('attachments', [])), wert=note[:180]))
@@ -70472,8 +70509,8 @@ class TemplateDraft(ListApp):
             if kind == "folder" and self.folder_depth(parent_id) + 1 >= self.MAX_FOLDER_DEPTH:
                 self.show_warning(glide_i18n.t("ui.kachel_boards.folder", "Ordner"), glide_i18n.t("ui.add_node.the_maximum_folder_depth", "Die maximale Ordnertiefe ist erreicht."), parent=self.dialog)
                 return
-            new = self.new_list_object("Neue Liste", [], folder_id=parent_id) if kind == "list" else self.new_folder_object("Neuer Ordner", parent_id=parent_id)
-            details = self.themed_page_details_dialog("Neue Liste" if kind == "list" else "Neuer Ordner", new["title"], "", page=new)
+            new = self.new_list_object(glide_i18n.t("ui.default_title.new_list", "Neue Liste"), [], folder_id=parent_id) if kind == "list" else self.new_folder_object(glide_i18n.t("ui.default_title.new_folder", "Neuer Ordner"), parent_id=parent_id)
+            details = self.themed_page_details_dialog(glide_i18n.t("ui.default_title.new_list", "Neue Liste") if kind == "list" else glide_i18n.t("ui.default_title.new_folder", "Neuer Ordner"), new["title"], "", page=new)
             if not details:
                 return
             new.update(details)
@@ -70493,7 +70530,7 @@ class TemplateDraft(ListApp):
             if depth > self.MAX_ITEM_DEPTH:
                 self.show_warning(glide_i18n.t("ui.add_node.subitem", "Unterpunkt"), glide_i18n.t("ui.add_node.the_maximum_item_depth", "Die maximale Punkttiefe ist erreicht."), parent=self.dialog)
                 return
-            details = self.new_item_dialog(title="Neuer Vorlagenpunkt")
+            details = self.new_item_dialog(title=glide_i18n.t("ui.default_title.new_template_item", "Neuer Vorlagenpunkt"))
             if not details:
                 return
             new = self.build_item_from_dialog(details)
