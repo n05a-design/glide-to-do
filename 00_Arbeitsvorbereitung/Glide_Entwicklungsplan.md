@@ -3821,3 +3821,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, eigene Tk 9.1, künstliche Daten: `test_ansichten.py --fall altfilter` grün; Wartehilfe mit simulierter Uhrzeit (23:58:30 wartet 92 s, 23:50:00 und 0:00:10 warten nicht). Kein echter Lauf über Mitternacht.
 
 **D – Rest und Git:** Eigener PR nur für Testcode und Plan; `src/glide` und `07_Python-Versionen` bleiben unberührt. Hover-Fall `seitenleistenabstand3504` nur beobachten.
+
+### 21.168 Mac-Temponachprüfung: Designabfragen beim Pinnwandaufbau (V1.79, 21.11.2026)
+
+**A – Auftrag:** Paket A zur Mac-Druckperformance. Den Prüffall `druck_tempo` auf `main` nachmessen, den tatsächlichen Kostenpfad profilieren und nachgewiesene Mehrarbeit beheben.
+
+**B – Befund und Umsetzung:** Der Zeitvergleich misst die Pinnwandzeichnung, anschließend prüft er den Inhalt des HTML-Druckexports. Jede Karte fragt beim Aufbau zweimal den Farbmodus ab. Seit der Volllokalisierung wurden dabei pro Abfrage der gesamte Designkatalog mehrfach übersetzt. `design_name()` und `color_mode()` lesen direkt aus den internen Einträgen. `design_info()` übersetzt nur den angeforderten Eintrag. T194 sichert gültige Design- und Farbschichtkennungen sowie den Rückfall auf das Standarddesign ab.
+
+**C – Prüfung:** Je zehn lokale Vorher-/Nachher-Läufe auf dem Mac mit Tk 9.1; vollständige Seitenkartensuite 7/7. Messwerte und Prüfgrenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#mac-nachprüfung-pinnwandaufbau-in-druck_tempo-v179-21112026).
+
+**D – Rest:** Die native GitHub-Vollprüfung bleibt offen. App-Version 1.0.0 und Aufgabenformat 26. Die Lieferkopie folgt mit dem separaten 1.0-Lieferpaket.

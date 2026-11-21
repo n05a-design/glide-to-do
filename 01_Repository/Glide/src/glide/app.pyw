@@ -19172,11 +19172,12 @@ class ListApp:
         nirgends mehr unabhängig gesetzt.
         """
         value = getattr(self, "settings", {}).get("design", self.DESIGN_DEFAULT)
-        return value if value in tr_table(self.DESIGNS) else self.DESIGN_DEFAULT
+        return value if value in self.DESIGNS else self.DESIGN_DEFAULT
 
     def design_info(self, key=None):
         """Die Beschreibung eines Designs; ohne Argument die des aktiven."""
-        return tr_table(self.DESIGNS).get(key or self.design_name(), tr_table(self.DESIGNS)[self.DESIGN_DEFAULT])
+        design = self.DESIGNS.get(key or self.design_name(), self.DESIGNS[self.DESIGN_DEFAULT])
+        return tr_table(design)
 
     def set_design(self, key, apply_now=True):
         """Wechselt das Design und hält die abgeleiteten Werte nach.
@@ -19263,7 +19264,7 @@ class ListApp:
         Bleibt als Name erhalten, weil Kartenzeichnung, Label-Chips und die
         Feierrückmeldung danach fragen. Gelesen wird seit 3.23 das Design.
         """
-        return self.design_info()["layer"] or "standard"
+        return self.DESIGNS[self.design_name()]["layer"] or "standard"
 
     def glass_enabled(self):
         """Ob das aktive Design die Materialoptik verwendet."""

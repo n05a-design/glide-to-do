@@ -245,6 +245,15 @@ def fall_druck_tempo(run):
     check_text_measurement_contract(run.app.workspace)
     check_paired_timing_contract()
     app=run.app;entry,page,note,item=seed(run);view=app.workspace
+    # Beim Zeichnen werden nur stabile Designkennungen benötigt.
+    with patch.object(run.mod, "tr_table", side_effect=AssertionError("Farbmodus übersetzt Designtabelle")):
+        for key, design in app.DESIGNS.items():
+            with patch.dict(app.settings, {"design": key}):
+                assert app.design_name() == key
+                assert app.color_mode() == (design["layer"] or "standard")
+        with patch.dict(app.settings, {"design": "unknown-design"}):
+            assert app.design_name() == app.DESIGN_DEFAULT
+            assert app.color_mode() == (app.DESIGNS[app.DESIGN_DEFAULT]["layer"] or "standard")
     # Derselbe Aufbau mit 200 Aufgabenkarten, dann 150 Aufgaben/50 Seiten.
     entry['items'][:]=[app.new_item('Karte '+str(i)) for i in range(200)]
     app.save_items();app.set_active_list(entry['id']);view.pin([i['id'] for i in entry['items']]);run.idle()
