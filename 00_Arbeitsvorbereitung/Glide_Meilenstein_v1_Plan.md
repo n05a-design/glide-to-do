@@ -1,6 +1,6 @@
 # Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
 
-Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.63 auf `main` (PR #161–#164 gemergt, `09be5717`); V1.64 Shell-Paket `glide_shell` in PR #167
+Stand 21.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.64 auf `main` (PR #167 gemergt, `db2c6f80`); V1.65 Zeichenimport/Symbol/Farbwahl auf `claude/v165-zeichenimport-main`, V1.66 Shell-Paket 7 (`motion`, Übernahmewerkzeug) auf `claude/v166-shell-motion-main`, V1.67 Shell-Bausteine D96 auf `claude/v167-shell-d96-main`
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 
