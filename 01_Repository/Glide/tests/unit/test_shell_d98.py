@@ -98,7 +98,7 @@ def simuliert(plattform, heim):
 
 class Laufzeitpfade(unittest.TestCase):
     def test_plattformordner(self):
-        mac, win, lin = "/Users/n", "C:\\Users\\n", "/home/n"
+        mac, win, lin = "/Users/nutzer", "C:\\Users\\nutzer", "/home/nutzer"
         faelle = (
             ("darwin", mac, {}, mac + "/Library/Application Support/App", mac + "/Library/Caches/App"),
             ("win32", win, {"APPDATA": win + "\\R", "LOCALAPPDATA": win + "\\L"}, win + "\\R\\App", win + "\\L\\App\\Cache"),
