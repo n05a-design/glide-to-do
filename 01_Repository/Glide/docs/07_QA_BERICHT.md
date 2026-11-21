@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## D93-Volllokalisierung, Paket L1 (V1.70, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v170-i18n-l1-pr` über `main` `22c48f4d`. Grün: Schnellprüfung `pruefen.py --modus schnell --vordergrund` (alle Suiten und Werkzeuge), `test_i18n.py` (23 Tests, darunter der neue Abgleich der `ui.*`-Vorgaben) und `test_lokalisierung_d93.py` (T335, Fall `l1_tageshinweise`). Die Umstellung erfolgte werkzeuggestützt: Jede Fundstelle wurde mit Vorlage und Platzhaltern in `glide_i18n.t()` gefasst; Datenwerte wurden einzeln ausgenommen. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme der englischen Oberfläche.
+
 ## Langtext-Umbruchschaukel behoben (V1.69, 21.11.2026)
 
 Der lokale Mac-Hänger in `test_arbeitsmodi --gruppe abschluss` (Fall `anhangsnamen`, seit mehreren Ständen als Umgebungsbefund geführt) war ein echter Fehler: Nach `open_task_inspector` brach `schedule_long_task_reflow` die Langtexte bei gleicher Fensterbreite (1280) im Kreis um (389 Umbrüche in 60 s, Breiten 207–225 px), `root.update()` kehrte nie zurück. Auf dem GitHub-Runner (1920 × 1080) trat die Schaukel nicht auf. `ui_design.reflow_repeats` beendet sie nach einer Runde. Danach lokal grün (macOS arm64, Python 3.14.5, eigene Tk 9.1.0, künstliche Daten, Vordergrund): `anhangsnamen` einzeln, Gruppe `abschluss` 10/10 (auch `ruecktaste`), `test_ui_design.py`.
