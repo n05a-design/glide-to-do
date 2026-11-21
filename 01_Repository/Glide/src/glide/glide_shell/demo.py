@@ -3,7 +3,8 @@
 
 Der Host zeigt Folgeprojekten das Nutzungsmuster der Glide Shell ohne Glide:
 Menüleiste über `desktop_adapter`, ein wiederkehrender Zeitgeber im eigenen
-`AfterScope`, Bedienelemente aus `custom_controls` und ein modaler Dialog über
+`AfterScope`, ein kurzer Übergang aus `motion` im selben Bereich,
+Bedienelemente aus `custom_controls` und ein modaler Dialog über
 `modal_session.create_dialog` und `run_modal`. Texte und Farben liefert der
 Host selbst; die Shell kennt sie nicht.
 
@@ -14,9 +15,9 @@ Suchpfad. Vertrag: `tests/integration/test_shell_demohost.py`.
 import time
 import tkinter as tk
 
-from glide_shell import custom_controls, desktop_adapter, modal_session, window_lifetime
+from glide_shell import custom_controls, desktop_adapter, modal_session, motion, window_lifetime
 
-PALETTE = {"bg": "#F5F5F7", "card": "#FFFFFF", "text": "#15243C", "muted": "#6E6E73"}
+PALETTE = {"bg": "#F5F5F7", "card": "#FFFFFF", "text": "#15243C", "muted": "#6E6E73", "accent": "#0A84FF"}
 TEXTS = {
     "title": "Glide Shell demo",
     "menu_file": "File",
@@ -39,6 +40,7 @@ class DemoHost:
         self.texts = dict(TEXTS, **(texts or {}))
         self.colors = dict(PALETTE, **(colors or {}))
         self.scope = window_lifetime.scope_for(root)
+        self.transitions = motion.Transitions(self.scope.after, self.scope.cancel)
         self.dialogs_opened = 0
         root.title(self.texts["title"])
         root.configure(bg=self.colors["bg"])
@@ -57,11 +59,22 @@ class DemoHost:
         self.seconds = tk.BooleanVar(root, value=True)
         self.toggle = custom_controls.GlideCheckbutton(
             root, text=self.texts["toggle"], variable=self.seconds,
-            bg=self.colors["bg"], fg=self.colors["text"], command=self.tick)
+            bg=self.colors["bg"], fg=self.colors["text"], command=self._toggled)
         self.toggle.pack(padx=20, anchor="w")
         self.clock = tk.Label(root, bg=self.colors["bg"], fg=self.colors["text"], font=("TkDefaultFont", 18))
         self.clock.pack(padx=20, pady=(8, 16), anchor="w")
         self.tick()
+
+    def _toggled(self):
+        self.tick()
+        self.pulse()
+
+    def pulse(self):
+        """Uhr kurz in der Akzentfarbe aufleuchten lassen; ein neuer Puls bricht den alten ab."""
+        self.transitions.start(
+            "clock", lambda value: self.clock.configure(
+                fg=self.colors["accent"] if value < 1.0 else self.colors["text"]),
+            duration_ms=120)
 
     def tick(self):
         """Uhr aktualisieren und den nächsten Lauf im eigenen Bereich planen."""
@@ -88,7 +101,8 @@ class DemoHost:
         return "break"
 
     def close(self):
-        """Fenster schließen; der Bereich bricht dabei alle Zeitgeber ab."""
+        """Fenster schließen; Übergänge enden, der Bereich bricht alle Zeitgeber ab."""
+        self.transitions.close()
         self.root.destroy()
 
 

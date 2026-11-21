@@ -1,5 +1,12 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Kurze, unterbrechbare Übergänge; Uhr und Zeitplanung werden injiziert."""
+"""Shell-Paket 7: kurze, unterbrechbare Übergänge; Uhr und Zeitplanung werden injiziert.
+
+`Transitions(schedule, unschedule, clock)` führt je Schlüssel höchstens einen
+Übergang von 0 bis 1 (höchstens 150 ms, kubisch ausklingend). Ein neuer Start
+desselben Schlüssels bricht den laufenden ab; `close()` beendet alle. Der Host
+reicht die Zeitplanung herein, etwa `AfterScope.after` und `AfterScope.cancel`
+aus `window_lifetime`; das Modul selbst importiert kein `tkinter`.
+"""
 from dataclasses import dataclass
 from time import monotonic
 
