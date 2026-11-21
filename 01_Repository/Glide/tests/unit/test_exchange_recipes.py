@@ -87,7 +87,8 @@ class RecipeTests(unittest.TestCase):
         tree = ast.parse((REPO / 'src/glide/exchange_recipes.py').read_text(encoding='utf-8'))
         imports = {alias.name.split('.')[0] for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names}
         imports.update(node.module.split('.')[0] for node in ast.walk(tree) if isinstance(node, ast.ImportFrom))
-        self.assertEqual(imports, {'copy', 'json', 're', 'exchange_patch', 'ui_design'})
+        # i18n ist reine Standardbibliothek ohne Netz und liefert die Auftragstexte in der aktiven Sprache (D93).
+        self.assertEqual(imports, {'copy', 'json', 're', 'exchange_patch', 'ui_design', 'i18n'})
         self.assertFalse(any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
                              and n.func.id in {'__import__', 'eval', 'exec'} for n in ast.walk(tree)))
 
