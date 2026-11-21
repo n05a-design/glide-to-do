@@ -40,8 +40,12 @@ def registry() -> tuple[str, dict[str, str]]:
 
 
 def actual_source_modules() -> set[str]:
-    return {p.name for p in (ROOT / "src" / "glide").iterdir()
-            if p.is_file() and p.suffix in (".py", ".pyw")}
+    # Seit D95 liegt die Shell als Unterpaket `glide_shell`; ihre Dateien stehen
+    # mit relativem Pfad im Register (etwa `glide_shell/modal_session.py`).
+    quelle = ROOT / "src" / "glide"
+    flach = {p.name for p in quelle.iterdir() if p.is_file() and p.suffix in (".py", ".pyw")}
+    shell = {p.relative_to(quelle).as_posix() for p in (quelle / "glide_shell").glob("*.py") if p.is_file()}
+    return flach | shell
 
 
 def actual_test_paths() -> set[str]:

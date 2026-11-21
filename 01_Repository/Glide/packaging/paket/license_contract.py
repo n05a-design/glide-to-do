@@ -4,6 +4,23 @@ from pathlib import Path, PurePosixPath
 import re
 
 
+SHELL_PACKAGE = "glide_shell"
+
+
+def _shell_path(stage, name):
+    """Erwarteter Ort eines Moduls des Shell-Pakets (D95) oder None.
+
+    Nur `glide_shell` selbst und genau eine Ebene darunter gehören zu Glide;
+    jede andere Lage bleibt ohne belegte Herkunft.
+    """
+    parts = name.split(".")
+    if parts[0] != SHELL_PACKAGE or len(parts) > 2:
+        return None
+    if len(parts) == 1:
+        return stage / SHELL_PACKAGE / "__init__.py"
+    return stage / SHELL_PACKAGE / (parts[1] + ".py")
+
+
 def pure_components(records, *, stage, stdlib, pyinstaller):
     stage, stdlib, pyinstaller = map(lambda p: Path(p).resolve(), (stage, stdlib, pyinstaller))
     result = {}
@@ -12,6 +29,8 @@ def pure_components(records, *, stage, stdlib, pyinstaller):
             raise ValueError("Mehrdeutiger oder unbekannter Python-Analysebestand: " + name)
         path = Path(origin).resolve()
         if path == stage / (name + ".py") and "." not in name:
+            component = "Glide"
+        elif path == _shell_path(stage, name):
             component = "Glide"
         elif path.is_relative_to(stage / "vendor/tkinterdnd2"):
             component = "tkinterdnd2"

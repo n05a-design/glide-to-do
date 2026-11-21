@@ -101,7 +101,7 @@ Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- 
 - **Ziel:** Einheitliche Widget-Schnittstelle (`keys()`, `configure()`, Event-Binding) unabhängig vom konkreten Glide-Inhalt.
 
 ### Phase 3: Modal- und Dialog-Manager
-- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py` als flaches Modul; ein Namensraum wie `glide_shell.dialogs` entsteht nach D86 erst mit dem Paket `glide_shell` vor Paket 6; bis dahin führt `tests/unit/test_shell_importregel.py` die Liste der Shell-Module.
+- **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py`, zunächst als flaches Modul; seit V1.64 (D95) im Paket als `glide_shell.modal_session`. Die Liste der Shell-Module führt `tests/unit/test_shell_importregel.py`.
 - **Ziel:** Schutz vor Livelocks, standardisierte Bestätigungs-, Eingabe- und Auswahldialoge mit einheitlicher Tastaturbedienung (Escape zum Abbrechen, Enter zum Bestätigen).
 
 ### Phase 4: Undo/Command-Abstraktion
@@ -179,3 +179,15 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 ### Locale-Vertrag für sichtbare Shell-Beschriftungen
 
 Shell-Module erhalten bereits angezeigte Menütexte, Aktionen und Beschriftungen vom Host; sie laden keine Glide-Kataloge und wählen keine Produktsprache. `desktop_adapter` ergänzt dafür bei `primary_modifier`, `format_accelerator` und `format_redo_accelerator` den optionalen Parameter `modifier_labels` (`command`, `control`, `shift`). Glide reicht die aktiven DE/EN-Katalogwerte ein. Bestehende Aufrufer ohne diesen Parameter behalten ihre bisherigen Beschriftungen (`Cmd`, `Strg`, `Shift`). Dieser kleine Host→Shell-Vertrag führt weder einen eigenen Übersetzungsdienst noch eine neue Shell-Abstraktion ein. T319 und T326 sichern Imports, öffentliche Signaturen und den rückwärtskompatiblen Fallback; T329 prüft die beiden Katalogwerte.
+
+---
+
+## 7. Paket `glide_shell` und Übernahme in Folgeprojekte (D95, 20.11.2026)
+
+Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit eigener Paketversion `SHELL_VERSION` (0.1.0, getrennt von App- und Systemversion). Es enthält `modal_session` (Dialogfabrik `create_dialog`, modaler Warteweg, Fokusrückgabe), `window_lifetime` (`AfterScope`, `scope_for`), `custom_controls` (Canvas-Bedienelemente), `desktop_adapter` (Menüleiste, Tastaturkürzel, Betriebssystemaktionen) und den Demonstrationshost `demo` (Paket 6).
+
+**Übernahme:** Ein Folgeprojekt kopiert den Ordner `glide_shell` unverändert in seinen Quellbaum und importiert die Bausteine einzeln, etwa `from glide_shell import modal_session, window_lifetime`. Voraussetzungen sind Python mit `tkinter` (geprüft mit 3.14.5 und Tk 9.1.0 auf macOS, Linux/Xvfb und Windows über Glides Matrix); es gibt keine weitere Abhängigkeit. Jede Datei trägt `SPDX-License-Identifier: MPL-2.0`. Texte, Farben, Schriften und Aktionskennungen liefert der Host; `custom_controls` nimmt Schrift, Tinte und Hintergrund über `set_font_provider`, `set_ink_provider` und `set_backdrop_painter` an. `python -m glide_shell.demo` zeigt das Nutzungsmuster.
+
+**Nachweis:** `tests/integration/test_shell_demohost.py` (T330) kopiert nur `glide_shell` in ein leeres Verzeichnis, startet den Host in eigenem Prozess und belegt, dass kein Modul aus `src/glide` geladen wird, Menü, Uhr im `AfterScope`, modaler Dialog und Abbau ohne offene Zeitgeber funktionieren. Die Verträge der Bausteine prüfen T316 (Modal, 18 Fälle, 10 Gegenproben), T320 (Lebensdauer, 10 Fälle, 7 Gegenproben), T312 und T326; T319 hält Importregel, Signaturen, Paketort und die Sperrklinke der Restkopplung.
+
+**Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Teilneutrale Module (`appearance`, `ui_design`, `compact_mode`, `action_menu`, Barrierefreiheit) und Undo gehören noch nicht zur Shell.

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Vertragstest für den Zeitgeberbesitz je Fenster oder Ansicht (Shell-Paket 3c).
 
-Geprüft wird `src/glide/window_lifetime.py` allein, mit echtem Tk und ohne
+Geprüft wird `src/glide/glide_shell/window_lifetime.py` allein, mit echtem Tk und ohne
 Glide: Ein `AfterScope` führt seine Zeitgeber, vergisst gelaufene, bricht beim
 Zerstören seines Widgets alle ab und nimmt danach keine mehr an. Das Zerstören
 eines Kindes beendet den Bereich des Elternfensters nicht.
@@ -21,7 +21,7 @@ import tempfile
 import tkinter as tk
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-MODUL = REPO / "src" / "glide" / "window_lifetime.py"
+MODUL = REPO / "src" / "glide" / "glide_shell" / "window_lifetime.py"
 ZEITLIMIT = 60
 NL = "\n"
 

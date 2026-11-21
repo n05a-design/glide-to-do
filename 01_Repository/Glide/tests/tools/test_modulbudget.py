@@ -24,13 +24,13 @@ SRC = REPO / "src" / "glide"
 
 class ModulbudgetPruefung(unittest.TestCase):
     def test_window_lifetime_meets_budget(self):
-        path = SRC / "window_lifetime.py"
+        path = SRC / "glide_shell" / "window_lifetime.py"
         _text, tree = analyse.load(path)
         violations = analyse.check_module_budget(tree, max_length=50, max_nesting=15, allow_tk=True)
         self.assertEqual(violations, [])
 
     def test_modal_session_meets_budget(self):
-        path = SRC / "modal_session.py"
+        path = SRC / "glide_shell" / "modal_session.py"
         _text, tree = analyse.load(path)
         violations = analyse.check_module_budget(tree, max_length=50, max_nesting=15, allow_tk=True)
         self.assertEqual(violations, [])

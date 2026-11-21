@@ -24,6 +24,21 @@ class LicenseContractTests(unittest.TestCase):
                 with self.subTest(path=path), self.assertRaisesRegex(ValueError, 'belegte Herkunft'):
                     pure_components([('alien', str(root/path), 'PYMODULE')], **options)
 
+    def test_shell_package_modules_are_glide_only_at_their_exact_place(self):
+        """D95: `glide_shell` und genau eine Ebene darunter gehören zu Glide."""
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            options = dict(stage=root/'source', stdlib=root/'python', pyinstaller=root/'builder/PyInstaller')
+            records = [('glide_shell', str(root/'source/glide_shell/__init__.py'), 'PYMODULE'),
+                       ('glide_shell.window_lifetime', str(root/'source/glide_shell/window_lifetime.py'), 'PYMODULE')]
+            self.assertEqual(pure_components(records, **options),
+                             {'glide_shell': ['Glide'], 'glide_shell.window_lifetime': ['Glide']})
+            for name, path in (('glide_shell.window_lifetime', 'source/elsewhere/window_lifetime.py'),
+                               ('glide_shell.sub.deep', 'source/glide_shell/sub/deep.py'),
+                               ('other_pkg.mod', 'source/other_pkg/mod.py')):
+                with self.subTest(name=name, path=path), self.assertRaisesRegex(ValueError, 'belegte Herkunft'):
+                    pure_components([(name, str(root/path), 'PYMODULE')], **options)
+
     def test_multiple_embedded_components_and_unknown_native_files(self):
         prefix = 'Contents/Frameworks/python3__dot__14/lib-dynload/'
         names = ['Contents/Frameworks/Tk', prefix+'_lzma.cpython-314-darwin.so',

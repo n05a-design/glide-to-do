@@ -201,8 +201,8 @@ import backup_diff as glide_backup_diff  # noqa: E402
 import action_menu as glide_action_menu  # noqa: E402
 import side_view as glide_side_view  # noqa: E402
 import compact_mode as glide_compact  # noqa: E402
-import modal_session as glide_modal_session  # noqa: E402
-import window_lifetime as glide_window_lifetime  # noqa: E402
+from glide_shell import modal_session as glide_modal_session  # noqa: E402
+from glide_shell import window_lifetime as glide_window_lifetime  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -246,14 +246,14 @@ APP_RELEASE_NAME = "Entwicklungsstand"
 APP_BUNDLE_ID = "de.shaye.glide"
 APP_USER_MODEL_ID = "Shaye.Glide"
 
-import desktop_adapter
+from glide_shell import desktop_adapter
 
 IS_MACOS = desktop_adapter.is_macos()
 IS_WINDOWS = desktop_adapter.is_windows()
 IS_LINUX = desktop_adapter.is_linux()
 
 
-from custom_controls import rounded_rect_points
+from glide_shell.custom_controls import rounded_rect_points
 
 
 def root_after(root, delay, callback):
@@ -2620,7 +2620,7 @@ class RoundedContainer(DeferredDrawCanvas):
             )
 
 
-from custom_controls import (
+from glide_shell.custom_controls import (
     CanvasLabel,
     GlideCheckbutton,
     GlideRadiobutton,

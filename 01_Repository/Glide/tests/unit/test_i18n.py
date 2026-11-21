@@ -24,7 +24,7 @@ if str(SRC) not in sys.path:
 
 import i18n
 import backdrop
-import desktop_adapter
+from glide_shell import desktop_adapter
 
 
 class I18nTests(unittest.TestCase):
