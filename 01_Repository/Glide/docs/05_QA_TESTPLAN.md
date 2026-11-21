@@ -99,6 +99,8 @@ Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26
 
 **3.69.0 – Dokumentationskonsolidierung und Headless-CI-Absicherung:** `test_desktop_adapter.py` (T326, bis 17.11.2026 irrtümlich als T313 geführt) fängt fehlende Tk-Displays in headless Linux-CI mit `SkipTest` ab. Unit-Suite läuft headless (1.230 Tests, 3 Skips) sowie auf Desktopsystemen (13/13 Fälle) fehlerfrei durch. Vollständige Link- und Dokumentenprüfung über alle 85 Markdown-Dateien belegt 0 defekte Links. [Nachweis](07_QA_BERICHT.md#prüfstand-3690--dokumentations--und-übergabekonsolidierung-headless-ci-absicherung-16112026).
 
+**V1.73 – Volllokalisierung L4:** T335 ergänzt `l4_menues_und_anlegen`: Kontextmenüs von Liste, Ordner und „Demnächst“ einschließlich aller Untermenüs sowie der Anlegen-Dialog auf Englisch ohne deutsche Reste, Deutsch als Gegenprobe. Die Erinnerungsübersicht vergleicht ihren Zustand mit demselben Katalogtext, sonst fehlten auf Englisch offene Hinweise im Zähler.
+
 **V1.72 – Volllokalisierung L3:** T335 ergänzt `l3_punkte_und_labels`: Punktmaske, Labelmanager und Tabellenspalten als echte Dialoge auf Englisch ohne deutsche Reste, Deutsch als Gegenprobe.
 
 **V1.71 – Volllokalisierung L2:** T335 ergänzt `l2_tag_und_start`: „Tag entlasten“ mit zwei eingeplanten Aufgaben und „Startseite einrichten“ als echte Dialoge auf Englisch ohne deutsche Reste, Deutsch als Gegenprobe. Ein bereits übersetzter Knopf des Tagesvorschlags wird jetzt über denselben Katalogtext gefunden.

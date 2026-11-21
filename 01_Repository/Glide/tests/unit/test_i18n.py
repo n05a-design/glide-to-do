@@ -227,7 +227,17 @@ class I18nTests(unittest.TestCase):
                 abweichend.append((node.lineno, key))
         self.assertGreater(gefunden, 0)
         self.assertEqual(abweichend, [], "Codevorgabe und de.json weichen ab")
-        unuebersetzt = sorted(key for key in de if key.startswith("ui.") and en.get(key) == de[key])
+        # Wörter, die im Englischen gleich lauten, dürfen unverändert bleiben.
+        gleich = {"labels", "label", "in", "zoom", "navigator", "status", "ok", "name", "start", "pdf", "html", "txt",
+                  "csv", "ics", "markdown", "json", "glide", "canvas", "png", "svg", "ico", "min", "cmd", "alt", "tab",
+                  "enter", "esc", "escape", "shift", "f2", "f3", "f11"}
+
+        def gleichlautend(text):
+            woerter = re.findall(r"[^\W\d_]+", re.sub(r"\{[^}]*\}", " ", text).lower())
+            return all(wort in gleich for wort in woerter)
+
+        unuebersetzt = sorted(key for key in de if key.startswith("ui.") and en.get(key) == de[key]
+                              and not gleichlautend(de[key]))
         self.assertEqual(unuebersetzt, [], "ui.*-Schlüssel ohne englischen Text")
 
     def test_settings_backdrop_names_exist_in_both_catalogs(self):
