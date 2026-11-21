@@ -194,4 +194,6 @@ Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit
 
 **Sprache (D96):** Laufzeittexte für Entwickler (Ausnahmen, Protokoll) sind Englisch, T319 prüft das; Docstrings und Kommentare bleiben Deutsch, sichtbare Texte liefert der Host.
 
+Für Agenten bündelt das [Arbeitshandbuch](GLIDE_SHELL_KI_HANDBUCH.md) Bausteine, Regeln, Tests, Prüfwege und Versionierung.
+
 **Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Noch nicht zur Shell gehören die Barrierefreiheit (S12, nicht freigegeben) und der Rückgängig-Stapel; von `ui_design`, `action_menu` und `runtime_config` liegt seit V1.69 nur der neutrale Teil in der Shell (D98).
