@@ -323,6 +323,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 | G22 | Verschlüsselte Ablage | ✕ | keine Priorität |
 | G12, G13 | Spalten in Seiten, Graph | ✕ | Entscheidungen 29./30.09.2026 |
 | ZF-200 | Eigene Felder je Liste | ✕ | am 25.09.2026 nicht gewählt |
+| N21 | Englische Eingabewörter der Schnellerfassung („tomorrow“, „next Monday“, „every week“, englische Wochentage und Monate) | ◇ | nicht Teil von 1.0.0, ausdrücklich nicht gestrichen (Inhaberentscheid 21.11.2026); Auslöser: Folgeversion nach 1.0.0. Deutsche Eingabewörter bleiben gültig; Handbuch und Platzhalter nennen sie bis dahin als deutsche Beispiele |
 | N15–N20 | N15 Sprache, N16 Gewohnheitsstatistik (=G06, vorerst), N17 Team, N18 freie Felder, N19 Unterseiten/Graph, N20 Web Clipper | ✕ bzw. zurückgestellt N16 | konkrete Produktgrenzen; Cloud-KI separat durch Q3 ausgeschlossen |
 
 ## 8. Abhängigkeiten und Regeln
@@ -3800,3 +3801,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: alle 1283 Unit-Tests, `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 (acht Fälle, streng) grün. Gemeinsamer Volllauf mit macOS-Paketbau folgt (D51).
 
 **D – Rest und Git:** Offen als Produktfragen, nicht entschieden: zweisprachiger TXT- und CSV-Austausch, englische KI-Formatbeschreibung, englische Datumswörter der Schnellerfassung, übersetzte Anzeige der Systemlabelnamen und englische mitgelieferte Vorlagen. Menschliche Sprach- und Sichtabnahme der englischen Oberfläche und Abnahme des übersetzten „Über Glide“-Texts durch den Inhaber. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.166 D93-Nachtrag: zweisprachiger Austausch, Systemlabels, KI-Format und Vorlagen (V1.78, 21.11.2026)
+
+**A – Auftrag:** Inhaberentscheid vom 21.11.2026 zu den offenen Produktfragen aus L1–L8: Austausch zweisprachig, KI-Formatbeschreibung auch auf Englisch, Systemlabels übersetzt; alle für Nutzer lesbaren Bestandteile auf Englisch, wenn Englisch gewählt ist. Englische Eingabewörter der Schnellerfassung sind nicht Teil von 1.0.0, werden aber nicht gestrichen, sondern als Zukunftspunkt geführt.
+
+**B – Umsetzung:** TXT: Feldnamen über `txt_field`, Exportkopf und Wiederholungstext in der eingestellten Sprache; der Import übersetzt englische Feldnamen, Notizmarken und Wiederholungsangaben über `txt_line_to_german` und `repeat_text_to_german` zurück. CSV: Kopfzeile über `csv.header.*`, Ja/Nein über `csv.value.*`, Import erkennt deutsche und englische Spaltennamen und Artwörter. `describe_repeat` und `parse_repeat_text` nutzen wieder die deutschen Wochentage (Fehler aus L8). Systemlabels zeigen an rund 17 Stellen `label_display_name`. KI-Formatbeschreibung, eingebaute Rezepte und die Rahmentexte von `exchange_recipes` laufen über den Katalog. Mitgelieferte Vorlagen: `glide_vorlagen.en.glidetemplates` (331 Texte, Anhanginhalte eingeschlossen) aus `scripts/pflege/vorlagen_englisch.py` mit `vorlagen_en.json`; `default_template_records` wählt nach Sprache, `localize_builtin_templates` tauscht beim Laden und beim Sprachwechsel unveränderte mitgelieferte Vorlagen. Notizbuchvorlagen, Notizbuchdokumente und Seitenvorlagen über `template.*`, `journal.document.*` und `page_template.*`. Standardtitel (Neue Liste, Neuer Ordner, Neue Seite, Neue Zeichnung, Tagesnotiz, Notizbuch, Kopie, Importierte Liste, Eingefügte Zeichnung, Zwischenstand) und der Eingang folgen `ui.default_title.*` und `sidebar.inbox`; Zwischenstände erkennen beide Namensvorsätze. Restliche sichtbare Einzeltexte (Verbindungsmenü, Filterzeile, Zeitraum, Importtitel) über den Katalog. Plan §7 erhält N21.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.1, künstliche Daten: 1.284 Unit-Tests grün, T335 9/9 grün, Schnellprüfung grün. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Abnahme.
+
+**D – Rest und Git:** Eigene Fotos im Showcase, Entfernen aller Fremdbilder und die Herausgeberzeile folgen als eigene Pakete. Gespeicherte Standardtitel bestehender Objekte werden nicht umbenannt; nur der Eingang trägt bei jedem Laden den Namen der Sprache. Lieferkopie mit der nächsten Produktionsrunde.

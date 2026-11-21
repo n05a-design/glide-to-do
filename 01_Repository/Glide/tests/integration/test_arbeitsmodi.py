@@ -925,7 +925,9 @@ def fall_drawing_dialogs_locale(lauf):
                 assert app.drawing_snapshot_save(editor)
             assert message().startswith(labels["saved"]), message()
             names = [item.get("name") for item in drawing.get("attachments", [])]
-            assert f"Zwischenstand – Probe {language}.json" in names, "Anhangsname bleibt Datenwert"
+            # Seit V1.78 folgt der sichtbare Anhangsname der Sprache; der Dialog erkennt beide Vorsätze.
+            vorsatz = "Snapshot" if language == "en" else "Zwischenstand"
+            assert f"{vorsatz} – Probe {language}.json" in names, (language, names)
             title, shown = modal_texts(lambda: app.drawing_snapshot_dialog(editor))
             assert title == labels["snapshots"][0] and labels["snapshots"][1] <= set(shown), (language, title, shown)
             assert f"Probe {language}" in "\n".join(shown), shown
@@ -941,7 +943,7 @@ def fall_drawing_dialogs_locale(lauf):
             assert title == labels["trace"][0] and labels["trace"][1] <= set(shown), (language, title, shown)
     finally:
         mod.glide_i18n.set_language(previous_language)
-    return "Farb-, Paletten-, Zwischenstands-, Leer-, Rahmen- und Nachzeichendialoge DE/EN; Anhangsname stabil"
+    return "Farb-, Paletten-, Zwischenstands-, Leer-, Rahmen- und Nachzeichendialoge DE/EN; Anhangsname folgt der Sprache"
 
 
 def fall_drawing_import_locale(lauf):
