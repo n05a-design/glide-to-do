@@ -3750,3 +3750,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
 
 **D – Rest und Git:** Paket L4 folgt auf diesem Zweig. Offen für L8: die deutsche Datumsformatierung von Notizbucheinträgen (`_german_note_date`). Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.161 D93-Volllokalisierung, Paket L4: Menüs, Papierkorb, Kopf und Meldungen (V1.73, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 520 Texte von `page_templates` bis `schedule_reminder_check`: Glide-Seiten exportieren und importieren, Seitenleistenzeilen und Umbenennen, Farben- und Labelmenüs, Mehrfachauswahl, Kontextmenüs von Liste, Ordner, Systemansichten und Ordnerübersicht, Listen- und Ordnerdetails, Verschieben, Ordner- und Teilexport, Erledigte entfernen, Leeren, Löschen, Papierkorb, Anlegen-Dialog mit Arten und Vorlagen, Einrücken, Werkzeugleiste und Kopf, Filtererklärung, Auswahlleiste, Seitenchips, Ansichts- und Eingabehinweise, Schließen-Abfrage, Fehlerhinweis und -protokoll, Anhangsnamen, Formatumstellung, Schreibschutz- und Speichermeldungen, Titelkürzung, Erinnerungsübersicht, Systemmitteilungen. Datenformat-Entscheidung: TXT-Export (`Exportiert am:`) und `describe_repeat` bleiben deutsch, weil der TXT-Import genau diese Texte wieder einliest; eine übersetzte Anzeige der Wiederholung folgt in L8. Die Erinnerungsübersicht vergleicht ihren Zustand mit dem Katalogtext (fünf Stellen). Standardtitel neuer Objekte und Kopien bleiben deutsch.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L5 folgt auf diesem Zweig. Offen als Produktfrage: zweisprachiger TXT- und CSV-Austausch (heute bewusst deutsch). Lieferkopie mit der nächsten Produktionsrunde.

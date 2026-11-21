@@ -40081,13 +40081,13 @@ class ListApp:
         bibliotheken = [self.get_folder(value) for value in folder_ids]
         if (not seiten and not bibliotheken) or any(not self.is_page_list(entry) for entry in seiten) \
                 or any(folder is None or folder.get("folder_kind") != "library" for folder in bibliotheken):
-            self.show_info("Seite exportieren", "Wähle zuerst eine Seite oder ein Buch aus.")
+            self.show_info(glide_i18n.t("ui.export_glide_pages.export_page", "Seite exportieren"), glide_i18n.t("ui.export_glide_pages.select_a_page_or", "Wähle zuerst eine Seite oder ein Buch aus."))
             return "break"
-        titel = (seiten[0] if seiten else bibliotheken[0]).get("title") or "Seite"
+        titel = (seiten[0] if seiten else bibliotheken[0]).get("title") or glide_i18n.t("ui.render.page", "Seite")
         path = filedialog.asksaveasfilename(
-            title="Als Glide-Seite exportieren", defaultextension=self.PAGE_FILE_EXTENSION,
+            title=glide_i18n.t("ui.export_glide_pages.export_as_glide_page", "Als Glide-Seite exportieren"), defaultextension=self.PAGE_FILE_EXTENSION,
             initialfile=self.safe_filename(titel) + self.PAGE_FILE_EXTENSION,
-            filetypes=[("Glide-Seite", "*" + self.PAGE_FILE_EXTENSION), ("Alle Dateien", "*.*")])
+            filetypes=[(glide_i18n.t("ui.export_glide_pages.glide_page", "Glide-Seite"), "*" + self.PAGE_FILE_EXTENSION), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return "break"
         try:
@@ -40096,9 +40096,9 @@ class ListApp:
             self.write_complete_backup(path, payload)
             self.record_data_operation("exported", path)
             anzahl = len(payload["lists"])
-            self.show_info("Seite exportiert", "1 Seite gespeichert." if anzahl == 1 else f"{anzahl} Seiten gespeichert.")
+            self.show_info(glide_i18n.t("ui.export_glide_pages.page_exported", "Seite exportiert"), glide_i18n.t("ui.export_glide_pages.1_page_saved", "1 Seite gespeichert.") if anzahl == 1 else glide_i18n.t("ui.export_glide_pages.pages_saved", '{anzahl} Seiten gespeichert.', anzahl=anzahl))
         except Exception as exc:
-            self.show_error("Seite exportieren", str(exc))
+            self.show_error(glide_i18n.t("ui.export_glide_pages.export_page", "Seite exportieren"), str(exc))
         return "break"
 
     def read_glide_page_file(self, path):
@@ -40119,14 +40119,14 @@ class ListApp:
     def import_glide_pages(self, path=None):
         """`.glidepage` hinzufügen – der Bestand bleibt, neue Seiten kommen dazu."""
         path = path or filedialog.askopenfilename(
-            title="Glide-Seiten importieren",
-            filetypes=[("Glide-Seite", "*" + self.PAGE_FILE_EXTENSION), ("Alle Dateien", "*.*")])
+            title=glide_i18n.t("ui.import_glide_pages.import_glide_pages", "Glide-Seiten importieren"),
+            filetypes=[(glide_i18n.t("ui.import_glide_pages.glide_page", "Glide-Seite"), "*" + self.PAGE_FILE_EXTENSION), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return None
         try:
             daten = self.read_glide_page_file(path)
         except (OSError, ValueError, KeyError, zipfile.BadZipFile) as exc:
-            self.show_error("Glide-Seiten importieren", str(exc))
+            self.show_error(glide_i18n.t("ui.import_glide_pages.import_glide_pages", "Glide-Seiten importieren"), str(exc))
             return None
         vorher = {entry.get("id") for entry in self.lists}
         if not self.import_full_backup(additive=True, path=path, show_success=False):
@@ -40135,7 +40135,7 @@ class ListApp:
         if neu and not daten.get("folders"):
             self.set_active_list(neu[0]["id"])
         anzahl = len(neu)
-        self.show_info("Glide-Seiten importiert", "1 Seite hinzugefügt." if anzahl == 1 else f"{anzahl} Seiten hinzugefügt.")
+        self.show_info(glide_i18n.t("ui.import_glide_pages.glide_pages_imported", "Glide-Seiten importiert"), glide_i18n.t("ui.import_glide_pages.1_page_added", "1 Seite hinzugefügt.") if anzahl == 1 else glide_i18n.t("ui.import_glide_pages.pages_added", '{anzahl} Seiten hinzugefügt.', anzahl=anzahl))
         return neu
 
     def on_pages_select(self, event=None):
@@ -40192,7 +40192,7 @@ class ListApp:
                 continue
             if parent_folder_id is None and self.sidebar_tree_for_folder(folder) is not ziel:
                 continue
-            folder_title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+            folder_title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
             # Der Zähler nennt Aufgaben aller enthaltenen Listen und Unterordner.
             child_count = self.folder_task_count(folder_id)
             iid = f"folder:{folder_id}"
@@ -40223,7 +40223,7 @@ class ListApp:
 
     def _insert_sidebar_list_row(self, entry, parent="", tree=None, depth=None):
         target_tree = tree or self.sidebar_listbox
-        title = entry.get("title", "Meine Liste").strip() or "Meine Liste"
+        title = entry.get("title", "Meine Liste").strip() or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")
         item_count = self.list_item_count(entry)
         item_id = entry.get("id")
         if not item_id:
@@ -40442,9 +40442,9 @@ class ListApp:
         row_type, row_id = row
         if row_type == "folder":
             folder = self.get_folder(row_id)
-            return str((folder or {}).get("title") or "Ordner")
+            return str((folder or {}).get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
         entry = next((item for item in self.lists if item.get("id") == row_id), None)
-        return str((entry or {}).get("title") or "Liste")
+        return str((entry or {}).get("title") or glide_i18n.t("editor.toolbar.list", "Liste"))
 
     def find_sidebar_iid(self, row):
         """Zeilen-ID zu einer (Art, ID)-Zuordnung."""
@@ -40484,7 +40484,7 @@ class ListApp:
         def finish(commit=True):
             value = editor.get().strip() if editor.winfo_exists() else ""
             if commit and value != item.get("text") and len(value) > self.CONTAINER_TITLE_MAX:
-                self.show_warning("Titel", "Der geänderte Titel darf höchstens 40 Zeichen enthalten.")
+                self.show_warning(glide_i18n.t("ui.submit.title", "Titel"), glide_i18n.t("ui.submit.the_changed_title_may", "Der geänderte Titel darf höchstens 40 Zeichen enthalten."))
                 editor.focus_set()
                 return
             self.cancel_item_rename()
@@ -40605,8 +40605,8 @@ class ListApp:
                 self.app_title = new_title
             change.mark()
         if open_list or open_folder:
-            self.finish_change_ui(change, [('Überschrift', self.update_header_title),
-                                          ('Fenstertitel', self.update_window_title)])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.apply_sidebar_rename.heading", 'Überschrift'), self.update_header_title),
+                                          (glide_i18n.t("ui.apply_sidebar_rename.window_title", 'Fenstertitel'), self.update_window_title)])
         return bool(change.saved)
 
     def _cancel_sidebar_rename_timer(self):
@@ -40664,7 +40664,7 @@ class ListApp:
             )
         color_menu.add_separator()
         prefix = "\u2713 " if not current else "      "
-        color_menu.add_command(label=f"{prefix}Keine Farbe", command=lambda: setter(target_id, None))
+        color_menu.add_command(label=glide_i18n.t("ui.add_color_menu.no_color", '{prefix}Keine Farbe', prefix=prefix), command=lambda: setter(target_id, None))
         menu.add_cascade(label=heading, menu=color_menu)
         return color_menu
 
@@ -40677,7 +40677,7 @@ class ListApp:
         # Listen und Ordnern nicht zur Auswahl.
         available = [label for label in self.labels if not self.is_system_label(label)]
         if not available:
-            label_menu.add_command(label="Noch keine Labels angelegt", state="disabled")
+            label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.no_labels_created_yet", "Noch keine Labels angelegt"), state="disabled")
         else:
             for label in available:
                 label_id = label.get("id")
@@ -40689,12 +40689,12 @@ class ListApp:
                 )
             label_menu.add_separator()
             label_menu.add_command(
-                label="Alle Labels entfernen",
+                label=glide_i18n.t("ui.add_page_label_menu.remove_all_labels", "Alle Labels entfernen"),
                 command=lambda: self.clear_page_labels(kind, holder_id),
             )
         label_menu.add_separator()
-        label_menu.add_command(label="Labels verwalten …", command=self.open_label_manager)
-        menu.add_cascade(label="Labels", menu=label_menu)
+        label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.manage_labels", "Labels verwalten …"), command=self.open_label_manager)
+        menu.add_cascade(label=glide_i18n.t("menu.view.labels", "Labels"), menu=label_menu)
         return label_menu
 
     def find_label_holder(self, kind, holder_id):
@@ -40708,14 +40708,14 @@ class ListApp:
         if holder is None or label is None:
             return 'break'
         if self.is_system_label(label):
-            self.show_info('Festes Label', f"„{label.get('name', '')}“ gilt nur für Punkte innerhalb einer Liste.")
+            self.show_info(glide_i18n.t("ui.remove_label.built_in_label", 'Festes Label'), glide_i18n.t("ui.toggle_page_label.only_applies_to_items", '„{get}“ gilt nur für Punkte innerhalb einer Liste.', get=label.get('name', '')))
             return 'break'
         assigned = glide_task_editing.toggle_labels(holder.get('labels'), label_id, self.MAX_LABELS_PER_ITEM)
         if assigned is not None:
             with self.sidebar_change(refresh_tree=True) as change:
                 holder['labels'] = assigned
                 change.mark()
-            self.finish_change_ui(change, [('Seitenlabels', self.update_page_labels)])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.toggle_page_label.page_labels", 'Seitenlabels'), self.update_page_labels)])
         return 'break'
 
     def clear_page_labels(self, kind, holder_id):
@@ -40726,7 +40726,7 @@ class ListApp:
             with self.sidebar_change(refresh_tree=True) as change:
                 holder['labels'] = []
                 change.mark()
-            self.finish_change_ui(change, [('Seitenlabels', self.update_page_labels)])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.clear_page_labels.page_labels", 'Seitenlabels'), self.update_page_labels)])
         return 'break'
 
     def build_sidebar_context_menu(self, row, rows=None):
@@ -40740,7 +40740,7 @@ class ListApp:
             menu = self.build_smart_view_menu(row_id)
             if menu is not None:
                 menu.add_separator()
-                menu.add_command(label="Ansichten einklappen",
+                menu.add_command(label=glide_i18n.t("ui.build_sidebar_context_menu.collapse_views", "Ansichten einklappen"),
                                  command=lambda: self.set_sidebar_section_open("views", False))
             return menu
         if row_type == "folder":
@@ -40754,7 +40754,7 @@ class ListApp:
         list_ids = [row_id for row_type, row_id in rows if row_type == "list" and not self.is_inbox_list(row_id)]
         folder_ids = [row_id for row_type, row_id in rows if row_type == "folder"]
         menu = self._new_themed_popup_menu()
-        menu.add_command(label=f"Auswahl: {len(list_ids)} Liste(n), {len(folder_ids)} Ordner", state="disabled")
+        menu.add_command(label=glide_i18n.t("ui.build_sidebar_multi_menu.selection_list_s_folder", 'Auswahl: {len} Liste(n), {len2} Ordner', len=len(list_ids), len2=len(folder_ids)), state="disabled")
         menu.add_separator()
 
         move_menu = self._new_themed_popup_menu(menu)
@@ -40762,18 +40762,18 @@ class ListApp:
             folder_id = folder.get("id")
             indent = "   " * self.folder_depth(folder_id)
             move_menu.add_command(
-                label=f"{indent}{str(folder.get('title') or 'Ordner').strip() or 'Ordner'}",
+                label=f"{indent}{str(folder.get('title') or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')).strip() or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')}",
                 command=lambda target=folder_id: self.move_selected_lists_to_folder(target),
             )
         if not self.folders:
-            move_menu.add_command(label="Kein Ordner vorhanden", state="disabled")
+            move_menu.add_command(label=glide_i18n.t("ui.build_sidebar_multi_menu.no_folder_available", "Kein Ordner vorhanden"), state="disabled")
         menu.add_cascade(
-            label="Listen in Ordner verschieben",
+            label=glide_i18n.t("ui.build_sidebar_multi_menu.move_lists_to_folder", "Listen in Ordner verschieben"),
             menu=move_menu,
             state="normal" if list_ids and self.folders else "disabled",
         )
         menu.add_command(
-            label="Listen aus Ordner herauslösen",
+            label=glide_i18n.t("ui.build_sidebar_multi_menu.take_lists_out_of", "Listen aus Ordner herauslösen"),
             command=lambda: self.move_selected_lists_to_folder(None),
             state="normal" if list_ids else "disabled",
         )
@@ -40782,7 +40782,7 @@ class ListApp:
         # einmal. Unzulässige Ziele bleiben sichtbar, aber gesperrt.
         folder_move_menu = self._new_themed_popup_menu(menu)
         folder_move_menu.add_command(
-            label="Oberste Ebene",
+            label=glide_i18n.t("ui.build_sidebar_multi_menu.top_level", "Oberste Ebene"),
             command=lambda: self.move_selected_folders_to_folder(None),
         )
         candidates = [
@@ -40797,12 +40797,12 @@ class ListApp:
                 self.can_move_folder_into(folder_id, target_id) for folder_id in folder_ids
             )
             folder_move_menu.add_command(
-                label=f"{indent}{str(folder.get('title') or 'Ordner').strip() or 'Ordner'}",
+                label=f"{indent}{str(folder.get('title') or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')).strip() or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')}",
                 command=lambda target=target_id: self.move_selected_folders_to_folder(target),
                 state="normal" if allowed else "disabled",
             )
         menu.add_cascade(
-            label="Ordner verschieben",
+            label=glide_i18n.t("ui.build_sidebar_multi_menu.move_folder", "Ordner verschieben"),
             menu=folder_move_menu,
             state="normal" if folder_ids else "disabled",
         )
@@ -40816,11 +40816,11 @@ class ListApp:
                 command=lambda selected=color_key: self.set_selected_sidebar_color(selected),
             )
         color_menu.add_separator()
-        color_menu.add_command(label="Keine Farbe", command=lambda: self.set_selected_sidebar_color(None))
-        menu.add_cascade(label="Farbe der Auswahl", menu=color_menu)
+        color_menu.add_command(label=glide_i18n.t("inspector.color.none", "Keine Farbe"), command=lambda: self.set_selected_sidebar_color(None))
+        menu.add_cascade(label=glide_i18n.t("ui.build_sidebar_multi_menu.color_of_the_selection", "Farbe der Auswahl"), menu=color_menu)
         menu.add_separator()
         menu.add_command(
-            label="In den Papierkorb",
+            label=glide_i18n.t("ui.build_sidebar_multi_menu.move_to_trash", "In den Papierkorb"),
             command=self.trash_selected_sidebar_entries,
             foreground=self.theme["delete"],
             state="normal" if (list_ids or folder_ids) else "disabled",
@@ -40832,43 +40832,43 @@ class ListApp:
         if entry is None:
             return None
         is_inbox = self.is_inbox_list(entry)
-        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
         in_folder = bool(entry.get("folder_id"))
 
         menu = self._new_themed_popup_menu()
         menu.add_command(label=self.ellipsize_sidebar_title(title), state="disabled")
         menu.add_separator()
-        menu.add_command(label="Öffnen", command=lambda: self.set_active_list(list_id))
+        menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=lambda: self.set_active_list(list_id))
         # E-U2 A: lesend neben der Arbeit; Zeichnung und Galerie nur über „Öffnen“.
-        menu.add_command(label="In Nebenansicht öffnen", command=lambda: self.open_side_view(list_id),
+        menu.add_command(label=glide_i18n.t("ui.build_object_reference_menu.open_in_side_view", "In Nebenansicht öffnen"), command=lambda: self.open_side_view(list_id),
                          state="disabled" if self.is_surface_list(entry) else "normal")
         if self.is_drawing_list(entry) or entry.get("list_kind") in ("page", "note"):
-            menu.add_command(label="Auf Pinnwand anheften", command=lambda: self.pin_page_on_board(list_id))
+            menu.add_command(label=glide_i18n.t("board.menu.pin", "Auf Pinnwand anheften"), command=lambda: self.pin_page_on_board(list_id))
         menu.add_command(
-            label="Umbenennen",
+            label=glide_i18n.t("ui.open_label_manager.rename", "Umbenennen"),
             command=lambda: self.begin_sidebar_rename(self.find_sidebar_iid(("list", list_id))),
             state="disabled" if is_inbox else "normal",
         )
         menu.add_command(
-            label="Bearbeiten (Titel, Beschreibungstext) …",
+            label=glide_i18n.t("ui.build_list_menu.edit_title_description", "Bearbeiten (Titel, Beschreibungstext) …"),
             command=lambda: self.edit_list_details(list_id),
         )
-        self._add_color_menu(menu, "Listenfarbe", entry.get("color"), self.set_list_color, list_id)
+        self._add_color_menu(menu, glide_i18n.t("ui.build_list_menu.list_color", "Listenfarbe"), entry.get("color"), self.set_list_color, list_id)
         self._add_page_label_menu(menu, entry, "list")
-        menu.add_cascade(label="Verweise und Rückverweise", menu=self.build_object_reference_menu(("list", list_id), menu))
+        menu.add_cascade(label=glide_i18n.t("ui.add_object_reference_menu.references_and_backlinks", "Verweise und Rückverweise"), menu=self.build_object_reference_menu(("list", list_id), menu))
         if self.is_page_list(entry):
-            menu.add_command(label='Live-Liste einbetten …', command=lambda: self.choose_live_list(list_id))
-            menu.add_cascade(label='Titelbild', menu=self.page_cover_menu(list_id, menu))
+            menu.add_command(label=glide_i18n.t("ui.build_page_menu.embed_live_list", 'Live-Liste einbetten …'), command=lambda: self.choose_live_list(list_id))
+            menu.add_cascade(label=glide_i18n.t("ui.build_page_menu.cover_image", 'Titelbild'), menu=self.page_cover_menu(list_id, menu))
         if entry.get("list_kind", self.LIST_KIND_TASKS) == self.LIST_KIND_TASKS and not is_inbox:
             wiederkehrend = entry.get("recurring_checklist") is True
             menu.add_command(
-                label=("✓ " if wiederkehrend else "") + "Wiederkehrende Checkliste",
+                label=glide_i18n.t("ui.build_list_menu.recurring_checklist", '{wert}Wiederkehrende Checkliste', wert="✓ " if wiederkehrend else ""),
                 command=lambda: self.set_recurring_checklist(list_id, not wiederkehrend))
             if wiederkehrend:
                 routine = list_id in (self.settings.get("today_routines") or [])
-                menu.add_command(label=("✓ " if routine else "") + "In Heute als Routine zeigen",
+                menu.add_command(label=glide_i18n.t("ui.build_list_menu.show_in_today_as", '{wert}In Heute als Routine zeigen', wert="✓ " if routine else ""),
                                  command=lambda: self.toggle_today_routine(list_id))
-            menu.add_command(label="Alle Punkte wieder öffnen", command=lambda: self.reset_checklist(list_id))
+            menu.add_command(label=glide_i18n.t("ui.build_list_menu.reopen_all_items", "Alle Punkte wieder öffnen"), command=lambda: self.reset_checklist(list_id))
         menu.add_separator()
 
         create_menu = self.folder_quick_add_menu(entry.get("folder_id")) if entry.get("folder_id") else self._new_themed_popup_menu(menu)
@@ -40876,82 +40876,82 @@ class ListApp:
             section = self.sidebar_section_for("list", list_id)
             for key, info in self.LIST_KINDS.items():
                 if glide_sidebar.accepts(section, "list", key):
-                    create_menu.add_command(label=f"Neue {info['label']} …", command=lambda k=key: self.create_container_dialog(
+                    create_menu.add_command(label=glide_i18n.t("ui.build_list_menu.new", 'Neue {label} …', label=info['label']), command=lambda k=key: self.create_container_dialog(
                         "list", list_kind=k, sidebar_section=section))
-            create_menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog(
+            create_menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_folder", "Neuer Ordner …"), command=lambda: self.create_container_dialog(
                 "folder", sidebar_section=section))
-        menu.add_cascade(label="Neu anlegen", menu=create_menu)
+        menu.add_cascade(label=glide_i18n.t("ui.build_list_menu.create_new", "Neu anlegen"), menu=create_menu)
 
         move_menu = self._new_themed_popup_menu(menu)
         move_menu.add_command(
-            label="In Ordner verschieben …",
+            label=glide_i18n.t("ui.build_list_menu.move_to_folder", "In Ordner verschieben …"),
             command=lambda: self.move_list_to_folder_dialog(list_id),
             state="disabled" if is_inbox or not self.folders else "normal",
         )
         move_menu.add_command(
-            label="Aus Ordner herauslösen",
+            label=glide_i18n.t("ui.build_list_menu.take_out_of_folder", "Aus Ordner herauslösen"),
             command=lambda: self.detach_list_from_folder(list_id),
             state="normal" if in_folder and not is_inbox else "disabled",
         )
-        menu.add_cascade(label="Verschieben", menu=move_menu, state="disabled" if is_inbox else "normal")
+        menu.add_cascade(label=glide_i18n.t("drawing.action.move", "Verschieben"), menu=move_menu, state="disabled" if is_inbox else "normal")
 
         menu.add_command(
-            label="Duplizieren",
+            label=glide_i18n.t("menu.edit.duplicate", "Duplizieren"),
             command=lambda: self.duplicate_list(list_id),
             state="disabled" if is_inbox else "normal",
         )
 
         export_menu = self._new_themed_popup_menu(menu)
-        export_menu.add_command(label="Als TXT …", command=lambda: self.export_list_as(list_id, "txt"))
-        export_menu.add_command(label="Als Markdown …", command=lambda: self.export_list_as(list_id, "md"))
-        export_menu.add_command(label="Als CSV …", command=lambda: self.export_list_as(list_id, "csv"))
-        export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([list_id], []))
+        export_menu.add_command(label=glide_i18n.t("menu.file.export.txt", "Als TXT …"), command=lambda: self.export_list_as(list_id, "txt"))
+        export_menu.add_command(label=glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), command=lambda: self.export_list_as(list_id, "md"))
+        export_menu.add_command(label=glide_i18n.t("menu.file.export.csv", "Als CSV …"), command=lambda: self.export_list_as(list_id, "csv"))
+        export_menu.add_command(label=glide_i18n.t("ui.build_list_menu.as_glide_partial_backup", "Als Glide-Teilbackup …"), command=lambda: self.export_partial_backup([list_id], []))
         if self.is_page_list(entry):
-            export_menu.add_command(label="Als Glide-Seite …", command=lambda: self.export_glide_pages([list_id], []))
-        export_menu.add_command(label="Drucken und PDF …", command=lambda: self.show_print_dialog(fmt="list"))
+            export_menu.add_command(label=glide_i18n.t("menu.file.export.glide_page", "Als Glide-Seite …"), command=lambda: self.export_glide_pages([list_id], []))
+        export_menu.add_command(label=glide_i18n.t("board.action.print_pdf", "Drucken und PDF …"), command=lambda: self.show_print_dialog(fmt="list"))
         # Import aus dem Listenmenü meint immer diese Liste: sie wird zuerst
         # geöffnet, damit das Ziel im Dialog dasselbe ist, das man angeklickt hat.
-        export_menu.add_command(label="CSV importieren …",
+        export_menu.add_command(label=glide_i18n.t("menu.file.import.csv", "CSV importieren …"),
                                 command=lambda: self.import_csv_into_list(list_id))
-        export_menu.add_command(label="Kalenderdatei (ICS) …",
+        export_menu.add_command(label=glide_i18n.t("ui.build_list_menu.calendar_file_ics", "Kalenderdatei (ICS) …"),
                                 command=lambda: self.calendar_export_for_list(list_id))
-        export_menu.add_command(label="Kalenderdatei (ICS) importieren …",
+        export_menu.add_command(label=glide_i18n.t("menu.file.import.ics", "Kalenderdatei (ICS) importieren …"),
                                 command=lambda: self.ics_import_into_list(list_id))
-        menu.add_cascade(label="Exportieren", menu=export_menu)
+        menu.add_cascade(label=glide_i18n.t("menu.file.export", "Exportieren"), menu=export_menu)
 
         if self.list_accepts_items(entry) and entry.get("list_kind") not in ("note", "page"):
             gruppen_menu = self._new_themed_popup_menu(menu)
             aktuell = (self.settings.get("list_group_by") or {}).get(list_id)
-            gruppen_menu.add_command(label=("\u2713 " if not aktuell else "    ") + "Keine Gruppierung",
+            gruppen_menu.add_command(label=glide_i18n.t("ui.build_list_menu.no_grouping", '{wert}Keine Gruppierung', wert="\u2713 " if not aktuell else "    "),
                                      command=lambda: self.set_list_group(None, list_id))
             for key, name in self.LIST_GROUP_FIELDS:
                 gruppen_menu.add_command(label=("\u2713 " if aktuell == key else "    ") + name,
                                          command=lambda value=key: self.set_list_group(value, list_id))
-            menu.add_cascade(label="Gruppieren nach", menu=gruppen_menu)
+            menu.add_cascade(label=glide_i18n.t("saved_view.field.group", "Gruppieren nach"), menu=gruppen_menu)
         menu.add_separator()
-        menu.add_command(label="Pixelsymbol …", command=lambda: self.page_icon_dialog("list", list_id),
+        menu.add_command(label=glide_i18n.t("ui.build_page_menu.pixel_icon", "Pixelsymbol …"), command=lambda: self.page_icon_dialog("list", list_id),
                          state="disabled" if is_inbox else "normal")
         ordner = self.get_folder(entry.get("folder_id")) if entry.get("folder_id") else None
         if ordner is not None and ordner.get("folder_kind") == "journal":
-            menu.add_command(label="Momentdatum …", command=lambda: self.edit_moment_date(list_id))
+            menu.add_command(label=glide_i18n.t("ui.build_list_menu.moment_date", "Momentdatum …"), command=lambda: self.edit_moment_date(list_id))
         pinned = self.is_pinned("list", list_id)
-        menu.add_command(label="Lösen" if pinned else "Anheften",
+        menu.add_command(label=glide_i18n.t("ui.show_pinned_menu.unpin", "Lösen") if pinned else glide_i18n.t("board.action.pin", "Anheften"),
                          command=lambda: self.set_pinned("list", list_id, not pinned),
                          state="disabled" if is_inbox else "normal")
-        menu.add_command(label="Aus Archiv zurückholen" if entry.get("archived") else "Archivieren", command=lambda: self.set_archived("list", list_id, not entry.get("archived")),
+        menu.add_command(label=glide_i18n.t("ui.build_list_menu.restore_from_archive", "Aus Archiv zurückholen") if entry.get("archived") else glide_i18n.t("ui.build_list_menu.archive", "Archivieren"), command=lambda: self.set_archived("list", list_id, not entry.get("archived")),
                          state="disabled" if is_inbox else "normal")
         menu.add_separator()
         menu.add_command(
-            label="Erledigte Punkte löschen",
+            label=glide_i18n.t("ui.build_list_menu.delete_completed_items", "Erledigte Punkte löschen"),
             command=lambda: self.remove_done_items(list_id),
         )
         menu.add_command(
-            label="Liste leeren",
+            label=glide_i18n.t("ui.show_side_recent_searches.clear_list", "Liste leeren"),
             command=lambda: self.clear_list_by_id(list_id),
             foreground=self.theme["delete"],
         )
         menu.add_command(
-            label="In den Papierkorb",
+            label=glide_i18n.t("ui.build_list_menu.move_to_trash", "In den Papierkorb"),
             command=lambda: self.delete_list_by_id(list_id),
             foreground=self.theme["delete"],
             state="disabled" if is_inbox else "normal",
@@ -40962,59 +40962,59 @@ class ListApp:
         folder = self.get_folder(folder_id)
         if folder is None:
             return None
-        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         child_count = self.folder_task_count(folder_id)
         sub_count = len(self.get_child_folders(folder_id))
 
         menu = self._new_themed_popup_menu()
         header = f"{self.ellipsize_sidebar_title(title)}  ({child_count})"
         if sub_count:
-            header += f"  ·  {sub_count} Unterordner"
+            header += glide_i18n.t("ui.build_folder_menu.subfolders", '  ·  {sub_count} Unterordner', sub_count=sub_count)
         menu.add_command(label=header, state="disabled")
         menu.add_separator()
-        menu.add_command(label="Öffnen", command=lambda: self.set_active_folder(folder_id))
+        menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=lambda: self.set_active_folder(folder_id))
         menu.add_command(
-            label="Umbenennen",
+            label=glide_i18n.t("ui.open_label_manager.rename", "Umbenennen"),
             command=lambda: self.begin_sidebar_rename(self.find_sidebar_iid(("folder", folder_id))),
         )
         menu.add_command(
-            label="Bearbeiten (Titel, Beschreibungstext) …",
+            label=glide_i18n.t("ui.build_folder_menu.edit_title_description", "Bearbeiten (Titel, Beschreibungstext) …"),
             command=lambda: self.edit_folder_details(folder_id),
         )
-        self._add_color_menu(menu, "Ordnerfarbe", folder.get("color"), self.set_folder_color, folder_id)
+        self._add_color_menu(menu, glide_i18n.t("ui.build_folder_menu.folder_color", "Ordnerfarbe"), folder.get("color"), self.set_folder_color, folder_id)
         self._add_page_label_menu(menu, folder, "folder")
         menu.add_separator()
-        menu.add_cascade(label="Neu anlegen", menu=self.folder_quick_add_menu(folder_id))
+        menu.add_cascade(label=glide_i18n.t("ui.build_folder_menu.create_new", "Neu anlegen"), menu=self.folder_quick_add_menu(folder_id))
         menu.add_separator()
 
         # Ordner in Ordner verschieben – derselbe Weg wie bei Listen.
         self._add_folder_move_menu(menu, folder_id)
         menu.add_separator()
-        menu.add_command(label="Alle Listen aufklappen", command=lambda: self.set_folder_open(folder_id, True))
-        menu.add_command(label="Ordner zuklappen", command=lambda: self.set_folder_open(folder_id, False))
+        menu.add_command(label=glide_i18n.t("ui.build_folder_menu.expand_all_lists", "Alle Listen aufklappen"), command=lambda: self.set_folder_open(folder_id, True))
+        menu.add_command(label=glide_i18n.t("ui.build_folder_menu.collapse_folder", "Ordner zuklappen"), command=lambda: self.set_folder_open(folder_id, False))
         folder_export_menu = self._new_themed_popup_menu(menu)
-        folder_export_menu.add_command(label="Als TXT …", command=lambda: self.export_folder_as(folder_id, "txt"))
-        folder_export_menu.add_command(label="Als Markdown …", command=lambda: self.export_folder_as(folder_id, "md"))
-        folder_export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([], [folder_id]))
+        folder_export_menu.add_command(label=glide_i18n.t("menu.file.export.txt", "Als TXT …"), command=lambda: self.export_folder_as(folder_id, "txt"))
+        folder_export_menu.add_command(label=glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), command=lambda: self.export_folder_as(folder_id, "md"))
+        folder_export_menu.add_command(label=glide_i18n.t("ui.build_folder_menu.as_glide_partial_backup", "Als Glide-Teilbackup …"), command=lambda: self.export_partial_backup([], [folder_id]))
         if (self.get_folder(folder_id) or {}).get("folder_kind") == "library":
-            folder_export_menu.add_command(label="Als Glide-Seiten …",
+            folder_export_menu.add_command(label=glide_i18n.t("ui.build_folder_menu.as_glide_pages", "Als Glide-Seiten …"),
                                            command=lambda: self.export_glide_pages([], [folder_id]))
-        menu.add_cascade(label="Exportieren", menu=folder_export_menu)
-        menu.add_command(label="Als Vorlage speichern", command=lambda: self.save_folder_as_template(folder_id))
+        menu.add_cascade(label=glide_i18n.t("menu.file.export", "Exportieren"), menu=folder_export_menu)
+        menu.add_command(label=glide_i18n.t("ui.build_folder_menu.save_as_template", "Als Vorlage speichern"), command=lambda: self.save_folder_as_template(folder_id))
         menu.add_separator()
-        menu.add_command(label="Pixelsymbol …", command=lambda: self.page_icon_dialog("folder", folder_id))
+        menu.add_command(label=glide_i18n.t("ui.build_page_menu.pixel_icon", "Pixelsymbol …"), command=lambda: self.page_icon_dialog("folder", folder_id))
         folder_pinned = self.is_pinned("folder", folder_id)
-        menu.add_command(label="Lösen" if folder_pinned else "Anheften",
+        menu.add_command(label=glide_i18n.t("ui.show_pinned_menu.unpin", "Lösen") if folder_pinned else glide_i18n.t("board.action.pin", "Anheften"),
                          command=lambda: self.set_pinned("folder", folder_id, not folder_pinned))
-        menu.add_command(label="Aus Archiv zurückholen" if folder.get("archived") else "Archivieren (mit Inhalt)", command=lambda: self.set_archived("folder", folder_id, not folder.get("archived")))
+        menu.add_command(label=glide_i18n.t("ui.build_folder_menu.restore_from_archive", "Aus Archiv zurückholen") if folder.get("archived") else glide_i18n.t("ui.build_folder_menu.archive_with_content", "Archivieren (mit Inhalt)"), command=lambda: self.set_archived("folder", folder_id, not folder.get("archived")))
         menu.add_separator()
         menu.add_command(
-            label="Ordner auflösen (Listen bleiben)",
+            label=glide_i18n.t("ui.build_folder_menu.dissolve_folder_lists_stay", "Ordner auflösen (Listen bleiben)"),
             command=lambda: self.delete_folder(folder_id),
             foreground=self.theme["delete"],
         )
         menu.add_command(
-            label="Ordner mit Listen in den Papierkorb",
+            label=glide_i18n.t("ui.build_folder_menu.move_folder_with_lists", "Ordner mit Listen in den Papierkorb"),
             command=lambda: self.trash_folder(folder_id),
             foreground=self.theme["delete"],
         )
@@ -41030,7 +41030,7 @@ class ListApp:
         move_menu = self._new_themed_popup_menu(menu)
         current_parent = self.folder_parent_id(folder_id)
         move_menu.add_command(
-            label=("\u2713 " if current_parent is None else "     ") + "Oberste Ebene",
+            label=glide_i18n.t("ui.add_folder_move_menu.top_level", '{wert}Oberste Ebene', wert="\u2713 " if current_parent is None else "     "),
             command=lambda: self.move_selected_folders_to_folder(None),
             state="disabled" if current_parent is None else "normal",
         )
@@ -41044,13 +41044,13 @@ class ListApp:
             indent = "   " * depth
             allowed = self.can_move_folder_into(folder_id, target_id) and current_parent != target_id
             move_menu.add_command(
-                label=f"{prefix}{indent}{self.ellipsize_sidebar_title(str(entry.get('title') or 'Ordner'))}",
+                label=f"{prefix}{indent}{self.ellipsize_sidebar_title(str(entry.get('title') or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')))}",
                 command=lambda target=target_id: self.move_selected_folders_to_folder(target),
                 state="normal" if allowed else "disabled",
             )
         if not candidates:
-            move_menu.add_command(label="Kein weiterer Ordner vorhanden", state="disabled")
-        menu.add_cascade(label="Ordner verschieben", menu=move_menu)
+            move_menu.add_command(label=glide_i18n.t("ui.add_folder_move_menu.no_other_folder_available", "Kein weiterer Ordner vorhanden"), state="disabled")
+        menu.add_cascade(label=glide_i18n.t("ui.add_folder_move_menu.move_folder", "Ordner verschieben"), menu=move_menu)
         return move_menu
 
     def build_smart_view_menu(self, view_id="in_progress"):
@@ -41060,51 +41060,51 @@ class ListApp:
             count = self.count_plan_day()
             menu.add_command(label=f"{self.plan_day_title()} ({self.count_today_view()})", state="disabled")
             menu.add_separator()
-            menu.add_command(label="Öffnen", command=self.set_today_view)
-            menu.add_command(label="Tagesbeginn …", command=self.start_day_review)
-            menu.add_command(label="Tagesabschluss …", command=self.start_day_close)
-            menu.add_command(label="Tag entlasten …", command=self.show_day_relief)
-            menu.add_command(label="Tageshinweise …", command=self.show_daily_hints)
-            menu.add_command(label="Tag zurück", command=self.plan_day_backward)
-            menu.add_command(label="Tag vor", command=self.plan_day_forward)
-            menu.add_command(label="Stundenraster", command=self.toggle_plan_day_grid)
-            menu.add_command(label="Tag leeren", command=self.clear_today_plan,
+            menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=self.set_today_view)
+            menu.add_command(label=glide_i18n.t("ui.show_plan_day_mode_menu.day_start", "Tagesbeginn …"), command=self.start_day_review)
+            menu.add_command(label=glide_i18n.t("ui.show_plan_day_mode_menu.day_close", "Tagesabschluss …"), command=self.start_day_close)
+            menu.add_command(label=glide_i18n.t("ui.render_day_proposal.lighten_the_day", "Tag entlasten …"), command=self.show_day_relief)
+            menu.add_command(label=glide_i18n.t("ui.show_plan_day_mode_menu.daily_hints", "Tageshinweise …"), command=self.show_daily_hints)
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.previous_day", "Tag zurück"), command=self.plan_day_backward)
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.next_day", "Tag vor"), command=self.plan_day_forward)
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.hour_grid", "Stundenraster"), command=self.toggle_plan_day_grid)
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.clear_day", "Tag leeren"), command=self.clear_today_plan,
                              state="normal" if count else "disabled")
             menu.add_separator()
-            menu.add_command(label="Aufgaben mit Bearbeitungstag · Fälligkeit bleibt unberührt",
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.tasks_with_a_work", "Aufgaben mit Bearbeitungstag · Fälligkeit bleibt unberührt"),
                              state="disabled")
             return menu
         if view_id == "overdue":
             overdue_count = len(self.get_overdue_items(apply_filters=False))
-            menu.add_command(label=f"Verspätet ({overdue_count})", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.late", 'Verspätet ({overdue_count})', overdue_count=overdue_count), state="disabled")
             menu.add_separator()
-            menu.add_command(label="Öffnen", command=self.set_overdue_view)
-            menu.add_command(label="Kalender öffnen …", command=self.open_calendar_view)
+            menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=self.set_overdue_view)
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.open_calendar", "Kalender öffnen …"), command=self.open_calendar_view)
             menu.add_separator()
             menu.add_command(
-                label="Überfällig und noch nicht erledigt",
+                label=glide_i18n.t("ui.build_smart_view_menu.overdue_and_not_yet", "Überfällig und noch nicht erledigt"),
                 state="disabled",
             )
             return menu
         if view_id == "trash":
-            menu.add_command(label=f"Papierkorb ({len(self.trash)})", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.trash", 'Papierkorb ({len})', len=len(self.trash)), state="disabled")
             menu.add_separator()
-            menu.add_command(label="Öffnen", command=self.set_trash_view)
+            menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=self.set_trash_view)
             menu.add_separator()
             menu.add_command(
-                label="Papierkorb leeren",
+                label=glide_i18n.t("ui.build_smart_view_menu.empty_trash", "Papierkorb leeren"),
                 command=self.empty_trash,
                 foreground=self.theme["delete"],
                 state="normal" if self.trash else "disabled",
             )
             return menu
-        menu.add_command(label="Demnächst", state="disabled")
+        menu.add_command(label=glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), state="disabled")
         menu.add_separator()
-        menu.add_command(label="Öffnen", command=self.set_in_progress_view)
-        menu.add_command(label="Kalender öffnen …", command=self.open_calendar_view)
+        menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=self.set_in_progress_view)
+        menu.add_command(label=glide_i18n.t("ui.build_smart_view_menu.open_calendar", "Kalender öffnen …"), command=self.open_calendar_view)
         menu.add_separator()
         menu.add_command(
-            label="Automatisch aus allen Listen erzeugt",
+            label=glide_i18n.t("ui.build_smart_view_menu.generated_automatically_from_all", "Automatisch aus allen Listen erzeugt"),
             state="disabled",
         )
         return menu
@@ -41113,40 +41113,40 @@ class ListApp:
         """Kontextmenü für den leeren Bereich der Ordnerübersicht."""
         menu = self._new_themed_popup_menu()
         folder = self.get_folder(self.active_folder_id)
-        title = str((folder or {}).get("title") or "Ordner").strip() or "Ordner"
+        title = str((folder or {}).get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         menu.add_command(label=self.ellipsize_sidebar_title(title), state="disabled")
         menu.add_separator()
         menu.add_command(
-            label="Neue Liste in diesem Ordner …",
+            label=glide_i18n.t("ui.build_folder_overview_menu.new_list_in_this", "Neue Liste in diesem Ordner …"),
             command=lambda: self.create_list_in_folder(self.active_folder_id),
         )
         menu.add_command(
-            label="Neue Zeichnung in diesem Ordner",
+            label=glide_i18n.t("ui.build_folder_overview_menu.new_drawing_in_this", "Neue Zeichnung in diesem Ordner"),
             command=lambda: self.create_new_drawing(self.active_folder_id),
         )
         menu.add_command(
-            label="Bearbeiten (Titel, Beschreibungstext) …",
+            label=glide_i18n.t("ui.build_folder_overview_menu.edit_title_description", "Bearbeiten (Titel, Beschreibungstext) …"),
             command=lambda: self.edit_folder_details(self.active_folder_id),
         )
         if folder:
             self._add_color_menu(
-                menu, "Ordnerfarbe", folder.get("color"), self.set_folder_color, self.active_folder_id
+                menu, glide_i18n.t("ui.build_folder_overview_menu.folder_color", "Ordnerfarbe"), folder.get("color"), self.set_folder_color, self.active_folder_id
             )
             self._add_page_label_menu(menu, folder, "folder")
         menu.add_separator()
         folder_export_menu = self._new_themed_popup_menu(menu)
-        folder_export_menu.add_command(label="Als TXT …", command=lambda: self.export_folder_as(self.active_folder_id, "txt"))
-        folder_export_menu.add_command(label="Als Markdown …", command=lambda: self.export_folder_as(self.active_folder_id, "md"))
-        folder_export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([], [self.active_folder_id]))
-        menu.add_cascade(label="Exportieren", menu=folder_export_menu, state="normal" if folder else "disabled")
+        folder_export_menu.add_command(label=glide_i18n.t("menu.file.export.txt", "Als TXT …"), command=lambda: self.export_folder_as(self.active_folder_id, "txt"))
+        folder_export_menu.add_command(label=glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), command=lambda: self.export_folder_as(self.active_folder_id, "md"))
+        folder_export_menu.add_command(label=glide_i18n.t("ui.build_folder_overview_menu.as_glide_partial_backup", "Als Glide-Teilbackup …"), command=lambda: self.export_partial_backup([], [self.active_folder_id]))
+        menu.add_cascade(label=glide_i18n.t("menu.file.export", "Exportieren"), menu=folder_export_menu, state="normal" if folder else "disabled")
         menu.add_separator()
         menu.add_command(
-            label="Ordner auflösen (Listen bleiben)",
+            label=glide_i18n.t("ui.build_folder_overview_menu.dissolve_folder_lists_stay", "Ordner auflösen (Listen bleiben)"),
             command=lambda: self.delete_folder(self.active_folder_id),
             foreground=self.theme["delete"],
         )
         menu.add_command(
-            label="Ordner mit Listen in den Papierkorb",
+            label=glide_i18n.t("ui.build_folder_overview_menu.move_folder_with_lists", "Ordner mit Listen in den Papierkorb"),
             command=lambda: self.trash_folder(self.active_folder_id),
             foreground=self.theme["delete"],
         )
@@ -41171,7 +41171,7 @@ class ListApp:
     @staticmethod
     def selection_modifier_name():
         """Anzeigename der Taste für „zur Auswahl hinzufügen“."""
-        return "Cmd" if IS_MACOS else "Strg"
+        return "Cmd" if IS_MACOS else glide_i18n.t("keyboard.modifier.control", "Strg")
 
     @staticmethod
     def selection_modifier_pressed(event):
@@ -41308,8 +41308,8 @@ class ListApp:
             return "break"
         inbox = self.is_inbox_list(entry)
         details = self.themed_page_details_dialog(
-            "Liste bearbeiten", entry.get("title", "Liste"), entry.get("note", ""),
-            title_label="Listentitel (fester Systemname)" if inbox else "Listentitel",
+            glide_i18n.t("ui.edit_list_details.edit_list", "Liste bearbeiten"), entry.get("title", "Liste"), entry.get("note", ""),
+            title_label=glide_i18n.t("ui.edit_list_details.list_title_fixed_system", "Listentitel (fester Systemname)") if inbox else glide_i18n.t("ui.edit_list_details.list_title", "Listentitel"),
             title_editable=not inbox, page=entry)
         return self._apply_page_details(entry, details)
 
@@ -41318,8 +41318,8 @@ class ListApp:
         if folder is None:
             return "break"
         details = self.themed_page_details_dialog(
-            "Ordner bearbeiten", folder.get("title", "Ordner"), folder.get("note", ""),
-            title_label="Ordnertitel", page=folder)
+            glide_i18n.t("ui.edit_folder_details.edit_folder", "Ordner bearbeiten"), folder.get("title", "Ordner"), folder.get("note", ""),
+            title_label=glide_i18n.t("ui.edit_folder_details.folder_title", "Ordnertitel"), page=folder)
         return self._apply_page_details(folder, details)
 
     def sidebar_template_allowed(self, template, section, folder_id=None):
@@ -41365,14 +41365,14 @@ class ListApp:
             ordnerart = (self.get_folder(ordner_id) or {}).get("folder_kind", "standard")
             return glide_sidebar.accepts(self.sidebar_section_for("folder", ordner_id), "list", "drawing", ordnerart)
         if folder_id and not passt(folder_id):
-            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            self.show_info(glide_i18n.t("ui.create_area.create", "Anlegen"), glide_i18n.t("ui.create_new_note.this_document_type_does", "Diese Dokumentart gehört nicht in diesen Bereich."))
             return "break"
         if not self.editor_switch_allowed():
             return "break"
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
         if folder_id and not passt(folder_id):
-            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen, Listen oder ein Notizbuch.")
+            self.show_info(glide_i18n.t("ui.create_area.create", "Anlegen"), glide_i18n.t("ui.create_new_drawing.drawings_belong_in_drawings", "Zeichnungen gehören in Zeichnungen, Listen oder ein Notizbuch."))
             return "break"
         folder = self.get_folder(folder_id) if folder_id else None
         journal = bool(folder and folder.get("folder_kind") == "journal")
@@ -41444,16 +41444,16 @@ class ListApp:
         if entry is None or self.is_inbox_list(entry):
             return "break"
         choices = [
-            (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
+            (folder.get("id"), str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
             for folder in self.folders
             if folder.get("id") != entry.get("folder_id")
             and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]), folder["id"])
         ]
         if not choices:
-            self.show_info("Verschieben", "Es gibt keinen anderen Ordner als Ziel.")
+            self.show_info(glide_i18n.t("drawing.action.move", "Verschieben"), glide_i18n.t("ui.move_list_to_folder_dialog.there_is_no_other", "Es gibt keinen anderen Ordner als Ziel."))
             return "break"
         folder_id = self.themed_choice_dialog(
-            "In Ordner verschieben", "In welchen Ordner soll die Liste?", choices
+            glide_i18n.t("ui.move_list_to_folder_dialog.move_to_folder", "In Ordner verschieben"), glide_i18n.t("ui.move_list_to_folder_dialog.which_folder_should_the", "In welchen Ordner soll die Liste?"), choices
         )
         if not folder_id:
             return "break"
@@ -41566,14 +41566,14 @@ class ListApp:
             return "break"
         lists = self.get_folder_lists_recursive(folder_id)
         if not lists:
-            self.show_warning("Ordnerexport", "Der Ordner enthält keine Listen.")
+            self.show_warning(glide_i18n.t("ui.export_folder_as.folder_export", "Ordnerexport"), glide_i18n.t("ui.export_folder_as.the_folder_contains_no", "Der Ordner enthält keine Listen."))
             return "break"
         extension = "md" if fmt == "md" else "txt"
-        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         default = f"{self.safe_filename(title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.{extension}"
         path = filedialog.asksaveasfilename(
-            title="Ordner exportieren", defaultextension=f".{extension}", initialfile=default,
-            filetypes=[("Markdown", "*.md"), ("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+            title=glide_i18n.t("ui.export_folder_as.export_folder", "Ordner exportieren"), defaultextension=f".{extension}", initialfile=default,
+            filetypes=[("Markdown", "*.md"), (glide_i18n.t("ui.export_folder_as.text_file", "Textdatei"), "*.txt"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return "break"
@@ -41585,27 +41585,27 @@ class ListApp:
                     if note:
                         file.write(note + "\n\n")
                     for entry in lists:
-                        list_title = str(entry.get("title") or "Liste").strip() or "Liste"
+                        list_title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
                         file.write(f"## {list_title}\n\n")
                         if entry.get("note"):
                             file.write(str(entry.get("note")).strip() + "\n\n")
                         self.write_items_to_markdown(file, entry.get("items", []), 0)
                         file.write("\n")
-                    file.write(f"_Exportiert am {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}_\n")
+                    file.write(glide_i18n.t("ui.export_folder_as.exported_on", '_Exportiert am {strftime}_\n', strftime=datetime.now().strftime(glide_i18n.t("ui.export_folder_as.y_m_d_at", '%d.%m.%Y um %H:%M Uhr'))))
                 else:
                     file.write(f"{title}\n{'=' * max(12, len(title))}\n\n")
                     if note:
                         file.write(self.TXT_NOTE_BLOCK_START + "\n" + note + "\n" + self.TXT_NOTE_BLOCK_END + "\n\n")
                     for entry in lists:
-                        list_title = str(entry.get("title") or "Liste").strip() or "Liste"
+                        list_title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
                         file.write(f"\n{list_title}\n{'-' * max(12, len(list_title))}\n")
                         if entry.get("note"):
                             file.write(self.TXT_NOTE_BLOCK_START + "\n" + str(entry.get("note")).strip() + "\n" + self.TXT_NOTE_BLOCK_END + "\n")
                         self.write_items_to_txt(file, entry.get("items", []), [])
                     file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
-            self.show_info("Export erfolgreich", f"Ordner exportiert nach:\n{path}")
+            self.show_info(glide_i18n.t("ui.export_folder_as.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_folder_as.folder_exported_to", 'Ordner exportiert nach:\n{path}', path=path))
         except OSError as exc:
-            self.show_error("Ordnerexport", str(exc))
+            self.show_error(glide_i18n.t("ui.export_folder_as.folder_export", "Ordnerexport"), str(exc))
         return "break"
 
     def partial_backup_payload(self, list_ids=None, folder_ids=None):
@@ -41642,20 +41642,20 @@ class ListApp:
             list_ids = [] if folder_ids else ([self.active_list_id] if self.active_list_id else [])
         list_ids, folder_ids = list(list_ids or []), list(folder_ids or [])
         if not list_ids and not folder_ids:
-            self.show_info("Teilbackup", "Wähle zuerst eine Liste oder einen Ordner aus.")
+            self.show_info(glide_i18n.t("ui.export_partial_backup.partial_backup", "Teilbackup"), glide_i18n.t("ui.export_partial_backup.select_a_list_or", "Wähle zuerst eine Liste oder einen Ordner aus."))
             return "break"
-        path = filedialog.asksaveasfilename(title="Listen/Ordner exportieren", defaultextension=".glidebackup",
+        path = filedialog.asksaveasfilename(title=glide_i18n.t("ui.export_partial_backup.export_lists_folders", "Listen/Ordner exportieren"), defaultextension=".glidebackup",
                                             initialfile="glide_teilbackup.glidebackup",
-                                            filetypes=[("Glide-Teilbackup", "*.glidebackup"), ("Alle Dateien", "*.*")])
+                                            filetypes=[("Glide-Teilbackup", "*.glidebackup"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not path:
             return "break"
         try:
             payload = self.partial_backup_payload(list_ids, folder_ids)
             self.write_complete_backup(path, payload)
             self.record_data_operation("backup", path)
-            self.show_info("Export erfolgreich", f"{len(payload['lists'])} Liste(n) und {len(payload['folders'])} Ordner exportiert.")
+            self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_partial_backup.list_s_and_folder", '{len} Liste(n) und {len2} Ordner exportiert.', len=len(payload['lists']), len2=len(payload['folders'])))
         except Exception as exc:
-            self.show_error("Teilbackup", str(exc))
+            self.show_error(glide_i18n.t("ui.export_partial_backup.partial_backup", "Teilbackup"), str(exc))
         return "break"
 
     def import_partial_backup(self):
@@ -41725,16 +41725,13 @@ class ListApp:
             self.sync_current_list_reference()
         identities = glide_task_editing.completed_ids(entry.get('items', []), self.is_schedulable_item)
         if not identities:
-            self.show_info('Erledigte entfernen', 'In dieser Liste ist nichts als erledigt markiert.')
+            self.show_info(glide_i18n.t("ui.remove_done_items.remove_completed", 'Erledigte entfernen'), glide_i18n.t("ui.remove_done_items.nothing_in_this_list", 'In dieser Liste ist nichts als erledigt markiert.'))
             return 'break'
-        title = str(entry.get('title') or 'Liste').strip() or 'Liste'
-        message = (f"{len(identities)} erledigte Aufgabe(n) aus '{title}' entfernen?\n\n"
-                   'Erledigte Punkte mit noch offenen Unterpunkten bleiben erhalten.')
+        title = str(entry.get('title') or glide_i18n.t("editor.toolbar.list", 'Liste')).strip() or glide_i18n.t("editor.toolbar.list", 'Liste')
+        message = (glide_i18n.t("ui.remove_done_items.remove_completed_task_s", "{len} erledigte Aufgabe(n) aus '{title}' entfernen?\n\nErledigte Punkte mit noch offenen Unterpunkten bleiben erhalten.", len=len(identities), title=title))
         if len(self.trash) + len(identities) > self.MAX_TRASH_ENTRIES:
-            message += (f'\n\nDer Papierkorb behält höchstens {self.MAX_TRASH_ENTRIES} Einträge; '
-                        'ältere Einträge werden verdrängt. Auch von dieser Aktion bleiben '
-                        f'höchstens {self.MAX_TRASH_ENTRIES} Einträge im Papierkorb erhalten.')
-        if not self.ask_yes_no('Erledigte entfernen', message):
+            message += (glide_i18n.t("ui.remove_done_items.the_trash_keeps_at", '\n\nDer Papierkorb behält höchstens {max_trash_entries} Einträge; ältere Einträge werden verdrängt. Auch von dieser Aktion bleiben höchstens {max_trash_entries2} Einträge im Papierkorb erhalten.', max_trash_entries=self.MAX_TRASH_ENTRIES, max_trash_entries2=self.MAX_TRASH_ENTRIES))
+        if not self.ask_yes_no(glide_i18n.t("ui.remove_done_items.remove_completed", 'Erledigte entfernen'), message):
             return 'break'
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
                 or not self.prepare_inspector_switch()):
@@ -41744,8 +41741,8 @@ class ListApp:
             return 'break'
         current = glide_task_editing.completed_ids(entry.get('items', []), self.is_schedulable_item)
         if set(current) != set(identities):
-            self.show_warning('Erledigte entfernen',
-                'Die erledigten Aufgaben haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.')
+            self.show_warning(glide_i18n.t("ui.remove_done_items.remove_completed", 'Erledigte entfernen'),
+                glide_i18n.t("ui.remove_done_items.the_completed_tasks_have", 'Die erledigten Aufgaben haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.'))
             return 'break'
         identities = current
         kept, removed = glide_task_editing.remove_planned(entry.get('items', []), identities)
@@ -41773,7 +41770,7 @@ class ListApp:
                     else glide_i18n.t(
                         "toast.completed_tasks_limit", "{n} erledigte Aufgabe(n) entfernt · Papierkorbgrenze berücksichtigt",
                         n=len(removed)))
-            self.finish_change_ui(change, [('Rückgängig-Hinweis', lambda: self.show_undo_toast(text))])
+            self.finish_change_ui(change, [(glide_i18n.t("ui.remove_done_items.undo_note", 'Rückgängig-Hinweis'), lambda: self.show_undo_toast(text))])
         return 'break'
 
     def clear_list_by_id(self, list_id):
@@ -41786,11 +41783,11 @@ class ListApp:
         if entry.get("id") == self.active_list_id:
             self.sync_current_list_reference()
         if not entry.get("items"):
-            self.show_info("Liste leeren", "Diese Liste ist bereits leer.")
+            self.show_info(glide_i18n.t("ui.show_side_recent_searches.clear_list", "Liste leeren"), glide_i18n.t("ui.clear_list_by_id.this_list_is_already", "Diese Liste ist bereits leer."))
             return "break"
-        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
         identities = self.collect_item_ids(entry['items'])
-        if not self.ask_yes_no("Liste leeren", f"Alle Punkte aus '{title}' wirklich löschen?"):
+        if not self.ask_yes_no(glide_i18n.t("ui.show_side_recent_searches.clear_list", "Liste leeren"), glide_i18n.t("ui.clear_list_by_id.really_delete_all_items", "Alle Punkte aus '{title}' wirklich löschen?", title=title)):
             return "break"
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
                 or not self.prepare_inspector_switch()):
@@ -41799,8 +41796,8 @@ class ListApp:
         if entry is None:
             return "break"
         if self.collect_item_ids(entry.get('items', [])) != identities:
-            self.show_warning('Liste leeren',
-                'Die Punkte haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.')
+            self.show_warning(glide_i18n.t("ui.show_side_recent_searches.clear_list", 'Liste leeren'),
+                glide_i18n.t("ui.clear_list_by_id.the_items_have_changed", 'Die Punkte haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.'))
             return "break"
         if list_id == self.active_list_id:
             self.items = entry['items']
@@ -41820,16 +41817,15 @@ class ListApp:
         if entry is None:
             return "break"
         if self.is_inbox_list(entry):
-            self.show_info("Eingang", "Der fest integrierte Eingang kann nicht gelöscht werden.")
+            self.show_info(glide_i18n.t("sidebar.inbox", "Eingang"), glide_i18n.t("ui.delete_list_by_id.the_built_in_inbox", "Der fest integrierte Eingang kann nicht gelöscht werden."))
             return "break"
         if len(self.lists) <= 1:
-            self.show_info("Liste löschen", "Die letzte Liste kann nicht gelöscht werden.")
+            self.show_info(glide_i18n.t("ui.delete_list_by_id.delete_list", "Liste löschen"), glide_i18n.t("ui.delete_list_by_id.the_last_list_cannot", "Die letzte Liste kann nicht gelöscht werden."))
             return "break"
-        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        title = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")).strip() or glide_i18n.t("editor.toolbar.list", "Liste")
         if not self.ask_yes_no(
-            "In den Papierkorb",
-            f"Liste '{title}' in den Papierkorb verschieben?\n\n"
-            "Die Liste bleibt dort vollständig erhalten und kann wiederhergestellt werden.",
+            glide_i18n.t("ui.delete_list_by_id.move_to_trash", "In den Papierkorb"),
+            glide_i18n.t("ui.delete_list_by_id.move_list_to_the", "Liste '{title}' in den Papierkorb verschieben?\n\nDie Liste bleibt dort vollständig erhalten und kann wiederhergestellt werden.", title=title),
         ):
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
@@ -41889,8 +41885,8 @@ class ListApp:
         kind = trash_entry.get("kind") if isinstance(trash_entry, dict) else None
         if kind == self.TRASH_KIND_ITEM:
             # Ein Punkt trägt seinen Text, keine Überschrift.
-            return str(payload.get("text") or "Punkt").strip() or "Punkt"
-        fallback = "Ordner" if kind == self.TRASH_KIND_FOLDER else "Liste"
+            return str(payload.get("text") or glide_i18n.t("ui.choose_cards.item", "Punkt")).strip() or glide_i18n.t("ui.choose_cards.item", "Punkt")
+        fallback = glide_i18n.t("ui.kachel_boards.folder", "Ordner") if kind == self.TRASH_KIND_FOLDER else glide_i18n.t("editor.toolbar.list", "Liste")
         return str(payload.get("title") or fallback).strip() or fallback
 
     def push_trash_entry(self, entry):
@@ -41944,16 +41940,15 @@ class ListApp:
         folder = self.get_folder(folder_id)
         if not folder:
             return "break"
-        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         child_lists = self.get_folder_lists_recursive(folder_id)
         sub_folders = len(self.iter_folder_subtree(folder_id)) - 1
-        detail = f"{len(child_lists)} Liste(n)"
+        detail = glide_i18n.t("ui.trash_folder.list_s", '{len} Liste(n)', len=len(child_lists))
         if sub_folders:
-            detail += f" und {sub_folders} Unterordner"
+            detail += glide_i18n.t("ui.trash_folder.and_subfolders", ' und {sub_folders} Unterordner', sub_folders=sub_folders)
         if not self.ask_yes_no(
-            "In den Papierkorb",
-            f"Ordner '{title}' mit {detail} in den Papierkorb verschieben?\n\n"
-            "Ordner und Listen bleiben dort vollständig erhalten und lassen sich gemeinsam wiederherstellen.",
+            glide_i18n.t("ui.trash_folder.move_to_trash", "In den Papierkorb"),
+            glide_i18n.t("ui.trash_folder.move_folder_with_to", "Ordner '{title}' mit {detail} in den Papierkorb verschieben?\n\nOrdner und Listen bleiben dort vollständig erhalten und lassen sich gemeinsam wiederherstellen.", title=title, detail=detail),
         ):
             return "break"
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
@@ -41962,7 +41957,7 @@ class ListApp:
         folder = self.get_folder(folder_id)
         if folder is None:
             return "break"
-        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        title = str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
         with self.sidebar_change(refresh_tree=True, feedback=False) as change:
             if self._move_folder_to_trash(folder_id):
                 change.mark()
@@ -42006,12 +42001,11 @@ class ListApp:
         list_ids = [row_id for row_type, row_id in rows if row_type == "list" and not self.is_inbox_list(row_id)]
         folder_ids = [row_id for row_type, row_id in rows if row_type == "folder"]
         if not list_ids and not folder_ids:
-            self.show_info("Papierkorb", "In der Auswahl steht nichts, das gelöscht werden könnte.")
+            self.show_info(glide_i18n.t("menu.view.trash", "Papierkorb"), glide_i18n.t("ui.trash_selected_sidebar_entries.nothing_in_the_selection", "In der Auswahl steht nichts, das gelöscht werden könnte."))
             return "break"
         if not self.ask_yes_no(
-            "In den Papierkorb",
-            f"{len(list_ids)} Liste(n) und {len(folder_ids)} Ordner in den Papierkorb verschieben?\n\n"
-            "Alles bleibt dort vollständig erhalten und kann wiederhergestellt werden.",
+            glide_i18n.t("ui.trash_selected_sidebar_entries.move_to_trash", "In den Papierkorb"),
+            glide_i18n.t("ui.trash_selected_sidebar_entries.move_list_s_and", '{len} Liste(n) und {len2} Ordner in den Papierkorb verschieben?\n\nAlles bleibt dort vollständig erhalten und kann wiederhergestellt werden.', len=len(list_ids), len2=len(folder_ids)),
         ):
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
@@ -42178,7 +42172,7 @@ class ListApp:
     def restore_selected_trash_entries(self, into_folder=False):
         trash_ids = self.get_selected_trash_ids()
         if not trash_ids:
-            self.show_info("Papierkorb", "Zuerst einen Eintrag auswählen.")
+            self.show_info(glide_i18n.t("menu.view.trash", "Papierkorb"), glide_i18n.t("ui.restore_selected_trash_entries.select_an_entry_first", "Zuerst einen Eintrag auswählen."))
             return "break"
         target_folder_id = None
         if into_folder:
@@ -42188,17 +42182,17 @@ class ListApp:
                           and entry.get("kind") == self.TRASH_KIND_LIST
                           and isinstance(self.trash_entry_payload(entry), dict)]
             choices = [
-                (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
+                (folder.get("id"), str(folder.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")).strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
                 for folder in self.folders
                 if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind,
                                              folder.get("folder_kind", "standard"))
                        for kind in list_kinds)
             ]
             if not choices:
-                self.show_info("Wiederherstellen", "Es gibt keinen passenden Ordner für diese Dokumentarten.")
+                self.show_info(glide_i18n.t("button.restore", "Wiederherstellen"), glide_i18n.t("ui.restore_selected_trash_entries.there_is_no_suitable", "Es gibt keinen passenden Ordner für diese Dokumentarten."))
                 return "break"
             target_folder_id = self.themed_choice_dialog(
-                "In Ordner wiederherstellen", "In welchen Ordner sollen die Listen zurück?", choices
+                glide_i18n.t("ui.restore_selected_trash_entries.restore_to_folder", "In Ordner wiederherstellen"), glide_i18n.t("ui.restore_selected_trash_entries.which_folder_should_the", "In welchen Ordner sollen die Listen zurück?"), choices
             )
             if not target_folder_id:
                 return "break"
@@ -42215,20 +42209,19 @@ class ListApp:
                     # Ein manipulierter oder überdimensionierter Eintrag darf den
                     # restlichen Papierkorb nicht mitreißen; er bleibt liegen.
                     self.show_error(
-                        "Wiederherstellen",
-                        f"„{self.trash_entry_title(entry)}“ konnte nicht wiederhergestellt werden:\n{exc}",
+                        glide_i18n.t("button.restore", "Wiederherstellen"),
+                        glide_i18n.t("ui.restore_selected_trash_entries.could_not_be_restored", '„{trash_entry_title}“ konnte nicht wiederhergestellt werden:\n{exc}', trash_entry_title=self.trash_entry_title(entry), exc=exc),
                     )
         return "break"
 
     def purge_selected_trash_entries(self):
         trash_ids = self.get_selected_trash_ids()
         if not trash_ids:
-            self.show_info("Papierkorb", "Zuerst einen Eintrag auswählen.")
+            self.show_info(glide_i18n.t("menu.view.trash", "Papierkorb"), glide_i18n.t("ui.purge_selected_trash_entries.select_an_entry_first", "Zuerst einen Eintrag auswählen."))
             return "break"
         if not self.ask_yes_no(
-            "Endgültig entfernen",
-            f"{len(trash_ids)} Eintrag/Einträge endgültig entfernen?\n\n"
-            f"Nur {self.accel('Z')} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.",
+            glide_i18n.t("ui.purge_selected_trash_entries.remove_permanently", "Endgültig entfernen"),
+            glide_i18n.t("ui.purge_selected_trash_entries.remove_entry_entries_permanently", '{len} Eintrag/Einträge endgültig entfernen?\n\nNur {accel} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.', len=len(trash_ids), accel=self.accel('Z')),
         ):
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
@@ -42240,12 +42233,11 @@ class ListApp:
 
     def empty_trash(self):
         if not self.trash:
-            self.show_info("Papierkorb", "Der Papierkorb ist bereits leer.")
+            self.show_info(glide_i18n.t("menu.view.trash", "Papierkorb"), glide_i18n.t("ui.empty_trash.the_trash_is_already", "Der Papierkorb ist bereits leer."))
             return "break"
         if not self.ask_yes_no(
-            "Papierkorb leeren",
-            f"Alle {len(self.trash)} Einträge endgültig entfernen?\n\n"
-            f"Nur {self.accel('Z')} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.",
+            glide_i18n.t("ui.empty_trash.empty_trash", "Papierkorb leeren"),
+            glide_i18n.t("ui.empty_trash.remove_all_entries_permanently", 'Alle {len} Einträge endgültig entfernen?\n\nNur {accel} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.', len=len(self.trash), accel=self.accel('Z')),
         ):
             return "break"
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
@@ -42307,7 +42299,7 @@ class ListApp:
         if is_list and list_kind is None and eltern is not None:
             # In einer Bibliothek entsteht standardmäßig eine Seite.
             list_kind = self.FOLDER_KINDS.get(eltern.get("folder_kind"), {}).get("list_kind")
-        title_text = "Neue Liste" if is_list else "Neuer Ordner"
+        title_text = glide_i18n.t("menu.file.new_list", "Neue Liste") if is_list else glide_i18n.t("menu.file.new_folder", "Neuer Ordner")
         dialog = self._new_dialog(title_text)
         actions = tk.Frame(dialog, bg=self.theme["bg"])
         actions.pack(side="bottom", fill="x", padx=24, pady=12)
@@ -42340,26 +42332,26 @@ class ListApp:
                                                                     self.FOLDER_KINDS["standard"])["label"])
         drawing_size_var = tk.StringVar(value="128 × 128")
         if is_list:
-            label("Listenart")
+            label(glide_i18n.t("ui.themed_page_details_dialog.list_type", "Listenart"))
             kind_frame, _ = self._make_option_menu(
                 primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items()
                                          if glide_sidebar.accepts(section, "list", key, eltern.get("folder_kind", "standard") if eltern else None)]
                 + ([self.BOARD_KIND_LABEL] if section == "lists" else []))
             kind_frame.pack(fill="x")
-            kind_hint = tk.Label(primary, text="Die Art bleibt nach dem Anlegen fest. „Pinnwand“ ist eine "
-                                               "Aufgabenliste, die als Fläche startet.",
+            kind_hint = tk.Label(primary, text=glide_i18n.t("ui.create_container_dialog.the_type_is_fixed", "Die Art bleibt nach dem Anlegen fest. „Pinnwand“ ist eine "
+                                               "Aufgabenliste, die als Fläche startet."),
                                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9),
                                  wraplength=420, justify="left", anchor="w")
             kind_hint.pack(fill="x", pady=(4, 0))
             # Die Flächengröße gilt nur für Zeichnungen und steht nur dann da.
             size_box = tk.Frame(primary, bg=self.theme["bg"])
-            tk.Label(size_box, text="Größe der Zeichenfläche", bg=self.theme["bg"], fg=self.theme["muted"],
+            tk.Label(size_box, text=glide_i18n.t("ui.create_container_dialog.canvas_size", "Größe der Zeichenfläche"), bg=self.theme["bg"], fg=self.theme["muted"],
                      font=app_font(10)).pack(anchor="w", pady=(8, 4))
             size_frame, _ = self._make_option_menu(
                 size_box, drawing_size_var, [f"{size} × {size}" for size in glide_drawing.SIZES])
             size_frame.pack(fill="x")
-            tk.Label(size_box, text="16 und 32 für Symbole und Figuren, 128 für Motive. Die Größe "
-                                    "bleibt nach dem Anlegen fest.",
+            tk.Label(size_box, text=glide_i18n.t("ui.create_container_dialog.16_and_32_for", "16 und 32 für Symbole und Figuren, 128 für Motive. Die Größe "
+                                    "bleibt nach dem Anlegen fest."),
                      bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9),
                      wraplength=420, justify="left", anchor="w").pack(fill="x", pady=(4, 0))
 
@@ -42370,13 +42362,13 @@ class ListApp:
                     size_box.pack_forget()
             list_kind_var.trace_add("write", show_size)
         else:
-            label("Ordnerart")
+            label(glide_i18n.t("ui.themed_page_details_dialog.folder_type", "Ordnerart"))
             kind_frame, _ = self._make_option_menu(primary, folder_kind_var,
                                                    [info["label"] for key, info in self.FOLDER_KINDS.items() if glide_sidebar.accepts(section, "folder", key)])
             kind_frame.pack(fill="x")
-        title_var, color_var = tk.StringVar(), tk.StringVar(value="Keine Farbe")
-        folder_var, template_var = tk.StringVar(value="Kein Ordner"), tk.StringVar(value="Ohne Vorlage")
-        label("Titel")
+        title_var, color_var = tk.StringVar(), tk.StringVar(value=glide_i18n.t("inspector.color.none", "Keine Farbe"))
+        folder_var, template_var = tk.StringVar(value=glide_i18n.t("ui.create_container_dialog.no_folder", "Kein Ordner")), tk.StringVar(value=glide_i18n.t("ui.create_container_dialog.no_template", "Ohne Vorlage"))
+        label(glide_i18n.t("ui.submit.title", "Titel"))
         title_border, title_field = self._make_field(primary)
         title_border.pack(fill="x")
         title_field.pack(fill="x", padx=1, pady=1)
@@ -42388,8 +42380,8 @@ class ListApp:
         titel_zaehler = tk.Label(primary, bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), anchor="e")
         titel_zaehler.pack(anchor="e", pady=(2, 0))
         self.limit_title_entry(title_entry, titel_zaehler)
-        label("Farbe")
-        color_frame, _ = self._make_option_menu(primary, color_var, ["Keine Farbe"] + [name for name, key in self.LIST_COLOR_CHOICES],
+        label(glide_i18n.t("inspector.color", "Farbe"))
+        color_frame, _ = self._make_option_menu(primary, color_var, [glide_i18n.t("inspector.color.none", "Keine Farbe")] + [name for name, key in self.LIST_COLOR_CHOICES],
                                                option_colors={name: key for name, key in self.LIST_COLOR_CHOICES})
         color_frame.pack(fill="x")
         folders = [folder for folder in self.folders if is_list or self.folder_depth(folder["id"]) + 1 < self.MAX_FOLDER_DEPTH]
@@ -42403,7 +42395,7 @@ class ListApp:
             colors[name] = folder.get("color") or "text"
             if folder["id"] == parent_id:
                 folder_var.set(name)
-        label("Zugehöriger Ordner")
+        label(glide_i18n.t("ui.create_container_dialog.folder", "Zugehöriger Ordner"))
         folder_frame, _ = self._make_option_menu(primary, folder_var, list(folder_map), option_colors=colors)
         folder_frame.pack(fill="x")
         # Im Tagebuch trägt jeder Inhalt ein Momentdatum (ZF-120), vorbelegt mit
@@ -42416,7 +42408,7 @@ class ListApp:
             ziel = self.get_folder(folder_map.get(folder_var.get()))
             if is_list and ziel is not None and ziel.get("folder_kind") == "journal":
                 if moment["field"] is None:
-                    tk.Label(moment_box, text="Momentdatum im Notizbuch", bg=self.theme["bg"], fg=self.theme["muted"],
+                    tk.Label(moment_box, text=glide_i18n.t("ui.show_moment.moment_date_in_the", "Momentdatum im Notizbuch"), bg=self.theme["bg"], fg=self.theme["muted"],
                              font=app_font(10)).pack(anchor="w", pady=(8, 4))
                     moment["field"] = DueField(moment_box, self, due=date.today().isoformat(), compact=True,
                                                dialog_parent=dialog, show_time=False)
@@ -42433,15 +42425,15 @@ class ListApp:
                 if name in template_map:
                     name += f" ({index})"
                 template_map[name] = template["id"]
-        label("Inhalt aus Vorlage")
+        label(glide_i18n.t("ui.create_container_dialog.content_from_template", "Inhalt aus Vorlage"))
         template_frame, _ = self._make_option_menu(primary, template_var, list(template_map))
         template_frame.pack(fill="x")
         panel = secondary
-        label("Labels")
+        label(glide_i18n.t("menu.view.labels", "Labels"))
         label_picker = LabelDropdown(secondary, self, self.assignable_labels_for_page(),
                                      dialog_parent=dialog, allow_create=True)
         label_picker.pack(fill="x")
-        label("Beschreibung")
+        label(glide_i18n.t("ui.render_detail.description", "Beschreibung"))
         note_border, note_field = self._make_field(secondary)
         note_border.pack(fill="both", expand=True)
         note_field.pack(fill="both", expand=True, padx=1, pady=1)
@@ -42455,7 +42447,7 @@ class ListApp:
         def submit():
             title = title_var.get().strip()
             if not title:
-                error.configure(text="Bitte einen Titel eingeben.")
+                error.configure(text=glide_i18n.t("ui.submit.please_enter_a_title", "Bitte einen Titel eingeben."))
                 return
             label_ids = label_picker.read()
             color = next((key for name, key in self.LIST_COLOR_CHOICES if name == color_var.get()), None)
@@ -42474,7 +42466,7 @@ class ListApp:
             container = (parent_folder or {}).get("folder_kind", "standard") if parent_folder else None
             if not glide_sidebar.accepts(target_section, kind, candidate_kind, container) or (
                     template_id and not self.sidebar_template_allowed(template, target_section, parent)):
-                error.configure(text=f"Diese Art gehört nicht in den Bereich {glide_sidebar.TITLES[target_section]}.")
+                error.configure(text=glide_i18n.t("ui.submit.this_type_does_not", 'Diese Art gehört nicht in den Bereich {wert}.', wert=glide_sidebar.TITLES[target_section]))
                 return
             # Seit 3.30 (ZF-120) nimmt ein Tagebuch jede Inhaltsart auf; der
             # frühere Notizzwang für Aufgabenlisten entfällt.
@@ -42482,7 +42474,7 @@ class ListApp:
             if journal_parent and is_list and moment["field"] is not None:
                 gelesen, fehler = moment["field"].read()
                 if fehler or not gelesen or not gelesen[0]:
-                    error.configure(text=fehler or "Bitte ein Momentdatum für das Notizbuch wählen.")
+                    error.configure(text=fehler or glide_i18n.t("ui.submit.please_choose_a_moment", "Bitte ein Momentdatum für das Notizbuch wählen."))
                     return
                 moment_date = gelesen[0]
             if template_id:
@@ -42546,8 +42538,8 @@ class ListApp:
                 self.save_settings()
                 self.refresh_tree()
             self.feedback("list_created" if is_list else "folder_created")
-        self._make_dialog_button(actions, "Anlegen", submit, "confirm").pack(side="right")
-        self._make_dialog_button(actions, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=8)
+        self._make_dialog_button(actions, glide_i18n.t("ui.create_area.create", "Anlegen"), submit, "confirm").pack(side="right")
+        self._make_dialog_button(actions, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=8)
         title_entry.bind("<Return>", lambda event: submit())
         dialog.bind("<Escape>", lambda event: dialog.destroy())
         dialog.update_idletasks()
@@ -42589,9 +42581,8 @@ class ListApp:
             parent_id = None
         if parent_id is not None and self.folder_depth(parent_id) + 1 >= self.MAX_FOLDER_DEPTH:
             self.show_info(
-                "Neuer Ordner",
-                f"Die Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen. "
-                "Der Ordner entsteht deshalb eine Ebene höher.",
+                glide_i18n.t("menu.file.new_folder", "Neuer Ordner"),
+                glide_i18n.t("ui.create_new_folder.nesting_ends_at_levels", 'Die Verschachtelung endet bei {max_folder_depth} Ebenen. Der Ordner entsteht deshalb eine Ebene höher.', max_folder_depth=self.MAX_FOLDER_DEPTH),
             )
             parent_id = self.folder_parent_id(parent_id)
         return self.create_container_dialog("folder", parent_id=parent_id)
@@ -42610,15 +42601,15 @@ class ListApp:
         row = rows[0] if rows else None
         if row and row[0] == "view":
             self.show_info(
-                "Systemansicht",
-                "Eingang, „Heute“, „Demnächst“ und Papierkorb gehören fest zur Anwendung.",
+                glide_i18n.t("ui.delete_selected_sidebar_entry.system_view", "Systemansicht"),
+                glide_i18n.t("ui.delete_selected_sidebar_entry.inbox_today_upcoming_and", "Eingang, „Heute“, „Demnächst“ und Papierkorb gehören fest zur Anwendung."),
             )
             return "break"
         if row and row[0] == "folder":
             self.trash_folder(row[1])
             return "break"
         if row and row[0] == "list" and self.is_inbox_list(row[1]):
-            self.show_info("Eingang", "Der fest integrierte Eingang kann nicht gelöscht werden.")
+            self.show_info(glide_i18n.t("sidebar.inbox", "Eingang"), glide_i18n.t("ui.delete_selected_sidebar_entry.the_built_in_inbox", "Der fest integrierte Eingang kann nicht gelöscht werden."))
             return "break"
         if row and row[0] == "list":
             self.delete_list_by_id(row[1])
@@ -42630,7 +42621,7 @@ class ListApp:
         """Verschiebt alle markierten Listen gemeinsam in einen Ordner oder heraus."""
         list_ids = self.get_selected_sidebar_list_ids()
         if not list_ids:
-            self.show_info("Verschieben", "In der Auswahl steht keine verschiebbare Liste.")
+            self.show_info(glide_i18n.t("drawing.action.move", "Verschieben"), glide_i18n.t("ui.move_selected_lists_to_folder.the_selection_contains_no", "In der Auswahl steht keine verschiebbare Liste."))
             return "break"
         if folder_id is not None and not self.get_folder(folder_id):
             return "break"
@@ -42692,7 +42683,7 @@ class ListApp:
             return "break"
         objekt = self.get_folder(kennung) if art == "folder" else next(
             (entry for entry in self.lists if entry.get("id") == kennung), None)
-        name = str((objekt or {}).get("title") or ("Ordner" if art == "folder" else "Seite"))
+        name = str((objekt or {}).get("title") or (glide_i18n.t("ui.kachel_boards.folder", "Ordner") if art == "folder" else glide_i18n.t("ui.render.page", "Seite")))
         name = name if len(name) <= 40 else name[:39] + "…"
         if nachher[0] != vorher[0]:
             ziel = self.get_folder(nachher[0]) if nachher[0] else None
@@ -42775,10 +42766,8 @@ class ListApp:
             return "break"
         title = folder.get("title", "Ordner")
         if not self.ask_yes_no(
-            "Ordner auflösen",
-            f"Ordner '{title}' auflösen?\n\n"
-            "Die enthaltenen Listen und Unterordner bleiben erhalten und rücken eine Ebene "
-            "nach oben. Der leere Ordner wandert in den Papierkorb.",
+            glide_i18n.t("ui.delete_folder.dissolve_folder", "Ordner auflösen"),
+            glide_i18n.t("ui.delete_folder.dissolve_folder_the_lists", "Ordner '{title}' auflösen?\n\nDie enthaltenen Listen und Unterordner bleiben erhalten und rücken eine Ebene nach oben. Der leere Ordner wandert in den Papierkorb.", title=title),
         ):
             return "break"
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
@@ -42839,7 +42828,7 @@ class ListApp:
         if not list_entry:
             return "break"
         if self.is_inbox_list(list_entry):
-            self.show_info("Eingang", "Der Eingang bleibt fest oberhalb aller Ordner und Listen.")
+            self.show_info(glide_i18n.t("sidebar.inbox", "Eingang"), glide_i18n.t("ui.toggle_sidebar_indent.the_inbox_stays_fixed", "Der Eingang bleibt fest oberhalb aller Ordner und Listen."))
             return "break"
         if list_entry.get("folder_id"):
             with self.sidebar_change() as change:
@@ -42870,10 +42859,9 @@ class ListApp:
                         target_folder_id = row_id
                         break
         if not target_folder_id:
-            bereich = {"pages": "Seiten", "notes": "Notizen", "drawings": "Zeichnungen"}.get(
+            bereich = {"pages": glide_i18n.t("sidebar.pages", "Seiten"), "notes": glide_i18n.t("sidebar.notes", "Notizen"), "drawings": glide_i18n.t("sidebar.drawings", "Zeichnungen")}.get(
                 self.sidebar_section_for("list", list_entry["id"]), "Listen")
-            self.show_info("Hinweis", "Zum Einrücken braucht dieser Bereich einen passenden Ordner. Lege zuerst "
-                                      f"über „+“ neben „{bereich}“ einen Ordner an.")
+            self.show_info(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.toggle_sidebar_indent.indenting_needs_a_matching", 'Zum Einrücken braucht dieser Bereich einen passenden Ordner. Lege zuerst über „+“ neben „{bereich}“ einen Ordner an.', bereich=bereich))
             return "break"
         if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id),
                                     target_folder_id):
@@ -42912,10 +42900,8 @@ class ListApp:
                     break
         if not target_folder_id:
             self.show_info(
-                "Ordner einrücken",
-                "Oberhalb steht kein Ordner, in den dieser Ordner passt. Ein Ordner "
-                "lässt sich nicht in einen seiner eigenen Unterordner legen, und die "
-                f"Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen.",
+                glide_i18n.t("ui.indent_selected_sidebar_folder.indent_folder", "Ordner einrücken"),
+                glide_i18n.t("ui.indent_selected_sidebar_folder.there_is_no_folder", 'Oberhalb steht kein Ordner, in den dieser Ordner passt. Ein Ordner lässt sich nicht in einen seiner eigenen Unterordner legen, und die Verschachtelung endet bei {max_folder_depth} Ebenen.', max_folder_depth=self.MAX_FOLDER_DEPTH),
             )
             return "break"
         with self.sidebar_change() as change:
@@ -43236,7 +43222,7 @@ class ListApp:
             return True
         journal = self.normalize_journal(entry.get("journal"), created_at=entry.get("created_at", ""))
         if not journal.get("moment_date"):
-            antwort = self.themed_due_dialog(date.today().isoformat(), None, title="Momentdatum", show_time=False)
+            antwort = self.themed_due_dialog(date.today().isoformat(), None, title=glide_i18n.t("ui.ensure_journal_moment.moment_date", "Momentdatum"), show_time=False)
             if not antwort or not antwort[0]:
                 return False
             journal["moment_date"] = antwort[0]
@@ -43365,10 +43351,8 @@ class ListApp:
 
     def report_blocked_folder_move(self, count=1):
         self.show_info(
-            "Ordner verschieben",
-            f"{count} Ordner konnte(n) nicht verschoben werden.\n\n"
-            "Ein Ordner lässt sich nicht in sich selbst oder in einen seiner eigenen "
-            f"Unterordner legen, und die Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen.",
+            glide_i18n.t("ui.report_blocked_folder_move.move_folder", "Ordner verschieben"),
+            glide_i18n.t("ui.report_blocked_folder_move.folder_s_could_not", '{count} Ordner konnte(n) nicht verschoben werden.\n\nEin Ordner lässt sich nicht in sich selbst oder in einen seiner eigenen Unterordner legen, und die Verschachtelung endet bei {max_folder_depth} Ebenen.', count=count, max_folder_depth=self.MAX_FOLDER_DEPTH),
         )
 
     def create_new_list(self, event=None):
@@ -43895,7 +43879,7 @@ class ListApp:
     def create_ui(self):
         self.shell = self.register_theme_widget(tk.Frame(self.root, bg=self.theme["bg"]), "bg")
         self.shell.pack(fill="both", expand=True, padx=self.WINDOW_PAD_X, pady=self.WINDOW_PAD_Y)
-        self.storage_notice = self.make_button(self.shell, "Speicherstatus", self.show_storage_status,
+        self.storage_notice = self.make_button(self.shell, glide_i18n.t("ui.show_storage_status.storage_status", "Speicherstatus"), self.show_storage_status,
                                               "muted", height=32, font=app_font(9), bg_key="bg")
         self.refresh_storage_sizes()
 
@@ -43924,7 +43908,7 @@ class ListApp:
             tk.Canvas(top_frame, bg=self.theme["bg"], highlightthickness=0, bd=0, width=1, height=1,
                       cursor="hand2", takefocus=0), "bg")
         self.header_logo.bind("<Button-1>", lambda _event: self.show_about_dialog())
-        self.add_tooltip(self.header_logo, f"Über {APP_NAME}")
+        self.add_tooltip(self.header_logo, glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME))
 
         title_block = self.register_theme_widget(tk.Frame(top_frame, bg=self.theme["bg"]), "bg")
         self.title_block = title_block
@@ -43986,7 +43970,7 @@ class ListApp:
         self.settings_button = self.make_button(self.header_controls, self.ICONS["settings"],
                                                 self.show_settings_dialog, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("settings", 16))
         self.settings_button.pack(side="right")
-        self.add_tooltip(self.settings_button, "Einstellungen · Design, Profil und Bedienung")
+        self.add_tooltip(self.settings_button, glide_i18n.t("ui.create_ui.settings_design_profile_and", "Einstellungen · Design, Profil und Bedienung"))
         # Seit dem 27.09.2026 trägt die Kopfzeile nur Symbole: „Aktionen“ und
         # „Benachrichtigungen“ standen als Wörter zwischen Zeichen gleicher
         # Aufgabe (Aufräumen, Form folgt Funktion). Die Bedeutung steht im
@@ -43997,18 +43981,18 @@ class ListApp:
         self.capture_button = self.make_button(self.header_controls, self.ICONS["capture"], self.show_quick_capture,
                                                "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("capture", 16))
         self.capture_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
-        self.add_tooltip(self.capture_button, "Schnellerfassung · " + self.accel("Alt", "N"))
+        self.add_tooltip(self.capture_button, glide_i18n.t("ui.create_ui.quick_capture", 'Schnellerfassung · {accel}', accel=self.accel("Alt", "N")))
         # Die Lupe öffnet die Suche über Seiten, Punkte und Aktionen – dieselbe
         # wie Strg/Cmd+O. Sie steht neben ⌘, der Suche nur über Aktionen.
         # Das Zeichen ist in allen Schriften zierlicher als ⌘ und ⚙; eine
         # größere Schrift gleicht die Gewichte in der Reihe aus.
         self.search_button = self.make_button(self.header_controls, self.ICONS["search"], self.show_quick_open,
                                               "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("search", self.SEARCH_SYMBOL_SIZE))
-        self.add_tooltip(self.search_button, "Suchen: Seiten, Punkte und Aktionen · " + self.accel("O"))
+        self.add_tooltip(self.search_button, glide_i18n.t("ui.create_ui.search_pages_items_and", 'Suchen: Seiten, Punkte und Aktionen · {accel}', accel=self.accel("O")))
         self.search_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.actions_button = self.make_button(self.header_controls, self.ICONS["actions"], self.show_actions_dialog,
                                                "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("actions", 16))
-        self.add_tooltip(self.actions_button, "Alle Aktionen durchsuchen")
+        self.add_tooltip(self.actions_button, glide_i18n.t("ui.create_ui.search_all_actions", "Alle Aktionen durchsuchen"))
         self.actions_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         def remember_action_focus(event):
             self._actions_source_focus = self.current_focus_widget()
@@ -44025,7 +44009,7 @@ class ListApp:
         self.sidebar_toggle_button = self.make_button(self.header_controls, self.ICONS["sidebar"],
                                                       self.toggle_sidebar, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("sidebar", 16))
         self.sidebar_toggle_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
-        self.add_tooltip(self.sidebar_toggle_button, "Listen- und Ordnerleiste")
+        self.add_tooltip(self.sidebar_toggle_button, glide_i18n.t("ui.create_ui.lists_and_folders_bar", "Listen- und Ordnerleiste"))
 
         # Die Druckausgabe gibt es seit 3.17, aber sie lag
         # ausschließlich im Menü „Datei" und hinter Strg+P. Wer beides nicht
@@ -44045,13 +44029,13 @@ class ListApp:
         self.history_button = self.make_button(self.header_controls, self.ICONS["history"],
                                                self.open_history_view, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("history", 15))
         self.history_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
-        self.add_tooltip(self.history_button, "Änderungsverlauf · " + self.accel("Strg", "H"))
+        self.add_tooltip(self.history_button, glide_i18n.t("ui.create_ui.change_history", 'Änderungsverlauf · {accel}', accel=self.accel(glide_i18n.t("keyboard.modifier.control", "Strg"), "H")))
         # Laufende Zeiterfassung (3.30): nur sichtbar, solange sie läuft.
         self.timer_button = self.make_button(self.header_controls, "", self.stop_time_tracking_from_header,
                                              "due_action", width=120, height=self.HEADER_CONTROL_HEIGHT)
-        self.add_tooltip(self.timer_button, "Zeiterfassung stoppen und auf den Punkt buchen")
+        self.add_tooltip(self.timer_button, glide_i18n.t("ui.create_ui.stop_time_tracking_and", "Zeiterfassung stoppen und auf den Punkt buchen"))
         self.after_scope().after_idle(self.update_timer_indicator)
-        self.add_tooltip(self.print_button, "Drucken und als PDF speichern · " + self.accel("Strg", "P"))
+        self.add_tooltip(self.print_button, glide_i18n.t("ui.create_ui.print_and_save_as", 'Drucken und als PDF speichern · {accel}', accel=self.accel(glide_i18n.t("keyboard.modifier.control", "Strg"), "P")))
 
         # Das Überlaufmenü nimmt auf, was bei
         # schmalem Fenster aus der Kopfzeile und den Aktionsreihen weicht.
@@ -44060,7 +44044,7 @@ class ListApp:
         self.header_overflow_button = self.make_button(
             self.header_controls, self.ICONS["overflow"], self.show_header_overflow_menu,
             "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=app_font(16))
-        self.add_tooltip(self.header_overflow_button, "Weitere Aktionen dieser Ansicht")
+        self.add_tooltip(self.header_overflow_button, glide_i18n.t("ui.create_ui.more_actions_in_this", "Weitere Aktionen dieser Ansicht"))
 
         # Kennzahlenzeile. Die Labels der geöffneten Seite stehen seit dem
         # 02.11.2026 in der Ecke der Inhaltskarte (`update_page_labels`).
@@ -44191,13 +44175,13 @@ class ListApp:
             width=38, height=38,
         )
         self.add_button.pack(side="right")
-        self.add_tooltip(self.add_button, "Aufgabe hinzufügen (Enter) · erweiterte Eingabe mit Umschalt+Enter")
+        self.add_tooltip(self.add_button, glide_i18n.t("ui.create_ui.add_task_enter_extended", "Aufgabe hinzufügen (Enter) · erweiterte Eingabe mit Umschalt+Enter"))
         self.entry.bind("<Shift-Return>", lambda _event: (self.add_item_advanced(), "break")[1], add="+")
         # Der frühere Textknopf bleibt als Objekt für bestehende Verweise,
         # wird aber nicht mehr eingeblendet (Menü, Palette und Kürzel führen hin).
         self.advanced_add_button = self.make_button(
             input_frame,
-            text="Erweitert",
+            text=glide_i18n.t("drawing.profile.extended", "Erweitert"),
             command=self.add_item_advanced,
             color_key="due_action",
             width=112,
@@ -44227,7 +44211,7 @@ class ListApp:
 
         self.clear_search_button = self.make_button(
             self.search_frame,
-            text="Suche löschen",
+            text=glide_i18n.t("ui.create_ui.clear_search", "Suche löschen"),
             command=self.clear_search,
             color_key="flag",
             width=126,
@@ -44243,9 +44227,9 @@ class ListApp:
         self.view_switch = self.register_theme_widget(tk.Frame(self.search_frame, bg=self.theme["bg"]), "bg")
         self._view_switch_active = None
         for name, text, befehl, hinweis in (
-                ("list_view_button", "Liste", self.open_list_view, "Punkte als Liste"),
-                ("table_button", "Tabelle", self.set_table_view, "Kompakte Tabellenansicht dieser Liste"),
-                ("board_button", "Pinnwand", self.open_board_view, "Punkte als Karten auf einer Fläche")):
+                ("list_view_button", glide_i18n.t("editor.toolbar.list", "Liste"), self.open_list_view, glide_i18n.t("ui.create_ui.items_as_a_list", "Punkte als Liste")),
+                ("table_button", glide_i18n.t("saved_view.choice.display_table", "Tabelle"), self.set_table_view, glide_i18n.t("ui.create_ui.compact_table_view_of", "Kompakte Tabellenansicht dieser Liste")),
+                ("board_button", glide_i18n.t("board.title", "Pinnwand"), self.open_board_view, glide_i18n.t("ui.create_ui.items_as_cards_on", "Punkte als Karten auf einer Fläche"))):
             ziel = name.split("_")[0]
             knopf = self.make_button(
                 self.view_switch, self.ICONS[ziel],
@@ -44256,7 +44240,7 @@ class ListApp:
             self.add_tooltip(knopf, text + " – " + hinweis)
             setattr(self, name, knopf)
         self.table_columns_button = self.make_button(
-            self.search_frame, "Spalten …", self.show_table_columns_dialog,
+            self.search_frame, glide_i18n.t("ui.create_ui.columns", "Spalten …"), self.show_table_columns_dialog,
             "muted", width=90, height=38, font=app_font(9, "bold"),
         )
         # „Anzeige“ steuert, wie viel eine Zeile zeigt.
@@ -44265,17 +44249,17 @@ class ListApp:
         # Bestand, nicht den Bestand.
         # Tag oder Zeitraum im Tagebuch (ZF-120). Er steht nur in einem Tagebuchordner da.
         self.journal_filter_button = self.make_button(
-            self.search_frame, "Zeitraum: alle Tage", self.show_journal_filter_dialog,
+            self.search_frame, glide_i18n.t("ui.create_ui.period_all_days", "Zeitraum: alle Tage"), self.show_journal_filter_dialog,
             "muted", width=190, height=38, font=app_font(9, "bold"),
         )
         self.add_tooltip(self.journal_filter_button,
-                         "Einträge eines Tages oder eines Zeitraums – beide Grenztage zählen mit")
+                         glide_i18n.t("ui.create_ui.entries_of_one_day", "Einträge eines Tages oder eines Zeitraums – beide Grenztage zählen mit"))
         self.detail_button = self.make_button(
-            self.search_frame, f"Anzeige: {self.detail_mode_name()}", self.show_detail_mode_menu,
+            self.search_frame, glide_i18n.t("ui.sync_detail_button.display", 'Anzeige: {detail_mode_name}', detail_mode_name=self.detail_mode_name()), self.show_detail_mode_menu,
             "muted", width=176, height=38, font=app_font(9, "bold"),
         )
         self.add_tooltip(self.detail_button,
-                         "Wie viel eine Zeile zeigt – Checklisten, Anhänge und Beschreibung")
+                         glide_i18n.t("ui.sync_detail_button.how_much_a_row", "Wie viel eine Zeile zeigt – Checklisten, Anhänge und Beschreibung"))
         # Tageswechsel der Tagesplanung. Beide Schaltflächen stehen nur in
         # dieser Ansicht und sind zusätzlich über das Ansichtsmenü und damit
         # über die durchsuchbaren App-Aktionen erreichbar.
@@ -44294,10 +44278,10 @@ class ListApp:
         )
         # Tagesbeginn und Tagesabschluss sind seit 3.33.6 (D14) Modi von „Heute“.
         self.plan_day_mode_button = self.make_button(
-            self.search_frame, "Tag …", self.show_plan_day_mode_menu,
+            self.search_frame, glide_i18n.t("ui.create_ui.day", "Tag …"), self.show_plan_day_mode_menu,
             "muted", width=72, height=38, font=app_font(9, "bold"),
         )
-        self.add_tooltip(self.plan_day_mode_button, "Tagesbeginn oder Tagesabschluss")
+        self.add_tooltip(self.plan_day_mode_button, glide_i18n.t("ui.create_ui.day_start_or_day", "Tagesbeginn oder Tagesabschluss"))
 
         self.hide_done_box_border = self.make_rounded_container(
             self.search_frame,
@@ -44318,7 +44302,7 @@ class ListApp:
 
         self.hide_done_check = GlideCheckbutton(
             self.hide_done_box_inner,
-            text="Nur offene Punkte",
+            text=glide_i18n.t("ui.create_ui.open_items_only", "Nur offene Punkte"),
             variable=self.hide_done_var,
             command=self.on_open_only_changed,
             bg=self.theme["input"],
@@ -44433,11 +44417,11 @@ class ListApp:
         self.note_journal_actions = ButtonFlow(self.list_frame_outer.inner, self.theme["card"], gap=glide_design.SPACING[8])
         self.register_theme_widget(self.note_journal_actions, "card")
         self.note_favorite_button = self.make_button(
-            self.note_journal_actions, "☆ Favorit", self.toggle_journal_favorite,
+            self.note_journal_actions, glide_i18n.t("ui.create_ui.favorite", "☆ Favorit"), self.toggle_journal_favorite,
             "muted", height=34, font=app_font(9, "bold"),
         )
         self.note_mood_button = self.make_button(
-            self.note_journal_actions, "Stimmung", self.choose_journal_mood,
+            self.note_journal_actions, glide_i18n.t("ui.create_ui.mood", "Stimmung"), self.choose_journal_mood,
             "muted", height=34, font=app_font(9, "bold"),
         )
         self.note_location_button = self.make_button(
@@ -44445,7 +44429,7 @@ class ListApp:
             "muted", height=34, font=app_font(9, "bold"),
         )
         self.note_prompt_button = self.make_button(
-            self.note_journal_actions, "Schreibimpuls", self.insert_journal_prompt,
+            self.note_journal_actions, glide_i18n.t("editor.menu.journal_prompt", "Schreibimpuls"), self.insert_journal_prompt,
             "muted", height=34, font=app_font(9, "bold"),
         )
         for key, button in (
@@ -44570,11 +44554,7 @@ class ListApp:
             CanvasLabel(
                 self.card_foot,
                 text=(
-                    "Drag & Drop: Reihenfolge ändern · Auf die Mitte einer Gruppe ziehen: hineinlegen · "
-                    "Shift + Drag: Unterpunkt · "
-                    f"Shift + Klick: Bereich auswählen · {self.selection_modifier_name()} + Klick: einzeln dazu · "
-                    "Tab: ein-/ausrücken · "
-                    "Rechtsklick: Details, Wichtigkeit, Fälligkeit, Farbe und Labels · F2: Bearbeiten"
+                    glide_i18n.t("ui.create_ui.drag_drop_change_order", 'Drag & Drop: Reihenfolge ändern · Auf die Mitte einer Gruppe ziehen: hineinlegen · Shift + Drag: Unterpunkt · Shift + Klick: Bereich auswählen · {selection_modifier_name} + Klick: einzeln dazu · Tab: ein-/ausrücken · Rechtsklick: Details, Wichtigkeit, Fälligkeit, Farbe und Labels · F2: Bearbeiten', selection_modifier_name=self.selection_modifier_name())
                 ),
                 font=app_font(9),
                 bg=self.theme["card"],
@@ -44611,15 +44591,15 @@ class ListApp:
             "card", "muted")
         knopf = {"width": 104, "height": self.SELECTION_BUTTON_HEIGHT, "radius": 14,
                  "font": app_font(9, "bold"), "bg_key": "card"}
-        self.flag_button = self.make_button(leiste.inner, "Wichtigkeit", self.cycle_importance_selected,
+        self.flag_button = self.make_button(leiste.inner, glide_i18n.t("inspector.importance", "Wichtigkeit"), self.cycle_importance_selected,
                                             "muted", **knopf)
-        self.due_button = self.make_button(leiste.inner, "Fällig", self.set_due_date_selected, "muted", **knopf)
-        self.plan_button = self.make_button(leiste.inner, f"{self.ICONS['calendar']}  Einplanen",
+        self.due_button = self.make_button(leiste.inner, glide_i18n.t("ui.create_ui.due", "Fällig"), self.set_due_date_selected, "muted", **knopf)
+        self.plan_button = self.make_button(leiste.inner, glide_i18n.t("ui.create_ui.schedule", '{calendar}  Einplanen', calendar=self.ICONS['calendar']),
                                             self.show_quick_plan_menu, "muted", **knopf)
-        self.add_tooltip(self.plan_button, "Bearbeitungstag wählen (Strg/Cmd+Umschalt+P)")
-        self.labels_button = self.make_button(leiste.inner, f"{self.ICONS['labels']}  Labels",
+        self.add_tooltip(self.plan_button, glide_i18n.t("ui.create_ui.choose_work_day_ctrl", "Bearbeitungstag wählen (Strg/Cmd+Umschalt+P)"))
+        self.labels_button = self.make_button(leiste.inner, glide_i18n.t("ui.create_ui.labels", '{labels}  Labels', labels=self.ICONS['labels']),
                                               self.show_selection_labels_menu, "muted", **knopf)
-        self.delete_button = self.make_button(leiste.inner, "Löschen", self.delete_item, "delete", **knopf)
+        self.delete_button = self.make_button(leiste.inner, glide_i18n.t("button.delete", "Löschen"), self.delete_item, "delete", **knopf)
         self.selection_buttons = (self.flag_button, self.due_button, self.plan_button,
                                   self.labels_button, self.delete_button)
         self.tree.bind("<<TreeviewSelect>>", self.sync_selection_bar, add="+")
@@ -44784,7 +44764,7 @@ class ListApp:
             font = ui_font_object(root=self.root, font=self.title_label.cget("font"))
             menu = getattr(self, "custom_menubar", None)
             menu_width = self.packed_width(menu) + 8 if menu is not None else 0
-            needed = max(220, font.measure("Wissen und Bildmaterial")) + menu_width
+            needed = max(220, font.measure(glide_i18n.t("ui.sync_header_action_host.knowledge_and_images", "Wissen und Bildmaterial"))) + menu_width
             needed += self.packed_width(self.header_controls) + 12
             docked = not self.compact_mode_active() and width < needed
             home = getattr(self, "home_frame", None)
@@ -44898,29 +44878,29 @@ class ListApp:
         """„Warum steht das hier?“ – jede Bedingung des Filters mit erfüllt/verfehlt (D-03)."""
         bedingungen = self.saved_filters.explain_item(list_id, item_id)
         if bedingungen is None:
-            self.show_info("Filter erklären", "Der Punkt oder der Filter ist nicht mehr vorhanden.")
+            self.show_info(glide_i18n.t("ui.explain_saved_filter_item.explain_filter", "Filter erklären"), glide_i18n.t("ui.explain_saved_filter_item.the_item_or_the", "Der Punkt oder der Filter ist nicht mehr vorhanden."))
             return "break"
         found = self.find_item_in_lists(item_id)
-        titel = self.item_display_text(found[0]) if found else "Punkt"
+        titel = self.item_display_text(found[0]) if found else glide_i18n.t("ui.choose_cards.item", "Punkt")
         if not bedingungen:
-            text = "Der Filter setzt keine Bedingung: Er zeigt jede planbare Aufgabe."
+            text = glide_i18n.t("ui.explain_saved_filter_item.the_filter_sets_no", "Der Filter setzt keine Bedingung: Er zeigt jede planbare Aufgabe.")
         else:
             text = "\n".join(f"{'✓' if b['ok'] else '✗'}  {b['title']}: {b['detail']}" for b in bedingungen)
-        self.show_info(f"Warum steht „{titel}“ hier?", text)
+        self.show_info(glide_i18n.t("ui.explain_saved_filter_item.why_is_here", 'Warum steht „{titel}“ hier?', titel=titel), text)
         return "break"
 
     def explain_saved_filter(self, event=None):
         """„Ausgeblendet: N“ erklären – je verfehlter Bedingung die Anzahl (D-03)."""
         criteria = self.saved_filters.current()
         if self.view_mode != "saved_filter" or criteria is None:
-            self.show_info("Filter erklären", "Öffne zuerst einen gespeicherten Filter (Ansicht › Oberfläche › Gespeicherte Filter …).")
+            self.show_info(glide_i18n.t("ui.explain_saved_filter.explain_filter", "Filter erklären"), glide_i18n.t("ui.explain_saved_filter.open_a_saved_filter", "Öffne zuerst einen gespeicherten Filter (Ansicht › Oberfläche › Gespeicherte Filter …)."))
             return "break"
         passend, ausgeblendet, gruende = self.saved_filters.hidden_reasons(criteria)
-        zeilen = [f"Passend: {passend} · Ausgeblendet: {ausgeblendet}"]
+        zeilen = [glide_i18n.t("ui.explain_saved_filter.matching_hidden", 'Passend: {passend} · Ausgeblendet: {ausgeblendet}', passend=passend, ausgeblendet=ausgeblendet)]
         if gruende:
-            zeilen.append("Ausgeblendet wegen (erste verfehlte Bedingung):")
+            zeilen.append(glide_i18n.t("ui.explain_saved_filter.hidden_because_of_first", "Ausgeblendet wegen (erste verfehlte Bedingung):"))
             zeilen += [f"• {name}: {anzahl}" for name, anzahl in gruende]
-        zeilen.append("Bedingungen: " + self.saved_filters.summary(criteria))
+        zeilen.append(glide_i18n.t("ui.explain_saved_filter.conditions", 'Bedingungen: {summary}', summary=self.saved_filters.summary(criteria)))
         self.show_info(f"Filter „{criteria.get('name', '')}“", "\n".join(zeilen))
         return "break"
 
@@ -44928,19 +44908,19 @@ class ListApp:
         """Die bei schmalem Fenster ausgeblendeten Aktionen als Menü."""
         menu = self._new_themed_popup_menu()
         if not self.capture_button.winfo_manager():
-            menu.add_command(label="Schnellerfassung …", command=self.show_quick_capture)
-        menu.add_command(label="Drucken und PDF …", command=self.show_print_dialog)
-        menu.add_command(label="Änderungsverlauf", command=self.open_history_view)
-        menu.add_command(label="Einstellungen …", command=self.show_settings_dialog)
+            menu.add_command(label=glide_i18n.t("menu.file.quick_capture", "Schnellerfassung …"), command=self.show_quick_capture)
+        menu.add_command(label=glide_i18n.t("board.action.print_pdf", "Drucken und PDF …"), command=self.show_print_dialog)
+        menu.add_command(label=glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), command=self.open_history_view)
+        menu.add_command(label=glide_i18n.t("menu.file.settings", "Einstellungen …"), command=self.show_settings_dialog)
         menu.add_separator()
-        menu.add_command(label="Erledigte Punkte löschen", command=lambda: self.remove_done_items())
-        menu.add_command(label="Liste leeren", command=self.clear_list)
-        menu.add_command(label="Löschen", command=self.delete_item)
-        menu.add_command(label="Bearbeiten", command=self.edit_item)
-        menu.add_command(label="Rückgängig", command=self.undo_last_change)
-        menu.add_command(label="Wiederholen", command=self.redo_last_change)
+        menu.add_command(label=glide_i18n.t("ui.show_header_overflow_menu.delete_completed_items", "Erledigte Punkte löschen"), command=lambda: self.remove_done_items())
+        menu.add_command(label=glide_i18n.t("ui.show_side_recent_searches.clear_list", "Liste leeren"), command=self.clear_list)
+        menu.add_command(label=glide_i18n.t("button.delete", "Löschen"), command=self.delete_item)
+        menu.add_command(label=glide_i18n.t("button.edit", "Bearbeiten"), command=self.edit_item)
+        menu.add_command(label=glide_i18n.t("menu.edit.undo", "Rückgängig"), command=self.undo_last_change)
+        menu.add_command(label=glide_i18n.t("menu.edit.redo", "Wiederholen"), command=self.redo_last_change)
         menu.add_separator()
-        menu.add_command(label="Alle Aktionen durchsuchen …", command=self.show_actions_dialog)
+        menu.add_command(label=glide_i18n.t("ui.show_header_overflow_menu.search_all_actions", "Alle Aktionen durchsuchen …"), command=self.show_actions_dialog)
         knopf = getattr(self, "header_overflow_button", None)
         try:
             if knopf is not None and knopf.winfo_ismapped():
@@ -45021,7 +45001,7 @@ class ListApp:
         if ids:
             try:
                 self.selection_count_label.configure(
-                    text="1 Punkt" if len(ids) == 1 else f"{len(ids)} Punkte")
+                    text=glide_i18n.t("ui.sync_selection_bar.1_item", "1 Punkt") if len(ids) == 1 else glide_i18n.t("ui.sync_selection_bar.items", '{len} Punkte', len=len(ids)))
             except tk.TclError:
                 pass
         self.sync_card_foot()
@@ -45056,7 +45036,7 @@ class ListApp:
         # Aus einer Zeichnungskarte heraus geöffnet (ZF-100): Der Rückweg
         # führt auf dieselbe Pinnwand. Er steht rechts neben dem Titel in
         # derselben Zeile und ändert deshalb keine Höhe.
-        zurueck = CanvasLabel(row, text=f"{self.ICONS['back']} Zurück zur Pinnwand", bg=self.theme["bg"],
+        zurueck = CanvasLabel(row, text=glide_i18n.t("ui.update_path_row.back_to_board", '{back} Zurück zur Pinnwand', back=self.ICONS['back']), bg=self.theme["bg"],
                               fg=self.theme["ui_accent"], font=app_font(9, "bold"), cursor="hand2", takefocus=1)
         zurueck.pack(side="left")
         for sequence in ("<Button-1>", "<Return>", "<space>"):
@@ -45100,9 +45080,9 @@ class ListApp:
         if abstand == -1:
             return "gestern"
         if 1 < abstand <= 6:
-            return f"in {abstand} Tagen"
+            return glide_i18n.t("ui.relative_day_text.in_days", 'in {abstand} Tagen', abstand=abstand)
         if -6 <= abstand < -1:
-            return f"vor {-abstand} Tagen"
+            return glide_i18n.t("ui.relative_day_text.days_ago", 'vor {wert} Tagen', wert=-abstand)
         return self.format_due_display(tag)
 
     def page_chips(self):
@@ -45131,29 +45111,29 @@ class ListApp:
                 return []
             if self.is_gallery_list(entry):
                 anzahl = len(entry.get("attachments") or [])
-                return ["1 Bild" if anzahl == 1 else f"{anzahl} Bilder"]
+                return [glide_i18n.t("ui.redraw.1_image", "1 Bild") if anzahl == 1 else glide_i18n.t("ui.page_chips.images", '{anzahl} Bilder', anzahl=anzahl)]
             if self.is_drawing_list(entry):
                 dokument = entry.get("drawing") or {}
                 groesse = dokument.get("width") or glide_drawing.WIDTH
-                chips = [f"{groesse} × {groesse}", f"{len(dokument.get('palette') or [])} Farben"]
+                chips = [f"{groesse} × {groesse}", glide_i18n.t("ui.page_chips.colors", '{len} Farben', len=len(dokument.get('palette') or []))]
                 try:
                     zellen = bytes.fromhex("".join(dokument.get("rows") or []))
-                    chips.append(f"{len(zellen) - zellen.count(0)} Zellen bemalt")
+                    chips.append(glide_i18n.t("ui.page_chips.cells_painted", '{wert} Zellen bemalt', wert=len(zellen) - zellen.count(0)))
                 except ValueError:
                     pass
                 return chips
             metrics = self.list_metrics(entry["id"])
             offen = metrics.total - metrics.done
-            chips = [f"{offen} offen" if metrics.total else "Noch keine Aufgaben"]
+            chips = [glide_i18n.t("ui.page_chips.open", '{offen} offen', offen=offen) if metrics.total else glide_i18n.t("ui.page_chips.no_tasks_yet", "Noch keine Aufgaben")]
             # Der Fortschritt stand bis 27.09.2026 nur rechts neben dem Titel.
             if metrics.done:
-                chips.append(f"{metrics.done} erledigt")
+                chips.append(glide_i18n.t("ui.kachel_stats.done", '{done} erledigt', done=metrics.done))
             ueberfaellig = metrics.overdue
             if ueberfaellig:
-                chips.append(f"{ueberfaellig} überfällig")
+                chips.append(glide_i18n.t("ui.page_chips.overdue", '{ueberfaellig} überfällig', ueberfaellig=ueberfaellig))
             naechste = metrics.next_due
             if naechste:
-                chips.append(f"nächste Fälligkeit {self.relative_day_text(naechste)}")
+                chips.append(glide_i18n.t("ui.page_chips.next_due", 'nächste Fälligkeit {relative_day_text}', relative_day_text=self.relative_day_text(naechste)))
             labels = metrics.labels
             if labels:
                 chips.append(f"{len(labels)} Label" + ("s" if len(labels) != 1 else ""))
@@ -45165,10 +45145,10 @@ class ListApp:
             offen = total - sum(value.done for value in metrics)
             chips = [f"{len(listen)} Seite" + ("n" if len(listen) != 1 else "")]
             if total:
-                chips.append(f"{offen} offen")
+                chips.append(glide_i18n.t("ui.page_chips.open", '{offen} offen', offen=offen))
             ueberfaellig = sum(value.overdue for value in metrics)
             if ueberfaellig:
-                chips.append(f"{ueberfaellig} überfällig")
+                chips.append(glide_i18n.t("ui.page_chips.overdue", '{ueberfaellig} überfällig', ueberfaellig=ueberfaellig))
             return chips
         return []
 
@@ -45205,7 +45185,7 @@ class ListApp:
             etikett._header_note = (vorsatz, notiz)
             if bearbeitbar:
                 etikett.bind("<Button-1>", self.edit_page_note)
-                self.add_tooltip(etikett, "Beschreibungstext bearbeiten")
+                self.add_tooltip(etikett, glide_i18n.t("ui.update_page_chips.edit_description", "Beschreibungstext bearbeiten"))
             etikett.pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
         if not zeile.winfo_manager():
             zeile.pack(side="left", anchor="w", fill="x", expand=True)
@@ -45812,11 +45792,11 @@ class ListApp:
             return "break"
         if self.view_mode in self.DERIVED_ITEM_VIEWS:
             self.show_info(
-                self.get_display_title(), "Diese automatisch erzeugte Ansicht hat einen festen Namen."
+                self.get_display_title(), glide_i18n.t("ui.edit_title.this_automatically_generated_view", "Diese automatisch erzeugte Ansicht hat einen festen Namen.")
             )
             return "break"
         if self.view_mode == "trash":
-            self.show_info("Papierkorb", "Der Papierkorb hat einen festen Namen.")
+            self.show_info(glide_i18n.t("menu.view.trash", "Papierkorb"), glide_i18n.t("ui.edit_title.the_trash_has_a", "Der Papierkorb hat einen festen Namen."))
             return "break"
         if self.view_mode == "folder" and self.active_folder_id:
             return self.edit_folder_details(self.active_folder_id)
@@ -45941,58 +45921,58 @@ class ListApp:
         if not hasattr(self, "page_chip_row"):
             return
         if self.view_mode == self.HISTORY_VIEW:
-            self.set_note_preview(text="Die letzten Änderungen · Suche und Filter im Verlauf")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.the_latest_changes_search", "Die letzten Änderungen · Suche und Filter im Verlauf"))
             return
         if self.view_mode == self.PAGES_VIEW:
-            self.set_note_preview(text="Favoriten, zuletzt geöffnete und alle Seiten · Zwischenablage oder Datei wird zur Seite")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.favorites_recently_opened_and", "Favoriten, zuletzt geöffnete und alle Seiten · Zwischenablage oder Datei wird zur Seite"))
             return
         if self.view_mode == self.DRAWINGS_VIEW:
-            self.set_note_preview(text="Deine Zeichnungen · Zeile anklicken zum Öffnen")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.your_drawings_click_a", "Deine Zeichnungen · Zeile anklicken zum Öffnen"))
             return
         if self.view_mode == self.NOTES_VIEW:
-            self.set_note_preview(text="Deine Notizen und Notizbücher · Zeile anklicken zum Öffnen")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.your_notes_and_notebooks", "Deine Notizen und Notizbücher · Zeile anklicken zum Öffnen"))
             return
         if self.view_mode == self.LIBRARY_VIEW:
-            self.set_note_preview(text="Deine Listen und Ordner · Kachel anklicken zum Öffnen")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.your_lists_and_folders", "Deine Listen und Ordner · Kachel anklicken zum Öffnen"))
             return
         if self.view_mode == self.TEMPLATE_VIEW:
-            self.set_note_preview(text="Vorlagen für Listen und Ordner · Aktionen am unteren Rand")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.templates_for_lists_and", "Vorlagen für Listen und Ordner · Aktionen am unteren Rand"))
             return
         if self.view_mode == self.HOME_VIEW:
-            self.set_note_preview(text="Dein Überblick für heute · Persönlich, lokal und jederzeit bereit")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.your_overview_for_today", "Dein Überblick für heute · Persönlich, lokal und jederzeit bereit"))
             return
         if self.view_mode == "saved_filter":
-            self.set_note_preview(text="Eigene Filteransicht · Doppelklick auf den Titel: Filter bearbeiten")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.custom_filter_view_double", "Eigene Filteransicht · Doppelklick auf den Titel: Filter bearbeiten"))
             return
         if self.view_mode == "in_progress":
-            self.set_note_preview(text="Alle Aufgaben mit Fälligkeit · Doppelklick öffnet die Quellliste")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.all_tasks_with_a", "Alle Aufgaben mit Fälligkeit · Doppelklick öffnet die Quellliste"))
             return
         if self.view_mode == self.PLAN_DAY_VIEW:
             self.set_note_preview(
-                text="Was du an diesem Tag bearbeiten willst · Mit den Pfeilen wechselst du den Tag · Fälligkeiten bleiben unverändert"
+                text=glide_i18n.t("ui.update_page_note_preview.what_you_want_to", "Was du an diesem Tag bearbeiten willst · Mit den Pfeilen wechselst du den Tag · Fälligkeiten bleiben unverändert")
             )
             return
         if self.view_mode == self.TABLE_VIEW:
-            self.set_note_preview(text="Kompakte Tabellenansicht · Spalten über „Spalten …“ je Liste wählen")
+            self.set_note_preview(text=glide_i18n.t("ui.update_page_note_preview.compact_table_view_choose", "Kompakte Tabellenansicht · Spalten über „Spalten …“ je Liste wählen"))
             return
         if self.view_mode == "overdue":
             self.set_note_preview(
-                text="Überfällig und noch offen · Doppelklick öffnet die Quellliste"
+                text=glide_i18n.t("ui.update_page_note_preview.overdue_and_still_open", "Überfällig und noch offen · Doppelklick öffnet die Quellliste")
             )
             return
         if self.view_mode == self.LABELS_VIEW:
             self.set_note_preview(
-                text="Alle Punkte nach Labels · Ziehen in eine andere Gruppe vergibt das Label"
+                text=glide_i18n.t("ui.update_page_note_preview.all_items_by_label", "Alle Punkte nach Labels · Ziehen in eine andere Gruppe vergibt das Label")
             )
             return
         if self.view_mode == "trash":
             self.set_note_preview(
-                text="Gelöschte Listen und Ordner · Doppelklick stellt einen Eintrag wieder her"
+                text=glide_i18n.t("ui.update_page_note_preview.deleted_lists_and_folders", "Gelöschte Listen und Ordner · Doppelklick stellt einen Eintrag wieder her")
             )
             return
         if self.view_mode == self.GLOBAL_BOARD_VIEW:
             self.set_note_preview(
-                text="Arbeitsfläche über den gesamten Bestand · Karten frei anordnen und verbinden"
+                text=glide_i18n.t("ui.update_page_note_preview.workspace_across_all_data", "Arbeitsfläche über den gesamten Bestand · Karten frei anordnen und verbinden")
             )
             return
         page = self.get_active_page()
@@ -46051,27 +46031,27 @@ class ListApp:
             return
         self.update_home_visibility()
         if self.view_mode == "saved_filter":
-            new_placeholder = "Gespeicherter Filter – neue Aufgaben über die Schnellerfassung anlegen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.saved_filter_create_new", "Gespeicherter Filter – neue Aufgaben über die Schnellerfassung anlegen")
         elif self.view_mode == "folder":
             ordner = self.get_folder(self.active_folder_id) if self.active_folder_id else None
-            new_placeholder = ("Neue Seite in diesem Buch"
-                               if (ordner or {}).get("folder_kind") == "library" else "Neue Liste in diesem Ordner")
+            new_placeholder = (glide_i18n.t("ui.update_entry_mode.new_page_in_this", "Neue Seite in diesem Buch")
+                               if (ordner or {}).get("folder_kind") == "library" else glide_i18n.t("ui.update_entry_mode.new_list_in_this", "Neue Liste in diesem Ordner"))
         elif self.view_mode == self.GLOBAL_BOARD_VIEW:
-            new_placeholder = "Globale Pinnwand – neue Punkte entstehen im Eingang oder in einer Liste"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.global_board_new_items", "Globale Pinnwand – neue Punkte entstehen im Eingang oder in einer Liste")
         elif self.view_mode == "in_progress":
-            new_placeholder = "Automatische Ansicht – Aufgabe in der Quellliste anlegen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.automatic_view_create_the", "Automatische Ansicht – Aufgabe in der Quellliste anlegen")
         elif self.view_mode == self.PLAN_DAY_VIEW:
-            new_placeholder = "Heute – Aufgaben aus dem Eingangsblock oder über das Kontextmenü einplanen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.today_schedule_tasks_from", "Heute – Aufgaben aus dem Eingangsblock oder über das Kontextmenü einplanen")
         elif self.view_mode == self.TABLE_VIEW:
-            new_placeholder = "Tabellenansicht – neue Aufgabe in dieser Liste anlegen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.table_view_create_a", "Tabellenansicht – neue Aufgabe in dieser Liste anlegen")
         elif self.view_mode == "overdue":
-            new_placeholder = "Automatische Ansicht – überfällige Aufgaben in der Quellliste bearbeiten"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.automatic_view_edit_overdue", "Automatische Ansicht – überfällige Aufgaben in der Quellliste bearbeiten")
         elif self.view_mode == self.LABELS_VIEW:
-            new_placeholder = "Automatische Ansicht – Punkte in ihrer Quellliste anlegen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.automatic_view_create_items", "Automatische Ansicht – Punkte in ihrer Quellliste anlegen")
         elif self.view_mode == "trash":
-            new_placeholder = "Papierkorb – Einträge wiederherstellen oder endgültig entfernen"
+            new_placeholder = glide_i18n.t("ui.update_entry_mode.trash_restore_entries_or", "Papierkorb – Einträge wiederherstellen oder endgültig entfernen")
         else:
-            new_placeholder = "Aufgabe eingeben"
+            new_placeholder = glide_i18n.t("ui.init.enter_task", "Aufgabe eingeben")
         if self.entry_placeholder_active:
             self.entry.delete(0, tk.END)
             self.entry_placeholder_text = new_placeholder
@@ -46080,64 +46060,55 @@ class ListApp:
             self.entry_placeholder_text = new_placeholder
         if hasattr(self, "hint_label"):
             if self.view_mode == "saved_filter":
-                self.hint_label.configure(text="Doppelklick oder Enter: Quellliste öffnen · Rechtsklick: bearbeiten oder erledigen · "
-                                          "Titel doppelklicken: Filter ändern · Suche und Offen-Schalter schränken zusätzlich ein")
+                self.hint_label.configure(text=glide_i18n.t("ui.update_entry_mode.double_click_or_enter", "Doppelklick oder Enter: Quellliste öffnen · Rechtsklick: bearbeiten oder erledigen · "
+                                          "Titel doppelklicken: Filter ändern · Suche und Offen-Schalter schränken zusätzlich ein"))
             elif self.view_mode == "in_progress":
                 self.hint_label.configure(
-                    text="Chronologisch nach Fälligkeit · Doppelklick oder Enter: Aufgabe in der Quellliste öffnen · "
-                    f"{self.accel('K')}: Kalenderansicht · Suche und Offen-/Erledigt-Filter gelten auch hier"
+                    text=glide_i18n.t("ui.update_entry_mode.chronological_by_due_date", 'Chronologisch nach Fälligkeit · Doppelklick oder Enter: Aufgabe in der Quellliste öffnen · {accel}: Kalenderansicht · Suche und Offen-/Erledigt-Filter gelten auch hier', accel=self.accel('K'))
                 )
             elif self.view_mode == self.PLAN_DAY_VIEW:
                 self.hint_label.configure(
-                    text="Aufgaben mit Bearbeitungstag an diesem Tag, nach Wichtigkeit sortiert · "
+                    text=glide_i18n.t("ui.update_entry_mode.tasks_with_this_work", "Aufgaben mit Bearbeitungstag an diesem Tag, nach Wichtigkeit sortiert · "
                     "„◂“ und „▸“ wechseln den Tag · unten die Aufgaben aus dem Eingang ohne Tag · "
                     "Doppelklick oder Enter: Aufgabe in der Quellliste öffnen · "
-                    "Rechtsklick: einplanen, verschieben oder Tag entfernen"
+                    "Rechtsklick: einplanen, verschieben oder Tag entfernen")
                 )
             elif self.view_mode == "overdue":
                 self.hint_label.configure(
-                    text="Fälligkeit in der Vergangenheit und noch nicht erledigt · Doppelklick oder Enter: "
-                    "Aufgabe in der Quellliste öffnen · erledigte Aufgaben verlassen diese Ansicht von selbst"
+                    text=glide_i18n.t("ui.update_entry_mode.due_date_in_the", "Fälligkeit in der Vergangenheit und noch nicht erledigt · Doppelklick oder Enter: "
+                    "Aufgabe in der Quellliste öffnen · erledigte Aufgaben verlassen diese Ansicht von selbst")
                 )
             elif self.view_mode == self.LABELS_VIEW:
                 self.hint_label.configure(
-                    text="Alle Punkte des Bestands, gruppiert nach Label und in dessen Farbe · "
+                    text=glide_i18n.t("ui.update_entry_mode.all_items_grouped_by", "Alle Punkte des Bestands, gruppiert nach Label und in dessen Farbe · "
                     "Drag & Drop in eine andere Gruppe: Label tauschen · aus „Ohne Label“ ziehen: Label vergeben · "
                     "Doppelklick oder Enter: Punkt in der Quellliste öffnen · ein Punkt mit mehreren Labels "
-                    "steht in jeder zugehörigen Gruppe"
+                    "steht in jeder zugehörigen Gruppe")
                 )
             elif self.view_mode == self.TABLE_VIEW:
                 self.hint_label.configure(
-                    text="Kompakte Aufgabenliste · Spalten über „Spalten …“ wählen · "
-                    "Doppelklick: Details · Rechtsklick: alle Aktionen · Leertaste: erledigt"
+                    text=glide_i18n.t("ui.update_entry_mode.compact_task_list_choose", "Kompakte Aufgabenliste · Spalten über „Spalten …“ wählen · "
+                    "Doppelklick: Details · Rechtsklick: alle Aktionen · Leertaste: erledigt")
                 )
             elif self.view_mode == "trash":
                 self.hint_label.configure(
-                    text="Doppelklick oder Enter: wiederherstellen · Rechtsklick: in Ordner wiederherstellen, "
-                    "endgültig entfernen, Papierkorb leeren · gelöschte Ordner nehmen ihre Listen mit"
+                    text=glide_i18n.t("ui.update_entry_mode.double_click_or_enter_2", "Doppelklick oder Enter: wiederherstellen · Rechtsklick: in Ordner wiederherstellen, "
+                    "endgültig entfernen, Papierkorb leeren · gelöschte Ordner nehmen ihre Listen mit")
                 )
             elif self.is_library_view():
                 self.hint_label.configure(
-                    text="Doppelklick oder Enter: Seite öffnen · Eingabefeld: neue Seite in diesem Buch · "
-                    "Spaltenüberschrift anklicken: sortieren · Rechtsklick: alle Aktionen der Seite"
+                    text=glide_i18n.t("ui.update_entry_mode.double_click_or_enter_3", "Doppelklick oder Enter: Seite öffnen · Eingabefeld: neue Seite in diesem Buch · "
+                    "Spaltenüberschrift anklicken: sortieren · Rechtsklick: alle Aktionen der Seite")
                 )
             elif self.view_mode == "folder":
                 self.hint_label.configure(
-                    text="Doppelklick oder Enter: Liste öffnen · Eingabefeld: neue Liste in diesem Ordner anlegen · "
+                    text=glide_i18n.t("ui.update_entry_mode.double_click_or_enter_4", "Doppelklick oder Enter: Liste öffnen · Eingabefeld: neue Liste in diesem Ordner anlegen · "
                     "Drag & Drop: Listen sortieren · Auf einen Ordner links ziehen: Liste verschieben · "
-                    "Labels einer Liste erscheinen rechts in dieser Übersicht"
+                    "Labels einer Liste erscheinen rechts in dieser Übersicht")
                 )
             else:
                 self.hint_label.configure(
-                    text="Rechtsklick → Art: Langtext, Zwischenüberschrift, Gruppe · "
-                    "Rechtsklick: alle weiteren Aktionen inklusive Labels · Drag & Drop: Reihenfolge ändern · "
-                    "Auf eine Seitenleisten-Liste ziehen: dorthin verschieben · "
-                    "Auf die Mitte einer Gruppe ziehen: hineinlegen · Shift + Drag: Unterpunkt · "
-                    f"Shift + Klick: Bereich auswählen · {self.selection_modifier_name()} + Klick: einzeln dazu · "
-                    f"{self.accel('A')}: alle auswählen · "
-                    "Alt+↑/↓: verschieben · Alt+←/→: aus-/einrücken · "
-                    f"Tab: ein-/ausrücken · {self.accel('G')}: gruppieren · {self.accel('F')}: Suche · "
-                    f"{self.accel('T')}: Fälligkeit · {self.accel('Z')}: Rückgängig · F2: Details"
+                    text=glide_i18n.t("ui.update_entry_mode.right_click_type_long", 'Rechtsklick → Art: Langtext, Zwischenüberschrift, Gruppe · Rechtsklick: alle weiteren Aktionen inklusive Labels · Drag & Drop: Reihenfolge ändern · Auf eine Seitenleisten-Liste ziehen: dorthin verschieben · Auf die Mitte einer Gruppe ziehen: hineinlegen · Shift + Drag: Unterpunkt · Shift + Klick: Bereich auswählen · {selection_modifier_name} + Klick: einzeln dazu · {accel}: alle auswählen · Alt+↑/↓: verschieben · Alt+←/→: aus-/einrücken · Tab: ein-/ausrücken · {accel2}: gruppieren · {accel3}: Suche · {accel4}: Fälligkeit · {accel5}: Rückgängig · F2: Details', selection_modifier_name=self.selection_modifier_name(), accel=self.accel('A'), accel2=self.accel('G'), accel3=self.accel('F'), accel4=self.accel('T'), accel5=self.accel('Z'))
                 )
         self.sync_view_chrome()
 
@@ -46289,17 +46260,17 @@ class ListApp:
         editor_pending = self.flush_rich_note() is False and not getattr(self, "_data_read_only", False)
         if (getattr(self, "_templates_editing", False) and
                 self.templates != getattr(self, "_templates_before_edit", self.templates)):
-            answer = self.ask_yes_no_cancel("Vorlagen speichern", "Die bearbeiteten Vorlagen vor dem Schließen speichern?")
+            answer = self.ask_yes_no_cancel(glide_i18n.t("ui.toggle_template_editing.save_templates", "Vorlagen speichern"), glide_i18n.t("ui.close_after_confirmation.save_the_edited_templates", "Die bearbeiteten Vorlagen vor dem Schließen speichern?"))
             if answer is None:
                 return False
             if answer and not self.save_templates():
-                self.show_error("Vorlagen speichern", "Die Vorlagen konnten nicht gespeichert werden.")
+                self.show_error(glide_i18n.t("ui.toggle_template_editing.save_templates", "Vorlagen speichern"), glide_i18n.t("ui.toggle_template_editing.the_templates_could_not", "Die Vorlagen konnten nicht gespeichert werden."))
                 return False
         if getattr(self, "dirty", False) or editor_pending:
             retry = self.ask_yes_no_cancel(
-                "Ungespeicherte Änderungen",
-                "Die letzten Änderungen konnten noch nicht gespeichert werden.\n\n"
-                "Jetzt erneut speichern?",
+                glide_i18n.t("ui.close_after_confirmation.unsaved_changes", "Ungespeicherte Änderungen"),
+                glide_i18n.t("ui.close_after_confirmation.the_latest_changes_could", "Die letzten Änderungen konnten noch nicht gespeichert werden.\n\n"
+                "Jetzt erneut speichern?"),
             )
             if retry is None:
                 return False
@@ -46307,8 +46278,8 @@ class ListApp:
                 if (editor_pending and self.flush_rich_note() is False) or not self.save_items():
                     return False
             elif not self.ask_yes_no(
-                "Ohne Speichern schließen",
-                "Glide wirklich schließen? Die ungespeicherten Änderungen gehen verloren.",
+                glide_i18n.t("ui.close_after_confirmation.close_without_saving", "Ohne Speichern schließen"),
+                glide_i18n.t("ui.close_after_confirmation.really_close_glide_the", "Glide wirklich schließen? Die ungespeicherten Änderungen gehen verloren."),
             ):
                 return False
         timer = self.running_timer()
@@ -46316,7 +46287,7 @@ class ListApp:
         # schreibgeschützter Start gehört nicht zum laufenden Fokus; er schreibt
         # dessen Zeit nicht und darf trotzdem schließen.
         if self.verify_data_lock() is False and not getattr(self, '_data_read_only', False):
-            self.show_error('Schließen nicht möglich', self.read_only_notice())
+            self.show_error(glide_i18n.t("ui.close_after_confirmation.closing_not_possible", 'Schließen nicht möglich'), self.read_only_notice())
             return False
         if (timer and timer.get("focus") and timer.get("started_at") and not self.settings.get("time_booking")
                 and not getattr(self, "_data_read_only", False)):
@@ -46408,8 +46379,8 @@ class ListApp:
         """Schreibt einen Fehler aus einem Tk-Callback ins Protokoll."""
         if isinstance(exc_value, glide_focus.PendingBookingError):
             self._register_after(self.root.after_idle(lambda: self.show_warning(
-                "Zeitbuchung ausstehend", "Bitte zuerst die Zeitbuchung über die Zeiterfassung erneut speichern. "
-                "Weitere Änderungen warten, bis diese Buchung abgeschlossen ist.")))
+                glide_i18n.t("ui.report_callback_exception.time_booking_pending", "Zeitbuchung ausstehend"), glide_i18n.t("ui.report_callback_exception.please_first_save_the", "Bitte zuerst die Zeitbuchung über die Zeiterfassung erneut speichern. "
+                "Weitere Änderungen warten, bis diese Buchung abgeschlossen ist."))))
             return
         text = self.format_error_report(exc_type, exc_value, exc_tb)
         self.log_error(text)
@@ -46459,11 +46430,11 @@ class ListApp:
     def _show_error_notice(self):
         try:
             self.show_warning(
-                "Es ist ein Fehler aufgetreten",
-                "Glide läuft weiter. Der vollständige Fehlerbericht liegt im "
+                glide_i18n.t("ui.show_error_notice.an_error_occurred", "Es ist ein Fehler aufgetreten"),
+                glide_i18n.t("ui.show_error_notice.glide_keeps_running_the", "Glide läuft weiter. Der vollständige Fehlerbericht liegt im "
                 "Fehlerprotokoll neben deinen Daten – über Hilfe › Fehlerprotokoll "
                 "öffnen erreichbar. Weitere Fehler dieser Sitzung werden nur noch "
-                "protokolliert.")
+                "protokolliert."))
         except Exception:
             pass
 
@@ -46486,8 +46457,8 @@ class ListApp:
     def open_error_log(self, event=None):
         """Öffnet das Fehlerprotokoll – oder sagt, dass es keines gibt."""
         if not os.path.isfile(ERROR_LOG_FILE):
-            self.show_info("Fehlerprotokoll",
-                           "Es ist noch kein Fehler aufgetreten – das Protokoll ist leer.")
+            self.show_info(glide_i18n.t("ui.open_error_log.error_log", "Fehlerprotokoll"),
+                           glide_i18n.t("ui.open_error_log.no_error_has_occurred", "Es ist noch kein Fehler aufgetreten – das Protokoll ist leer."))
             return "break"
         self.open_external_path(ERROR_LOG_FILE)
         return "break"
@@ -47110,7 +47081,7 @@ class ListApp:
             return False
         regular = [value for value in item.get("labels", []) if not self.is_system_label(self.get_label(value))]
         if new_kind in (self.ITEM_KIND_LONG, self.ITEM_KIND_HEADING) and len(regular) >= self.MAX_LABELS_PER_ITEM:
-            self.show_warning("Labels", "Für das Artlabel muss zuerst ein anderes Label abgewählt werden.")
+            self.show_warning(glide_i18n.t("menu.view.labels", "Labels"), glide_i18n.t("ui.set_item_kind.for_the_type_label", "Für das Artlabel muss zuerst ein anderes Label abgewählt werden."))
             return False
         item["kind"] = new_kind
         # Nur ein Langtext darf Zeilenumbrüche tragen. Beim Zurückwandeln
@@ -47297,11 +47268,9 @@ class ListApp:
         grenze = glide_attachment_names.NAME_MAX_CHARS
         while True:
             antwort = self.themed_input_dialog(
-                "Anhang umbenennen",
-                f"„{glide_design.clip_title(original, 60)}“ hat {len(original)} Zeichen. Anhangsnamen dürfen "
-                f"höchstens {grenze} Zeichen haben, damit Glide die Datei überall öffnen und ändern kann. "
-                "Bitte einen kürzeren Namen wählen – ohne Umbenennen wird die Datei nicht übernommen.",
-                initial=vorschlag, ok_text="Übernehmen", title_limit=True)
+                glide_i18n.t("ui.ask_attachment_name.rename_attachment", "Anhang umbenennen"),
+                glide_i18n.t("ui.ask_attachment_name.has_characters_attachment_names", '„{clip_title}“ hat {len} Zeichen. Anhangsnamen dürfen höchstens {grenze} Zeichen haben, damit Glide die Datei überall öffnen und ändern kann. Bitte einen kürzeren Namen wählen – ohne Umbenennen wird die Datei nicht übernommen.', clip_title=glide_design.clip_title(original, 60), len=len(original), grenze=grenze),
+                initial=vorschlag, ok_text=glide_i18n.t("button.apply", "Übernehmen"), title_limit=True)
             if antwort is None:
                 return None
             name = glide_attachment_names.keep_extension(antwort, original)
@@ -47311,9 +47280,8 @@ class ListApp:
             if name != " ".join(str(antwort or "").split()) and glide_attachment_names.too_long(name):
                 # Die Endung kam erst nach der Eingabe dazu (Prüfbefund H5).
                 _stamm, endung = glide_attachment_names.split_extension(name)
-                problem = (f"Mit der Endung „{endung}“ hat der Name {len(name)} Zeichen; erlaubt sind höchstens "
-                           f"{grenze}. Bitte den Namen vor der Endung kürzen.")
-            self.show_warning("Anhang umbenennen", problem, **({"parent": parent} if parent is not None else {}))
+                problem = (glide_i18n.t("ui.ask_attachment_name.with_the_extension_the", 'Mit der Endung „{endung}“ hat der Name {len} Zeichen; erlaubt sind höchstens {grenze}. Bitte den Namen vor der Endung kürzen.', endung=endung, len=len(name), grenze=grenze))
+            self.show_warning(glide_i18n.t("ui.ask_attachment_name.rename_attachment", "Anhang umbenennen"), problem, **({"parent": parent} if parent is not None else {}))
             vorschlag = glide_attachment_names.shortened_name(name)
 
     def confirm_attachment_names(self, paths, parent=None):
@@ -47362,16 +47330,13 @@ class ListApp:
         if not renamed and not files:
             return
         zeilen = "\n".join(f"• {glide_design.clip_title(alt, 50)}\n   → {neu}" for alt, neu in renamed[:10])
-        rest = f"\n… und {len(renamed) - 10} weitere" if len(renamed) > 10 else ""
-        text = (f"{len(renamed)} Anhangsname(n) waren länger als {glide_attachment_names.NAME_MAX_CHARS} Zeichen "
-                f"und wurden gekürzt:\n\n{zeilen}{rest}") if renamed else ""
+        rest = glide_i18n.t("ui.show_attachment_name_notice.and_more", '\n… und {wert} weitere', wert=len(renamed) - 10) if len(renamed) > 10 else ""
+        text = (glide_i18n.t("ui.show_attachment_name_notice.attachment_name_s_were", '{len} Anhangsname(n) waren länger als {name_max_chars} Zeichen und wurden gekürzt:\n\n{zeilen}{rest}', len=len(renamed), name_max_chars=glide_attachment_names.NAME_MAX_CHARS, zeilen=zeilen, rest=rest)) if renamed else ""
         if files:
-            text = (text + "\n\n" if text else "") + (
-                f"{files} Datei(en) in der Ablage hatten zu lange Speichernamen und wurden kürzer benannt; "
-                "Inhalt und Verknüpfungen bleiben unverändert.")
+            text = glide_i18n.t("ui.show_attachment_name_notice.file_s_in_the", '{wert}{files} Datei(en) in der Ablage hatten zu lange Speichernamen und wurden kürzer benannt; Inhalt und Verknüpfungen bleiben unverändert.', wert=text + "\n\n" if text else "", files=files)
         if backup:
-            text += f"\n\nDie vorherige Datei liegt unter:\n{backup}"
-        self.show_info("Anhangsnamen gekürzt", text)
+            text += glide_i18n.t("ui.show_attachment_name_notice.the_previous_file_is", '\n\nDie vorherige Datei liegt unter:\n{backup}', backup=backup)
+        self.show_info(glide_i18n.t("ui.show_attachment_name_notice.attachment_names_shortened", "Anhangsnamen gekürzt"), text)
 
     def store_attachment(self, source_path, name=None):
         """Datei in die Ablage kopieren; der Anzeigename ist höchstens 40 Zeichen lang (D67).
@@ -47699,25 +47664,25 @@ class ListApp:
             if ordner is None:
                 return None
             if ordner.get("folder_kind") == "journal" and any(self.journal_filter_range(ordner["id"])):
-                return "Alle Tage zeigen", lambda: self.set_journal_filter(ordner["id"])
+                return glide_i18n.t("ui.empty_state_action.show_all_days", "Alle Tage zeigen"), lambda: self.set_journal_filter(ordner["id"])
             if self.current_search_query():
-                return "Suche zurücksetzen", self.reset_filters_for_empty_state
+                return glide_i18n.t("ui.empty_state_action.reset_search", "Suche zurücksetzen"), self.reset_filters_for_empty_state
             if ordner.get("folder_kind") == "journal":
                 # Ein Notizbucheintrag trägt seinen Tag; die Eingabezeile legt
                 # dort nur eine gewöhnliche Liste an. Der Weg bleibt deshalb.
-                return "Ersten Eintrag anlegen", lambda: self.create_journal_entry(ordner["id"])
+                return glide_i18n.t("ui.empty_state_action.create_first_entry", "Ersten Eintrag anlegen"), lambda: self.create_journal_entry(ordner["id"])
             if anlegen_ueber_eingabe:
                 return None
-            return "Neue Liste anlegen", lambda: self.create_list_in_folder(ordner["id"])
+            return glide_i18n.t("ui.empty_state_action.create_new_list", "Neue Liste anlegen"), lambda: self.create_list_in_folder(ordner["id"])
         if modus == "trash":
-            return "Zur Startseite", self.set_home_view
+            return glide_i18n.t("ui.render_week_review.to_home", "Zur Startseite"), self.set_home_view
         if modus in ("list", self.TABLE_VIEW) or modus in self.TASK_OVERVIEW_VIEWS:
             if self.has_active_filter():
-                return "Suche zurücksetzen", self.reset_filters_for_empty_state
+                return glide_i18n.t("ui.empty_state_action.reset_search", "Suche zurücksetzen"), self.reset_filters_for_empty_state
             if modus in ("list", self.TABLE_VIEW):
                 eintrag = self.current_list()
                 if eintrag and self.list_accepts_items(eintrag) and not anlegen_ueber_eingabe:
-                    return "Ersten Punkt anlegen", self.focus_new_item_entry
+                    return glide_i18n.t("ui.empty_state_action.create_first_item", "Ersten Punkt anlegen"), self.focus_new_item_entry
         return None
 
     def reset_filters_for_empty_state(self):
@@ -47945,10 +47910,10 @@ class ListApp:
             text = "täglich"
         elif art == cls.REPEAT_EVERY_N_DAYS:
             abstand = regel["abstand"]
-            text = "jeden zweiten Tag" if abstand == 2 else f"alle {abstand} Tage"
+            text = "jeden zweiten Tag" if abstand == 2 else f'alle {abstand} Tage'
         elif art == cls.REPEAT_WEEKDAYS:
             namen = ", ".join(cls.REPEAT_WEEKDAY_NAMES[tag] for tag in regel["tage"])
-            text = f"jeden {namen}"
+            text = f'jeden {namen}'
         elif art == cls.REPEAT_WEEKLY:
             text = "wöchentlich"
         elif art == cls.REPEAT_MONTHLY:
@@ -48299,7 +48264,7 @@ class ListApp:
             self.active_folder_id = None
             self.active_list_id = current["id"]
             self.items = current.setdefault("items", [])
-            self.app_title = str(current.get("title") or "Meine Liste").strip() or "Meine Liste"
+            self.app_title = str(current.get("title") or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")).strip() or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")
         self.show_error(*glide_load.display_failure(error))
 
     def start_with_empty_dataset(self):
@@ -48347,13 +48312,11 @@ class ListApp:
         if newer or (version is not None and version > self.DATA_SCHEMA_VERSION):
             self._data_read_only = True
             self._read_only_reason = "newer_format"
-            grund = (f"Die Speicherdatei hat Datenformat {version}; Glide {APP_VERSION} kennt höchstens "
-                     f"Format {self.DATA_SCHEMA_VERSION}." if not newer else
-                     f"{message}\n\nGlide {APP_VERSION} kennt diesen Inhalt nicht.")
+            grund = (glide_i18n.t("ui.handle_unreadable_save_file.the_save_file_has", 'Die Speicherdatei hat Datenformat {version}; Glide {app_version} kennt höchstens Format {data_schema_version}.', version=version, app_version=APP_VERSION, data_schema_version=self.DATA_SCHEMA_VERSION) if not newer else
+                     glide_i18n.t("ui.handle_unreadable_save_file.glide_does_not_know", '{message}\n\nGlide {app_version} kennt diesen Inhalt nicht.', message=message, app_version=APP_VERSION))
             self.show_error(
-                "Bestand aus neuerer Glide-Version",
-                grund + "\n\nDieser Start zeigt einen leeren Bestand und "
-                "speichert nichts. Die Datei bleibt unverändert – bitte die neuere Glide-Version verwenden.")
+                glide_i18n.t("ui.handle_unreadable_save_file.data_from_a_newer", "Bestand aus neuerer Glide-Version"),
+                glide_i18n.t("ui.handle_unreadable_save_file.this_start_shows_empty", '{grund}\n\nDieser Start zeigt einen leeren Bestand und speichert nichts. Die Datei bleibt unverändert – bitte die neuere Glide-Version verwenden.', grund=grund))
         else:
             kopie = self.preserve_unreadable_save_file()
             if kopie:
@@ -48361,15 +48324,13 @@ class ListApp:
                 # ließen daran jedes Speichern scheitern; die Kopie ersetzt sie.
                 for stufe in range(12, self.DATA_SCHEMA_VERSION + 1):
                     setattr(self, f"_schema{stufe}_backup_checked", True)
-                message += (f"\n\nDie Datei ist unverändert gesichert:\n{kopie}\n\n"
-                            "Ein früherer Stand lässt sich über Datei › Sicherung › "
-                            "„Aufgabensicherung laden …“ aus dem Sicherungsordner zurückholen.")
+                message += (glide_i18n.t("ui.handle_unreadable_save_file.the_file_is_backed", '\n\nDie Datei ist unverändert gesichert:\n{kopie}\n\nEin früherer Stand lässt sich über Datei › Sicherung › „Aufgabensicherung laden …“ aus dem Sicherungsordner zurückholen.', kopie=kopie))
             else:
                 # Ohne Kopie darf nichts die Datei ersetzen.
                 self._data_read_only = True
                 self._read_only_reason = "unreadable"
-                message += "\n\nDieser Start speichert nichts, damit die Datei unverändert bleibt."
-            self.show_error("Fehler", message)
+                message += glide_i18n.t("ui.handle_unreadable_save_file.this_start_saves_nothing", "\n\nDieser Start speichert nichts, damit die Datei unverändert bleibt.")
+            self.show_error(glide_i18n.t("error.title", "Fehler"), message)
         self.start_with_empty_dataset()
 
     def migrate_on_start(self, data):
@@ -48410,13 +48371,12 @@ class ListApp:
         if not hinweis:
             return
         alt, sicherung = hinweis
-        text = (f"Der Bestand lag noch in Datenformat {alt} vor und ist jetzt auf Format "
-                f"{self.DATA_SCHEMA_VERSION} umgestellt.")
+        text = (glide_i18n.t("ui.show_format_migration_notice.the_data_was_still", 'Der Bestand lag noch in Datenformat {alt} vor und ist jetzt auf Format {data_schema_version} umgestellt.', alt=alt, data_schema_version=self.DATA_SCHEMA_VERSION))
         if sicherung:
-            text += f"\n\nDie Datei im alten Format liegt unverändert im Sicherungsordner:\n{sicherung}"
-        text += ("\n\nÄltere Glide-Fassungen können den umgestellten Bestand nicht mehr lesen. Nach der "
-                 "Umstellung nur noch diese oder eine neuere Fassung starten.")
-        self.show_info("Bestand umgestellt", text)
+            text += glide_i18n.t("ui.show_format_migration_notice.the_file_in_the", '\n\nDie Datei im alten Format liegt unverändert im Sicherungsordner:\n{sicherung}', sicherung=sicherung)
+        text += (glide_i18n.t("ui.show_format_migration_notice.older_glide_versions_can", "\n\nÄltere Glide-Fassungen können den umgestellten Bestand nicht mehr lesen. Nach der "
+                 "Umstellung nur noch diese oder eine neuere Fassung starten."))
+        self.show_info(glide_i18n.t("ui.show_format_migration_notice.data_converted", "Bestand umgestellt"), text)
 
     # Zwischendateien von `write_json_atomic`, die ein abgebrochener Schreibvorgang
     # hinterlassen hat. Jünger als diese Frist könnte eine noch laufende Glide-
@@ -48467,12 +48427,8 @@ class ListApp:
         if type(version) is not int or type(written) is not int or version >= written:
             return
         self.show_warning(
-            "Bestand von älterer Glide-Version gespeichert",
-            f"Die Speicherdatei hat Datenformat {version}, obwohl Glide hier schon Format {written} "
-            "gespeichert hatte. Das passiert, wenn eine ältere Glide-Version den Bestand gespeichert "
-            "oder jemand eine ältere Datei hineinkopiert hat.\n\nFehlen Einträge, liegen frühere Stände "
-            "im Sicherungsordner (Datei › Sicherung › Sicherungsordner öffnen) und lassen sich über "
-            "„Aufgabensicherung laden …“ zurückholen.")
+            glide_i18n.t("ui.warn_if_saved_by_older_version.data_saved_by_an", "Bestand von älterer Glide-Version gespeichert"),
+            glide_i18n.t("ui.warn_if_saved_by_older_version.the_save_file_has", 'Die Speicherdatei hat Datenformat {version}, obwohl Glide hier schon Format {written} gespeichert hatte. Das passiert, wenn eine ältere Glide-Version den Bestand gespeichert oder jemand eine ältere Datei hineinkopiert hat.\n\nFehlen Einträge, liegen frühere Stände im Sicherungsordner (Datei › Sicherung › Sicherungsordner öffnen) und lassen sich über „Aufgabensicherung laden …“ zurückholen.', version=version, written=written))
 
     def remember_written_data_format(self):
         """Merkt in den Einstellungen, welches Datenformat hier zuletzt geschrieben wurde.
@@ -48492,23 +48448,23 @@ class ListApp:
     def read_only_notice(self):
         """Warum dieser Start nichts speichert – für Hinweise und Statuszeilen."""
         if not getattr(self, '_data_read_only', False):
-            return 'Die Datensperre ließ sich gerade nicht prüfen oder erneuern. Bitte erneut versuchen.'
+            return glide_i18n.t("ui.read_only_notice.the_data_lock_could", 'Die Datensperre ließ sich gerade nicht prüfen oder erneuern. Bitte erneut versuchen.')
         reason = getattr(self, "_read_only_reason", "lock")
         if reason == "newer_format":
-            return "Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert."
+            return glide_i18n.t("ui.read_only_notice.the_data_comes_from", "Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert.")
         if reason == "unreadable":
-            return "Die Speicherdatei ist unlesbar und bleibt unverändert."
+            return glide_i18n.t("ui.read_only_notice.the_save_file_is", "Die Speicherdatei ist unlesbar und bleibt unverändert.")
         if reason == "capacity":
-            return "Die Speicherdatei überschreitet die unterstützte JSON-Größe und bleibt unverändert."
+            return glide_i18n.t("ui.read_only_notice.the_save_file_exceeds", "Die Speicherdatei überschreitet die unterstützte JSON-Größe und bleibt unverändert.")
         if reason == 'recovery':
-            return ('Der Wiederanlauf schützt den Originalbestand. Prüfung und bewusste Freigabe '
-                    'stehen im Speicherstatus; die Datei bleibt bis dahin unverändert.')
+            return (glide_i18n.t("ui.read_only_notice.the_restart_protects_the", 'Der Wiederanlauf schützt den Originalbestand. Prüfung und bewusste Freigabe '
+                    'stehen im Speicherstatus; die Datei bleibt bis dahin unverändert.'))
         if reason == "lock_defective":
-            return ("Die Datensperre des Datenordners ist beschädigt oder unlesbar. Beim nächsten Start "
-                    "lässt sie sich bewusst übernehmen.")
+            return (glide_i18n.t("ui.read_only_notice.the_data_folder_s", "Die Datensperre des Datenordners ist beschädigt oder unlesbar. Beim nächsten Start "
+                    "lässt sie sich bewusst übernehmen."))
         if reason == "lock_lost":
-            return "Die Datensperre des Datenordners ließ sich nicht neu anlegen."
-        return "Der Datenordner ist anderweitig geöffnet."
+            return glide_i18n.t("ui.read_only_notice.the_data_folder_s_2", "Die Datensperre des Datenordners ließ sich nicht neu anlegen.")
+        return glide_i18n.t("ui.read_only_notice.the_data_folder_is", "Der Datenordner ist anderweitig geöffnet.")
 
     def data_payload(self, lists=None, folders=None, active_list_id=None, active_folder_id=None,
                      labels=None, trash=None, history=None):
@@ -48587,7 +48543,7 @@ class ListApp:
         if result.data_written:
             self.storage_success("data", SAVE_FILE)
         elif not getattr(self, "_data_read_only", False):
-            self.storage_failure("data", result.error or "Der Bestand wurde nicht gespeichert.")
+            self.storage_failure("data", result.error or glide_i18n.t("ui.save_items.the_data_was_not", "Der Bestand wurde nicht gespeichert."))
         if result.backup_warning:
             self.storage_failure("backup", result.backup_warning)
         elif result.backup_checked:
@@ -48605,19 +48561,19 @@ class ListApp:
             if show_error:
                 hinweis = self.read_only_notice()
                 if getattr(self, "_read_only_reason", "lock") == "lock":
-                    hinweis += " Bitte Glide nach dem Ordnerabgleich erneut starten."
-                self.show_warning("Speichern gesperrt", hinweis)
-            return SaveResult(error='Der Bestand ist schreibgeschützt.')
+                    hinweis += glide_i18n.t("ui.save_items_result.please_start_glide_again", " Bitte Glide nach dem Ordnerabgleich erneut starten.")
+                self.show_warning(glide_i18n.t("ui.save_items_result.saving_blocked", "Speichern gesperrt"), hinweis)
+            return SaveResult(error=glide_i18n.t("ui.submit.the_data_is_read", 'Der Bestand ist schreibgeschützt.'))
         if lock_ok is False:
             # Sperre gerade nicht lesbar (WA-30): nicht schreiben, Änderung bleibt offen.
             self.dirty = True
             if show_error:
-                self.show_error("Fehler beim Speichern", "Die Datensperre (glide.lock) ließ sich gerade nicht "
-                                "prüfen oder erneuern. Glide versucht es beim nächsten Speichern erneut.")
-            return SaveResult(error='Die Datensperre ließ sich nicht prüfen oder erneuern.')
+                self.show_error(glide_i18n.t("ui.save_items_result.error_while_saving", "Fehler beim Speichern"), glide_i18n.t("ui.save_items_result.the_data_lock_glide", "Die Datensperre (glide.lock) ließ sich gerade nicht "
+                                "prüfen oder erneuern. Glide versucht es beim nächsten Speichern erneut."))
+            return SaveResult(error=glide_i18n.t("ui.save_items_result.the_data_lock_could", 'Die Datensperre ließ sich nicht prüfen oder erneuern.'))
         if not self.guarded_save_allowed():
             # Ein Bestandswächter vermisst Punkte: nicht schreiben (WA-27).
-            return SaveResult(lock_verified=True, error='Der Bestandswächter hat das Schreiben abgebrochen.')
+            return SaveResult(lock_verified=True, error=glide_i18n.t("ui.save_items_result.the_data_guard_stopped", 'Der Bestandswächter hat das Schreiben abgebrochen.'))
         self.dirty = True
 
         def prepare():
@@ -48666,11 +48622,11 @@ class ListApp:
                 if not getattr(self, '_settings_defer_depth', 0) and self._last_settings_batch_saved is False:
                     raise OSError('Die zusätzlichen Einstellungen konnten nicht gespeichert werden.')
 
-            operations = [('Formatnachweis', self.remember_written_data_format)]
+            operations = [(glide_i18n.t("ui.followups.format_proof", 'Formatnachweis'), self.remember_written_data_format)]
             if not getattr(self, '_autosave_unchanged', False):
-                operations.append(('Wiederholen', lambda: self.redo_steps().note_write()))
-            return operations + [('Aktivität', activity), ('Erinnerungen', self.refresh_reminder_status),
-                                 ('Seitenleiste', self.update_sidebar_list)]
+                operations.append((glide_i18n.t("ui.followups.repeat", 'Wiederholen'), lambda: self.redo_steps().note_write()))
+            return operations + [(glide_i18n.t("ui.followups.activity", 'Aktivität'), activity), (glide_i18n.t("ui.followups.reminders", 'Erinnerungen'), self.refresh_reminder_status),
+                                 (glide_i18n.t("ui.followups.sidebar", 'Seitenleiste'), self.update_sidebar_list)]
 
         result = PersistenceCoordinator.save(PersistencePlan(
             prepare=prepare, backup=lambda: self.write_backup_copy(force=force_backup),
@@ -48681,26 +48637,24 @@ class ListApp:
                               else getattr(self, '_last_settings_batch_saved', None))))
         if not result.data_written:
             if show_error:
-                self.show_error("Fehler beim Speichern", result.error)
+                self.show_error(glide_i18n.t("ui.save_items_result.error_while_saving", "Fehler beim Speichern"), result.error)
             return result
         for detail in result.followup_errors:
             self.log_error('Nach erfolgreicher Speicherung: ' + detail)
         if result.backup_warning and show_error:
             try:
                 self.show_warning(
-                    "Sicherung nicht möglich",
-                    "Die aktuellen Daten wurden gespeichert, aber die zusätzliche automatische Sicherung "
-                    f"konnte nicht erstellt werden:\n{result.backup_warning}",
+                    glide_i18n.t("ui.save_items_result.backup_not_possible", "Sicherung nicht möglich"),
+                    glide_i18n.t("ui.save_items_result.the_current_data_was", 'Die aktuellen Daten wurden gespeichert, aber die zusätzliche automatische Sicherung konnte nicht erstellt werden:\n{backup_warning}', backup_warning=result.backup_warning),
                 )
             except Exception as exc:
-                result = result.with_followup_error(f'Sicherungswarnung: {exc}')
+                result = result.with_followup_error(glide_i18n.t("ui.save_items_result.backup_warning", 'Sicherungswarnung: {exc}', exc=exc))
                 self.log_error('Nach erfolgreicher Speicherung: ' + result.followup_errors[-1])
         if result.followup_errors and show_error:
             try:
-                self.show_warning('Daten gespeichert', 'Die Daten wurden gespeichert, aber eine '
-                                  'anschließende Aktualisierung ist fehlgeschlagen.\n\n' + '\n'.join(result.followup_errors))
+                self.show_warning(glide_i18n.t("ui.save_items_result.data_saved", 'Daten gespeichert'), glide_i18n.t("ui.save_items_result.the_data_was_saved", 'Die Daten wurden gespeichert, aber eine anschließende Aktualisierung ist fehlgeschlagen.\n\n{join}', join='\n'.join(result.followup_errors)))
             except Exception as exc:
-                result = result.with_followup_error(f'Fehlermeldung: {exc}')
+                result = result.with_followup_error(glide_i18n.t("ui.save_items_result.error_message", 'Fehlermeldung: {exc}', exc=exc))
                 self.log_error('Nach erfolgreicher Speicherung: ' + result.followup_errors[-1])
         return result
 
@@ -48944,10 +48898,9 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
         gekuerzt, ziel = hinweis
         self.save_items()
         zeilen = "\n".join(f"• {kurz}" for _original, kurz in gekuerzt[:12])
-        rest = f"\n… und {len(gekuerzt) - 12} weitere" if len(gekuerzt) > 12 else ""
-        self.show_info("Titel gekürzt",
-                       f"{len(gekuerzt)} Titel waren länger als {self.CONTAINER_TITLE_MAX} Zeichen und sind jetzt "
-                       f"gekürzt:\n\n{zeilen}{rest}\n\nDie vorherige Datei liegt unter:\n{ziel}")
+        rest = glide_i18n.t("ui.show_title_clip_notice.and_more", '\n… und {wert} weitere', wert=len(gekuerzt) - 12) if len(gekuerzt) > 12 else ""
+        self.show_info(glide_i18n.t("ui.show_title_clip_notice.titles_shortened", "Titel gekürzt"),
+                       glide_i18n.t("ui.show_title_clip_notice.titles_were_longer_than", '{len} Titel waren länger als {container_title_max} Zeichen und sind jetzt gekürzt:\n\n{zeilen}{rest}\n\nDie vorherige Datei liegt unter:\n{ziel}', len=len(gekuerzt), container_title_max=self.CONTAINER_TITLE_MAX, zeilen=zeilen, rest=rest, ziel=ziel))
 
     def ensure_schema21_backup(self):
         """Original vor dem ersten Schreiben mit Aufgaben-Textverweisen sichern."""
@@ -49327,7 +49280,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if entry.get("target"):
             teile.append(str(entry["target"]))
         if entry.get("list"):
-            teile.append(f"in {entry['list']}")
+            teile.append(glide_i18n.t("ui.history_entry_line.in", 'in {list}', list=entry['list']))
         if entry.get("fields"):
             teile.append("(" + ", ".join(entry["fields"]) + ")")
         return " · ".join(teile)
@@ -49660,25 +49613,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     continue
                 reminder = item["reminder"]
                 if reminder.get("acknowledged_key") == event["key"]:
-                    state = "Bestätigt"
+                    state = glide_i18n.t("ui.reminder_rows.confirmed", "Bestätigt")
                 elif (reminder.get("delivered_key") == event["key"]
                       or datetime.fromisoformat(event["at"]) <= now):
-                    state = "Offen / verpasst"
+                    state = glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst")
                 elif reminder.get("snoozed_for") == event["base"]:
-                    state = "Verschoben"
+                    state = glide_i18n.t("ui.reminder_rows.postponed", "Verschoben")
                 else:
-                    state = "Geplant"
+                    state = glide_i18n.t("ui.render_week_review.planned", "Geplant")
                 rows.append({**event, "item": item, "source": source, "state": state})
-        return sorted(rows, key=lambda row: (row["state"] != "Offen / verpasst", row["at"], row["item"]["id"]))
+        return sorted(rows, key=lambda row: (row["state"] != glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst"), row["at"], row["item"]["id"]))
 
     def process_reminders(self, now=None):
         """Eine Sammelanzeige erst nach dauerhaft gespeichertem Zustellstatus."""
         now = now or datetime.now(timezone.utc)
         if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
-            self._reminder_error = "Benachrichtigungen pausiert: " + self.read_only_notice()
+            self._reminder_error = glide_i18n.t("ui.process_reminders.notifications_paused", 'Benachrichtigungen pausiert: {read_only_notice}', read_only_notice=self.read_only_notice())
             return 0
         due = [row for row in self.reminder_rows(now)
-               if row["state"] == "Offen / verpasst"
+               if row["state"] == glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst")
                and row["item"]["reminder"].get("delivered_key") != row["key"]]
         if not due:
             self._reminder_error = None
@@ -49692,7 +49645,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not change.saved:
             for item, reminder in before:
                 item["reminder"] = reminder
-            self._reminder_error = "Benachrichtigungen konnten nicht gespeichert werden. Bitte Datenordner prüfen."
+            self._reminder_error = glide_i18n.t("ui.process_reminders.notifications_could_not_be", "Benachrichtigungen konnten nicht gespeichert werden. Bitte Datenordner prüfen.")
             return 0
         self._reminder_error = None
         self._delivered_titles = [str(row["item"].get("text") or "").strip() for row in due]
@@ -49817,8 +49770,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self._system_notification_backend = None
         self._system_notification_error = ""
         if not self.tk_has_sysnotify(self.root):
-            self._system_notification_error = ("Diese Tk-Version kennt keine Systemmitteilungen "
-                                               f"(Tk {self.root.tk.call('info', 'patchlevel')}; nötig ist Tk 9).")
+            self._system_notification_error = (glide_i18n.t("ui.system_notification_backend.this_tk_version_has", 'Diese Tk-Version kennt keine Systemmitteilungen (Tk {call}; nötig ist Tk 9).', call=self.root.tk.call('info', 'patchlevel')))
             return None
         system = self.root.tk.call("tk", "windowingsystem")
 
@@ -49876,7 +49828,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             backend(titel[:120], text[:400])
         except Exception as exc:
             # Mitteilungen sind Beiwerk: der Hinweis bleibt in der Übersicht.
-            self._system_notification_error = f"Systemmitteilung nicht möglich: {exc}"
+            self._system_notification_error = glide_i18n.t("ui.send_system_notification.system_notification_not_possible", 'Systemmitteilung nicht möglich: {exc}', exc=exc)
             self.log_error(f"Systemmitteilung: {exc!r}")
             return False
         self._system_notification_error = ""
@@ -49885,13 +49837,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     @staticmethod
     def reminder_notification_text(titles):
         """Eine Sammelmitteilung je Prüflauf: Titel bei einem Punkt, sonst Anzahl und die ersten drei."""
-        titles = [t for t in (titles or []) if t] or ["Erinnerung"]
+        titles = [t for t in (titles or []) if t] or [glide_i18n.t("ui.reminder_notification_text.reminder", "Erinnerung")]
         if len(titles) == 1:
-            return "Glide – Erinnerung", titles[0]
+            return glide_i18n.t("ui.reminder_notification_text.glide_reminder", "Glide – Erinnerung"), titles[0]
         erste = " · ".join(titles[:3])
         rest = len(titles) - 3
-        return (f"Glide – {len(titles)} Erinnerungen fällig",
-                erste + (f" · und {rest} weitere" if rest > 0 else ""))
+        return (glide_i18n.t("ui.reminder_notification_text.glide_reminders_due", 'Glide – {len} Erinnerungen fällig', len=len(titles)),
+                erste + (glide_i18n.t("ui.reminder_notification_text.and_more", ' · und {rest} weitere', rest=rest) if rest > 0 else ""))
 
     def send_reminder_notification(self, titles):
         if not self.settings.get("system_notifications", False):
@@ -49900,15 +49852,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def test_system_notification(self):
         """Probe aus dem Menü: zeigt, ob und warum Mitteilungen ankommen."""
-        if self.send_system_notification("Glide – Probe", "So sehen Benachrichtigungen von Glide aus."):
-            hinweis = ("Die Probe wurde an das System übergeben. Erscheint sie nicht, "
-                       "Mitteilungen für Glide bzw. Python in den Systemeinstellungen erlauben.")
+        if self.send_system_notification("Glide – Probe", glide_i18n.t("ui.test_system_notification.this_is_what_notifications", "So sehen Benachrichtigungen von Glide aus.")):
+            hinweis = (glide_i18n.t("ui.test_system_notification.the_sample_was_handed", "Die Probe wurde an das System übergeben. Erscheint sie nicht, "
+                       "Mitteilungen für Glide bzw. Python in den Systemeinstellungen erlauben."))
             if not self.settings.get("system_notifications", False):
-                hinweis += " Eingeschaltet wird die Funktion unter Einstellungen › Persönlich."
-            self.show_info("Systemmitteilung", hinweis)
+                hinweis += glide_i18n.t("ui.test_system_notification.the_feature_is_switched", " Eingeschaltet wird die Funktion unter Einstellungen › Persönlich.")
+            self.show_info(glide_i18n.t("ui.test_system_notification.system_notification", "Systemmitteilung"), hinweis)
             return True
-        self.show_warning("Systemmitteilung", getattr(self, "_system_notification_error", "")
-                          or "Systemmitteilungen sind auf diesem System nicht verfügbar.")
+        self.show_warning(glide_i18n.t("ui.test_system_notification.system_notification", "Systemmitteilung"), getattr(self, "_system_notification_error", "")
+                          or glide_i18n.t("ui.test_system_notification.system_notifications_are_not", "Systemmitteilungen sind auf diesem System nicht verfügbar."))
         return False
 
     def schedule_reminder_check(self, delay=15000):
@@ -49934,7 +49886,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label = getattr(self, "reminder_status", None)
         if label is None:
             return
-        pending = sum(row["state"] == "Offen / verpasst" for row in self.reminder_rows())
+        pending = sum(row["state"] == glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst") for row in self.reminder_rows())
         message = getattr(self, "_reminder_error", "")
         label.configure(text=message, fg=self.theme["delete"])
         if message:
@@ -49949,7 +49901,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if button is None:
             return
         if pending is None:
-            pending = sum(row["state"] == "Offen / verpasst" for row in self.reminder_rows())
+            pending = sum(row["state"] == glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst") for row in self.reminder_rows())
         daily = getattr(self, "_daily_hint_count", 0)
         error = getattr(self, "_daily_hint_error", "")
         total = pending + daily
@@ -50013,7 +49965,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         now = now or self.daily_now()
         until = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
         rows = [row for row in self.reminder_rows(now.astimezone(timezone.utc))
-                if row["state"] == "Offen / verpasst"]
+                if row["state"] == glide_i18n.t("ui.reminder_rows.open_missed", "Offen / verpasst")]
         old_state = copy.deepcopy(self.settings.get("daily_hint_state"))
         try:
             state, count = daily_hints.snooze_open(self.settings.get("daily_hints"), old_state, now, until)

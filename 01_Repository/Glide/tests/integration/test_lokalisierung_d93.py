@@ -88,11 +88,17 @@ def modal_texte(lauf, aktion):
 
 
 def menue_texte(menu):
+    """Beschriftungen eines Menüs einschließlich aller Untermenüs."""
     texte = []
     ende = menu.index("end")
     for index in range(0 if ende is None else ende + 1):
-        if menu.type(index) in ("command", "cascade", "checkbutton", "radiobutton"):
+        art = menu.type(index)
+        if art in ("command", "cascade", "checkbutton", "radiobutton"):
             texte.append(str(menu.entrycget(index, "label")))
+        if art == "cascade":
+            name = str(menu.entrycget(index, "menu"))
+            if name:
+                texte.extend(menue_texte(menu.nametowidget(name)))
     return texte
 
 
@@ -189,7 +195,36 @@ def fall_l3_punkte_und_labels(lauf):
     return f"Punktmaske, Labelmanager und Tabellenspalten: {en} englische, {de} deutsche Texte"
 
 
-FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels")
+def fall_l4_menues_und_anlegen(lauf):
+    """L4: Kontextmenüs von Liste, Ordner und Systemansicht sowie der Anlegen-Dialog."""
+    app = lauf.app
+    liste = app.new_list_object("Gamma Liste", [])
+    app.lists.append(liste)
+    ordner = app.new_folder_object("Gamma Ordner") if hasattr(app, "new_folder_object") else None
+    if ordner is not None:
+        app.folders.append(ordner)
+    assert app.save_items()
+    lauf.idle(2)
+
+    def pruefung(sprache):
+        texte = menue_texte(app.build_list_menu(liste["id"]))
+        if ordner is not None:
+            texte += menue_texte(app.build_folder_menu(ordner["id"]))
+        texte += menue_texte(app.build_smart_view_menu("in_progress"))
+        texte += modal_texte(lauf, lambda: app.create_container_dialog("list"))
+        erwartet = {"en": {"Rename", "Duplicate", "Export", "Move to trash", "Archive", "New list", "Create",
+                           "Cancel", "Open calendar …"},
+                    "de": {"Umbenennen", "Duplizieren", "Exportieren", "In den Papierkorb", "Archivieren",
+                           "Neue Liste", "Anlegen", "Abbrechen", "Kalender öffnen …"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt, texte)
+        return [text for text in texte if "Gamma" not in text]
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Listen-, Ordner- und Ansichtsmenü, Anlegen-Dialog: {en} englische, {de} deutsche Texte"
+
+
+FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen")
 
 
 def main():
