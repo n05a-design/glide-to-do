@@ -3679,7 +3679,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten, `LANGUAGE=de`):** `test_i18n.py` grün (27 neue Schlüssel, Fallbacks und Platzhalter deckungsgleich); `test_arbeitsmodi.py --fall drawing_import_locale` und die fünf übrigen Zeichenfälle je 1/1; `test_pixel3350`, `test_features330`, `test_features329`, `test_animation3400`, `test_befunde330`, `test_etappe1_332`, `test_glide` grün; `test_fenster330` im ersten Lauf mit dem bekannten Fokusbefund „Esc schließt nicht“ beim Handbuch (andere App vorn), im zweiten Lauf grün.
 
-**D – Rest und Git:** Offen im Zeicheneditor bleiben Bildfolgen-Dialog und -Export, das Journal-Untermenü und die Modulfehlertexte; appweit `RoundedButton.action_text` und dynamische Undo-Texte. Der Schnitt liegt auf `claude/v165-zeichenimport-main` direkt über `main` (`db2c6f80`, nach Merge von #167).
+**D – Rest und Git:** Offen im Zeicheneditor bleiben Bildfolgen-Dialog und -Export, das Journal-Untermenü und die Modulfehlertexte; appweit `RoundedButton.action_text` und dynamische Undo-Texte. Gemergt am 21.11.2026 als PR #168 (`17ff9263`).
 
 ### 21.154 Shell-Paket 7: `motion` und Übernahmewerkzeug (D95, V1.66, 21.11.2026)
 
@@ -3689,7 +3689,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten, `LANGUAGE=de`):** CI-Grundstufe bestanden; `test_motion`, `test_shell_importregel` (einschließlich Paketbau und Manifest), `test_shell_uebernahme` (6 Fälle), `test_shell_demohost`, `test_startwege` (17/17), `test_modalvertrag` (18), `test_fensterlebensdauer` (10), `test_abbauvertrag` (5), `test_aufgaben3380` (nutzt die UI-Übergänge der App) und `test_glide` grün. Probeübernahme in einen leeren Ordner außerhalb des Repos: 7 Dateien, `--pruefen` alles aktuell, Import aus der Kopie.
 
-**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` folgt mit der nächsten Produktionsrunde. Weitere Shell-Bausteine (neutrale Teile von `compact_mode`, `appearance`, `ui_design`, `action_menu`, Barrierefreiheit, `RedoHistory`) brauchen eine eigene Entscheidung, weil D95 sie beim Host lässt. Der Schnitt liegt auf `claude/v166-shell-motion-main` über V1.65.
+**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` folgt mit der nächsten Produktionsrunde. Weitere Shell-Bausteine (neutrale Teile von `compact_mode`, `appearance`, `ui_design`, `action_menu`, Barrierefreiheit, `RedoHistory`) brauchen eine eigene Entscheidung, weil D95 sie beim Host lässt. Gemergt am 21.11.2026 als PR #169 (`b7e6934f`). Der Codex-Hinweis zu Namenskollisionen im Übernahmewerkzeug ist mit PR #170 behoben (siehe §21.155).
 
 ### 21.155 Shell-Bausteine nach D96: `window_geometry`, `system_appearance`, `redo_history` (V1.67, 21.11.2026)
 
@@ -3699,7 +3699,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten, `LANGUAGE=de`):** CI-Grundstufe bestanden; `test_shell_d96` (9), `test_shell_importregel`, `test_compact_mode`, `test_appearance`, `test_undo_history`, `test_motion`, `test_glide_system`; `test_shell_demohost`, `test_startwege` 17/17, `test_glide`, `test_wiederholen` 9/9, `test_mutationsreste`, `test_bedienung33316`, `test_festlayout330`, `test_hintergrund330`, `test_oberflaeche33321` (N01 Systemmodus) und `test_abbauvertrag` grün. `test_arbeitsmodi` lief in die Zeitgrenze: `kompakt_verlorenes_loslassen` rot mit `focus: None`, `anhangsnamen` hängt. Beide Befunde treten auf dem unveränderten Basisstand V1.66 genauso auf und gehen auf fremden Fensterfokus zurück; `kompakt` und `kompakt_ansichten` sind einzeln grün. Maßgeblich bleibt die GitHub-Matrix.
 
-**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` mit der nächsten Produktionsrunde. Offen: S10, S12, `action_menu`, `runtime_config`. Der Schnitt liegt auf `claude/v167-shell-d96-main` über V1.66.
+**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` mit der nächsten Produktionsrunde. Offen: S10, S12, `action_menu`, `runtime_config`. Gemergt am 21.11.2026 als PR #170 (`24ed51c0`), zusammen mit dem Kollisionsschutz von `shell_uebernehmen.py`: Liefert eine neuere Shell eine Datei, die es in der Kopie schon ohne Manifesteintrag und mit anderem Inhalt gibt, bricht die Übernahme ohne `--ersetzen` ab (T331, 7 Fälle).
 
 ### 21.156 Glide Shell für Folgeprojekte: Selbsttest, Demohost und Anleitung (D97, V1.68, 21.11.2026)
 
@@ -3709,4 +3709,4 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **C – Prüfung (macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten, `LANGUAGE=de`):** CI-Grundstufe bestanden; `test_glide_system`, alle Unit-Tests, `test_shell_uebernahme`, `test_shell_importregel`, `test_shell_demohost`, `test_shell_selbsttest` (Kopie 7/7, Gegenprobe genau `window_geometry` rot), `test_startwege` 17/17, `test_glide`, `test_modalvertrag` 18 und `test_fensterlebensdauer` 10 grün. Der Selbsttest meldete auf dem Mac „system dark“.
 
-**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` mit der nächsten Produktionsrunde. Menschliche Sichtprüfung des Demohosts und ein Selbsttestlauf unter Windows und Linux außerhalb der CI stehen aus. Der Schnitt liegt auf `claude/v168-shell-selbsttest` über V1.67.
+**D – Rest und Git:** Lieferkopie in `07_Python-Versionen` mit der nächsten Produktionsrunde. Menschliche Sichtprüfung des Demohosts und ein Selbsttestlauf unter Windows und Linux außerhalb der CI stehen aus. Gemergt am 21.11.2026 als PR #171 (`0ba533af`).
