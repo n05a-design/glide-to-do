@@ -59349,32 +59349,32 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         menu = self._new_themed_popup_menu()
         source_list = next((entry for entry in self.lists if entry.get("id") == list_id), None)
-        source_title = str((source_list or {}).get("title") or "Quellliste").strip() or "Quellliste"
+        source_title = str((source_list or {}).get("title") or glide_i18n.t("ui.build_in_progress_context_menu.source_list", "Quellliste")).strip() or glide_i18n.t("ui.build_in_progress_context_menu.source_list", "Quellliste")
         menu.add_command(label=f"Aus: {self.ellipsize_sidebar_title(source_title)}", state="disabled")
         menu.add_separator()
-        menu.add_command(label="In Quellliste öffnen", command=self.open_in_progress_source_item)
+        menu.add_command(label=glide_i18n.t("ui.show_card_context_menu.open_in_source_list", "In Quellliste öffnen"), command=self.open_in_progress_source_item)
         if self.view_mode == "saved_filter":
-            menu.add_command(label="Warum steht das hier? …",
+            menu.add_command(label=glide_i18n.t("ui.build_in_progress_context_menu.why_is_this_here", "Warum steht das hier? …"),
                              command=lambda: self.explain_saved_filter_item(list_id, item_id))
         if self.task_text_sources(item_id):
-            menu.add_command(label='Textquelle öffnen …', command=lambda: self.open_task_text_source(item_id))
-        menu.add_command(label="Als Reiter öffnen", command=lambda: self.workspace.open_tab(item_id))
+            menu.add_command(label=glide_i18n.t("ui.build_item_context_menu.open_text_source", 'Textquelle öffnen …'), command=lambda: self.open_task_text_source(item_id))
+        menu.add_command(label=glide_i18n.t("board.action.open_tab", "Als Reiter öffnen"), command=lambda: self.workspace.open_tab(item_id))
         menu.add_command(
-            label="Bearbeiten (Titel, Beschreibung, Anhänge) …",
+            label=glide_i18n.t("ui.build_item_context_menu.edit_title_description_attachments", "Bearbeiten (Titel, Beschreibung, Anhänge) …"),
             command=lambda: self.edit_in_progress_item(item_id),
         )
         menu.add_command(
-            label=("Als offen markieren" if item.get("done") else "Als erledigt markieren"),
+            label=(glide_i18n.t("ui.render_detail.mark_as_open", "Als offen markieren") if item.get("done") else glide_i18n.t("ui.render_detail.mark_as_done", "Als erledigt markieren")),
             command=lambda: self.update_in_progress_item(item_id, "done", not item.get("done")),
         )
-        menu.add_cascade(label="Einplanen", menu=self.build_quick_plan_menu(menu, self.quick_plan_selection() or [item_id]),
+        menu.add_cascade(label=glide_i18n.t("ui.build_home_task_menu.schedule", "Einplanen"), menu=self.build_quick_plan_menu(menu, self.quick_plan_selection() or [item_id]),
                          accelerator=self.accel("Shift", "P"))
         self.add_repeat_skip_entries(menu, self.quick_plan_selection() or [item_id])
         menu.add_separator()
 
         importance_menu = self._new_themed_popup_menu(menu)
         current_importance = self.clamp_importance(item.get("importance", 0))
-        for value, label in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
+        for value, label in ((0, glide_i18n.t("ui.render_detail.none", "Keine")), (1, glide_i18n.t("saved_view.choice.importance_low", "Niedrig")), (2, glide_i18n.t("saved_view.choice.importance_medium", "Mittel")), (3, glide_i18n.t("saved_view.choice.importance_high", "Hoch"))):
             prefix = "✓ " if current_importance == value else "    "
             importance_menu.add_command(
                 label=f"{prefix}{self.IMPORTANCE_MARKERS.get(value, '')}{label}",
@@ -59383,25 +59383,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 activebackground=self.theme["hover"],
                 command=lambda selected=value: self.update_in_progress_item(item_id, "importance", selected),
             )
-        menu.add_cascade(label="Wichtigkeit", menu=importance_menu)
+        menu.add_cascade(label=glide_i18n.t("inspector.importance", "Wichtigkeit"), menu=importance_menu)
 
         due_menu = self._new_themed_popup_menu(menu)
         today_iso = date.today().isoformat()
         tomorrow_iso = (date.today() + timedelta(days=1)).isoformat()
         current_due = item.get("due")
         due_menu.add_command(
-            label=f"{'✓ ' if current_due == today_iso else '    '}Heute",
+            label=glide_i18n.t("ui.add_due_cascade.today", '{wert}Heute', wert='✓ ' if current_due == today_iso else '    '),
             command=lambda: self.update_in_progress_item(item_id, "due", today_iso),
         )
         due_menu.add_command(
-            label=f"{'✓ ' if current_due == tomorrow_iso else '    '}Morgen",
+            label=glide_i18n.t("ui.add_due_cascade.tomorrow", '{wert}Morgen', wert='✓ ' if current_due == tomorrow_iso else '    '),
             command=lambda: self.update_in_progress_item(item_id, "due", tomorrow_iso),
         )
         due_menu.add_command(
-            label="Fälligkeit entfernen",
+            label=glide_i18n.t("ui.build_in_progress_context_menu.remove_due_date", "Fälligkeit entfernen"),
             command=lambda: self.update_in_progress_item(item_id, "due", None),
         )
-        menu.add_cascade(label="Fälligkeit", menu=due_menu)
+        menu.add_cascade(label=glide_i18n.t("calendar.title.due", "Fälligkeit"), menu=due_menu)
 
         color_menu = self._new_themed_popup_menu(menu)
         current_color = item.get("color")
@@ -59414,14 +59414,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             )
         color_menu.add_separator()
         color_menu.add_command(
-            label=f"{'✓ ' if current_color is None else '    '}Keine Farbe",
+            label=glide_i18n.t("ui.add_color_cascade.no_color", '{wert}Keine Farbe', wert='✓ ' if current_color is None else '    '),
             command=lambda: self.update_in_progress_item(item_id, "color", None),
         )
-        menu.add_cascade(label="Aufgabenfarbe", menu=color_menu)
+        menu.add_cascade(label=glide_i18n.t("ui.add_color_cascade.task_color", "Aufgabenfarbe"), menu=color_menu)
 
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
-            label_menu.add_command(label="Noch keine Labels angelegt", state="disabled")
+            label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.no_labels_created_yet", "Noch keine Labels angelegt"), state="disabled")
         else:
             assigned = item.get("labels") or []
             for label in self.labels:
@@ -59433,8 +59433,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     command=lambda selected=label_id: self.toggle_in_progress_label(item_id, selected),
                 )
         label_menu.add_separator()
-        label_menu.add_command(label="Labels verwalten …", command=self.open_label_manager)
-        menu.add_cascade(label="Labels", menu=label_menu)
+        label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.manage_labels", "Labels verwalten …"), command=self.open_label_manager)
+        menu.add_cascade(label=glide_i18n.t("menu.view.labels", "Labels"), menu=label_menu)
         return menu
 
     def toggle_in_progress_label(self, item_id, label_id):
@@ -59653,11 +59653,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         waiting = [(item, blockers) for item, blockers in waiting if blockers]
         if not waiting:
             return True
-        lines = [f"„{self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)[:50]}“ wartet noch auf "
-                 + ", ".join(f"„{self.normalize_item_text(b.get('text', ''), self.ITEM_KIND_TASK)[:40]}“"
-                             for b in blockers[:3])
+        lines = [glide_i18n.t("ui.confirm_complete_blocked.is_still_waiting_for", '„{wert}“ wartet noch auf {join}', wert=self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)[:50], join=", ".join(f"„{self.normalize_item_text(b.get('text', ''), self.ITEM_KIND_TASK)[:40]}“"
+                             for b in blockers[:3]))
                  for item, blockers in waiting[:5]]
-        return self.ask_yes_no("Wartet noch", "\n".join(lines) + "\n\nTrotzdem als erledigt markieren?",
+        return self.ask_yes_no(glide_i18n.t("ui.confirm_complete_blocked.still_waiting", "Wartet noch"), glide_i18n.t("ui.confirm_complete_blocked.mark_as_done_anyway", '{join}\n\nTrotzdem als erledigt markieren?', join="\n".join(lines)),
                                parent=parent)
 
     def choose_items_dialog(self, title, heading, exclude_ids=(), multiple=True, parent=None, only_tasks=False):
@@ -59668,8 +59667,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text=heading, bg=self.theme["bg"], fg=self.theme["text"],
                  font=app_font(15, "bold"), anchor="w").pack(anchor="w")
-        tk.Label(outer, text="Suche nach Titel. " + (
-            f"Mehrere mit {self.selection_modifier_name()} oder Shift wählen." if multiple else "Ein Punkt."),
+        tk.Label(outer, text=glide_i18n.t("ui.choose_items_dialog.search_by_title", 'Suche nach Titel. {wert}', wert=glide_i18n.t("ui.choose_items_dialog.select_several_with_or", 'Mehrere mit {selection_modifier_name} oder Shift wählen.', selection_modifier_name=self.selection_modifier_name()) if multiple else glide_i18n.t("ui.choose_items_dialog.one_item", "Ein Punkt.")),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(anchor="w")
         query = tk.StringVar()
         border, field = self._make_field(outer)
@@ -59683,7 +59681,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         frame.pack(fill="both", expand=True)
         tree = GlideTreeview(frame, columns=("source",), show="tree headings",
                             selectmode="extended" if multiple else "browse", style="Dialog.Treeview", height=12)
-        self.prepare_table(tree, (("#0", "Punkt", 340), ("source", "Liste", 200)), stretch="#0")
+        self.prepare_table(tree, (("#0", glide_i18n.t("ui.choose_cards.item", "Punkt"), 340), ("source", glide_i18n.t("editor.toolbar.list", "Liste"), 200)), stretch="#0")
         self._attach_field_scrollbar(frame, tree)
         tree.pack(fill="both", expand=True)
         excluded = set(exclude_ids)
@@ -59716,8 +59714,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         footer = tk.Frame(outer, bg=self.theme["bg"])
         footer.pack(fill="x", pady=(14, 0))
-        self._make_dialog_button(footer, "Übernehmen", accept, "confirm").pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 10))
+        self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), accept, "confirm").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=(0, 10))
         tree.bind("<Return>", accept)
         tree.bind("<Double-Button-1>", accept)
         entry.bind("<Down>", lambda _event: (tree.focus_set(), tree.selection_set(tree.get_children()[:1])) and "break")
@@ -59747,9 +59745,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         current = current[:self.MAX_ITEM_REFERENCES]
         if rejected:
             self.show_warning(
-                "Abhängigkeit abgelehnt",
-                "Diese Voraussetzung würde einen Kreis schließen – die Punkte warteten dann "
-                "aufeinander: " + ", ".join(f"„{self.item_display_text(value)[:40]}“" for value in rejected))
+                glide_i18n.t("ui.add_detail_pane_relation.dependency_rejected", "Abhängigkeit abgelehnt"),
+                glide_i18n.t("ui.add_item_relation.this_prerequisite_would_close", 'Diese Voraussetzung würde einen Kreis schließen – die Punkte warteten dann aufeinander: {join}', join=", ".join(f"„{self.item_display_text(value)[:40]}“" for value in rejected)))
         if current == list(item.get(field) or []):
             return False
         with self.item_change([item_id], restore=False) as change:
@@ -59762,7 +59759,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not item_ids or len(item_ids) != 1:
             return "break"
         item = self.find_item(item_ids[0])[0]
-        chosen = self.choose_items_dialog("Verknüpfen", "Punkte verknüpfen",
+        chosen = self.choose_items_dialog(glide_i18n.t("ui.render_mentions.link", "Verknüpfen"), glide_i18n.t("ui.link_selected_items.link_items", "Punkte verknüpfen"),
                                           exclude_ids=[item.get("id")] + list(item.get("links") or []))
         if chosen:
             self.add_item_relation(item.get("id"), "links", chosen)
@@ -59776,7 +59773,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         item = self.find_item(item_ids[0])[0]
         if not self.is_schedulable_item(item):
             return "break"
-        chosen = self.choose_items_dialog("Wartet auf", "Voraussetzungen wählen",
+        chosen = self.choose_items_dialog(glide_i18n.t("ui.item_form_dialog.waits_for", "Wartet auf"), glide_i18n.t("ui.add_blockers_selected.choose_prerequisites", "Voraussetzungen wählen"),
                                           exclude_ids=[item.get("id")] + list(item.get("blocked_by") or []),
                                           only_tasks=True)
         if chosen:
@@ -59823,7 +59820,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         minutes = self.timer_minutes(timer, now)
         found = self.find_item_in_lists(timer["item_id"])
         if not found:
-            self.show_warning("Zeit nicht gebucht", "Die Aufgabe fehlt. Die Erfassung bleibt zur Klärung erhalten.")
+            self.show_warning(glide_i18n.t("ui.stop_time_tracking.time_not_booked", "Zeit nicht gebucht"), glide_i18n.t("ui.stop_time_tracking.the_task_is_missing", "Die Aufgabe fehlt. Die Erfassung bleibt zur Klärung erhalten."))
             return 0
         if not minutes:
             self.settings["time_tracking"] = None
@@ -59863,8 +59860,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 return False
             action = glide_focus.booking_action(booking, found[0].get("time_spent_minutes") or 0)
             if action == "conflict":
-                self.show_warning("Zeitbuchung prüfen", "Die erfasste Zeit wurde inzwischen geändert. "
-                                  "Die vorbereitete Buchung bleibt erhalten; bitte den Bestand prüfen.")
+                self.show_warning(glide_i18n.t("ui.recover_time_booking.check_time_booking", "Zeitbuchung prüfen"), glide_i18n.t("ui.recover_time_booking.the_tracked_time_has", "Die erfasste Zeit wurde inzwischen geändert. "
+                                  "Die vorbereitete Buchung bleibt erhalten; bitte den Bestand prüfen."))
                 return False
             if action == "apply":
                 before_value = found[0].get("time_spent_minutes")
@@ -59910,7 +59907,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if item:
             self.start_focus(item["id"])
         else:
-            self.show_info("Fokus", "Keine offene, ausführbare Aufgabe für heute.")
+            self.show_info(glide_i18n.t("ui.start_focus_selected.focus", "Fokus"), glide_i18n.t("ui.start_focus_selected.no_open_actionable_task", "Keine offene, ausführbare Aufgabe für heute."))
         return "break"
 
     def start_focus(self, item_id, now=None, minutes=None, remember=True):
@@ -60009,7 +60006,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Menübefehl des Fokusfelds; ohne laufende Sitzung ein Hinweis statt stiller Wirkungslosigkeit."""
         timer = self.running_timer()
         if not timer or not timer.get("focus"):
-            self.show_info("Fokus", "Es läuft keine Fokussitzung. „Fokus starten“ beginnt eine.")
+            self.show_info(glide_i18n.t("ui.run_focus_command.focus", "Fokus"), glide_i18n.t("ui.run_focus_command.no_focus_session_is", "Es läuft keine Fokussitzung. „Fokus starten“ beginnt eine."))
             return "break"
         command()
         return "break"
@@ -60024,7 +60021,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not timer or not timer.get("focus") or self.settings.get("time_booking"):
             return "break"
         if not any(item["id"] == target_id for item in self.focus_candidates(exclude=timer["item_id"])):
-            self.show_warning("Fokus", "Die Auswahl hat sich geändert. Bitte „Wechseln zu …“ erneut öffnen.")
+            self.show_warning(glide_i18n.t("ui.switch_focus.focus", "Fokus"), glide_i18n.t("ui.switch_focus.the_selection_has_changed", "Die Auswahl hat sich geändert. Bitte „Wechseln zu …“ erneut öffnen."))
             return "break"
         self.start_focus(target_id, now=now)
         self.sync_focus_panel()
@@ -60037,9 +60034,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         alle = self.focus_candidates(exclude=timer["item_id"]) if timer and timer.get("focus") else []
         candidates = alle[:glide_focus.SWITCH_LIMIT]
         if not candidates:
-            menu.add_command(label="Keine weitere offene Aufgabe für heute", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.build_focus_switch_menu.no_other_open_task", "Keine weitere offene Aufgabe für heute"), state="disabled")
             return menu
-        menu.add_command(label="Zeit buchen und wechseln zu", state="disabled")
+        menu.add_command(label=glide_i18n.t("ui.build_focus_switch_menu.book_time_and_switch", "Zeit buchen und wechseln zu"), state="disabled")
         for item in candidates:
             title = glide_focus.switch_label(self.normalize_item_text(item.get("text", ""), self.ITEM_KIND_TASK))
             menu.add_command(label="   " + title, command=lambda value=item["id"]: self.switch_focus(value))
@@ -60078,13 +60075,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 frame.pack_forget()
             return
         found = self.find_item_in_lists(timer["item_id"])
-        title = self.normalize_item_text(found[0].get("text", ""), self.ITEM_KIND_TASK) if found else "Aufgabe nicht mehr vorhanden"
+        title = self.normalize_item_text(found[0].get("text", ""), self.ITEM_KIND_TASK) if found else glide_i18n.t("ui.sync_focus_panel.task_no_longer_exists", "Aufgabe nicht mehr vorhanden")
         instant = now or datetime.now().astimezone()
         seconds = glide_focus.elapsed(timer, instant)
         paused = timer["started_at"] is None
         remaining = max(0, math.ceil(timer["goal_seconds"] - seconds))
-        status = ("Zeit für eine Pause" if remaining == 0 else "Pausiert" if paused else
-                  f"Noch {remaining // 60:02d}:{remaining % 60:02d}")
+        status = (glide_i18n.t("ui.sync_focus_panel.time_for_a_break", "Zeit für eine Pause") if remaining == 0 else glide_i18n.t("ui.sync_focus_panel.paused", "Pausiert") if paused else
+                  glide_i18n.t("ui.sync_focus_panel.left", 'Noch {wert}:{wert2}', wert=f'{remaining // 60:02d}', wert2=f'{remaining % 60:02d}'))
         signature = (json.dumps(self.theme, sort_keys=True), self.settings.get("ui_font_size"),
                      self.settings.get("ui_font_family"), timer["item_id"], title, paused, remaining == 0)
         if frame is None or not frame.winfo_exists() or signature != getattr(self, "_focus_panel_signature", None):
@@ -60093,7 +60090,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             theme = self.theme
             frame = self.focus_panel = tk.Frame(self.list_frame_outer.inner, bg=theme["card"])
             self._focus_panel_signature = signature
-            label = tk.Label(frame, text=f"Fokus · {title}", bg=theme["card"], fg=theme["text"],
+            label = tk.Label(frame, text=glide_i18n.t("ui.sync_focus_panel.focus", 'Fokus · {title}', title=title), bg=theme["card"], fg=theme["text"],
                              font=app_font(12, "bold"), anchor="w", justify="left")
             label.pack(fill="x", padx=12, pady=(8, 4))
             label.bind("<Configure>", lambda event: label.configure(wraplength=max(120, event.width - 4)))
@@ -60109,23 +60106,23 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self._focus_next_key = None
             buttons = ButtonFlow(frame, bg=theme["card"], gap=8)
             buttons.pack(fill="x", padx=12, pady=(0, 8))
-            for text, callback in (("Fortsetzen" if paused else "Pause", self.toggle_focus_pause),
-                                   ("+5 Minuten", self.extend_focus),
-                                   ("Beenden & buchen", self.stop_time_tracking_from_header),
-                                   ("Erledigt & weiter", lambda: self.finish_focus(complete=True, next_task=True)),
-                                   ("Nächste Aufgabe", lambda: self.finish_focus(next_task=True)),
-                                   ("Wechseln zu …", self.show_focus_switch_menu)):
+            for text, callback in ((glide_i18n.t("ui.sync_focus_panel.resume", "Fortsetzen") if paused else "Pause", self.toggle_focus_pause),
+                                   (glide_i18n.t("ui.sync_focus_panel.5_minutes", "+5 Minuten"), self.extend_focus),
+                                   (glide_i18n.t("ui.sync_focus_panel.end_book", "Beenden & buchen"), self.stop_time_tracking_from_header),
+                                   (glide_i18n.t("ui.sync_focus_panel.done_next", "Erledigt & weiter"), lambda: self.finish_focus(complete=True, next_task=True)),
+                                   (glide_i18n.t("ui.refresh_task_overview.next_task", "Nächste Aufgabe"), lambda: self.finish_focus(next_task=True)),
+                                   (glide_i18n.t("ui.sync_focus_panel.switch_to", "Wechseln zu …"), self.show_focus_switch_menu)):
                 knopf = self._make_dialog_button(buttons, text, callback, "muted", height=32, width=150)
                 buttons.add(knopf)
                 if callback == self.show_focus_switch_menu:
                     self.focus_switch_button = knopf
-                    knopf._accessible_name = "Fokus zu einer anderen Tagesaufgabe wechseln"
+                    knopf._accessible_name = glide_i18n.t("ui.sync_focus_panel.switch_focus_to_another", "Fokus zu einer anderen Tagesaufgabe wechseln")
                     glide_core_accessibility.refresh(knopf)
-                    self.add_tooltip(knopf, "Erfasste Zeit buchen und eine der nächsten Aufgaben für heute fokussieren")
+                    self.add_tooltip(knopf, glide_i18n.t("ui.sync_focus_panel.book_the_tracked_time", "Erfasste Zeit buchen und eine der nächsten Aufgaben für heute fokussieren"))
         siblings = [widget for widget in self.list_frame_outer.inner.pack_slaves() if widget is not frame]
         if not frame.winfo_manager():
             frame.pack(fill="x", before=siblings[0]) if siblings else frame.pack(fill="x")
-        self.focus_clock_label.configure(text=f"{status} · {self.timer_minutes(timer, instant)} min erfasst")
+        self.focus_clock_label.configure(text=glide_i18n.t("ui.sync_focus_panel.min_tracked", '{status} · {timer_minutes} min erfasst', status=status, timer_minutes=self.timer_minutes(timer, instant)))
         # Neu bestimmt nur nach einer Bestandsänderung oder am nächsten Tag, nicht bei jedem Sekundentakt.
         key = (getattr(self, "_data_revision", 0), date.today().isoformat(), timer["item_id"])
         if key != getattr(self, "_focus_next_key", None):
@@ -60368,8 +60365,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Ende seinen Grab zurück – sonst nimmt eine modale Eingabemaske nach dem
         Schließen des Kalenders keine Eingabe mehr an.
         """
-        result = {"value": None}
-        purpose = purpose or ("planned" if title == "Bearbeitungstag" else "due")
+        result, title = {"value": None}, (glide_i18n.t("calendar.title.due", "Fälligkeit") if title == "Fälligkeit" else title)
+        purpose = purpose or ("planned" if title in ("Bearbeitungstag", glide_i18n.t("calendar.title.planned", "Bearbeitungstag")) else "due")
         owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
         dialog = glide_modal_session.create_dialog(self.root, title, background=self.theme["bg"], transient=False,
                                                  resizable=(False, False))
@@ -60494,7 +60491,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         target_item, _target_siblings, _target_index, _target_parent = target_found
 
         if self.item_contains_id(source_item, target_id):
-            self.show_warning("Nicht möglich", "Ein Punkt kann nicht unter einen eigenen Unterpunkt verschoben werden.")
+            self.show_warning(glide_i18n.t("ui.make_subitem.not_possible", "Nicht möglich"), glide_i18n.t("ui.make_subitem.an_item_cannot_be", "Ein Punkt kann nicht unter einen eigenen Unterpunkt verschoben werden."))
             return False
 
         # Auch der tiefste Nachfahre muss nach dem Einrücken wieder ladbar sein.
@@ -60513,7 +60510,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             subtree_height = max(subtree_height, height)
             stack.extend((child, height + 1) for child in node.get("children", []))
         if target_depth + 1 + subtree_height > self.MAX_ITEM_DEPTH:
-            self.show_warning("Nicht möglich", "Die maximale Verschachtelungstiefe würde überschritten.")
+            self.show_warning(glide_i18n.t("ui.make_subitem.not_possible", "Nicht möglich"), glide_i18n.t("ui.make_subitem.the_maximum_nesting_depth", "Die maximale Verschachtelungstiefe würde überschritten."))
             return False
         moved_item = self.remove_item_by_id(source_id)
         if not moved_item:
@@ -60547,7 +60544,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         source_item = source_found[0]
         if self.item_contains_id(source_item, target_id):
-            self.show_warning("Nicht möglich", "Ein Punkt kann nicht in den eigenen Unterbereich verschoben werden.")
+            self.show_warning(glide_i18n.t("ui.move_item_relative_to_target.not_possible", "Nicht möglich"), glide_i18n.t("ui.move_item_relative_to_target.an_item_cannot_be", "Ein Punkt kann nicht in den eigenen Unterbereich verschoben werden."))
             return False
 
         moved_item = self.remove_item_by_id(source_id)
@@ -60600,7 +60597,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         previous_sibling_id = self.tree.prev(source_id)
         if not previous_sibling_id:
-            self.show_info("Hinweis", "Der Punkt kann nur unter den vorherigen Punkt eingerückt werden.")
+            self.show_info(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.indent_selected.the_item_can_only", "Der Punkt kann nur unter den vorherigen Punkt eingerückt werden."))
             return "break"
 
         with self.item_change([source_id], restore=False) as change:
@@ -60620,7 +60617,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return "break"
         _source_item, _source_siblings, _source_index, parent_item = found
         if not parent_item:
-            self.show_info("Hinweis", "Der Punkt ist bereits ein Hauptpunkt.")
+            self.show_info(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.outdent_selected.the_item_is_already", "Der Punkt ist bereits ein Hauptpunkt."))
             return "break"
 
         with self.item_change([source_id], restore=False) as change:
@@ -60927,15 +60924,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         ]
         if not choices:
             self.show_info(
-                "Kein anderes Ziel",
-                "Dieser Ordner enthält keine andere Zielliste. Lege zuerst eine weitere Liste darin an.",
+                glide_i18n.t("ui.resolve_task_drop_destination.no_other_target", "Kein anderes Ziel"),
+                glide_i18n.t("ui.resolve_task_drop_destination.this_folder_contains_no", "Dieser Ordner enthält keine andere Zielliste. Lege zuerst eine weitere Liste darin an."),
             )
             return None
         if len(choices) == 1:
             return choices[0][0]
         return self.themed_choice_dialog(
-            "Ziel im Ordner wählen",
-            f"In welche Liste von „{folder.get('title', 'Ordner')}“ soll der Punkt verschoben werden?",
+            glide_i18n.t("ui.resolve_task_drop_destination.choose_target_in_folder", "Ziel im Ordner wählen"),
+            glide_i18n.t("ui.resolve_task_drop_destination.which_list_of_should", 'In welche Liste von „{get}“ soll der Punkt verschoben werden?', get=folder.get('title', 'Ordner')),
             choices,
         )
 
@@ -60996,8 +60993,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if sidebar_row == ("view", self.PLAN_DAY_VIEW) and self.drag_has_moved:
                     ids = self.drag_item_ids or [self.drag_start_id]
                     self._planning_drop_hint = True
-                    self._set_stats_text("Einplanen auf " + self.format_plan_day() + " · " +
-                                         self.planning_available_text(self.plan_day(), ids))
+                    self._set_stats_text(glide_i18n.t("ui.on_drag_motion.schedule_on", 'Einplanen auf {format_plan_day} · {planning_available_text}', format_plan_day=self.format_plan_day(), planning_available_text=self.planning_available_text(self.plan_day(), ids)))
                 if sidebar_row[0] == "folder":
                     target_tree.item(sidebar_iid, open=True)
             except tk.TclError:
@@ -61099,7 +61095,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 pass
 
         as_subitem = shift_pressed or drop_into
-        action_name = "Unterpunkt erstellen" if as_subitem else "Verschieben"
+        action_name = glide_i18n.t("ui.on_drag_end.create_subitem", "Unterpunkt erstellen") if as_subitem else glide_i18n.t("drawing.action.move", "Verschieben")
         with self.guarded_structural_change(action_name):
             with self.item_change(ordered_ids, focus="first") as change:
                 if as_subitem:
@@ -61143,19 +61139,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not target:
             return False
         if not self.list_accepts_items(target):
-            self.show_info("Zeichnung", f"„{self.list_path_title(target)}“ ist eine Zeichnung und "
-                           "kann keine Listenpunkte aufnehmen.")
+            self.show_info(glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung"), glide_i18n.t("ui.drop_items_on_list.is_a_drawing_and", '„{list_path_title}“ ist eine Zeichnung und kann keine Listenpunkte aufnehmen.', list_path_title=self.list_path_title(target)))
             return False
         movable = [item_id for item_id in item_ids if self.find_item(item_id)]
         if not movable:
             return False
         target_name = self.list_path_title(target)
         count = len(self.filter_top_level_selection(movable))
-        subject = "1 Punkt" if count == 1 else f"{count} Punkte"
+        subject = glide_i18n.t("ui.sync_selection_bar.1_item", "1 Punkt") if count == 1 else glide_i18n.t("ui.drop_items_on_list.items", '{count} Punkte', count=count)
         if not self.ask_yes_no(
-            "In andere Liste verschieben",
-            f"{subject} nach „{target_name}“ verschieben?\n\n"
-            "Die Punkte verlassen damit diese Liste. Rückgängig machen: Strg+Z.",
+            glide_i18n.t("ui.drop_items_on_list.move_to_another_list", "In andere Liste verschieben"),
+            glide_i18n.t("ui.drop_items_on_list.move_to_the_items", '{subject} nach „{target_name}“ verschieben?\n\nDie Punkte verlassen damit diese Liste. Rückgängig machen: Strg+Z.', subject=subject, target_name=target_name),
         ):
             return False
         with self.guarded_structural_change("In andere Liste verschieben") as guard:
@@ -61183,8 +61177,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def import_txt_as_new_lists(self, event=None):
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
             return 'break'
-        paths = filedialog.askopenfilenames(title='Eine oder mehrere TXT-Dateien als neue Listen importieren',
-            filetypes=[('Textdateien','*.txt'),('Alle Dateien','*.*')])
+        paths = filedialog.askopenfilenames(title=glide_i18n.t("ui.import_txt_as_new_lists.import_one_or_more", 'Eine oder mehrere TXT-Dateien als neue Listen importieren'),
+            filetypes=[(glide_i18n.t("ui.import_txt_as_new_lists.text_files", 'Textdateien'),'*.txt'),(glide_i18n.t("drawing.filetype.all", 'Alle Dateien'),'*.*')])
         if not paths or self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
             return 'break'
         if not self.prepare_inspector_switch():
@@ -61205,20 +61199,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                                        folder_id=target_folder_id,note=note))
         except Exception as error:
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-            self.show_error('Fehler beim Listenimport',f'{os.path.basename(path)} konnte nicht importiert werden:\n{error}')
+            self.show_error(glide_i18n.t("ui.import_txt_as_new_lists.error_importing_lists", 'Fehler beim Listenimport'),glide_i18n.t("ui.import_txt_as_new_lists.could_not_be_imported", '{basename} konnte nicht importiert werden:\n{error}', basename=os.path.basename(path), error=error))
             return 'break'
         if not created:
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-            self.show_warning('Import','In den ausgewählten Dateien wurden keine Aufgaben oder Beschreibungstexte gefunden.')
+            self.show_warning('Import',glide_i18n.t("ui.import_txt_as_new_lists.no_tasks_or_descriptions", 'In den ausgewählten Dateien wurden keine Aufgaben oder Beschreibungstexte gefunden.'))
             return 'break'
         self.lists.extend(created)
         if not self.save_items():
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
             return 'break'
         self.trim_undo_stack()
-        self.finish_import_ui([('Neue Liste öffnen',lambda:self.set_active_list(created[-1]['id'])),
-            ('Importvermerk',lambda:self.record_data_operation('imported',paths[0] if len(paths)==1 else f'{len(paths)} Textdateien')),
-            ('Importrückmeldung',lambda:self.show_info('Import erfolgreich',f'{len(created)} Liste(n) importiert.'))])
+        self.finish_import_ui([(glide_i18n.t("ui.import_txt_as_new_lists.open_new_list", 'Neue Liste öffnen'),lambda:self.set_active_list(created[-1]['id'])),
+            (glide_i18n.t("ui.import_txt_as_new_lists.import_record", 'Importvermerk'),lambda:self.record_data_operation('imported',paths[0] if len(paths)==1 else f'{len(paths)} Textdateien')),
+            (glide_i18n.t("ui.import_txt_as_new_lists.import_feedback", 'Importrückmeldung'),lambda:self.show_info(glide_i18n.t("ui.import_txt_as_new_lists.import_successful", 'Import erfolgreich'),glide_i18n.t("ui.import_txt_as_new_lists.list_s_imported", '{len} Liste(n) importiert.', len=len(created))))])
         return 'break'
 
     def extract_txt_list_title(self, lines, path):
@@ -61256,14 +61250,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         note = "\n\n".join(value for value in (str(self.current_list().get("note") or "").strip(),
                            self.current_list().get("rich_note", {}).get("text", "")) if value)
         if not self.items and not note:
-            self.show_warning("Hinweis", "Keine Aufgaben und kein Beschreibungstext zum Exportieren.")
+            self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.export_as_txt.no_tasks_and_no", "Keine Aufgaben und kein Beschreibungstext zum Exportieren."))
             return
         default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt"
         path = filedialog.asksaveasfilename(
-            title="Liste als TXT speichern",
+            title=glide_i18n.t("ui.export_as_txt.save_list_as_txt", "Liste als TXT speichern"),
             defaultextension=".txt",
             initialfile=default_filename,
-            filetypes=[("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+            filetypes=[(glide_i18n.t("ui.export_folder_as.text_file", "Textdatei"), "*.txt"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -61278,9 +61272,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.write_items_to_txt(file, self.items, [])
                 file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
             self.record_data_operation("exported", path)
-            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+            self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_as_txt.list_exported_to", 'Liste exportiert nach:\n{path}', path=path))
         except Exception as e:
-            self.show_error("Fehler beim Export", str(e))
+            self.show_error(glide_i18n.t("ui.export_as_txt.error_while_exporting", "Fehler beim Export"), str(e))
 
     def write_items_to_txt(self, file, items, number_prefix):
         for index, item in enumerate(items, start=1):
@@ -61357,22 +61351,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not self.output_editor_ready():
             return "break"
         if target is None:
-            parent = filedialog.askdirectory(parent=self.root, title="Gesamtausgabe: Zielordner wählen")
+            parent = filedialog.askdirectory(parent=self.root, title=glide_i18n.t("ui.export_all_markdown.full_export_choose_target", "Gesamtausgabe: Zielordner wählen"))
             if not parent:
                 return "break"
             target = os.path.join(parent, "Glide-Markdown-"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
         snapshot = copy.deepcopy({"lists": self.lists, "folders": self.folders, "labels": self.labels,
                                   "trash": self.trash, "pinboards": self.settings.get("pinboards", {})})
-        dialog = glide_modal_session.create_dialog(self.root, "Alles als Markdown-Ordner", background=self.theme["bg"],
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.export_all_markdown.everything_as_a_markdown", "Alles als Markdown-Ordner"), background=self.theme["bg"],
                                                  transient=False)
-        status = tk.Label(dialog, text="Gesamtausgabe wird erstellt …", bg=self.theme["bg"], fg=self.theme["text"], font=app_font(11))
+        status = tk.Label(dialog, text=glide_i18n.t("ui.export_all_markdown.creating_full_export", "Gesamtausgabe wird erstellt …"), bg=self.theme["bg"], fg=self.theme["text"], font=app_font(11))
         status.pack(padx=28, pady=24)
         cancel = threading.Event()
         result = {}
         def abort():
             cancel.set()
-            status.configure(text="Ausgabe wird abgebrochen …")
-        button = self._make_dialog_button(dialog, "Abbrechen", abort, "muted")
+            status.configure(text=glide_i18n.t("ui.abort.cancelling_export", "Ausgabe wird abgebrochen …"))
+        button = self._make_dialog_button(dialog, glide_i18n.t("button.cancel", "Abbrechen"), abort, "muted")
         button.pack(pady=(0, 20))
         dialog.protocol("WM_DELETE_WINDOW", abort)
         dialog.bind("<Escape>", lambda _e: abort())
@@ -61397,11 +61391,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         error = result.get("error")
         if error is not None:
             if not isinstance(error, glide_markdown_tree.ExportCancelled):
-                self.show_error("Gesamtausgabe fehlgeschlagen", str(error))
+                self.show_error(glide_i18n.t("ui.export_all_markdown.full_export_failed", "Gesamtausgabe fehlgeschlagen"), str(error))
             return "break"
         if "ok" in result:
             count = result["ok"]["zaehlung"]
-            self.show_info("Gesamtausgabe erstellt", f"{count['listen_seiten']} Listen/Seiten und {count['aufgaben']} Aufgaben ausgegeben.\n{target}\nErhalt und Grenzen stehen in INDEX.md; zur Wiederherstellung die App-Sicherung verwenden.")
+            self.show_info(glide_i18n.t("ui.export_all_markdown.full_export_created", "Gesamtausgabe erstellt"), glide_i18n.t("ui.export_all_markdown.lists_pages_and_tasks", '{listen_seiten} Listen/Seiten und {aufgaben} Aufgaben ausgegeben.\n{target}\nErhalt und Grenzen stehen in INDEX.md; zur Wiederherstellung die App-Sicherung verwenden.', listen_seiten=count['listen_seiten'], aufgaben=count['aufgaben'], target=target))
         return "break"
 
     def export_as_markdown(self):
@@ -61412,14 +61406,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         note = "\n\n".join(value for value in (str(self.current_list().get("note") or "").strip(),
                            self.current_list().get("rich_note", {}).get("text", "")) if value)
         if not self.items and not note:
-            self.show_warning("Hinweis", "Keine Aufgaben und kein Beschreibungstext zum Exportieren.")
+            self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.export_as_markdown.no_tasks_and_no", "Keine Aufgaben und kein Beschreibungstext zum Exportieren."))
             return
         default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.md"
         path = filedialog.asksaveasfilename(
-            title="Liste als Markdown speichern",
+            title=glide_i18n.t("ui.export_as_markdown.save_list_as_markdown", "Liste als Markdown speichern"),
             defaultextension=".md",
             initialfile=default_filename,
-            filetypes=[("Markdown", "*.md"), ("Alle Dateien", "*.*")],
+            filetypes=[("Markdown", "*.md"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -61429,11 +61423,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if note:
                     file.write(note + "\n\n")
                 self.write_items_to_markdown(file, self.items, 0)
-                file.write(f"\n_Exportiert am {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}_\n")
+                file.write(glide_i18n.t("ui.export_as_markdown.exported_on", '\n_Exportiert am {strftime}_\n', strftime=datetime.now().strftime(glide_i18n.t("ui.export_folder_as.y_m_d_at", '%d.%m.%Y um %H:%M Uhr'))))
             self.record_data_operation("exported", path)
-            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+            self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_as_markdown.list_exported_to", 'Liste exportiert nach:\n{path}', path=path))
         except Exception as e:
-            self.show_error("Fehler beim Export", str(e))
+            self.show_error(glide_i18n.t("ui.export_as_markdown.error_while_exporting", "Fehler beim Export"), str(e))
 
     def write_items_to_markdown(self, file, items, level):
         indent = "  " * level
@@ -61453,21 +61447,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 for line in description.splitlines():
                     file.write(f"{indent}  > {line}\n")
                 for attachment in item.get("attachments", []):
-                    file.write(f"{indent}  - Anhang: `{attachment.get('name', 'Datei')}`\n")
+                    file.write(glide_i18n.t("ui.write_items_to_markdown.attachment", '{indent}  - Anhang: `{get}`\n', indent=indent, get=attachment.get('name', 'Datei')))
                 self.write_items_to_markdown(file, item.get("children", []), level + 1)
                 continue
             checkbox = "[x]" if item.get("done") else "[ ]"
             flag = self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get("importance", 0)), "")
             due_text = self.format_due_full(item.get("due"), item.get("due_time"))
-            due_suffix = f" (f\u00e4llig {due_text})" if due_text else ""
+            due_suffix = glide_i18n.t("ui.write_items_to_markdown.due", ' (fällig {due_text})', due_text=due_text) if due_text else ""
             label_names = self.format_item_label_names(item)
             label_suffix = f" `{label_names}`" if label_names else ""
             markdown_lines = str(item.get("text", "")).splitlines() or [""]
             file.write(f"{indent}- {checkbox} {flag}{markdown_lines[0]}{due_suffix}{label_suffix}\n")
             if item.get("planned_date"):
-                file.write(f"{indent}  - Bearbeitungstag: {self.format_due_display(item['planned_date'])}\n")
+                file.write(glide_i18n.t("ui.write_items_to_markdown.work_day", '{indent}  - Bearbeitungstag: {format_due_display}\n', indent=indent, format_due_display=self.format_due_display(item['planned_date'])))
             if item.get("estimated_minutes") is not None:
-                file.write(f"{indent}  - Geschätzter Aufwand: {self.format_estimated_minutes(item['estimated_minutes'])}\n")
+                file.write(glide_i18n.t("ui.write_items_to_markdown.estimated_effort", '{indent}  - Geschätzter Aufwand: {format_estimated_minutes}\n', indent=indent, format_estimated_minutes=self.format_estimated_minutes(item['estimated_minutes'])))
             # Weitere Zeilen eines Langtexts als eingerückte Fortsetzung – so
             # bleiben sie im Markdown Teil desselben Listenpunkts.
             for line in markdown_lines[1:]:
@@ -61481,21 +61475,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 kasten = "[x]" if eintrag.get("done") else "[ ]"
                 file.write(f"{indent}  - {kasten} {eintrag.get('text', '')}\n")
             for attachment in item.get("attachments", []):
-                file.write(f"{indent}  - Anhang: `{attachment.get('name', 'Datei')}`\n")
+                file.write(glide_i18n.t("ui.write_items_to_markdown.attachment", '{indent}  - Anhang: `{get}`\n', indent=indent, get=attachment.get('name', 'Datei')))
             self.write_items_to_markdown(file, item.get("children", []), level + 1)
 
     def export_as_csv(self):
         if not self.require_list_view():
             return
         if not self.items:
-            self.show_warning("Hinweis", "Keine Punkte zum Exportieren.")
+            self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.export_as_csv.no_items_to_export", "Keine Punkte zum Exportieren."))
             return
         default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.csv"
         path = filedialog.asksaveasfilename(
-            title="Liste als CSV speichern",
+            title=glide_i18n.t("ui.export_as_csv.save_list_as_csv", "Liste als CSV speichern"),
             defaultextension=".csv",
             initialfile=default_filename,
-            filetypes=[("CSV", "*.csv"), ("Alle Dateien", "*.*")],
+            filetypes=[("CSV", "*.csv"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -61512,9 +61506,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ])
                 self.write_items_to_csv(writer, self.items, [])
             self.record_data_operation("exported", path)
-            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+            self.show_info(glide_i18n.t("ui.export_partial_backup.export_successful", "Export erfolgreich"), glide_i18n.t("ui.export_as_csv.list_exported_to", 'Liste exportiert nach:\n{path}', path=path))
         except Exception as e:
-            self.show_error("Fehler beim Export", str(e))
+            self.show_error(glide_i18n.t("ui.export_as_csv.error_while_exporting", "Fehler beim Export"), str(e))
 
     @staticmethod
     def safe_csv_cell(value):
@@ -61696,10 +61690,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if kopf:
             namen = [cls.clean_csv_cell(zelle) for zelle in rohzeilen[0]]
             namen += [""] * (spaltenzahl - len(namen))
-            spalten = [name or f"Spalte {nummer}" for nummer, name in enumerate(namen, start=1)]
+            spalten = [name or glide_i18n.t("ui.read_csv_table.column", 'Spalte {nummer}', nummer=nummer) for nummer, name in enumerate(namen, start=1)]
             datenzeilen = rohzeilen[1:]
         else:
-            spalten = [f"Spalte {nummer}" for nummer in range(1, spaltenzahl + 1)]
+            spalten = [glide_i18n.t("ui.read_csv_table.column", 'Spalte {nummer}', nummer=nummer) for nummer in range(1, spaltenzahl + 1)]
             datenzeilen = rohzeilen
         if len(datenzeilen) > cls.MAX_CSV_IMPORT_ROWS:
             raise ValueError(
@@ -61851,7 +61845,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         def notiere(nummer, grund):
             if len(bericht["notes"]) < 3:
-                bericht["notes"].append(f"Zeile {nummer}: {grund}")
+                bericht["notes"].append(glide_i18n.t("ui.notiere.row", 'Zeile {nummer}: {grund}', nummer=nummer, grund=grund))
 
         def zelle(zeile, feld):
             index = mapping.get(feld)
@@ -61868,12 +61862,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             text = zelle(zeile, "text")
             if not text.strip():
                 bericht["skipped"] += 1
-                notiere(nummer, "kein Aufgabentext")
+                notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.no_task_text", "kein Aufgabentext"))
                 continue
             art = self.parse_csv_kind(zelle(zeile, "kind"))
             if zelle(zeile, "kind").strip() and art is None:
                 bericht["cells"] += 1
-                notiere(nummer, f"unbekannte Art „{zelle(zeile, 'kind').strip()}“")
+                notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unknown_type", 'unbekannte Art „{strip}“', strip=zelle(zeile, 'kind').strip()))
             if art is None:
                 art = self.ITEM_KIND_LONG if "\n" in text else self.ITEM_KIND_TASK
             elif art == self.ITEM_KIND_TASK and "\n" in text:
@@ -61884,11 +61878,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             erledigt = self.parse_csv_flag(zelle(zeile, "done"))
             if zelle(zeile, "done").strip() and erledigt is None:
                 bericht["cells"] += 1
-                notiere(nummer, f"unklarer Erledigt-Wert „{zelle(zeile, 'done').strip()}“")
+                notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unclear_done_value", 'unklarer Erledigt-Wert „{strip}“', strip=zelle(zeile, 'done').strip()))
             wichtigkeit = self.parse_csv_importance(zelle(zeile, "importance"))
             if zelle(zeile, "importance").strip() and wichtigkeit is None:
                 bericht["cells"] += 1
-                notiere(nummer, f"unbekannte Wichtigkeit „{zelle(zeile, 'importance').strip()}“")
+                notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unknown_importance", 'unbekannte Wichtigkeit „{strip}“', strip=zelle(zeile, 'importance').strip()))
 
             frist = None
             roh_frist = zelle(zeile, "due").strip()
@@ -61896,28 +61890,28 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 frist = self.parse_due_input(roh_frist) or None
                 if not frist:
                     bericht["cells"] += 1
-                    notiere(nummer, f"unlesbare Fälligkeit „{roh_frist}“")
+                    notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unreadable_due_date", 'unlesbare Fälligkeit „{roh_frist}“', roh_frist=roh_frist))
             uhrzeit = None
             roh_zeit = zelle(zeile, "due_time").strip()
             if roh_zeit:
                 uhrzeit = self.normalize_due_time(roh_zeit)
                 if not uhrzeit:
                     bericht["cells"] += 1
-                    notiere(nummer, f"unlesbare Uhrzeit „{roh_zeit}“")
+                    notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unreadable_time", 'unlesbare Uhrzeit „{roh_zeit}“', roh_zeit=roh_zeit))
             bearbeitungstag = None
             roh_tag = zelle(zeile, "planned_date").strip()
             if roh_tag:
                 bearbeitungstag = self.parse_due_input(roh_tag) or None
                 if not bearbeitungstag:
                     bericht["cells"] += 1
-                    notiere(nummer, f"unlesbarer Bearbeitungstag „{roh_tag}“")
+                    notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unreadable_work_day", 'unlesbarer Bearbeitungstag „{roh_tag}“', roh_tag=roh_tag))
             aufwand = None
             roh_aufwand = zelle(zeile, "estimated_minutes").strip()
             if roh_aufwand:
                 aufwand = self.parse_csv_minutes(roh_aufwand)
                 if aufwand is None:
                     bericht["cells"] += 1
-                    notiere(nummer, f"unlesbarer Aufwand „{roh_aufwand}“")
+                    notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.unreadable_effort", 'unlesbarer Aufwand „{roh_aufwand}“', roh_aufwand=roh_aufwand))
 
             label_ids = []
             if not dry_run:
@@ -61931,7 +61925,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                         label_ids.append(label["id"])
                     else:
                         bericht["cells"] += 1
-                        notiere(nummer, f"Label „{name}“ konnte nicht angelegt werden")
+                        notiere(nummer, glide_i18n.t("ui.csv_rows_to_items.label_could_not_be", 'Label „{name}“ konnte nicht angelegt werden', name=name))
 
             punkt = self.new_item(
                 text,
@@ -61969,7 +61963,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         beschnitten["rows"] = table.get("rows", [])[:self.CSV_PREVIEW_ROWS]
         punkte, _bericht = self.csv_rows_to_items(beschnitten, mapping, nest=nest, dry_run=True)
         if not punkte:
-            return "Mit dieser Zuordnung entsteht kein Punkt. Ordne mindestens die Spalte mit dem Aufgabentext zu."
+            return glide_i18n.t("ui.csv_preview_text.this_mapping_creates_no", "Mit dieser Zuordnung entsteht kein Punkt. Ordne mindestens die Spalte mit dem Aufgabentext zu.")
         zeilen = []
 
         def schreibe(items, ebene):
@@ -61981,7 +61975,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if punkt.get("due"):
                     zusatz.append(self.format_due_full(punkt.get("due"), punkt.get("due_time")))
                 if punkt.get("planned_date"):
-                    zusatz.append(f"Tag {self.format_due_display(punkt['planned_date'])}")
+                    zusatz.append(glide_i18n.t("ui.schreibe.day", 'Tag {format_due_display}', format_due_display=self.format_due_display(punkt['planned_date'])))
                 if punkt.get("estimated_minutes"):
                     zusatz.append(self.format_estimated_minutes(punkt["estimated_minutes"]))
                 if punkt.get("importance"):
@@ -61989,7 +61983,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if punkt.get("labels"):
                     zusatz.append(f"{len(punkt['labels'])} Label")
                 if str(punkt.get("description") or "").strip():
-                    zusatz.append("mit Beschreibung")
+                    zusatz.append(glide_i18n.t("ui.schreibe.with_description", "mit Beschreibung"))
                 schwanz = f"   ({' · '.join(teil for teil in zusatz if teil)})" if zusatz else ""
                 zeilen.append(f"{'    ' * ebene}{marke} {text}{schwanz}")
                 schreibe(punkt.get("children", []), ebene + 1)
@@ -61997,7 +61991,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         schreibe(punkte, 0)
         gesamt = len(table.get("rows", []))
         if gesamt > self.CSV_PREVIEW_ROWS:
-            zeilen.append(f"… und {gesamt - self.CSV_PREVIEW_ROWS} weitere Zeilen")
+            zeilen.append(glide_i18n.t("ui.csv_preview_text.and_more_rows", '… und {wert} weitere Zeilen', wert=gesamt - self.CSV_PREVIEW_ROWS))
         return "\n".join(zeilen)
 
     def restore_import_checkpoint(self, snapshot, undo_before, dirty_before):
@@ -62062,22 +62056,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             raise ValueError("Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen.")
         self.trim_undo_stack()
         if append_to_current and ziel_liste is not None and ziel_liste is self.current_list():
-            self.finish_import_ui([('Seitenlabels',self.update_page_labels),
-                                   ('Importansicht',lambda:self.refresh_tree(selected_id=punkte[-1]["id"]))])
+            self.finish_import_ui([(glide_i18n.t("ui.clear_page_labels.page_labels", 'Seitenlabels'),self.update_page_labels),
+                                   (glide_i18n.t("ui.import_csv_table.import_view", 'Importansicht'),lambda:self.refresh_tree(selected_id=punkte[-1]["id"]))])
         else:
-            self.finish_import_ui([('Importliste öffnen',lambda:self.set_active_list(ziel_liste["id"]))])
+            self.finish_import_ui([(glide_i18n.t("ui.import_csv_table.open_import_list", 'Importliste öffnen'),lambda:self.set_active_list(ziel_liste["id"]))])
         return ziel_liste, bericht
 
     def csv_import_summary(self, bericht, ziel_liste=None):
         """Abschlussmeldung: was entstand, was fehlte, wo es hakte."""
         anzahl = bericht.get("items", 0)
-        teile = [f"{anzahl} {'Punkt' if anzahl == 1 else 'Punkte'} übernommen"]
+        teile = [glide_i18n.t("ui.csv_import_summary.taken_over", '{anzahl} {wert} übernommen', anzahl=anzahl, wert=glide_i18n.t("ui.add_item.item", 'Punkt') if anzahl == 1 else glide_i18n.t("ui.csv_import_summary.items", 'Punkte'))]
         if ziel_liste is not None:
-            teile[0] += f" in „{ziel_liste.get('title', 'Liste')}“"
+            teile[0] += glide_i18n.t("ui.csv_import_summary.in", ' in „{get}“', get=ziel_liste.get('title', 'Liste'))
         if bericht.get("skipped"):
-            teile.append(f"{bericht['skipped']} Zeile(n) ohne Aufgabentext übersprungen")
+            teile.append(glide_i18n.t("ui.csv_import_summary.row_s_without_task", '{skipped} Zeile(n) ohne Aufgabentext übersprungen', skipped=bericht['skipped']))
         if bericht.get("cells"):
-            teile.append(f"{bericht['cells']} Zelle(n) nicht lesbar")
+            teile.append(glide_i18n.t("ui.csv_import_summary.cell_s_not_readable", '{cells} Zelle(n) nicht lesbar', cells=bericht['cells']))
         text = ".\n".join(teile) + "."
         if bericht.get("notes"):
             text += "\n\n" + "\n".join(bericht["notes"])
@@ -62388,15 +62382,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         def summary_lines(self):
             zeilen = [
-                f"{self.counts['folders']} Ordner",
-                f"{self.counts['lists']} Listen",
-                f"{self.counts['tasks']} Aufgaben",
-                f"{self.counts['long']} Langtexts",
-                f"{self.counts['groups']} Gruppen",
-                f"{self.counts['headings']} Überschriften",
-                f"{self.counts['children']} Unterpunkte",
-                f"{self.counts['checklist']} Checklistenschritte",
-                f"{self.counts['labels']} Labels",
+                glide_i18n.t("ui.summary_lines.folders", '{folders} Ordner', folders=self.counts['folders']),
+                glide_i18n.t("ui.kachel_stats.lists", '{lists} Listen', lists=self.counts['lists']),
+                glide_i18n.t("ui.summary_lines.tasks", '{tasks} Aufgaben', tasks=self.counts['tasks']),
+                glide_i18n.t("ui.summary_lines.long_texts", '{long} Langtexts', long=self.counts['long']),
+                glide_i18n.t("ui.summary_lines.groups", '{groups} Gruppen', groups=self.counts['groups']),
+                glide_i18n.t("ui.summary_lines.headings", '{headings} Überschriften', headings=self.counts['headings']),
+                glide_i18n.t("ui.summary_lines.subitems", '{children} Unterpunkte', children=self.counts['children']),
+                glide_i18n.t("ui.summary_lines.checklist_steps", '{checklist} Checklistenschritte', checklist=self.counts['checklist']),
+                glide_i18n.t("ui.summary_lines.labels", '{labels} Labels', labels=self.counts['labels']),
             ]
             return zeilen
 
@@ -62414,30 +62408,27 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             nutzlast = json.loads(text)
         except (ValueError, TypeError) as fehler:
-            bericht.errors.append(f"Die Datei ist kein gültiges JSON: {fehler}")
+            bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.the_file_is_not", 'Die Datei ist kein gültiges JSON: {fehler}', fehler=fehler))
             return None, bericht
         if not isinstance(nutzlast, dict):
-            bericht.errors.append("Die Datei enthält kein Austauschobjekt.")
+            bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.the_file_contains_no", "Die Datei enthält kein Austauschobjekt."))
             return None, bericht
         if nutzlast.get("format") != self.EXCHANGE_FORMAT_NAME:
             bericht.errors.append(
-                f"Unbekanntes Format: erwartet „{self.EXCHANGE_FORMAT_NAME}“, "
-                f"gefunden „{nutzlast.get('format')}“.")
+                glide_i18n.t("ui.parse_exchange_document.unknown_format_expected_found", 'Unbekanntes Format: erwartet „{exchange_format_name}“, gefunden „{get}“.', exchange_format_name=self.EXCHANGE_FORMAT_NAME, get=nutzlast.get('format')))
             return None, bericht
         version = nutzlast.get("format_version")
         if not isinstance(version, int) or version < 1:
-            bericht.errors.append("Die Formatversion fehlt oder ist ungültig.")
+            bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.the_format_version_is", "Die Formatversion fehlt oder ist ungültig."))
             return None, bericht
         if version > self.EXCHANGE_FORMAT_VERSION:
             bericht.errors.append(
-                f"Die Datei verwendet Austauschformat {version}; diese Glide-Fassung "
-                f"liest bis {self.EXCHANGE_FORMAT_VERSION}.")
+                glide_i18n.t("ui.parse_exchange_document.the_file_uses_exchange", 'Die Datei verwendet Austauschformat {version}; diese Glide-Fassung liest bis {exchange_format_version}.', version=version, exchange_format_version=self.EXCHANGE_FORMAT_VERSION))
             return None, bericht
         modus = nutzlast.get("mode", "create")
         if modus != "create":
             bericht.errors.append(
-                f"Der Modus „{modus}“ wird noch nicht unterstützt. Diese Fassung legt "
-                "ausschließlich neue Inhalte an und verändert keine vorhandenen.")
+                glide_i18n.t("ui.parse_exchange_document.the_mode_is_not", 'Der Modus „{modus}“ wird noch nicht unterstützt. Diese Fassung legt ausschließlich neue Inhalte an und verändert keine vorhandenen.', modus=modus))
             return None, bericht
         for feld in nutzlast:
             if feld not in self.EXCHANGE_ROOT_FIELDS and feld != "capabilities":
@@ -62446,7 +62437,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label_keys = set()
         for label in nutzlast.get("labels") or []:
             if not isinstance(label, dict) or not str(label.get("name") or "").strip():
-                bericht.warnings.append("Ein Label ohne Namen wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.parse_exchange_document.a_label_without_a", "Ein Label ohne Namen wurde übersprungen."))
                 continue
             for feld in label:
                 if feld not in self.EXCHANGE_LABEL_FIELDS:
@@ -62458,14 +62449,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         ordner_keys = set()
         for ordner in nutzlast.get("folders") or []:
             if not isinstance(ordner, dict):
-                bericht.warnings.append("Ein Ordnereintrag war kein Objekt und wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.parse_exchange_document.a_folder_entry_was", "Ein Ordnereintrag war kein Objekt und wurde übersprungen."))
                 continue
             for feld in ordner:
                 if feld not in self.EXCHANGE_FOLDER_FIELDS:
                     bericht.unknown_fields.append(f"folders.{feld}")
             if ordner.get("folder_kind") and ordner.get("folder_kind") not in self.FOLDER_KINDS:
                 bericht.warnings.append(
-                    f"„{ordner.get('title', '')}“: Unbekannte Ordnerart {ordner['folder_kind']!r} – als Standardordner übernommen.")
+                    glide_i18n.t("ui.parse_exchange_document.unknown_folder_type_taken", '„{get}“: Unbekannte Ordnerart {folder_kind} – als Standardordner übernommen.', get=ordner.get('title', ''), folder_kind=f"{ordner['folder_kind']!r}"))
             if ordner.get("key"):
                 ordner_keys.add(str(ordner["key"]))
             bericht.counts["folders"] += 1
@@ -62474,18 +62465,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if bericht.total_items >= self.MAX_EXCHANGE_ITEMS:
                 return
             if not isinstance(eintrag, dict):
-                bericht.warnings.append("Ein Punkt war kein Objekt und wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.an_item_was_not", "Ein Punkt war kein Objekt und wurde übersprungen."))
                 return
             for feld in eintrag:
                 if feld not in self.EXCHANGE_ITEM_FIELDS:
                     bericht.unknown_fields.append(f"items.{feld}")
             art = str(eintrag.get("type") or "task")
             if art not in self.EXCHANGE_ITEM_TYPES:
-                bericht.warnings.append(f"Unbekannte Punktart „{art}“ – als Aufgabe übernommen.")
+                bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.unknown_item_type_taken", 'Unbekannte Punktart „{art}“ – als Aufgabe übernommen.', art=art))
                 art = "task"
             titel = str(eintrag.get("title") or eintrag.get("text") or "").strip()
             if not titel:
-                bericht.warnings.append("Ein Punkt ohne Titel wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.an_item_without_a", "Ein Punkt ohne Titel wurde übersprungen."))
                 return
             bericht.counts[{"task": "tasks", "long": "long", "group": "groups",
                             "heading": "headings"}[art]] += 1
@@ -62494,49 +62485,45 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for feld in ("due", "planned_date"):
                 if eintrag.get(feld) and not self.normalize_due(eintrag[feld]):
                     bericht.warnings.append(
-                        f"„{titel}“: {feld} „{eintrag[feld]}“ ist kein Datum im Format JJJJ-MM-TT "
-                        "und bleibt leer.")
+                        glide_i18n.t("ui.pruefe_punkt.is_not_a_date", '„{titel}“: {feld} „{wert}“ ist kein Datum im Format JJJJ-MM-TT und bleibt leer.', titel=titel, feld=feld, wert=eintrag[feld]))
             if eintrag.get("due_time") and not self.normalize_due_time(eintrag["due_time"]):
-                bericht.warnings.append(f"„{titel}“: Uhrzeit „{eintrag['due_time']}“ unbrauchbar.")
+                bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.time_unusable", '„{titel}“: Uhrzeit „{due_time}“ unbrauchbar.', titel=titel, due_time=eintrag['due_time']))
             if eintrag.get("repeat"):
                 if not eintrag.get("due"):
                     bericht.warnings.append(
-                        f"„{titel}“: Wiederholung ohne Fälligkeitsdatum wird ignoriert.")
+                        glide_i18n.t("ui.pruefe_punkt.repeat_without_a_due", '„{titel}“: Wiederholung ohne Fälligkeitsdatum wird ignoriert.', titel=titel))
                 elif self.exchange_repeat_from_payload(eintrag["repeat"], eintrag.get("due")) is None:
                     bericht.warnings.append(
-                        f"„{titel}“: Wiederholungsregel unbrauchbar und wird ignoriert.")
+                        glide_i18n.t("ui.pruefe_punkt.repeat_rule_unusable_and", '„{titel}“: Wiederholungsregel unbrauchbar und wird ignoriert.', titel=titel))
             if eintrag.get("reminder"):
                 try:
                     self.normalize_reminder(eintrag["reminder"])
                 except (ValueError, TypeError) as fehler:
-                    bericht.warnings.append(f"„{titel}“: Erinnerung unbrauchbar ({fehler}) – bleibt leer.")
+                    bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.reminder_unusable_stays_empty", '„{titel}“: Erinnerung unbrauchbar ({fehler}) – bleibt leer.', titel=titel, fehler=fehler))
             schritte = eintrag.get("checklist") or []
             if schritte:
                 if len(schritte) > self.MAX_CHECKLIST_ENTRIES:
                     bericht.warnings.append(
-                        f"„{titel}“: {len(schritte)} Checklistenschritte – "
-                        f"übernommen werden die ersten {self.MAX_CHECKLIST_ENTRIES}.")
+                        glide_i18n.t("ui.pruefe_punkt.checklist_steps_the_first", '„{titel}“: {len} Checklistenschritte – übernommen werden die ersten {max_checklist_entries}.', titel=titel, len=len(schritte), max_checklist_entries=self.MAX_CHECKLIST_ENTRIES))
                 bericht.counts["checklist"] += min(len(schritte), self.MAX_CHECKLIST_ENTRIES)
             for kennung in eintrag.get("labels") or []:
                 if label_keys and str(kennung) not in label_keys:
                     bericht.warnings.append(
-                        f"„{titel}“: Label „{kennung}“ ist in der Datei nicht beschrieben; "
-                        "es wird über seinen Namen angelegt.")
+                        glide_i18n.t("ui.pruefe_punkt.label_is_not_described", '„{titel}“: Label „{kennung}“ ist in der Datei nicht beschrieben; es wird über seinen Namen angelegt.', titel=titel, kennung=kennung))
             kinder = eintrag.get("children") or []
             if kinder and tiefe + 1 >= self.MAX_EXCHANGE_DEPTH:
-                bericht.warnings.append(f"„{titel}“: Unterpunkte jenseits von Ebene "
-                                        f"{self.MAX_EXCHANGE_DEPTH} wurden nicht übernommen.")
+                bericht.warnings.append(glide_i18n.t("ui.pruefe_punkt.subitems_beyond_level_were", '„{titel}“: Unterpunkte jenseits von Ebene {max_exchange_depth} wurden nicht übernommen.', titel=titel, max_exchange_depth=self.MAX_EXCHANGE_DEPTH))
                 return
             for kind in kinder:
                 pruefe_punkt(kind, tiefe + 1)
 
         listen = nutzlast.get("lists")
         if not isinstance(listen, list) or not listen:
-            bericht.errors.append("Die Datei enthält keine Listen.")
+            bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.the_file_contains_no_2", "Die Datei enthält keine Listen."))
             return None, bericht
         for eintrag in listen:
             if not isinstance(eintrag, dict):
-                bericht.warnings.append("Ein Listeneintrag war kein Objekt und wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.parse_exchange_document.a_list_entry_was", "Ein Listeneintrag war kein Objekt und wurde übersprungen."))
                 continue
             try:
                 RichNoteEditor.normalize(eintrag.get("rich_note"))
@@ -62546,14 +62533,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             art = eintrag.get("list_kind")
             listentitel = str(eintrag.get("title") or "").strip()
             if art is not None and art not in self.LIST_KINDS:
-                bericht.errors.append(f"„{listentitel}“: Unbekannte Listenart {art!r}.")
+                bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.unknown_list_type", '„{listentitel}“: Unbekannte Listenart {art}.', listentitel=listentitel, art=f'{art!r}'))
                 return None, bericht
             if eintrag.get("animation") is not None and art != self.LIST_KIND_DRAWING:
-                bericht.errors.append(f"„{listentitel}“: Eine Bildfolge gehört in eine Zeichnungsseite.")
+                bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.a_frame_sequence_belongs", '„{listentitel}“: Eine Bildfolge gehört in eine Zeichnungsseite.', listentitel=listentitel))
                 return None, bericht
             if art == self.LIST_KIND_DRAWING:
                 if eintrag.get("items"):
-                    bericht.errors.append(f"„{listentitel}“: Eine Zeichnung kann keine Punkte enthalten.")
+                    bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.a_drawing_cannot_contain", '„{listentitel}“: Eine Zeichnung kann keine Punkte enthalten.', listentitel=listentitel))
                     return None, bericht
                 try:
                     self.normalize_animation_fields(
@@ -62565,23 +62552,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if feld not in self.EXCHANGE_LIST_FIELDS:
                     bericht.unknown_fields.append(f"lists.{feld}")
             if eintrag.get("markdown") is not None and not isinstance(eintrag.get("markdown"), str):
-                bericht.warnings.append(f"„{listentitel}“: Das Markdown-Feld ist kein Text und wird ignoriert.")
+                bericht.warnings.append(glide_i18n.t("ui.parse_exchange_document.the_markdown_field_is", '„{listentitel}“: Das Markdown-Feld ist kein Text und wird ignoriert.', listentitel=listentitel))
             if not str(eintrag.get("title") or "").strip():
-                bericht.warnings.append("Eine Liste ohne Titel wurde übersprungen.")
+                bericht.warnings.append(glide_i18n.t("ui.parse_exchange_document.a_list_without_a", "Eine Liste ohne Titel wurde übersprungen."))
                 continue
             if eintrag.get("folder") and ordner_keys and str(eintrag["folder"]) not in ordner_keys:
                 bericht.warnings.append(
-                    f"„{eintrag['title']}“: Der Ordner „{eintrag['folder']}“ ist nicht "
-                    "beschrieben; die Liste entsteht ohne Ordner.")
+                    glide_i18n.t("ui.parse_exchange_document.the_folder_is_not", '„{title}“: Der Ordner „{folder}“ ist nicht beschrieben; die Liste entsteht ohne Ordner.', title=eintrag['title'], folder=eintrag['folder']))
             bericht.counts["lists"] += 1
             for punkt in eintrag.get("items") or []:
                 pruefe_punkt(punkt, 0)
         if bericht.total_items > self.MAX_EXCHANGE_ITEMS:
             bericht.errors.append(
-                f"Die Datei beschreibt mehr als {self.MAX_EXCHANGE_ITEMS} Punkte.")
+                glide_i18n.t("ui.parse_exchange_document.the_file_describes_more", 'Die Datei beschreibt mehr als {max_exchange_items} Punkte.', max_exchange_items=self.MAX_EXCHANGE_ITEMS))
             return None, bericht
         if not bericht.counts["lists"]:
-            bericht.errors.append("Keine der Listen war brauchbar.")
+            bericht.errors.append(glide_i18n.t("ui.parse_exchange_document.none_of_the_lists", "Keine der Listen war brauchbar."))
             return None, bericht
         bericht.unknown_fields = sorted(set(bericht.unknown_fields))
         return nutzlast, bericht
@@ -62735,14 +62721,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Exportiert den Agenten-Skill glide-to-do als ZIP-Archiv für Claude, Cursor, Antigravity etc."""
         skill_dir = self.find_agent_skill_dir()
         if not skill_dir:
-            self.show_error("KI-Skill exportieren", "Der Skill-Ordner 'skills/glide-to-do' konnte nicht gefunden werden.")
+            self.show_error(glide_i18n.t("ui.export_agent_skill.export_ai_skill", "KI-Skill exportieren"), glide_i18n.t("ui.export_agent_skill.the_skill_folder_skills", "Der Skill-Ordner 'skills/glide-to-do' konnte nicht gefunden werden."))
             return "break"
         if not target_path:
             target_path = filedialog.asksaveasfilename(
-                title="KI-Skill exportieren",
+                title=glide_i18n.t("ui.export_agent_skill.export_ai_skill", "KI-Skill exportieren"),
                 initialfile="glide-to-do-skill-v1.4.zip",
                 defaultextension=".zip",
-                filetypes=[("ZIP-Archiv", "*.zip"), ("Alle Dateien", "*.*")],
+                filetypes=[("ZIP-Archiv", "*.zip"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
                 parent=getattr(self, "root", None),
             )
         if not target_path:
@@ -62762,12 +62748,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                         archive.write(voll, arcname=rel)
             os.replace(temp_path, target_path)
             if getattr(self, "root", None) is not None:
-                self.show_info("KI-Skill exportieren",
-                               f"Der KI-Skill wurde erfolgreich exportiert nach:\n{target_path}\n\n"
-                               "Er kann in Claude Desktop, Cursor, Antigravity oder andere KI-Werkzeuge eingebunden werden.")
+                self.show_info(glide_i18n.t("ui.export_agent_skill.export_ai_skill", "KI-Skill exportieren"),
+                               glide_i18n.t("ui.export_agent_skill.the_ai_skill_was", 'Der KI-Skill wurde erfolgreich exportiert nach:\n{target_path}\n\nEr kann in Claude Desktop, Cursor, Antigravity oder andere KI-Werkzeuge eingebunden werden.', target_path=target_path))
             return True
         except (OSError, ValueError) as fehler:
-            self.show_error("KI-Skill exportieren", f"Export fehlgeschlagen:\n{fehler}")
+            self.show_error(glide_i18n.t("ui.export_agent_skill.export_ai_skill", "KI-Skill exportieren"), glide_i18n.t("ui.export_agent_skill.export_failed", 'Export fehlgeschlagen:\n{fehler}', fehler=fehler))
             return "break"
 
     # ------------------------------------------------------------------
@@ -63167,7 +63152,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 except OSError:
                     pass
         self.trim_undo_stack()
-        self.finish_import_ui([('Seitenleiste',self.update_sidebar_list),('Inhaltsansicht',self.refresh_tree)])
+        self.finish_import_ui([(glide_i18n.t("ui.followups.sidebar", 'Seitenleiste'),self.update_sidebar_list),(glide_i18n.t("ui.sidebar_change.content_view", 'Inhaltsansicht'),self.refresh_tree)])
         return neue_listen
 
     # ------------------------------------------------------------------
@@ -63310,18 +63295,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def edit_exchange_recipe(self, initial=None, mode='patch'):
         if getattr(self, '_data_read_only', False):
-            self.show_warning('Auftrag', 'Eigene Aufträge brauchen Schreibrecht für die Einstellungen.')
+            self.show_warning(glide_i18n.t("ui.edit_exchange_recipe.task", 'Auftrag'), glide_i18n.t("ui.edit_exchange_recipe.custom_tasks_need_write", 'Eigene Aufträge brauchen Schreibrecht für die Einstellungen.'))
             return None
         own_ids = {r['id'] for r in self.settings.get('exchange_recipes', [])}
         initial = dict(initial or {})
         editing = initial.get('id') in own_ids
         identity = initial.get('id') if editing else 'own-' + uuid.uuid4().hex
         result = {'value': None}
-        dialog = glide_modal_session.create_dialog(self.root, 'Eigener Auftrag', background=self.theme['bg'])
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.edit_exchange_recipe.custom_task", 'Eigener Auftrag'), background=self.theme['bg'])
         body = tk.Frame(dialog, bg=self.theme['bg'])
         body.pack(fill='both', expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        self.dialog_label(body, 'Eigener Auftrag', bold=True, size=16)
-        self._make_field_label(body, 'Titel').pack(anchor='w', pady=(8, 4))
+        self.dialog_label(body, glide_i18n.t("ui.edit_exchange_recipe.custom_task", 'Eigener Auftrag'), bold=True, size=16)
+        self._make_field_label(body, glide_i18n.t("ui.submit.title", 'Titel')).pack(anchor='w', pady=(8, 4))
         title = tk.StringVar(master=dialog, value=initial.get('title', '') if editing else '')
         border, field = self._make_field(body); border.pack(fill='x'); field.pack(fill='x', padx=1, pady=1)
         title_entry = tk.Entry(field, textvariable=title, bg=self.theme['input'], fg=self.theme['text'],
@@ -63329,17 +63314,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         title_entry.pack(fill='x', padx=10, pady=8)
         self.limit_title_entry(title_entry)
         purpose = tk.StringVar(master=dialog, value='Neues anlegen' if initial.get('mode', mode) == 'create' else 'Vorhandenes überarbeiten')
-        self._make_field_label(body, 'Zweck').pack(anchor='w', pady=(8, 4))
+        self._make_field_label(body, glide_i18n.t("ui.edit_exchange_recipe.purpose", 'Zweck')).pack(anchor='w', pady=(8, 4))
         options, _ = self._make_option_menu(body, purpose, ['Neues anlegen', 'Vorhandenes überarbeiten'])
         options.pack(fill='x')
-        self._make_field_label(body, 'Anweisung (höchstens 12.000 Zeichen)').pack(anchor='w', pady=(8, 4))
+        self._make_field_label(body, glide_i18n.t("ui.edit_exchange_recipe.instruction_at_most_12", 'Anweisung (höchstens 12.000 Zeichen)')).pack(anchor='w', pady=(8, 4))
         border, field = self._make_field(body); border.pack(fill='both', expand=True); field.pack(fill='both', expand=True, padx=1, pady=1)
         text = tk.Text(field, name='recipe_instruction', wrap='word', height=7, relief='flat',
                        bg=self.theme['input'], fg=self.theme['text'], insertbackground=self.theme['text'], font=app_font(11))
         self._attach_field_scrollbar(field, text)
         text.pack(fill='both', expand=True, padx=10, pady=8)
         text.insert('1.0', initial.get('instruction', ''))
-        self.dialog_label(body, 'Eigene Aufträge dürfen die neun vorhandenen Austauschfelder vorschlagen. Die Antwort wird vor Übernahme geprüft.', color='muted', pady=(8, 0))
+        self.dialog_label(body, glide_i18n.t("ui.edit_exchange_recipe.custom_tasks_may_suggest", 'Eigene Aufträge dürfen die neun vorhandenen Austauschfelder vorschlagen. Die Antwort wird vor Übernahme geprüft.'), color='muted', pady=(8, 0))
         error = self.dialog_label(body, '', color='delete')
         actions = ButtonFlow(body, bg=self.theme['bg'], align='e'); actions.pack(fill='x', pady=(12, 0))
         def submit(remove=False):
@@ -63352,10 +63337,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     dialog.destroy()
             except ValueError as exc:
                 error.configure(text=str(exc))
-        actions.add(self._make_dialog_button(actions, 'Abbrechen', dialog.destroy, 'muted', width=115))
+        actions.add(self._make_dialog_button(actions, glide_i18n.t("button.cancel", 'Abbrechen'), dialog.destroy, 'muted', width=115))
         if editing:
-            actions.add(self._make_dialog_button(actions, 'Löschen', lambda: submit(True), 'delete', width=100))
-        actions.add(self._make_dialog_button(actions, 'Speichern', submit, 'confirm', width=115))
+            actions.add(self._make_dialog_button(actions, glide_i18n.t("button.delete", 'Löschen'), lambda: submit(True), 'delete', width=100))
+        actions.add(self._make_dialog_button(actions, glide_i18n.t("button.save", 'Speichern'), submit, 'confirm', width=115))
         dialog.bind('<Escape>', lambda _e: dialog.destroy())
         self._center_dialog(dialog, min_width=620, min_height=520)
         self._schedule_windows_chrome_theme(dialog)
@@ -63372,21 +63357,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             recipes = self.exchange_recipe_catalog()
         except (OSError, ValueError) as exc:
-            self.show_warning('Aufträge', str(exc))
+            self.show_warning(glide_i18n.t("ui.show_exchange_export_dialog.tasks", 'Aufträge'), str(exc))
             return 'break'
-        umfaenge = [("current", "Aktuelle Liste"), ("folder", "Aktueller Ordner"),
-                    ("all", "Alle Listen und Ordner")]
+        umfaenge = [("current", glide_i18n.t("ui.show_exchange_export_dialog.current_list", "Aktuelle Liste")), ("folder", glide_i18n.t("ui.show_exchange_export_dialog.current_folder", "Aktueller Ordner")),
+                    ("all", glide_i18n.t("ui.show_exchange_export_dialog.all_lists_and_folders", "Alle Listen und Ordner"))]
         markiert = [item_id for item_id in self.get_selected_item_ids() if self.view_mode == "list"]
         if markiert:
-            umfaenge.insert(0, ("selection", f"Ausgewählte Punkte ({len(markiert)})"))
+            umfaenge.insert(0, ("selection", glide_i18n.t("ui.show_exchange_export_dialog.selected_items", 'Ausgewählte Punkte ({len})', len=len(markiert))))
         auswahl = tk.StringVar(master=self.root, value=dict(umfaenge)["current" if self.active_list_id else "all"])
         erledigte = tk.BooleanVar(master=self.root, value=True)
         # G24 (3.35.0): Neues anlegen lassen (Stufe 1) oder Vorhandenes
         # überarbeiten lassen – dann mit Ausgangsstand je Aufgabe.
-        zwecke = [("create", "Neues anlegen lassen (Austauschdatei)"),
-                  ("context", "Vorhandene Aufgaben überarbeiten lassen (Kontextpaket)")]
+        zwecke = [("create", glide_i18n.t("ui.show_exchange_export_dialog.have_new_content_created", "Neues anlegen lassen (Austauschdatei)")),
+                  ("context", glide_i18n.t("ui.show_exchange_export_dialog.have_existing_tasks_revised", "Vorhandene Aufgaben überarbeiten lassen (Kontextpaket)"))]
         zweck = tk.StringVar(master=self.root, value=zwecke[0][1])
-        dialog = self._new_dialog("Für KI bereitstellen")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_exchange_export_dialog.provide_for_ai", "Für KI bereitstellen"))
         footer = tk.Frame(dialog, bg=self.theme['bg'])
         footer.pack(side='bottom', fill='x', padx=self.DIALOG_PAD_X, pady=(4, self.DIALOG_PAD_Y))
         scroll_host = tk.Frame(dialog, bg=self.theme['bg'])
@@ -63394,23 +63379,23 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         canvas, aussen = self._make_scroll_area(scroll_host, height=460)
         canvas.configure(bg=self.theme['bg'])
         aussen.configure(bg=self.theme['bg'])
-        self.dialog_label(aussen, "Für KI bereitstellen", bold=True, size=16)
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.provide_for_ai", "Für KI bereitstellen"), bold=True, size=16)
         self.dialog_label(
             aussen,
-            "Neues als Austauschdatei anlegen oder vorhandene Aufgaben über ein Kontextpaket "
+            glide_i18n.t("ui.show_exchange_export_dialog.create_new_content_as", "Neues als Austauschdatei anlegen oder vorhandene Aufgaben über ein Kontextpaket "
             "überarbeiten lassen. Die Antwort wird vor Übernahme geprüft. Anhänge, Wiederholungen "
-            "und Erinnerungen werden nicht mitgegeben.",
+            "und Erinnerungen werden nicht mitgegeben."),
             color="muted", pady=(4, 12))
-        self._make_field_label(aussen, "Zweck").pack(anchor="w", pady=(6, 5))
+        self._make_field_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.purpose", "Zweck")).pack(anchor="w", pady=(6, 5))
         zweck_rahmen, zweck_menu = self._make_option_menu(aussen, zweck, [name for _key, name in zwecke])
         zweck_menu.configure(width=1)
         zweck_rahmen.pack(fill="x", pady=(0, 8))
-        self._make_field_label(aussen, 'Auftrag').pack(anchor='w', pady=(6, 5))
+        self._make_field_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.task", 'Auftrag')).pack(anchor='w', pady=(6, 5))
         auftrag = tk.StringVar(master=dialog, value=glide_recipes.NONE)
         auftrag_rahmen, auftrag_menu = self._make_option_menu(aussen, auftrag, [glide_recipes.NONE])
         auftrag_menu.configure(width=1)
         auftrag_rahmen.pack(fill='x', pady=(0, 5))
-        vorschau = self.dialog_label(aussen, 'Kein Auftrag gewählt. Glide verwendet den bisherigen Austauschweg.',
+        vorschau = self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.no_task_chosen_glide", 'Kein Auftrag gewählt. Glide verwendet den bisherigen Austauschweg.'),
                                      color='muted', pady=(0, 5))
         choices = {}
 
@@ -63418,7 +63403,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             choices.clear()
             own_ids = {r['id'] for r in self.settings.get('exchange_recipes', [])}
             for recipe in self.exchange_recipe_catalog():
-                prefix = 'Eigener' if recipe['id'] in own_ids else 'Mitgeliefert'
+                prefix = glide_i18n.t("ui.refresh_recipes.custom", 'Eigener') if recipe['id'] in own_ids else glide_i18n.t("ui.refresh_recipes.built_in", 'Mitgeliefert')
                 choices[prefix + ' · ' + recipe['title']] = recipe
             auftrag_menu.options = [glide_recipes.NONE, *choices]
             auftrag_menu.menu.delete(0, 'end')
@@ -63434,7 +63419,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 text = recipe['instruction']
                 vorschau.configure(text=text)
             else:
-                vorschau.configure(text='Kein Auftrag gewählt. Glide verwendet den bisherigen Austauschweg.')
+                vorschau.configure(text=glide_i18n.t("ui.choose_recipe.no_task_chosen_glide", 'Kein Auftrag gewählt. Glide verwendet den bisherigen Austauschweg.'))
 
         def choose_purpose(*_args):
             recipe = choices.get(auftrag.get())
@@ -63456,15 +63441,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 mode='create' if zweck.get() == zwecke[0][1] else 'patch')
             if recipe is not None:
                 refresh_recipes(recipe.get('id'))
-        self._make_dialog_button(aussen, 'Eigenen Auftrag bearbeiten …', own_recipe, 'muted',
+        self._make_dialog_button(aussen, glide_i18n.t("ui.show_exchange_export_dialog.edit_custom_task", 'Eigenen Auftrag bearbeiten …'), own_recipe, 'muted',
                                  width=265, height=28).pack(anchor='w', pady=(0, 6))
-        self.dialog_label(aussen, 'Glide verbindet sich mit keiner KI. Datei oder Text nur bewusst an das gewählte Werkzeug weitergeben.',
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.glide_connects_to_no", 'Glide verbindet sich mit keiner KI. Datei oder Text nur bewusst an das gewählte Werkzeug weitergeben.'),
                           color='muted', pady=(0, 6))
-        self._make_field_label(aussen, "Umfang").pack(anchor="w", pady=(6, 5))
+        self._make_field_label(aussen, glide_i18n.t("ui.show_exchange_export_dialog.scope", "Umfang")).pack(anchor="w", pady=(6, 5))
         rahmen, umfang_menu = self._make_option_menu(aussen, auswahl, [name for _key, name in umfaenge])
         umfang_menu.configure(width=1)
         rahmen.pack(fill="x", pady=(0, 8))
-        GlideCheckbutton(aussen, text="Erledigte Punkte mitgeben", variable=erledigte,
+        GlideCheckbutton(aussen, text=glide_i18n.t("ui.show_exchange_export_dialog.include_completed_items", "Erledigte Punkte mitgeben"), variable=erledigte,
                          bg=self.theme["bg"], fg=self.theme["text"], activebackground=self.theme["bg"],
                          activeforeground=self.theme["text"], selectcolor=self.theme["input"],
                          relief="flat", bd=0, highlightthickness=0, anchor="w",
@@ -63481,7 +63466,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             kontext = next((key for key, name in zwecke if name == zweck.get()), "create") == "context"
             if schluessel == "selection":
                 if not kontext:
-                    meldung.configure(text="Ausgewählte Punkte gibt es nur im Kontextpaket zum Überarbeiten.")
+                    meldung.configure(text=glide_i18n.t("ui.schreiben.selected_items_only_exist", "Ausgewählte Punkte gibt es nur im Kontextpaket zum Überarbeiten."))
                     return "break"
                 return kontextpaket([entry for entry in self.lists if entry.get("id") == self.active_list_id],
                                     set(markiert), copy_only, preview)
@@ -63493,7 +63478,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     (next((e for e in self.lists if e.get("id") == self.active_list_id), {}) or {})
                     .get("folder_id"))
                 if not ziel:
-                    meldung.configure(text="Es ist kein Ordner geöffnet.")
+                    meldung.configure(text=glide_i18n.t("ui.schreiben.no_folder_is_open", "Es ist kein Ordner geöffnet."))
                     return "break"
                 quelle = self.get_folder_lists_recursive(ziel)
                 ordner = list(self.iter_folder_subtree(ziel))
@@ -63501,15 +63486,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 quelle = list(self.lists)
                 ordner = list(self.folders)
             if not quelle:
-                meldung.configure(text="Der gewählte Umfang enthält keine Liste.")
+                meldung.configure(text=glide_i18n.t("ui.schreiben.the_chosen_scope_contains", "Der gewählte Umfang enthält keine Liste."))
                 return "break"
             if kontext:
                 return kontextpaket(quelle, None, copy_only, preview)
             pfad = '' if copy_only or preview else filedialog.asksaveasfilename(
-                title="Austauschdatei speichern", defaultextension=self.EXCHANGE_SUFFIX,
+                title=glide_i18n.t("ui.schreiben.save_exchange_file", "Austauschdatei speichern"), defaultextension=self.EXCHANGE_SUFFIX,
                 initialfile="Glide-Austausch" + self.EXCHANGE_SUFFIX,
                 filetypes=[("Glide-Austauschdatei", "*" + self.EXCHANGE_SUFFIX),
-                           ("JSON-Datei", "*.json")])
+                           (glide_i18n.t("ui.export_board_json_canvas.json_file", "JSON-Datei"), "*.json")])
             if not copy_only and not preview and not pfad:
                 return "break"
             try:
@@ -63525,14 +63510,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 with open(pfad, "w", encoding="utf-8", newline="\n") as datei:
                     json.dump(nutzlast, datei, ensure_ascii=False, indent=2)
             except (OSError, ValueError) as fehler:
-                meldung.configure(text=f"Die Datei konnte nicht geschrieben werden: {fehler}")
+                meldung.configure(text=glide_i18n.t("ui.schreiben.the_file_could_not", 'Die Datei konnte nicht geschrieben werden: {fehler}', fehler=fehler))
                 return "break"
             self.record_data_operation("exported", pfad)
             dialog.destroy()
-            self.show_info("Für KI bereitstellen",
-                           f"{len(quelle)} Liste(n) geschrieben nach:\n{pfad}\n\n"
-                           "Die Datei beschreibt Aufbau und Grenzen selbst; eine KI braucht "
-                           "zusätzlich nur die Anweisung, in derselben Form zu antworten.")
+            self.show_info(glide_i18n.t("ui.schreiben.provide_for_ai", "Für KI bereitstellen"),
+                           glide_i18n.t("ui.schreiben.list_s_written_to", '{len} Liste(n) geschrieben nach:\n{pfad}\n\nDie Datei beschreibt Aufbau und Grenzen selbst; eine KI braucht zusätzlich nur die Anweisung, in derselben Form zu antworten.', len=len(quelle), pfad=pfad))
             return "break"
 
         def kopieren(paket):
@@ -63540,19 +63523,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 text = glide_recipes.clipboard_text(paket)
                 self.root.clipboard_clear()
                 self.root.clipboard_append(text)
-                meldung.configure(text='In Zwischenablage kopiert. Es wurde nichts an eine KI gesendet.', fg=self.theme['text'])
+                meldung.configure(text=glide_i18n.t("ui.kopieren.copied_to_the_clipboard", 'In Zwischenablage kopiert. Es wurde nichts an eine KI gesendet.'), fg=self.theme['text'])
             except tk.TclError as exc:
-                meldung.configure(text=f'Zwischenablage nicht verfügbar: {exc}')
+                meldung.configure(text=glide_i18n.t("ui.kopieren.clipboard_not_available", 'Zwischenablage nicht verfügbar: {exc}', exc=exc))
             return 'break'
 
         def preview_paket(paket):
-            window = glide_modal_session.create_dialog(dialog, 'Vorschau für KI', background=self.theme['bg'],
+            window = glide_modal_session.create_dialog(dialog, glide_i18n.t("ui.preview_paket.preview_for_ai", 'Vorschau für KI'), background=self.theme['bg'],
                                                      minsize=(460, 360))
             body = tk.Frame(window, bg=self.theme['bg'])
             body.pack(fill='both', expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-            self.dialog_label(body, 'Auftrag und Kontext', bold=True, size=16)
-            self.dialog_label(body, 'Aktueller Paketinhalt einschließlich aller Anweisungen. '
-                              'Es wurde nichts an eine KI gesendet.', color='muted', pady=(4, 10))
+            self.dialog_label(body, glide_i18n.t("ui.preview_paket.task_and_context", 'Auftrag und Kontext'), bold=True, size=16)
+            self.dialog_label(body, glide_i18n.t("ui.preview_paket.current_package_content_including", 'Aktueller Paketinhalt einschließlich aller Anweisungen. '
+                              'Es wurde nichts an eine KI gesendet.'), color='muted', pady=(4, 10))
             border, field = self._make_field(body)
             border.pack(fill='both', expand=True)
             field.pack(fill='both', expand=True, padx=1, pady=1)
@@ -63563,7 +63546,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             text.pack(fill='both', expand=True, padx=10, pady=8)
             text.insert('1.0', glide_recipes.preview_text(paket))
             text.configure(state='disabled')
-            self._make_dialog_button(body, 'Schließen', window.destroy, 'muted', width=120).pack(
+            self._make_dialog_button(body, glide_i18n.t("button.close", 'Schließen'), window.destroy, 'muted', width=120).pack(
                 anchor='e', pady=(12, 0))
             window.bind('<Escape>', lambda _event: window.destroy())
             self._center_dialog(window, min_width=660, min_height=500)
@@ -63579,16 +63562,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 meldung.configure(text=str(exc))
                 return 'break'
             if not paket["items"]:
-                meldung.configure(text="Der gewählte Umfang enthält keine Aufgabe.")
+                meldung.configure(text=glide_i18n.t("ui.kontextpaket.the_chosen_scope_contains", "Der gewählte Umfang enthält keine Aufgabe."))
                 return "break"
             if preview:
                 return preview_paket(paket)
             if copy_only:
                 return kopieren(paket)
             pfad = filedialog.asksaveasfilename(
-                title="Kontextpaket speichern", defaultextension=self.CONTEXT_SUFFIX,
+                title=glide_i18n.t("ui.kontextpaket.save_context_package", "Kontextpaket speichern"), defaultextension=self.CONTEXT_SUFFIX,
                 initialfile="Glide-Kontext" + self.CONTEXT_SUFFIX,
-                filetypes=[("Glide-Kontextpaket", "*" + self.CONTEXT_SUFFIX), ("JSON-Datei", "*.json")])
+                filetypes=[("Glide-Kontextpaket", "*" + self.CONTEXT_SUFFIX), (glide_i18n.t("ui.export_board_json_canvas.json_file", "JSON-Datei"), "*.json")])
             if not pfad:
                 return "break"
             try:
@@ -63596,22 +63579,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 with open(pfad, "w", encoding="utf-8", newline="\n") as datei:
                     json.dump(paket, datei, ensure_ascii=False, indent=2)
             except (OSError, ValueError) as fehler:
-                meldung.configure(text=f"Die Datei konnte nicht geschrieben werden: {fehler}")
+                meldung.configure(text=glide_i18n.t("ui.kontextpaket.the_file_could_not", 'Die Datei konnte nicht geschrieben werden: {fehler}', fehler=fehler))
                 return "break"
             self.record_data_operation("exported", pfad)
             dialog.destroy()
-            self.show_info("Für KI bereitstellen",
-                           f"{len(paket['items'])} Aufgabe(n) mit Ausgangsstand geschrieben nach:\n{pfad}\n\n"
-                           "Die KI antwortet mit einem Änderungsvorschlag (glide.exchange, mode „patch“). "
-                           "Ihn über Datei › Datenaustausch › „KI-Ergebnis importieren …“ prüfen und übernehmen.")
+            self.show_info(glide_i18n.t("ui.kontextpaket.provide_for_ai", "Für KI bereitstellen"),
+                           glide_i18n.t("ui.kontextpaket.task_s_with_their", '{len} Aufgabe(n) mit Ausgangsstand geschrieben nach:\n{pfad}\n\nDie KI antwortet mit einem Änderungsvorschlag (glide.exchange, mode „patch“). Ihn über Datei › Datenaustausch › „KI-Ergebnis importieren …“ prüfen und übernehmen.', len=len(paket['items']), pfad=pfad))
             return "break"
 
-        knoepfe.add(self._make_dialog_button(knoepfe, "Abbrechen", dialog.destroy, "muted", width=120))
-        knoepfe.add(self._make_dialog_button(knoepfe, 'Vorschau …', lambda: schreiben(preview=True),
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=120))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_exchange_export_dialog.preview", 'Vorschau …'), lambda: schreiben(preview=True),
                                            'muted', width=120))
-        knoepfe.add(self._make_dialog_button(knoepfe, 'In Zwischenablage kopieren', lambda: schreiben(True),
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_exchange_export_dialog.copy_to_clipboard", 'In Zwischenablage kopieren'), lambda: schreiben(True),
                                            'muted', width=260))
-        knoepfe.add(self._make_dialog_button(knoepfe, "Speichern …", schreiben, "confirm", width=140))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_exchange_export_dialog.save", "Speichern …"), schreiben, "confirm", width=140))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=620, min_height=420)
         self._schedule_windows_chrome_theme(dialog)
@@ -63627,12 +63608,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Felder, die diese Fassung nicht kennt, ist Abbrechen die Vorgabe.
         """
         pfad = path or filedialog.askopenfilename(
-            title="KI-Ergebnis importieren",
+            title=glide_i18n.t("ui.show_exchange_import_dialog.import_ai_result", "KI-Ergebnis importieren"),
             filetypes=[("Glide-Austauschdatei", "*" + self.EXCHANGE_SUFFIX),
                        ("ZIP-Container", "*.zip"),
-                       ("JSON-Datei", "*.json"),
+                       (glide_i18n.t("ui.export_board_json_canvas.json_file", "JSON-Datei"), "*.json"),
                        ("Markdown-Gliederung", "*.md"),
-                       ("Alle Dateien", "*.*")])
+                       (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
         if not pfad:
             return "break"
         try:
@@ -63659,37 +63640,34 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     json.dumps(aus_markdown, ensure_ascii=False))
         if nutzlast is None:
             self.show_error("KI-Import", "\n".join(bericht.errors)
-                            or "Die Datei konnte nicht gelesen werden.")
+                            or glide_i18n.t("ui.show_exchange_import_dialog.the_file_could_not", "Die Datei konnte nicht gelesen werden."))
             return "break"
 
-        dialog = self._new_dialog("KI-Ergebnis importieren")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_exchange_import_dialog.import_ai_result", "KI-Ergebnis importieren"))
         aussen = tk.Frame(dialog, bg=self.theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        self.dialog_label(aussen, "KI-Ergebnis importieren", bold=True, size=16)
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_import_dialog.import_ai_result", "KI-Ergebnis importieren"), bold=True, size=16)
         self.dialog_label(aussen, os.path.basename(pfad), color="muted", pady=(0, 10))
         erzeuger = (nutzlast.get("generator") or {}).get("type", "unbekannt")
-        self.dialog_label(aussen, f"Erzeugt von: {erzeuger} · Austauschformat "
-                                  f"{nutzlast.get('format_version')}", color="muted", pady=(0, 10))
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_import_dialog.created_by_exchange_format", 'Erzeugt von: {erzeuger} · Austauschformat {get}', erzeuger=erzeuger, get=nutzlast.get('format_version')), color="muted", pady=(0, 10))
         self.dialog_label(aussen, "Enthalten:", bold=True, pady=(4, 4))
         self.dialog_label(aussen, " · ".join(bericht.summary_lines()), color="muted", pady=(0, 10))
         if bericht.unknown_fields:
             self.dialog_label(
                 aussen,
-                "Diese Datei verwendet Angaben, die " + APP_NAME + " " + APP_VERSION
-                + " noch nicht kennt:\n– " + "\n– ".join(bericht.unknown_fields)
-                + "\n\nSie werden nicht übernommen. Der Rest lässt sich trotzdem importieren.",
+                glide_i18n.t("ui.show_exchange_import_dialog.this_file_uses_details", 'Diese Datei verwendet Angaben, die {app_name} {app_version} noch nicht kennt:\n– {join}\n\nSie werden nicht übernommen. Der Rest lässt sich trotzdem importieren.', app_name=APP_NAME, app_version=APP_VERSION, join="\n– ".join(bericht.unknown_fields)),
                 color="flag", pady=(0, 10))
         if bericht.warnings:
             sichtbar = bericht.warnings[:8]
             rest = len(bericht.warnings) - len(sichtbar)
-            text = "– " + "\n– ".join(sichtbar) + (f"\n… und {rest} weitere" if rest > 0 else "")
+            text = "– " + "\n– ".join(sichtbar) + (glide_i18n.t("ui.show_exchange_import_dialog.and_more", '\n… und {rest} weitere', rest=rest) if rest > 0 else "")
             self.dialog_label(aussen, "Hinweise:", bold=True, pady=(4, 4))
             self.dialog_label(aussen, text, color="muted", pady=(0, 10))
         self.dialog_label(
             aussen,
-            "Beim Import entstehen ausschließlich neue Listen, Ordner und Punkte. "
+            glide_i18n.t("ui.show_exchange_import_dialog.importing_only_creates_new", "Beim Import entstehen ausschließlich neue Listen, Ordner und Punkte. "
             "Vorhandene Inhalte bleiben unverändert; der Vorgang ist ein einziger "
-            "Rückgängig-Schritt.", color="muted", pady=(0, 10))
+            "Rückgängig-Schritt."), color="muted", pady=(0, 10))
         meldung = self.dialog_label(aussen, "", color="delete", pady=(0, 0))
         knoepfe = ButtonFlow(aussen, bg=self.theme["bg"])
         knoepfe.pack(fill="x", pady=(14, 0))
@@ -63697,22 +63675,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def uebernehmen():
             ergebnis = self.apply_exchange_payload(nutzlast, attachment_source=pfad)
             if ergebnis is None:
-                meldung.configure(text="Der Import wurde nicht gespeichert. "
-                                       "Der Bestand ist unverändert.")
+                meldung.configure(text=glide_i18n.t("ui.uebernehmen.the_import_was_not", "Der Import wurde nicht gespeichert. "
+                                       "Der Bestand ist unverändert."))
                 return "break"
             self.record_data_operation("imported", pfad)
             dialog.destroy()
             self.set_active_list(ergebnis[0]["id"])
             self.show_info("KI-Import",
-                           f"{len(ergebnis)} Liste(n) mit {bericht.total_items} Punkten angelegt.")
+                           glide_i18n.t("ui.uebernehmen.list_s_with_items", '{len} Liste(n) mit {total_items} Punkten angelegt.', len=len(ergebnis), total_items=bericht.total_items))
             return "break"
 
         # Punkt 40: Abbrechen ist die sichere Vorgabe und steht deshalb zuerst
         # auf dem Fokus, wenn die Datei unbekannte Angaben enthält.
         importieren = self._make_dialog_button(
-            knoepfe, "Importieren", uebernehmen,
+            knoepfe, glide_i18n.t("menu.file.import", "Importieren"), uebernehmen,
             "flag" if bericht.unknown_fields else "confirm", width=150)
-        abbrechen = self._make_dialog_button(knoepfe, "Abbrechen", dialog.destroy, "muted", width=120)
+        abbrechen = self._make_dialog_button(knoepfe, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=120)
         knoepfe.add(importieren)
         knoepfe.add(abbrechen)
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
@@ -63725,14 +63703,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def show_exchange_spec_dialog(self, event=None):
         """Zeigt die Kurzbeschreibung des Austauschformats zum Kopieren."""
         text = self.exchange_prompt_text()
-        dialog = self._new_dialog("Austauschformat anzeigen")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_exchange_spec_dialog.show_exchange_format", "Austauschformat anzeigen"))
         aussen = tk.Frame(dialog, bg=self.theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        self.dialog_label(aussen, "Austauschformat", bold=True, size=16)
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_spec_dialog.exchange_format", "Austauschformat"), bold=True, size=16)
         self.dialog_label(
             aussen,
-            "Dieser Text beschreibt das Format so, dass eine KI danach eine gültige "
-            "Glide-Datei erzeugen kann. Kopieren und der Anfrage voranstellen.",
+            glide_i18n.t("ui.show_exchange_spec_dialog.this_text_describes_the", "Dieser Text beschreibt das Format so, dass eine KI danach eine gültige "
+            "Glide-Datei erzeugen kann. Kopieren und der Anfrage voranstellen."),
             color="muted", pady=(4, 10))
         rahmen, feld = self._make_field(aussen)
         rahmen.pack(fill="both", expand=True)
@@ -63751,9 +63729,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.root.clipboard_append(text)
             return "break"
 
-        knoepfe.add(self._make_dialog_button(knoepfe, "In die Zwischenablage", kopieren,
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_exchange_spec_dialog.to_the_clipboard", "In die Zwischenablage"), kopieren,
                                              "confirm", width=190))
-        knoepfe.add(self._make_dialog_button(knoepfe, "Schließen", dialog.destroy, "muted", width=120))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted", width=120))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=760, min_height=560)
         self._schedule_windows_chrome_theme(dialog)
@@ -63827,7 +63805,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if (eintrag["status"] == "ok" and item is not None and eintrag["values"].get("done") is True
                     and self.normalize_repeat(item.get("repeat"))):
                 eintrag["status"] = "invalid"
-                eintrag["messages"].append("Wiederkehrende Aufgabe: bitte in Glide abhaken")
+                eintrag["messages"].append(glide_i18n.t("ui.check_exchange_patch.recurring_task_please_check", "Wiederkehrende Aufgabe: bitte in Glide abhaken"))
         return vorschau, index
 
     def apply_exchange_patch(self, vorschau, index):
@@ -63840,7 +63818,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not anwendbar:
             return None
         if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
-            self.show_warning("Änderungsvorschlag", self.read_only_notice())
+            self.show_warning(glide_i18n.t("ui.apply_exchange_patch.change_proposal", "Änderungsvorschlag"), self.read_only_notice())
             return None
         if self.flush_rich_note() is False or not self.save_items():
             return None
@@ -63850,8 +63828,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                         + datetime.now().strftime("%Y%m%d_%H%M%S_%f") + ".glidebackup")
             self.write_complete_backup(vorsicherung, self.complete_backup_payload())
         except (OSError, ValueError) as fehler:
-            self.show_error("Änderungsvorschlag", "Die Vorsicherung ließ sich nicht schreiben; nichts wurde "
-                                                  f"geändert.\n{fehler}")
+            self.show_error(glide_i18n.t("ui.apply_exchange_patch.change_proposal", "Änderungsvorschlag"), glide_i18n.t("ui.apply_exchange_patch.the_pre_backup_could", 'Die Vorsicherung ließ sich nicht schreiben; nichts wurde geändert.\n{fehler}', fehler=fehler))
             return None
         with self.item_change([item["id"] for item, _werte in anwendbar], restore=False,
                               update_sidebar=True) as change:
@@ -63878,14 +63855,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         try:
             vorschau, index = self.check_exchange_patch(data)
         except glide_exchange_patch.PatchError as fehler:
-            self.show_error("Änderungsvorschlag", str(fehler))
+            self.show_error(glide_i18n.t("ui.show_exchange_patch_dialog.change_proposal", "Änderungsvorschlag"), str(fehler))
             return "break"
         theme = self.theme
         anwendbar = sum(1 for eintrag in vorschau if eintrag["status"] == "ok")
-        dialog = glide_modal_session.create_dialog(self.root, "Änderungsvorschlag prüfen", background=theme["bg"])
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.show_exchange_patch_dialog.check_change_proposal", "Änderungsvorschlag prüfen"), background=theme["bg"])
         aussen = tk.Frame(dialog, bg=theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        self.dialog_label(aussen, "Änderungsvorschlag prüfen", bold=True, size=16)
+        self.dialog_label(aussen, glide_i18n.t("ui.show_exchange_patch_dialog.check_change_proposal", "Änderungsvorschlag prüfen"), bold=True, size=16)
         self.dialog_label(aussen, os.path.basename(pfad), color="muted", pady=(0, 6))
         self.dialog_label(aussen, glide_exchange_patch.summary(vorschau), bold=True, pady=(0, 8))
         rahmen, feld = self._make_field(aussen)
@@ -63899,7 +63876,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         anzeige.tag_configure("konflikt", foreground=theme["flag"])
         for eintrag in vorschau:
             symbol = self.PATCH_STATUS_SYMBOLS.get(eintrag["status"], "·")
-            name = eintrag["title"] or "Unbekannte Aufgabe"
+            name = eintrag["title"] or glide_i18n.t("ui.show_exchange_patch_dialog.unknown_task", "Unbekannte Aufgabe")
             anzeige.insert("end", f"{symbol}  {name}\n", ("titel",))
             for feldname, alt, neu in eintrag["diffs"]:
                 anzeige.insert("end", f"     {feldname}: {glide_backup_diff.describe(alt)} → "
@@ -63909,9 +63886,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                ("konflikt" if eintrag["status"] == "conflict" else "hinweis",))
         anzeige.configure(state="disabled")
         self.dialog_label(
-            aussen, "Übernommen wird nur, was ✓ trägt. Konflikte (⚠) – die Aufgabe hat sich seit dem "
+            aussen, glide_i18n.t("ui.show_exchange_patch_dialog.only_what_carries_is", "Übernommen wird nur, was ✓ trägt. Konflikte (⚠) – die Aufgabe hat sich seit dem "
                     "Kontextpaket geändert –, ungültige und unbekannte Einträge bleiben liegen. Vorher legt "
-                    "Glide eine Vorsicherung an; die Übernahme ist ein Rückgängig-Schritt.",
+                    "Glide eine Vorsicherung an; die Übernahme ist ein Rückgängig-Schritt."),
             color="muted", pady=(10, 0))
         meldung = self.dialog_label(aussen, "", color="delete", pady=(4, 0))
         knoepfe = ButtonFlow(aussen, bg=theme["bg"], align="e")
@@ -63920,7 +63897,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def uebernehmen():
             ergebnis = self.apply_exchange_patch(vorschau, index)
             if ergebnis is None:
-                meldung.configure(text="Nichts übernommen; der Bestand ist unverändert.")
+                meldung.configure(text=glide_i18n.t("ui.uebernehmen.nothing_taken_over_the", "Nichts übernommen; der Bestand ist unverändert."))
                 return "break"
             anzahl, _vorsicherung = ergebnis
             self.record_data_operation("imported", pfad)
@@ -63930,9 +63907,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 n=anzahl))
             return "break"
 
-        knoepfe.add(self._make_dialog_button(knoepfe, "Abbrechen", dialog.destroy, "muted", width=120))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=120))
         if anwendbar:
-            knoepfe.add(self._make_dialog_button(knoepfe, f"{anwendbar} übernehmen", uebernehmen, "confirm",
+            knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_exchange_patch_dialog.apply", '{anwendbar} übernehmen', anwendbar=anwendbar), uebernehmen, "confirm",
                                                  width=160))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=640, min_height=480)
@@ -63949,33 +63926,32 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def page_restore_preview(self, plan, backup):
         """Seite, Anhänge und fehlende Ziele vor einer selektiven Übernahme zeigen."""
         theme = self.theme
-        dialog, outer, footer = self._daily_dialog("Einzelne Seite wiederherstellen", 720, 620)
-        self.dialog_label(outer, "Prüfe den Sicherungsstand und die offenen Verweise. Andere Seiten bleiben "
+        dialog, outer, footer = self._daily_dialog(glide_i18n.t("ui.page_restore_preview.restore_single_page", "Einzelne Seite wiederherstellen"), 720, 620)
+        self.dialog_label(outer, glide_i18n.t("ui.page_restore_preview.check_the_backup_state", "Prüfe den Sicherungsstand und die offenen Verweise. Andere Seiten bleiben "
                           "erhalten. Vor der Übernahme entsteht eine vollständige Vorsicherung; "
-                          "die Änderung ist ein Rückgängig-Schritt.", color="muted", pady=(4, 10))
+                          "die Änderung ist ein Rückgängig-Schritt."), color="muted", pady=(4, 10))
         current = self.page_entry(plan.page["id"])
         source_index = glide_objects.nodes(backup.get("lists", ()), backup.get("trash", ()))
-        lines = ["Seite aus der Sicherung: " + plan.page.get("title", "Seite"), "",
-                 "Heutiger Seitenstand:",
+        lines = [glide_i18n.t("ui.page_restore_preview.page_from_the_backup", 'Seite aus der Sicherung: {get}', get=plan.page.get("title", "Seite")), "",
+                 glide_i18n.t("ui.page_restore_preview.current_page_state", "Heutiger Seitenstand:"),
                  (str((current.get("rich_note") or {}).get("text") or "")[:24000]
-                  if current is not None else "Die Seite ist heute nicht vorhanden."), "",
+                  if current is not None else glide_i18n.t("ui.page_restore_preview.the_page_does_not", "Die Seite ist heute nicht vorhanden.")), "",
                  "Sicherungsstand:", str((plan.page.get("rich_note") or {}).get("text") or "")[:24000], "",
-                 f"{len(plan.attachments)} Anhang/Anhänge werden neu abgelegt:"]
+                 glide_i18n.t("ui.page_restore_preview.attachment_s_will_be", '{len} Anhang/Anhänge werden neu abgelegt:', len=len(plan.attachments))]
         lines += [value.get("name", "Datei") for value in plan.attachments] or ["Keine."]
         if plan.missing_files:
-            lines += ["", "Fehlende Dateien – Wiederherstellung gesperrt:", *plan.missing_files]
+            lines += ["", glide_i18n.t("ui.page_restore_preview.missing_files_restore_blocked", "Fehlende Dateien – Wiederherstellung gesperrt:"), *plan.missing_files]
         if plan.missing_targets:
-            lines += ["", "Fehlende oder nicht aktive Ziele:"]
-            states = {"missing": "fehlt", "trash": "im Papierkorb", "archived": "archiviert"}
+            lines += ["", glide_i18n.t("ui.page_restore_preview.missing_or_inactive_targets", "Fehlende oder nicht aktive Ziele:")]
+            states = {"missing": "fehlt", "trash": glide_i18n.t("ui.page_restore_preview.in_the_trash", "im Papierkorb"), "archived": "archiviert"}
             for kind, identity, state in plan.missing_targets:
                 target = source_index.get((kind, identity))
                 holder = target[1] if target else {}
                 name = holder.get("title") or holder.get("text") or identity
                 lines.append(f"{name}: {states.get(state, state)}")
-            lines += ["Diese Ziele werden nicht mit wiederhergestellt; ihre Verweise bleiben sichtbar."]
+            lines += [glide_i18n.t("ui.page_restore_preview.these_targets_are_not", "Diese Ziele werden nicht mit wiederhergestellt; ihre Verweise bleiben sichtbar.")]
         if plan.remapped_items:
-            lines += ["", f"{len(plan.remapped_items)} Aufgabenkennung(en) müssen neu vergeben werden, "
-                      "weil sie heute einer anderen Seite gehören. Interne Verweise ziehen mit um."]
+            lines += ["", glide_i18n.t("ui.page_restore_preview.task_id_s_must", '{len} Aufgabenkennung(en) müssen neu vergeben werden, weil sie heute einer anderen Seite gehören. Interne Verweise ziehen mit um.', len=len(plan.remapped_items))]
         lines += ["", *plan.warnings]
         frame = tk.Frame(outer, bg=theme["bg"])
         frame.pack(fill="both", expand=True)
@@ -63990,19 +63966,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         preview.insert("1.0", "\n".join(lines))
         preview.configure(state="disabled")
         result = [False]
-        message = self.dialog_label(outer, "" if plan.ready else "Dateien fehlen. Übernahme gesperrt.",
+        message = self.dialog_label(outer, "" if plan.ready else glide_i18n.t("ui.page_restore_preview.files_are_missing_taking", "Dateien fehlen. Übernahme gesperrt."),
                                     color="delete", pady=(6, 0))
         def accept():
             if not plan.ready:
-                message.configure(text="Dateien fehlen. Wähle eine vollständige Sicherung dieser Seite.")
+                message.configure(text=glide_i18n.t("ui.accept.files_are_missing_choose", "Dateien fehlen. Wähle eine vollständige Sicherung dieser Seite."))
                 return "break"
             result[0] = True
             dialog.destroy()
             return "break"
         buttons = ButtonFlow(footer, bg=theme["bg"], align="e")
         buttons.pack(fill="x", pady=(10, 0))
-        buttons.add(self._make_dialog_button(buttons, "Abbrechen", dialog.destroy, "muted", width=120))
-        buttons.add(self._make_dialog_button(buttons, "Seite wiederherstellen", accept, "confirm", width=220))
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=120))
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.page_restore_preview.restore_page", "Seite wiederherstellen"), accept, "confirm", width=220))
         dialog._glide_restore_preview = {"plan": plan, "preview": preview, "accept": accept}
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=720, min_height=620)
@@ -64014,21 +63990,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def notion_import_preview(self, export, plan, page_ids):
         """Quellenvergleich, Auswahl und Konfliktfreigabe vor jeder Bestandsänderung."""
         theme = self.theme
-        dialog, outer, footer = self._daily_dialog("Notion-Export übernehmen", 760, 660)
-        self.dialog_label(outer, "Wähle die Seiten, die du übernehmen möchtest. Bereits unveränderte Quellen "
-                          "werden ausgelassen. Eigene Änderungen brauchen eine zusätzliche Konfliktfreigabe.",
+        dialog, outer, footer = self._daily_dialog(glide_i18n.t("ui.notion_import_preview.take_over_notion_export", "Notion-Export übernehmen"), 760, 660)
+        self.dialog_label(outer, glide_i18n.t("ui.notion_import_preview.choose_the_pages_you", "Wähle die Seiten, die du übernehmen möchtest. Bereits unveränderte Quellen "
+                          "werden ausgelassen. Eigene Änderungen brauchen eine zusätzliche Konfliktfreigabe."),
                           color="muted", pady=(4, 10))
-        status_names = {"new": "Neu", "changed": "Quelle geändert", "conflict": "Konflikt mit eigenem Stand",
-                        "unchanged": "Unverändert", "local-only": "Nur in Glide geändert",
-                        "missing-target": "Glide-Seite fehlt"}
+        status_names = {"new": glide_i18n.t("saved_view.manager.new", "Neu"), "changed": glide_i18n.t("ui.notion_import_preview.source_changed", "Quelle geändert"), "conflict": glide_i18n.t("ui.notion_import_preview.conflict_with_your_own", "Konflikt mit eigenem Stand"),
+                        "unchanged": glide_i18n.t("ui.notion_import_preview.unchanged", "Unverändert"), "local-only": glide_i18n.t("ui.notion_import_preview.changed_in_glide_only", "Nur in Glide geändert"),
+                        "missing-target": glide_i18n.t("ui.notion_import_preview.glide_page_missing", "Glide-Seite fehlt")}
         source_rows = {str(index): row for index, row in enumerate(plan.rows)}
         frame = tk.Frame(outer, bg=theme["bg"])
         frame.pack(fill="both", expand=True)
         # Wie die übrigen Dialogtabellen: Glide-Tabellenstil, eigene Leisten.
         tree = GlideTreeview(frame, columns=("status", "source"), show="tree headings",
                             selectmode="extended", height=6, style="Dialog.Treeview")
-        self.prepare_table(tree, (("#0", "Seite", 200), ("status", "Vergleich", 210),
-                                  ("source", "Quelle im Export", 300)), stretch="source")
+        self.prepare_table(tree, (("#0", glide_i18n.t("ui.render.page", "Seite"), 200), ("status", glide_i18n.t("ui.notion_import_preview.comparison", "Vergleich"), 210),
+                                  ("source", glide_i18n.t("ui.notion_import_preview.source_in_the_export", "Quelle im Export"), 300)), stretch="source")
         vertical = self._dialog_scrollbar(frame)
         vertical.configure(height=1)
         vertical.set_command(tree.yview)
@@ -64051,54 +64027,49 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         details.configure(yscrollcommand=detail_scroll.set)
         detail_scroll.pack(side="right", fill="y")
         details.pack(side="left", fill="both", expand=True)
-        message = self.dialog_label(outer, "Keine Seite zur Übernahme ausgewählt.", color="muted", pady=(6, 0))
+        message = self.dialog_label(outer, glide_i18n.t("ui.notion_import_preview.no_page_selected_for", "Keine Seite zur Übernahme ausgewählt."), color="muted", pady=(6, 0))
         result = [None]
         def selection_changed(_event=None):
             keys = tree.selection()
             rows = [source_rows[key] for key in keys]
             current = source_rows.get(tree.focus())
             losses = tuple(export.losses) + glide_notion_archive.unresolved_links(
-                export, {**page_ids, **{row.page.key: "ausgewählt" for row in rows}})
-            lines = [f"{len(rows)} Seite(n) ausdrücklich ausgewählt.", ""]
+                export, {**page_ids, **{row.page.key: glide_i18n.t("ui.selection_changed.selected", "ausgewählt") for row in rows}})
+            lines = [glide_i18n.t("ui.selection_changed.page_s_explicitly_selected", '{len} Seite(n) ausdrücklich ausgewählt.', len=len(rows)), ""]
             if current is not None:
                 lines += [current.page.title, status_names[current.status], current.page.path, "",
-                          "Text aus dem Export:", current.page.markdown[:24000], "",
-                          "Dateien aus der Quelle:", *current.page.asset_paths, ""]
+                          glide_i18n.t("ui.selection_changed.text_from_the_export", "Text aus dem Export:"), current.page.markdown[:24000], "",
+                          glide_i18n.t("ui.selection_changed.files_from_the_source", "Dateien aus der Quelle:"), *current.page.asset_paths, ""]
                 if len(current.page.markdown) > 24000:
-                    lines.append("Die Textvorschau ist gekürzt; die vollständige Quelle bleibt erhalten.")
+                    lines.append(glide_i18n.t("ui.selection_changed.the_text_preview_is", "Die Textvorschau ist gekürzt; die vollständige Quelle bleibt erhalten."))
                 local = self.page_entry(current.target_id) if current.target_id else None
                 if local is not None:
-                    lines += ["Heutiger Text in Glide:", str((local.get("rich_note") or {}).get("text") or "")[:24000], "",
-                              "Heutige Anhänge:", *[asset.get("name", "Datei") for asset in local.get("attachments", ())], ""]
-            lines += ["Verluste und offene Verweise:"]
-            lines += [f"{loss.path}: {loss.message}" for loss in losses] or ["Keine gemeldet."]
+                    lines += [glide_i18n.t("ui.selection_changed.current_text_in_glide", "Heutiger Text in Glide:"), str((local.get("rich_note") or {}).get("text") or "")[:24000], "",
+                              glide_i18n.t("ui.selection_changed.current_attachments", "Heutige Anhänge:"), *[asset.get("name", "Datei") for asset in local.get("attachments", ())], ""]
+            lines += [glide_i18n.t("ui.selection_changed.losses_and_open_references", "Verluste und offene Verweise:")]
+            lines += [f"{loss.path}: {loss.message}" for loss in losses] or [glide_i18n.t("ui.selection_changed.none_reported", "Keine gemeldet.")]
             if plan.absent_source_keys:
-                lines += ["", f"{len(plan.absent_source_keys)} frühere Quellen fehlen in diesem Export; "
-                           "ihre Glide-Seiten werden beibehalten."]
+                lines += ["", glide_i18n.t("ui.selection_changed.earlier_sources_are_missing", '{len} frühere Quellen fehlen in diesem Export; ihre Glide-Seiten werden beibehalten.', len=len(plan.absent_source_keys))]
             details.configure(state="normal")
             details.delete("1.0", "end")
             details.insert("1.0", "\n".join(lines))
             details.configure(state="disabled")
-            message.configure(text=f"{len(rows)} Seite(n) ausgewählt; "
-                              "Strg/Cmd-Klick oder Umschalt für Mehrfachauswahl.")
+            message.configure(text=glide_i18n.t("ui.selection_changed.page_s_selected_ctrl", '{len} Seite(n) ausgewählt; Strg/Cmd-Klick oder Umschalt für Mehrfachauswahl.', len=len(rows)))
         def accept():
             selection_changed()
             rows = [source_rows[key] for key in tree.selection()]
             if not rows:
-                message.configure(text="Wähle zuerst mindestens eine Seite.")
+                message.configure(text=glide_i18n.t("ui.accept.choose_at_least_one", "Wähle zuerst mindestens eine Seite."))
                 tree.focus_set()
                 return "break"
             if any(row.status in ("unchanged", "local-only") for row in rows):
-                message.configure(text="Unveränderte Quellen und nur lokal geänderte Seiten werden ausgelassen. "
-                                  "Nimm sie aus der Auswahl.")
+                message.configure(text=glide_i18n.t("ui.accept.unchanged_sources_and_pages", "Unveränderte Quellen und nur lokal geänderte Seiten werden ausgelassen. "
+                                  "Nimm sie aus der Auswahl."))
                 return "break"
             conflicts = [row for row in rows if row.status == "conflict"]
             overwrite = tuple(row.page.key for row in conflicts)
-            if conflicts and not self.ask_yes_no("Eigene Seitenänderungen ersetzen?",
-                    "Die Quelle und dein Glide-Stand haben sich verändert. Der gewählte Quellstand ersetzt "
-                    "die Inhalte dieser Seiten:\n\n" + "\n".join(row.page.title for row in conflicts) +
-                    "\n\nVorher wird der gesamte Bestand gesichert. Andere Seiten bleiben erhalten; "
-                    "die Übernahme lässt sich einmal rückgängig machen.", parent=dialog):
+            if conflicts and not self.ask_yes_no(glide_i18n.t("ui.accept.replace_your_own_page", "Eigene Seitenänderungen ersetzen?"),
+                    glide_i18n.t("ui.accept.the_source_and_your", 'Die Quelle und dein Glide-Stand haben sich verändert. Der gewählte Quellstand ersetzt die Inhalte dieser Seiten:\n\n{join}\n\nVorher wird der gesamte Bestand gesichert. Andere Seiten bleiben erhalten; die Übernahme lässt sich einmal rückgängig machen.', join="\n".join(row.page.title for row in conflicts)), parent=dialog):
                 return "break"
             result[0] = (tuple(row.page.key for row in rows), overwrite)
             dialog.destroy()
@@ -64106,8 +64077,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         tree.bind("<<TreeviewSelect>>", selection_changed)
         controls = ButtonFlow(footer, bg=theme["bg"], align="e")
         controls.pack(fill="x", pady=(10, 0))
-        controls.add(self._make_dialog_button(controls, "Abbrechen", dialog.destroy, "muted", width=120))
-        controls.add(self._make_dialog_button(controls, "Ausgewählte übernehmen", accept, "confirm", width=220))
+        controls.add(self._make_dialog_button(controls, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=120))
+        controls.add(self._make_dialog_button(controls, glide_i18n.t("ui.notion_import_preview.take_over_selected", "Ausgewählte übernehmen"), accept, "confirm", width=220))
         dialog._glide_notion_preview = {"tree": tree, "details": details, "accept": accept, "plan": plan}
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=760, min_height=660)
@@ -64119,11 +64090,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def import_notion_archive(self, event=None, *, path=None):
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
-            self.show_warning('Notion-Export übernehmen', self.read_only_notice())
+            self.show_warning(glide_i18n.t("ui.import_notion_archive.take_over_notion_export", 'Notion-Export übernehmen'), self.read_only_notice())
             return False
         if not self.prepare_inspector_switch() or self.flush_rich_note() is False or not self.save_items():
             return False
-        path = path or filedialog.askopenfilename(title='Notion-Export übernehmen', parent=self.root,
+        path = path or filedialog.askopenfilename(title=glide_i18n.t("ui.import_notion_archive.take_over_notion_export", 'Notion-Export übernehmen'), parent=self.root,
                                                   filetypes=[('Notion Markdown & CSV', '*.zip')])
         if not path:
             return False
@@ -64147,7 +64118,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                                      max_depth=self.MAX_FOLDER_DEPTH)
             return self.apply_notion_selection(selection, export, original_bytes, page_hashes, asset_hashes)
         except (OSError, ValueError, zipfile.BadZipFile) as exc:
-            self.show_error('Notion-Export übernehmen', str(exc))
+            self.show_error(glide_i18n.t("ui.import_notion_archive.take_over_notion_export", 'Notion-Export übernehmen'), str(exc))
             return False
 
     def apply_notion_selection(self, selection, export, original_bytes, page_hashes, asset_hashes):
@@ -64258,16 +64229,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def restore_page_from_backup(self, event=None, *, path=None, page_id=None):
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
-            self.show_warning('Seite wiederherstellen', self.read_only_notice())
+            self.show_warning(glide_i18n.t("ui.restore_page_from_backup.restore_page", 'Seite wiederherstellen'), self.read_only_notice())
             return False
         if not self.prepare_inspector_switch():
             return False
         if self.flush_rich_note() is False or not self.save_items():
             return False
         path = path or filedialog.askopenfilename(
-            title='Einzelne Seite aus Sicherung wiederherstellen',
+            title=glide_i18n.t("ui.restore_page_from_backup.restore_single_page_from", 'Einzelne Seite aus Sicherung wiederherstellen'),
             filetypes=[('Glide-Aufgabensicherung', '*.glidebackup'),
-                       ('Frühere JSON-Sicherungen', '*.json'), ('Alle Dateien', '*.*')])
+                       (glide_i18n.t("ui.restore_page_from_backup.earlier_json_backups", 'Frühere JSON-Sicherungen'), '*.json'), (glide_i18n.t("drawing.filetype.all", 'Alle Dateien'), '*.*')])
         if not path:
             return False
         try:
@@ -64275,12 +64246,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             pages = [entry for entry in snapshot.data.get('lists', [])
                      if entry.get('list_kind') == self.LIST_KIND_PAGE]
             if not pages:
-                self.show_info('Seite wiederherstellen', 'Die Sicherung enthält keine Seite.')
+                self.show_info(glide_i18n.t("ui.restore_page_from_backup.restore_page", 'Seite wiederherstellen'), glide_i18n.t("ui.restore_page_from_backup.the_backup_contains_no", 'Die Sicherung enthält keine Seite.'))
                 return False
             if page_id is None:
                 page_id = self.themed_choice_dialog(
-                    'Seite wiederherstellen', 'Welche Seite soll aus dieser Sicherung zurückkehren?',
-                    [(entry['id'], entry.get('title') or 'Seite') for entry in pages])
+                    glide_i18n.t("ui.restore_page_from_backup.restore_page", 'Seite wiederherstellen'), glide_i18n.t("ui.restore_page_from_backup.which_page_should_come", 'Welche Seite soll aus dieser Sicherung zurückkehren?'),
+                    [(entry['id'], entry.get('title') or glide_i18n.t("ui.render.page", 'Seite')) for entry in pages])
             if page_id is None:
                 return False
             # Gekürzte Anhangsnamen: alte Sicherungen über die Umbenennungsliste auflösen.
@@ -64301,7 +64272,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 max_total_bytes=self.MAX_BACKUP_TOTAL_BYTES, local_paths=local_paths)
             return self.apply_page_restore(plan, snapshot, assets)
         except (OSError, ValueError, zipfile.BadZipFile) as exc:
-            self.show_error('Seite wiederherstellen', str(exc))
+            self.show_error(glide_i18n.t("ui.restore_page_from_backup.restore_page", 'Seite wiederherstellen'), str(exc))
             return False
 
     def apply_page_restore(self, plan, snapshot, assets):
@@ -64393,14 +64364,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def show_backup_catalog(self, event=None):
         """Sicherungen finden, lesend prüfen und bestehende Vergleichs-/Restorewege öffnen."""
         theme = self.theme
-        dialog = glide_modal_session.create_dialog(self.root, "Sicherungsübersicht", background=theme["bg"])
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.show_backup_catalog.backup_overview", "Sicherungsübersicht"), background=theme["bg"])
         dialog.geometry("800x600")
         dialog.minsize(600, 480)
         outer = tk.Frame(dialog, bg=theme["bg"])
         outer.pack(fill="both", expand=True, padx=20, pady=16)
-        self.dialog_label(outer, "Sicherungsübersicht", bold=True, size=16)
-        self.dialog_label(outer, "Automatische Sicherungen und selbst gewählte Dateien. "
-                          "Die Übersicht verändert keine Sicherung.", color="muted", pady=(4, 10))
+        self.dialog_label(outer, glide_i18n.t("ui.show_backup_catalog.backup_overview", "Sicherungsübersicht"), bold=True, size=16)
+        self.dialog_label(outer, glide_i18n.t("ui.show_backup_catalog.automatic_backups_and_files", "Automatische Sicherungen und selbst gewählte Dateien. "
+                          "Die Übersicht verändert keine Sicherung."), color="muted", pady=(4, 10))
         footer = ButtonFlow(outer, bg=theme["bg"])
         footer.pack(side="bottom", fill="x", pady=(12, 0))
         detail = tk.Label(outer, name="backup_detail", text="", anchor="w", justify="left",
@@ -64412,7 +64383,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         summary.pack(side="bottom", fill="x", pady=(6, 0))
         search = tk.Frame(outer, bg=theme["bg"])
         search.pack(fill="x", pady=(0, 10))
-        tk.Label(search, text="Suchen", bg=theme["bg"], fg=theme["muted"],
+        tk.Label(search, text=glide_i18n.t("ui.build_side_navigation.search", "Suchen"), bg=theme["bg"], fg=theme["muted"],
                  font=app_font(10)).pack(side="left", padx=(0, 8))
         query = tk.StringVar(dialog)
         frame, field = self._make_field(search)
@@ -64425,10 +64396,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         area.pack(fill="both", expand=True)
         tree = GlideTreeview(area, name="backup_files", columns=("date", "size", "kind"),
                             show="tree headings", selectmode="browse", height=7)
-        tree.heading("#0", text="Datei")
+        tree.heading("#0", text=glide_i18n.t("menu.file", "Datei"))
         tree.column("#0", width=260, minwidth=110, stretch=True)
-        for key, title, width in (("date", "Geändert", 128), ("size", "Größe", 86),
-                                  ("kind", "Dateityp", 140)):
+        for key, title, width in (("date", glide_i18n.t("ui.show_backup_catalog.changed", "Geändert"), 128), ("size", glide_i18n.t("drawing.frame.size", "Größe"), 86),
+                                  ("kind", glide_i18n.t("ui.show_backup_catalog.file_type", "Dateityp"), 140)):
             tree.heading(key, text=title)
             tree.column(key, width=width, minwidth=width, stretch=False)
         # D66: beide Leisten gezeichnet wie überall sonst, keine Systemleisten.
@@ -64450,7 +64421,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for button in selection_buttons:
                 button.configure(state="normal" if row else "disabled")
             detail.configure(text=(f"{row.name}\n{row.kind} · {row.date_text} · {row.size_text}"
-                                   if row else "Keine Sicherung ausgewählt."))
+                                   if row else glide_i18n.t("ui.selection_changed.no_backup_selected", "Keine Sicherung ausgewählt.")))
 
         def render(*_args):
             old = selected()
@@ -64461,7 +64432,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for identity, row in state["rows"].items():
                 tree.insert("", "end", iid=identity, text=row.name,
                             values=(row.date_text, row.size_text, row.kind))
-            summary.configure(text=f"{len(rows)} von {len(state['entries'])} Sicherungen")
+            summary.configure(text=glide_i18n.t("ui.render.of_backups", '{len} von {len2} Sicherungen', len=len(rows), len2=len(state['entries'])))
             if rows:
                 identity = next((key for key, row in state["rows"].items() if row.path == old_path), "0")
                 tree.selection_set(identity)
@@ -64475,8 +64446,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             render()
 
         def choose_file():
-            path = filedialog.askopenfilename(parent=dialog, title="Sicherung zur Übersicht hinzufügen",
-                filetypes=[("Glide-Sicherungen", "*.glidebackup *.glideapp *.json"), ("Alle Dateien", "*.*")])
+            path = filedialog.askopenfilename(parent=dialog, title=glide_i18n.t("ui.choose_file.add_backup_to_the", "Sicherung zur Übersicht hinzufügen"),
+                filetypes=[("Glide-Sicherungen", "*.glidebackup *.glideapp *.json"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
             if path:
                 state["extra"].append(path)
                 query.set("")
@@ -64493,9 +64464,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 return
             try:
                 data = self.read_backup_for_compare(row.path)
-                detail.configure(text="Datenteil gelesen: " + glide_backup_catalog.describe(data))
+                detail.configure(text=glide_i18n.t("ui.read_selected.data_part_read", 'Datenteil gelesen: {describe}', describe=glide_backup_catalog.describe(data)))
             except (OSError, ValueError, TypeError, zipfile.BadZipFile) as exc:
-                detail.configure(text=f"Lesen fehlgeschlagen: {exc}")
+                detail.configure(text=glide_i18n.t("ui.read_selected.reading_failed", 'Lesen fehlgeschlagen: {exc}', exc=exc))
 
         def open_action(kind):
             row = selected()
@@ -64512,18 +64483,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self._register_after(self.root.after_idle(command))
             return "break"
 
-        self._make_dialog_button(search, "Aktualisieren", refresh, "muted", width=126).pack(
+        self._make_dialog_button(search, glide_i18n.t("ui.show_backup_catalog.refresh", "Aktualisieren"), refresh, "muted", width=126).pack(
             side="left", padx=(8, 0))
         selection_buttons = []
-        footer.add(self._make_dialog_button(footer, "Datei …", choose_file, "import", width=100))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("ui.show_backup_catalog.file", "Datei …"), choose_file, "import", width=100))
         for text, command, role, width in (
-                ("Lesen", read_selected, "muted", 90),
-                ("Vergleichen", lambda: open_action("compare"), "export", 126),
-                ("Wiederherstellen …", lambda: open_action("restore"), "muted", 170)):
+                (glide_i18n.t("ui.show_backup_catalog.read", "Lesen"), read_selected, "muted", 90),
+                (glide_i18n.t("ui.show_backup_catalog.compare", "Vergleichen"), lambda: open_action("compare"), "export", 126),
+                (glide_i18n.t("ui.show_backup_catalog.restore", "Wiederherstellen …"), lambda: open_action("restore"), "muted", 170)):
             button = self._make_dialog_button(footer, text, command, role, width=width)
             selection_buttons.append(button)
             footer.add(button)
-        footer.add(self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted", width=100))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted", width=100))
         query_trace = query.trace_add("write", render)
 
         def release_query_trace(event):
@@ -64546,7 +64517,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def backup_compare_sources(self):
         """[(Name, Pfad)] – der aktuelle Bestand (Pfad None), dann die automatischen Sicherungen, neueste zuerst."""
-        quellen = [("Aktueller Bestand", None)]
+        quellen = [(glide_i18n.t("ui.backup_compare_sources.current_data", "Aktueller Bestand"), None)]
         try:
             pfade = [os.path.join(BACKUP_DIR, name) for name in os.listdir(BACKUP_DIR)
                      if name.startswith("liste_backup_") and name.endswith(".json")]
@@ -64555,7 +64526,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             pfade = []
         for pfad in pfade[:self.BACKUP_COMPARE_LIMIT]:
             stempel = datetime.fromtimestamp(os.path.getmtime(pfad)).strftime("%d.%m.%Y %H:%M:%S")
-            name = f"Automatische Sicherung vom {stempel}"
+            name = glide_i18n.t("ui.backup_compare_sources.automatic_backup_from", 'Automatische Sicherung vom {stempel}', stempel=stempel)
             if any(label == name for label, _ in quellen):
                 name += f" · {os.path.basename(pfad)}"
             quellen.append((name, pfad))
@@ -64582,10 +64553,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def backup_compare_text(self, ergebnis):
         """Zeilen des Vergleichs: (Text, Tag) – Überschriften fett, je Abschnitt begrenzt."""
         zeilen = []
-        abschnitte = (("lists_added", "Listen neu"), ("lists_removed", "Listen entfernt"),
-                      ("lists_changed", "Listen geändert"), ("items_added", "Aufgaben neu"),
-                      ("items_removed", "Aufgaben entfernt"), ("items_moved", "Aufgaben verschoben"),
-                      ("items_changed", "Aufgaben geändert"))
+        abschnitte = (("lists_added", glide_i18n.t("ui.backup_compare_text.lists_new", "Listen neu")), ("lists_removed", glide_i18n.t("ui.backup_compare_text.lists_removed", "Listen entfernt")),
+                      ("lists_changed", glide_i18n.t("ui.backup_compare_text.lists_changed", "Listen geändert")), ("items_added", glide_i18n.t("ui.backup_compare_text.tasks_new", "Aufgaben neu")),
+                      ("items_removed", glide_i18n.t("ui.backup_compare_text.tasks_removed", "Aufgaben entfernt")), ("items_moved", glide_i18n.t("ui.backup_compare_text.tasks_moved", "Aufgaben verschoben")),
+                      ("items_changed", glide_i18n.t("ui.backup_compare_text.tasks_changed", "Aufgaben geändert")))
         for key, titel in abschnitte:
             eintraege = ergebnis[key]
             if not eintraege:
@@ -64605,7 +64576,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     zeilen.append((f"   {eintrag[1]}  · {eintrag[2]}", None))
                     zeilen += [(f"      {feld}: {alt} → {neu}", "hinweis") for feld, alt, neu in eintrag[3]]
             if len(eintraege) > self.BACKUP_COMPARE_LINES:
-                zeilen.append((f"   … und {len(eintraege) - self.BACKUP_COMPARE_LINES} weitere", "hinweis"))
+                zeilen.append((glide_i18n.t("ui.backup_compare_text.and_more", '   … und {wert} weitere', wert=len(eintraege) - self.BACKUP_COMPARE_LINES), "hinweis"))
         return zeilen
 
     def show_backup_compare_dialog(self, event=None, *, older_path=None, newer_path=None):
@@ -64629,15 +64600,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             alt_var.set(glide_backup_catalog.choice_label(list(pfade.items()), older_path))
         if newer_path is not None:
             neu_var.set(glide_backup_catalog.choice_label(list(pfade.items()), newer_path))
-        dialog = glide_modal_session.create_dialog(self.root, "Sicherungen vergleichen", background=theme["bg"])
+        dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.show_backup_compare_dialog.compare_backups", "Sicherungen vergleichen"), background=theme["bg"])
         aussen = tk.Frame(dialog, bg=theme["bg"])
         aussen.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        self.dialog_label(aussen, "Sicherungen vergleichen", bold=True, size=16)
-        self.dialog_label(aussen, "Zeigt, was sich zwischen zwei Ständen an Listen und Aufgaben unterscheidet. "
-                                  "Nur lesend: Nichts wird wiederhergestellt oder geschrieben.",
+        self.dialog_label(aussen, glide_i18n.t("ui.show_backup_compare_dialog.compare_backups", "Sicherungen vergleichen"), bold=True, size=16)
+        self.dialog_label(aussen, glide_i18n.t("ui.show_backup_compare_dialog.shows_how_lists_and", "Zeigt, was sich zwischen zwei Ständen an Listen und Aufgaben unterscheidet. "
+                                  "Nur lesend: Nichts wird wiederhergestellt oder geschrieben."),
                           color="muted", pady=(4, 10))
         menues = {}
-        for beschriftung, variable in (("Älterer Stand", alt_var), ("Neuerer Stand", neu_var)):
+        for beschriftung, variable in ((glide_i18n.t("ui.show_backup_compare_dialog.older_state", "Älterer Stand"), alt_var), (glide_i18n.t("ui.show_backup_compare_dialog.newer_state", "Neuerer Stand"), neu_var)):
             self._make_field_label(aussen, beschriftung).pack(anchor="w", pady=(4, 4))
             zeile = tk.Frame(aussen, bg=theme["bg"])
             zeile.pack(fill="x")
@@ -64647,8 +64618,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
             def datei(variable=variable):
                 pfad = filedialog.askopenfilename(
-                    title="Sicherung wählen", parent=dialog,
-                    filetypes=[("Glide-Sicherung", "*.glidebackup *.glideapp *.json"), ("Alle Dateien", "*.*")])
+                    title=glide_i18n.t("ui.datei.choose_backup", "Sicherung wählen"), parent=dialog,
+                    filetypes=[("Glide-Sicherung", "*.glidebackup *.glideapp *.json"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
                 if not pfad:
                     return "break"
                 name = glide_backup_catalog.choice_label(list(pfade.items()), pfad)
@@ -64662,7 +64633,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 variable.set(name)
                 return "break"
 
-            self._make_dialog_button(zeile, "Datei …", datei, "muted", width=100).pack(side="left", padx=(8, 0))
+            self._make_dialog_button(zeile, glide_i18n.t("ui.show_backup_compare_dialog.file", "Datei …"), datei, "muted", width=100).pack(side="left", padx=(8, 0))
         zusammenfassung = self.dialog_label(aussen, "", bold=True, pady=(12, 6))
         rahmen, feld = self._make_field(aussen)
         rahmen.pack(fill="both", expand=True)
@@ -64681,7 +64652,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 alt = self.read_backup_for_compare(pfade.get(alt_var.get()))
                 neu = self.read_backup_for_compare(pfade.get(neu_var.get()))
             except (OSError, ValueError, zipfile.BadZipFile) as fehler:
-                meldung.configure(text=f"Lesen fehlgeschlagen: {fehler}")
+                meldung.configure(text=glide_i18n.t("ui.vergleichen.reading_failed", 'Lesen fehlgeschlagen: {fehler}', fehler=fehler))
                 return "break"
             ergebnis = glide_backup_diff.compare(alt, neu)
             dialog._glide_compare = ergebnis
@@ -64695,8 +64666,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         knoepfe = ButtonFlow(aussen, bg=theme["bg"], align="e")
         knoepfe.pack(fill="x", pady=(12, 0))
-        knoepfe.add(self._make_dialog_button(knoepfe, "Schließen", dialog.destroy, "muted", width=120))
-        knoepfe.add(self._make_dialog_button(knoepfe, "Vergleichen", vergleichen, "confirm", width=140))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted", width=120))
+        knoepfe.add(self._make_dialog_button(knoepfe, glide_i18n.t("ui.show_backup_compare_dialog.compare", "Vergleichen"), vergleichen, "confirm", width=140))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=680, min_height=560)
         self._schedule_windows_chrome_theme(dialog)
@@ -64812,8 +64783,8 @@ Labels, Termine und Metadaten."""
     def show_csv_import_dialog(self, event=None, path=None, append_to_current=None):
         """CSV-Datei wählen, Spalten zuordnen, Vorschau prüfen, übernehmen."""
         path = path or filedialog.askopenfilename(
-            title="CSV-Datei importieren",
-            filetypes=[("CSV-Datei", "*.csv"), ("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+            title=glide_i18n.t("ui.show_csv_import_dialog.import_csv_file", "CSV-Datei importieren"),
+            filetypes=[(glide_i18n.t("ui.show_csv_import_dialog.csv_file", "CSV-Datei"), "*.csv"), (glide_i18n.t("ui.export_folder_as.text_file", "Textdatei"), "*.txt"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return "break"
@@ -64826,7 +64797,7 @@ Labels, Termine und Metadaten."""
         zustand["table"] = tabelle
         zustand["mapping"] = self.csv_auto_mapping(tabelle)
 
-        dialog = self._new_dialog("CSV importieren", resizable=(True, True))
+        dialog = self._new_dialog(glide_i18n.t("ui.show_csv_import_dialog.import_csv", "CSV importieren"), resizable=(True, True))
         fuss = tk.Frame(dialog, bg=self.theme["bg"])
         fuss.pack(side="bottom", fill="x", padx=self.DIALOG_PAD_X, pady=12)
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -64843,7 +64814,7 @@ Labels, Termine und Metadaten."""
         canvas.bind("<Configure>", lambda ereignis: canvas.itemconfigure(fenster, width=ereignis.width))
         self.bind_mousewheel(dialog, target=canvas)
 
-        tk.Label(body, text="CSV importieren", font=app_font(15, "bold"),
+        tk.Label(body, text=glide_i18n.t("ui.show_csv_import_dialog.import_csv", "CSV importieren"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
         kopfzeile = tk.Label(body, text="", font=app_font(10), bg=self.theme["bg"],
                              fg=self.theme["muted"], justify="left", wraplength=700, anchor="w")
@@ -64860,11 +64831,11 @@ Labels, Termine und Metadaten."""
         links.grid(row=0, column=0, sticky="new", padx=(0, 12))
         rechts = tk.Frame(form, bg=self.theme["bg"])
         rechts.grid(row=0, column=1, sticky="new", padx=(12, 0))
-        self._make_field_label(links, "Trennzeichen").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(links, glide_i18n.t("ui.show_csv_import_dialog.separator", "Trennzeichen")).pack(anchor="w", pady=(0, 5))
         feld_trenn, _knopf = self._make_option_menu(links, trenn_var,
                                                     [text for _key, text in self.CSV_DELIMITER_CHOICES])
         feld_trenn.pack(fill="x")
-        self._make_field_label(rechts, "Kodierung").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(rechts, glide_i18n.t("ui.show_csv_import_dialog.encoding", "Kodierung")).pack(anchor="w", pady=(0, 5))
         feld_kod, _knopf = self._make_option_menu(rechts, kod_var,
                                                   [text for _key, text in self.CSV_ENCODING_CHOICES])
         feld_kod.pack(fill="x")
@@ -64928,11 +64899,9 @@ Labels, Termine und Metadaten."""
 
         def beschrifte_kopf():
             trennzeichen = zustand["table"]["delimiter"]
-            sichtbar = {"\t": "Tabulator", ";": "Semikolon", ",": "Komma", "|": "senkrechter Strich"}
+            sichtbar = {"\t": "Tabulator", ";": glide_i18n.t("ui.beschrifte_kopf.semicolon", "Semikolon"), ",": glide_i18n.t("ui.beschrifte_kopf.comma", "Komma"), "|": glide_i18n.t("ui.beschrifte_kopf.vertical_bar", "senkrechter Strich")}
             kopfzeile.configure(text=(
-                f"{os.path.basename(zustand['table']['path'])} · Kodierung "
-                f"{zustand['table']['encoding']} · Trennzeichen {sichtbar.get(trennzeichen, trennzeichen)} · "
-                f"{len(zustand['table']['rows'])} Datenzeilen · {len(zustand['table']['columns'])} Spalten"
+                glide_i18n.t("ui.beschrifte_kopf.encoding_separator_data_rows", '{basename} · Kodierung {encoding} · Trennzeichen {get} · {len} Datenzeilen · {len2} Spalten', basename=os.path.basename(zustand['table']['path']), encoding=zustand['table']['encoding'], get=sichtbar.get(trennzeichen, trennzeichen), len=len(zustand['table']['rows']), len2=len(zustand['table']['columns']))
             ))
 
         def lade_neu(*_args):
@@ -64952,14 +64921,14 @@ Labels, Termine und Metadaten."""
             aktualisiere_vorschau()
 
         GlideCheckbutton(
-            body, name="csv_header", text="Erste Zeile enthält Spaltennamen", variable=kopf_var,
+            body, name="csv_header", text=glide_i18n.t("ui.show_csv_import_dialog.first_row_contains_column", "Erste Zeile enthält Spaltennamen"), variable=kopf_var,
             command=lade_neu, bg=self.theme["bg"], fg=self.theme["text"],
             selectcolor=self.theme["input"], activebackground=self.theme["bg"],
             activeforeground=self.theme["text"], anchor="w", font=app_font(10),
             highlightthickness=0,
         ).pack(fill="x", pady=(14, 2))
         GlideCheckbutton(
-            body, name="csv_nest", text="Verschachtelung aus Ebene oder Nummer übernehmen",
+            body, name="csv_nest", text=glide_i18n.t("ui.show_csv_import_dialog.take_over_nesting_from", "Verschachtelung aus Ebene oder Nummer übernehmen"),
             variable=nest_var, command=lambda: aktualisiere_vorschau(),
             bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
             activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -64967,8 +64936,8 @@ Labels, Termine und Metadaten."""
         ).pack(fill="x", pady=2)
         GlideCheckbutton(
             body, name="csv_append",
-            text=(f"An die geöffnete Liste „{self.app_title}“ anhängen (sonst als neue Liste)"
-                  if liste_offen else "An die geöffnete Liste anhängen (keine Liste geöffnet)"),
+            text=(glide_i18n.t("ui.show_csv_import_dialog.append_to_the_open", 'An die geöffnete Liste „{app_title}“ anhängen (sonst als neue Liste)', app_title=self.app_title)
+                  if liste_offen else glide_i18n.t("ui.show_csv_import_dialog.append_to_the_open_2", "An die geöffnete Liste anhängen (keine Liste geöffnet)")),
             variable=anhaengen_var, state="normal" if liste_offen else "disabled",
             bg=self.theme["bg"], fg=self.theme["text"] if liste_offen else self.theme["muted"],
             selectcolor=self.theme["input"], activebackground=self.theme["bg"],
@@ -64976,10 +64945,10 @@ Labels, Termine und Metadaten."""
             highlightthickness=0, disabledforeground=self.theme["muted"],
         ).pack(fill="x", pady=(2, 14))
 
-        tk.Label(body, text="Zuordnung", font=app_font(11, "bold"),
+        tk.Label(body, text=glide_i18n.t("ui.show_csv_import_dialog.mapping", "Zuordnung"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 8))
         zuordnung_rahmen.pack(fill="x")
-        tk.Label(body, text="Vorschau", font=app_font(11, "bold"),
+        tk.Label(body, text=glide_i18n.t("drawing.button.preview", "Vorschau"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(6, 6))
         vorschau.pack(fill="both", expand=True)
         hinweis.pack(anchor="w", pady=(10, 0))
@@ -65001,17 +64970,16 @@ Labels, Termine und Metadaten."""
                 return "break"
             dialog.destroy()
             if ziel is None:
-                self.show_warning("CSV-Import", "Mit dieser Zuordnung entstand kein Punkt.\n"
-                                                + self.csv_import_summary(bericht))
+                self.show_warning("CSV-Import", glide_i18n.t("ui.importiere.this_mapping_created_no", 'Mit dieser Zuordnung entstand kein Punkt.\n{csv_import_summary}', csv_import_summary=self.csv_import_summary(bericht)))
             else:
                 self.record_data_operation("imported", path)
-                self.show_info("Import erfolgreich", self.csv_import_summary(bericht, ziel))
+                self.show_info(glide_i18n.t("ui.importiere.import_successful", "Import erfolgreich"), self.csv_import_summary(bericht, ziel))
             return "break"
 
         flow = ButtonFlow(fuss, bg=self.theme["bg"], gap=10)
         flow.pack(fill="x")
-        flow.add(self._make_dialog_button(flow, "Abbrechen", dialog.destroy, "muted"))
-        flow.add(self._make_dialog_button(flow, "Importieren", importiere, "confirm"))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("menu.file.import", "Importieren"), importiere, "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.minsize(700, 560)
         self._center_dialog(dialog, min_width=820, min_height=620)
@@ -65388,23 +65356,23 @@ Labels, Termine und Metadaten."""
         self.sync_current_list_reference()
         default_filename = f"glide_backup_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.glidebackup"
         path = filedialog.asksaveasfilename(
-            title="Aufgabensicherung speichern (alle Listen)",
+            title=glide_i18n.t("ui.export_full_backup.save_task_backup_all", "Aufgabensicherung speichern (alle Listen)"),
             defaultextension=".glidebackup",
             initialfile=default_filename,
-            filetypes=[("Glide-Aufgabensicherung", "*.glidebackup"), ("Alle Dateien", "*.*")],
+            filetypes=[("Glide-Aufgabensicherung", "*.glidebackup"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
         try:
             count = self.write_complete_backup(path, self.complete_backup_payload())
-            attachment_word = "Anhang" if count == 1 else "Anhängen"
+            attachment_word = glide_i18n.t("ui.export_full_backup.attachment", "Anhang") if count == 1 else glide_i18n.t("ui.export_full_backup.attachments", "Anhängen")
             self.record_data_operation("backup", path)
             self.show_info(
-                "Backup erstellt",
-                f"Aufgabensicherung mit {count} {attachment_word} gespeichert nach:\n{path}",
+                glide_i18n.t("feedback.backup", "Backup erstellt"),
+                glide_i18n.t("ui.export_full_backup.task_backup_with_saved", 'Aufgabensicherung mit {count} {attachment_word} gespeichert nach:\n{path}', count=count, attachment_word=attachment_word, path=path),
             )
         except Exception as e:
-            self.show_error("Fehler beim Backup", str(e))
+            self.show_error(glide_i18n.t("ui.export_full_backup.error_while_backing_up", "Fehler beim Backup"), str(e))
 
     # --- Druck- und PDF-Ausgabe ---------------------------------------------
 
@@ -65430,34 +65398,34 @@ Labels, Termine und Metadaten."""
         heute = date.today()
         abschnitte = []
         if fmt == "today":
-            titel = "Tageszettel"
+            titel = glide_i18n.t("ui.print_document_sections.day_sheet", "Tageszettel")
             untertitel = f"{self.WEEKDAY_NAMES[heute.weekday()]}, {heute.strftime('%d.%m.%Y')}"
             geplant = self.plan_day_entries(apply_filters=False, day=heute.isoformat())
             if geplant:
-                abschnitte.append(("Tagesplan",
+                abschnitte.append((glide_i18n.t("ui.print_document_sections.day_plan", "Tagesplan"),
                                    [(0, eintrag[4], eintrag[3]) for eintrag in geplant]))
             faellig = [eintrag for eintrag in self.get_in_progress_items(apply_filters=False)
                        if self.normalize_due(eintrag[4].get("due")) == heute.isoformat()]
             if faellig:
-                abschnitte.append(("Heute fällig", [(0, eintrag[4], eintrag[3]) for eintrag in faellig]))
+                abschnitte.append((glide_i18n.t("ui.refresh_task_overview.due_today", "Heute fällig"), [(0, eintrag[4], eintrag[3]) for eintrag in faellig]))
             ueberfaellig = self.get_overdue_items(apply_filters=False)
             if ueberfaellig:
-                abschnitte.append(("Überfällig", [(0, eintrag[4], eintrag[3]) for eintrag in ueberfaellig]))
+                abschnitte.append((glide_i18n.t("saved_view.choice.due_overdue", "Überfällig"), [(0, eintrag[4], eintrag[3]) for eintrag in ueberfaellig]))
         elif fmt == "planday":
             ziel = self.normalize_due(day) or self.plan_day()
-            titel = "Tagesplanung"
+            titel = glide_i18n.t("ui.print_document_sections.day_planning", "Tagesplanung")
             untertitel = self.format_plan_day(ziel)
             eintraege = self.plan_day_entries(apply_filters=False, day=ziel)
             if eintraege:
-                abschnitte.append((f"Bearbeitungstag {self.format_due_display(ziel)}",
+                abschnitte.append((glide_i18n.t("ui.set_group_value.work_day", 'Bearbeitungstag {format_due_display}', format_due_display=self.format_due_display(ziel)),
                                    [(0, eintrag[4], eintrag[3]) for eintrag in eintraege]))
         else:
             # Liste und Checkliste teilen die Datengrundlage und unterscheiden
             # sich nur in der Darstellung.
             ordner = self.get_folder(self.active_folder_id) if self.view_mode == "folder" else None
             if ordner:
-                titel = str(ordner.get("title") or "Ordner")
-                untertitel = "Ordner mit allen enthaltenen Listen"
+                titel = str(ordner.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
+                untertitel = glide_i18n.t("ui.print_document_sections.folder_with_all_contained", "Ordner mit allen enthaltenen Listen")
                 for entry in self.get_folder_lists_recursive(ordner.get("id")):
                     punkte = self.flatten_print_items(entry.get("items", []), entry)
                     if punkte:
@@ -65465,12 +65433,12 @@ Labels, Termine und Metadaten."""
             else:
                 entry = self.current_list() if self.lists else None
                 if entry is None:
-                    return "Glide", "Keine Liste geöffnet", []
-                titel = str(entry.get("title") or "Liste")
+                    return "Glide", glide_i18n.t("ui.print_document_sections.no_list_open", "Keine Liste geöffnet"), []
+                titel = str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste"))
                 untertitel = self.list_path_title(entry)
                 abschnitte.append((titel, self.flatten_print_items(entry.get("items", []), entry)))
             if fmt == "checklist":
-                untertitel = (untertitel + " · Checkliste") if untertitel else "Checkliste"
+                untertitel = (glide_i18n.t("ui.print_document_sections.checklist", '{untertitel} · Checkliste', untertitel=untertitel)) if untertitel else glide_i18n.t("ui.add_detail_pane_step.checklist", "Checkliste")
         return titel, untertitel, abschnitte
 
     def flatten_print_items(self, items, source, level=0):
@@ -65489,27 +65457,27 @@ Labels, Termine und Metadaten."""
         if options.get("due"):
             frist = self.format_due_full(item.get("due"), item.get("due_time"))
             if frist:
-                teile.append("Fällig: " + frist)
+                teile.append(glide_i18n.t("ui.board_region_lines.due", 'Fällig: {frist}', frist=frist))
             wiederholung = self.describe_repeat(item.get("repeat"))
             if wiederholung:
                 teile.append(wiederholung)
         if options.get("effort"):
             if item.get("planned_date"):
-                teile.append("Bearbeitungstag: " + self.format_due_display(item.get("planned_date")))
+                teile.append(glide_i18n.t("ui.print_item_details.work_day", 'Bearbeitungstag: {format_due_display}', format_due_display=self.format_due_display(item.get("planned_date"))))
             aufwand = self.format_estimated_minutes(item.get("estimated_minutes"))
             if aufwand:
-                teile.append("Aufwand: " + aufwand)
+                teile.append(glide_i18n.t("ui.print_item_details.effort", 'Aufwand: {aufwand}', aufwand=aufwand))
         if options.get("labels"):
             namen = [str(label.get("name") or "") for label in self.item_labels(item)]
             namen = [name for name in namen if name]
             if namen:
-                teile.append("Labels: " + ", ".join(namen))
+                teile.append(glide_i18n.t("ui.print_item_details.labels", 'Labels: {join}', join=", ".join(namen)))
         fortschritt = self.checklist_progress(item)
         if fortschritt["total"]:
-            teile.append(f"Checkliste: {fortschritt['done']} von {fortschritt['total']}")
+            teile.append(glide_i18n.t("ui.print_item_details.checklist_of", 'Checkliste: {done} von {total}', done=fortschritt['done'], total=fortschritt['total']))
         anhaenge = len(item.get("attachments", []) or [])
         if anhaenge:
-            teile.append(f"{anhaenge} Anhang" if anhaenge == 1 else f"{anhaenge} Anhänge")
+            teile.append(glide_i18n.t("ui.print_item_details.attachment", '{anhaenge} Anhang', anhaenge=anhaenge) if anhaenge == 1 else glide_i18n.t("ui.print_item_details.attachments", '{anhaenge} Anhänge', anhaenge=anhaenge))
         return teile
 
     def build_print_html(self, fmt, options=None, day=None):
@@ -65598,14 +65566,13 @@ Labels, Termine und Metadaten."""
             if begrenzt:
                 break
         if not sichtbare_abschnitte:
-            zeilen.append('<p class="empty">Für diese Auswahl gibt es nichts zu drucken.</p>')
+            zeilen.append(glide_i18n.t("ui.build_print_html.p_class_empty_there", '<p class="empty">Für diese Auswahl gibt es nichts zu drucken.</p>'))
         if begrenzt:
-            zeilen.append(f'<p class="empty">Nach {self.MAX_PRINT_ITEMS} Punkten abgeschnitten. '
-                          "Bitte die Auswahl eingrenzen.</p>")
+            zeilen.append(glide_i18n.t("ui.build_print_html.p_class_empty_cut", '<p class="empty">Nach {max_print_items} Punkten abgeschnitten. Bitte die Auswahl eingrenzen.</p>', max_print_items=self.MAX_PRINT_ITEMS))
         if options.get("notes"):
             zeilen.append('<div class="lines">' + "<span></span>" * 8 + "</div>")
         erzeugt = datetime.now().strftime("%d.%m.%Y um %H:%M")
-        fuss = f"{APP_NAME} · gedruckt am {erzeugt} · {gedruckt} Punkt(e)"
+        fuss = glide_i18n.t("ui.build_print_html.printed_on_item_s", '{app_name} · gedruckt am {erzeugt} · {gedruckt} Punkt(e)', app_name=APP_NAME, erzeugt=erzeugt, gedruckt=gedruckt)
         if name:
             fuss += " · " + name
         zeilen += [f"<footer>{self.escape_print_text(fuss)}</footer>", "</body>", "</html>", ""]
@@ -65636,23 +65603,23 @@ Labels, Termine und Metadaten."""
 
     def show_print_dialog(self, event=None, fmt=None):
         """Druckansicht wählen, erzeugen und im Standardprogramm öffnen."""
-        dialog = self._new_dialog("Drucken und PDF")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_print_dialog.print_and_pdf", "Drucken und PDF"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Drucken und PDF", font=app_font(15, "bold"),
+        tk.Label(outer, text=glide_i18n.t("ui.show_print_dialog.print_and_pdf", "Drucken und PDF"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
-        tk.Label(outer, text="Glide erzeugt eine Druckansicht und öffnet sie im Standardprogramm. "
-                 "Dessen Druckdialog druckt auf Papier oder speichert als PDF.",
+        tk.Label(outer, text=glide_i18n.t("ui.show_print_dialog.glide_creates_a_print", "Glide erzeugt eine Druckansicht und öffnet sie im Standardprogramm. "
+                 "Dessen Druckdialog druckt auf Papier oder speichert als PDF."),
                  font=app_font(10), bg=self.theme["bg"], fg=self.theme["muted"],
                  justify="left", wraplength=620, anchor="w").pack(anchor="w", pady=(4, 16))
         namen = dict(self.PRINT_FORMATS)
         start = fmt if fmt in namen else ("list" if self.view_mode in ("list", self.TABLE_VIEW, "folder")
                                           else "planday" if self.view_mode == self.PLAN_DAY_VIEW else "today")
         auswahl = tk.StringVar(value=namen[start])
-        self._make_field_label(outer, "Was soll gedruckt werden?").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(outer, glide_i18n.t("ui.show_print_dialog.what_should_be_printed", "Was soll gedruckt werden?")).pack(anchor="w", pady=(0, 5))
         feld, _knopf = self._make_option_menu(outer, auswahl, [text for _key, text in self.PRINT_FORMATS])
         feld.pack(fill="x", pady=(0, 14))
-        tk.Label(outer, text="Inhalt", font=app_font(11, "bold"),
+        tk.Label(outer, text=glide_i18n.t("board.group.content", "Inhalt"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 6))
         vorgaben = self.print_default_options()
         variablen = {}
@@ -65683,9 +65650,9 @@ Labels, Termine und Metadaten."""
                 return "break"
             if speichern:
                 ziel = filedialog.asksaveasfilename(
-                    title="Druckansicht speichern", defaultextension=".html",
+                    title=glide_i18n.t("ui.ausgeben.save_print_view", "Druckansicht speichern"), defaultextension=".html",
                     initialfile=f"glide_{key}_{datetime.now().strftime('%Y-%m-%d')}.html",
-                    filetypes=[("HTML-Druckansicht", "*.html"), ("Alle Dateien", "*.*")],
+                    filetypes=[("HTML-Druckansicht", "*.html"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
                     parent=dialog,
                 )
                 if not ziel:
@@ -65700,17 +65667,17 @@ Labels, Termine und Metadaten."""
                 return "break"
             dialog.destroy()
             if speichern:
-                self.show_info("Druckansicht gespeichert", f"Gespeichert nach:\n{pfad}")
+                self.show_info(glide_i18n.t("ui.ausgeben.print_view_saved", "Druckansicht gespeichert"), glide_i18n.t("ui.ausgeben.saved_to", 'Gespeichert nach:\n{pfad}', pfad=pfad))
             else:
                 self.open_external_path(pfad)
             return "break"
 
         footer = ButtonFlow(outer, bg=self.theme["bg"], gap=10)
         footer.pack(fill="x", pady=(18, 0))
-        footer.add(self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted"))
-        footer.add(self._make_dialog_button(footer, "Als HTML speichern",
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("ui.show_print_dialog.save_as_html", "Als HTML speichern"),
                                             lambda: ausgeben(True), "export"))
-        footer.add(self._make_dialog_button(footer, "Öffnen und drucken",
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("ui.show_print_dialog.open_and_print", "Öffnen und drucken"),
                                             lambda: ausgeben(False), "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.bind("<Return>", lambda _event: ausgeben(False))
@@ -65834,11 +65801,11 @@ Labels, Termine und Metadaten."""
             zeit = self.normalize_due_time(item.get("due_time"))
         if not tag:
             return []
-        titel = " ".join(str(item.get("text") or "").split()) or "Aufgabe"
+        titel = " ".join(str(item.get("text") or "").split()) or glide_i18n.t("editor.toolbar.task", "Aufgabe")
         if kind == "planned":
-            titel = "Planung: " + titel
+            titel = glide_i18n.t("ui.ics_event_lines.planning", 'Planung: {titel}', titel=titel)
         if item.get("done"):
-            titel = "Erledigt: " + titel
+            titel = glide_i18n.t("ui.ics_event_lines.done", 'Erledigt: {titel}', titel=titel)
         zeilen = ["BEGIN:VEVENT",
                   f"UID:glide-{item.get('id') or uuid.uuid4().hex}"
                   f"{'-plan' if kind == 'planned' else ''}@{self.ICS_UID_DOMAIN}",
@@ -65868,18 +65835,18 @@ Labels, Termine und Metadaten."""
             beschreibung.append("Aus: " + str(source["title"]))
         wichtig = self.clamp_importance(item.get("importance", 0))
         if wichtig:
-            beschreibung.append("Wichtigkeit: " + self.IMPORTANCE_NAMES.get(wichtig, ""))
+            beschreibung.append(glide_i18n.t("ui.ics_event_lines.importance", 'Wichtigkeit: {get}', get=self.IMPORTANCE_NAMES.get(wichtig, "")))
         if options.get("effort") and item.get("estimated_minutes"):
-            beschreibung.append("Aufwand: " + self.format_estimated_minutes(item["estimated_minutes"]))
+            beschreibung.append(glide_i18n.t("ui.ics_event_lines.effort", 'Aufwand: {format_estimated_minutes}', format_estimated_minutes=self.format_estimated_minutes(item["estimated_minutes"])))
         if options.get("labels"):
             namen = self.format_item_label_names(item)
             if namen:
-                beschreibung.append("Labels: " + namen)
+                beschreibung.append(glide_i18n.t("ui.ics_event_lines.labels", 'Labels: {namen}', namen=namen))
                 zeilen.append("CATEGORIES:" + ",".join(
                     self.escape_ics_text(name.strip()) for name in namen.split(",") if name.strip()))
         if kind == "due" and item.get("repeat") and not self.ics_repeat_rule(item, ganztaegig=not zeit):
-            beschreibung.append("Wiederholung: " + self.describe_repeat(item["repeat"]))
-            beschreibung.append("Die Folgetermine sind nicht als Kalenderserie enthalten.")
+            beschreibung.append(glide_i18n.t("ui.ics_event_lines.repeat", 'Wiederholung: {describe_repeat}', describe_repeat=self.describe_repeat(item["repeat"])))
+            beschreibung.append(glide_i18n.t("ui.ics_event_lines.the_following_occurrences_are", "Die Folgetermine sind nicht als Kalenderserie enthalten."))
         if beschreibung:
             zeilen.append("DESCRIPTION:" + self.escape_ics_text("\n".join(beschreibung)))
         if wichtig in self.ICS_PRIORITIES:
