@@ -3770,3 +3770,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
 
 **D – Rest und Git:** Paket L6 folgt auf diesem Zweig. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.163 D93-Volllokalisierung, Paket L6: Fokus, Austausch, Sicherungen und Druck (V1.75, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 470 Texte von `build_in_progress_context_menu` bis `ics_alarm_lines`: Kontextmenü der Planungsansichten, Abhaken mit offenen Voraussetzungen, Punktauswahl, Verknüpfen und Abhängigkeiten, Zeiterfassung, Fokusleiste und Fokuswechsel, Fälligkeitsdialog, Verschachteln und Verschieben per Ziehen, TXT-Listenimport, Markdown-Einzel- und Gesamtausgabe, CSV-Export (Meldungen), CSV-Vorschau und -Import, Prüfung von Austauschdateien, KI-Skill-Export, eigene Aufträge, Für KI bereitstellen, KI-Ergebnis importieren, Änderungsvorschlag, Einzelseiten-Wiederherstellung, Notion-Übernahme, Sicherungsübersicht und -vergleich, Aufgabensicherung, Druckvorschau und Druckabschnitte, ICS-Termintexte. Bewusst deutsch bleiben, weil Glide sie wieder einliest oder sie Austauschformat sind: TXT-Exportzeilen, CSV-Spaltenköpfe, die KI-Formatbeschreibung und die Zweck-Auswahl eigener Aufträge (sie wird über ihren Text ausgewertet). Der Kalenderdialog übersetzt seinen Standardtitel und erkennt „Bearbeitungstag“ auch übersetzt. Terminologie: „Bearbeitungstag“ heißt auf Englisch überall „planned day“, abgeglichen mit dem englischen Benutzerhandbuch.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L7 folgt auf diesem Zweig. Offen als Produktfragen: englische KI-Formatbeschreibung, zweisprachiger TXT- und CSV-Austausch. Lieferkopie mit der nächsten Produktionsrunde.

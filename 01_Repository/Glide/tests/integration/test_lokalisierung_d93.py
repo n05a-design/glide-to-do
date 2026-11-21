@@ -247,8 +247,33 @@ def fall_l5_erinnerungen_und_erfassung(lauf):
     return f"Benachrichtigungen, Schnellerfassung, Listenmenü: {en} englische, {de} deutsche Texte"
 
 
+def fall_l6_drucken_und_sicherungen(lauf):
+    """L6: Drucken und PDF, Sicherungsübersicht, Sicherungsvergleich und „Für KI bereitstellen“."""
+    app = lauf.app
+    item = app.new_item("Epsilon 1")
+    app.items.append(item)
+    assert app.save_items()
+    lauf.idle(2)
+
+    def pruefung(sprache):
+        texte = modal_texte(lauf, app.show_print_dialog)
+        texte += modal_texte(lauf, app.show_backup_catalog)
+        texte += modal_texte(lauf, app.show_backup_compare_dialog)
+        texte += modal_texte(lauf, app.show_exchange_export_dialog)
+        erwartet = {"en": {"Print and PDF", "Open and print", "Backup overview", "Compare backups", "Older state",
+                           "Provide for AI", "Purpose", "Scope"},
+                    "de": {"Drucken und PDF", "Öffnen und drucken", "Sicherungsübersicht", "Sicherungen vergleichen",
+                           "Älterer Stand", "Für KI bereitstellen", "Zweck", "Umfang"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt, texte)
+        return [text for text in texte if "Epsilon" not in text and ".glide" not in text]
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Drucken, Sicherungen und KI-Austausch: {en} englische, {de} deutsche Texte"
+
+
 FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
-          "l5_erinnerungen_und_erfassung")
+          "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen")
 
 
 def main():
