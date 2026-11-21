@@ -436,12 +436,20 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
         # --- R8: Farben nach Bedeutung für jeden Knopf im Quelltext -------------
         import re
         quelle = (REPO / "src/glide/app.pyw").read_text(encoding="utf-8")
-        muster = re.compile(r'(?:make_button|_make_dialog_button)\(\s*[^,]+,\s*(?:text=)?("[^"]*")\s*,\s*[^,]*?,'
+        # Seit D93 steht die Beschriftung meist als glide_i18n.t("schlüssel", "deutscher Text");
+        # geprüft wird der deutsche Standardtext, nach dem auch die Farbrolle bestimmt wird.
+        beschriftung = r'(?:"[^"]*"|glide_i18n\.t\("[^"]+",\s*(?:"[^"]*"|\'[^\']*\')[^()]*\))'
+        muster = re.compile(r'(?:make_button|_make_dialog_button)\(\s*[^,(]+,\s*(?:text=)?(' + beschriftung + r')\s*,\s*[^,]*?,'
                             r'\s*(?:color_key=)?["\'](\w+)["\']', re.S)
-        leiste = re.compile(r'\(\s*("[^"]+")\s*,\s*[\w\.\(\)\s,=\-:]+?,\s*"(\w+)"\s*,\s*\d+\)')
+        leiste = re.compile(r'\(\s*(' + beschriftung + r')\s*,\s*[\w\.\(\)\s,=\-:]+?,\s*"(\w+)"\s*,\s*\d+\)')
+
+        def klartext(roh):
+            innen = re.match(r'glide_i18n\.t\("[^"]+",\s*(["\'])(.*?)\1', roh, re.S)
+            return innen.group(2) if innen else roh.strip('"')
+
         gesehen = 0
         for treffer in list(muster.finditer(quelle)) + list(leiste.finditer(quelle)):
-            text, wunsch = treffer.group(1).strip('"'), treffer.group(2)
+            text, wunsch = klartext(treffer.group(1)), treffer.group(2)
             rolle = app.button_color_key(wunsch, text)
             gesehen += 1
             if rolle == "delete":
