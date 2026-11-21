@@ -3489,7 +3489,7 @@ class LabelDropdown(tk.Frame):
     MIN_POPUP_WIDTH = 240
 
     def __init__(self, parent, app, labels, selected_ids=None,
-                 empty_text=glide_i18n.t("ui.init.no_labels_selected", "Keine Labels ausgewählt"), dialog_parent=None,
+                 empty_text=None, dialog_parent=None,
                  allow_create=False, on_change=None):
         super().__init__(parent, bg=app.theme["bg"])
         self.app = app
@@ -3501,7 +3501,7 @@ class LabelDropdown(tk.Frame):
         self.selected_ids = [
             label_id for label_id in (selected_ids or []) if label_id in known_ids
         ]
-        self.empty_text = empty_text
+        self.empty_text = (empty_text if empty_text is not None else glide_i18n.t("ui.init.no_labels_selected", "Keine Labels ausgewählt"))
         self.dialog_parent = dialog_parent
         self.allow_create = bool(allow_create)
         self.on_change = on_change
