@@ -3780,3 +3780,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
 
 **D – Rest und Git:** Paket L7 folgt auf diesem Zweig. Offen als Produktfragen: englische KI-Formatbeschreibung, zweisprachiger TXT- und CSV-Austausch. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.164 D93-Volllokalisierung, Paket L7: Menüleiste, Sicherung, Verlauf und Tastenkürzel (V1.76, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 510 Texte von `ics_alarm_lines` bis zum Dateiende: Kalenderdatei schreiben und einlesen mit Vorschau und Zusammenfassung, App-Sicherung speichern, prüfen und wiederherstellen, Aufgabensicherung laden und im geschützten Start wiederherstellen, TXT-Listenimport, schmale Seitenleiste und Kompaktkopf, Änderungsverlauf mit Ausgabe, Schnellsuche, Aktionssuche, die gesamte Menüleiste (`menubar_structure`), Nachrichtendialog, „Über Glide“ mit dem persönlichen Text des Inhabers, Handbuchrahmen, Tastenkürzel, Vorlageneditor und die Startfehlermeldung. Standardnamen neuer Vorlagenknoten, die ICS-Kennung `PRODID`, Tastennamen der Menüleiste und das Label „Langtext“ bleiben unverändert. Der Vorlageneditor vergleicht seine Knöpfe mit den Katalogtexten; Einzelwörter wie „importiert“ und „enthalten“ haben eigene Schlüssel.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L8 (Klassentabellen mit eingebautem Handbuch, Module außerhalb von `app.pyw`, Kurzformen, Wiederholungsanzeige, Notizbuchdatum) folgt auf diesem Zweig. Der englische Text von „Über Glide“ ist eine Übersetzung des persönlichen Inhabertexts und braucht dessen Abnahme. Lieferkopie mit der nächsten Produktionsrunde.
