@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Glide Shell – wiederverwendbares Tk-Fundament ohne Glide-Bezug (D86, D95).
+"""Glide Shell – wiederverwendbares Tk-Fundament ohne Glide-Bezug (D86, D95, D98).
 
 Die Shell bündelt anwendungsneutrale Desktop-Bausteine für Tk-Anwendungen.
 Jedes Modul importiert ausschließlich die Standardbibliothek, `tkinter` und
@@ -17,6 +17,9 @@ Bausteine:
 - `window_geometry`: Geometrietexte lesen/schreiben, Fenster auf der Arbeitsfläche halten.
 - `system_appearance`: Hell/Dunkel des Systems auf macOS, Windows und Linux deuten.
 - `redo_history`: Wiederholen-Stapel neben dem Rückgängig-Stapel des Hosts.
+- `text_fit`: Text auf Zeichen- oder Pixelbreite kürzen, Zeichen auf gleiche Breite bringen.
+- `action_picker`: durchsuchbare Aktionsauswahl aus einem fertigen Menü (Ordnen, Suchen, Gruppieren).
+- `runtime_paths`: Daten- und Cacheordner nach Plattformkonvention auflösen, ohne Dateisystemmutation.
 - `selftest`: Prüfung einer übernommenen Kopie auf dem Zielrechner (`python -m glide_shell.selftest`).
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
@@ -25,7 +28,8 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.4.0"
+SHELL_VERSION = "0.5.0"
 
 __all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
-           "window_geometry", "system_appearance", "redo_history", "selftest", "demo"]
+           "window_geometry", "system_appearance", "redo_history", "text_fit", "action_picker",
+           "runtime_paths", "selftest", "demo"]

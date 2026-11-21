@@ -170,11 +170,11 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 | `desktop_adapter` (seit 3.68.0) | vollständig; Importregel in `test_shell_importregel.py`, Verhalten in `tests/unit/test_desktop_adapter.py` | Attributname `_glide_action_ids` an Menüs; Menüeinträge, Aktionskennungen und Beschriftungen liefert der Host |
 | `compact_mode` | `parse`, `format_geometry`, `clamp`, `keep_visible` liegen seit V1.67 in `glide_shell.window_geometry` (D96) | Mindestmaße, Einstellungsname, Kürzelregel, Kompaktlage |
 | `appearance` | Erkennung des Systemmodus und `resolve` liegen seit V1.67 in `glide_shell.system_appearance` (D96) | Designpaare (`pair_for`, `normalize_auto`), Hintergrundauswahl, `with_background` |
-| `ui_design` | Skalen, `fit_text`, `clip_title`, Breitenausgleich, `settled_wrap_width` | `task_title`, `today_columns`, `page_icon_layout` |
-| `action_menu` | Eintragsmodell, Gruppierung, Auswahl | Begründungstexte, Bindung an `content_search` |
+| `ui_design` | Kürzen, Breitenausgleich und ruhige Umbruchbreite liegen seit V1.69 in `glide_shell.text_fit` (S10, D98) | Skalen, Titelgrenze (`clip_title`), `task_title`, `today_columns`, `page_icon_layout` |
+| `action_menu` | Eintragsmodell, Ordnen, Suchen und Gruppieren liegen seit V1.69 in `glide_shell.action_picker` (D98) | Sperrgründe, Platzhalter, Zustandstexte, Kopfverweise, Suchschlüssel aus `content_search` |
 | `accessibility`, `accessibility_bindings`, `core_accessibility` | `Attributes`, `set_attributes`, `Binding`, allgemeine Binder | `task_value`, alle Binder mit `app` |
 | `undo_history` | `RedoHistory` liegt seit V1.67 in `glide_shell.redo_history` (D96) | Board-Einträge, Rückgängig-Stapel in `ListApp` |
-| `runtime_config` | Auflösungsmechanik | Produktname, Dateinamen, Umgebungsvariablen |
+| `runtime_config` | Plattformordner, Umgebung, Zeiger und Reihenfolge liegen seit V1.69 in `glide_shell.runtime_paths` (D98) | Produktname, Datei- und Variablennamen, `RuntimePaths`, Meldungen |
 
 ### Locale-Vertrag für sichtbare Shell-Beschriftungen
 
@@ -194,4 +194,4 @@ Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit
 
 **Sprache (D96):** Laufzeittexte für Entwickler (Ausnahmen, Protokoll) sind Englisch, T319 prüft das; Docstrings und Kommentare bleiben Deutsch, sichtbare Texte liefert der Host.
 
-**Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Noch nicht zur Shell gehören `ui_design` (S10 `text_fit`, nicht freigegeben), die Barrierefreiheit (S12, nicht freigegeben), `action_menu` und `runtime_config` (eigene Vorlage nötig) sowie der Rückgängig-Stapel.
+**Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Noch nicht zur Shell gehören die Barrierefreiheit (S12, nicht freigegeben) und der Rückgängig-Stapel; von `ui_design`, `action_menu` und `runtime_config` liegt seit V1.69 nur der neutrale Teil in der Shell (D98).

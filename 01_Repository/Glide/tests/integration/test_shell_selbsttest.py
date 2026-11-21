@@ -3,7 +3,7 @@
 
 Der Test kopiert `src/glide/glide_shell` in ein leeres Temporärverzeichnis und
 startet dort `python -m glide_shell.selftest` in eigenem Prozess:
-- vollständige Kopie: Exitcode 0, jede Prüfung `ok`, Zusammenfassung „7/7“;
+- vollständige Kopie: Exitcode 0, jede Prüfung `ok`, Zusammenfassung „10/10“;
 - Gegenprobe mit verändertem `window_geometry.parse`: Exitcode 1 und genau
   diese Prüfung `FAIL`, die übrigen bleiben `ok` – auch unter `python -O`.
 
@@ -40,7 +40,7 @@ def main():
         kopie(ordner)
         code, text = lauf(ordner)
         zeilen = [z for z in text.splitlines() if z.startswith(("ok ", "FAIL"))]
-        if code != 0 or len(zeilen) != 7 or any(z.startswith("FAIL") for z in zeilen) or "7/7 checks passed" not in text:
+        if code != 0 or len(zeilen) != 10 or any(z.startswith("FAIL") for z in zeilen) or "10/10 checks passed" not in text:
             fehler.append(f"vollständige Kopie: Exit {code}\n{text}")
     with tempfile.TemporaryDirectory(prefix="glide-shell-selbst-") as ordner:
         paket = kopie(ordner)
@@ -54,14 +54,14 @@ def main():
             for schalter in ((), ("-O",)):
                 code, text = lauf(ordner, *schalter)
                 rot = [z for z in text.splitlines() if z.startswith("FAIL")]
-                if code != 1 or len(rot) != 1 or "window_geometry" not in rot[0] or "6/7 checks passed" not in text:
+                if code != 1 or len(rot) != 1 or "window_geometry" not in rot[0] or "9/10 checks passed" not in text:
                     fehler.append(f"Gegenprobe {' '.join(schalter) or 'ohne -O'}: Exit {code}, "
                                   f"erwartet genau window_geometry rot\n{text}")
     if fehler:
         print("\n".join(fehler))
         print("Shell-Selbsttest: ROT")
         return 1
-    print("Shell-Selbsttest: OK (Kopie 7/7, Gegenprobe erkennt kaputte Geometrie, auch mit -O)")
+    print("Shell-Selbsttest: OK (Kopie 10/10, Gegenprobe erkennt kaputte Geometrie, auch mit -O)")
     return 0
 
 

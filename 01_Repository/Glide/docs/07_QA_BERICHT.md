@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Shell-Bausteine D98: `text_fit`, `action_picker`, `runtime_paths` (V1.69, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und eigener Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v169-shell-text-menu-paths` über PR #172. Grün: CI-Grundstufe; `test_shell_d98.py` (T334); `test_shell_importregel.py` (T319); `test_shell_d96.py`; `test_ui_design.py`; `test_action_menu.py`; `test_runtime_config.py` (Plattformsimulation unverändert); `test_shell_uebernahme.py`; `test_shell_demohost.py`; `test_shell_selbsttest.py` (Kopie 10/10, Gegenprobe ohne und mit `-O`). Nicht geprüft: Windows und Linux (GitHub-Matrix), lokale Vollprüfung.
+
 ## Integration V1.65–V1.68 auf `main` (21.11.2026)
 
 PRs #168–#171 sind per Squash gemergt; `main` `0ba533af` ist dateigleich mit dem lokal geprüften Zweigstand `claude/v168-shell-selbsttest` samt Kollisionsschutz der Shell-Übernahme. Vor dem Merge bestanden auf GitHub Grundstufe und Linux-/Windows-Vollprüfung je Zweig. Lokale Mac-Vollprüfung (macOS arm64, Python 3.14.5, eigene Tk 9.1.0, isoliertes `GLIDE_DATA_DIR`, künstliche Daten) auf V1.68 `12a9d3d6`: 106 Schritte grün, nach dem Stopp 29 Schritte nachgeholt und grün (darunter Startwege 17/17, Shell-Suiten, Showcase, Analysen, Beispiel- und Releasedaten gleich). Nicht grün: `kompakt_verlorenes_loslassen` (rot, `focus: None`), `anhangsnamen` und `ruecktaste` (Zeitgrenze); alle drei scheitern auf unverändertem `main` `db2c6f80` gleich und hängen am Tastaturfokus dieser Mac-Umgebung. Nach dem Merge auf `main` `0ba533af` lokal grün: CI-Grundstufe; nach dem Codex-Hinweis T331 (7 Fälle), T319, T332 und T333 (Kopie 7/7). Der Hauptlauf auf `main` steht im Actions-Verlauf.
