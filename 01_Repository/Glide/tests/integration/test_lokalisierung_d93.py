@@ -164,7 +164,32 @@ def fall_l2_tag_und_start(lauf):
     return f"Tag entlasten und Startseite einrichten: {en} englische, {de} deutsche Texte"
 
 
-FAELLE = ("l1_tageshinweise", "l2_tag_und_start")
+def fall_l3_punkte_und_labels(lauf):
+    """L3: Punktmaske, Labelmanager und Tabellenspalten als echte Dialoge."""
+    app = lauf.app
+    item = app.new_item("Beta 1")
+    app.items.append(item)
+    assert app.save_items()
+    lauf.idle(2)
+
+    def pruefung(sprache):
+        texte = modal_texte(lauf, lambda: app.item_form_dialog(mode="create"))
+        texte += modal_texte(lauf, app.open_label_manager)
+        texte += modal_texte(lauf, app.show_table_columns_dialog)
+        erwartet = {"en": {"New item", "Title", "Importance", "Due date", "Repeat", "Rename",
+                           "Table columns"},
+                    "de": {"Neuer Punkt", "Titel", "Wichtigkeit", "Fälligkeit", "Wiederholung",
+                           "Umbenennen", "Tabellenspalten"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt, texte)
+        # Die festen Systemlabels „Langtext“ und „Zwischenüberschrift“ sind gespeicherte Labelnamen (Daten).
+        return [text for text in texte if not text.startswith("Beta") and text not in ("Langtext", "Zwischenüberschrift")]
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Punktmaske, Labelmanager und Tabellenspalten: {en} englische, {de} deutsche Texte"
+
+
+FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels")
 
 
 def main():
