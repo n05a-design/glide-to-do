@@ -2,6 +2,7 @@
 """Typregel und verständliche Rückfrage für aktive Anhänge, ohne Tk."""
 from pathlib import PurePath
 import os
+import i18n as glide_i18n
 
 ACTIVE_TYPES = frozenset({'.exe', '.com', '.bat', '.cmd', '.ps1', '.psm1', '.psd1',
     '.vbs', '.vbe', '.js', '.jse', '.msi', '.msp', '.scr', '.lnk', '.url', '.hta',
@@ -16,8 +17,8 @@ def origin_text(path, data_folder):
     except (OSError, ValueError):
         stored = False
     if stored:
-        return 'Glide-Datenablage; kann auch aus einer Sicherung oder Vorlage stammen'
-    return 'Lokale Datei außerhalb der Glide-Datenablage'
+        return glide_i18n.t("mod.attachment_policy.origin_text.glide_data_storage_may", 'Glide-Datenablage; kann auch aus einer Sicherung oder Vorlage stammen')
+    return glide_i18n.t("mod.attachment_policy.origin_text.local_file_outside_the", 'Lokale Datei außerhalb der Glide-Datenablage')
 
 
 def active_type(path, name=''):
@@ -34,9 +35,5 @@ def question(path, name='', origin=None):
     if suffix is None:
         return None
     display = str(name or PurePath(str(path)).name)
-    origin = origin or 'Glide-Datenablage; kann auch aus einer Sicherung oder Vorlage stammen'
-    return (f'„{display}“ hat den ausführbaren oder skriptfähigen Dateityp {suffix}.\n\n'
-            f'Herkunft: {origin}\nDatei: {path}\n\n'
-            'Beim Öffnen kann das Betriebssystem Programme oder Skripte ausführen. '
-            'Öffne die Datei nur, wenn du ihrer Herkunft vertraust.\n\n'
-            'Diesen Anhang jetzt öffnen?')
+    origin = origin or glide_i18n.t("mod.attachment_policy.question.glide_data_storage_may", 'Glide-Datenablage; kann auch aus einer Sicherung oder Vorlage stammen')
+    return (glide_i18n.t("mod.attachment_policy.question.has_the_executable_or", '„{display}“ hat den ausführbaren oder skriptfähigen Dateityp {suffix}.\n\nHerkunft: {origin}\nDatei: {path}\n\nBeim Öffnen kann das Betriebssystem Programme oder Skripte ausführen. Öffne die Datei nur, wenn du ihrer Herkunft vertraust.\n\nDiesen Anhang jetzt öffnen?', display=display, suffix=suffix, origin=origin, path=path))

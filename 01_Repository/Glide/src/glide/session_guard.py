@@ -19,6 +19,7 @@ import uuid
 from backup_snapshot import regular_bytes
 from data_lock import host_name, process_alive
 from storage_health import MAX_JSON_BYTES
+import i18n as glide_i18n
 
 
 MARKER_VERSION = 1
@@ -110,8 +111,8 @@ def _basic_data_check(data, schema_version):
                 found.add(ident)
         return found
 
-    folder_ids = ids(folders, "Ordner")
-    ids(lists, "Liste")
+    folder_ids = ids(folders, glide_i18n.t("ui.kachel_boards.folder", "Ordner"))
+    ids(lists, glide_i18n.t("editor.toolbar.list", "Liste"))
     parents = {entry.get("id"): entry.get("parent_id") for entry in folders}
     for entry in folders:
         ident, parent = entry.get("id"), entry.get("parent_id")
@@ -231,36 +232,35 @@ class SessionGuard:
             if (isinstance(data, dict) and type(data.get('version')) is int
                     and data['version'] > self.schema_version):
                 return Assessment('newer_format', False,
-                                  'Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert.', marker_kind)
+                                  glide_i18n.t("ui.read_only_notice.the_data_comes_from", 'Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert.'), marker_kind)
             _basic_data_check(data, self.schema_version)
             if validate_data is not None:
                 validate_data(data)
         except FileNotFoundError:
             return Assessment("missing_data", False,
-                              "Nach dem ungeklärten Ende fehlt die Datendatei. Es wird kein leerer Bestand gespeichert.",
+                              glide_i18n.t("mod.session_guard.inspect.after_the_unclear_end", "Nach dem ungeklärten Ende fehlt die Datendatei. Es wird kein leerer Bestand gespeichert."),
                               marker_kind)
         except OSError as exc:
             return Assessment("unreadable_data", False,
-                              f"Die Datendatei konnte nicht lesend geprüft werden ({type(exc).__name__}).", marker_kind)
+                              glide_i18n.t("mod.session_guard.inspect.the_data_file_could", 'Die Datendatei konnte nicht lesend geprüft werden ({name}).', name=type(exc).__name__), marker_kind)
         except (ValueError, TypeError, KeyError, UnicodeError, RecursionError) as exc:
             if type(exc).__name__ == 'NewerDataError':
                 return Assessment('newer_format', False,
-                                  'Der Bestand enthält Daten einer neueren Glide-Version und bleibt unverändert.', marker_kind)
+                                  glide_i18n.t("mod.session_guard.inspect.the_data_contains_data", 'Der Bestand enthält Daten einer neueren Glide-Version und bleibt unverändert.'), marker_kind)
             return Assessment("invalid_data", False,
-                              f"Die lesende Bestandsprüfung ist fehlgeschlagen ({type(exc).__name__}). "
-                              "Originaldatei erhalten; eine Sicherung kann bewusst ausgewählt werden.", marker_kind)
+                              glide_i18n.t("mod.session_guard.inspect.the_read_only_data", 'Die lesende Bestandsprüfung ist fehlgeschlagen ({name}). Originaldatei erhalten; eine Sicherung kann bewusst ausgewählt werden.', name=type(exc).__name__), marker_kind)
         return Assessment("recovery_required", False,
-                          "Der vorherige Abschluss ist ungeklärt. Der Bestand ist lesbar geprüft. "
-                          "Schreibend fortsetzen erfordert eine bewusste Freigabe mit Originalvorsicherung.",
+                          glide_i18n.t("mod.session_guard.inspect.the_previous_end_is", "Der vorherige Abschluss ist ungeklärt. Der Bestand ist lesbar geprüft. "
+                          "Schreibend fortsetzen erfordert eine bewusste Freigabe mit Originalvorsicherung."),
                           marker_kind, hashlib.sha256(content).hexdigest())
 
     def assess(self, *, validate_data=None):
         """Nur lesen; eine gültige Altsitzung wird niemals still freigegeben."""
         kind, record, _ = self._marker()
         if kind in ("active", "foreign"):
-            return Assessment(kind, False, "Der Sitzungsnachweis gehört einem anderen oder noch lebenden Prozess.", kind)
+            return Assessment(kind, False, glide_i18n.t("mod.session_guard.assess.the_session_record_belongs", "Der Sitzungsnachweis gehört einem anderen oder noch lebenden Prozess."), kind)
         if kind == "unreadable":
-            return Assessment(kind, False, "Der lokale Sitzungsnachweis ist nicht lesbar.", kind)
+            return Assessment(kind, False, glide_i18n.t("mod.session_guard.assess.the_local_session_record", "Der lokale Sitzungsnachweis ist nicht lesbar."), kind)
         if kind == "owned":
             return self._begun or Assessment("started", True, marker_kind=kind)
         if kind == "missing":
@@ -297,19 +297,19 @@ class SessionGuard:
         try:
             self._atomic_marker(record, expected_digest)
         except (OSError, ValueError) as exc:
-            self.last_error = f"Sitzungsnachweis nicht schreibbar ({type(exc).__name__})."
+            self.last_error = glide_i18n.t("mod.session_guard.start.session_record_cannot_be", 'Sitzungsnachweis nicht schreibbar ({name}).', name=type(exc).__name__)
             return Assessment("marker_write_failed", False, self.last_error, assessment.marker_kind,
                               assessment.sha256, preserved_path)
         self._owned_token = token
         result = Assessment(kind or ("recovery_started" if preserved_path else "started"), True,
-                            "Original unverändert gesichert; Wiederanlauf freigegeben." if preserved_path else "",
+                            glide_i18n.t("mod.session_guard.start.original_backed_up_unchanged", "Original unverändert gesichert; Wiederanlauf freigegeben.") if preserved_path else "",
                             assessment.marker_kind, assessment.sha256, preserved_path, original_missing)
         self._begun = result
         return result
 
     def begin(self, *, lock_owned, validate_data=None):
         if lock_owned is not True:
-            return Assessment("lock_required", False, "Vor dem Sitzungsstart ist die Datensperre erforderlich.")
+            return Assessment("lock_required", False, glide_i18n.t("mod.session_guard.begin.the_data_lock_is", "Vor dem Sitzungsstart ist die Datensperre erforderlich."))
         _, _, digest = self._marker()
         assessment = self.assess(validate_data=validate_data)
         if not assessment.writable or self._owned_token:
@@ -353,14 +353,14 @@ class SessionGuard:
     def resume(self, *, lock_owned, expected_sha256, validate_data=None):
         """Bewusste Freigabe nur desselben lesbar geprüften Bestands."""
         if lock_owned is not True:
-            return Assessment("lock_required", False, "Vor dem Wiederanlauf ist die Datensperre erforderlich.")
+            return Assessment("lock_required", False, glide_i18n.t("mod.session_guard.resume.the_data_lock_is", "Vor dem Wiederanlauf ist die Datensperre erforderlich."))
         _, _, digest = self._marker()
         assessment = self.assess(validate_data=validate_data)
         if not assessment.needs_recovery:
             return assessment if not assessment.writable else Assessment(
-                "recovery_changed", False, "Der Wiederanlaufzustand wurde zwischenzeitlich verändert.", assessment.marker_kind)
+                "recovery_changed", False, glide_i18n.t("mod.session_guard.resume.the_restart_state_was", "Der Wiederanlaufzustand wurde zwischenzeitlich verändert."), assessment.marker_kind)
         if not expected_sha256 or assessment.sha256 != expected_sha256:
-            return Assessment("recovery_changed", False, "Der Bestand wurde seit der Vorschau verändert.",
+            return Assessment("recovery_changed", False, glide_i18n.t("mod.session_guard.resume.the_data_was_changed", "Der Bestand wurde seit der Vorschau verändert."),
                               assessment.marker_kind, assessment.sha256)
         try:
             preserved = self.preserve_original(expected_sha256=expected_sha256)
@@ -368,8 +368,7 @@ class SessionGuard:
                 raise ValueError("Die Datendatei wurde während der Vorsicherung verändert.")
         except (OSError, ValueError) as exc:
             return Assessment("preservation_failed", False,
-                              f"Die Originalvorsicherung ist fehlgeschlagen ({type(exc).__name__}). "
-                              "Der Bestand bleibt schreibgeschützt.", assessment.marker_kind, assessment.sha256)
+                              glide_i18n.t("mod.session_guard.resume.the_original_pre_backup", 'Die Originalvorsicherung ist fehlgeschlagen ({name}). Der Bestand bleibt schreibgeschützt.', name=type(exc).__name__), assessment.marker_kind, assessment.sha256)
         return self._start(assessment, expected_digest=digest, preserved_path=preserved)
 
     def _original_digest(self):
@@ -418,16 +417,16 @@ class SessionGuard:
         Commit darf dieselbe eigene laufende Sitzung erneut versuchen.
         """
         if lock_owned is not True:
-            return Assessment("lock_required", False, "Vor der Wiederherstellung ist die Datensperre erforderlich.")
+            return Assessment("lock_required", False, glide_i18n.t("mod.session_guard.begin_replacement.the_data_lock_is", "Vor der Wiederherstellung ist die Datensperre erforderlich."))
         marker_kind, _, marker_digest = self._marker()
         if marker_kind in ("active", "foreign", "unreadable"):
             return Assessment(marker_kind, False,
-                              "Der Sitzungsnachweis gehört einem anderen Prozess oder ist nicht lesbar.", marker_kind)
+                              glide_i18n.t("mod.session_guard.begin_replacement.the_session_record_belongs", "Der Sitzungsnachweis gehört einem anderen Prozess oder ist nicht lesbar."), marker_kind)
         original_check = self._inspect(marker_kind, validate_data)
         if original_check.kind == 'newer_format':
             return original_check
         if expected_marker is not None and expected_marker != marker_digest:
-            return Assessment("recovery_changed", False, "Der Sitzungsnachweis wurde seit der Vorschau verändert.", marker_kind)
+            return Assessment("recovery_changed", False, glide_i18n.t("mod.session_guard.begin_replacement.the_session_record_was", "Der Sitzungsnachweis wurde seit der Vorschau verändert."), marker_kind)
         try:
             if not callable(validate_data):
                 raise ValueError("Ein strenger Schema-Prüfer ist erforderlich.")
@@ -435,12 +434,12 @@ class SessionGuard:
             validate_data(replacement_data)
         except (ValueError, TypeError, KeyError, UnicodeError, RecursionError) as exc:
             return Assessment("invalid_replacement", False,
-                              f"Die gewählte Wiederherstellung ist nicht gültig ({type(exc).__name__}).", marker_kind)
+                              glide_i18n.t("mod.session_guard.begin_replacement.the_chosen_restore_is", 'Die gewählte Wiederherstellung ist nicht gültig ({name}).', name=type(exc).__name__), marker_kind)
         try:
             original_digest = self._original_digest()
             if expected_sha256 is not None and original_digest != expected_sha256:
                 return Assessment("recovery_changed", False,
-                                  "Die Originaldatei wurde seit der Vorschau verändert.", marker_kind,
+                                  glide_i18n.t("mod.session_guard.begin_replacement.the_original_file_was", "Die Originaldatei wurde seit der Vorschau verändert."), marker_kind,
                                   original_digest or "")
             preserved = (self._preserve_absence() if original_digest is None else
                          self.preserve_original(expected_sha256=original_digest))
@@ -448,8 +447,7 @@ class SessionGuard:
                 raise ValueError("Der Originalzustand wurde während der Vorsicherung verändert.")
         except (OSError, ValueError) as exc:
             return Assessment("preservation_failed", False,
-                              f"Die Originalvorsicherung ist fehlgeschlagen ({type(exc).__name__}). "
-                              "Der Bestand bleibt schreibgeschützt.", marker_kind)
+                              glide_i18n.t("mod.session_guard.begin_replacement.the_original_pre_backup", 'Die Originalvorsicherung ist fehlgeschlagen ({name}). Der Bestand bleibt schreibgeschützt.', name=type(exc).__name__), marker_kind)
         assessment = Assessment("replacement_ready", False, marker_kind=marker_kind,
                                 sha256=original_digest or "", original_missing=original_digest is None)
         return self._start(assessment, expected_digest=marker_digest, preserved_path=preserved,
@@ -461,13 +459,13 @@ class SessionGuard:
             return False
         kind, record, digest = self._marker()
         if (kind != "owned" or record["token"] != self._owned_token or record["pid"] != self.pid):
-            self.last_error = "Der eigene Sitzungsnachweis ist nicht mehr vorhanden."
+            self.last_error = glide_i18n.t("mod.session_guard.finish.your_own_session_record", "Der eigene Sitzungsnachweis ist nicht mehr vorhanden.")
             return False
         record = dict(record, state="clean", finished_at=_stamp(), data_present=self.data_file.is_file())
         try:
             self._atomic_marker(record, digest)
         except (OSError, ValueError) as exc:
-            self.last_error = f"Der saubere Sitzungsabschluss konnte nicht vermerkt werden ({type(exc).__name__})."
+            self.last_error = glide_i18n.t("mod.session_guard.finish.the_clean_end_of", 'Der saubere Sitzungsabschluss konnte nicht vermerkt werden ({name}).', name=type(exc).__name__)
             return False
         self._owned_token = None
         self._begun = None

@@ -15,6 +15,7 @@ import os
 import sys
 
 from glide_shell import runtime_paths as _paths
+import i18n as glide_i18n
 
 APP_NAME = "Glide"
 IS_MACOS = sys.platform == "darwin"
@@ -84,16 +85,16 @@ def prepare_data_dir(paths: RuntimePaths, origin: RuntimePaths | None = None) ->
 
 def unreachable_message(paths: RuntimePaths, error: OSError | None = None) -> str:
     """Meldung für einen Datenordner, der sich nicht anlegen oder öffnen lässt."""
-    teile = [f"Glide erreicht den Datenordner nicht:\n{paths.base_dir}"]
+    teile = [glide_i18n.t("mod.runtime_config.unreachable_message.glide_cannot_reach_the", 'Glide erreicht den Datenordner nicht:\n{base_dir}', base_dir=paths.base_dir)]
     if paths.is_overridden:
-        teile.append("Der Ordner ist über die Umgebungsvariable GLIDE_DATA_DIR gesetzt.")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.the_folder_is_set", "Der Ordner ist über die Umgebungsvariable GLIDE_DATA_DIR gesetzt."))
     elif os.path.normcase(paths.base_dir) != os.path.normcase(paths.default_dir):
-        teile.append(f"Der Ordner ist eingetragen in:\n{paths.pointer_file}")
-    teile.append("Binde das Laufwerk oder den Ordner ein und starte Glide erneut. "
-                 "Glide beendet sich jetzt, ohne den Bestand zu ändern.")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.the_folder_is_entered", 'Der Ordner ist eingetragen in:\n{pointer_file}', pointer_file=paths.pointer_file))
+    teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.connect_the_drive_or", "Binde das Laufwerk oder den Ordner ein und starte Glide erneut. "
+                 "Glide beendet sich jetzt, ohne den Bestand zu ändern."))
     grund = getattr(error, "strerror", None)
     if grund:
-        teile.append(f"Systemmeldung: {grund}")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.system_message", 'Systemmeldung: {grund}', grund=grund))
     return "\n\n".join(teile)
 
 

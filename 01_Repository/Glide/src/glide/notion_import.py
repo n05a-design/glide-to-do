@@ -14,6 +14,7 @@ import object_references as objects
 import page_restore
 import source_metadata
 import task_references as tasks
+import i18n as glide_i18n
 
 
 @dataclass(frozen=True)
@@ -181,15 +182,15 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
         imported.append(identity)
     if len(trash) > max_trash:
         raise ValueError('Die Übernahme würde den Papierkorb kürzen; bitte zuerst Platz schaffen.')
-    lines = ['Notion-Importbericht', '', f'{len(imported)} Seite(n) ausdrücklich übernommen.', '',
-             'Originalexport: als ZIP-Anhang vollständig erhalten.',
-             'Frühere Seitenaufgaben bleiben im Papierkorb; andere Seiten bleiben erhalten.', '',
-             'Übernommene Quellen:']
+    lines = ['Notion-Importbericht', '', glide_i18n.t("mod.notion_import.content.page_s_explicitly_taken", '{len} Seite(n) ausdrücklich übernommen.', len=len(imported)), '',
+             glide_i18n.t("mod.notion_import.content.original_export_fully_kept", 'Originalexport: als ZIP-Anhang vollständig erhalten.'),
+             glide_i18n.t("mod.notion_import.content.earlier_page_tasks_stay", 'Frühere Seitenaufgaben bleiben im Papierkorb; andere Seiten bleiben erhalten.'), '',
+             glide_i18n.t("mod.notion_import.content.sources_taken_over", 'Übernommene Quellen:')]
     lines.extend(row.page.path for row in selection.rows)
-    lines += ['', 'Verluste und offene Verweise:']
+    lines += ['', glide_i18n.t("ui.selection_changed.losses_and_open_references", 'Verluste und offene Verweise:')]
     lines.extend(f'{loss.path}: {loss.message}' for loss in selection.losses)
     if not selection.losses:
-        lines.append('Keine gemeldet.')
+        lines.append(glide_i18n.t("ui.selection_changed.none_reported", 'Keine gemeldet.'))
     report = page_factory('Notion-Importbericht', [], list_id=selection.report_id, list_kind='page',
                           rich_note=dict(text='\n'.join(lines), spans=[], links={}),
                           attachments=[copy.deepcopy(stored[selection.report_asset_id])])
@@ -230,11 +231,11 @@ def current_sources(pages, resolve_path, *, max_bytes):
                     by_storage[storage] = digest.hexdigest()
                     if size != asset['size']:
                         issues.append(archive.Loss(page['title'], 'local-asset-size',
-                                      'Die heutige Anhangsgröße stimmt nicht mit dem gespeicherten Stand überein: '+asset['name']))
+                                      glide_i18n.t("mod.notion_import.current_sources.today_s_attachment_size", 'Die heutige Anhangsgröße stimmt nicht mit dem gespeicherten Stand überein: {name}', name=asset['name'])))
                 except OSError:
                     by_storage[storage] = 'unlesbar'
                     issues.append(archive.Loss(page['title'], 'local-asset-missing',
-                                  'Ein heutiger Anhang fehlt oder ist nicht lesbar: '+asset['name']))
+                                  glide_i18n.t("mod.notion_import.current_sources.a_current_attachment_is", 'Ein heutiger Anhang fehlt oder ist nicht lesbar: {name}', name=asset['name'])))
             previous = file_hashes.get(asset['id'])
             if previous is not None and previous != by_storage[storage]:
                 raise ValueError('Die heutige Anhangskennung ist nicht eindeutig.')

@@ -15,6 +15,7 @@ import hashlib
 import json
 import re
 from ui_design import TITLE_MAX_CHARS
+import i18n as glide_i18n
 
 FORMAT = "glide.exchange"
 CONTEXT_FORMAT = "glide.context"
@@ -164,23 +165,23 @@ def check_patch(changes, resolve, known_labels=()):
         vorschau.append(eintrag)
         if change["ref"] in gesehen:
             eintrag["status"] = "invalid"
-            eintrag["messages"].append("Dieselbe Aufgabe kommt mehrfach vor")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.the_same_task_occurs", "Dieselbe Aufgabe kommt mehrfach vor"))
             continue
         gesehen.add(change["ref"])
         gefunden = resolve(change["ref"])
         if gefunden is None:
             eintrag["status"] = "unknown"
-            eintrag["messages"].append("Aufgabe nicht gefunden (gelöscht oder nicht im Kontextpaket)")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.task_not_found_deleted", "Aufgabe nicht gefunden (gelöscht oder nicht im Kontextpaket)"))
             continue
         item, label_names = gefunden
         zustand = item_state(item, label_names)
         eintrag["title"] = zustand["title"]
         if checksum(zustand) != change["base"]:
             eintrag["status"] = "conflict"
-            eintrag["messages"].append("Die Aufgabe wurde seit dem Kontextpaket geändert")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.the_task_was_changed", "Die Aufgabe wurde seit dem Kontextpaket geändert"))
         for feld, wert in change["set"].items():
             if feld not in FIELDS:
-                eintrag["messages"].append(f"Unbekanntes Feld „{feld}“")
+                eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.unknown_field", 'Unbekanntes Feld „{feld}“', feld=feld))
                 eintrag["status"] = "invalid" if eintrag["status"] == "ok" else eintrag["status"]
                 continue
             try:
@@ -192,7 +193,7 @@ def check_patch(changes, resolve, known_labels=()):
             if feld == "labels" and bekannt:
                 fremd = [name for name in neu if name not in bekannt]
                 if fremd:
-                    eintrag["messages"].append("Unbekannte Labels: " + ", ".join(fremd))
+                    eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.unknown_labels", 'Unbekannte Labels: {join}', join=", ".join(fremd)))
                     eintrag["status"] = "invalid" if eintrag["status"] == "ok" else eintrag["status"]
                     continue
             if neu != zustand[feld]:
@@ -207,6 +208,6 @@ def summary(vorschau):
     zaehler = {}
     for eintrag in vorschau:
         zaehler[eintrag["status"]] = zaehler.get(eintrag["status"], 0) + 1
-    namen = (("ok", "anwendbar"), ("unchanged", "ohne Änderung"), ("conflict", "Konflikte"),
-             ("unknown", "nicht gefunden"), ("invalid", "ungültig"))
+    namen = (("ok", "anwendbar"), ("unchanged", glide_i18n.t("mod.exchange_patch.summary.without_change", "ohne Änderung")), ("conflict", glide_i18n.t("mod.exchange_patch.summary.conflicts", "Konflikte")),
+             ("unknown", glide_i18n.t("inspector.attachments.not_found", "nicht gefunden")), ("invalid", glide_i18n.t("mod.exchange_patch.summary.invalid", "ungültig")))
     return " · ".join(f"{zaehler[key]} {name}" for key, name in namen if zaehler.get(key))

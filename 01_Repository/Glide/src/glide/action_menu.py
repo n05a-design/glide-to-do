@@ -24,6 +24,7 @@ import content_search
 from glide_shell import action_picker as _menu
 from glide_shell.action_picker import (CHECK_MARK, CHECK_PAD, MAX_ENTRIES, PATH_SEPARATOR, Entry,  # noqa: F401
                                        check_label, clean_label, first_enabled, grouped)
+import i18n as glide_i18n
 
 FALLBACK_SECTION = "Weitere"
 
@@ -99,11 +100,11 @@ def search(values, query):
 def summary(values, query):
     """Kurze Zustandszeile unter der Liste."""
     if not values:
-        return "Keine passende Aktion" if str(query or "").strip() else "Keine Aktionen"
+        return glide_i18n.t("mod.action_menu.summary.no_matching_action", "Keine passende Aktion") if str(query or "").strip() else glide_i18n.t("mod.action_menu.summary.no_actions", "Keine Aktionen")
     usable, total = _menu.counts(values)
     if usable == total:
-        return f"{usable} Aktionen" if usable != 1 else "1 Aktion"
-    return f"{usable} von {total} Aktionen verfügbar"
+        return glide_i18n.t("mod.action_menu.summary.actions", '{usable} Aktionen', usable=usable) if usable != 1 else glide_i18n.t("mod.action_menu.summary.1_action", "1 Aktion")
+    return glide_i18n.t("mod.action_menu.summary.of_actions_available", '{usable} von {total} Aktionen verfügbar', usable=usable, total=total)
 
 
 def header_affordances(entry, read_only=False):

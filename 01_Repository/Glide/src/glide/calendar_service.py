@@ -10,6 +10,7 @@ from datetime import date
 from queue import Empty, Queue
 from threading import Lock, Thread
 import busy_calendar
+import i18n as glide_i18n
 
 
 @dataclass(frozen=True)
@@ -134,7 +135,7 @@ class CalendarService:
                 continue
             source, window = result
             if window.sha256 != source.sha256:
-                self.failures[year] = "Kalenderfenster passt nicht zur Quelle."
+                self.failures[year] = glide_i18n.t("mod.calendar_service.poll.calendar_window_does_not", "Kalenderfenster passt nicht zur Quelle.")
                 if operation == "load":
                     self.error = self.failures[year]
                 continue
@@ -150,13 +151,13 @@ class CalendarService:
 
     def view(self, day, zone=None):
         if self.closed:
-            return View("closed", message="Kalenderdienst ist geschlossen.")
+            return View("closed", message=glide_i18n.t("mod.calendar_service.view.calendar_service_is_closed", "Kalenderdienst ist geschlossen."))
         if type(day) is not date:
-            return View("error", message="Ungültiger Kalendertag.")
+            return View("error", message=glide_i18n.t("ui.busy_view.invalid_calendar_day", "Ungültiger Kalendertag."))
         if self.error:
             return View("error", message=self.error)
         if self.loading:
-            return View("loading", message="Kalender wird gelesen …")
+            return View("loading", message=glide_i18n.t("mod.calendar_service.view.reading_calendar", "Kalender wird gelesen …"))
         if self.source is None:
             return View("disabled")
         year = day.year
@@ -168,7 +169,7 @@ class CalendarService:
             try:
                 blocks = window.day_blocks(day, zone or self.source.zone)
             except (ValueError, OverflowError):
-                return View("error", message="Dieser Kalendertag liegt außerhalb der darstellbaren Tagesgrenzen in der lokalen Zeitzone.",
+                return View("error", message=glide_i18n.t("mod.calendar_service.view.this_calendar_day_is", "Dieser Kalendertag liegt außerhalb der darstellbaren Tagesgrenzen in der lokalen Zeitzone."),
                             sha256=self.source.sha256)
             return View("ready", blocks, window.issues, sha256=self.source.sha256)
         try:
@@ -178,7 +179,7 @@ class CalendarService:
         if year not in self.pending:
             self.pending.add(year)
             self._submit((self.generation, "expand", self.source, year))
-        return View("loading", message="Kalenderzeitraum wird berechnet …", sha256=self.source.sha256)
+        return View("loading", message=glide_i18n.t("mod.calendar_service.view.calculating_calendar_period", "Kalenderzeitraum wird berechnet …"), sha256=self.source.sha256)
 
     def close(self):
         with self._lock:

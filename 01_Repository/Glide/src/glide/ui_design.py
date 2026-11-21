@@ -11,6 +11,7 @@ from types import MappingProxyType
 
 from glide_shell import text_fit as _text_fit
 from glide_shell.text_fit import HAIR_SPACE, aligned_markers, pad_to_width, settled_wrap_width  # noqa: F401
+import i18n as glide_i18n
 
 SPACING = MappingProxyType({value: value for value in
                            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 18, 22, 24, 28, 30)})
@@ -25,18 +26,18 @@ def remaining_text(length, limit=TITLE_MAX_CHARS, short=False):
     """Restzähler einer begrenzten Eingabe (D67, 07.11.2026): zählt von der Grenze herunter."""
     rest = int(limit) - max(0, int(length or 0))
     if rest > 0:
-        return f"noch {rest}" if short else ("noch 1 Zeichen" if rest == 1 else f"noch {rest} Zeichen")
+        return glide_i18n.t("mod.ui_design.remaining_text.left", 'noch {rest}', rest=rest) if short else (glide_i18n.t("mod.ui_design.remaining_text.1_character_left", "noch 1 Zeichen") if rest == 1 else glide_i18n.t("mod.ui_design.remaining_text.characters_left", 'noch {rest} Zeichen', rest=rest))
     if rest == 0:
-        return "0 übrig" if short else "keine Zeichen mehr frei"
-    return f"{-rest} zu viel" if short else ("1 Zeichen zu viel" if rest == -1 else f"{-rest} Zeichen zu viel")
+        return glide_i18n.t("mod.ui_design.remaining_text.0_left", "0 übrig") if short else glide_i18n.t("mod.ui_design.remaining_text.no_characters_left", "keine Zeichen mehr frei")
+    return glide_i18n.t("mod.ui_design.remaining_text.too_many", '{wert} zu viel', wert=-rest) if short else (glide_i18n.t("mod.ui_design.remaining_text.1_character_too_many", "1 Zeichen zu viel") if rest == -1 else glide_i18n.t("mod.ui_design.remaining_text.characters_too_many", '{wert} Zeichen zu viel', wert=-rest))
 
 
 def limit_message(limit=TITLE_MAX_CHARS, dropped=0, short=False):
     """Klare Meldung, wenn eine Eingabe die Grenze überschreiten würde (D67)."""
     if short:
-        return f"{int(dropped)} gekürzt" if dropped else f"max. {int(limit)}"
-    text = f"Höchstens {int(limit)} Zeichen"
-    return text + (f" · {int(dropped)} nicht übernommen" if dropped else "")
+        return glide_i18n.t("mod.ui_design.limit_message.shortened", '{int} gekürzt', int=int(dropped)) if dropped else f"max. {int(limit)}"
+    text = glide_i18n.t("mod.ui_design.limit_message.at_most_characters", 'Höchstens {int} Zeichen', int=int(limit))
+    return text + (glide_i18n.t("mod.ui_design.limit_message.not_taken_over", ' · {int} nicht übernommen', int=int(dropped)) if dropped else "")
 
 
 def clip_title(text, limit=TITLE_MAX_CHARS, ellipsis="..."):
@@ -54,7 +55,7 @@ def task_title(text, description="", *, preserve=False):
     """Neue Titel begrenzen und ihr Original sichern; Altdaten vollständig bewahren."""
     clipped = text if preserve else clip_title(text)
     if clipped != text:
-        description = (str(description or "").rstrip() + "\n\nOriginaltitel:\n" + text).lstrip()
+        description = (glide_i18n.t("mod.ui_design.task_title.original_title", '{rstrip}\n\nOriginaltitel:\n{text}', rstrip=str(description or "").rstrip(), text=text)).lstrip()
     return clipped, description
 
 

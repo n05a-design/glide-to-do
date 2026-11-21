@@ -14,6 +14,7 @@ import ics_recurrence as recurrence
 import ics_timezone
 import timezones
 from occupied_time import Block, utc
+import i18n as glide_i18n
 
 UTC = timezone.utc
 
@@ -255,7 +256,7 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
                             until += timedelta(days=1, microseconds=-1)
                 except (ValueError, recurrence.RuleError) as exc:
                     rule = None
-                    issues.append((uid, str(exc) + ' Weitere Serienvorkommen wurden nicht berücksichtigt.'))
+                    issues.append((uid, glide_i18n.t("mod.ics_busy.parse_calendar.further_series_occurrences_were", '{str} Weitere Serienvorkommen wurden nicht berücksichtigt.', str=str(exc))))
             def moments(name):
                 result = []
                 for prop in lookup.get(name, ()):
@@ -275,7 +276,7 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
                 stamp_moment,stamp_date = moment(one('DTSTAMP'),zone,resolver,date_zone)
                 if stamp_date or not stamp.endswith('Z'):
                     raise ValueError('DTSTAMP muss eine UTC-Uhrzeit enthalten.')
-            title = text_value(one('SUMMARY').value) if one('SUMMARY') else 'Belegte Zeit'
+            title = text_value(one('SUMMARY').value) if one('SUMMARY') else glide_i18n.t("ui.show_busy_calendar_dialog.busy_time", 'Belegte Zeit')
             events.append(Event(uid, title, start, span, all_day, rule, until, extra, excluded,
                                 identity, cancelled, transparent, sequence, stamp, identity_all_day))
         except (ValueError, OverflowError) as exc:
@@ -293,7 +294,7 @@ def expand(calendar, start, end, *, max_periods=200000, max_blocks=100000):
         group = groups.setdefault(event.uid, {})
         key = utc(event.identity) if event.identity else None
         if key in group:
-            issues.append((event.uid, 'Mehrere Revisionen: neueste SEQUENCE/DTSTAMP berücksichtigt.'))
+            issues.append((event.uid, glide_i18n.t("mod.ics_busy.expand.several_revisions_newest_sequence", 'Mehrere Revisionen: neueste SEQUENCE/DTSTAMP berücksichtigt.')))
             if (event.sequence, event.stamp) < (group[key].sequence, group[key].stamp):
                 continue
         group[key] = event
@@ -315,7 +316,7 @@ def expand(calendar, start, end, *, max_periods=200000, max_blocks=100000):
             if master and master.start:
                 for key,event in tuple(group.items()):
                     if event.identity_all_day != master.all_day or (event.start is not None and event.all_day != master.all_day):
-                        issues.append((uid,'Serienausnahme hat einen anderen Datumstyp als der Basistermin; Ausnahme nicht berücksichtigt.'))
+                        issues.append((uid,glide_i18n.t("mod.ics_busy.expand.series_exception_has_a", 'Serienausnahme hat einen anderen Datumstyp als der Basistermin; Ausnahme nicht berücksichtigt.')))
                         del group[key]
                 occurrences = {utc(master.start):master.start}
                 if master.rule:
@@ -337,7 +338,7 @@ def expand(calendar, start, end, *, max_periods=200000, max_blocks=100000):
                     if identity not in master.excluded and identity not in group:
                         add(master, occurrence)
             elif group:
-                issues.append((uid, 'Serienausnahme ohne Basistermin; einzelner Termin berücksichtigt.'))
+                issues.append((uid, glide_i18n.t("mod.ics_busy.expand.series_exception_without_base", 'Serienausnahme ohne Basistermin; einzelner Termin berücksichtigt.')))
             for event in group.values():
                 add(event, event.start)
         except (ValueError, OverflowError) as exc:

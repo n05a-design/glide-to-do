@@ -7,6 +7,7 @@ vorhandene Tastenbindungen. Native Attribute ersetzen keine Readerabnahme.
 """
 from dataclasses import replace
 from accessibility import Attributes, screenreader_active, set_attributes
+import i18n as glide_i18n
 
 
 def available(call):
@@ -69,7 +70,7 @@ class Binding:
             return
         current = self.attributes()
         if current is None:
-            current = Attributes('Label', 'Nicht verfügbar', state='disabled')
+            current = Attributes('Label', glide_i18n.t("mod.accessibility_bindings.apply.not_available", 'Nicht verfügbar'), state='disabled')
         if self.command is not None and self.action is not None and current.state != 'disabled':
             current = replace(current, action=(self.command,))
         set_attributes(widget.tk.call, widget, current)

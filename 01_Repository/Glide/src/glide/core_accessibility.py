@@ -2,17 +2,18 @@
 """Semantik des Aufgaben-Kernablaufs; Widgetadapter ohne Tk-Import."""
 from accessibility import Attributes, plain, task_value
 from accessibility_bindings import Binding, available
+import i18n as glide_i18n
 
 
 def control_name(text):
     text = plain(text)
-    special = {'+': 'Hinzufügen', '×': 'Entfernen', '…': 'Weitere Aktionen',
-               '...': 'Weitere Aktionen', '←': 'Zurück', '→': 'Weiter'}
+    special = {'+': glide_i18n.t("button.add", 'Hinzufügen'), '×': glide_i18n.t("saved_view.manager.remove", 'Entfernen'), '…': glide_i18n.t("table.383b7f232d7d", 'Weitere Aktionen'),
+               '...': glide_i18n.t("table.383b7f232d7d", 'Weitere Aktionen'), '←': glide_i18n.t("ui.show_busy_calendar_dialog.back", 'Zurück'), '→': glide_i18n.t("ui.show_busy_calendar_dialog.next", 'Weiter')}
     if text in special:
         return special[text]
     while text and not (text[0].isalnum() or text[0] in 'ÄÖÜäöü'):
         text = text[1:].lstrip()
-    return text.rstrip(' …') or 'Aktion'
+    return text.rstrip(' …') or glide_i18n.t("mod.core_accessibility.control_name.action", 'Aktion')
 
 
 def bind_control(widget, attributes, *, action=None):
@@ -50,7 +51,7 @@ def button_attributes(widget):
         name = plain(tooltip) if tooltip and not any(char.isalnum() for char in widget.text) else control_name(widget.text)
     value = getattr(widget, '_accessible_value', lambda: '')()
     return Attributes(getattr(widget, '_accessible_role', 'Button'), name, state=state, value=value,
-                      help='Mit Leertaste oder Enter ausführen.')
+                      help=glide_i18n.t("mod.core_accessibility.button_attributes.run_with_space_or", 'Mit Leertaste oder Enter ausführen.'))
 
 
 def bind_button(widget):
@@ -60,8 +61,8 @@ def bind_button(widget):
 def bind_checkbox(widget, variable, name):
     return bind_control(widget, lambda: Attributes('Checkbutton', name,
         value='1' if variable.get() else '0', state=str(widget.cget('state')),
-        description='Ausgewählt' if variable.get() else 'Nicht ausgewählt',
-        help='Mit Leertaste umschalten.'), action=widget.invoke)
+        description=glide_i18n.t("mod.core_accessibility.bind_checkbox.selected", 'Ausgewählt') if variable.get() else glide_i18n.t("mod.core_accessibility.bind_checkbox.not_selected", 'Nicht ausgewählt'),
+        help=glide_i18n.t("mod.core_accessibility.bind_checkbox.toggle_with_space", 'Mit Leertaste umschalten.')), action=widget.invoke)
 
 
 def attachment_attributes(app, identity, index):
@@ -70,8 +71,8 @@ def attachment_attributes(app, identity, index):
     if (state.get('item_id') != identity or app.find_item_in_lists(identity) is None or
             not 0 <= index < len(attachments)):
         return None
-    return Attributes('Button', 'Anhang öffnen: '+plain(attachments[index].get('name') or 'Anhang'),
-                      help='Mit Leertaste oder Enter öffnen.')
+    return Attributes('Button', glide_i18n.t("mod.core_accessibility.attachment_attributes.open_attachment", 'Anhang öffnen: {plain}', plain=plain(attachments[index].get('name') or glide_i18n.t("ui.insert_detail_rows.attachment", 'Anhang'))),
+                      help=glide_i18n.t("mod.core_accessibility.attachment_attributes.open_with_space_or", 'Mit Leertaste oder Enter öffnen.'))
 
 
 def bind_attachment(widget, app, identity, index):
@@ -88,7 +89,7 @@ def entry_attributes(widget, name, *, text=False, help='', placeholder=None):
     value = '' if placeholder is not None and placeholder() else (
         widget.get('1.0', 'end-1c') if text else widget.get())
     return Attributes('Text' if text else 'Entry', name, value=str(value or ''),
-                      state=str(widget.cget('state')), help=help or 'Mit den normalen Texttasten bearbeiten. Strg+Tab wechselt zum nächsten Feld.')
+                      state=str(widget.cget('state')), help=help or glide_i18n.t("mod.core_accessibility.entry_attributes.edit_with_the_normal", 'Mit den normalen Texttasten bearbeiten. Strg+Tab wechselt zum nächsten Feld.'))
 
 
 def bind_focus_traversal(widget):
@@ -125,7 +126,7 @@ def choice_disabled(widget):
 def choice_attributes(widget):
     return Attributes('Combobox', getattr(widget, '_accessible_name', 'Auswahl'),
                       value=plain(widget.variable.get()), state='disabled' if choice_disabled(widget) else 'normal',
-                      help='Mit Enter öffnen, Pfeiltasten wählen, Enter übernehmen, Escape abbrechen.')
+                      help=glide_i18n.t("mod.core_accessibility.choice_attributes.open_with_enter_choose", 'Mit Enter öffnen, Pfeiltasten wählen, Enter übernehmen, Escape abbrechen.'))
 
 
 def bind_choice(widget, name=None):
@@ -137,22 +138,22 @@ def bind_choice(widget, name=None):
 def bind_options(widget, owner):
     return bind_control(widget, lambda: Attributes('Listbox', getattr(owner, '_accessible_name', 'Auswahl'),
         state='disabled' if choice_disabled(owner) else 'normal',
-        value=plain(widget.options[widget._selected]) if widget.options else 'Keine Auswahl',
-        help='Pfeiltasten wählen, Enter übernimmt, Escape bricht ab.'), action=owner._commit)
+        value=plain(widget.options[widget._selected]) if widget.options else glide_i18n.t("mod.core_accessibility.bind_options.no_selection", 'Keine Auswahl'),
+        help=glide_i18n.t("mod.core_accessibility.bind_options.arrow_keys_choose_enter", 'Pfeiltasten wählen, Enter übernimmt, Escape bricht ab.')), action=owner._commit)
 
 
 def label_selection_attributes(dropdown, *, popup=False):
     if popup:
         index = getattr(dropdown, '_focus_index', 0)
         label = dropdown.labels[index] if 0 <= index < len(dropdown.labels) else None
-        value = (plain(label.get('name')) + ('. Ausgewählt.' if label.get('id') in dropdown.selected_ids
-                                           else '. Nicht ausgewählt.')) if label else 'Keine Labels vorhanden.'
+        value = (plain(label.get('name')) + (glide_i18n.t("mod.core_accessibility.label_selection_attributes.selected", '. Ausgewählt.') if label.get('id') in dropdown.selected_ids
+                                           else glide_i18n.t("mod.core_accessibility.label_selection_attributes.not_selected", '. Nicht ausgewählt.'))) if label else glide_i18n.t("mod.core_accessibility.label_selection_attributes.no_labels_available", 'Keine Labels vorhanden.')
     else:
         value = ', '.join(plain(label.get('name')) for label in dropdown.labels
-                          if label.get('id') in dropdown.selected_ids) or 'Keine Labels ausgewählt.'
-    return Attributes('Listbox' if popup else 'Combobox', 'Labels', value=value,
+                          if label.get('id') in dropdown.selected_ids) or glide_i18n.t("mod.core_accessibility.label_selection_attributes.no_labels_selected", 'Keine Labels ausgewählt.')
+    return Attributes('Listbox' if popup else 'Combobox', glide_i18n.t("menu.view.labels", 'Labels'), value=value,
                       state='disabled' if choice_disabled(dropdown) else 'normal',
-                      help='Enter öffnet oder beendet die Auswahl. Pfeiltasten wählen ein Label, Leertaste schaltet es um.')
+                      help=glide_i18n.t("mod.core_accessibility.label_selection_attributes.enter_opens_or_ends", 'Enter öffnet oder beendet die Auswahl. Pfeiltasten wählen ein Label, Leertaste schaltet es um.'))
 
 
 def bind_labels(dropdown, popup=None):
@@ -168,15 +169,15 @@ def navigation_attributes(tree, name):
         (value for value in selected if tree.exists(value)), None)
     title = plain(tree.item(identity, 'text')) if identity is not None else ''
     return Attributes('Tree', name + (': ' + title if title else ''),
-                      value=title or 'Keine Auswahl.',
-                      help='Mit Pfeil auf und ab den Bereich oder die Liste wählen. Strg+Tab wechselt den Bereich.')
+                      value=title or glide_i18n.t("mod.core_accessibility.navigation_attributes.no_selection", 'Keine Auswahl.'),
+                      help=glide_i18n.t("mod.core_accessibility.navigation_attributes.choose_the_area_or", 'Mit Pfeil auf und ab den Bereich oder die Liste wählen. Strg+Tab wechselt den Bereich.'))
 
 
 def bind_navigation(app):
-    for key, name in (('system_listbox', 'Arbeitsbereiche'),
-                      ('sidebar_listbox', 'Listen und Ordner'),
-                      ('pages_listbox', 'Seiten'), ('notes_listbox', 'Notizbücher'),
-                      ('drawings_listbox', 'Zeichnungen')):
+    for key, name in (('system_listbox', glide_i18n.t("mod.core_accessibility.bind_navigation.workspaces", 'Arbeitsbereiche')),
+                      ('sidebar_listbox', glide_i18n.t("ui.require_list_view.lists_and_folders", 'Listen und Ordner')),
+                      ('pages_listbox', glide_i18n.t("sidebar.pages", 'Seiten')), ('notes_listbox', glide_i18n.t("ui.render_notes_page.notebooks", 'Notizbücher')),
+                      ('drawings_listbox', glide_i18n.t("sidebar.drawings", 'Zeichnungen'))):
         tree = getattr(app, key, None)
         if tree is not None:
             bind_focus_traversal(tree)
@@ -189,10 +190,10 @@ def task_completion_attributes(widget, app, identity):
         return None
     item = found[0]
     done = bool(item.get('done'))
-    return Attributes('Button', 'Aufgabe wieder öffnen' if done else 'Aufgabe erledigen',
-                      description=plain(item.get('text')), value='Erledigt' if done else 'Offen',
+    return Attributes('Button', glide_i18n.t("mod.core_accessibility.task_completion_attributes.reopen_task", 'Aufgabe wieder öffnen') if done else glide_i18n.t("ui.open_reminders.complete_task", 'Aufgabe erledigen'),
+                      description=plain(item.get('text')), value=glide_i18n.t("inspector.done", 'Erledigt') if done else glide_i18n.t("ui.refresh.open", 'Offen'),
                       state='disabled' if getattr(app, '_data_read_only', False) else str(widget.cget('state')),
-                      help='Mit Leertaste oder Enter ausführen.')
+                      help=glide_i18n.t("mod.core_accessibility.task_completion_attributes.run_with_space_or", 'Mit Leertaste oder Enter ausführen.'))
 
 
 def bind_task_completion(widget, app, identity):
@@ -201,14 +202,14 @@ def bind_task_completion(widget, app, identity):
 
 
 def bind_due(field, name=None, date_help=None, time_help=None, calendar_action=None):
-    name = name or ('Bearbeitungstag' if field.purpose == 'planned' else 'Fälligkeit')
-    date_help = date_help or 'Datum als Tag, Monat und Jahr eingeben, zum Beispiel 13.10.2026.'
-    time_help = time_help or 'Freiwillige Uhrzeit als Stunde und Minute eingeben, zum Beispiel 09:30.'
-    calendar_action = calendar_action or name + ' im Kalender wählen'
+    name = name or (glide_i18n.t("calendar.title.planned", 'Bearbeitungstag') if field.purpose == 'planned' else glide_i18n.t("calendar.title.due", 'Fälligkeit'))
+    date_help = date_help or glide_i18n.t("mod.core_accessibility.bind_due.enter_the_date_as", 'Datum als Tag, Monat und Jahr eingeben, zum Beispiel 13.10.2026.')
+    time_help = time_help or glide_i18n.t("mod.core_accessibility.bind_due.enter_an_optional_time", 'Freiwillige Uhrzeit als Stunde und Minute eingeben, zum Beispiel 09:30.')
+    calendar_action = calendar_action or glide_i18n.t("mod.core_accessibility.bind_due.choose_in_the_calendar", '{name} im Kalender wählen', name=name)
     bind_entry(field.date_entry, name, help=date_help)
     time = getattr(field, 'time_entry', None)
     if time is not None:
-        bind_entry(time, name + ': Uhrzeit', help=time_help)
+        bind_entry(time, glide_i18n.t("mod.core_accessibility.bind_due.time", '{name}: Uhrzeit', name=name), help=time_help)
     if field.calendar_button is not None:
         field.calendar_button._accessible_name = calendar_action
         refresh(field.calendar_button)
@@ -220,12 +221,12 @@ def checklist_attributes(app, identity, index):
     if not 0 <= index < len(steps):
         return None
     step = steps[index]
-    return Attributes('Checkbutton', plain(step.get('text')) or 'Checklistenpunkt',
+    return Attributes('Checkbutton', plain(step.get('text')) or glide_i18n.t("mod.core_accessibility.checklist_attributes.checklist_item", 'Checklistenpunkt'),
         # Tk 9.1 leitet den nativen Checked-Zustand aus dem Wert "1" ab.
         value='1' if step.get('done') else '0',
-        description='Erledigt' if step.get('done') else 'Offen',
+        description=glide_i18n.t("inspector.done", 'Erledigt') if step.get('done') else glide_i18n.t("ui.refresh.open", 'Offen'),
         state='disabled' if getattr(app, '_data_read_only', False) else 'normal',
-        help='Leertaste oder Enter schaltet den Checklistenpunkt um.')
+        help=glide_i18n.t("mod.core_accessibility.checklist_attributes.space_or_enter_toggles", 'Leertaste oder Enter schaltet den Checklistenpunkt um.'))
 
 
 def bind_checklist(widget, app, identity, index):
@@ -294,10 +295,10 @@ def refresh_inspector(app):
 def selected_task_attributes(app):
     identity = app.get_selected_item_id()
     found = app.find_item_in_lists(identity) if identity else None
-    name = 'Mein Tag: Aufgaben' if app.view_mode == app.PLAN_DAY_VIEW else 'Aufgaben'
+    name = glide_i18n.t("mod.core_accessibility.selected_task_attributes.my_day_tasks", 'Mein Tag: Aufgaben') if app.view_mode == app.PLAN_DAY_VIEW else glide_i18n.t("saved_view.manager.tasks", 'Aufgaben')
     count = len(app.get_selected_item_ids())
     if found is None:
-        value = 'Keine Aufgabe ausgewählt.'
+        value = glide_i18n.t("mod.core_accessibility.selected_task_attributes.no_task_selected", 'Keine Aufgabe ausgewählt.')
     else:
         item = found[0]
         blockers = [target[0].get('text', '') for key in item.get('blocked_by', ())
@@ -305,28 +306,28 @@ def selected_task_attributes(app):
         value = task_value(item, label_names=[label.get('name', '') for label in app.item_labels(item)],
                            blocked_titles=blockers)
         if count > 1:
-            value = f'{count} Aufgaben ausgewählt. Aktuelle Aufgabe: ' + value
+            value = glide_i18n.t("mod.core_accessibility.selected_task_attributes.tasks_selected_current_task", '{count} Aufgaben ausgewählt. Aktuelle Aufgabe: {value}', count=count, value=value)
     return Attributes('Tree', name, value=value,
-                      description='Schreibgeschützter Bestand.' if getattr(app, '_data_read_only', False) else '',
-                      help='Pfeil auf und ab wählen Aufgaben. Leertaste erledigt. F2 öffnet den Inspektor. '
-                           'Strg oder Cmd plus Umschalt plus P plant die Auswahl. Strg+Tab wechselt den Bereich. Escape schließt den Inspektor.')
+                      description=glide_i18n.t("mod.core_accessibility.selected_task_attributes.read_only_data", 'Schreibgeschützter Bestand.') if getattr(app, '_data_read_only', False) else '',
+                      help=glide_i18n.t("mod.core_accessibility.selected_task_attributes.58", 'Pfeil auf und ab wählen Aufgaben. Leertaste erledigt. F2 öffnet den Inspektor. '
+                           'Strg oder Cmd plus Umschalt plus P plant die Auswahl. Strg+Tab wechselt den Bereich. Escape schließt den Inspektor.'))
 
 
 def install_core(app):
     bind_navigation(app)
-    bind_entry(app.entry, 'Neue Aufgabe', help='Aufgabe eintippen, Enter fügt sie hinzu. Umschalt plus Enter öffnet alle Felder.',
+    bind_entry(app.entry, glide_i18n.t("board.action.new_task", 'Neue Aufgabe'), help=glide_i18n.t("mod.core_accessibility.install_core.type_a_task_enter", 'Aufgabe eintippen, Enter fügt sie hinzu. Umschalt plus Enter öffnet alle Felder.'),
                placeholder=lambda: app.entry_placeholder_active)
-    bind_entry(app.search_entry, 'Aufgaben suchen', help='Suchtext eingeben. Escape löscht die Suche. Die Ergebnisliste folgt darunter.',
+    bind_entry(app.search_entry, glide_i18n.t("mod.core_accessibility.install_core.search_tasks", 'Aufgaben suchen'), help=glide_i18n.t("mod.core_accessibility.install_core.enter_search_text_escape", 'Suchtext eingeben. Escape löscht die Suche. Die Ergebnisliste folgt darunter.'),
                placeholder=lambda: app.search_placeholder_active)
     bind_focus_traversal(app.tree)
     bind_control(app.tree, lambda: selected_task_attributes(app))
-    app.add_button._accessible_name = 'Aufgabe hinzufügen'
+    app.add_button._accessible_name = glide_i18n.t("mod.core_accessibility.install_core.add_task", 'Aufgabe hinzufügen')
     refresh(app.add_button)
 
 
 def bind_inspector_fields(fields):
-    names = {'text': 'Aufgabentitel', 'estimated_minutes': 'Aufwand in Minuten',
-             'time_spent_minutes': 'Erfasste Zeit in Minuten', 'description': 'Beschreibung'}
+    names = {'text': glide_i18n.t("mod.core_accessibility.bind_inspector_fields.task_title", 'Aufgabentitel'), 'estimated_minutes': glide_i18n.t("mod.core_accessibility.bind_inspector_fields.effort_in_minutes", 'Aufwand in Minuten'),
+             'time_spent_minutes': glide_i18n.t("ui.item_form_dialog.tracked_time_in_minutes", 'Erfasste Zeit in Minuten'), 'description': glide_i18n.t("ui.render_detail.description", 'Beschreibung')}
     for key, name in names.items():
         widget = fields.get(key)
         if widget is not None:

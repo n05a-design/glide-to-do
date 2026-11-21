@@ -18,6 +18,7 @@ import zlib
 
 import page_markdown
 import object_references
+import i18n as glide_i18n
 
 MAX_ARCHIVE_BYTES = 200 * 1024 * 1024
 MAX_EXPANDED_BYTES = 256 * 1024 * 1024
@@ -82,7 +83,7 @@ def plain_title(name):
     stem = PurePosixPath(name).stem if PurePosixPath(name).suffix.lower() in (".md", ".csv") else name
     match = _PAGE_ID.search(stem)
     title = stem[:match.start()].strip(" _-") if match else stem
-    return title.strip() or "Ohne Titel"
+    return title.strip() or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel")
 
 
 def local_target(page_path, target, members):
@@ -189,9 +190,9 @@ def inspect_export(source):
     for path, raw in sorted(members.items()):
         suffix = PurePosixPath(path).suffix.lower()
         if suffix == ".csv":
-            losses.append(Loss(path, "csv-database", "CSV-Datenbank bleibt im Originalarchiv; Datenbankansichten und Eigenschaften werden nicht nachgebaut."))
+            losses.append(Loss(path, "csv-database", glide_i18n.t("mod.notion_archive.inspect_export.csv_database_stays_in", "CSV-Datenbank bleibt im Originalarchiv; Datenbankansichten und Eigenschaften werden nicht nachgebaut.")))
         elif suffix == ".html":
-            losses.append(Loss(path, "html-file", "HTML-Datei bleibt im Originalarchiv und wird nicht als Seite übernommen."))
+            losses.append(Loss(path, "html-file", glide_i18n.t("mod.notion_archive.inspect_export.html_file_stays_in", "HTML-Datei bleibt im Originalarchiv und wird nicht als Seite übernommen.")))
         if suffix != ".md":
             continue
         try:
@@ -206,11 +207,11 @@ def inspect_export(source):
             raise NotionFormatError("Eine Notion-Quellenkennung kommt mehrfach vor: " + path)
         identities.add(key)
         if key.startswith("path:"):
-            losses.append(Loss(path, "path-identity", "Keine Notion-Kennung im Dateinamen; die Wiedererkennung nutzt den Archivpfad. Umbenennungen müssen gegebenenfalls zugeordnet werden."))
+            losses.append(Loss(path, "path-identity", glide_i18n.t("mod.notion_archive.inspect_export.no_notion_id_in", "Keine Notion-Kennung im Dateinamen; die Wiedererkennung nutzt den Archivpfad. Umbenennungen müssen gegebenenfalls zugeordnet werden.")))
         if re.search(r"<(?:aside|table|div|details|iframe|script)\b", text, re.I):
-            losses.append(Loss(path, "html-block", "HTML-/Hinweisblöcke bleiben als Quelltext lesbar; ihre Gestaltung und eingebettete Funktionen werden nicht übernommen."))
+            losses.append(Loss(path, "html-block", glide_i18n.t("mod.notion_archive.inspect_export.html_callout_blocks_stay", "HTML-/Hinweisblöcke bleiben als Quelltext lesbar; ihre Gestaltung und eingebettete Funktionen werden nicht übernommen.")))
         if re.search(r"^#{5,6}\s", text, re.M):
-            losses.append(Loss(path, "heading-depth", "Überschriften der Stufen 5/6 werden als Stufe 4 übernommen."))
+            losses.append(Loss(path, "heading-depth", glide_i18n.t("mod.notion_archive.inspect_export.headings_of_levels_5", "Überschriften der Stufen 5/6 werden als Stufe 4 übernommen.")))
         assets = set()
         for match in _links(text):
             target = match.group(3)
@@ -222,19 +223,19 @@ def inspect_export(source):
             if found and not found.lower().endswith(".md"):
                 assets.add(found)
                 if not match.group(1):
-                    losses.append(Loss(path, "attachment-link", "Dateiverweis wird als Seitenanhang übernommen: " + found))
+                    losses.append(Loss(path, "attachment-link", glide_i18n.t("mod.notion_archive.inspect_export.file_reference_is_taken", 'Dateiverweis wird als Seitenanhang übernommen: {found}', found=found)))
                 if match.group(1) and PurePosixPath(found).suffix.lower() not in _IMAGE_SUFFIXES:
-                    losses.append(Loss(path, "image-format", "Bildformat bleibt als Datei erhalten: " + found))
+                    losses.append(Loss(path, "image-format", glide_i18n.t("mod.notion_archive.inspect_export.image_format_is_kept", 'Bildformat bleibt als Datei erhalten: {found}', found=found)))
                 if match.group(1):
                     start = text.rfind("\n", 0, match.start()) + 1
                     end = text.find("\n", match.end())
                     line = text[start:len(text) if end == -1 else end]
                     if line.strip() != match.group(0).strip():
-                        losses.append(Loss(path, "inline-image-block", "Ein Bild innerhalb einer Textzeile wird als eigener Bildblock übernommen."))
+                        losses.append(Loss(path, "inline-image-block", glide_i18n.t("mod.notion_archive.inspect_export.an_image_inside_a", "Ein Bild innerhalb einer Textzeile wird als eigener Bildblock übernommen.")))
             elif found is None and (parsed is None or not parsed.scheme or parsed.scheme in ("file", "data")):
-                losses.append(Loss(path, "missing-local-target", "Lokales Ziel nicht im Archiv gefunden: " + target))
+                losses.append(Loss(path, "missing-local-target", glide_i18n.t("mod.notion_archive.inspect_export.local_target_not_found", 'Lokales Ziel nicht im Archiv gefunden: {target}', target=target)))
             if parsed and parsed.fragment:
-                losses.append(Loss(path, "link-anchor", "Abschnittsanker wird nicht als eigenes Sprungziel übernommen: " + target))
+                losses.append(Loss(path, "link-anchor", glide_i18n.t("mod.notion_archive.inspect_export.section_anchor_is_not", 'Abschnittsanker wird nicht als eigenes Sprungziel übernommen: {target}', target=target)))
         title = next((line[2:].strip() for line in text.splitlines() if line.startswith("# ")), plain_title(PurePosixPath(path).name))
         parent = PurePosixPath(path).parent
         parts = parent.parts[1:] if wrapper and parent.parts and parent.parts[0] == wrapper else parent.parts
@@ -250,7 +251,7 @@ def inspect_export(source):
             asset_key = asset[len(wrapper) + 1:] if wrapper else asset
             digest.update(b"\x00" + asset_key.encode("utf-8") + b"\x00")
             digest.update(hashlib.sha256(members[asset]).digest())
-        pages.append(Page(key, path, title[:200] or "Ohne Titel", tuple(folders), text,
+        pages.append(Page(key, path, title[:200] or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"), tuple(folders), text,
                           digest.hexdigest(), tuple(sorted(assets))))
     if not pages:
         raise NotionFormatError("Das Archiv enthält keine Seiten.")
@@ -266,7 +267,7 @@ def unresolved_links(export, page_ids):
         for match in _links(page.markdown):
             target = local_target(page.path, match.group(3), export.members)
             if target in by_path and by_path[target] not in page_ids:
-                losses.append(Loss(page.path, "unselected-page", "Seitenziel ist nicht zur Übernahme ausgewählt und noch nicht in Glide zugeordnet: " + target))
+                losses.append(Loss(page.path, "unselected-page", glide_i18n.t("mod.notion_archive.unresolved_links.page_target_is_not", 'Seitenziel ist nicht zur Übernahme ausgewählt und noch nicht in Glide zugeordnet: {target}', target=target)))
     return tuple(dict.fromkeys(losses))
 
 

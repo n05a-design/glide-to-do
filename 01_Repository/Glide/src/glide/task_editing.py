@@ -7,6 +7,7 @@ werden. Unberührte Felder bewahren deshalb den frischen Bestandswert.
 import copy
 from datetime import date, datetime
 from dataclasses import dataclass
+import i18n as glide_i18n
 
 
 class ChangeRecord:
@@ -184,7 +185,7 @@ GROUPS = (frozenset(("due", "due_time", "repeat")),
 class Conflict(ValueError):
     def __init__(self, fields):
         self.fields = tuple(sorted(fields))
-        super().__init__("Zwischenzeitlich geänderte Felder: " + ", ".join(FIELD_NAMES[key] for key in self.fields))
+        super().__init__(glide_i18n.t("mod.task_editing.init.fields_changed_in_the", 'Zwischenzeitlich geänderte Felder: {join}', join=", ".join(FIELD_NAMES[key] for key in self.fields)))
 
 
 @dataclass(frozen=True)

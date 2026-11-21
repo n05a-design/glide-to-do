@@ -5,6 +5,7 @@ import copy
 from dataclasses import dataclass
 from urllib.parse import quote, unquote
 from content_search import search_key, match_spans
+import i18n as glide_i18n
 
 URI = re.compile(r'^glide://(list|item)/([^/?#]+)$')
 
@@ -120,13 +121,13 @@ def caption(key, index):
         title = ' '.join(title.split())
         if len(title) > 120:
             title = title[:119] + '…'
-    label = title or 'Ziel fehlt'
+    label = title or glide_i18n.t("ui.refresh_tasks.target_missing", 'Ziel fehlt')
     if state == 'trash':
-        label += ' · im Papierkorb'
+        label += glide_i18n.t("ui.refresh_page_features.in_the_trash", ' · im Papierkorb')
     elif state == 'archived':
-        label += ' · im Archiv'
+        label += glide_i18n.t("ui.refresh_page_features.archived", ' · im Archiv')
     if key[0] == 'item' and source:
-        label += ' · ' + str(source.get('title') or 'Liste')
+        label += ' · ' + str(source.get('title') or glide_i18n.t("editor.toolbar.list", 'Liste'))
     return state, label
 
 
@@ -225,7 +226,7 @@ class UsageLocation:
 
     @property
     def kind_label(self) -> str:
-        return USAGE_KIND_LABELS.get(self.kind, self.kind)
+        return glide_i18n.t(f"mod.object_references.kind.{self.kind}", USAGE_KIND_LABELS.get(self.kind, self.kind))
 
 
 def _folder_path(folder_id, folders_by_id):
@@ -233,7 +234,7 @@ def _folder_path(folder_id, folders_by_id):
     while current and current in folders_by_id and current not in seen:
         seen.add(current)
         folder = folders_by_id[current]
-        names.append(str(folder.get('title') or 'Ordner').strip() or 'Ordner')
+        names.append(str(folder.get('title') or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')).strip() or glide_i18n.t("ui.kachel_boards.folder", 'Ordner'))
         current = folder.get('parent_id')
     return ' › '.join(reversed(names))
 
@@ -303,8 +304,8 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                 kind='home',
                 source=('folder', folder_id),
                 state=f_state,
-                title=f'Ordner · {path}',
-                detail='Übergeordneter Ordner',
+                title=glide_i18n.t("mod.object_references.usage_locations.folder", 'Ordner · {path}', path=path),
+                detail=glide_i18n.t("mod.object_references.usage_locations.parent_folder", 'Übergeordneter Ordner'),
                 scope=f'folder:{folder_id}',
             ))
         else:
@@ -313,7 +314,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                 source=target,
                 state=target_state,
                 title=caption(target, index)[1],
-                detail='Oberste Ebene (ohne Ordner)',
+                detail=glide_i18n.t("mod.object_references.usage_locations.top_level_no_folder", 'Oberste Ebene (ohne Ordner)'),
             ))
     else:
         if target_entry and isinstance(target_entry, dict) and 'id' in target_entry:
@@ -321,16 +322,16 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
             e_state, e_label = caption(entry_key, index)
             parents = _item_parent_map(target_entry.get('items', ()))
             parent_item = parents.get(target[1])
-            detail = 'Quellbehälter'
+            detail = glide_i18n.t("mod.object_references.usage_locations.source_container", 'Quellbehälter')
             if parent_item:
                 p_title = ' '.join(str(parent_item.get('text') or '').split())[:60]
-                detail = f'Unterpunkt von „{p_title}“'
+                detail = glide_i18n.t("mod.object_references.usage_locations.subitem_of", 'Unterpunkt von „{p_title}“', p_title=p_title)
             doc = target_entry.get('rich_note') or {}
             line_no = 0
             for span in doc.get('spans', ()):
                 if span.get('tag') == f'item:{target[1]}':
                     line_no, snippet = _line_excerpt(doc.get('text', ''), span.get('start', 0), span.get('end', 0))
-                    detail = f'Heimatzeile {line_no}' + (f': „{snippet}“' if snippet else '')
+                    detail = glide_i18n.t("mod.object_references.usage_locations.home_line", 'Heimatzeile {line_no}{wert}', line_no=line_no, wert=f': „{snippet}“' if snippet else '')
                     break
             result.append(UsageLocation(
                 kind='home',
@@ -361,7 +362,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                 source=source_key,
                 state=source_state,
                 title=source_label,
-                detail='Ausdrücklicher Objektverweis',
+                detail=glide_i18n.t("mod.object_references.usage_locations.explicit_object_reference", 'Ausdrücklicher Objektverweis'),
             ))
 
         if source_key[0] == 'list':
@@ -381,7 +382,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                             source=source_key,
                             state=source_state,
                             title=source_label,
-                            detail=f'Zeile {line_no}' + (f': „{snippet}“' if snippet else ''),
+                            detail=glide_i18n.t("mod.object_references.usage_locations.line", 'Zeile {line_no}{wert}', line_no=line_no, wert=f': „{snippet}“' if snippet else ''),
                             line=line_no,
                         ))
                 elif target[0] == 'item' and tag in (f'taskref:{target[1]}', f'item:{target[1]}'):
@@ -390,13 +391,13 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                     line_no, snippet = _line_excerpt(text, span.get('start', 0), span.get('end', 0))
                     if ('task_line', line_no) not in seen_lines:
                         seen_lines.add(('task_line', line_no))
-                        label_kind = 'Eingebetteter Aufgabenverweis' if tag.startswith('taskref:') else 'Aufgabenzeile'
+                        label_kind = glide_i18n.t("mod.object_references.usage_locations.embedded_task_reference", 'Eingebetteter Aufgabenverweis') if tag.startswith('taskref:') else glide_i18n.t("mod.object_references.usage_locations.task_line", 'Aufgabenzeile')
                         result.append(UsageLocation(
                             kind='task_line',
                             source=source_key,
                             state=source_state,
                             title=source_label,
-                            detail=f'{label_kind} (Zeile {line_no})' + (f': „{snippet}“' if snippet else ''),
+                            detail=glide_i18n.t("mod.object_references.usage_locations.line_2", '{label_kind} (Zeile {line_no}){wert}', label_kind=label_kind, line_no=line_no, wert=f': „{snippet}“' if snippet else ''),
                             line=line_no,
                         ))
 
@@ -409,18 +410,18 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                             source=source_key,
                             state=source_state,
                             title=source_label,
-                            detail='Eingebettete Live-Liste',
+                            detail=glide_i18n.t("mod.object_references.usage_locations.embedded_live_list", 'Eingebettete Live-Liste'),
                         ))
                     elif isinstance(live_val, str) and live_val.startswith('glide://folder/'):
                         fid = unquote(live_val.split('glide://folder/', 1)[1])
                         if fid in target_folder_ancestors:
-                            f_title = _folder_path(fid, folders_by_id) or 'Ordner'
+                            f_title = _folder_path(fid, folders_by_id) or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')
                             result.append(UsageLocation(
                                 kind='live_list',
                                 source=source_key,
                                 state=source_state,
                                 title=source_label,
-                                detail=f'Über Ordner-Live-Liste „{f_title}“',
+                                detail=glide_i18n.t("mod.object_references.usage_locations.via_folder_live_list", 'Über Ordner-Live-Liste „{f_title}“', f_title=f_title),
                             ))
         else:
             # d) Aufgabenbeziehungen (`links`, `blocked_by`)
@@ -431,7 +432,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                         source=source_key,
                         state=source_state,
                         title=source_label,
-                        detail='Verknüpfte Aufgabe',
+                        detail=glide_i18n.t("mod.object_references.usage_locations.linked_task", 'Verknüpfte Aufgabe'),
                     ))
                 if target[1] in (holder.get('blocked_by') or ()):
                     result.append(UsageLocation(
@@ -439,7 +440,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                         source=source_key,
                         state=source_state,
                         title=source_label,
-                        detail='Blockiert diese Aufgabe (Abhängigkeit)',
+                        detail=glide_i18n.t("mod.object_references.usage_locations.blocks_this_task_dependency", 'Blockiert diese Aufgabe (Abhängigkeit)'),
                     ))
 
     if target[0] == 'item':
@@ -452,7 +453,7 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                     source=other_key,
                     state=o_state,
                     title=o_label,
-                    detail='Wird von dieser Aufgabe vorausgesetzt',
+                    detail=glide_i18n.t("mod.object_references.usage_locations.is_required_by_this", 'Wird von dieser Aufgabe vorausgesetzt'),
                 ))
 
     # 3. Pinnwände (`pinboards`)
@@ -469,24 +470,24 @@ def usage_locations(target, lists, folders=(), trash=(), pinboards=None):
                      if isinstance(e, dict) and (e.get('from') == card_key or e.get('to') == card_key)]
             if scope == 'global':
                 b_state = 'active'
-                b_title = 'Globale Pinnwand'
+                b_title = glide_i18n.t("settings.startup.globalboard", 'Globale Pinnwand')
                 b_source = ('pinboard', 'global')
             elif isinstance(scope, str) and scope.startswith('list:'):
                 lid = scope.split(':', 1)[1]
                 b_source = ('list', lid)
                 b_state, b_label = caption(b_source, index)
-                b_title = f'Pinnwand · {b_label}'
+                b_title = glide_i18n.t("mod.object_references.usage_locations.board", 'Pinnwand · {b_label}', b_label=b_label)
             elif isinstance(scope, str) and scope.startswith('folder:'):
                 fid = scope.split(':', 1)[1]
                 folder = folders_by_id.get(fid)
                 b_state = ('archived' if folder.get('archived') else 'active') if folder else 'missing'
-                f_path = _folder_path(fid, folders_by_id) or 'Ordner'
-                b_title = f'Ordner-Pinnwand · {f_path}'
+                f_path = _folder_path(fid, folders_by_id) or glide_i18n.t("ui.kachel_boards.folder", 'Ordner')
+                b_title = glide_i18n.t("mod.object_references.usage_locations.folder_board", 'Ordner-Pinnwand · {f_path}', f_path=f_path)
                 b_source = ('folder', fid)
             else:
                 continue
             pos = f"Position ({int(card.get('x', 0))}, {int(card.get('y', 0))})"
-            edge_info = f' · {len(edges)} Verbindung(en)' if edges else ''
+            edge_info = glide_i18n.t("mod.object_references.usage_locations.connection_s", ' · {len} Verbindung(en)', len=len(edges)) if edges else ''
             result.append(UsageLocation(
                 kind='pinboard',
                 source=b_source,
