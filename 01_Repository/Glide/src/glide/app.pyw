@@ -21868,12 +21868,12 @@ class ListApp:
             else:
                 days = [self.plan_day()]
         days = tuple(dict.fromkeys(day_relief.iso_day(day) for day in days))
-        dialog, body, footer = self._daily_dialog("Tag entlasten", 820, 620)
+        dialog, body, footer = self._daily_dialog(glide_i18n.t("ui.show_day_relief.lighten_the_day", "Tag entlasten"), 820, 620)
         dialog._daily_scroll_canvas.configure(height=380)
-        self._daily_label(body, "Aufgaben markieren, Ziel wählen und mit „Umplanen“ bestätigen. "
-                          "Die Fälligkeiten bleiben erhalten.", color="muted")
-        label = ("Tag: " + self.format_due_display(days[0]) if len(days) == 1 else
-                 "Zeitraum: " + self.format_due_display(days[0]) + " bis " + self.format_due_display(days[-1]))
+        self._daily_label(body, glide_i18n.t("ui.show_day_relief.mark_tasks_choose_a", "Aufgaben markieren, Ziel wählen und mit „Umplanen“ bestätigen. "
+                          "Die Fälligkeiten bleiben erhalten."), color="muted")
+        label = (glide_i18n.t("ui.show_day_relief.day", 'Tag: {format_due_display}', format_due_display=self.format_due_display(days[0])) if len(days) == 1 else
+                 glide_i18n.t("ui.show_day_relief.period_to", 'Zeitraum: {format_due_display} bis {format_due_display2}', format_due_display=self.format_due_display(days[0]), format_due_display2=self.format_due_display(days[-1])))
         labels = {label: set(days),
                   "Alle eingeplanten Aufgaben": None}
         scope = tk.StringVar(master=dialog, value=next(iter(labels)))
@@ -21883,9 +21883,9 @@ class ListApp:
         frame.pack(fill="both", expand=True)
         tree = GlideTreeview(frame, name="day_relief_tasks", columns=("day", "due", "effort", "list"),
                             selectmode="extended", style="Dialog.Treeview", height=6)
-        self.prepare_table(tree, (("#0", "Aufgabe", 240), ("day", "Bearbeitungstag", 110),
-                                 ("due", "Fälligkeit (bleibt)", 125), ("effort", "Aufwand", 90),
-                                 ("list", "Liste", 115)), stretch="#0")
+        self.prepare_table(tree, (("#0", glide_i18n.t("editor.toolbar.task", "Aufgabe"), 240), ("day", glide_i18n.t("ui.show_day_relief.work_day", "Bearbeitungstag"), 110),
+                                 ("due", glide_i18n.t("ui.show_day_relief.due_date_kept", "Fälligkeit (bleibt)"), 125), ("effort", glide_i18n.t("saved_view.field.effort", "Aufwand"), 90),
+                                 ("list", glide_i18n.t("editor.toolbar.list", "Liste"), 115)), stretch="#0")
         scroll = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
                                      thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
                                      width=10, radius=5)
@@ -21903,7 +21903,7 @@ class ListApp:
         destination = tk.StringVar(master=dialog, value="day")
         target_frame = tk.Frame(footer, bg=self.theme["bg"])
         target_frame.pack(fill="x")
-        for key, text in (("day", "Neuer Bearbeitungstag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
+        for key, text in (("day", glide_i18n.t("ui.show_day_relief.new_work_day", "Neuer Bearbeitungstag")), ("stock", glide_i18n.t("ui.show_day_relief.backlog_no_work_day", "Vorrat · ohne Bearbeitungstag"))):
             GlideRadiobutton(target_frame, text=text, value=key, variable=destination,
                              bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
@@ -21916,8 +21916,8 @@ class ListApp:
         preview_frame.pack(fill="both", expand=True)
         preview = GlideTreeview(preview_frame, name="day_relief_balance", columns=("before", "after"),
                                selectmode="none", style="Dialog.Treeview", height=4)
-        self.prepare_table(preview, (("#0", "Tag", 100), ("before", "Vorher (Bilanz)", 300),
-                                    ("after", "Nachher (Bilanz)", 300)), stretch="after")
+        self.prepare_table(preview, (("#0", glide_i18n.t("ui.show_day_relief.day_2", "Tag"), 100), ("before", glide_i18n.t("ui.show_day_relief.before_balance", "Vorher (Bilanz)"), 300),
+                                    ("after", glide_i18n.t("ui.show_day_relief.after_balance", "Nachher (Bilanz)"), 300)), stretch="after")
         preview_scroll = ThemedAutoScrollbar(preview_frame, bg_color=self.theme["card"], track_color=self.theme["card"],
                                              thumb_color=self.theme["input_border"],
                                              active_thumb_color=self.theme["muted"], width=10, radius=5)
@@ -21946,7 +21946,7 @@ class ListApp:
             before = set(selected)
             selected.difference_update(page_ids)
             selected.update(tree.selection())
-            count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
+            count.configure(text=glide_i18n.t("ui.capture.selected_page_of", '{len} ausgewählt · Seite {wert} von {max}', len=len(selected), wert=page[0]+1, max=max(1, (len(rows)+99)//100)))
             if selected != before:
                 compare()
 
@@ -21963,14 +21963,14 @@ class ListApp:
                     page_ids.add(identity)
                     tree.insert("", "end", iid=identity, text=item.get("text", ""),
                                 values=(self.format_due_display(item["planned_date"]),
-                                        self.format_due_display(item.get("due")) or "Keine",
-                                        self.format_estimated_minutes(item.get("estimated_minutes")) or "Ohne Schätzung",
+                                        self.format_due_display(item.get("due")) or glide_i18n.t("ui.render_detail.none", "Keine"),
+                                        self.format_estimated_minutes(item.get("estimated_minutes")) or glide_i18n.t("saved_view.choice.effort_none", "Ohne Schätzung"),
                                         entry.get("title", "")))
                 self._daily_fit_columns(tree, (("#0", 240), ("day", 110), ("due", 125), ("effort", 90), ("list", 115)))
                 tree.selection_set([identity for identity in selected if identity in page_ids])
             finally:
                 rebuilding[0] = False
-            count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
+            count.configure(text=glide_i18n.t("ui.render.selected_page_of", '{len} ausgewählt · Seite {wert} von {max}', len=len(selected), wert=page[0]+1, max=max(1, (len(rows)+99)//100)))
 
         def refresh(*_args):
             selected.clear()
@@ -21999,26 +21999,25 @@ class ListApp:
             warnings = sum(bool(self.busy_view(value["day"]).issues) for value in plan[0].before)
             moves = plan[0].moves
             if not moves:
-                message.configure(text="Die gewählten Aufgaben liegen bereits an diesem Tag.", fg=self.theme["muted"])
+                message.configure(text=glide_i18n.t("ui.show_comparison.the_selected_tasks_are", "Die gewählten Aufgaben liegen bereits an diesem Tag."), fg=self.theme["muted"])
                 return
             day = moves[0].target
-            goal = f"auf {self.format_due_display(day)}" if day else "in den Vorrat"
-            task_count = "1 Aufgabe" if len(moves) == 1 else f"{len(moves)} Aufgaben"
-            timing = "Uhrzeiten bleiben erhalten." if day else "Geplante Uhrzeiten werden entfernt."
-            pages = f" · Bilanzseite {preview_page[0]+1} von {(len(pairs)+49)//50}" if len(pairs) > 50 else ""
-            message.configure(text=f"{task_count} {goal} umplanen. {timing}" + pages
-                              + (" · Kalenderhinweise beachten" if warnings else ""), fg=self.theme["muted"])
+            goal = glide_i18n.t("ui.show_comparison.to", 'auf {format_due_display}', format_due_display=self.format_due_display(day)) if day else glide_i18n.t("ui.show_comparison.to_the_backlog", "in den Vorrat")
+            task_count = glide_i18n.t("ui.show_comparison.1_task", "1 Aufgabe") if len(moves) == 1 else glide_i18n.t("ui.show_comparison.tasks", '{len} Aufgaben', len=len(moves))
+            timing = glide_i18n.t("ui.show_comparison.times_are_kept", "Uhrzeiten bleiben erhalten.") if day else glide_i18n.t("ui.show_comparison.planned_times_are_removed", "Geplante Uhrzeiten werden entfernt.")
+            pages = glide_i18n.t("ui.show_comparison.balance_page_of", ' · Bilanzseite {wert} von {wert2}', wert=preview_page[0]+1, wert2=(len(pairs)+49)//50) if len(pairs) > 50 else ""
+            message.configure(text=glide_i18n.t("ui.show_comparison.reschedule", '{task_count} {goal} umplanen. {timing}{pages}{wert}', task_count=task_count, goal=goal, timing=timing, pages=pages, wert=glide_i18n.t("ui.show_comparison.note_the_calendar_hints", " · Kalenderhinweise beachten") if warnings else ""), fg=self.theme["muted"])
 
         def compare(*_args):
             clear_preview()
             if not selected:
-                message.configure(text="Aufgaben in der Tabelle markieren.", fg=self.theme["muted"])
+                message.configure(text=glide_i18n.t("ui.compare.mark_tasks_in_the", "Aufgaben in der Tabelle markieren."), fg=self.theme["muted"])
                 return
             value = None
             if destination.get() == "day":
                 parsed, error = target.read()
                 if error or not parsed[0]:
-                    message.configure(text=error or "Neuen Bearbeitungstag wählen.", fg=self.theme["muted"])
+                    message.configure(text=error or glide_i18n.t("ui.compare.choose_a_new_work", "Neuen Bearbeitungstag wählen."), fg=self.theme["muted"])
                     return
                 value = parsed[0]
             try:
@@ -22040,23 +22039,23 @@ class ListApp:
                 if self.apply_day_relief(plan[0]):
                     dialog.destroy()
                 else:
-                    message.configure(text="Keine Änderung gespeichert. Die Auswahl bleibt für einen erneuten Versuch erhalten.",
+                    message.configure(text=glide_i18n.t("ui.apply.no_change_saved_the", "Keine Änderung gespeichert. Die Auswahl bleibt für einen erneuten Versuch erhalten."),
                                       fg=self.theme["delete"])
             except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
                 compare()
                 if plan[0] and plan[0].moves:
-                    message.configure(text="Die Planung hat sich geändert. Aktualisierte Bilanz prüfen "
-                                      "und erneut bestätigen.", fg=self.theme["delete"])
+                    message.configure(text=glide_i18n.t("ui.apply.the_planning_has_changed", "Die Planung hat sich geändert. Aktualisierte Bilanz prüfen "
+                                      "und erneut bestätigen."), fg=self.theme["delete"])
                 else:
                     message.configure(text=str(exc), fg=self.theme["delete"])
             return "break"
 
-        for text, delta in (("Vorige Aufgaben", -1), ("Weitere Aufgaben", 1)):
+        for text, delta in ((glide_i18n.t("ui.show_day_relief.previous_tasks", "Vorige Aufgaben"), -1), (glide_i18n.t("ui.show_day_relief.more_tasks", "Weitere Aufgaben"), 1)):
             self._make_dialog_button(line, text, lambda step=delta: render(step), "muted",
                                      width=140, height=28).pack(side="right", padx=(4, 0))
         preview_navigation = tk.Frame(body, bg=self.theme["bg"])
         preview_navigation.pack(fill="x")
-        for text, delta in (("Vorige Bilanzen", -1), ("Weitere Bilanzen", 1)):
+        for text, delta in ((glide_i18n.t("ui.show_day_relief.previous_balances", "Vorige Bilanzen"), -1), (glide_i18n.t("ui.show_day_relief.more_balances", "Weitere Bilanzen"), 1)):
             self._make_dialog_button(preview_navigation, text, lambda step=delta: show_comparison(step),
                                      "muted", width=145, height=28).pack(side="left", padx=(0, 6))
         # Gründe der Überlastung unter der Bilanz: ruhige Begleitzeile, nur bei überplanten Tagen.
@@ -22072,9 +22071,9 @@ class ListApp:
                 reasons.pack_forget()
         flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
         flow.pack(fill="x")
-        confirm = self._make_dialog_button(flow, "Umplanen", apply, "confirm", width=150, height=36)
+        confirm = self._make_dialog_button(flow, glide_i18n.t("ui.show_day_relief.reschedule", "Umplanen"), apply, "confirm", width=150, height=36)
         flow.add(confirm)
-        flow.add(self._make_dialog_button(flow, "Abbrechen", dialog.destroy, "muted", width=150, height=36))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted", width=150, height=36))
         scope.trace_add("write", refresh)
         destination.trace_add("write", compare)
         target_text.trace_add("write", compare)
@@ -22239,22 +22238,22 @@ class ListApp:
             ids = [identity] if identity else ids
         items = self.quick_plan_items(ids)
         if not items:
-            self.show_info("Zeitblock", "Bitte eine oder mehrere Aufgaben auswählen.")
+            self.show_info(glide_i18n.t("ui.choose_time_block.time_block", "Zeitblock"), glide_i18n.t("ui.choose_time_block.please_select_one_or", "Bitte eine oder mehrere Aufgaben auswählen."))
             return "break"
         old = [(self.find_item_in_lists(item["id"])[3]["id"], copy.deepcopy(item)) for item in items]
         value = self.themed_due_dialog(self.plan_day(), items[0].get("planned_time") or "09:00",
-                                      title="Zeitblock", planning_preview_ids=ids)
+                                      title=glide_i18n.t("ui.choose_time_block.time_block", "Zeitblock"), planning_preview_ids=ids)
         if value is None:
             return "break"
         for source, item in old:
             fresh = self.find_item_in_lists(item["id"])
             if not fresh or fresh[3]["id"] != source or fresh[0] != item or self.is_archived_entry(fresh[3]):
-                self.show_warning("Zeitblock", "Die Auswahl hat sich geändert. Bitte erneut auswählen.")
+                self.show_warning(glide_i18n.t("ui.choose_time_block.time_block", "Zeitblock"), glide_i18n.t("ui.choose_time_block.the_selection_has_changed", "Die Auswahl hat sich geändert. Bitte erneut auswählen."))
                 return "break"
         try:
             assignments = glide_planning.time_assignments(items, *value)
         except ValueError as exc:
-            self.show_warning("Zeitblock", str(exc))
+            self.show_warning(glide_i18n.t("ui.choose_time_block.time_block", "Zeitblock"), str(exc))
             return "break"
         self.apply_clock_assignments(assignments)
         return "break"
@@ -22285,7 +22284,7 @@ class ListApp:
                 values = glide_planning.time_assignments([found[0]], self.plan_day(), clock)
                 self.apply_clock_assignments(values)
             except ValueError as exc:
-                self.show_warning("Zeitblock", str(exc))
+                self.show_warning(glide_i18n.t("ui.shift_plan_grid_focus.time_block", "Zeitblock"), str(exc))
         return "break"
 
     def clear_plan_grid_focus(self, event=None):
@@ -22567,7 +22566,7 @@ class ListApp:
                                     outline=theme["delete"] if block["overlap"] else farbe,
                                     width=2 if block["overlap"] else 1, tags=tags)
             canvas.create_text(x1 + 6, y1 + 3, anchor="nw", width=max(20, x2 - x1 - 10),
-                               text=(f"{block['start']}  Kalender · {block['title']}" if calendar else
+                               text=(glide_i18n.t("ui.draw_plan_grid.calendar", '{start}  Kalender · {title}', start=block['start'], title=block['title']) if calendar else
                                      f"{block['start']}  {self.item_display_text(item)}"),
                                fill=readable_text_color(farbe), font=app_font(9), tags=tags)
             if kennung is not None:
@@ -22580,9 +22579,9 @@ class ListApp:
             (f" · {self.item_display_text(focused[0])[:32]}" if focused else ""))
         if not bloecke:
             canvas.create_text(links + 8, 14, anchor="nw", width=max(80, breite - links - 16), fill=theme["muted"],
-                               font=app_font(9), text="Keine Punkte mit Uhrzeit. Punkte aus der Liste "
+                               font=app_font(9), text=glide_i18n.t("ui.draw_plan_grid.no_items_with_a", "Keine Punkte mit Uhrzeit. Punkte aus der Liste "
                                                       "hierher ziehen oder im Feld „Bearbeitungstag“ "
-                                                      "eine Uhrzeit setzen.")
+                                                      "eine Uhrzeit setzen."))
         if self.plan_day() == date.today().isoformat():
             jetzt = datetime.now()
             minuten = jetzt.hour * 60 + jetzt.minute
@@ -22731,8 +22730,8 @@ class ListApp:
         items = self.quick_plan_items(item_ids)
         plan, gruende = glide_repeat.skip_plan(items, date.today(), missed=missed, with_rules=True)
         if not plan:
-            grund = next(iter(gruende.values()), "keine Aufgabe mit Wiederholung ausgewählt")
-            self.show_info("Wiederholung", f"Nichts zu überspringen: {grund}.")
+            grund = next(iter(gruende.values()), glide_i18n.t("ui.skip_repeat_occurrences.no_task_with_a", "keine Aufgabe mit Wiederholung ausgewählt"))
+            self.show_info(glide_i18n.t("ui.skip_repeat_occurrences.repeat", "Wiederholung"), glide_i18n.t("ui.skip_repeat_occurrences.nothing_to_skip", 'Nichts zu überspringen: {grund}.', grund=grund))
             return "break"
         with self.item_change(list(plan)) as change:
             for item_id, neu in plan.items():
@@ -22775,10 +22774,10 @@ class ListApp:
         wiederholt = [item for item in items if self.normalize_repeat(item.get("repeat")) and not item.get("done")]
         if not wiederholt:
             return
-        menu.add_command(label="Diesen Termin überspringen",
+        menu.add_command(label=glide_i18n.t("inspector.repeat.skip", "Diesen Termin überspringen"),
                          command=lambda ids=list(item_ids): self.skip_repeat_occurrences(ids))
         if any((self.normalize_due(item.get("due")) or heute) < heute for item in wiederholt):
-            menu.add_command(label="Verpasste Termine überspringen",
+            menu.add_command(label=glide_i18n.t("ui.add_repeat_skip_entries.skip_missed_occurrences", "Verpasste Termine überspringen"),
                              command=lambda ids=list(item_ids): self.skip_repeat_occurrences(ids, missed=True))
 
     def quick_plan_items(self, item_ids):
@@ -22843,7 +22842,7 @@ class ListApp:
         if choice == "date":
             items = self.quick_plan_items(ids)
             initial = items[0].get("planned_date") if len(items) == 1 else None
-            value = self.themed_due_dialog(initial or self.plan_day(), title="Einplanen",
+            value = self.themed_due_dialog(initial or self.plan_day(), title=glide_i18n.t("ui.choose_quick_plan.schedule", "Einplanen"),
                                            show_time=False, planning_preview_ids=ids)
             if value is None:
                 return "break"
@@ -22982,8 +22981,8 @@ class ListApp:
                 button = self.make_button(self.list_frame, self.ICONS["overflow"], lambda: None, "muted",
                     width=self.ROW_ACTION_SIZE, height=self.ROW_ACTION_SIZE, radius=9,
                     font=self.symbol_font("overflow", 12), bg_key="card", icon=True, outline=False)
-                button._accessible_name = "Aufgabenaktionen"
-                self.add_tooltip(button, "Aufgabenaktionen")
+                button._accessible_name = glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen")
+                self.add_tooltip(button, glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen"))
                 buttons.append(button)
                 band = tk.Frame(self.list_frame, bg=self.theme["card"])
                 bands.append(band)
@@ -23157,19 +23156,19 @@ class ListApp:
             return ""
         teile = []
         if summary["estimated"]:
-            teile.append(f"{self.format_estimated_minutes(summary['minutes'])} geplant")
+            teile.append(glide_i18n.t("ui.format_planning_summary.planned", '{format_estimated_minutes} geplant', format_estimated_minutes=self.format_estimated_minutes(summary['minutes'])))
             if summary["done_minutes"]:
-                teile.append(f"davon {self.format_estimated_minutes(summary['done_minutes'])} erledigt")
+                teile.append(glide_i18n.t("ui.format_planning_summary.of_which_done", 'davon {format_estimated_minutes} erledigt', format_estimated_minutes=self.format_estimated_minutes(summary['done_minutes'])))
         if summary["without_estimate"]:
-            teile.append(f"{summary['without_estimate']} ohne Schätzung")
+            teile.append(glide_i18n.t("ui.format_planning_summary.without_estimate", '{without_estimate} ohne Schätzung', without_estimate=summary['without_estimate']))
         capacity = summary.get("capacity") or 0
         rest = summary.get("remaining")
         if capacity and rest is not None:
             bezug = self.format_estimated_minutes(capacity)
             if rest >= 0:
-                teile.append(f"{self.format_estimated_minutes(rest)} frei von {bezug}")
+                teile.append(glide_i18n.t("ui.format_planning_summary.free_of", '{format_estimated_minutes} frei von {bezug}', format_estimated_minutes=self.format_estimated_minutes(rest), bezug=bezug))
             else:
-                teile.append(f"{self.format_estimated_minutes(-rest)} über {bezug}")
+                teile.append(glide_i18n.t("ui.format_planning_summary.over", '{format_estimated_minutes} über {bezug}', format_estimated_minutes=self.format_estimated_minutes(-rest), bezug=bezug))
         return " · ".join(teile)
 
     def home_summary(self, today=None):
@@ -23218,14 +23217,14 @@ class ListApp:
         if key == "week":
             day = today + timedelta(days=2)
             if day > week_end:
-                return None, "Diese Woche hat nach morgen keinen Tag mehr."
+                return None, glide_i18n.t("ui.date_group_target.this_week_has_no", "Diese Woche hat nach morgen keinen Tag mehr.")
             return day.isoformat(), None
         if key == "later":
             return max(week_end + timedelta(days=1), today + timedelta(days=2)).isoformat(), None
         if key == "none":
             return "", None
-        return None, ("Ein vergangenes Datum setzt man nicht durch Ziehen – die Gruppe zeigt, "
-                      "was liegen geblieben ist.")
+        return None, (glide_i18n.t("ui.date_group_target.a_past_date_is", "Ein vergangenes Datum setzt man nicht durch Ziehen – die Gruppe zeigt, "
+                      "was liegen geblieben ist."))
 
     def entry_color_value(self, entry):
         key = self.inherited_list_color(entry)
@@ -23244,9 +23243,9 @@ class ListApp:
             return {"key": key, "title": title, "color": color, "settable": settable, "reason": reason}
 
         if field in ("due", "planned"):
-            namen = {"past": "Überfällig" if field == "due" else "Liegen geblieben", "today": "Heute",
-                     "tomorrow": "Morgen", "week": "Diese Woche", "later": "Später",
-                     "none": "Ohne Termin" if field == "due" else "Ohne Bearbeitungstag"}
+            namen = {"past": glide_i18n.t("saved_view.choice.due_overdue", "Überfällig") if field == "due" else glide_i18n.t("ui.group_columns.left_undone", "Liegen geblieben"), "today": glide_i18n.t("menu.view.today", "Heute"),
+                     "tomorrow": glide_i18n.t("calendar.tomorrow", "Morgen"), "week": glide_i18n.t("ui.group_columns.this_week", "Diese Woche"), "later": glide_i18n.t("ui.refresh.later", "Später"),
+                     "none": glide_i18n.t("ui.render_detail.no_date", "Ohne Termin") if field == "due" else glide_i18n.t("ui.group_columns.no_work_day", "Ohne Bearbeitungstag")}
             farben = {"past": "overdue", "today": "due_today", "tomorrow": "due_action", "week": "clear",
                       "later": "muted", "none": "muted"}
             result = []
@@ -23255,12 +23254,12 @@ class ListApp:
                 result.append(gruppe(key, namen[key], theme[farben[key]], ziel is not None, grund))
             return result
         if field == "importance":
-            namen = {3: "Hoch", 2: "Mittel", 1: "Niedrig", 0: "Ohne Wichtigkeit"}
+            namen = {3: glide_i18n.t("saved_view.choice.importance_high", "Hoch"), 2: glide_i18n.t("saved_view.choice.importance_medium", "Mittel"), 1: glide_i18n.t("saved_view.choice.importance_low", "Niedrig"), 0: glide_i18n.t("ui.group_columns.no_importance", "Ohne Wichtigkeit")}
             return [gruppe(str(value), namen[value],
                            theme[self.importance_color_key(value)] if value else theme["muted"])
                     for value in (3, 2, 1, 0)]
         if field == "done":
-            return [gruppe("open", "Offen", theme["ui_accent"]), gruppe("done", "Erledigt", theme["confirm"])]
+            return [gruppe("open", glide_i18n.t("ui.refresh.open", "Offen"), theme["ui_accent"]), gruppe("done", glide_i18n.t("inspector.done", "Erledigt"), theme["confirm"])]
         if field == "eisenhower":
             # Jeder Quadrant nimmt an; was Ablegen ändert, entscheidet eisenhower.aenderung.
             farben = {"q1": theme[self.importance_color_key(3)], "q2": theme["clear"],
@@ -23269,12 +23268,12 @@ class ListApp:
         if field == "label":
             result = [gruppe(label["id"], str(label.get("name") or "Label"), self.label_color(label))
                       for label in self.labels if not self.is_system_label(label)]
-            result.append(gruppe("none", "Ohne Label", theme["muted"]))
+            result.append(gruppe("none", glide_i18n.t("ui.group_columns.no_label", "Ohne Label"), theme["muted"]))
             return result
         if field == "list":
-            return [gruppe(entry["id"], str(entry.get("title") or "Liste"), self.entry_color_value(entry),
+            return [gruppe(entry["id"], str(entry.get("title") or glide_i18n.t("editor.toolbar.list", "Liste")), self.entry_color_value(entry),
                            self.list_accepts_items(entry),
-                           None if self.list_accepts_items(entry) else "Diese Seite nimmt keine Aufgaben auf.")
+                           None if self.list_accepts_items(entry) else glide_i18n.t("ui.group_columns.this_page_does_not", "Diese Seite nimmt keine Aufgaben auf."))
                     for entry in lists]
         return []
 
@@ -23312,7 +23311,7 @@ class ListApp:
         gefunden = [self.find_item_in_lists(item_id) for item_id in dict.fromkeys(item_ids or ())]
         gefunden = [value for value in gefunden if value and self.is_schedulable_item(value[0])]
         if not gefunden:
-            return False, "Nur Aufgaben und Langtexts lassen sich so einordnen."
+            return False, glide_i18n.t("ui.set_group_value.only_tasks_and_long", "Nur Aufgaben und Langtexts lassen sich so einordnen.")
         items = [value[0] for value in gefunden]
         kennungen = [item["id"] for item in items]
         if field in ("due", "planned"):
@@ -23363,8 +23362,8 @@ class ListApp:
             if geaendert:
                 teile = []
                 for key, value in next((felder for _item, felder in plaene if felder), {}).items():
-                    teile.append(f"Wichtigkeit {self.IMPORTANCE_NAMES.get(value, value)}" if key == "importance"
-                                 else f"Bearbeitungstag {self.format_due_display(value)}")
+                    teile.append(glide_i18n.t("ui.set_group_value.importance", 'Wichtigkeit {get}', get=self.IMPORTANCE_NAMES.get(value, value)) if key == "importance"
+                                 else glide_i18n.t("ui.set_group_value.work_day", 'Bearbeitungstag {format_due_display}', format_due_display=self.format_due_display(value)))
                 self.show_undo_toast(
                     glide_i18n.t("toast.ordered_with_details", "Eingeordnet · {details}",
                                  details=" · ".join(teile))
@@ -23393,7 +23392,7 @@ class ListApp:
         if field == "label":
             bekannt = self.regular_label_ids()
             if target != "none" and target not in bekannt:
-                return False, "Dieses Label gibt es nicht mehr."
+                return False, glide_i18n.t("ui.set_group_value.this_label_no_longer", "Dieses Label gibt es nicht mehr.")
             with self.item_change(kennungen, restore=False, local=True) as change:
                 for item in items:
                     labels = list(item.get("labels", []) or [])
@@ -23412,7 +23411,7 @@ class ListApp:
         if field == "list":
             ziel = next((entry for entry in self.lists if entry.get("id") == target), None)
             if ziel is None or not self.list_accepts_items(ziel):
-                return False, "Diese Seite nimmt keine Aufgaben auf."
+                return False, glide_i18n.t("ui.set_group_value.this_page_does_not", "Diese Seite nimmt keine Aufgaben auf.")
             with self.guarded_structural_change("In andere Liste verschieben"):
                 with self.item_change((), restore=False, update_sidebar=True) as change:
                     for item_id in kennungen:
@@ -23792,13 +23791,13 @@ class ListApp:
         _geaendert, grund = self.set_group_value(kennungen, field, self.group_section_key(ziel),
                                                  self.group_section_key(quelle))
         if grund:
-            self.show_info("Gruppieren", grund)
+            self.show_info(glide_i18n.t("ui.board_controls.group", "Gruppieren"), grund)
         return True
 
     def group_menu_entries(self):
         """Menüeinträge „Gruppieren nach“ für Menüleiste und Listenmenü."""
-        return tuple([("Gruppieren: aus", lambda: self.set_list_group(None), "", "grouping.none")]
-                     + [(f"Gruppieren: {name}", lambda value=key: self.set_list_group(value), "", "grouping." + key)
+        return tuple([(glide_i18n.t("ui.group_menu_entries.group_off", "Gruppieren: aus"), lambda: self.set_list_group(None), "", "grouping.none")]
+                     + [(glide_i18n.t("ui.render_column_options_row.group_2", 'Gruppieren: {name}', name=name), lambda value=key: self.set_list_group(value), "", "grouping." + key)
                         for key, name in self.LIST_GROUP_FIELDS])
 
     # -----------------------------
@@ -23925,9 +23924,9 @@ class ListApp:
             status = getattr(self, "detail_status", None)
             if status is not None and status.winfo_exists():
                 if getattr(self, "_data_read_only", False):
-                    status.configure(text="Schreibgeschützter Bestand · Angaben nur ansehen.", fg=self.theme["muted"])
+                    status.configure(text=glide_i18n.t("ui.save_task_inspector.read_only_data_details", "Schreibgeschützter Bestand · Angaben nur ansehen."), fg=self.theme["muted"])
                 else:
-                    status.configure(text="Gespeichert", fg=self.theme["confirm"])
+                    status.configure(text=glide_i18n.t("editor.status.saved", "Gespeichert"), fg=self.theme["confirm"])
         return "break"
 
     def skip_detail_pane_repeat(self, item_id):
@@ -24147,7 +24146,7 @@ class ListApp:
         history = self.remember_side_history()
         self._destroy_item_context_menu()
         menu = self._new_themed_popup_menu()
-        menu.add_command(label="Inhalt wechseln …", command=self.choose_side_view)
+        menu.add_command(label=glide_i18n.t("ui.show_side_history.switch_content", "Inhalt wechseln …"), command=self.choose_side_view)
         available = set(self.side_history_available())
         if history.entries:
             menu.add_separator()
@@ -24158,7 +24157,7 @@ class ListApp:
                 continue
             label = self.list_path_title(entry)
             if index == history.index:
-                label += " · aktuell"
+                label += glide_i18n.t("ui.show_side_history.current", " · aktuell")
             menu.add_command(label=label[:120], command=lambda pos=index, identity=location.list_id:
                              self.jump_side_history(pos, identity))
         self._item_context_menu = menu
@@ -24175,12 +24174,12 @@ class ListApp:
         if entry is None:
             return False
         if getattr(self, "_compact", None):
-            self.show_info("Nebenansicht", "Im Kompaktmodus ist neben dem Inhalt kein Platz. "
-                                           "Mit „Normalansicht“ steht die Nebenansicht wieder zur Verfügung.")
+            self.show_info(glide_i18n.t("ui.open_side_view.side_view", "Nebenansicht"), glide_i18n.t("ui.open_side_view.compact_mode_leaves_no", "Im Kompaktmodus ist neben dem Inhalt kein Platz. "
+                                           "Mit „Normalansicht“ steht die Nebenansicht wieder zur Verfügung."))
             return False
         state, text = glide_side_view.availability(entry, list_id, self.trash)
         if state == "unsupported":
-            self.show_info("Nebenansicht", text)
+            self.show_info(glide_i18n.t("ui.open_side_view.side_view", "Nebenansicht"), text)
             return False
         self.commit_detail_pane()
         if getattr(self, "_detail_commit_error", None):
@@ -24359,13 +24358,13 @@ class ListApp:
         recent = self.side_recent_searches()
         current = getattr(self, "_side_search_query", "")
         if not recent:
-            menu.add_command(label="Noch keine Suche in dieser Sitzung", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.show_side_recent_searches.no_search_in_this", "Noch keine Suche in dieser Sitzung"), state="disabled")
         for query in recent:
             menu.add_command(label=glide_action_menu.check_label(glide_side_view.recent_label(query), query == current),
                              command=lambda value=query: self.search_side_view(value))
         if recent:
             menu.add_separator()
-            menu.add_command(label=glide_action_menu.check_label("Liste leeren", False), command=self.clear_side_recent_searches)
+            menu.add_command(label=glide_action_menu.check_label(glide_i18n.t("ui.show_side_recent_searches.clear_list", "Liste leeren"), False), command=self.clear_side_recent_searches)
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.side_pane
         try:
@@ -24396,42 +24395,42 @@ class ListApp:
         available = self.side_history_available()
         navigation = ButtonFlow(parent, bg=self.theme["card"], gap=6)
         navigation.pack(fill="x", pady=(0, 4))
-        for title, step in (("Zurück", -1), ("Vorwärts", 1)):
+        for title, step in ((glide_i18n.t("ui.show_busy_calendar_dialog.back", "Zurück"), -1), (glide_i18n.t("ui.build_side_history_navigation.forward", "Vorwärts"), 1)):
             enabled = glide_side_view.history_step(history, step, available).index != history.index
             button = self._make_dialog_button(navigation, title,
                 (lambda value=step: self.move_side_history(value)) if enabled else None,
                 "muted", width=78, height=30)
-            button._accessible_name = title + " im Nebenansichtsverlauf" + ("" if enabled else " · nicht verfügbar")
+            button._accessible_name = glide_i18n.t("ui.build_side_history_navigation.in_the_side_view", '{title} im Nebenansichtsverlauf{wert}', title=title, wert="" if enabled else glide_i18n.t("ui.build_side_history_navigation.not_available", " · nicht verfügbar"))
             glide_core_accessibility.refresh(button)
             navigation.add(button)
-        button = self._make_dialog_button(navigation, "Verlauf", self.show_side_history, "muted", width=78, height=30)
-        self.add_tooltip(button, "Besuchte Inhalte oder einen anderen Inhalt in der Nebenansicht öffnen")
+        button = self._make_dialog_button(navigation, glide_i18n.t("menu.view.history", "Verlauf"), self.show_side_history, "muted", width=78, height=30)
+        self.add_tooltip(button, glide_i18n.t("ui.build_side_history_navigation.open_visited_content_or", "Besuchte Inhalte oder einen anderen Inhalt in der Nebenansicht öffnen"))
         navigation.add(button)
 
     def build_side_navigation(self, parent, entry):
         row = ButtonFlow(parent, bg=self.theme["card"], gap=6)
         row.pack(fill="x", pady=(0, 4))
-        commands = [("Suchen", self.open_side_search)]
+        commands = [(glide_i18n.t("ui.build_side_navigation.search", "Suchen"), self.open_side_search)]
         if getattr(self, "_side_search_open", False):
             # Trefferübersicht nur bei offener Suche; in der umbrechenden Zeile, nicht im engen Suchfeld (B15).
-            commands.append(("Treffer …", self.show_side_matches))
-            commands.append(("Letzte Suchen …", self.show_side_recent_searches))
+            commands.append((glide_i18n.t("ui.build_side_navigation.matches", "Treffer …"), self.show_side_matches))
+            commands.append((glide_i18n.t("ui.build_side_navigation.recent_searches", "Letzte Suchen …"), self.show_side_recent_searches))
         if glide_side_view.sections(entry):
-            commands.append(("Abschnitte …", self.show_side_sections))
-        commands.append(("Verweise …", self.show_side_references))
+            commands.append((glide_i18n.t("ui.build_side_navigation.sections", "Abschnitte …"), self.show_side_sections))
+        commands.append((glide_i18n.t("ui.build_side_navigation.references", "Verweise …"), self.show_side_references))
         for title, command in commands:
             button = self._make_dialog_button(row, title, command, "muted",
                 width=max(84, ui_font_object(font=app_font(10, "bold")).measure(title) + 24), height=32)
             if command == self.show_side_matches:
-                button._accessible_name = "Trefferübersicht der Nebenansichtssuche"
+                button._accessible_name = glide_i18n.t("ui.build_side_navigation.match_overview_of_the", "Trefferübersicht der Nebenansichtssuche")
                 glide_core_accessibility.refresh(button)
-                self.add_tooltip(button, "Alle Treffer mit Abschnitt und Ausschnitt anzeigen und einen ansteuern")
+                self.add_tooltip(button, glide_i18n.t("ui.build_side_navigation.show_all_matches_with", "Alle Treffer mit Abschnitt und Ausschnitt anzeigen und einen ansteuern"))
             elif command == self.show_side_recent_searches:
-                button._accessible_name = "Letzte Suchbegriffe der Nebenansicht"
+                button._accessible_name = glide_i18n.t("ui.build_side_navigation.recent_search_terms_of", "Letzte Suchbegriffe der Nebenansicht")
                 glide_core_accessibility.refresh(button)
-                self.add_tooltip(button, "Einen zuletzt genutzten Suchbegriff erneut suchen · im Suchfeld auch Pfeil hoch/runter")
+                self.add_tooltip(button, glide_i18n.t("ui.build_side_navigation.search_a_recently_used", "Einen zuletzt genutzten Suchbegriff erneut suchen · im Suchfeld auch Pfeil hoch/runter"))
             elif command == self.show_side_sections:
-                self.add_tooltip(button, "Zu einer Überschrift springen · Alt+Pfeil runter/hoch: nächster/vorheriger Abschnitt")
+                self.add_tooltip(button, glide_i18n.t("ui.build_side_navigation.jump_to_a_heading", "Zu einer Überschrift springen · Alt+Pfeil runter/hoch: nächster/vorheriger Abschnitt"))
             row.add(button)
         self._side_search_entry = None
         self._side_search_counter = None
@@ -24439,7 +24438,7 @@ class ListApp:
             return
         search = tk.Frame(parent, bg=self.theme["card"])
         search.pack(fill="x", pady=(0, 4))
-        for title, step in (("Weiter", 1), ("Zurück", -1)):
+        for title, step in ((glide_i18n.t("ui.show_busy_calendar_dialog.next", "Weiter"), 1), (glide_i18n.t("ui.show_busy_calendar_dialog.back", "Zurück"), -1)):
             button = self._make_dialog_button(search, title, lambda value=step: self.move_side_search(value),
                                               "muted", width=62, height=30)
             button.pack(side="right", padx=(4, 0))
@@ -24449,14 +24448,14 @@ class ListApp:
         query = tk.StringVar(master=field, value=getattr(self, "_side_search_query", ""))
         field.configure(textvariable=query)
         field._side_query_variable = query
-        field._accessible_name = "In Nebenansicht suchen"
-        self.add_tooltip(field, "Inhalt durchsuchen · Enter weiter · Umschalt+Enter zurück")
+        field._accessible_name = glide_i18n.t("ui.build_side_navigation.search_in_side_view", "In Nebenansicht suchen")
+        self.add_tooltip(field, glide_i18n.t("ui.build_side_navigation.search_content_enter_next", "Inhalt durchsuchen · Enter weiter · Umschalt+Enter zurück"))
         field.bind("<Return>", lambda _event: self.move_side_search(1))
         field.bind("<Shift-Return>", lambda _event: self.move_side_search(-1))
         # Pfeil hoch/runter blättert durch die letzten Suchen; die Suche folgt dem Feld.
         field.bind("<Up>", lambda _event: self.step_side_recent(1))
         field.bind("<Down>", lambda _event: self.step_side_recent(-1))
-        counter = tk.Label(parent, text="Suchbegriff eingeben.", bg=self.theme["card"], fg=self.theme["muted"],
+        counter = tk.Label(parent, text=glide_i18n.t("side_view.status.enter_search", "Suchbegriff eingeben."), bg=self.theme["card"], fg=self.theme["muted"],
                            anchor="w", font=app_font(9))
         counter.pack(fill="x", pady=(0, 4))
         self._side_search_entry, self._side_search_counter = field, counter
@@ -24535,7 +24534,7 @@ class ListApp:
                 except tk.TclError:
                     ausschnitt = ""
                 titel = glide_side_view.section_at(abschnitte, target, reihenfolge) if visible is body else ""
-            labels.append(glide_side_view.overview_label(titel, ausschnitt or "Treffer"))
+            labels.append(glide_side_view.overview_label(titel, ausschnitt or glide_i18n.t("ui.side_match_labels.matches", "Treffer")))
         return labels
 
     def side_section_match_counts(self, entry, abschnitte):
@@ -24569,8 +24568,7 @@ class ListApp:
         weitere = len(matches) - len(labels)
         if weitere > 0 or getattr(self, "_side_search_more", False):
             menu.add_separator()
-            menu.add_command(label=f"… {max(weitere, 0)}{'+' if getattr(self, '_side_search_more', False) else ''} "
-                                   "weitere Treffer – Suchbegriff verfeinern", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.show_side_matches.more_matches_refine_the", '… {max}{wert} weitere Treffer – Suchbegriff verfeinern', max=max(weitere, 0), wert='+' if getattr(self, '_side_search_more', False) else ''), state="disabled")
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.side_pane
         try:
@@ -24644,7 +24642,7 @@ class ListApp:
         for section, anzahl, hier in zip(abschnitte, zaehlung, aktuell):
             # Bei aktiver Suche zeigt die Auswahl, wo der Begriff steht (3.50.0).
             menu.add_command(label=glide_action_menu.check_label("  " * min(section["depth"], 6) + section["title"][:90]
-                                                       + (f" · {anzahl} Treffer" if anzahl else ""), hier),
+                                                       + (glide_i18n.t("ui.show_side_sections.matches", ' · {anzahl} Treffer', anzahl=anzahl) if anzahl else ""), hier),
                              command=lambda value=section: self.jump_side_section(identity, value))
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.side_pane
@@ -24855,25 +24853,25 @@ class ListApp:
         inhalt.pack(fill="both", expand=True, padx=14, pady=12)
         kopf = tk.Frame(inhalt, bg=theme["card"])
         kopf.pack(fill="x", pady=(0, 6))
-        tk.Label(kopf, text="Nebenansicht", bg=theme["card"], fg=theme["text"],
+        tk.Label(kopf, text=glide_i18n.t("ui.render_side_view.side_view", "Nebenansicht"), bg=theme["card"], fg=theme["text"],
                  font=app_font(glide_design.FONT_SIZES["caption"], "bold"), anchor="w").pack(fill="x", pady=(0, 3))
         actions = ButtonFlow(kopf, bg=theme["card"], gap=6, align="e")
         actions.pack(fill="x")
         oeffnen = None
         if state in ("ok", "archived"):
-            oeffnen = self._make_dialog_button(actions, "Öffnen", self.open_side_view_target, "muted", width=96,
+            oeffnen = self._make_dialog_button(actions, glide_i18n.t("saved_view.manager.open", "Öffnen"), self.open_side_view_target, "muted", width=96,
                                                height=32)
             actions.add(oeffnen)
-            oeffnen._accessible_name = "Im Hauptbereich öffnen"
+            oeffnen._accessible_name = glide_i18n.t("ui.render_side_view.open_in_main_area", "Im Hauptbereich öffnen")
             glide_core_accessibility.refresh(oeffnen)
-            self.add_tooltip(oeffnen, "Im Hauptbereich öffnen und bearbeiten")
-        schliessen = self._make_dialog_button(actions, "Schließen", self.close_side_view, "muted", width=104, height=32)
+            self.add_tooltip(oeffnen, glide_i18n.t("ui.render_side_view.open_in_main_area_2", "Im Hauptbereich öffnen und bearbeiten"))
+        schliessen = self._make_dialog_button(actions, glide_i18n.t("button.close", "Schließen"), self.close_side_view, "muted", width=104, height=32)
         actions.add(schliessen)
-        schliessen._accessible_name = "Nebenansicht schließen"
+        schliessen._accessible_name = glide_i18n.t("ui.render_side_view.close_side_view", "Nebenansicht schließen")
         glide_core_accessibility.refresh(schliessen)
         breite = (max(280, self.list_frame_outer.inner.winfo_width()) if getattr(self, "_side_narrow", False)
                   else self.side_view_width()) - 40
-        titel = str((entry or {}).get("title") or "Inhalt")
+        titel = str((entry or {}).get("title") or glide_i18n.t("board.group.content", "Inhalt"))
         tk.Label(inhalt, text=titel, bg=theme["card"], fg=theme["text"],
                  font=app_font(glide_design.FONT_SIZES["section"], "bold"), anchor="w", justify="left",
                  wraplength=breite).pack(fill="x")
@@ -24889,7 +24887,7 @@ class ListApp:
             self._bind_side_view_keys(pane)
             return
         art = glide_side_view.content_kind(entry)
-        teile = [{"page": "Seite", "note": "Notiz"}.get(art, "Liste")]
+        teile = [{"page": glide_i18n.t("ui.render.page", "Seite"), "note": glide_i18n.t("ui.render.note", "Notiz")}.get(art, "Liste")]
         if entry.get("folder_id"):
             teile.insert(0, " › ".join(self.folder_path_titles(entry.get("folder_id"))))
         rows = glide_side_view.list_rows(entry.get("items", []))
@@ -24901,11 +24899,11 @@ class ListApp:
                  font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w", justify="left",
                  wraplength=breite).pack(fill="x", pady=(2, 8))
         if getattr(self, "_data_read_only", False):
-            status.configure(text="Schreibgeschützter Bestand · nur ansehen.")
+            status.configure(text=glide_i18n.t("side_view.status.read_only", "Schreibgeschützter Bestand · nur ansehen."))
         status.pack(side="bottom", fill="x", pady=(6, 0))
         if self.hints_shown():
-            hinweis = ("Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich"
-                       if art == "tasks" else "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten")
+            hinweis = (glide_i18n.t("ui.render_side_view.click_the_box_or", "Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich")
+                       if art == "tasks" else glide_i18n.t("ui.render_side_view.click_the_box_to", "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten"))
             tk.Label(inhalt, text=hinweis, bg=theme["card"], fg=theme["muted"],
                      font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w", justify="left",
                      wraplength=breite).pack(side="bottom", fill="x", pady=(6, 0))
@@ -24986,7 +24984,7 @@ class ListApp:
                 marke = self.ICONS["group"]
             else:
                 marke = ""
-            text = "    " * min(row["depth"], 8) + (marke + "  " if marke else "") + (row["text"] or "Ohne Titel")
+            text = "    " * min(row["depth"], 8) + (marke + "  " if marke else "") + (row["text"] or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"))
             tags = ("done",) if row["done"] else ("heading",) if row["kind"] == "heading" else ()
             baum.insert("", "end", iid=row["id"], text=text,
                         values=(self.format_due_display(row["due"]) if row["due"] else "",), tags=tags)
@@ -25059,7 +25057,7 @@ class ListApp:
         self.bind_mousewheel(baum, baum)
         glide_core_accessibility.bind_focus_traversal(baum)
         glide_core_accessibility.bind_control(baum, lambda: glide_core_accessibility.navigation_attributes(
-            baum, "Nebenansicht"))
+            baum, glide_i18n.t("ui.render_side_view_rows.side_view", "Nebenansicht")))
         self._side_search_bodies.append(baum)
         return baum
 
@@ -25116,7 +25114,7 @@ class ListApp:
             return source == ('list', entry['id']) or source == ('item', selected)
         if not current():
             return False
-        value = self.themed_choice_dialog('Verknüpfen', 'Seite, Liste oder Aufgabe auswählen:',
+        value = self.themed_choice_dialog(glide_i18n.t("ui.render_mentions.link", 'Verknüpfen'), glide_i18n.t("ui.insert_object_reference.select_a_page_list", 'Seite, Liste oder Aufgabe auswählen:'),
                                          self.object_reference_choices(source))
         if value is None or not current():
             return False
@@ -25126,7 +25124,7 @@ class ListApp:
         menu = self._new_themed_popup_menu()
         entry = self.side_view_entry()
         if entry is None:
-            menu.add_command(label="Inhalt nicht mehr vorhanden", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.build_side_references_menu.content_no_longer_exists", "Inhalt nicht mehr vorhanden"), state="disabled")
             return menu
         body = getattr(self, "_side_view_body", None)
         if isinstance(body, ttk.Treeview) and body.selection():
@@ -25144,7 +25142,7 @@ class ListApp:
                     command=lambda value=row["value"], source=row["source"]:
                         self.follow_side_reference(value, source))
             if not rows:
-                group.add_command(label="Keine Verweise" if title.endswith("· Verweise") else "Keine Rückverweise",
+                group.add_command(label=glide_i18n.t("ui.build_side_references_menu.no_references", "Keine Verweise") if title.endswith("· Verweise") else glide_i18n.t("ui.build_side_references_menu.no_backlinks", "Keine Rückverweise"),
                                   state="disabled")
             menu.add_cascade(label=f"{title} ({len(rows)})", menu=group)
         if action_rows:
@@ -25156,14 +25154,14 @@ class ListApp:
                         command=lambda a=action, value=row['value'], source=row['source']:
                             self.follow_side_reference(value, source, action=a))
                 actions.add_cascade(label=title + ' · ' + row['title'], menu=target)
-            menu.add_cascade(label='Verweisaktionen', menu=actions)
+            menu.add_cascade(label=glide_i18n.t("ui.build_side_references_menu.reference_actions", 'Verweisaktionen'), menu=actions)
         if not getattr(self, '_data_read_only', False) and index.get(('list', entry['id']), ('missing',))[0] == 'active':
-            menu.add_command(label='Inhalt verknüpfen …',
+            menu.add_command(label=glide_i18n.t("ui.build_side_references_menu.link_content", 'Inhalt verknüpfen …'),
                              command=lambda source=('list', entry['id']): self.link_side_reference(source))
             selected = getattr(self, '_side_view_selected', None)
             holder = index.get(('item', selected))
             if holder and holder[0] == 'active' and holder[2] and holder[2].get('id') == entry['id']:
-                menu.add_command(label='Ausgewählte Aufgabe verknüpfen …',
+                menu.add_command(label=glide_i18n.t("ui.build_side_references_menu.link_selected_task", 'Ausgewählte Aufgabe verknüpfen …'),
                                  command=lambda source=('item', selected): self.link_side_reference(source))
         return menu
 
@@ -25171,7 +25169,7 @@ class ListApp:
         self._destroy_item_context_menu()
         menu = self.build_side_references_menu()
         self._item_context_menu = menu
-        self.show_action_chooser(menu, title="Verweise in der Nebenansicht",
+        self.show_action_chooser(menu, title=glide_i18n.t("ui.show_side_references.references_in_the_side", "Verweise in der Nebenansicht"),
                                  anchor=self.current_focus_widget() or self.side_pane)
         return "break"
 
@@ -25253,7 +25251,7 @@ class ListApp:
                 versatz = inhalt.find(glide_side_view.IMAGE_ANCHOR)
                 if versatz >= 0:
                     text.tag_add("anchor", f"{start} + {versatz}c")
-                    bild = tk.Label(text, text="Bild · im Original sichtbar", bg=theme["input"], fg=theme["muted"],
+                    bild = tk.Label(text, text=glide_i18n.t("ui.render_side_view_page.image_visible_in_the", "Bild · im Original sichtbar"), bg=theme["input"], fg=theme["muted"],
                                     font=app_font(groessen["caption"]), padx=6, pady=2)
                     text.window_create(f"{start} + {versatz}c", window=bild, padx=2)
             elif zeile["task"]:
@@ -25266,7 +25264,7 @@ class ListApp:
                     marke.bind("<Button-1>", lambda _event, iid=zeile["task"]: self.toggle_side_view_task(iid))
                     marke.bind("<Enter>", lambda _event, w=marke: w.configure(bg=self.theme["hover"]))
                     marke.bind("<Leave>", lambda _event, w=marke: w.configure(bg=self.theme["card"]))
-                marke._accessible_name = ("Erledigt: " if erledigt else "Offen: ") + text.get(start, f"{start} lineend")
+                marke._accessible_name = (glide_i18n.t("ui.render_side_view_page.done", "Erledigt: ") if erledigt else glide_i18n.t("ui.render_side_view_page.open", "Offen: ")) + text.get(start, f"{start} lineend")
                 text.window_create(start, window=marke, padx=2)
                 if erledigt:
                     text.tag_add("task_done", f"{start} + 1c", f"{start} lineend")
@@ -25307,7 +25305,7 @@ class ListApp:
             jetzt = time.monotonic()
             zuletzt = getattr(self, "_detail_commit_error_shown", None)
             if not zuletzt or zuletzt[0] != fehler or jetzt - zuletzt[1] >= 2.0:
-                self.show_warning("Bearbeitung offen", fehler + " Erst danach lässt sich die Ansicht wechseln.")
+                self.show_warning(glide_i18n.t("ui.prepare_inspector_switch.edit_in_progress", "Bearbeitung offen"), glide_i18n.t("ui.prepare_inspector_switch.only_then_can_the", '{fehler} Erst danach lässt sich die Ansicht wechseln.', fehler=fehler))
                 self._detail_commit_error_shown = (fehler, time.monotonic())
         return False
 
@@ -26131,8 +26129,8 @@ class ListApp:
             return "break"
         neu, abgelehnt = self.add_relation_targets(own_id, field, aktuell, gewaehlt, self.item_index())
         if abgelehnt:
-            self.show_warning("Abhängigkeit abgelehnt", "Mindestens eine Voraussetzung wartet selbst "
-                              "auf diesen Punkt. Die Punkte würden dann aufeinander warten.")
+            self.show_warning(glide_i18n.t("ui.add_detail_pane_relation.dependency_rejected", "Abhängigkeit abgelehnt"), glide_i18n.t("ui.add_detail_pane_relation.at_least_one_prerequisite", "Mindestens eine Voraussetzung wartet selbst "
+                              "auf diesen Punkt. Die Punkte würden dann aufeinander warten."))
         state["fields"][field] = neu
         self.commit_detail_pane()
         self.sync_detail_pane(force=True)
@@ -26148,7 +26146,7 @@ class ListApp:
         self.commit_detail_pane()
         if getattr(self,"_detail_commit_error",None):
             return "break"
-        pfade = filedialog.askopenfilenames(title="Dateien oder Bilder anhängen", parent=self.root)
+        pfade = filedialog.askopenfilenames(title=glide_i18n.t("ui.add_detail_pane_attachments.attach_files_or_images", "Dateien oder Bilder anhängen"), parent=self.root)
         if not pfade:
             return "break"
         # Abgelegt wird eine Kopie mit eigenem Pfad und seit D67 womöglich
@@ -26202,7 +26200,7 @@ class ListApp:
         if pfad and os.path.isfile(pfad):
             self.open_external_path(pfad)
         else:
-            self.show_warning("Anhang nicht gefunden", "Die Datei ist in der Datenablage nicht verfügbar.")
+            self.show_warning(glide_i18n.t("ui.open_attachment.attachment_not_found", "Anhang nicht gefunden"), glide_i18n.t("ui.open_attachment.the_file_is_not", "Die Datei ist in der Datenablage nicht verfügbar."))
         return "break"
 
     def remove_detail_pane_relation(self, field, target):
@@ -26225,7 +26223,7 @@ class ListApp:
         finally:
             self._detail_committing = False
         if change.saved is False:
-            self._detail_commit_error = "Die Checkliste konnte nicht gespeichert werden. Aktion erneut ausführen."
+            self._detail_commit_error = glide_i18n.t("ui.save_detail_pane_checklist.the_checklist_could_not", "Die Checkliste konnte nicht gespeichert werden. Aktion erneut ausführen.")
             self.detail_status.configure(text=self._detail_commit_error, fg=self.theme["delete"])
             return False
         # Der Bereich darf seine alte Checkliste beim erneuten Aufbau nicht
@@ -26248,8 +26246,7 @@ class ListApp:
             return False
         schritte = list(found[0].get("checklist") or [])
         if len(schritte) >= self.MAX_CHECKLIST_ENTRIES:
-            self.show_warning("Checkliste", f"Eine Checkliste fasst {self.MAX_CHECKLIST_ENTRIES} Schritte. "
-                              "Für mehr Struktur eignen sich Unterpunkte.")
+            self.show_warning(glide_i18n.t("ui.add_detail_pane_step.checklist", "Checkliste"), glide_i18n.t("ui.add_detail_pane_step.a_checklist_holds_steps", 'Eine Checkliste fasst {max_checklist_entries} Schritte. Für mehr Struktur eignen sich Unterpunkte.', max_checklist_entries=self.MAX_CHECKLIST_ENTRIES))
             return False
         return self.save_detail_pane_checklist(found[0],
             schritte + [{"id": uuid.uuid4().hex, "text": text, "done": False}])
@@ -26406,8 +26403,8 @@ class ListApp:
 
     def edit_task_field(self, item_id, field, anchor=None):
         """Kleine Feldauswahl mit derselben Mutation aus jedem Aufgaben-Kontext."""
-        titles = {"planned": "Bearbeitungstag", "due": "Fälligkeit",
-                  "importance": "Wichtigkeit", "labels": "Labels"}
+        titles = {"planned": glide_i18n.t("ui.edit_task_field.work_day", "Bearbeitungstag"), "due": glide_i18n.t("calendar.title.due", "Fälligkeit"),
+                  "importance": glide_i18n.t("inspector.importance", "Wichtigkeit"), "labels": glide_i18n.t("menu.view.labels", "Labels")}
         if field not in titles or getattr(self, "_data_read_only", False):
             return "break"
         self.commit_detail_pane()
@@ -26440,7 +26437,7 @@ class ListApp:
                 def capacity(*_args):
                     parsed,error=picker.read()
                     preview.configure(text=error or (self.planning_available_text(parsed[0],[item_id])
-                                                     if parsed[0] else "Ohne Bearbeitungstag"))
+                                                     if parsed[0] else glide_i18n.t("ui.capacity.no_work_day", "Ohne Bearbeitungstag")))
                 picker.on_change = capacity
                 picker.date_entry.bind("<KeyRelease>",capacity,add="+")
                 capacity()
@@ -26461,11 +26458,11 @@ class ListApp:
         result={"changed":False}
         def submit(_event=None):
             if getattr(self,"_data_read_only",False):
-                status.configure(text="Der Bestand ist schreibgeschützt.")
+                status.configure(text=glide_i18n.t("ui.submit.the_data_is_read", "Der Bestand ist schreibgeschützt."))
                 return "break"
             fresh=self.find_item_in_lists(item_id)
             if not fresh or not self.is_schedulable_item(fresh[0]):
-                status.configure(text="Diese Aufgabe ist nicht mehr verfügbar.")
+                status.configure(text=glide_i18n.t("ui.submit.this_task_is_no", "Diese Aufgabe ist nicht mehr verfügbar."))
                 return "break"
             entered=copy.deepcopy(baseline)
             if field in ("planned","due"):
@@ -26481,13 +26478,13 @@ class ListApp:
             try:
                 edit=glide_task_editing.merge(baseline,entered,self.item_details_snapshot(fresh[0]))
             except ValueError as exc:
-                status.configure(text=str(exc)+". Abbrechen und aktuellen Stand öffnen.")
+                status.configure(text=glide_i18n.t("ui.submit.cancel_and_open_the", '{str}. Abbrechen und aktuellen Stand öffnen.', str=str(exc)))
                 return "break"
             self._detail_committing=True
             try:
                 change = self.apply_task_edit(fresh[0], edit.details)
                 if change.saved is False:
-                    status.configure(text="Die Änderung konnte nicht gespeichert werden. Eingabe bleibt erhalten; erneut versuchen oder abbrechen.")
+                    status.configure(text=glide_i18n.t("ui.submit.the_change_could_not", "Die Änderung konnte nicht gespeichert werden. Eingabe bleibt erhalten; erneut versuchen oder abbrechen."))
                     return "break"
                 result["changed"]=bool(change.changed)
             finally:
@@ -26499,8 +26496,8 @@ class ListApp:
             return "break"
         footer=tk.Frame(body,bg=self.theme["bg"])
         footer.pack(fill="x",pady=(12,0))
-        self._make_dialog_button(footer,"Übernehmen",submit,"confirm").pack(side="right")
-        self._make_dialog_button(footer,"Abbrechen",cancel,"muted").pack(side="right",padx=(0,8))
+        self._make_dialog_button(footer,glide_i18n.t("button.apply", "Übernehmen"),submit,"confirm").pack(side="right")
+        self._make_dialog_button(footer,glide_i18n.t("button.cancel", "Abbrechen"),cancel,"muted").pack(side="right",padx=(0,8))
         dialog.bind("<Escape>",cancel)
         dialog.bind("<Return>",submit)
         dialog.protocol("WM_DELETE_WINDOW",cancel)
@@ -26551,7 +26548,7 @@ class ListApp:
         self._detail_commit_error = None
         found = self.find_item_in_lists(state["item_id"])
         if not found:
-            self._detail_commit_error = "Diese Aufgabe ist nicht mehr verfügbar. Eingabe verwerfen oder aktuellen Stand laden."
+            self._detail_commit_error = glide_i18n.t("ui.commit_detail_pane.this_task_is_no", "Diese Aufgabe ist nicht mehr verfügbar. Eingabe verwerfen oder aktuellen Stand laden.")
             status = getattr(self,"detail_status",None)
             if status is not None and status.winfo_exists():
                 status.configure(text=self._detail_commit_error, fg=self.theme["delete"])
@@ -26571,7 +26568,7 @@ class ListApp:
             self._detail_commit_error = str(exc)
             status = getattr(self,"detail_status",None)
             if status is not None and status.winfo_exists():
-                status.configure(text=str(exc)+" · Eingabe prüfen oder aktuellen Stand laden.", fg=self.theme["delete"])
+                status.configure(text=glide_i18n.t("ui.commit_detail_pane.check_the_input_or", '{str} · Eingabe prüfen oder aktuellen Stand laden.', str=str(exc)), fg=self.theme["delete"])
             return False
         status = getattr(self,"detail_status",None)
         if status is not None and status.winfo_exists():
@@ -26583,7 +26580,7 @@ class ListApp:
         try:
             change = self.apply_task_edit(item, edit.details)
             if change.saved is False:
-                self._detail_commit_error = "Die Änderung konnte nicht gespeichert werden. Eingabe bleibt erhalten."
+                self._detail_commit_error = glide_i18n.t("ui.commit_detail_pane.the_change_could_not", "Die Änderung konnte nicht gespeichert werden. Eingabe bleibt erhalten.")
                 if status is not None and status.winfo_exists():
                     status.configure(text=self._detail_commit_error, fg=self.theme["delete"])
                 return False
@@ -26683,7 +26680,7 @@ class ListApp:
         esc = self.escape_print_text
         zeilen = [
             "<!DOCTYPE html>", '<html lang="de">', "<head>", '<meta charset="utf-8">',
-            f"<title>{esc(titel)} · Folien · {APP_NAME}</title>", "<style>",
+            glide_i18n.t("ui.build_note_slides_html.title_slides_title", '<title>{esc} · Folien · {app_name}</title>', esc=esc(titel), app_name=APP_NAME), "<style>",
             "@page { size: A4 landscape; margin: 16mm; }",
             "* { box-sizing: border-box; }",
             "body { margin: 0; font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;"
@@ -26711,7 +26708,7 @@ class ListApp:
         """Die Folien einer Notiz als Druckseite öffnen (MO-080, zweite Stufe)."""
         editor = getattr(self, "rich_note_editor", None)
         if editor is None or not editor.winfo_exists():
-            self.show_info("Folien als PDF", "Zuerst eine Notiz öffnen.")
+            self.show_info(glide_i18n.t("ui.print_note_presentation.slides_as_pdf", "Folien als PDF"), glide_i18n.t("ui.print_note_presentation.open_a_note_first", "Zuerst eine Notiz öffnen."))
             return "break"
         editor.flush()
         try:
@@ -26719,13 +26716,13 @@ class ListApp:
         except ValueError:
             return "break"
         return self.open_print_html(self.build_note_slides_html(self.get_display_title(), folien),
-                                    "glide_folien", "Folien als PDF")
+                                    "glide_folien", glide_i18n.t("ui.print_note_presentation.slides_as_pdf", "Folien als PDF"))
 
     def start_note_presentation(self):
         """Blendet über dem Notizeditor eine Folienansicht ein – kein Zusatzfenster."""
         editor = getattr(self, "rich_note_editor", None)
         if editor is None or not editor.winfo_exists():
-            self.show_info("Präsentieren", "Zuerst eine Notiz öffnen.")
+            self.show_info(glide_i18n.t("ui.start_presentation.present", "Präsentieren"), glide_i18n.t("ui.start_note_presentation.open_a_note_first", "Zuerst eine Notiz öffnen."))
             return "break"
         editor.flush()
         try:
@@ -26764,7 +26761,7 @@ class ListApp:
         titel, text = folien[index]
         zustand["title"].configure(text=titel or str((self.current_list() or {}).get("title") or ""))
         zustand["body"].configure(text=text)
-        zustand["footer"].configure(text=f"Folie {index + 1} / {len(folien)} · Pfeiltasten blättern · Escape beendet")
+        zustand["footer"].configure(text=glide_i18n.t("ui.show_note_slide.slide_arrow_keys_to", 'Folie {wert} / {len} · Pfeiltasten blättern · Escape beendet', wert=index + 1, len=len(folien)))
         return "break"
 
     def note_presentation_step(self, schritt):
@@ -26819,7 +26816,7 @@ class ListApp:
                  and value.get("id") in (folder_ids if value.get("kind") == "folder" else list_ids)]
         if pinned:
             if len(pages) >= self.MAX_PINNED_PAGES:
-                self.show_info("Anheften", f"Es lassen sich höchstens {self.MAX_PINNED_PAGES} Seiten anheften.")
+                self.show_info(glide_i18n.t("board.action.pin", "Anheften"), glide_i18n.t("ui.set_pinned.at_most_pages_can", 'Es lassen sich höchstens {max_pinned_pages} Seiten anheften.', max_pinned_pages=self.MAX_PINNED_PAGES))
                 return False
             pages.append({"kind": kind, "id": identity})
         self.settings["pinned_pages"] = pages
@@ -26996,8 +26993,8 @@ class ListApp:
                 self.sidebar_frame, anchor="w", cursor="hand2", takefocus=True, font=app_font(9, "bold"))
             for sequence in ("<Button-1>", "<Return>", "<space>"):
                 kopf.bind(sequence, lambda _event: self.set_sidebar_section_open("views", True))
-            self.add_tooltip(kopf, "Ansichten ausklappen")
-        kopf.configure(text=f"{self.ICONS['group']}  Ansichten ({len(system.get_children(''))})",
+            self.add_tooltip(kopf, glide_i18n.t("ui.apply_sidebar_sections.expand_views", "Ansichten ausklappen"))
+        kopf.configure(text=glide_i18n.t("ui.apply_sidebar_sections.views", '{group}  Ansichten ({len})', group=self.ICONS['group'], len=len(system.get_children(''))),
                        bg=theme["card"], fg=theme["muted"])
         naechstes = self.pinned_sidebar_frame if getattr(self, "pinned_sidebar_frame", None) is not None \
             and self.pinned_sidebar_frame.winfo_manager() else (getattr(self, "pages_title_row", None) if self.sidebar_section_visible("pages") else None) or titelzeile
@@ -27046,8 +27043,8 @@ class ListApp:
         self.sidebar_quick_kind = None
         self.sidebar_quick_tree = None
         knoepfe = []
-        for text, befehl, hinweis in (("+", self.sidebar_quick_add, "In diesem Ordner anlegen"),
-                                     ("…", self.sidebar_quick_more, "Bearbeiten, Löschen und weitere Aktionen")):
+        for text, befehl, hinweis in (("+", self.sidebar_quick_add, glide_i18n.t("ui.build_sidebar_quick_actions.create_in_this_folder", "In diesem Ordner anlegen")),
+                                     ("…", self.sidebar_quick_more, glide_i18n.t("ui.build_sidebar_quick_actions.edit_delete_and_more", "Bearbeiten, Löschen und weitere Aktionen"))):
             knopf = tk.Label(baum, text=text, font=app_font(11, "bold"), cursor="hand2", width=2,
                              bg=theme["hover"], fg=theme["text"])
             knopf.bind("<Button-1>", lambda event, run=befehl: run(event) or "break")
@@ -27147,31 +27144,31 @@ class ListApp:
         section = self.sidebar_section_for("folder", folder_id) if folder_id else "lists"
         ordnerart = (self.get_folder(folder_id) or {}).get("folder_kind")
         if section == "lists":
-            menu.add_command(label="Aus Vorlage …", command=lambda: self.choose_creation_template(folder_id, section))
-            menu.add_command(label="Neue Liste …", command=lambda: self.create_container_dialog("list", parent_id=folder_id))
+            menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.from_template", "Aus Vorlage …"), command=lambda: self.choose_creation_template(folder_id, section))
+            menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_list", "Neue Liste …"), command=lambda: self.create_container_dialog("list", parent_id=folder_id))
         if section in ("pages", "lists"):
-            menu.add_command(label="Neue Seite", command=lambda: self.create_in_sidebar_section("page", folder_id, section))
-            menu.add_cascade(label="Seite aus Vorlage", menu=self.page_template_menu(menu, folder_id, section))
+            menu.add_command(label=glide_i18n.t("menu.file.new_page", "Neue Seite"), command=lambda: self.create_in_sidebar_section("page", folder_id, section))
+            menu.add_cascade(label=glide_i18n.t("ui.folder_quick_add_menu.page_from_template", "Seite aus Vorlage"), menu=self.page_template_menu(menu, folder_id, section))
         if section in ("notes", "lists"):
             if ordnerart == "journal":
-                menu.add_command(label="Neue Tagesnotiz", command=lambda: self.create_journal_entry(folder_id))
-            menu.add_command(label="Neue Notiz …", command=lambda: self.create_container_dialog(
+                menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_daily_note", "Neue Tagesnotiz"), command=lambda: self.create_journal_entry(folder_id))
+            menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_note", "Neue Notiz …"), command=lambda: self.create_container_dialog(
                 "list", parent_id=folder_id, list_kind=self.LIST_KIND_NOTE, sidebar_section=section))
         if section == "lists":
-            menu.add_command(label="Neue Pinnwand …", command=lambda: self.create_container_dialog(
+            menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.new_board", "Neue Pinnwand …"), command=lambda: self.create_container_dialog(
                 "list", parent_id=folder_id, list_kind="board"))
-            menu.add_command(label="Neue Galerie", command=lambda: self.create_new_gallery(folder_id))
+            menu.add_command(label=glide_i18n.t("menu.file.new_gallery", "Neue Galerie"), command=lambda: self.create_new_gallery(folder_id))
         if glide_sidebar.accepts(section, "list", "drawing", ordnerart):
-            menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", folder_id, section))
+            menu.add_command(label=glide_i18n.t("menu.file.new_drawing", "Neue Zeichnung"), command=lambda: self.create_in_sidebar_section("drawing", folder_id, section))
         for key, info in self.FOLDER_KINDS.items():
             if glide_sidebar.accepts(section, "folder", key):
-                menu.add_command(label=("Neuer Unterordner …" if folder_id else "Neuer Ordner …") if key == "standard"
-                                 else "Neues Buch …" if key == "library" else "Neues Notizbuch …",
+                menu.add_command(label=(glide_i18n.t("ui.folder_quick_add_menu.new_subfolder", "Neuer Unterordner …") if folder_id else glide_i18n.t("ui.folder_quick_add_menu.new_folder", "Neuer Ordner …")) if key == "standard"
+                                 else glide_i18n.t("ui.folder_quick_add_menu.new_book", "Neues Buch …") if key == "library" else glide_i18n.t("ui.folder_quick_add_menu.new_notebook", "Neues Notizbuch …"),
                                  command=lambda k=key: self.create_container_dialog(
                                      "folder", parent_id=folder_id, folder_kind=k, sidebar_section=section))
         if folder_id is None:
             menu.add_separator()
-            menu.add_command(label="Listen importieren …", command=self.import_txt_as_new_lists)
+            menu.add_command(label=glide_i18n.t("ui.folder_quick_add_menu.import_lists", "Listen importieren …"), command=self.import_txt_as_new_lists)
         return menu
 
     def show_sidebar_add_menu(self, event=None):
@@ -27240,7 +27237,7 @@ class ListApp:
         pfeil = TriangleLabel(kopf, text=self.ICONS["dropdown_closed" if is_open else "group"], width=2,
                          bg=theme["card"], fg=theme["muted"], font=self.tree_font(), cursor="hand2", takefocus=True)
         pfeil.pack(side="left", padx=(6, 2))
-        titel = tk.Label(kopf, text=f"Angeheftet ({len(pages)})", bg=theme["card"], fg=theme["muted"],
+        titel = tk.Label(kopf, text=glide_i18n.t("ui.render_pinned_sidebar.pinned", 'Angeheftet ({len})', len=len(pages)), bg=theme["card"], fg=theme["muted"],
                          font=app_font(9, "bold"), anchor="w", cursor="hand2")
         titel.pack(side="left", fill="x", expand=True)
         for widget in (kopf, pfeil, titel):
@@ -27265,7 +27262,7 @@ class ListApp:
                                   "folder" if kind == "folder" else "drawing" if self.is_drawing_list(holder)
                                   else "list"])
             symbol.pack(side="left")
-            label = tk.Label(row, text=str(holder.get("title") or ("Ordner" if kind == "folder" else "Liste")),
+            label = tk.Label(row, text=str(holder.get("title") or (glide_i18n.t("ui.render_pinned_sidebar.folder", "Ordner") if kind == "folder" else glide_i18n.t("editor.toolbar.list", "Liste"))),
                              bg=bg, fg=fg, font=self.tree_font(), anchor="w")
             label.pack(side="left", fill="x", expand=True, pady=2)
             widgets = (row, symbol, label)
@@ -27304,12 +27301,12 @@ class ListApp:
 
     def show_pinned_menu(self, event, kind, identity):
         menu = self._new_themed_popup_menu()
-        menu.add_command(label="Öffnen", command=lambda: self.open_pinned_page(kind, identity))
+        menu.add_command(label=glide_i18n.t("saved_view.manager.open", "Öffnen"), command=lambda: self.open_pinned_page(kind, identity))
         menu.add_separator()
-        menu.add_command(label="Nach oben", command=lambda: self.move_pinned(kind, identity, -1))
-        menu.add_command(label="Nach unten", command=lambda: self.move_pinned(kind, identity, 1))
+        menu.add_command(label=glide_i18n.t("ui.show_pinned_menu.move_up", "Nach oben"), command=lambda: self.move_pinned(kind, identity, -1))
+        menu.add_command(label=glide_i18n.t("ui.show_pinned_menu.move_down", "Nach unten"), command=lambda: self.move_pinned(kind, identity, 1))
         menu.add_separator()
-        menu.add_command(label="Lösen", command=lambda: self.set_pinned(kind, identity, False))
+        menu.add_command(label=glide_i18n.t("ui.show_pinned_menu.unpin", "Lösen"), command=lambda: self.set_pinned(kind, identity, False))
         try:
             menu.tk_popup(event.x_root, event.y_root)
         finally:
@@ -27325,7 +27322,7 @@ class ListApp:
         angeheftet = list(self.settings.get("home_filter_tiles", []))
         filter_liste = self.settings.get("saved_filters", [])
         if not filter_liste:
-            menu.add_command(label="Noch keine gespeicherten Filter – Filter anlegen …",
+            menu.add_command(label=glide_i18n.t("ui.show_filter_pin_menu.no_saved_filters_yet", "Noch keine gespeicherten Filter – Filter anlegen …"),
                              command=self.saved_filters.show_manager)
         for saved in filter_liste:
             dran = saved["id"] in angeheftet
@@ -27343,8 +27340,8 @@ class ListApp:
         values = [value for value in self.settings.get("home_filter_tiles", []) if value != identity]
         if pinned:
             if len(values) >= self.MAX_HOME_FILTER_TILES:
-                self.show_info("Filter anheften",
-                               f"Es lassen sich höchstens {self.MAX_HOME_FILTER_TILES} Filter anheften.")
+                self.show_info(glide_i18n.t("ui.pin_home_filter.pin_filter", "Filter anheften"),
+                               glide_i18n.t("ui.pin_home_filter.at_most_filters_can", 'Es lassen sich höchstens {max_home_filter_tiles} Filter anheften.', max_home_filter_tiles=self.MAX_HOME_FILTER_TILES))
                 return False
             values.append(identity)
             hidden = [key for key in self.settings.get("home_tiles_hidden", []) if key != "filters"]
@@ -27550,15 +27547,15 @@ class ListApp:
         # (Rückmeldung 27.09.2026).
         kopf = tk.Frame(self.home_content, bg=theme["bg"])
         kopf.pack(fill="x", pady=(0, 10))
-        CanvasLabel(kopf, text="Startseite anpassen", bg=theme["bg"], fg=theme["text"], font=app_font(15, "bold"),
+        CanvasLabel(kopf, text=glide_i18n.t("ui.render_home_editor.customize_home", "Startseite anpassen"), bg=theme["bg"], fg=theme["text"], font=app_font(15, "bold"),
                     anchor="w").pack(side="left")
-        self._make_dialog_button(kopf, "Fertig", self.toggle_home_editing, "confirm", width=110,
+        self._make_dialog_button(kopf, glide_i18n.t("ui.open_popup.done", "Fertig"), self.toggle_home_editing, "confirm", width=110,
                                  height=34).pack(side="right")
-        self._make_dialog_button(kopf, "Weitere Einstellungen …", self.show_home_tiles_dialog, "muted", width=200,
+        self._make_dialog_button(kopf, glide_i18n.t("ui.render_home_editor.more_settings", "Weitere Einstellungen …"), self.show_home_tiles_dialog, "muted", width=200,
                                  height=34).pack(side="right", padx=(0, 8))
         if self.hints_room():
-            CanvasLabel(self.home_content, text="Am Griff ziehen oder mit Alt+Pfeiltasten verschieben. „Ganze Breite“ "
-                                                "stellt eine Kachel über das Raster.", bg=theme["bg"], fg=theme["muted"],
+            CanvasLabel(self.home_content, text=glide_i18n.t("ui.render_home_editor.drag_the_handle_or", "Am Griff ziehen oder mit Alt+Pfeiltasten verschieben. „Ganze Breite“ "
+                                                "stellt eine Kachel über das Raster."), bg=theme["bg"], fg=theme["muted"],
                         font=app_font(10), anchor="w").pack(fill="x", pady=(0, 8))
         liste = tk.Frame(self.home_content, bg=theme["bg"])
         liste.pack(fill="x")
@@ -27607,11 +27604,11 @@ class ListApp:
             griff.pack(side="left", padx=(0, 10))
             tk.Label(row, text=titles.get(key, key), bg=theme["card"], fg=theme["text"], font=app_font(11),
                      anchor="w").pack(side="left", fill="x", expand=True)
-            self._make_dialog_button(row, "Ausblenden", lambda value=key: self.set_home_tile_hidden(value, True),
+            self._make_dialog_button(row, glide_i18n.t("ui.render_home_editor.hide", "Ausblenden"), lambda value=key: self.set_home_tile_hidden(value, True),
                                      "muted", width=110, height=30).pack(side="right")
             if key not in fixed_wide:
                 wide = spans.get(key) == "wide"
-                self._make_dialog_button(row, "Normale Breite" if wide else "Ganze Breite",
+                self._make_dialog_button(row, glide_i18n.t("ui.render_home_editor.normal_width", "Normale Breite") if wide else glide_i18n.t("ui.render_home_editor.full_width", "Ganze Breite"),
                                          lambda value=key, now=wide: self.set_home_tile_span(
                                              value, "normal" if now else "wide"),
                                          "accent" if wide else "muted", width=130, height=30).pack(side="right",
@@ -27734,17 +27731,17 @@ class ListApp:
         """Text des Rückblicks für die Tagesnotiz."""
         today = today or date.today()
         state = getattr(self, "_day_review", None) or {}
-        zeilen = [f"Tagesabschluss {datetime.now():%H:%M}"]
+        zeilen = [glide_i18n.t("ui.day_close_summary.day_close", 'Tagesabschluss {now}', now=f'{datetime.now():%H:%M}')]
         erledigt = self.done_today_items(today.isoformat())
         if erledigt:
-            zeilen.append(f"Erledigt ({len(erledigt)}):")
+            zeilen.append(glide_i18n.t("ui.day_close_summary.done", 'Erledigt ({len}):', len=len(erledigt)))
             zeilen += [f"{self.ICONS['check']} {self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)}"
                        for item, _entry in erledigt]
         else:
-            zeilen.append("Heute nichts abgehakt.")
+            zeilen.append(glide_i18n.t("ui.day_close_summary.nothing_checked_off_today", "Heute nichts abgehakt."))
         verschoben = [text for text in state.get("moved", []) if text]
         if verschoben:
-            zeilen.append(f"Weitergegeben ({len(verschoben)}): " + ", ".join(verschoben))
+            zeilen.append(glide_i18n.t("ui.day_close_summary.passed_on", 'Weitergegeben ({len}): {join}', len=len(verschoben), join=", ".join(verschoben)))
         return "\n".join(zeilen)
 
     def write_day_close_note(self):
@@ -27836,42 +27833,41 @@ class ListApp:
         buttons = ButtonFlow(panel, bg=theme["card"], gap=8)
         abschluss = state.get("mode") == "close"
         if not abschluss:
-            text("1 Rückblick · 2 Tagesvorschlag · 3 Zeitblöcke", 10, color="muted")
-            buttons.add(self._make_dialog_button(buttons, "Was passt heute?", self.start_day_proposal,
+            text(glide_i18n.t("ui.render_day_review.1_review_2_day", "1 Rückblick · 2 Tagesvorschlag · 3 Zeitblöcke"), 10, color="muted")
+            buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.render_day_review.what_fits_today", "Was passt heute?"), self.start_day_proposal,
                                                  "confirm", width=180, height=36))
         if position >= len(queue) and abschluss:
             counts = state["counts"]
             erledigt = self.done_today_items()
-            text(f"{self.ICONS['check']}  Tagesabschluss", 15, True)
-            text(f"{len(erledigt)} heute erledigt · {counts['later']} weitergegeben · {counts['done']} jetzt abgehakt"
-                 if queue else f"{len(erledigt)} heute erledigt; nichts Offenes war für heute eingeplant.",
+            text(glide_i18n.t("ui.render_day_review.day_close", '{check}  Tagesabschluss', check=self.ICONS['check']), 15, True)
+            text(glide_i18n.t("ui.render_day_review.done_today_passed_on", '{len} heute erledigt · {later} weitergegeben · {done} jetzt abgehakt', len=len(erledigt), later=counts['later'], done=counts['done'])
+                 if queue else glide_i18n.t("ui.render_day_review.done_today_nothing_open", '{len} heute erledigt; nichts Offenes war für heute eingeplant.', len=len(erledigt)),
                  color="muted")
             for item, _entry in erledigt[:12]:
                 text(f"{self.ICONS['check']}  {self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)}",
                      10, pady=(0, 2))
             if len(erledigt) > 12:
-                text(f"… und {len(erledigt) - 12} weitere", 10, color="muted", pady=(0, 2))
+                text(glide_i18n.t("ui.render_day_review.and_more", '… und {wert} weitere', wert=len(erledigt) - 12), 10, color="muted", pady=(0, 2))
             buttons.pack(fill="x", pady=(10, 0))
             # „Zur Startseite“ und „Heute öffnen“ stehen in der Leiste unten;
             # hier nur der neue Weg.
-            buttons.add(self._make_dialog_button(buttons, "In die Tagesnotiz übernehmen", self.write_day_close_note,
+            buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.render_day_review.add_to_the_daily", "In die Tagesnotiz übernehmen"), self.write_day_close_note,
                                                  "confirm", width=230, height=36))
-            self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                       ("Heute öffnen", self.set_today_view, "confirm", 170)))
+            self.refresh_page_actions(((glide_i18n.t("ui.render_day_review.to_home", "Zur Startseite"), self.set_home_view, "muted", 160),
+                                       (glide_i18n.t("ui.show_daily_hints.open_today", "Heute öffnen"), self.set_today_view, "confirm", 170)))
             return surface
         if position >= len(queue):
             counts = state["counts"]
-            text(f"{self.ICONS['check']}  Tagesbeginn abgeschlossen", 15, True)
-            text(f"{counts['today']} für heute eingeplant · {counts['later']} verschoben · {counts['done']} erledigt"
-                 f" · {counts['skipped']} übersprungen" if queue else
-                 "Heute ist nichts zu entscheiden: nichts überfällig, nichts verschleppt, der Eingang ist leer.",
+            text(glide_i18n.t("ui.render_day_review.day_start_completed", '{check}  Tagesbeginn abgeschlossen', check=self.ICONS['check']), 15, True)
+            text(glide_i18n.t("ui.render_day_review.planned_for_today_postponed", '{today} für heute eingeplant · {later} verschoben · {done} erledigt · {skipped} übersprungen', today=counts['today'], later=counts['later'], done=counts['done'], skipped=counts['skipped']) if queue else
+                 glide_i18n.t("ui.render_day_review.nothing_to_decide_today", "Heute ist nichts zu entscheiden: nichts überfällig, nichts verschleppt, der Eingang ist leer."),
                  color="muted")
-            text(f"Heute: {capacity_text}", 10, color="muted", pady=(4, 10))
+            text(glide_i18n.t("ui.render_day_review.today", 'Heute: {capacity_text}', capacity_text=capacity_text), 10, color="muted", pady=(4, 10))
             buttons.pack(fill="x", pady=(4, 0))
             # Beide Wege stehen in der Leiste unten – einmal, nicht zweimal
             # (bis 30.09.2026 zusätzlich hier in der Karte).
-            self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                       ("Heute öffnen", self.set_today_view, "confirm", 170)))
+            self.refresh_page_actions(((glide_i18n.t("ui.render_day_review.to_home", "Zur Startseite"), self.set_home_view, "muted", 160),
+                                       (glide_i18n.t("ui.show_daily_hints.open_today", "Heute öffnen"), self.set_today_view, "confirm", 170)))
             return surface
         step = queue[position]
         found = self.find_item_in_lists(step["item_id"])
@@ -27879,26 +27875,26 @@ class ListApp:
             state["index"] += 1
             return self.render_day_review()
         item, entry = found[0], found[3]
-        text(f"Punkt {position + 1} von {len(queue)} · {self.DAY_REVIEW_REASONS.get(step['reason'], '')}",
+        text(glide_i18n.t("ui.render_day_review.item_of", 'Punkt {wert} von {len} · {get}', wert=position + 1, len=len(queue), get=self.DAY_REVIEW_REASONS.get(step['reason'], '')),
              10, color="muted")
         text(self.normalize_item_text(item.get("text", ""), self.ITEM_KIND_TASK), 16, True)
         details = [self.list_path_title(entry)]
         if item.get("due"):
-            details.append(f"fällig {self.format_due_display(item['due'])}")
+            details.append(glide_i18n.t("ui.render_day_review.due", 'fällig {format_due_display}', format_due_display=self.format_due_display(item['due'])))
         if item.get("planned_date"):
-            details.append(f"eingeplant {self.format_due_display(item['planned_date'])}")
+            details.append(glide_i18n.t("ui.render_day_review.planned", 'eingeplant {format_due_display}', format_due_display=self.format_due_display(item['planned_date'])))
         if item.get("estimated_minutes"):
-            details.append(f"Aufwand {self.format_estimated_minutes(item['estimated_minutes'])}")
+            details.append(glide_i18n.t("ui.render_day_review.effort", 'Aufwand {format_estimated_minutes}', format_estimated_minutes=self.format_estimated_minutes(item['estimated_minutes'])))
         if self.is_blocked(item):
-            details.append(f"{self.ICONS['blocked']} wartet noch")
+            details.append(glide_i18n.t("ui.render_day_review.still_waiting", '{blocked} wartet noch', blocked=self.ICONS['blocked']))
         text(" · ".join(details), 10, color="muted", pady=(0, 10))
-        text(f"Heute: {capacity_text}", 10, color="muted", pady=(0, 10))
+        text(glide_i18n.t("ui.render_day_review.today", 'Heute: {capacity_text}', capacity_text=capacity_text), 10, color="muted", pady=(0, 10))
         buttons.pack(fill="x")
-        plan_button = self._make_dialog_button(buttons, "Einplanen", lambda: self.show_quick_plan_menu(
+        plan_button = self._make_dialog_button(buttons, glide_i18n.t("ui.render_day_review.schedule", "Einplanen"), lambda: self.show_quick_plan_menu(
             item_ids=[step["item_id"]], review=True, anchor=plan_button), "muted", width=160, height=36)
         buttons.add(plan_button)
-        for label_text, decision, key in (("Erledigt (E)", "done", "e"),
-                                          ("Überspringen (Leertaste)", "skip", "space")):
+        for label_text, decision, key in ((glide_i18n.t("ui.render_day_review.done_e", "Erledigt (E)"), "done", "e"),
+                                          (glide_i18n.t("ui.render_day_review.skip_space", "Überspringen (Leertaste)"), "skip", "space")):
             buttons.add(self._make_dialog_button(buttons, label_text, lambda value=decision: self.day_review_decide(value),
                                                  "muted", width=230, height=36))
             panel.bind(f"<{key}>", lambda _event, value=decision: self.day_review_decide(value))
@@ -27907,8 +27903,8 @@ class ListApp:
         panel.bind("<p>", lambda event: self.show_quick_plan_menu(event, [step["item_id"]], review=True, anchor=plan_button))
         panel.configure(takefocus=1)
         panel.focus_set()
-        self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                   ("Heute öffnen", self.set_today_view, "confirm", 170)))
+        self.refresh_page_actions(((glide_i18n.t("ui.render_day_review.to_home", "Zur Startseite"), self.set_home_view, "muted", 160),
+                                   (glide_i18n.t("ui.show_daily_hints.open_today", "Heute öffnen"), self.set_today_view, "confirm", 170)))
         return surface
 
     def day_proposal(self, day=None):
@@ -27936,13 +27932,13 @@ class ListApp:
         original = state["proposal"]
         fresh = self.day_proposal()
         if original["signature"] != fresh["signature"]:
-            self.show_warning("Tagesvorschlag aktualisiert",
-                              "Tag, Aufgaben oder Kapazität haben sich geändert. Bitte die neue Auswahl prüfen.")
+            self.show_warning(glide_i18n.t("ui.apply_day_proposal.day_proposal_updated", "Tagesvorschlag aktualisiert"),
+                              glide_i18n.t("ui.apply_day_proposal.the_day_tasks_or", "Tag, Aufgaben oder Kapazität haben sich geändert. Bitte die neue Auswahl prüfen."))
             return self.start_day_proposal()
         try:
             rows = glide_day_proposal.selected_rows(fresh, state["selected"])
         except ValueError as exc:
-            self.show_warning("Tagesvorschlag", str(exc))
+            self.show_warning(glide_i18n.t("ui.apply_day_proposal.day_proposal", "Tagesvorschlag"), str(exc))
             return "break"
         if not rows:
             return "break"
@@ -27977,21 +27973,21 @@ class ListApp:
             label.bind("<Configure>", lambda event: label.configure(wraplength=max(120, event.width - 4)))
             return label
 
-        text("Was passt heute?", 16, True)
-        text("1 Rückblick · 2 Tagesvorschlag · 3 Zeitblöcke", color="muted")
+        text(glide_i18n.t("ui.render_day_proposal.what_fits_today", "Was passt heute?"), 16, True)
+        text(glide_i18n.t("ui.render_day_proposal.1_review_2_day", "1 Rückblick · 2 Tagesvorschlag · 3 Zeitblöcke"), color="muted")
         text(self.format_due_display(proposal["day"]), color="muted")
         budget = proposal["budget"]
-        text("Bitte eine Tageskapazität festlegen." if budget is None else
-             f"Auswahlbudget {glide_planning.duration(budget)}", 12, True)
+        text(glide_i18n.t("ui.render_day_proposal.please_set_a_daily", "Bitte eine Tageskapazität festlegen.") if budget is None else
+             glide_i18n.t("ui.render_day_proposal.selection_budget", 'Auswahlbudget {duration}', duration=glide_planning.duration(budget)), 12, True)
         if proposal["planned_unknown"] or any(row["assumed"] for row in proposal["rows"]):
-            text("Für Aufgaben ohne Schätzung reserviert der Vorschlag 30 Minuten. Der gespeicherte Aufwand bleibt leer.",
+            text(glide_i18n.t("ui.render_day_proposal.for_tasks_without_an", "Für Aufgaben ohne Schätzung reserviert der Vorschlag 30 Minuten. Der gespeicherte Aufwand bleibt leer."),
                  color="muted")
         chosen_label = text("", color="muted")
 
         def totals():
             chosen = [row for row in proposal["rows"] if (row["list_id"], row["item_id"]) in selected]
             minutes = sum(row["minutes"] for row in chosen)
-            chosen_label.configure(text=f"{len(chosen)} ausgewählt · {glide_planning.duration(minutes)}")
+            chosen_label.configure(text=glide_i18n.t("ui.totals.selected", '{len} ausgewählt · {duration}', len=len(chosen), duration=glide_planning.duration(minutes)))
             valid = bool(chosen and budget is not None and minutes <= budget)
             apply_button.command = self.apply_day_proposal if valid else None
             apply_button.configure(takefocus=int(valid))
@@ -28002,14 +27998,14 @@ class ListApp:
         pages = max(1, math.ceil(len(rows) / 50))
         state["page"] = min(state["page"], pages - 1)
         if not rows:
-            text("Keine weiteren passenden Aufgaben. Bereits eingeplante und gesperrte Aufgaben bleiben außen vor.",
+            text(glide_i18n.t("ui.render_day_proposal.no_more_matching_tasks", "Keine weiteren passenden Aufgaben. Bereits eingeplante und gesperrte Aufgaben bleiben außen vor."),
                  color="muted")
         for row in rows[state["page"] * 50:(state["page"] + 1) * 50]:
             identity = (row["list_id"], row["item_id"])
             variable = tk.BooleanVar(panel, value=identity in selected)
             source = next((entry for entry in self.lists if entry["id"] == row["list_id"]), None)
             title = self.normalize_item_text(row["title"], self.ITEM_KIND_TASK)
-            suffix = "30 min angenommen" if row["assumed"] else glide_planning.duration(row["minutes"])
+            suffix = glide_i18n.t("ui.render_day_proposal.30_min_assumed", "30 min angenommen") if row["assumed"] else glide_planning.duration(row["minutes"])
             label = f"{title}\n{glide_day_proposal.reason_text(row)} · {suffix} · {source['title'] if source else ''}"
 
             def toggle(key=identity, value=variable):
@@ -28026,24 +28022,24 @@ class ListApp:
                 wraplength=max(120, event.width - 32)))
         buttons = ButtonFlow(panel, bg=theme["card"], gap=8)
         buttons.pack(fill="x", pady=(8, 0))
-        buttons.add(self._make_dialog_button(buttons, "Neu berechnen", self.start_day_proposal,
+        buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.render_day_proposal.recalculate", "Neu berechnen"), self.start_day_proposal,
                                              "muted", width=160, height=36))
         if budget is None:
-            buttons.add(self._make_dialog_button(buttons, "Kapazität festlegen …", self.show_settings_dialog,
+            buttons.add(self._make_dialog_button(buttons, glide_i18n.t("ui.render_day_proposal.set_capacity", "Kapazität festlegen …"), self.show_settings_dialog,
                                                  "muted", width=210, height=36))
         if pages > 1:
-            text(f"Seite {state['page'] + 1} von {pages} · {len(rows)} Kandidaten", color="muted")
-            for title, delta in (("Vorige", -1), ("Weitere", 1)):
+            text(glide_i18n.t("ui.render_day_proposal.page_of_candidates", 'Seite {wert} von {pages} · {len} Kandidaten', wert=state['page'] + 1, pages=pages, len=len(rows)), color="muted")
+            for title, delta in ((glide_i18n.t("ui.render_day_proposal.previous", "Vorige"), -1), (glide_i18n.t("ui.render_day_proposal.more", "Weitere"), 1)):
                 def turn(step=delta):
                     state["page"] = (state["page"] + step) % pages
                     self.refresh_home()
                 buttons.add(self._make_dialog_button(buttons, title, turn, "muted", width=100, height=36))
-        self.refresh_page_actions((("Tag entlasten …", self.show_day_relief, "muted", 170),
-                                   ("Zurück zum Rückblick", self.start_day_review, "muted", 210),
-                                   ("Abbrechen · Heute öffnen", self.set_today_view, "muted", 230),
-                                   ("Übernehmen & Raster", self.apply_day_proposal, "confirm", 220)))
+        self.refresh_page_actions(((glide_i18n.t("ui.render_day_proposal.lighten_the_day", "Tag entlasten …"), self.show_day_relief, "muted", 170),
+                                   (glide_i18n.t("ui.render_day_proposal.back_to_review", "Zurück zum Rückblick"), self.start_day_review, "muted", 210),
+                                   (glide_i18n.t("ui.render_day_proposal.cancel_open_today", "Abbrechen · Heute öffnen"), self.set_today_view, "muted", 230),
+                                   (glide_i18n.t("ui.render_day_proposal.apply_grid", "Übernehmen & Raster"), self.apply_day_proposal, "confirm", 220)))
         apply_button = next(button for group in self.template_action_groups for button in group.inner.winfo_children()
-                            if isinstance(button, RoundedButton) and button.text == "Übernehmen & Raster")
+                            if isinstance(button, RoundedButton) and button.text == glide_i18n.t("ui.render_day_proposal.apply_grid", "Übernehmen & Raster"))
         totals()
         return surface
 
@@ -28110,10 +28106,10 @@ class ListApp:
                 wraplength=max(120, event.width - 4)))
             return widget
 
-        text(f"Woche vom {first:%d.%m.} bis {last:%d.%m.%Y}", 15, True, pady=(0, 10))
+        text(glide_i18n.t("ui.render_week_review.week_from_to", 'Woche vom {first} bis {last}', first=f'{first:%d.%m.}', last=f'{last:%d.%m.%Y}'), 15, True, pady=(0, 10))
         table = tk.Frame(panel, bg=theme["card"])
         table.pack(fill="x")
-        for column, heading in enumerate(("Tag", "Geplant", "Aufwand", "Kapazität", "Erledigt")):
+        for column, heading in enumerate((glide_i18n.t("ui.render_week_review.day", "Tag"), glide_i18n.t("ui.render_week_review.planned", "Geplant"), glide_i18n.t("saved_view.field.effort", "Aufwand"), glide_i18n.t("ui.render_week_review.capacity", "Kapazität"), glide_i18n.t("inspector.done", "Erledigt"))):
             tk.Label(table, text=heading, bg=theme["card"], fg=theme["muted"], font=app_font(9, "bold"),
                      anchor="w").grid(row=0, column=column, sticky="w", padx=(0, 18))
         for row_number, day in enumerate(data["days"], 1):
@@ -28122,7 +28118,7 @@ class ListApp:
             over = row["remaining"] is not None and row["remaining"] < 0
             cells = (f"{self.WEEKDAY_NAMES[parsed.weekday()][:2]} {parsed:%d.%m.}", str(row["planned"]),
                      self.format_estimated_minutes(row["planned_minutes"]) or "–",
-                     ("Unbekannt" if row["calendar_state"] in ("loading", "error", "closed") else
+                     (glide_i18n.t("ui.render_week_review.unknown", "Unbekannt") if row["calendar_state"] in ("loading", "error", "closed") else
                       self.format_estimated_minutes(row["capacity"]) or ("0 min" if row["remaining"] is not None else "–")),
                      str(row["done"]))
             for column, value in enumerate(cells):
@@ -28134,29 +28130,27 @@ class ListApp:
             if data["rows"][day]["calendar_state"]:
                 text(self.format_due_display(day) + " · " + data["rows"][day]["calendar_text"], 9, color="muted")
         total_done = sum(row["done"] for row in data["rows"].values())
-        text(f"{total_done} Aufgaben erledigt · {len(data['carried'])} weitergewandert", 11, True, pady=(12, 4))
+        text(glide_i18n.t("ui.render_week_review.tasks_done_moved_on", '{total_done} Aufgaben erledigt · {len} weitergewandert', total_done=total_done, len=len(data['carried'])), 11, True, pady=(12, 4))
         if data["spent"] or data["estimate"]:
-            text(f"Erfasste Zeit für Erledigtes: {self.format_estimated_minutes(data['spent']) or '–'}"
-                 f" · geschätzt: {self.format_estimated_minutes(data['estimate']) or '–'}", color="muted")
+            text(glide_i18n.t("ui.render_week_review.recorded_time_for_completed", 'Erfasste Zeit für Erledigtes: {wert} · geschätzt: {wert2}', wert=self.format_estimated_minutes(data['spent']) or '–', wert2=self.format_estimated_minutes(data['estimate']) or '–'), color="muted")
         if data["done_items"]:
             text("ERLEDIGT", 8, True, "muted", pady=(10, 4))
             for entry, item in data["done_items"][:12]:
                 text(f"{self.ICONS['check']}  {self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)}"
                      f"  ·  {entry.get('title', '')}")
         if data["carried"]:
-            text("WEITERGEWANDERT – EINGEPLANT, NOCH OFFEN", 8, True, "muted", pady=(10, 4))
+            text(glide_i18n.t("ui.render_week_review.moved_on_planned_still", "WEITERGEWANDERT – EINGEPLANT, NOCH OFFEN"), 8, True, "muted", pady=(10, 4))
             for entry, item in data["carried"][:12]:
-                text(f"{self.ICONS['task_open']}  {self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK)}"
-                     f"  ·  eingeplant {self.format_due_display(item.get('planned_date'))}")
-        text("Erledigt je Tag stammt aus der Tageszählung; die Liste des Erledigten aus dem Erledigt-Datum "
-             "der Punkte (seit 3.30).", 8, color="muted", pady=(12, 0))
+                text(glide_i18n.t("ui.render_week_review.planned_2", '{task_open}  {normalize_item_text}  ·  eingeplant {format_due_display}', task_open=self.ICONS['task_open'], normalize_item_text=self.normalize_item_text(item.get('text', ''), self.ITEM_KIND_TASK), format_due_display=self.format_due_display(item.get('planned_date'))))
+        text(glide_i18n.t("ui.render_week_review.done_per_day_comes", "Erledigt je Tag stammt aus der Tageszählung; die Liste des Erledigten aus dem Erledigt-Datum "
+             "der Punkte (seit 3.30)."), 8, color="muted", pady=(12, 0))
         self.refresh_page_actions((
-            ("Vorwoche", lambda: self.show_week_review(offset=offset - 1), "muted", 120),
-            ("Diese Woche", lambda: self.show_week_review(offset=0), "accent", 130),
-            ("Folgewoche", lambda: self.show_week_review(offset=offset + 1), "muted", 130),
-            ("Woche planen", self.calendar_from_week_review, "accent", 150),
-            ("Woche entlasten …", self.show_day_relief, "muted", 180),
-            ("Zur Startseite", self.set_home_view, "muted", 150),
+            (glide_i18n.t("ui.render_week_review.previous_week", "Vorwoche"), lambda: self.show_week_review(offset=offset - 1), "muted", 120),
+            (glide_i18n.t("ui.render_week_review.this_week", "Diese Woche"), lambda: self.show_week_review(offset=0), "accent", 130),
+            (glide_i18n.t("ui.render_week_review.next_week", "Folgewoche"), lambda: self.show_week_review(offset=offset + 1), "muted", 130),
+            (glide_i18n.t("ui.render_week_review.plan_the_week", "Woche planen"), self.calendar_from_week_review, "accent", 150),
+            (glide_i18n.t("ui.render_week_review.lighten_the_week", "Woche entlasten …"), self.show_day_relief, "muted", 180),
+            (glide_i18n.t("ui.render_week_review.to_home", "Zur Startseite"), self.set_home_view, "muted", 150),
         ))
         return surface
 
@@ -28311,7 +28305,7 @@ class ListApp:
         hint = getattr(self, "overview_search_hint", None)
         if hint is None:
             return
-        text = "Vorlagen durchsuchen" if self.view_mode == self.TEMPLATE_VIEW else "Global suchen · Enter"
+        text = glide_i18n.t("ui.sync_overview_search_hint.search_templates", "Vorlagen durchsuchen") if self.view_mode == self.TEMPLATE_VIEW else glide_i18n.t("ui.sync_overview_search_hint.search_everywhere_enter", "Global suchen · Enter")
         hint.configure(text=text)
         if not self.overview_search_var.get() and self.root.focus_get() is not self.overview_search_entry:
             hint.place(x=0, y=0, relwidth=1, relheight=1)
@@ -28651,9 +28645,9 @@ class ListApp:
     def care_for_mascot(self, action):
         care = self.mascot_care()
         messages = {
-            "feed": "Der Snack war genau richtig.",
-            "play": "Eine kleine Spielrunde später ist die Laune bestens.",
-            "rest": "Kurze Pause – jetzt ist wieder Energie da.",
+            "feed": glide_i18n.t("ui.care_for_mascot.the_snack_was_just", "Der Snack war genau richtig."),
+            "play": glide_i18n.t("ui.care_for_mascot.after_a_little_game", "Eine kleine Spielrunde später ist die Laune bestens."),
+            "rest": glide_i18n.t("ui.care_for_mascot.a_short_break_energy", "Kurze Pause – jetzt ist wieder Energie da."),
         }
         if action == "feed":
             care["satiety"] = min(100, care["satiety"] + 24)
@@ -28677,28 +28671,28 @@ class ListApp:
     def home_primary_actions(self):
         """Die vier Wege, die auf der Startseite täglich gebraucht werden."""
         return (
-            ("today", f"{self.ICONS['today']}  Heute", self.set_today_view, "accent"),
-            ("progress", f"{self.ICONS['in_progress']}  Demnächst", self.set_in_progress_view, "due_action"),
-            ("inbox", f"{self.ICONS['inbox']}  Eingang", self.open_inbox_list, "ui_accent"),
-            ("board", f"{self.ICONS['board']}  Pinnwand", self.open_global_board, "muted"),
+            ("today", glide_i18n.t("ui.home_primary_actions.today", '{today}  Heute', today=self.ICONS['today']), self.set_today_view, "accent"),
+            ("progress", glide_i18n.t("ui.home_primary_actions.upcoming", '{in_progress}  Demnächst', in_progress=self.ICONS['in_progress']), self.set_in_progress_view, "due_action"),
+            ("inbox", glide_i18n.t("ui.home_primary_actions.inbox", '{inbox}  Eingang', inbox=self.ICONS['inbox']), self.open_inbox_list, "ui_accent"),
+            ("board", glide_i18n.t("ui.home_primary_actions.board", '{board}  Pinnwand', board=self.ICONS['board']), self.open_global_board, "muted"),
         )
 
     def home_more_actions(self):
         """Was auf der Startseite selten gebraucht wird, nach Zweck gruppiert."""
         return (
-            ("Ansichten", (
-                (f"{self.ICONS['next']}  Nächste Aufgabe", self.open_next_task),
-                (f"{self.ICONS['overdue']}  Verspätet", self.set_overdue_view),
-                (f"{self.ICONS['calendar']}  Kalender", self.open_calendar_view),
-                (f"{self.ICONS['templates']}  Vorlagen", self.set_template_view),
+            (glide_i18n.t("ui.home_more_actions.views", "Ansichten"), (
+                (glide_i18n.t("ui.home_more_actions.next_task", '{next}  Nächste Aufgabe', next=self.ICONS['next']), self.open_next_task),
+                (glide_i18n.t("ui.home_more_actions.late", '{overdue}  Verspätet', overdue=self.ICONS['overdue']), self.set_overdue_view),
+                (glide_i18n.t("ui.home_more_actions.calendar", '{calendar}  Kalender', calendar=self.ICONS['calendar']), self.open_calendar_view),
+                (glide_i18n.t("ui.home_more_actions.templates", '{templates}  Vorlagen', templates=self.ICONS['templates']), self.set_template_view),
             )),
-            ("Anlegen", (
-                ("Neue Liste", self.create_new_list),
-                ("Neuer Ordner", self.create_new_folder),
+            (glide_i18n.t("ui.create_area.create", "Anlegen"), (
+                (glide_i18n.t("menu.file.new_list", "Neue Liste"), self.create_new_list),
+                (glide_i18n.t("menu.file.new_folder", "Neuer Ordner"), self.create_new_folder),
             )),
-            ("Einrichten", (
-                ("Startseite einrichten …", self.show_home_tiles_dialog),
-                ("Einstellungen …", self.show_settings_dialog),
+            (glide_i18n.t("ui.home_more_actions.set_up", "Einrichten"), (
+                (glide_i18n.t("ui.home_more_actions.set_up_home", "Startseite einrichten …"), self.show_home_tiles_dialog),
+                (glide_i18n.t("menu.file.settings", "Einstellungen …"), self.show_settings_dialog),
             )),
         )
 
@@ -28787,13 +28781,13 @@ class ListApp:
 
     def show_home_tiles_dialog(self, event=None):
         """Kacheln der Startseite ein- und ausschalten und ordnen."""
-        dialog = self._new_dialog("Startseite einrichten")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_home_tiles_dialog.set_up_home", "Startseite einrichten"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Startseite einrichten", bg=self.theme["bg"], fg=self.theme["text"],
+        tk.Label(outer, text=glide_i18n.t("ui.show_home_tiles_dialog.set_up_home", "Startseite einrichten"), bg=self.theme["bg"], fg=self.theme["text"],
                  font=app_font(16, "bold"), anchor="w").pack(fill="x", pady=(0, 6))
-        tk.Label(outer, text="Welche Kacheln erscheinen, in welcher Reihenfolge und in wie vielen Spalten. "
-                             "Die Auswahl gilt für dieses Gerät und liegt bei den persönlichen Einstellungen.",
+        tk.Label(outer, text=glide_i18n.t("ui.show_home_tiles_dialog.which_tiles_appear_in", "Welche Kacheln erscheinen, in welcher Reihenfolge und in wie vielen Spalten. "
+                             "Die Auswahl gilt für dieses Gerät und liegt bei den persönlichen Einstellungen."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
                  anchor="w", justify="left", wraplength=560).pack(fill="x", pady=(0, 14))
         # Drei Auswahlen nebeneinander statt einer
@@ -28809,16 +28803,16 @@ class ListApp:
         auswahlen.pack(fill="x", pady=(0, 14))
         auswahlen.columnconfigure((0, 1, 2), weight=1, uniform="homeoptionen")
         for spalte, (beschriftung, variable, moeglichkeiten) in enumerate((
-                ("Spalten", spalten, [text for _key, text in self.HOME_COLUMN_CHOICES]),
-                ("Kalendervorschau", kalender, [text for _key, text in self.HOME_CALENDAR_CHOICES]),
-                ("Ausführlichkeit", dichte, [text for _key, text in self.HOME_DENSITY_CHOICES]))):
+                (glide_i18n.t("ui.show_home_tiles_dialog.columns", "Spalten"), spalten, [text for _key, text in self.HOME_COLUMN_CHOICES]),
+                (glide_i18n.t("ui.show_home_tiles_dialog.calendar_preview", "Kalendervorschau"), kalender, [text for _key, text in self.HOME_CALENDAR_CHOICES]),
+                (glide_i18n.t("ui.show_home_tiles_dialog.level_of_detail", "Ausführlichkeit"), dichte, [text for _key, text in self.HOME_DENSITY_CHOICES]))):
             zelle = tk.Frame(auswahlen, bg=self.theme["bg"])
             zelle.grid(row=0, column=spalte, sticky="new",
                        padx=(0, 8) if spalte < 2 else (0, 0))
             self._make_field_label(zelle, beschriftung).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
             feld, _knopf = self._make_option_menu(zelle, variable, moeglichkeiten)
             feld.pack(fill="x")
-        self._make_field_label(outer, "Kacheln").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        self._make_field_label(outer, glide_i18n.t("ui.show_home_tiles_dialog.tiles", "Kacheln")).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
         rahmen, feld = self._make_field(outer)
         rahmen.pack(fill="both", expand=True)
         feld.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
@@ -28871,10 +28865,10 @@ class ListApp:
 
         aktionen = ButtonFlow(outer, bg=self.theme["bg"])
         aktionen.pack(fill="x", pady=(10, 0))
-        for text, befehl, farbe in (("Sichtbarkeit", umschalten, "confirm"),
-                                    ("▴ Nach oben", lambda: verschieben(-1), "accent"),
-                                    ("▾ Nach unten", lambda: verschieben(1), "accent"),
-                                    ("Standard wiederherstellen", standard, "muted")):
+        for text, befehl, farbe in ((glide_i18n.t("ui.show_home_tiles_dialog.visibility", "Sichtbarkeit"), umschalten, "confirm"),
+                                    (glide_i18n.t("ui.show_home_tiles_dialog.move_up", "▴ Nach oben"), lambda: verschieben(-1), "accent"),
+                                    (glide_i18n.t("ui.show_home_tiles_dialog.move_down", "▾ Nach unten"), lambda: verschieben(1), "accent"),
+                                    (glide_i18n.t("ui.show_home_tiles_dialog.restore_default", "Standard wiederherstellen"), standard, "muted")):
             aktionen.add(self._make_dialog_button(aktionen, text, befehl, farbe, width=170, height=36))
         liste.bind("<Double-Button-1>", umschalten)
         liste.bind("<space>", umschalten)
@@ -28907,8 +28901,8 @@ class ListApp:
 
         fuss = ButtonFlow(outer, bg=self.theme["bg"])
         fuss.pack(fill="x", pady=(16, 0))
-        fuss.add(self._make_dialog_button(fuss, "Speichern", submit, "confirm"))
-        fuss.add(self._make_dialog_button(fuss, "Abbrechen", dialog.destroy, "muted"))
+        fuss.add(self._make_dialog_button(fuss, glide_i18n.t("button.save", "Speichern"), submit, "confirm"))
+        fuss.add(self._make_dialog_button(fuss, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         zeichnen()
         # Drei Auswahlen nebeneinander brauchen Breite.
@@ -28937,7 +28931,7 @@ class ListApp:
             widget.configure(image=bild, text="")
             return
         endung = os.path.splitext(str(anhang.get("name") or anhang.get("storage") or ""))[1].lstrip(".").upper()
-        widget.configure(image="", text=endung[:5] or "Bild")
+        widget.configure(image="", text=endung[:5] or glide_i18n.t("editor.toolbar.image", "Bild"))
         warteschlange = getattr(self, "_home_gallery_pending", None)
         if warteschlange is None:
             warteschlange = self._home_gallery_pending = []
@@ -28995,7 +28989,7 @@ class ListApp:
             self._home_gallery_images[key] = image
             widget.configure(image=image, text='')
         else:
-            widget.configure(image='', text='Keine Vorschau')
+            widget.configure(image='', text=glide_i18n.t("ui.render_image.no_preview", 'Keine Vorschau'))
 
     def open_gallery_image(self, list_id, index):
         """Öffnet die Galerie direkt bei diesem Bild (Einstieg der Startseitenvorschau)."""
@@ -29085,7 +29079,7 @@ class ListApp:
 
     def choose_home_day(self):
         owner, current = str(SAVE_FILE), self.home_day()
-        value = self.themed_due_dialog(current, title="Tag auf der Startseite", show_time=False)
+        value = self.themed_due_dialog(current, title=glide_i18n.t("ui.choose_home_day.day_on_the_home", "Tag auf der Startseite"), show_time=False)
         if value is not None and value[0] and owner == str(SAVE_FILE) and current == self.home_day():
             self.change_home_day(value[0])
         return "break"
@@ -29103,18 +29097,18 @@ class ListApp:
     def build_home_week_menu(self):
         menu = self._new_themed_popup_menu()
         owner, origin = str(SAVE_FILE), self.home_day()
-        for offset, title in ((-1, 'Vorige Woche'), (0, 'Betrachtete Woche'), (1, 'Nächste Woche')):
+        for offset, title in ((-1, glide_i18n.t("ui.build_home_week_menu.previous_week", 'Vorige Woche')), (0, glide_i18n.t("ui.build_home_week_menu.viewed_week", 'Betrachtete Woche')), (1, glide_i18n.t("ui.build_home_week_menu.next_week", 'Nächste Woche'))):
             days = self._new_themed_popup_menu(menu)
             choices = glide_task_tiles.week_choices(origin, offset)
             for value, label in choices:
                 if value == origin:
-                    label += ' (ausgewählt)'
+                    label += glide_i18n.t("ui.build_home_week_menu.selected", ' (ausgewählt)')
                 if value == date.today().isoformat():
-                    label += ' · Heute'
+                    label += glide_i18n.t("ui.build_home_week_menu.today", ' · Heute')
                 days.add_command(label=label, command=lambda selected=value:
                     self.choose_home_week_day(selected, owner, origin))
             if not choices:
-                days.add_command(label='Außerhalb des Kalenderbereichs', state='disabled')
+                days.add_command(label=glide_i18n.t("ui.build_home_week_menu.outside_the_calendar_range", 'Außerhalb des Kalenderbereichs'), state='disabled')
             menu.add_cascade(label=title, menu=days)
         return menu
 
@@ -29122,7 +29116,7 @@ class ListApp:
         self._destroy_item_context_menu()
         menu = self.build_home_week_menu()
         self._item_context_menu = menu
-        self.show_action_chooser(menu, title='Woche auf der Startseite',
+        self.show_action_chooser(menu, title=glide_i18n.t("ui.show_home_week_menu.week_on_the_home", 'Woche auf der Startseite'),
                                  anchor=self.current_focus_widget() or self.home_canvas)
         return 'break'
 
@@ -29155,7 +29149,7 @@ class ListApp:
                 for _due, _list, _index, source, item in rows),
             next_task=self.home_task_link(next_item, next_source, list_color) if next_item is not None else None,
             show_goal=sections["goal"] and is_today, inbox_total=len(self.plan_inbox_items(apply_filters=False)),
-            due_lists=tuple((f"{self.list_path_title(entry)}  ·  {count} offen", entry["id"], list_color(entry))
+            due_lists=tuple((glide_i18n.t("ui.home_today_content.open", '{list_path_title}  ·  {count} offen', list_path_title=self.list_path_title(entry), count=count), entry["id"], list_color(entry))
                             for entry, count in summary["due_lists"]),
             writable=not getattr(self, "_data_read_only", False), selecting=selection is not None,
             selected_total=len(selection["selected"]) if selection is not None else 0,
@@ -29220,7 +29214,7 @@ class ListApp:
         try:
             plan = glide_task_editing.batch_plan(items, operation, value, max_labels=self.MAX_LABELS_PER_ITEM)
         except ValueError as error:
-            self.show_warning("Auswahl bearbeiten", str(error))
+            self.show_warning(glide_i18n.t("ui.apply_home_batch.edit_selection", "Auswahl bearbeiten"), str(error))
             return False
         if not plan:
             return False
@@ -29236,7 +29230,7 @@ class ListApp:
             try:
                 plan = glide_task_editing.batch_plan(items, operation, value, max_labels=self.MAX_LABELS_PER_ITEM)
             except ValueError as error:
-                self.show_warning("Auswahl bearbeiten", str(error))
+                self.show_warning(glide_i18n.t("ui.apply_home_batch.edit_selection", "Auswahl bearbeiten"), str(error))
                 return False
             for item in items:
                 if item["id"] in plan:
@@ -29252,18 +29246,18 @@ class ListApp:
         menu = self._new_themed_popup_menu()
         projection = self.home_selection_projection()
         if projection is None or not projection["selected"]:
-            menu.add_command(label="Keine offenen Aufgaben ausgewählt", state="disabled")
+            menu.add_command(label=glide_i18n.t("ui.build_home_batch_menu.no_open_tasks_selected", "Keine offenen Aufgaben ausgewählt"), state="disabled")
             return menu
         identities, day = projection["selected"], self.home_day()
         importance = self._new_themed_popup_menu(menu)
         items = self.home_batch_targets(identities, day) or []
         values = {self.clamp_importance(item.get("importance", 0)) for item in items}
-        for value, title in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
+        for value, title in ((0, glide_i18n.t("ui.render_detail.none", "Keine")), (1, glide_i18n.t("saved_view.choice.importance_low", "Niedrig")), (2, glide_i18n.t("saved_view.choice.importance_medium", "Mittel")), (3, glide_i18n.t("saved_view.choice.importance_high", "Hoch"))):
             importance.add_command(label=glide_action_menu.check_label(title, values == {value}),
                 foreground=self.theme[self.importance_color_key(value)],
                 command=lambda selected=value: self.apply_home_batch(identities, day, "importance", selected))
-        menu.add_cascade(label="Wichtigkeit", menu=importance)
-        for operation, title in (("label_add", "Label hinzufügen"), ("label_remove", "Label entfernen")):
+        menu.add_cascade(label=glide_i18n.t("inspector.importance", "Wichtigkeit"), menu=importance)
+        for operation, title in (("label_add", glide_i18n.t("ui.build_home_batch_menu.add_label", "Label hinzufügen")), ("label_remove", glide_i18n.t("ui.build_home_batch_menu.remove_label", "Label entfernen"))):
             labels = self._new_themed_popup_menu(menu)
             regular = [label for label in self.labels if not self.is_system_label(label)]
             for label in regular:
@@ -29272,27 +29266,27 @@ class ListApp:
                     command=lambda op=operation, identity=label["id"]:
                         self.apply_home_batch(identities, day, op, identity))
             if not regular:
-                labels.add_command(label="Keine eigenen Labels vorhanden", state="disabled")
+                labels.add_command(label=glide_i18n.t("ui.build_home_batch_menu.no_custom_labels", "Keine eigenen Labels vorhanden"), state="disabled")
             menu.add_cascade(label=title, menu=labels)
         due = self._new_themed_popup_menu(menu)
-        for title, value in (('Heute', date.today().isoformat()),
-                             ('Morgen', glide_task_tiles.shift_day(date.today().isoformat(), 1)),
-                             ('Keine Fälligkeit', None)):
+        for title, value in ((glide_i18n.t("menu.view.today", 'Heute'), date.today().isoformat()),
+                             (glide_i18n.t("calendar.tomorrow", 'Morgen'), glide_task_tiles.shift_day(date.today().isoformat(), 1)),
+                             (glide_i18n.t("calendar.none_due", 'Keine Fälligkeit'), None)):
             due.add_command(label=title, command=lambda chosen=value:
                 self.apply_home_batch(identities, day, 'due', chosen))
         due.add_command(label='Datum …', command=lambda: self.choose_home_batch_value(identities, day, 'due'))
         series = any(item.get('repeat') for item in items)
-        menu.add_cascade(label='Fälligkeit' + (' (Serien einzeln bearbeiten)' if series else ''),
+        menu.add_cascade(label=glide_i18n.t("ui.build_home_batch_menu.due_date", 'Fälligkeit{wert}', wert=glide_i18n.t("ui.build_home_batch_menu.edit_series_individually", ' (Serien einzeln bearbeiten)') if series else ''),
                          menu=due, state='disabled' if series else 'normal')
         effort = self._new_themed_popup_menu(menu)
         for minutes in (15, 30, 45, 60, 90, 120):
             effort.add_command(label=self.format_estimated_minutes(minutes), command=lambda chosen=minutes:
                 self.apply_home_batch(identities, day, 'estimated_minutes', chosen))
-        effort.add_command(label='Eigener Aufwand …', command=lambda:
+        effort.add_command(label=glide_i18n.t("ui.build_home_batch_menu.custom_effort", 'Eigener Aufwand …'), command=lambda:
             self.choose_home_batch_value(identities, day, 'estimated_minutes'))
-        effort.add_command(label='Schätzung entfernen', command=lambda:
+        effort.add_command(label=glide_i18n.t("ui.build_home_batch_menu.remove_estimate", 'Schätzung entfernen'), command=lambda:
             self.apply_home_batch(identities, day, 'estimated_minutes', None))
-        menu.add_cascade(label='Aufwand je Aufgabe', menu=effort)
+        menu.add_cascade(label=glide_i18n.t("ui.build_home_batch_menu.effort_per_task", 'Aufwand je Aufgabe'), menu=effort)
         return menu
 
     def choose_home_batch_value(self, identities, day, operation):
@@ -29301,13 +29295,13 @@ class ListApp:
         if not items:
             return False
         if operation == 'due':
-            result = self.themed_due_dialog(items[0].get('due'), title='Fälligkeit für Auswahl', show_time=False)
+            result = self.themed_due_dialog(items[0].get('due'), title=glide_i18n.t("ui.choose_home_batch_value.due_date_for_selection", 'Fälligkeit für Auswahl'), show_time=False)
             if result is None:
                 return False
             value = result[0]
         elif operation == 'estimated_minutes':
-            entered = self.themed_input_dialog('Aufwand für Auswahl',
-                'Aufwand je Aufgabe, z. B. 45 min oder 1,5 h. Leer entfernt die Schätzung.',
+            entered = self.themed_input_dialog(glide_i18n.t("ui.choose_home_batch_value.effort_for_selection", 'Aufwand für Auswahl'),
+                glide_i18n.t("ui.choose_home_batch_value.effort_per_task_e", 'Aufwand je Aufgabe, z. B. 45 min oder 1,5 h. Leer entfernt die Schätzung.'),
                 initial=str(items[0].get('estimated_minutes') or ''))
             if entered is None:
                 return False
@@ -29316,8 +29310,8 @@ class ListApp:
             except (ValueError, OverflowError):
                 value = None
             if entered.strip() and value is None:
-                self.show_warning('Aufwand für Auswahl',
-                                  f'Bitte eine Dauer von 1 bis {self.MAX_ESTIMATED_MINUTES} Minuten eingeben.')
+                self.show_warning(glide_i18n.t("ui.choose_home_batch_value.effort_for_selection", 'Aufwand für Auswahl'),
+                                  glide_i18n.t("ui.choose_home_batch_value.please_enter_a_duration", 'Bitte eine Dauer von 1 bis {max_estimated_minutes} Minuten eingeben.', max_estimated_minutes=self.MAX_ESTIMATED_MINUTES))
                 return False
         else:
             return False
@@ -29330,7 +29324,7 @@ class ListApp:
         menu = self.build_home_batch_menu()
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.home_canvas
-        self.show_action_chooser(menu, title="Ausgewählte Tagesaufgaben bearbeiten", anchor=anchor)
+        self.show_action_chooser(menu, title=glide_i18n.t("ui.show_home_batch_menu.edit_selected_tasks_for", "Ausgewählte Tagesaufgaben bearbeiten"), anchor=anchor)
         return "break"
 
     def choose_home_selection_plan(self, choice, item_ids, review=False, shown_day=None):
@@ -29356,7 +29350,7 @@ class ListApp:
             return glide_task_tiles.FocusContent(None)
         details = []
         if item.get("due"):
-            details.append("Fällig " + self.format_due_full(item.get("due"), item.get("due_time")))
+            details.append(glide_i18n.t("ui.home_focus_content.due", 'Fällig {format_due_full}', format_due_full=self.format_due_full(item.get("due"), item.get("due_time"))))
         if item.get("estimated_minutes") is not None:
             details.append(self.format_estimated_minutes(item["estimated_minutes"]))
         details.append(self.list_path_title(source))
@@ -29404,7 +29398,7 @@ class ListApp:
         if choice == "date":
             item = self.find_item_in_lists(ids[0])[0]
             initial = item.get("planned_date") if len(ids) == 1 else None
-            value = self.themed_due_dialog(initial or self.plan_day(), title="Einplanen",
+            value = self.themed_due_dialog(initial or self.plan_day(), title=glide_i18n.t("ui.choose_home_plan.schedule", "Einplanen"),
                                            show_time=False, planning_preview_ids=ids)
             if value is None:
                 return "break"
@@ -29429,22 +29423,22 @@ class ListApp:
         editable = bool(found and not item.get("done") and not self.is_archived_entry(source)
                         and not getattr(self, "_data_read_only", False))
         blocked = self.is_blocked(item) if found else False
-        menu.add_cascade(label="Einplanen", menu=plan, state="normal" if editable else "disabled")
-        menu.add_command(label="Fokus starten" if not blocked else "Fokus · wartet auf andere Aufgaben",
+        menu.add_cascade(label=glide_i18n.t("ui.build_home_task_menu.schedule", "Einplanen"), menu=plan, state="normal" if editable else "disabled")
+        menu.add_command(label=glide_i18n.t("ui.build_home_task_menu.start_focus", "Fokus starten") if not blocked else glide_i18n.t("ui.build_home_task_menu.focus_waiting_for_other", "Fokus · wartet auf andere Aufgaben"),
                          state="normal" if editable and not blocked else "disabled",
                          command=lambda: self.start_home_focus(item_id))
         # Fokusdauer: Die Wahl startet und wird zur Vorgabe für „Fokus starten“ (✓).
         dauern = self._new_themed_popup_menu(menu)
         vorgabe = glide_focus.normalize_minutes(self.settings.get("focus_minutes"))
         for wert in glide_focus.FOCUS_MINUTES:
-            dauern.add_command(label=glide_action_menu.check_label(f"{wert} Minuten", wert == vorgabe),
+            dauern.add_command(label=glide_action_menu.check_label(glide_i18n.t("ui.build_home_task_menu.minutes", '{wert} Minuten', wert=wert), wert == vorgabe),
                                command=lambda value=wert: self.start_home_focus(item_id, minutes=value))
         aufwand = glide_focus.estimate_option(item.get("estimated_minutes")) if found else None
         if aufwand is not None:
             dauern.add_separator()
-            dauern.add_command(label=f"   Aufwand · {aufwand} Minuten",
+            dauern.add_command(label=glide_i18n.t("ui.build_home_task_menu.effort_minutes", '   Aufwand · {aufwand} Minuten', aufwand=aufwand),
                                command=lambda: self.start_home_focus(item_id, minutes=aufwand, remember=False))
-        menu.add_cascade(label="Fokus für", menu=dauern, state="normal" if editable and not blocked else "disabled")
+        menu.add_cascade(label=glide_i18n.t("ui.build_home_task_menu.focus_for", "Fokus für"), menu=dauern, state="normal" if editable and not blocked else "disabled")
         return menu
 
     def show_home_task_menu(self, item_id, plan_only=False):
@@ -29682,7 +29676,7 @@ class ListApp:
                 selecting = getattr(self, "_home_plan_selection", None) is not None
                 check = action(row, self.ICONS["check"] if selecting and task.selected else self.ICONS["task_open"],
                                complete_command, "muted", side="left", pady=0)
-                description = (" · Auswahl aufheben" if task.selected else " auswählen") if selecting else " erledigen"
+                description = (glide_i18n.t("ui.task_row.clear_selection", " · Auswahl aufheben") if task.selected else glide_i18n.t("ui.task_row.select", " auswählen")) if selecting else glide_i18n.t("ui.task_row.complete", " erledigen")
                 check._accessible_name = task.title + description
                 if selecting:
                     check._home_selection_id = task.item_id
@@ -29694,7 +29688,7 @@ class ListApp:
                     more = action(row, "Mehr", lambda iid=task.item_id: self.show_home_task_menu(iid),
                                   "muted", side="right", pady=0)
                     more._home_task_actions_id = task.item_id
-                    more._accessible_name = "Aktionen für " + task.title
+                    more._accessible_name = glide_i18n.t("ui.task_row.actions_for", 'Aktionen für {title}', title=task.title)
                     self.add_tooltip(more, more._accessible_name)
             title = action(row, task.title, open_command, task.color, pady=0)
             title._home_task_id = task.item_id
@@ -29721,7 +29715,7 @@ class ListApp:
                                       dark_color=theme["input"], outline_color=theme["line"])
                 _ui.pack(mond_icon, side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
                 moon = moon_phase_info()
-                _ui.pack(_ui.make(tk.Label, mond, text=f"{moon['name']}\n{moon['percent']} % beleuchtet",
+                _ui.pack(_ui.make(tk.Label, mond, text=glide_i18n.t("ui.kachel_clock.illuminated", '{name}\n{percent} % beleuchtet', name=moon['name'], percent=moon['percent']),
                          bg=theme["card"], fg=theme["muted"], justify="left",
                          font=app_font(8), anchor="w"), side="left")
                 self._bind_home_wheel(mond)
@@ -29737,10 +29731,10 @@ class ListApp:
             if naechster is not None:
                 wann = self.format_due_full(naechster.get("due"), naechster.get("due_time"))
                 titel = str(naechster.get("text") or "").splitlines()[0]
-                label(kopf_text, f"Als Nächstes: {wann} · {titel}",
+                label(kopf_text, glide_i18n.t("ui.kachel_clock.next", 'Als Nächstes: {wann} · {titel}', wann=wann, titel=titel),
                       10, color=list_color(naechste_liste), pady=(glide_design.SPACING[0], glide_design.SPACING[0]), surface="card")
             else:
-                label(kopf_text, "Nichts Terminiertes in Sicht.", 10, color="muted",
+                label(kopf_text, glide_i18n.t("ui.kachel_clock.nothing_scheduled_in_sight", "Nichts Terminiertes in Sicht."), 10, color="muted",
                       pady=(glide_design.SPACING[0], glide_design.SPACING[0]), surface="card")
 
         def tagesziel(parent):
@@ -29751,8 +29745,7 @@ class ListApp:
             geschafft = self.completions_today()
             erreicht = geschafft >= ziel
             label(parent,
-                  f"Heute geschafft: {geschafft} von {ziel}"
-                  + ("  – Ziel erreicht." if erreicht else ""),
+                  glide_i18n.t("ui.tagesziel.done_today_of", 'Heute geschafft: {geschafft} von {ziel}{wert}', geschafft=geschafft, ziel=ziel, wert=glide_i18n.t("ui.tagesziel.goal_reached", "  – Ziel erreicht.") if erreicht else ""),
                   11, True, "confirm" if erreicht else "text", pady=(glide_design.SPACING[0], glide_design.SPACING[5]))
             _ui.pack(_ui.make(ProgressBar,
                 parent, value=geschafft, maximum=ziel, bg_color=theme["card"],
@@ -29802,11 +29795,11 @@ class ListApp:
             return task_tiles.render_focus(parent, self.home_focus_content(list_color))
 
         def kachel_week(parent):
-            tile = card(parent, "Die nächsten sieben Tage")
+            tile = card(parent, glide_i18n.t("ui.kachel_week.the_next_seven_days", "Die nächsten sieben Tage"))
             uebersicht = self.home_week_overview()
             hoechstwert = max([anzahl for _tag, anzahl in uebersicht] + [1])
             if not any(anzahl for _tag, anzahl in uebersicht):
-                label(tile, "In den nächsten sieben Tagen ist nichts fällig.", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_week.nothing_is_due_in", "In den nächsten sieben Tagen ist nichts fällig."), color="muted")
             for tag, anzahl in uebersicht:
                 parsed = date.fromisoformat(tag)
                 zeile = _ui.make(tk.Frame, tile, bg=theme["card"])
@@ -29824,10 +29817,10 @@ class ListApp:
                 self._bind_home_wheel(balken)
 
         def kachel_labels(parent):
-            tile = card(parent, "Labels im Bestand")
+            tile = card(parent, glide_i18n.t("ui.kachel_labels.labels_in_use", "Labels im Bestand"))
             treffer = self.home_label_overview()
             if not treffer:
-                label(tile, "Noch keine Labels an offenen Aufgaben.", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_labels.no_labels_on_open", "Noch keine Labels an offenen Aufgaben."), color="muted")
                 return
             for entry, anzahl in treffer:
                 zeile = _ui.make(tk.Frame, tile, bg=theme["card"])
@@ -29836,23 +29829,23 @@ class ListApp:
                 chip = self.make_label_chip(zeile, entry, bg_key="card")
                 _ui.pack(chip, side="left")
                 self._bind_home_wheel(chip)
-                _ui.pack(_ui.make(tk.Label, zeile, text=f"{anzahl} offen", bg=theme["card"], fg=theme["muted"],
+                _ui.pack(_ui.make(tk.Label, zeile, text=glide_i18n.t("ui.kachel_labels.open", '{anzahl} offen', anzahl=anzahl), bg=theme["card"], fg=theme["muted"],
                          font=app_font(9), anchor="e"), side="right")
             action(tile, f"{self.ICONS['labels']}  Labelansicht öffnen", self.set_labels_view, "confirm")
 
         def kachel_recent(parent):
-            recent = card(parent, "Zuletzt bearbeitet")
+            recent = card(parent, glide_i18n.t("ui.kachel_recent.recently_edited", "Zuletzt bearbeitet"))
             if summary["recent"]:
                 for entry, edited in summary["recent"][:self.HOME_RECENT_VISIBLE]:
                     when = datetime.fromisoformat(edited).strftime("%d.%m.%Y, %H:%M")
                     action(recent, f"{self.list_path_title(entry)}  ·  {when}",
                            lambda lid=entry["id"]: self.set_active_list(lid), list_color(entry))
             else:
-                label(recent, "Sobald du eine Liste bearbeitest, findest du sie hier wieder.", color="muted")
+                label(recent, glide_i18n.t("ui.kachel_recent.as_soon_as_you", "Sobald du eine Liste bearbeitest, findest du sie hier wieder."), color="muted")
 
         def kachel_templates(parent):
-            templates = card(parent, "Mit einer Vorlage starten")
-            label(templates, "Jede Vorlage legt eine neue, frei bearbeitbare Liste an.", color="muted")
+            templates = card(parent, glide_i18n.t("ui.kachel_templates.start_with_a_template", "Mit einer Vorlage starten"))
+            label(templates, glide_i18n.t("ui.kachel_templates.each_template_creates_a", "Jede Vorlage legt eine neue, frei bearbeitbare Liste an."), color="muted")
             for key in self.home_template_keys():
                 record = self.template_by_id(key)
                 if record is not None:
@@ -29863,7 +29856,7 @@ class ListApp:
                        lambda value=key: self.create_list_from_template(value), "confirm")
 
         def kachel_impulse(parent):
-            tile = card(parent, "Impuls für den Tag")
+            tile = card(parent, glide_i18n.t("ui.kachel_impulse.thought_for_the_day", "Impuls für den Tag"))
             label(tile, self.home_impulse(), 11, color="text", pady=(glide_design.SPACING[0], glide_design.SPACING[0]))
 
         def kachel_calendar(parent):
@@ -29875,13 +29868,13 @@ class ListApp:
             """
             modus = self.home_calendar_mode()
             titel = self.MONTH_NAMES[date.today().month - 1] if modus == "month" else dict(self.HOME_CALENDAR_CHOICES).get(modus, "Kalendervorschau")
-            tile = card(parent, f"{self.ICONS['calendar']}  Kalender \u00b7 {titel}")
+            tile = card(parent, glide_i18n.t("ui.kachel_calendar.calendar", '{calendar}  Kalender · {titel}', calendar=self.ICONS['calendar'], titel=titel))
             zaehler = self.home_calendar_days()
             heute = date.today()
             if modus == "next":
                 termine = self.home_next_events(self.home_row_limit() + 1)
                 if not termine:
-                    label(tile, "Kein offener Punkt trägt einen Termin in der Zukunft.", color="muted")
+                    label(tile, glide_i18n.t("ui.kachel_calendar.no_open_item_has", "Kein offener Punkt trägt einen Termin in der Zukunft."), color="muted")
                 for tag, uhrzeit, quelle, item in termine:
                     beschriftung = self.format_due_full(tag, uhrzeit or None)
                     action(tile, f"{beschriftung}  \u00b7  {self.item_display_text(item).splitlines()[0]}",
@@ -29939,62 +29932,61 @@ class ListApp:
                     _ui.grid(zelle, row=zeile_nr + 1, column=spalte, sticky="ew", padx=glide_design.SPACING[1], pady=glide_design.SPACING[1], ipady=glide_design.SPACING[2])
                     self._bind_home_wheel(zelle)
                     if anzahl:
-                        self.add_tooltip(zelle, f"{tag.strftime('%d.%m.%Y')}: {anzahl} offene(r) Punkt(e)")
-                label(tile, f"{sum(zaehler.get((heute.replace(day=1) + timedelta(days=schritt)).isoformat(), 0) for schritt in range(tage_im_monat))} "
-                            "offene Punkte mit Termin in diesem Monat", color="muted")
+                        self.add_tooltip(zelle, glide_i18n.t("ui.kachel_calendar.open_item_s", '{strftime}: {anzahl} offene(r) Punkt(e)', strftime=tag.strftime('%d.%m.%Y'), anzahl=anzahl))
+                label(tile, glide_i18n.t("ui.kachel_calendar.open_items_with_a", '{sum} offene Punkte mit Termin in diesem Monat', sum=sum(zaehler.get((heute.replace(day=1) + timedelta(days=schritt)).isoformat(), 0) for schritt in range(tage_im_monat))), color="muted")
             action(tile, f"{self.ICONS['calendar']}  Kalender öffnen", self.open_calendar_view, "import")
 
         def kachel_overdue(parent):
             eintraege, gesamt = self.home_overdue_entries(self.home_row_limit())
-            tile = card(parent, f"{self.ICONS['overdue']}  Verspätet")
+            tile = card(parent, glide_i18n.t("ui.kachel_overdue.late", '{overdue}  Verspätet', overdue=self.ICONS['overdue']))
             if not gesamt:
-                label(tile, "Nichts überfällig – alle Fälligkeiten liegen in der Zukunft.", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_overdue.nothing_overdue_all_due", "Nichts überfällig – alle Fälligkeiten liegen in der Zukunft."), color="muted")
                 return
-            label(tile, f"{gesamt} offene(r) Punkt(e) mit vergangener Fälligkeit", color="muted")
+            label(tile, glide_i18n.t("ui.kachel_overdue.open_item_s_with", '{gesamt} offene(r) Punkt(e) mit vergangener Fälligkeit', gesamt=gesamt), color="muted")
             for faellig, quelle, item in eintraege:
                 action(tile, f"{self.format_due_column(faellig, item.get('due_time'))}  \u00b7  "
                              f"{self.item_display_text(item).splitlines()[0]}",
                        lambda lid=quelle["id"], iid=item["id"]: self.open_task_in_source_list(lid, iid),
                        "overdue")
             if gesamt > len(eintraege):
-                label(tile, f"… und {gesamt - len(eintraege)} weitere", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_overdue.and_more", '… und {wert} weitere', wert=gesamt - len(eintraege)), color="muted")
             action(tile, f"{self.ICONS['overdue']}  Verspätet öffnen", self.set_overdue_view, "overdue")
 
         def kachel_progress(parent):
             """Fortschritt als Balken: heute gegen das Ziel, Woche gegen sich selbst."""
-            tile = card(parent, "Fortschritt")
+            tile = card(parent, glide_i18n.t("ui.kachel_progress.progress", "Fortschritt"))
             ziel = self.daily_goal()
             geschafft = self.completions_today()
             if ziel:
-                label(tile, f"Heute: {geschafft} von {ziel} erledigt", 11, True,
+                label(tile, glide_i18n.t("ui.kachel_progress.today_of_done", 'Heute: {geschafft} von {ziel} erledigt', geschafft=geschafft, ziel=ziel), 11, True,
                       "confirm" if geschafft >= ziel else "text", pady=(glide_design.SPACING[0], glide_design.SPACING[4]))
                 _ui.pack(_ui.make(ProgressBar, tile, value=geschafft, maximum=ziel, bg_color=theme["card"],
                             track_color=theme["input"],
                             fill_color=theme["confirm"] if geschafft >= ziel else theme["ui_accent"],
                             ), fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[10]))
             else:
-                label(tile, f"Heute erledigt: {geschafft}", 11, True, pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
+                label(tile, glide_i18n.t("ui.kachel_progress.done_today", 'Heute erledigt: {geschafft}', geschafft=geschafft), 11, True, pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
             verlauf = self.completion_chart()
             woche = verlauf[-7:]
             summe = sum(anzahl for _tag, anzahl in woche)
             bestwert = max([anzahl for _tag, anzahl in woche] + [1])
-            label(tile, f"Diese sieben Tage: {summe} erledigt \u00b7 bester Tag {bestwert}", color="muted")
+            label(tile, glide_i18n.t("ui.kachel_progress.these_seven_days_done", 'Diese sieben Tage: {summe} erledigt · bester Tag {bestwert}', summe=summe, bestwert=bestwert), color="muted")
             planung = self.planning_summary(self.plan_day_items(day=date.today().isoformat()),
                                             day=date.today().isoformat())
             kapazitaet = planung.get("capacity") or 0
             if kapazitaet:
                 belegt = min(planung.get("minutes", 0), kapazitaet)
-                label(tile, "Tageskapazität", 10, True, "muted", pady=(glide_design.SPACING[8], glide_design.SPACING[3]))
+                label(tile, glide_i18n.t("ui.kachel_progress.daily_capacity", "Tageskapazität"), 10, True, "muted", pady=(glide_design.SPACING[8], glide_design.SPACING[3]))
                 _ui.pack(_ui.make(ProgressBar, tile, value=belegt, maximum=kapazitaet, bg_color=theme["card"],
                             track_color=theme["input"], fill_color=theme["flag"]), fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[4]))
                 label(tile, self.format_planning_summary(planung) or "", color="muted")
             elif planung.get("calendar_state"):
-                label(tile, "Tageskapazität", 10, True, "muted", pady=(glide_design.SPACING[8], glide_design.SPACING[3]))
+                label(tile, glide_i18n.t("ui.kachel_progress.daily_capacity", "Tageskapazität"), 10, True, "muted", pady=(glide_design.SPACING[8], glide_design.SPACING[3]))
                 label(tile, self.format_planning_summary(planung) or "", color="muted")
 
         def kachel_boards(parent):
             """Welche Pinnwände etwas tragen – und der Weg auf die globale."""
-            tile = card(parent, "Pinnwände")
+            tile = card(parent, glide_i18n.t("ui.kachel_boards.boards", "Pinnwände"))
             boards = self.settings.get("pinboards", {})
             boards = boards if isinstance(boards, dict) else {}
             werkstatt = getattr(self, "workspace", None)
@@ -30015,10 +30007,10 @@ class ListApp:
                 elif art == "folder":
                     ordner = self.get_folder(kennung)
                     if ordner is not None:
-                        eintraege.append((str(ordner.get("title") or "Ordner"), karten, "folder", kennung))
+                        eintraege.append((str(ordner.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")), karten, "folder", kennung))
             eintraege.sort(key=lambda wert: -wert[1])
             if not eintraege:
-                label(tile, "Noch keine Pinnwand mit Karten. Die globale Fläche ist ein guter Anfang.",
+                label(tile, glide_i18n.t("ui.kachel_boards.no_board_with_cards", "Noch keine Pinnwand mit Karten. Die globale Fläche ist ein guter Anfang."),
                       color="muted")
             for titel, karten, art, kennung in eintraege[:self.home_row_limit()]:
                 if art is None:
@@ -30033,7 +30025,7 @@ class ListApp:
 
         def kachel_boardpreview(parent):
             """Die globale Pinnwand als Bild – ein Klick führt hinein."""
-            tile = card(parent, f"{self.ICONS['board']}  Pinnwand")
+            tile = card(parent, glide_i18n.t("ui.kachel_boardpreview.board", '{board}  Pinnwand', board=self.ICONS['board']))
             flaechen, verbindungen, karten = self.global_board_preview()
             vorschau = _ui.make(BoardPreview,
                 tile, bg_color=theme["card"], card_color=theme["input"],
@@ -30045,14 +30037,14 @@ class ListApp:
             self._bind_home_wheel(vorschau)
             for sequenz in ("<Button-1>", "<Return>"):
                 _ui.bind(vorschau, sequenz, lambda _event: self.open_global_board())
-            self.add_tooltip(vorschau, "Globale Pinnwand öffnen")
+            self.add_tooltip(vorschau, glide_i18n.t("board.menu.global_open", "Globale Pinnwand öffnen"))
             if karten:
                 gesamt_verbindungen = len(self.settings.get("pinboards", {}).get("global", {}).get("connections", []))
-                label(tile, f"{karten} Karten · {gesamt_verbindungen} Verbindungen", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_boardpreview.cards_connections", '{karten} Karten · {gesamt_verbindungen} Verbindungen', karten=karten, gesamt_verbindungen=gesamt_verbindungen), color="muted")
                 if getattr(self, "_home_preview_condensed", False) or len(flaechen) < karten:
-                    label(tile, f"Verdichtete Übersicht · {len(flaechen)} von {karten} Karten", color="muted")
+                    label(tile, glide_i18n.t("ui.kachel_boardpreview.condensed_overview_of_cards", 'Verdichtete Übersicht · {len} von {karten} Karten', len=len(flaechen), karten=karten), color="muted")
             else:
-                label(tile, "Noch leer. Auf der Fläche legt ein Doppelklick eine Karte an.",
+                label(tile, glide_i18n.t("ui.kachel_boardpreview.still_empty_on_the", "Noch leer. Auf der Fläche legt ein Doppelklick eine Karte an."),
                       color="muted")
             action(tile, "Globale Pinnwand öffnen", self.open_global_board, "confirm")
 
@@ -30069,9 +30061,9 @@ class ListApp:
             self.add_tooltip(figur, satz)
             care = self.mascot_care()
             care_bars = {}
-            for key, title, color in (("satiety", "Satt", "confirm"),
-                                      ("energy", "Energie", "due_action"),
-                                      ("affection", "Vertrauen", "ui_accent")):
+            for key, title, color in (("satiety", glide_i18n.t("ui.kachel_mascot.fed", "Satt"), "confirm"),
+                                      ("energy", glide_i18n.t("ui.kachel_mascot.energy", "Energie"), "due_action"),
+                                      ("affection", glide_i18n.t("ui.kachel_mascot.trust", "Vertrauen"), "ui_accent")):
                 line = _ui.make(tk.Frame, tile, bg=theme["card"])
                 _ui.pack(line, fill="x", pady=(glide_design.SPACING[2], glide_design.SPACING[0]))
                 self._bind_home_wheel(line)
@@ -30085,17 +30077,17 @@ class ListApp:
 
             def react(feed=False, care_action=None):
                 figur.react("freut" if feed else "winkt")
-                pool = [satz, "Ein Schritt nach dem anderen.", "Ich bin hier, wenn du eine Pause brauchst."]
+                pool = [satz, glide_i18n.t("ui.react.one_step_at_a", "Ein Schritt nach dem anderen."), glide_i18n.t("ui.react.i_m_here_when", "Ich bin hier, wenn du eine Pause brauchst.")]
                 if zustand == "sorgt":
-                    pool += ["Du entscheidest, was heute dran ist.", "Auch Umplanen ist erlaubt."]
+                    pool += [glide_i18n.t("ui.react.you_decide_what_s", "Du entscheidest, was heute dran ist."), glide_i18n.t("ui.react.rescheduling_is_allowed_too", "Auch Umplanen ist erlaubt.")]
                 elif zustand == "freut":
-                    pool += ["Zeit, kurz durchzuatmen.", "Das darf sich gut anfühlen."]
+                    pool += [glide_i18n.t("ui.react.time_to_take_a", "Zeit, kurz durchzuatmen."), glide_i18n.t("ui.react.that_may_feel_good", "Das darf sich gut anfühlen.")]
                 elif zustand == "schlaeft":
-                    pool += ["Heute darf es ruhig sein.", "Ich halte hier die Stellung."]
+                    pool += [glide_i18n.t("ui.react.today_may_be_quiet", "Heute darf es ruhig sein."), glide_i18n.t("ui.react.i_ll_hold_the", "Ich halte hier die Stellung.")]
                 care_message = self.care_for_mascot(care_action) if care_action else ""
                 # Ohne Rahmen: Ein Kasten um den Satz war eine Form ohne
                 # Funktion (Aufräumen 27.09.2026).
-                hinweis.configure(text=care_message or ("Danke für den kleinen Snack!" if feed else random.choice(pool)))
+                hinweis.configure(text=care_message or (glide_i18n.t("ui.react.thanks_for_the_little", "Danke für den kleinen Snack!") if feed else random.choice(pool)))
                 if care_action:
                     # Bis 3.28 wurde nach jeder Pflegeaktion die gesamte
                     # Startseite zerstört und neu aufgebaut. Besonders im
@@ -30184,14 +30176,14 @@ class ListApp:
             anbinden(tile)
 
         def kachel_stats(parent):
-            stats = card(parent, "Dein aktueller Bestand")
+            stats = card(parent, glide_i18n.t("ui.kachel_stats.your_current_data", "Dein aktueller Bestand"))
             kennzahlen = _ui.make(tk.Frame, stats, bg=theme["card"])
             _ui.pack(kennzahlen, fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[6]))
             self._bind_home_wheel(kennzahlen)
             for index, (text, farbe) in enumerate((
-                (f"{summary['done']} erledigt", "confirm"),
-                (f"{summary['open']} offen", "flag"),
-                (f"{summary['lists']} Listen", "clear"),
+                (glide_i18n.t("ui.kachel_stats.done", '{done} erledigt', done=summary['done']), "confirm"),
+                (glide_i18n.t("ui.kachel_stats.open", '{open} offen', open=summary['open']), "flag"),
+                (glide_i18n.t("ui.kachel_stats.lists", '{lists} Listen', lists=summary['lists']), "clear"),
             )):
                 if index:
                     trenner = _ui.make(tk.Label, kennzahlen, text="·", bg=theme["card"], fg=theme["muted"],
@@ -30202,13 +30194,12 @@ class ListApp:
                                 font=app_font(12, "bold"))
                 _ui.pack(zahl, side="left")
                 self._bind_home_wheel(zahl)
-            label(stats, f"{summary['due_today']} heute fällig  ·  {summary['overdue']} überfällig", color="muted")
+            label(stats, glide_i18n.t("ui.kachel_stats.due_today_overdue", '{due_today} heute fällig  ·  {overdue} überfällig', due_today=summary['due_today'], overdue=summary['overdue']), color="muted")
             heute_geplant = self.planning_summary(self.plan_day_items(day=date.today().isoformat()),
                                                   day=date.today().isoformat())
             if heute_geplant["items"] or heute_geplant.get("calendar_state"):
                 planungstext = self.format_planning_summary(heute_geplant)
-                label(stats, f"Heute geplant: {heute_geplant['items']} Aufgabe(n)"
-                      + (f"  ·  {planungstext}" if planungstext else ""), color="muted")
+                label(stats, glide_i18n.t("ui.kachel_stats.planned_today_task_s", 'Heute geplant: {items} Aufgabe(n){wert}', items=heute_geplant['items'], wert=f"  ·  {planungstext}" if planungstext else ""), color="muted")
             bestand_zeile = flow(stats, pady=(glide_design.SPACING[4], glide_design.SPACING[8]))
             action(bestand_zeile, f"{self.ICONS['in_progress']}  Demnächst öffnen",
                    self.set_in_progress_view, "due_action", side="left")
@@ -30218,7 +30209,7 @@ class ListApp:
             if summary["overdue"]:
                 action(bestand_zeile, f"{self.ICONS['overdue']}  Verspätet öffnen",
                        self.set_overdue_view, "overdue", side="left")
-            label(stats, f"Erledigt in den letzten {self.COMPLETION_CHART_DAYS} Tagen",
+            label(stats, glide_i18n.t("ui.kachel_stats.done_in_the_last", 'Erledigt in den letzten {completion_chart_days} Tagen', completion_chart_days=self.COMPLETION_CHART_DAYS),
                   10, True, pady=(glide_design.SPACING[6], glide_design.SPACING[6]))
             _ui.pack(_ui.make(CompletionChart,
                 stats, self.completion_chart(), bg_color=theme["card"],
@@ -30226,7 +30217,7 @@ class ListApp:
                 text_color=theme["muted"], today_color=theme["confirm"],
             ), fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
             if self.settings.get("show_yearly_stats", True):
-                label(stats, "Jahresanzeige · Aufgaben bearbeitet", 10, True, pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
+                label(stats, glide_i18n.t("ui.kachel_stats.year_view_tasks_edited", "Jahresanzeige · Aufgaben bearbeitet"), 10, True, pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
                 yearly_history = self.yearly_activity_history()
                 heatmap = _ui.make(YearHeatmap,
                     stats, yearly_history, bg_color=theme["card"],
@@ -30238,20 +30229,19 @@ class ListApp:
                     heatmap.winfo_pointerx()-heatmap.winfo_rootx(),
                     heatmap.winfo_pointery()-heatmap.winfo_rooty()))
                 year_stats = YearHeatmap.statistics(yearly_history)
-                label(stats, f"{year_stats['active_days']} aktive Tage  ·  {year_stats['total']} Bearbeitungen  ·  "
-                      f"bester Tag {year_stats['best_day']}  ·  Serie {year_stats['streak']}",
+                label(stats, glide_i18n.t("ui.kachel_stats.active_days_edits_best", '{active_days} aktive Tage  ·  {total} Bearbeitungen  ·  bester Tag {best_day}  ·  Serie {streak}', active_days=year_stats['active_days'], total=year_stats['total'], best_day=year_stats['best_day'], streak=year_stats['streak']),
                       9, color="muted", pady=(glide_design.SPACING[0], glide_design.SPACING[6]))
-            label(stats, "Der Bestand zählt vorhandene Aufgaben. Erfasste Tageswerte bleiben auch nach dem Löschen erhalten. "
-                  "Gruppen und Überschriften zählen nicht mit.", 9, color="muted")
+            label(stats, glide_i18n.t("ui.kachel_stats.the_data_count_covers", "Der Bestand zählt vorhandene Aufgaben. Erfasste Tageswerte bleiben auch nach dem Löschen erhalten. "
+                  "Gruppen und Überschriften zählen nicht mit."), 9, color="muted")
 
         def kachel_drawings(parent):
             """Die zuletzt geänderten Zeichnungen als Bilder (ST-030)."""
-            tile = card(parent, f"{self.ICONS['drawing']}  Zeichnungen")
+            tile = card(parent, glide_i18n.t("ui.kachel_drawings.drawings", '{drawing}  Zeichnungen', drawing=self.ICONS['drawing']))
             zeichnungen = [entry for entry in self.planning_lists() if self.is_drawing_list(entry)]
             zeichnungen.sort(key=lambda entry: str(entry.get("updated_at") or entry.get("created_at") or ""),
                              reverse=True)
             if not zeichnungen:
-                label(tile, "Noch keine Zeichnung. Pixelbilder entstehen hier in 16 bis 128 Zellen.", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_drawings.no_drawing_yet_pixel", "Noch keine Zeichnung. Pixelbilder entstehen hier in 16 bis 128 Zellen."), color="muted")
                 action(tile, f"{self.ICONS['drawing']}  Neue Zeichnung", self.create_new_drawing, "confirm")
                 return
             reihe = _ui.make(tk.Frame, tile, bg=theme["card"])
@@ -30274,7 +30264,7 @@ class ListApp:
                     bilder[schluessel] = bild
                 bildfeld = _ui.make(tk.Label, zelle, image=bild, cursor="hand2", **self.thumbnail_frame_options())
                 _ui.pack(bildfeld, anchor="w")
-                titel = str(entry.get("title") or "Zeichnung")
+                titel = str(entry.get("title") or glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung"))
                 unterschrift = _ui.make(tk.Label, zelle, text=titel[:14] + ("…" if len(titel) > 14 else ""),
                                         bg=theme["card"], fg=theme["muted"], font=app_font(8), anchor="w")
                 _ui.pack(unterschrift, anchor="w")
@@ -30295,12 +30285,12 @@ class ListApp:
             Zwischenspeicher wie die Galerie und lädt nach dem Aufbau Bild für
             Bild nach; ein Klick öffnet die Galerie mit diesem Bild.
             """
-            tile = card(parent, f"{self.ICONS['gallery']}  Galeriebilder")
+            tile = card(parent, glide_i18n.t("ui.kachel_gallery.gallery_images", '{gallery}  Galeriebilder', gallery=self.ICONS['gallery']))
             galerien = [entry for entry in self.planning_lists() if self.is_gallery_list(entry)]
             galerien.sort(key=lambda entry: str(entry.get("updated_at") or entry.get("created_at") or ""),
                           reverse=True)
             if not galerien:
-                label(tile, "Noch keine Galerie. Eine Galerie sammelt Bilder: „+“ neben „Listen“ › Neue Galerie.",
+                label(tile, glide_i18n.t("ui.kachel_gallery.no_gallery_yet_a", "Noch keine Galerie. Eine Galerie sammelt Bilder: „+“ neben „Listen“ › Neue Galerie."),
                       color="muted")
                 return
             bilder = [(entry, index, anhang) for entry in galerien
@@ -30308,7 +30298,7 @@ class ListApp:
                       if isinstance(anhang, dict)]
             if not bilder:
                 erste = galerien[0]
-                label(tile, f"„{str(erste.get('title') or 'Galerie')[:40]}“ enthält noch keine Bilder.",
+                label(tile, glide_i18n.t("ui.kachel_gallery.has_no_images_yet", '„{wert}“ enthält noch keine Bilder.', wert=str(erste.get('title') or glide_i18n.t("ui.kachel_gallery.gallery", 'Galerie'))[:40]),
                       color="muted")
                 action(tile, f"{self.ICONS['gallery']}  Galerie öffnen",
                        lambda value=erste["id"]: self.set_active_list(value), "muted")
@@ -30339,7 +30329,7 @@ class ListApp:
                                     cursor="hand2", text="", image="")
                 _ui.pack(bildfeld, fill="both", expand=True)
                 self.show_home_gallery_thumbnail(bildfeld, anhang, groesse)
-                titel = str(anhang.get("title") or entry.get("title") or "Bild")
+                titel = str(anhang.get("title") or entry.get("title") or glide_i18n.t("editor.toolbar.image", "Bild"))
                 unterschrift = _ui.make(tk.Label, zelle, text=glide_design.fit_text(titel, schrift.measure, groesse + 2),
                                         bg=theme["card"], fg=theme["muted"], font=app_font(8), anchor="w",
                                         padx=0, bd=0)
@@ -30350,23 +30340,22 @@ class ListApp:
                              self.open_gallery_image(lid, value))
                     self._bind_home_wheel(widget)
             if len(bilder) > 2 * je_zeile:
-                label(tile, f"{len(bilder)} Bilder in {len(galerien)} "
-                            f"{'Galerie' if len(galerien) == 1 else 'Galerien'}", 9, color="muted")
+                label(tile, glide_i18n.t("ui.kachel_gallery.images_in", '{len} Bilder in {len2} {wert}', len=len(bilder), len2=len(galerien), wert=glide_i18n.t("ui.kachel_gallery.gallery_2", 'Galerie') if len(galerien) == 1 else glide_i18n.t("ui.kachel_gallery.galleries", 'Galerien')), 9, color="muted")
 
         def kachel_filters(parent):
             """Angeheftete gespeicherte Filter mit ihren ersten Treffern (ST-020)."""
-            tile = card(parent, f"{self.ICONS['labels']}  Angeheftete Filter")
+            tile = card(parent, glide_i18n.t("ui.kachel_filters.pinned_filters", '{labels}  Angeheftete Filter', labels=self.ICONS['labels']))
             angeheftet = [value for value in self.settings.get("home_filter_tiles", [])
                           if any(saved["id"] == value for saved in self.settings.get("saved_filters", []))]
             if not angeheftet:
-                label(tile, "Heftet einen gespeicherten Filter an, um seine Treffer hier zu sehen.", color="muted")
+                label(tile, glide_i18n.t("ui.kachel_filters.pin_a_saved_filter", "Heftet einen gespeicherten Filter an, um seine Treffer hier zu sehen."), color="muted")
                 action(tile, "Filter anheften …", lambda: self.show_filter_pin_menu(tile), "accent")
                 return
             grenze = 3 if self.home_density() == "compact" else 5
             for identity in angeheftet:
                 saved = next(value for value in self.settings["saved_filters"] if value["id"] == identity)
                 treffer = self.saved_filters.entries(criteria=saved, apply_filters=False)
-                label(tile, f"{saved['name']} · {len(treffer)} Treffer", 10, True, "muted", pady=(glide_design.SPACING[6], glide_design.SPACING[3]))
+                label(tile, glide_i18n.t("ui.kachel_filters.matches", '{name} · {len} Treffer', name=saved['name'], len=len(treffer)), 10, True, "muted", pady=(glide_design.SPACING[6], glide_design.SPACING[3]))
                 for _due, _li, _ii, quelle, item in treffer[:grenze]:
                     zeile = _ui.make(tk.Frame, tile, bg=theme["card"])
                     _ui.pack(zeile, fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[2]))
@@ -30385,10 +30374,10 @@ class ListApp:
 
         def kachel_pinned(parent):
             """Angeheftete Seiten (ST-040)."""
-            tile = card(parent, f"{self.ICONS['pinned']}  Angeheftet")
+            tile = card(parent, glide_i18n.t("ui.kachel_pinned.pinned", '{pinned}  Angeheftet', pinned=self.ICONS['pinned']))
             seiten = self.pinned_pages()
             if not seiten:
-                label(tile, "Rechtsklick auf eine Liste, Notiz, Zeichnung oder einen Ordner → „Anheften“.",
+                label(tile, glide_i18n.t("ui.kachel_pinned.right_click_a_list", "Rechtsklick auf eine Liste, Notiz, Zeichnung oder einen Ordner → „Anheften“."),
                       color="muted")
                 return
             for kind, holder in seiten:
@@ -30454,10 +30443,10 @@ class ListApp:
         anpassen = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
         _ui.pack(anpassen, side="bottom", fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[0]))
         self._bind_home_wheel(anpassen)
-        anpassen_knopf = _ui.make(self._make_dialog_button, anpassen, "Startseite anpassen", self.toggle_home_editing,
+        anpassen_knopf = _ui.make(self._make_dialog_button, anpassen, glide_i18n.t("ui.render_home.customize_home", "Startseite anpassen"), self.toggle_home_editing,
                                                   "muted", width=170, height=30)
         _ui.pack(anpassen_knopf, side="left")
-        self.add_tooltip(anpassen_knopf, "Kacheln ordnen, verbreitern, aus- und einblenden – direkt hier")
+        self.add_tooltip(anpassen_knopf, glide_i18n.t("ui.render_home.arrange_widen_hide_and", "Kacheln ordnen, verbreitern, aus- und einblenden – direkt hier"))
 
         kopfbereich = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
         available_width = self.home_canvas.winfo_width()
@@ -30480,8 +30469,8 @@ class ListApp:
                 self.save_settings()
                 self._home_scroll_to_top = True
                 self.refresh_home()
-            neu_karte = card(kopfbereich, f"{self.ICONS['check']}  Neu in Glide {APP_VERSION}",
-                             heading_action=("Gelesen", gelesen, "confirm"))
+            neu_karte = card(kopfbereich, glide_i18n.t("ui.render_home.new_in_glide", '{check}  Neu in Glide {app_version}', check=self.ICONS['check'], app_version=APP_VERSION),
+                             heading_action=(glide_i18n.t("ui.render_home.read", "Gelesen"), gelesen, "confirm"))
             for version, punkte in neuerungen:
                 if len(neuerungen) > 1:
                     label(neu_karte, f"Version {version}", 10, True, color="muted", pady=(glide_design.SPACING[4], glide_design.SPACING[2]))
@@ -30516,7 +30505,7 @@ class ListApp:
                 inner_pad_x=self.HOME_CARD_PAD_X, inner_pad_y=self.HOME_CARD_PAD_Y,
                 auto_height=True, register=False)
             _ui.grid(leer, row=0, column=0, sticky="new")
-            label(leer.inner, "Alle Kacheln sind ausgeblendet.", 12, True)
+            label(leer.inner, glide_i18n.t("ui.render_home.all_tiles_are_hidden", "Alle Kacheln sind ausgeblendet."), 12, True)
             action(leer.inner, "Startseite einrichten …", self.show_home_tiles_dialog, "accent")
 
         for widget in (self.home_canvas, self.home_content):

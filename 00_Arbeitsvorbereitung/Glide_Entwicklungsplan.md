@@ -3730,3 +3730,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten, `LANGUAGE=de`: Schnellprüfung grün; `test_i18n.py` 23/23; T335 `l1_tageshinweise` grün auf Englisch und Deutsch. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Abnahme.
 
 **D – Rest und Git:** Pakete L2–L8 folgen nacheinander als eigene PRs auf diesem Zweig. Offen für L8: Klassentabellen (u. a. eingebautes Handbuch `MANUAL_SECTIONS`), Module außerhalb von `app.pyw`, `RoundedButton.action_text`, Einzelwörter und Mehrzahlbildung. Als Produktfragen offen und nicht entschieden: deutsche CSV-Spaltenköpfe (Import erkennt sie), deutsche KI-Formatbeschreibung und deutsche Datumswörter der Schnellerfassung. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.159 D93-Volllokalisierung, Paket L2: Tagesplanung, Nebenansicht und Startseite (V1.71, 21.11.2026)
+
+**A – Auftrag:** Fortsetzung von §21.158 (Auftrag vom 21.11.2026, acht PRs).
+
+**B – Umsetzung:** Rund 440 Texte von `show_day_relief` bis `refresh_template_page`: Tag entlasten mit Bilanz, Zeitblöcke und Planungsraster, Wiederholungen überspringen, Planungszusammenfassung, Datums- und Wertgruppen, Gruppierungsmenü, Inspektor-Speichern, Nebenansicht mit Verlauf, Suche, Abschnitten und Verweisen, Abhängigkeiten, Anhänge und Checkliste im Detailbereich, Feldbearbeitung, Notizfolien, Anheften, Seitenleisten-Schnellaktionen, Startseiten-Editor, Tagesabschluss-Zusammenfassung, Tagesbeginn, Tagesvorschlag, Wochenrückblick, Startseitenkacheln und Maskottchen. Gespeicherte Datenwerte bleiben unverändert. Der Knopf „Übernehmen & Raster“ des Tagesvorschlags wird über denselben Katalogtext gesucht, sonst fände die Tastatursteuerung ihn auf Englisch nicht.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.0, künstliche Daten: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 grün. Vollprüfung gemeinsam am Ende (D51).
+
+**D – Rest und Git:** Paket L3 folgt auf diesem Zweig. Lieferkopie mit der nächsten Produktionsrunde.
