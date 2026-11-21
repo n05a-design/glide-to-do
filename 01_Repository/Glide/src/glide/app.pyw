@@ -65877,7 +65877,7 @@ Labels, Termine und Metadaten."""
                 return []
             trigger = "TRIGGER;VALUE=DATE-TIME:" + stempel
         return ["BEGIN:VALARM", "ACTION:DISPLAY",
-                "DESCRIPTION:" + self.escape_ics_text(" ".join(str(item.get("text") or "Aufgabe").split())),
+                "DESCRIPTION:" + self.escape_ics_text(" ".join(str(item.get("text") or glide_i18n.t("editor.toolbar.task", "Aufgabe")).split())),
                 trigger, "END:VALARM"]
 
     def ics_default_options(self):
@@ -65893,7 +65893,7 @@ Labels, Termine und Metadaten."""
                     continue
                 paare.extend((item, entry) for _ebene, item, _quelle
                              in self.flatten_print_items(entry.get("items", []), entry))
-            return "Glide – alle Listen", paare
+            return glide_i18n.t("ui.ics_sources.glide_all_lists", "Glide – alle Listen"), paare
         titel, _untertitel, abschnitte = self.print_document_sections(
             "list" if scope == "list" else scope, day=day)
         paare = []
@@ -65937,7 +65937,7 @@ Labels, Termine und Metadaten."""
                 f"PRODID:-//Glide//Aufgaben und Listen {APP_VERSION}//DE",
                 "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
                 "X-WR-CALNAME:" + self.escape_ics_text(
-                    name + (f" (erste {self.MAX_ICS_EVENTS} Termine)" if bericht["truncated"] else "")),
+                    name + (glide_i18n.t("ui.build_ics_document.first_events", ' (erste {max_ics_events} Termine)', max_ics_events=self.MAX_ICS_EVENTS) if bericht["truncated"] else "")),
                 "X-WR-TIMEZONE:" + self.escape_ics_text(time.tzname[0] if time.tzname else "")]
         gefaltet = []
         for zeile in kopf + koerper + ["END:VCALENDAR"]:
@@ -65968,23 +65968,23 @@ Labels, Termine und Metadaten."""
         return ziel, bericht
 
     def ics_summary(self, bericht, pfad=None):
-        teile = [f"{bericht.get('events', 0)} Termin(e) geschrieben"]
+        teile = [glide_i18n.t("ui.ics_summary.event_s_written", '{get} Termin(e) geschrieben', get=bericht.get('events', 0))]
         if bericht.get("skipped"):
-            teile.append(f"{bericht['skipped']} Punkt(e) ohne Fälligkeit übersprungen")
+            teile.append(glide_i18n.t("ui.ics_summary.item_s_without_a", '{skipped} Punkt(e) ohne Fälligkeit übersprungen', skipped=bericht['skipped']))
         if bericht.get("truncated"):
-            teile.append(f"bei {self.MAX_ICS_EVENTS} Terminen abgeschnitten")
+            teile.append(glide_i18n.t("ui.ics_summary.cut_off_at_events", 'bei {max_ics_events} Terminen abgeschnitten', max_ics_events=self.MAX_ICS_EVENTS))
         text = ".\n".join(teile) + "."
         return text + (f"\n\n{pfad}" if pfad else "")
 
     def show_calendar_export_dialog(self, event=None, scope=None):
         """Umfang und Inhalt wählen, Kalenderdatei schreiben und öffnen."""
-        dialog = self._new_dialog("Kalenderdatei (ICS)")
+        dialog = self._new_dialog(glide_i18n.t("ui.show_calendar_export_dialog.calendar_file_ics", "Kalenderdatei (ICS)"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Kalenderdatei (ICS)", font=app_font(15, "bold"),
+        tk.Label(outer, text=glide_i18n.t("ui.show_calendar_export_dialog.calendar_file_ics", "Kalenderdatei (ICS)"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
-        tk.Label(outer, text="Glide schreibt die Fälligkeiten als ICS-Datei. Apple Kalender, Outlook, "
-                 "Thunderbird und Google Kalender lesen sie ein – ohne Konto und ohne Synchronisierung.",
+        tk.Label(outer, text=glide_i18n.t("ui.show_calendar_export_dialog.glide_writes_the_due", "Glide schreibt die Fälligkeiten als ICS-Datei. Apple Kalender, Outlook, "
+                 "Thunderbird und Google Kalender lesen sie ein – ohne Konto und ohne Synchronisierung."),
                  font=app_font(10), bg=self.theme["bg"], fg=self.theme["muted"],
                  justify="left", wraplength=620, anchor="w").pack(anchor="w", pady=(4, 16))
         namen = dict(self.ICS_SCOPES)
@@ -65992,10 +65992,10 @@ Labels, Termine und Metadaten."""
             "planday" if self.view_mode == self.PLAN_DAY_VIEW else
             "list" if self.view_mode in ("list", self.TABLE_VIEW, "folder") else "all")
         auswahl = tk.StringVar(value=namen[start])
-        self._make_field_label(outer, "Was soll in den Kalender?").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(outer, glide_i18n.t("ui.show_calendar_export_dialog.what_should_go_into", "Was soll in den Kalender?")).pack(anchor="w", pady=(0, 5))
         feld, _knopf = self._make_option_menu(outer, auswahl, [text for _key, text in self.ICS_SCOPES])
         feld.pack(fill="x", pady=(0, 14))
-        tk.Label(outer, text="Inhalt", font=app_font(11, "bold"),
+        tk.Label(outer, text=glide_i18n.t("board.group.content", "Inhalt"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 6))
         vorgaben = self.ics_default_options()
         variablen = {}
@@ -66023,9 +66023,9 @@ Labels, Termine und Metadaten."""
             except Exception as fehler:
                 hinweis.configure(text=str(fehler), fg=self.theme["delete"])
                 return
-            teile = [f"{bericht['events']} Termin(e)"]
+            teile = [glide_i18n.t("ui.vorschau.event_s", '{events} Termin(e)', events=bericht['events'])]
             if bericht["skipped"]:
-                teile.append(f"{bericht['skipped']} ohne Fälligkeit übersprungen")
+                teile.append(glide_i18n.t("ui.vorschau.skipped_without_a_due", '{skipped} ohne Fälligkeit übersprungen', skipped=bericht['skipped']))
             if bericht["truncated"]:
                 teile.append("abgeschnitten")
             hinweis.configure(text=" · ".join(teile), fg=self.theme["muted"])
@@ -66033,9 +66033,9 @@ Labels, Termine und Metadaten."""
         def ausgeben(oeffnen):
             key = gewaehlter_umfang()
             ziel = filedialog.asksaveasfilename(
-                title="Kalenderdatei speichern", defaultextension=self.ICS_EXTENSION,
+                title=glide_i18n.t("ui.ausgeben.save_calendar_file", "Kalenderdatei speichern"), defaultextension=self.ICS_EXTENSION,
                 initialfile=f"glide_{key}_{datetime.now().strftime('%Y-%m-%d')}{self.ICS_EXTENSION}",
-                filetypes=[("Kalenderdatei", "*.ics"), ("Alle Dateien", "*.*")], parent=dialog,
+                filetypes=[(glide_i18n.t("ui.choose.calendar_file", "Kalenderdatei"), "*.ics"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")], parent=dialog,
             )
             if not ziel:
                 return "break"
@@ -66048,7 +66048,7 @@ Labels, Termine und Metadaten."""
             dialog.destroy()
             if oeffnen:
                 self.open_external_path(pfad)
-            self.show_info("Kalenderdatei geschrieben", self.ics_summary(bericht, pfad))
+            self.show_info(glide_i18n.t("ui.ausgeben.calendar_file_written", "Kalenderdatei geschrieben"), self.ics_summary(bericht, pfad))
             return "break"
 
         for var in variablen.values():
@@ -66057,9 +66057,9 @@ Labels, Termine und Metadaten."""
         vorschau()
         footer = ButtonFlow(outer, bg=self.theme["bg"], gap=10)
         footer.pack(fill="x", pady=(18, 0))
-        footer.add(self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted"))
-        footer.add(self._make_dialog_button(footer, "Speichern", lambda: ausgeben(False), "export"))
-        footer.add(self._make_dialog_button(footer, "Speichern und öffnen",
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.save", "Speichern"), lambda: ausgeben(False), "export"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("ui.show_calendar_export_dialog.save_and_open", "Speichern und öffnen"),
                                             lambda: ausgeben(True), "confirm", width=186))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         self._center_dialog(dialog, min_width=700)
@@ -66374,7 +66374,7 @@ Labels, Termine und Metadaten."""
                 ueberspringe("no_start")
                 continue
             if hinweis == "tzid":
-                verwerfe("tzid", "Zeitzone der Datei unbekannt – als Ortszeit gelesen")
+                verwerfe("tzid", glide_i18n.t("ui.ics_events_to_items.time_zone_of_the", "Zeitzone der Datei unbekannt – als Ortszeit gelesen"))
             if grenze and datetime.fromisoformat(tag).date() < grenze:
                 ueberspringe("out_of_range")
                 continue
@@ -66419,7 +66419,7 @@ Labels, Termine und Metadaten."""
             if regel_eintrag:
                 regel = self.ics_repeat_from_rule(regel_eintrag[2], start=tag)
                 if regel is None:
-                    verwerfe("rrule", "Wiederholungsregel nicht abbildbar – ohne Wiederholung angelegt")
+                    verwerfe("rrule", glide_i18n.t("ui.ics_events_to_items.repeat_rule_cannot_be", "Wiederholungsregel nicht abbildbar – ohne Wiederholung angelegt"))
 
             erinnerung = None
             if options.get("alarms"):
@@ -66437,16 +66437,16 @@ Labels, Termine und Metadaten."""
                                 erinnerung = {"mode": "fixed",
                                               "at": self.local_reminder_time(alarm_tag, alarm_zeit, strict=False)}
                             except (ValueError, OverflowError, OSError):
-                                verwerfe("alarm", "Erinnerungszeitpunkt unlesbar")
+                                verwerfe("alarm", glide_i18n.t("ui.ics_events_to_items.reminder_time_unreadable", "Erinnerungszeitpunkt unlesbar"))
                         else:
-                            verwerfe("alarm", "Erinnerungszeitpunkt unlesbar")
+                            verwerfe("alarm", glide_i18n.t("ui.ics_events_to_items.reminder_time_unreadable", "Erinnerungszeitpunkt unlesbar"))
                         break
                     if parameter.get("RELATED", "START").upper() != "START":
-                        verwerfe("alarm", "Erinnerung bezog sich auf das Ende – verworfen")
+                        verwerfe("alarm", glide_i18n.t("ui.ics_events_to_items.reminder_referred_to_the", "Erinnerung bezog sich auf das Ende – verworfen"))
                         break
                     minuten_vorher = self.parse_ics_duration(roh)
                     if minuten_vorher is None or minuten_vorher > 0:
-                        verwerfe("alarm", "Erinnerung lag nach dem Beginn – verworfen")
+                        verwerfe("alarm", glide_i18n.t("ui.ics_events_to_items.reminder_was_after_the", "Erinnerung lag nach dem Beginn – verworfen"))
                         break
                     erinnerung = {"mode": "relative", "minutes": min(abs(minuten_vorher), 525600)}
                     break
@@ -66489,7 +66489,7 @@ Labels, Termine und Metadaten."""
         punkte, _bericht = self.ics_events_to_items(
             ereignisse[:self.ICS_PREVIEW_ROWS], options, zeitraum, dry_run=True)
         if not punkte:
-            return "Mit diesen Einstellungen entsteht kein Punkt."
+            return glide_i18n.t("ui.ics_preview_text.these_settings_create_no", "Mit diesen Einstellungen entsteht kein Punkt.")
         zeilen = []
         for punkt in punkte:
             teile = [self.format_due_full(punkt.get("due"), punkt.get("due_time"))]
@@ -66500,13 +66500,13 @@ Labels, Termine und Metadaten."""
             if punkt.get("repeat"):
                 teile.append(self.describe_repeat(punkt["repeat"]))
             if punkt.get("reminder"):
-                teile.append("Erinnerung")
+                teile.append(glide_i18n.t("ui.reminder_notification_text.reminder", "Erinnerung"))
             if str(punkt.get("description") or "").strip():
-                teile.append("mit Beschreibung")
+                teile.append(glide_i18n.t("ui.schreibe.with_description", "mit Beschreibung"))
             schwanz = " · ".join(teil for teil in teile if teil)
             zeilen.append(f"☐ {punkt.get('text')}   ({schwanz})" if schwanz else f"☐ {punkt.get('text')}")
         if len(ereignisse) > self.ICS_PREVIEW_ROWS:
-            zeilen.append(f"… und {len(ereignisse) - self.ICS_PREVIEW_ROWS} weitere Termine")
+            zeilen.append(glide_i18n.t("ui.ics_preview_text.and_more_events", '… und {wert} weitere Termine', wert=len(ereignisse) - self.ICS_PREVIEW_ROWS))
         return "\n".join(zeilen)
 
     def import_ics_events(self, kopf, ereignisse, options=None, zeitraum="all", append_to_current=False):
@@ -66547,22 +66547,22 @@ Labels, Termine und Metadaten."""
             raise ValueError("Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen.")
         self.trim_undo_stack()
         if append_to_current and ziel is self.current_list():
-            self.finish_import_ui([('Seitenlabels',self.update_page_labels),
-                                   ('Importansicht',lambda:self.refresh_tree(selected_id=punkte[-1]["id"]))])
+            self.finish_import_ui([(glide_i18n.t("ui.clear_page_labels.page_labels", 'Seitenlabels'),self.update_page_labels),
+                                   (glide_i18n.t("ui.import_csv_table.import_view", 'Importansicht'),lambda:self.refresh_tree(selected_id=punkte[-1]["id"]))])
         else:
-            self.finish_import_ui([('Importliste öffnen',lambda:self.set_active_list(ziel["id"]))])
+            self.finish_import_ui([(glide_i18n.t("ui.import_csv_table.open_import_list", 'Importliste öffnen'),lambda:self.set_active_list(ziel["id"]))])
         return ziel, bericht
 
     def ics_import_summary(self, bericht, ziel=None):
         anzahl = bericht.get("items", 0)
-        teile = [f"{anzahl} {'Punkt' if anzahl == 1 else 'Punkte'} übernommen"]
+        teile = [glide_i18n.t("ui.csv_import_summary.taken_over", '{anzahl} {wert} übernommen', anzahl=anzahl, wert=glide_i18n.t("ui.add_item.item", 'Punkt') if anzahl == 1 else glide_i18n.t("ui.csv_import_summary.items", 'Punkte'))]
         if ziel is not None:
-            teile[0] += f" in „{ziel.get('title', 'Liste')}“"
+            teile[0] += glide_i18n.t("ui.csv_import_summary.in", ' in „{get}“', get=ziel.get('title', 'Liste'))
         for grund, zahl in sorted(bericht.get("skipped", {}).items()):
-            teile.append(f"{zahl} × übersprungen ({self.ICS_SKIP_REASONS.get(grund, grund)})")
+            teile.append(glide_i18n.t("ui.ics_import_summary.skipped", '{zahl} × übersprungen ({get})', zahl=zahl, get=self.ICS_SKIP_REASONS.get(grund, grund)))
         if bericht.get("dropped"):
             gesamt = sum(bericht["dropped"].values())
-            teile.append(f"{gesamt} Angabe(n) nicht übernommen")
+            teile.append(glide_i18n.t("ui.ics_import_summary.detail_s_not_taken", '{gesamt} Angabe(n) nicht übernommen', gesamt=gesamt))
         text = ".\n".join(teile) + "."
         if bericht.get("notes"):
             text += "\n\n" + "\n".join(bericht["notes"])
@@ -66571,18 +66571,18 @@ Labels, Termine und Metadaten."""
     def show_ics_import_dialog(self, event=None, path=None, append_to_current=None):
         """Kalenderdatei wählen, Vorschau prüfen, Termine übernehmen."""
         path = path or filedialog.askopenfilename(
-            title="Kalenderdatei importieren",
-            filetypes=[("Kalenderdatei", "*.ics"), ("Alle Dateien", "*.*")],
+            title=glide_i18n.t("ui.show_ics_import_dialog.import_calendar_file", "Kalenderdatei importieren"),
+            filetypes=[(glide_i18n.t("ui.choose.calendar_file", "Kalenderdatei"), "*.ics"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return "break"
         try:
             kopf, ereignisse = self.read_ics_file(path)
         except Exception as fehler:
-            self.show_error("Kalenderimport", str(fehler))
+            self.show_error(glide_i18n.t("ui.show_ics_import_dialog.calendar_import", "Kalenderimport"), str(fehler))
             return "break"
 
-        dialog = self._new_dialog("Kalenderdatei importieren", resizable=(True, True))
+        dialog = self._new_dialog(glide_i18n.t("ui.show_ics_import_dialog.import_calendar_file", "Kalenderdatei importieren"), resizable=(True, True))
         fuss = tk.Frame(dialog, bg=self.theme["bg"])
         fuss.pack(side="bottom", fill="x", padx=self.DIALOG_PAD_X, pady=12)
         canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
@@ -66598,22 +66598,22 @@ Labels, Termine und Metadaten."""
         body.bind("<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.bind("<Configure>", lambda ereignis: canvas.itemconfigure(fenster, width=ereignis.width))
         self.bind_mousewheel(dialog, target=canvas)
-        tk.Label(body, text="Kalenderdatei importieren", font=app_font(15, "bold"),
+        tk.Label(body, text=glide_i18n.t("ui.show_ics_import_dialog.import_calendar_file", "Kalenderdatei importieren"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
         beschriftung = [os.path.basename(path), f"{len(ereignisse)} Termine"]
         if kopf.get("name"):
-            beschriftung.insert(1, "Kalender: " + kopf["name"])
+            beschriftung.insert(1, glide_i18n.t("ui.show_ics_import_dialog.calendar", 'Kalender: {name}', name=kopf["name"]))
         if kopf.get("prodid"):
-            beschriftung.append("Erzeuger: " + kopf["prodid"])
+            beschriftung.append(glide_i18n.t("ui.show_ics_import_dialog.created_by", 'Erzeuger: {prodid}', prodid=kopf["prodid"]))
         tk.Label(body, text=" · ".join(beschriftung), font=app_font(10), bg=self.theme["bg"],
                  fg=self.theme["muted"], justify="left", wraplength=700, anchor="w").pack(anchor="w", pady=(4, 14))
         zeit_namen = dict(self.ICS_RANGE_CHOICES)
         zeit_var = tk.StringVar(value=zeit_namen["all"])
-        self._make_field_label(body, "Zeitraum").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(body, glide_i18n.t("ui.show_ics_import_dialog.period", "Zeitraum")).pack(anchor="w", pady=(0, 5))
         zeit_feld, _knopf = self._make_option_menu(body, zeit_var,
                                                    [text for _key, text in self.ICS_RANGE_CHOICES])
         zeit_feld.pack(fill="x", pady=(0, 14))
-        tk.Label(body, text="Übernehmen", font=app_font(11, "bold"),
+        tk.Label(body, text=glide_i18n.t("button.apply", "Übernehmen"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 6))
         vorgaben = self.ics_import_default_options()
         variablen = {}
@@ -66629,15 +66629,15 @@ Labels, Termine und Metadaten."""
         anhaengen_var = tk.BooleanVar(value=bool(append_to_current))
         GlideCheckbutton(
             body, name="icsimp_append",
-            text=(f"An die geöffnete Liste „{self.app_title}“ anhängen (sonst als neue Liste)"
-                  if liste_offen else "An die geöffnete Liste anhängen (keine Liste geöffnet)"),
+            text=(glide_i18n.t("ui.show_csv_import_dialog.append_to_the_open", 'An die geöffnete Liste „{app_title}“ anhängen (sonst als neue Liste)', app_title=self.app_title)
+                  if liste_offen else glide_i18n.t("ui.show_csv_import_dialog.append_to_the_open_2", "An die geöffnete Liste anhängen (keine Liste geöffnet)")),
             variable=anhaengen_var, state="normal" if liste_offen else "disabled",
             bg=self.theme["bg"], fg=self.theme["text"] if liste_offen else self.theme["muted"],
             selectcolor=self.theme["input"], activebackground=self.theme["bg"],
             activeforeground=self.theme["text"], anchor="w", font=app_font(10),
             highlightthickness=0, disabledforeground=self.theme["muted"],
         ).pack(fill="x", pady=(10, 14))
-        tk.Label(body, text="Vorschau", font=app_font(11, "bold"),
+        tk.Label(body, text=glide_i18n.t("drawing.button.preview", "Vorschau"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 6))
         vorschau = tk.Text(body, name="icsimp_preview", height=9, wrap="none", relief="flat",
                            bg=self.theme["input"], fg=self.theme["text"],
@@ -66661,7 +66661,7 @@ Labels, Termine und Metadaten."""
             vorschau.insert("1.0", self.ics_preview_text(ereignisse, optionen(), zeitraum()))
             vorschau.configure(state="disabled")
             _punkte, bericht = self.ics_events_to_items(ereignisse, optionen(), zeitraum(), dry_run=True)
-            teile = [f"{bericht['items']} Punkt(e)"]
+            teile = [glide_i18n.t("ui.aktualisiere.item_s", '{items} Punkt(e)', items=bericht['items'])]
             for grund, zahl in sorted(bericht["skipped"].items()):
                 teile.append(f"{zahl} × {self.ICS_SKIP_REASONS.get(grund, grund)}")
             hinweis.configure(text=" · ".join(teile))
@@ -66676,11 +66676,10 @@ Labels, Termine und Metadaten."""
                 return "break"
             dialog.destroy()
             if ziel is None:
-                self.show_warning("Kalenderimport", "Mit diesen Einstellungen entstand kein Punkt.\n"
-                                                    + self.ics_import_summary(bericht))
+                self.show_warning(glide_i18n.t("ui.importiere.calendar_import", "Kalenderimport"), glide_i18n.t("ui.importiere.these_settings_created_no", 'Mit diesen Einstellungen entstand kein Punkt.\n{ics_import_summary}', ics_import_summary=self.ics_import_summary(bericht)))
             else:
                 self.record_data_operation("imported", path)
-                self.show_info("Import erfolgreich", self.ics_import_summary(bericht, ziel))
+                self.show_info(glide_i18n.t("ui.importiere.import_successful", "Import erfolgreich"), self.ics_import_summary(bericht, ziel))
             return "break"
 
         for var in list(variablen.values()) + [zeit_var]:
@@ -66688,8 +66687,8 @@ Labels, Termine und Metadaten."""
         aktualisiere()
         flow = ButtonFlow(fuss, bg=self.theme["bg"], gap=10)
         flow.pack(fill="x")
-        flow.add(self._make_dialog_button(flow, "Abbrechen", dialog.destroy, "muted"))
-        flow.add(self._make_dialog_button(flow, "Importieren", importiere, "confirm"))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("menu.file.import", "Importieren"), importiere, "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.minsize(700, 560)
         self._center_dialog(dialog, min_width=820, min_height=620)
@@ -66806,16 +66805,15 @@ Labels, Termine und Metadaten."""
     def format_app_backup_preview(self, summary):
         """Klartext der Inhaltsvorschau; nennt Herkunft, Menge und Grenzen."""
         stamp = summary.get("exported_at") or ""
-        when = stamp.replace("T", " um ")[:19] if stamp else "ohne Zeitstempel"
+        when = stamp.replace("T", " um ")[:19] if stamp else glide_i18n.t("ui.format_app_backup_preview.without_time_stamp", "ohne Zeitstempel")
         zeilen = [
-            f"Erzeugt von Glide {summary['app_version']} · Datenformat {summary['schema']} · {when}",
-            f"Aufgaben: {summary['tasks']} in {summary['lists']} Liste(n) und {summary['folders']} Ordner(n)",
-            f"Zusätzlich: {summary['structural']} Gruppen/Überschriften · {summary['labels']} Labels · "
-            f"{summary['trash']} Papierkorbeinträge · {summary['attachments']} Anhänge",
-            f"Vorlagen im Archiv: {summary['templates']}",
-            f"Persönliche Einstellungen: {'enthalten' if summary['has_settings'] else 'nicht enthalten'}",
-            f"Aktivitätsdaten: {summary['activity_days']} erfasste Tage"
-            if summary["has_activity"] else "Aktivitätsdaten: nicht enthalten",
+            glide_i18n.t("ui.format_app_backup_preview.created_by_glide_data", 'Erzeugt von Glide {app_version} · Datenformat {schema} · {when}', app_version=summary['app_version'], schema=summary['schema'], when=when),
+            glide_i18n.t("ui.format_app_backup_preview.tasks_in_list_s", 'Aufgaben: {tasks} in {lists} Liste(n) und {folders} Ordner(n)', tasks=summary['tasks'], lists=summary['lists'], folders=summary['folders']),
+            glide_i18n.t("ui.format_app_backup_preview.in_addition_groups_headings", 'Zusätzlich: {structural} Gruppen/Überschriften · {labels} Labels · {trash} Papierkorbeinträge · {attachments} Anhänge', structural=summary['structural'], labels=summary['labels'], trash=summary['trash'], attachments=summary['attachments']),
+            glide_i18n.t("ui.format_app_backup_preview.templates_in_the_archive", 'Vorlagen im Archiv: {templates}', templates=summary['templates']),
+            glide_i18n.t("ui.format_app_backup_preview.personal_settings", 'Persönliche Einstellungen: {wert}', wert=glide_i18n.t("ui.format_app_backup_preview.included", 'enthalten') if summary['has_settings'] else glide_i18n.t("ui.format_app_backup_preview.not_included", 'nicht enthalten')),
+            glide_i18n.t("ui.format_app_backup_preview.activity_data_recorded_days", 'Aktivitätsdaten: {activity_days} erfasste Tage', activity_days=summary['activity_days'])
+            if summary["has_activity"] else glide_i18n.t("ui.format_app_backup_preview.activity_data_not_included", "Aktivitätsdaten: nicht enthalten"),
         ]
         return "\n".join(zeilen)
 
@@ -66826,11 +66824,11 @@ Labels, Termine und Metadaten."""
         self.sync_current_list_reference()
         default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
         path = filedialog.asksaveasfilename(
-            title="Vollständiges App-Sicherung speichern",
+            title=glide_i18n.t("ui.export_app_backup.save_full_app_backup", "Vollständiges App-Sicherung speichern"),
             defaultextension=self.APP_BACKUP_EXTENSION,
             initialfile=default_filename,
             filetypes=[("Glide-App-Sicherung", "*" + self.APP_BACKUP_EXTENSION),
-                       ("Glide-Aufgabensicherung", "*.glidebackup"), ("Alle Dateien", "*.*")],
+                       ("Glide-Aufgabensicherung", "*.glidebackup"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
@@ -66840,13 +66838,12 @@ Labels, Termine und Metadaten."""
             summary = self.describe_app_backup(payload)
             self.record_data_operation("backup", path)
             self.show_info(
-                "App-Sicherung erstellt",
-                f"Gespeichert nach:\n{path}\n\n{self.format_app_backup_preview(summary)}\n\n"
-                f"Enthaltene Anhangsdateien: {count}",
+                glide_i18n.t("ui.export_app_backup.app_backup_created", "App-Sicherung erstellt"),
+                glide_i18n.t("ui.export_app_backup.saved_to_included_attachment", 'Gespeichert nach:\n{path}\n\n{format_app_backup_preview}\n\nEnthaltene Anhangsdateien: {count}', path=path, format_app_backup_preview=self.format_app_backup_preview(summary), count=count),
             )
             return True
         except Exception as exc:
-            self.show_error("Fehler beim App-Sicherung", str(exc))
+            self.show_error(glide_i18n.t("ui.export_app_backup.error_in_the_app", "Fehler beim App-Sicherung"), str(exc))
 
     def read_app_backup_file(self, path):
         """Liest Daten und Zusatzabschnitt eines Archivs ohne Änderung am Bestand."""
@@ -66905,9 +66902,9 @@ Labels, Termine und Metadaten."""
                 self.settings = vorher
                 self.theme_name = vorher_theme
                 raise OSError("Die Einstellungen konnten nicht geschrieben werden.")
-            angewendet.append("Einstellungen" if settings else "Aktivitätsdaten")
+            angewendet.append(glide_i18n.t("settings.title", "Einstellungen") if settings else glide_i18n.t("ui.restore_app_backup_extras.activity_data", "Aktivitätsdaten"))
             if settings and activity:
-                angewendet[-1] = "Einstellungen und Aktivitätsdaten"
+                angewendet[-1] = glide_i18n.t("ui.restore_app_backup_extras.settings_and_activity_data", "Einstellungen und Aktivitätsdaten")
         if templates:
             vorher = copy.deepcopy(getattr(self, "templates", []))
             records = (section.get("templates") or {}).get("templates", [])
@@ -66920,7 +66917,7 @@ Labels, Termine und Metadaten."""
             if not self.save_templates():
                 self.templates = vorher
                 raise OSError("Der Vorlagenkatalog konnte nicht geschrieben werden.")
-            angewendet.append("Vorlagenkatalog")
+            angewendet.append(glide_i18n.t("ui.restore_app_backup_extras.template_catalog", "Vorlagenkatalog"))
         return angewendet
 
     def restore_app_backup(self, path=None, sections=None, show_success=True):
@@ -66931,19 +66928,19 @@ Labels, Termine und Metadaten."""
         Zusatzbereiche folgen erst danach.
         """
         path = path or filedialog.askopenfilename(
-            title="App-Sicherung wiederherstellen",
+            title=glide_i18n.t("ui.restore_app_backup.restore_app_backup", "App-Sicherung wiederherstellen"),
             filetypes=[("Glide-App-Sicherung", "*" + self.APP_BACKUP_EXTENSION),
-                       ("Glide-Aufgabensicherung", "*.glidebackup"), ("Alle Dateien", "*.*")],
+                       ("Glide-Aufgabensicherung", "*.glidebackup"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")],
         )
         if not path:
             return
         try:
             data, section = self.read_app_backup_file(path)
         except (json.JSONDecodeError, UnicodeDecodeError):
-            self.show_error("Fehler", "Die Datei ist kein gültiges Glide-Backup.")
+            self.show_error(glide_i18n.t("error.title", "Fehler"), glide_i18n.t("ui.restore_app_backup.the_file_is_not", "Die Datei ist kein gültiges Glide-Backup."))
             return
         except Exception as exc:
-            self.show_error("Fehler beim Lesen", str(exc))
+            self.show_error(glide_i18n.t("ui.restore_app_backup.error_while_reading", "Fehler beim Lesen"), str(exc))
             return
         summary = self.describe_app_backup(data, section)
         if sections is None:
@@ -66952,13 +66949,13 @@ Labels, Termine und Metadaten."""
                 return
         gewaehlt = {name: bool(sections.get(name)) for name in self.APP_BACKUP_SECTIONS}
         if not any(gewaehlt.values()):
-            self.show_warning("App-Sicherung", "Es wurde kein Bereich zum Wiederherstellen ausgewählt.")
+            self.show_warning("App-Sicherung", glide_i18n.t("ui.restore_app_backup.no_area_to_restore", "Es wurde kein Bereich zum Wiederherstellen ausgewählt."))
             return
         angewendet = []
         if gewaehlt["tasks"]:
             if not self.import_full_backup(path=path, show_success=False, confirm=False):
                 return
-            angewendet.append(f"{summary['tasks']} Aufgabe(n) in {summary['lists']} Liste(n)")
+            angewendet.append(glide_i18n.t("ui.restore_app_backup.task_s_in_list", '{tasks} Aufgabe(n) in {lists} Liste(n)', tasks=summary['tasks'], lists=summary['lists']))
         try:
             angewendet += self.restore_app_backup_extras(
                 section,
@@ -66966,7 +66963,7 @@ Labels, Termine und Metadaten."""
                 activity=gewaehlt["activity"], with_tasks=gewaehlt["tasks"],
             )
         except Exception as exc:
-            self.show_error("Fehler beim Wiederherstellen", str(exc))
+            self.show_error(glide_i18n.t("ui.restore_app_backup.error_while_restoring", "Fehler beim Wiederherstellen"), str(exc))
             return
         if gewaehlt["settings"] or gewaehlt["activity"] or gewaehlt["templates"]:
             self._ui_font_family = None
@@ -66977,15 +66974,15 @@ Labels, Termine und Metadaten."""
             self.update_sidebar_list()
             self.refresh_tree()
         if show_success:
-            self.show_info("Wiederhergestellt", "Übernommen: " + ", ".join(angewendet) + ".")
+            self.show_info(glide_i18n.t("feedback.restored", "Wiederhergestellt"), glide_i18n.t("ui.restore_app_backup.taken_over", 'Übernommen: {join}.', join=", ".join(angewendet)))
         return True
 
     def ask_app_backup_sections(self, summary, path):
         """Inhaltsvorschau mit einzeln zuschaltbaren Bereichen."""
-        dialog = self._new_dialog("App-Sicherung wiederherstellen")
+        dialog = self._new_dialog(glide_i18n.t("ui.ask_app_backup_sections.restore_app_backup", "App-Sicherung wiederherstellen"))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Das steckt in diesem Archiv", font=app_font(15, "bold"),
+        tk.Label(outer, text=glide_i18n.t("ui.ask_app_backup_sections.what_this_archive_contains", "Das steckt in diesem Archiv"), font=app_font(15, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
         tk.Label(outer, text=os.path.basename(path), font=app_font(10),
                  bg=self.theme["bg"], fg=self.theme["muted"], justify="left",
@@ -66996,7 +66993,7 @@ Labels, Termine und Metadaten."""
         tk.Label(field, name="app_backup_preview", text=self.format_app_backup_preview(summary),
                  font=app_font(10), bg=self.theme["input"], fg=self.theme["text"],
                  justify="left", anchor="w", wraplength=600).pack(fill="x", padx=10, pady=8)
-        tk.Label(outer, text="Zu übernehmende Bereiche", font=app_font(11, "bold"),
+        tk.Label(outer, text=glide_i18n.t("ui.ask_app_backup_sections.areas_to_take_over", "Zu übernehmende Bereiche"), font=app_font(11, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(16, 6))
         verfuegbar = {
             "tasks": summary["lists"] > 0,
@@ -67005,10 +67002,10 @@ Labels, Termine und Metadaten."""
             "activity": summary["has_activity"],
         }
         beschriftung = {
-            "tasks": "Aufgaben, Listen, Ordner, Labels, Papierkorb und Anhänge – ersetzt den vorhandenen Bestand",
-            "settings": "Persönliche Einstellungen – ersetzt Profil, Darstellung und Ansichtsoptionen",
-            "templates": "Vorlagenkatalog – ersetzt den vorhandenen Katalog",
-            "activity": "Aktivitätsdaten – ersetzt die erfassten Tageswerte der Jahresanzeige",
+            "tasks": glide_i18n.t("ui.ask_app_backup_sections.tasks_lists_folders_labels", "Aufgaben, Listen, Ordner, Labels, Papierkorb und Anhänge – ersetzt den vorhandenen Bestand"),
+            "settings": glide_i18n.t("ui.ask_app_backup_sections.personal_settings_replaces_profile", "Persönliche Einstellungen – ersetzt Profil, Darstellung und Ansichtsoptionen"),
+            "templates": glide_i18n.t("ui.ask_app_backup_sections.template_catalog_replaces_the", "Vorlagenkatalog – ersetzt den vorhandenen Katalog"),
+            "activity": glide_i18n.t("ui.ask_app_backup_sections.activity_data_replaces_the", "Aktivitätsdaten – ersetzt die erfassten Tageswerte der Jahresanzeige"),
         }
         variablen = {}
         for name in self.APP_BACKUP_SECTIONS:
@@ -67022,10 +67019,10 @@ Labels, Termine und Metadaten."""
             check.pack(fill="x", pady=3)
             if not verfuegbar[name]:
                 check.configure(state="disabled")
-        tk.Label(outer, text="Vom aktuellen Stand wird vorher gesichert: Aufgaben als Aufgabensicherung im "
+        tk.Label(outer, text=glide_i18n.t("ui.ask_app_backup_sections.the_current_state_is", "Vom aktuellen Stand wird vorher gesichert: Aufgaben als Aufgabensicherung im "
                  "Sicherungsordner, Einstellungen und Vorlagen als eigene Kopien. Ohne die Aufgaben dieses "
                  "Archivs werden Reiter, Pinnwände, Tagesauswahl, gespeicherte Filter und Tabellenspalten "
-                 "nicht übernommen, weil sie auf dessen Punkte verweisen.",
+                 "nicht übernommen, weil sie auf dessen Punkte verweisen."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), justify="left",
                  wraplength=620, anchor="w").pack(anchor="w", pady=(12, 0))
         ergebnis = {"value": None}
@@ -67033,7 +67030,7 @@ Labels, Termine und Metadaten."""
         def submit(event=None):
             gewaehlt = {name: bool(variablen[name].get()) for name in self.APP_BACKUP_SECTIONS}
             if not any(gewaehlt.values()):
-                self.show_warning("App-Sicherung", "Bitte mindestens einen Bereich auswählen.", parent=dialog)
+                self.show_warning("App-Sicherung", glide_i18n.t("ui.submit.please_select_at_least", "Bitte mindestens einen Bereich auswählen."), parent=dialog)
                 return "break"
             ergebnis["value"] = gewaehlt
             dialog.destroy()
@@ -67041,8 +67038,8 @@ Labels, Termine und Metadaten."""
 
         footer = ButtonFlow(outer, bg=self.theme["bg"], gap=10)
         footer.pack(fill="x", pady=(20, 0))
-        footer.add(self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted"))
-        footer.add(self._make_dialog_button(footer, "Wiederherstellen", submit, "confirm"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted"))
+        footer.add(self._make_dialog_button(footer, glide_i18n.t("button.restore", "Wiederherstellen"), submit, "confirm"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         dialog.bind("<Return>", submit)
         self._center_dialog(dialog, min_width=720)
@@ -67056,38 +67053,38 @@ Labels, Termine und Metadaten."""
                       and getattr(self, '_read_only_reason', None) == 'recovery')
         recovery_guard = getattr(self, '_recovery_guard', None) if recovering else None
         if getattr(self, '_data_read_only', False) and not recovering:
-            self.show_warning('Wiederherstellen gesperrt', self.read_only_notice())
+            self.show_warning(glide_i18n.t("ui.import_full_backup.restore_blocked", 'Wiederherstellen gesperrt'), self.read_only_notice())
             return
         if recovering and (additive or recovery_guard is None):
-            self.show_warning('Wiederherstellen gesperrt',
-                              'Im geschützten Wiederanlauf kann nur ein vollständiger, geprüfter Bestand übernommen werden.')
+            self.show_warning(glide_i18n.t("ui.import_full_backup.restore_blocked", 'Wiederherstellen gesperrt'),
+                              glide_i18n.t("ui.import_full_backup.in_the_protected_restart", 'Im geschützten Wiederanlauf kann nur ein vollständiger, geprüfter Bestand übernommen werden.'))
             return
         if target_folder_id and (not additive or not self.get_folder(target_folder_id) or self.is_archived_folder(target_folder_id)):
             return None
         path = path or filedialog.askopenfilename(
-            title="Listen/Ordner hinzufügen" if additive else "Aufgabensicherung laden (ersetzt alle Listen)",
+            title=glide_i18n.t("ui.import_full_backup.add_lists_folders", "Listen/Ordner hinzufügen") if additive else glide_i18n.t("ui.import_full_backup.load_task_backup_replaces", "Aufgabensicherung laden (ersetzt alle Listen)"),
             filetypes=[
                 ("Glide-Aufgabensicherung", "*.glidebackup"),
-                ("Frühere JSON-Backups", "*.json"),
-                ("Alle Dateien", "*.*"),
+                (glide_i18n.t("ui.import_full_backup.earlier_json_backups", "Frühere JSON-Backups"), "*.json"),
+                (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*"),
             ],
         )
         if not path:
             return
         if recovering and not self.ask_yes_no(
-                'Sicherung im geschützten Start wiederherstellen',
-                'Die ausgewählte Sicherung wird vollständig geprüft. Vor der Übernahme werden '
+                glide_i18n.t("ui.import_full_backup.restore_backup_in_the", 'Sicherung im geschützten Start wiederherstellen'),
+                glide_i18n.t("ui.import_full_backup.the_selected_backup_is", 'Die ausgewählte Sicherung wird vollständig geprüft. Vor der Übernahme werden '
                 'die vorhandenen Originalbytes unverändert separat gesichert; eine fehlende '
                 'Originaldatei wird ausdrücklich dokumentiert.\n\n'
                 'Danach ersetzt dieser Sicherungsstand den geschützten Bestand. '
                 'Die Wiederherstellung kann nicht auf den leeren Fehlerstart rückgängig gemacht werden.\n\n'
-                'Ausgewählte Sicherung wiederherstellen?'):
+                'Ausgewählte Sicherung wiederherstellen?')):
             return
         if not recovering and not additive and confirm and not self.ask_yes_no(
-            "Backup importieren",
-            "Beim Import werden alle aktuell vorhandenen Listen ersetzt.\n\n"
+            glide_i18n.t("ui.import_full_backup.import_backup", "Backup importieren"),
+            glide_i18n.t("ui.import_full_backup.importing_replaces_all_lists", "Beim Import werden alle aktuell vorhandenen Listen ersetzt.\n\n"
             "Vom aktuellen Stand wird vorher automatisch ein vollständiges Sicherungsbackup angelegt.\n\n"
-            "Fortfahren?",
+            "Fortfahren?"),
         ):
             return
 
@@ -67120,9 +67117,9 @@ Labels, Termine und Metadaten."""
                 extra = sorted(set(attachment_infos) - referenced)
                 details = []
                 if missing:
-                    details.append("fehlend: " + ", ".join(missing[:5]))
+                    details.append(glide_i18n.t("ui.import_full_backup.missing", 'fehlend: {join}', join=", ".join(missing[:5])))
                 if extra:
-                    details.append("nicht referenziert: " + ", ".join(extra[:5]))
+                    details.append(glide_i18n.t("ui.import_full_backup.not_referenced", 'nicht referenziert: {join}', join=", ".join(extra[:5])))
                 raise ValueError("Die Anhänge im Backup sind unvollständig oder unerwartet (" + "; ".join(details) + ").")
 
             # normalize_lists_data setzt folders, labels und trash; der aktuelle
@@ -67229,7 +67226,7 @@ Labels, Termine und Metadaten."""
                     expected_sha256=getattr(assessment, 'sha256', '') or None)
                 if not replacement.writable:
                     self.storage_failure('recovery', replacement.detail)
-                    self.show_error('Wiederherstellen gesperrt', replacement.detail)
+                    self.show_error(glide_i18n.t("ui.import_full_backup.restore_blocked", 'Wiederherstellen gesperrt'), replacement.detail)
                     return
                 pre_import_path = replacement.preserved_path
             else:
@@ -67325,13 +67322,12 @@ Labels, Termine und Metadaten."""
             self.record_data_operation("imported", path)
             if show_success:
                 self.show_info(
-                    "Import erfolgreich",
-                    f"{imported_count} Liste(n) {'hinzugefügt' if additive else 'importiert'}.\n\n"
-                    f"Sicherung des vorherigen Stands:\n{pre_import_path}",
+                    glide_i18n.t("ui.importiere.import_successful", "Import erfolgreich"),
+                    glide_i18n.t("ui.import_full_backup.list_s_backup_of", '{imported_count} Liste(n) {wert}.\n\nSicherung des vorherigen Stands:\n{pre_import_path}', imported_count=imported_count, wert=glide_i18n.t("ui.import_full_backup.added", 'hinzugefügt') if additive else glide_i18n.t("ui.import_full_backup.imported", 'importiert'), pre_import_path=pre_import_path),
                 )
             return True
         except (json.JSONDecodeError, UnicodeDecodeError):
-            self.show_error("Fehler", "Die Datei ist kein gültiges Glide-Backup.")
+            self.show_error(glide_i18n.t("error.title", "Fehler"), glide_i18n.t("ui.import_full_backup.the_file_is_not", "Die Datei ist kein gültiges Glide-Backup."))
         except Exception as e:
             if recovering and committed:
                 self._data_read_only = True
@@ -67339,8 +67335,8 @@ Labels, Termine und Metadaten."""
                 self._recovery_loaded = False
                 self._recovery_assessment = glide_session.Assessment(
                     'replacement_error', False,
-                    'Der Wiederherstellungsstand wurde gespeichert. Der weitere Aufbau ist '
-                    'fehlgeschlagen; der Bestand bleibt bis zu einer erneuten Prüfung geschützt.',
+                    glide_i18n.t("ui.import_full_backup.the_restore_state_was", 'Der Wiederherstellungsstand wurde gespeichert. Der weitere Aufbau ist '
+                    'fehlgeschlagen; der Bestand bleibt bis zu einer erneuten Prüfung geschützt.'),
                     marker_kind='owned', preserved_path=replacement.preserved_path)
                 self.storage_health().fail('recovery', self._recovery_assessment.detail)
             if not committed:
@@ -67351,7 +67347,7 @@ Labels, Termine und Metadaten."""
                         pass
                 while len(self.undo_stack) > undo_size:
                     self.undo_stack.pop()
-            self.show_error("Fehler beim Import", str(e))
+            self.show_error(glide_i18n.t("ui.import_full_backup.error_while_importing", "Fehler beim Import"), str(e))
         finally:
             if archive:
                 archive.close()
@@ -67376,8 +67372,8 @@ Labels, Termine und Metadaten."""
         if self.refresh_data_lock() is False or getattr(self,'_data_read_only',False) or not self.require_list_view():
             return
         target_id = self.active_list_id
-        path = filedialog.askopenfilename(title='Liste aus TXT laden',
-            filetypes=[('Textdatei','*.txt'),('Alle Dateien','*.*')])
+        path = filedialog.askopenfilename(title=glide_i18n.t("ui.import_from_txt.load_list_from_txt", 'Liste aus TXT laden'),
+            filetypes=[(glide_i18n.t("ui.export_folder_as.text_file", 'Textdatei'),'*.txt'),(glide_i18n.t("drawing.filetype.all", 'Alle Dateien'),'*.*')])
         if (not path or self.refresh_data_lock() is False or getattr(self,'_data_read_only',False)
                 or not self.prepare_inspector_switch() or self.active_list_id != target_id):
             return
@@ -67390,7 +67386,7 @@ Labels, Termine und Metadaten."""
             imported, note = self.parse_txt_items(lines), self.extract_txt_note(lines)
             if not imported and not note:
                 self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-                self.show_warning('Import','Die Datei enthält weder erkennbare Aufgaben noch einen Beschreibungstext.')
+                self.show_warning('Import',glide_i18n.t("ui.import_from_txt.the_file_contains_neither", 'Die Datei enthält weder erkennbare Aufgaben noch einen Beschreibungstext.'))
                 return
             self.items.extend(imported)
             if note:
@@ -67401,13 +67397,13 @@ Labels, Termine und Metadaten."""
                 return
         except Exception as error:
             self.restore_import_checkpoint(checkpoint,undo_before,dirty_before)
-            self.show_error('Fehler beim Import',str(error))
+            self.show_error(glide_i18n.t("ui.import_from_txt.error_while_importing", 'Fehler beim Import'),str(error))
             return
         self.trim_undo_stack()
-        self.finish_import_ui([('Notizvorschau',self.update_page_note_preview),('Labels',self.update_page_labels),
-            ('Inhaltsansicht',lambda:self.refresh_tree(selected_id=imported[-1]['id'] if imported else None)),
-            ('Importvermerk',lambda:self.record_data_operation('imported',path)),
-            ('Importrückmeldung',lambda:self.show_info('Import erfolgreich',f"{self.count_items(imported)} Punkte und {'ein Beschreibungstext' if note else 'kein Beschreibungstext'} importiert."))])
+        self.finish_import_ui([(glide_i18n.t("ui.import_from_txt.note_preview", 'Notizvorschau'),self.update_page_note_preview),(glide_i18n.t("menu.view.labels", 'Labels'),self.update_page_labels),
+            (glide_i18n.t("ui.sidebar_change.content_view", 'Inhaltsansicht'),lambda:self.refresh_tree(selected_id=imported[-1]['id'] if imported else None)),
+            (glide_i18n.t("ui.import_txt_as_new_lists.import_record", 'Importvermerk'),lambda:self.record_data_operation('imported',path)),
+            (glide_i18n.t("ui.import_txt_as_new_lists.import_feedback", 'Importrückmeldung'),lambda:self.show_info(glide_i18n.t("ui.importiere.import_successful", 'Import erfolgreich'),glide_i18n.t("ui.import_from_txt.items_and_imported", '{count_items} Punkte und {wert} importiert.', count_items=self.count_items(imported), wert=glide_i18n.t("ui.import_from_txt.a_description", 'ein Beschreibungstext') if note else glide_i18n.t("ui.import_from_txt.no_description", 'kein Beschreibungstext'))))])
 
     def parse_txt_items(self, lines):
         imported_root = []
@@ -67980,10 +67976,10 @@ Labels, Termine und Metadaten."""
                 ("list", self.active_list_id) if self.view_mode in ("list", self.TABLE_VIEW) else None)
             for art, holder in seiten:
                 symbol = self.ICONS["folder" if art == "folder" else "drawing" if self.is_drawing_list(holder) else "list"]
-                titel = str(holder.get("title") or ("Ordner" if art == "folder" else "Liste"))
+                titel = str(holder.get("title") or (glide_i18n.t("ui.kachel_boards.folder", "Ordner") if art == "folder" else glide_i18n.t("editor.toolbar.list", "Liste")))
                 eintrag(symbol, titel, lambda a=art, i=holder.get("id"): self.open_pinned_page(a, i),
                         aktiv=offen == (art, holder.get("id")), bild=self.page_icon_image(holder))
-        breit = eintrag("»", "Seitenleiste breit zeigen · Ansicht › Seitenleiste schmal", self.toggle_sidebar_narrow)
+        breit = eintrag("»", glide_i18n.t("ui.refresh_sidebar_rail.show_sidebar_wide_view", "Seitenleiste breit zeigen · Ansicht › Seitenleiste schmal"), self.toggle_sidebar_narrow)
         breit.pack_forget()
         breit.pack(side="bottom", fill="x", pady=(6, 0))
         for index, knopf in enumerate(knoepfe):
@@ -68139,7 +68135,7 @@ Labels, Termine und Metadaten."""
         self.compact_header = kopf
         rechts = self.register_theme_widget(tk.Frame(kopf, bg=theme["bg"]), "bg")
         rechts.pack(side="right")
-        beschriftung = "Normalansicht"
+        beschriftung = glide_i18n.t("ui.build_compact_header.normal_view", "Normalansicht")
         self.compact_exit_button = self.make_button(
             rechts, beschriftung, self.leave_compact_mode, "muted",
             width=ui_font_object(font=app_font(9, "bold")).measure(beschriftung) + 30, height=hoehe,
@@ -68155,12 +68151,12 @@ Labels, Termine und Metadaten."""
         for knopf, rand in ((self.compact_exit_button, (0, 0)), (self.compact_menu_button, (0, 8)),
                             (self.compact_capture_button, (0, 8)), (self.compact_search_button, (0, 8))):
             knopf.pack(side="right", padx=rand)
-        self.add_tooltip(self.compact_exit_button, "Kompaktmodus beenden · " + self.accel("Shift", "K"))
-        self.add_tooltip(self.compact_menu_button, "Menü: alle Befehle durchsuchen")
-        self.add_tooltip(self.compact_capture_button, "Schnellerfassung · " + self.accel("Alt", "N"))
-        self.add_tooltip(self.compact_search_button, "Suchen und Inhalt wechseln · " + self.accel("O"))
-        for knopf, name in ((self.compact_menu_button, "Menü"), (self.compact_capture_button, "Schnellerfassung"),
-                            (self.compact_search_button, "Suchen und Inhalt wechseln")):
+        self.add_tooltip(self.compact_exit_button, glide_i18n.t("ui.build_compact_header.exit_compact_mode", 'Kompaktmodus beenden · {accel}', accel=self.accel("Shift", "K")))
+        self.add_tooltip(self.compact_menu_button, glide_i18n.t("ui.build_compact_header.menu_search_all_commands", "Menü: alle Befehle durchsuchen"))
+        self.add_tooltip(self.compact_capture_button, glide_i18n.t("ui.create_ui.quick_capture", 'Schnellerfassung · {accel}', accel=self.accel("Alt", "N")))
+        self.add_tooltip(self.compact_search_button, glide_i18n.t("ui.build_compact_header.search_and_switch_content", 'Suchen und Inhalt wechseln · {accel}', accel=self.accel("O")))
+        for knopf, name in ((self.compact_menu_button, glide_i18n.t("ui.build_compact_header.menu", "Menü")), (self.compact_capture_button, glide_i18n.t("ui.show_quick_capture.quick_capture", "Schnellerfassung")),
+                            (self.compact_search_button, glide_i18n.t("ui.build_compact_header.search_and_switch_content_2", "Suchen und Inhalt wechseln"))):
             knopf._accessible_name = name
             glide_core_accessibility.refresh(knopf)
         self.compact_title = self.register_theme_widget(
@@ -68195,7 +68191,7 @@ Labels, Termine und Metadaten."""
         if menubar is None:
             return "break"
         knopf = getattr(self, "compact_menu_button", None)
-        self.show_action_chooser(menubar, title="Menü", anchor=knopf if knopf is not None else None,
+        self.show_action_chooser(menubar, title=glide_i18n.t("ui.show_compact_menu.menu", "Menü"), anchor=knopf if knopf is not None else None,
                                  return_focus=self.current_focus_widget())
         return "break"
 
@@ -68264,20 +68260,20 @@ Labels, Termine und Metadaten."""
             dialog = karte.inner
             grund = self.theme["card"]
         else:
-            dialog = glide_modal_session.create_dialog(self.root, "Änderungsverlauf")
+            dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"))
             grund = self.theme["bg"]
         dialog.configure(bg=grund)
         if not embedded:
             dialog.minsize(560, 440)
         body = tk.Frame(dialog, bg=grund)
         body.pack(fill="both", expand=True, padx=24 if not embedded else 14, pady=20 if not embedded else 12)
-        tk.Label(body, text="Änderungsverlauf", bg=grund, fg=self.theme["text"],
+        tk.Label(body, text=glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), bg=grund, fg=self.theme["text"],
                  font=app_font(16, "bold"), anchor="w").pack(fill="x")
         kopf = tk.Label(body, text="", bg=grund, fg=self.theme["muted"],
                         font=app_font(10), anchor="w", justify="left", wraplength=700)
         kopf.pack(fill="x", pady=(4, 14))
         suche = tk.StringVar()
-        self._make_field_label(body, "Suchen · Objekt, Vorgang, Liste oder Feld").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(body, glide_i18n.t("ui.show_history_dialog.search_object_action_list", "Suchen · Objekt, Vorgang, Liste oder Feld")).pack(anchor="w", pady=(0, 5))
         feld = tk.Entry(body, textvariable=suche, name="history_search", bg=self.theme["input"],
                         fg=self.theme["text"], insertbackground=self.theme["text"], font=app_font(12),
                         relief="flat", bd=0, highlightthickness=1,
@@ -68294,7 +68290,7 @@ Labels, Termine und Metadaten."""
         links.grid(row=0, column=0, sticky="new", padx=(0, 10))
         rechts = tk.Frame(auswahl, bg=grund)
         rechts.grid(row=0, column=1, sticky="new", padx=(10, 0))
-        self._make_field_label(links, "Zeitraum").pack(anchor="w", pady=(0, 5))
+        self._make_field_label(links, glide_i18n.t("ui.show_history_dialog.period", "Zeitraum")).pack(anchor="w", pady=(0, 5))
         zeit_feld, _knopf = self._make_option_menu(links, zeit_var,
                                                    [text for _key, text in self.HISTORY_RANGE_CHOICES])
         zeit_feld.pack(fill="x")
@@ -68312,8 +68308,8 @@ Labels, Termine und Metadaten."""
         # zum Ziehen. Beides ist jetzt da.
         baum = GlideTreeview(flaeche, name="history_tree", columns=("aktion", "objekt", "liste"),
                             show="tree headings", selectmode="browse", style="Dialog.Treeview", height=12)
-        self.prepare_table(baum, (("#0", "Zeitpunkt", 200), ("aktion", "Vorgang", 170),
-                                  ("objekt", "Betroffenes Objekt", 270), ("liste", "Liste", 140)),
+        self.prepare_table(baum, (("#0", glide_i18n.t("ui.show_daily_hints.time", "Zeitpunkt"), 200), ("aktion", glide_i18n.t("ui.show_history_dialog.action", "Vorgang"), 170),
+                                  ("objekt", glide_i18n.t("ui.show_history_dialog.affected_object", "Betroffenes Objekt"), 270), ("liste", glide_i18n.t("editor.toolbar.list", "Liste"), 140)),
                            stretch="objekt")
         scroll = ThemedAutoScrollbar(flaeche, self.theme["card"], self.theme["card"],
                                      self.theme["input_border"], self.theme["muted"])
@@ -68345,42 +68341,41 @@ Labels, Termine und Metadaten."""
                             text=self.format_history_time(entry.get("at")),
                             values=(vorgang, objekt, entry.get("list") or ""))
             gesamt = len(getattr(self, "history", []) or [])
-            zusatz = "" if self.history_enabled() else "  ·  Protokollierung ist ausgeschaltet"
-            kopf.configure(text=f"{len(sichtbar)} von {gesamt} Einträgen{zusatz}")
+            zusatz = "" if self.history_enabled() else glide_i18n.t("ui.aktualisiere.logging_is_switched_off", "  ·  Protokollierung ist ausgeschaltet")
+            kopf.configure(text=glide_i18n.t("ui.aktualisiere.of_entries", '{len} von {gesamt} Einträgen{zusatz}', len=len(sichtbar), gesamt=gesamt, zusatz=zusatz))
 
         def speichern():
             if not sichtbar:
-                self.show_warning("Änderungsverlauf", "Zu dieser Auswahl gibt es keine Einträge.")
+                self.show_warning(glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), glide_i18n.t("ui.speichern.there_are_no_entries", "Zu dieser Auswahl gibt es keine Einträge."))
                 return "break"
             ziel = filedialog.asksaveasfilename(
-                title="Änderungsverlauf speichern", defaultextension=".txt",
+                title=glide_i18n.t("ui.speichern.save_change_history", "Änderungsverlauf speichern"), defaultextension=".txt",
                 initialfile=f"glide_verlauf_{datetime.now().strftime('%Y-%m-%d')}.txt",
-                filetypes=[("Textdatei", "*.txt"), ("Alle Dateien", "*.*")], parent=dialog,
+                filetypes=[(glide_i18n.t("ui.export_folder_as.text_file", "Textdatei"), "*.txt"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")], parent=dialog,
             )
             if not ziel:
                 return "break"
             try:
                 self.validate_backup_target(ziel)
                 with open(ziel, "w", encoding="utf-8") as datei:
-                    datei.write(f"{APP_NAME} – Änderungsverlauf\n")
-                    datei.write(f"Ausgegeben am {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
-                    datei.write(f"{len(sichtbar)} Einträge\n\n")
+                    datei.write(glide_i18n.t("ui.speichern.change_history", '{app_name} – Änderungsverlauf\n', app_name=APP_NAME))
+                    datei.write(glide_i18n.t("ui.speichern.exported_on", 'Ausgegeben am {strftime}\n', strftime=datetime.now().strftime(glide_i18n.t("ui.export_folder_as.y_m_d_at", '%d.%m.%Y um %H:%M Uhr'))))
+                    datei.write(glide_i18n.t("ui.speichern.entries", '{len} Einträge\n\n', len=len(sichtbar)))
                     for entry in sichtbar:
                         datei.write(self.history_entry_line(entry) + "\n")
             except Exception as fehler:
-                self.show_error("Änderungsverlauf", str(fehler))
+                self.show_error(glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), str(fehler))
                 return "break"
-            self.show_info("Änderungsverlauf gespeichert", f"Gespeichert nach:\n{ziel}")
+            self.show_info(glide_i18n.t("ui.speichern.change_history_saved", "Änderungsverlauf gespeichert"), glide_i18n.t("ui.speichern.saved_to", 'Gespeichert nach:\n{ziel}', ziel=ziel))
             return "break"
 
         def leeren():
             gesamt = len(getattr(self, "history", []) or [])
             if not gesamt:
-                self.show_warning("Änderungsverlauf", "Es sind keine Einträge vorhanden.")
+                self.show_warning(glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), glide_i18n.t("ui.leeren.there_are_no_entries", "Es sind keine Einträge vorhanden."))
                 return "break"
-            if not self.ask_yes_no("Verlauf leeren",
-                                   f"{gesamt} Verlaufseinträge endgültig entfernen?\n\n"
-                                   "Aufgaben, Listen und Ordner bleiben unverändert."):
+            if not self.ask_yes_no(glide_i18n.t("ui.leeren.clear_history", "Verlauf leeren"),
+                                   glide_i18n.t("ui.leeren.remove_history_entries_permanently", '{gesamt} Verlaufseinträge endgültig entfernen?\n\nAufgaben, Listen und Ordner bleiben unverändert.', gesamt=gesamt)):
                 return "break"
             self.clear_history()
             aktualisiere()
@@ -68391,9 +68386,9 @@ Labels, Termine und Metadaten."""
         art_var.trace_add("write", aktualisiere)
         flow = ButtonFlow(fuss, bg=grund, gap=8)
         flow.pack(fill="x")
-        flow.add(self._make_dialog_button(flow, "Zur Startseite" if embedded else "Schließen", self.set_home_view if embedded else dialog.destroy, "muted"))
-        flow.add(self._make_dialog_button(flow, "Verlauf leeren", leeren, "delete", width=150))
-        flow.add(self._make_dialog_button(flow, "Als TXT speichern", speichern, "export", width=178))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("ui.render_week_review.to_home", "Zur Startseite") if embedded else glide_i18n.t("button.close", "Schließen"), self.set_home_view if embedded else dialog.destroy, "muted"))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("ui.show_history_dialog.clear_history", "Verlauf leeren"), leeren, "delete", width=150))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("ui.show_history_dialog.save_as_txt", "Als TXT speichern"), speichern, "export", width=178))
 
         def sicherungen():
             # FP-01 Stufe 2: Ältere Stände als die Rückgängig-Schritte liegen
@@ -68403,7 +68398,7 @@ Labels, Termine und Metadaten."""
             else:
                 dialog.destroy()
                 self._register_after(self.root.after_idle(self.show_backup_compare_dialog))
-        flow.add(self._make_dialog_button(flow, "Sicherungen vergleichen …", sicherungen, "muted", width=222))
+        flow.add(self._make_dialog_button(flow, glide_i18n.t("ui.show_history_dialog.compare_backups", "Sicherungen vergleichen …"), sicherungen, "muted", width=222))
         dialog.bind("<Escape>", lambda _event: self.set_home_view() if embedded else dialog.destroy())
         aktualisiere()
         if not embedded:
@@ -68467,19 +68462,19 @@ Labels, Termine und Metadaten."""
 
     def quick_open_views(self):
         return (
-            ("Startseite", self.ICONS["home"], self.set_home_view),
-            ("Heute", self.ICONS["today"], self.set_today_view),
-            ("Demnächst", self.ICONS["in_progress"], self.set_in_progress_view),
-            ("Verspätet", self.ICONS["overdue"], self.set_overdue_view),
-            ("Labels", self.ICONS["labels"], self.set_labels_view),
-            ("Listen und Ordner", self.ICONS["list"], self.set_library_view),
-            ("Globale Pinnwand", self.ICONS["board"], self.open_global_board),
-            ("Vorlagen", self.ICONS["templates"], self.set_template_view),
-            ("Kalender", self.ICONS["calendar"], self.open_calendar_view),
-            ("Wochenrückblick", self.ICONS["calendar"], self.show_week_review),
-            ("Tagesbeginn", self.ICONS["today"], self.start_day_review),
-            ("Tagesabschluss", self.ICONS["check"], self.start_day_close),
-            ("Papierkorb", self.ICONS["trash"], self.set_trash_view),
+            (glide_i18n.t("menu.view.home", "Startseite"), self.ICONS["home"], self.set_home_view),
+            (glide_i18n.t("menu.view.today", "Heute"), self.ICONS["today"], self.set_today_view),
+            (glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), self.ICONS["in_progress"], self.set_in_progress_view),
+            (glide_i18n.t("ui.refresh_sidebar_row_texts.late", "Verspätet"), self.ICONS["overdue"], self.set_overdue_view),
+            (glide_i18n.t("menu.view.labels", "Labels"), self.ICONS["labels"], self.set_labels_view),
+            (glide_i18n.t("ui.require_list_view.lists_and_folders", "Listen und Ordner"), self.ICONS["list"], self.set_library_view),
+            (glide_i18n.t("settings.startup.globalboard", "Globale Pinnwand"), self.ICONS["board"], self.open_global_board),
+            (glide_i18n.t("menu.view.templates", "Vorlagen"), self.ICONS["templates"], self.set_template_view),
+            (glide_i18n.t("ui.update_preview.calendar", "Kalender"), self.ICONS["calendar"], self.open_calendar_view),
+            (glide_i18n.t("ui.render_calendar.week_review", "Wochenrückblick"), self.ICONS["calendar"], self.show_week_review),
+            (glide_i18n.t("ui.refresh.day_start", "Tagesbeginn"), self.ICONS["today"], self.start_day_review),
+            (glide_i18n.t("ui.refresh.day_close", "Tagesabschluss"), self.ICONS["check"], self.start_day_close),
+            (glide_i18n.t("menu.view.trash", "Papierkorb"), self.ICONS["trash"], self.set_trash_view),
         )
 
     def quick_open_results(self, query):
@@ -68503,9 +68498,9 @@ Labels, Termine und Metadaten."""
         results = []
         if not key:
             for kind, holder in self.recent_pages()[:8]:
-                results.append(self._quick_page_result(kind, holder, "Zuletzt geöffnet"))
+                results.append(self._quick_page_result(kind, holder, glide_i18n.t("ui.render_pages_page.recently_opened", "Zuletzt geöffnet")))
             for title, symbol, command in self.quick_open_views():
-                results.append({"group": "Ansichten", "symbol": symbol, "title": title, "path": "",
+                results.append({"group": glide_i18n.t("ui.home_more_actions.views", "Ansichten"), "symbol": symbol, "title": title, "path": "",
                                 "target": ("view", command)})
             return results[:self.QUICK_OPEN_LIMIT]
         pages = []
@@ -68513,7 +68508,7 @@ Labels, Termine und Metadaten."""
             score, excerpt = glide_search.match_content(
                 entry.get("title", ""), glide_search.list_content(entry), key)
             if score is not None:
-                result = self._quick_page_result("list", entry, "Seiten")
+                result = self._quick_page_result("list", entry, glide_i18n.t("sidebar.pages", "Seiten"))
                 if excerpt:
                     result["path"] = (result["path"] + " · " if result["path"] else "") + excerpt
                     # G14h: Nach dem Öffnen werden die Fundstellen im Text markiert.
@@ -68522,17 +68517,17 @@ Labels, Termine und Metadaten."""
         for folder in self.folders:
             score = rank(folder.get("title", ""))
             if score is not None:
-                pages.append((score, self._quick_page_result("folder", folder, "Seiten")))
+                pages.append((score, self._quick_page_result("folder", folder, glide_i18n.t("sidebar.pages", "Seiten"))))
         for title, symbol, command in self.quick_open_views():
             score = rank(title)
             if score is not None:
-                pages.append((score, {"group": "Seiten", "symbol": symbol, "title": title, "path": "Ansicht",
+                pages.append((score, {"group": glide_i18n.t("sidebar.pages", "Seiten"), "symbol": symbol, "title": title, "path": glide_i18n.t("menu.view", "Ansicht"),
                                       "target": ("view", command)}))
         for saved in self.settings.get("saved_filters", []):
             score = rank(saved.get("name", ""))
             if score is not None:
-                pages.append((score, {"group": "Seiten", "symbol": self.ICONS["labels"], "title": saved["name"],
-                                      "path": "Gespeicherter Filter", "target": ("filter", saved["id"])}))
+                pages.append((score, {"group": glide_i18n.t("sidebar.pages", "Seiten"), "symbol": self.ICONS["labels"], "title": saved["name"],
+                                      "path": glide_i18n.t("ui.quick_open_results.saved_filter", "Gespeicherter Filter"), "target": ("filter", saved["id"])}))
         pages.sort(key=lambda value: (value[0], self.search_key(value[1]["title"])))
         results.extend(result for _score, result in pages[:30])
         if len(key) >= 2:
@@ -68545,7 +68540,7 @@ Labels, Termine und Metadaten."""
                         item.get("text", ""), (item.get("description", ""),), key)
                     if score is None:
                         continue
-                    items.append((score, {"group": "Punkte", "symbol": self.ICONS["check"] if item.get("done")
+                    items.append((score, {"group": glide_i18n.t("ui.quick_open_results.items", "Punkte"), "symbol": self.ICONS["check"] if item.get("done")
                                           else self.ICONS["task_open"],
                                           "title": self.normalize_item_text(item.get("text", ""), self.ITEM_KIND_TASK),
                                           "path": self.list_path_title(entry) + (" · " + excerpt if excerpt else ""),
@@ -68558,7 +68553,7 @@ Labels, Termine und Metadaten."""
             if score is None:
                 score = 3 if key in self.search_key(action["path"] + " " + action["group"]) else None
             if score is not None:
-                actions.append((score, {"group": "Aktionen", "symbol": self.ICONS["actions"],
+                actions.append((score, {"group": glide_i18n.t("board.action.actions", "Aktionen"), "symbol": self.ICONS["actions"],
                                         "title": action["label"], "path": action["path"],
                                         "shortcut": action.get("shortcut", ""), "target": ("action", action)}))
         actions.sort(key=lambda value: value[0])
@@ -68575,7 +68570,7 @@ Labels, Termine und Metadaten."""
                 self.ICONS["description"] if holder.get("list_kind") == self.LIST_KIND_NOTE else self.ICONS["list"])
             path = " › ".join(self.folder_path_titles(holder.get("folder_id"))) if holder.get("folder_id") else ""
         if holder.get("archived") or (kind == "list" and self.is_archived_entry(holder)):
-            path = (path + " · " if path else "") + "im Archiv"
+            path = glide_i18n.t("ui.quick_page_result.archived", '{wert}im Archiv', wert=path + " · " if path else "")
         return {"group": group, "symbol": symbol, "title": str(holder.get("title") or ""), "path": path,
                 "target": (kind, holder.get("id")), "icon": self.page_icon_image(holder)}
 
@@ -68631,11 +68626,11 @@ Labels, Termine und Metadaten."""
         buehne, panel = self.quick_open_stage(breite)
         flaeche = self.quick_open_surface()
         if side:
-            kopftext = "Nebenansicht · Liste, Seite oder Notiz wählen"
+            kopftext = glide_i18n.t("ui.show_quick_open.side_view_choose_list", "Nebenansicht · Liste, Seite oder Notiz wählen")
         else:
-            kopftext = "Suchen und Aktionen · > zeigt nur Aktionen"
+            kopftext = glide_i18n.t("ui.show_quick_open.search_and_actions_shows", "Suchen und Aktionen · > zeigt nur Aktionen")
             if self.hints_shown():
-                kopftext += " · Umschalt+Enter: Nebenansicht"
+                kopftext += glide_i18n.t("ui.show_quick_open.shift_enter_side_view", " · Umschalt+Enter: Nebenansicht")
         tk.Label(panel, text=kopftext, bg=flaeche, fg=theme["muted"],
                  font=app_font(9), anchor="w").pack(fill="x", padx=4, pady=(2, 6))
         query = tk.StringVar(value="> " if actions_only else str(initial_query or ""))
@@ -68943,12 +68938,12 @@ Labels, Termine und Metadaten."""
                            fg=theme["text"], insertbackground=theme["text"], font=app_font(11), relief="flat",
                            bd=0, highlightthickness=0)
         eingabe.pack(fill="both", expand=True)
-        platzhalter = tk.Label(feld.inner, text="Aktionen durchsuchen", bg=theme["input"], fg=theme["placeholder"],
+        platzhalter = tk.Label(feld.inner, text=glide_i18n.t("ui.show_action_chooser.search_actions", "Aktionen durchsuchen"), bg=theme["input"], fg=theme["placeholder"],
                                font=app_font(11), anchor="w", padx=0, pady=0, bd=0)
         platzhalter.place(x=1, rely=0.5, anchor="w")
         platzhalter.bind("<Button-1>", lambda _event: eingabe.focus_set() or "break")
-        glide_core_accessibility.bind_entry(eingabe, title + ": Aktionen durchsuchen",
-                                            help="Tippen filtert. Pfeil auf und ab wählt, Enter führt aus, Esc schließt.")
+        glide_core_accessibility.bind_entry(eingabe, glide_i18n.t("ui.show_action_chooser.search_actions_2", '{title}: Aktionen durchsuchen', title=title),
+                                            help=glide_i18n.t("ui.show_action_chooser.typing_filters_up_and", "Tippen filtert. Pfeil auf und ab wählt, Enter führt aus, Esc schließt."))
         stil = "ActionChooser.Treeview"
         zeile = max(26, ui_font_object(root=self.root, font=app_font(10)).metrics("linespace") + 10)
         try:
@@ -68999,7 +68994,7 @@ Labels, Termine und Metadaten."""
             baum.delete(*baum.get_children())
             treffer.clear()
             gruppen = (glide_action_menu.grouped(gefunden, order) if not text.strip()
-                       else [("Treffer", gefunden)] if gefunden else [])
+                       else [(glide_i18n.t("ui.side_match_labels.matches", "Treffer"), gefunden)] if gefunden else [])
             orte = {id(wert): (wert.location if text.strip()
                                else glide_action_menu.PATH_SEPARATOR.join(wert.path[1:])) for wert in gefunden}
             # Ortsspalte nur so breit wie nötig (B11); den Rest bekommt die Beschriftung.
@@ -69230,61 +69225,61 @@ Labels, Termine und Metadaten."""
                 None,
                 (glide_i18n.t("menu.file.import", "Importieren"), (
                     (glide_i18n.t("menu.file.import.txt", "TXT importieren …"), self.import_from_txt, self.accel("I")),
-                    ("TXT als neue Liste(n) …", self.import_txt_as_new_lists),
-                    ("CSV importieren …", self.show_csv_import_dialog),
-                    ("Kalenderdatei (ICS) importieren …", self.show_ics_import_dialog),
-                    ("Zeichnung (SVG/JSON) importieren …", self.import_drawing_as_new),
-                    ("Seite aus Datei …", self.import_markdown_page),
-                    ("Notion-Export übernehmen …", self.import_notion_archive),
-                    ("Seite aus Zwischenablage", self.new_page_from_clipboard),
-                    ("Glide-Seiten importieren …", self.import_glide_pages),
+                    (glide_i18n.t("menu.file.import.txt_as_lists", "TXT als neue Liste(n) …"), self.import_txt_as_new_lists),
+                    (glide_i18n.t("menu.file.import.csv", "CSV importieren …"), self.show_csv_import_dialog),
+                    (glide_i18n.t("menu.file.import.ics", "Kalenderdatei (ICS) importieren …"), self.show_ics_import_dialog),
+                    (glide_i18n.t("menu.file.import.drawing", "Zeichnung (SVG/JSON) importieren …"), self.import_drawing_as_new),
+                    (glide_i18n.t("menu.file.import.page", "Seite aus Datei …"), self.import_markdown_page),
+                    (glide_i18n.t("ui.show_library_import_menu.take_over_notion_export", "Notion-Export übernehmen …"), self.import_notion_archive),
+                    (glide_i18n.t("menu.file.import.clipboard_page", "Seite aus Zwischenablage"), self.new_page_from_clipboard),
+                    (glide_i18n.t("menu.file.import.glide_pages", "Glide-Seiten importieren …"), self.import_glide_pages),
                 )),
                 (glide_i18n.t("menu.file.export", "Exportieren"), (
                     (glide_i18n.t("menu.file.export.txt", "Als TXT …"), self.export_as_txt, self.accel("E")),
                     (glide_i18n.t("menu.file.export.markdown", "Als Markdown …"), self.export_as_markdown),
-                    ("Alles als Markdown-Ordner …", self.export_all_markdown),
+                    (glide_i18n.t("ui.menubar_structure.everything_as_a_markdown", "Alles als Markdown-Ordner …"), self.export_all_markdown),
                     (glide_i18n.t("menu.file.export.csv", "Als CSV …"), self.export_as_csv),
-                    ("Als Glide-Seite …", self.export_glide_pages),
+                    (glide_i18n.t("menu.file.export.glide_page", "Als Glide-Seite …"), self.export_glide_pages),
                     (glide_i18n.t("menu.file.export.board_canvas", "Pinnwand als JSON Canvas (.canvas) …"), self.export_board_json_canvas),
                     None,
-                    ("Kalenderdatei (ICS) …", self.show_calendar_export_dialog),
-                    ("Drucken und PDF …", self.show_print_dialog, self.accel("P")),
+                    (glide_i18n.t("ui.build_list_menu.calendar_file_ics", "Kalenderdatei (ICS) …"), self.show_calendar_export_dialog),
+                    (glide_i18n.t("board.action.print_pdf", "Drucken und PDF …"), self.show_print_dialog, self.accel("P")),
                 )),
                 # Der Austausch mit einem anderen
                 # System – einer KI, einem Umwandler, einer zweiten Ablage –
                 # ist dasselbe wie Import und Export und steht deshalb hier.
-                ("Datenaustausch", (
-                    ("Für KI bereitstellen …", self.show_exchange_export_dialog),
-                    ("KI-Ergebnis importieren …", self.show_exchange_import_dialog),
-                    ("KI-Skill exportieren …", self.export_agent_skill),
-                    ("Austauschformat anzeigen …", self.show_exchange_spec_dialog),
+                (glide_i18n.t("ui.menubar_structure.data_exchange", "Datenaustausch"), (
+                    (glide_i18n.t("ui.menubar_structure.provide_for_ai", "Für KI bereitstellen …"), self.show_exchange_export_dialog),
+                    (glide_i18n.t("ui.menubar_structure.import_ai_result", "KI-Ergebnis importieren …"), self.show_exchange_import_dialog),
+                    (glide_i18n.t("ui.menubar_structure.export_ai_skill", "KI-Skill exportieren …"), self.export_agent_skill),
+                    (glide_i18n.t("ui.menubar_structure.show_exchange_format", "Austauschformat anzeigen …"), self.show_exchange_spec_dialog),
                 )),
                 None,
                 (glide_i18n.t("menu.file.backup", "Sicherung"), (
-                    ("Speicherstatus …", self.show_storage_status),
-                    ("Sicherungsübersicht …", self.show_backup_catalog),
+                    (glide_i18n.t("ui.menubar_structure.storage_status", "Speicherstatus …"), self.show_storage_status),
+                    (glide_i18n.t("ui.menubar_structure.backup_overview", "Sicherungsübersicht …"), self.show_backup_catalog),
                     None,
-                    ("Aufgabensicherung speichern …", self.export_full_backup),
-                    ("Aufgabensicherung laden …", self.import_full_backup),
+                    (glide_i18n.t("ui.menubar_structure.save_task_backup", "Aufgabensicherung speichern …"), self.export_full_backup),
+                    (glide_i18n.t("ui.menubar_structure.load_task_backup", "Aufgabensicherung laden …"), self.import_full_backup),
                     None,
-                    ("Vollständiges App-Sicherung speichern …", self.export_app_backup),
-                    ("App-Sicherung wiederherstellen …", self.restore_app_backup),
+                    (glide_i18n.t("ui.menubar_structure.save_full_app_backup", "Vollständiges App-Sicherung speichern …"), self.export_app_backup),
+                    (glide_i18n.t("ui.menubar_structure.restore_app_backup", "App-Sicherung wiederherstellen …"), self.restore_app_backup),
                     None,
-                    ("Listen/Ordner hinzufügen …", self.import_partial_backup),
-                    ("Sicherungen vergleichen …", self.show_backup_compare_dialog),
-                    ("Einzelne Seite wiederherstellen …", self.restore_page_from_backup),
-                    ("Sicherungsordner öffnen", self.open_backup_folder),
+                    (glide_i18n.t("ui.refresh_template_actions.add_lists_folders", "Listen/Ordner hinzufügen …"), self.import_partial_backup),
+                    (glide_i18n.t("ui.menubar_structure.compare_backups", "Sicherungen vergleichen …"), self.show_backup_compare_dialog),
+                    (glide_i18n.t("ui.menubar_structure.restore_single_page", "Einzelne Seite wiederherstellen …"), self.restore_page_from_backup),
+                    (glide_i18n.t("ui.menubar_structure.open_backup_folder", "Sicherungsordner öffnen"), self.open_backup_folder),
                 )),
-                ("Vorlagen", (
-                    ("Vorlagen öffnen", self.set_template_view),
-                    ("Vorlagen exportieren …", self.export_templates_file),
-                    ("Vorlagen hinzufügen …", self.import_templates_file),
+                (glide_i18n.t("menu.view.templates", "Vorlagen"), (
+                    (glide_i18n.t("ui.menubar_structure.open_templates", "Vorlagen öffnen"), self.set_template_view),
+                    (glide_i18n.t("ui.refresh_template_actions.export_templates", "Vorlagen exportieren …"), self.export_templates_file),
+                    (glide_i18n.t("ui.refresh_template_actions.add_templates", "Vorlagen hinzufügen …"), self.import_templates_file),
                 )),
-                ("Datenablage", (
-                    ("Wo liegen meine Daten?",
-                     lambda: self.show_info("Datenordner", f"Glide speichert den Bestand hier:\n{BASE_DIR}"), "", 'data_directory.show'),
-                    ("Datenordner wechseln …", self.show_data_folder_dialog),
-                    ("Standardordner benutzen", self.use_default_data_folder),
+                (glide_i18n.t("ui.menubar_structure.data_storage", "Datenablage"), (
+                    (glide_i18n.t("ui.menubar_structure.where_is_my_data", "Wo liegen meine Daten?"),
+                     lambda: self.show_info(glide_i18n.t("ui.use_default_data_folder.data_folder", "Datenordner"), glide_i18n.t("ui.menubar_structure.glide_stores_the_data", 'Glide speichert den Bestand hier:\n{base_dir}', base_dir=BASE_DIR)), "", 'data_directory.show'),
+                    (glide_i18n.t("settings.change_data_folder", "Datenordner wechseln …"), self.show_data_folder_dialog),
+                    (glide_i18n.t("ui.use_default_data_folder.use_default_folder", "Standardordner benutzen"), self.use_default_data_folder),
                 )),
                 None,
                 (glide_i18n.t("menu.file.quit", "Beenden"), self.on_close, self.accel("Q")),
@@ -69293,114 +69288,114 @@ Labels, Termine und Metadaten."""
                 (glide_i18n.t("menu.edit.undo", "Rückgängig"), self.undo_last_change, self.accel("Z")),
                 (glide_i18n.t("menu.edit.redo", "Wiederholen"), self.redo_last_change, self.redo_accel()),
                 None,
-                ("Zwischenablage", (
+                (glide_i18n.t("ui.build_item_context_menu.clipboard", "Zwischenablage"), (
                     (glide_i18n.t("menu.edit.copy", "Kopieren"), self.copy_selected_to_clipboard, self.accel("C")),
                     (glide_i18n.t("menu.edit.paste", "Einfügen"), self.paste_items_from_clipboard, self.accel("V")),
                     (glide_i18n.t("menu.edit.select_all", "Alle auswählen"), self.select_all_items, self.accel("A")),
                 )),
                 None,
-                ("Aufgabendetails …", self.edit_item, "F2"),
-                ("Aufgabe ändern", (
-                    ("Titel und Beschreibungstext …", self.edit_page_note, self.accel("M")),
-                    ("Wichtigkeit ändern", self.cycle_importance_selected),
-                    ("Fälligkeitsdatum …", self.set_due_date_selected, self.accel("T")),
-                    ("Einplanen", self.show_quick_plan_menu, self.accel("Shift", "P")),
-                    ("Diesen Termin überspringen", self.skip_repeat_selected),
-                    ("Verpasste Termine überspringen", self.skip_missed_repeats_selected),
-                    ("Bearbeitungstag und Aufwand …", self.set_planning_selected),
-                    ("Labels verwalten …", self.open_label_manager, self.accel("L")),
+                (glide_i18n.t("ui.menubar_structure.task_details", "Aufgabendetails …"), self.edit_item, "F2"),
+                (glide_i18n.t("ui.menubar_structure.change_task", "Aufgabe ändern"), (
+                    (glide_i18n.t("ui.menubar_structure.title_and_description", "Titel und Beschreibungstext …"), self.edit_page_note, self.accel("M")),
+                    (glide_i18n.t("ui.menubar_structure.change_importance", "Wichtigkeit ändern"), self.cycle_importance_selected),
+                    (glide_i18n.t("ui.menubar_structure.due_date", "Fälligkeitsdatum …"), self.set_due_date_selected, self.accel("T")),
+                    (glide_i18n.t("ui.build_home_task_menu.schedule", "Einplanen"), self.show_quick_plan_menu, self.accel("Shift", "P")),
+                    (glide_i18n.t("inspector.repeat.skip", "Diesen Termin überspringen"), self.skip_repeat_selected),
+                    (glide_i18n.t("ui.add_repeat_skip_entries.skip_missed_occurrences", "Verpasste Termine überspringen"), self.skip_missed_repeats_selected),
+                    (glide_i18n.t("ui.build_item_context_menu.work_day_and_effort", "Bearbeitungstag und Aufwand …"), self.set_planning_selected),
+                    (glide_i18n.t("ui.add_page_label_menu.manage_labels", "Labels verwalten …"), self.open_label_manager, self.accel("L")),
                 )),
-                ("Struktur", (
-                    ("Auswahl gruppieren …", self.group_selected_items, self.accel("G")),
-                    ("In Gruppe umwandeln", lambda: self.convert_selected_kind(self.ITEM_KIND_GROUP), "", 'convert_selected_kind.group'),
-                    ("In Aufgabe zurückwandeln", lambda: self.convert_selected_kind(self.ITEM_KIND_TASK), "", 'convert_selected_kind.task'),
-                    ("Gruppe auflösen", self.dissolve_selected_group),
+                (glide_i18n.t("ui.build_item_context_menu.structure", "Struktur"), (
+                    (glide_i18n.t("ui.build_item_context_menu.group_selection", "Auswahl gruppieren …"), self.group_selected_items, self.accel("G")),
+                    (glide_i18n.t("ui.menubar_structure.turn_into_group", "In Gruppe umwandeln"), lambda: self.convert_selected_kind(self.ITEM_KIND_GROUP), "", 'convert_selected_kind.group'),
+                    (glide_i18n.t("ui.build_item_context_menu.turn_back_into_task", "In Aufgabe zurückwandeln"), lambda: self.convert_selected_kind(self.ITEM_KIND_TASK), "", 'convert_selected_kind.task'),
+                    (glide_i18n.t("ui.menubar_structure.dissolve_group", "Gruppe auflösen"), self.dissolve_selected_group),
                     None,
                     (glide_i18n.t("menu.edit.duplicate", "Duplizieren"), self.duplicate_selected_items),
-                    ("In Liste verschieben …", self.move_selected_to_list_dialog),
+                    (glide_i18n.t("ui.build_item_context_menu.move_to_list", "In Liste verschieben …"), self.move_selected_to_list_dialog),
                 )),
                 (glide_i18n.t("menu.edit.delete", "Löschen"), self.delete_item, loeschen),
-                ("Erledigte Aufgaben löschen", lambda: self.remove_done_items(), "", 'remove_done_items'),
-                ("Papierkorb leeren", self.empty_trash),
+                (glide_i18n.t("ui.menubar_structure.delete_completed_tasks", "Erledigte Aufgaben löschen"), lambda: self.remove_done_items(), "", 'remove_done_items'),
+                (glide_i18n.t("ui.empty_trash.empty_trash", "Papierkorb leeren"), self.empty_trash),
                 None,
                 (glide_i18n.t("menu.file.settings", "Einstellungen …"), self.show_settings_dialog),
             )),
             (glide_i18n.t("menu.view", "Ansicht"), (
                 (glide_i18n.t("menu.view.compact_mode", "Kompaktmodus"), self.toggle_compact_mode, self.accel("Shift", "K")),
                 None,
-                ("Ansichten", (
-                    ("Seite, Punkt oder Aktion suchen …", self.show_quick_open, self.accel("O")),
+                (glide_i18n.t("ui.home_more_actions.views", "Ansichten"), (
+                    (glide_i18n.t("ui.menubar_structure.search_page_item_or", "Seite, Punkt oder Aktion suchen …"), self.show_quick_open, self.accel("O")),
                     None,
                     (glide_i18n.t("sidebar.home", "Startseite"), self.set_home_view),
                     (glide_i18n.t("sidebar.today", "Heute"), self.set_today_view),
-                    ("Demnächst", self.set_in_progress_view),
-                    ("Nächste Aufgabe", self.open_next_task),
-                    ("Tagesbeginn …", self.start_day_review),
-                    ("Was passt heute?", self.start_day_proposal),
-                    ("Fokus starten", self.start_focus_selected, self.accel("Shift+F")),
+                    (glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), self.set_in_progress_view),
+                    (glide_i18n.t("ui.refresh_task_overview.next_task", "Nächste Aufgabe"), self.open_next_task),
+                    (glide_i18n.t("ui.show_plan_day_mode_menu.day_start", "Tagesbeginn …"), self.start_day_review),
+                    (glide_i18n.t("ui.render_day_proposal.what_fits_today", "Was passt heute?"), self.start_day_proposal),
+                    (glide_i18n.t("ui.build_home_task_menu.start_focus", "Fokus starten"), self.start_focus_selected, self.accel("Shift+F")),
                     # Dieselben Befehle wie im Fokusfeld, damit sie auch über Menü und
                     # Aktionsauswahl erreichbar sind (D57, 01.11.2026).
-                    ("Fokus pausieren oder fortsetzen", lambda: self.run_focus_command(self.toggle_focus_pause),
+                    (glide_i18n.t("ui.menubar_structure.pause_or_resume_focus", "Fokus pausieren oder fortsetzen"), lambda: self.run_focus_command(self.toggle_focus_pause),
                      "", "focus_pause"),
-                    ("Fokus um 5 Minuten verlängern", lambda: self.run_focus_command(self.extend_focus),
+                    (glide_i18n.t("ui.menubar_structure.extend_focus_by_5", "Fokus um 5 Minuten verlängern"), lambda: self.run_focus_command(self.extend_focus),
                      "", "focus_extend"),
-                    ("Fokus wechseln zu …", lambda: self.run_focus_command(self.show_focus_switch_menu),
+                    (glide_i18n.t("ui.menubar_structure.switch_focus_to", "Fokus wechseln zu …"), lambda: self.run_focus_command(self.show_focus_switch_menu),
                      "", "focus_switch"),
-                    ("Fokus beenden und Zeit buchen", lambda: self.run_focus_command(self.stop_time_tracking_from_header),
+                    (glide_i18n.t("ui.menubar_structure.end_focus_and_book", "Fokus beenden und Zeit buchen"), lambda: self.run_focus_command(self.stop_time_tracking_from_header),
                      "", "focus_finish"),
-                    ("Tagesabschluss …", self.start_day_close),
-                    ("Wochenrückblick", self.show_week_review),
-                    ("Tag entlasten …", self.show_day_relief),
-                    ("Tageshinweise …", self.show_daily_hints),
-                    ("Tageshinweise einstellen …", self.show_daily_hint_settings),
-                    ("Kalender als Belegzeiten …", self.show_busy_calendar_dialog),
+                    (glide_i18n.t("ui.show_plan_day_mode_menu.day_close", "Tagesabschluss …"), self.start_day_close),
+                    (glide_i18n.t("ui.render_calendar.week_review", "Wochenrückblick"), self.show_week_review),
+                    (glide_i18n.t("ui.render_day_proposal.lighten_the_day", "Tag entlasten …"), self.show_day_relief),
+                    (glide_i18n.t("ui.show_plan_day_mode_menu.daily_hints", "Tageshinweise …"), self.show_daily_hints),
+                    (glide_i18n.t("ui.open_reminders.set_up_daily_hints", "Tageshinweise einstellen …"), self.show_daily_hint_settings),
+                    (glide_i18n.t("ui.calendar_footer_actions.calendar_as_busy_times", "Kalender als Belegzeiten …"), self.show_busy_calendar_dialog),
                     # „Verspätet“ und der Eingang
                     # haben keine eigene Seitenleistenzeile mehr. Eine Ansicht
                     # ohne Weg dorthin gibt es nicht.
                     (glide_i18n.t("menu.view.overdue", "Verspätet"), self.set_overdue_view),
-                    ("Eingang öffnen", self.open_inbox_list),
+                    (glide_i18n.t("ui.menubar_structure.open_inbox", "Eingang öffnen"), self.open_inbox_list),
                     None,
                     (glide_i18n.t("sidebar.templates", "Vorlagen"), self.set_template_view),
-                    ("Kalender …", self.open_calendar_view, self.accel("K")),
+                    (glide_i18n.t("ui.menubar_structure.calendar", "Kalender …"), self.open_calendar_view, self.accel("K")),
                     (glide_i18n.t("sidebar.trash", "Papierkorb"), self.set_trash_view),
                 )),
-                ("Heute", (
-                    ("Heute: Tag zurück", self.plan_day_backward),
-                    ("Heute: Tag vor", self.plan_day_forward),
-                    ("Heute: Stundenraster", self.toggle_plan_day_grid),
-                    ("Zeitblock festlegen …", self.choose_time_block, self.accel("Shift+T")),
+                (glide_i18n.t("menu.view.today", "Heute"), (
+                    (glide_i18n.t("ui.menubar_structure.today_previous_day", "Heute: Tag zurück"), self.plan_day_backward),
+                    (glide_i18n.t("ui.menubar_structure.today_next_day", "Heute: Tag vor"), self.plan_day_forward),
+                    (glide_i18n.t("ui.menubar_structure.today_hour_grid", "Heute: Stundenraster"), self.toggle_plan_day_grid),
+                    (glide_i18n.t("ui.menubar_structure.set_time_block", "Zeitblock festlegen …"), self.choose_time_block, self.accel("Shift+T")),
                 )),
                 None,
-                ("Liste", (
+                (glide_i18n.t("editor.toolbar.list", "Liste"), (
                     # Seit 3.30 derselbe Weg wie der Knopf „Liste“: Aus der
                     # Tabelle heraus meldete der Menüpunkt vorher, es sei keine
                     # Liste geöffnet.
-                    ("Zur Listenansicht", self.open_list_view),
-                    ("Tabellenansicht", self.set_table_view),
-                    ("Tabellenspalten …", self.show_table_columns_dialog),
-                    ("Gruppieren nach", self.group_menu_entries()),
-                    ("Detailbereich", self.toggle_detail_pane),
-                    ("Tabelle: Unterpunkte verschachtelt", lambda: self.set_table_nested(True), "", 'set_table_nested.true'),
-                    ("Tabelle: Unterpunkte flach", lambda: self.set_table_nested(False), "", 'set_table_nested.false'),
+                    (glide_i18n.t("ui.menubar_structure.to_list_view", "Zur Listenansicht"), self.open_list_view),
+                    (glide_i18n.t("ui.set_table_view.table_view", "Tabellenansicht"), self.set_table_view),
+                    (glide_i18n.t("ui.menubar_structure.table_columns", "Tabellenspalten …"), self.show_table_columns_dialog),
+                    (glide_i18n.t("saved_view.field.group", "Gruppieren nach"), self.group_menu_entries()),
+                    (glide_i18n.t("ui.menubar_structure.detail_area", "Detailbereich"), self.toggle_detail_pane),
+                    (glide_i18n.t("ui.menubar_structure.table_subitems_nested", "Tabelle: Unterpunkte verschachtelt"), lambda: self.set_table_nested(True), "", 'set_table_nested.true'),
+                    (glide_i18n.t("ui.menubar_structure.table_subitems_flat", "Tabelle: Unterpunkte flach"), lambda: self.set_table_nested(False), "", 'set_table_nested.false'),
                     None,
-                    ("Aufklappen", self.expand_all),
-                    ("Zuklappen", self.collapse_all),
+                    (glide_i18n.t("ui.build_tree_background_menu.expand", "Aufklappen"), self.expand_all),
+                    (glide_i18n.t("ui.build_tree_background_menu.collapse", "Zuklappen"), self.collapse_all),
                     None,
-                    ("Aktive Liste sortieren", (
-                        ("Nach Fälligkeit", lambda: self.sort_current_list("due"), "", 'sort_current_list.due'),
-                        ("Nach Wichtigkeit", lambda: self.sort_current_list("importance"), "", 'sort_current_list.importance'),
-                        ("Alphabetisch", lambda: self.sort_current_list("alpha"), "", 'sort_current_list.alpha'),
+                    (glide_i18n.t("ui.menubar_structure.sort_active_list", "Aktive Liste sortieren"), (
+                        (glide_i18n.t("ui.build_tree_background_menu.by_due_date", "Nach Fälligkeit"), lambda: self.sort_current_list("due"), "", 'sort_current_list.due'),
+                        (glide_i18n.t("ui.build_tree_background_menu.by_importance", "Nach Wichtigkeit"), lambda: self.sort_current_list("importance"), "", 'sort_current_list.importance'),
+                        (glide_i18n.t("ui.build_tree_background_menu.alphabetical", "Alphabetisch"), lambda: self.sort_current_list("alpha"), "", 'sort_current_list.alpha'),
                     )),
                 )),
-                ("Reiter", (
-                    ("Als Reiter öffnen", lambda: self.workspace.open_tab(), self.accel("Shift", "O"), 'workspace.open_tab'),
-                    ("Reiter schließen", lambda: self.workspace.close_tab(), self.accel("Shift", "W"), 'workspace.close_tab'),
-                    ("Offene Reiter …", lambda: self.workspace.tab_overview(), "", 'workspace.tab_overview'),
+                (glide_i18n.t("ui.tab_overview.tabs", "Reiter"), (
+                    (glide_i18n.t("board.action.open_tab", "Als Reiter öffnen"), lambda: self.workspace.open_tab(), self.accel("Shift", "O"), 'workspace.open_tab'),
+                    (glide_i18n.t("ui.render_detail.close_tab", "Reiter schließen"), lambda: self.workspace.close_tab(), self.accel("Shift", "W"), 'workspace.close_tab'),
+                    (glide_i18n.t("ui.menubar_structure.open_tabs", "Offene Reiter …"), lambda: self.workspace.tab_overview(), "", 'workspace.tab_overview'),
                     None,
-                    ("Reiter nach links", lambda: self.workspace.reorder_tab(-1), "", 'workspace.reorder_tab.-1'),
-                    ("Reiter nach rechts", lambda: self.workspace.reorder_tab(1), "", 'workspace.reorder_tab.1'),
+                    (glide_i18n.t("ui.menubar_structure.tab_to_the_left", "Reiter nach links"), lambda: self.workspace.reorder_tab(-1), "", 'workspace.reorder_tab.-1'),
+                    (glide_i18n.t("ui.menubar_structure.tab_to_the_right", "Reiter nach rechts"), lambda: self.workspace.reorder_tab(1), "", 'workspace.reorder_tab.1'),
                 )),
-                ("Pinnwand", (
+                (glide_i18n.t("board.title", "Pinnwand"), (
                     # Über open_board_view, damit es auch aus der Tabelle wirkt; direkt
                     # meldete es dort „Zuerst eine Liste oder einen Ordner öffnen“.
                     (glide_i18n.t("board.menu.open", "Pinnwand öffnen"), self.open_board_view),
@@ -69408,25 +69403,25 @@ Labels, Termine und Metadaten."""
                     (glide_i18n.t("board.menu.pin", "Auf Pinnwand anheften"), lambda: self.workspace.pin(), "", 'workspace.pin'),
                 )),
                 None,
-                ("Oberfläche", (
-                    ("Seitenleiste", self.toggle_sidebar),
-                    ("Seitenleiste schmal", self.toggle_sidebar_narrow),
-                    ("Nebenansicht öffnen …", self.choose_side_view),
-                    ("Nebenansicht schließen", self.close_side_view),
-                    ("Design wechseln (Hell/Dunkel)", self.toggle_theme, self.accel("D")),
-                    ("Hintergrund", "backdrop_menu"),
+                (glide_i18n.t("ui.menubar_structure.interface", "Oberfläche"), (
+                    (glide_i18n.t("ui.followups.sidebar", "Seitenleiste"), self.toggle_sidebar),
+                    (glide_i18n.t("ui.menubar_structure.narrow_sidebar", "Seitenleiste schmal"), self.toggle_sidebar_narrow),
+                    (glide_i18n.t("ui.menubar_structure.open_side_view", "Nebenansicht öffnen …"), self.choose_side_view),
+                    (glide_i18n.t("ui.render_side_view.close_side_view", "Nebenansicht schließen"), self.close_side_view),
+                    (glide_i18n.t("ui.menubar_structure.switch_design_light_dark", "Design wechseln (Hell/Dunkel)"), self.toggle_theme, self.accel("D")),
+                    (glide_i18n.t("ui.menubar_structure.background", "Hintergrund"), "backdrop_menu"),
                     None,
-                    ("Startseite einrichten …", self.show_home_tiles_dialog),
-                    ("Aus Seiten", self.show_tasks_from_pages),
+                    (glide_i18n.t("ui.home_more_actions.set_up_home", "Startseite einrichten …"), self.show_home_tiles_dialog),
+                    (glide_i18n.t("saved_view.choice.source_pages", "Aus Seiten"), self.show_tasks_from_pages),
                     (glide_i18n.t("menu.view.saved_filters", "Gespeicherte Filter …"), self.saved_filters.show_manager),
                     (glide_i18n.t("menu.view.save_as_view", "Als Ansicht speichern …"), self.saved_filters.capture_current),
                     (glide_i18n.t("menu.view.explain_filter", "Filter erklären …"), self.explain_saved_filter),
                 )),
                 None,
-                ("Benachrichtigungen …", self.open_reminders),
-                ("Änderungsverlauf", self.open_history_view, self.accel("H")),
-                ("Verweise und Rückverweise", self.show_object_references, None),
-                ("Fundorte anzeigen …", self.show_usage_locations_dialog),
+                (glide_i18n.t("ui.menubar_structure.notifications", "Benachrichtigungen …"), self.open_reminders),
+                (glide_i18n.t("ui.get_display_title.change_history", "Änderungsverlauf"), self.open_history_view, self.accel("H")),
+                (glide_i18n.t("ui.add_object_reference_menu.references_and_backlinks", "Verweise und Rückverweise"), self.show_object_references, None),
+                (glide_i18n.t("ui.build_object_reference_menu.show_locations", "Fundorte anzeigen …"), self.show_usage_locations_dialog),
             )),
             (glide_i18n.t("menu.help", "Hilfe"), (
                 (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
@@ -69569,9 +69564,9 @@ Labels, Termine und Metadaten."""
         buttons = {}
         specs = [("ok", "OK", "ok", "confirm")]
         if is_question:
-            specs = [("yes", "Ja", True, "confirm"), ("no", "Nein", False, "muted")]
+            specs = [("yes", "Ja", True, "confirm"), ("no", glide_i18n.t("ui.themed_message_dialog.no", "Nein"), False, "muted")]
             if kind == "yesnocancel":
-                specs.append(("cancel", "Abbrechen", None, "muted"))
+                specs.append(("cancel", glide_i18n.t("button.cancel", "Abbrechen"), None, "muted"))
         for index, (name, label, value, color) in enumerate(specs):
             button = self._make_dialog_button(
                 button_row, label, lambda value=value: finish(value), color, width=104,
@@ -69656,21 +69651,7 @@ Labels, Termine und Metadaten."""
     def about_text(self):
         """Der Text von „Über Glide“ – eine Stelle für Fenster und Prüfung."""
         return (
-            f"{APP_NAME} – {glide_brand.DESCRIPTION}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
-            "Danke, dass du meine App benutzt.\n"
-            "Mit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. "
-            "Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\n"
-            "Warum mir Glide wichtig ist\n"
-            "Ich wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\n"
-            "Aufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\n"
-            "Glide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\n"
-            "Shaye.de – mailme@shaye.de\n\n"
-            f"Softwarelizenz: Mozilla Public License 2.0 ({glide_brand.LICENSE_ID}).\n"
-            "Quellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\n"
-            "Mitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\n"
-            "Deine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. "
-            "Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\n"
-            f"Speicherort der Daten:\n{BASE_DIR}"
+            glide_i18n.t("ui.about_text.version_thank_you_for", '{app_name} – {description}\nVersion {app_version} · {app_release_name}\n\nDanke, dass du meine App benutzt.\nMit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\nWarum mir Glide wichtig ist\nIch wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\nAufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\nGlide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\nShaye.de – mailme@shaye.de\n\nSoftwarelizenz: Mozilla Public License 2.0 ({license_id}).\nQuellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\nMitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\nDeine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\nSpeicherort der Daten:\n{base_dir}', app_name=APP_NAME, description=glide_brand.DESCRIPTION, app_version=APP_VERSION, app_release_name=APP_RELEASE_NAME, license_id=glide_brand.LICENSE_ID, base_dir=BASE_DIR)
         )
 
     def about_actions(self):
@@ -69683,10 +69664,10 @@ Labels, Termine und Metadaten."""
         mehreren Geräten – ist genau das der Einstieg.
         """
         return (
-            ("Neuerungen …", self.show_release_notes_dialog, "muted"),
-            ("Arbeitsdateien verschieben …", self.show_data_folder_dialog, "ui_accent"),
-            ("Standardordner benutzen", self.use_default_data_folder, "muted"),
-            ("Ordner öffnen", lambda: self.open_external_path(BASE_DIR), "muted"),
+            (glide_i18n.t("ui.about_actions.what_s_new", "Neuerungen …"), self.show_release_notes_dialog, "muted"),
+            (glide_i18n.t("ui.about_actions.move_working_files", "Arbeitsdateien verschieben …"), self.show_data_folder_dialog, "ui_accent"),
+            (glide_i18n.t("ui.use_default_data_folder.use_default_folder", "Standardordner benutzen"), self.use_default_data_folder, "muted"),
+            (glide_i18n.t("ui.about_actions.open_folder", "Ordner öffnen"), lambda: self.open_external_path(BASE_DIR), "muted"),
         )
 
     ABOUT_LOGO_HEIGHT = 56
@@ -69698,11 +69679,11 @@ Labels, Termine und Metadaten."""
         Startseite – eine Quelle in release_notes.py. Nach „Gelesen“ und
         Neustart bleiben sie hier erreichbar.
         """
-        return self.themed_message_dialog("Neuerungen", glide_release.history_text(APP_VERSION), kind="info")
+        return self.themed_message_dialog(glide_i18n.t("ui.show_release_notes_dialog.what_s_new", "Neuerungen"), glide_release.history_text(APP_VERSION), kind="info")
 
     def show_about_dialog(self):
         return self.themed_message_dialog(
-            f"Über {APP_NAME}", self.about_text(), kind="info",
+            glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME), self.about_text(), kind="info",
             extra_buttons=self.about_actions(), logo=True,
         )
 
@@ -69713,19 +69694,14 @@ Labels, Termine und Metadaten."""
             rows = ''.join('<tr><th>'+escape(name)+'</th><td>'+escape(purpose)+'</td><td>'+escape(place)+'</td></tr>'
                            for name, purpose, place in entries)
             sections.append('<section><h2>'+escape(title)+'</h2><table>'+rows+'</table></section>')
-        return ('<!doctype html><html lang="de"><meta charset="utf-8"><title>Glide Handbuch</title>'
-                '<style>body{font:11pt system-ui;max-width:1050px;margin:2em auto;padding:1em;color:#111}'
-                'table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #bbb;padding:.6em}'
-                'th{width:22%}tr{break-inside:avoid}@media print{body{margin:0;max-width:none}.print{display:none}}</style>'
-                '<button class="print" onclick="window.print()">Drucken / als PDF speichern</button>'
-                '<h1>Glide – Handbuch</h1><p>Version '+escape(APP_VERSION)+'</p>'+''.join(sections)+'</html>')
+        return (glide_i18n.t("ui.manual_html.doctype_html_html_lang", '<!doctype html><html lang="de"><meta charset="utf-8"><title>Glide Handbuch</title><style>body{{font:11pt system-ui;max-width:1050px;margin:2em auto;padding:1em;color:#111}}table{{border-collapse:collapse;width:100%}}th,td{{text-align:left;vertical-align:top;border-bottom:1px solid #bbb;padding:.6em}}th{{width:22%}}tr{{break-inside:avoid}}@media print{{body{{margin:0;max-width:none}}.print{{display:none}}}}</style><button class="print" onclick="window.print()">Drucken / als PDF speichern</button><h1>Glide – Handbuch</h1><p>Version {escape}</p>{join}</html>', escape=escape(APP_VERSION), join=''.join(sections)))
 
     def export_manual(self, open_for_print=False):
         if open_for_print:
             descriptor, path = tempfile.mkstemp(prefix="glide-handbuch-", suffix=".html")
             os.close(descriptor)
         else:
-            path = filedialog.asksaveasfilename(title="Handbuch speichern", defaultextension=".html",
+            path = filedialog.asksaveasfilename(title=glide_i18n.t("ui.export_manual.save_manual", "Handbuch speichern"), defaultextension=".html",
                                               initialfile=f"Glide-Handbuch-{APP_VERSION}.html",
                                               filetypes=[("HTML-Dokument", "*.html")])
         if not path:
@@ -69737,9 +69713,9 @@ Labels, Termine und Metadaten."""
             if open_for_print:
                 self.open_external_path(path)
             else:
-                self.show_info("Handbuch gespeichert", path)
+                self.show_info(glide_i18n.t("ui.export_manual.manual_saved", "Handbuch gespeichert"), path)
         except (OSError, ValueError) as error:
-            self.show_error("Handbuch", str(error))
+            self.show_error(glide_i18n.t("ui.export_manual.manual", "Handbuch"), str(error))
         return "break"
 
     def show_manual_dialog(self, event=None):
@@ -69752,25 +69728,25 @@ Labels, Termine und Metadaten."""
         Spalten, weil man mal den Namen, mal die Wirkung und mal den Ort kennt.
         """
         previous_focus = self.current_focus_widget()
-        dialog = self._new_dialog("Handbuch", minsize=(620, 420))
+        dialog = self._new_dialog(glide_i18n.t("ui.show_manual_dialog.manual", "Handbuch"), minsize=(620, 420))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
-        tk.Label(outer, text="Handbuch", bg=self.theme["bg"], fg=self.theme["text"],
+        tk.Label(outer, text=glide_i18n.t("ui.show_manual_dialog.manual", "Handbuch"), bg=self.theme["bg"], fg=self.theme["text"],
                  font=app_font(17, "bold"), anchor="w").pack(fill="x", pady=(0, 6))
-        tk.Label(outer, text="Jeder Baustein von Glide: was er tut und wo er liegt.",
+        tk.Label(outer, text=glide_i18n.t("ui.show_manual_dialog.every_building_block_of", "Jeder Baustein von Glide: was er tut und wo er liegt."),
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
                  anchor="w").pack(fill="x", pady=(0, 14))
         footer = tk.Frame(outer, bg=self.theme["bg"])
         footer.pack(side="bottom", fill="x", pady=(16, 0))
-        self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted").pack(side="right")
-        self._make_dialog_button(footer, "Tastenkürzel …",
+        self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted").pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("ui.show_manual_dialog.keyboard_shortcuts", "Tastenkürzel …"),
                                  lambda: (dialog.destroy(), self.show_shortcuts_dialog()),
                                  "muted").pack(side="right", padx=(0, 10))
 
         manual_actions = ButtonFlow(dialog, bg=self.theme["bg"])
         manual_actions.pack(side="bottom", fill="x", padx=24, pady=10)
-        manual_actions.add(self._make_dialog_button(manual_actions, "Als HTML speichern", self.export_manual, "export"))
-        manual_actions.add(self._make_dialog_button(manual_actions, "Öffnen und drucken", lambda: self.export_manual(True), "import"))
+        manual_actions.add(self._make_dialog_button(manual_actions, glide_i18n.t("ui.show_print_dialog.save_as_html", "Als HTML speichern"), self.export_manual, "export"))
+        manual_actions.add(self._make_dialog_button(manual_actions, glide_i18n.t("ui.show_print_dialog.open_and_print", "Öffnen und drucken"), lambda: self.export_manual(True), "import"))
         suche = tk.StringVar()
         suchrahmen, suchfeld = self._make_field(outer)
         suchrahmen.pack(fill="x", pady=(0, 12))
@@ -69836,7 +69812,7 @@ Labels, Termine und Metadaten."""
                         widget.bind("<Configure>", lambda event, ziel=widget: ziel.configure(
                             wraplength=max(160, event.width - 4)))
             if not treffer:
-                tk.Label(inhalt, text="Kein Eintrag passt zu dieser Suche.", bg=self.theme["bg"],
+                tk.Label(inhalt, text=glide_i18n.t("ui.aufbauen.no_entry_matches_this", "Kein Eintrag passt zu dieser Suche."), bg=self.theme["bg"],
                          fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(14, 0))
             sync()
 
@@ -69864,118 +69840,118 @@ Labels, Termine und Metadaten."""
         return ergebnis
 
     def show_shortcuts_dialog(self):
-        delete_key = "Rückschritt" if IS_MACOS else "Entf"
+        delete_key = glide_i18n.t("ui.show_shortcuts_dialog.backspace", "Rückschritt") if IS_MACOS else glide_i18n.t("ui.show_shortcuts_dialog.delete", "Entf")
         selection_key = self.selection_modifier_name()
         sections = [
-            ("Punkte und Eingabe", [
-                ("Enter", "Punkt aus der schnellen Eingabe hinzufügen"),
-                (self.accel("Alt", "N"), "Schnellerfassung aus jeder Glide-Ansicht öffnen"),
-                ("Umschalt+Enter", "Eingabemaske mit allen Angaben öffnen (übernimmt den getippten Text)"),
-                ("Doppelklick / Leertaste", "Erledigt umschalten"),
-                (delete_key, "Ausgewählte Punkte in den Papierkorb verschieben"),
-                ("F2", "Punktdetails mit Beschreibung und Anhängen öffnen"),
-                ("F3", "Titel bearbeiten"),
-                (self.accel("M"), "Titel und Beschreibungstext öffnen"),
-                (self.accel("Shift", "F"), "Wichtigkeit durchschalten"),
-                (self.accel("T"), "Fälligkeitsdatum setzen oder entfernen"),
-                (self.accel("L"), "Labels verwalten"),
-                (self.accel("K"), "Kalender öffnen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.items_and_input", "Punkte und Eingabe"), [
+                ("Enter", glide_i18n.t("ui.show_shortcuts_dialog.add_item_from_the", "Punkt aus der schnellen Eingabe hinzufügen")),
+                (self.accel("Alt", "N"), glide_i18n.t("ui.show_shortcuts_dialog.open_quick_capture_from", "Schnellerfassung aus jeder Glide-Ansicht öffnen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.shift_enter", "Umschalt+Enter"), glide_i18n.t("ui.show_shortcuts_dialog.open_the_input_form", "Eingabemaske mit allen Angaben öffnen (übernimmt den getippten Text)")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.double_click_space", "Doppelklick / Leertaste"), glide_i18n.t("ui.build_item_context_menu.toggle_done", "Erledigt umschalten")),
+                (delete_key, glide_i18n.t("ui.show_shortcuts_dialog.move_selected_items_to", "Ausgewählte Punkte in den Papierkorb verschieben")),
+                ("F2", glide_i18n.t("ui.show_shortcuts_dialog.open_item_details_with", "Punktdetails mit Beschreibung und Anhängen öffnen")),
+                ("F3", glide_i18n.t("ui.show_shortcuts_dialog.edit_title", "Titel bearbeiten")),
+                (self.accel("M"), glide_i18n.t("ui.show_shortcuts_dialog.open_title_and_description", "Titel und Beschreibungstext öffnen")),
+                (self.accel("Shift", "F"), glide_i18n.t("ui.show_shortcuts_dialog.cycle_importance", "Wichtigkeit durchschalten")),
+                (self.accel("T"), glide_i18n.t("ui.show_shortcuts_dialog.set_or_remove_due", "Fälligkeitsdatum setzen oder entfernen")),
+                (self.accel("L"), glide_i18n.t("ui.show_shortcuts_dialog.manage_labels", "Labels verwalten")),
+                (self.accel("K"), glide_i18n.t("ui.show_shortcuts_dialog.open_calendar", "Kalender öffnen")),
             ]),
-            ("Auswahl und Struktur", [
-                ("Shift + Klick", "Zusammenhängenden Bereich auswählen"),
-                (f"{selection_key} + Klick", "Einzelne Punkte zur Auswahl hinzufügen oder abwählen"),
-                (self.accel("A"), "Alle Punkte auswählen"),
-                (self.accel("G"), "Ausgewählte Punkte gruppieren"),
-                ("Alt + ↑ / ↓", "Ausgewählte Punkte nach oben / unten verschieben"),
-                ("Heute, Zeitplan: Alt + ↑ / ↓", "Ausgewählte Blöcke 15 Minuten früher / später"),
-                ("Alt + ← / →", "Ausgewählte Punkte ausrücken / einrücken"),
-                ("Tab", "Einrücken / ausrücken"),
-                ("Drag & Drop", "Reihenfolge ändern"),
-                ("Shift + Drag", "Als Unterpunkt verschieben"),
-                ("Auf eine Liste ziehen", "Punkte in diese Liste verschieben"),
-                ("Auf einen Ordner ziehen", "Enthaltene Zielliste auswählen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.selection_and_structure", "Auswahl und Struktur"), [
+                (glide_i18n.t("ui.show_shortcuts_dialog.shift_click", "Shift + Klick"), glide_i18n.t("ui.show_shortcuts_dialog.select_a_contiguous_range", "Zusammenhängenden Bereich auswählen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.click", '{selection_key} + Klick', selection_key=selection_key), glide_i18n.t("ui.show_shortcuts_dialog.add_single_items_to", "Einzelne Punkte zur Auswahl hinzufügen oder abwählen")),
+                (self.accel("A"), glide_i18n.t("ui.show_shortcuts_dialog.select_all_items", "Alle Punkte auswählen")),
+                (self.accel("G"), glide_i18n.t("ui.show_shortcuts_dialog.group_selected_items", "Ausgewählte Punkte gruppieren")),
+                ("Alt + ↑ / ↓", glide_i18n.t("ui.show_shortcuts_dialog.move_selected_items_up", "Ausgewählte Punkte nach oben / unten verschieben")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.today_schedule_alt", "Heute, Zeitplan: Alt + ↑ / ↓"), glide_i18n.t("ui.show_shortcuts_dialog.selected_blocks_15_minutes", "Ausgewählte Blöcke 15 Minuten früher / später")),
+                ("Alt + ← / →", glide_i18n.t("ui.show_shortcuts_dialog.outdent_indent_selected_items", "Ausgewählte Punkte ausrücken / einrücken")),
+                ("Tab", glide_i18n.t("ui.show_shortcuts_dialog.indent_outdent", "Einrücken / ausrücken")),
+                ("Drag & Drop", glide_i18n.t("ui.show_shortcuts_dialog.change_order", "Reihenfolge ändern")),
+                ("Shift + Drag", glide_i18n.t("ui.show_shortcuts_dialog.move_as_subitem", "Als Unterpunkt verschieben")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.drag_onto_a_list", "Auf eine Liste ziehen"), glide_i18n.t("ui.show_shortcuts_dialog.move_items_into_this", "Punkte in diese Liste verschieben")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.drag_onto_a_folder", "Auf einen Ordner ziehen"), glide_i18n.t("ui.show_shortcuts_dialog.choose_a_contained_target", "Enthaltene Zielliste auswählen")),
             ]),
-            ("Seitenleiste", [
-                ("Ordner anklicken", "Enthaltene Listen im Hauptbereich anzeigen"),
-                (f"Shift / {selection_key} + Klick", "Mehrere Listen oder Ordner auswählen"),
-                (delete_key, "Ausgewählte Listen oder Ordner in den Papierkorb verschieben"),
-                ("Alt + ↑ / ↓", "Listen und Ordner nach oben / unten verschieben"),
-                ("Alt + ← / →", "Aus einem Ordner / in einen Ordner verschieben"),
-                (self.accel("Shift", "N"), "Neue Liste anlegen"),
-            ] + ([] if IS_MACOS else [(self.accel("W"), "Aktive Liste löschen") ])),
-            ("Reiter und Pinnwand", [
-                (self.accel("Shift", "O"), "Ausgewählten Punkt als Reiter öffnen"),
-                (self.accel("Shift", "W"), "Aktuellen Punktreiter schließen"),
-                ("Strg + Bild↑ / Bild↓", "Zwischen Liste und Punktreitern wechseln"),
-                ("Pinnwand: Pfeiltasten / Pos1 / Ende", "Karten auswählen und ins Sichtfeld holen"),
-                ("Pinnwand: Alt + Pfeiltasten", "Karte in freier Anordnung verschieben – Strg/Cmd+Z nimmt es zurück"),
-                ("Pinnwand: Enter / F2", "Ausgewählte Karte bearbeiten"),
-                ("Pinnwand: Leertaste", "Erledigt umschalten"),
-                ("Pinnwand: Entf / Rückschritt", "Nur die Karte von der Pinnwand nehmen"),
-                (f"Pinnwand: {self.accel('Enter')}", "Neue Karte rechts neben der ausgewählten anlegen"),
-                ("Spaltenboard: Alt + ← / →", "Karte in die Nachbarspalte verschieben – setzt das Feld"),
-                ("Bereich gewählt: F2 / Entf", "Bereich umbenennen / entfernen (Karten bleiben)"),
-                ("Präsentation: ← / → / Leertaste / Escape", "Folie wechseln / beenden"),
+            (glide_i18n.t("ui.followups.sidebar", "Seitenleiste"), [
+                (glide_i18n.t("ui.show_shortcuts_dialog.click_a_folder", "Ordner anklicken"), glide_i18n.t("ui.show_shortcuts_dialog.show_contained_lists_in", "Enthaltene Listen im Hauptbereich anzeigen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.shift_click_2", 'Shift / {selection_key} + Klick', selection_key=selection_key), glide_i18n.t("ui.show_shortcuts_dialog.select_several_lists_or", "Mehrere Listen oder Ordner auswählen")),
+                (delete_key, glide_i18n.t("ui.show_shortcuts_dialog.move_selected_lists_or", "Ausgewählte Listen oder Ordner in den Papierkorb verschieben")),
+                ("Alt + ↑ / ↓", glide_i18n.t("ui.show_shortcuts_dialog.move_lists_and_folders", "Listen und Ordner nach oben / unten verschieben")),
+                ("Alt + ← / →", glide_i18n.t("ui.show_shortcuts_dialog.move_out_of_a", "Aus einem Ordner / in einen Ordner verschieben")),
+                (self.accel("Shift", "N"), glide_i18n.t("ui.empty_state_action.create_new_list", "Neue Liste anlegen")),
+            ] + ([] if IS_MACOS else [(self.accel("W"), glide_i18n.t("ui.show_shortcuts_dialog.delete_active_list", "Aktive Liste löschen")) ])),
+            (glide_i18n.t("ui.show_shortcuts_dialog.tabs_and_board", "Reiter und Pinnwand"), [
+                (self.accel("Shift", "O"), glide_i18n.t("ui.show_shortcuts_dialog.open_selected_item_as", "Ausgewählten Punkt als Reiter öffnen")),
+                (self.accel("Shift", "W"), glide_i18n.t("ui.show_shortcuts_dialog.close_current_item_tab", "Aktuellen Punktreiter schließen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.ctrl_page_up_page", "Strg + Bild↑ / Bild↓"), glide_i18n.t("ui.show_shortcuts_dialog.switch_between_list_and", "Zwischen Liste und Punktreitern wechseln")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board_arrow_keys_home", "Pinnwand: Pfeiltasten / Pos1 / Ende"), glide_i18n.t("ui.show_shortcuts_dialog.select_cards_and_bring", "Karten auswählen und ins Sichtfeld holen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board_alt_arrow_keys", "Pinnwand: Alt + Pfeiltasten"), glide_i18n.t("ui.show_shortcuts_dialog.move_card_in_free", "Karte in freier Anordnung verschieben – Strg/Cmd+Z nimmt es zurück")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board_enter_f2", "Pinnwand: Enter / F2"), glide_i18n.t("ui.show_shortcuts_dialog.edit_selected_card", "Ausgewählte Karte bearbeiten")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board_space", "Pinnwand: Leertaste"), glide_i18n.t("ui.build_item_context_menu.toggle_done", "Erledigt umschalten")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board_delete_backspace", "Pinnwand: Entf / Rückschritt"), glide_i18n.t("ui.show_shortcuts_dialog.only_remove_the_card", "Nur die Karte von der Pinnwand nehmen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.board", 'Pinnwand: {accel}', accel=self.accel('Enter')), glide_i18n.t("ui.show_shortcuts_dialog.create_a_new_card", "Neue Karte rechts neben der ausgewählten anlegen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.column_board_alt", "Spaltenboard: Alt + ← / →"), glide_i18n.t("ui.show_shortcuts_dialog.move_card_into_the", "Karte in die Nachbarspalte verschieben – setzt das Feld")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.area_selected_f2_delete", "Bereich gewählt: F2 / Entf"), glide_i18n.t("ui.show_shortcuts_dialog.rename_remove_area_cards", "Bereich umbenennen / entfernen (Karten bleiben)")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.presentation_space_escape", "Präsentation: ← / → / Leertaste / Escape"), glide_i18n.t("ui.show_shortcuts_dialog.change_slide_end", "Folie wechseln / beenden")),
             ]),
-            ("Zeichenfläche", [
-                ("B / F / I / L / U / E / S", "Pinsel, Füllen, Pipette, Linie, Rechteck, Ellipse, Auswahl"),
-                ("1 / 2 / 4 / 8", "Pinselgröße"),
-                ("X / D", "Farben tauschen / zurücksetzen"),
-                ("M / P / G / R / C", "Symmetrie, Vorschau, Raster, Referenz, Farbe wählen"),
-                ("+ / − / 0 · Strg + Mausrad", "Zoomen / einpassen"),
-                ("Mittlere Maustaste ziehen", "Fläche verschieben"),
-                ("Rechte Maustaste", "Mit der zweiten Farbe malen"),
-                (f"{self.accel('Z')} / {self.accel('Y')}", "Aktion rückgängig / wiederherstellen"),
-                (f"{self.accel('C')} / {self.accel('X')} / {self.accel('V')}", "Auswahl kopieren / ausschneiden / einfügen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.drawing_canvas", "Zeichenfläche"), [
+                ("B / F / I / L / U / E / S", glide_i18n.t("ui.show_shortcuts_dialog.brush_fill_eyedropper_line", "Pinsel, Füllen, Pipette, Linie, Rechteck, Ellipse, Auswahl")),
+                ("1 / 2 / 4 / 8", glide_i18n.t("ui.show_shortcuts_dialog.brush_size", "Pinselgröße")),
+                ("X / D", glide_i18n.t("ui.show_shortcuts_dialog.swap_reset_colors", "Farben tauschen / zurücksetzen")),
+                ("M / P / G / R / C", glide_i18n.t("ui.show_shortcuts_dialog.symmetry_preview_grid_reference", "Symmetrie, Vorschau, Raster, Referenz, Farbe wählen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.0_ctrl_mouse_wheel", "+ / − / 0 · Strg + Mausrad"), glide_i18n.t("ui.show_shortcuts_dialog.zoom_fit", "Zoomen / einpassen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.drag_with_middle_mouse", "Mittlere Maustaste ziehen"), glide_i18n.t("ui.show_shortcuts_dialog.pan_canvas", "Fläche verschieben")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.right_mouse_button", "Rechte Maustaste"), glide_i18n.t("ui.show_shortcuts_dialog.paint_with_the_second", "Mit der zweiten Farbe malen")),
+                (f"{self.accel('Z')} / {self.accel('Y')}", glide_i18n.t("ui.show_shortcuts_dialog.undo_redo_action", "Aktion rückgängig / wiederherstellen")),
+                (f"{self.accel('C')} / {self.accel('X')} / {self.accel('V')}", glide_i18n.t("ui.show_shortcuts_dialog.copy_cut_paste_selection", "Auswahl kopieren / ausschneiden / einfügen")),
             ]),
-            ("Seiten und Notizen", [
-                ("„/“ am Zeilenanfang", "Block einfügen"),
-                (self.accel("/"), "Blockaktionen der Zeile suchen und ausführen (auch über ⠿ links der Zeile)"),
-                ("Mehr", "Seiten- bzw. Notizaktionen durchsuchen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.pages_and_notes", "Seiten und Notizen"), [
+                (glide_i18n.t("ui.show_shortcuts_dialog.at_the_start_of", "„/“ am Zeilenanfang"), glide_i18n.t("ui.show_shortcuts_dialog.insert_block", "Block einfügen")),
+                (self.accel("/"), glide_i18n.t("ui.show_shortcuts_dialog.search_and_run_the", "Blockaktionen der Zeile suchen und ausführen (auch über ⠿ links der Zeile)")),
+                (glide_i18n.t("editor.toolbar.more", "Mehr"), glide_i18n.t("ui.show_shortcuts_dialog.search_page_or_note", "Seiten- bzw. Notizaktionen durchsuchen")),
             ]),
-            ("Startseite", [
-                ("Startseite anpassen: Alt + ↑ / ↓", "Kachel verschieben"),
+            (glide_i18n.t("menu.view.home", "Startseite"), [
+                (glide_i18n.t("ui.show_shortcuts_dialog.customize_home_alt", "Startseite anpassen: Alt + ↑ / ↓"), glide_i18n.t("ui.show_shortcuts_dialog.move_tile", "Kachel verschieben")),
             ]),
-            ("Allgemein", [
-                (self.accel("O"), "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)"),
-                ("Suche: Umschalt+Enter", "Gefundene Liste, Seite oder Notiz in der Nebenansicht öffnen"),
-                ("Nebenansicht: Leertaste / Esc", "Aufgabe abhaken / Nebenansicht schließen"),
-                ("Nebenansicht: " + self.accel("F"), "Suchen; Enter / Umschalt+Enter: nächster / vorheriger Treffer, ↑ / ↓: letzte Suchen"),
-                ("Nebenansicht: Alt + ← / →", "Zurück / vorwärts"),
-                ("Nebenansicht: Alt + ↑ / ↓", "Nächster / vorheriger Abschnitt"),
-                (self.accel("Shift", "K"), "Kompaktmodus"),
-                (self.accel("Z"), "Letzte Änderung rückgängig machen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.general", "Allgemein"), [
+                (self.accel("O"), glide_i18n.t("ui.show_shortcuts_dialog.search_page_item_or", "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.search_shift_enter", "Suche: Umschalt+Enter"), glide_i18n.t("ui.show_shortcuts_dialog.open_the_found_list", "Gefundene Liste, Seite oder Notiz in der Nebenansicht öffnen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.side_view_space_esc", "Nebenansicht: Leertaste / Esc"), glide_i18n.t("ui.show_shortcuts_dialog.check_off_task_close", "Aufgabe abhaken / Nebenansicht schließen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.side_view", 'Nebenansicht: {accel}', accel=self.accel("F")), glide_i18n.t("ui.show_shortcuts_dialog.search_enter_shift_enter", "Suchen; Enter / Umschalt+Enter: nächster / vorheriger Treffer, ↑ / ↓: letzte Suchen")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.side_view_alt", "Nebenansicht: Alt + ← / →"), glide_i18n.t("ui.show_shortcuts_dialog.back_forward", "Zurück / vorwärts")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.side_view_alt_2", "Nebenansicht: Alt + ↑ / ↓"), glide_i18n.t("ui.show_shortcuts_dialog.next_previous_section", "Nächster / vorheriger Abschnitt")),
+                (self.accel("Shift", "K"), glide_i18n.t("menu.view.compact_mode", "Kompaktmodus")),
+                (self.accel("Z"), glide_i18n.t("ui.show_shortcuts_dialog.undo_the_last_change", "Letzte Änderung rückgängig machen")),
                 (f"{self.accel('Shift', 'Z')}" + (f" / {self.accel('Y')}" if IS_WINDOWS else ""),
-                 "Rückgängig gemachte Änderung wiederholen"),
-                (self.accel("C"), "Ausgewählte Punkte kopieren"),
-                (self.accel("V"), "Punkte aus der Zwischenablage einfügen"),
-                (self.accel("F"), "Suche öffnen"),
-                (self.accel("E"), "Aktive Liste als TXT exportieren"),
-                (self.accel("I"), "TXT importieren"),
-                (self.accel("D"), "Zwischen hellem und dunklem Design wechseln"),
-                (self.accel("S"), "Speichern"),
+                 glide_i18n.t("ui.show_shortcuts_dialog.redo_an_undone_change", "Rückgängig gemachte Änderung wiederholen")),
+                (self.accel("C"), glide_i18n.t("ui.show_shortcuts_dialog.copy_selected_items", "Ausgewählte Punkte kopieren")),
+                (self.accel("V"), glide_i18n.t("ui.show_shortcuts_dialog.paste_items_from_the", "Punkte aus der Zwischenablage einfügen")),
+                (self.accel("F"), glide_i18n.t("ui.show_shortcuts_dialog.open_search", "Suche öffnen")),
+                (self.accel("E"), glide_i18n.t("ui.show_shortcuts_dialog.export_active_list_as", "Aktive Liste als TXT exportieren")),
+                (self.accel("I"), glide_i18n.t("ui.show_shortcuts_dialog.import_txt", "TXT importieren")),
+                (self.accel("D"), glide_i18n.t("ui.show_shortcuts_dialog.switch_between_light_and", "Zwischen hellem und dunklem Design wechseln")),
+                (self.accel("S"), glide_i18n.t("button.save", "Speichern")),
             ]),
-            ("Kontextmenüs", [
-                ("Rechtsklick auf einen Punkt", "Details, Art, Labels, Wichtigkeit, Fälligkeit, Farbe, Struktur und mehr"),
-                ("Rechtsklick in die freie Liste", "Neuen Punkt anlegen, gruppieren, sortieren und exportieren"),
-                ("Rechtsklick auf Liste / Ordner", "Bearbeiten, färben, verschieben und in den Papierkorb legen"),
+            (glide_i18n.t("ui.show_shortcuts_dialog.context_menus", "Kontextmenüs"), [
+                (glide_i18n.t("ui.show_shortcuts_dialog.right_click_an_item", "Rechtsklick auf einen Punkt"), glide_i18n.t("ui.show_shortcuts_dialog.details_type_labels_importance", "Details, Art, Labels, Wichtigkeit, Fälligkeit, Farbe, Struktur und mehr")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.right_click_the_empty", "Rechtsklick in die freie Liste"), glide_i18n.t("ui.show_shortcuts_dialog.create_a_new_item", "Neuen Punkt anlegen, gruppieren, sortieren und exportieren")),
+                (glide_i18n.t("ui.show_shortcuts_dialog.right_click_a_list", "Rechtsklick auf Liste / Ordner"), glide_i18n.t("ui.show_shortcuts_dialog.edit_color_move_and", "Bearbeiten, färben, verschieben und in den Papierkorb legen")),
             ]),
         ]
         previous_focus = self.current_focus_widget()
-        dialog = self._new_dialog("Tastenkürzel", minsize=(500, 360))
+        dialog = self._new_dialog(glide_i18n.t("ui.show_shortcuts_dialog.keyboard_shortcuts", "Tastenkürzel"), minsize=(500, 360))
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(
-            outer, text="Tastenkürzel", bg=self.theme["bg"], fg=self.theme["text"],
+            outer, text=glide_i18n.t("ui.show_shortcuts_dialog.keyboard_shortcuts", "Tastenkürzel"), bg=self.theme["bg"], fg=self.theme["text"],
             font=app_font(17, "bold"), anchor="w",
         ).pack(fill="x", pady=(0, 6))
         tk.Label(
-            outer, text="Schneller durch deinen Alltag mit Glide.", bg=self.theme["bg"],
+            outer, text=glide_i18n.t("ui.show_shortcuts_dialog.get_through_your_day", "Schneller durch deinen Alltag mit Glide."), bg=self.theme["bg"],
             fg=self.theme["muted"], font=app_font(10), anchor="w",
         ).pack(fill="x", pady=(0, 16))
         footer = tk.Frame(outer, bg=self.theme["bg"])
         footer.pack(side="bottom", fill="x", pady=(16, 0))
-        close_button = self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted")
+        close_button = self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy, "muted")
         close_button.pack(side="right")
         scroll_area = tk.Frame(outer, bg=self.theme["bg"])
         scroll_area.pack(fill="both", expand=True)
@@ -69998,7 +69974,7 @@ Labels, Termine und Metadaten."""
         table.columnconfigure(0, weight=0)
         table.columnconfigure(1, weight=1)
         key_labels, meaning_labels = [], []
-        for column, text in enumerate(("Tasten / Aktion", "Wirkung")):
+        for column, text in enumerate((glide_i18n.t("ui.show_shortcuts_dialog.keys_action", "Tasten / Aktion"), glide_i18n.t("ui.show_shortcuts_dialog.effect", "Wirkung"))):
             label = tk.Label(
                 table, text=text, bg=self.theme["bg"], fg=self.theme["muted"],
                 font=app_font(9, "bold"), anchor="w",
@@ -70178,17 +70154,17 @@ class TemplateDraft(ListApp):
         return record
 
     def edit(self):
-        dialog = self.dialog = glide_modal_session.create_dialog(self.root, "Vorlage bearbeiten", background=self.theme["bg"],
+        dialog = self.dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.edit_template.edit_template", "Vorlage bearbeiten"), background=self.theme["bg"],
                                                              minsize=(800, 640))
         footer = tk.Frame(dialog, bg=self.theme["bg"])
         footer.pack(side="bottom", fill="x", padx=24, pady=16)
         body = tk.Frame(dialog, bg=self.theme["bg"])
         body.pack(fill="both", expand=True, padx=24, pady=(20, 0))
-        tk.Label(body, text="Vorlage bearbeiten", font=app_font(16, "bold"),
+        tk.Label(body, text=glide_i18n.t("ui.edit_template.edit_template", "Vorlage bearbeiten"), font=app_font(16, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
-        tk.Label(body, text="Details am ausgewählten Eintrag bearbeiten. Übernehmen ändert nur die Vorlage.",
+        tk.Label(body, text=glide_i18n.t("ui.edit.edit_details_on_the", "Details am ausgewählten Eintrag bearbeiten. Übernehmen ändert nur die Vorlage."),
                  font=app_font(10), bg=self.theme["bg"], fg=self.theme["muted"]).pack(anchor="w", pady=(5, 14))
-        self._make_field_label(body, "Titel der Vorlage").pack(anchor="w")
+        self._make_field_label(body, glide_i18n.t("ui.edit.template_title", "Titel der Vorlage")).pack(anchor="w")
         self.title_var = tk.StringVar(value=self.holder["title"])
         title_border, title_field = self._make_field(body)
         title_border.pack(fill="x", pady=(4, 10))
@@ -70207,13 +70183,13 @@ class TemplateDraft(ListApp):
         actions = ButtonFlow(body, bg=self.theme["bg"])
         actions.pack(fill="x", pady=(0, 10))
         for text, command, color, width in (
-            ("Vorlagendetails", self.edit_holder, "accent", 154),
-            ("+ Punkt", lambda: self.add_node("item"), "confirm", 96),
-            ("+ Unterpunkt", lambda: self.add_node("child"), "confirm", 132),
-            ("+ Liste", lambda: self.add_node("list"), "accent", 96),
-            ("+ Ordner", lambda: self.add_node("folder"), "import", 106),
+            (glide_i18n.t("ui.edit.template_details", "Vorlagendetails"), self.edit_holder, "accent", 154),
+            (glide_i18n.t("ui.edit.item", "+ Punkt"), lambda: self.add_node("item"), "confirm", 96),
+            (glide_i18n.t("ui.edit.subitem", "+ Unterpunkt"), lambda: self.add_node("child"), "confirm", 132),
+            (glide_i18n.t("ui.edit.list", "+ Liste"), lambda: self.add_node("list"), "accent", 96),
+            (glide_i18n.t("ui.edit.folder", "+ Ordner"), lambda: self.add_node("folder"), "import", 106),
         ):
-            if self.record["kind"] == "list" and text in ("+ Liste", "+ Ordner"):
+            if self.record["kind"] == "list" and text in (glide_i18n.t("ui.edit.list", "+ Liste"), glide_i18n.t("ui.edit.folder", "+ Ordner")):
                 continue
             actions.add(self._make_dialog_button(actions, text, command, color, width=width, height=36))
         self.editor_card = self.make_rounded_container(body, padding=14, register=False)
@@ -70257,21 +70233,21 @@ class TemplateDraft(ListApp):
         commands = ButtonFlow(area, bg=self.theme["card"])
         commands.pack(side="bottom", fill="x", pady=(12, 0), before=tree_area)
         for text, command, color, width in (
-            ("Bearbeiten", self.edit_selected, "accent", 120),
-            ("Nach oben", lambda: self.move_selected(-1), "muted", 116),
-            ("Nach unten", lambda: self.move_selected(1), "muted", 122),
-            ("Entfernen", self.remove_selected, "delete", 112),
+            (glide_i18n.t("button.edit", "Bearbeiten"), self.edit_selected, "accent", 120),
+            (glide_i18n.t("ui.show_pinned_menu.move_up", "Nach oben"), lambda: self.move_selected(-1), "muted", 116),
+            (glide_i18n.t("ui.show_pinned_menu.move_down", "Nach unten"), lambda: self.move_selected(1), "muted", 122),
+            (glide_i18n.t("saved_view.manager.remove", "Entfernen"), self.remove_selected, "delete", 112),
         ):
             commands.add(self._make_dialog_button(commands, text, command, color, width=width, height=36))
         self.relative_var = tk.BooleanVar(value=bool(self.record.get("schedule_anchor")))
         self.relative_anchor = self.record.get("schedule_anchor") or date.today().isoformat()
-        relative = GlideCheckbutton(footer, text="Termine relativ zum Einsatzdatum", variable=self.relative_var,
+        relative = GlideCheckbutton(footer, text=glide_i18n.t("ui.edit.dates_relative_to_the", "Termine relativ zum Einsatzdatum"), variable=self.relative_var,
             bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
             activebackground=self.theme["bg"], activeforeground=self.theme["text"], font=app_font(9))
         relative.pack(side="left")
-        self.add_tooltip(relative, f"Bezugsdatum: {self.relative_anchor}. Beim Verwenden werden Fälligkeiten und Wiederholungsgrenzen um denselben Tagesabstand verschoben.")
-        self._make_dialog_button(footer, "Übernehmen", self.submit, "confirm", width=140).pack(side="right")
-        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=8)
+        self.add_tooltip(relative, glide_i18n.t("ui.edit.reference_date_when_the", 'Bezugsdatum: {relative_anchor}. Beim Verwenden werden Fälligkeiten und Wiederholungsgrenzen um denselben Tagesabstand verschoben.', relative_anchor=self.relative_anchor))
+        self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), self.submit, "confirm", width=140).pack(side="right")
+        self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=8)
         dialog.bind("<Escape>", lambda e: dialog.destroy())
         dialog.bind("<Control-Return>", lambda e: self.submit())
         if IS_MACOS:
@@ -70295,7 +70271,7 @@ class TemplateDraft(ListApp):
             self.nodes[identity] = (kind, obj, siblings)
             label_names = ", ".join((self.get_label(value) or {}).get("name", "") for value in obj.get("labels", []))
             due = self.format_due_full(obj.get("due"), obj.get("due_time"))
-            art = self.ITEM_KIND_NAMES[self.item_kind(obj)] if kind == "item" else "Liste" if kind == "list" else "Ordner"
+            art = self.ITEM_KIND_NAMES[self.item_kind(obj)] if kind == "item" else glide_i18n.t("editor.toolbar.list", "Liste") if kind == "list" else glide_i18n.t("ui.kachel_boards.folder", "Ordner")
             text = " ".join(str(obj.get("text" if kind == "item" else "title") or "").split())
             if kind == "item":
                 item_kind = self.item_kind(obj)
@@ -70322,13 +70298,13 @@ class TemplateDraft(ListApp):
             tree.selection_set(selected)
             tree.focus(selected)
             tree.see(selected)
-        labels = ", ".join((self.get_label(value) or {}).get("name", "") for value in self.holder.get("labels", [])) or "Keine Labels"
-        color = next((name for name, key in self.LIST_COLOR_CHOICES if key == self.holder.get("color")), "Keine Farbe")
-        note = " ".join(str(self.holder.get("note") or "Keine Beschreibung").split())
-        self.summary_var.set(f"{color} · {labels} · {len(self.holder.get('attachments', []))} Anhänge\n{note[:180]}")
+        labels = ", ".join((self.get_label(value) or {}).get("name", "") for value in self.holder.get("labels", [])) or glide_i18n.t("ui.render_editor.no_labels", "Keine Labels")
+        color = next((name for name, key in self.LIST_COLOR_CHOICES if key == self.holder.get("color")), glide_i18n.t("inspector.color.none", "Keine Farbe"))
+        note = " ".join(str(self.holder.get("note") or glide_i18n.t("ui.render_editor.no_description", "Keine Beschreibung")).split())
+        self.summary_var.set(glide_i18n.t("ui.render_editor.attachments", '{color} · {labels} · {len} Anhänge\n{wert}', color=color, labels=labels, len=len(self.holder.get('attachments', [])), wert=note[:180]))
         counts = [f"{sum(kind == key for kind, _obj, _siblings in self.nodes.values())} {name}"
-                  for key, name in (("folder", "Ordner"), ("list", "Listen"), ("item", "Punkte"))]
-        self.structure_var.set("Aufbau der Vorlage · " + " · ".join(counts))
+                  for key, name in (("folder", glide_i18n.t("ui.render_editor.folders", "Ordner")), ("list", glide_i18n.t("ui.update_stats_label.lists", "Listen")), ("item", glide_i18n.t("ui.csv_import_summary.items", "Punkte")))]
+        self.structure_var.set(glide_i18n.t("ui.render_editor.template_structure", 'Aufbau der Vorlage · {join}', join=" · ".join(counts)))
         self.resize_editor_columns()
 
     def resize_editor_columns(self, _event=None):
@@ -70372,7 +70348,7 @@ class TemplateDraft(ListApp):
             if details:
                 self.apply_item_details(obj, details)
         else:
-            details = self.themed_page_details_dialog("Vorlagendetails" if obj is self.holder else "Listendetails" if kind == "list" else "Ordnerdetails",
+            details = self.themed_page_details_dialog(glide_i18n.t("ui.edit_object.template_details", "Vorlagendetails") if obj is self.holder else glide_i18n.t("ui.edit_object.list_details", "Listendetails") if kind == "list" else glide_i18n.t("ui.edit_object.folder_details", "Ordnerdetails"),
                 obj.get("title"), obj.get("note"), page=obj)
             if details:
                 obj.update(details)
@@ -70401,7 +70377,7 @@ class TemplateDraft(ListApp):
                     current = self.editor_tree.parent(current)
                 parent_id = self.nodes[current][1].get("folder_id") if current else self.holder["id"]
             if kind == "folder" and self.folder_depth(parent_id) + 1 >= self.MAX_FOLDER_DEPTH:
-                self.show_warning("Ordner", "Die maximale Ordnertiefe ist erreicht.", parent=self.dialog)
+                self.show_warning(glide_i18n.t("ui.kachel_boards.folder", "Ordner"), glide_i18n.t("ui.add_node.the_maximum_folder_depth", "Die maximale Ordnertiefe ist erreicht."), parent=self.dialog)
                 return
             new = self.new_list_object("Neue Liste", [], folder_id=parent_id) if kind == "list" else self.new_folder_object("Neuer Ordner", parent_id=parent_id)
             details = self.themed_page_details_dialog("Neue Liste" if kind == "list" else "Neuer Ordner", new["title"], "", page=new)
@@ -70411,7 +70387,7 @@ class TemplateDraft(ListApp):
             (self.lists if kind == "list" else self.folders).append(new)
         else:
             if selected_kind == "folder":
-                self.show_info("Punkt hinzufügen", "Wähle zuerst eine Liste oder lege eine Liste im Ordner an.", parent=self.dialog)
+                self.show_info(glide_i18n.t("ui.add_node.add_item", "Punkt hinzufügen"), glide_i18n.t("ui.add_node.choose_a_list_first", "Wähle zuerst eine Liste oder lege eine Liste im Ordner an."), parent=self.dialog)
                 return
             target = obj["items"] if selected_kind == "list" else obj.setdefault("children", []) if kind == "child" else siblings
             if target is None:
@@ -70422,7 +70398,7 @@ class TemplateDraft(ListApp):
                 depth += 1
                 parent = self.editor_tree.parent(parent)
             if depth > self.MAX_ITEM_DEPTH:
-                self.show_warning("Unterpunkt", "Die maximale Punkttiefe ist erreicht.", parent=self.dialog)
+                self.show_warning(glide_i18n.t("ui.add_node.subitem", "Unterpunkt"), glide_i18n.t("ui.add_node.the_maximum_item_depth", "Die maximale Punkttiefe ist erreicht."), parent=self.dialog)
                 return
             details = self.new_item_dialog(title="Neuer Vorlagenpunkt")
             if not details:
@@ -70449,7 +70425,7 @@ class TemplateDraft(ListApp):
         if not selection or selection[1] is self.holder:
             return
         kind, obj, siblings = selection
-        if not self.ask_yes_no("Eintrag entfernen", "Diesen Eintrag einschließlich seiner Unterpunkte aus der Vorlage entfernen?", parent=self.dialog):
+        if not self.ask_yes_no(glide_i18n.t("ui.remove_selected.remove_entry", "Eintrag entfernen"), glide_i18n.t("ui.remove_selected.remove_this_entry_including", "Diesen Eintrag einschließlich seiner Unterpunkte aus der Vorlage entfernen?"), parent=self.dialog):
             return
         if kind == "folder":
             identities = {value["id"] for value in self.iter_folder_subtree(obj["id"])}
@@ -70462,7 +70438,7 @@ class TemplateDraft(ListApp):
     def submit(self):
         title = self.title_var.get().strip()
         if not title:
-            self.show_warning("Vorlage", "Bitte einen Titel eingeben.", parent=self.dialog)
+            self.show_warning(glide_i18n.t("ui.show_notes_add_menu.template", "Vorlage"), glide_i18n.t("ui.submit.please_enter_a_title", "Bitte einen Titel eingeben."), parent=self.dialog)
             return "break"
         self.holder["title"] = glide_design.edited_title(title, self.holder["title"])
         if self.relative_var.get():
@@ -70472,7 +70448,7 @@ class TemplateDraft(ListApp):
         try:
             self.result = self.export_record()
         except (OSError, ValueError) as exc:
-            self.show_error("Vorlage übernehmen", str(exc), parent=self.dialog)
+            self.show_error(glide_i18n.t("ui.submit.apply_template", "Vorlage übernehmen"), str(exc), parent=self.dialog)
             return "break"
         self.dialog.destroy()
         return "break"
@@ -70616,7 +70592,7 @@ def main():
         stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
         if stufe == "zu_alt":
             root.withdraw()
-            messagebox.showerror("Glide kann nicht starten", meldung, parent=root)
+            messagebox.showerror(glide_i18n.t("ui.main.glide_cannot_start", "Glide kann nicht starten"), meldung, parent=root)
             root.destroy()
             raise SystemExit(1)
         # Ein nicht erreichbarer Datenordner (etwa ein nicht eingebundenes

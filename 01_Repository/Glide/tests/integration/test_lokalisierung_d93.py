@@ -272,8 +272,28 @@ def fall_l6_drucken_und_sicherungen(lauf):
     return f"Drucken, Sicherungen und KI-Austausch: {en} englische, {de} deutsche Texte"
 
 
+def fall_l7_kalender_verlauf_kuerzel(lauf):
+    """L7: Kalenderexport, Änderungsverlauf und Tastenkürzel als echte Dialoge."""
+    app = lauf.app
+
+    def pruefung(sprache):
+        texte = modal_texte(lauf, app.show_calendar_export_dialog)
+        texte += modal_texte(lauf, app.show_history_dialog)
+        texte += modal_texte(lauf, app.show_shortcuts_dialog)
+        erwartet = {"en": {"Calendar file (ICS)", "Save and open", "Change history", "Clear history",
+                           "Keyboard shortcuts", "Keys / action", "Effect"},
+                    "de": {"Kalenderdatei (ICS)", "Speichern und öffnen", "Änderungsverlauf", "Verlauf leeren",
+                           "Tastenkürzel", "Tasten / Aktion", "Wirkung"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt, texte)
+        return texte
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Kalenderexport, Änderungsverlauf und Tastenkürzel: {en} englische, {de} deutsche Texte"
+
+
 FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
-          "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen")
+          "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen", "l7_kalender_verlauf_kuerzel")
 
 
 def main():
