@@ -16,6 +16,7 @@ die drei neuesten Versionen mit Eintrag (`CARD_VERSIONS`); „Gelesen“ bleibt 
 ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 „Hilfe › Über Glide › Neuerungen“.
 """
+import i18n as glide_i18n
 
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
@@ -291,7 +292,7 @@ def history_text(current, catalog=None):
     """Lesbarer Text für „Über Glide › Neuerungen“."""
     eintraege = history(current, catalog)
     if not eintraege:
-        return "Für diese Version sind keine Neuerungen hinterlegt."
+        return glide_i18n.t("mod.release_notes.history_text.no_changes_are_recorded", "Für diese Version sind keine Neuerungen hinterlegt.")
     abschnitte = []
     for version, punkte in eintraege:
         abschnitte.append(f"Version {version}\n" + "\n".join(f"• {punkt}" for punkt in punkte))

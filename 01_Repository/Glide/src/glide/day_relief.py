@@ -5,6 +5,7 @@ from datetime import date
 import json
 import planning
 from occupied_time import day_occupancy
+import i18n as glide_i18n
 
 
 def iso_day(value):
@@ -33,17 +34,17 @@ def day_summary(items, day, capacity, blocks, zone, schedulable):
 
 def available_text(value):
     if value.get("calendar_state") in ("loading", "error", "closed"):
-        text = "Freie Zeit unbekannt · " + value.get("calendar_message", "Kalender nicht verfügbar")
+        text = glide_i18n.t("mod.day_relief.available_text.free_time_unknown", 'Freie Zeit unbekannt · {get}', get=value.get("calendar_message", "Kalender nicht verfügbar"))
         if value.get("without_estimate"):
-            text += f" · {value['without_estimate']} ohne Schätzung"
+            text += glide_i18n.t("mod.day_relief.available_text.without_estimate", ' · {without_estimate} ohne Schätzung', without_estimate=value['without_estimate'])
         return text
     text = planning.available_text(value)
     if value.get("occupied_all_day"):
-        text += " · ganztägig belegt"
+        text += glide_i18n.t("ui.calendar_grid_caption.busy_all_day", " · ganztägig belegt")
     elif value.get("occupied_minutes"):
-        text += " · " + planning.duration(value["occupied_minutes"]) + " Kalenderzeit"
+        text += glide_i18n.t("mod.day_relief.available_text.calendar_time", ' · {duration} Kalenderzeit', duration=planning.duration(value["occupied_minutes"]))
     if value.get("calendar_issues"):
-        text += " · Kalenderhinweise beachten"
+        text += glide_i18n.t("ui.show_comparison.note_the_calendar_hints", " · Kalenderhinweise beachten")
     return text
 
 
@@ -55,11 +56,11 @@ def capacity_analysis(value):
 def relief_summary_text(value):
     """Präzise Vorher/Nachher-Bilanzzeile für die Tagesentlastung (WA-12 / D57)."""
     items_count = value.get("items", 0)
-    items_label = f"{items_count} {'Aufgabe' if items_count == 1 else 'Aufgaben'}"
+    items_label = f"{items_count} {glide_i18n.t("mod.day_proposal.reason_text.task", 'Aufgabe') if items_count == 1 else glide_i18n.t("mod.day_proposal.reason_text.tasks", 'Aufgaben')}"
     if value.get("calendar_state") in ("loading", "error", "closed"):
-        text = f"{items_label} · Freie Zeit unbekannt · " + value.get("calendar_message", "Kalender nicht verfügbar")
+        text = glide_i18n.t("mod.day_relief.relief_summary_text.free_time_unknown", '{items_label} · Freie Zeit unbekannt · {get}', items_label=items_label, get=value.get("calendar_message", "Kalender nicht verfügbar"))
         if value.get("without_estimate"):
-            text += f" · {value['without_estimate']} ohne Schätzung"
+            text += glide_i18n.t("mod.day_relief.relief_summary_text.without_estimate", ' · {without_estimate} ohne Schätzung', without_estimate=value['without_estimate'])
         return text
     analysis = planning.capacity_analysis(value)
     return f"{items_label} · {analysis['summary_text']}"
@@ -83,14 +84,14 @@ def overload_lines(before, after, day_label, limit=4):
     for old, new in zip(before, after):
         now = _overload_reasons(new)
         if now:
-            lines.append(f"{day_label(new['day'])}, nachher: " + "; ".join(now))
+            lines.append(glide_i18n.t("mod.day_relief.overload_lines.after", '{day_label}, nachher: {join}', day_label=day_label(new['day']), join="; ".join(now)))
             continue
         was = _overload_reasons(old)
         if was:
-            lines.append(f"{day_label(old['day'])}, vorher: " + "; ".join(was) + " · nachher nicht mehr überplant")
+            lines.append(glide_i18n.t("mod.day_relief.overload_lines.before_after_no_longer", '{day_label}, vorher: {join} · nachher nicht mehr überplant', day_label=day_label(old['day']), join="; ".join(was)))
     if len(lines) > limit:
         rest = len(lines) - limit
-        lines = lines[:limit] + ["… und ein weiterer Tag" if rest == 1 else f"… und {rest} weitere Tage"]
+        lines = lines[:limit] + [glide_i18n.t("mod.day_relief.overload_lines.and_one_more_day", "… und ein weiterer Tag") if rest == 1 else glide_i18n.t("mod.day_relief.overload_lines.and_more_days", '… und {rest} weitere Tage', rest=rest)]
     return lines
 
 

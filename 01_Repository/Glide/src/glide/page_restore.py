@@ -12,6 +12,7 @@ import uuid
 import object_references as objects
 import task_references as tasks
 import attachment_paths as paths
+import i18n as glide_i18n
 
 
 def fingerprint(data):
@@ -111,15 +112,15 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
     wanted_folder = original_page.get("folder_id") if original_page else page.get("folder_id")
     page["folder_id"] = wanted_folder if wanted_folder in folders else None
     if wanted_folder and wanted_folder not in folders:
-        warnings.append("Der frühere Ordner fehlt; die Seite wird ohne Ordner eingeordnet.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.the_earlier_folder_is", "Der frühere Ordner fehlt; die Seite wird ohne Ordner eingeordnet."))
     if original_page and page.get("folder_id") != candidates[0].get("folder_id"):
-        warnings.append("Die heutige Ordnereinordnung bleibt erhalten.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.the_current_folder_placement", "Die heutige Ordnereinordnung bleibt erhalten."))
     trash = []
     def trash_item(item, source=None):
         record = copy.deepcopy(source) if source else dict(id=fresh(),kind="item",deleted_at="",
                 list=None,folder=None,item=None,origin_folder_id=None,origin_folder_title="",origin={})
         record.update(kind="item",list=None,folder=None,item=item,
-                      origin=dict(list_id=page_id,list_title=page.get("title") or "Seite",
+                      origin=dict(list_id=page_id,list_title=page.get("title") or glide_i18n.t("ui.render.page", "Seite"),
                                   parent_item_id=None,index=None))
         return record
     for deleted in current.get("trash",[]):
@@ -150,7 +151,7 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
         removed = forest_without(original_page.get("items",[]),restored)
         trash = [*(trash_item(item) for item in removed),*trash]
         if removed:
-            warnings.append("Heute vorhandene, nicht wiederhergestellte Aufgaben bleiben im Papierkorb.")
+            warnings.append(glide_i18n.t("mod.page_restore.prepare.tasks_that_exist_today", "Heute vorhandene, nicht wiederhergestellte Aufgaben bleiben im Papierkorb."))
     if len(trash)>max_trash:
         raise ValueError("Die Wiederherstellung würde den Papierkorb kürzen; bitte zuerst Platz schaffen.")
     holders = [page,*incoming]
@@ -163,7 +164,7 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
     if len(known_labels)+len(added)>max_labels:
         raise ValueError("Die Wiederherstellung würde die Labelgrenze überschreiten.")
     if any(key in known_labels and key in saved_labels and known_labels[key]!=saved_labels[key] for key in needed):
-        warnings.append("Zwischenzeitlich geänderte Labeldefinitionen bleiben wie heute; andere Seiten ändern sich nicht.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.label_definitions_changed_in", "Zwischenzeitlich geänderte Labeldefinitionen bleiben wie heute; andere Seiten ändern sich nicht."))
     attachments = {}
     for holder in holders:
         for attachment in holder.get("attachments",[]):

@@ -7,6 +7,7 @@ import re
 
 import drawing
 import object_references as objects
+import i18n as glide_i18n
 
 
 def block_lines(document, line):
@@ -150,7 +151,7 @@ def live_rows(target, lists, trash=(), folders=()):
             walk(item.get('children', []), depth + 1)
     if state in ('active', 'archived'):
         walk(holder.get('items', []))
-    return state, str(holder.get('title') or 'Ziel fehlt'), rows
+    return state, str(holder.get('title') or glide_i18n.t("ui.refresh_tasks.target_missing", 'Ziel fehlt')), rows
 
 
 def prepare_template(template, today):
@@ -184,21 +185,21 @@ def prepare_template(template, today):
 
 def template_preview(template, names=None):
     """Lesbare Vorschau auch vollständiger Ordner, Unteraufgaben und Seitentexte."""
-    lines = [str(template.get('title') or 'Vorlage'), str(template.get('note') or ''), '']
+    lines = [str(template.get('title') or glide_i18n.t("ui.show_notes_add_menu.template", 'Vorlage')), str(template.get('note') or ''), '']
     payload = template.get('payload') or {}
     for folder in payload.get('folders', []):
-        lines.append('Ordner: ' + str(folder.get('title') or 'Ordner'))
+        lines.append(glide_i18n.t("mod.page_features.template_preview.folder", 'Ordner: {str}', str=str(folder.get('title') or glide_i18n.t("ui.kachel_boards.folder", 'Ordner'))))
     entries = payload.get('lists') or [template]
     for entry in entries:
         if entry is not template:
-            lines.extend(['', str(entry.get('title') or 'Liste'), str(entry.get('note') or '')])
+            lines.extend(['', str(entry.get('title') or glide_i18n.t("editor.toolbar.list", 'Liste')), str(entry.get('note') or '')])
         text = (entry.get('rich_note') or {}).get('text')
         if text:
             lines.extend(['', text])
         if entry.get('cover'):
-            lines.append('Titelbild: ' + ('Pixelzeichnung' if entry['cover'].get('kind') == 'drawing' else 'Bilddatei'))
+            lines.append(glide_i18n.t("mod.page_features.template_preview.cover_image", 'Titelbild: {wert}', wert=glide_i18n.t("mod.page_features.template_preview.pixel_drawing", 'Pixelzeichnung') if entry['cover'].get('kind') == 'drawing' else glide_i18n.t("mod.page_features.template_preview.image_file", 'Bilddatei')))
         for value in entry.get('live_lists', []):
-            lines.append('Live-Liste: ' + (names or {}).get(value, 'Liste außerhalb der Vorlage'))
+            lines.append(glide_i18n.t("mod.page_features.template_preview.live_list", 'Live-Liste: {get}', get=(names or {}).get(value, 'Liste außerhalb der Vorlage')))
         def walk(items, depth=0):
             for item in items:
                 if isinstance(item, str):
@@ -206,14 +207,14 @@ def template_preview(template, names=None):
                     continue
                 text = str(item.get('text') or '')
                 dates = ' · '.join(f'{label} {item[field]}' for field,label in
-                                 (('due', 'fällig'), ('planned_date', 'geplant')) if item.get(field))
+                                 (('due', glide_i18n.t("ui.calendar_show_day.due", 'fällig')), ('planned_date', 'geplant')) if item.get(field))
                 lines.append('  ' * depth + '□ ' + text + (' · ' + dates if dates else ''))
                 if item.get('description'):
                     lines.append('  ' * (depth+1) + str(item['description']))
                 walk(item.get('children', []), depth+1)
         walk(entry.get('items', []))
         if entry.get('attachments'):
-            lines.append('Anhänge: ' + ', '.join(str(a.get('name') or 'Datei') for a in entry['attachments']))
+            lines.append(glide_i18n.t("mod.page_features.template_preview.attachments", 'Anhänge: {join}', join=', '.join(str(a.get('name') or glide_i18n.t("menu.file", 'Datei')) for a in entry['attachments'])))
     return '\n'.join(lines).strip()
 
 

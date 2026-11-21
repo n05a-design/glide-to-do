@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Bearbeitungstage und Aufwandsbilanz ohne Tk oder Datenmutation (KO01/AU02)."""
 from datetime import date, timedelta
+import i18n as glide_i18n
 
 
 CHOICES = (("today", "Heute"), ("tomorrow", "Morgen"),
@@ -136,38 +137,38 @@ def capacity_analysis(summary):
     reasons = []
     if is_overloaded:
         if occupied_all_day:
-            reasons.append("Tag ist ganztägig durch Kalendertermine belegt")
+            reasons.append(glide_i18n.t("mod.planning.capacity_analysis.day_is_busy_all", "Tag ist ganztägig durch Kalendertermine belegt"))
         elif occupied_minutes > 0:
             reasons.append(
-                f"Kalenderzeit belegt {duration(occupied_minutes)} der Kapazität ({duration(capacity_minutes)})"
+                glide_i18n.t("mod.planning.capacity_analysis.calendar_time_occupies_of", 'Kalenderzeit belegt {duration} der Kapazität ({duration2})', duration=duration(occupied_minutes), duration2=duration(capacity_minutes))
             )
         if task_minutes > net_capacity:
             reasons.append(
-                f"Geplanter Aufgabenaufwand ({duration(task_minutes)}) übersteigt nutzbare Kapazität ({duration(net_capacity)}) um {duration(overload_minutes)}"
+                glide_i18n.t("mod.planning.capacity_analysis.planned_task_effort_exceeds", 'Geplanter Aufgabenaufwand ({duration}) übersteigt nutzbare Kapazität ({duration2}) um {duration3}', duration=duration(task_minutes), duration2=duration(net_capacity), duration3=duration(overload_minutes))
             )
     if without_estimate_count > 0:
-        label, verb = ("Aufgabe", "kann") if without_estimate_count == 1 else ("Aufgaben", "können")
-        reasons.append(f"{without_estimate_count} {label} ohne Aufwandsschätzung {verb} den Tag zusätzlich belasten")
+        label, verb = (glide_i18n.t("mod.day_proposal.reason_text.task", "Aufgabe"), "kann") if without_estimate_count == 1 else (glide_i18n.t("mod.day_proposal.reason_text.tasks", "Aufgaben"), glide_i18n.t("mod.planning.capacity_analysis.can", "können"))
+        reasons.append(glide_i18n.t("mod.planning.capacity_analysis.without_an_effort_estimate", '{without_estimate_count} {label} ohne Aufwandsschätzung {verb} den Tag zusätzlich belasten', without_estimate_count=without_estimate_count, label=label, verb=verb))
 
     parts = []
     if task_minutes > 0 or estimated_count > 0:
-        parts.append(f"Aufwand {duration(task_minutes)}")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.effort", 'Aufwand {duration}', duration=duration(task_minutes)))
     if occupied_all_day:
-        parts.append("ganztägig belegt")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.busy_all_day", "ganztägig belegt"))
     elif occupied_minutes > 0:
-        parts.append(f"Kalender {duration(occupied_minutes)}")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.calendar", 'Kalender {duration}', duration=duration(occupied_minutes)))
 
     if not has_capacity:
-        parts.append("Kapazität nicht festgelegt")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.capacity_not_set", "Kapazität nicht festgelegt"))
     elif is_overloaded:
-        parts.append(f"{duration(overload_minutes)} überplant")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.overplanned", '{duration} überplant', duration=duration(overload_minutes)))
     else:
-        parts.append(f"frei {duration(free_minutes)}")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.free", 'frei {duration}', duration=duration(free_minutes)))
 
     if without_estimate_count > 0:
-        parts.append(f"{without_estimate_count} ohne Schätzung")
+        parts.append(glide_i18n.t("mod.planning.capacity_analysis.without_estimate", '{without_estimate_count} ohne Schätzung', without_estimate_count=without_estimate_count))
 
-    summary_text = " · ".join(parts) if parts else "0 min geplant"
+    summary_text = " · ".join(parts) if parts else glide_i18n.t("mod.planning.capacity_analysis.0_min_planned", "0 min geplant")
 
     return {
         "task_minutes": task_minutes,
@@ -191,13 +192,13 @@ def capacity_analysis(summary):
 def available_text(summary):
     remaining = summary["remaining"]
     if remaining is None:
-        text = "Kapazität nicht festgelegt"
+        text = glide_i18n.t("mod.planning.available_text.capacity_not_set", "Kapazität nicht festgelegt")
     elif remaining >= 0:
-        text = f"frei {duration(remaining)}"
+        text = glide_i18n.t("mod.planning.available_text.free", 'frei {duration}', duration=duration(remaining))
     else:
-        text = f"{duration(-remaining)} überplant"
+        text = glide_i18n.t("mod.planning.available_text.overplanned", '{duration} überplant', duration=duration(-remaining))
     if summary["without_estimate"]:
-        text += f" · {summary['without_estimate']} ohne Schätzung"
+        text += glide_i18n.t("mod.day_relief.relief_summary_text.without_estimate", ' · {without_estimate} ohne Schätzung', without_estimate=summary['without_estimate'])
     return text
 
 

@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## D93-Volllokalisierung, Paket L8 (Abschluss) (V1.77, 21.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v177-i18n-l8` über Paket L7. Grün: alle 1283 Unit-Tests, `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 mit allen acht Fällen ohne deutsche Reste. Gefunden und behoben: Die Startmodule `runtime_check` und `runtime_diagnostics` dürfen `i18n` nicht laden, weil der Startweg mit drei kopierten Dateien läuft (T264-Fall `test_real_source_launcher_keeps_child_phase_and_native_exit`); `action_catalog` behält seine deutschen Gruppennamen als Ordnungsschlüssel. Nicht geprüft: Windows und Linux (GitHub-Matrix), Vollprüfung und Paketbau (folgen gemeinsam), menschliche Sprach- und Sichtabnahme.
+
 ## D93-Volllokalisierung, Paket L7 (V1.76, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `LANGUAGE=de`, auf `claude/v176-i18n-l7` über Paket L6. Grün: `test_i18n.py`, `test_glide_system.py`, CI-Grundstufe und T335 (Fälle L1–L7). Vollprüfung gemeinsam am Ende (D51). Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme.

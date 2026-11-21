@@ -31,7 +31,7 @@ DEUTSCH = re.compile(
 
 # Null deutsche Reste verlangt T335 ab Paket L8, wenn auch Klassentabellen und Module übersetzt sind;
 # davor prüfen die Fälle die erwarteten englischen Texte ihres Pakets.
-STRENG = False
+STRENG = True
 
 
 def deutsche_reste(texte):
@@ -122,16 +122,14 @@ def beide_sprachen(lauf, pruefung):
 def fall_l1_tageshinweise(lauf):
     """L1: Tageshinweise und ihre Einstellungen, Speicherstatus-Knöpfe und Mondphasen.
 
-    Der Berichtstext des Speicherstatus kommt aus `storage_health` (Paket L8) und
-    zählt hier noch nicht; geprüft werden Titel und Knöpfe des Dialogs.
+    Seit Paket L8 zählt auch der Berichtstext aus `storage_health`.
     """
     app, mod = lauf.app, lauf.mod
 
     def pruefung(sprache):
         texte = modal_texte(lauf, app.show_daily_hint_settings)
         texte += modal_texte(lauf, app.show_daily_hints)
-        status = modal_texte(lauf, app.show_storage_status)
-        texte += [text for text in status if "\n" not in text]
+        texte += modal_texte(lauf, app.show_storage_status)
         texte += [mod.moon_phase_info(mod.date(2026, 11, 21))["name"]]
         erwartet = {"en": {"Set up daily hints", "Daily hints", "Storage status", "Cancel", "Save", "Close"},
                     "de": {"Tageshinweise einstellen", "Tageshinweise", "Speicherstatus", "Abbrechen", "Speichern",
@@ -183,11 +181,11 @@ def fall_l3_punkte_und_labels(lauf):
         texte += modal_texte(lauf, app.open_label_manager)
         texte += modal_texte(lauf, app.show_table_columns_dialog)
         erwartet = {"en": {"New item", "Title", "Importance", "Due date", "Repeat", "Rename",
-                           "Table columns"},
+                           "Table columns", "Reset view"},
                     "de": {"Neuer Punkt", "Titel", "Wichtigkeit", "Fälligkeit", "Wiederholung",
-                           "Umbenennen", "Tabellenspalten"}}
+                           "Umbenennen", "Tabellenspalten", "Ansicht zurücksetzen"}}
         fehlt = erwartet[sprache] - set(texte)
-        assert not fehlt, (sprache, fehlt, texte)
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
         # Die festen Systemlabels „Langtext“ und „Zwischenüberschrift“ sind gespeicherte Labelnamen (Daten).
         return [text for text in texte if not text.startswith("Beta") and text not in ("Langtext", "Zwischenüberschrift")]
 
@@ -217,7 +215,7 @@ def fall_l4_menues_und_anlegen(lauf):
                     "de": {"Umbenennen", "Duplizieren", "Exportieren", "In den Papierkorb", "Archivieren",
                            "Neue Liste", "Anlegen", "Abbrechen", "Kalender öffnen …"}}
         fehlt = erwartet[sprache] - set(texte)
-        assert not fehlt, (sprache, fehlt, texte)
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
         return [text for text in texte if "Gamma" not in text]
 
     en, de = beide_sprachen(lauf, pruefung)
@@ -240,7 +238,7 @@ def fall_l5_erinnerungen_und_erfassung(lauf):
                     "de": {"Benachrichtigungen", "Schließen", "Schnellerfassung", "Erfassen", "Abbrechen", "Sortieren",
                            "Alphabetisch"}}
         fehlt = erwartet[sprache] - set(texte)
-        assert not fehlt, (sprache, fehlt, texte)
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
         return [text for text in texte if "Delta" not in text]
 
     en, de = beide_sprachen(lauf, pruefung)
@@ -265,7 +263,7 @@ def fall_l6_drucken_und_sicherungen(lauf):
                     "de": {"Drucken und PDF", "Öffnen und drucken", "Sicherungsübersicht", "Sicherungen vergleichen",
                            "Älterer Stand", "Für KI bereitstellen", "Zweck", "Umfang"}}
         fehlt = erwartet[sprache] - set(texte)
-        assert not fehlt, (sprache, fehlt, texte)
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
         return [text for text in texte if "Epsilon" not in text and ".glide" not in text]
 
     en, de = beide_sprachen(lauf, pruefung)
@@ -285,15 +283,37 @@ def fall_l7_kalender_verlauf_kuerzel(lauf):
                     "de": {"Kalenderdatei (ICS)", "Speichern und öffnen", "Änderungsverlauf", "Verlauf leeren",
                            "Tastenkürzel", "Tasten / Aktion", "Wirkung"}}
         fehlt = erwartet[sprache] - set(texte)
-        assert not fehlt, (sprache, fehlt, texte)
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
         return texte
 
     en, de = beide_sprachen(lauf, pruefung)
     return f"Kalenderexport, Änderungsverlauf und Tastenkürzel: {en} englische, {de} deutsche Texte"
 
 
+def fall_l8_handbuch_und_bericht(lauf):
+    """L8: eingebautes Handbuch, vollständiger Speicherstatus-Bericht und Klassentabellen der Pinnwand."""
+    app = lauf.app
+
+    def pruefung(sprache):
+        texte = modal_texte(lauf, app.show_manual_dialog)
+        texte += modal_texte(lauf, app.show_storage_status)
+        texte += [name for _key, name in lauf.mod.tr_table(lauf.mod.ItemWorkspace.BOARD_LAYOUTS)]
+        handbuch = {titel for titel, _eintraege in app.manual_sections()}
+        erwartet = {"en": {"Manual", "Board", "Help", "Keyboard shortcuts", "Free layout"},
+                    "de": {"Handbuch", "Pinnwand", "Hilfe", "Tastenkürzel", "Frei anordnen"}}
+        fehlt = erwartet[sprache] - set(texte) - handbuch
+        assert not fehlt, f"{sprache}: fehlt {sorted(fehlt)}"
+        # Gewollt deutsch zitiert: Eingabewörter der Schnellerfassung und Vorlagenplatzhalter.
+        zitiert = ("{{Datum}}", "German phrases")
+        return [text for text in texte if not any(marke in text for marke in zitiert)] + sorted(handbuch)
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Handbuch, Speicherstatus und Pinnwand-Anordnungen: {en} englische, {de} deutsche Texte"
+
+
 FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
-          "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen", "l7_kalender_verlauf_kuerzel")
+          "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen", "l7_kalender_verlauf_kuerzel",
+          "l8_handbuch_und_bericht")
 
 
 def main():

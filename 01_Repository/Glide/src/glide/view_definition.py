@@ -7,6 +7,7 @@ Unverstandene Definitionen bleiben gespeichert und werden sichtbar ungültig.
 from collections import Counter
 import copy
 from datetime import date, timedelta
+import i18n as glide_i18n
 
 KEY = 'saved_view_conditions_v1'
 LAYOUT_KEY = 'saved_view_layouts_v1'
@@ -20,30 +21,30 @@ LAYOUT_DEFAULT = dict(display='list', group='none', sort='due', direction='asc',
 
 def layout_errors(value):
     if not isinstance(value, dict):
-        return ['Die Darstellung ist kein gültiges Objekt.']
+        return [glide_i18n.t("mod.view_definition.layout_errors.the_display_is_not", 'Die Darstellung ist kein gültiges Objekt.')]
     problems = []
     if set(value) - set(LAYOUT_DEFAULT):
-        problems.append('Die Darstellung enthält unbekannte Felder.')
+        problems.append(glide_i18n.t("mod.view_definition.layout_errors.the_display_contains_unknown", 'Die Darstellung enthält unbekannte Felder.'))
     for key, choices in (('display', ('list', 'table', 'columns')), ('group', GROUPS),
                          ('sort', ('manual',) + COLUMNS), ('direction', ('asc', 'desc'))):
         option = value.get(key, LAYOUT_DEFAULT[key])
         if not isinstance(option, str) or option not in choices:
-            problems.append('Ungültige Darstellung: ' + key)
+            problems.append(glide_i18n.t("mod.view_definition.layout_errors.invalid_display", 'Ungültige Darstellung: {key_}', key_=key))
     columns = value.get('columns', LAYOUT_DEFAULT['columns'])
     if (not isinstance(columns, list) or not columns or len(columns) > len(COLUMNS)
             or any(not isinstance(v, str) or v not in COLUMNS for v in columns)
             or len(set(columns)) != len(columns) or 'title' not in columns):
-        problems.append('Die Tabellenspalten benötigen eine eindeutige Auswahl mit Aufgabe.')
+        problems.append(glide_i18n.t("mod.view_definition.layout_errors.the_table_columns_need", 'Die Tabellenspalten benötigen eine eindeutige Auswahl mit Aufgabe.'))
     widths = value.get('widths', {})
     if not isinstance(widths, dict) or any(
             k not in COLUMNS or type(v) is not int or not 60 <= v <= 1200 for k, v in widths.items()):
-        problems.append('Ungültige Tabellenspaltenbreiten.')
+        problems.append(glide_i18n.t("mod.view_definition.layout_errors.invalid_table_column_widths", 'Ungültige Tabellenspaltenbreiten.'))
     collapsed = value.get('collapsed', [])
     if not isinstance(collapsed, list) or len(collapsed) > 1000 or any(
             not isinstance(v, str) or len(v) > 160 for v in collapsed):
-        problems.append('Ungültige eingeklappte Gruppen.')
+        problems.append(glide_i18n.t("mod.view_definition.layout_errors.invalid_collapsed_groups", 'Ungültige eingeklappte Gruppen.'))
     if any(type(value.get(k, LAYOUT_DEFAULT[k])) is not bool for k in ('hide_empty', 'only_open')):
-        problems.append('Ungültige Darstellungsoption.')
+        problems.append(glide_i18n.t("mod.view_definition.layout_errors.invalid_display_option", 'Ungültige Darstellungsoption.'))
     return problems
 
 
@@ -93,10 +94,10 @@ def day(value):
 
 def errors(value):
     if not isinstance(value, dict):
-        return ['Die Ansichtsbedingungen sind kein gültiges Objekt.']
+        return [glide_i18n.t("mod.view_definition.errors.the_view_conditions_are", 'Die Ansichtsbedingungen sind kein gültiges Objekt.')]
     problems = []
     if set(value) - FIELDS:
-        problems.append('Die Ansicht enthält unbekannte Bedingungen.')
+        problems.append(glide_i18n.t("mod.view_definition.errors.the_view_contains_unknown", 'Die Ansicht enthält unbekannte Bedingungen.'))
     for field, choices, default in (
             ('mode', {'all', 'any'}, 'all'), ('planned', PLANNED, 'any'),
             ('effort', {'any', 'none', 'at_most', 'at_least'}, 'any'),
@@ -104,19 +105,19 @@ def errors(value):
             ('importance_min', {'all', '0', '1', '2', '3'}, 'all')):
         option = value.get(field, default)
         if not isinstance(option, str) or option not in choices:
-            problems.append('Ungültige Bedingung: ' + field)
+            problems.append(glide_i18n.t("mod.view_definition.errors.invalid_condition", 'Ungültige Bedingung: {field}', field=field))
     if value.get('planned') == 'range':
         start, end = day(value.get('start')), day(value.get('end'))
         if start is None or end is None or start > end:
-            problems.append('Zeitraum: gültiges Von-/Bis-Datum im Format JJJJ-MM-TT erforderlich.')
+            problems.append(glide_i18n.t("mod.view_definition.errors.period_valid_from_to", 'Zeitraum: gültiges Von-/Bis-Datum im Format JJJJ-MM-TT erforderlich.'))
     if value.get('effort') in ('at_most', 'at_least'):
         minutes = value.get('minutes')
         if type(minutes) is not int or not 1 <= minutes <= 525600:
-            problems.append('Aufwand: 1 bis 525600 Minuten erforderlich.')
+            problems.append(glide_i18n.t("mod.view_definition.errors.effort_1_to_525600", 'Aufwand: 1 bis 525600 Minuten erforderlich.'))
     labels = value.get('exclude_labels', [])
     if not isinstance(labels, list) or len(labels) > 1000 or any(
             not isinstance(label, str) or not label or len(label) > 120 for label in labels):
-        problems.append('Ungültige ausgeschlossene Labels.')
+        problems.append(glide_i18n.t("mod.view_definition.errors.invalid_excluded_labels", 'Ungültige ausgeschlossene Labels.'))
     return problems
 
 
@@ -157,17 +158,17 @@ class Prepared:
 
         def planned_text(facts, names):
             planned = day(facts.get('planned_date'))
-            return planned.strftime('%d.%m.%Y') if planned else 'ohne Bearbeitungstag'
+            return planned.strftime('%d.%m.%Y') if planned else glide_i18n.t("mod.view_definition.planned_text.without_planned_day", 'ohne Bearbeitungstag')
 
         mode = value.get('planned', 'any')
         if mode == 'none':
-            add('planned', 'Bearbeitungstag', lambda f: day(f.get('planned_date')) is None,
-                lambda n: 'ohne Bearbeitungstag', planned_text)
+            add('planned', glide_i18n.t("calendar.title.planned", 'Bearbeitungstag'), lambda f: day(f.get('planned_date')) is None,
+                lambda n: glide_i18n.t("mod.view_definition.init.without_planned_day", 'ohne Bearbeitungstag'), planned_text)
         elif mode == 'overdue':
             def overdue(f):
                 planned = day(f.get('planned_date'))
                 return planned is not None and planned < today and not f.get('done')
-            add('planned', 'Bearbeitungstag', overdue, lambda n: 'liegen geblieben (offen vor heute)', planned_text)
+            add('planned', glide_i18n.t("calendar.title.planned", 'Bearbeitungstag'), overdue, lambda n: glide_i18n.t("mod.view_definition.init.left_undone_open_before", 'liegen geblieben (offen vor heute)'), planned_text)
         elif mode in ('today', 'this_week', 'next_week', 'range'):
             start = end = today
             if mode in ('this_week', 'next_week'):
@@ -179,7 +180,7 @@ class Prepared:
                 planned = day(f.get('planned_date'))
                 return planned is not None and start <= planned <= end
             requested = f'{start:%d.%m.%Y} bis {end:%d.%m.%Y}'
-            add('planned', 'Bearbeitungstag', in_window, lambda n: requested, planned_text)
+            add('planned', glide_i18n.t("calendar.title.planned", 'Bearbeitungstag'), in_window, lambda n: requested, planned_text)
         effort = value.get('effort', 'any')
         if effort != 'any':
             limit = value.get('minutes')
@@ -191,27 +192,27 @@ class Prepared:
                 return estimated and (minutes <= limit if effort == 'at_most' else minutes >= limit)
             def effort_text(f, n):
                 minutes = f.get('estimated_minutes')
-                return f'{minutes} Minuten' if type(minutes) is int and minutes > 0 else 'ohne Schätzung'
-            effort_request = ('ohne Schätzung' if effort == 'none' else
-                              ('höchstens ' if effort == 'at_most' else 'mindestens ') + f'{limit} Minuten')
-            add('effort', 'Aufwand', effort_matches, lambda n: effort_request, effort_text)
+                return glide_i18n.t("mod.view_definition.effort_text.minutes", '{minutes} Minuten', minutes=minutes) if type(minutes) is int and minutes > 0 else glide_i18n.t("mod.view_definition.effort_text.without_estimate", 'ohne Schätzung')
+            effort_request = (glide_i18n.t("mod.view_definition.init.without_estimate", 'ohne Schätzung') if effort == 'none' else
+                              glide_i18n.t("mod.view_definition.init.minutes", '{wert}{limit} Minuten', wert=glide_i18n.t("mod.view_definition.init.at_most", 'höchstens ') if effort == 'at_most' else glide_i18n.t("mod.view_definition.init.at_least", 'mindestens '), limit=limit))
+            add('effort', glide_i18n.t("saved_view.field.effort", 'Aufwand'), effort_matches, lambda n: effort_request, effort_text)
         blocked = value.get('blocked', 'any')
         if blocked != 'any':
-            add('blocked', 'Wartet auf', lambda f: bool(f.get('blocked')) == (blocked == 'yes'),
+            add('blocked', glide_i18n.t("ui.item_form_dialog.waits_for", 'Wartet auf'), lambda f: bool(f.get('blocked')) == (blocked == 'yes'),
                 lambda n: 'blockiert' if blocked == 'yes' else 'frei',
                 lambda f, n: 'blockiert' if f.get('blocked') else 'frei')
         minimum = value.get('importance_min', 'all')
         if minimum != 'all':
             level = int(minimum)
-            add('importance_min', 'Mindestwichtigkeit', lambda f: f.get('importance', 0) >= level,
-                lambda n: f'mindestens {minimum}', lambda f, n: f.get('importance', 0))
+            add('importance_min', glide_i18n.t("saved_view.field.importance_min", 'Mindestwichtigkeit'), lambda f: f.get('importance', 0) >= level,
+                lambda n: glide_i18n.t("mod.view_definition.init.at_least_2", 'mindestens {minimum}', minimum=minimum), lambda f, n: f.get('importance', 0))
         excluded = tuple(value.get('exclude_labels', []))
         if excluded:
             excluded_set = frozenset(excluded)
             def excluded_text(f, n):
                 overlap = excluded_set.intersection(f.get('labels') or ())
-                return ', '.join(n.get(label, label) for label in sorted(overlap)) if overlap else 'keines der ausgeschlossenen Labels'
-            add('exclude_labels', 'Labels ausschließen', lambda f: not excluded_set.intersection(f.get('labels') or ()),
+                return ', '.join(n.get(label, label) for label in sorted(overlap)) if overlap else glide_i18n.t("mod.view_definition.excluded_text.none_of_the_excluded", 'keines der ausgeschlossenen Labels')
+            add('exclude_labels', glide_i18n.t("saved_view.field.exclude_labels", 'Labels ausschließen'), lambda f: not excluded_set.intersection(f.get('labels') or ()),
                 lambda n: ', '.join(n.get(label, label) for label in excluded), excluded_text)
 
     def matches(self, facts, legacy=()):
@@ -226,10 +227,10 @@ class Prepared:
 
     def conditions(self, facts, names=None):
         if self.problems:
-            return [dict(key='view_invalid', title='Ansicht ungültig', ok=False, detail=' '.join(self.problems))]
+            return [dict(key='view_invalid', title=glide_i18n.t("mod.view_definition.conditions.view_invalid", 'Ansicht ungültig'), ok=False, detail=' '.join(self.problems))]
         names = names or {}
         return [dict(key=key, title=title, ok=bool(predicate(facts)),
-                     detail=f'verlangt: {requested(names)} · Punkt: {actual(facts, names)}')
+                     detail=glide_i18n.t("mod.view_definition.conditions.requires_item", 'verlangt: {requested} · Punkt: {actual}', requested=requested(names), actual=actual(facts, names)))
                 for key, title, predicate, requested, actual in self.rules]
 
 

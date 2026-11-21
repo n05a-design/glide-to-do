@@ -25,6 +25,7 @@ zeigt die Meldung.
 
 import os
 import tempfile
+import i18n as glide_i18n
 
 RESTORED = "restored"
 UNSAVED = "unsaved"
@@ -157,20 +158,17 @@ def restore_bytes(path, data, replace=os.replace):
 def stop_message(action_name, missing_count, result=RESTORED, crashed=False, missing_after=0):
     """Titel und Text der Abbruchmeldung; behauptet nur, was `result` belegt."""
     if crashed:
-        detail = "Der Vorgang wurde abgebrochen."
+        detail = glide_i18n.t("mod.structural_guard.stop_message.the_action_was_cancelled", "Der Vorgang wurde abgebrochen.")
     elif missing_count:
-        detail = f"Dabei wären {missing_count} Punkt(e) verloren gegangen."
+        detail = glide_i18n.t("mod.structural_guard.stop_message.item_s_would_have", 'Dabei wären {missing_count} Punkt(e) verloren gegangen.', missing_count=missing_count)
     else:
-        detail = "Dabei wären Punkte verloren gegangen."
-    head = f"„{action_name}“ wurde nicht ausgeführt.\n{detail}\n\n"
+        detail = glide_i18n.t("mod.structural_guard.stop_message.items_would_have_been", "Dabei wären Punkte verloren gegangen.")
+    head = glide_i18n.t("mod.structural_guard.stop_message.was_not_carried_out", '„{action_name}“ wurde nicht ausgeführt.\n{detail}\n\n', action_name=action_name, detail=detail)
     if result == RESTORED:
-        return ("Abgebrochen – keine Daten verloren",
-                head + "Der vorherige Stand ist vollständig wiederhergestellt.")
+        return (glide_i18n.t("mod.structural_guard.stop_message.cancelled_no_data_lost", "Abgebrochen – keine Daten verloren"),
+                glide_i18n.t("mod.structural_guard.stop_message.the_previous_state_is", '{head}Der vorherige Stand ist vollständig wiederhergestellt.', head=head))
     if result == UNSAVED:
-        return ("Abgebrochen – noch nicht gespeichert",
-                head + "Der vorherige Stand steht wieder in Glide, ließ sich aber nicht speichern. "
-                "Glide versucht es beim nächsten Speichern erneut und fragt beim Beenden nach.")
-    return ("Abgebrochen – Bestand prüfen",
-            head + f"Glide konnte den vorherigen Stand nicht vollständig wiederherstellen; "
-            f"{missing_after} Punkt(e) fehlen noch. Bitte zuerst mit Strg/Cmd+Z zurücknehmen "
-            "und die Liste prüfen. Ältere Stände zeigt „Sicherungen vergleichen …“.")
+        return (glide_i18n.t("mod.structural_guard.stop_message.cancelled_not_saved_yet", "Abgebrochen – noch nicht gespeichert"),
+                glide_i18n.t("mod.structural_guard.stop_message.the_previous_state_is_2", '{head}Der vorherige Stand steht wieder in Glide, ließ sich aber nicht speichern. Glide versucht es beim nächsten Speichern erneut und fragt beim Beenden nach.', head=head))
+    return (glide_i18n.t("mod.structural_guard.stop_message.cancelled_check_data", "Abgebrochen – Bestand prüfen"),
+            glide_i18n.t("mod.structural_guard.stop_message.glide_could_not_fully", '{head}Glide konnte den vorherigen Stand nicht vollständig wiederherstellen; {missing_after} Punkt(e) fehlen noch. Bitte zuerst mit Strg/Cmd+Z zurücknehmen und die Liste prüfen. Ältere Stände zeigt „Sicherungen vergleichen …“.', head=head, missing_after=missing_after))

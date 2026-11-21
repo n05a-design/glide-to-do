@@ -8,6 +8,7 @@ zu lange Pfade ließen sich unter Windows/OneDrive nicht mehr öffnen und änder
 """
 import os
 import unicodedata
+import i18n as glide_i18n
 
 NAME_MAX_CHARS = 40
 ID_PREFIX_CHARS = 32
@@ -69,13 +70,13 @@ def name_problem(name, limit=NAME_MAX_CHARS):
     """Klare Meldung, warum ein Anhangsname nicht zulässig ist – sonst None."""
     text = " ".join(str(name or "").split())
     if not text:
-        return "Bitte einen Dateinamen eingeben."
+        return glide_i18n.t("mod.attachment_paths.name_problem.please_enter_a_file", "Bitte einen Dateinamen eingeben.")
     if len(text) > limit:
-        return f"Der Anhangsname hat {len(text)} Zeichen; erlaubt sind höchstens {limit}."
+        return glide_i18n.t("mod.attachment_paths.name_problem.the_attachment_name_has", 'Der Anhangsname hat {len} Zeichen; erlaubt sind höchstens {limit}.', len=len(text), limit=limit)
     if any(ord(char) < 32 or char in FORBIDDEN_CHARS for char in text):
-        return "Der Anhangsname enthält unzulässige Zeichen (< > : \" / \\ | ? *)."
+        return glide_i18n.t("mod.attachment_paths.name_problem.the_attachment_name_contains", "Der Anhangsname enthält unzulässige Zeichen (< > : \" / \\ | ? *).")
     if text.rstrip(" .") != text:
-        return "Der Anhangsname darf nicht auf Punkt oder Leerzeichen enden."
+        return glide_i18n.t("mod.attachment_paths.name_problem.the_attachment_name_must", "Der Anhangsname darf nicht auf Punkt oder Leerzeichen enden.")
     return None
 
 

@@ -11,6 +11,7 @@ Weg, Termine auszulassen).
 import calendar
 from datetime import date, datetime, timedelta
 import ics_recurrence
+import i18n as glide_i18n
 
 DAILY = "taeglich"
 EVERY_N_DAYS = "tage"
@@ -119,26 +120,42 @@ def form_values(value):
     return result
 
 
-def describe_series(value):
-    """Feste deutsche Klartexte, auch verlustfrei für den TXT-Rundlauf."""
+def _german(_key, default, **values):
+    return default.format(**values) if values else default
+
+
+def describe_series(value, tr=None):
+    """Feste deutsche Klartexte, auch verlustfrei für den TXT-Rundlauf.
+
+    `tr(key, default, **werte)` übersetzt für die Anzeige (etwa `i18n.t`); ohne `tr`
+    entsteht immer der deutsche Text, den der TXT-Import zurückliest.
+    """
+    tr = tr or _german
     fields = form_values(value)
-    names = ("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+    names = tuple(tr(f"repeat.weekday.short.{i}", name) for i, name in enumerate(("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")))
     n, kind = fields["abstand"], fields["art"]
+    tage = ", ".join(names[d] for d in fields["tage"])
     if kind == "serie_woche":
-        return ("jede Woche: " if n == 1 else f"alle {n} Wochen: ") + ", ".join(names[d] for d in fields["tage"])
+        return (tr("repeat.series.week_one", "jede Woche: {tage}", tage=tage) if n == 1
+                else tr("repeat.series.week_many", "alle {n} Wochen: {tage}", n=n, tage=tage))
     if kind in ("serie_monat", "serie_jahr"):
-        base = ("jeden Monat" if kind == "serie_monat" else "jedes Jahr") if n == 1 else f"alle {n} " + ("Monate" if kind == "serie_monat" else "Jahre")
-        return base + " (fehlende Tage entfallen)"
+        if kind == "serie_monat":
+            base = tr("repeat.series.month_one", "jeden Monat") if n == 1 else tr("repeat.series.month_many", "alle {n} Monate", n=n)
+        else:
+            base = tr("repeat.series.year_one", "jedes Jahr") if n == 1 else tr("repeat.series.year_many", "alle {n} Jahre", n=n)
+        return base + tr("repeat.series.missing_days", " (fehlende Tage entfallen)")
     if kind == "serie_position":
-        position = "letzter" if fields["position"] == -1 else f"{fields['position']}."
+        position = (tr("repeat.series.last", "letzter") if fields["position"] == -1
+                    else tr("repeat.series.position", "{position}.", position=fields["position"]))
         suffix = position + " " + names[fields["wochentag"]]
     elif kind == "serie_letzter":
-        suffix = "letzter Tag"
+        suffix = tr("repeat.series.last_day", "letzter Tag")
     elif kind == "serie_werktag":
-        suffix = "letzter Werktag (Mo–Fr)"
+        suffix = tr("repeat.series.last_workday", "letzter Werktag (Mo–Fr)")
     else:
         return ""
-    return ("jeden Monat: " if n == 1 else f"alle {n} Monate: ") + suffix
+    return (tr("repeat.series.month_prefix_one", "jeden Monat: {suffix}", suffix=suffix) if n == 1
+            else tr("repeat.series.month_prefix_many", "alle {n} Monate: {suffix}", n=n, suffix=suffix))
 
 
 def parse_series_text(text):
@@ -362,14 +379,16 @@ def apply_options(rule, basis="faellig", paused=False, remaining=""):
     return result
 
 
-def option_suffix(rule):
+def option_suffix(rule, tr=None):
+    """Zusätze einer Regel; `tr` wie bei `describe_series`, ohne `tr` deutsch für den TXT-Rundlauf."""
+    tr = tr or _german
     result = []
     if rule.get("bezug") == "erledigt":
-        result.append("ab Erledigung")
+        result.append(tr("repeat.option.from_completion", "ab Erledigung"))
     if rule.get("pausiert"):
-        result.append("pausiert")
+        result.append(tr("repeat.option.paused", "pausiert"))
     if rule.get("rest"):
-        result.append(f"noch {rule['rest']} Termine inkl. aktuell")
+        result.append(tr("repeat.option.remaining", "noch {rest} Termine inkl. aktuell", rest=rule["rest"]))
     return "".join(" · " + text for text in result)
 
 
@@ -475,20 +494,20 @@ def skip_plan(items, stichtag, missed=False, with_rules=False):
         regel = normalize(item.get("repeat"))
         faellig = _due(item)
         if regel is None:
-            gruende[kennung] = "keine Wiederholung"
+            gruende[kennung] = glide_i18n.t("mod.repeat_rules.skip_plan.no_repeat", "keine Wiederholung")
             continue
         if item.get("done"):
-            gruende[kennung] = "bereits erledigt"
+            gruende[kennung] = glide_i18n.t("mod.repeat_rules.skip_plan.already_done", "bereits erledigt")
             continue
         if regel.get("pausiert"):
-            gruende[kennung] = "Serie pausiert"
+            gruende[kennung] = glide_i18n.t("mod.repeat_rules.skip_plan.series_paused", "Serie pausiert")
             continue
         if faellig is None:
-            gruende[kennung] = "ohne Fälligkeit"
+            gruende[kennung] = glide_i18n.t("mod.filter_explain.conditions.without_due_date", "ohne Fälligkeit")
             continue
         if missed:
             if faellig >= stichtag:
-                gruende[kennung] = "nicht überfällig"
+                gruende[kennung] = glide_i18n.t("mod.repeat_rules.skip_plan.not_overdue", "nicht überfällig")
                 continue
             neu = faellig
             for _ in range(MAX_SKIP_STEPS):
@@ -500,7 +519,7 @@ def skip_plan(items, stichtag, missed=False, with_rules=False):
         else:
             neu, regel = advance_rule(regel, faellig)
         if neu is None:
-            gruende[kennung] = "die Reihe hat keinen weiteren Termin"
+            gruende[kennung] = glide_i18n.t("mod.repeat_rules.skip_plan.the_series_has_no", "die Reihe hat keinen weiteren Termin")
             continue
         plan[kennung] = {"due": neu.isoformat(), "repeat": regel} if with_rules else neu.isoformat()
     return plan, gruende

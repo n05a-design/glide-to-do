@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from notion_reimport import is_source_key
 import uuid
+import i18n as glide_i18n
 
 
 
@@ -103,7 +104,7 @@ def prepare(pages, existing_folders, current_pages=(), *, target_folder_id=None,
             descriptors[key]=descriptor
             if key not in bindings:
                 identity=fresh();bindings[key]=identity
-                folder=Folder(identity,str(title).strip()[:200]or 'Ohne Titel',parent,key)
+                folder=Folder(identity,str(title).strip()[:200]or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel'),parent,key)
                 created.append(folder)
                 folders[identity]={'id':identity,'parent_id':parent}
             parent=bindings[key]

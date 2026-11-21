@@ -27,6 +27,7 @@ import struct
 from typing import Iterable, Sequence
 import xml.etree.ElementTree as ET
 import zlib
+import i18n as glide_i18n
 
 
 FORMAT_NAME = "glide.drawing"
@@ -1443,9 +1444,9 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
 
     warnings = []
     if model_changed and not artwork_changed and not matches_model:
-        warnings.append("Zeichenmodell wurde als Text geändert; sichtbare Grafik wird neu erzeugt")
+        warnings.append(glide_i18n.t("mod.drawing.import_glide_svg.the_drawing_model_was", "Zeichenmodell wurde als Text geändert; sichtbare Grafik wird neu erzeugt"))
     elif model_changed and artwork_changed and matches_model:
-        warnings.append("Modell und Grafik wurden geändert; Prüfsummen werden neu erzeugt")
+        warnings.append(glide_i18n.t("mod.drawing.import_glide_svg.model_and_graphic_were", "Modell und Grafik wurden geändert; Prüfsummen werden neu erzeugt"))
     elif model_changed:
-        warnings.append("Modellprüfsumme wird neu erzeugt")
+        warnings.append(glide_i18n.t("mod.drawing.import_glide_svg.model_checksum_is_recreated", "Modellprüfsumme wird neu erzeugt"))
     return SvgImportResult(model=model, repaired=bool(warnings), warnings=tuple(warnings))

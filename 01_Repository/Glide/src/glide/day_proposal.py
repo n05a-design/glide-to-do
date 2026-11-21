@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 import hashlib
 import json
+import i18n as glide_i18n
 
 REASONS = {"overdue": "überfällig", "due_today": "heute fällig",
            "carried": "liegen geblieben", "due_soon": "in den nächsten zwei Tagen fällig",
@@ -39,7 +40,7 @@ def reason_text(row):
     count = row.get("unblocks", 0)
     if not count:
         return reason
-    release = f"gibt {count} weitere {'Aufgabe' if count == 1 else 'Aufgaben'} frei"
+    release = glide_i18n.t("mod.day_proposal.reason_text.frees_more", 'gibt {count} weitere {wert} frei', count=count, wert=glide_i18n.t("mod.day_proposal.reason_text.task", 'Aufgabe') if count == 1 else glide_i18n.t("mod.day_proposal.reason_text.tasks", 'Aufgaben'))
     return release if row["reason"] == "unblocks" else f"{reason} · {release}"
 
 
