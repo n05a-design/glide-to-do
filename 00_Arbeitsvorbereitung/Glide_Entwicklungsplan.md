@@ -3811,3 +3811,23 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.1, künstliche Daten: 1.284 Unit-Tests grün, T335 9/9 grün, Schnellprüfung grün. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Abnahme.
 
 **D – Rest und Git:** Eigene Fotos im Showcase, Entfernen aller Fremdbilder und die Herausgeberzeile folgen als eigene Pakete. Gespeicherte Standardtitel bestehender Objekte werden nicht umbenannt; nur der Eingang trägt bei jedem Laden den Namen der Sprache. Lieferkopie mit der nächsten Produktionsrunde.
+
+### 21.167 CI-Nachtrag: Mitternachtsschutz in `fall_altfilter` (21.11.2026)
+
+**A – Auftrag:** Inhaber am 21.11.2026: Exitcode 1 in den GitHub-Branches klären und den Mitternachtsfehler beheben.
+
+**B – Befund und Umsetzung:** Die Glide-Prüfung zu PR #164 (`claude/d93-drawing-dialogs-i18n`) scheiterte am 20.11.2026 im Push-Lauf 44830631612 an `test_ansichten` → `fall_altfilter`. Die Ergebnisse des alten Lesers waren um genau einen Tag verschoben: Die Fristen entstanden vor 0 Uhr CET, der alte Leser wertete danach aus. `tageswechsel_abwarten()` wartet jetzt bis kurz nach Mitternacht, wenn weniger als 240 s bis 0 Uhr bleiben. Wechselt das Datum trotzdem, meldet eine eigene Zusicherung den Tageswechsel. Der PR-Lauf 44830635542 desselben Commits scheiterte dagegen an `seitenleistenabstand3504` („Hover fehlt“, Xvfb-Timing); er bleibt unter Beobachtung. Der Merge-Lauf auf `main` (`09be5717`) und alle späteren `main`-Läufe waren grün.
+
+**C – Prüfung:** macOS arm64, Python 3.14.5, eigene Tk 9.1, künstliche Daten: `test_ansichten.py --fall altfilter` grün; Wartehilfe mit simulierter Uhrzeit (23:58:30 wartet 92 s, 23:50:00 und 0:00:10 warten nicht). Kein echter Lauf über Mitternacht.
+
+**D – Rest und Git:** Eigener PR nur für Testcode und Plan; `src/glide` und `07_Python-Versionen` bleiben unberührt. Hover-Fall `seitenleistenabstand3504` nur beobachten.
+
+### 21.168 Mac-Temponachprüfung: Designabfragen beim Pinnwandaufbau (V1.79, 21.11.2026)
+
+**A – Auftrag:** Paket A zur Mac-Druckperformance. Den Prüffall `druck_tempo` auf `main` nachmessen, den tatsächlichen Kostenpfad profilieren und nachgewiesene Mehrarbeit beheben.
+
+**B – Befund und Umsetzung:** Der Zeitvergleich misst die Pinnwandzeichnung, anschließend prüft er den Inhalt des HTML-Druckexports. Jede Karte fragt beim Aufbau zweimal den Farbmodus ab. Seit der Volllokalisierung wurden dabei pro Abfrage der gesamte Designkatalog mehrfach übersetzt. `design_name()` und `color_mode()` lesen direkt aus den internen Einträgen. `design_info()` übersetzt nur den angeforderten Eintrag. T194 sichert gültige Design- und Farbschichtkennungen sowie den Rückfall auf das Standarddesign ab.
+
+**C – Prüfung:** Je zehn lokale Vorher-/Nachher-Läufe auf dem Mac mit Tk 9.1; vollständige Seitenkartensuite 7/7. Messwerte und Prüfgrenzen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#mac-nachprüfung-pinnwandaufbau-in-druck_tempo-v179-21112026).
+
+**D – Rest:** Die native GitHub-Vollprüfung bleibt offen. App-Version 1.0.0 und Aufgabenformat 26. Die Lieferkopie folgt mit dem separaten 1.0-Lieferpaket.

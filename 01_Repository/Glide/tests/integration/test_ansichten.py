@@ -2,7 +2,7 @@
 """FP-03/1: echte Filtereinstiege, Dialog, Persistenz, Altleser und Gegenprobe."""
 import argparse
 import copy
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import hashlib
 import json
 from pathlib import Path
@@ -169,7 +169,27 @@ def fall_altleser(run):
     return {'altleser_sha256':hashlib.sha256(old.read_bytes()).hexdigest(),'historische_begleitmodule':True}
 
 
+# Puffer vor Mitternacht für fall_altfilter: Setzen der Fristen, Abbau,
+# Start des alten Lesers (Zeitgrenze 90 s) und Vergleich müssen am selben
+# Kalendertag liegen.
+ALTFILTER_TAGESPUFFER_S=240
+
+
+def tageswechsel_abwarten(puffer=ALTFILTER_TAGESPUFFER_S):
+    """Wartet bis kurz nach Mitternacht, wenn der Fall sonst darüber liefe."""
+    now=datetime.now()
+    midnight=datetime.combine(now.date()+timedelta(days=1),datetime.min.time())
+    rest=(midnight-now).total_seconds()
+    if rest<puffer:
+        time.sleep(rest+2)
+    return date.today()
+
+
 def fall_altfilter(run):
+    # Am 20.11.2026 lief die CI über Mitternacht (CET): Die Fristen entstanden
+    # vor 0 Uhr, der alte Leser wertete danach aus und alle Ergebnisse waren
+    # um einen Tag verschoben.
+    day=tageswechsel_abwarten()
     app=run.app;source,other,a,b,c=seed(run)
     a['due']=date.today().isoformat()
     b['due']=(date.today()+timedelta(days=1)).isoformat()
@@ -194,6 +214,7 @@ print("ERGEBNIS "+json.dumps([sorted(row[4]["id"] for row in r.app.saved_filters
         child=subprocess.run([sys.executable,'-B','-c',code,str(old_runtime),run.data,str(REPO/'tests/integration'),str(request)],capture_output=True,text=True,timeout=90)
     assert child.returncode==0,(child.stdout+child.stderr)[-1200:]
     actual=json.loads(next(line[9:] for line in child.stdout.splitlines() if line.startswith('ERGEBNIS ')))
+    assert date.today()==day,('Tageswechsel während fall_altfilter; Puffer erhöhen',day,date.today())
     assert actual==expected,(actual,expected)
     run.start()
     return {'alte_kombinationen':len(criteria),'identisch_zum_ausgelieferten_leser':True,'historische_begleitmodule':True}

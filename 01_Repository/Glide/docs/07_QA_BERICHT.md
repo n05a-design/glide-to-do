@@ -1,5 +1,16 @@
 # QA-Bericht – Glide 1.0.0
 
+## Mac-Nachprüfung: Pinnwandaufbau in `druck_tempo` (V1.79, 21.11.2026)
+
+Lokale Vergleichsmessung auf macOS arm64, Python 3.14.5, Tcl/Tk 9.1.0, `LANGUAGE=de`, mit künstlichen Daten pro Prozess. Je zehn Einzelläufe auf `27540f9b` und mit der Korrektur, jeweils mit zwei Vorwärmrunden und fünf abwechselnd angeordneten Messpaaren. Gemessen wird `draw_board()` für je 200 Karten. Der HTML-Druckexport wird anschließend auf Inhalt geprüft.
+
+| Stand | Nur Aufgabenkarten | 150 Aufgaben- und 50 Seitenkarten | Gepaarter Quotient, Min. bis Max. | Bestanden |
+| --- | --- | --- | --- | --- |
+| `27540f9b` | 75,43 ms | 74,55 ms | 0,9703–1,0064 | 10/10 |
+| Korrektur V1.79 | 32,81 ms | 31,41 ms | 0,9334–0,9731 | 10/10 |
+
+Die Zeitspalten zeigen den Median der Laufmediane. Die Schranke bleibt bei 1,10. Das separate Python-Profil ordnet rund zwei Drittel der ursprünglichen Zeichenzeit dem wiederholten Übersetzen der Designtabelle über `color_mode()` zu. Die neue deterministische Gegenprobe für Design- und Farbschichtkennungen scheitert auf der Basis am Übersetzungsaufruf und besteht mit der Korrektur. Die vollständige lokale Seitenkartensuite bestand 7/7. Auch die Design-/Erscheinungsprüfung `test_oberflaeche33321.py` und die DE/EN-Lokalisierungssuite T335 (9/9) waren grün. Der frühere rote Hosted-Lauf ist unter den lokalen Bedingungen nicht reproduzierbar. Die Wirkung auf die native GitHub-Vollprüfung ist offen.
+
 ## D93: zweisprachiger Austausch und englische Vorlagen (V1.78, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/v178-austausch-zweisprachig` über `main` `3a7e9170`. Grün: 1.284 Unit-Tests einschließlich `test_i18n.py` mit dem neuen Abgleich des englischen Vorlagenkatalogs, T335 mit allen neun Fällen (L1–L8 und `v178_austausch_und_vorlagen`) auf Englisch und Deutsch sowie die Schnellprüfung `pruefen.py --modus schnell --vordergrund`. Die englischen Vorlagentexte wurden in der Sitzung übersetzt und auf die Titelgrenze von 40 Zeichen gekürzt, sodass kein „Originaltitel“-Nachsatz entsteht. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme der englischen Vorlagen und Exporte.
