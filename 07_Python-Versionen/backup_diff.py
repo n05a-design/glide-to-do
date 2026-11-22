@@ -7,6 +7,7 @@ Backupdatei): Listen und Aufgaben neu, entfernt, verschoben oder mit
 geänderten Feldern. Dieses Modul liest und schreibt keine Dateien.
 """
 import json
+import i18n as glide_i18n
 
 LIST_FIELDS = (("title", "Titel"), ("folder_id", "Ordner"), ("list_kind", "Art"), ("note", "Notiz"),
                ("archived", "Archiviert"), ("rich_note", "Seitentext"), ("labels", "Labels"),
@@ -76,7 +77,7 @@ def compare(alt, neu):
     listen_neu, punkte_neu = index(neu)
 
     def titel(listen, kennung):
-        return str((listen.get(kennung) or {}).get("title") or "Liste")
+        return str((listen.get(kennung) or {}).get("title") or glide_i18n.t("editor.toolbar.list", "Liste"))
 
     ergebnis = {"lists_added": [], "lists_removed": [], "lists_changed": [],
                 "items_added": [], "items_removed": [], "items_moved": [], "items_changed": []}
@@ -109,9 +110,9 @@ def compare(alt, neu):
 
 def summary(ergebnis):
     """Ein Satz mit den Zahlen je Art, z. B. für den Kopf des Vergleichs."""
-    teile = [("lists_added", "Listen neu"), ("lists_removed", "Listen entfernt"),
-             ("lists_changed", "Listen geändert"), ("items_added", "Aufgaben neu"),
-             ("items_removed", "Aufgaben entfernt"), ("items_moved", "Aufgaben verschoben"),
-             ("items_changed", "Aufgaben geändert")]
+    teile = [("lists_added", glide_i18n.t("ui.backup_compare_text.lists_new", "Listen neu")), ("lists_removed", glide_i18n.t("ui.backup_compare_text.lists_removed", "Listen entfernt")),
+             ("lists_changed", glide_i18n.t("ui.backup_compare_text.lists_changed", "Listen geändert")), ("items_added", glide_i18n.t("ui.backup_compare_text.tasks_new", "Aufgaben neu")),
+             ("items_removed", glide_i18n.t("ui.backup_compare_text.tasks_removed", "Aufgaben entfernt")), ("items_moved", glide_i18n.t("ui.backup_compare_text.tasks_moved", "Aufgaben verschoben")),
+             ("items_changed", glide_i18n.t("ui.backup_compare_text.tasks_changed", "Aufgaben geändert"))]
     text = [f"{len(ergebnis[key])} {name}" for key, name in teile if ergebnis[key]]
-    return " · ".join(text) if text else "Keine Unterschiede bei Listen und Aufgaben"
+    return " · ".join(text) if text else glide_i18n.t("mod.backup_diff.summary.no_differences_in_lists", "Keine Unterschiede bei Listen und Aufgaben")

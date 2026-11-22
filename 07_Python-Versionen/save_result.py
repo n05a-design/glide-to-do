@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Expliziter Ausgang einer Speicherung, unabhängig von Tk und Dateisystem."""
 from dataclasses import dataclass, replace
+import i18n as glide_i18n
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,5 +33,5 @@ class SaveResult:
             return self
         errors = self.followup_errors
         if saved is False:
-            errors += ('Die zusätzlichen Einstellungen konnten nicht gespeichert werden.',)
+            errors += (glide_i18n.t("mod.save_result.finish_settings.the_additional_settings_could", 'Die zusätzlichen Einstellungen konnten nicht gespeichert werden.'),)
         return replace(self, settings_pending=False, settings_saved=saved, followup_errors=errors)

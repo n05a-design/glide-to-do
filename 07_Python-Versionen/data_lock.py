@@ -32,6 +32,7 @@ import sys
 import tempfile
 import uuid
 from datetime import datetime
+import i18n as glide_i18n
 
 MISSING = "missing"
 VALID = "valid"
@@ -87,15 +88,15 @@ def parse(raw):
     try:
         record = json.loads(raw)
     except (ValueError, RecursionError) as exc:
-        raise ValueError(f"kein lesbares JSON ({exc.__class__.__name__})") from None
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.no_readable_json", 'kein lesbares JSON ({name})', name=exc.__class__.__name__)) from None
     if not isinstance(record, dict):
-        raise ValueError("kein JSON-Objekt")
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.no_json_object", "kein JSON-Objekt"))
     if not isinstance(record.get("host"), str) or not record.get("host"):
-        raise ValueError("Rechnername fehlt")
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.computer_name_missing", "Rechnername fehlt"))
     try:
         stamp(record)
     except (ValueError, TypeError, OverflowError):
-        raise ValueError("Zeitstempel fehlt oder ist ungültig") from None
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.timestamp_missing_or_invalid", "Zeitstempel fehlt oder ist ungültig")) from None
     return record
 
 
@@ -109,7 +110,7 @@ def read(path):
     except OSError as exc:
         return LockState(UNREADABLE, detail=str(exc) or exc.__class__.__name__)
     if len(raw) > MAX_BYTES:
-        return LockState(DEFECTIVE, detail="zu groß für eine Sperrdatei")
+        return LockState(DEFECTIVE, detail=glide_i18n.t("mod.data_lock.read.too_large_for_a", "zu groß für eine Sperrdatei"))
     try:
         return LockState(VALID, parse(raw))
     except (ValueError, UnicodeDecodeError) as exc:
@@ -160,14 +161,11 @@ def classify(record, *, host, pid, now, max_age_seconds, alive=process_alive):
 def defective_question(detail):
     """Frage beim Start, wenn die Sperre defekt oder unlesbar ist."""
     grund = f": {detail}" if detail else ""
-    return (f"Die Sperrdatei dieses Datenordners (glide.lock) ist beschädigt oder unlesbar{grund}.\n\n"
-            "Glide hat den Bestand deshalb schreibgeschützt geöffnet. Ist Glide sicher auf keinem anderen "
-            "Rechner und in keinem anderen Fenster mit diesem Datenordner geöffnet, kann dieser Start die "
-            "Sperre übernehmen und wieder speichern.\n\nSperre jetzt übernehmen?")
+    return (glide_i18n.t("mod.data_lock.defective_question.the_lock_file_of", 'Die Sperrdatei dieses Datenordners (glide.lock) ist beschädigt oder unlesbar{grund}.\n\nGlide hat den Bestand deshalb schreibgeschützt geöffnet. Ist Glide sicher auf keinem anderen Rechner und in keinem anderen Fenster mit diesem Datenordner geöffnet, kann dieser Start die Sperre übernehmen und wieder speichern.\n\nSperre jetzt übernehmen?', grund=grund))
 
 
 def takeover_failed(detail):
-    return f"Die Datensperre ließ sich nicht übernehmen:\n{detail}\n\nDieser Start bleibt schreibgeschützt."
+    return glide_i18n.t("mod.data_lock.takeover_failed.the_data_lock_could", 'Die Datensperre ließ sich nicht übernehmen:\n{detail}\n\nDieser Start bleibt schreibgeschützt.', detail=detail)
 
 
 def _content(record):

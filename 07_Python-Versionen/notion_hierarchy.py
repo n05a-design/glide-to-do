@@ -3,12 +3,13 @@
 from dataclasses import dataclass
 from notion_reimport import is_source_key
 import uuid
+import i18n as glide_i18n
 
 
 
 def source_key(value):
     if not is_source_key(value):
-        raise ValueError("Ungültige Notion-Ordnerzuordnung.")
+        raise ValueError(glide_i18n.t("mod.notion_hierarchy.source_key.invalid_notion_folder_mapping", "Ungültige Notion-Ordnerzuordnung."))
     return value
 
 
@@ -21,7 +22,7 @@ def restored_source_key(folder, live_folders):
     existing = [source_key(item['notion_source_key']) for item in live_folders
                 if item.get('notion_source_key') is not None]
     if len(existing) != len(set(existing)):
-        raise ValueError('Die vorhandene Notion-Ordnerzuordnung ist nicht eindeutig.')
+        raise ValueError(glide_i18n.t("mod.notion_hierarchy.restored_source_key.the_existing_notion_folder", 'Die vorhandene Notion-Ordnerzuordnung ist nicht eindeutig.'))
     return None if key in existing else key
 
 
@@ -42,19 +43,19 @@ class Plan:
 def prepare(pages, existing_folders, current_pages=(), *, target_folder_id=None,
             max_depth=8, new_id=None, occupied_ids=()):
     if type(max_depth)is not int or max_depth<1:
-        raise ValueError("Ungültige Ordnertiefe.")
+        raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.invalid_folder_depth", "Ungültige Ordnertiefe."))
     folders={};bindings={};occupied=set(occupied_ids)
     for folder in existing_folders:
         identity=folder['id']
-        if identity in folders:raise ValueError("Mehrdeutige vorhandene Ordnerkennung.")
+        if identity in folders:raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.ambiguous_existing_folder_id", "Mehrdeutige vorhandene Ordnerkennung."))
         folders[identity]=folder;occupied.add(identity)
         key=folder.get('notion_source_key')
         if key is not None:
             key=source_key(key)
-            if key in bindings:raise ValueError("Mehrdeutige Notion-Ordnerzuordnung.")
+            if key in bindings:raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.ambiguous_notion_folder_mapping", "Mehrdeutige Notion-Ordnerzuordnung."))
             bindings[key]=identity
     if target_folder_id is not None and target_folder_id not in folders:
-        raise ValueError("Der gewählte Zielordner fehlt.")
+        raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.the_chosen_target_folder", "Der gewählte Zielordner fehlt."))
     current={page['id']:page for page in current_pages}
     occupied.update(current)
     source_targets={}
@@ -62,7 +63,7 @@ def prepare(pages, existing_folders, current_pages=(), *, target_folder_id=None,
         value=page.get('notion_source')
         if value is not None:
             key=source_key(value['key'])
-            if key in source_targets:raise ValueError("Mehrdeutige vorhandene Quellseite.")
+            if key in source_targets:raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.ambiguous_existing_source_page", "Mehrdeutige vorhandene Quellseite."))
             source_targets[key]=page
     factory=new_id or (lambda:uuid.uuid4().hex)
     def fresh():
@@ -72,22 +73,22 @@ def prepare(pages, existing_folders, current_pages=(), *, target_folder_id=None,
                     and all(c.isascii()and(c.isalnum()or c in '_-')for c in identity)
                     and identity not in occupied):
                 occupied.add(identity);return identity
-        raise ValueError("Keine freie Ordnerkennung verfügbar.")
+        raise ValueError(glide_i18n.t("mod.notion_hierarchy.fresh.no_free_folder_id", "Keine freie Ordnerkennung verfügbar."))
     def check_chain(identity):
         seen=set();depth=0
         while identity is not None:
             if identity in seen or identity not in folders:
-                raise ValueError("Die Zielordnerstruktur enthält einen Kreis oder ein fehlendes Ziel.")
+                raise ValueError(glide_i18n.t("mod.notion_hierarchy.check_chain.the_target_folder_structure", "Die Zielordnerstruktur enthält einen Kreis oder ein fehlendes Ziel."))
             seen.add(identity);depth+=1
             folder=folders[identity]
             if folder.get('archived') is True:
-                raise ValueError("Der Importzielordner ist archiviert.")
+                raise ValueError(glide_i18n.t("mod.notion_hierarchy.check_chain.the_import_target_folder", "Der Importzielordner ist archiviert."))
             identity=folder.get('parent_id')
-        if depth>max_depth:raise ValueError("Die Unterseiten überschreiten die erlaubte Ordnertiefe.")
+        if depth>max_depth:raise ValueError(glide_i18n.t("mod.notion_hierarchy.check_chain.the_subpages_exceed_the", "Die Unterseiten überschreiten die erlaubte Ordnertiefe."))
     descriptors={};created=[];assignments=[];seen_pages=set()
     check_chain(target_folder_id)
     for page in pages:
-        if page.key in seen_pages:raise ValueError("Eine Quellseite wurde mehrfach gewählt.")
+        if page.key in seen_pages:raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.a_source_page_was", "Eine Quellseite wurde mehrfach gewählt."))
         seen_pages.add(page.key)
         existing=source_targets.get(page.key)
         if existing is not None:
@@ -99,11 +100,11 @@ def prepare(pages, existing_folders, current_pages=(), *, target_folder_id=None,
             key=source_key(key)
             descriptor=(prior_key,title)
             if key in descriptors and descriptors[key]!=descriptor:
-                raise ValueError("Die Exportordnerstruktur ist nicht eindeutig.")
+                raise ValueError(glide_i18n.t("mod.notion_hierarchy.prepare.the_export_folder_structure", "Die Exportordnerstruktur ist nicht eindeutig."))
             descriptors[key]=descriptor
             if key not in bindings:
                 identity=fresh();bindings[key]=identity
-                folder=Folder(identity,str(title).strip()[:200]or 'Ohne Titel',parent,key)
+                folder=Folder(identity,str(title).strip()[:200]or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel'),parent,key)
                 created.append(folder)
                 folders[identity]={'id':identity,'parent_id':parent}
             parent=bindings[key]

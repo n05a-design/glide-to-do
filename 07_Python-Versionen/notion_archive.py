@@ -18,6 +18,7 @@ import zlib
 
 import page_markdown
 import object_references
+import i18n as glide_i18n
 
 MAX_ARCHIVE_BYTES = 200 * 1024 * 1024
 MAX_EXPANDED_BYTES = 256 * 1024 * 1024
@@ -62,10 +63,10 @@ def safe_member(name):
     if (not isinstance(name, str) or not name or len(name) > 4096 or "\\" in name
             or name.startswith("/") or re.match(r"^[A-Za-z]:", name)
             or any(ord(char) < 32 for char in name)):
-        raise NotionFormatError("Das Archiv enthält einen ungültigen Dateipfad.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.safe_member.the_archive_contains_an", "Das Archiv enthält einen ungültigen Dateipfad."))
     parts = name.rstrip("/").split("/")
     if any(part in ("", ".", "..") or len(part) > 255 for part in parts):
-        raise NotionFormatError("Das Archiv enthält einen unzulässigen Dateipfad.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.safe_member.the_archive_contains_a", "Das Archiv enthält einen unzulässigen Dateipfad."))
     return unicodedata.normalize("NFC", "/".join(parts))
 
 
@@ -82,7 +83,7 @@ def plain_title(name):
     stem = PurePosixPath(name).stem if PurePosixPath(name).suffix.lower() in (".md", ".csv") else name
     match = _PAGE_ID.search(stem)
     title = stem[:match.start()].strip(" _-") if match else stem
-    return title.strip() or "Ohne Titel"
+    return title.strip() or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel")
 
 
 def local_target(page_path, target, members):
@@ -136,12 +137,12 @@ def _read_members(source):
         from pathlib import Path
         source_size = Path(source).stat().st_size
     if source_size > MAX_ARCHIVE_BYTES:
-        raise NotionFormatError("Das Notion-Archiv darf höchstens 200 MiB groß sein.")
+        raise NotionFormatError(glide_i18n.t("ui.import_notion_archive.the_notion_archive_may", "Das Notion-Archiv darf höchstens 200 MiB groß sein."))
     try:
         with zipfile.ZipFile(source) as archive:
             infos = archive.infolist()
             if not 1 <= len(infos) <= MAX_MEMBERS:
-                raise NotionFormatError("Das Archiv enthält keine oder mehr als 5.000 Einträge.")
+                raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_archive_contains_no", "Das Archiv enthält keine oder mehr als 5.000 Einträge."))
             members = {}
             paths, folded = set(), set()
             total = 0
@@ -151,33 +152,33 @@ def _read_members(source):
                 # Nullbytes. Den ungekürzten Archivnamen vor jeder Nutzung prüfen.
                 name = safe_member(info.orig_filename)
                 if name in paths or name.casefold() in folded:
-                    raise NotionFormatError("Das Archiv enthält doppelte oder mehrdeutige Dateipfade.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_archive_contains_duplicate", "Das Archiv enthält doppelte oder mehrdeutige Dateipfade."))
                 paths.add(name); folded.add(name.casefold())
                 mode = info.external_attr >> 16
                 if stat.S_ISLNK(mode) or (stat.S_IFMT(mode) and not (stat.S_ISREG(mode) or stat.S_ISDIR(mode))):
-                    raise NotionFormatError("Verknüpfungen und Sonderdateien sind im Import nicht erlaubt.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.links_and_special_files", "Verknüpfungen und Sonderdateien sind im Import nicht erlaubt."))
                 if info.flag_bits & 1:
-                    raise NotionFormatError("Verschlüsselte Archive werden nicht unterstützt.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.encrypted_archives_are_not", "Verschlüsselte Archive werden nicht unterstützt."))
                 if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
-                    raise NotionFormatError("Das Kompressionsverfahren wird nicht unterstützt; ZIP ohne Kompression oder mit Deflate verwenden.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_compression_method_is", "Das Kompressionsverfahren wird nicht unterstützt; ZIP ohne Kompression oder mit Deflate verwenden."))
                 if info.is_dir():
                     continue
                 limit = MAX_MARKDOWN_BYTES if name.lower().endswith(".md") else MAX_MEMBER_BYTES
                 if info.file_size > limit or info.file_size < 0:
-                    raise NotionFormatError("Ein Archivbestandteil überschreitet die erlaubte Größe: " + name)
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.an_archive_member_exceeds", 'Ein Archivbestandteil überschreitet die erlaubte Größe: {name}', name=name))
                 total += info.file_size
                 if total > MAX_EXPANDED_BYTES:
-                    raise NotionFormatError("Die entpackten Inhalte dürfen höchstens 256 MiB belegen.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_unpacked_contents_may", "Die entpackten Inhalte dürfen höchstens 256 MiB belegen."))
                 inspected.append((info, name, limit))
             for info, name, limit in inspected:
                 with archive.open(info) as stream:
                     data = stream.read(limit + 1)
                 if len(data) > limit or len(data) != info.file_size:
-                    raise NotionFormatError("Die Größe eines Archivbestandteils ist ungültig: " + name)
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_size_of_an", 'Die Größe eines Archivbestandteils ist ungültig: {name}', name=name))
                 members[name] = data
             return members
     except (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError, EOFError, zlib.error) as exc:
-        raise NotionFormatError("Das Notion-Archiv konnte nicht gelesen werden: " + str(exc)) from exc
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_notion_archive_could", 'Das Notion-Archiv konnte nicht gelesen werden: {str}', str=str(exc))) from exc
 
 
 def inspect_export(source):
@@ -189,28 +190,28 @@ def inspect_export(source):
     for path, raw in sorted(members.items()):
         suffix = PurePosixPath(path).suffix.lower()
         if suffix == ".csv":
-            losses.append(Loss(path, "csv-database", "CSV-Datenbank bleibt im Originalarchiv; Datenbankansichten und Eigenschaften werden nicht nachgebaut."))
+            losses.append(Loss(path, "csv-database", glide_i18n.t("mod.notion_archive.inspect_export.csv_database_stays_in", "CSV-Datenbank bleibt im Originalarchiv; Datenbankansichten und Eigenschaften werden nicht nachgebaut.")))
         elif suffix == ".html":
-            losses.append(Loss(path, "html-file", "HTML-Datei bleibt im Originalarchiv und wird nicht als Seite übernommen."))
+            losses.append(Loss(path, "html-file", glide_i18n.t("mod.notion_archive.inspect_export.html_file_stays_in", "HTML-Datei bleibt im Originalarchiv und wird nicht als Seite übernommen.")))
         if suffix != ".md":
             continue
         try:
             text = raw.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
         except UnicodeError as exc:
-            raise NotionFormatError("Seite enthält ungültiges UTF-8: " + path) from exc
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.page_contains_invalid_utf", 'Seite enthält ungültiges UTF-8: {path}', path=path)) from exc
         if "\x00" in text:
-            raise NotionFormatError("Seite enthält ein Nullzeichen: " + path)
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.page_contains_a_null", 'Seite enthält ein Nullzeichen: {path}', path=path))
         semantic_path = path[len(wrapper) + 1:] if wrapper else path
         key = source_key(semantic_path)
         if key in identities:
-            raise NotionFormatError("Eine Notion-Quellenkennung kommt mehrfach vor: " + path)
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.a_notion_source_id", 'Eine Notion-Quellenkennung kommt mehrfach vor: {path}', path=path))
         identities.add(key)
         if key.startswith("path:"):
-            losses.append(Loss(path, "path-identity", "Keine Notion-Kennung im Dateinamen; die Wiedererkennung nutzt den Archivpfad. Umbenennungen müssen gegebenenfalls zugeordnet werden."))
+            losses.append(Loss(path, "path-identity", glide_i18n.t("mod.notion_archive.inspect_export.no_notion_id_in", "Keine Notion-Kennung im Dateinamen; die Wiedererkennung nutzt den Archivpfad. Umbenennungen müssen gegebenenfalls zugeordnet werden.")))
         if re.search(r"<(?:aside|table|div|details|iframe|script)\b", text, re.I):
-            losses.append(Loss(path, "html-block", "HTML-/Hinweisblöcke bleiben als Quelltext lesbar; ihre Gestaltung und eingebettete Funktionen werden nicht übernommen."))
+            losses.append(Loss(path, "html-block", glide_i18n.t("mod.notion_archive.inspect_export.html_callout_blocks_stay", "HTML-/Hinweisblöcke bleiben als Quelltext lesbar; ihre Gestaltung und eingebettete Funktionen werden nicht übernommen.")))
         if re.search(r"^#{5,6}\s", text, re.M):
-            losses.append(Loss(path, "heading-depth", "Überschriften der Stufen 5/6 werden als Stufe 4 übernommen."))
+            losses.append(Loss(path, "heading-depth", glide_i18n.t("mod.notion_archive.inspect_export.headings_of_levels_5", "Überschriften der Stufen 5/6 werden als Stufe 4 übernommen.")))
         assets = set()
         for match in _links(text):
             target = match.group(3)
@@ -222,19 +223,19 @@ def inspect_export(source):
             if found and not found.lower().endswith(".md"):
                 assets.add(found)
                 if not match.group(1):
-                    losses.append(Loss(path, "attachment-link", "Dateiverweis wird als Seitenanhang übernommen: " + found))
+                    losses.append(Loss(path, "attachment-link", glide_i18n.t("mod.notion_archive.inspect_export.file_reference_is_taken", 'Dateiverweis wird als Seitenanhang übernommen: {found}', found=found)))
                 if match.group(1) and PurePosixPath(found).suffix.lower() not in _IMAGE_SUFFIXES:
-                    losses.append(Loss(path, "image-format", "Bildformat bleibt als Datei erhalten: " + found))
+                    losses.append(Loss(path, "image-format", glide_i18n.t("mod.notion_archive.inspect_export.image_format_is_kept", 'Bildformat bleibt als Datei erhalten: {found}', found=found)))
                 if match.group(1):
                     start = text.rfind("\n", 0, match.start()) + 1
                     end = text.find("\n", match.end())
                     line = text[start:len(text) if end == -1 else end]
                     if line.strip() != match.group(0).strip():
-                        losses.append(Loss(path, "inline-image-block", "Ein Bild innerhalb einer Textzeile wird als eigener Bildblock übernommen."))
+                        losses.append(Loss(path, "inline-image-block", glide_i18n.t("mod.notion_archive.inspect_export.an_image_inside_a", "Ein Bild innerhalb einer Textzeile wird als eigener Bildblock übernommen.")))
             elif found is None and (parsed is None or not parsed.scheme or parsed.scheme in ("file", "data")):
-                losses.append(Loss(path, "missing-local-target", "Lokales Ziel nicht im Archiv gefunden: " + target))
+                losses.append(Loss(path, "missing-local-target", glide_i18n.t("mod.notion_archive.inspect_export.local_target_not_found", 'Lokales Ziel nicht im Archiv gefunden: {target}', target=target)))
             if parsed and parsed.fragment:
-                losses.append(Loss(path, "link-anchor", "Abschnittsanker wird nicht als eigenes Sprungziel übernommen: " + target))
+                losses.append(Loss(path, "link-anchor", glide_i18n.t("mod.notion_archive.inspect_export.section_anchor_is_not", 'Abschnittsanker wird nicht als eigenes Sprungziel übernommen: {target}', target=target)))
         title = next((line[2:].strip() for line in text.splitlines() if line.startswith("# ")), plain_title(PurePosixPath(path).name))
         parent = PurePosixPath(path).parent
         parts = parent.parts[1:] if wrapper and parent.parts and parent.parts[0] == wrapper else parent.parts
@@ -250,10 +251,10 @@ def inspect_export(source):
             asset_key = asset[len(wrapper) + 1:] if wrapper else asset
             digest.update(b"\x00" + asset_key.encode("utf-8") + b"\x00")
             digest.update(hashlib.sha256(members[asset]).digest())
-        pages.append(Page(key, path, title[:200] or "Ohne Titel", tuple(folders), text,
+        pages.append(Page(key, path, title[:200] or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"), tuple(folders), text,
                           digest.hexdigest(), tuple(sorted(assets))))
     if not pages:
-        raise NotionFormatError("Das Archiv enthält keine Seiten.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.the_archive_contains_no", "Das Archiv enthält keine Seiten."))
     return Export(tuple(pages), members, tuple(dict.fromkeys(losses)))
 
 
@@ -266,7 +267,7 @@ def unresolved_links(export, page_ids):
         for match in _links(page.markdown):
             target = local_target(page.path, match.group(3), export.members)
             if target in by_path and by_path[target] not in page_ids:
-                losses.append(Loss(page.path, "unselected-page", "Seitenziel ist nicht zur Übernahme ausgewählt und noch nicht in Glide zugeordnet: " + target))
+                losses.append(Loss(page.path, "unselected-page", glide_i18n.t("mod.notion_archive.unresolved_links.page_target_is_not", 'Seitenziel ist nicht zur Übernahme ausgewählt und noch nicht in Glide zugeordnet: {target}', target=target)))
     return tuple(dict.fromkeys(losses))
 
 
@@ -313,23 +314,23 @@ def bind_page_tasks(document, item_factory):
     """
     import copy
     if not isinstance(document, dict) or not isinstance(document.get("spans"), list):
-        raise NotionFormatError("Das Seitendokument enthält keine gültigen Formatspannen.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_page_document_contains", "Das Seitendokument enthält keine gültigen Formatspannen."))
     tasks = document.get("tasks", [])
     if not isinstance(tasks, list):
-        raise NotionFormatError("Die Seitenaufgaben sind keine Liste.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_page_tasks_are", "Die Seitenaufgaben sind keine Liste."))
     mapped, items, used_ids = {}, [], set()
     for task in tasks:
         if (not isinstance(task, dict) or set(task) != {"ref", "text", "done"}
                 or type(task["ref"]) is not int or task["ref"] < 0
                 or not isinstance(task["text"], str) or type(task["done"]) is not bool):
-            raise NotionFormatError("Eine Seitenaufgabe enthält ungültige Angaben.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_page_task_contains", "Eine Seitenaufgabe enthält ungültige Angaben."))
         tag = "taskref:" + str(task["ref"])
         if tag in mapped:
-            raise NotionFormatError("Eine Quellenaufgabe ist mehrfach definiert.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_source_task_is", "Eine Quellenaufgabe ist mehrfach definiert."))
         item = item_factory(task["text"], done=task["done"])
         identity = item.get("id") if isinstance(item, dict) else None
         if not isinstance(identity, str) or not identity or identity in used_ids:
-            raise NotionFormatError("Die Aufgabenwerkzeuge lieferten keine eindeutige Kennung.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_task_tools_did", "Die Aufgabenwerkzeuge lieferten keine eindeutige Kennung."))
         used_ids.add(identity)
         mapped[tag] = "item:" + identity
         items.append(copy.deepcopy(item))
@@ -338,13 +339,13 @@ def bind_page_tasks(document, item_factory):
     seen = set()
     for span in result["spans"]:
         if not isinstance(span, dict) or not isinstance(span.get("tag"), str):
-            raise NotionFormatError("Eine Formatspanne ist ungültig.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_format_span_is", "Eine Formatspanne ist ungültig."))
         tag = span["tag"]
         if tag.startswith("taskref:"):
             if tag not in mapped:
-                raise NotionFormatError("Ein Kästchen verweist auf eine fehlende Quellenaufgabe.")
+                raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_checkbox_refers_to", "Ein Kästchen verweist auf eine fehlende Quellenaufgabe."))
             span["tag"] = mapped[tag]
             seen.add(tag)
     if seen != set(mapped):
-        raise NotionFormatError("Eine Quellenaufgabe hat keine sichtbare Textstelle.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_source_task_has", "Eine Quellenaufgabe hat keine sichtbare Textstelle."))
     return result, tuple(items)

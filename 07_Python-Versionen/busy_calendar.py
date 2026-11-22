@@ -13,6 +13,7 @@ import stat
 import ics_busy
 import ics_recurrence
 from occupied_time import BlockIndex, day_bounds
+import i18n as glide_i18n
 
 MAX_BYTES = 12 * 1024 * 1024
 MAX_EVENTS = 5000
@@ -50,7 +51,7 @@ class Window:
 
     def day_blocks(self, day, zone):
         if not self.contains(day):
-            raise ValueError("Tag liegt außerhalb des geprüften Kalenderfensters.")
+            raise ValueError(glide_i18n.t("mod.busy_calendar.day_blocks.day_lies_outside_the", "Tag liegt außerhalb des geprüften Kalenderfensters."))
         return self.index.between(*day_bounds(day, zone))
 
     def contains(self, day):
@@ -59,14 +60,14 @@ class Window:
 
 def validate_content(content):
     if len(content) > MAX_BYTES:
-        raise SourceError("Kalenderdatei ist größer als 12 MiB.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.calendar_file_is_larger", "Kalenderdatei ist größer als 12 MiB."))
     try:
         text = content.decode("utf-8-sig")
     except UnicodeDecodeError:
-        raise SourceError("Kalenderdatei ist nicht gültig UTF-8-kodiert.") from None
+        raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.calendar_file_is_not", "Kalenderdatei ist nicht gültig UTF-8-kodiert.")) from None
     lines = text.splitlines()
     if len(lines) > MAX_LINES:
-        raise SourceError("Kalenderdatei enthält zu viele Zeilen.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.calendar_file_contains_too", "Kalenderdatei enthält zu viele Zeilen."))
     unfolded = []
     folded_bytes = 0
     for line in lines:
@@ -74,10 +75,10 @@ def validate_content(content):
         size = len((line[1:] if continuation else line).encode("utf-8"))
         folded_bytes = folded_bytes + size if continuation else size
         if folded_bytes > MAX_LINE_BYTES:
-            raise SourceError("Eine Kalendereigenschaft ist zu lang.")
+            raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.a_calendar_property_is", "Eine Kalendereigenschaft ist zu lang."))
         if continuation:
             if not unfolded:
-                raise SourceError("ICS-Faltung ohne vorherige Eigenschaft.")
+                raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.ics_folding_without_a", "ICS-Faltung ohne vorherige Eigenschaft."))
             unfolded[-1] += line[1:]
         elif line:
             unfolded.append(line)
@@ -89,7 +90,7 @@ def validate_content(content):
             events += upper == "BEGIN:VEVENT"
             zones += upper == "BEGIN:VTIMEZONE"
             if depth > MAX_DEPTH or events > MAX_EVENTS or zones > MAX_ZONES:
-                raise SourceError("Kalender enthält zu viele Termine, Zeitzonen oder verschachtelte Komponenten.")
+                raise SourceError(glide_i18n.t("mod.busy_calendar.validate_content.calendar_contains_too_many", "Kalender enthält zu viele Termine, Zeitzonen oder verschachtelte Komponenten."))
         elif upper.startswith("END:"):
             depth -= 1
     return text
@@ -101,43 +102,43 @@ def read_source(path, zone, resolver=None, date_zone=None):
         source = Path(path).expanduser().absolute()
         before = source.stat()
         if not stat.S_ISREG(before.st_mode):
-            raise SourceError("Bitte eine gewöhnliche lokale Kalenderdatei wählen.")
+            raise SourceError(glide_i18n.t("mod.busy_calendar.read_source.please_choose_an_ordinary", "Bitte eine gewöhnliche lokale Kalenderdatei wählen."))
         if before.st_size > MAX_BYTES:
-            raise SourceError("Kalenderdatei ist größer als 12 MiB.")
+            raise SourceError(glide_i18n.t("mod.busy_calendar.read_source.calendar_file_is_larger", "Kalenderdatei ist größer als 12 MiB."))
         with source.open("rb") as stream:
             content = stream.read(MAX_BYTES + 1)
             after = source.stat()
         signature = lambda value: (value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns)
         if signature(before) != signature(after):
-            raise SourceError("Kalenderdatei wurde beim Lesen geändert; bitte erneut laden.")
+            raise SourceError(glide_i18n.t("mod.busy_calendar.read_source.calendar_file_was_changed", "Kalenderdatei wurde beim Lesen geändert; bitte erneut laden."))
         text = validate_content(content)
         calendar = ics_busy.parse_calendar(text, zone, resolver, date_zone)
         return Source(str(source), hashlib.sha256(content).hexdigest(), len(content), calendar, zone)
     except SourceError:
         raise
     except (OSError, ValueError, OverflowError) as exc:
-        raise SourceError("Kalenderdatei konnte nicht gelesen werden: " + str(exc)) from exc
+        raise SourceError(glide_i18n.t("mod.busy_calendar.read_source.calendar_file_could_not", 'Kalenderdatei konnte nicht gelesen werden: {str}', str=str(exc))) from exc
 
 
 def expand_window(source, first, last, margin_days=0, *, max_steps=200000, max_blocks=100000):
     """Beide Datumsgrenzen inklusive; maximal 370 Tage, keine Dateizugriffe."""
     if type(first) is not date or type(last) is not date or last < first:
-        raise SourceError("Bitte einen gültigen Kalenderzeitraum wählen.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.expand_window.please_choose_a_valid", "Bitte einen gültigen Kalenderzeitraum wählen."))
     if (last - first).days >= MAX_WINDOW_DAYS or last == date.max:
-        raise SourceError("Kalenderzeitraum muss kürzer als 371 Tage sein und vor dem letzten Datum enden.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.expand_window.calendar_period_must_be", "Kalenderzeitraum muss kürzer als 371 Tage sein und vor dem letzten Datum enden."))
     if type(margin_days) is not int or not 0 <= margin_days <= 2:
-        raise SourceError("Ungültiger Zeitzonenrand des Kalenderfensters.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.expand_window.invalid_time_zone_margin", "Ungültiger Zeitzonenrand des Kalenderfensters."))
     expanded_first = max(date.min, first - timedelta(days=min(margin_days, (first-date.min).days)))
     expanded_last = last + timedelta(days=min(margin_days, (date.max-last).days-1))
     if (expanded_last-expanded_first).days >= MAX_WINDOW_DAYS:
-        raise SourceError("Kalenderfenster einschließlich Zeitzonenrand ist zu groß.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.expand_window.calendar_window_including_time", "Kalenderfenster einschließlich Zeitzonenrand ist zu groß."))
     lower = datetime.combine(expanded_first, time(), source.zone)
     upper = datetime.combine(expanded_last + timedelta(days=1), time(), source.zone)
     try:
         result = ics_busy.expand(source.calendar, lower, upper,
                                  max_periods=max_steps, max_blocks=max_blocks)
     except (ValueError, OverflowError, ics_recurrence.ExpansionLimitError) as exc:
-        raise SourceError("Kalenderzeitraum konnte nicht ausgewertet werden: " + str(exc)) from exc
+        raise SourceError(glide_i18n.t("mod.busy_calendar.expand_window.calendar_period_could_not", 'Kalenderzeitraum konnte nicht ausgewertet werden: {str}', str=str(exc))) from exc
     return Window(source.sha256, first, last, result.blocks, result.issues)
 
 
@@ -146,22 +147,22 @@ def normalize_config(value):
     if value is None:
         return {}
     if not isinstance(value, dict):
-        raise SourceError("Gespeicherte Kalenderauswahl ist beschädigt.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.stored_selection_damaged", "Gespeicherte Kalenderauswahl ist beschädigt."))
     result = dict(value)
     path = result.get("path", "")
     if path is None:
         path = ""
     if not isinstance(path, str) or len(path) > 4096 or any(ord(c) < 32 for c in path):
-        raise SourceError("Gespeicherter Kalenderpfad ist ungültig.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.stored_path_invalid", "Gespeicherter Kalenderpfad ist ungültig."))
     result["path"] = path
     zone = result.get("zone", "local")
     import timezones
     if zone != "local" and not timezones.valid_key(zone):
-        raise SourceError("Gespeicherte Kalenderzeitzone ist ungültig.")
+        raise SourceError(glide_i18n.t("mod.busy_calendar.stored_zone_invalid", "Gespeicherte Kalenderzeitzone ist ungültig."))
     result["zone"] = zone
     digest = result.get("sha256")
     if digest is not None:
         import re
         if not isinstance(digest, str) or not re.fullmatch("[0-9a-f]{64}", digest):
-            raise SourceError("Gespeicherter Kalenderhash ist ungültig.")
+            raise SourceError(glide_i18n.t("mod.busy_calendar.stored_hash_invalid", "Gespeicherter Kalenderhash ist ungültig."))
     return result

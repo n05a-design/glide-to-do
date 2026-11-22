@@ -5,11 +5,12 @@ from datetime import date
 import json
 import planning
 from occupied_time import day_occupancy
+import i18n as glide_i18n
 
 
 def iso_day(value):
     if not isinstance(value, str) or date.fromisoformat(value).isoformat() != value:
-        raise ValueError("Bitte einen gültigen Bearbeitungstag wählen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.iso_day.please_choose_a_valid", "Bitte einen gültigen Bearbeitungstag wählen."))
     return value
 
 
@@ -33,17 +34,17 @@ def day_summary(items, day, capacity, blocks, zone, schedulable):
 
 def available_text(value):
     if value.get("calendar_state") in ("loading", "error", "closed"):
-        text = "Freie Zeit unbekannt · " + value.get("calendar_message", "Kalender nicht verfügbar")
+        text = glide_i18n.t("mod.day_relief.available_text.free_time_unknown", 'Freie Zeit unbekannt · {get}', get=value.get("calendar_message", "Kalender nicht verfügbar"))
         if value.get("without_estimate"):
-            text += f" · {value['without_estimate']} ohne Schätzung"
+            text += glide_i18n.t("mod.day_relief.available_text.without_estimate", ' · {without_estimate} ohne Schätzung', without_estimate=value['without_estimate'])
         return text
     text = planning.available_text(value)
     if value.get("occupied_all_day"):
-        text += " · ganztägig belegt"
+        text += glide_i18n.t("ui.calendar_grid_caption.busy_all_day", " · ganztägig belegt")
     elif value.get("occupied_minutes"):
-        text += " · " + planning.duration(value["occupied_minutes"]) + " Kalenderzeit"
+        text += glide_i18n.t("mod.day_relief.available_text.calendar_time", ' · {duration} Kalenderzeit', duration=planning.duration(value["occupied_minutes"]))
     if value.get("calendar_issues"):
-        text += " · Kalenderhinweise beachten"
+        text += glide_i18n.t("ui.show_comparison.note_the_calendar_hints", " · Kalenderhinweise beachten")
     return text
 
 
@@ -55,11 +56,11 @@ def capacity_analysis(value):
 def relief_summary_text(value):
     """Präzise Vorher/Nachher-Bilanzzeile für die Tagesentlastung (WA-12 / D57)."""
     items_count = value.get("items", 0)
-    items_label = f"{items_count} {'Aufgabe' if items_count == 1 else 'Aufgaben'}"
+    items_label = f"{items_count} {glide_i18n.t("mod.day_proposal.reason_text.task", 'Aufgabe') if items_count == 1 else glide_i18n.t("mod.day_proposal.reason_text.tasks", 'Aufgaben')}"
     if value.get("calendar_state") in ("loading", "error", "closed"):
-        text = f"{items_label} · Freie Zeit unbekannt · " + value.get("calendar_message", "Kalender nicht verfügbar")
+        text = glide_i18n.t("mod.day_relief.relief_summary_text.free_time_unknown", '{items_label} · Freie Zeit unbekannt · {get}', items_label=items_label, get=value.get("calendar_message", "Kalender nicht verfügbar"))
         if value.get("without_estimate"):
-            text += f" · {value['without_estimate']} ohne Schätzung"
+            text += glide_i18n.t("mod.day_relief.relief_summary_text.without_estimate", ' · {without_estimate} ohne Schätzung', without_estimate=value['without_estimate'])
         return text
     analysis = planning.capacity_analysis(value)
     return f"{items_label} · {analysis['summary_text']}"
@@ -83,14 +84,14 @@ def overload_lines(before, after, day_label, limit=4):
     for old, new in zip(before, after):
         now = _overload_reasons(new)
         if now:
-            lines.append(f"{day_label(new['day'])}, nachher: " + "; ".join(now))
+            lines.append(glide_i18n.t("mod.day_relief.overload_lines.after", '{day_label}, nachher: {join}', day_label=day_label(new['day']), join="; ".join(now)))
             continue
         was = _overload_reasons(old)
         if was:
-            lines.append(f"{day_label(old['day'])}, vorher: " + "; ".join(was) + " · nachher nicht mehr überplant")
+            lines.append(glide_i18n.t("mod.day_relief.overload_lines.before_after_no_longer", '{day_label}, vorher: {join} · nachher nicht mehr überplant', day_label=day_label(old['day']), join="; ".join(was)))
     if len(lines) > limit:
         rest = len(lines) - limit
-        lines = lines[:limit] + ["… und ein weiterer Tag" if rest == 1 else f"… und {rest} weitere Tage"]
+        lines = lines[:limit] + [glide_i18n.t("mod.day_relief.overload_lines.and_one_more_day", "… und ein weiterer Tag") if rest == 1 else glide_i18n.t("mod.day_relief.overload_lines.and_more_days", '… und {rest} weitere Tage', rest=rest)]
     return lines
 
 
@@ -127,16 +128,16 @@ def propose(items, selected, target, *, capacity, blocks, zone, schedulable):
     items = tuple(items)
     identities = [item["id"] for item in items]
     if len(set(identities)) != len(identities):
-        raise ValueError("Mehrdeutige Aufgabenkennungen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.propose.ambiguous_task_ids", "Mehrdeutige Aufgabenkennungen."))
     index = dict(zip(identities, items))
     selected = tuple(dict.fromkeys(selected))
     if not selected:
-        raise ValueError("Bitte mindestens eine Aufgabe wählen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.propose.please_choose_at_least", "Bitte mindestens eine Aufgabe wählen."))
     moves = []
     for identity in selected:
         item = index.get(identity)
         if item is None or not schedulable(item) or item.get("done"):
-            raise ValueError("Ausgewählte Aufgabe ist nicht mehr offen verfügbar.")
+            raise ValueError(glide_i18n.t("mod.day_relief.propose.the_selected_task_is", "Ausgewählte Aufgabe ist nicht mehr offen verfügbar."))
         source = iso_day(item.get("planned_date"))
         if source != target:
             moves.append(Move(identity, source, item.get("planned_time"), target))
@@ -158,20 +159,20 @@ def validate(plan, items, schedulable, *, capacity=None, blocks=None, zone=None)
     items = tuple(items)
     index = {item["id"]:item for item in items}
     if len(index) != len(items):
-        raise ValueError("Mehrdeutige Aufgabenkennungen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.validate.ambiguous_task_ids", "Mehrdeutige Aufgabenkennungen."))
     if fingerprint(items, schedulable) != plan.snapshot:
-        raise ValueError("Die Planung hat sich inzwischen geändert; bitte neu vergleichen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.validate.the_planning_has_changed", "Die Planung hat sich inzwischen geändert; bitte neu vergleichen."))
     if any(value is not None for value in (capacity, blocks, zone)):
         if any(value is None for value in (capacity, blocks, zone)):
-            raise ValueError("Kapazität, Belegzeiten und Zeitzone werden gemeinsam benötigt.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.capacity_busy_times_and", "Kapazität, Belegzeiten und Zeitzone werden gemeinsam benötigt."))
         fresh = propose(items, [move.identity for move in plan.moves],
                         plan.moves[0].target if plan.moves else None,
                         capacity=capacity, blocks=blocks, zone=zone, schedulable=schedulable) if plan.moves else plan
         if fresh.before != plan.before or fresh.after != plan.after:
-            raise ValueError("Die Kapazität hat sich inzwischen geändert; bitte neu vergleichen.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.the_capacity_has_changed", "Die Kapazität hat sich inzwischen geändert; bitte neu vergleichen."))
     for move in plan.moves:
         item = index.get(move.identity)
         if (item is None or not schedulable(item) or item.get("done")
                 or item.get("planned_date") != move.source or item.get("planned_time") != move.clock):
-            raise ValueError("Die Planung hat sich inzwischen geändert; bitte neu vergleichen.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.the_planning_has_changed", "Die Planung hat sich inzwischen geändert; bitte neu vergleichen."))
     return tuple((move.identity, move.target, move.clock if move.target else None) for move in plan.moves)

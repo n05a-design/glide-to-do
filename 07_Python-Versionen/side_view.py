@@ -16,6 +16,7 @@ import hashlib
 import re
 from dataclasses import dataclass, replace
 import object_references as objects
+import i18n as glide_i18n
 
 IMAGE_ANCHOR = "￼"
 LINE_STYLES = ("h1", "h2", "h3", "h4", "codeblock", "quote", "callout", "table", "divider",
@@ -56,19 +57,19 @@ def reference_groups(list_id, item_id, index, outgoing, incoming):
     Fehlende/gelöschte Ziele bleiben benannt. Die aufrufende Oberfläche darf
     nur erreichbare Heimatcontainer öffnen, ohne Hauptkontextwechsel.
     """
-    sources = [(('list', list_id), 'Inhalt')]
+    sources = [(('list', list_id), glide_i18n.t("board.group.content", 'Inhalt'))]
     selected = index.get(('item', item_id))
     if selected and selected[2] and selected[2].get('id') == list_id:
-        sources.append((('item', item_id), 'Ausgewählte Aufgabe'))
+        sources.append((('item', item_id), glide_i18n.t("mod.side_view.reference_groups.selected_task", 'Ausgewählte Aufgabe')))
     groups = []
     for source, label in sources:
-        for direction, graph in (('Verweise', outgoing), ('Rückverweise', incoming)):
+        for direction, graph in ((glide_i18n.t("ui.build_object_reference_menu.references", 'Verweise'), outgoing), (glide_i18n.t("ui.build_object_reference_menu.backlinks", 'Rückverweise'), incoming)):
             rows = []
             for target in graph.get(source, ()):
                 state, title = objects.caption(target, index)
                 destination = reference_target(target, index)
-                reason = ('Im Papierkorb' if state == 'trash' else 'Ziel fehlt' if state == 'missing'
-                          else 'Nur im Hauptbereich darstellbar' if destination is None else '')
+                reason = (glide_i18n.t("ui.refresh_tasks.in_the_trash", 'Im Papierkorb') if state == 'trash' else glide_i18n.t("ui.refresh_tasks.target_missing", 'Ziel fehlt') if state == 'missing'
+                          else glide_i18n.t("mod.side_view.reference_groups.only_displayable_in_the", 'Nur im Hauptbereich darstellbar') if destination is None else '')
                 rows.append(dict(source=source, value=objects.uri(*target), title=title,
                                  reason=reason, enabled=destination is not None, state=state))
             rows.sort(key=lambda row: (row['title'].casefold(), row['value']))
@@ -80,9 +81,9 @@ def reference_actions(row):
     """Gezielte Originalaktionen; eine fehlende Beziehung darf noch kopierbar bleiben."""
     valid = objects.parse(row.get('value')) is not None
     available = valid and row.get('state') not in ('trash', 'missing')
-    return (('side', 'In Nebenansicht öffnen', valid and bool(row.get('enabled'))),
-            ('main', 'Im Hauptbereich öffnen', available),
-            ('copy', 'Verweis kopieren', valid))
+    return (('side', glide_i18n.t("ui.build_object_reference_menu.open_in_side_view", 'In Nebenansicht öffnen'), valid and bool(row.get('enabled'))),
+            ('main', glide_i18n.t("ui.render_side_view.open_in_main_area", 'Im Hauptbereich öffnen'), available),
+            ('copy', glide_i18n.t("mod.side_view.reference_actions.copy_reference", 'Verweis kopieren'), valid))
 
 
 @dataclass(frozen=True, slots=True)
@@ -350,11 +351,11 @@ def sections(entry, limit=200):
     if not isinstance(entry, dict):
         return []
     if content_kind(entry) == 'tasks':
-        return [dict(key=row['id'], title=row['text'] or 'Ohne Titel', depth=row['depth'])
+        return [dict(key=row['id'], title=row['text'] or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel'), depth=row['depth'])
                 for row in list_rows(entry.get('items', [])) if row['kind'] in ('heading', 'group')][:limit]
     projection = page_projection(entry.get('rich_note') or {})
     lines = projection['text'].split('\n')
-    return [dict(key=row['line'], title=lines[row['line']-1].strip() or 'Ohne Titel',
+    return [dict(key=row['line'], title=lines[row['line']-1].strip() or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel'),
                  depth=int(row['style'][1:])-1)
             for row in projection['lines'] if row['style'] in ('h1', 'h2', 'h3', 'h4')][:limit]
 
@@ -399,10 +400,9 @@ def availability(entry, identity=None, trash=()):
             "missing", STATE_TEXT["missing"])
     kind = entry.get("list_kind") or "tasks"
     if kind in UNSUPPORTED_KINDS:
-        return ("unsupported", f"{UNSUPPORTED_KINDS[kind]} zeigt die Nebenansicht nicht. "
-                               "„Öffnen“ zeigt den Inhalt im Hauptbereich.")
+        return ("unsupported", glide_i18n.t("mod.side_view.availability.is_not_shown_in", '{wert} zeigt die Nebenansicht nicht. „Öffnen“ zeigt den Inhalt im Hauptbereich.', wert=UNSUPPORTED_KINDS[kind]))
     if entry.get("archived"):
-        return "archived", "Im Archiv · nur lesen"
+        return "archived", glide_i18n.t("mod.side_view.availability.archived_read_only", "Im Archiv · nur lesen")
     return "ok", ""
 
 
@@ -456,12 +456,12 @@ def list_summary(rows):
     """Kurze Zeile „3 offen · 2 erledigt“ für den Kopf."""
     tasks = [row for row in rows if row["toggle"]]
     if not tasks:
-        return "Keine Aufgaben"
+        return glide_i18n.t("mod.side_view.list_summary.no_tasks", "Keine Aufgaben")
     done = sum(1 for row in tasks if row["done"])
     open_count = len(tasks) - done
-    parts = [f"{open_count} offen"] if open_count else []
+    parts = [glide_i18n.t("mod.side_view.list_summary.open", '{open_count} offen', open_count=open_count)] if open_count else []
     if done:
-        parts.append(f"{done} erledigt")
+        parts.append(glide_i18n.t("ui.kachel_stats.done", '{done} erledigt', done=done))
     return " · ".join(parts)
 
 

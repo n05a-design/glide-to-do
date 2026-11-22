@@ -11,6 +11,7 @@ from datetime import datetime, date, timedelta, tzinfo
 from functools import lru_cache
 import re
 import ics_recurrence as recurrence
+import i18n as glide_i18n
 
 ZERO = timedelta(0)
 
@@ -29,17 +30,17 @@ class Observance:
 def offset(value):
     match=re.fullmatch(r'([+-])(\d{2})(\d{2})(\d{2})?',value)
     if not match:
-        raise ValueError('Ungültiger Zeitzonenversatz.')
+        raise ValueError(glide_i18n.t("mod.ics_timezone.offset.invalid_time_zone_offset", 'Ungültiger Zeitzonenversatz.'))
     sign,hour,minute,second=match.groups()
     hour,minute,second=int(hour),int(minute),int(second or 0)
     if hour>23 or minute>59 or second>59 or (sign=='-' and not any((hour,minute,second))):
-        raise ValueError('Ungültiger Zeitzonenversatz.')
+        raise ValueError(glide_i18n.t("mod.ics_timezone.offset.invalid_time_zone_offset", 'Ungültiger Zeitzonenversatz.'))
     return timedelta(seconds=(hour*3600+minute*60+second)*(1 if sign=='+' else -1))
 
 
 def local_time(value):
     if not re.fullmatch(r'\d{8}T\d{6}',value):
-        raise ValueError('Zeitzonenübergang braucht eine lokale Uhrzeit ohne Z oder TZID.')
+        raise ValueError(glide_i18n.t("mod.ics_timezone.local_time.time_zone_transition_needs", 'Zeitzonenübergang braucht eine lokale Uhrzeit ohne Z oder TZID.'))
     return datetime.strptime(value,'%Y%m%dT%H%M%S')
 
 
@@ -48,7 +49,7 @@ class CalendarZone(tzinfo):
         self.key=name
         self.observances=tuple(observances)
         if not name or not self.observances:
-            raise ValueError('Zeitzonenkennung oder STANDARD/DAYLIGHT fehlt.')
+            raise ValueError(glide_i18n.t("mod.ics_timezone.init.time_zone_id_or", 'Zeitzonenkennung oder STANDARD/DAYLIGHT fehlt.'))
         self.offsets=tuple(set(o.before for o in self.observances)|set(o.after for o in self.observances))
 
     @lru_cache(maxsize=64)
@@ -70,7 +71,7 @@ class CalendarZone(tzinfo):
                 instant=moment-obs.before
                 entry=(instant,obs.before,obs.after,obs.daylight,obs.name)
                 if instant in changes and changes[instant]!=entry:
-                    raise ValueError('Widersprüchliche Zeitzonenübergänge.')
+                    raise ValueError(glide_i18n.t("mod.ics_timezone.timeline.contradictory_time_zone_transitions", 'Widersprüchliche Zeitzonenübergänge.'))
                 changes[instant]=entry
         entries=tuple(sorted(changes.values()))
         if not entries:
@@ -78,7 +79,7 @@ class CalendarZone(tzinfo):
             entries=((obs.start-obs.before,obs.before,obs.after,obs.daylight,obs.name),)
         for previous,current in zip(entries,entries[1:]):
             if previous[2]!=current[1]:
-                raise ValueError('Zeitzonenübergänge schließen nicht aneinander an.')
+                raise ValueError(glide_i18n.t("mod.ics_timezone.timeline.time_zone_transitions_do", 'Zeitzonenübergänge schließen nicht aneinander an.'))
         return tuple(entry[0] for entry in entries),entries
 
     def _at_utc(self,instant):
@@ -110,7 +111,7 @@ class CalendarZone(tzinfo):
                 chosen=after if dt.fold else before
                 phase=daylight if dt.fold else not daylight
                 return chosen,phase,name or self.key,index if dt.fold else index-1,entries
-        raise ValueError('Lokale Uhrzeit lässt sich keiner Zeitzonenphase zuordnen.')
+        raise ValueError(glide_i18n.t("mod.ics_timezone.local_info.local_time_cannot_be", 'Lokale Uhrzeit lässt sich keiner Zeitzonenphase zuordnen.'))
 
     def utcoffset(self,dt):
         return None if dt is None else self._local_info(dt)[0]
@@ -134,7 +135,7 @@ class CalendarZone(tzinfo):
 
     def fromutc(self,dt):
         if dt.tzinfo is not self:
-            raise ValueError('fromutc braucht dieselbe Zeitzone.')
+            raise ValueError(glide_i18n.t("mod.ics_timezone.fromutc.fromutc_needs_the_same", 'fromutc braucht dieselbe Zeitzone.'))
         instant=dt.replace(tzinfo=None)
         chosen,_daylight,_name,index,entries=self._at_utc(instant)
         fold=0
@@ -148,30 +149,30 @@ def parse_zone(properties,children):
     def single(props,name,required=True):
         found=[p for p in props if p.name==name]
         if len(found)>1 or (required and not found):
-            raise ValueError('Zeitzoneneigenschaft fehlt oder ist mehrfach vorhanden: '+name)
+            raise ValueError(glide_i18n.t("mod.ics_timezone.single.time_zone_property_is", 'Zeitzoneneigenschaft fehlt oder ist mehrfach vorhanden: {name}', name=name))
         return found[0] if found else None
     name=single(properties,'TZID').value
     observances=[]
     for kind,props,_children in children:
         if kind not in ('STANDARD','DAYLIGHT'):
-            raise ValueError('Unbekannte Zeitzonenkomponente: '+kind)
+            raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.unknown_time_zone_component", 'Unbekannte Zeitzonenkomponente: {kind}', kind=kind))
         first=single(props,'DTSTART')
         if first.params:
-            raise ValueError('Zeitzonen-DTSTART muss lokal ohne Parameter vorliegen.')
+            raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.time_zone_dtstart_must", 'Zeitzonen-DTSTART muss lokal ohne Parameter vorliegen.'))
         rule_prop=single(props,'RRULE',False)
         rule=recurrence.parse_rule(rule_prop.value) if rule_prop else None
         if rule and rule.frequency!='YEARLY':
-            raise ValueError('Eingebettete Zeitzonen unterstützen nur jährliche Regeln.')
+            raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.embedded_time_zones_only", 'Eingebettete Zeitzonen unterstützen nur jährliche Regeln.'))
         if rule and rule.until and not re.fullmatch(r'\d{8}T\d{6}Z',rule.until):
-            raise ValueError('Zeitzonen-UNTIL muss in UTC vorliegen.')
+            raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.time_zone_until_must", 'Zeitzonen-UNTIL muss in UTC vorliegen.'))
         extras=[]
         for prop in props:
             if prop.name=='RDATE':
                 if prop.params:
-                    raise ValueError('Zeitzonen-RDATE muss lokal ohne Parameter vorliegen.')
+                    raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.time_zone_rdate_must", 'Zeitzonen-RDATE muss lokal ohne Parameter vorliegen.'))
                 extras.extend(local_time(value) for value in prop.value.split(','))
             if prop.name=='EXDATE':
-                raise ValueError('EXDATE innerhalb VTIMEZONE wird nicht unterstützt.')
+                raise ValueError(glide_i18n.t("mod.ics_timezone.parse_zone.exdate_inside_vtimezone_is", 'EXDATE innerhalb VTIMEZONE wird nicht unterstützt.'))
         label=single(props,'TZNAME',False)
         observances.append(Observance(local_time(first.value),offset(single(props,'TZOFFSETFROM').value),
             offset(single(props,'TZOFFSETTO').value),kind=='DAYLIGHT',label.value if label else name,rule,tuple(extras)))

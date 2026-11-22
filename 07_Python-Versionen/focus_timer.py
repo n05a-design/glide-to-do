@@ -2,6 +2,7 @@
 """Eine Zeiterfassung mit pausierbarer Fokussitzung und Buchungsjournal, ohne Tk."""
 from datetime import datetime
 import math
+import i18n as glide_i18n
 
 
 # Wählbare Fokusdauern in Minuten (D57, 31.10.2026); Vorgabe wie bisher 25.
@@ -54,12 +55,12 @@ def more_label(count):
     """Gesperrter Schlusseintrag von „Wechseln zu …“ für Aufgaben jenseits der Grenze; leer ohne Rest."""
     if not isinstance(count, int) or count <= 0:
         return ""
-    return f"… und {count} weitere für heute"
+    return glide_i18n.t("mod.focus_timer.more_label.and_more_for_today", '… und {count} weitere für heute', count=count)
 
 
 def switch_label(title, limit=SWITCH_TITLE_LIMIT):
     """Einzeiliger Menütitel; lange Titel enden an der Grenze mit „…“."""
-    clean = " ".join(str(title or "").split()) or "Ohne Titel"
+    clean = " ".join(str(title or "").split()) or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel")
     return clean if len(clean) <= limit else clean[:limit - 1].rstrip() + "…"
 
 
@@ -69,10 +70,10 @@ def next_label(title, remaining=0):
     `remaining` zählt die Tagesaufgaben nach der genannten (3.50.0).
     """
     if title is None:
-        return "Danach keine weitere Aufgabe für heute"
+        return glide_i18n.t("mod.focus_timer.next_label.no_further_task_for", "Danach keine weitere Aufgabe für heute")
     rest = remaining if isinstance(remaining, int) and remaining > 0 else 0
-    suffix = "" if not rest else f" · danach noch {rest} Aufgabe{'' if rest == 1 else 'n'}"
-    return "Als Nächstes: " + switch_label(title) + suffix
+    suffix = "" if not rest else glide_i18n.t("mod.focus_timer.next_label.then_more_task", ' · danach noch {rest} Aufgabe{wert}', rest=rest, wert='' if rest == 1 else 'n')
+    return glide_i18n.t("mod.focus_timer.next_label.next", 'Als Nächstes: {switch_label}{suffix}', switch_label=switch_label(title), suffix=suffix)
 
 
 class PendingBookingError(RuntimeError):
@@ -130,7 +131,7 @@ def minutes(timer, now):
 def pause(timer, now):
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.pause.no_focus_session", "Keine Fokussitzung."))
     result.update(elapsed_seconds=elapsed(result, now), started_at=None)
     return result
 
@@ -138,7 +139,7 @@ def pause(timer, now):
 def resume(timer, now):
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.resume.no_focus_session", "Keine Fokussitzung."))
     if result["started_at"] is not None:
         return result
     if result["elapsed_seconds"] >= result["goal_seconds"]:
@@ -155,7 +156,7 @@ def extend(timer, now, seconds=300):
     """
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.extend.no_focus_session", "Keine Fokussitzung."))
     bisher = elapsed(result, now)
     am_ende = result["started_at"] is None and bisher >= result["goal_seconds"]
     result["goal_seconds"] = min(max(result["goal_seconds"], bisher) + seconds, 86400 * 365)

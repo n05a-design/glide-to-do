@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Callable, Iterable
 
 from save_result import SaveResult
+import i18n as glide_i18n
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,17 +50,17 @@ class PersistenceCoordinator:
             except Exception as exc:
                 errors.append(f'{name}: {exc}')
 
-        attempt('Speicherstand', lambda: plan.accept(comparison))
+        attempt(glide_i18n.t("mod.persistence.save.save_state", 'Speicherstand'), lambda: plan.accept(comparison))
         try:
             for name, operation in plan.followups(comparison):
                 attempt(name, operation)
         except Exception as exc:
-            errors.append(f'Folgeaktionen: {exc}')
+            errors.append(glide_i18n.t("mod.persistence.save.follow_up_actions", 'Folgeaktionen: {exc}', exc=exc))
         pending, saved = False, None
         try:
             pending, saved = plan.settings()
         except Exception as exc:
-            errors.append(f'Einstellungsstatus: {exc}')
+            errors.append(glide_i18n.t("mod.persistence.save.settings_status", 'Einstellungsstatus: {exc}', exc=exc))
         return SaveResult(data_written=True, lock_verified=True,
                           backup_checked=backup_checked, backup_warning=backup_warning,
                           history_updated=True, followup_errors=tuple(errors),

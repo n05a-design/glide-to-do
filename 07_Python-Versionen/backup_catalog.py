@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import os
 from pathlib import Path
+import i18n as glide_i18n
 
 TYPES = {'.json': 'Aufgaben (JSON)', '.glidebackup': 'Aufgabensicherung',
          '.glideapp': 'App-Sicherung'}
@@ -26,7 +27,7 @@ class Entry:
         if self.size < 1024:
             return f'{self.size} B'
         if self.size < 1024 * 1024:
-            return f'{self.size / 1024:.1f} KiB'.replace('.', ',')
+            return glide_i18n.t("mod.backup_catalog.size_text.kib", '{wert} KiB', wert=f'{self.size / 1024:.1f}').replace('.', ',')
         return f'{self.size / (1024 * 1024):.1f} MiB'.replace('.', ',')
 
 
@@ -34,8 +35,9 @@ def inspect(path):
     """Nur Metadaten; der tatsächliche Inhalt wird gesondert geprüft."""
     path = Path(path).absolute()
     kind = TYPES.get(path.suffix.lower())
+    kind = glide_i18n.t("mod.backup_catalog.type" + path.suffix.lower(), kind) if kind else kind
     if kind is None or not path.is_file() or path.is_symlink():
-        raise ValueError('Bitte eine JSON-, Aufgaben- oder App-Sicherung wählen.')
+        raise ValueError(glide_i18n.t("mod.backup_catalog.inspect.please_choose_a_json", 'Bitte eine JSON-, Aufgaben- oder App-Sicherung wählen.'))
     info = path.stat()
     return Entry(str(path), path.name, info.st_mtime, info.st_size, kind)
 
@@ -51,17 +53,17 @@ def scan(directory, extra=(), limit=500):
     except FileNotFoundError:
         pass  # Vor der ersten Sicherung ist ein fehlender Ordner normal.
     except OSError:
-        errors.append('Der Sicherungsordner konnte nicht vollständig gelesen werden.')
+        errors.append(glide_i18n.t("mod.backup_catalog.scan.the_backup_folder_could", 'Der Sicherungsordner konnte nicht vollständig gelesen werden.'))
     found = {}
     for path in paths:
         try:
             entry = inspect(path)
             found[os.path.normcase(entry.path)] = entry
         except (OSError, ValueError):
-            errors.append(f'{Path(path).name}: Datei nicht verfügbar.')
+            errors.append(glide_i18n.t("mod.backup_catalog.scan.file_not_available", '{name}: Datei nicht verfügbar.', name=Path(path).name))
     ordered = sorted(found.values(), key=lambda entry: (-entry.modified, entry.path.casefold()))
     if len(ordered) > limit:
-        errors.append(f'Angezeigt werden die neuesten {limit} Sicherungen.')
+        errors.append(glide_i18n.t("mod.backup_catalog.scan.the_newest_backups_are", 'Angezeigt werden die neuesten {limit} Sicherungen.', limit=limit))
     return ordered[:limit], errors
 
 
@@ -77,7 +79,7 @@ def choice_label(sources, path):
     for name, existing in sources:
         if existing is not None and os.path.normcase(os.path.abspath(existing)) == key:
             return name
-    base = f'Datei: {Path(path).name}'
+    base = glide_i18n.t("mod.backup_catalog.choice_label.file", 'Datei: {name}', name=Path(path).name)
     label, number = base, 2
     names = {name for name, _ in sources}
     while label in names:
@@ -101,4 +103,4 @@ def describe(data):
         completed += bool(item.get('done'))
         stack.extend(item.get('children') or ())
     version = data.get('version', data.get('data_version', data.get('schema_version', 'nicht angegeben')))
-    return f'{lists} Listen · {count} Punkte · {completed} erledigt · Speicherstufe {version}'
+    return glide_i18n.t("mod.backup_catalog.describe.lists_items_done_storage", '{lists} Listen · {count} Punkte · {completed} erledigt · Speicherstufe {version}', lists=lists, count=count, completed=completed, version=version)

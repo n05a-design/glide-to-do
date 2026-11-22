@@ -1,5 +1,5 @@
 {
-  "app_version": "1.0.0",
+  "app_version": "1.0.1",
   "format_version": 26,
   "sprache": "en",
   "thema": "City Light · Photo journey",
@@ -109,20 +109,20 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 10322754,
-      "sha256": "12b8244d531c971b60a6500f36991b471189a98775b71c13859faf1b07dbd2f7"
+      "bytes": 10322759,
+      "sha256": "9bbb824d9fd7cde47d5a8c1eb87612fa76d7b3bef0cf30d95fc551b86f2c9208"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 10366029,
-      "sha256": "ebff0f82560d0a4beceebb9bdfeda0de2a90089a654084f59dd4b455480b6ebe"
+      "bytes": 10366037,
+      "sha256": "8151badcc8b5057d595613adb1541101ba62e4283c59f5a1b7be3a639a1091c2"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 16525,
-      "sha256": "b7887f11bea278b490feb430ad56e235084ded4fc917e43924ead8b3aeb801e3"
+      "sha256": "63a24e8825cea40269b79b6640fbd4d88c111460e660535cb26d5f7381d1ef48"
     },
     "City-Light.canvas": {
       "bytes": 4692,
-      "sha256": "66ef8ef0298990a7e10c8dae62b46fc447aa1131e4f6c471c772ba060fbf3bc5"
+      "sha256": "030ca285951d3769561d78132a3000f91e64c7ead2bea9d1d00af4c3cadd1200"
     }
   }
 }

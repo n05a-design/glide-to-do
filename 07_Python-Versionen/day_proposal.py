@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 import hashlib
 import json
+import i18n as glide_i18n
 
 REASONS = {"overdue": "überfällig", "due_today": "heute fällig",
            "carried": "liegen geblieben", "due_soon": "in den nächsten zwei Tagen fällig",
@@ -39,7 +40,7 @@ def reason_text(row):
     count = row.get("unblocks", 0)
     if not count:
         return reason
-    release = f"gibt {count} weitere {'Aufgabe' if count == 1 else 'Aufgaben'} frei"
+    release = glide_i18n.t("mod.day_proposal.reason_text.frees_more", 'gibt {count} weitere {wert} frei', count=count, wert=glide_i18n.t("mod.day_proposal.reason_text.task", 'Aufgabe') if count == 1 else glide_i18n.t("mod.day_proposal.reason_text.tasks", 'Aufgaben'))
     return release if row["reason"] == "unblocks" else f"{reason} · {release}"
 
 
@@ -103,9 +104,9 @@ def selected_rows(proposal, identities):
     wanted = set(identities)
     selected = [row for row in proposal["rows"] if (row["list_id"], row["item_id"]) in wanted]
     if len(selected) != len(wanted):
-        raise ValueError("Die Auswahl enthält keine aktuellen Vorschlagsaufgaben.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.the_selection_contains_no", "Die Auswahl enthält keine aktuellen Vorschlagsaufgaben."))
     if proposal["budget"] is None:
-        raise ValueError("Bitte zuerst eine Tageskapazität festlegen.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.please_set_a_daily", "Bitte zuerst eine Tageskapazität festlegen."))
     if sum(row["minutes"] for row in selected) > proposal["budget"]:
-        raise ValueError("Die Auswahl überschreitet das verfügbare Auswahlbudget.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.the_selection_exceeds_the", "Die Auswahl überschreitet das verfügbare Auswahlbudget."))
     return selected

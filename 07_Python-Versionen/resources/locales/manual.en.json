@@ -1,0 +1,772 @@
+[
+ [
+  "Note lists",
+  [
+   [
+    "Notes area",
+    "Notes without a folder and notebooks have their own area “Notes +” in the sidebar below the lists. Notes in ordinary folders stay with their folder. The heading “Notes” opens the overview with notebooks and all notes. “+” creates a note, in an open notebook a daily note, a note from a template or a new notebook.",
+    "Sidebar › Notes +"
+   ],
+   [
+    "Choose list type",
+    "“+” next to “Notes” › New note, or New list with the type Note. Tasks stay at the top, below is an independently scrolling rich-text area; in small windows the text takes precedence. The type is fixed after creation; the edit dialog only shows it.",
+    "Notes + · New list › List type"
+   ],
+   [
+    "Writing in notes",
+    "The note text is written like a page: the same shortcuts, “/”, images, right-click and floating format bar. Tasks are created in the list above the text; “- [ ]” from pasted text becomes a bullet list.",
+    "Note text"
+   ],
+   [
+    "Formatting",
+    "Select text: the floating bar offers block type, B, I, U, S, code, highlight and link. Ctrl+B/I/U formats, Ctrl+K inserts a link; Ctrl+click opens it.",
+    "Format bar above the selection"
+   ],
+   [
+    "Undo and saving",
+    "Ctrl+Z works locally in the note editor; Ctrl+Y or Ctrl+Shift+Z redoes. Text and formatting are saved together. The status reports failed write attempts.",
+    "Note editor"
+   ],
+   [
+    "Notebook",
+    "Insert a timestamp or day section at the cursor position.",
+    "Note › More"
+   ],
+   [
+    "Present",
+    "Each heading (H1/H2) starts a slide, in full screen of the page view. Arrow keys, Space and Page Up/Down browse, Escape ends. “Slides as PDF …” opens the same slides as a print page – print or save as PDF.",
+    "Format bar › More › Present · Slides as PDF"
+   ]
+  ]
+ ],
+ [
+  "Pages",
+  [
+   [
+    "Page actions",
+    "“More” opens all commands of the page as a searchable list: typing filters (umlauts like ae/oe/ue/ss), arrows select, Enter runs, Esc closes and returns to the text. Blocked entries name their reason, such as “Select text first”. In notes the same list is called “Note actions”.",
+    "Page › More · Note › More"
+   ],
+   [
+    "Block actions",
+    "Ctrl/Cmd+/ or the handle ⠿ left of the line open the line's actions: at the top “Convert to” (heading, list, task, quote, code …), below that line, format and link. The handle appears under the mouse pointer and at the cursor and disappears while typing. A conversion is one undo step.",
+    "Page or note › Ctrl/Cmd+/ · ⠿ left of the line · Right-click › Search block actions …"
+   ],
+   [
+    "Icon and cover image",
+    "“More” sets and changes a page's pixel icon and cover image. A set icon stays fixed at the top of the left margin before the handle ⋮⋮ and stays in place while scrolling; clicking it, Return or Space changes it. The page title is at the top of the header; double-click there or F3 renames.",
+    "Page › More › Cover image / Pixel icon …"
+   ],
+   [
+    "Images in pages",
+    "“Image” in the toolbar, “/” › Image or drag an image from Finder/Explorer onto the page. Small images sit on the left and the text flows past on the right, large ones fill the column. Dragging moves: drop left, centered or right in the column. Dragging the corner changes the size. Right-click: text flow, column width, half width, original size, remove. Delete removes the selected image; Undo brings it back. Images are attachments of the page.",
+    "Page › Image · toolbar above the canvas"
+   ],
+   [
+    "Pages area",
+    "Pages and books have their own area “Pages +” in the sidebar between Trash and “Lists +”. Pages in ordinary folders stay with their folder. The heading “Pages” opens the overview. Above a book, “+” (page, template, subfolder) and “…” appear.",
+    "Sidebar › Pages"
+   ],
+   [
+    "Create page",
+    "“+” next to “Pages”, File › Create new › New page or “New page” in the overview. In a book every new entry is created as a page.",
+    "Sidebar › Pages + · File › Create new"
+   ],
+   [
+    "Page templates",
+    "Report, meeting and project page are included; every page of your own can be saved as a template. The template's tasks become new items in the new page.",
+    "Pages + › From template"
+   ],
+   [
+    "Exchange Glide pages",
+    "Save a page or a book as .glidepage: text, tasks, labels and attachments travel along. On import the pages are added and labels are merged. The page import rejects a file with ordinary lists.",
+    "Page › More › Export as Glide page · Pages + › Import Glide pages …"
+   ],
+   [
+    "Take over an AI report",
+    "Text from the clipboard or a file (.md, .txt) becomes a page: headings, lists, tables, quotes, code and links are kept; “- [ ]” becomes a real task. Inside a page, pasting takes over the formatting as well.",
+    "Pages › From clipboard · File › Import › Page from file …"
+   ],
+   [
+    "Writing",
+    "As in Notion: “# ”, “## ”, “### ” for headings, “- ” and “1. ” for lists, “[] ” for a task, “> ” for a quote, “```” + Enter for code, “---” + Enter for a divider. “/” at the start of a line opens the block picker; Enter continues lists and tasks, an empty line ends them.",
+    "Page"
+   ],
+   [
+    "Block types",
+    "Text, heading 1–4 (“#### ”), bullet list, numbered list, task, toggle list, toggle heading, quote, callout and code. Toggle list: the arrow “▾” collapses and expands the indented lines below; Enter on the toggle line creates an indented line, Enter on an empty indented line outdents. The state is saved.",
+    "“/” · Right-click › Convert to"
+   ],
+   [
+    "Right-click and format bar",
+    "Right-click in the text: cut, copy, paste, paste as plain text, select all, format, convert to another block type as well as move line up, down, duplicate and delete. Selected text shows a floating format bar.",
+    "Page and note › Right-click"
+   ],
+   [
+    "Outline",
+    "“More › Outline” lists the headings and jumps to them; a collapsed list opens on the way.",
+    "Page and note › More › Outline"
+   ],
+   [
+    "Tasks in pages",
+    "Every task is a full Glide item: the box checks it off, double-clicking the title opens all item details, it appears in “Today” and in the calendar. A deleted task line puts the item in the trash.",
+    "Page"
+   ],
+   [
+    "Reading",
+    "Endless scrolling in a calm reading column; “More › Full width” switches. “More” copies the page, saves it as Markdown and adds it to the favorites.",
+    "Page › More"
+   ],
+   [
+    "Favorites and recent",
+    "Only for pages, separate from the lists: in the “Pages” overview.",
+    "Sidebar › Pages"
+   ]
+  ]
+ ],
+ [
+  "Gallery",
+  [
+   [
+    "Create gallery",
+    "A collection of images: “+” next to “Lists” › New gallery, File › Create new › New gallery or New list with the list type Gallery.",
+    "Sidebar › Lists +"
+   ],
+   [
+    "Images",
+    "“Add images …” or drag files from Finder/Explorer onto the canvas – they are stored as attachments of the gallery, backed up and exported like any attachment. Previews: PNG, GIF and SVG everywhere; on macOS also JPEG, HEIC, WebP and TIFF, on Windows JPEG, TIFF and BMP (HEIC and WebP with Microsoft's image extensions). Otherwise “Open in system” opens the image.",
+    "Gallery › Add images …"
+   ],
+   [
+    "View and caption",
+    "Double-click or Enter shows an image large, with title and note; ◂ ▸ and the arrow keys browse, Escape goes back. Small, Medium, Large sets the tile size.",
+    "Gallery"
+   ],
+   [
+    "Remove",
+    "Right-click › Remove from gallery; “Undo” brings the image back.",
+    "Gallery › Right-click"
+   ]
+  ]
+ ],
+ [
+  "Folder types",
+  [
+   [
+    "Folder",
+    "Takes everything: tasks, notes, drawings, pages.",
+    "New folder › Folder type"
+   ],
+   [
+    "Book",
+    "A collection of pages – such as reports or project documents. New entries are pages. Books are in the “Pages” area; ordinary subfolders are possible too.",
+    "Pages + › New book … · New folder › Folder type"
+   ],
+   [
+    "Notebook",
+    "Formerly “Diary”: entries carry a moment date. Notebooks are in the “Notes” area; a subfolder is again a notebook.",
+    "Notes + › New notebook … · New folder › Folder type"
+   ]
+  ]
+ ],
+ [
+  "Drawing pages",
+  [
+   [
+    "Create drawing",
+    "New list with the list type Drawing, File › Create new › New drawing or the context menu of a list or folder. In a notebook the drawing gets a moment date.",
+    "File › Create new"
+   ],
+   [
+    "Canvas size",
+    "16, 32, 64 or 128 cells per side – chosen at creation and fixed afterwards. 16 and 32 suit icons and figures.",
+    "New list › List type Drawing › Size"
+   ],
+   [
+    "Tools",
+    "Brush (1×1 to 8×8), fill, eyedropper, line, rectangle, ellipse and selection. The context bar only shows what fits the tool: size, outline or filled, symmetry, pattern. Shift while dragging keeps shapes straight or square.",
+    "Drawing canvas › Toolbar"
+   ],
+   [
+    "Two colors",
+    "The left mouse button paints with the foreground color, the right one with the background color. The color bar shows the palette and recently used colors; X swaps, D resets.",
+    "Drawing canvas › Color swatches"
+   ],
+   [
+    "Symmetry, pattern, tile",
+    "Mirror horizontally, vertically or both ways; fill with a checkerboard or dot grid; the tile preview shows patterns 3 × 3, and on request the brush runs over the edge.",
+    "Drawing canvas › Context bar · More"
+   ],
+   [
+    "Selection",
+    "Drag a rectangle, move, copy, cut and paste – also between drawings. Delete clears the selection.",
+    "Selection tool (S)"
+   ],
+   [
+    "Palettes",
+    "Glide 32 is included; your own palettes can be saved and exchanged as .gpl or .hex. Importing also reads the palette from Aseprite files (.aseprite, .ase) and Adobe swatches (.ase). A color can be replaced in the whole drawing, unused colors removed.",
+    "Drawing canvas › Palette · More"
+   ],
+   [
+    "Keyboard",
+    "Arrow keys move the cell cursor (with Shift eight cells), Space applies the tool. B, F, I, L, U, E, S choose the tools; 1, 2, 4, 8 the size; + and − zoom, 0 fits; Ctrl+mouse wheel zooms, the middle mouse button pans; G grid, R reference, C color, M symmetry, P preview.",
+    "Drawing canvas"
+   ],
+   [
+    "Undo and saving",
+    "Ctrl+Z undoes per action – a brush stroke, a shape, a fill is one step, up to 50. Glide saves automatically after a short pause; the status reports errors. Tracing, replacing and clearing can be undone completely.",
+    "Drawing canvas › Status"
+   ],
+   [
+    "Snapshots",
+    "Remember a named state and restore it later; it is stored as an attachment of the page and travels with backups.",
+    "Drawing canvas › More › Remember snapshot"
+   ],
+   [
+    "PNG export",
+    "In whole-number enlargements up to 2048 pixels edge length, without smoothing.",
+    "Drawing canvas › More › Export as PNG"
+   ],
+   [
+    "Icon export",
+    "The drawing as ICO with 16, 32, 48 and 256 pixels – for program icons and as favicon.ico for websites; Windows, macOS, Linux and all browsers read it. The unpainted background can optionally be transparent. Drawings with 16 or 32 cells fit without loss; larger ones are scaled down without smoothing. Before saving, a preview shows 16, 32 and 48 pixels on light and dark backgrounds, pixel-identical to the file.",
+    "Drawing canvas › More › Export as icon (ICO)"
+   ],
+   [
+    "Pixel icon",
+    "A 16×16 image as the icon of a list or folder – in the sidebar, overview and search.",
+    "Right-click a list/folder › Pixel icon"
+   ],
+   [
+    "Reference image and tracing",
+    "The “Reference” button or More › Load reference image (PNG, JPEG, SVG and more): frame the image and show it as a faint helper layer or trace it after a preview with at most 64 colors. The PNG is stored as an attachment of the page and travels with backups.",
+    "Drawing canvas › More"
+   ],
+   [
+    "Exchange",
+    "More › Export as SVG or JSON. File › Import › Drawing creates a new page; More › Import and replace swaps the content of the open drawing.",
+    "Drawing canvas › More"
+   ]
+  ]
+ ],
+ [
+  "Board navigation and history",
+  [
+   [
+    "Selection rectangle",
+    "Drag on an empty area and enclose cards completely. Ctrl/Cmd adds to the selection; Escape cancels.",
+    "Board"
+   ],
+   [
+    "Align",
+    "Switch on Align to cards in the context menu. Edges, centers and equal distances snap within a small tolerance; Alt suppresses object alignment.",
+    "Board context menu"
+   ],
+   [
+    "Zoom and navigator",
+    "Zoom from 50 to 200 percent only changes the view. The navigator, which can be switched off, shows the whole canvas and the visible section; clicking or dragging navigates.",
+    "Board › Zoom / Navigator"
+   ],
+   [
+    "History",
+    "At most 15 entries from the last 15 days. Search as well as type and time filters limit the display. The history does not replace Undo.",
+    "Header › ◷ · Ctrl+H"
+   ],
+   [
+    "Output manual",
+    "Save the complete manual as HTML or open it in the default program for printing.",
+    "Manual › Save HTML / Print"
+   ]
+  ]
+ ],
+ [
+  "Basic layout",
+  [
+   [
+    "Sidebar",
+    "System views at the top, below them Pinned and the areas Pages, Lists and Notes. The arrow before an area collapses it, its title opens the overview. Above folders, libraries and notebooks “+” and “…” appear; a collapsed folder stays closed. Select with a click, multiple selection in the list area with Shift or Ctrl.",
+    "Left · View › Interface › Sidebar"
+   ],
+   [
+    "Properties",
+    "Below the title, compact details such as open items, next due date and labels; to the left of it, in a wide window, the logo in the accent color.",
+    "Page header"
+   ],
+   [
+    "Search page, item or action",
+    "Pages, items and commands in one field; without input, the recently opened pages.",
+    "Header › ⌕ · View › Views · Ctrl/Cmd+O"
+   ],
+   [
+    "Header",
+    "Title of the view, search, filters, level of detail, printing and settings.",
+    "Top of the window"
+   ],
+   [
+    "Quick input",
+    "A field for a new item; Enter creates it.",
+    "Below the header · Alt+N from any view"
+   ],
+   [
+    "New item with all details",
+    "The same form as for editing: type, importance, color, target list, due date, repeat, reminder, planned day, labels, description, checklist and attachments.",
+    "Shift+Enter in the quick input · File › Create new"
+   ],
+   [
+    "Status bar",
+    "Number of items, filter note and date.",
+    "Bottom of the window"
+   ],
+   [
+    "Undo and redo",
+    "Ctrl/Cmd+Z undoes the last change, up to 20 steps. Ctrl/Cmd+Shift+Z – on Windows also Ctrl+Y – brings it back; after “Undo” in the notice, the same notice offers “Redo”. A new change discards the redo steps. In texts and on the drawing canvas their own steps apply. “Compare backups” shows older states.",
+    "Edit › Undo / Redo · Change history"
+   ]
+  ]
+ ],
+ [
+  "Views",
+  [
+   [
+    "Home",
+    "Tiles with clock, greeting, daily goal, next task, week, drawings, gallery images, pinned pages and filters, board preview and data. Clicking a gallery image opens it in its gallery. “Customize home” arranges right on the page: drag or Alt+↑/↓, full width, hide and show. Gismo also sits quietly next to empty lists, folders and boards; if you don't want him, hide his tile under “Customize home” – then he appears nowhere.",
+    "Sidebar › Home · View › Views › Home"
+   ],
+   [
+    "Today",
+    "What is on today: at the top the next task, then late items, leftovers, the day plan and what is due today, at the end the inbox with everything without a day. Each task appears exactly once; future due dates are shown in “Upcoming”. ◂ and ▸ page to other days; there you see their day plan and what is due on them. The day plan shows what is scheduled via the planned day, not via the due date. Items with a time come first as a schedule; the duration comes from the estimate, overlaps are named. Drag a block: onto the upper half of another – before it, onto the lower half – after it, to “No time” – without a time. Alt+↑/↓ moves by 15 minutes. “Grid” shows an hour grid next to it in which blocks move in 15-minute steps; every item of the list – even without a time or from the inbox – can be dragged into it; in narrow windows the grid replaces the list. Dragged from any list onto “Today” in the sidebar, an item is scheduled for the day. “Day …” opens day start and day close.",
+    "Sidebar › Today"
+   ],
+   [
+    "Day start",
+    "Guided through overdue items, items dragged along and the inbox: today, tomorrow, next week, no day, done or skip.",
+    "Today › Day … · View › Views › Day start"
+   ],
+   [
+    "Day close",
+    "In the evening: whatever was planned or due for today and stayed open gets a new day (tomorrow, next week, no day) or is checked off. Afterwards you see what was done today; “Add to the daily note” writes that into today's daily note as a review.",
+    "Today › Day … · View › Views › Day close"
+   ],
+   [
+    "Week review",
+    "What was done during the week, what moved on, estimated versus tracked time and the capacity per day.",
+    "View › Views › Week review"
+   ],
+   [
+    "Upcoming",
+    "All items with a due date, across lists and chronological; overdue items are at the top under “Late”. Was called “In progress” until 3.33.5.",
+    "Sidebar › Upcoming · View › Views · Home"
+   ],
+   [
+    "Next task",
+    "Exactly one item: planned for today, otherwise overdue or due today, otherwise left undone – each by importance and date.",
+    "At the top of “Today” · home tile"
+   ],
+   [
+    "Late",
+    "Everything overdue as its own view.",
+    "View › Views › Late"
+   ],
+   [
+    "Labels",
+    "The same data grouped by labels; items can be dragged in.",
+    "Sidebar › Labels"
+   ],
+   [
+    "Lists and folders",
+    "Overview of all folders and lists as a gallery with preview; card size selectable, archived pages via the “Archive” switch.",
+    "Sidebar › Lists and folders"
+   ],
+   [
+    "Archive",
+    "Pages that are finished but should stay. Archived content drops out of planning, sidebar and home and can be brought back at any time.",
+    "Right-click a list/folder › Archive"
+   ],
+   [
+    "Table view",
+    "The same list as a table with sortable and configurable columns.",
+    "View › List › Table view"
+   ],
+   [
+    "Trash",
+    "Deleted items, lists and folders; restore or delete permanently.",
+    "Sidebar › Trash"
+   ]
+  ]
+ ],
+ [
+  "Items",
+  [
+   [
+    "Types",
+    "Task, group, long text and subheading. The type decides which fields an item has.",
+    "Item form › Type · Right-click › Type"
+   ],
+   [
+    "Importance",
+    "Four levels; it helps decide which task comes next.",
+    "Item form › Importance · Ctrl+Shift+F"
+   ],
+   [
+    "Due date",
+    "Date and optionally time. Basis for “Today”, “Upcoming” and “Late”.",
+    "Item form › Due date · Ctrl+T"
+   ],
+   [
+    "Repeat",
+    "Rule based on the due date; without a date there is no repeat.",
+    "Item form › Repeat"
+   ],
+   [
+    "Quick input",
+    "While you type an item, Glide recognizes English and German phrases: “tomorrow”, “next Monday”, “in 3 days”, “24 May” or a date set the planned day; “due” or “by” before them the due date, for example “due next Monday at 14:30”; “at 14:30” the time, “45 minutes” the effort, “!high” the importance, “#labelname” an existing label. “every Monday”, “daily”, “every weekday”, “every 2 weeks on Monday and Thursday”, “every 3 months on 15” or “every year on 24 May” set a repeat and its first occurrence as the due date. German phrases such as “morgen” or “jeden Montag” work as well. The “/” commands still apply (/due, /morgen, /wichtig, /meintag, /labelname). Below the input each detection appears as a chip; × undoes it and the text stays in the title. Text in quotation marks stays literal; Tab completes a started “/” word.",
+    "Input line of the list and quick capture"
+   ],
+   [
+    "Selection bar",
+    "As long as items are selected, the bar with importance, due, schedule, labels and delete sits below the list – in place of the hint.",
+    "Below the list"
+   ],
+   [
+    "Recurring checklist",
+    "Right-click a task list › Recurring checklist: when everything is checked off, all items and steps reopen after a moment (shopping, packing list). “Reopen all items” does that immediately; Undo shows the completed state.",
+    "Sidebar › Right-click the list"
+   ],
+   [
+    "Reminder",
+    "Notification at a time before or at the due date. Optionally also as a system notification (one combined message per check); on Windows an icon appears in the notification area for it. “Test system notification” shows whether it arrives.",
+    "Item form › Reminder · Settings › Personal · View › Test system notification"
+   ],
+   [
+    "Planned day",
+    "When the work is done – independent of when something is due. Controls the day plan in “Today”.",
+    "Item form › Planned day · Edit › Item"
+   ],
+   [
+    "Labels",
+    "Can be assigned several times, colored, with their own view.",
+    "Item form › Labels · Ctrl+L"
+   ],
+   [
+    "Checklist",
+    "Steps inside an item, checked off directly in the list.",
+    "Item form › Checklist · Display › Checklists"
+   ],
+   [
+    "Attachments",
+    "Files are stored in the data storage, not as a reference to the original path.",
+    "Item form › Attachments"
+   ],
+   [
+    "Links",
+    "An item refers to others; both show the reference.",
+    "Item form › Relations and time · Right-click › Relations and time › Link with items"
+   ],
+   [
+    "Dependencies",
+    "“Waits for” with a cycle check. A waiting item asks before it is checked off.",
+    "Item form › Relations and time · Right-click › Relations and time › Waits for"
+   ],
+   [
+    "Time tracking",
+    "Start and stop per item; the tracked time appears next to the estimate. A running tracking is shown in the header.",
+    "Right-click › Relations and time › Start time tracking"
+   ],
+   [
+    "Detail area",
+    "To the right of the list or table, all fields of the selected item – including type, color, repeat, reminder, checklist, relations, tracked time and attachments. Changes apply when leaving a field and can be undone. Below 980 pixels width the item form stays.",
+    "View › List › Detail area"
+   ]
+  ]
+ ],
+ [
+  "Board",
+  [
+   [
+    "A list's board",
+    "The items of a list as cards on a canvas. Moving with the mouse or Alt+arrow is undone by Ctrl/Cmd+Z.",
+    "Tab row › Board"
+   ],
+   [
+    "Global board",
+    "The same canvas across all data.",
+    "View › Board › Global board · home tile"
+   ],
+   [
+    "Create cards",
+    "Double-clicking the free canvas opens the full form.",
+    "On the canvas"
+   ],
+   [
+    "Connect",
+    "Connect two cards; the style decides whether and where an arrow points.",
+    "Canvas › Connect · a card's context menu"
+   ],
+   [
+    "Card size",
+    "Three levels – main idea, normal, side note. Here size is the hierarchy.",
+    "A card's context menu › Card size"
+   ],
+   [
+    "Full screen",
+    "The canvas across the whole window; Escape or F11 to return.",
+    "Tab row › Full screen"
+   ],
+   [
+    "Context menu",
+    "All actions of the card hit, otherwise those of the canvas.",
+    "Right-click on the canvas"
+   ],
+   [
+    "Column board",
+    "All items of the area in columns by due date, planned day, importance, urgency × importance, label, done or list. Dragging into a column sets the field; Alt+←/→ moves via keyboard.",
+    "Board › Arrangement Columns"
+   ],
+   [
+    "Card content and color",
+    "Description, checklist and image on the card; color as a stripe, header or whole card, from the item color or first label.",
+    "Board › Actions › Card content / Card color"
+   ],
+   [
+    "Areas",
+    "Named rectangles; cards inside move along when they are moved. F2 renames, Remove only deletes the area.",
+    "Board › Actions › New area · Jump to area"
+   ],
+   [
+    "Tidy up and think further",
+    "Tidy up arranges the selection in the grid; Ctrl/Cmd+Enter creates a new card to the right; the dot at the card edge connects by dragging.",
+    "Board › Selected card"
+   ],
+   [
+    "Design connections",
+    "Label, dashed, color and direction.",
+    "Right-click a connection"
+   ],
+   [
+    "Background and drawings",
+    "Dots, lines or squares at the grid spacing. Drawings can be pinned as a card; a double-click opens the original.",
+    "Board › Actions › Background · Pin"
+   ],
+   [
+    "Present",
+    "The areas become slides in full screen. “Presentation as PDF …” creates one landscape page per area – print or save as PDF.",
+    "Board › Actions › Present · Presentation as PDF"
+   ]
+  ]
+ ],
+ [
+  "Order and finding again",
+  [
+   [
+    "Search",
+    "Filters the current view by title and description.",
+    "Header · Ctrl+F"
+   ],
+   [
+    "Filter",
+    "Open, done or everything; works together with the search.",
+    "Header"
+   ],
+   [
+    "Saved filters",
+    "Save a combination of search and filter as its own view.",
+    "View › Interface › Saved filters"
+   ],
+   [
+    "Display",
+    "How much a row shows: compact, standard, checklists, attachments, extended.",
+    "Header › Display"
+   ],
+   [
+    "Sort",
+    "Order the active list by due date, importance or alphabetically.",
+    "View › List › Sort active list"
+   ],
+   [
+    "Tabs",
+    "Keep an item open as its own tab.",
+    "View › Tabs · Ctrl+Shift+O"
+   ],
+   [
+    "Urgency × importance",
+    "The four Eisenhower quadrants as a grouping: important from medium importance, urgent with a due date or planned day within the next two days. Dragging only sets what the quadrant requires – medium or low importance, planned day today or after the two days. A due date never changes; if it makes the task urgent, Glide says so.",
+    "Column board and list › Group"
+   ],
+   [
+    "Group",
+    "Split list and table into sections by due date, planned day, importance, urgency × importance, label or done; dragging between sections sets the field. The list's numbers and subheadings are kept; a column sort of the table applies within each heading.",
+    "View › List › Group by · Right-click a list"
+   ],
+   [
+    "Nested table",
+    "Subitems indented instead of flat; if only one subitem matches, its parent stays visible, dimmed.",
+    "View › List › Table: subitems nested"
+   ],
+   [
+    "Pin",
+    "Important pages at the top of the sidebar and on the home page; saved filters as a tile.",
+    "Right-click a list/folder › Pin"
+   ],
+   [
+    "Filter notebook",
+    "One day or a period; both boundary days count, the search applies in addition.",
+    "Notebook › Period"
+   ]
+  ]
+ ],
+ [
+  "Templates and exchange",
+  [
+   [
+    "Templates",
+    "Ready-made list structures with relative deadlines as a starting point.",
+    "Sidebar › Templates · File › Templates"
+   ],
+   [
+    "Templates with input fields",
+    "Glide asks once for placeholders like {{Projektname}} when the template is used and inserts the value everywhere. Date and time fill themselves and are not asked for: {{Datum}}, {{Wochentag}}, {{KW}}, {{Monat}}, {{Jahr}}, {{Uhrzeit}}, {{Morgen}}, {{Gestern}}.",
+    "Use template"
+   ],
+   [
+    "TXT, Markdown, CSV",
+    "Output the active list or read in data.",
+    "File › Import or Export"
+   ],
+   [
+    "Calendar file (ICS)",
+    "Output due dates as events or read in events.",
+    "File › Import or Export"
+   ],
+   [
+    "Print and PDF …",
+    "Create a print view and open it in the default program.",
+    "File › Export › Print and PDF … · Ctrl+P"
+   ],
+   [
+    "Exchange with an AI",
+    "Output data in a described format and read the result back in a controlled way.",
+    "File › Data exchange"
+   ]
+  ]
+ ],
+ [
+  "Backup and storage",
+  [
+   [
+    "Task backup",
+    "All lists, folders, labels, attachments and boards in one file.",
+    "File › Backup"
+   ],
+   [
+    "App backup",
+    "In addition settings, templates and daily counts.",
+    "File › Backup"
+   ],
+   [
+    "Add lists/folders",
+    "Take parts of a backup into the existing data.",
+    "File › Backup"
+   ],
+   [
+    "Data storage",
+    "Where Glide works. The folder can be changed – for example to a cloud folder that is on several devices. Glide opens data from a newer Glide version read-only; it backs up an unreadable file before anything can replace it.",
+    "File › Data storage · Help › About Glide"
+   ],
+   [
+    "Change history",
+    "Log of actions, filterable.",
+    "Header › ◷ · View › Change history · Ctrl+H"
+   ]
+  ]
+ ],
+ [
+  "Interface",
+  [
+   [
+    "Designs",
+    "Light, dark, high-contrast and calm variants, two minimal designs without color and “Pixel” with block colors, pixel frames and the pixel font “Pixelify Sans” for headings.",
+    "Settings › Display"
+   ],
+   [
+    "Background",
+    "Five gradients per design behind the interface – mesh, northern lights, grain or, in the pixel design, pixel blocks. At the top below the title the gradient stays quieter so the text stays readable. Tiles, lists and windows become frosted glass: they take on the blurred color of the gradient behind them, more strongly in the glass design. The contrast designs stay opaque.",
+    "View › Interface › Background · Settings › Background"
+   ],
+   [
+    "Colors by meaning",
+    "Red only for deleting and removing, green only for confirming (create, save, apply, restore), a fixed purple for adding and new. Open, cancel and import stay neutral; hints such as the notification bell are yellow. Buttons with “…” open a window first and are therefore neutral.",
+    "all buttons"
+   ],
+   [
+    "Search",
+    "The search opens centered below the header: a frame in the accent color, a slightly darker (in the dark design lighter) area. A click outside or Escape closes it.",
+    "Header › Magnifier · Ctrl+F"
+   ],
+   [
+    "Dopamine mode",
+    "Animated feedback on every action – arcade instead of restraint.",
+    "Settings › Display › Color mode"
+   ],
+   [
+    "Font",
+    "Family and base size of the whole interface.",
+    "Settings › Display"
+   ],
+   [
+    "Compact mode",
+    "For a narrow Glide window next to another application: the header only shows title, search, quick capture, menu and “Normal view”, the sidebar is off and the window can be shrunk down to 480 × 560. All menu commands are in the menu button. Both modes remember their window position separately; at the next start Glide opens normally.",
+    "View › Compact mode · Ctrl/Cmd+Shift+K"
+   ],
+   [
+    "Side view",
+    "A list, page or note for reading to the right of your work, in place of the task inspector. Tasks can be checked off there (box or Space, one undo step); “Open” shows the content in the main area, “Close” or Esc ends it. If you open the task inspector, it steps back and returns afterwards. Drawings, galleries and boards are opened in the main area.",
+    "Right-click a list/page › Open in side view · Search › Shift+Enter · View › Interface › Open side view …"
+   ],
+   [
+    "Usage hints",
+    "Additional hints in the views, such as “Double-click opens” or the explanation in the trash. Off by default; necessary messages always appear.",
+    "Settings › Display and controls"
+   ],
+   [
+    "Set up home",
+    "Which tiles appear, in which order and in how many columns.",
+    "View › Interface › Set up home"
+   ],
+   [
+    "View at startup",
+    "What Glide starts with – last opened or a fixed view.",
+    "Settings › Behavior"
+   ],
+   [
+    "Daily goal and daily capacity",
+    "Comparison values you set yourself; 0 switches them off.",
+    "Settings › Personal"
+   ]
+  ]
+ ],
+ [
+  "Help",
+  [
+   [
+    "Manual",
+    "This overview.",
+    "Help › Manual"
+   ],
+   [
+    "Keyboard shortcuts",
+    "All keyboard shortcuts by area.",
+    "Help › Show keyboard shortcuts"
+   ],
+   [
+    "App actions",
+    "Every menu action searchable in one place.",
+    "Header › ⌘"
+   ],
+   [
+    "About Glide",
+    "Version, data location and changing the data storage. “What's new …” shows the changes of all previous versions – even after the card on the home page is marked as read.",
+    "Help › About Glide"
+   ]
+  ]
+ ]
+]

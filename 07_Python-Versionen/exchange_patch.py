@@ -15,6 +15,7 @@ import hashlib
 import json
 import re
 from ui_design import TITLE_MAX_CHARS
+import i18n as glide_i18n
 
 FORMAT = "glide.exchange"
 CONTEXT_FORMAT = "glide.context"
@@ -86,21 +87,21 @@ class PatchError(ValueError):
 def parse_patch(data):
     """Prüft Rahmen und Form eines Änderungsvorschlags; liefert die Liste der Änderungen."""
     if not isinstance(data, dict):
-        raise PatchError("Die Datei enthält kein JSON-Objekt.")
+        raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.the_file_contains_no", "Die Datei enthält kein JSON-Objekt."))
     if data.get("format") != FORMAT:
-        raise PatchError("Das Format heißt nicht „glide.exchange“.")
+        raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.the_format_is_not", "Das Format heißt nicht „glide.exchange“."))
     if data.get("format_version") != VERSION or data.get("mode") != "patch":
-        raise PatchError("Erwartet wird format_version 2 mit mode „patch“.")
+        raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.expected_format_version_2", "Erwartet wird format_version 2 mit mode „patch“."))
     changes = data.get("changes")
     if not isinstance(changes, list) or not changes:
-        raise PatchError("Der Vorschlag enthält keine Änderungen.")
+        raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.the_suggestion_contains_no", "Der Vorschlag enthält keine Änderungen."))
     if len(changes) > MAX_CHANGES:
-        raise PatchError(f"Höchstens {MAX_CHANGES} Änderungen je Datei.")
+        raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.at_most_changes_per", 'Höchstens {max_changes} Änderungen je Datei.', max_changes=MAX_CHANGES))
     ergebnis = []
     for nummer, change in enumerate(changes, 1):
         if (not isinstance(change, dict) or not isinstance(change.get("ref"), str)
                 or not isinstance(change.get("base"), str) or not isinstance(change.get("set"), dict)):
-            raise PatchError(f"Änderung {nummer}: ref, base und set fehlen oder haben die falsche Form.")
+            raise PatchError(glide_i18n.t("mod.exchange_patch.parse_patch.change_ref_base_and", 'Änderung {nummer}: ref, base und set fehlen oder haben die falsche Form.', nummer=nummer))
         ergebnis.append(change)
     return ergebnis
 
@@ -109,43 +110,43 @@ def validate_value(feld, wert):
     """Normalisierter Wert oder ValueError mit einer verständlichen Meldung."""
     if feld == "title":
         if not isinstance(wert, str) or not wert.strip() or len(wert) > TITLE_MAX_CHARS:
-            raise ValueError(f"Titel muss Text mit 1 bis {TITLE_MAX_CHARS} Zeichen sein")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.title_must_be_text", 'Titel muss Text mit 1 bis {title_max_chars} Zeichen sein', title_max_chars=TITLE_MAX_CHARS))
         return " ".join(wert.split())
     if feld == "description":
         if not isinstance(wert, str) or len(wert) > 20000:
-            raise ValueError("Beschreibung muss Text bis 20.000 Zeichen sein")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.description_must_be_text", "Beschreibung muss Text bis 20.000 Zeichen sein"))
         return wert
     if feld == "importance":
         if isinstance(wert, bool) or not isinstance(wert, int) or not 0 <= wert <= 3:
-            raise ValueError("Wichtigkeit muss 0 bis 3 sein")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.importance_must_be_0", "Wichtigkeit muss 0 bis 3 sein"))
         return wert
     if feld in ("due", "planned_date"):
         if wert is None:
             return None
         if not isinstance(wert, str) or not _DATUM.fullmatch(wert):
-            raise ValueError("Datum im Format JJJJ-MM-TT oder null")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.date_in_the_format", "Datum im Format JJJJ-MM-TT oder null"))
         return wert
     if feld == "due_time":
         if wert is None:
             return None
         if not isinstance(wert, str) or not _UHRZEIT.fullmatch(wert):
-            raise ValueError("Uhrzeit im Format HH:MM oder null")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.time_in_the_format", "Uhrzeit im Format HH:MM oder null"))
         return wert
     if feld == "estimated_minutes":
         if wert is None:
             return None
         if isinstance(wert, bool) or not isinstance(wert, int) or not 1 <= wert <= 10080:
-            raise ValueError("Aufwand in Minuten (1 bis 10.080) oder null")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.effort_in_minutes_1", "Aufwand in Minuten (1 bis 10.080) oder null"))
         return wert
     if feld == "done":
         if not isinstance(wert, bool):
-            raise ValueError("Erledigt muss true oder false sein")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.done_must_be_true", "Erledigt muss true oder false sein"))
         return wert
     if feld == "labels":
         if not isinstance(wert, list) or not all(isinstance(name, str) and name.strip() for name in wert):
-            raise ValueError("Labels als Liste von Namen")
+            raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.labels_as_a_list", "Labels als Liste von Namen"))
         return sorted(dict.fromkeys(" ".join(name.split()) for name in wert))
-    raise ValueError("unbekanntes Feld")
+    raise ValueError(glide_i18n.t("mod.exchange_patch.validate_value.unknown_field", "unbekanntes Feld"))
 
 
 def check_patch(changes, resolve, known_labels=()):
@@ -164,23 +165,23 @@ def check_patch(changes, resolve, known_labels=()):
         vorschau.append(eintrag)
         if change["ref"] in gesehen:
             eintrag["status"] = "invalid"
-            eintrag["messages"].append("Dieselbe Aufgabe kommt mehrfach vor")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.the_same_task_occurs", "Dieselbe Aufgabe kommt mehrfach vor"))
             continue
         gesehen.add(change["ref"])
         gefunden = resolve(change["ref"])
         if gefunden is None:
             eintrag["status"] = "unknown"
-            eintrag["messages"].append("Aufgabe nicht gefunden (gelöscht oder nicht im Kontextpaket)")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.task_not_found_deleted", "Aufgabe nicht gefunden (gelöscht oder nicht im Kontextpaket)"))
             continue
         item, label_names = gefunden
         zustand = item_state(item, label_names)
         eintrag["title"] = zustand["title"]
         if checksum(zustand) != change["base"]:
             eintrag["status"] = "conflict"
-            eintrag["messages"].append("Die Aufgabe wurde seit dem Kontextpaket geändert")
+            eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.the_task_was_changed", "Die Aufgabe wurde seit dem Kontextpaket geändert"))
         for feld, wert in change["set"].items():
             if feld not in FIELDS:
-                eintrag["messages"].append(f"Unbekanntes Feld „{feld}“")
+                eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.unknown_field", 'Unbekanntes Feld „{feld}“', feld=feld))
                 eintrag["status"] = "invalid" if eintrag["status"] == "ok" else eintrag["status"]
                 continue
             try:
@@ -192,7 +193,7 @@ def check_patch(changes, resolve, known_labels=()):
             if feld == "labels" and bekannt:
                 fremd = [name for name in neu if name not in bekannt]
                 if fremd:
-                    eintrag["messages"].append("Unbekannte Labels: " + ", ".join(fremd))
+                    eintrag["messages"].append(glide_i18n.t("mod.exchange_patch.check_patch.unknown_labels", 'Unbekannte Labels: {join}', join=", ".join(fremd)))
                     eintrag["status"] = "invalid" if eintrag["status"] == "ok" else eintrag["status"]
                     continue
             if neu != zustand[feld]:
@@ -207,6 +208,6 @@ def summary(vorschau):
     zaehler = {}
     for eintrag in vorschau:
         zaehler[eintrag["status"]] = zaehler.get(eintrag["status"], 0) + 1
-    namen = (("ok", "anwendbar"), ("unchanged", "ohne Änderung"), ("conflict", "Konflikte"),
-             ("unknown", "nicht gefunden"), ("invalid", "ungültig"))
+    namen = (("ok", "anwendbar"), ("unchanged", glide_i18n.t("mod.exchange_patch.summary.without_change", "ohne Änderung")), ("conflict", glide_i18n.t("mod.exchange_patch.summary.conflicts", "Konflikte")),
+             ("unknown", glide_i18n.t("inspector.attachments.not_found", "nicht gefunden")), ("invalid", glide_i18n.t("mod.exchange_patch.summary.invalid", "ungültig")))
     return " · ".join(f"{zaehler[key]} {name}" for key, name in namen if zaehler.get(key))

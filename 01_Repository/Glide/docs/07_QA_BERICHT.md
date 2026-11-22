@@ -1,5 +1,23 @@
 # QA-Bericht – Glide 1.0.1
 
+## Release-Runde 1.0.1: Volllauf, macOS-Paket und DMG (V1.83, 22.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, Vordergrundmodus, auf `claude/v101-release` (`841fb56a`; enthält PRs #185–#187 und WA-49).
+
+| Gegenstand | Ergebnis |
+|---|---|
+| Volllauf 1 (`9d212eb6`) | Rot in `test_features328`: feste Erwartung `APP_VERSION == "1.0.0"`. Test vergleicht seitdem über `release_rank`. |
+| Volllauf 2 (`8e02c55e`) | 121 Schritte grün, darunter alle Arbeitsmodi-Gruppen; rot in `test_modalvertrag/menue`: der Test baut `ListApp` ohne `__init__` und erwartete den Menüaufschub schon beim Import. Ruft seit V1.83 `activate_runtime()` auf, 18/18. |
+| Volllauf 3 (`841fb56a`) | 106 Schritte grün; rot nur `test_arbeitsmodi_bedienung/kompakt_verlorenes_loslassen` (25/26), weil der Bildschirm gesperrt war (`CGSSessionScreenIsLocked`): Der Finder-Wechsel liefert dann kein FocusOut. In Lauf 2 auf gleichem App-Code grün. Wiederholung bei entsperrtem Bildschirm offen. |
+| Nachgeholte Schritte | Alle 31 übersprungenen Schritte grün: Arbeitsmodi Planung/Navigation/Geometrie/Abschluss, Speicherstatus, Sicherungszentrale, Wiederanlauf, Startwege 17/17, Modalvertrag 18/18, Abbauvertrag, Fensterlebensdauer, Shell-Demohost und -Selbsttest, KI-Ausgabe, T335 Lokalisierung, Showcase DE/EN, statische und Erreichbarkeitsanalyse, Stand-, Attribut- und Dublettenprüfung, Beispiel- und Releasedaten gleich. |
+| Gezielte Prüfungen | `test_release_notes` 15/15 (Neuerungen folgen der Oberflächensprache, jeder Satz hat eine englische Fassung), `test_i18n` 24/24, `test_agenten_skill` 18/18, `test_glide_system` 5/5, `test_runtime_config`, `test_features319` (Anhangsordner als Sicherungsziel in DE und EN gesperrt). |
+| macOS-Paket | `baue_und_pruefe_macos.sh`: Glide 1.0.1 macOS arm64, Quellvergleich, isolierte Paketprobe Exit 0 mit blockiertem externem Python; `Glide-1.0.1-macos-arm64.tar.gz` SHA-256 `ea8f22ac0b0f39fabcce0ea9a70969c9ff10aea739733095ec1ec3530e9bfb9d`, 492 Dateien. |
+| DMG | Lokal nach `macos-paket.yml`: `hdiutil create` UDZO, `hdiutil verify` gültig, schreibgeschützt eingehängt; Datei- und Inhaltsinventar gleich dem Paket (562 Einträge), Verknüpfung `/Applications`, `codesign --verify --deep --strict` gültig. `Glide-1.0.1-macos-arm64.dmg` (21,3 MB) SHA-256 `8e4a6c6c2ca9395548ce864c20827d29d5a037296367afa42d87d4e2f767fa8b`. Ad-hoc signiert, nicht notarisiert, nicht veröffentlicht. |
+| Lieferstand 07 | `abgleich_07.py`: 108 Code-Dateien und 169 Ressourcen, keine Abweichungen; 1.0.0 ins Archiv. `showcase_abgleich.py --vordergrund` grün. |
+| Showcase-Start | Englischer Starter auf deutschem System (`de-DE`): erster Start stellt die Sicherung im eigenen Prozess her, die Oberfläche startet englisch (Menüs File/Edit/View/Help), `language = en`. |
+
+**Offen:** Fokusfall bei entsperrtem Bildschirm wiederholen; GitHub-Matrix für den Release-PR; menschliche Sicht- und Bedienabnahme; Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+
 ## Bearbeitungszeit im Seitenkopf (WA-25) (V1.82, 21.11.2026)
 
 T065 prüft fehlende und ungültige Werte, Zeitzonen, Einheiten und beide Oberflächensprachen. T182 nutzt den echten Seiteneditor, prüft die Kopfzeile, den genauen Zeitpunkt im Menü und die Aktualisierung nach dem Speichern. Die GitHub-Matrix und menschliche Abnahme sind offen.
