@@ -3883,13 +3883,14 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - Wurzel-`AGENTS.md` für agentenneutralen Einstieg.
   - Skill `glide-shell` nach `.agents/skills/` gespiegelt und in `.claude/skills/` synchronisiert (T338).
   - `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt.
-  - `shell_uebernehmen.py` erweitert um `--commit <Rev>`, Lizenznachweis MPL-2.0 und Integritätswächter gegen unsaubere Quellen (T331).
-  - `selftest.py` auf 13/13 Checks erweitert: prüft eine übernommene Kopie autonom gegen `SHELL_MANIFEST.json` (T333).
+  - `shell_uebernehmen.py` erweitert um `--commit <Rev>`, Lizenznachweis MPL-2.0, Integritätswächter gegen unsaubere Quellen, Symlink-Sperre sowie atomares Snapshot-Rollback bei abgebrochenem oder fehlerhaftem Schreibvorgang (T331).
+  - `selftest.py` auf 13/13 Checks erweitert: prüft eine übernommene Kopie autonom gegen `SHELL_MANIFEST.json` inklusive Pfadsicherheit und Symlink-Ausschluss (T333).
+  - `custom_controls.py` erweitert um hierarchische UI-Provider-Isolation (`widget` → `toplevel` → global) für Schrift, Hintergründe und Glyphenmetrik (T336).
   - Portabler Designvertrag in `DESIGN_RICHTLINIEN.md` verankert (universelle Regeln, Shell-Provider, Host-Freiheiten).
-  - `test_shell_referenzhost.py` (T337) als dauerhafter E2E-Referenzhost mit Wächter gegen unzulässige Glide-Kopplung.
+  - `test_shell_referenzhost.py` (T337) als dauerhafter E2E-Referenzhost mit Wächter gegen unzulässige Glide-Kopplung, unterbrechungsfreiem Upgrade von Altversionen (0.5.0 → 0.6.2) unter Erhalt aller Host-Dateien sowie Rollback-Verifikation.
   - `GLIDE_SYSTEM_VERSION` auf V1.86 angehoben und Register gepflegt.
 - **C – Prüfung:**
-  - T331 (14 Fälle), T333 (13/13 + Gegenproben), T337 (Referenzhost + Wächter), T338 (Agenten-Einstieg) und alle Shell-Suiten grün (58 Tests).
+  - T331 (18 Fälle), T333 (13/13 + Gegenproben), T337 (4 Fälle), T338 (4 Fälle) und alle Shell-Suiten grün (64 Tests).
   - CI-Grundstufe vollständig bestanden.
 - **D – Rest:**
   - Release-Tag / Wheel-Distribution (P2-Entscheidungsvorlage).

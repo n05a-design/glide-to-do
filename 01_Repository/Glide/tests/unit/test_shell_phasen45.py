@@ -22,7 +22,7 @@ import unittest
 SRC = Path(__file__).resolve().parents[2] / "src/glide"
 sys.path.insert(0, str(SRC))
 
-from glide_shell import app_host, command_history, redo_history  # noqa: E402
+from glide_shell import app_host, command_history, custom_controls, redo_history  # noqa: E402
 
 
 class Zaehler(command_history.Command):
@@ -210,6 +210,74 @@ class AppHost(unittest.TestCase):
         self.assertFalse(app_host.install_close(unter, schliessen, app_host.MACOS, scope=bereich),
                          "ein eingebettetes Fenster übernimmt nicht das Beenden der Anwendung")
         self.assertEqual(unter.log, [("WM_DELETE_WINDOW", schliessen)])
+
+
+class MultiHostProviderIsolation(unittest.TestCase):
+    def tearDown(self):
+        custom_controls.set_font_provider(None)
+        custom_controls.set_ink_provider(None)
+        custom_controls.set_backdrop_painter(None)
+
+    def test_default_font_provider_isolation_and_precedence(self):
+        # 1. Fallback ohne Provider
+        self.assertEqual(custom_controls._default_font(12), ("TkDefaultFont", 12))
+
+        # 2. Globaler Provider
+        custom_controls.set_font_provider(lambda s: ("GlobalFont", s))
+        self.assertEqual(custom_controls._default_font(12), ("GlobalFont", 12))
+
+        # 3. Toplevel-spezifischer Provider
+        class DummyToplevel:
+            def _font_provider(self, s):
+                return ("ToplevelFont", s)
+
+        class DummyWidget:
+            def __init__(self, top):
+                self._top = top
+
+            def winfo_toplevel(self):
+                return self._top
+
+        top = DummyToplevel()
+        w = DummyWidget(top)
+        self.assertEqual(custom_controls._default_font(14, widget=w), ("ToplevelFont", 14))
+
+        # 4. Widget-spezifischer Provider hat Vorrang vor Toplevel und Global
+        w._font_provider = lambda s: ("WidgetFont", s)
+        self.assertEqual(custom_controls._default_font(16, widget=w), ("WidgetFont", 16))
+
+    def test_backdrop_painter_isolation_and_precedence(self):
+        called = []
+
+        class DummyCanvas:
+            def __init__(self, top=None):
+                self._top = top
+
+            def winfo_toplevel(self):
+                return self._top
+
+        # Globaler Painter
+        custom_controls.set_backdrop_painter(lambda c: called.append("global"))
+        c1 = DummyCanvas()
+        custom_controls.paint_canvas_backdrop(c1)
+        self.assertEqual(called, ["global"])
+
+        # Toplevel-spezifischer Painter
+        called.clear()
+
+        class DummyTop:
+            def _backdrop_painter(self, c):
+                called.append("toplevel")
+
+        c2 = DummyCanvas(DummyTop())
+        custom_controls.paint_canvas_backdrop(c2)
+        self.assertEqual(called, ["toplevel"])
+
+        # Canvas-spezifischer Painter hat Vorrang
+        called.clear()
+        c2._backdrop_painter = lambda c: called.append("canvas")
+        custom_controls.paint_canvas_backdrop(c2)
+        self.assertEqual(called, ["canvas"])
 
 
 def lade_glide():

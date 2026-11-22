@@ -22,11 +22,12 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 ### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 22.11.2026)
 
 - **Agentenübergreifender Einstieg (T338):** Schlanker `AGENTS.md` in der Repository-Wurzel, `glide-shell`-Skill unter `.agents/skills/` gespiegelt zu `.claude/skills/`, `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt. Trennung von Produkt-Skill `glide-to-do` und Shell-Entwicklungsskill strikt gewahrt.
-- **Reproduzierbare Übernahme & Provenienz (T331):** `shell_uebernehmen.py` erweitert um `--commit <Rev>` (Pin-Übernahme unabhängig vom Arbeitsbaum), Schutz vor lokal veränderten Quellen (Exit 3, `--unsauber-erlauben`), vollständigen Lizenztext `LICENSE` (MPL-2.0) im Paket und Manifest-Validierung.
-- **Selbsttest (T333):** Auf 13/13 Prüfungen erweitert: prüft eine übernommene Kopie autonom gegen ihr `SHELL_MANIFEST.json` ohne Glide-Checkout.
+- **Reproduzierbare & transaktionssichere Übernahme (T331):** `shell_uebernehmen.py` erweitert um `--commit <Rev>` (Pin-Übernahme unabhängig vom Arbeitsbaum), Schutz vor lokal veränderten Quellen (Exit 3, `--unsauber-erlauben`), vollständigen Lizenztext `LICENSE` (MPL-2.0) im Paket, Manifest-Validierung, Symlink-Sperre sowie atomares Snapshot-Rollback bei abgebrochenem oder fehlerhaftem Schreibvorgang.
+- **Selbsttest (T333):** Auf 13/13 Prüfungen erweitert: prüft eine übernommene Kopie autonom gegen ihr `SHELL_MANIFEST.json` ohne Glide-Checkout, inklusive Pfad- und Symlinksicherheit.
+- **Multi-Host UI-Provider-Isolation (T336):** Hierarchischer Fallback (`widget` → `toplevel` → global) für Schriften (`_default_font`), Hintergrundverläufe (`paint_canvas_backdrop`) und Glyphenmetrik (`CanvasLabel._render`) in `custom_controls.py`.
 - **Portabler Designvertrag:** In `DESIGN_RICHTLINIEN.md` verankert: Trennung von universellen Regeln (P1–P6, B15, B11, B01/B16, B03, Kontrast, Tastatur/Fokus), Shell-Schnittstellen (`custom_controls`-Provider, `system_appearance.resolve`) und Host-Gestaltungsfreiheit.
-- **End-to-End-Referenzhost (T337):** Dauerhafter Testfall für isolierten Host mit AppHost, Dialogen, Undo/Redo, Timern und Wächter gegen Glide-Abhängigkeiten.
-- **Prüfergebnis:** CI-Grundstufe und alle Shell-Suiten (58 Tests) lokal bestanden.
+- **End-to-End-Referenzhost & Consumer-Upgrade (T337):** Dauerhafter Testfall für isolierten Host mit AppHost, Dialogen, Undo/Redo, Timern, Wächter gegen Glide-Abhängigkeiten, sauberem Upgrade von Altversionen (0.5.0 → 0.6.2) unter Erhalt aller Host-Dateien sowie intaktem Rollback bei Abbruch.
+- **Prüfergebnis:** CI-Grundstufe und alle Shell-Suiten (64 Tests) lokal bestanden.
 
 ## 0. Sofortübergabe WA-41 – zuerst lesen
 
