@@ -4,8 +4,8 @@ document_id: GLIDE-I18N
 title: Internationalization
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-UX, GLIDE-DATA, GLIDE-ROADMAP]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-UX, GLIDE-DATA, GLIDE-ROADMAP]
 
 # Internationalization
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Current mechanism
 
@@ -23,7 +23,7 @@ The module catches catalog/locale failures and returns fallback language/text; a
 
 ## Current coverage
 
-**Partially integrated.** Recent work covers the language setting, menus, selected sidebar areas, settings, page/editor actions and statuses, task inspector/calendar fields, selected accessibility probes and action labels. Remaining UI includes additional dialogs, dynamic toasts, status/error messages and other hard-coded strings. D93 establishes DE/EN as the 1.0 target; it does not mean full localization has been achieved.
+**Completed for 1.0.** The whole interface follows the chosen language (V1.70–V1.79): menus, views, dialogs, toasts, status and error messages, undo texts, the built-in manual, exchange format, system labels, templates, home page, AI output and release notes. Since V1.81 quick capture understands English and German words. Only names that users gave their own content stay as written. T335 (`test_lokalisierung_d93`) and `test_i18n.py` guard the catalogs.
 
 Tests include catalog key/placeholder parity (T329) and targeted visible behavior (T118), as described in the canonical system/test register. Exact current test status is in the QA report.
 
@@ -33,7 +33,7 @@ The persisted language preference is distinct from task data and the active proc
 
 ## Glide-Shell boundary
 
-`i18n.py` is an extracted module within the Glide source tree. Shell-oriented modules `modal_session.py`, `window_lifetime.py`, `custom_controls.py`, and `desktop_adapter.py` also exist in the Glide repository. There is no verified shared language service between separate Glide and Glide-Shell applications, and no separately released `glide_shell` package/host at this snapshot. Package consolidation is documented as post-1.0 work. Do not describe that target as an active integration.
+`i18n.py` is a module within the Glide source tree. The shell (`glide_shell` 0.6.0) loads no catalogs: the host passes already translated labels in (locale contract in the shell concept). There is no shared language service between separate applications.
 
 ## Safe extension strategy
 

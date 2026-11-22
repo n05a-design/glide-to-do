@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 21.11.2026 · Glide 1.0.1 · Glide Shell 0.5.0
+Status as of 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.0
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
@@ -42,7 +42,7 @@ The self-test briefly opens a hidden Tk window and checks every building block w
 python3 -m glide_shell.demo
 ```
 
-The demo host is a small app built only from shell building blocks: menu bar, a clock in its own timer scope with a short transition, a checkbox, a modal dialog, a counter with undo and redo, a window position kept on screen and light/dark following the system. Its source [`demo.py`](demo.py) shows the usage pattern.
+The demo host is a small app built only from shell building blocks: menu bar, a clock in its own timer scope with a short transition, a checkbox, a modal dialog, a counter with undo and redo as commands (`command_history`), a start through `app_host`, a window position kept on screen and light/dark following the system. Its source [`demo.py`](demo.py) shows the usage pattern.
 
 ## Building blocks
 
@@ -61,6 +61,25 @@ Import the building blocks one by one, for example `from glide_shell import moda
 | `text_fit` | Fit text to a character limit or pixel width, align marker widths | `clip`, `fit`, `settled_wrap_width`, `aligned_markers` |
 | `action_picker` | Searchable picker over the entries of an existing menu | `entries`, `search`, `grouped`, `first_enabled` |
 | `runtime_paths` | Data and cache folders by platform convention, environment variable and pointer file | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
+| `command_history` | Undo and redo for command objects or state snapshots, with a rollback path on failure | `Command`, `CommandHistory` (`execute`, `record`, `undo`, `redo_step`) |
+| `app_host` | Start the main window: steps before Tk, startup checks, placeholder, controller, menu bar, shortcuts, close path | `AppHost`, `bind_shortcuts`, `primary_shortcuts`, `attach_menubar`, `install_close` |
+
+A start with app host and command history, as in the demo host:
+
+```python
+from glide_shell import app_host, command_history
+
+class App:
+    def __init__(self, root):
+        self.history = command_history.CommandHistory()
+        platform = app_host.platform_of(root.tk.call("tk", "windowingsystem"))
+        app_host.bind_shortcuts(root, app_host.primary_shortcuts("z", lambda _e: self.history.undo(), platform), platform)
+        app_host.install_close(root, root.destroy, platform)
+
+app_host.AppHost(preflight=(lambda root: None,)).run(App)
+```
+
+For AI agents building a new project on the shell, the complete workflow with processes, design rules and checks is in [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md) (German: [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md)).
 
 A pattern from the demo host: schedule a window's timers and transitions through the same scope so that nothing keeps running after it closes.
 

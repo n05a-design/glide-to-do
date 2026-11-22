@@ -4,8 +4,8 @@ document_id: GLIDE-TESTING
 title: Testing and quality
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-DEVELOPMENT, GLIDE-SECURITY, GLIDE-KNOWN-ISSUES]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-DEVELOPMENT, GLIDE-SECURITY, GLIDE-KNOWN-ISSUES]
 
 # Testing and quality
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Test architecture
 
@@ -39,7 +39,11 @@ python3 -B tests/tools/pruefen.py --modus voll --protokoll /tmp/glide-full --tim
 
 Native full commands require the workflow's Tk runtime and desktop setup; use repository instructions rather than assuming a system Tk result is equivalent.
 
-## Current evidence at PR head dd469d12 (product baseline 5631333a)
+## Current evidence on `main` 4ce3697a (Glide 1.0.1, 22.11.2026)
+
+The 1.0.1 release round ran the full suite on macOS arm64 with Tk 9.1 in foreground mode: all steps passed except one focus case (`kompakt_verlorenes_loslassen`), which cannot be observed while the screen is locked; it passed in an earlier run on the same app code. The macOS package passed its isolated start probe, the DMG was verified against the package, and `abgleich_07.py` reported no deviations. The CI basic stage and documentation workflow pass on `main`. Exact runs, hashes and limits are in the [QA report](../../07_QA_BERICHT.md).
+
+## Historical evidence at PR head dd469d12 (product baseline 5631333a, 19.11.2026)
 
 **Passed locally:** macOS/CPython 3.14.5 `schriftstile` 1/1; `tests/unit/test_ui_design.py` 23/23; CI basic stage exit 0 and delivery byte-equality. `test_befunde330.py` passed and `test_ui39.py` passed 6/6 on the final local V1.52 candidate. These local results do not establish remote or cross-platform verification.
 

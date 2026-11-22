@@ -4,8 +4,8 @@ document_id: GLIDE-ARCHITECTURE
 title: System architecture
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-CODEBASE, GLIDE-DATA, GLIDE-I18N]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-CODEBASE, GLIDE-DATA, GLIDE-I18N]
 
 # System architecture
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Runtime shape
 
@@ -62,7 +62,7 @@ The app's runtime is based on the Python standard library plus optional `tkinter
 ## Architecture boundaries and risks
 
 - `ListApp` remains large; extraction is incremental, not a mandate for a rewrite.
-- Several extracted shell modules are present, but the separate `glide_shell` package/host is a post-1.0 goal, not an existing shared library.
+- The reusable shell is the subpackage `glide_shell` 0.6.0 (modal session, window lifetime, custom controls, desktop adapter, motion, window geometry, system appearance, redo history, text fit, action picker, runtime paths), with demo host and self-test. It is copied into follow-up projects, not published separately. D99 closes the shell work; `ListApp` stays the host with facades.
 - Existing UI/API facades and mutation boundaries must remain compatible.
 - Tk event order and geometry are platform-sensitive; full current platform runs on PR #152 are red in `test_ui39.py`.
 - Future architecture proposals belong in the plan as proposals until the owner selects them.

@@ -4,8 +4,8 @@ document_id: GLIDE-AUDIT
 title: Final audit summary
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GEMINI-INDEX, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
@@ -13,8 +13,10 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
 
 # Final audit summary
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
+
+**Status refresh 22.11.2026:** Version, localization, shell and release facts were refreshed against `main` `4ce3697a` (Glide 1.0.1, catalog V1.83, `glide_shell` 0.5.0 completed by D99). The PR #152 statements below are historical.
 ## Scope and result
 
 The collection has a file for each requested topic ID 01–20 and supporting index, source manifest, gap register, Gemini import guide, changelog, audit and compact core pack. It is an English, evidence-linked derivative of the Glide project sources. It separates documented current behavior from plans, proposals, historical evidence, unknowns, and owner-controlled release gates.

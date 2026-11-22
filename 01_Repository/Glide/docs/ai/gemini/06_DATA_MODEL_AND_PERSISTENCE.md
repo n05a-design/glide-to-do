@@ -4,8 +4,8 @@ document_id: GLIDE-DATA
 title: Data model and persistence
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GLOSSARY, GLIDE-ARCHITECTURE, GLIDE-SECURITY]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-GLOSSARY, GLIDE-ARCHITECTURE, GLIDE-SECURITY]
 
 # Data model and persistence
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Persisted stores
 
@@ -40,7 +40,7 @@ Folders contain nested folders and lists. Lists have a fixed kind: task list, no
 - Exchange format: `glide.exchange` version `2`.
 - App backup format and drawing/page subformats have their own version contracts.
 
-Do not conflate these versions with app version `1.0.0` or the independently versioned system catalog (current PR #152 worktree candidate V1.49). Older app versions must not silently overwrite a newer data schema. A data-format change requires migration, pre-write backup, fixtures, old-reader behavior tests, and updates to Skill coverage/examples in the same change.
+Do not conflate these versions with app version `1.0.1` or the independently versioned system catalog (V1.83 on `main`). Older app versions must not silently overwrite a newer data schema. A data-format change requires migration, pre-write backup, fixtures, old-reader behavior tests, and updates to Skill coverage/examples in the same change.
 
 ## Persistence guarantees and limits
 

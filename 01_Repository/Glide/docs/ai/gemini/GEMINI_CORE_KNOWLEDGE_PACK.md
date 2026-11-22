@@ -4,8 +4,8 @@ document_id: GLIDE-GEMINI-CORE
 title: Glide Core Knowledge Pack
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GEMINI-MASTER, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
 
 # Glide Core Knowledge Pack
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Identity
 
@@ -23,11 +23,11 @@ It is not a cloud collaboration service, automatic multi-device sync, built-in A
 
 ## Version and source status
 
-- App: Glide 1.0.0.
+- App: Glide 1.0.1.
 - Main data schema: 26. Settings: 2. Templates: 2. Exchange format: `glide.exchange` v2.
-- Checked product-source baseline: PR #152 product-code baseline `5631333a1c5a80c11c48226016ab115c434b0a64`. PR #152 remains open at remote head `dd469d122cca3dd5bf01823364c95c365bcdaae7`; V1.49 diagnostic/documentation, V1.50 evidence refresh, and V1.52 callback handling are on the branch. Six final-code macOS/Tk 9.0.3 UI39 runs and the corrected focused Linux/Windows UI39 dispatch passed; full workflow basic CI passed while Linux full validation remained in progress.
-- `main`: merge commit `98f4b816`, system catalog V1.47. PR #152 product-code baseline `5631333a` carried the V1.48 candidate; `042a8d7` added V1.49 diagnostics, `cada01b` refreshed prior remote evidence, and `dd469d12` delivered V1.52. Do not treat these refs as one.
-- The v1.0 source cut was merged; no current GitHub tag/release or external Homebrew/winget submission was recorded. No final owner acceptance was recorded.
+- Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.84, `glide_shell` 0.6.0 (completed, D99).
+- PRs #185–#188 are merged: own photos and bilingual showcase, English quick capture, page edit time, WA-49 and localized release notes.
+- No GitHub tag/release, notarization or Homebrew/winget submission exists; no final owner acceptance was recorded.
 
 ## Architecture
 

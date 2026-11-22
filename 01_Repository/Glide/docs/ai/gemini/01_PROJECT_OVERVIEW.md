@@ -4,8 +4,8 @@ document_id: GLIDE-PROJECT-OVERVIEW
 title: Project overview
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GEMINI-MASTER, GLIDE-PRODUCT-CONSTRAINTS, GLIDE-ROADMAP]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-PRODUCT-CONSTRAINTS, GLIDE-ROADMA
 
 # Project overview
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Identity and purpose
 
@@ -39,7 +39,7 @@ These are documented product constraints, not security certification claims. See
 
 ## Platforms and maturity
 
-**VERIFIED at source snapshot:** App version `1.0.0`, data schema `26`, settings schema `2`, template schema `2`, exchange format `glide.exchange` version `2`. `main` remains at system catalog V1.47; the current PR #152 worktree advances the catalog to V1.49 for test diagnostics, while the app/dialog fix itself is the V1.48 candidate. The product release was not published in the checked GitHub state: PR #152 was open, no release/tag was reported, and human acceptance remained open.
+**VERIFIED at `main` `4ce3697a` (22.11.2026):** App version `1.0.1`, data schema `26`, settings schema `2`, template schema `2`, exchange format `glide.exchange` version `2`, system catalog V1.84, `glide_shell` 0.6.0. PRs #185–#188 are merged. No tag, GitHub release, notarization or package-manager submission exists; human acceptance remains open.
 
 Python/Tk builds and tests target macOS, Windows, and Linux. Current documented reference is Python 3.14 and Tk 9.1; Tk 8.6 remains a compatibility/basic-CI layer with reduced native integrations. Platform support does not mean every platform had a green current full run.
 

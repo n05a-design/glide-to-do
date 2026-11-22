@@ -4,8 +4,8 @@ document_id: GLIDE-INTEGRATIONS
 title: Integrations and ecosystem
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: documented-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-DATA, GLIDE-I18N, GLIDE-ARCHITECTURE]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-DATA, GLIDE-I18N, GLIDE-ARCHITECTURE]
 
 # Integrations and ecosystem
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Runtime and desktop
 
@@ -44,4 +44,4 @@ GitHub Actions validate source and prepare release/package paths. Homebrew Cask 
 
 ## Glide Shell
 
-Some desktop shell responsibilities have extracted modules in the Glide repository. There is no verified cross-application/shared package connection or independent Glide Shell product at this snapshot; the planned package/host remains post-1.0.
+The reusable shell is the subpackage `glide_shell` 0.6.0; follow-up projects copy it with `scripts/pflege/shell_uebernehmen.py` and check the copy with `python -m glide_shell.selftest`. There is no separate repository or release; D99 closes the shell work.

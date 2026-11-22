@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für Folgeprojekte
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide Shell 0.5.0
+Stand 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.0
 
 <p align="right"><a href="README.md">English</a></p>
 
@@ -42,7 +42,7 @@ Der Selbsttest öffnet kurz ein unsichtbares Tk-Fenster und prüft jeden Baustei
 python3 -m glide_shell.demo
 ```
 
-Der Demonstrationshost ist eine kleine App nur aus Shell-Bausteinen: Menüleiste, Uhr im eigenen Zeitgeberbereich mit kurzem Übergang, Kontrollkästchen, modaler Dialog, Zähler mit Rückgängig und Wiederholen, Fensterlage auf dem Bildschirm und Hell/Dunkel nach System. Sein Quelltext [`demo.py`](demo.py) zeigt das Nutzungsmuster.
+Der Demonstrationshost ist eine kleine App nur aus Shell-Bausteinen: Menüleiste, Uhr im eigenen Zeitgeberbereich mit kurzem Übergang, Kontrollkästchen, modaler Dialog, Zähler mit Rückgängig und Wiederholen als Befehle (`command_history`), Start über `app_host`, Fensterlage auf dem Bildschirm und Hell/Dunkel nach System. Sein Quelltext [`demo.py`](demo.py) zeigt das Nutzungsmuster.
 
 ## Bausteine
 
@@ -61,6 +61,25 @@ Importiere die Bausteine einzeln, etwa `from glide_shell import modal_session, w
 | `text_fit` | Text auf Zeichengrenze oder Pixelbreite kürzen, Zeichen auf gleiche Breite bringen | `clip`, `fit`, `settled_wrap_width`, `aligned_markers` |
 | `action_picker` | Durchsuchbare Auswahl über die Einträge eines fertigen Menüs | `entries`, `search`, `grouped`, `first_enabled` |
 | `runtime_paths` | Daten- und Cacheordner nach Plattformkonvention, Umgebungsvariable und Zeigerdatei | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
+| `command_history` | Rückgängig und Wiederholen für Befehlsobjekte oder Zustandsabbilder, mit Rückweg bei Fehlern | `Command`, `CommandHistory` (`execute`, `record`, `undo`, `redo_step`) |
+| `app_host` | Hauptfenster starten: Schritte vor Tk, Startprüfungen, Platzhalter, Controller, Menüleiste, Kürzel, Schließweg | `AppHost`, `bind_shortcuts`, `primary_shortcuts`, `attach_menubar`, `install_close` |
+
+Ein Start mit App-Host und Befehlsverlauf, wie im Demohost:
+
+```python
+from glide_shell import app_host, command_history
+
+class App:
+    def __init__(self, root):
+        self.history = command_history.CommandHistory()
+        platform = app_host.platform_of(root.tk.call("tk", "windowingsystem"))
+        app_host.bind_shortcuts(root, app_host.primary_shortcuts("z", lambda _e: self.history.undo(), platform), platform)
+        app_host.install_close(root, root.destroy, platform)
+
+app_host.AppHost(preflight=(lambda root: None,)).run(App)
+```
+
+Für KI-Agenten, die mit der Shell ein neues Projekt bauen, steht der vollständige Ablauf mit Prozessen, Design-Richtlinien und Prüfungen in [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md) (englisch: [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md)).
 
 Ein Muster aus dem Demohost: Zeitgeber und Übergänge eines Fensters über denselben Bereich planen, damit beim Schließen nichts weiterläuft.
 
