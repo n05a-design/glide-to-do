@@ -58,6 +58,9 @@ def lade_app(temp_root):
     spec = importlib.util.spec_from_loader(loader.name, loader)
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
+    # Seit V1.83 (WA-49) setzt erst der Start den Menüaufschub; der Test baut
+    # ListApp ohne __init__ und ruft den Startweg deshalb selbst auf.
+    mod.activate_runtime()
     assert pathlib.Path(mod.BASE_DIR).resolve() == pathlib.Path(temp_root).resolve()
     return mod
 
