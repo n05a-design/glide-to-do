@@ -7,14 +7,20 @@ und prüft jeden Baustein mit echtem Tk: Paketversion, Geometrie, Systemmodus,
 Wiederholen-Stapel, Zeitgeberbereich, Übergang, Menüleiste, Bedienelement,
 Textkürzung mit echter Schrift, Aktionsauswahl, Pfadauflösung ohne
 Seiteneffekt, Befehlsverlauf mit Befehl und Zustandsabbild, App-Host mit
-Startprüfung, Kürzeln und Schließweg sowie modalen Dialog mit Griff und Freigabe. Ausgabe je Prüfung `ok` oder `FAIL`,
+Startprüfung, Kürzeln und Schließweg, modalen Dialog mit Griff und Freigabe
+sowie die Unversehrtheit der Kopie gegenüber ihrem `SHELL_MANIFEST.json`
+(Version, SHA-256 je Datei, keine zusätzlichen Module; im Glide-Quellbaum ohne
+Manifest nur vermerkt). Ausgabe je Prüfung `ok` oder `FAIL`.
 Die Prüfungen greifen auch unter
 `python -O`. Exitcode 0 nur, wenn alles bestanden ist; 2, wenn kein Tk-Fenster möglich ist
 (etwa ohne Anzeige). Meldungen sind Englisch (D96). Vertrag:
 `tests/integration/test_shell_selbsttest.py`.
 """
 
+import hashlib
+import json
 import os
+import pathlib
 import sys
 import tempfile
 import time
@@ -214,12 +220,35 @@ def check_app_host(root):
     return f"preflight, shortcuts and close path on {platform}"
 
 
+def _check_manifest(_root, folder=None):
+    """Prüft eine übernommene Kopie gegen ihr eigenes Manifest, ohne Glide-Checkout (shell_uebernehmen.py)."""
+    folder = pathlib.Path(folder or os.path.dirname(os.path.abspath(__file__)))
+    path = folder / "SHELL_MANIFEST.json"
+    if not path.is_file():
+        return "source tree without manifest"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    files = data.get("dateien")
+    expect(data.get("paket") == "glide_shell" and isinstance(files, dict) and "__init__.py" in files,
+           "manifest: package name or file list invalid")
+    expect(data.get("shell_version") == SHELL_VERSION, f"manifest version {data.get('shell_version')} != {SHELL_VERSION}")
+    expect(data.get("lizenz") == "MPL-2.0", "manifest: license is not MPL-2.0")
+    for name, digest in sorted(files.items()):
+        expect(name not in ("", ".", "..") and "/" not in name and "\\" not in name, f"manifest: bad file name {name!r}")
+        target = folder / name
+        expect(target.is_file(), f"{name}: missing")
+        expect(hashlib.sha256(target.read_bytes()).hexdigest() == digest, f"{name}: modified")
+    extra = sorted(p.name for p in folder.iterdir() if p.suffix == ".py" and p.name not in files)
+    expect(not extra, f"modules without manifest entry: {extra}")
+    return f"{len(files)} files match manifest ({str(data.get('quell_commit') or 'no commit')[:12]})"
+
+
 CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("system_appearance", check_appearance), ("redo_history", check_redo),
           ("window_lifetime+motion", check_scope_and_motion), ("desktop_adapter+custom_controls", check_controls),
           ("text_fit", check_text_fit), ("action_picker", check_action_picker),
           ("runtime_paths", check_runtime_paths), ("command_history", check_command_history),
-          ("app_host", check_app_host), ("modal_session", check_modal))
+          ("app_host", check_app_host), ("modal_session", check_modal),
+          ("manifest", _check_manifest))
 
 
 def run(out=sys.stdout):

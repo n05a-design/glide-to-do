@@ -381,3 +381,39 @@ Vor der Umsetzung betroffene Zeilen dieser Matrix und bestehende B-/D-Regeln nen
 Der [frische Audit 21.10.](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#135-frische-designprüfung-und-vollständiger-geltungsbereich) hat Umbruch/Knopfschutz in konkreten Fenstern bestätigt und Verbesserungskandidaten bei Seitenhierarchie, Boardwerkzeughöhe und KI-Auftragsvorschau gezeigt. Er umfasst 19 gesichtete eigene Aufnahmen, weitere Bereiche nur strukturell bzw. über bestehende Funktionstests. Die volle Kontextmatrix ist daher Arbeitsvertrag und Prüfumfang für künftige Pakete, keine Behauptung einer bereits abgeschlossenen appweiten visuellen/native Abnahme.
 
 **Heute mit aktivem Suchfilter (3.50.5):** „Suche löschen“ bleibt auch bei ausgeblendetem Feld erreichbar. Wenn die übrigen Knöpfe nicht vollständig passen, weichen Raster und Anzeige in das Tag-Menü; die globalen Aktionen und der erste Pfeil bleiben vollständig und bündig. Äußere Packabstände in die Platzberechnung aufnehmen, breite Darstellung stellt die direkten Knöpfe wieder her. `abnahme3505` prüft diesen Hin-/Rückwechsel und den sichtbaren Menüanker.
+
+
+## Portabler Designvertrag für Folgeprojekte
+
+Dieser Abschnitt definiert den transportablen Vertrag für Anwendungen, die die Glide Shell übernehmen. Er ersetzt die Richtlinien von Glide nicht, sondern stellt klar, welche Regeln universell für jedes Projekt gelten, welche technischen Schnittstellen die Shell bietet und wo projektspezifische Gestaltungsfreiheit beginnt.
+
+### 1. Universelle Gestaltungsregeln (verbindlich für jeden Host)
+
+Jedes Folgeprojekt wendet die Grundsätze P1–P6 an:
+
+| Regel-ID | Geltungsbereich | Technisch prüfbares Kriterium | Erforderliche Sichtprüfung |
+|---|---|---|---|
+| **B15** (Knopfschutz) | Alle Dialoge und Hauptfenster | Kein Bedienelement wird bei Fensterverkleinerung überdeckt oder unbedienbar; Mindestbreite/-höhe greift (`window_geometry.clamp`). | Fenster auf Mindestgröße stauchen; alle Knöpfe bleiben klickbar. |
+| **B11** (Hierarchie) | Inhalts- und Metadatenanzeige | Inhalt/Titel bleiben vor Metadaten sichtbar; Kürzung über `text_fit.clip`/`fit`. | Worst-Case: Extrem lange Zeichenketten und schmale Breiten. |
+| **B01/B16** (Rückmeldung) | Aktionen und Scrollwege | Sofortige Rückmeldung im selben Ereigniszyklus; keine blockierenden Schlafzeiten. | Flüssiges Ansprechen ohne Ruckeln. |
+| **B03** (Bewegung) | Animationen und Übergänge | Dauer $\le 150\text{ ms}$; Übergänge unterbrechbar via `motion.Transitions`; Respektierung reduzierter Bewegung. | Schnelle wiederholte Auslösung bricht Vorläufer ab. |
+| **B10/B12/B14** (Symbole) | Menü, Buttons, Navigation | Ein Symbol = eine feste Bedeutung (z. B. ◂/▸ Blättern, ▸/▾ Aufklappen); Standard-Unicode oder Symbolfont. | Visuelle Eindeutigkeit ohne Missverständnisse. |
+| **Kontrast** | Farbrollen und Text | Mindestkontrast 4,5:1 für Standardtext, 3:1 für große/fette Schriften (WCAG 2.2 AA). | Hell- und Dunkelmodus gegen Hintergrund prüfen. |
+| **Fokus & Tastatur** | Interaktive Elemente | Vollständige Tastaturbedienbarkeit (Tab, Pfeiltasten, Esc für Abbruch, Enter für Primäraktion); sichtbarer Fokus. | Tab-Reihenfolge durchlaufen ohne Fokusfalle. |
+
+### 2. Technischer Vertrag der Shell (Schnittstellen)
+
+Die Shell stellt neutrale Mechanismen bereit, die der Host mit seinen Theme-Werten versorgt:
+- **Schriften (`custom_controls.set_font_provider`):** Host registriert Schriftenauflösung `provider(size, *styles)`.
+- **Glyphenmetrik (`custom_controls.set_ink_provider`):** Rechner für genaue Textpositionierung und optische Mitte.
+- **Hintergrund (`custom_controls.set_backdrop_painter`):** Zeichnet themespezifische Verläufe oder Flächen auf Canvas.
+- **Farben & Theme (`system_appearance.resolve`):** Host übergibt Farbwörterbücher für Hell/Dunkel (`{"light": ..., "dark": ...}`) und löst sie systemabhängig auf.
+- **Tastatur & Menüs (`desktop_adapter`, `app_host`):** Menübäume und Tastaturkürzel (`primary_shortcuts`) passen sich an OS-Konventionen (macOS Command vs. Windows/Linux Control) an.
+
+### 3. Produktspezifische Gestaltung (Freiheit des Hosts)
+
+Folgende Elemente gehören der Fachanwendung und werden **nicht** aus Glide übernommen:
+- Produktname, Logo, App-Icon und Markenfarben (z. B. Glides `#9E4AC8`/`#FFDC0B`).
+- Maskottchen und spielerische Elemente (z. B. Gismo).
+- Spezifische Fachlayouts (Kacheln, Tag-Strukturen, Kanban-Boards, Zeichenflächen).
+- Spezifische Maße, die nicht aus dem Mindestschutz (B15) resultieren.

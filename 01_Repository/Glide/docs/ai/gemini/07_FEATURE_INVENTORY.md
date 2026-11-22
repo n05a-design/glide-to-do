@@ -31,7 +31,7 @@ This document is the English navigation and status layer. The canonical register
 | Internationalization | Complete DE/EN interface, manual, exchange format, templates, home page, AI output and release notes; quick capture understands English and German words | Completed for 1.0 (V1.70–V1.81, T335, `test_i18n`); human acceptance open |
 | Product agent skill | `glide-to-do` skill generates/imports supported data documents and has format-coupled tests | Present outside app UI; not a general agent API |
 | Showcase and editing time | Bilingual “City Light” showcase with own photos (MPL-2.0); open pages show their last edit time | V1.80, V1.82 |
-| Technical shell capabilities | `glide_shell` 0.6.1: modal lifecycle, custom controls, window callback scope, desktop adapters, motion, geometry, appearance, redo, text fit, action picker, runtime paths | Modules present inside Glide; package/host extraction is not complete |
+| Technical shell capabilities | `glide_shell` 0.6.2: modal lifecycle, custom controls, window callback scope, desktop adapters, motion, geometry, appearance, redo, text fit, action picker, runtime paths, command history, app host | Modules present inside Glide; package/host extraction is not complete |
 
 ## Example stable feature rows
 

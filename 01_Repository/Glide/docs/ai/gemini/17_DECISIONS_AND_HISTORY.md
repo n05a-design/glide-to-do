@@ -36,7 +36,7 @@ The complete decision register D01–D99 and working procedure are in [`docs/ARB
 ## Source and release chronology
 
 - Early Glide development established local-first storage, stable object identities, schema guards, and Tk UI integration.
-- System catalogs and feature releases are independently versioned from the app and data schema; `main` is at catalog V1.85 with app 1.0.1 (22.11.2026). D99 records that the Glide Shell work is complete.
+- System catalogs and feature releases are independently versioned from the app and data schema; `main` is at catalog V1.86 with app 1.0.1 (22.11.2026). D99 records that the Glide Shell work is complete.
 - The v1.0.0 source cut was merged to `main` on 19 November and never published; 1.0.1 is the first release candidate. No tag or GitHub Release exists.
 - PR #152 contains follow-up localization and a dialog geometry fix. Its latest full Linux/Windows checks are red in `test_ui39.py`; local macOS passes do not supersede them.
 

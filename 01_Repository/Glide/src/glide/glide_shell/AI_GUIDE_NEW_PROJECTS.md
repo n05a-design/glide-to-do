@@ -1,6 +1,6 @@
 # Glide Shell – Guide for AI agents in new projects
 
-Status as of 22.11.2026 · Glide 1.0.1 · Glide-System V1.85 · Glide Shell 0.6.1 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
+Status as of 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Glide Shell 0.6.2 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
 
 This guide is for AI agents (Claude Code, Codex, Cursor, Gemini and others) that build a **new** Tk desktop application on the Glide Shell. It explains how Glide, the Glide-System and the Glide Shell fit together, how to start a project, the architecture rules, the design rules, the working processes and the checks. It lives in the `glide_shell` package and is copied with every adoption. A ready prompt for the first session, with an overview of what lives where, is in [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md). The German version is authoritative; this is its controlled English translation.
 
@@ -15,7 +15,7 @@ Glide (the app)                 Glide-System (the inventory)          Glide Shel
 src/glide/app.pyw               src/glide/README.md                   src/glide/glide_shell/
 ListApp = controller            register: modules M…, features F…,    neutral Tk building blocks,
 domain modules (Tk-free)        packages, tests T…, version history   no Glide values
-data, views, texts              GLIDE_SYSTEM_VERSION (V1.85)          SHELL_VERSION (0.6.1)
+data, views, texts              GLIDE_SYSTEM_VERSION (V1.86)          SHELL_VERSION (0.6.2)
         │                                 │                                  ▲
         └──── uses ───────────────────────┼──────────── host → shell → Tk ───┘
                                           └─ documents both, versioned independently
@@ -308,7 +308,7 @@ Glide's design contract is [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05
 
 ```bash
 cd <project>/src/<app>
-python3 -m glide_shell.selftest          # 12/12 checks passed
+python3 -m glide_shell.selftest          # 13/13 checks passed
 python3 -O -m glide_shell.selftest       # must report the same
 python3 -m glide_shell.demo              # visual check of the usage pattern
 ```
