@@ -3,13 +3,14 @@
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta, timezone
 from math import ceil
+import i18n as glide_i18n
 
 UTC = timezone.utc
 
 
 def utc(moment):
     if not isinstance(moment, datetime) or moment.tzinfo is None or moment.utcoffset() is None:
-        raise ValueError("Belegzeiten brauchen eine eindeutige Zeitzone.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.utc.busy_times_need_an", "Belegzeiten brauchen eine eindeutige Zeitzone."))
     return moment.astimezone(UTC)
 
 
@@ -22,14 +23,14 @@ class Block:
 
     def __post_init__(self):
         if utc(self.end) <= utc(self.start):
-            raise ValueError("Das Ende muss nach dem Beginn liegen.")
+            raise ValueError(glide_i18n.t("mod.occupied_time.post_init.the_end_must_be", "Das Ende muss nach dem Beginn liegen."))
 
 
 def merged_intervals(blocks, start, end):
     """UTC-Intervalle schneiden und vereinigen; angrenzende Blöcke zusammenfassen."""
     lower, upper = utc(start), utc(end)
     if upper <= lower:
-        raise ValueError("Der Betrachtungszeitraum muss positiv sein.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.merged_intervals.the_viewing_period_must", "Der Betrachtungszeitraum muss positiv sein."))
     clipped = sorted((max(lower, utc(block.start)), min(upper, utc(block.end)))
                      for block in blocks if utc(block.start) < upper and utc(block.end) > lower)
     result = []
@@ -60,7 +61,7 @@ class BlockIndex:
         from bisect import bisect_left, bisect_right
         lower, upper = utc(start), utc(end)
         if upper <= lower:
-            raise ValueError("Der Betrachtungszeitraum muss positiv sein.")
+            raise ValueError(glide_i18n.t("mod.occupied_time.between.the_viewing_period_must", "Der Betrachtungszeitraum muss positiv sein."))
         first = bisect_right(self.prefix_ends, lower)
         last = bisect_left(self.starts, upper)
         return tuple(block for block in self.blocks[first:last] if utc(block.end) > lower)
@@ -70,14 +71,14 @@ def local_interval(day, clock, minutes, zone):
     """Aufgabenuhrzeit: erste doppelte Stunde; fehlende Uhrzeit sichtbar abweisen."""
     import re
     if not isinstance(clock, str) or not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", clock):
-        raise ValueError("Ungültige Aufgabenzeit.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.local_interval.invalid_task_time", "Ungültige Aufgabenzeit."))
     if type(minutes) is not int or not 1 <= minutes <= 1440:
-        raise ValueError("Ungültige Aufgabendauer.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.local_interval.invalid_task_duration", "Ungültige Aufgabendauer."))
     hour, minute = map(int, clock.split(":"))
     local = datetime.combine(day, time(hour, minute), zone)
     start = utc(local)
     if start.astimezone(zone).replace(tzinfo=None) != local.replace(tzinfo=None):
-        raise ValueError("Diese Aufgabenzeit existiert am Tag der Zeitumstellung nicht.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.local_interval.this_task_time_does", "Diese Aufgabenzeit existiert am Tag der Zeitumstellung nicht."))
     return start, start + timedelta(minutes=minutes)
 
 
@@ -139,7 +140,7 @@ def planning_slots(items, day, duration, blocks, zone, start=8*60, end=18*60):
     if type(duration) is not int or not 1 <= duration <= 1440:
         return []
     if not (type(start) is int and type(end) is int and 0 <= start < end < 1440):
-        raise ValueError("Ungültiger Zeitraum für freie Zeitfenster.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.planning_slots.invalid_period_for_free", "Ungültiger Zeitraum für freie Zeitfenster."))
     lower, _ = local_interval(day, f"{start//60:02d}:{start%60:02d}", 1, zone)
     upper, _ = local_interval(day, f"{end//60:02d}:{end%60:02d}", 1, zone)
     busy = list(blocks)
@@ -168,7 +169,7 @@ def day_bounds(day, zone):
 
 def day_occupancy(blocks, day, zone, capacity):
     if type(capacity) is not int or not 0 <= capacity <= 1440:
-        raise ValueError("Die Tageskapazität muss zwischen 0 und 1440 Minuten liegen.")
+        raise ValueError(glide_i18n.t("mod.occupied_time.day_occupancy.the_daily_capacity_must", "Die Tageskapazität muss zwischen 0 und 1440 Minuten liegen."))
     blocks = tuple(blocks)
     start, end = day_bounds(day, zone)
     intervals = merged_intervals(blocks, start, end)

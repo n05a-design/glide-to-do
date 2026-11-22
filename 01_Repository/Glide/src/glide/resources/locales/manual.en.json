@@ -419,7 +419,7 @@
    ],
    [
     "Quick input",
-    "While you type an item, Glide recognizes German phrases: “morgen” (tomorrow), a weekday, “in 3 Tagen” (in 3 days) or a date set the planned day, “fällig” or “bis” before them the due date; “um 14:30” the time, “45 Minuten” the effort, “!hoch” the importance, “#labelname” an existing label. “jeden Montag”, “täglich”, “werktags”, “alle 2 Wochen” or “monatlich” set a repeat and its first occurrence as the due date. The “/” commands still apply (/morgen, /bis Freitag, /wichtig, /meintag, /labelname). Below the input each detection appears as a chip; × undoes it and the text stays in the title. Text in quotation marks stays literal; Tab completes a started “/” word.",
+    "While you type an item, Glide recognizes English and German phrases: “tomorrow”, “next Monday”, “in 3 days”, “24 May” or a date set the planned day; “due” or “by” before them the due date, for example “due next Monday at 14:30”; “at 14:30” the time, “45 minutes” the effort, “!high” the importance, “#labelname” an existing label. “every Monday”, “daily”, “every weekday”, “every 2 weeks on Monday and Thursday”, “every 3 months on 15” or “every year on 24 May” set a repeat and its first occurrence as the due date. German phrases such as “morgen” or “jeden Montag” work as well. The “/” commands still apply (/due, /morgen, /wichtig, /meintag, /labelname). Below the input each detection appears as a chip; × undoes it and the text stays in the title. Text in quotation marks stays literal; Tab completes a started “/” word.",
     "Input line of the list and quick capture"
    ],
    [

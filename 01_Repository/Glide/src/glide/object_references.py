@@ -29,10 +29,10 @@ def parse(value):
 
 def uri(kind, identity):
     if not isinstance(identity, str):
-        raise ValueError('Ungültige Verweiskennung')
+        raise ValueError(glide_i18n.t("mod.object_references.uri.invalid_reference_id", 'Ungültige Verweiskennung'))
     value = f'glide://{kind}/{quote(identity, safe="")}'
     if parse(value) is None:
-        raise ValueError('Ungültiges Verweisziel')
+        raise ValueError(glide_i18n.t("mod.object_references.uri.invalid_reference_target", 'Ungültiges Verweisziel'))
     return value
 
 
@@ -192,9 +192,9 @@ def linked_mention_document(holder, mention, target, tag):
     """Bestehendes Format-22-Linkformat; Text und andere Formatierungen bleiben."""
     document = copy.deepcopy(holder.get('rich_note') or {})
     if mention.field != 'rich_note' or document.get('text') != mention.text:
-        raise ValueError('Die Fundstelle hat sich inzwischen geändert.')
+        raise ValueError(glide_i18n.t("mod.object_references.linked_mention_document.the_location_has_changed", 'Die Fundstelle hat sich inzwischen geändert.'))
     if not tag.startswith('link:') or tag in document.get('links', {}):
-        raise ValueError('Ungültige Linkmarke.')
+        raise ValueError(glide_i18n.t("mod.object_references.linked_mention_document.invalid_link_mark", 'Ungültige Linkmarke.'))
     document.setdefault('links', {})[tag] = uri(*target)
     document.setdefault('spans', []).append(dict(tag=tag, start=mention.start, end=mention.end))
     return document

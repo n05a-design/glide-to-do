@@ -1,4 +1,43 @@
-# QA-Bericht – Glide 1.0.0
+# QA-Bericht – Glide 1.0.1
+
+## Release-Runde 1.0.1: Volllauf, macOS-Paket und DMG (V1.83, 22.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, Vordergrundmodus, auf `claude/v101-release` (`841fb56a`; enthält PRs #185–#187 und WA-49).
+
+| Gegenstand | Ergebnis |
+|---|---|
+| Volllauf 1 (`9d212eb6`) | Rot in `test_features328`: feste Erwartung `APP_VERSION == "1.0.0"`. Test vergleicht seitdem über `release_rank`. |
+| Volllauf 2 (`8e02c55e`) | 121 Schritte grün, darunter alle Arbeitsmodi-Gruppen; rot in `test_modalvertrag/menue`: der Test baut `ListApp` ohne `__init__` und erwartete den Menüaufschub schon beim Import. Ruft seit V1.83 `activate_runtime()` auf, 18/18. |
+| Volllauf 3 (`841fb56a`) | 106 Schritte grün; rot nur `test_arbeitsmodi_bedienung/kompakt_verlorenes_loslassen` (25/26), weil der Bildschirm gesperrt war (`CGSSessionScreenIsLocked`): Der Finder-Wechsel liefert dann kein FocusOut. In Lauf 2 auf gleichem App-Code grün. Wiederholung bei entsperrtem Bildschirm offen. |
+| Nachgeholte Schritte | Alle 31 übersprungenen Schritte grün: Arbeitsmodi Planung/Navigation/Geometrie/Abschluss, Speicherstatus, Sicherungszentrale, Wiederanlauf, Startwege 17/17, Modalvertrag 18/18, Abbauvertrag, Fensterlebensdauer, Shell-Demohost und -Selbsttest, KI-Ausgabe, T335 Lokalisierung, Showcase DE/EN, statische und Erreichbarkeitsanalyse, Stand-, Attribut- und Dublettenprüfung, Beispiel- und Releasedaten gleich. |
+| Gezielte Prüfungen | `test_release_notes` 15/15 (Neuerungen folgen der Oberflächensprache, jeder Satz hat eine englische Fassung), `test_i18n` 24/24, `test_agenten_skill` 18/18, `test_glide_system` 5/5, `test_runtime_config`, `test_features319` (Anhangsordner als Sicherungsziel in DE und EN gesperrt). |
+| macOS-Paket | `baue_und_pruefe_macos.sh`: Glide 1.0.1 macOS arm64, Quellvergleich, isolierte Paketprobe Exit 0 mit blockiertem externem Python; `Glide-1.0.1-macos-arm64.tar.gz` SHA-256 `ea8f22ac0b0f39fabcce0ea9a70969c9ff10aea739733095ec1ec3530e9bfb9d`, 492 Dateien. |
+| DMG | Lokal nach `macos-paket.yml`: `hdiutil create` UDZO, `hdiutil verify` gültig, schreibgeschützt eingehängt; Datei- und Inhaltsinventar gleich dem Paket (562 Einträge), Verknüpfung `/Applications`, `codesign --verify --deep --strict` gültig. `Glide-1.0.1-macos-arm64.dmg` (21,3 MB) SHA-256 `8e4a6c6c2ca9395548ce864c20827d29d5a037296367afa42d87d4e2f767fa8b`. Ad-hoc signiert, nicht notarisiert, nicht veröffentlicht. |
+| Lieferstand 07 | `abgleich_07.py`: 108 Code-Dateien und 169 Ressourcen, keine Abweichungen; 1.0.0 ins Archiv. `showcase_abgleich.py --vordergrund` grün. |
+| Showcase-Start | Englischer Starter auf deutschem System (`de-DE`): erster Start stellt die Sicherung im eigenen Prozess her, die Oberfläche startet englisch (Menüs File/Edit/View/Help), `language = en`. |
+
+**Offen:** Fokusfall bei entsperrtem Bildschirm wiederholen; GitHub-Matrix für den Release-PR; menschliche Sicht- und Bedienabnahme; Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+
+## Bearbeitungszeit im Seitenkopf (WA-25) (V1.82, 21.11.2026)
+
+T065 prüft fehlende und ungültige Werte, Zeitzonen, Einheiten und beide Oberflächensprachen. T182 nutzt den echten Seiteneditor, prüft die Kopfzeile, den genauen Zeitpunkt im Menü und die Aktualisierung nach dem Speichern. Die GitHub-Matrix und menschliche Abnahme sind offen.
+## Englische Schnellerfassung (N21) (V1.81, 21.11.2026)
+
+Geprüft werden deutsche und englische Eingaben, beide Reihenfolgen ausgeschriebener Monatsdaten, Wiederholungsregeln, rücknehmbare Chips und wörtliche Abschnitte. T139 (`test_features311.py`) nutzt den echten Speicher- und Rückgängig-Weg der Schnellerfassung mit künstlichen Daten. Die GitHub-Matrix und menschliche Abnahme sind offen.
+## Showcase „Stadtlicht“, Fremdbilder entfernt, Restlokalisierung (V1.80, 22.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/v179-eigene-fotos` über `main` `27540f9b` mit `codex/macos-drucktempo` (V1.79). Grün: 1.284 Unit-Tests, `pruefe_showcase.py` für beide Sprachen, T335 mit zehn Fällen, die zuvor angepassten Fälle von `test_arbeitsmodi` und `test_uiux_paket`. Vollprüfung `pruefen.py --modus voll --vordergrund`: 131 Schritte grün bis auf zwei Befunde, die behoben und nachgeprüft wurden: erster Lauf rot an `test_startwege` (Bytecode `__pycache__` aus einer eigenen Kompilierprobe im Quellbaum, entfernt, Lauf vollständig wiederholt), zweiter Lauf rot an der Standprüfung (englische Showcase-README ohne Standzeile, relativer Link auf `quellen.json` in der Lieferkopie; korrigiert, Standprüfung grün). Die danach übersprungenen Schritte Attribut-, Dublettenprüfung sowie Beispieldaten- und Releaseplan-Reproduktion wurden nachgeholt und sind grün. macOS-Paket `Glide-1.0.0-macos-arm64.tar.gz` (492 Dateien, Ad-hoc-Signatur geprüft, isolierte Startprobe Exit 0, Quellvergleich unverändert, `NSHumanReadableCopyright` „© 2026 Tim von Trostorff – shaye Design – N05A Foundry“), SHA-256 `2582000d9c810727eecf044225d4a51f9362ba1876b5cefe936c619bf085c1b4`, gebaut aus Commit `996c1e88`. Sichtprüfung der Galerie durch den Agenten: deutsche Reste der Startseite, „Raster“ und ein Symbolrückfall des Aufnahmewerkzeugs (Schriften vor `Tk()` registrieren) wurden gefunden und behoben. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sicht- und Sprachabnahme.
+
+## Mac-Nachprüfung: Pinnwandaufbau in `druck_tempo` (V1.79, 21.11.2026)
+
+Lokale Vergleichsmessung auf macOS arm64, Python 3.14.5, Tcl/Tk 9.1.0, `LANGUAGE=de`, mit künstlichen Daten pro Prozess. Je zehn Einzelläufe auf `27540f9b` und mit der Korrektur, jeweils mit zwei Vorwärmrunden und fünf abwechselnd angeordneten Messpaaren. Gemessen wird `draw_board()` für je 200 Karten. Der HTML-Druckexport wird anschließend auf Inhalt geprüft.
+
+| Stand | Nur Aufgabenkarten | 150 Aufgaben- und 50 Seitenkarten | Gepaarter Quotient, Min. bis Max. | Bestanden |
+| --- | --- | --- | --- | --- |
+| `27540f9b` | 75,43 ms | 74,55 ms | 0,9703–1,0064 | 10/10 |
+| Korrektur V1.79 | 32,81 ms | 31,41 ms | 0,9334–0,9731 | 10/10 |
+
+Die Zeitspalten zeigen den Median der Laufmediane. Die Schranke bleibt bei 1,10. Das separate Python-Profil ordnet rund zwei Drittel der ursprünglichen Zeichenzeit dem wiederholten Übersetzen der Designtabelle über `color_mode()` zu. Die neue deterministische Gegenprobe für Design- und Farbschichtkennungen scheitert auf der Basis am Übersetzungsaufruf und besteht mit der Korrektur. Die vollständige lokale Seitenkartensuite bestand 7/7. Auch die Design-/Erscheinungsprüfung `test_oberflaeche33321.py` und die DE/EN-Lokalisierungssuite T335 (9/9) waren grün. Der frühere rote Hosted-Lauf ist unter den lokalen Bedingungen nicht reproduzierbar. Die Wirkung auf die native GitHub-Vollprüfung ist offen.
 
 ## D93: zweisprachiger Austausch und englische Vorlagen (V1.78, 21.11.2026)
 
@@ -400,7 +439,7 @@ Der Werkzeugtest T299 (`tests/tools/test_standpruefung.py`) prüft jetzt die Spr
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
-**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.0, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
+**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.1, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
 
 **Vollprüfung:** `tests/tools/pruefen.py --modus voll --timeout 900 --arbeitsablage ~/GlidePruefung`; Ergebnis `~/GlidePruefung/voll-141-20261118-r4/ergebnis.json`, dauerhafter WA-42-Nachweis `~/GlidePruefung/lauf-esdb9s05`. Exitcode 0: **135 ausgeführte Schritte erfolgreich, 2 ausdrücklich übersprungen**. Syntax 447 Python-Dateien, Versions-/Dokument-/Fixtureprüfungen, Fachlogik-Unit-Tests, sämtliche Integrationssuiten, Showcase, statische und Erreichbarkeitsanalyse, Stand-/Attribut-/Duplikatprüfungen sowie Beispieldaten- und Releaseabgleich bestanden. Quellhash von `app.pyw`: `bd7d9f90aed799e233b945914f34bba1fbb9485aa9fa06dddcd0f3d44698548b`. Screenshots wurden übersprungen, da `screenshots.py` Linux/X11 voraussetzt; die Sichtprüfung bleibt ausdrücklich menschlich und offen.
 
@@ -428,7 +467,7 @@ Der Fehler stoppt die positive Integrationsfolge. In #550 weisen `ergebnis.json`
 
 ## Agenten-Skill `glide-to-do`, Pakete K4 & K5 – Bilder/Anhänge & Verteilung (17.11.2026)
 
-Stand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pakete K4 & K5) auf Branch `claude/skill-paket-k4-k5-wa61`; Glide 3.70.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.39. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Nachweisstand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pakete K4 & K5) auf Branch `claude/skill-paket-k4-k5-wa61`; Glide 3.70.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.39. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -449,7 +488,7 @@ Stand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pakete K4 
 
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
-Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.0, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.1, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -467,7 +506,7 @@ Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skil
 
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
-Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.0, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.1, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -1029,7 +1068,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

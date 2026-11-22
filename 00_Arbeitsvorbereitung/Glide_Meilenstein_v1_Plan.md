@@ -1,6 +1,6 @@
-# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.0)
+# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.1)
 
-Stand 21.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.68 auf `main` (PRs #168–#172 gemergt, `0efa33ae`) · Glide Shell 0.4.0; V1.69 Shell-Bausteine D98 (`text_fit`, `action_picker`, `runtime_paths`, Shell 0.5.0, Selbsttest unter `-O`) in PR #173 (`claude/v169-shell-text-menu-paths`); KI-Handbuch und Skill `glide-shell` auf `claude/v169-shell-ki-handbuch` über #173; V1.70 D93-Volllokalisierung L1 (Pinnwand, Reiter, Seiten, Galerie, Datenordner, Tageshinweise, Belegzeiten) auf `claude/v170-i18n-l1-pr`; V1.71 D93-Volllokalisierung L2 (Tagesplanung, Nebenansicht, Inspektor, Seitenleiste, Startseite) auf `claude/v171-i18n-l2`; V1.72 D93-Volllokalisierung L3 (Vorlagen, Bibliothek, Labels, Punktmaske, Verweise, Kalender, Seitenleiste) auf `claude/v172-i18n-l3`; V1.73 D93-Volllokalisierung L4 (Seitenleistenmenüs, Papierkorb, Anlegen, Kopf, Hinweise, Speichern, Erinnerungen) auf `claude/v173-i18n-l4`; V1.74 D93-Volllokalisierung L5 (Benachrichtigungen, Statuszeile, Seiten, Zeichnungsdialoge, Übersichten, Schnellerfassung, Kontextmenüs) auf `claude/v174-i18n-l5`; V1.75 D93-Volllokalisierung L6 (Fokus, Verschieben, Import/Export, KI-Austausch, Sicherungen, CSV, Druck) auf `claude/v175-i18n-l6`; V1.76 D93-Volllokalisierung L7 (Kalenderdatei, App-Sicherung, Verlauf, Suche, Menüleiste, Über Glide, Tastenkürzel, Vorlageneditor) auf `claude/v176-i18n-l7`; V1.77 D93-Volllokalisierung L8 (Handbuch, Klassentabellen, Module, Knopfrollen, Kurzformen) auf `claude/v177-i18n-l8`; Volllokalisierung damit vollständig; V1.78 D93 zweisprachiger Austausch, Systemlabels, KI-Formatbeschreibung und mitgelieferte Vorlagen auf Englisch auf `claude/v178-austausch-zweisprachig`
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.83 · Glide Shell 0.5.0 (abgeschlossen) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung; diese Schritte bleiben dem Inhaber vorbehalten.
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 
@@ -16,15 +16,14 @@ Um nicht endlos weiterzuentwickeln, wird der Umfang für **Version 1.0** strikt 
 flowchart TD
     subgraph V1 ["Glide Version 1.0 (Scope Freeze / D93)"]
         S["1. Agenten-Skill komplett<br/>(K4 Bilder/Anhänge + K5 Verteilung)<br/><b>✅ ERLEDIGT (PR #130)</b>"]
-        I["2. Mehrsprachigkeit<br/>(vollständige Oberfläche DE/EN)<br/><b>◐ TEILWEISE</b>"]
+        I["2. Mehrsprachigkeit<br/>(vollständige Oberfläche DE/EN)<br/><b>✅ ERLEDIGT (V1.70–V1.81)</b>"]
         P["3. Paketierung & Installer<br/>(macOS DMG / Windows Setup.exe)<br/><b>✅ ERLEDIGT (PR #135)</b>"]
         M["4. Paketmanager-Einbindung<br/>(Homebrew Cask + winget Manifest)<br/><b>◐ VORLAGEN, NICHT EINGEREICHT</b>"]
         Q["5. Grüne CI-Vollmatrix & Release Cut<br/>(macOS arm64, Windows x64, Linux)<br/><b>◐ QUELLCUT GEMERGT, RELEASE OFFEN</b>"]
     end
 
     subgraph POST ["Version 1.1+ / Spätere Versionen"]
-        S6["Shell-Paket 6 Demonstrationshost & glide_shell Bündelung"]
-        CAL["CalDAV / Kalender-Sync"]
+                CAL["CalDAV / Kalender-Sync"]
         LANG["Weitere Sprachen (FR, ES, ...)"]
         MOB["Mobile Apps / Cloud-Option"]
     end
@@ -37,11 +36,11 @@ flowchart TD
    - K1–K3: Austauschformat 2, Labels, Vorsicherung, Markdown, Ordnerarten, Wiederholungen, Erinnerungen.
    - **K4 (Bilder & Anhänge):** ZIP-Container (`.glideexchange`/`.zip`), Zip-Slip-Schutz, Anhänge für Aufgaben/Listen/Ordner in `ATTACHMENTS_DIR`, Galerielisten, Seiten-Cover, Markdown-Bildauflösung, Export (`write_exchange_package`), Rollback-Bereinigung.
    - **K5 (Ökosystem & Verteilung):** `MANIFEST.json`, `VERTEILUNG.md`, Desktop-Menüaktion `export_agent_skill`, Workflow-Paketierung in GitHub Release-Assets (`glide-to-do-skill-v$VERSION.zip`).
-2. **Mehrsprachigkeit (i18n: Deutsch & Englisch) (◐ teilweise umgesetzt):**
+2. **Mehrsprachigkeit (i18n: Deutsch & Englisch) (✅ abgeschlossen):**
    - Soll: Komplette App-Oberfläche umschaltbar: Automatisch (nach OS), Deutsch, Englisch.
    - Menüs (`desktop_adapter.py`), Werkzeugleiste, Seitenleiste, Kern-Dialoge, Einstellungen, Status- und Fehlermeldungen.
    - Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Modulbudget-konform).
-   - Ist: Spracheinstellung, Kataloge, Menü-/Tastaturbeschriftungen, ausgewählte Seitenleistenbereiche, Einstellungsdialog, Seiteneditor, Aktionsfeedback und Aufgabeninspektor sind in den geprüften Bereichen zweisprachig. PR #157 ergänzt Statuszeile, Kernmeldungen und zentrale Zeichensteuerungen; Animations-/Mehr-Menüs, weitere Dialoge, Zeichen-/Exportmeldungen, dynamische Undo-Texte und einzelne Status-/Fehlertexte bleiben teilweise deutsch. Vollständige Oberflächenlokalisierung und menschliche Sicht-/Bedienabnahme sind offen.
+   - Ist: Die gesamte Oberfläche ist über die Kataloge zweisprachig (Lokalisierungsrunden V1.70–V1.79, Test T335 `test_lokalisierung_d93` mit l1–l8), einschließlich Dialogen, Menüs, Status-, Fehler- und Undo-Texten, Handbuch, Austauschformat und KI-Ausgabe. Seit V1.81 versteht die Schnellerfassung auch englische Eingabewörter (N21). Die menschliche Sicht- und Bedienabnahme bleibt Teil der Freigabe.
 3. **Plattformpakete & Installer:**
    - **macOS:** `.app`-Bundle, `.dmg` und `.tar.gz` (Ad-hoc signiert, arm64).
    - **Windows:** Inno-Setup-Installer `Glide-setup.exe` (Startmenü-Icon, saubere Deinstallation, AppUserModelID `Shaye.Glide`, unprivilegiert nach `%LOCALAPPDATA%\Programs\Glide`) + portable `.zip`.
@@ -54,9 +53,12 @@ flowchart TD
    - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Menschliche Sicht-/Bedienabnahme sowie übersprungene UI-/Barrierefreiheitsjobs bleiben offen.
    - Am 18.11.2026 wurden weder GitHub-Release noch Git-Tags gefunden. Öffentliche Freigabe und Paketmanager-Einreichungen sind nicht erfolgt.
 
+> [!NOTE]
+> **Glide Shell abgeschlossen:** Das Unterpaket `glide_shell` (Shell 0.5.0) mit Demonstrationshost, Selbsttest, Anleitung, KI-Handbuch und den Bausteinen aus D94–D98 ist in V1.65–V1.69 geliefert; WA-49 (importfreie App-Schicht) ist mit V1.83 abgeschlossen. Weitere Shell-Arbeit entsteht nur noch aus konkretem Bedarf eines Folgeprojekts.
+
 > [!IMPORTANT]
 > **Was bewusst NICHT in Version 1.0 kommt (Post-1.0):**
-> Tiefere interne Shell-Umbauten (Shell-Paket 6 Demonstrationshost, Namespace-Bündelung `glide_shell`), zusätzliche Sprachen jenseits DE/EN, externe Kalendersynchronisation (CalDAV) oder Plugin-Systeme werden bis nach Version 1.0 zurückgestellt.
+> Zusätzliche Sprachen jenseits DE/EN, externe Kalendersynchronisation (CalDAV) oder Plugin-Systeme werden bis nach Version 1.0 zurückgestellt.
 
 ---
 
@@ -75,31 +77,31 @@ flowchart TD
   - GitHub Actions Workflow packt Skill-ZIP mit Prüfsummen.
 - **Nachweis:** Integrationstest T328 (`test_austausch_k4.py`, 9/9 OK), Werkzeugtest T321 (18/18 OK), PR #130 gemergt.
 
-### Etappe 2: Mehrsprachigkeit (i18n: Deutsch / Englisch) – ◐ TEILWEISE
+### Etappe 2: Mehrsprachigkeit (i18n: Deutsch / Englisch) – ✅ ERLEDIGT
 - **Architektur:**
   - Neues leichtgewichtiges Modul `src/glide/i18n.py` (M100) im Glide-System (Standardbibliothek only, Modulbudget max. 50 Zeilen je Funktion, WA-50 konform).
   - Strukturierte Übersetzungskataloge: `src/glide/resources/locales/de.json` und `src/glide/resources/locales/en.json`.
   - Robuster Aufruf: `t(key, default, **kwargs)` mit sicherer Formatierung (`safe_format`).
   - Einstellungsdialog: Dropdown zur Sprachauswahl (`Automatisch (System)`, `Deutsch`, `English`), persistiert in `settings.json` als `language`.
 - **Tatsächlicher Übersetzungsumfang:**
-  - Spracheinstellung, Kataloge und `t()`-Hilfsfunktionen sind implementiert; Menüleiste/Tastaturkürzel und ausgewählte Beschriftungen in Seitenleiste und Einstellungen nutzen die Kataloge.
-  - Die vollständige Oberfläche ist nicht lokalisiert: unter anderem bleiben weitere Dialoge, Werkzeugleisten, Inspektoren, Status- und Fehlermeldungen teilweise deutsch.
-  - `test_i18n.py` prüft Katalogparität, Platzhalter, direkt verwendete Übersetzungsschlüssel und dynamische Schlüssel aller Hintergrund-Presets.
+  - Vollständige Oberfläche in Deutsch und Englisch; Austauschformat, Systemlabels und KI-Ausgabe lesen sich auch englisch (V1.78), Startseite und Vorlagen zweisprachig (V1.79), Showcase in beiden Sprachen.
+  - Schnellerfassung mit englischen und deutschen Eingabewörtern (V1.81, N21).
+  - `test_i18n.py` prüft Katalogparität, Platzhalter, direkt verwendete Übersetzungsschlüssel und dynamische Schlüssel; T335 prüft die Lokalisierungsfälle l1–l8.
 - **Nachweis:**
   - Test T329 (`test_i18n.py`): Spracherkennung, Auflösung, Fallbacks, Schlüssel- und Platzhalterparität zwischen `de.json` und `en.json`, WA-50-Budget.
   - Werkzeugtest `test_modulbudget.py` um `i18n.py` erweitert.
   - Systemregister auf V1.42 angehoben; `test_i18n.py` besteht mit 13/13 Tests.
-  - Die CI-Grundstufe für den aktuellen Lokalisierungsschnitt ist noch auszuführen.
+  - CI-Grundstufe und Vollläufe der Lokalisierungsrunden sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt.
 
 ### Etappe 3: Paketbau, Installer & Paketmanager-Vorbereitung – ✅ TECHNISCH VORBEREITET; EINREICHUNG OFFEN
 - **macOS:**
   - DMG-Erzeugung in `.github/workflows/macos-paket.yml` verifiziert.
-  - Homebrew-Cask `packaging/homebrew/Casks/glide.rb` aktualisiert auf Version 3.70.0.
+  - Homebrew-Cask `packaging/homebrew/Casks/glide.rb` folgt der aktuellen App-Version (Prüfsumme bleibt Platzhalter bis zum Release).
 - **Windows:**
   - Inno-Setup-Skript `packaging/windows/glide_setup.iss` für unprivilegierte Benutzer-Installation nach `%LOCALAPPDATA%\Programs\Glide`, Startmenüeintrag (`AppUserModelID: "Shaye.Glide"`), Sprachunterstützung (DE/EN) und saubere Deinstallation ohne Nutzerdatenverlust.
   - Build-Schritt in `.github/workflows/windows-paket.yml` verankert (Erzeugung von `Glide-$version-windows-x64-setup.exe` samt SHA-256 und Artefakt-Upload).
   - Release-Workflow `.github/workflows/release.yml` um Installer-Einbindung und Download-Tabelleneintrag erweitert.
-  - winget-Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/3.70.0/` auf `InstallerType: inno` und zweisprachige Metadaten (de-DE, en-US) umgestellt.
+  - winget-Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/<Version>/` (nur der aktuelle Stand) auf `InstallerType: inno` und zweisprachige Metadaten (de-DE, en-US) umgestellt.
 
 ### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – ◐ QUELLCUT ERLEDIGT, VERÖFFENTLICHUNG OFFEN
 - **Versionierung:**
@@ -116,10 +118,10 @@ flowchart TD
 
 ## 3. GitHub Issue Tracking (#129)
 
-Statusabgleich vom 19.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt offen. PR #148 hat den zweisprachigen Einstellungsdialog gemergt; übrige App-/Shell-Lokalisierung, öffentliche Veröffentlichung und externe Paketmanager-Einreichung sind weiter offen.
+Statusabgleich vom 22.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt bis zur öffentlichen Freigabe offen. Lokalisierung und Glide Shell sind abgeschlossen; offen sind nur Tag/Release, Paketmanager-Einreichung und die menschliche Abnahme, alle mit Freigabe des Inhabers.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [ ] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (M100 und weitere Bereiche in `main`; PR #157 (gemergt) ergänzt Zeicheneditor-Status und zentrale Steuerungen, PR #158 (gemergt) Animationsleiste, Mehr-Menü, Paletten und Export, vollständige UI-/Status-/Shell-Lokalisierung und menschliche Abnahme offen)
+- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (vollständige Oberfläche über PR #148, #157, #158 und die Lokalisierungsrunden V1.70–V1.79; englische Schnellerfassung V1.81, PR #186; menschliche Abnahme läuft mit der Freigabe)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
 - [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
 - [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. Öffentlicher Tag/Release, vollständige menschliche Abnahme und übersprungene UI-/Barrierefreiheitsjobs offen)

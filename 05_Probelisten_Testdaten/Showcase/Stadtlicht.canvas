@@ -1,0 +1,106 @@
+{
+    "nodes": [
+        {
+            "id": "area:global-auswahl",
+            "type": "group",
+            "x": 370,
+            "y": 30,
+            "width": 640,
+            "height": 620,
+            "label": "Auswahl und Reisebuch",
+            "color": "6"
+        },
+        {
+            "id": "page:71f3455405b546e8bf0771cf16cb4bef",
+            "type": "text",
+            "x": 34,
+            "y": 63,
+            "width": 240,
+            "height": 295,
+            "text": "### Reiseführer · Überblick (Seite)\n\nSieben Städte, zwei Wochen Eine Fotoreise mit der Bahn und zwei Flügen. Jede Stadt hat eine eigene Seite mit Orten, Zeiten und Tipps; das Reisetagebuch hält…\nAnhänge: 1\n\nVerweis: `glide://list/71f3455405b546e8bf0771cf16cb4bef`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:1b3448a1aacf46afaf4f415c1c62a161",
+            "type": "text",
+            "x": 34,
+            "y": 355,
+            "width": 240,
+            "height": 147,
+            "text": "### Abendrunde · Offene Fragen (Notiz)\n\nAbend nach der Rückkehr Die Reise ist vorbei, die Auswahl beginnt. Aus rund 230 Bildern sollen 14 ins Reisebuch. • Pro Stadt zwei Bilder, die zusammen eine k…\n\nLabels: `Foto`\nAnhänge: 1\n\nVerweis: `glide://list/1b3448a1aacf46afaf4f415c1c62a161`",
+            "color": "#217E39"
+        },
+        {
+            "id": "f787f15803e349ffa2cda18cf93135b9",
+            "type": "text",
+            "x": 390,
+            "y": 64,
+            "width": 312,
+            "height": 426,
+            "text": "### [ ] Fotoauswahl für das Reisebuch treffen\n3 hoch · Bearbeitungstag: 22.11.2026, 09:00 · Fällig: 22.11.2026, 11:00 · Liste: Reiseplan\n\nPro Stadt zwei Bilder auswählen, die zusammen eine kleine Geschichte erzählen.\n\n- [x] Rohdaten gesichert\n- [x] Erste Auswahl mit Sternen markiert\n- [ ] Zweite Runde: Schwarzweiß prüfen\n\nLabels: `Foto`, `Freigabe`\nAnhänge: 1\n\nVerweis: `glide://item/f787f15803e349ffa2cda18cf93135b9`",
+            "color": "#217E39"
+        },
+        {
+            "id": "548f7c27f0964d89994782c28a6b0ca2",
+            "type": "text",
+            "x": 735,
+            "y": 58,
+            "width": 240,
+            "height": 355,
+            "text": "### [ ] Bildunterschriften schreiben\n2 mittel · Bearbeitungstag: 22.11.2026, 11:00 · Fällig: 23.11.2026 · Liste: Reiseplan\n\nKurz, mit Ort und Moment. Keine Kameradaten in die Unterschrift.\n\nLabels: `Foto`\nAnhänge: 2\n\nVerweis: `glide://item/548f7c27f0964d89994782c28a6b0ca2`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:2506eb154621428bb1270527c884e20a",
+            "type": "text",
+            "x": 735,
+            "y": 470,
+            "width": 187,
+            "height": 215,
+            "text": "### Reisestempel · Lichtwechsel (Zeichnung)\n\nEin Reisestempel mit vier Himmelsfarben von Morgen bis Nacht, PNG-Referenz und 16-Pixel-Symbol.\nAnhänge: 2\n\nVerweis: `glide://list/2506eb154621428bb1270527c884e20a`",
+            "color": "#217E39"
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge:1:page:71f3455405b546e8bf0771cf16cb4bef:f787f15803e349ffa2cda18cf93135b9",
+            "fromNode": "page:71f3455405b546e8bf0771cf16cb4bef",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "f787f15803e349ffa2cda18cf93135b9",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Route ansehen"
+        },
+        {
+            "id": "edge:2:page:1b3448a1aacf46afaf4f415c1c62a161:f787f15803e349ffa2cda18cf93135b9",
+            "fromNode": "page:1b3448a1aacf46afaf4f415c1c62a161",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "f787f15803e349ffa2cda18cf93135b9",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Fragen klären"
+        },
+        {
+            "id": "edge:3:f787f15803e349ffa2cda18cf93135b9:548f7c27f0964d89994782c28a6b0ca2",
+            "fromNode": "f787f15803e349ffa2cda18cf93135b9",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "548f7c27f0964d89994782c28a6b0ca2",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "dann beschriften"
+        },
+        {
+            "id": "edge:4:548f7c27f0964d89994782c28a6b0ca2:page:2506eb154621428bb1270527c884e20a",
+            "fromNode": "548f7c27f0964d89994782c28a6b0ca2",
+            "fromSide": "bottom",
+            "fromEnd": "none",
+            "toNode": "page:2506eb154621428bb1270527c884e20a",
+            "toSide": "top",
+            "toEnd": "none",
+            "label": "Stempel aufs Cover"
+        }
+    ]
+}

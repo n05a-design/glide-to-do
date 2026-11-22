@@ -13,7 +13,7 @@ related_documents: [GLIDE-SOURCE-MANIFEST, GLIDE-AUDIT, GLIDE-ROADMAP]
 
 # Knowledge gaps and contradictions
 
-Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## Open evidence gaps
 

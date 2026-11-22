@@ -21,7 +21,8 @@ import zipfile
 from unittest.mock import patch
 
 from rundgang import load_module, ruhe
-from showcase import BRIEFING_TITLE, FOCUS_TASK, MAIN_TITLE, NOTIZ_TITLE, PHOTO_TITLE, PIXEL_TITLE
+from showcase import TITEL
+from showcase import BRIEFING_TITLE, FOCUS_TASK, MAIN_TITLE, NOTIZ_TITLE, PHOTO_TITLE, PIXEL_TITLE  # noqa: F401
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests/fixtures/showcase"
@@ -96,7 +97,7 @@ def integrity(app, expected_lists, expected_boards=3):
             assert app.sidebar_section_for_tree(tree) == app.sidebar_section_for(kind, obj["id"])
             parent = obj.get("folder_id" if kind == "list" else "parent_id")
             assert tree.parent(iid) == ("folder:" + parent if parent else ""), obj["title"]
-    for title, section in (("Werkstattbuch", "pages"), ("Studiojournal", "notes"),
+    for title, section in ((BUCH, "pages"), (JOURNAL, "notes"),
                            (PIXEL_TITLE, "drawings")):
         kind = "list" if section == "drawings" else "folder"
         objects = app.lists if kind == "list" else app.folders
@@ -123,7 +124,16 @@ def integrity(app, expected_lists, expected_boards=3):
             assert connection["from"] in card_ids and connection["to"] in card_ids
 
 
+def sprache_setzen(fixture):
+    """Titel und Texte der Fassung (`manifest.json` › `sprache`) für alle Prüfschritte setzen."""
+    sprache = json.loads((fixture/"manifest.json").read_text(encoding="utf-8")).get("sprache", "de")
+    globals().update(TITEL[sprache])
+    return sprache
+
+
 def check(fixture, images=None, restart_dir=None):
+    sprache = sprache_setzen(fixture)
+    manifest = json.loads((fixture/"manifest.json").read_text(encoding="utf-8"))
     with tempfile.TemporaryDirectory(prefix="glide-showcase-pruefen-") as temporary:
         data_dir = Path(restart_dir or temporary)/"Glide"
         mod = load_module(data_dir)
@@ -137,21 +147,21 @@ def check(fixture, images=None, restart_dir=None):
         try:
             settle(root)
             if restart_dir:
-                integrity(app, 15)
-                assert len(entries(app)[BRIEFING_TITLE]["rich_note"]["images"]) == 3
-                assert app.settings["profile_name"] == "Studio am Hof"
-                assert any(t["title"] == "{{Wochentag}} KW {{KW}} · {{Projekt}}" for t in app.templates)
+                integrity(app, manifest["listen"])
+                assert len(entries(app)[BRIEFING_TITLE]["rich_note"]["images"]) == 1
+                assert app.settings["profile_name"] == PROFIL
+                assert any(t["title"] == VORLAGE for t in app.templates)
                 assert not errors, errors
                 print("Neustart: ok")
                 return
-            manifest = json.loads((fixture/"manifest.json").read_text())
             assert manifest["app_version"] == mod.APP_VERSION
             for name, record in manifest["dateien"].items():
                 path = fixture/name
                 assert hashlib.sha256(path.read_bytes()).hexdigest() == record["sha256"], name
                 if path.suffix == ".canvas":
                     canvas = json.loads(path.read_bytes())
-                    assert len(canvas["nodes"]) == 5 and len(canvas["edges"]) == 4
+                    assert len(canvas["nodes"]) == 6 and len(canvas["edges"]) == 4
+                    assert sum(node["type"] == "group" for node in canvas["nodes"]) == 1
                     assert all(edge["label"] for edge in canvas["edges"])
                 if path.suffix in (".glidebackup", ".glideapp"):
                     with zipfile.ZipFile(path) as archive:
@@ -172,20 +182,20 @@ def check(fixture, images=None, restart_dir=None):
             assert app.import_full_backup(additive=True, path=str(fixture/"Glide-Showcase.glidebackup"),
                                           show_success=False, confirm=False)
             settle(root)
-            assert len(app.lists) == before_count+14
+            assert len(app.lists) == before_count+len(manifest["dokumente"])
             assert before_ids <= app.data_item_ids()
             assert app.settings["profile_name"] == "Vorhandenes Profil"
-            integrity(app, before_count+14, expected_boards=2)
+            integrity(app, before_count+len(manifest["dokumente"]), expected_boards=2)
             # Die Vollvariante setzt nur diesen temporären Arbeitsstand auf die Demo zurück.
             assert app.restore_app_backup(str(fixture/"Glide-Showcase_App.glideapp"),
                 sections={"tasks":True,"settings":True,"templates":True,"activity":True}, show_success=False)
             settle(root)
-            integrity(app, 15)
+            integrity(app, manifest["listen"])
             lists = entries(app)
             main = lists[MAIN_TITLE]
             briefing = lists[BRIEFING_TITLE]
             gallery = lists[PHOTO_TITLE]
-            assert len(gallery["attachments"]) == 4
+            assert len(gallery["attachments"]) == manifest["bilder"] == 14
             assert all(a.get("title") and a.get("note") for a in gallery["attachments"])
             assert set((i.get("repeat") or {}).get("art") for e in app.lists for i in e["items"] if i.get("repeat")) == set(app.REPEAT_KINDS)
             assert {i["reminder"]["mode"] for e in app.lists for i in e["items"] if i.get("reminder")} == {"fixed","relative"}
@@ -199,8 +209,15 @@ def check(fixture, images=None, restart_dir=None):
                 settle(root, .65)
                 if title == briefing["title"]:
                     editor = app.rich_note_editor
-                    assert len(editor.images) == 3
-                    assert {info["mode"] for info in editor.images.values()} == {"left","right","center"}
+                    assert len(editor.images) == 1
+                    # Stadtseiten: je ein Bild, abwechselnd rechts, links und zentriert, als Titelbild genutzt.
+                    stadtseiten = [e for e in app.lists if e["list_kind"] == "page" and e["id"] != briefing["id"]
+                                   and (e.get("rich_note") or {}).get("images")]
+                    assert len(stadtseiten) == 7
+                    assert {info["mode"] for e in stadtseiten for info in e["rich_note"]["images"].values()} == \
+                        {"left","right","center"}
+                    assert all((e.get("cover") or {}).get("kind") == "image" for e in stadtseiten)
+                    assert (briefing.get("cover") or {}).get("kind") == "drawing" and briefing["live_lists"]
                     assert len(editor._image_views) == len(editor.images)
                     assert all(v._photo is not None for v in editor._image_views.values())
                     closed = editor.text.tag_ranges("toggle_closed")
@@ -212,10 +229,10 @@ def check(fixture, images=None, restart_dir=None):
                 if title == gallery["title"]:
                     assert {key[0] for key in app.gallery_view._images} == {a["storage"] for a in gallery["attachments"]}
                 photo(images, filename)
-            project = next(f for f in app.folders if f["title"] == "Werkhaus West")
+            project = next(f for f in app.folders if f["title"] == PROJEKT)
             app.set_active_folder(project["id"])
             settle(root)
-            assert app.workspace.mode == "board" and len(app.workspace.board()["cards"]) == 5
+            assert app.workspace.mode == "board" and len(app.workspace.board()["cards"]) == 10 and len(app.workspace.board()["areas"]) == 5
             photo(images, "05_Projektpinnwand")
             app.set_active_list(main["id"])
             settle(root)
@@ -233,9 +250,9 @@ def check(fixture, images=None, restart_dir=None):
             settle(root)
             assert app.find_item(candidate["id"])[0] == original
             # Vorlage mit tatsächlicher Abfrage nur des Projektfeldes, inklusive Anhang.
-            template = next(t for t in app.templates if t["title"] == "{{Wochentag}} KW {{KW}} · {{Projekt}}")
+            template = next(t for t in app.templates if t["title"] == VORLAGE)
             asked = []
-            app.ask_template_fields = lambda fields, title="": (asked.append(fields), {"Projekt":"Demo"})[1]
+            app.ask_template_fields = lambda fields, title="": (asked.append(fields), {FELD:"Demo"})[1]
             count = len(app.lists)
             previous_ids = {entry["id"] for entry in app.lists}
             previewed = []
@@ -250,7 +267,7 @@ def check(fixture, images=None, restart_dir=None):
             assert previewed
 
             settle(root)
-            assert asked == [["Projekt"]] and len(app.lists) == count+1
+            assert asked == [[FELD]] and len(app.lists) == count+1
             created = next(entry for entry in app.lists if entry["id"] not in previous_ids)
             assert "{{" not in created["title"] and created["list_kind"] == "note" and created["attachments"]
             # Auf Basisbestand zurücksetzen, dann speichern/exportieren und separaten Prozess starten.
@@ -287,8 +304,8 @@ def check(fixture, images=None, restart_dir=None):
                                    capture_output=True,text=True,timeout=90)
             assert child.returncode == 0, child.stdout+child.stderr
             print(child.stdout.strip())
-            print("Showcase: Import, ID-Verweise, 5 Dokumentarten, 3 Ordnertypen, 4 Stockmotive, 3 Seitenbilder, "
-                  "2 Pinnwände, Klappblock, Termine, Erinnerungen, Undo, Vorlagen, Export und Neustart: ok")
+            print(f"Showcase ({sprache}): Import, ID-Verweise, 5 Dokumentarten, 3 Ordnertypen, 14 eigene Fotos, 8 Seitenbilder mit Titelbildern, "
+                  "3 Pinnwände mit Bereichen, Hervorhebung, Klappblock, Termine, Erinnerungen, Undo, Vorlagen, Export und Neustart: ok")
         finally:
             if root is not None:
                 root.destroy()
@@ -296,11 +313,14 @@ def check(fixture, images=None, restart_dir=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--fixture",type=Path,default=FIXTURE)
+    parser.add_argument("--fixture",type=Path,help="eine Fassung; ohne Angabe Deutsch und Englisch")
     parser.add_argument("--bilder",type=Path)
     parser.add_argument("--neustart",type=Path)
     args = parser.parse_args()
-    check(args.fixture.resolve(),args.bilder,args.neustart)
+    fixtures = [args.fixture] if args.fixture else [f for f in (FIXTURE, FIXTURE/"en") if (f/"manifest.json").is_file()]
+    for fixture in fixtures:
+        bilder = args.bilder/fixture.name if args.bilder and fixture.name == "en" else args.bilder
+        check(fixture.resolve(), bilder, args.neustart)
 
 
 if __name__ == "__main__":

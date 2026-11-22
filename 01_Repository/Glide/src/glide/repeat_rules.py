@@ -39,13 +39,13 @@ def series_rule(text):
     Das Serienende bleibt wie bisher das eigene inklusive Datumsfeld.
     """
     if not isinstance(text, str) or len(text) > 180:
-        raise ValueError("Keine unterstützte Serienregel.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.series_rule.no_supported_series_rule", "Keine unterstützte Serienregel."))
     fields = {part.partition("=")[0] for part in text.upper().split(";")}
     if fields - {"FREQ", "INTERVAL", "BYDAY", "BYMONTHDAY", "BYSETPOS"}:
-        raise ValueError("Nicht unterstützte Serienteile.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.series_rule.unsupported_series_parts", "Nicht unterstützte Serienteile."))
     rule = ics_recurrence.parse_rule(text)
     if rule.interval > MAX_INTERVAL:
-        raise ValueError("Serienabstand muss zwischen 1 und 365 liegen.")
+        raise ValueError(glide_i18n.t("inspector.error.series_interval", "Serienabstand muss zwischen 1 und 365 liegen."))
     if rule.frequency == "WEEKLY":
         valid = bool(rule.weekdays) and all(n is None for n, _d in rule.weekdays)
     elif rule.frequency == "MONTHLY":
@@ -58,7 +58,7 @@ def series_rule(text):
     else:
         valid = rule.frequency == "YEARLY" and not (rule.weekdays or rule.monthdays or rule.positions)
     if not valid:
-        raise ValueError("Keine unterstützte Serienform.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.series_rule.no_supported_series_form", "Keine unterstützte Serienform."))
     parts = ["FREQ=" + rule.frequency, "INTERVAL=" + str(rule.interval)]
     if rule.weekdays:
         parts.append("BYDAY=" + ",".join((str(n) if n is not None else "") + DAY_CODES[d]
@@ -73,21 +73,21 @@ def series_rule(text):
 def from_series_fields(kind, interval, days=(), position=1, weekday=0):
     """Maskenwerte als kanonische RRULE; Zahlenbereiche auch außerhalb der UI prüfen."""
     if kind not in dict((key, label) for label, key in SERIES_CHOICES):
-        raise ValueError("Unbekannte Serienform.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.from_series_fields.unknown_series_form", "Unbekannte Serienform."))
     if isinstance(interval, bool) or not str(interval).isascii() or not str(interval).isdigit():
-        raise ValueError("Bitte einen Abstand von 1 bis 365 eingeben.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.from_series_fields.please_enter_an_interval", "Bitte einen Abstand von 1 bis 365 eingeben."))
     interval = int(interval)
     if not 1 <= interval <= MAX_INTERVAL:
-        raise ValueError("Bitte einen Abstand von 1 bis 365 eingeben.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.from_series_fields.please_enter_an_interval", "Bitte einen Abstand von 1 bis 365 eingeben."))
     frequency = {"serie_woche": "WEEKLY", "serie_jahr": "YEARLY"}.get(kind, "MONTHLY")
     text = f"FREQ={frequency};INTERVAL={interval}"
     if kind == "serie_woche":
         if not days or any(type(d) is not int or not 0 <= d <= 6 for d in days):
-            raise ValueError("Bitte mindestens einen Wochentag auswählen.")
+            raise ValueError(glide_i18n.t("mod.repeat_rules.from_series_fields.please_select_at_least", "Bitte mindestens einen Wochentag auswählen."))
         text += ";BYDAY=" + ",".join(DAY_CODES[d] for d in sorted(set(days)))
     elif kind == "serie_position":
         if type(position) is not int or position not in (1, 2, 3, 4, 5, -1) or type(weekday) is not int or not 0 <= weekday <= 6:
-            raise ValueError("Bitte eine Monatsposition und einen Wochentag auswählen.")
+            raise ValueError(glide_i18n.t("mod.repeat_rules.from_series_fields.please_select_a_month", "Bitte eine Monatsposition und einen Wochentag auswählen."))
         text += f";BYDAY={position}{DAY_CODES[weekday]}"
     elif kind == "serie_letzter":
         text += ";BYMONTHDAY=-1"
@@ -208,9 +208,9 @@ def check_stored_series(data, version):
             if isinstance(repeat, dict) and (repeat.get("art") == SERIES
                     or any(key in repeat for key in ("bezug", "pausiert", "rest"))):
                 if type(version) is not int or version < 26:
-                    raise ValueError("Erweiterte Wiederholungsregeln brauchen Datenformat 26.")
+                    raise ValueError(glide_i18n.t("mod.repeat_rules.check_stored_series.extended_repeat_rules_need", "Erweiterte Wiederholungsregeln brauchen Datenformat 26."))
                 if normalize(repeat) is None:
-                    raise ValueError("Ungültige erweiterte Wiederholungsregel; Datei bleibt erhalten.")
+                    raise ValueError(glide_i18n.t("mod.repeat_rules.check_stored_series.invalid_extended_repeat_rule", "Ungültige erweiterte Wiederholungsregel; Datei bleibt erhalten."))
             pending.extend(v for v in value.values() if isinstance(v, (dict, list)))
 
 
@@ -360,7 +360,7 @@ def anchor_date(regel):
 def apply_options(rule, basis="faellig", paused=False, remaining=""):
     """Gemeinsame Zusatzwerte, ohne eine alte Regel ungefragt umzuschreiben."""
     if basis not in ("faellig", "erledigt") or type(paused) is not bool:
-        raise ValueError("Ungültiger Serienbezug oder Pausenzustand.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.apply_options.invalid_series_reference_or", "Ungültiger Serienbezug oder Pausenzustand."))
     value = dict(rule)
     for key in ("bezug", "pausiert", "rest"):
         value.pop(key, None)
@@ -371,11 +371,11 @@ def apply_options(rule, basis="faellig", paused=False, remaining=""):
     text = str(remaining).strip()
     if text:
         if not text.isascii() or not text.isdigit() or not 1 <= int(text) <= 10000:
-            raise ValueError("Bitte 1 bis 10.000 verbleibende Termine eingeben oder das Feld leer lassen.")
+            raise ValueError(glide_i18n.t("mod.repeat_rules.apply_options.please_enter_1_to", "Bitte 1 bis 10.000 verbleibende Termine eingeben oder das Feld leer lassen."))
         value["rest"] = int(text)
     result = normalize(value)
     if result is None:
-        raise ValueError("Ungültige Wiederholung.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.apply_options.invalid_repeat", "Ungültige Wiederholung."))
     return result
 
 
@@ -404,7 +404,7 @@ def split_options_text(text):
         elif match := re.fullmatch(r"noch ([0-9]{1,5}) Termine inkl\. aktuell", part):
             options["remaining"] = match[1]
         else:
-            raise ValueError("Unbekannter Serienzusatz.")
+            raise ValueError(glide_i18n.t("inspector.error.series_extra", "Unbekannter Serienzusatz."))
     return parts[0], options
 
 
@@ -439,7 +439,7 @@ def preview(regel, due, count=5, completed_on=None):
     werden ausgelassen; die sechs alten Arten behalten ihre Klemmregel.
     """
     if type(count) is not int or not 1 <= count <= 5:
-        raise ValueError("Die Vorschau enthält ein bis fünf Folgetermine.")
+        raise ValueError(glide_i18n.t("mod.repeat_rules.preview.the_preview_contains_one", "Die Vorschau enthält ein bis fünf Folgetermine."))
     regel = normalize(regel)
     current = _due({"due": due})
     if not regel or current is None:

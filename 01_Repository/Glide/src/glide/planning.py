@@ -22,7 +22,7 @@ def target_day(choice, reference, week_start="monday"):
     if choice == "next_week":
         first = 6 if week_start == "sunday" else 0
         return (reference + timedelta(days=(first - reference.weekday()) % 7 or 7)).isoformat()
-    raise ValueError("Unbekanntes Planungsziel")
+    raise ValueError(glide_i18n.t("mod.planning.target_day.unknown_planning_target", "Unbekanntes Planungsziel"))
 
 
 def capacity_for(settings, day=None, default=0, maximum=1440):
@@ -76,7 +76,7 @@ def projected_items(items, selected, day):
 
 def changed_ids(items, day):
     if day is not None and (not isinstance(day, str) or date.fromisoformat(day).isoformat() != day):
-        raise ValueError("Der Bearbeitungstag muss ein gültiges ISO-Datum sein.")
+        raise ValueError(glide_i18n.t("mod.planning.changed_ids.the_planned_day_must", "Der Bearbeitungstag muss ein gültiges ISO-Datum sein."))
     return list(dict.fromkeys(item["id"] for item in items if item.get("planned_date") != day))
 
 
@@ -212,13 +212,13 @@ def time_assignments(items, day, clock):
         if len(clock) != 5 or not 0 <= hour < 24 or not 0 <= minute < 60:
             raise ValueError
     except (AttributeError, TypeError, ValueError):
-        raise ValueError("Bitte eine gültige Uhrzeit wählen.") from None
+        raise ValueError(glide_i18n.t("mod.planning.time_assignments.please_choose_a_valid", "Bitte eine gültige Uhrzeit wählen.")) from None
     start, result = hour * 60 + minute, []
     for item in items:
         estimate = item.get("estimated_minutes")
         duration = estimate if type(estimate) is int and estimate > 0 else 30
         if start + duration > 1440:
-            raise ValueError("Die Zeitblöcke reichen über das Tagesende hinaus.")
+            raise ValueError(glide_i18n.t("mod.planning.time_assignments.the_time_blocks_run", "Die Zeitblöcke reichen über das Tagesende hinaus."))
         result.append((item["id"], day, f"{start // 60:02d}:{start % 60:02d}"))
         start += duration
     return result

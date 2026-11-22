@@ -88,15 +88,15 @@ def parse(raw):
     try:
         record = json.loads(raw)
     except (ValueError, RecursionError) as exc:
-        raise ValueError(f"kein lesbares JSON ({exc.__class__.__name__})") from None
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.no_readable_json", 'kein lesbares JSON ({name})', name=exc.__class__.__name__)) from None
     if not isinstance(record, dict):
-        raise ValueError("kein JSON-Objekt")
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.no_json_object", "kein JSON-Objekt"))
     if not isinstance(record.get("host"), str) or not record.get("host"):
-        raise ValueError("Rechnername fehlt")
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.computer_name_missing", "Rechnername fehlt"))
     try:
         stamp(record)
     except (ValueError, TypeError, OverflowError):
-        raise ValueError("Zeitstempel fehlt oder ist ungültig") from None
+        raise ValueError(glide_i18n.t("mod.data_lock.parse.timestamp_missing_or_invalid", "Zeitstempel fehlt oder ist ungültig")) from None
     return record
 
 

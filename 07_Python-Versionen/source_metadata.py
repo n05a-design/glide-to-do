@@ -6,6 +6,7 @@ from pathlib import PurePosixPath
 from notion_reimport import SourceRecord, content_fingerprint
 import object_references as objects
 import task_references as tasks
+import i18n as glide_i18n
 
 
 def normalize(document, target_id, list_kind):
@@ -30,7 +31,7 @@ def records(pages):
             continue
         record = SourceRecord.from_document(value)
         if record.key in seen_keys or record.target_id in seen_targets:
-            raise ValueError("Die Notion-Quellenzuordnung ist im Bestand nicht eindeutig.")
+            raise ValueError(glide_i18n.t("mod.source_metadata.records.the_notion_source_mapping", "Die Notion-Quellenzuordnung ist im Bestand nicht eindeutig."))
         seen_keys.add(record.key)
         seen_targets.add(record.target_id)
         result.append(record)
@@ -89,20 +90,20 @@ def _asset_holders(holder):
 def staged_source_hashes(collection, staged_files, *, max_bytes):
     """Nur tatsächlich referenzierte Quellseiten-Dateien begrenzt prüfen."""
     if type(max_bytes) is not int or max_bytes < 0:
-        raise ValueError('Ungültige Dateiprüfgrenze.')
+        raise ValueError(glide_i18n.t("mod.notion_import.current_sources.invalid_file_check_limit", 'Ungültige Dateiprüfgrenze.'))
     storages = {attachment['storage'] for page in source_pages(collection)
                 for holder in _asset_holders(page) for attachment in holder.get('attachments', [])}
     result, total = {}, 0
     for storage in sorted(storages):
         path = staged_files.get(storage)
         if path is None:
-            raise ValueError('Eine Datei der Quellseite fehlt im geprüften Zwischenstand.')
+            raise ValueError(glide_i18n.t("mod.source_metadata.staged_source_hashes.a_file_of_the", 'Eine Datei der Quellseite fehlt im geprüften Zwischenstand.'))
         digest = hashlib.sha256()
         with open(path, 'rb') as source:
             while block := source.read(128 * 1024):
                 total += len(block)
                 if total > max_bytes:
-                    raise ValueError('Die Dateiprüfung überschreitet ihre Gesamtgrenze.')
+                    raise ValueError(glide_i18n.t("mod.notion_import.current_sources.the_file_check_exceeds", 'Die Dateiprüfung überschreitet ihre Gesamtgrenze.'))
                 digest.update(block)
         result[storage] = digest.hexdigest()
     return result
@@ -123,21 +124,21 @@ def relocated(page_before, page_after, asset_hashes_before, asset_hashes_after):
         return result
     if (page_after.get("id") != page_before.get("id")
             or page_after.get("list_kind") != "page"):
-        raise ValueError("Beim Verlegen von Anhängen wurde die Seitenkennung geändert.")
+        raise ValueError(glide_i18n.t("mod.source_metadata.relocated.the_page_id_was", "Beim Verlegen von Anhängen wurde die Seitenkennung geändert."))
     def canonicalized(original, changed):
         result = copy.deepcopy(changed)
         old_attachments = original.get("attachments", [])
         new_attachments = result.get("attachments", [])
         if len(old_attachments) != len(new_attachments):
-            raise ValueError("Die Anhänge wurden beim Verlegen verändert.")
+            raise ValueError(glide_i18n.t("mod.source_metadata.canonicalized.the_attachments_were_changed", "Die Anhänge wurden beim Verlegen verändert."))
         reverse = {}
         for old, new in zip(old_attachments, new_attachments):
             old_id, new_id = old["id"], new["id"]
             if new_id in reverse and reverse[new_id] != old_id:
-                raise ValueError("Die neuen Anhangskennungen sind nicht eindeutig.")
+                raise ValueError(glide_i18n.t("mod.source_metadata.canonicalized.the_new_attachment_ids", "Die neuen Anhangskennungen sind nicht eindeutig."))
             if (old_id not in asset_hashes_before or new_id not in asset_hashes_after
                     or asset_hashes_before[old_id] != asset_hashes_after[new_id]):
-                raise ValueError("Die Anhangsbytes wurden beim Verlegen verändert oder fehlen.")
+                raise ValueError(glide_i18n.t("mod.source_metadata.canonicalized.the_attachment_bytes_were", "Die Anhangsbytes wurden beim Verlegen verändert oder fehlen."))
             reverse[new_id] = old_id
             new["id"], new["storage"] = old_id, old["storage"]
         document = result.get("rich_note") or {}
@@ -149,14 +150,14 @@ def relocated(page_before, page_after, asset_hashes_before, asset_hashes_after):
         for key in ("items", "children"):
             old_children, new_children = original.get(key, []), result.get(key, [])
             if len(old_children) != len(new_children):
-                raise ValueError("Der Seiteninhalt wurde beim Verlegen verändert.")
+                raise ValueError(glide_i18n.t("mod.source_metadata.canonicalized.the_page_content_was", "Der Seiteninhalt wurde beim Verlegen verändert."))
             if key in result:
                 result[key] = [canonicalized(old, new) for old, new in zip(old_children, new_children)]
         result.pop("notion_source", None)
         return result
     canonical_before = independent_copy(page_before)
     if canonical_before != canonicalized(page_before, page_after):
-        raise ValueError("Der Seiteninhalt wurde beim Verlegen von Anhängen verändert.")
+        raise ValueError(glide_i18n.t("mod.source_metadata.relocated.the_page_content_was", "Der Seiteninhalt wurde beim Verlegen von Anhängen verändert."))
     record = SourceRecord.from_document(before)
     if content_fingerprint(page_before, asset_hashes_before) == record.local_hash:
         record = SourceRecord(record.key, record.target_id, record.source_hash,
@@ -177,17 +178,17 @@ def relocated_collections(before, after, storage_hashes_before, storage_hashes_a
             for attachment in holder.get('attachments', []):
                 identity, storage = attachment['id'], attachment['storage']
                 if storage not in stored:
-                    raise ValueError('Die geprüften Dateibytes einer Quellseite fehlen.')
+                    raise ValueError(glide_i18n.t("mod.source_metadata.asset_hashes.the_checked_file_bytes", 'Die geprüften Dateibytes einer Quellseite fehlen.'))
                 digest = stored[storage]
                 if identity in result and result[identity] != digest:
-                    raise ValueError('Eine Anhangskennung bezeichnet unterschiedliche Dateibytes.')
+                    raise ValueError(glide_i18n.t("mod.source_metadata.asset_hashes.an_attachment_id_refers", 'Eine Anhangskennung bezeichnet unterschiedliche Dateibytes.'))
                 result[identity] = digest
         return result
 
     result = copy.deepcopy(after)
     originals, changed = source_pages(before), source_pages(result)
     if len(originals) != len(changed):
-        raise ValueError('Die Quellseiten wurden während des Dateiumzugs verändert.')
+        raise ValueError(glide_i18n.t("mod.source_metadata.relocated_collections.the_source_pages_were", 'Die Quellseiten wurden während des Dateiumzugs verändert.'))
     for original, page in zip(originals, changed):
         updated = relocated(original, page, asset_hashes(original, storage_hashes_before),
                             asset_hashes(page, storage_hashes_after))
@@ -206,7 +207,7 @@ def selectively_restored(original, restored, asset_hashes_before, asset_hashes_a
     """
     result = copy.deepcopy(restored)
     if original.get('id') != restored.get('id'):
-        raise ValueError('Die Seitenkennung darf beim Einzelrestore nicht wechseln.')
+        raise ValueError(glide_i18n.t("mod.source_metadata.selectively_restored.the_page_id_must", 'Die Seitenkennung darf beim Einzelrestore nicht wechseln.'))
     mapping = restored_source(original, restored['id'],
                               [page for page in live_pages if page.get('id') != restored['id']])
     if mapping is None:
@@ -216,7 +217,7 @@ def selectively_restored(original, restored, asset_hashes_before, asset_hashes_a
     reverse = {new: old for old, new in pairs}
     if (len(reverse) != len(pairs) or len({old for old, _new in pairs}) != len(pairs)
             or set(reverse).intersection(reverse.values())):
-        raise ValueError('Die Aufgabenkennungen wurden nicht eindeutig umgelegt.')
+        raise ValueError(glide_i18n.t("mod.source_metadata.selectively_restored.the_task_ids_were", 'Die Aufgabenkennungen wurden nicht eindeutig umgelegt.'))
     canonical = copy.deepcopy(result)
     if 'folder_id' in original:
         canonical['folder_id'] = original['folder_id']

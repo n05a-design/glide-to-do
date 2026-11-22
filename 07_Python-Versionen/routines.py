@@ -10,6 +10,7 @@ offen ist und ob die Routine heute schon einmal vollständig war.
 """
 
 from datetime import date
+import i18n as glide_i18n
 
 # Obergrenze der gemerkten Auswahl; mehr Routinen trägt „Heute“ nicht sinnvoll.
 MAX_ROUTINES = 20
@@ -110,7 +111,7 @@ def toggled(ids, list_id):
 def summary(zeile):
     """Kurzer Fortschrittstext für die Abschnittszeile."""
     if zeile["completed_today"] and not zeile["open"]:
-        return f"{zeile['title']} · heute erledigt"
+        return glide_i18n.t("mod.routines.summary.done_today", '{title} · heute erledigt', title=zeile['title'])
     if zeile["completed_today"]:
-        return f"{zeile['title']} · heute schon einmal erledigt · {zeile['done']}/{zeile['total']}"
+        return glide_i18n.t("mod.routines.summary.already_done_once_today", '{title} · heute schon einmal erledigt · {done}/{total}', title=zeile['title'], done=zeile['done'], total=zeile['total'])
     return f"{zeile['title']} · {zeile['done']}/{zeile['total']}"

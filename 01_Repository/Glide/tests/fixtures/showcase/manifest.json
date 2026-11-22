@@ -1,86 +1,128 @@
 {
-  "app_version": "1.0.0",
+  "app_version": "1.0.1",
   "format_version": 26,
-  "thema": "Werkhaus West",
-  "bearbeitungstag": "2026-11-17",
+  "sprache": "de",
+  "thema": "Stadtlicht · Fotoreise",
+  "bearbeitungstag": "2026-11-22",
+  "listen": 25,
   "dokumente": [
     {
-      "titel": "Offene Werkstatt",
+      "titel": "Reiseplan",
       "art": "tasks"
     },
     {
-      "titel": "Freitagsrunde · Offene Fragen",
+      "titel": "Abendrunde · Offene Fragen",
       "art": "note"
     },
     {
-      "titel": "Raumstudien",
+      "titel": "Stadtlicht · Auswahl",
       "art": "gallery"
     },
     {
-      "titel": "Leitschild · Lichtwechsel",
+      "titel": "Reisestempel · Lichtwechsel",
       "art": "drawing"
     },
     {
-      "titel": "Aufschließen · Wiederkehrende Checkliste",
+      "titel": "Vor jedem Stadtwechsel",
       "art": "tasks"
     },
     {
-      "titel": "Studioroutinen",
+      "titel": "Fotoroutinen",
       "art": "tasks"
     },
     {
-      "titel": "Erster Lauf durch den Hof",
+      "titel": "Start an der Wupper",
       "art": "note"
     },
     {
-      "titel": "Freitag · Das Licht am Modell",
+      "titel": "Berlin in Grautönen",
       "art": "note"
     },
     {
-      "titel": "Probelauf am Donnerstag",
+      "titel": "Rhythmus in München",
+      "art": "note"
+    },
+    {
+      "titel": "Wien am Morgen",
+      "art": "note"
+    },
+    {
+      "titel": "Hoch über Monaco",
+      "art": "note"
+    },
+    {
+      "titel": "Wind über Bilbao",
+      "art": "note"
+    },
+    {
+      "titel": "Letzter Abend in Seoul",
+      "art": "note"
+    },
+    {
+      "titel": "Wieder zu Hause",
+      "art": "note"
+    },
+    {
+      "titel": "Erste Route über Paris",
       "art": "tasks"
     },
     {
-      "titel": "Schilder und Druck",
+      "titel": "Reiseführer · Überblick",
       "art": "page"
     },
     {
-      "titel": "Material am Modell",
+      "titel": "Wuppertal · Die Stadt am Gerüst",
       "art": "page"
     },
     {
-      "titel": "Einladung & Ablauf",
+      "titel": "Berlin · Beton, Glas und Himmel",
       "art": "page"
     },
     {
-      "titel": "Rückblick · Probelauf",
+      "titel": "München · Bögen und Seile",
       "art": "page"
     },
     {
-      "titel": "Werkhaus West · Rundgang",
+      "titel": "Wien · Eisen, Glas und Ornament",
+      "art": "page"
+    },
+    {
+      "titel": "Monaco · Zwischen Fels und Meer",
+      "art": "page"
+    },
+    {
+      "titel": "Bilbao · Stahl und Licht",
+      "art": "page"
+    },
+    {
+      "titel": "Seoul · Lichter am Abend",
+      "art": "page"
+    },
+    {
+      "titel": "Reisekasse",
       "art": "page"
     }
   ],
-  "bilder": 4,
-  "seitenbilder": 3,
+  "bilder": 14,
+  "seitenbilder": 8,
   "projektpinnwaende": 2,
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 8388413,
-      "sha256": "b6420df6fa1ecedda6cc898f41a4ad331172dac4545dc7ab0faaae9f3e9aed46"
+      "bytes": 10322881,
+      "sha256": "a6a447cdc7536f7f182eac140cb5fbe7c6e871bb971279856a55fff71587f716"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 10016563,
-      "sha256": "1c84e669b95b53bb3665fb93f84a2def9c698f465bf67b0e58b51859e4bfa666"
+      "bytes": 10367985,
+      "sha256": "9c025283c2842681d7e22910459251d595059a85644801833012a68a53a05279"
     },
     "Glide-Showcase.glidetemplates": {
-      "bytes": 2105102,
-      "sha256": "b223281c407afe2d8fd5124ff836a5af09889aeeb41d7d3b89b5890a05cbd75a"
+      "bytes": 16564,
+      "sha256": "2584a0e4908f32702460a6d20ef32afbd25bf2d3a7796b097364a793b41e781e"
     },
-    "Werkhaus-West.canvas": {
-      "bytes": 4502,
-      "sha256": "17c89dde50d63521199066989c59fb889742f65817963a01e06c6f3906922b43"
+    "Stadtlicht.canvas": {
+      "bytes": 4715,
+      "sha256": "a7dd25171e1022578c6a350e1eaec37c9f45e14223ec3d928798a7d316c73c8f"
     }
   }
 }

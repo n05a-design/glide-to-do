@@ -112,6 +112,13 @@ class PointerAndUnreachableTests(unittest.TestCase):
         self.zeiger(ziel, "utf-8-sig")
         self.assertEqual(rc.resolve_paths(env={}).base_dir, str(ziel))
 
+    def test_import_resolution_skips_pointer(self):
+        """Rest WA-49: Beim Import von app.pyw wird der Zeiger nicht gelesen, erst beim Start."""
+        ziel = self.ordner / "eigene_ablage"
+        self.zeiger(ziel)
+        self.assertEqual(rc.resolve_paths(env={}, read_pointer=False).base_dir, str(self.standard))
+        self.assertEqual(rc.resolve_paths(env={}).base_dir, str(ziel))
+
     def test_unreachable_pointer_target_returns_message_and_creates_nothing(self):
         sperre = self.ordner / "keinordner"
         sperre.write_text("Datei statt Ordner", encoding="utf-8")

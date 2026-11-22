@@ -124,7 +124,7 @@ def choice_disabled(widget):
 
 
 def choice_attributes(widget):
-    return Attributes('Combobox', getattr(widget, '_accessible_name', 'Auswahl'),
+    return Attributes('Combobox', getattr(widget, '_accessible_name', glide_i18n.t("mod.core_accessibility.selection", 'Auswahl')),
                       value=plain(widget.variable.get()), state='disabled' if choice_disabled(widget) else 'normal',
                       help=glide_i18n.t("mod.core_accessibility.choice_attributes.open_with_enter_choose", 'Mit Enter öffnen, Pfeiltasten wählen, Enter übernehmen, Escape abbrechen.'))
 
@@ -136,7 +136,7 @@ def bind_choice(widget, name=None):
 
 
 def bind_options(widget, owner):
-    return bind_control(widget, lambda: Attributes('Listbox', getattr(owner, '_accessible_name', 'Auswahl'),
+    return bind_control(widget, lambda: Attributes('Listbox', getattr(owner, '_accessible_name', glide_i18n.t("mod.core_accessibility.selection", 'Auswahl')),
         state='disabled' if choice_disabled(owner) else 'normal',
         value=plain(widget.options[widget._selected]) if widget.options else glide_i18n.t("mod.core_accessibility.bind_options.no_selection", 'Keine Auswahl'),
         help=glide_i18n.t("mod.core_accessibility.bind_options.arrow_keys_choose_enter", 'Pfeiltasten wählen, Enter übernimmt, Escape bricht ab.')), action=owner._commit)

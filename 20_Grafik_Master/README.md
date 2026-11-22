@@ -1,6 +1,6 @@
 # Grafik-Master und zentrale Logo-Übersicht
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Am 05.11.2026 zusammengeführt und gekürzt: alle aktiven Logo-Quellen, Verwendungen und künftigen Aktualisierungsschritte stehen hier. Frühere Logo-Dateien sind auf ausdrücklichen Benutzerauftrag im Grafikarchiv erhalten; diese Ausnahme betrifft Grafiken, keine zusätzlichen Dokumentarchive.
 
@@ -75,8 +75,8 @@ Das Werkzeug öffnet echte Ansichten und Dialoge aus einer separaten Kopie des S
 
 ## Weitere Grafikquellen
 
-`05_Inspiration` enthält historische Stilvorlagen und Entwurfsbelege. Sie sind keine aktuelle Logo-Quelle. Fremdbilder vor öffentlicher Veröffentlichung nach ihrer jeweiligen Lizenz prüfen.
+`05_Inspiration` enthält nur noch eigene Entwurfsbelege (Logo- und Oberflächenvergleiche). Sie sind keine aktuelle Logo-Quelle. Fremdbilder wurden am 21.11.2026 entfernt und werden nicht mehr eingecheckt.
 
 `07_Fonts` enthält die unveränderten Originale und Lizenztexte für Rubik, Charis SIL, DM Serif Display und DM Mono. Die Runtime führt zusätzlich DejaVu Sans als internen Symbolbegleiter und Pixelify Sans für Pixel-Überschriften; Details im Schriftkatalog und Veröffentlichungsdokument.
 
-Die vier Stock-Referenzen des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md) stammen aus `06_Beispielbilder`. Die [Herkunftsdatei](../01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt die Originale und die Prüfsummen der für die Demo komprimierten Arbeitskopien. Frühere Logo- und Showcase-Stände sind in Git nachvollziehbar.
+`06_Beispielbilder` enthält die eigenen Originalfotos des Inhabers, nach Städten geordnet. Der Ordner bleibt lokal (`.gitignore`, rund 400 MB); versioniert sind nur die 14 Arbeitskopien des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md); sie stehen wie der Quellcode unter MPL-2.0 (Inhaberentscheid 22.11.2026). Die [Herkunftsdatei](../01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt Original und Prüfsumme jeder Arbeitskopie. Frühere Logo- und Showcase-Stände sind in Git nachvollziehbar.

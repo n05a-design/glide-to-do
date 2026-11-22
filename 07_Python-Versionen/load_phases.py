@@ -19,6 +19,7 @@ Jetzt gilt:
 Die App bleibt Adapter (D17); dieses Modul ordnet Fehler ein, wählt die
 aktive Liste und formuliert die Meldungen.
 """
+import i18n as glide_i18n
 
 # Fehlerarten der Lesephase. `json.JSONDecodeError`, `UnicodeDecodeError` und
 # Glides `NewerDataError` sind Unterarten von `ValueError`.
@@ -41,17 +42,14 @@ def read_failure(exc, newer_type=None):
     if newer_type is not None and isinstance(exc, newer_type):
         return str(exc), True
     if isinstance(exc, OSError):
-        return f"Die Speicherdatei konnte nicht gelesen werden:\n{exc}", False
-    return f"Die Speicherdatei ist beschädigt oder ungültig:\n{exc}", False
+        return glide_i18n.t("mod.load_phases.read_failure.the_save_file_could", 'Die Speicherdatei konnte nicht gelesen werden:\n{exc}', exc=exc), False
+    return glide_i18n.t("mod.load_phases.read_failure.the_save_file_is", 'Die Speicherdatei ist beschädigt oder ungültig:\n{exc}', exc=exc), False
 
 
 def display_failure(exc):
     """Titel und Text, wenn die Ansicht nach erfolgreichem Lesen scheitert."""
     return (DISPLAY_TITLE,
-            "Die Speicherdatei ist lesbar und vollständig geladen; der Bestand bleibt erhalten.\n\n"
-            f"Beim Aufbau der Ansicht trat ein Fehler auf:\n{exc}\n\n"
-            "Der Fehlerbericht steht im Fehlerprotokoll (Hilfe › Fehlerprotokoll öffnen). "
-            "Tritt der Fehler erneut auf, Glide neu starten.")
+            glide_i18n.t("mod.load_phases.display_failure.the_save_file_is", 'Die Speicherdatei ist lesbar und vollständig geladen; der Bestand bleibt erhalten.\n\nBeim Aufbau der Ansicht trat ein Fehler auf:\n{exc}\n\nDer Fehlerbericht steht im Fehlerprotokoll (Hilfe › Fehlerprotokoll öffnen). Tritt der Fehler erneut auf, Glide neu starten.', exc=exc))
 
 
 def choose_active_list(list_ids, inbox_ids, current=None, from_file=None):

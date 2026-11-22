@@ -9,6 +9,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta, timezone
 import re
+import i18n as glide_i18n
 
 KINDS = ("start", "close")
 DEFAULT_CLOCKS = {"start": "08:30", "close": "17:30"}
@@ -36,29 +37,29 @@ def _moment(value):
 
 def _now(now):
     if not isinstance(now, datetime) or now.tzinfo is None or now.utcoffset() is None:
-        raise ValueError("Tageshinweise brauchen eine Uhrzeit mit Zeitzone.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.now.daily_hints_need_a", "Tageshinweise brauchen eine Uhrzeit mit Zeitzone."))
     return now
 
 
 def key(day, kind):
     if kind not in KINDS:
-        raise ValueError("Unbekannter Tageshinweis")
+        raise ValueError(glide_i18n.t("mod.daily_hints.key.unknown_daily_hint", "Unbekannter Tageshinweis"))
     if isinstance(day, str):
         day = date.fromisoformat(day)
     if type(day) is not date:
-        raise ValueError("Ungültiger Hinweistag")
+        raise ValueError(glide_i18n.t("mod.daily_hints.key.invalid_hint_day", "Ungültiger Hinweistag"))
     return f"{day.isoformat()}/{kind}"
 
 
 def _state(state):
     if state is not None and not isinstance(state, dict):
-        raise ValueError("Gespeicherter Tageshinweiszustand ist beschädigt.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.state.stored_daily_hint_state", "Gespeicherter Tageshinweiszustand ist beschädigt."))
     result = deepcopy(state) if isinstance(state, dict) else {}
     if "receipts" in result and not isinstance(result["receipts"], dict):
-        raise ValueError("Gespeicherte Tageshinweisbelege sind beschädigt.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.state.stored_daily_hint_records", "Gespeicherte Tageshinweisbelege sind beschädigt."))
     result.setdefault("receipts", {})
     if result.get("last_check") and _moment(result["last_check"]) is None:
-        raise ValueError("Gespeicherter Prüfzeitpunkt der Tageshinweise ist ungültig.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.state.stored_check_time_of", "Gespeicherter Prüfzeitpunkt der Tageshinweise ist ungültig."))
     for identity, receipt in result["receipts"].items():
         try:
             stamp, kind = identity.split("/")
@@ -67,9 +68,9 @@ def _state(state):
             continue
         if valid and (not isinstance(receipt,dict) or receipt.get("status") not in
                       ("presented","completed","skipped","snoozed")):
-            raise ValueError("Unbekannter gespeicherter Zustand eines Tageshinweises: " + identity)
+            raise ValueError(glide_i18n.t("mod.daily_hints.state.unknown_stored_state_of", 'Unbekannter gespeicherter Zustand eines Tageshinweises: {identity}', identity=identity))
         if valid and receipt.get("status") == "snoozed" and _moment(receipt.get("wake_at")) is None:
-            raise ValueError("Gespeicherte Später-Uhrzeit eines Tageshinweises ist ungültig: " + identity)
+            raise ValueError(glide_i18n.t("mod.daily_hints.state.stored_remind_later_time", 'Gespeicherte Später-Uhrzeit eines Tageshinweises ist ungültig: {identity}', identity=identity))
     return result
 
 
@@ -98,7 +99,7 @@ def collect_due(config, state, now):
     previous = _moment(state.get("last_check"))
     first = previous.astimezone(now.tzinfo).date() if previous else now.date()
     if (now.date()-first).days > 3660:
-        raise ValueError("Der gespeicherte Prüfzeitpunkt liegt mehr als zehn Jahre zurück. Bitte die Tageshinweise ab heute neu beginnen.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.collect_due.the_stored_check_time", "Der gespeicherte Prüfzeitpunkt liegt mehr als zehn Jahre zurück. Bitte die Tageshinweise ab heute neu beginnen."))
     receipts, offers = state["receipts"], {}
     day = first
     while day <= now.date():
@@ -152,7 +153,7 @@ def mark_presented(state, hints, now):
     result = _state(state)
     for hint in hints:
         if key(hint.day, hint.kind) != hint.identity:
-            raise ValueError("Ungültige Zustellkennung")
+            raise ValueError(glide_i18n.t("mod.daily_hints.mark_presented.invalid_delivery_id", "Ungültige Zustellkennung"))
         result["receipts"][hint.identity] = {"status": "presented", "at": now.isoformat()}
     return checkpoint(result,now)
 
@@ -160,7 +161,7 @@ def mark_presented(state, hints, now):
 def snooze(state, hint, now, minutes=15):
     now = _now(now)
     if type(minutes) is not int or not 1 <= minutes <= 1440:
-        raise ValueError("Später erinnern braucht 1 bis 1440 Minuten.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.snooze.remind_later_needs_1", "Später erinnern braucht 1 bis 1440 Minuten."))
     result = mark_presented(state, (hint,), now)
     result["receipts"][hint.identity] = {"status": "snoozed", "wake_at": (now.astimezone(timezone.utc) + timedelta(minutes=minutes)).astimezone(now.tzinfo).isoformat()}
     return result
@@ -236,7 +237,7 @@ def snooze_open(config, state, now, until):
     """
     now, until = _now(now), _now(until)
     if until.astimezone(timezone.utc) <= now.astimezone(timezone.utc):
-        raise ValueError("Der Aufschub muss in der Zukunft liegen.")
+        raise ValueError(glide_i18n.t("mod.daily_hints.snooze_open.the_snooze_must_be", "Der Aufschub muss in der Zukunft liegen."))
     result = _state(state)
     hints = [hint for hint in pending(config, result, now)
              if hint.due.astimezone(timezone.utc) <= now.astimezone(timezone.utc)]

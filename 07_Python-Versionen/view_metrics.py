@@ -7,6 +7,7 @@ Kennzahlen entstehen frisch; die Oberfläche hält sie höchstens einen Aufbau.
 from dataclasses import dataclass
 from datetime import date, datetime
 from functools import lru_cache
+import i18n as glide_i18n
 
 
 @lru_cache(maxsize=4096)
@@ -137,10 +138,10 @@ def home_subtitle(today_count, late_count=0, upcoming_count=0):
     zählt alle Aufgaben mit Fälligkeit (Prüfbefund H7 vom 07.11.2026).
     """
     return join_facts(
-        count_text(today_count, "Aufgabe heute", "Aufgaben heute") if today_count else "Heute nichts offen",
-        f"davon {int(late_count)} verspätet" if late_count and today_count else
-        (f"{int(late_count)} verspätet" if late_count else ""),
-        f"{int(upcoming_count)} mit Fälligkeit" if upcoming_count else "")
+        count_text(today_count, glide_i18n.t("mod.view_metrics.home_subtitle.task_today", "Aufgabe heute"), glide_i18n.t("mod.view_metrics.home_subtitle.tasks_today", "Aufgaben heute")) if today_count else glide_i18n.t("mod.view_metrics.home_subtitle.nothing_open_today", "Heute nichts offen"),
+        glide_i18n.t("mod.view_metrics.home_subtitle.of_which_late", 'davon {int} verspätet', int=int(late_count)) if late_count and today_count else
+        (glide_i18n.t("mod.view_metrics.home_subtitle.late", '{int} verspätet', int=int(late_count)) if late_count else ""),
+        glide_i18n.t("mod.view_metrics.home_subtitle.with_a_due_date", '{int} mit Fälligkeit', int=int(upcoming_count)) if upcoming_count else "")
 
 
 def templates_subtitle(templates, shown=None):
@@ -148,10 +149,10 @@ def templates_subtitle(templates, shown=None):
     templates = list(templates or ())
     listen = sum(1 for vorlage in templates if (vorlage or {}).get("kind") != "folder")
     ordner = len(templates) - listen
-    gesamt = (f"{shown} von {len(templates)} Vorlagen" if shown is not None
-              else count_text(len(templates), "Vorlage", "Vorlagen"))
-    return join_facts(gesamt, count_text(listen, "für Listen", "für Listen") if listen else "",
-                      count_text(ordner, "für Ordner", "für Ordner") if ordner else "")
+    gesamt = (glide_i18n.t("mod.view_metrics.templates_subtitle.of_templates", '{shown} von {len} Vorlagen', shown=shown, len=len(templates)) if shown is not None
+              else count_text(len(templates), glide_i18n.t("mod.view_metrics.templates_subtitle.template", "Vorlage"), glide_i18n.t("mod.view_metrics.templates_subtitle.templates", "Vorlagen")))
+    return join_facts(gesamt, count_text(listen, glide_i18n.t("mod.view_metrics.templates_subtitle.for_lists", "für Listen"), glide_i18n.t("mod.view_metrics.templates_subtitle.for_lists", "für Listen")) if listen else "",
+                      count_text(ordner, glide_i18n.t("mod.view_metrics.templates_subtitle.for_folders", "für Ordner"), glide_i18n.t("mod.view_metrics.templates_subtitle.for_folders", "für Ordner")) if ordner else "")
 
 
 def ensure_subtitle(text, view):

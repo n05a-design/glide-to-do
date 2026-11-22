@@ -26,8 +26,7 @@ def size_text(size):
 
 def check_size(size, limit=MAX_JSON_BYTES):
     if size > limit:
-        raise SizeLimitError(f"Die JSON-Datei ist mit {size_text(size)} größer als die "
-                             f"unterstützten {size_text(limit)}. Sie bleibt unverändert.")
+        raise SizeLimitError(glide_i18n.t("mod.storage_health.check_size.the_json_file_is", 'Die JSON-Datei ist mit {size_text} größer als die unterstützten {size_text2}. Sie bleibt unverändert.', size_text=size_text(size), size_text2=size_text(limit)))
 
 
 def json_size(text, newline=None):

@@ -14,7 +14,7 @@
 <p align="center">
   <img alt="Windows, macOS und Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Quellstand 1.0.0" src="https://img.shields.io/badge/Quellstand-1.0.0-9E4AC8">
+  <img alt="Quellstand 1.0.1" src="https://img.shields.io/badge/Quellstand-1.0.1-9E4AC8">
   <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
 </p>
 
@@ -26,9 +26,9 @@
   <a href="CONTRIBUTING.de.md">Mitwirken</a>
 </p>
 
-<img alt="Glide-Pinnwand mit Aufgaben, Notizen und verbundenen Ideen" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
+<img alt="Glide-Pinnwand mit Seiten, Aufgaben und beschrifteten Verbindungen" src="01_Repository/Glide/assets/marketing/glide-1.0-pinnwand.png" width="100%">
 
-<p align="center"><sub>Die englische Oberfläche ist teilweise übersetzt; einige Bereiche und ausführliche Anleitungen sind noch auf Deutsch. Die Aufnahmen zeigen Glide 3.60.0 mit künstlichen Daten und sind kein Prüf- oder Paketnachweis für 1.0.0.</sub></p>
+<p align="center"><sub>Glide gibt es auf Deutsch und Englisch. Die Aufnahmen zeigen Glide 1.0.1 unter macOS mit dem Showcase „Stadtlicht“, einer fiktiven Fotoreise; die Fotos stammen von Tim von Trostorff. Sie sind kein Prüf- oder Paketnachweis.</sub></p>
 
 ## Warum Glide?
 
@@ -40,20 +40,20 @@ Glide verbindet Aufgaben und Projektnotizen an einem lokalen Arbeitsplatz. Diese
 
 ## Ein Blick in Glide
 
-Alle Aufnahmen stammen aus einem künstlichen Showcase-Datensatz.
+Alle Aufnahmen zeigen den Showcase „Stadtlicht“: fiktive Daten, echte Fotos des Autors.
 
 <table>
   <tr>
-    <td><strong>Startseite</strong><br><img alt="Glide-Startseite mit Tagesplan und Projektkacheln" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png" width="100%"></td>
-    <td><strong>Kalender</strong><br><img alt="Glide-Wochenkalender mit geplanten Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png" width="100%"></td>
+    <td><strong>Startseite</strong><br><img alt="Glide-Startseite mit Tagesplan und Projektkacheln" src="01_Repository/Glide/assets/marketing/glide-1.0-startseite.png" width="100%"></td>
+    <td><strong>Kalender</strong><br><img alt="Glide-Wochenkalender mit geplanten Aufgaben" src="01_Repository/Glide/assets/marketing/glide-1.0-kalender.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Heute</strong><br><img alt="Tagesplan mit Aufgaben und Zeitblöcken im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png" width="100%"></td>
-    <td><strong>Seiten</strong><br><img alt="Projektseite mit formatiertem Text, Bildern und Aufgaben" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png" width="100%"></td>
+    <td><strong>Heute</strong><br><img alt="Tagesplan mit Aufgaben und Zeitblöcken im dunklen Design" src="01_Repository/Glide/assets/marketing/glide-1.0-heute.png" width="100%"></td>
+    <td><strong>Seiten</strong><br><img alt="Projektseite mit formatiertem Text, Bildern und Aufgaben" src="01_Repository/Glide/assets/marketing/glide-1.0-seite.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Aufgabenliste</strong><br><img alt="Aufgabenliste mit Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png" width="100%"></td>
-    <td><strong>Pixel-Werkstatt</strong><br><img alt="Pixel-Werkstatt mit einem selbst gezeichneten Wegweiser" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png" width="100%"></td>
+    <td><strong>Aufgabenliste</strong><br><img alt="Aufgabenliste mit Labels und Wiederholungen" src="01_Repository/Glide/assets/marketing/glide-1.0-liste.png" width="100%"></td>
+    <td><strong>Pixel-Werkstatt</strong><br><img alt="Pixel-Werkstatt mit einem animierten Reisestempel" src="01_Repository/Glide/assets/marketing/glide-1.0-pixel.png" width="100%"></td>
   </tr>
 </table>
 
@@ -148,7 +148,7 @@ Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vert
 
 ## Entwicklung und Qualität
 
-Stand 19.11.2026 · Glide 1.0.0
+Stand 22.11.2026 · Glide 1.0.1
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen auf main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 
@@ -157,7 +157,7 @@ Mehr zum Quellcode, Entwicklungsablauf und Prüfstand:
 [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) ·
 [Qualität und Prüfungen](01_Repository/Glide/docs/07_QA_BERICHT.md)
 
-Der Quellstand für Glide 1.0.0 liegt in `main`; ein öffentlicher Release ist nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`, nicht auf diesen README-Branch oder einen anderen Pull Request. Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
+Der Quellstand für Glide 1.0.1 ist für die Veröffentlichung vorbereitet; ein öffentlicher Release ist noch nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`, nicht auf diesen README-Branch oder einen anderen Pull Request. Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
 
 ## Lizenz
 

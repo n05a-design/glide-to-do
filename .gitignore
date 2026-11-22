@@ -45,10 +45,16 @@ datenordner.json
 window.conf
 05_Probelisten_Testdaten/Showcase/Arbeitsstand/
 05_Probelisten_Testdaten/Showcase/Arbeitsstand-Werkhaus/
+05_Probelisten_Testdaten/Showcase/Arbeitsstand-Stadtlicht/
+05_Probelisten_Testdaten/Showcase/en/Workspace-City-Light/
+01_Repository/Glide/tests/fixtures/showcase/Arbeitsstand-Stadtlicht/
+01_Repository/Glide/tests/fixtures/showcase/en/Workspace-City-Light/
 *.glidebackup
 !01_Repository/Glide/tests/fixtures/beispiele/*.glidebackup
 !01_Repository/Glide/tests/fixtures/showcase/*.glidebackup
 !05_Probelisten_Testdaten/Showcase/*.glidebackup
+!01_Repository/Glide/tests/fixtures/showcase/en/*.glidebackup
+!05_Probelisten_Testdaten/Showcase/en/*.glidebackup
 
 # --- Protokolle: Rohprotokolle bleiben lokal ---------------------------------
 # Öffentliches Repository (Entscheidung des Inhabers, 01.10.2026): versioniert
@@ -147,7 +153,9 @@ skills-main/
 !01_Repository/Glide/src/glide/resources/templates/*.glidetemplates
 !07_Python-Versionen/resources/templates/*.glidetemplates
 !05_Probelisten_Testdaten/Showcase/*.glideapp
+!05_Probelisten_Testdaten/Showcase/en/*.glideapp
 !05_Probelisten_Testdaten/Showcase/*.glidetemplates
+!05_Probelisten_Testdaten/Showcase/en/*.glidetemplates
 
 # Lokale Audit-, Kontext- und Übergabe-Mappen; bleiben lokale Artefakte
 AI_CONTEXT_HANDOVER/
@@ -157,3 +165,7 @@ GLIDE_MASTER_AUDIT_*/
 GLIDE_GESAMTAUDIT_*
 Antigravity Glide Bericht.zip
 Antigravity_Glide_Bericht.zip
+
+# Originalfotos des Inhabers (rund 400 MB) bleiben lokal; versioniert werden nur die
+# Showcase-Arbeitskopien unter 01_Repository/Glide/tests/fixtures/showcase/bilder.
+20_Grafik_Master/06_Beispielbilder/

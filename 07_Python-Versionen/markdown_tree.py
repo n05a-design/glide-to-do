@@ -21,6 +21,7 @@ import object_references as objects
 import page_markdown
 import drawing
 import task_references
+import i18n as glide_i18n
 
 
 class ExportCancelled(Exception):
@@ -34,8 +35,8 @@ def label(value):
 
 def filename(title, identity, suffix=""):
     suffix = re.sub(r'[^A-Za-z0-9.]', '_', suffix)[:12]
-    name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', str(title or 'Ohne Titel'))
-    name = re.sub(r'\s+', ' ', name).strip(' .')[:40].rstrip(' .') or 'Ohne Titel'
+    name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', str(title or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel')))
+    name = re.sub(r'\s+', ' ', name).strip(' .')[:40].rstrip(' .') or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel')
     # Auch CON.txt oder gleiche Titel auf einem anderen Dateisystem sind sicher.
     tag = hashlib.sha256(str(identity).encode('utf-8')).hexdigest()[:12]
     return f'_{name}-{tag}{suffix}'
@@ -51,13 +52,13 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
     target = Path(target).absolute()
     data_root = Path(data_root).absolute()
     if target.exists() or target.is_symlink():
-        raise FileExistsError('Der Ausgabeordner existiert bereits.')
+        raise FileExistsError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_folder_already", 'Der Ausgabeordner existiert bereits.'))
     if not target.parent.is_dir():
-        raise ValueError('Der übergeordnete Ausgabeordner fehlt.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.the_parent_output_folder", 'Der übergeordnete Ausgabeordner fehlt.'))
     if len(str(target)) > 130:
-        raise ValueError('Bitte einen kürzeren Ausgabeort wählen (höchstens 130 Zeichen).')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.please_choose_a_shorter", 'Bitte einen kürzeren Ausgabeort wählen (höchstens 130 Zeichen).'))
     if target.resolve() == data_root.resolve() or data_root.resolve() in target.resolve().parents:
-        raise ValueError('Die Ausgabe muss außerhalb der Glide-Datenablage liegen.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_must_be", 'Die Ausgabe muss außerhalb der Glide-Datenablage liegen.'))
     losses = []
     inventory = {'format': 'Glide-Markdown-Inventar', 'version': 1,
                  'objekte': [], 'anhaenge': [], 'hinweise': losses, 'bestand': snapshot}
@@ -68,7 +69,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
 
     def check():
         if cancel is not None and cancel.is_set():
-            raise ExportCancelled('Ausgabe abgebrochen.')
+            raise ExportCancelled(glide_i18n.t("mod.markdown_tree.check.output_cancelled", 'Ausgabe abgebrochen.'))
 
     def note(kind, owner, field, detail):
         losses.append({'art': kind, 'objekt': owner, 'feld': field, 'detail': detail})
@@ -76,12 +77,12 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
     def bounded(relative, title, identity, suffix):
         if len(str(target / relative)) > 240:
             relative = Path('_Lange_Pfade') / filename(title, identity, suffix)
-            note('pfad', identity, 'folder_id', 'Langer Ordnerpfad in _Lange_Pfade abgeflacht.')
+            note('pfad', identity, 'folder_id', glide_i18n.t("mod.markdown_tree.bounded.long_folder_path_flattened", 'Langer Ordnerpfad in _Lange_Pfade abgeflacht.'))
         return relative
 
     by_folder = {f['id']: f for f in folders}
     if len(by_folder) != len(folders):
-        raise ValueError('Doppelte Ordnerkennungen.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.duplicate_folder_ids", 'Doppelte Ordnerkennungen.'))
 
     def folder_path(identity, trail=()):
         if identity in folder_paths:
@@ -90,25 +91,25 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
         if folder is None:
             return Path()
         if identity in trail:
-            note('ordner', identity, 'parent_id', 'Zyklische Ordnerzuordnung; an Wurzel ausgegeben.')
+            note('ordner', identity, 'parent_id', glide_i18n.t("mod.markdown_tree.folder_path.cyclic_folder_assignment_output", 'Zyklische Ordnerzuordnung; an Wurzel ausgegeben.'))
             return Path()
         parent = folder.get('parent_id')
         if parent and parent not in by_folder:
-            note('ordner', identity, 'parent_id', 'Übergeordneter Ordner fehlt.')
+            note('ordner', identity, 'parent_id', glide_i18n.t("mod.markdown_tree.folder_path.parent_folder_missing", 'Übergeordneter Ordner fehlt.'))
         base = folder_path(parent, (*trail, identity))
         relative = bounded(base / filename(folder.get('title'), 'folder:'+identity),
                            folder.get('title'), 'folder:'+identity, '')
         # Reserviert auch Platz für die Dateien innerhalb dieses Ordners.
         if len(str(target/relative)) > 175:
             relative = Path('_Lange_Pfade') / filename(folder.get('title'), 'folder:'+identity)
-            note('pfad', identity, 'parent_id', 'Tiefer Ordnerbaum abgeflacht.')
+            note('pfad', identity, 'parent_id', glide_i18n.t("mod.markdown_tree.folder_path.deep_folder_tree_flattened", 'Tiefer Ordnerbaum abgeflacht.'))
         folder_paths[identity] = relative
         return relative
 
     def register(kind, holder, relative):
         key = kind, holder.get('id')
         if not isinstance(key[1], str) or not key[1] or key in seen:
-            raise ValueError('Fehlende oder doppelte Objektkennung.')
+            raise ValueError(glide_i18n.t("mod.markdown_tree.register.missing_or_duplicate_object", 'Fehlende oder doppelte Objektkennung.'))
         seen.add(key)
         paths[key] = relative
         holders.append((kind, holder, relative))
@@ -119,14 +120,14 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
     for entry in lists:
         parent = entry.get('folder_id')
         if parent and parent not in by_folder:
-            note('ordner', entry.get('id'), 'folder_id', 'Heimatordner fehlt; an Wurzel ausgegeben.')
+            note('ordner', entry.get('id'), 'folder_id', glide_i18n.t("mod.markdown_tree.write_tree.home_folder_missing_output", 'Heimatordner fehlt; an Wurzel ausgegeben.'))
         relative = bounded(folder_path(parent)/filename(entry.get('title'), entry.get('id'), '.md'),
                            entry.get('title'), entry.get('id'), '.md')
         register('list', entry, relative)
         for item in objects.walk(entry.get('items', [])):
             key = 'item', item.get('id')
             if not isinstance(key[1], str) or not key[1] or key in seen:
-                raise ValueError('Fehlende oder doppelte Punktkennung.')
+                raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.missing_or_duplicate_item", 'Fehlende oder doppelte Punktkennung.'))
             seen.add(key)
             paths[key] = Path(relative.as_posix()+'#punkt-'+quote(key[1], safe=''))
             inventory['objekte'].append({'art': 'item', 'id': key[1], 'datei': str(paths[key]).replace('\\', '/')})
@@ -156,8 +157,8 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                 key = objects.parse(match.group(0))
                 if key in paths:
                     relative = link(source, paths[key])
-                    return relative if part[max(0, match.start()-2):match.start()] == '](' else f'[Verweis]({relative})'
-                note('verweis', owner, 'references', 'Ziel fehlt: '+match.group(0))
+                    return relative if part[max(0, match.start()-2):match.start()] == '](' else glide_i18n.t("mod.markdown_tree.replace.reference", '[Verweis]({relative})', relative=relative)
+                note('verweis', owner, 'references', glide_i18n.t("mod.markdown_tree.replace.target_missing", 'Ziel fehlt: {group}', group=match.group(0)))
                 return match.group(0)
             result = []
             # Code ist wörtlicher Inhalt; dort stehende URI-Beispiele sind
@@ -180,17 +181,17 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
             parts = storage.replace('\\', '/').split('/') if isinstance(storage, str) else []
             if (not parts or parts[0] != 'attachments' or any(p in ('', '.', '..') for p in parts)
                     or any(':' in p for p in parts)):
-                note('anhang', owner, str(value.get('id')), 'Ungültiger Ablagepfad.')
+                note('anhang', owner, str(value.get('id')), glide_i18n.t("mod.markdown_tree.attachment.invalid_storage_path", 'Ungültiger Ablagepfad.'))
                 return None
             source = data_root.joinpath(*parts)
             # Gesperrt sind Verknüpfungen innerhalb des Datenordners; der Weg zum
             # Datenordner selbst darf verlinkt sein (macOS: /var → /private/var).
             inside = [data_root.joinpath(*parts[:depth]) for depth in range(1, len(parts) + 1)]
             if any(p.is_symlink() or p.is_junction() for p in inside):
-                note('anhang', owner, str(value.get('id')), 'Symlink/Junction wird nicht verfolgt.')
+                note('anhang', owner, str(value.get('id')), glide_i18n.t("mod.markdown_tree.attachment.symlink_junction_is_not", 'Symlink/Junction wird nicht verfolgt.'))
                 return None
             if not source.is_file():
-                note('anhang', owner, str(value.get('id')), 'Datei fehlt.')
+                note('anhang', owner, str(value.get('id')), glide_i18n.t("mod.markdown_tree.attachment.file_missing", 'Datei fehlt.'))
                 return None
             dest = attachment_paths.get(storage)
             if dest is None:
@@ -204,7 +205,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                         check();dst.write(data);digest.update(data)
                     after = os.fstat(src.fileno())
                     if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
-                        raise OSError('Eine Anhangsdatei wurde während der Ausgabe verändert.')
+                        raise OSError(glide_i18n.t("mod.markdown_tree.attachment.an_attachment_file_was", 'Eine Anhangsdatei wurde während der Ausgabe verändert.'))
                 record['sha256'] = digest.hexdigest()
                 attachment_digests[storage] = record['sha256']
             else:
@@ -226,37 +227,37 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
         def details(holder, relative):
             result = []
             if holder.get('labels'):
-                result.append('Labels: '+', '.join(label(labels.get(v, v)) for v in holder['labels']))
+                result.append(glide_i18n.t("ui.print_item_details.labels", 'Labels: {join}', join=', '.join(label(labels.get(v, v)) for v in holder['labels'])))
             for value in holder.get('attachments', []):
                 ref = attachment(holder, value, relative)
-                name = label(value.get('name') or 'Anhang')
+                name = label(value.get('name') or glide_i18n.t("ui.insert_detail_rows.attachment", 'Anhang'))
                 image = Path(name).suffix.lower() in ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg')
-                result.append(('!' if image else '')+f'[{name}]({ref})' if ref else 'Fehlender Anhang: '+name)
+                result.append(('!' if image else '')+f'[{name}]({ref})' if ref else glide_i18n.t("mod.markdown_tree.details.missing_attachment", 'Fehlender Anhang: {name}', name=name))
             for field in ('references', 'live_lists'):
                 for uri in holder.get(field, []):
                     key = objects.parse(uri)
-                    result.append(f'[Verweis]({link(relative, paths[key])})' if key in paths else 'Verweisziel fehlt: '+uri)
+                    result.append(glide_i18n.t("mod.markdown_tree.details.reference", '[Verweis]({link})', link=link(relative, paths[key])) if key in paths else glide_i18n.t("mod.markdown_tree.details.reference_target_missing", 'Verweisziel fehlt: {uri}', uri=uri))
                     if key not in paths:note('verweis', holder['id'], field, uri)
             for identity in holder.get('links', []):
                 key = 'item', identity
-                result.append(f'[Aufgabe]({link(relative, paths[key])})' if key in paths else 'Aufgabenziel fehlt: '+identity)
+                result.append(glide_i18n.t("mod.markdown_tree.details.task", '[Aufgabe]({link})', link=link(relative, paths[key])) if key in paths else glide_i18n.t("mod.markdown_tree.details.task_target_missing", 'Aufgabenziel fehlt: {identity}', identity=identity))
                 if key not in paths:note('verweis', holder['id'], 'links', identity)
             for field, value in holder.items():
                 if field not in readable and value not in (None, '', [], {}, False):
                     note('darstellung', holder['id'], field,
-                         'Im Inventar vollständig erhalten; in Markdown ohne ausführbares Glide-Verhalten.')
+                         glide_i18n.t("mod.markdown_tree.details.fully_kept_in_the", 'Im Inventar vollständig erhalten; in Markdown ohne ausführbares Glide-Verhalten.'))
             return result
 
         task_count = 0
         for kind, holder, relative in holders:
             check()
-            lines = ['# '+label(holder.get('title') or 'Ohne Titel'), '', metadata(holder), '']
+            lines = ['# '+label(holder.get('title') or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel')), '', metadata(holder), '']
             lines += [str(holder.get('note') or ''), str(holder.get('description') or ''), '']
             doc = holder.get('rich_note')
             if isinstance(doc, dict) and doc.get('text'):
                 if doc.get('spans'):
                     note('darstellung', holder['id'], 'rich_note.spans',
-                         'Markdown bildet Grundformate ab; vollständige Formatbereiche und Klappzustände im Inventar.')
+                         glide_i18n.t("mod.markdown_tree.write_tree.markdown_represents_basic_formats", 'Markdown bildet Grundformate ab; vollständige Formatbereiche und Klappzustände im Inventar.'))
                 by_id = {i['id']: i for i in objects.walk(holder.get('items', []))}
                 body_doc = copy.deepcopy(doc)
                 reference_spans = []
@@ -267,7 +268,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                             reference_spans.append(span)
                             body_doc.setdefault('links', {})[span['tag']] = objects.uri('item', identity)
                         else:
-                            note('verweis', holder['id'], 'rich_note.spans', 'Aufgabenziel fehlt: '+identity)
+                            note('verweis', holder['id'], 'rich_note.spans', glide_i18n.t("mod.markdown_tree.write_tree.task_target_missing", 'Aufgabenziel fehlt: {identity}', identity=identity))
                 # Jede Aufgabe bekommt unten genau eine Checkbox und einen Anker.
                 # Ihre eingebetteten Vorkommen bleiben Verweise auf dieses Original.
                 body_doc['spans'] = [s for s in body_doc.get('spans', [])
@@ -278,9 +279,9 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                 def image_source(info):
                     value = image_map.get(info.get('attachment'))
                     if value is None:
-                        note('anhang', holder['id'], str(info.get('attachment')), 'Bildkennung fehlt.')
-                        return 'Fehlendes Seitenbild', ''
-                    return str(value.get('name') or 'Bild'), attachment(holder, value, relative) or ''
+                        note('anhang', holder['id'], str(info.get('attachment')), glide_i18n.t("mod.markdown_tree.image_source.image_id_missing", 'Bildkennung fehlt.'))
+                        return glide_i18n.t("mod.markdown_tree.image_source.missing_page_image", 'Fehlendes Seitenbild'), ''
+                    return str(value.get('name') or glide_i18n.t("editor.toolbar.image", 'Bild')), attachment(holder, value, relative) or ''
                 lines.append(page_markdown.page_to_markdown(body_doc,
                     task_state=lambda identity: (by_id[identity]['text'], by_id[identity].get('done')) if identity in by_id else None,
                     image_source=image_source))
@@ -293,12 +294,12 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                         for line in table_rows:
                             if not re.fullmatch(r'[\s|:\-]+', line):
                                 writer.writerow([v.strip() for v in line.strip().strip('|').split('|')])
-                    lines.append(f'[Tabellen als CSV]({link(relative, table_path)})')
+                    lines.append(glide_i18n.t("mod.markdown_tree.write_tree.tables_as_csv", '[Tabellen als CSV]({link})', link=link(relative, table_path)))
             if holder.get('drawing'):
                 picture = relative.with_suffix('.png')
                 (stage/picture).parent.mkdir(parents=True, exist_ok=True)
                 (stage/picture).write_bytes(drawing.DrawingModel.from_document(holder['drawing']).to_png())
-                lines.append(f'![Zeichnung]({link(relative, picture)})')
+                lines.append(glide_i18n.t("mod.markdown_tree.write_tree.drawing", '![Zeichnung]({link})', link=link(relative, picture)))
             lines += details(holder, relative)
             rows = []
             def items(values, depth=0):
@@ -318,7 +319,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                 for child_kind, child, child_path in holders:
                     if (child_kind == 'folder' and child.get('parent_id') == holder['id'] or
                             child_kind == 'list' and child.get('folder_id') == holder['id']):
-                        lines.append(f'- [{label(child.get("title") or "Ohne Titel")}]({link(relative, child_path)})')
+                        lines.append(f'- [{label(child.get("title") or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"))}]({link(relative, child_path)})')
             output(relative, rewrite('\n'.join(lines)+'\n', relative, holder['id']))
             if rows:
                 path = relative.with_suffix('.csv')
@@ -331,23 +332,22 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                     for item in rows:
                         check();writer.writerow({key: json.dumps(item.get(key), ensure_ascii=False) for key in fields})
         if snapshot.get('trash'):
-            note('darstellung', 'bestand', 'trash', 'Papierkorb vollständig im Inventar, außerhalb der aktiven Markdownstruktur.')
-            output(Path('Papierkorb.md'), '# Papierkorb\n\nVollständige abgelegte Objekte, keine aktiven Aufgaben:\n\n```json\n'
-                   +json.dumps(snapshot['trash'], ensure_ascii=False, indent=2)+'\n```\n')
+            note('darstellung', 'bestand', 'trash', glide_i18n.t("mod.markdown_tree.write_tree.trash_fully_in_the", 'Papierkorb vollständig im Inventar, außerhalb der aktiven Markdownstruktur.'))
+            output(Path('Papierkorb.md'), glide_i18n.t("mod.markdown_tree.write_tree.trash_complete_stored_objects", '# Papierkorb\n\nVollständige abgelegte Objekte, keine aktiven Aufgaben:\n\n```json\n{dumps}\n```\n', dumps=json.dumps(snapshot['trash'], ensure_ascii=False, indent=2)))
         if snapshot.get('pinboards'):
-            note('darstellung', 'bestand', 'pinboards', 'Layout und Verbindungen im Inventar; keine interaktive Pinnwand in Markdown.')
+            note('darstellung', 'bestand', 'pinboards', glide_i18n.t("mod.markdown_tree.write_tree.layout_and_connections_in", 'Layout und Verbindungen im Inventar; keine interaktive Pinnwand in Markdown.'))
         inventory['zaehlung'] = {'listen_seiten': len(lists), 'ordner': len(folders), 'aufgaben': task_count,
                                 'anhangverweise': len(inventory['anhaenge']),
                                 'anhangdateien': len(attachment_paths)}
         output(Path('INVENTAR.json'), json.dumps(inventory, ensure_ascii=False, indent=2)+'\n')
-        index = ['# Glide – Gesamtausgabe', '', 'Lesbarer Export; kein garantiert rückimportierbares Backup.',
-                 'Zur vollständigen Wiederherstellung die Glide-App-Sicherung verwenden.', '',
-                 json.dumps(inventory['zaehlung'], ensure_ascii=False), '', '## Inhalt', '']
-        index += [f'- [{label(h.get("title") or "Ohne Titel")}]({link(Path("INDEX.md"), p)})' for _, h, p in holders]
-        index += ['', '## Erhalt und Grenzen', '',
-                  'Objektfelder, Papierkorb und Pinnwanddaten stehen vollständig in INVENTAR.json.',
-                  'Wiederholungen, Erinnerungen, Zeichnungen/Animationen, Darstellung und Bedienzustände',
-                  'haben im Markdown kein ausführbares Verhalten. Nicht dargestellte Felder sind einzeln zugeordnet.', '']
+        index = [glide_i18n.t("mod.markdown_tree.write_tree.glide_full_export", '# Glide – Gesamtausgabe'), '', glide_i18n.t("mod.markdown_tree.write_tree.readable_export_not_a", 'Lesbarer Export; kein garantiert rückimportierbares Backup.'),
+                 glide_i18n.t("mod.markdown_tree.write_tree.use_the_glide_app", 'Zur vollständigen Wiederherstellung die Glide-App-Sicherung verwenden.'), '',
+                 json.dumps(inventory['zaehlung'], ensure_ascii=False), '', glide_i18n.t("mod.markdown_tree.write_tree.contents", '## Inhalt'), '']
+        index += [f'- [{label(h.get("title") or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"))}]({link(Path("INDEX.md"), p)})' for _, h, p in holders]
+        index += ['', glide_i18n.t("mod.markdown_tree.write_tree.what_is_kept_and", '## Erhalt und Grenzen'), '',
+                  glide_i18n.t("mod.markdown_tree.write_tree.object_fields_trash_and", 'Objektfelder, Papierkorb und Pinnwanddaten stehen vollständig in INVENTAR.json.'),
+                  glide_i18n.t("mod.markdown_tree.write_tree.repeats_reminders_drawings_animations", 'Wiederholungen, Erinnerungen, Zeichnungen/Animationen, Darstellung und Bedienzustände'),
+                  glide_i18n.t("mod.markdown_tree.write_tree.have_no_executable_behavior", 'haben im Markdown kein ausführbares Verhalten. Nicht dargestellte Felder sind einzeln zugeordnet.'), '']
         index += [f'- {v["objekt"]} · {v["feld"]}: {v["detail"]}' for v in losses]
         output(Path('INDEX.md'), '\n'.join(index)+'\n')
         manifest = {p.relative_to(stage).as_posix(): digest_file(p)
@@ -361,7 +361,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
         try:
             os.close(fd)
             if target.exists() or target.is_symlink():
-                raise FileExistsError('Der Ausgabeordner wurde inzwischen angelegt.')
+                raise FileExistsError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_folder_has", 'Der Ausgabeordner wurde inzwischen angelegt.'))
             check()
             os.rename(stage, target)
         finally:

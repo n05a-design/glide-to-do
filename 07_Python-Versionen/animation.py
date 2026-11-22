@@ -15,6 +15,7 @@ from uuid import uuid4
 import zlib
 
 from drawing import DrawingFormatError, DrawingModel, canonical_json, check_size
+import i18n as glide_i18n
 
 FORMAT = "glide.animation"
 FORMAT_VERSION = 1
@@ -30,13 +31,13 @@ _ID = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 
 def duration(value):
     if type(value) is not int or not MIN_DURATION_MS <= value <= MAX_DURATION_MS:
-        raise DrawingFormatError("Die Bilddauer muss 20 bis 60.000 Millisekunden betragen.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.duration.the_frame_duration_must", "Die Bilddauer muss 20 bis 60.000 Millisekunden betragen."))
     return value
 
 
 def frame_id(value):
     if not isinstance(value, str) or not _ID.fullmatch(value):
-        raise DrawingFormatError("Ungültige Frame-Kennung.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.frame_id.invalid_frame_id", "Ungültige Frame-Kennung."))
     return value
 
 
@@ -45,20 +46,20 @@ def _json_document(text):
         try:
             text = text.decode("utf-8")
         except UnicodeError as exc:
-            raise DrawingFormatError("Die Bildfolge braucht gültiges UTF-8.") from exc
+            raise DrawingFormatError(glide_i18n.t("mod.animation.json_document.the_animation_needs_valid", "Die Bildfolge braucht gültiges UTF-8.")) from exc
     if not isinstance(text, str) or len(text.encode("utf-8")) > MAX_JSON_BYTES:
-        raise DrawingFormatError("Die Bildfolge darf höchstens 12 MiB belegen.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.json_document.the_animation_may_use", "Die Bildfolge darf höchstens 12 MiB belegen."))
     def unique(pairs):
         value = {}
         for key, item in pairs:
             if key in value:
-                raise DrawingFormatError("Doppelter JSON-Schlüssel: " + key)
+                raise DrawingFormatError(glide_i18n.t("mod.animation.unique.duplicate_json_key", 'Doppelter JSON-Schlüssel: {key_}', key_=key))
             value[key] = item
         return value
     try:
         document = json.loads(text, object_pairs_hook=unique)
     except (ValueError, RecursionError) as exc:
-        raise DrawingFormatError("Ungültige Animationsdaten: " + str(exc)) from exc
+        raise DrawingFormatError(glide_i18n.t("mod.animation.json_document.invalid_animation_data", 'Ungültige Animationsdaten: {str}', str=str(exc))) from exc
     return document
 
 
@@ -82,20 +83,20 @@ class Animation:
         frames = list(frames)
         self.duration_ms = duration(duration_ms)
         if not 1 <= len(frames) <= MAX_FRAMES:
-            raise DrawingFormatError("Eine Bildfolge braucht 1 bis 120 Frames.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.init.an_animation_needs_1", "Eine Bildfolge braucht 1 bis 120 Frames."))
         identities = set()
         size = None
         for frame in frames:
             if not isinstance(frame, Frame) or not isinstance(frame.model, DrawingModel):
-                raise DrawingFormatError("Ein Frame braucht ein gültiges Pixelmodell.")
+                raise DrawingFormatError(glide_i18n.t("mod.animation.init.a_frame_needs_a", "Ein Frame braucht ein gültiges Pixelmodell."))
             frame_id(frame.id)
             if frame.id in identities:
-                raise DrawingFormatError("Doppelte Frame-Kennung.")
+                raise DrawingFormatError(glide_i18n.t("mod.animation.init.duplicate_frame_id", "Doppelte Frame-Kennung."))
             identities.add(frame.id)
             if frame.duration_ms is not None:
                 duration(frame.duration_ms)
             if size is not None and frame.model.width != size:
-                raise DrawingFormatError("Alle Frames müssen dieselbe Fläche haben.")
+                raise DrawingFormatError(glide_i18n.t("mod.animation.init.all_frames_must_have", "Alle Frames müssen dieselbe Fläche haben."))
             size = frame.model.width
         self.frames = frames
 
@@ -111,21 +112,21 @@ class Animation:
     def from_document(cls, raw):
         fields = {"format", "format_version", "width", "height", "duration_ms", "frames"}
         if not isinstance(raw, dict) or set(raw) != fields:
-            raise DrawingFormatError("Die Bildfolge enthält fehlende oder unbekannte Felder.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.the_animation_contains_missing", "Die Bildfolge enthält fehlende oder unbekannte Felder."))
         if raw["format"] != FORMAT or type(raw["format_version"]) is not int or raw["format_version"] != FORMAT_VERSION:
-            raise DrawingFormatError("Unbekanntes Animationsformat.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.unknown_animation_format", "Unbekanntes Animationsformat."))
         size = check_size(raw["width"])
         if type(raw["height"]) is not int or raw["height"] != size:
-            raise DrawingFormatError("Die Bildfolge muss quadratisch sein.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.the_animation_must_be", "Die Bildfolge muss quadratisch sein."))
         if not isinstance(raw["frames"], list) or not 1 <= len(raw["frames"]) <= MAX_FRAMES:
-            raise DrawingFormatError("Eine Bildfolge braucht 1 bis 120 Frames.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.an_animation_needs_1", "Eine Bildfolge braucht 1 bis 120 Frames."))
         frames = []
         for value in raw["frames"]:
             if not isinstance(value, dict) or set(value) != {"id", "drawing", "duration_ms"}:
-                raise DrawingFormatError("Ein Frame enthält fehlende oder unbekannte Felder.")
+                raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.a_frame_contains_missing", "Ein Frame enthält fehlende oder unbekannte Felder."))
             model = DrawingModel.from_document(value["drawing"])
             if model.width != size:
-                raise DrawingFormatError("Framefläche und Animationsfläche unterscheiden sich.")
+                raise DrawingFormatError(glide_i18n.t("mod.animation.from_document.frame_canvas_and_animation", "Framefläche und Animationsfläche unterscheiden sich."))
             frames.append(Frame(value["id"], model, value["duration_ms"]))
         return cls(frames, raw["duration_ms"])
 
@@ -149,17 +150,17 @@ class Animation:
         for index, frame in enumerate(self.frames):
             if frame.id == identity:
                 return index
-        raise DrawingFormatError("Der Frame ist nicht mehr vorhanden.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.index.the_frame_no_longer", "Der Frame ist nicht mehr vorhanden."))
 
     def _new_id(self, value):
         identity = frame_id(value if value is not None else uuid4().hex)
         if any(frame.id == identity for frame in self.frames):
-            raise DrawingFormatError("Doppelte Frame-Kennung.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.new_id.duplicate_frame_id", "Doppelte Frame-Kennung."))
         return identity
 
     def add(self, after=None, *, identity=None):
         if len(self.frames) >= MAX_FRAMES:
-            raise DrawingFormatError("Eine Bildfolge darf höchstens 120 Frames enthalten.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.add.an_animation_may_contain", "Eine Bildfolge darf höchstens 120 Frames enthalten."))
         index = len(self.frames) if after is None else self.index(after) + 1
         frame = Frame(self._new_id(identity), DrawingModel.blank(self.size))
         self.frames.insert(index, frame)
@@ -167,7 +168,7 @@ class Animation:
 
     def duplicate(self, identity, *, new_identity=None):
         if len(self.frames) >= MAX_FRAMES:
-            raise DrawingFormatError("Eine Bildfolge darf höchstens 120 Frames enthalten.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.duplicate.an_animation_may_contain", "Eine Bildfolge darf höchstens 120 Frames enthalten."))
         index = self.index(identity)
         source = self.frames[index]
         frame = Frame(self._new_id(new_identity), source.model.copy(), source.duration_ms)
@@ -177,14 +178,14 @@ class Animation:
     def remove(self, identity):
         index = self.index(identity)
         if len(self.frames) == 1:
-            raise DrawingFormatError("Der letzte Frame bleibt erhalten.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.remove.the_last_frame_is", "Der letzte Frame bleibt erhalten."))
         self.frames.pop(index)
         return self.frames[min(index, len(self.frames) - 1)].id
 
     def move(self, identity, target):
         index = self.index(identity)
         if type(target) is not int or not 0 <= target < len(self.frames):
-            raise DrawingFormatError("Ungültige Frameposition.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.move.invalid_frame_position", "Ungültige Frameposition."))
         if target == index:
             return False
         self.frames.insert(target, self.frames.pop(index))
@@ -194,9 +195,9 @@ class Animation:
         """Ein Bild ersetzen, weitere Bilder und Zeitachse erhalten."""
         index = self.index(identity)
         if not isinstance(model, DrawingModel):
-            raise DrawingFormatError("Kein gültiges Pixelmodell.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.replace_model.not_a_valid_pixel", "Kein gültiges Pixelmodell."))
         if len(self.frames) > 1 and model.width != self.size:
-            raise DrawingFormatError("Ein Bild einer Folge braucht dieselbe Fläche; eine andere Größe als neue Zeichnung anlegen.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.replace_model.a_frame_of_an", "Ein Bild einer Folge braucht dieselbe Fläche; eine andere Größe als neue Zeichnung anlegen."))
         checked = DrawingModel.from_document(model.to_document())
         self.frames[index].model = checked
 
@@ -219,7 +220,7 @@ class Animation:
     def playback(self, elapsed_ms, *, loop=True):
         if (isinstance(elapsed_ms, bool) or not isinstance(elapsed_ms, (int, float))
                 or (isinstance(elapsed_ms, float) and not math.isfinite(elapsed_ms)) or elapsed_ms < 0):
-            raise DrawingFormatError("Ungültiger Zeitpunkt für die Vorschau.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.playback.invalid_time_for_the", "Ungültiger Zeitpunkt für die Vorschau."))
         times = self.durations()
         total = sum(times)
         if not loop and elapsed_ms >= total:
@@ -250,16 +251,16 @@ class Animation:
 
     def png_spritesheet(self, *, columns=None, scale=1):
         if type(scale) is not int or not 1 <= scale <= 16:
-            raise DrawingFormatError("Der Exportmaßstab muss 1 bis 16 sein.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.png_spritesheet.the_export_scale_must", "Der Exportmaßstab muss 1 bis 16 sein."))
         count = len(self.frames)
         columns = math.ceil(math.sqrt(count)) if columns is None else columns
         if type(columns) is not int or not 1 <= columns <= count:
-            raise DrawingFormatError("Ungültige Spaltenzahl für das Spritesheet.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.png_spritesheet.invalid_column_count_for", "Ungültige Spaltenzahl für das Spritesheet."))
         rows = math.ceil(count / columns)
         edge = self.size * scale
         width, height = columns * edge, rows * edge
         if max(width, height) > MAX_SHEET_EDGE or width * height > MAX_SHEET_PIXELS:
-            raise DrawingFormatError("Das Spritesheet ist zu groß; einen kleineren Maßstab wählen.")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.png_spritesheet.the_sprite_sheet_is", "Das Spritesheet ist zu groß; einen kleineren Maßstab wählen."))
         # Framepaletten dürfen zusammen mehr als 256 Farben enthalten.
         # RGBA bewahrt jede konkrete Farbe und leere Rasterplätze transparent.
         palettes = [[bytes.fromhex(color[1:]) + b"\xff" for color in frame.model.palette]
@@ -299,21 +300,21 @@ def from_entry(entry):
     Die beiden Darstellungen müssen denselben ersten Frame beschreiben.
     """
     if not isinstance(entry, dict):
-        raise DrawingFormatError("Eine Zeichnungsseite braucht ein gültiges Objekt.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.from_entry.a_drawing_page_needs", "Eine Zeichnungsseite braucht ein gültiges Objekt."))
     legacy = DrawingModel.from_document(entry.get("drawing"))
     raw = entry.get("animation")
     if raw is None:
         return Animation.from_legacy(legacy.to_document())
     result = Animation.from_document(raw)
     if result.frames[0].model.to_document() != legacy.to_document():
-        raise DrawingFormatError("Die statische Vorschau und das erste Bild der Bildfolge unterscheiden sich.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.from_entry.the_static_preview_and", "Die statische Vorschau und das erste Bild der Bildfolge unterscheiden sich."))
     return result
 
 
 def entry_fields(value):
     """Kanonische gespeicherte Felder, unabhängig vom aktiv bearbeiteten Frame."""
     if not isinstance(value, Animation):
-        raise DrawingFormatError("Keine gültige Bildfolge.")
+        raise DrawingFormatError(glide_i18n.t("mod.animation.entry_fields.not_a_valid_animation", "Keine gültige Bildfolge."))
     document = value.to_document()
     # Erneut validieren: UI-Änderungen könnten das Modell seit dem letzten
     # Lesen verändert haben. Es gelangt nur ein vollständiger Stand zur Datei.

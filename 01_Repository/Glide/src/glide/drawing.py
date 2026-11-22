@@ -141,13 +141,13 @@ def normalize_color(value: str) -> str:
         raise DrawingFormatError("Farbe muss Text im Format #RRGGBB sein")
     color = value.strip().upper()
     if not _COLOR_RE.fullmatch(color):
-        raise DrawingFormatError(f"Ungültige sRGB-Farbe: {value!r}")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.invalid_srgb_colour", "Ungültige sRGB-Farbe: {value}", value=repr(value)))
     return color
 
 
 def check_size(size) -> int:
     if type(size) is not int or size not in SIZES:
-        raise DrawingFormatError("Die Fläche muss 16, 32, 64 oder 128 Zellen breit sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.check_size.the_canvas_must_be", "Die Fläche muss 16, 32, 64 oder 128 Zellen breit sein"))
     return size
 
 
@@ -155,24 +155,24 @@ def _unique_object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise DrawingFormatError(f"Doppelter JSON-Schlüssel: {key}")
+            raise DrawingFormatError(glide_i18n.t("mod.animation.unique.duplicate_json_key", 'Doppelter JSON-Schlüssel: {key_}', key_=key))
         result[key] = value
     return result
 
 
 def _load_json(text: str) -> dict:
     if not isinstance(text, str):
-        raise DrawingFormatError("Zeichnungsdaten müssen UTF-8-Text sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.load_json.drawing_data_must_be", "Zeichnungsdaten müssen UTF-8-Text sein"))
     if len(text.encode("utf-8")) > MAX_JSON_BYTES:
-        raise DrawingFormatError("Zeichnungsdaten überschreiten 512 KiB")
+        raise DrawingFormatError(glide_i18n.t("ui.read_drawing_file.drawing_data_exceeds_512", "Zeichnungsdaten überschreiten 512 KiB"))
     try:
         value = json.loads(text, object_pairs_hook=_unique_object)
     except DrawingFormatError:
         raise
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise DrawingFormatError(f"Ungültiges JSON: {exc}") from exc
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.load_json.invalid_json", 'Ungültiges JSON: {exc}', exc=exc)) from exc
     if not isinstance(value, dict):
-        raise DrawingFormatError("Das Zeichenmodell muss ein JSON-Objekt sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.load_json.the_drawing_model_must", "Das Zeichenmodell muss ein JSON-Objekt sein"))
     return value
 
 
@@ -194,9 +194,9 @@ def brush_hits(u: float, v: float, size: int, width: int = WIDTH, height: int = 
     der Kachelmodus für nahtlose Muster.
     """
     if size not in BRUSH_SIZES:
-        raise DrawingFormatError("Pinselgröße muss 1, 2, 4 oder 8 sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.brush_hits.brush_size_must_be", "Pinselgröße muss 1, 2, 4 oder 8 sein"))
     if not all(isinstance(value, (int, float)) and math.isfinite(value) for value in (u, v)):
-        raise DrawingFormatError("Pinselposition muss endlich sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.brush_hits.brush_position_must_be", "Pinselposition muss endlich sein"))
     half = size / 2.0
     left, right = u - half, u + half
     top, bottom = v - half, v + half
@@ -306,7 +306,7 @@ def shape_cells(shape: str, x0: int, y0: int, x1: int, y1: int) -> list[tuple[in
         return rect_cells(x0, y0, x1, y1, filled=shape == "rect_filled")
     if shape in ("ellipse", "ellipse_filled"):
         return ellipse_cells(x0, y0, x1, y1, filled=shape == "ellipse_filled")
-    raise DrawingFormatError(f"Unbekannte Form: {shape!r}")
+    raise DrawingFormatError(glide_i18n.t("mod.drawing.shape_cells.unknown_shape", 'Unbekannte Form: {shape}', shape=f'{shape!r}'))
 
 
 def mirror_points(u: float, v: float, mode: str, width: int = WIDTH,
@@ -317,7 +317,7 @@ def mirror_points(u: float, v: float, mode: str, width: int = WIDTH,
     achsensymmetrisch ist, trifft das Spiegelbild genau die gespiegelten Zellen.
     """
     if mode not in SYMMETRY_MODES:
-        raise DrawingFormatError("Unbekannte Symmetrie")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.mirror_points.unknown_symmetry", "Unbekannte Symmetrie"))
     points = [(u, v)]
     if mode in ("x", "xy"):
         points.append((width - u, v))
@@ -331,7 +331,7 @@ def mirror_points(u: float, v: float, mode: str, width: int = WIDTH,
 def mirror_cells(cells: Iterable[tuple[int, int]], mode: str, width: int = WIDTH,
                  height: int = HEIGHT) -> list[tuple[int, int]]:
     if mode not in SYMMETRY_MODES:
-        raise DrawingFormatError("Unbekannte Symmetrie")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.mirror_cells.unknown_symmetry", "Unbekannte Symmetrie"))
     result = []
     seen = set()
     for x, y in cells:
@@ -359,7 +359,7 @@ def pattern_primary(pattern: str, x: int, y: int) -> bool:
         return _BAYER[y % 4][x % 4] < 4
     if pattern == "dots75":
         return _BAYER[y % 4][x % 4] < 12
-    raise DrawingFormatError(f"Unbekanntes Füllmuster: {pattern!r}")
+    raise DrawingFormatError(glide_i18n.t("mod.drawing.pattern_primary.unknown_fill_pattern", 'Unbekanntes Füllmuster: {pattern}', pattern=f'{pattern!r}'))
 
 
 class PixelPerfectStroke:
@@ -400,9 +400,9 @@ def parse_palette(text: str, name_hint: str = "") -> tuple[str, list[str]]:
     Datei wird vollständig abgelehnt; es gibt keine halbe Übernahme.
     """
     if not isinstance(text, str):
-        raise DrawingFormatError("Palettendatei muss Text sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.palette_file_must_be", "Palettendatei muss Text sein"))
     if len(text) > 256 * 1024:
-        raise DrawingFormatError("Palettendatei ist zu groß")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.palette_file_is_too", "Palettendatei ist zu groß"))
     lines = [line.strip() for line in text.replace("\r\n", "\n").split("\n")]
     name = " ".join(str(name_hint or "Palette").split())[:60] or "Palette"
     colors: list[str] = []
@@ -417,10 +417,10 @@ def parse_palette(text: str, name_hint: str = "") -> tuple[str, list[str]]:
                 continue
             parts = line.split()
             if len(parts) < 3 or not all(part.isdigit() for part in parts[:3]):
-                raise DrawingFormatError(f"Zeile {number} ist keine Farbe (R G B Name)")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.line_is_not_a", 'Zeile {number} ist keine Farbe (R G B Name)', number=number))
             red, green, blue = (int(part) for part in parts[:3])
             if max(red, green, blue) > 255:
-                raise DrawingFormatError(f"Zeile {number}: Farbwerte müssen 0 bis 255 sein")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.line_colour_values_must", 'Zeile {number}: Farbwerte müssen 0 bis 255 sein', number=number))
             colors.append(f"#{red:02X}{green:02X}{blue:02X}")
     else:
         for number, line in enumerate(lines, 1):
@@ -430,12 +430,12 @@ def parse_palette(text: str, name_hint: str = "") -> tuple[str, list[str]]:
             try:
                 colors.append(normalize_color(value))
             except DrawingFormatError as exc:
-                raise DrawingFormatError(f"Zeile {number} ist keine Hex-Farbe") from exc
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.line_is_not_a_2", 'Zeile {number} ist keine Hex-Farbe', number=number)) from exc
     unique = list(dict.fromkeys(colors))
     if not unique:
-        raise DrawingFormatError("Die Palette enthält keine Farbe")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.the_palette_contains_no", "Die Palette enthält keine Farbe"))
     if len(unique) > MAX_COLORS:
-        raise DrawingFormatError("Eine Palette darf höchstens 256 Farben enthalten")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_palette.a_palette_may_contain", "Eine Palette darf höchstens 256 Farben enthalten"))
     return name, unique
 
 
@@ -451,9 +451,9 @@ def parse_binary_palette(data: bytes, name_hint: str = "") -> tuple[str, list[st
     Textpaletten gilt: alles oder nichts.
     """
     if not isinstance(data, (bytes, bytearray)):
-        raise DrawingFormatError("Palettendatei muss Binärdaten enthalten")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.palette_file_must_contain", "Palettendatei muss Binärdaten enthalten"))
     if len(data) > MAX_BINARY_PALETTE_BYTES:
-        raise DrawingFormatError("Palettendatei ist zu groß")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.palette_file_is_too", "Palettendatei ist zu groß"))
     name = " ".join(str(name_hint or "Palette").split())[:60] or "Palette"
     try:
         if data[:4] == b"ASEF":
@@ -461,14 +461,14 @@ def parse_binary_palette(data: bytes, name_hint: str = "") -> tuple[str, list[st
         elif len(data) >= 128 and struct.unpack_from("<H", data, 4)[0] == 0xA5E0:
             colors = _aseprite_palette(bytes(data))
         else:
-            raise DrawingFormatError("Weder Aseprite-Datei noch Adobe-Farbfelder")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.neither_an_aseprite_file", "Weder Aseprite-Datei noch Adobe-Farbfelder"))
     except struct.error as exc:
-        raise DrawingFormatError("Die Datei ist unvollständig") from exc
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.the_file_is_incomplete", "Die Datei ist unvollständig")) from exc
     unique = list(dict.fromkeys(colors))
     if not unique:
-        raise DrawingFormatError("Die Palette enthält keine Farbe")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.the_palette_contains_no", "Die Palette enthält keine Farbe"))
     if len(unique) > MAX_COLORS:
-        raise DrawingFormatError("Eine Palette darf höchstens 256 Farben enthalten")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_binary_palette.a_palette_may_contain", "Eine Palette darf höchstens 256 Farben enthalten"))
     return name, unique
 
 
@@ -501,7 +501,7 @@ def _adobe_swatches(data: bytes) -> list[str]:
             colors.append(_hex(255 * (1 - cyan) * (1 - key), 255 * (1 - magenta) * (1 - key),
                                255 * (1 - yellow) * (1 - key)))
         else:
-            raise DrawingFormatError("Farbfelder im Lab-Farbraum werden nicht unterstützt")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.adobe_swatches.swatches_in_the_lab", "Farbfelder im Lab-Farbraum werden nicht unterstützt"))
     return colors
 
 
@@ -511,7 +511,7 @@ def _aseprite_palette(data: bytes) -> list[str]:
     for _ in range(max(1, frames)):
         frame_bytes, magic, old_chunks = struct.unpack_from("<IHH", data, position)
         if magic != 0xF1FA:
-            raise DrawingFormatError("Aseprite-Datei ist beschädigt")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.aseprite_palette.aseprite_file_is_damaged", "Aseprite-Datei ist beschädigt"))
         new_chunks = struct.unpack_from("<I", data, position + 12)[0]
         chunk_count = new_chunks or old_chunks
         chunk = position + 16
@@ -546,7 +546,7 @@ def _aseprite_palette(data: bytes) -> list[str]:
         if old_palette:
             return old_palette
         position += frame_bytes
-    raise DrawingFormatError("Die Aseprite-Datei enthält keine Palette")
+    raise DrawingFormatError(glide_i18n.t("mod.drawing.aseprite_palette.the_aseprite_file_contains", "Die Aseprite-Datei enthält keine Palette"))
 
 
 def palette_to_gpl(name: str, colors: Sequence[str]) -> str:
@@ -573,7 +573,7 @@ def encode_indexed_png(width: int, height: int, palette: Sequence[str], cells: S
                        scale: int = 1) -> bytes:
     """Indiziertes PNG ohne Glättung; jede Zelle wird ein Quadrat aus scale Pixeln."""
     if type(scale) is not int or scale < 1 or max(width, height) * scale > MAX_PNG_EDGE:
-        raise DrawingFormatError(f"Das PNG darf höchstens {MAX_PNG_EDGE} Pixel breit sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.encode_indexed_png.the_png_may_be", 'Das PNG darf höchstens {max_png_edge} Pixel breit sein', max_png_edge=MAX_PNG_EDGE))
     plte = b"".join(bytes.fromhex(normalize_color(color)[1:]) for color in palette)
     raw = bytearray()
     for y in range(height):
@@ -598,7 +598,7 @@ def resample_cells(width: int, cells: Sequence[int], target: int) -> list[int]:
     Pixelkanten erhalten; Mischfarben entstehen nie.
     """
     if target < 1:
-        raise DrawingFormatError("Symbolgröße muss positiv sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.resample_cells.icon_size_must_be", "Symbolgröße muss positiv sein"))
     result = []
     for y in range(target):
         source_y = min(width - 1, (2 * y + 1) * width // (2 * target))
@@ -658,7 +658,7 @@ def encode_ico(width: int, palette: Sequence[str], cells: Sequence[int],
     """
     sizes = tuple(dict.fromkeys(int(size) for size in sizes))
     if not sizes or any(size < 1 or size > 256 for size in sizes):
-        raise DrawingFormatError("Symbolgrößen müssen zwischen 1 und 256 Pixel liegen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.encode_ico.icon_sizes_must_be", "Symbolgrößen müssen zwischen 1 und 256 Pixel liegen"))
     images = [encode_rgba_png(size, icon_rgba(width, palette, cells, size, transparent_background))
               for size in sizes]
     header = struct.pack("<HHH", 0, 1, len(images))
@@ -689,24 +689,24 @@ class DrawingModel:
         size = check_size(size)
         normalized = [normalize_color(color) for color in (palette or [BACKGROUND])]
         if not normalized or normalized[0] != BACKGROUND:
-            raise DrawingFormatError("palette[0] muss #FFFFFF sein")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.palette_0_must_be", "palette[0] muss #FFFFFF sein"))
         if len(normalized) > MAX_COLORS:
-            raise DrawingFormatError("Eine Zeichnung darf höchstens 256 Farben enthalten")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.a_drawing_may_contain", "Eine Zeichnung darf höchstens 256 Farben enthalten"))
         if len(set(normalized)) != len(normalized):
-            raise DrawingFormatError("Palettenfarben müssen eindeutig sein")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.palette_colours_must_be", "Palettenfarben müssen eindeutig sein"))
         if not isinstance(palette_id, str) or not _PALETTE_ID_RE.fullmatch(palette_id):
-            raise DrawingFormatError("Ungültige Palettenkennung")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.invalid_palette_id", "Ungültige Palettenkennung"))
         if type(palette_version) is not int or not 1 <= palette_version <= 1_000_000:
-            raise DrawingFormatError("Ungültige Palettenversion")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.invalid_palette_version", "Ungültige Palettenversion"))
         if type(undo_limit) is not int or undo_limit < 1:
-            raise DrawingFormatError("Undo-Limit muss eine positive Ganzzahl sein")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.undo_limit_must_be", "Undo-Limit muss eine positive Ganzzahl sein"))
 
         count = size * size
         raw_cells = bytearray(count) if cells is None else bytearray(cells)
         if len(raw_cells) != count:
-            raise DrawingFormatError(f"Eine Zeichnung benötigt genau {count} Zellen")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.a_drawing_needs_exactly", 'Eine Zeichnung benötigt genau {count} Zellen', count=count))
         if raw_cells and max(raw_cells) >= len(normalized):
-            raise DrawingFormatError("Eine Zelle verweist außerhalb der Palette")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.init.a_cell_refers_outside", "Eine Zelle verweist außerhalb der Palette"))
 
         self.width = size
         self.height = size
@@ -736,30 +736,30 @@ class DrawingModel:
     @classmethod
     def from_document(cls, raw: dict) -> "DrawingModel":
         if not isinstance(raw, dict):
-            raise DrawingFormatError("Das Zeichenmodell muss ein Objekt sein")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.the_drawing_model_must", "Das Zeichenmodell muss ein Objekt sein"))
         unknown = set(raw) - _MODEL_FIELDS
         missing = _MODEL_FIELDS - set(raw)
         if unknown:
-            raise DrawingFormatError("Unbekannte Modellfelder: " + ", ".join(sorted(unknown)))
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.unknown_model_fields", 'Unbekannte Modellfelder: {join}', join=", ".join(sorted(unknown))))
         if missing:
-            raise DrawingFormatError("Fehlende Modellfelder: " + ", ".join(sorted(missing)))
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.missing_model_fields", 'Fehlende Modellfelder: {join}', join=", ".join(sorted(missing))))
         version = raw.get("format_version")
         if type(version) is not int or version not in (FORMAT_VERSION, FORMAT_VERSION_SIZED):
-            raise DrawingFormatError("Ungültiger Wert für format_version")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.invalid_value_for_format", "Ungültiger Wert für format_version"))
         width, height = raw.get("width"), raw.get("height")
         if type(width) is not int or type(height) is not int or width != height:
-            raise DrawingFormatError("Ungültiger Wert für width")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.invalid_value_for_width", "Ungültiger Wert für width"))
         if version == FORMAT_VERSION and width != WIDTH:
-            raise DrawingFormatError("Ungültiger Wert für width")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.invalid_value_for_width", "Ungültiger Wert für width"))
         if width not in SIZES:
-            raise DrawingFormatError("Ungültiger Wert für width")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.invalid_value_for_width", "Ungültiger Wert für width"))
         for key, value in (("format", FORMAT_NAME), ("color_space", COLOR_SPACE), ("encoding", ENCODING)):
             if raw.get(key) != value:
-                raise DrawingFormatError(f"Ungültiger Wert für {key}")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.invalid_value_for", 'Ungültiger Wert für {key_}', key_=key))
 
         palette = raw.get("palette")
         if not isinstance(palette, list):
-            raise DrawingFormatError("palette muss eine Liste sein")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.palette_must_be_a", "palette muss eine Liste sein"))
         model = cls(
             palette,
             palette_id=raw.get("palette_id"),
@@ -768,15 +768,15 @@ class DrawingModel:
         )
         rows = raw.get("rows")
         if not isinstance(rows, list) or len(rows) != height:
-            raise DrawingFormatError(f"rows muss genau {height} Zeilen enthalten")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.rows_must_contain_exactly", 'rows muss genau {height} Zeilen enthalten', height=height))
         row_re = re.compile(r"[0-9A-F]{%d}\Z" % (2 * width))
         cells = bytearray()
         for number, row in enumerate(rows, 1):
             if not isinstance(row, str) or not row_re.fullmatch(row):
-                raise DrawingFormatError(f"Zeile {number} muss {2 * width} große Hexzeichen enthalten")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.line_must_contain_uppercase", 'Zeile {number} muss {wert} große Hexzeichen enthalten', number=number, wert=2 * width))
             decoded = bytes.fromhex(row)
             if decoded and max(decoded) >= len(model.palette):
-                raise DrawingFormatError(f"Zeile {number} enthält einen ungültigen Palettenindex")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.from_document.line_contains_an_invalid", 'Zeile {number} enthält einen ungültigen Palettenindex', number=number))
             cells.extend(decoded)
         model.cells = cells
         return model
@@ -787,7 +787,7 @@ class DrawingModel:
             try:
                 value = value.decode("utf-8")
             except UnicodeDecodeError as exc:
-                raise DrawingFormatError("Zeichnungsdatei ist kein gültiges UTF-8") from exc
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.from_json.drawing_file_is_not", "Zeichnungsdatei ist kein gültiges UTF-8")) from exc
         return cls.from_document(_load_json(value))
 
     def to_document(self) -> dict:
@@ -838,14 +838,14 @@ class DrawingModel:
             return self.palette.index(normalized)
         except ValueError:
             if len(self.palette) >= MAX_COLORS:
-                raise DrawingFormatError("Die Palette enthält bereits 256 Farben")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.ensure_color.the_palette_already_contains", "Die Palette enthält bereits 256 Farben"))
             self.palette.append(normalized)
             return len(self.palette) - 1
 
     def _color_index(self, color: str | int) -> int:
         index = self.ensure_color(color) if isinstance(color, str) else color
         if type(index) is not int or not 0 <= index < len(self.palette):
-            raise DrawingFormatError("Ungültiger Palettenindex")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.color_index.invalid_palette_index", "Ungültiger Palettenindex"))
         return index
 
     def used_colors(self) -> list[str]:
@@ -905,7 +905,7 @@ class DrawingModel:
 
     def _set_index(self, index: int, color_index: int, *, record: bool = True) -> bool:
         if type(color_index) is not int or not 0 <= color_index < len(self.palette):
-            raise DrawingFormatError("Ungültiger Palettenindex")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.set_index.invalid_palette_index", "Ungültiger Palettenindex"))
         before = self.cells[index]
         if before == color_index:
             return False
@@ -1040,7 +1040,7 @@ class DrawingModel:
         changed += self.paint_brush(*previous, size, color_index, wrap)
         for current in points[1:]:
             if len(current) != 2:
-                raise DrawingFormatError("Ein Pfadpunkt benötigt x und y")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.paint_path.a_path_point_needs", "Ein Pfadpunkt benötigt x und y"))
             dx, dy = current[0] - previous[0], current[1] - previous[1]
             steps = max(1, math.ceil(max(abs(dx), abs(dy)) * 8.0))
             for step in range(1, steps + 1):
@@ -1093,7 +1093,7 @@ class DrawingModel:
              secondary: str | int | None = None) -> int:
         replacement = self._color_index(color)
         if pattern not in FILL_PATTERNS:
-            raise DrawingFormatError(f"Unbekanntes Füllmuster: {pattern!r}")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.fill.unknown_fill_pattern", 'Unbekanntes Füllmuster: {pattern}', pattern=f'{pattern!r}'))
         other = replacement if pattern == "solid" or secondary is None else self._color_index(secondary)
         target = self.cells[self._index(x, y)]
         if pattern == "solid" and target == replacement:
@@ -1109,7 +1109,7 @@ class DrawingModel:
         """Ersetzt eine Farbe in der ganzen Zeichnung."""
         old_index = self.palette.index(normalize_color(old)) if isinstance(old, str) else old
         if type(old_index) is not int or not 0 <= old_index < len(self.palette):
-            raise DrawingFormatError("Unbekannte Farbe")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.replace_color.unknown_colour", "Unbekannte Farbe"))
         new_index = self._color_index(new)
         if old_index == new_index:
             return 0
@@ -1164,7 +1164,7 @@ class DrawingModel:
         """Setzt einen Bereich mit oberer linker Ecke bei (x, y); Ränder werden abgeschnitten."""
         needed = [color for color in dict.fromkeys(region.colors) if color not in self.palette]
         if len(self.palette) + len(needed) > MAX_COLORS:
-            raise DrawingFormatError("Die Palette enthält bereits 256 Farben")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.stamp_region.the_palette_already_contains", "Die Palette enthält bereits 256 Farben"))
         changed = 0
         for row in range(region.height):
             for column in range(region.width):
@@ -1181,7 +1181,7 @@ class DrawingModel:
         """Verkleinerung nach Mehrheitsfarbe je Block, etwa für ein Seitensymbol."""
         size = check_size(size)
         if size > self.width:
-            raise DrawingFormatError("Eine Zeichnung kann nur verkleinert werden")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.downscaled.a_drawing_can_only", "Eine Zeichnung kann nur verkleinert werden"))
         block = self.width // size
         result = DrawingModel(size=size)
         for by in range(size):
@@ -1263,17 +1263,17 @@ def _exact_attributes(element: ET.Element, expected: set[str], context: str):
     actual = set(element.attrib)
     if actual != expected:
         raise DrawingFormatError(
-            f"{context}: Attribute müssen {sorted(expected)} sein; erhalten {sorted(actual)}"
+            glide_i18n.t("mod.drawing.exact_attributes.attributes_must_be_got", '{context}: Attribute müssen {sorted} sein; erhalten {sorted2}', context=context, sorted=sorted(expected), sorted2=sorted(actual))
         )
 
 
 def _parse_int_attribute(element: ET.Element, name: str, *, minimum: int, maximum: int) -> int:
     value = element.get(name, "")
     if not re.fullmatch(r"0|[1-9][0-9]*", value):
-        raise DrawingFormatError(f"SVG-Attribut {name} muss eine Ganzzahl sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_int_attribute.svg_attribute_must_be", 'SVG-Attribut {name} muss eine Ganzzahl sein', name=name))
     number = int(value)
     if not minimum <= number <= maximum:
-        raise DrawingFormatError(f"SVG-Attribut {name} liegt außerhalb der Fläche")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.parse_int_attribute.svg_attribute_lies_outside", 'SVG-Attribut {name} liegt außerhalb der Fläche', name=name))
     return number
 
 
@@ -1285,28 +1285,28 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
     """
     if isinstance(value, bytes):
         if len(value) > MAX_SVG_BYTES:
-            raise DrawingFormatError("SVG überschreitet 4 MiB")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_exceeds_4_mib", "SVG überschreitet 4 MiB"))
         try:
             text = value.decode("utf-8")
         except UnicodeDecodeError as exc:
-            raise DrawingFormatError("SVG ist kein gültiges UTF-8") from exc
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_is_not_valid", "SVG ist kein gültiges UTF-8")) from exc
     elif isinstance(value, str):
         text = value
         if len(text.encode("utf-8")) > MAX_SVG_BYTES:
-            raise DrawingFormatError("SVG überschreitet 4 MiB")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_exceeds_4_mib", "SVG überschreitet 4 MiB"))
     else:
-        raise DrawingFormatError("SVG muss Text oder UTF-8-Bytes sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_must_be_text", "SVG muss Text oder UTF-8-Bytes sein"))
 
     lowered = text.lower()
     if any(token in lowered for token in ("<!doctype", "<!entity", "<![cdata[", "<!--")):
-        raise DrawingFormatError("DOCTYPE, ENTITY, CDATA und Kommentare sind nicht erlaubt")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.doctype_entity_cdata_and", "DOCTYPE, ENTITY, CDATA und Kommentare sind nicht erlaubt"))
     without_declaration = re.sub(r"\A﻿?\s*<\?xml\s+[^?]*\?>", "", text, count=1, flags=re.I)
     if "<?" in without_declaration:
-        raise DrawingFormatError("Verarbeitungsanweisungen sind nicht erlaubt")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.processing_instructions_are_not", "Verarbeitungsanweisungen sind nicht erlaubt"))
     try:
         root = ET.fromstring(text)
     except ET.ParseError as exc:
-        raise DrawingFormatError(f"Ungültiges XML: {exc}") from exc
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.invalid_xml", 'Ungültiges XML: {exc}', exc=exc)) from exc
 
     count = 0
     stack = [(root, 1)]
@@ -1319,45 +1319,45 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
         element, depth = stack.pop()
         count += 1
         if count > 4096 or depth > 8:
-            raise DrawingFormatError("SVG-Struktur ist zu groß oder zu tief")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_structure_is_too", "SVG-Struktur ist zu groß oder zu tief"))
         if element.tag not in allowed_tags:
-            raise DrawingFormatError(f"Nicht erlaubtes SVG-Element: {element.tag}")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_element_not_allowed", 'Nicht erlaubtes SVG-Element: {tag}', tag=element.tag))
         if any(len(str(key)) > 80 or len(str(item)) > 512 for key, item in element.attrib.items()):
-            raise DrawingFormatError("SVG-Attribut ist zu lang")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_attribute_is_too", "SVG-Attribut ist zu lang"))
         if element.text and len(element.text) > MAX_JSON_BYTES:
-            raise DrawingFormatError("SVG-Textknoten ist zu lang")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_text_node_is", "SVG-Textknoten ist zu lang"))
         if element.tail and element.tail.strip():
-            raise DrawingFormatError("Text zwischen SVG-Elementen ist nicht erlaubt")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.text_between_svg_elements", "Text zwischen SVG-Elementen ist nicht erlaubt"))
         stack.extend((child, depth + 1) for child in element)
 
     if root.tag != SVG + "svg":
-        raise DrawingFormatError("Wurzelelement muss svg im SVG-Namensraum sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.root_element_must_be", "Wurzelelement muss svg im SVG-Namensraum sein"))
     _exact_attributes(root, {"version", "width", "height", "viewBox", "preserveAspectRatio"}, "svg")
     size_text = root.get("width", "")
     size = int(size_text) if size_text.isdigit() and str(int(size_text)) == size_text else 0
     if size not in SIZES:
-        raise DrawingFormatError("SVG-Koordinatenraum entspricht nicht dem Glide-Profil")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_coordinate_space_does", "SVG-Koordinatenraum entspricht nicht dem Glide-Profil"))
     expected_root = {
         "version": "1.1", "width": str(size), "height": str(size),
         "viewBox": f"0 0 {size} {size}", "preserveAspectRatio": "xMidYMid meet",
     }
     if root.attrib != expected_root:
-        raise DrawingFormatError("SVG-Koordinatenraum entspricht nicht dem Glide-Profil")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_coordinate_space_does", "SVG-Koordinatenraum entspricht nicht dem Glide-Profil"))
     children = list(root)
     expected_tags = [SVG + name for name in ("title", "desc", "metadata", "rect", "g")]
     if [child.tag for child in children] != expected_tags:
-        raise DrawingFormatError("SVG benötigt title, desc, metadata, Hintergrund und glide-artwork")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_needs_title_desc", "SVG benötigt title, desc, metadata, Hintergrund und glide-artwork"))
     title, desc, metadata, background, group = children
     _exact_attributes(title, set(), "title")
     _exact_attributes(desc, set(), "desc")
     if len(title) or len(desc):
-        raise DrawingFormatError("Titel und Beschreibung dürfen keine Unterelemente enthalten")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.title_and_description_must", "Titel und Beschreibung dürfen keine Unterelemente enthalten"))
     if len(title.text or "") > 200 or len(desc.text or "") > 300:
-        raise DrawingFormatError("Titel oder Beschreibung ist zu lang")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.title_or_description_is", "Titel oder Beschreibung ist zu lang"))
 
     _exact_attributes(metadata, set(), "metadata")
     if len(metadata) != 1 or metadata[0].tag != GLIDE + "drawing":
-        raise DrawingFormatError("Glide-Metadaten fehlen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.glide_metadata_is_missing", "Glide-Metadaten fehlen"))
     drawing = metadata[0]
     _exact_attributes(drawing, {"version"}, "glide:drawing")
     expected_version = "1" if size == WIDTH else "2"
@@ -1365,28 +1365,28 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
         raise DrawingFormatError("Unbekannte Glide-SVG-Version")
     manifest, model_element = drawing
     if manifest.tag != GLIDE + "manifest" or model_element.tag != GLIDE + "model":
-        raise DrawingFormatError("Glide-Manifest oder Zeichenmodell fehlt")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.glide_manifest_or_drawing", "Glide-Manifest oder Zeichenmodell fehlt"))
     _exact_attributes(manifest, {"model-sha256", "artwork-sha256"}, "glide:manifest")
     _exact_attributes(model_element, {"media-type"}, "glide:model")
     if len(manifest) or (manifest.text or "").strip():
-        raise DrawingFormatError("Glide-Manifest darf keine Inhalte enthalten")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.glide_manifest_must_not", "Glide-Manifest darf keine Inhalte enthalten"))
     if model_element.get("media-type") != "application/json" or len(model_element):
-        raise DrawingFormatError("Glide-Modell muss ein JSON-Textknoten sein")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.glide_model_must_be", "Glide-Modell muss ein JSON-Textknoten sein"))
     for name in ("model-sha256", "artwork-sha256"):
         if not re.fullmatch(r"[0-9a-f]{64}", manifest.get(name, "")):
-            raise DrawingFormatError(f"Ungültige Prüfsumme {name}")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.invalid_checksum", 'Ungültige Prüfsumme {name}', name=name))
     model = DrawingModel.from_json(model_element.text or "")
     if model.width != size:
-        raise DrawingFormatError("SVG-Größe und Zeichenmodell passen nicht zusammen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_size_and_drawing", "SVG-Größe und Zeichenmodell passen nicht zusammen"))
 
     _exact_attributes(background, {"x", "y", "width", "height", "fill"}, "Hintergrund")
     if background.attrib != {
         "x": "0", "y": "0", "width": str(size), "height": str(size), "fill": BACKGROUND,
     } or len(background):
-        raise DrawingFormatError("SVG-Hintergrund entspricht nicht dem Glide-Profil")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_background_does_not", "SVG-Hintergrund entspricht nicht dem Glide-Profil"))
     _exact_attributes(group, {"id", "shape-rendering"}, "glide-artwork")
     if group.attrib != {"id": "glide-artwork", "shape-rendering": "crispEdges"}:
-        raise DrawingFormatError("SVG-Grafikgruppe entspricht nicht dem Glide-Profil")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.svg_graphics_group_does", "SVG-Grafikgruppe entspricht nicht dem Glide-Profil"))
 
     visible = DrawingModel(
         model.palette,
@@ -1399,34 +1399,34 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
     previous_key = (-1, -1)
     for element in group:
         if element.tag != SVG + "rect" or len(element) or (element.text or "").strip():
-            raise DrawingFormatError("glide-artwork darf nur leere rect-Elemente enthalten")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.glide_artwork_may_only", "glide-artwork darf nur leere rect-Elemente enthalten"))
         _exact_attributes(element, {"x", "y", "width", "height", "fill"}, "Artwork-Rechteck")
         x = _parse_int_attribute(element, "x", minimum=0, maximum=size - 1)
         y = _parse_int_attribute(element, "y", minimum=0, maximum=size - 1)
         width = _parse_int_attribute(element, "width", minimum=1, maximum=size)
         height = _parse_int_attribute(element, "height", minimum=1, maximum=1)
         if x + width > size or height != 1:
-            raise DrawingFormatError("Artwork-Rechteck liegt außerhalb der Fläche")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.artwork_rectangle_lies_outside", "Artwork-Rechteck liegt außerhalb der Fläche"))
         color = normalize_color(element.get("fill"))
         if color == BACKGROUND:
-            raise DrawingFormatError("Weiße Läufe gehören nicht in glide-artwork")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.white_runs_do_not", "Weiße Läufe gehören nicht in glide-artwork"))
         try:
             color_index = model.palette.index(color)
         except ValueError as exc:
-            raise DrawingFormatError("Artwork-Farbe fehlt in der Palette") from exc
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.artwork_colour_is_missing", "Artwork-Farbe fehlt in der Palette")) from exc
         if (y, x) <= previous_key:
-            raise DrawingFormatError("Artwork-Rechtecke sind nicht nach y und x sortiert")
+            raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.artwork_rectangles_are_not", "Artwork-Rechtecke sind nicht nach y und x sortiert"))
         previous_key = (y, x)
         for cell_x in range(x, x + width):
             index = y * size + cell_x
             if occupied[index]:
-                raise DrawingFormatError("Artwork-Rechtecke überlappen sich")
+                raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.artwork_rectangles_overlap", "Artwork-Rechtecke überlappen sich"))
             occupied[index] = 1
             visible.cells[index] = color_index
         source_records.append(f"R,{y},{x},{width},{color}")
 
     if tuple(source_records) != visible.artwork_records():
-        raise DrawingFormatError("Artwork-Rechtecke sind nicht maximal zusammengefasst")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.artwork_rectangles_are_not_2", "Artwork-Rechtecke sind nicht maximal zusammengefasst"))
     visible_hash = visible.artwork_hash()
     actual_model_hash = model.model_hash()
     declared_model_hash = manifest.get("model-sha256")
@@ -1436,11 +1436,11 @@ def import_glide_svg(value: str | bytes) -> SvgImportResult:
     matches_model = visible.cells == model.cells
 
     if not model_changed and artwork_changed:
-        raise DrawingFormatError("Die sichtbare Grafik wurde ohne passendes Modell verändert")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.the_visible_graphic_was", "Die sichtbare Grafik wurde ohne passendes Modell verändert"))
     if not matches_model and not model_changed:
-        raise DrawingFormatError("Die sichtbare Grafik widerspricht dem unveränderten Modell")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.the_visible_graphic_contradicts", "Die sichtbare Grafik widerspricht dem unveränderten Modell"))
     if not matches_model and model_changed and artwork_changed:
-        raise DrawingFormatError("Modell und sichtbare Grafik wurden widersprüchlich verändert")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing.import_glide_svg.model_and_visible_graphic", "Modell und sichtbare Grafik wurden widersprüchlich verändert"))
 
     warnings = []
     if model_changed and not artwork_changed and not matches_model:

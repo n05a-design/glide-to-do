@@ -11,6 +11,7 @@ import calendar
 from dataclasses import dataclass
 from datetime import date, timedelta
 import re
+import i18n as glide_i18n
 
 WEEKDAYS = {name: index for index, name in enumerate(("MO", "TU", "WE", "TH", "FR", "SA", "SU"))}
 SUPPORTED = {"FREQ", "INTERVAL", "COUNT", "UNTIL", "BYDAY", "BYMONTH", "BYMONTHDAY", "BYSETPOS", "WKST"}
@@ -32,7 +33,7 @@ class Budget:
         self.remaining -= amount
         if self.remaining < 0:
             raise ExpansionLimitError(
-                "Serienberechnung überschreitet die lokale Prüfgrenze; bitte den Kalenderzeitraum begrenzen.")
+                glide_i18n.t("mod.ics_recurrence.take.series_calculation_exceeds_the", "Serienberechnung überschreitet die lokale Prüfgrenze; bitte den Kalenderzeitraum begrenzen."))
 
 
 @dataclass(frozen=True)
@@ -50,10 +51,10 @@ class Rule:
 
 def _integer(value, minimum, maximum, zero=False):
     if not re.fullmatch(r"[+-]?\d+", value):
-        raise RuleError("Serienregel enthält keine gültige ganze Zahl.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.integer.series_rule_contains_no", "Serienregel enthält keine gültige ganze Zahl."))
     number = int(value)
     if not minimum <= number <= maximum or (number == 0 and not zero):
-        raise RuleError("Zahl der Serienregel liegt außerhalb des erlaubten Bereichs.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.integer.number_in_the_series", "Zahl der Serienregel liegt außerhalb des erlaubten Bereichs."))
     return number
 
 
@@ -62,37 +63,37 @@ def parse_rule(text):
     for part in str(text).upper().split(";"):
         name, separator, value = part.partition("=")
         if not separator or not value or name in fields:
-            raise RuleError("Serienregel ist unvollständig oder enthält doppelte Teile.")
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.series_rule_is_incomplete", "Serienregel ist unvollständig oder enthält doppelte Teile."))
         fields[name] = value
     if set(fields) - SUPPORTED:
-        raise RuleError("Nicht unterstützte Serienteile: " + ", ".join(sorted(set(fields) - SUPPORTED)))
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.unsupported_series_parts", 'Nicht unterstützte Serienteile: {join}', join=", ".join(sorted(set(fields) - SUPPORTED))))
     frequency = fields.get("FREQ")
     if frequency not in ("DAILY", "WEEKLY", "MONTHLY", "YEARLY"):
-        raise RuleError("Nur tägliche, wöchentliche, monatliche und jährliche Serien werden unterstützt.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.only_daily_weekly_monthly", "Nur tägliche, wöchentliche, monatliche und jährliche Serien werden unterstützt."))
     if "COUNT" in fields and "UNTIL" in fields:
-        raise RuleError("COUNT und UNTIL dürfen nicht gemeinsam stehen.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.count_and_until_must", "COUNT und UNTIL dürfen nicht gemeinsam stehen."))
     interval = _integer(fields.get("INTERVAL", "1"), 1, 2147483647)
     count = _integer(fields["COUNT"], 1, 2147483647) if "COUNT" in fields else None
     until = fields.get("UNTIL")
     if until:
         if not re.fullmatch(r"\d{8}(?:T\d{6}Z?)?", until):
-            raise RuleError("UNTIL enthält kein unterstütztes Enddatum.")
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.until_contains_no_supported", "UNTIL enthält kein unterstütztes Enddatum."))
         try:
             date(int(until[:4]), int(until[4:6]), int(until[6:8]))
             if len(until) > 8 and not (int(until[9:11]) < 24 and int(until[11:13]) < 60 and int(until[13:15]) < 60):
                 raise ValueError
         except ValueError:
-            raise RuleError("UNTIL enthält kein gültiges Enddatum.") from None
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.until_contains_no_valid", "UNTIL enthält kein gültiges Enddatum.")) from None
     weekdays = []
     for token in fields.get("BYDAY", "").split(",") if "BYDAY" in fields else ():
         match = re.fullmatch(r"([+-]?\d+)?(MO|TU|WE|TH|FR|SA|SU)", token)
         if not match:
-            raise RuleError("BYDAY enthält keinen gültigen Wochentag.")
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.byday_contains_no_valid", "BYDAY enthält keinen gültigen Wochentag."))
         ordinal = _integer(match[1], -53, 53) if match[1] else None
         if ordinal is not None and frequency not in ("MONTHLY", "YEARLY"):
-            raise RuleError("Nummerierte Wochentage brauchen eine Monats- oder Jahresserie.")
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.numbered_weekdays_need_a", "Nummerierte Wochentage brauchen eine Monats- oder Jahresserie."))
         if ordinal is not None and frequency == "MONTHLY" and abs(ordinal) > 5:
-            raise RuleError("Monatlicher Wochentag muss zwischen -5 und 5 liegen.")
+            raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.monthly_weekday_must_be", "Monatlicher Wochentag muss zwischen -5 und 5 liegen."))
         weekdays.append((ordinal, WEEKDAYS[match[2]]))
     def numbers(name, minimum, maximum):
         return tuple(sorted({_integer(value, minimum, maximum) for value in fields[name].split(",")})) if name in fields else ()
@@ -100,12 +101,12 @@ def parse_rule(text):
     monthdays = numbers("BYMONTHDAY", -31, 31)
     positions = numbers("BYSETPOS", -366, 366)
     if monthdays and frequency == "WEEKLY":
-        raise RuleError("BYMONTHDAY darf nicht in einer Wochenserie stehen.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.bymonthday_must_not_appear", "BYMONTHDAY darf nicht in einer Wochenserie stehen."))
     if positions and not (weekdays or months or monthdays):
-        raise RuleError("BYSETPOS braucht einen weiteren BY-Teil.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.bysetpos_needs_another_by", "BYSETPOS braucht einen weiteren BY-Teil."))
     week_start = fields.get("WKST", "MO")
     if week_start not in WEEKDAYS:
-        raise RuleError("WKST enthält keinen gültigen Wochentag.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.parse_rule.wkst_contains_no_valid", "WKST enthält keinen gültigen Wochentag."))
     return Rule(frequency, interval, count, until, tuple(dict.fromkeys(weekdays)), months,
                 monthdays, positions, WEEKDAYS[week_start])
 
@@ -191,7 +192,7 @@ def dates(start, rule, through, *, after=None, valid=lambda day: True, budget=No
     if isinstance(rule, str):
         rule = parse_rule(rule)
     if type(start) is not date or type(through) is not date or (after is not None and type(after) is not date):
-        raise RuleError("Serie braucht reine Datumswerte.")
+        raise RuleError(glide_i18n.t("mod.ics_recurrence.dates.series_needs_plain_date", "Serie braucht reine Datumswerte."))
     lower = after or start
     upper = through
     if rule.until:

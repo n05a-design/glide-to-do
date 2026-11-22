@@ -10,6 +10,7 @@ fällt bei unlesbarem Wert auf „aus“ zurück. Pixel steht in der Auswahl vor
 sein (Gegenprobe). Künstliche Daten in einem temporären GLIDE_DATA_DIR.
 """
 import argparse
+from datetime import datetime, timedelta, timezone
 import importlib.machinery
 import importlib.util
 import os
@@ -225,7 +226,8 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         # --- U18/D71: Seitentitel nur im Kopf, Schreibhinweis in leerer Seite ---
         # Bis 07.11.2026 stand der Titel zusätzlich über der Lesespalte; der Inhaber
         # befand das als doppelt (D71). Umbenennen geht über den Kopftitel.
-        seite = app.new_list_object("Wochenbericht", [], list_kind=app.LIST_KIND_PAGE)
+        earlier = (datetime.now(timezone.utc) - timedelta(hours=2, minutes=10)).isoformat(timespec="seconds")
+        seite = app.new_list_object("Wochenbericht", [], list_kind=app.LIST_KIND_PAGE, updated_at=earlier)
         app.lists.append(seite)
         app.save_items()
         app.set_active_list(seite["id"])
@@ -236,6 +238,20 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         assert not editor.title_label.winfo_manager(), "Seitentitel steht doppelt im Inhalt"
         assert app.title_label.cget("text").startswith("Wochenbericht"), app.title_label.cget("text")
         assert editor._placeholder.winfo_manager() == "place"
+        edit_chip = next(w for w in app.page_chip_row.winfo_children()
+                         if str(w.cget("text")) == "Vor 2 Stunden bearbeitet")
+        assert edit_chip.winfo_manager() == "pack"
+        expected = datetime.fromisoformat(earlier).astimezone().isoformat(sep=" ", timespec="seconds")
+        assert expected in edit_chip._glide_tooltip["source"]
+        menu = editor.build_page_menu()
+        with patch.object(app, "show_info") as info:
+            action = next(i for i in range(menu.index("end") + 1)
+                          if menu.type(i) == "command" and menu.entrycget(i, "label") == "Bearbeitungszeit anzeigen …")
+            menu.invoke(action)
+            # Menübefehle laufen nach dem Schließen des Menüs (verzögerter Aufruf).
+            ruhe(0.1)
+            info.assert_called_once_with("Letzte Bearbeitung", expected)
+        menu.destroy()
         editor.text.focus_set()
         editor.text.insert("1.0", "Erster Satz")
         editor.text.event_generate("<<Modified>>")
@@ -245,6 +261,8 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         ruhe(0.1)
         gespeichert = app.page_entry(seite["id"]).get("rich_note") or {}
         assert gespeichert.get("text") == "Erster Satz", gespeichert  # Hinweis und Titel nicht im Text
+        assert not edit_chip.winfo_exists()
+        assert any(w.cget("text") == "Gerade bearbeitet" for w in app.page_chip_row.winfo_children())
 
         # Der echte Umbenennen-Weg über den Kopftitel; nur der Dialog liefert die neue Eingabe.
         with patch.object(app, "themed_page_details_dialog",
@@ -262,6 +280,7 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         app.set_active_list(notiz["id"])
         ruhe(0.2)
         assert app.rich_note_editor.title_label is None, "Notizen zeigen keinen zweiten Titel"
+        assert all("bearbeitet" not in w.cget("text").lower() for w in app.page_chip_row.winfo_children())
         pruefungen.append("U18/D71: Seitentitel nur im Kopf, Doppelklick dort benennt über den bestehenden Weg um, "
                           "Schreibhinweis nur leer und nie gespeichert; Notizen unverändert")
 

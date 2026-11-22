@@ -23,7 +23,7 @@ def day(value):
     try:
         return date.fromisoformat(value).strftime("%d.%m.%Y")
     except (ValueError, TypeError):
-        raise ValueError("Ungültiger Tag im zugänglichen Aufgabenwert.") from None
+        raise ValueError(glide_i18n.t("mod.accessibility.day.invalid_day_in_the", "Ungültiger Tag im zugänglichen Aufgabenwert.")) from None
 
 
 def task_value(item, *, label_names=(), blocked_titles=()):
@@ -43,12 +43,12 @@ def task_value(item, *, label_names=(), blocked_titles=()):
             parts.append(title + " " + value + (" um " + time if time else "") if value else empty)
         importance = item.get("importance", 0)
         if type(importance) is not int or not 0 <= importance <= 3:
-            raise ValueError("Ungültige Wichtigkeit im zugänglichen Aufgabenwert.")
+            raise ValueError(glide_i18n.t("mod.accessibility.task_value.invalid_importance_in_the", "Ungültige Wichtigkeit im zugänglichen Aufgabenwert."))
         parts.append(glide_i18n.t("saved_view.choice.importance_none", "Keine Wichtigkeit") if importance == 0 else
                      glide_i18n.t("mod.accessibility.task_value.importance", 'Wichtigkeit {wert}', wert=("", "niedrig", "mittel", "hoch")[importance]))
         minutes = item.get("estimated_minutes")
         if minutes is not None and (type(minutes) is not int or minutes < 0):
-            raise ValueError("Ungültiger Aufwand im zugänglichen Aufgabenwert.")
+            raise ValueError(glide_i18n.t("mod.accessibility.task_value.invalid_effort_in_the", "Ungültiger Aufwand im zugänglichen Aufgabenwert."))
         parts.append(glide_i18n.t("mod.accessibility.task_value.effort_not_estimated", "Aufwand nicht geschätzt") if minutes is None else glide_i18n.t("mod.accessibility.task_value.effort_minutes", 'Aufwand {minutes} Minuten', minutes=minutes))
         if item.get("repeat"):
             parts.append(glide_i18n.t("mod.accessibility.task_value.recurring", "Wiederkehrend"))
@@ -78,13 +78,13 @@ class Attributes:
 
     def __post_init__(self):
         if self.role not in ROLES or not isinstance(self.name, str) or not self.name.strip():
-            raise ValueError("Rolle und zugänglicher Name müssen bekannt und benannt sein.")
+            raise ValueError(glide_i18n.t("mod.accessibility.post_init.role_and_accessible_name", "Rolle und zugänglicher Name müssen bekannt und benannt sein."))
         if self.role == "Checkbutton" and self.value not in ("0", "1"):
-            raise ValueError("Der native Checkboxzustand muss 0 oder 1 sein.")
+            raise ValueError(glide_i18n.t("mod.accessibility.post_init.the_native_checkbox_state", "Der native Checkboxzustand muss 0 oder 1 sein."))
         if any(not isinstance(getattr(self, key), str) for key in ("description", "value", "state", "help")):
-            raise ValueError("Zugängliche Werte müssen Text sein.")
+            raise ValueError(glide_i18n.t("mod.accessibility.post_init.accessible_values_must_be", "Zugängliche Werte müssen Text sein."))
         if not isinstance(self.action, tuple) or any(not isinstance(value, str) for value in self.action):
-            raise ValueError("Die Bedienaktion muss eine Tcl-Argumentliste sein.")
+            raise ValueError(glide_i18n.t("mod.accessibility.post_init.the_control_action_must", "Die Bedienaktion muss eine Tcl-Argumentliste sein."))
 
 
 def set_attributes(call, window, attributes):
@@ -94,7 +94,7 @@ def set_attributes(call, window, attributes):
     Aufgabentexten bilden; eine Aktion bleibt ein einzelnes Listenargument.
     """
     if not isinstance(attributes, Attributes):
-        raise TypeError("Zugänglichkeitsattribute fehlen.")
+        raise TypeError(glide_i18n.t("mod.accessibility.set_attributes.accessibility_attributes_are_missing", "Zugänglichkeitsattribute fehlen."))
     role = attributes.role
     system = call("tk", "windowingsystem")
     # Tk 9.1 verwendet unter X11 in seiner ATK-Tabelle den Namen Checkbox;

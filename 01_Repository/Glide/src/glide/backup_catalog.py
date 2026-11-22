@@ -37,7 +37,7 @@ def inspect(path):
     kind = TYPES.get(path.suffix.lower())
     kind = glide_i18n.t("mod.backup_catalog.type" + path.suffix.lower(), kind) if kind else kind
     if kind is None or not path.is_file() or path.is_symlink():
-        raise ValueError('Bitte eine JSON-, Aufgaben- oder App-Sicherung wählen.')
+        raise ValueError(glide_i18n.t("mod.backup_catalog.inspect.please_choose_a_json", 'Bitte eine JSON-, Aufgaben- oder App-Sicherung wählen.'))
     info = path.stat()
     return Entry(str(path), path.name, info.st_mtime, info.st_size, kind)
 

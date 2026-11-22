@@ -13,6 +13,7 @@ import sys
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+import i18n as glide_i18n
 
 RESOURCES = Path(__file__).resolve().parent / "resources" / "timezones"
 
@@ -35,7 +36,7 @@ class Resolver:
     @lru_cache(maxsize=64)
     def __call__(self, key):
         if not valid_key(key):
-            raise ValueError("Ungültige Zeitzonenkennung.")
+            raise ValueError(glide_i18n.t("mod.timezones.call.invalid_time_zone_id", "Ungültige Zeitzonenkennung."))
         try:
             with ZipFile(self.resources / "iana-2026e.zip") as archive:
                 try:
@@ -49,7 +50,7 @@ class Resolver:
         try:
             return self.system(key)
         except ZoneInfoNotFoundError:
-            raise ZoneInfoNotFoundError("Zeitzone nicht verfügbar: " + key) from None
+            raise ZoneInfoNotFoundError(glide_i18n.t("mod.timezones.call.time_zone_not_available", 'Zeitzone nicht verfügbar: {key_}', key_=key)) from None
 
     @lru_cache(maxsize=256)
     def windows_key(self, name, territory="001"):
@@ -59,7 +60,7 @@ class Resolver:
         fallback = next((entry for entry in mappings if entry.get("territory") == "001"), None)
         found = preferred if preferred is not None else fallback
         if found is None:
-            raise ZoneInfoNotFoundError("Windows-Zeitzone nicht zugeordnet: " + str(name))
+            raise ZoneInfoNotFoundError(glide_i18n.t("mod.timezones.windows_key.windows_time_zone_not", 'Windows-Zeitzone nicht zugeordnet: {str}', str=str(name)))
         return found.attrib["type"].split()[0]
 
 
@@ -93,7 +94,7 @@ def local_zone(resolver=None, *, environment=None, platform=None,
             # Windows hat Sommerzeit ausdrücklich abgeschaltet; kein IANA-DST.
             zone = fixed_local if fixed_local is not None else datetime.now().astimezone().tzinfo
             if zone is None:
-                raise ValueError("Lokale Windows-Zeitzone nicht verfügbar.")
+                raise ValueError(glide_i18n.t("mod.timezones.local_zone.local_windows_time_zone", "Lokale Windows-Zeitzone nicht verfügbar."))
             return zone
         return resolver(resolver.windows_key(name))
     try:
@@ -107,4 +108,4 @@ def local_zone(resolver=None, *, environment=None, platform=None,
         chosen = ""
     if chosen:
         return resolver(chosen)
-    raise ZoneInfoNotFoundError("Lokale Zeitzone nicht bestimmbar; bitte eine Zeitzone wählen.")
+    raise ZoneInfoNotFoundError(glide_i18n.t("mod.timezones.local_zone.local_time_zone_cannot", "Lokale Zeitzone nicht bestimmbar; bitte eine Zeitzone wählen."))

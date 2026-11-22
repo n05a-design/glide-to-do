@@ -103,6 +103,7 @@ def zoomed_image(kind, width, height, factor):
 
 from dataclasses import dataclass
 import object_references as objects
+import i18n as glide_i18n
 
 
 CANVAS_COLORS = {
@@ -134,17 +135,17 @@ class CanvasExportReport:
 
     def summary_text(self):
         lines = [
-            f'JSON Canvas 1.0 Export · {self.scope_title or "Pinnwand"}',
-            f'Exportiert: {self.cards_count} Karte(n), {self.areas_count} Bereich(e), {self.edges_count} Verbindung(en).',
+            f'JSON Canvas 1.0 Export · {self.scope_title or glide_i18n.t("board.title", "Pinnwand")}',
+            glide_i18n.t("mod.pinboard_pages.summary_text.exported_card_s_area", 'Exportiert: {cards_count} Karte(n), {areas_count} Bereich(e), {edges_count} Verbindung(en).', cards_count=self.cards_count, areas_count=self.areas_count, edges_count=self.edges_count),
         ]
         if self.losses:
             lines.append('')
-            lines.append('Formatbedingte Abweichungen (Verlustbericht):')
+            lines.append(glide_i18n.t("mod.pinboard_pages.summary_text.format_related_differences_loss", 'Formatbedingte Abweichungen (Verlustbericht):'))
             for entry in self.losses:
                 lines.append(f'• {entry}')
         else:
             lines.append('')
-            lines.append('Alle Elemente wurden ohne Formatverluste übertragen.')
+            lines.append(glide_i18n.t("mod.pinboard_pages.summary_text.all_elements_were_transferred", 'Alle Elemente wurden ohne Formatverluste übertragen.'))
         return '\n'.join(lines)
 
 
@@ -181,12 +182,12 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
 
     layout = board.get('layout', 'free')
     if layout == 'columns':
-        losses.append('Das Spaltenboard wurde als statische Fläche exportiert. Karten in mehreren Spalten erscheinen einmal.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.the_column_board_was", 'Das Spaltenboard wurde als statische Fläche exportiert. Karten in mehreren Spalten erscheinen einmal.'))
     elif layout == 'grid':
-        losses.append('Die geordnete Pinnwand wurde als statische Fläche exportiert.'
-                      if visible_layout else 'Für die geschlossene Pinnwand wurden die gespeicherten Kartenpositionen verwendet.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.the_ordered_board_was", 'Die geordnete Pinnwand wurde als statische Fläche exportiert.')
+                      if visible_layout else glide_i18n.t("mod.pinboard_pages.export_json_canvas.for_the_closed_board", 'Für die geschlossene Pinnwand wurden die gespeicherten Kartenpositionen verwendet.'))
     if board.get('collapsed'):
-        losses.append('Eingeklappte Spaltenzustände des Spaltenboards sind in JSON Canvas 1.0 nicht darstellbar.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.collapsed_column_states_of", 'Eingeklappte Spaltenzustände des Spaltenboards sind in JSON Canvas 1.0 nicht darstellbar.'))
 
     areas = [a for a in (board.get('areas') or ()) if isinstance(a, dict) and a.get('id')]
     if layout != 'columns':
@@ -198,7 +199,7 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
                 'y': int(round(area.get('y', 0))),
                 'width': max(120, int(round(area.get('w', 480)))),
                 'height': max(80, int(round(area.get('h', 320)))),
-                'label': str(area.get('name') or 'Bereich'),
+                'label': str(area.get('name') or glide_i18n.t("ui.create_area.area", 'Bereich')),
             }
             color = _canvas_color(area.get('color'))
             if color:
@@ -220,13 +221,13 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
         h = max(80, int(round(info.get('height', 140))))
         node_boxes[cid] = (x, y, w, h)
 
-        title = str(info.get('title') or 'Ohne Titel').strip()
+        title = str(info.get('title') or glide_i18n.t("ui.page_card_blocks.untitled", 'Ohne Titel')).strip()
         is_page = bool(info.get('is_page')) or cid.startswith('page:')
         has_pages |= is_page
         has_planning_rules |= bool(info.get('has_planning_rules'))
         md_lines = []
         if is_page:
-            kind_label = str(info.get('kind_label') or 'Seite')
+            kind_label = str(info.get('kind_label') or glide_i18n.t("ui.render.page", 'Seite'))
             md_lines.append(f'### {title} ({kind_label})')
         else:
             marker = '[x]' if info.get('done') else '[ ]'
@@ -236,11 +237,11 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
         if info.get('importance_label'):
             meta.append(str(info['importance_label']))
         if info.get('planned'):
-            meta.append(f"Bearbeitungstag: {info['planned']}")
+            meta.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.planned_day", 'Bearbeitungstag: {planned}', planned=info['planned']))
         if info.get('due'):
-            meta.append(f"Fällig: {info['due']}")
+            meta.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.due", 'Fällig: {due}', due=info['due']))
         if info.get('source_title') and not is_page:
-            meta.append(f"Liste: {info['source_title']}")
+            meta.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.list", 'Liste: {source_title}', source_title=info['source_title']))
         if meta:
             md_lines.append(' · '.join(meta))
 
@@ -259,12 +260,12 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
 
         labels = [str(l).strip() for l in (info.get('labels') or ()) if str(l).strip()]
         if labels:
-            md_lines.extend(('', 'Labels: ' + ', '.join(f'`{l}`' for l in labels)))
+            md_lines.extend(('', glide_i18n.t("ui.print_item_details.labels", 'Labels: {join}', join=', '.join(f'`{l}`' for l in labels))))
 
         attachments_count = int(info.get('attachments_count') or 0)
         if attachments_count > 0:
             has_attachments = True
-            md_lines.append(f'Anhänge: {attachments_count}')
+            md_lines.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.attachments", 'Anhänge: {attachments_count}', attachments_count=attachments_count))
 
         ref_uri = info.get('uri')
         if not ref_uri:
@@ -276,7 +277,7 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
             except ValueError:
                 ref_uri = None
         if ref_uri:
-            md_lines.extend(('', f'Verweis: `{ref_uri}`'))
+            md_lines.extend(('', glide_i18n.t("mod.pinboard_pages.export_json_canvas.reference", 'Verweis: `{ref_uri}`', ref_uri=ref_uri)))
 
         node = {
             'id': cid,
@@ -295,15 +296,15 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
     raw_cards = [c for c in (board.get('cards') or ()) if isinstance(c, dict) and c.get('item_id')]
     skipped_cards = sum(1 for c in raw_cards if str(c['item_id']) not in node_boxes)
     if skipped_cards and layout != 'columns':
-        losses.append(f'{skipped_cards} ausgeblendete oder nicht mehr vorhandene Karte(n) wurden ausgelassen.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.hidden_or_no_longer", '{skipped_cards} ausgeblendete oder nicht mehr vorhandene Karte(n) wurden ausgelassen.', skipped_cards=skipped_cards))
     if has_interactive_checklists:
-        losses.append('Abhakbare Checklisten und Live-Zähler wurden als statisches Markdown übernommen.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.checkable_checklists_and_live", 'Abhakbare Checklisten und Live-Zähler wurden als statisches Markdown übernommen.'))
     if has_attachments:
-        losses.append('Lokale Dateianhänge und Vorschaubilder bleiben in der Glide-Ablage und sind als Anzahl vermerkt.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.local_file_attachments_and", 'Lokale Dateianhänge und Vorschaubilder bleiben in der Glide-Ablage und sind als Anzahl vermerkt.'))
     if has_pages:
-        losses.append('Seiten, Notizen und Zeichnungen werden als Textkarten übertragen. Vollständige Seiteninhalte und Zeichnungsdaten bleiben in Glide.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.pages_notes_and_drawings", 'Seiten, Notizen und Zeichnungen werden als Textkarten übertragen. Vollständige Seiteninhalte und Zeichnungsdaten bleiben in Glide.'))
     if has_planning_rules:
-        losses.append('Wiederholungsregeln und Erinnerungen bleiben in Glide.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.repeat_rules_and_reminders", 'Wiederholungsregeln und Erinnerungen bleiben in Glide.'))
 
     dashed_count = 0
     skipped_edges = 0
@@ -345,15 +346,14 @@ def export_json_canvas(board, cards_info, scope_title='', *, visible_layout=True
 
     if dashed_count:
         losses.append(
-            f'{dashed_count} gestrichelte Verbindung(en) wurden als durchgezogene Kanten exportiert '
-            '(JSON Canvas 1.0 definiert keine Strichart).'
+            glide_i18n.t("mod.pinboard_pages.export_json_canvas.dashed_connection_s_were", '{dashed_count} gestrichelte Verbindung(en) wurden als durchgezogene Kanten exportiert (JSON Canvas 1.0 definiert keine Strichart).', dashed_count=dashed_count)
         )
     if skipped_edges:
-        losses.append(f'{skipped_edges} Verbindung(en) zu ausgeblendeten Karten wurden ausgelassen.')
+        losses.append(glide_i18n.t("mod.pinboard_pages.export_json_canvas.connection_s_to_hidden", '{skipped_edges} Verbindung(en) zu ausgeblendeten Karten wurden ausgelassen.', skipped_edges=skipped_edges))
 
     document = {'nodes': nodes, 'edges': edges}
     report = CanvasExportReport(
-        scope_title=str(scope_title or 'Pinnwand'),
+        scope_title=str(scope_title or glide_i18n.t("board.title", 'Pinnwand')),
         areas_count=len(areas) if layout != 'columns' else 0,
         cards_count=len(node_boxes),
         edges_count=len(edges),

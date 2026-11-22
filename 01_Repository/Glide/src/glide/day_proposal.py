@@ -104,9 +104,9 @@ def selected_rows(proposal, identities):
     wanted = set(identities)
     selected = [row for row in proposal["rows"] if (row["list_id"], row["item_id"]) in wanted]
     if len(selected) != len(wanted):
-        raise ValueError("Die Auswahl enthält keine aktuellen Vorschlagsaufgaben.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.the_selection_contains_no", "Die Auswahl enthält keine aktuellen Vorschlagsaufgaben."))
     if proposal["budget"] is None:
-        raise ValueError("Bitte zuerst eine Tageskapazität festlegen.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.please_set_a_daily", "Bitte zuerst eine Tageskapazität festlegen."))
     if sum(row["minutes"] for row in selected) > proposal["budget"]:
-        raise ValueError("Die Auswahl überschreitet das verfügbare Auswahlbudget.")
+        raise ValueError(glide_i18n.t("mod.day_proposal.selected_rows.the_selection_exceeds_the", "Die Auswahl überschreitet das verfügbare Auswahlbudget."))
     return selected

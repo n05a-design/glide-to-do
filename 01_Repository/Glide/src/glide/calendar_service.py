@@ -24,7 +24,7 @@ class View:
 
 def bounds(year):
     if type(year) is not int or not 1 <= year < 9999:
-        raise ValueError("Kalenderauswertung benötigt ein Jahr zwischen 1 und 9998.")
+        raise ValueError(glide_i18n.t("mod.calendar_service.bounds.calendar_evaluation_needs_a", "Kalenderauswertung benötigt ein Jahr zwischen 1 und 9998."))
     return date(year, 1, 1), date(year, 12, 31)
 
 
@@ -107,7 +107,7 @@ class CalendarService:
             raise RuntimeError("Kalenderdienst ist geschlossen.")
         if (window.sha256 != source.sha256 or window.first.year != window.last.year
                 or (window.first, window.last) != bounds(window.first.year)):
-            raise ValueError("Kalenderfenster passt nicht zur gewählten Quelle.")
+            raise ValueError(glide_i18n.t("mod.calendar_service.adopt.calendar_window_does_not", "Kalenderfenster passt nicht zur gewählten Quelle."))
         self._reset()
         self.source = source
         self.windows[window.first.year] = window

@@ -1,10 +1,10 @@
 # Backups – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen – Sicherungsübersicht](../20_FUNKTIONEN.md#sicherungsübersicht-und-anhangsrückfrage-3450), [§11 Sicherungen](../20_FUNKTIONEN.md#11-import-ausgabe-und-austausch), [Daten und Migration](../06_DATA_BACKUP_MIGRATION.md#automatische-sicherungen) · [Guide contents](README.md) · Previous: [Import and export](09-import-and-export.md) · Next: [Keyboard shortcuts](11-keyboard-shortcuts.md)
 
-> Controlled translation of the German function reference. If the texts differ, the German text applies. The entries of the **File › Backups** menu and the backup dialogs are still German; their German labels are given in italics.
+> Controlled translation of the German function reference. If the texts differ, the German text applies.
 
 ## What is in your data folder
 
@@ -16,7 +16,7 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 | `attachments/` | Local copies of attachments |
 | `backups/` | Automatic backups and pre-backups |
 
-Glide saves every change immediately and atomically. A half-written file never replaces the previous one. **File › Backups › *Sicherungsordner öffnen*** opens the backup folder.
+Glide saves every change immediately and atomically. A half-written file never replaces the previous one. **File › Backups › Open backup folder** opens the backup folder.
 
 ## Automatic backups
 
@@ -32,21 +32,21 @@ All of these are under **File › Backups**:
 
 | Menu entry | Use |
 |---|---|
-| *Aufgabensicherung speichern …* / *laden …* | Task backup (`.glidebackup`): all tasks and attachments. Loading replaces the collection after validation and a pre-backup. |
-| *Vollständiges App-Sicherung speichern …* / *App-Sicherung wiederherstellen …* | App backup: the task backup plus settings, templates and pinboard layouts. On restore you choose which areas to restore. |
-| *Listen/Ordner hinzufügen …* | Adds lists and folders from a backup with new IDs, without replacing anything. |
+| **Save task backup …** / **Load task backup …** | Task backup (`.glidebackup`): all tasks and attachments. Loading replaces the collection after validation and a pre-backup. |
+| **Save full app backup …** / **Restore app backup …** | App backup: the task backup plus settings, templates and pinboard layouts. On restore you choose which areas to restore. |
+| **Add lists/folders …** | Adds lists and folders from a backup with new IDs, without replacing anything. |
 
 Templates travel separately as a template catalog (`.glidetemplates`, **File › *Vorlagen***). Pages and books can be saved as `.glidepage` ([Import and export](09-import-and-export.md)).
 
 ## Backup overview, comparing and restoring
 
-- *Sicherungsübersicht …* (backup overview) lists the files in the backup folder, newest first, and you can search them. *Datei …* adds an external backup file for this session. *Lesen* (read) checks a backup's data part. *Vergleichen* (compare) opens the comparison. *Wiederherstellen …* (restore) starts the normal restore with confirmation and a pre-backup. Selecting an entry alone changes nothing.
-- *Sicherungen vergleichen …* (compare backups) puts two states side by side: the current one, an automatic backup or a chosen file. It shows lists and tasks as new, removed, moved or changed. It is read-only.
-- *Einzelne Seite wiederherstellen …* (restore a single page) restores one page from a backup, with its text, images, cover, attachments and task links. Other pages stay unchanged.
+- **Backup overview …** lists the files in the backup folder, newest first, and you can search them. **File …** adds an external backup file for this session. **Read** checks a backup's data part. **Compare** opens the comparison. **Restore …** starts the normal restore with confirmation and a pre-backup. Selecting an entry alone changes nothing.
+- **Compare backups …** puts two states side by side: the current one, an automatic backup or a chosen file. It shows lists and tasks as new, removed, moved or changed. It is read-only.
+- **Restore single page …** restores one page from a backup, with its text, images, cover, attachments and task links. Other pages stay unchanged.
 
 ## Storage status
 
-**File › Backups › *Speicherstatus …*** (storage status) shows open save problems for tasks, settings, templates and automatic backups, and the size of the data files. *Erneut speichern* (save again) retries. A hint *Speicherproblem · Details* (storage problem) stays at the bottom of the window until saving works again. Above 80 % of the 32 MiB budget, a *Sicherungsreserve · Details* (backup reserve) warning appears. Glide never deletes data on its own to make space. See [Troubleshooting](12-troubleshooting.md).
+**File › Backups › Storage status …** shows open save problems for tasks, settings, templates and automatic backups, and the size of the data files. **Save again** retries. A hint **Storage problem · details** stays at the bottom of the window until saving works again. Above 80 % of the 32 MiB budget, a **Backup reserve · details** warning appears. Glide never deletes data on its own to make space. See [Troubleshooting](12-troubleshooting.md).
 
 ## Moving to another computer
 

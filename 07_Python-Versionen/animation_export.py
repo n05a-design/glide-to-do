@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 import tempfile
+import i18n as glide_i18n
 
 
 class ExportRecoveryError(OSError):
@@ -19,17 +20,17 @@ def write_files(directory, files, *, replace=False):
     """
     directory = Path(directory).resolve(strict=True)
     if not directory.is_dir() or not isinstance(files, dict) or not files:
-        raise ValueError("Die Bildausgabe braucht einen Ordner und Dateien.")
+        raise ValueError(glide_i18n.t("mod.animation_export.write_files.the_image_output_needs", "Die Bildausgabe braucht einen Ordner und Dateien."))
     for name, content in files.items():
         if (not isinstance(name, str) or not name or name in ('.', '..')
                 or Path(name).name != name or '/' in name or '\\' in name
                 or not isinstance(content, bytes)):
-            raise ValueError("Ungültige Ausgabedatei.")
+            raise ValueError(glide_i18n.t("mod.animation_export.write_files.invalid_output_file", "Ungültige Ausgabedatei."))
         target = directory / name
         if target.is_symlink() or (target.exists() and not target.is_file()):
-            raise ValueError("Das Ausgabeziel ist keine gewöhnliche Datei: " + name)
+            raise ValueError(glide_i18n.t("mod.animation_export.write_files.the_output_target_is", 'Das Ausgabeziel ist keine gewöhnliche Datei: {name}', name=name))
         if target.exists() and not replace:
-            raise FileExistsError("Die Ausgabedatei existiert bereits: " + name)
+            raise FileExistsError(glide_i18n.t("mod.animation_export.write_files.the_output_file_already", 'Die Ausgabedatei existiert bereits: {name}', name=name))
     stage = Path(tempfile.mkdtemp(prefix='.glide-animation-', dir=directory))
     prepared = stage / 'neu'
     backup = stage / 'vorher'
@@ -46,10 +47,10 @@ def write_files(directory, files, *, replace=False):
         for name in files:
             target = directory / name
             if target.is_symlink() or (target.exists() and not target.is_file()):
-                raise ValueError("Das Ausgabeziel wurde verändert: " + name)
+                raise ValueError(glide_i18n.t("mod.animation_export.write_files.the_output_target_was", 'Das Ausgabeziel wurde verändert: {name}', name=name))
             if target.exists():
                 if not replace:
-                    raise FileExistsError("Die Ausgabedatei existiert bereits: " + name)
+                    raise FileExistsError(glide_i18n.t("mod.animation_export.write_files.the_output_file_already", 'Die Ausgabedatei existiert bereits: {name}', name=name))
                 os.replace(target, backup / name)
                 moved.append(name)
             else:
@@ -74,8 +75,7 @@ def write_files(directory, files, *, replace=False):
         if errors:
             keep = True
             raise ExportRecoveryError(
-                "Die Ausgabe ist fehlgeschlagen und konnte nicht vollständig zurückgenommen werden. "
-                "Die vorherigen Dateien bleiben hier erhalten: " + str(stage)) from cause
+                glide_i18n.t("mod.animation_export.write_files.the_output_failed_and", 'Die Ausgabe ist fehlgeschlagen und konnte nicht vollständig zurückgenommen werden. Die vorherigen Dateien bleiben hier erhalten: {str}', str=str(stage))) from cause
         raise
     finally:
         if not keep:

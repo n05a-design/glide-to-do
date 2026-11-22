@@ -161,13 +161,13 @@ class HomeTaskTiles:
         if self.commands.day_shift is not None:
             row = ui.flow(tile, pady=(self.spacing[0], self.spacing[4]))
             turn = self.commands.day_shift
-            ui.action(row, 'Voriger Tag', lambda: turn(-1), 'muted', side='left')
-            ui.action(row, 'Datum …', self.commands.day_choose, 'muted', side='left')
+            ui.action(row, glide_i18n.t("mod.home_task_tiles.render_today.previous_day", 'Voriger Tag'), lambda: turn(-1), 'muted', side='left')
+            ui.action(row, glide_i18n.t("ui.home_batch.date", "Datum …"), self.commands.day_choose, 'muted', side='left')
             if self.commands.day_week is not None:
-                ui.action(row, 'Woche …', self.commands.day_week, 'muted', side='left')
-            ui.action(row, 'Nächster Tag', lambda: turn(1), 'muted', side='left')
+                ui.action(row, glide_i18n.t("mod.home_task_tiles.render_today.week", 'Woche …'), self.commands.day_week, 'muted', side='left')
+            ui.action(row, glide_i18n.t("mod.home_task_tiles.render_today.next_day", 'Nächster Tag'), lambda: turn(1), 'muted', side='left')
             if not content.is_today:
-                ui.action(row, 'Heute', self.commands.day_today, 'muted', side='left')
+                ui.action(row, glide_i18n.t("menu.view.today", 'Heute'), self.commands.day_today, 'muted', side='left')
         if content.show_goal:
             ui.goal(tile)
         if content.next_task is not None:
@@ -182,7 +182,7 @@ class HomeTaskTiles:
         ui.action(tile, f"{self.icons['today']}  " + (glide_i18n.t("ui.show_daily_hints.open_today", 'Heute öffnen') if content.is_today else glide_i18n.t("mod.home_task_tiles.render_today.open_day_plan", 'Tagesplan öffnen')),
                   self.commands.day_open or self.commands.today, 'accent')
         if content.is_today and content.writable and self.commands.proposal is not None:
-            ui.action(tile, 'Was passt heute?', self.commands.proposal, 'muted')
+            ui.action(tile, glide_i18n.t("ui.render_day_proposal.what_fits_today", 'Was passt heute?'), self.commands.proposal, 'muted')
         return tile
 
     def render_planned(self, tile, content):
@@ -217,7 +217,7 @@ class HomeTaskTiles:
                     if turn is not None:
                         ui.action(controls, title, lambda value=step: turn(value), 'muted', side='left')
             if content.writable and content.tasks and not content.selecting and self.commands.selection_start:
-                ui.action(tile, 'Mehrere auswählen …', self.commands.selection_start, 'muted')
+                ui.action(tile, glide_i18n.t("mod.home_task_tiles.render_planned.select_several", 'Mehrere auswählen …'), self.commands.selection_start, 'muted')
         else:
             ui.label(tile, glide_i18n.t("mod.home_task_tiles.render_planned.nothing_is_planned_for", 'Für heute ist noch nichts eingeplant.') if content.is_today else
                      glide_i18n.t("mod.home_task_tiles.render_planned.nothing_is_planned_for_2", 'Für diesen Tag ist noch nichts eingeplant.'), color='muted')
@@ -240,7 +240,7 @@ class HomeTaskTiles:
         task = content.task
         if task is None:
             ui.label(tile, glide_i18n.t("mod.home_task_tiles.render_focus.nothing_is_on_a", 'Nichts steht an. Ein guter Moment, um zu planen oder Feierabend zu machen.'), color='muted')
-            ui.action(tile, f"{self.icons['in_progress']}  Demnächst öffnen", self.commands.upcoming, 'due_action')
+            ui.action(tile, glide_i18n.t("ui.kachel_stats.open_upcoming", '{in_progress}  Demnächst öffnen', in_progress=self.icons['in_progress']), self.commands.upcoming, 'due_action')
             return tile
         ui.label(tile, task.title, 12, True)
         ui.label(tile, content.details, color='muted')
@@ -250,14 +250,14 @@ class HomeTaskTiles:
             ui.label(tile, glide_i18n.t("mod.home_task_tiles.render_focus.read_only_tasks_can", 'Schreibgeschützt · Aufgaben lassen sich öffnen.'), color='muted')
         row = ui.flow(tile, pady=(self.spacing[4], self.spacing[0]))
         open_task, complete = self.commands.open_task, self.commands.complete
-        ui.action(row, 'Öffnen', lambda lid=task.list_id, iid=task.item_id: open_task(lid, iid), task.color, side='left')
+        ui.action(row, glide_i18n.t("saved_view.manager.open", 'Öffnen'), lambda lid=task.list_id, iid=task.item_id: open_task(lid, iid), task.color, side='left')
         if content.writable:
-            ui.action(row, f"{self.icons['check']}  Erledigt", lambda iid=task.item_id: complete(iid), 'confirm', side='left')
+            ui.action(row, glide_i18n.t("mod.home_task_tiles.render_focus.done", '{check}  Erledigt', check=self.icons['check']), lambda iid=task.item_id: complete(iid), 'confirm', side='left')
             focus, plan = self.commands.focus, self.commands.plan
             if focus is not None:
                 ui.action(row, glide_i18n.t("mod.home_task_tiles.render_focus.show_focus", 'Fokus anzeigen') if content.focused else glide_i18n.t("ui.build_home_task_menu.start_focus", 'Fokus starten'),
                           lambda iid=task.item_id: focus(iid), 'due_action', side='left')
             if plan is not None:
-                ui.action(row, 'Einplanen …', lambda iid=task.item_id: plan(iid), 'muted', side='left')
-        ui.action(row, f"{self.icons['next']}  Im Abschnitt zeigen", self.commands.next_task, 'due_action', side='left')
+                ui.action(row, glide_i18n.t("mod.home_task_tiles.render_focus.schedule", 'Einplanen …'), lambda iid=task.item_id: plan(iid), 'muted', side='left')
+        ui.action(row, glide_i18n.t("mod.home_task_tiles.render_focus.show_in_section", '{next}  Im Abschnitt zeigen', next=self.icons['next']), self.commands.next_task, 'due_action', side='left')
         return tile

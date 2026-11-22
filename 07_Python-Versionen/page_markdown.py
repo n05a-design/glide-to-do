@@ -24,6 +24,7 @@ import re
 import urllib.parse
 import task_references as task_refs
 import object_references as object_refs
+import i18n as glide_i18n
 
 BULLET = "•"
 DIVIDER = "―" * 24
@@ -50,7 +51,7 @@ _SAFE_URL = re.compile(r"^(https?://|mailto:)[^\s]+$")
 def insert_blocks(document, addition, position, link_map):
     """Blöcke einfügen, vorhandene Bilder und geteilte Formatbereiche bewahren."""
     if type(position) is not int or not 0 <= position <= len(document['text']):
-        raise ValueError('Ungültige Einfügeposition.')
+        raise ValueError(glide_i18n.t("mod.page_markdown.insert_blocks.invalid_insert_position", 'Ungültige Einfügeposition.'))
     delta = len(addition['text']) + 2
     spans = []
     for span in document['spans']:
@@ -120,7 +121,7 @@ class _Builder:
 
     def inline(self, text):
         """Inline-Markdown in reinen Text plus Bereiche (relativ zur Zeile)."""
-        text = _IMAGE.sub(lambda m: f"[Bild: {m.group(1) or 'ohne Titel'}]({m.group(2)})", text)
+        text = _IMAGE.sub(lambda m: glide_i18n.t("mod.page_markdown.inline.image", '[Bild: {wert}]({group})', wert=m.group(1) or glide_i18n.t("mod.page_markdown.inline.untitled", 'ohne Titel'), group=m.group(2)), text)
         text = _AUTOLINK.sub(lambda m: f"[{m.group(1)}]({m.group(1)})", text)
         ausgabe, spans, index = [], [], 0
         offen = {}
@@ -361,7 +362,7 @@ def page_to_markdown(document, task_state=None, image_source=None):
         auf_zeile = {span["tag"] for span in spans if span["start"] < max(ende, start + 1) and span["end"] > start}
         if IMAGE_ANCHOR in zeile:
             for tag in sorted(tag for tag in auf_zeile if tag in images):
-                beschreibung, pfad = image_source(images[tag]) if image_source else ("Bild", "")
+                beschreibung, pfad = image_source(images[tag]) if image_source else (glide_i18n.t("editor.toolbar.image", "Bild"), "")
                 bloecke.append(("image", f"![{beschreibung}]({pfad})" if pfad else f"*[{beschreibung}]*"))
             zeile = zeile.replace(IMAGE_ANCHOR, "")
             if not zeile.strip():
@@ -484,7 +485,7 @@ def _inline_html(zeile, bilder):
         if quelle:
             teile.append(f'<img src="{quelle}" alt="{_html(beschreibung)}">')
         else:
-            teile.append(f'<span class="image-missing">[Bild: {_html(beschreibung)}]</span>')
+            teile.append(glide_i18n.t("mod.page_markdown.inline_html.span_class_image_missing", '<span class="image-missing">[Bild: {html}]</span>', html=_html(beschreibung)))
         pos = treffer.end()
     teile.append(_inline_text_html(zeile[pos:]))
     return "".join(teile)
@@ -608,7 +609,7 @@ def page_to_print_html(document, task_state=None, image_data=None, max_image_byt
             if roh and len(roh) <= max_image_bytes and gesamt[0] + len(roh) <= max_total_bytes:
                 gesamt[0] += len(roh)
                 bilder[platzhalter] = f"data:{mime};base64," + base64.b64encode(roh).decode("ascii")
-            return str(beschreibung or "Bild").replace("]", ")"), platzhalter
-        return "Bild", platzhalter
+            return str(beschreibung or glide_i18n.t("editor.toolbar.image", "Bild")).replace("]", ")"), platzhalter
+        return glide_i18n.t("editor.toolbar.image", "Bild"), platzhalter
     markdown = page_to_markdown(document, task_state, quelle)
     return markdown_to_print_html(markdown, bilder)

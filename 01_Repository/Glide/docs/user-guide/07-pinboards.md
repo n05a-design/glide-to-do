@@ -1,12 +1,12 @@
 # Pinboards – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen §6 Pinnwand](../20_FUNKTIONEN.md#6-pinnwand), [JSON-Canvas-Export](../20_FUNKTIONEN.md#fundortübersicht-json-canvas-10-und-themengerechte-steuerelemente-3540-10112026) · [Guide contents](README.md) · Previous: [Pages and notes](06-pages-and-notes.md) · Next: [Pixel workshop](08-pixel-workshop.md)
 
-> Controlled translation of the German function reference. If the texts differ, the German text applies. Board labels are available in English.
+> Controlled translation of the German function reference. If the texts differ, the German text applies.
 
-A **pinboard** (in the English interface: *board*) is a view of the tasks of a list, a folder or your whole collection. It is not a separate content type. A card is the original task, and editing the card edits the task. There is a board per list, per folder and one **global board**.
+A **pinboard** (called **Board** in the interface) is a view of the tasks of a list, a folder or your whole collection. It is not a separate content type. A card is the original task, and editing the card edits the task. There is a board per list, per folder and one **global board**.
 
 ## Layouts
 
@@ -27,14 +27,14 @@ The toolbar button with the current name opens the layout menu:
 ## Connections and areas
 
 - **Connections** link two cards (one per pair). They can be a plain line or an arrow in either or both directions, with a label of up to 40 characters, dashes and a color. Drag from the handle at a card's edge to connect.
-- **Areas** (*Bereiche*) are named rectangles (up to 50). Cards whose center lies inside move with the area. Areas exist only in free arrangement.
+- **Areas** are named rectangles (up to 50). Cards whose center lies inside move with the area. Areas exist only in free arrangement.
 
 ## Working on the board
 
 - Ctrl/Cmd+click selects several cards in order. Connect, complete, resize and remove act on the selection.
 - Arrow keys select the next card, Home/End the first and last, and Enter opens it. Alt+arrows move the selected card by one grid step. In the column board, Alt+←/→ moves the card to the next column and sets its field.
-- F11 or **Area** (*Fläche*) switches to full screen. Escape leaves step by step: connecting, then full screen, then the board.
-- Shift+mouse wheel or the trackpad scrolls sideways. A pressed middle button drags the canvas. **Tidy up** (*Aufräumen*) arranges the selection in a grid.
+- F11 or **Full screen** switches to full screen. Escape leaves step by step: connecting, then full screen, then the board.
+- Shift+mouse wheel or the trackpad scrolls sideways. A pressed middle button drags the canvas. **Tidy up** arranges the selection in a grid.
 - Backgrounds: dots, lines or grid.
 - **Present** shows the areas as full-screen slides. **Presentation as PDF …** opens a print page with one A4 landscape page per area.
 

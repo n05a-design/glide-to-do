@@ -16,14 +16,20 @@ die drei neuesten Versionen mit Eintrag (`CARD_VERSIONS`); „Gelesen“ bleibt 
 ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
 „Hilfe › Über Glide › Neuerungen“.
 """
+import i18n as glide_i18n
 
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "1.0.1": (
+        "Der neue Showcase „Stadtlicht“ zeigt alle Funktionen an einer Fotoreise durch sieben Städte, auf Deutsch und Englisch.",
+        "Die Schnellerfassung versteht englische Wörter wie „tomorrow“, „next Monday“ oder „every week“; deutsche Wörter gelten weiter.",
+        "Geöffnete Seiten zeigen im Kopf, wann sie zuletzt bearbeitet wurden.",
+        "Austauschformat, Systemlabels, Vorlagen, Startseite und KI-Ausgabe lesen sich vollständig auf Englisch.",
+    ),
     "1.0.0": (
         "Glide spricht Deutsch und Englisch; Strg+Umschalt+L (Mac: Cmd+Umschalt+L) wechselt die Sprache ohne Neustart.",
         "Für Windows gibt es einen Installer mit Deinstallation, für macOS ein DMG-Abbild.",
-        "Glide lässt sich über Homebrew (macOS) und winget (Windows) installieren.",
         "Der KI-Skill „glide-to-do“ lässt sich für Claude Desktop, Cursor, Gemini CLI und Web-Assistenten exportieren.",
     ),
     "3.63.0": (
@@ -229,6 +235,18 @@ def release_rank(text):
     return (0 if stand[:1] == (3,) and stand <= LAST_DEVELOPMENT_VERSION else 1, stand)
 
 
+def note_key(version, index):
+    """Katalogschlüssel eines Neuerungssatzes, etwa `mod.release_notes.v1_0_1.0`."""
+    return f"mod.release_notes.v{str(version).replace('.', '_')}.{index}"
+
+
+def localized(version, punkte, catalog=None):
+    """Sätze einer Version in der aktiven Sprache; nur der eingebaute Katalog wird übersetzt."""
+    if catalog is not None:
+        return list(punkte)
+    return [glide_i18n.t(note_key(version, index), punkt) for index, punkt in enumerate(punkte)]
+
+
 def notes_since(last_seen, current, catalog=None):
     """Neuerungen der Versionen nach `last_seen` bis einschließlich `current`.
 
@@ -247,7 +265,7 @@ def notes_since(last_seen, current, catalog=None):
         if stand is not None and alt < stand <= neu and punkte:
             treffer.append((stand, version, list(punkte)[:5]))
     neueste = sorted(treffer, reverse=True)[:CARD_VERSIONS]
-    return [(version, punkte) for _stand, version, punkte in neueste]
+    return [(version, localized(version, punkte, catalog)) for _stand, version, punkte in neueste]
 
 
 def normalize_seen(value):
@@ -284,14 +302,14 @@ def history(current, catalog=None):
         stand = release_rank(version)
         if stand is not None and punkte and (neu is None or stand <= neu):
             treffer.append((stand, version, list(punkte)[:5]))
-    return [(version, punkte) for _stand, version, punkte in sorted(treffer, reverse=True)]
+    return [(version, localized(version, punkte, catalog)) for _stand, version, punkte in sorted(treffer, reverse=True)]
 
 
 def history_text(current, catalog=None):
     """Lesbarer Text für „Über Glide › Neuerungen“."""
     eintraege = history(current, catalog)
     if not eintraege:
-        return "Für diese Version sind keine Neuerungen hinterlegt."
+        return glide_i18n.t("mod.release_notes.history_text.no_changes_are_recorded", "Für diese Version sind keine Neuerungen hinterlegt.")
     abschnitte = []
     for version, punkte in eintraege:
         abschnitte.append(f"Version {version}\n" + "\n".join(f"• {punkt}" for punkt in punkte))

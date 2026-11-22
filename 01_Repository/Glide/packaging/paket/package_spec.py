@@ -28,6 +28,18 @@ def stage_modules(stage, bootstrap_name):
     return found
 
 
+def copyright_line(stage):
+    """Copyright-Zeile aus `brand.py` der Paketstufe (Inhaberentscheid 21.11.2026)."""
+    import ast
+    quelle = Path(stage) / "brand.py"
+    if not quelle.is_file():  # Prüfungen ohne Paketstufe lesen den Quellbaum
+        quelle = Path(__file__).resolve().parents[2] / "src/glide/brand.py"
+    for node in ast.parse(quelle.read_text(encoding="utf-8")).body:
+        if isinstance(node, ast.Assign) and any(getattr(t, "id", "") == "COPYRIGHT" for t in node.targets):
+            return ast.literal_eval(node.value)
+    raise ValueError("COPYRIGHT fehlt in brand.py")
+
+
 def specification(stage, target, product, icon, *, modules=()):
     if target not in TARGETS:
         raise ValueError('Unbeauftragte Paketplattform.')
@@ -73,7 +85,7 @@ def specification(stage, target, product, icon, *, modules=()):
         info=dict(CFBundleName=product['APP_NAME'],CFBundleDisplayName=product['APP_NAME'],
                   CFBundleShortVersionString=product['APP_VERSION'],CFBundleVersion=product['APP_VERSION'],
                   CFBundleDevelopmentRegion='de',LSApplicationCategoryType='public.app-category.productivity',
-                  NSHighResolutionCapable=True)
+                  NSHighResolutionCapable=True, NSHumanReadableCopyright=copyright_line(stage))
         lines += ['app = BUNDLE(coll, name='+repr(product['APP_NAME']+'.app')+',',
                   '    icon='+repr(str(icon))+', bundle_identifier='+repr(product['APP_BUNDLE_ID'])+',',
                   '    info_plist='+repr(info)+',',')']

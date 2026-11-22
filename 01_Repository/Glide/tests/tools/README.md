@@ -2,7 +2,7 @@
 
 **Prüfkopien auf anderen Laufwerken (06.11.2026):** Der lokale Git-Klon kopiert Objekte mit `--no-hardlinks`; Quell- und Prüfkopie teilen keine Objektdateien. Das erlaubt eine Prüfablage auf E trotz Quellablage auf C. Der bestehende Kopiertest prüft Bytegleichheit und getrennte Dateidentität.
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Intel-/AMD-Prüfplätze:** Jeder neue WA-42-Prüfablauf erfasst CPU-Modell/-Hersteller, logische Prozessorzahl, Board-/BIOS-Kontext und Laufzeit bereits am Anfang, auch bei grünen Läufen. `runtime.pruefplatz` führt die ermittelte CPU-Familie und einen Hardwareprofil-Hash ohne Rechner-/Benutzerkennung; er ist keine eindeutige physische Rechner-ID. Intel- und AMD-Ergebnisse getrennt zuordnen, zusätzlich App-/Suite-/Fixturehashes und Python/Tk vergleichen. Ein angekündigter AMD-Bericht bleibt bis zum tatsächlichen Eingang offen. Weder Hardwareprofil noch grüner Gegenlauf beweisen eine CPU-Ursache. Aktueller Intel-Eingang und Nachweise im [Abschlussnachlauf](https://github.com/n05a-design/glide-to-do/blob/f1a5b5b6e0f97f2b5eab1ac552999c33c6416e69/01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md).
 
@@ -26,7 +26,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `prozessdiagnose.py` / `test_prozessdiagnose.py` | Ergänzt den gemeinsamen Prüfungsstarter um lesenden Systemkontext und signaturbezogene WA-41A-/WA-41B-Hinweise; keine Fehlerunterdrückung, CPU-Skips oder automatischen Wiederholungen. [Vertrag und Grenzen](../../docs/05_QA_TESTPLAN.md#prozessabstürze-und-möglicher-prüfplatzfehler-wa-41) |
 | `pruefe_tk.py` | Tk-Voraussetzung und unter macOS die native Mausisolierung der Prüffenster |
 | `pruefe_showcase.py` | Pflichtprüfung des gelieferten Showcase (Import, Remapping, Vorschauen, Undo, Vorlagen, Neustart) |
-| `showcase.py [--tag JJJJ-MM-TT]` | Erzeugt den Showcase aus den Bildern in `tests/fixtures/showcase/bilder` |
+| `showcase.py [--tag JJJJ-MM-TT] [--sprache en]` | Erzeugt den Showcase „Stadtlicht“ bzw. „City Light“ (`showcase/en`) aus den eigenen Fotos in `tests/fixtures/showcase/bilder` |
 | `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Format |
 | `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT [--screenshot PFAD.png]` | Release-Arbeitslisten zum aktuellen Stand; Planungsfristen folgen dem Stichtag, Webquellen nicht. Unter Windows zusätzlich Aufnahmen im hellen Design und seinem dunklen Gegenstück; gleiche Bilder brechen ab |
 | `rundgang.py` | Probedaten „Rundgang“ (Liste, Notiz, Seite mit Bildern, Zeichnung) |

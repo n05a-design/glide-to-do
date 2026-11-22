@@ -15,6 +15,7 @@ import tkinter as tk
 import base64
 
 from drawing import BACKGROUND, SIZES, WIDTH, DrawingFormatError, DrawingModel, encode_rgba_png, icon_rgba
+import i18n as glide_i18n
 
 # Referenzbilder werden vor dem Einlesen begrenzt. Tk hält ein PhotoImage
 # unkomprimiert im Speicher; 4096 × 4096 Pixel sind rund 64 MiB.
@@ -43,7 +44,7 @@ def normalize_ui_color(value: str, widget: tk.Misc) -> str:
         red, green, blue = widget.winfo_rgb(text)
     except tk.TclError as exc:
         raise DrawingFormatError(
-            "Ungültige Farbe. Bitte Farbspektrum oder #RRGGBB verwenden."
+            glide_i18n.t("mod.drawing_image.invalid_colour", "Ungültige Farbe. Bitte Farbspektrum oder #RRGGBB verwenden.")
         ) from exc
     return f"#{red // 257:02X}{green // 257:02X}{blue // 257:02X}"
 
@@ -63,13 +64,13 @@ def render_framed_reference(
     Offsets are given in cells of the drawing.
     """
     if size not in SIZES:
-        raise DrawingFormatError("Unbekannte Flächengröße")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_framed_reference.unknown_canvas_size", "Unbekannte Flächengröße"))
     width = height = size
     source_width, source_height = source.width(), source.height()
     if source_width < 1 or source_height < 1:
-        raise DrawingFormatError("Das Referenzbild hat keine gültigen Abmessungen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_framed_reference.the_reference_image_has", "Das Referenzbild hat keine gültigen Abmessungen"))
     if mode not in {"fit", "fill"}:
-        raise DrawingFormatError("Unbekannter Bildrahmen-Modus")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_framed_reference.unknown_image_frame_mode", "Unbekannter Bildrahmen-Modus"))
     base_scale = (
         min(width / source_width, height / source_height)
         if mode == "fit"
@@ -117,13 +118,13 @@ def render_trace_reference(
 ) -> tk.PhotoImage:
     """Render a contour-aware square source for automatic tracing."""
     if size not in SIZES:
-        raise DrawingFormatError("Unbekannte Flächengröße")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_trace_reference.unknown_canvas_size", "Unbekannte Flächengröße"))
     width = height = size
     source_width, source_height = source.width(), source.height()
     if source_width < 1 or source_height < 1:
-        raise DrawingFormatError("Das Referenzbild hat keine gültigen Abmessungen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_trace_reference.the_reference_image_has", "Das Referenzbild hat keine gültigen Abmessungen"))
     if mode not in {"fit", "fill"}:
-        raise DrawingFormatError("Unbekannter Bildrahmen-Modus")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.render_trace_reference.unknown_image_frame_mode", "Unbekannter Bildrahmen-Modus"))
     base_scale = (
         min(width / source_width, height / source_height)
         if mode == "fit"
@@ -185,11 +186,11 @@ def quantize_reference(
     """Convert a framed reference into an editable, white-backed cell model."""
     width = height = image.width()
     if image.width() != image.height() or width not in SIZES:
-        raise DrawingFormatError("Die Nachzeichnung benötigt eine gerahmte quadratische Referenz")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.quantize_reference.tracing_needs_a_framed", "Die Nachzeichnung benötigt eine gerahmte quadratische Referenz"))
     if not 2 <= max_colors <= 64:
-        raise DrawingFormatError("Die Nachzeichnung erlaubt 2 bis 64 Farben")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.quantize_reference.tracing_allows_2_to", "Die Nachzeichnung erlaubt 2 bis 64 Farben"))
     if not 0 <= white_threshold <= 255:
-        raise DrawingFormatError("Die Weißtoleranz muss zwischen 0 und 255 liegen")
+        raise DrawingFormatError(glide_i18n.t("mod.drawing_image.quantize_reference.the_white_tolerance_must", "Die Weißtoleranz muss zwischen 0 und 255 liegen"))
 
     raw_cells: list[tuple[int, int, int] | None] = []
     histogram: dict[tuple[int, int, int], int] = {}

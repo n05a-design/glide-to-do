@@ -32,7 +32,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
         # Die 3.28-Funktionen bleiben in jeder späteren Fassung erhalten.
-        assert mod.APP_VERSION == "1.0.0" or tuple(map(int, mod.APP_VERSION.split("."))) >= (3, 28, 0)
+        # Release-Abfolge statt Zahlenvergleich: die offizielle Reihe ab 1.0.0 folgt auf 3.x (D93).
+        assert mod.glide_release.release_rank(mod.APP_VERSION) >= mod.glide_release.release_rank("3.28.0")
         assert app.DATA_SCHEMA_VERSION == 26
         assert app.ENTRY_MIN_WIDTH == 180
 

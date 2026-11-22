@@ -9,6 +9,7 @@ was der Zielquadrant verlangt: die Wichtigkeit oder den Bearbeitungstag.
 Eine Fälligkeit wird nie gelöscht oder verschoben.
 """
 from datetime import date, timedelta
+import i18n as glide_i18n
 
 WICHTIG_AB = 2
 DRINGEND_TAGE = 2
@@ -65,7 +66,7 @@ def aenderung(item, ziel, today=None, tage=DRINGEND_TAGE):
     today = today or date.today()
     soll = next(((w, d) for key, _t, w, d in QUADRANTEN if key == ziel), None)
     if soll is None:
-        return None, "Unbekannter Quadrant."
+        return None, glide_i18n.t("mod.eisenhower.aenderung.unknown_quadrant", "Unbekannter Quadrant.")
     wichtig_soll, dringend_soll = soll
     felder = {}
     if wichtig_soll and not ist_wichtig(item):
@@ -76,7 +77,7 @@ def aenderung(item, ziel, today=None, tage=DRINGEND_TAGE):
         felder["planned_date"] = today.isoformat()
     elif not dringend_soll and ist_dringend(item, today, tage):
         if faellig_dringend(item, today, tage):
-            return None, ("Die Fälligkeit liegt in den nächsten zwei Tagen und macht die Aufgabe dringend. "
-                          "Glide ändert keine Fälligkeit durch Ziehen.")
+            return None, (glide_i18n.t("mod.eisenhower.aenderung.the_due_date_is", "Die Fälligkeit liegt in den nächsten zwei Tagen und macht die Aufgabe dringend. "
+                          "Glide ändert keine Fälligkeit durch Ziehen."))
         felder["planned_date"] = (grenze(today, tage) + timedelta(days=1)).isoformat()
     return felder, None

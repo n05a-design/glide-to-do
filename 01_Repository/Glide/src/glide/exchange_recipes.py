@@ -55,25 +55,25 @@ def normalize_update(value, previous=None):
 
 def records(values):
     if not isinstance(values, list) or len(values) > MAX_RECIPES:
-        raise ValueError('Höchstens 50 eigene Aufträge sind möglich.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.records.at_most_50_custom", 'Höchstens 50 eigene Aufträge sind möglich.'))
     result = [normalize(value) for value in values]
     if len({r['id'] for r in result}) != len(result):
-        raise ValueError('Doppelte Auftragskennung.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.records.duplicate_task_id", 'Doppelte Auftragskennung.'))
     if len({r['title'].casefold() for r in result}) != len(result):
-        raise ValueError('Doppelter Auftragstitel.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.records.duplicate_task_title", 'Doppelter Auftragstitel.'))
     return result
 
 
 def catalog(resource, custom=()):
     if (not isinstance(resource, dict) or type(resource.get('format_version')) is not int
             or resource.get('format_version') != 1):
-        raise ValueError('Unbekanntes Format der mitgelieferten Aufträge.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.catalog.unknown_format_of_the", 'Unbekanntes Format der mitgelieferten Aufträge.'))
     builtins = records(resource.get('recipes'))
     if not isinstance(custom, (list, tuple)):
-        raise ValueError('Ungültige Ablage eigener Aufträge.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.catalog.invalid_storage_of_custom", 'Ungültige Ablage eigener Aufträge.'))
     own = records(list(custom))
     if {r['id'] for r in builtins} & {r['id'] for r in own}:
-        raise ValueError('Eine eigene Auftragskennung überschreibt einen mitgelieferten Auftrag.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.catalog.a_custom_task_id", 'Eine eigene Auftragskennung überschreibt einen mitgelieferten Auftrag.'))
     return builtins + own
 
 
@@ -111,11 +111,11 @@ def prepare(payload, recipe=None, create_spec=''):
     recipe = normalize(recipe)
     mode = 'patch' if payload.get('format') == 'glide.context' else payload.get('mode')
     if mode != recipe['mode']:
-        raise ValueError('Auftrag und gewählter Zweck passen nicht zusammen.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.prepare.task_and_chosen_purpose", 'Auftrag und gewählter Zweck passen nicht zusammen.'))
     field = 'instructions' if mode == 'patch' else 'notes'
     previous = result.get(field, '')
     if previous and not isinstance(previous, str):
-        raise ValueError('Ungültiger Anweisungstext im Austauschpaket.')
+        raise ValueError(glide_i18n.t("mod.exchange_recipes.prepare.invalid_instruction_text_in", 'Ungültiger Anweisungstext im Austauschpaket.'))
     result[field] = (previous + '\n\n' if previous else '') + instructions(recipe, create_spec)
     return result
 

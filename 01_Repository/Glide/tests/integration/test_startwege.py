@@ -325,6 +325,8 @@ def befunde(name, ergebnis):
             (zustand.get("basis_gleich") is True, "Pfadkonstanten folgen GLIDE_DATA_DIR nicht"),
             (zustand.get("ordner_vorhanden") is False and not ergebnis["daten"], "der Import hat den Datenordner angelegt"),
             (zustand.get("tk_fenster") is False, "der Import hat ein Tk-Fenster erzeugt"),
+            # Rest WA-49 (V1.83): der Menüaufschub entsteht erst beim App-Start.
+            (zustand.get("menue_aufschub") is False, "der Import hat tk.Menu verändert"),
         ]
         return [text for erfuellt, text in regeln if not erfuellt]
     einstieg, zustand = name.rsplit("_", 1)

@@ -395,9 +395,41 @@ def fall_v178_austausch_und_vorlagen(lauf):
             "Export in beiden Sprachen in beiden Sprachen wieder eingelesen")
 
 
+def fall_v179_startseite(lauf):
+    """V1.79: Startseite mit Tageskachel, Kacheln und Knöpfen in beiden Sprachen.
+
+    Die Kachel „Heute“ (home_task_tiles) und die Startseitenknöpfe waren bis
+    V1.78 teils deutsch; geprüft wird das ganze Hauptfenster mit künstlichen,
+    sprachneutralen Aufgaben.
+    """
+    app, mod = lauf.app, lauf.mod
+    heute = mod.date.today().isoformat()
+    liste = app.new_list_object("Alpha", [app.new_item("Beta", due=heute, planned_date=heute, estimated_minutes=30),
+                                          app.new_item("Gamma", due=heute)])
+    app.lists.append(liste)
+    app.save_items()
+
+    def pruefung(sprache):
+        app.create_menubar()
+        app._home_signature = None  # Sprachwechsel: Startseite neu aufbauen
+        app.set_home_view()
+        lauf.idle(6)
+        # Nur die neu aufgebaute Startseite: Feste Leisten des Hauptfensters wechseln die
+        # Sprache erst nach einem Neustart (Hinweis im Einstellungsdialog).
+        texte = [text for text in widget_texte(app.home_content, mod) if text not in ("Alpha", "Beta", "Gamma")]
+        erwartet = {"en": {"Previous day", "Next day", "Date"}, "de": {"Voriger Tag", "Nächster Tag", "Datum"}}
+        fehlt = erwartet[sprache] - set(texte)
+        assert not fehlt, (sprache, fehlt)
+        return texte
+
+    en, de = beide_sprachen(lauf, pruefung)
+    return f"Startseite mit Tageskachel: {en} englische, {de} deutsche Texte"
+
+
 FAELLE = ("l1_tageshinweise", "l2_tag_und_start", "l3_punkte_und_labels", "l4_menues_und_anlegen",
           "l5_erinnerungen_und_erfassung", "l6_drucken_und_sicherungen", "l7_kalender_verlauf_kuerzel",
-          "l8_handbuch_und_bericht", "v178_austausch_und_vorlagen")
+          "l8_handbuch_und_bericht", "v178_austausch_und_vorlagen",
+          "v179_startseite")
 
 
 def main():

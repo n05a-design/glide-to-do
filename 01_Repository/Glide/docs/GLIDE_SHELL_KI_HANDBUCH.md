@@ -1,6 +1,6 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 21.11.2026 · Glide 1.0.0 · Glide-System V1.69 · Glide Shell 0.5.0 · Aufgabenformat 26
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.69 · Glide Shell 0.5.0 · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 
@@ -133,7 +133,7 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
 | `SHELL_VERSION` (SemVer, derzeit 0.5.0) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
-| Glide-System-Version (derzeit 1.69) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
+| Glide-System-Version (derzeit 1.83) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
 | App-Version (1.0.0) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |

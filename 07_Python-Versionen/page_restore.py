@@ -12,6 +12,7 @@ import uuid
 import object_references as objects
 import task_references as tasks
 import attachment_paths as paths
+import i18n as glide_i18n
 
 
 def fingerprint(data):
@@ -58,16 +59,16 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
     """Kein stilles Überschreiben fremder IDs oder Dateien, kein Mit-Restore anderer Seiten."""
     candidates = [page for page in backup.get("lists",[]) if page.get("id") == page_id]
     if len(candidates) != 1 or candidates[0].get("list_kind") != "page":
-        raise ValueError("Die Sicherung enthält diese Seite nicht eindeutig.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.the_backup_does_not", "Die Sicherung enthält diese Seite nicht eindeutig."))
     page = copy.deepcopy(candidates[0])
     live_pages = [entry for entry in current.get("lists",[]) if entry.get("id") == page_id]
     if len(live_pages)>1 or (live_pages and live_pages[0].get("list_kind") != "page"):
-        raise ValueError("Die Zielkennung gehört nicht eindeutig derselben Seitenart.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.the_target_id_does", "Die Zielkennung gehört nicht eindeutig derselben Seitenart."))
     original_page = live_pages[0] if live_pages else None
     incoming = list(tasks.walk(page.get("items",[])))
     source_ids = [item["id"] for item in incoming]
     if len(set(source_ids)) != len(source_ids):
-        raise ValueError("Mehrdeutige Aufgabenkennungen auf der Sicherungsseite.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.ambiguous_task_ids_on", "Mehrdeutige Aufgabenkennungen auf der Sicherungsseite."))
     index = objects.nodes(current.get("lists",[]),current.get("trash",[]))
     occupied = {identity for _kind,identity in index} | set(source_ids)
     occupied.update(entry["id"] for entry in current.get("trash",[]))
@@ -80,7 +81,7 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
                     and identity not in occupied):
                 occupied.add(identity)
                 return identity
-        raise ValueError("Keine freie gültige Kennung für die Wiederherstellung.")
+        raise ValueError(glide_i18n.t("mod.page_restore.fresh.no_free_valid_id", "Keine freie gültige Kennung für die Wiederherstellung."))
     owned_trash = set()
     for deleted in current.get("trash",[]):
         if deleted.get("kind")=="item" and (deleted.get("origin") or {}).get("list_id")==page_id:
@@ -111,15 +112,15 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
     wanted_folder = original_page.get("folder_id") if original_page else page.get("folder_id")
     page["folder_id"] = wanted_folder if wanted_folder in folders else None
     if wanted_folder and wanted_folder not in folders:
-        warnings.append("Der frühere Ordner fehlt; die Seite wird ohne Ordner eingeordnet.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.the_earlier_folder_is", "Der frühere Ordner fehlt; die Seite wird ohne Ordner eingeordnet."))
     if original_page and page.get("folder_id") != candidates[0].get("folder_id"):
-        warnings.append("Die heutige Ordnereinordnung bleibt erhalten.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.the_current_folder_placement", "Die heutige Ordnereinordnung bleibt erhalten."))
     trash = []
     def trash_item(item, source=None):
         record = copy.deepcopy(source) if source else dict(id=fresh(),kind="item",deleted_at="",
                 list=None,folder=None,item=None,origin_folder_id=None,origin_folder_title="",origin={})
         record.update(kind="item",list=None,folder=None,item=item,
-                      origin=dict(list_id=page_id,list_title=page.get("title") or "Seite",
+                      origin=dict(list_id=page_id,list_title=page.get("title") or glide_i18n.t("ui.render.page", "Seite"),
                                   parent_item_id=None,index=None))
         return record
     for deleted in current.get("trash",[]):
@@ -150,26 +151,26 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
         removed = forest_without(original_page.get("items",[]),restored)
         trash = [*(trash_item(item) for item in removed),*trash]
         if removed:
-            warnings.append("Heute vorhandene, nicht wiederhergestellte Aufgaben bleiben im Papierkorb.")
+            warnings.append(glide_i18n.t("mod.page_restore.prepare.tasks_that_exist_today", "Heute vorhandene, nicht wiederhergestellte Aufgaben bleiben im Papierkorb."))
     if len(trash)>max_trash:
-        raise ValueError("Die Wiederherstellung würde den Papierkorb kürzen; bitte zuerst Platz schaffen.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.the_restore_would_shorten", "Die Wiederherstellung würde den Papierkorb kürzen; bitte zuerst Platz schaffen."))
     holders = [page,*incoming]
     known_labels = {value["id"]:value for value in current.get("labels",[])}
     saved_labels = {value["id"]:value for value in backup.get("labels",[])}
     needed = {identity for holder in holders for identity in holder.get("labels",[])}
     if needed-known_labels.keys()-saved_labels.keys():
-        raise ValueError("Labeldefinition fehlt in der Sicherung.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.label_definition_is_missing", "Labeldefinition fehlt in der Sicherung."))
     added = tuple(copy.deepcopy(saved_labels[key]) for key in sorted(needed-known_labels.keys()))
     if len(known_labels)+len(added)>max_labels:
-        raise ValueError("Die Wiederherstellung würde die Labelgrenze überschreiten.")
+        raise ValueError(glide_i18n.t("mod.page_restore.prepare.the_restore_would_exceed", "Die Wiederherstellung würde die Labelgrenze überschreiten."))
     if any(key in known_labels and key in saved_labels and known_labels[key]!=saved_labels[key] for key in needed):
-        warnings.append("Zwischenzeitlich geänderte Labeldefinitionen bleiben wie heute; andere Seiten ändern sich nicht.")
+        warnings.append(glide_i18n.t("mod.page_restore.prepare.label_definitions_changed_in", "Zwischenzeitlich geänderte Labeldefinitionen bleiben wie heute; andere Seiten ändern sich nicht."))
     attachments = {}
     for holder in holders:
         for attachment in holder.get("attachments",[]):
             identity = attachment["id"]
             if identity in attachments and attachments[identity] != attachment:
-                raise ValueError("Anhangskennung ist in der Sicherungsseite mehrdeutig.")
+                raise ValueError(glide_i18n.t("mod.page_restore.prepare.attachment_id_is_ambiguous", "Anhangskennung ist in der Sicherungsseite mehrdeutig."))
             attachments[identity] = copy.deepcopy(attachment)
     referenced = {value.get("attachment") for value in (page.get("rich_note") or {}).get("images",{}).values()}
     cover = page.get("cover") or {}
@@ -200,31 +201,31 @@ def prepare(current, backup, page_id, available_assets, *, new_id=None, max_tras
 def with_attachments(plan, stored):
     expected = {value["id"] for value in plan.attachments}
     if set(stored) != expected or not plan.ready:
-        raise ValueError("Alle Sicherungsanhänge müssen vor Übernahme verfügbar sein.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.all_backup_attachments_must", "Alle Sicherungsanhänge müssen vor Übernahme verfügbar sein."))
     if plan.staged:
-        raise ValueError("Die Sicherungsanhänge wurden bereits zugeordnet.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.the_backup_attachments_have", "Die Sicherungsanhänge wurden bereits zugeordnet."))
     if any(not isinstance(value, dict) for value in stored.values()):
-        raise ValueError("Ungültige Metadaten eines kopierten Anhangs.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.invalid_metadata_of_a", "Ungültige Metadaten eines kopierten Anhangs."))
     new_ids = [value.get("id") for value in stored.values()]
     if any(not isinstance(identity, str) or not 1 <= len(identity) <= 64
            or any(not c.isascii() or not (c.isalnum() or c in "_-") for c in identity)
            for identity in new_ids) or len(set(new_ids)) != len(new_ids):
-        raise ValueError("Neue Anhangskennungen sind nicht eindeutig oder ungültig.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.new_attachment_ids_are", "Neue Anhangskennungen sind nicht eindeutig oder ungültig."))
     if set(new_ids).intersection(plan.occupied_attachment_ids):
-        raise ValueError("Eine neue Anhangskennung ist bereits belegt.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.a_new_attachment_id", "Eine neue Anhangskennung ist bereits belegt."))
     storage = [value.get("storage") for value in stored.values()]
     keys = [paths.storage_key(value) for value in storage]
     occupied = {paths.storage_key(value) for value in plan.occupied_storage}
     if (any(paths.validate_storage(value) != value for value in storage)
             or len(set(keys)) != len(keys) or set(keys).intersection(occupied)):
-        raise ValueError("Jeder kopierte Anhang braucht einen freien gültigen Speicherpfad.")
+        raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.every_copied_attachment_needs", "Jeder kopierte Anhang braucht einen freien gültigen Speicherpfad."))
     for original in plan.attachments:
         copied = stored[original["id"]]
         if type(copied.get("size")) is not int or copied["size"] != original.get("size"):
-            raise ValueError("Eine kopierte Anhangsgröße stimmt nicht mit der Sicherung überein.")
+            raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.a_copied_attachment_size", "Eine kopierte Anhangsgröße stimmt nicht mit der Sicherung überein."))
         for field in ("name", "mime", "title", "note"):
             if copied.get(field) != original.get(field):
-                raise ValueError("Beschreibende Anhangsfelder müssen aus der Sicherung erhalten bleiben.")
+                raise ValueError(glide_i18n.t("mod.page_restore.with_attachments.descriptive_attachment_fields_must", "Beschreibende Anhangsfelder müssen aus der Sicherung erhalten bleiben."))
     page = copy.deepcopy(plan.page)
     for holder in [page,*tasks.walk(page.get("items",[]))]:
         if "attachments" in holder:
@@ -238,9 +239,9 @@ def with_attachments(plan, stored):
 
 def validate(plan, current):
     if not plan.ready:
-        raise ValueError("Dateien für die Wiederherstellung fehlen.")
+        raise ValueError(glide_i18n.t("mod.page_restore.validate.files_for_the_restore", "Dateien für die Wiederherstellung fehlen."))
     if plan.attachments and not plan.staged:
-        raise ValueError("Anhänge müssen vor Übernahme neu abgelegt werden.")
+        raise ValueError(glide_i18n.t("mod.page_restore.validate.attachments_must_be_stored", "Anhänge müssen vor Übernahme neu abgelegt werden."))
     if fingerprint(current) != plan.current_hash:
-        raise ValueError("Der Bestand hat sich geändert; bitte die Vorschau neu aufbauen.")
+        raise ValueError(glide_i18n.t("mod.page_restore.validate.the_data_has_changed", "Der Bestand hat sich geändert; bitte die Vorschau neu aufbauen."))
     return True

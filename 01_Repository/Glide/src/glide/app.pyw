@@ -91,7 +91,9 @@ def defer_window_menu_commands():
     tk.Menu.insert_command = huelle_einfuegen(tk.Menu.insert_command)
     tk.Menu._glide_defers_windows = True
 
-defer_window_menu_commands()
+
+# Seit V1.83 (Rest WA-49) wird der Aufschub erst beim App-Start eingerichtet
+# (`activate_runtime`); der Import verändert `tk.Menu` nicht mehr.
 
 
 def bytecode_cache_dir():
@@ -114,6 +116,16 @@ def bytecode_cache_dir():
 
 if not sys.pycache_prefix and not getattr(sys, "frozen", False):
     sys.pycache_prefix = bytecode_cache_dir()
+
+# D89 (Rest WA-49): Beim Direktstart prüft Glide die Python-Version, nach der Bytecode-Umleitung und bevor ein
+# weiteres Glide-Modul geladen oder ein Nutzerdatum berührt wird. Ein Import
+# (Tests, Schnellstart, Paket) bleibt unberührt; dort prüft der jeweilige Starter.
+if __name__ == "__main__":
+    import runtime_check as _glide_startpruefung
+    _stufe, _meldung = _glide_startpruefung.python_status()
+    if _stufe == "zu_alt":
+        print(_meldung, file=sys.stderr)
+        sys.exit(1)
 import drawing as glide_drawing  # noqa: E402
 import animation as glide_animation  # noqa: E402
 import notion_archive as glide_notion_archive  # noqa: E402
@@ -255,7 +267,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 APP_RELEASE_NAME = "Entwicklungsstand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -598,7 +610,9 @@ def get_app_data_dir():
     return glide_runtime_config.resolve_paths().base_dir
 
 
-RUNTIME_PATHS = glide_runtime_config.resolve_paths()
+# Beim Import nur rechnen, ohne den Benutzerzeiger `datenordner.json` zu lesen
+# (Rest WA-49). `activate_runtime()` liest ihn einmal beim Start.
+RUNTIME_PATHS = glide_runtime_config.resolve_paths(read_pointer=False)
 BASE_DIR = RUNTIME_PATHS.base_dir
 SAVE_FILE = RUNTIME_PATHS.save_file
 SETTINGS_FILE = RUNTIME_PATHS.settings_file
@@ -612,6 +626,34 @@ ERROR_LOG_MAX_BYTES = 200_000
 
 # Der Import legt keine Ordner an, auch nicht mit GLIDE_DATA_DIR (WA-49). Die
 # Bereitstellung erfolgt beim App-Start in ListApp.__init__ und beim Ordnerwechsel.
+
+_RUNTIME_ACTIVE = False
+
+
+def activate_runtime():
+    """Einmal je Prozess beim Start: Menüaufschub und Datenordner samt Benutzerzeiger.
+
+    Bis V1.82 geschah beides schon beim Import (Rest WA-49). Ein späterer
+    Ordnerwechsel im selben Prozess (`change_data_folder`) bleibt unberührt,
+    weil die Funktion nur beim ersten Aufruf wirkt.
+    """
+    global _RUNTIME_ACTIVE, RUNTIME_PATHS, BASE_DIR, SAVE_FILE, SETTINGS_FILE, BACKUP_DIR
+    global ATTACHMENTS_DIR, TEMPLATES_FILE, DATA_POINTER_FILE, LOCK_FILE, ERROR_LOG_FILE
+    if _RUNTIME_ACTIVE:
+        return RUNTIME_PATHS
+    _RUNTIME_ACTIVE = True
+    defer_window_menu_commands()
+    RUNTIME_PATHS = glide_runtime_config.resolve_paths()
+    BASE_DIR = RUNTIME_PATHS.base_dir
+    SAVE_FILE = RUNTIME_PATHS.save_file
+    SETTINGS_FILE = RUNTIME_PATHS.settings_file
+    BACKUP_DIR = RUNTIME_PATHS.backup_dir
+    ATTACHMENTS_DIR = RUNTIME_PATHS.attachments_dir
+    TEMPLATES_FILE = RUNTIME_PATHS.templates_file
+    DATA_POINTER_FILE = RUNTIME_PATHS.pointer_file
+    LOCK_FILE = RUNTIME_PATHS.lock_file
+    ERROR_LOG_FILE = RUNTIME_PATHS.error_log_file
+    return RUNTIME_PATHS
 
 
 def register_private_fonts(font_dir=None):
@@ -716,7 +758,7 @@ def principal_moon_phase_utc(lunation, quarter):
     Für Kalenderdaten gedacht; keine astronomische Präzisionszeitangabe.
     """
     if quarter not in (0, 1, 2, 3):
-        raise ValueError("Mondphase muss zwischen 0 und 3 liegen.")
+        raise ValueError(glide_i18n.t("ui.principal_moon_phase_utc.moon_phase_must_be", "Mondphase muss zwischen 0 und 3 liegen."))
     k = lunation + quarter / 4
     t = k / 1236.85
     def sin(angle):
@@ -6366,7 +6408,7 @@ class ItemWorkspace:
         boxes = self.logical_card_boxes()
         geometrie = self.board_print_geometry()
         if geometrie is None:
-            raise ValueError("Auf dieser Pinnwand liegt noch keine Karte.")
+            raise ValueError(glide_i18n.t("ui.build_board_print_html.there_are_no_cards", "Auf dieser Pinnwand liegt noch keine Karte."))
         ursprung_x, ursprung_y, breite, hoehe = geometrie
         titel = app.get_display_title()
         skala = self.BOARD_PRINT_SCALE
@@ -6540,8 +6582,8 @@ class ItemWorkspace:
         app = self.app
         bereiche = self.area_list()
         if self.board()["layout"] != "free" or not bereiche:
-            raise ValueError("Die Präsentation zeigt die Bereiche der Pinnwand als Folien. "
-                             "Zuerst in der Anordnung „Frei anordnen“ einen Bereich anlegen.")
+            raise ValueError(glide_i18n.t("ui.build_presentation_print_html.the_presentation_shows_the", "Die Präsentation zeigt die Bereiche der Pinnwand als Folien. "
+                             "Zuerst in der Anordnung „Frei anordnen“ einen Bereich anlegen."))
         titel = app.get_display_title()
         skala = self.BOARD_PRINT_SCALE
         esc = app.escape_print_text
@@ -6692,7 +6734,7 @@ class ItemWorkspace:
             if target == os.path.normcase(os.path.realpath(TEMPLATES_FILE)) or (os.path.isfile(path) and any(
                     os.path.isfile(protected) and os.path.samefile(path, protected)
                     for protected in (SAVE_FILE, SETTINGS_FILE, TEMPLATES_FILE))):
-                raise ValueError("Diese Glide-Systemdatei darf nicht überschrieben werden.")
+                raise ValueError(glide_i18n.t("ui.export_board_json_canvas.this_glide_system_file", "Diese Glide-Systemdatei darf nicht überschrieben werden."))
             app.write_json_atomic(path, payload)
         except (OSError, ValueError) as exc:
             app.show_error(glide_i18n.t("ui.export_board_json_canvas.export_json_canvas", "JSON Canvas exportieren"), glide_i18n.t("ui.export_board_json_canvas.the_file_could_not", 'Die Datei konnte nicht geschrieben werden:\n{exc}', exc=exc))
@@ -6834,7 +6876,7 @@ class ItemWorkspace:
         app = self.app
         board = self.board()
         specs = (
-            ("Raster", board["snap"], lambda: self.configure_board("snap", not self.board()["snap"]),
+            (glide_i18n.t("ui.board_controls.grid", "Raster"), board["snap"], lambda: self.configure_board("snap", not self.board()["snap"]),
              glide_i18n.t("ui.board_controls.snap_cards_to_the", "Karten beim Ablegen am 24-Pixel-Raster ausrichten")),
         )
         buttons = []
@@ -12084,6 +12126,9 @@ class PageEditor(RichNoteEditor):
                          command=self.toggle_width)
         self.add_outline_menu(menu)
         self.add_object_reference_menu(menu)
+        if self.app.is_page_list(entry := self.app.page_entry(self.entry_id)) and glide_pages.edit_time_text(entry.get("updated_at")):
+            menu.add_command(label=glide_i18n.t("page.edit_time.action", "Bearbeitungszeit anzeigen …"),
+                             command=self.show_page_edit_time)
         menu.add_separator()
         menu.add_command(label=glide_i18n.t("ui.build_page_menu.embed_live_list", 'Live-Liste einbetten …'), command=lambda: self.app.choose_live_list(self.entry_id))
         menu.add_cascade(label=glide_i18n.t("ui.build_page_menu.cover_image", 'Titelbild'), menu=self.app.page_cover_menu(self.entry_id, menu))
@@ -12104,6 +12149,11 @@ class PageEditor(RichNoteEditor):
         menu.add_command(label=glide_i18n.t("menu.edit.undo", 'Rückgängig'), command=self.undo)
         menu.add_command(label=glide_i18n.t("menu.edit.redo", 'Wiederholen'), command=self.redo)
         return menu
+
+    def show_page_edit_time(self):
+        entry = self.app.page_entry(self.entry_id)
+        if entry and (edit := glide_pages.edit_time_text(entry.get("updated_at"))):
+            self.app.show_info(glide_i18n.t("page.edit_time.title", "Letzte Bearbeitung"), edit[1])
 
     def show_page_actions(self, event=None):
         """„Mehr“: die Einträge des Seitenmenüs als eingebettete Auswahl mit Filterfeld (E-U3 A)."""
@@ -15143,8 +15193,8 @@ class DrawingEditor(tk.Frame):
             action_key = self.STATUS_ACTION_KEYS.get(action.label)
             action_label = glide_i18n.t(f"drawing.action.{action_key}", action.label) if action_key else action.label
             count_key = "one" if action.count == 1 else "many"
-            fallback = ("{action}: 1 Zelle geändert" if count_key == "one"
-                        else "{action}: {count} Zellen geändert")
+            fallback = (glide_i18n.t("drawing.status.cells_changed.one", "{action}: 1 Zelle geändert") if count_key == "one"
+                        else glide_i18n.t("drawing.status.cells_changed.many", "{action}: {count} Zellen geändert"))
             self.update_status(glide_i18n.t(f"drawing.status.cells_changed.{count_key}", fallback,
                                             action=action_label, count=action.count))
         else:
@@ -15534,16 +15584,16 @@ class DrawingEditor(tk.Frame):
             action_label = glide_i18n.t(f"drawing.action.{action_key}", action.label) if action_key else action.label
             count_key = "one" if action.count == 1 else "many"
             fallback = {
-                ("undo_done", "one"): "Zurückgenommen: {action} (1 Zelle)",
-                ("undo_done", "many"): "Zurückgenommen: {action} ({count} Zellen)",
-                ("redo_done", "one"): "Wiederhergestellt: {action} (1 Zelle)",
-                ("redo_done", "many"): "Wiederhergestellt: {action} ({count} Zellen)",
+                ("undo_done", "one"): glide_i18n.t("ui.history_step.undone_1_cell", "Zurückgenommen: {action} (1 Zelle)"),
+                ("undo_done", "many"): glide_i18n.t("ui.history_step.undone_cells", "Zurückgenommen: {action} ({count} Zellen)"),
+                ("redo_done", "one"): glide_i18n.t("ui.history_step.redone_1_cell", "Wiederhergestellt: {action} (1 Zelle)"),
+                ("redo_done", "many"): glide_i18n.t("ui.history_step.redone_cells", "Wiederhergestellt: {action} ({count} Zellen)"),
             }[(done_key, count_key)]
             self.update_status(glide_i18n.t(f"drawing.status.{done_key}.{count_key}", fallback,
                                             action=action_label, count=action.count))
         else:
-            fallback = ("Kein weiterer Rückgängig-Schritt" if empty_key == "undo_empty"
-                        else "Kein weiterer Wiederholen-Schritt")
+            fallback = (glide_i18n.t("ui.history_step.no_further_undo_step", "Kein weiterer Rückgängig-Schritt") if empty_key == "undo_empty"
+                        else glide_i18n.t("ui.history_step.no_further_redo_step", "Kein weiterer Wiederholen-Schritt"))
             self.update_status(glide_i18n.t(f"drawing.status.{empty_key}", fallback))
         return "break"
 
@@ -17889,6 +17939,7 @@ class ListApp:
 
     def __init__(self, root):
         self.root = root
+        activate_runtime()
         self.paths = glide_runtime_config.resolve_paths(BASE_DIR)
         self.paths.ensure_dirs()
         # Der eigene Fehlerbericht steht vor
@@ -18018,7 +18069,7 @@ class ListApp:
             self.view_mode = saved_view_mode
         else:
             self.view_mode = "list"
-        self.app_title = self.settings.get("title", "Meine Liste").strip() or "Meine Liste"
+        self.app_title = self.settings.get("title", "Meine Liste").strip() or glide_i18n.t("ui.refresh_sidebar_row_texts.my_list", "Meine Liste")
         self.theme = self.active_theme()
         self.theme_widgets = []
         self.rounded_containers = []
@@ -19172,11 +19223,12 @@ class ListApp:
         nirgends mehr unabhängig gesetzt.
         """
         value = getattr(self, "settings", {}).get("design", self.DESIGN_DEFAULT)
-        return value if value in tr_table(self.DESIGNS) else self.DESIGN_DEFAULT
+        return value if value in self.DESIGNS else self.DESIGN_DEFAULT
 
     def design_info(self, key=None):
         """Die Beschreibung eines Designs; ohne Argument die des aktiven."""
-        return tr_table(self.DESIGNS).get(key or self.design_name(), tr_table(self.DESIGNS)[self.DESIGN_DEFAULT])
+        design = self.DESIGNS.get(key or self.design_name(), self.DESIGNS[self.DESIGN_DEFAULT])
+        return tr_table(design)
 
     def set_design(self, key, apply_now=True):
         """Wechselt das Design und hält die abgeleiteten Werte nach.
@@ -19263,7 +19315,7 @@ class ListApp:
         Bleibt als Name erhalten, weil Kartenzeichnung, Label-Chips und die
         Feierrückmeldung danach fragen. Gelesen wird seit 3.23 das Design.
         """
-        return self.design_info()["layer"] or "standard"
+        return self.DESIGNS[self.design_name()]["layer"] or "standard"
 
     def glass_enabled(self):
         """Ob das aktive Design die Materialoptik verwendet."""
@@ -19912,7 +19964,7 @@ class ListApp:
         try:
             if not session.acquire():
                 self._lock_token = {}
-                return self.mark_lock_read_only({"host": "gleichzeitig startender Prozess"}, reason="lock")
+                return self.mark_lock_read_only({"host": glide_i18n.t("ui.acquire_data_lock.process_starting_at_the", "gleichzeitig startender Prozess")}, reason="lock")
             info = self._acquire_data_lock()
             if self._lock_token:
                 self._lock_session = session
@@ -19966,7 +20018,7 @@ class ListApp:
             break
         state = glide_lock.read(LOCK_FILE)
         info = self.foreign_lock_info(state) or state.record or {
-            "defective": True, "kind": state.kind, "detail": "Sperre gleichzeitig verändert"}
+            "defective": True, "kind": state.kind, "detail": glide_i18n.t("ui.acquire_data_lock.lock_changed_at_the", "Sperre gleichzeitig verändert")}
         return self.mark_lock_read_only(info, reason="lock")
 
     def take_over_data_lock(self):
@@ -20106,7 +20158,7 @@ class ListApp:
             return False
         if state.kind != glide_lock.VALID or state.record.get("token") != token.get("token"):
             self.mark_lock_read_only(state.record if state.kind == glide_lock.VALID else {
-                "defective": True, "kind": state.kind, "detail": state.detail or "Sperre fehlt"})
+                "defective": True, "kind": state.kind, "detail": state.detail or glide_i18n.t("ui.check_data_lock.lock_missing", "Sperre fehlt")})
             return False
         if not renew:
             return True
@@ -20133,30 +20185,30 @@ class ListApp:
         global BASE_DIR, SAVE_FILE, SETTINGS_FILE, BACKUP_DIR, ATTACHMENTS_DIR, TEMPLATES_FILE
         global LOCK_FILE, ERROR_LOG_FILE
         if not str(path or "").strip():
-            raise ValueError("Bitte einen Datenordner auswählen.")
+            raise ValueError(glide_i18n.t("ui.change_data_folder.please_choose_a_data", "Bitte einen Datenordner auswählen."))
         target = os.path.realpath(os.path.abspath(os.path.expanduser(str(path))))
         source = os.path.realpath(BASE_DIR)
         if os.path.normcase(target) == os.path.normcase(source):
             return True
         foreign = self.read_foreign_lock(os.path.join(target, "glide.lock"))
         if foreign and not foreign.get("defective"):
-            raise ValueError("Der Zielordner ist auf einem anderen Arbeitsplatz geöffnet.")
+            raise ValueError(glide_i18n.t("ui.change_data_folder.the_target_folder_is", "Der Zielordner ist auf einem anderen Arbeitsplatz geöffnet."))
         os.makedirs(target, exist_ok=True)
         if move_existing and os.listdir(target):
-            raise ValueError("Zum Kopieren muss der Zielordner leer sein. Vorhandene Daten können stattdessen geöffnet werden.")
+            raise ValueError(glide_i18n.t("ui.change_data_folder.the_target_folder_must", "Zum Kopieren muss der Zielordner leer sein. Vorhandene Daten können stattdessen geöffnet werden."))
         if move_existing:
             try:
                 nested = os.path.commonpath([source, target]) in (source, target)
             except ValueError:
                 nested = False
             if nested:
-                raise ValueError("Quell- und Zielordner dürfen nicht ineinander liegen.")
+                raise ValueError(glide_i18n.t("ui.change_data_folder.source_and_target_folder", "Quell- und Zielordner dürfen nicht ineinander liegen."))
         target_data = os.path.join(target, "liste_speicher.json")
         if not move_existing and os.path.isfile(target_data):
             with open(target_data, "r", encoding="utf-8") as file:
                 self.validate_backup_schema(glide_storage.read_stream(file))
         if not self.save_items():
-            raise OSError("Der aktuelle Bestand konnte nicht gespeichert werden.")
+            raise OSError(glide_i18n.t("ui.change_data_folder.the_current_data_could", "Der aktuelle Bestand konnte nicht gespeichert werden."))
         self.save_settings()
         self.save_templates()
         if move_existing:
@@ -20339,7 +20391,7 @@ class ListApp:
             if self.verify_data_lock() is False:
                 if getattr(self, "_data_read_only", False):
                     return False
-                raise OSError("Die Datensperre (glide.lock) ließ sich gerade nicht lesen.")
+                raise OSError(glide_i18n.t("ui.save_settings.the_data_lock_glide", "Die Datensperre (glide.lock) ließ sich gerade nicht lesen."))
             migration_backup = os.path.join(BASE_DIR, "settings.before-v1.json")
             if os.path.isfile(SETTINGS_FILE) and not os.path.exists(migration_backup):
                 with open(SETTINGS_FILE, "rb") as existing_file:
@@ -21855,7 +21907,7 @@ class ListApp:
         if view.status == "disabled":
             return glide_week.free_slots(items, day, duration)
         if view.status != "ready":
-            raise ValueError("Freie Zeit unbekannt: " + view.message)
+            raise ValueError(glide_i18n.t("ui.calendar_free_slots.free_time_unknown", 'Freie Zeit unbekannt: {message}', message=view.message))
         return occupied_time.planning_slots(
             [item for item in items if self.is_schedulable_item(item)],
             date.fromisoformat(day), duration, view.blocks, self._daily_zone)
@@ -21870,7 +21922,7 @@ class ListApp:
     def relief_blocks(self, day):
         view = self.busy_view(day)
         if view.status not in ("ready", "disabled"):
-            raise ValueError("Freie Zeit für " + self.format_due_display(day) + " unbekannt: " + view.message)
+            raise ValueError(glide_i18n.t("ui.relief_blocks.free_time_for_unknown", 'Freie Zeit für {format_due_display} unbekannt: {message}', format_due_display=self.format_due_display(day), message=view.message))
         return view.blocks
 
 
@@ -22520,7 +22572,7 @@ class ListApp:
         knopf = getattr(self, "plan_day_grid_button", None)
         if knopf is not None:
             try:
-                knopf.set_text("Raster ✓" if self.plan_grid_enabled() else "Raster")
+                knopf.set_text(glide_i18n.t("ui.plan_day.grid", "Raster") + " ✓" if self.plan_grid_enabled() else glide_i18n.t("ui.plan_day.grid", "Raster"))
             except tk.TclError:
                 pass
         rahmen = getattr(self, "plan_grid_frame", None)
@@ -23479,7 +23531,7 @@ class ListApp:
             ziel = next((entry for entry in self.lists if entry.get("id") == target), None)
             if ziel is None or not self.list_accepts_items(ziel):
                 return False, glide_i18n.t("ui.set_group_value.this_page_does_not", "Diese Seite nimmt keine Aufgaben auf.")
-            with self.guarded_structural_change("In andere Liste verschieben"):
+            with self.guarded_structural_change(glide_i18n.t("ui.drop_items_on_list.move_to_another_list", "In andere Liste verschieben")):
                 with self.item_change((), restore=False, update_sidebar=True) as change:
                     for item_id in kennungen:
                         found = self.find_item_in_lists(item_id)
@@ -26628,7 +26680,7 @@ class ListApp:
             current = self.item_details_snapshot(item)
             edit = glide_task_editing.merge(state.get("baseline") or current,entered,current)
             if edit.changed and getattr(self,"_data_read_only",False):
-                raise ValueError("Der Bestand ist schreibgeschützt. Die Eingabe bleibt erhalten")
+                raise ValueError(glide_i18n.t("ui.commit_detail_pane.the_data_is_read", "Der Bestand ist schreibgeschützt. Die Eingabe bleibt erhalten"))
         except tk.TclError:
             return False
         except ValueError as exc:
@@ -29341,7 +29393,7 @@ class ListApp:
                              (glide_i18n.t("calendar.none_due", 'Keine Fälligkeit'), None)):
             due.add_command(label=title, command=lambda chosen=value:
                 self.apply_home_batch(identities, day, 'due', chosen))
-        due.add_command(label='Datum …', command=lambda: self.choose_home_batch_value(identities, day, 'due'))
+        due.add_command(label=glide_i18n.t("ui.home_batch.date", "Datum …"), command=lambda: self.choose_home_batch_value(identities, day, 'due'))
         series = any(item.get('repeat') for item in items)
         menu.add_cascade(label=glide_i18n.t("ui.build_home_batch_menu.due_date", 'Fälligkeit{wert}', wert=glide_i18n.t("ui.build_home_batch_menu.edit_series_individually", ' (Serien einzeln bearbeiten)') if series else ''),
                          menu=due, state='disabled' if series else 'normal')
@@ -29752,7 +29804,7 @@ class ListApp:
                 glide_core_accessibility.refresh(check)
                 self.add_tooltip(check, check._accessible_name)
                 if not selecting:
-                    more = action(row, "Mehr", lambda iid=task.item_id: self.show_home_task_menu(iid),
+                    more = action(row, glide_i18n.t("editor.toolbar.more", "Mehr"), lambda iid=task.item_id: self.show_home_task_menu(iid),
                                   "muted", side="right", pady=0)
                     more._home_task_actions_id = task.item_id
                     more._accessible_name = glide_i18n.t("ui.task_row.actions_for", 'Aktionen für {title}', title=task.title)
@@ -29851,7 +29903,7 @@ class ListApp:
             for key, text, befehl, farbe in self.home_primary_actions():
                 button = action(schnell, text, befehl, farbe)
                 schnell.entries[-1] = (button, key)
-            weiter = action(schnell, "Weitere …", self.show_home_more_menu, "muted")
+            weiter = action(schnell, glide_i18n.t("ui.kachel_welcome.more", "Weitere …"), self.show_home_more_menu, "muted")
             schnell.entries[-1] = (weiter, "more")
             schnell.reflow()
 
@@ -29898,7 +29950,7 @@ class ListApp:
                 self._bind_home_wheel(chip)
                 _ui.pack(_ui.make(tk.Label, zeile, text=glide_i18n.t("ui.kachel_labels.open", '{anzahl} offen', anzahl=anzahl), bg=theme["card"], fg=theme["muted"],
                          font=app_font(9), anchor="e"), side="right")
-            action(tile, f"{self.ICONS['labels']}  Labelansicht öffnen", self.set_labels_view, "confirm")
+            action(tile, glide_i18n.t("ui.kachel_labels.open_label_view", '{labels}  Labelansicht öffnen', labels=self.ICONS['labels']), self.set_labels_view, "confirm")
 
         def kachel_recent(parent):
             recent = card(parent, glide_i18n.t("ui.kachel_recent.recently_edited", "Zuletzt bearbeitet"))
@@ -30001,7 +30053,7 @@ class ListApp:
                     if anzahl:
                         self.add_tooltip(zelle, glide_i18n.t("ui.kachel_calendar.open_item_s", '{strftime}: {anzahl} offene(r) Punkt(e)', strftime=tag.strftime('%d.%m.%Y'), anzahl=anzahl))
                 label(tile, glide_i18n.t("ui.kachel_calendar.open_items_with_a", '{sum} offene Punkte mit Termin in diesem Monat', sum=sum(zaehler.get((heute.replace(day=1) + timedelta(days=schritt)).isoformat(), 0) for schritt in range(tage_im_monat))), color="muted")
-            action(tile, f"{self.ICONS['calendar']}  Kalender öffnen", self.open_calendar_view, "import")
+            action(tile, glide_i18n.t("ui.kachel_calendar.open_calendar", '{calendar}  Kalender öffnen', calendar=self.ICONS['calendar']), self.open_calendar_view, "import")
 
         def kachel_overdue(parent):
             eintraege, gesamt = self.home_overdue_entries(self.home_row_limit())
@@ -30017,7 +30069,7 @@ class ListApp:
                        "overdue")
             if gesamt > len(eintraege):
                 label(tile, glide_i18n.t("ui.kachel_overdue.and_more", '… und {wert} weitere', wert=gesamt - len(eintraege)), color="muted")
-            action(tile, f"{self.ICONS['overdue']}  Verspätet öffnen", self.set_overdue_view, "overdue")
+            action(tile, glide_i18n.t("ui.kachel_overdue.open_overdue", '{overdue}  Verspätet öffnen', overdue=self.ICONS['overdue']), self.set_overdue_view, "overdue")
 
         def kachel_progress(parent):
             """Fortschritt als Balken: heute gegen das Ziel, Woche gegen sich selbst."""
@@ -30081,14 +30133,14 @@ class ListApp:
                       color="muted")
             for titel, karten, art, kennung in eintraege[:self.home_row_limit()]:
                 if art is None:
-                    action(tile, f"{titel}  \u00b7  {karten} Karten", self.open_global_board, "confirm")
+                    action(tile, glide_i18n.t("ui.kachel_boards.cards", '{titel}  ·  {karten} Karten', titel=titel, karten=karten), self.open_global_board, "confirm")
                 elif art == "list":
-                    action(tile, f"{titel}  \u00b7  {karten} Karten",
+                    action(tile, glide_i18n.t("ui.kachel_boards.cards", '{titel}  ·  {karten} Karten', titel=titel, karten=karten),
                            lambda lid=kennung: self.set_active_list(lid), "accent")
                 else:
-                    action(tile, f"{titel}  \u00b7  {karten} Karten",
+                    action(tile, glide_i18n.t("ui.kachel_boards.cards", '{titel}  ·  {karten} Karten', titel=titel, karten=karten),
                            lambda fid=kennung: self.set_active_folder(fid), "import")
-            action(tile, "Globale Pinnwand öffnen", self.open_global_board, "confirm")
+            action(tile, glide_i18n.t("ui.kachel_boards.open_global_pinboard", "Globale Pinnwand öffnen"), self.open_global_board, "confirm")
 
         def kachel_boardpreview(parent):
             """Die globale Pinnwand als Bild – ein Klick führt hinein."""
@@ -30113,7 +30165,7 @@ class ListApp:
             else:
                 label(tile, glide_i18n.t("ui.kachel_boardpreview.still_empty_on_the", "Noch leer. Auf der Fläche legt ein Doppelklick eine Karte an."),
                       color="muted")
-            action(tile, "Globale Pinnwand öffnen", self.open_global_board, "confirm")
+            action(tile, glide_i18n.t("ui.kachel_boardpreview.open_global_pinboard", "Globale Pinnwand öffnen"), self.open_global_board, "confirm")
 
         def kachel_mascot(parent):
             """Der Begleiter: ein Blick auf den Tag, keine Bewertung."""
@@ -30199,9 +30251,9 @@ class ListApp:
             # die ganze Kachel. Bewegungsreduktion nimmt nur die Bewegung.
             pflege = make_flow(tile, bg=theme["card"])
             self._bind_home_wheel(pflege)
-            action(pflege, "Füttern", lambda: react(feed=True, care_action="feed"), "muted")
-            action(pflege, "Spielen", lambda: react(care_action="play"), "muted")
-            action(pflege, "Ruhen", lambda: react(care_action="rest"), "muted")
+            action(pflege, glide_i18n.t("ui.kachel_mascot.feed", "Füttern"), lambda: react(feed=True, care_action="feed"), "muted")
+            action(pflege, glide_i18n.t("ui.kachel_mascot.play", "Spielen"), lambda: react(care_action="play"), "muted")
+            action(pflege, glide_i18n.t("ui.kachel_mascot.rest", "Ruhen"), lambda: react(care_action="rest"), "muted")
             self._mascot_care_bar = pflege
 
             def in_kachel(widget):
@@ -30268,13 +30320,13 @@ class ListApp:
                 planungstext = self.format_planning_summary(heute_geplant)
                 label(stats, glide_i18n.t("ui.kachel_stats.planned_today_task_s", 'Heute geplant: {items} Aufgabe(n){wert}', items=heute_geplant['items'], wert=f"  ·  {planungstext}" if planungstext else ""), color="muted")
             bestand_zeile = flow(stats, pady=(glide_design.SPACING[4], glide_design.SPACING[8]))
-            action(bestand_zeile, f"{self.ICONS['in_progress']}  Demnächst öffnen",
+            action(bestand_zeile, glide_i18n.t("ui.kachel_stats.open_upcoming", '{in_progress}  Demnächst öffnen', in_progress=self.ICONS['in_progress']),
                    self.set_in_progress_view, "due_action", side="left")
             if heute_geplant["items"]:
-                action(bestand_zeile, f"{self.ICONS['today']}  Heute öffnen",
+                action(bestand_zeile, glide_i18n.t("ui.kachel_stats.open_today", '{today}  Heute öffnen', today=self.ICONS['today']),
                        self.set_today_view, "ui_accent", side="left")
             if summary["overdue"]:
-                action(bestand_zeile, f"{self.ICONS['overdue']}  Verspätet öffnen",
+                action(bestand_zeile, glide_i18n.t("ui.kachel_stats.open_overdue", '{overdue}  Verspätet öffnen', overdue=self.ICONS['overdue']),
                        self.set_overdue_view, "overdue", side="left")
             label(stats, glide_i18n.t("ui.kachel_stats.done_in_the_last", 'Erledigt in den letzten {completion_chart_days} Tagen', completion_chart_days=self.COMPLETION_CHART_DAYS),
                   10, True, pady=(glide_design.SPACING[6], glide_design.SPACING[6]))
@@ -30309,7 +30361,7 @@ class ListApp:
                              reverse=True)
             if not zeichnungen:
                 label(tile, glide_i18n.t("ui.kachel_drawings.no_drawing_yet_pixel", "Noch keine Zeichnung. Pixelbilder entstehen hier in 16 bis 128 Zellen."), color="muted")
-                action(tile, f"{self.ICONS['drawing']}  Neue Zeichnung", self.create_new_drawing, "confirm")
+                action(tile, glide_i18n.t("ui.kachel_drawings.new_drawing", '{drawing}  Neue Zeichnung', drawing=self.ICONS['drawing']), self.create_new_drawing, "confirm")
                 return
             reihe = _ui.make(tk.Frame, tile, bg=theme["card"])
             _ui.pack(reihe, fill="x", pady=(glide_design.SPACING[2], glide_design.SPACING[0]))
@@ -30367,7 +30419,7 @@ class ListApp:
                 erste = galerien[0]
                 label(tile, glide_i18n.t("ui.kachel_gallery.has_no_images_yet", '„{wert}“ enthält noch keine Bilder.', wert=str(erste.get('title') or glide_i18n.t("ui.kachel_gallery.gallery", 'Galerie'))[:40]),
                       color="muted")
-                action(tile, f"{self.ICONS['gallery']}  Galerie öffnen",
+                action(tile, glide_i18n.t("ui.kachel_gallery.open_gallery", '{gallery}  Galerie öffnen', gallery=self.ICONS['gallery']),
                        lambda value=erste["id"]: self.set_active_list(value), "muted")
                 return
             reihe = _ui.make(tk.Frame, tile, bg=theme["card"])
@@ -30416,7 +30468,7 @@ class ListApp:
                           if any(saved["id"] == value for saved in self.settings.get("saved_filters", []))]
             if not angeheftet:
                 label(tile, glide_i18n.t("ui.kachel_filters.pin_a_saved_filter", "Heftet einen gespeicherten Filter an, um seine Treffer hier zu sehen."), color="muted")
-                action(tile, "Filter anheften …", lambda: self.show_filter_pin_menu(tile), "accent")
+                action(tile, glide_i18n.t("ui.kachel_filters.pin_filter", "Filter anheften …"), lambda: self.show_filter_pin_menu(tile), "accent")
                 return
             grenze = 3 if self.home_density() == "compact" else 5
             for identity in angeheftet:
@@ -30437,7 +30489,7 @@ class ListApp:
                     _ui.bind(text, "<Button-1>", lambda _event, lid=quelle["id"], iid=item["id"]:
                               self.open_quick_result({"target": ("item", lid, iid)}))
                     self._bind_home_wheel(zeile)
-                action(tile, "Alle anzeigen", lambda value=identity: self.saved_filters.open(value), "muted")
+                action(tile, glide_i18n.t("ui.kachel_filters.show_all", "Alle anzeigen"), lambda value=identity: self.saved_filters.open(value), "muted")
 
         def kachel_pinned(parent):
             """Angeheftete Seiten (ST-040)."""
@@ -30573,7 +30625,7 @@ class ListApp:
                 auto_height=True, register=False)
             _ui.grid(leer, row=0, column=0, sticky="new")
             label(leer.inner, glide_i18n.t("ui.render_home.all_tiles_are_hidden", "Alle Kacheln sind ausgeblendet."), 12, True)
-            action(leer.inner, "Startseite einrichten …", self.show_home_tiles_dialog, "accent")
+            action(leer.inner, glide_i18n.t("ui.home_more_actions.set_up_home", "Startseite einrichten …"), self.show_home_tiles_dialog, "accent")
 
         for widget in (self.home_canvas, self.home_content):
             self._bind_home_wheel(widget)
@@ -31433,10 +31485,10 @@ class ListApp:
             with open(path, "rb") as file:
                 raw = file.read(self.MAX_BACKUP_ATTACHMENT_BYTES + 1)
             if len(raw) > self.MAX_BACKUP_ATTACHMENT_BYTES:
-                raise ValueError("Ein Anhang ist für die Vorlage zu groß.")
+                raise ValueError(glide_i18n.t("ui.capture_template.an_attachment_is_too", "Ein Anhang ist für die Vorlage zu groß."))
             files[storage] = base64.b64encode(raw).decode("ascii")
         template = {"id": uuid.uuid4().hex, "kind": "folder" if folder_id else "list",
-                    "title": holder.get("title") or "Vorlage", "note": holder.get("note") or "",
+                    "title": holder.get("title") or glide_i18n.t("ui.show_notes_add_menu.template", "Vorlage"), "note": holder.get("note") or "",
                     "color": holder.get("color"), "labels": list(holder.get("labels", [])),
                     "items": [], "payload": payload, "files": files,
                     # Seitenvorlagen stehen im „+“ neben „Seiten“ (27.09.2026).
@@ -31444,7 +31496,7 @@ class ListApp:
         self.templates.append(template)
         if not getattr(self, "_templates_editing", False) and not self.save_templates():
             self.templates.remove(template)
-            raise OSError("Die Vorlage konnte nicht gespeichert werden.")
+            raise OSError(glide_i18n.t("ui.capture_template.the_template_could_not", "Die Vorlage konnte nicht gespeichert werden."))
         return template
 
     def template_from_current_list(self):
@@ -31486,19 +31538,19 @@ class ListApp:
         referenced = self.validate_backup_schema(template["payload"], portable=True)
         files = template.get("files", {})
         if not isinstance(files, dict):
-            raise ValueError("Die Anhänge der Vorlage sind ungültig.")
+            raise ValueError(glide_i18n.t("ui.validate_template_payload.the_template_s_attachments", "Die Anhänge der Vorlage sind ungültig."))
         total = 0
         for storage in referenced:
             encoded = files.get(storage)
             if not isinstance(encoded, str) or len(encoded) > (self.MAX_BACKUP_ATTACHMENT_BYTES + 2) // 3 * 4:
-                raise ValueError("Ein Vorlagenanhang fehlt oder ist zu groß.")
+                raise ValueError(glide_i18n.t("ui.validate_template_payload.a_template_attachment_is", "Ein Vorlagenanhang fehlt oder ist zu groß."))
             try:
                 raw = base64.b64decode(encoded, validate=True)
             except (ValueError, UnicodeEncodeError) as exc:
-                raise ValueError("Ein Vorlagenanhang ist beschädigt.") from exc
+                raise ValueError(glide_i18n.t("ui.validate_template_payload.a_template_attachment_is_2", "Ein Vorlagenanhang ist beschädigt.")) from exc
             total += len(raw)
             if len(raw) > self.MAX_BACKUP_ATTACHMENT_BYTES or total > self.MAX_BACKUP_TOTAL_BYTES:
-                raise ValueError("Die Vorlagenanhänge überschreiten die zulässige Größe.")
+                raise ValueError(glide_i18n.t("ui.validate_template_payload.the_template_attachments_exceed", "Die Vorlagenanhänge überschreiten die zulässige Größe."))
         return referenced
 
     def import_templates_file(self):
@@ -31507,7 +31559,7 @@ class ListApp:
             return
         try:
             if os.path.getsize(path) > self.MAX_BACKUP_TOTAL_BYTES * 2:
-                raise ValueError("Die Vorlagendatei ist zu groß.")
+                raise ValueError(glide_i18n.t("ui.import_templates_file.the_template_file_is", "Die Vorlagendatei ist zu groß."))
             with open(path, "r", encoding="utf-8-sig") as file:
                 incoming = self.normalize_template_records(glide_storage.read_stream(file), importing=True)
             for record in incoming:
@@ -31521,7 +31573,7 @@ class ListApp:
                 existing.add(item["id"])
             if not getattr(self, "_templates_editing", False) and not self.save_templates():
                 self.templates = self.templates[:-len(incoming)] if incoming else self.templates
-                raise OSError("Die Vorlagen konnten nicht gespeichert werden.")
+                raise OSError(glide_i18n.t("ui.toggle_template_editing.the_templates_could_not", "Die Vorlagen konnten nicht gespeichert werden."))
             self.update_sidebar_list()
             self.refresh_tree()
             self.show_info(glide_i18n.t("ui.import_templates_file.templates_added", "Vorlagen hinzugefügt"), glide_i18n.t("ui.import_templates_file.template_s_added", '{len} Vorlage(n) ergänzt.', len=len(incoming)))
@@ -31539,7 +31591,7 @@ class ListApp:
     # verhält sich wie bisher.
     TEMPLATE_FIELD_PATTERN = re.compile(r"\{\{\s*([^{}\n]{1,40}?)\s*\}\}")
     MAX_TEMPLATE_FIELDS = 12
-    TEMPLATE_DATE_FIELDS = ("datum", "heute", "tag")
+    TEMPLATE_DATE_FIELDS = ("datum", "heute", "tag", "date", "today", "day")
 
     @classmethod
     def template_field_name(cls, raw):
@@ -31635,6 +31687,7 @@ class ListApp:
     # beim Anlegen. Sie werden nicht abgefragt; ein Dialog erscheint nur noch
     # für echte Angaben wie {{Projektname}}.
     WOCHENTAGE = ("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
+    WEEKDAY_KEYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")
     MONATE = ("Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September",
               "Oktober", "November", "Dezember")
 
@@ -31646,21 +31699,27 @@ class ListApp:
         if schluessel in self.TEMPLATE_DATE_FIELDS:
             return heute.strftime("%d.%m.%Y")
         werte = {
-            "wochentag": self.WOCHENTAGE[heute.weekday()],
+            "wochentag": glide_i18n.t(f"settings.weekday.full.{self.WEEKDAY_KEYS[heute.weekday()]}",
+                                      self.WOCHENTAGE[heute.weekday()]),
             "kw": str(heute.isocalendar()[1]),
             "kalenderwoche": str(heute.isocalendar()[1]),
-            "monat": self.MONATE[heute.month - 1],
+            "monat": glide_i18n.t(f"calendar.month.{heute.month}", self.MONATE[heute.month - 1]),
             "jahr": str(heute.year),
             "uhrzeit": jetzt.strftime("%H:%M"),
             "morgen": (heute + timedelta(days=1)).strftime("%d.%m.%Y"),
             "gestern": (heute - timedelta(days=1)).strftime("%d.%m.%Y"),
         }
+        # Englische Feldnamen (D93): gleiche Werte, Ausgabe in der eingestellten Sprache.
+        for englisch, deutsch in (("weekday", "wochentag"), ("week", "kw"), ("cw", "kw"), ("month", "monat"),
+                                  ("year", "jahr"), ("time", "uhrzeit"), ("tomorrow", "morgen"),
+                                  ("yesterday", "gestern")):
+            werte[englisch] = werte[deutsch]
         return werte.get(schluessel)
 
     def template_field_default(self, name):
         if self.search_key(name) in self.TEMPLATE_DATE_FIELDS:
             return date.today().strftime("%d.%m.%Y")
-        if self.search_key(name) == "jahr":
+        if self.search_key(name) in ("jahr", "year"):
             return str(date.today().year)
         return ""
 
@@ -32626,12 +32685,21 @@ class ListApp:
             self.apply_ui_font()
             self.apply_theme()
             if chosen_lang_code != previous_lang:
+                self._home_signature = None  # Startseite in der neuen Sprache neu aufbauen
                 editor = self.current_drawing_editor()
                 if editor is not None:
                     editor.refresh_locale()
             self.update_sidebar_list()
             self.update_header_title()
             self.refresh_tree()
+            if chosen_lang_code != previous_lang:
+                # Menüs, Ansichten und Dialoge wechseln sofort; einige beim Start gebaute
+                # Leisten des Hauptfensters erst mit dem nächsten Start (V1.79).
+                self._register_after(self.root.after(80, lambda: self.show_info(
+                    glide_i18n.t("ui.settings.language_changed", "Sprache geändert"),
+                    glide_i18n.t("ui.settings.language_restart_hint",
+                                 "Menüs, Ansichten und Dialoge erscheinen jetzt in der neuen Sprache. "
+                                 "Einige feste Leisten des Hauptfensters wechseln nach einem Neustart von Glide."))))
             return "break"
 
         dialog._glide_modal_finished = tk.BooleanVar(master=dialog, value=False)
@@ -34624,12 +34692,12 @@ class ListApp:
             if apply_fields is None or apply_fields["planned_date"].get():
                 value, error = day_field.read()
                 if error:
-                    raise ValueError("Bearbeitungstag: " + error)
+                    raise ValueError(glide_i18n.t("ui.read.planned_day", 'Bearbeitungstag: {error}', error=error))
                 changes["planned_date"] = value[0]
             if apply_fields is None or apply_fields["estimated_minutes"].get():
                 raw = entry.get().strip()
                 if raw and (len(raw) > 5 or not raw.isascii() or not raw.isdigit()):
-                    raise ValueError(f"Aufwand: ganze Minuten von 1 bis {self.MAX_ESTIMATED_MINUTES} eingeben oder das Feld leeren.")
+                    raise ValueError(glide_i18n.t("ui.read.effort_enter_whole_minutes", 'Aufwand: ganze Minuten von 1 bis {max_estimated_minutes} eingeben oder das Feld leeren.', max_estimated_minutes=self.MAX_ESTIMATED_MINUTES))
                 changes["estimated_minutes"] = int(raw) if raw else None
             self.normalize_planning(**changes)
             return changes
@@ -36605,7 +36673,7 @@ class ListApp:
             return False
         old = copy.deepcopy(self.lists)
         created = self.build_item_from_dialog(details)
-        with self.guarded_structural_change('Kalenderaufgabe anlegen') as guard:
+        with self.guarded_structural_change(glide_i18n.t("ui.calendar_add_task.create_calendar_task", 'Kalenderaufgabe anlegen')) as guard:
             with self.item_change([], update_sidebar=True) as change:
                 target.setdefault('items', []).append(created)
                 change.mark(created['id'])
@@ -36980,11 +37048,11 @@ class ListApp:
             kind = self.LIST_KIND_TASKS if kind == self.LIST_KIND_DRAWING else kind
         items = items if isinstance(items, list) else []
         if animation is not None and kind != self.LIST_KIND_DRAWING:
-            raise ValueError("Eine Bildfolge gehört in eine Zeichnungsseite.")
+            raise ValueError(glide_i18n.t("ui.new_list_object.an_animation_belongs_in", "Eine Bildfolge gehört in eine Zeichnungsseite."))
         if kind == self.LIST_KIND_DRAWING and items:
             # Eine Zeichnung hat keinen Aufgabenbereich. Punkte würden beim
             # stillen Verwerfen verloren gehen; der Bestand wird abgelehnt.
-            raise ValueError(f"Die Zeichnung „{title}“ enthält unzulässige Listenpunkte.")
+            raise ValueError(glide_i18n.t("ui.new_list_object.the_drawing_contains_disallowed", 'Die Zeichnung „{title}“ enthält unzulässige Listenpunkte.', title=title))
         entry = {
             "id": list_id or uuid.uuid4().hex,
             "title": title,
@@ -37012,11 +37080,11 @@ class ListApp:
             entry["references"] = glide_objects.normalize(references)
         if live_lists is not None:
             if kind != self.LIST_KIND_PAGE:
-                raise ValueError('Live-Listen gehören in eine Seite.')
+                raise ValueError(glide_i18n.t("ui.new_list_object.live_lists_belong_in", 'Live-Listen gehören in eine Seite.'))
             entry['live_lists'] = glide_pages.live_lists(live_lists)
         if cover is not None:
             if kind != self.LIST_KIND_PAGE:
-                raise ValueError('Titelbilder gehören in eine Seite.')
+                raise ValueError(glide_i18n.t("ui.new_list_object.cover_images_belong_in", 'Titelbilder gehören in eine Seite.'))
             entry['cover'] = glide_pages.cover(cover)
         # Wiederkehrende Checkliste (27.09.2026, additiv in Format 20): Nur
         # Aufgabenlisten tragen den Schlüssel, und nur, wenn er an ist.
@@ -37066,8 +37134,7 @@ class ListApp:
         if value is None or value in tr_table(cls.LIST_KINDS):
             return
         if isinstance(schema_version, int) and schema_version >= cls.FIRST_DRAWING_SCHEMA_VERSION:
-            raise NewerDataError(f"Unbekannte Listenart {value!r}. Diese Datei stammt vermutlich "
-                                 "aus einer neueren Glide-Version.")
+            raise NewerDataError(glide_i18n.t("ui.check_list_kind.unknown_list_type_this", 'Unbekannte Listenart {value}. Diese Datei stammt vermutlich aus einer neueren Glide-Version.', value=f'{value!r}'))
 
     @classmethod
     def list_kind_label(cls, entry):
@@ -40030,7 +40097,7 @@ class ListApp:
         ordner = self.get_folder(folder_id) if folder_id else None
         if ordner is not None and ordner.get("folder_kind") == "journal":
             return self.create_journal_entry(folder_id)
-        entry = self.new_list_object("Neue Notiz", [], folder_id=folder_id if ordner else None,
+        entry = self.new_list_object(glide_i18n.t("board.action.new_note", "Neue Notiz"), [], folder_id=folder_id if ordner else None,
                                      list_kind=self.LIST_KIND_NOTE)
         with self.sidebar_change(refresh_tree=True) as change:
             self.lists.append(entry)
@@ -40205,16 +40272,16 @@ class ListApp:
     def read_glide_page_file(self, path):
         """Liest den Inhalt einer `.glidepage` und prüft, dass sie nur Seiten enthält."""
         if not zipfile.is_zipfile(path):
-            raise ValueError("Das ist keine Glide-Seitendatei.")
+            raise ValueError(glide_i18n.t("ui.read_glide_page_file.this_is_not_a", "Das ist keine Glide-Seitendatei."))
         with zipfile.ZipFile(path, "r") as archiv:
             info, _anhaenge = self.inspect_backup_archive(archiv)
             daten = json.loads(self.read_zip_member_limited(archiv, info, self.MAX_BACKUP_DATA_BYTES).decode("utf-8"))
         if not isinstance(daten, dict) or daten.get("content") != "pages":
-            raise ValueError("Die Datei enthält keine Glide-Seiten. Listen und Ordner kommen über "
-                             "„Listen/Ordner hinzufügen …“.")
+            raise ValueError(glide_i18n.t("ui.read_glide_page_file.the_file_contains_no", "Die Datei enthält keine Glide-Seiten. Listen und Ordner kommen über "
+                             "„Listen/Ordner hinzufügen …“."))
         if any(not self.is_page_list(entry) for entry in daten.get("lists") or []) or any(
                 (folder or {}).get("folder_kind") != "library" for folder in daten.get("folders") or []):
-            raise ValueError("Die Seitendatei enthält etwas anderes als Seiten und Bücher.")
+            raise ValueError(glide_i18n.t("ui.read_glide_page_file.the_page_file_contains", "Die Seitendatei enthält etwas anderes als Seiten und Bücher."))
         return daten
 
     def import_glide_pages(self, path=None):
@@ -41390,6 +41457,8 @@ class ListApp:
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
             page.update(values)
+            if self.is_page_list(page):
+                page["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
             if self.is_drawing_list(page):
                 # Wurde das Referenz-PNG als Anhang entfernt, entfällt der Verweis.
                 page["drawing_reference"] = self.normalize_drawing_reference(
@@ -41582,7 +41651,7 @@ class ListApp:
         if getattr(self, '_data_read_only', False):
             return 'break'
         before = copy.deepcopy(self.lists)
-        with self.guarded_structural_change('Liste kopieren') as guard:
+        with self.guarded_structural_change(glide_i18n.t("ui.duplicate_list.copy_list", 'Liste kopieren')) as guard:
             # Kein Neuzeichnen im Rahmen: Nach Erfolg wechselt die Ansicht auf
             # die Kopie und zeichnet ohnehin neu, nach Fehlschlag der Rückweg unten (P06r).
             with self.sidebar_change(refresh_tree=False) as change:
@@ -41789,7 +41858,7 @@ class ListApp:
             merged_labels.append(fresh)
             label_map[label["id"]] = fresh["id"]
         if len(merged_labels) > self.MAX_LABELS:
-            raise ValueError("Der Import würde die maximale Anzahl der Labels überschreiten.")
+            raise ValueError(glide_i18n.t("ui.prepare_additive_import.the_import_would_exceed", "Der Import würde die maximale Anzahl der Labels überschreiten."))
         for folder in folders:
             folder["id"] = id_map[folder["id"]]
             folder["parent_id"] = id_map.get(folder.get("parent_id"))
@@ -41855,7 +41924,7 @@ class ListApp:
         evicted = glide_guard.trash_item_ids(displaced)
         if list_id == self.active_list_id:
             self.items = entry['items']
-        with self.guarded_structural_change('Erledigte entfernen', expected_removals=evicted), \
+        with self.guarded_structural_change(glide_i18n.t("ui.remove_done_items.remove_done_items", 'Erledigte entfernen'), expected_removals=evicted), \
                 self.item_change(identities, update_sidebar=True, restore=False) as change:
             entry['items'] = kept
             for record in incoming:
@@ -41904,7 +41973,7 @@ class ListApp:
             self.items = entry['items']
         # Bestehendes direktes Leeren bleibt rücknehmbar. Nur die ausdrücklich
         # bestätigten Punkte dürfen entfallen; andere Listen/Papierkörbe nicht.
-        with self.guarded_structural_change('Liste leeren', expected_removals=identities), \
+        with self.guarded_structural_change(glide_i18n.t("ui.show_side_recent_searches.clear_list", 'Liste leeren'), expected_removals=identities), \
                 self.item_change(identities, update_sidebar=True, restore=False) as change:
             entry['items'] = []
             if list_id == self.active_list_id:
@@ -42567,7 +42636,7 @@ class ListApp:
             container = (parent_folder or {}).get("folder_kind", "standard") if parent_folder else None
             if not glide_sidebar.accepts(target_section, kind, candidate_kind, container) or (
                     template_id and not self.sidebar_template_allowed(template, target_section, parent)):
-                error.configure(text=glide_i18n.t("ui.submit.this_type_does_not", 'Diese Art gehört nicht in den Bereich {wert}.', wert=glide_sidebar.TITLES[target_section]))
+                error.configure(text=glide_i18n.t("ui.submit.this_type_does_not", 'Diese Art gehört nicht in den Bereich {wert}.', wert=glide_i18n.t(f"sidebar.{target_section}", glide_sidebar.TITLES[target_section])))
                 return
             # Seit 3.30 (ZF-120) nimmt ein Tagebuch jede Inhaltsart auf; der
             # frühere Notizzwang für Aufgabenlisten entfällt.
@@ -42879,7 +42948,7 @@ class ListApp:
         # Die vorhandene Papierkorbgrenze darf den ältesten Eintrag verdrängen;
         # nur diese bereits gelöschten Punkte sind vom Bestandswächter ausgenommen.
         evicted = glide_guard.trash_item_ids(self.trash[self.MAX_TRASH_ENTRIES - 1:])
-        with self.guarded_structural_change("Ordner auflösen", expected_removals=evicted), \
+        with self.guarded_structural_change(glide_i18n.t("ui.delete_folder.dissolve_folder", "Ordner auflösen"), expected_removals=evicted), \
                 self.sidebar_change(refresh_tree=True) as change:
             folder = self.get_folder(folder_id)
             if folder is None:
@@ -43169,7 +43238,7 @@ class ListApp:
             and target_row
             and target_row[0] == "folder"
         ):
-            with self.guarded_structural_change("Seitenleiste verschieben"), self.sidebar_change() as change:
+            with self.guarded_structural_change(glide_i18n.t("ui.on_sidebar_drag_end.move_sidebar", "Seitenleiste verschieben")), self.sidebar_change() as change:
                 for list_id in selected_list_ids:
                     if self.move_sidebar_list_into_folder(list_id, target_row[1]):
                         change.mark()
@@ -43178,7 +43247,7 @@ class ListApp:
             return "break"
 
         blocked = False
-        with self.guarded_structural_change("Seitenleiste verschieben"), self.sidebar_change() as change:
+        with self.guarded_structural_change(glide_i18n.t("ui.on_sidebar_drag_end.move_sidebar", "Seitenleiste verschieben")), self.sidebar_change() as change:
             if not target_row:
                 self.locate_sidebar_root(source_row[0], source_row[1], target_section)
             if source_row[0] == "list":
@@ -43478,7 +43547,7 @@ class ListApp:
         trash_item_roots = []
         if isinstance(data, list):
             if portable:
-                raise ValueError("Ein Aufgabensicherung benötigt das aktuelle Glide-Schema.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_backup_needs", "Ein Aufgabensicherung benötigt das aktuelle Glide-Schema."))
             raw_folders = []
             raw_lists = [{"items": data}]
         elif isinstance(data, dict):
@@ -43489,52 +43558,52 @@ class ListApp:
                     or not isinstance(version, int)
                     or not self.MIN_PORTABLE_BACKUP_SCHEMA_VERSION <= version <= self.DATA_SCHEMA_VERSION
                 ):
-                    raise ValueError("Das Aufgabensicherung stammt nicht aus einer unterstützten Glide-Version.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_task_backup_does", "Das Aufgabensicherung stammt nicht aus einer unterstützten Glide-Version."))
             elif version is not None and (
                 not isinstance(version, int) or version < 1 or version > self.DATA_SCHEMA_VERSION
             ):
-                raise ValueError(f"Die Datenformat-Version {version!r} wird nicht unterstützt.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.data_format_version_is", 'Die Datenformat-Version {version} wird nicht unterstützt.', version=f'{version!r}'))
             raw_folders = data.get("folders", [])
             raw_lists = data.get("lists")
             if not isinstance(raw_folders, list) or not isinstance(raw_lists, list):
-                raise ValueError("Das Backup enthält keine gültigen Ordner- und Listenfelder.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_no", "Das Backup enthält keine gültigen Ordner- und Listenfelder."))
             raw_labels = data.get("labels", [])
             raw_trash = data.get("trash", [])
             if not isinstance(raw_labels, list) or not isinstance(raw_trash, list):
-                raise ValueError("Die Felder 'labels' und 'trash' müssen Listen sein.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_fields_labels_and", "Die Felder 'labels' und 'trash' müssen Listen sein."))
             self.check_stored_list_kinds(data, version)
             glide_repeat.check_stored_series(data, version)
             label_ids = set()
             for label in raw_labels:
                 if not isinstance(label, dict):
-                    raise ValueError("Ein Label im Backup ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_label_in_the", "Ein Label im Backup ist ungültig."))
                 label_id = label.get("id")
                 if portable and (not isinstance(label_id, str) or not label_id):
-                    raise ValueError("Ein Label im Aufgabensicherung besitzt keine ID.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_label_in_the_2", "Ein Label im Aufgabensicherung besitzt keine ID."))
                 if isinstance(label_id, str) and label_id:
                     if label_id in label_ids:
-                        raise ValueError("Das Backup enthält doppelte Label-IDs.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_duplicate", "Das Backup enthält doppelte Label-IDs."))
                     label_ids.add(label_id)
                 if portable and label.get("color") is not None and label.get("color") not in self.LABEL_COLOR_KEYS:
-                    raise ValueError("Ein Label im Aufgabensicherung besitzt eine unbekannte Farbe.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_label_in_the_3", "Ein Label im Aufgabensicherung besitzt eine unbekannte Farbe."))
             # Gelöschte Listen bleiben vollwertige Daten: ihre Aufgaben werden
             # zusätzlich geprüft, damit auch deren Anhänge im Backup landen.
             for trash_entry in raw_trash:
                 if not isinstance(trash_entry, dict):
-                    raise ValueError("Ein Papierkorbeintrag im Backup ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_trash_entry_in", "Ein Papierkorbeintrag im Backup ist ungültig."))
                 if trash_entry.get("kind") not in (
                     None,
                     self.TRASH_KIND_LIST,
                     self.TRASH_KIND_FOLDER,
                     self.TRASH_KIND_ITEM,
                 ):
-                    raise ValueError("Ein Papierkorbeintrag besitzt eine unbekannte Art.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_trash_entry_has", "Ein Papierkorbeintrag besitzt eine unbekannte Art."))
                 trashed_list = trash_entry.get("list")
                 if isinstance(trashed_list, dict):
                     RichNoteEditor.normalize(trashed_list.get("rich_note"))
                     trashed_items = trashed_list.get("items", [])
                     if not isinstance(trashed_items, list):
-                        raise ValueError("Das Aufgabenfeld einer gelöschten Liste ist ungültig.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_task_field_of", "Das Aufgabenfeld einer gelöschten Liste ist ungültig."))
                     trash_item_roots.append(trashed_items)
                 # Ein gelöschter Punkt ist vollwertige Aufgabe: Seine Anhänge
                 # müssen im Backup genauso mitwandern wie die einer Liste.
@@ -43542,26 +43611,26 @@ class ListApp:
                 if isinstance(trashed_item, dict):
                     trash_item_roots.append([trashed_item])
         else:
-            raise ValueError("Die ausgewählte Datei ist kein Glide-Backup.")
+            raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_selected_file_is", "Die ausgewählte Datei ist kein Glide-Backup."))
 
         folder_ids = set()
         for folder in raw_folders:
             if not isinstance(folder, dict):
-                raise ValueError("Ein Ordner im Backup ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_folder_in_the", "Ein Ordner im Backup ist ungültig."))
             folder_id = folder.get("id")
             if portable and (not isinstance(folder_id, str) or not folder_id):
-                raise ValueError("Ein Ordner im Aufgabensicherung besitzt keine ID.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_folder_in_the_2", "Ein Ordner im Aufgabensicherung besitzt keine ID."))
             if isinstance(folder_id, str) and folder_id:
                 if folder_id in folder_ids:
-                    raise ValueError("Das Backup enthält doppelte Ordner-IDs.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_duplicate_2", "Das Backup enthält doppelte Ordner-IDs."))
                 folder_ids.add(folder_id)
             if folder.get("labels") is not None and not isinstance(folder.get("labels"), list):
-                raise ValueError("Die Labels eines Ordners sind ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_labels_of_a", "Die Labels eines Ordners sind ungültig."))
             parent_id = folder.get("parent_id")
             if parent_id is not None and not isinstance(parent_id, str):
-                raise ValueError("Der Elternordner eines Ordners ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_parent_folder_of", "Der Elternordner eines Ordners ist ungültig."))
             if parent_id == folder_id and parent_id is not None:
-                raise ValueError("Ein Ordner kann nicht sein eigener Elternordner sein.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_folder_cannot_be", "Ein Ordner kann nicht sein eigener Elternordner sein."))
 
         # Format 9: Elternverweise dürfen nur auf bekannte Ordner zeigen und
         # keinen Kreis bilden. Ein Kreis würde jeden rekursiven Durchlauf –
@@ -43575,12 +43644,12 @@ class ListApp:
             if parent_id is None:
                 continue
             if parent_id not in folder_ids:
-                raise ValueError("Ein Ordner verweist auf einen unbekannten Elternordner.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_folder_refers_to", "Ein Ordner verweist auf einen unbekannten Elternordner."))
             seen = {folder_id}
             current = parent_id
             while current is not None:
                 if current in seen:
-                    raise ValueError("Die Ordnerstruktur im Backup enthält einen Kreis.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_folder_structure_in", "Die Ordnerstruktur im Backup enthält einen Kreis."))
                 seen.add(current)
                 current = parent_map.get(current)
 
@@ -43593,80 +43662,80 @@ class ListApp:
                               if isinstance(deleted.get(key), dict))
         for container in containers:
             if not isinstance(container, dict):
-                raise ValueError("Eine Liste oder ein Ordner im Backup ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_list_or_folder", "Eine Liste oder ein Ordner im Backup ist ungültig."))
             attachments = container.get("attachments", [])
             if not isinstance(attachments, list):
-                raise ValueError("Die Anhänge einer Liste oder eines Ordners sind ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_attachments_of_a", "Die Anhänge einer Liste oder eines Ordners sind ungültig."))
             for attachment in attachments:
                 if not isinstance(attachment, dict):
-                    raise ValueError("Ein Anhang im Backup ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.an_attachment_in_the", "Ein Anhang im Backup ist ungültig."))
                 referenced_storages.add(self.validate_attachment_storage(attachment.get("storage")))
         item_count = 0
         for list_entry in raw_lists:
             if not isinstance(list_entry, dict):
-                raise ValueError("Eine Liste im Backup ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_list_in_the", "Eine Liste im Backup ist ungültig."))
             RichNoteEditor.normalize(list_entry.get("rich_note"))
             list_id = list_entry.get("id")
             if portable and (not isinstance(list_id, str) or not list_id):
-                raise ValueError("Eine Liste im Aufgabensicherung besitzt keine ID.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_list_in_the_2", "Eine Liste im Aufgabensicherung besitzt keine ID."))
             if isinstance(list_id, str) and list_id:
                 if list_id in list_ids:
-                    raise ValueError("Das Backup enthält doppelte Listen-IDs.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_duplicate_3", "Das Backup enthält doppelte Listen-IDs."))
                 list_ids.add(list_id)
             folder_id = list_entry.get("folder_id")
             if folder_id is not None and folder_id not in folder_ids:
-                raise ValueError("Eine Liste verweist auf einen unbekannten Ordner.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_list_refers_to", "Eine Liste verweist auf einen unbekannten Ordner."))
             if list_entry.get("labels") is not None and not isinstance(list_entry.get("labels"), list):
-                raise ValueError("Die Labels einer Liste sind ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_labels_of_a_2", "Die Labels einer Liste sind ungültig."))
             raw_items = list_entry.get("items", [])
             if not isinstance(raw_items, list):
-                raise ValueError("Das Aufgabenfeld einer Liste ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_task_field_of_2", "Das Aufgabenfeld einer Liste ist ungültig."))
             stack = [(entry, 0) for entry in reversed(raw_items)]
             while stack:
                 item, depth = stack.pop()
                 item_count += 1
                 if item_count > self.MAX_BACKUP_ITEMS:
-                    raise ValueError("Das Backup enthält zu viele Aufgaben.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_too", "Das Backup enthält zu viele Aufgaben."))
                 if depth > self.MAX_ITEM_DEPTH:
-                    raise ValueError("Das Backup ist zu tief verschachtelt.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_is_nested", "Das Backup ist zu tief verschachtelt."))
                 if isinstance(item, str) and not portable:
                     continue
                 if not isinstance(item, dict):
-                    raise ValueError("Ein Aufgabenpunkt im Backup ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_item_in", "Ein Aufgabenpunkt im Backup ist ungültig."))
                 item_id = item.get("id")
                 if portable and (not isinstance(item_id, str) or not item_id):
-                    raise ValueError("Ein Aufgabenpunkt im Aufgabensicherung besitzt keine ID.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_item_in_2", "Ein Aufgabenpunkt im Aufgabensicherung besitzt keine ID."))
                 if isinstance(item_id, str) and item_id:
                     if item_id in item_ids:
-                        raise ValueError("Das Backup enthält doppelte Aufgaben-IDs.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_duplicate_4", "Das Backup enthält doppelte Aufgaben-IDs."))
                     item_ids.add(item_id)
                 if portable and (not isinstance(item.get("text"), str) or not item.get("text").strip()):
-                    raise ValueError("Ein Aufgabenpunkt im Aufgabensicherung besitzt keinen Text.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_item_in_3", "Ein Aufgabenpunkt im Aufgabensicherung besitzt keinen Text."))
                 item_color = item.get("color")
                 if portable and item_color is not None and item_color not in self.ITEM_COLOR_KEYS:
-                    raise ValueError("Ein Aufgabenpunkt im Aufgabensicherung besitzt eine ungültige Farbe.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_item_in_4", "Ein Aufgabenpunkt im Aufgabensicherung besitzt eine ungültige Farbe."))
                 item_kind = item.get("kind")
                 if portable and item_kind is not None and item_kind not in self.ITEM_KINDS:
-                    raise ValueError("Ein Punkt im Aufgabensicherung besitzt eine unbekannte Art.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.an_item_in_the", "Ein Punkt im Aufgabensicherung besitzt eine unbekannte Art."))
                 children = item.get("children", [])
                 if not isinstance(children, list):
-                    raise ValueError("Die Unterpunkte einer Aufgabe sind ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_subtasks_of_a", "Die Unterpunkte einer Aufgabe sind ungültig."))
                 stack.extend((child, depth + 1) for child in reversed(children))
                 attachments = item.get("attachments", [])
                 if not isinstance(attachments, list):
-                    raise ValueError("Die Anhänge einer Aufgabe sind ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_attachments_of_a_2", "Die Anhänge einer Aufgabe sind ungültig."))
                 for attachment in attachments:
                     if not isinstance(attachment, dict):
-                        raise ValueError("Ein Anhang im Backup ist ungültig.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.an_attachment_in_the", "Ein Anhang im Backup ist ungültig."))
                     storage = self.validate_attachment_storage(attachment.get("storage"))
                     referenced_storages.add(storage)
                 self.normalize_reminder(item.get("reminder"))
                 self.normalize_planning(item.get("planned_date"), item.get("estimated_minutes"))
                 if item.get("checklist") is not None and not isinstance(item.get("checklist"), list):
-                    raise ValueError("Die Checkliste einer Aufgabe ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_checklist_of_a", "Die Checkliste einer Aufgabe ist ungültig."))
                 item_labels = item.get("labels")
                 if item_labels is not None and not isinstance(item_labels, list):
-                    raise ValueError("Die Labels einer Aufgabe sind ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_labels_of_a_3", "Die Labels einer Aufgabe sind ungültig."))
 
         # Aufgaben aus dem Papierkorb durchlaufen dieselbe Prüfung. Ihre Anhänge
         # gehören zwingend ins Backup, sonst wäre eine Wiederherstellung
@@ -43677,39 +43746,39 @@ class ListApp:
                 item, depth = stack.pop()
                 item_count += 1
                 if item_count > self.MAX_BACKUP_ITEMS:
-                    raise ValueError("Das Backup enthält zu viele Aufgaben.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_too", "Das Backup enthält zu viele Aufgaben."))
                 if depth > self.MAX_ITEM_DEPTH:
-                    raise ValueError("Das Backup ist zu tief verschachtelt.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_is_nested", "Das Backup ist zu tief verschachtelt."))
                 if not isinstance(item, dict):
                     if isinstance(item, str) and not portable:
                         continue
-                    raise ValueError("Ein Aufgabenpunkt im Papierkorb ist ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.a_task_item_in_5", "Ein Aufgabenpunkt im Papierkorb ist ungültig."))
                 item_id = item.get("id")
                 if isinstance(item_id, str) and item_id:
                     if item_id in item_ids:
-                        raise ValueError("Das Backup enthält doppelte Aufgaben-IDs.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_contains_duplicate_4", "Das Backup enthält doppelte Aufgaben-IDs."))
                     item_ids.add(item_id)
                 children = item.get("children", [])
                 if not isinstance(children, list):
-                    raise ValueError("Die Unterpunkte einer gelöschten Aufgabe sind ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_subtasks_of_a_2", "Die Unterpunkte einer gelöschten Aufgabe sind ungültig."))
                 self.normalize_reminder(item.get("reminder"))
                 self.normalize_planning(item.get("planned_date"), item.get("estimated_minutes"))
                 stack.extend((child, depth + 1) for child in reversed(children))
                 attachments = item.get("attachments", [])
                 if not isinstance(attachments, list):
-                    raise ValueError("Die Anhänge einer gelöschten Aufgabe sind ungültig.")
+                    raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_attachments_of_a_3", "Die Anhänge einer gelöschten Aufgabe sind ungültig."))
                 for attachment in attachments:
                     if not isinstance(attachment, dict):
-                        raise ValueError("Ein Anhang im Papierkorb ist ungültig.")
+                        raise ValueError(glide_i18n.t("ui.validate_backup_schema.an_attachment_in_the_2", "Ein Anhang im Papierkorb ist ungültig."))
                     referenced_storages.add(self.validate_attachment_storage(attachment.get("storage")))
 
         if isinstance(data, dict):
             active_list_id = data.get("active_list_id")
             active_folder_id = data.get("active_folder_id")
             if active_list_id is not None and active_list_id not in list_ids:
-                raise ValueError("Das Backup verweist auf eine unbekannte aktive Liste.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_refers_to", "Das Backup verweist auf eine unbekannte aktive Liste."))
             if active_folder_id is not None and active_folder_id not in folder_ids:
-                raise ValueError("Das Backup verweist auf einen unbekannten aktiven Ordner.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_backup_refers_to_2", "Das Backup verweist auf einen unbekannten aktiven Ordner."))
         return referenced_storages
 
     def normalize_lists_data(self, data):
@@ -43834,9 +43903,9 @@ class ListApp:
         if not isinstance(data, list):
             raise ValueError("Die Datei ist weder ein Glide-Dokument noch eine alte Aufgabenliste.")
         glide_repeat.check_stored_series(data, None)
-        title = self.settings.get("title", "Meine Liste") if isinstance(self.settings, dict) else "Meine Liste"
+        title = self.settings.get("title", glide_i18n.t("ui.default_title.my_list", "Meine Liste")) if isinstance(self.settings, dict) else glide_i18n.t("ui.default_title.my_list", "Meine Liste")
         self.folders = []
-        return [self.new_list_object(str(title).strip() or "Meine Liste", self.normalize_items(data))], None
+        return [self.new_list_object(str(title).strip() or glide_i18n.t("ui.default_title.my_list", "Meine Liste"), self.normalize_items(data))], None
 
     def check_stored_list_kinds(self, data, version):
         """Prüft alle Listenarten eines Bestands, bevor irgendetwas übernommen wird."""
@@ -43855,7 +43924,7 @@ class ListApp:
                 self.check_list_kind(entry.get("list_kind"), version)
                 if entry.get("notion_source") is not None:
                     if version is None or version < 25:
-                        raise ValueError("Notion-Quellenmetadaten brauchen Datenformat 25.")
+                        raise ValueError(glide_i18n.t("ui.check_stored_list_kinds.notion_source_metadata_needs", "Notion-Quellenmetadaten brauchen Datenformat 25."))
                     glide_source_metadata.normalize(entry["notion_source"], entry.get("id"), entry.get("list_kind"))
         glide_source_metadata.records(entry for entry in data.get("lists", []) if isinstance(entry, dict))
         live_keys = set()
@@ -43863,16 +43932,16 @@ class ListApp:
             if not isinstance(folder, dict) or folder.get("notion_source_key") is None:
                 continue
             if version is None or version < 25:
-                raise ValueError("Notion-Ordnerzuordnungen brauchen Datenformat 25.")
+                raise ValueError(glide_i18n.t("ui.check_stored_list_kinds.notion_folder_mappings_need", "Notion-Ordnerzuordnungen brauchen Datenformat 25."))
             key = glide_notion_hierarchy.source_key(folder["notion_source_key"])
             if key in live_keys:
-                raise ValueError("Die Notion-Ordnerzuordnung ist nicht eindeutig.")
+                raise ValueError(glide_i18n.t("ui.check_stored_list_kinds.the_notion_folder_mapping", "Die Notion-Ordnerzuordnung ist nicht eindeutig."))
             live_keys.add(key)
         for raw in data.get("trash") or []:
             folder = raw.get("folder") if isinstance(raw, dict) else None
             if isinstance(folder, dict) and folder.get("notion_source_key") is not None:
                 if version is None or version < 25:
-                    raise ValueError("Notion-Ordnerzuordnungen brauchen Datenformat 25.")
+                    raise ValueError(glide_i18n.t("ui.check_stored_list_kinds.notion_folder_mappings_need", "Notion-Ordnerzuordnungen brauchen Datenformat 25."))
                 glide_notion_hierarchy.source_key(folder["notion_source_key"])
 
     def normalize_trash_data(self, data, item_ids=None, item_counter=None, known_label_ids=None):
@@ -44374,7 +44443,7 @@ class ListApp:
         )
         # Stundenraster (zweiter Ausbau 3.30): zuschaltbar neben dem Zeitplan.
         self.plan_day_grid_button = self.make_button(
-            self.search_frame, "Raster", self.toggle_plan_day_grid,
+            self.search_frame, glide_i18n.t("ui.plan_day.grid", "Raster"), self.toggle_plan_day_grid,
             "muted", width=84, height=38, font=app_font(9, "bold"),
         )
         # Tagesbeginn und Tagesabschluss sind seit 3.33.6 (D14) Modi von „Heute“.
@@ -45262,7 +45331,10 @@ class ListApp:
         notiz = self.header_note_text()
         kennzahlen = bool(str(getattr(self, "_stats_full_text", "") or "").strip())
         self._chip_stats_flag = kennzahlen
-        signatur = (tuple(chips), notiz, bearbeitbar, kennzahlen, self.theme.get("bg"), self.theme.get("muted"))
+        entry = self.current_list() if self.view_mode == "list" else None
+        edit = (glide_pages.edit_time_text(entry.get("updated_at"))
+                if chips and self.is_page_list(entry) else None)
+        signatur = (tuple(chips), edit, notiz, bearbeitbar, kennzahlen, self.theme.get("bg"), self.theme.get("muted"))
         sichtbar = bool(chips or notiz)
         if signatur == getattr(self, "_chip_signature", None) and sichtbar == bool(zeile.winfo_manager()):
             return
@@ -45275,9 +45347,13 @@ class ListApp:
             return
         # Kennzahlen als Text mit Trennpunkt, ohne Kasten: Auf dem Verlauf stand
         # jede als eigenes Feld in der Eingabefarbe (Rückmeldung 26.09.2026).
-        for index, text in enumerate(chips):
-            CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
-                        font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True).pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+        for index, text in enumerate(([edit[0]] if edit else []) + chips):
+            chip = CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
+                               font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True)
+            chip.pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+            if edit and index == 0:
+                self.add_tooltip(chip, glide_i18n.t("page.edit_time.exact", "Letzte Bearbeitung: {stamp}", stamp=edit[1]))
+                glide_window_lifetime.scope_for(chip).after(60000, self.tick_page_edit_time, chip)
         if notiz:
             vorsatz = "·  " if chips or kennzahlen else ""
             etikett = CanvasLabel(zeile, text=vorsatz + notiz, bg=self.theme["bg"], fg=self.theme["muted"],
@@ -45291,6 +45367,11 @@ class ListApp:
         if not zeile.winfo_manager():
             zeile.pack(side="left", anchor="w", fill="x", expand=True)
         self.fit_page_chips()
+
+    def tick_page_edit_time(self, chip):
+        self.update_page_chips()
+        if chip.winfo_exists():
+            glide_window_lifetime.scope_for(chip).after(60000, self.tick_page_edit_time, chip)
 
     def fit_page_chips(self, event=None):
         """Zeigt nur ganze Kennzahlen: Was nicht passt, fällt von hinten weg.
@@ -47235,23 +47316,23 @@ class ListApp:
     def validate_attachment_storage(storage):
         """Erlaubt ausschließlich portable, flache Pfade unter attachments/."""
         if not isinstance(storage, str):
-            raise ValueError("Ungültiger Anhangspfad.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.invalid_attachment_path", "Ungültiger Anhangspfad."))
         storage = storage.strip()
         if not storage or "\\" in storage or "\x00" in storage:
-            raise ValueError("Ungültiger Anhangspfad.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.invalid_attachment_path", "Ungültiger Anhangspfad."))
         parts = storage.split("/")
         if len(parts) != 2 or parts[0] != "attachments":
-            raise ValueError("Anhänge müssen direkt im Ordner attachments liegen.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.attachments_must_be_directly", "Anhänge müssen direkt im Ordner attachments liegen."))
         filename = parts[1]
         if filename in ("", ".", "..") or filename.rstrip(" .") != filename:
-            raise ValueError("Ungültiger Anhangsname.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.invalid_attachment_name", "Ungültiger Anhangsname."))
         if any(ord(char) < 32 or char in '<>:"/\\|?*' for char in filename):
-            raise ValueError("Der Anhangsname enthält unzulässige Zeichen.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.the_attachment_name_contains", "Der Anhangsname enthält unzulässige Zeichen."))
         reserved = {"CON", "PRN", "AUX", "NUL"}
         reserved.update({f"COM{number}" for number in range(1, 10)})
         reserved.update({f"LPT{number}" for number in range(1, 10)})
         if filename.split(".", 1)[0].upper() in reserved:
-            raise ValueError("Der Anhangsname ist unter Windows reserviert.")
+            raise ValueError(glide_i18n.t("ui.validate_attachment_storage.the_attachment_name_is", "Der Anhangsname ist unter Windows reserviert."))
         return storage
 
     def normalize_attachments(self, data):
@@ -47447,12 +47528,12 @@ class ListApp:
         etwa aus einem Import –, kürzt Glide ihn und meldet das ausdrücklich.
         """
         if not source_path or not os.path.isfile(source_path):
-            raise OSError("Die ausgewählte Datei ist nicht mehr vorhanden.")
+            raise OSError(glide_i18n.t("ui.store_attachment.the_selected_file_no", "Die ausgewählte Datei ist nicht mehr vorhanden."))
         source_size = os.path.getsize(source_path)
         if source_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
             raise OSError(
-                "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
-                "vollständiges Glide-Backup aufgenommen werden."
+                glide_i18n.t("ui.store_attachment.the_file_is_larger", "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
+                "vollständiges Glide-Backup aufgenommen werden.")
             )
         original_name = " ".join(str(name or os.path.basename(source_path)).split())
         if glide_attachment_names.too_long(original_name):
@@ -47474,8 +47555,8 @@ class ListApp:
             copied_size = os.path.getsize(temp_path)
             if copied_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
                 raise OSError(
-                    "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
-                    "vollständiges Glide-Backup aufgenommen werden."
+                    glide_i18n.t("ui.store_attachment.the_file_is_larger", "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
+                    "vollständiges Glide-Backup aufgenommen werden.")
                 )
             os.replace(temp_path, destination)
             temp_path = None
@@ -48757,7 +48838,7 @@ class ListApp:
                 with self.settings_write_batch():
                     self.record_recent_list_edits(record=record_activity, comparison=comparison)
                 if not getattr(self, '_settings_defer_depth', 0) and self._last_settings_batch_saved is False:
-                    raise OSError('Die zusätzlichen Einstellungen konnten nicht gespeichert werden.')
+                    raise OSError(glide_i18n.t("mod.save_result.finish_settings.the_additional_settings_could", 'Die zusätzlichen Einstellungen konnten nicht gespeichert werden.'))
 
             operations = [(glide_i18n.t("ui.followups.format_proof", 'Formatnachweis'), self.remember_written_data_format)]
             if not getattr(self, '_autosave_unchanged', False):
@@ -48905,7 +48986,7 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                     archiv.write(pfad, arcname=alt)
             with zipfile.ZipFile(temporaer, "r") as pruefung:
                 if pruefung.testzip():
-                    raise OSError("Die Vorsicherung ist beschädigt.")
+                    raise OSError(glide_i18n.t("ui.back_up_before_attachment_renaming.the_pre_backup_is", "Die Vorsicherung ist beschädigt."))
             os.replace(temporaer, ziel)
             temporaer = None
         except (OSError, ValueError, zipfile.BadZipFile):
@@ -49663,13 +49744,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def local_reminder_time(cls, day, clock, *, strict=True):
         """Lokale Kalenderzeit; bei doppelter Herbststunde gilt der erste Zeitpunkt."""
         if not cls.normalize_due(day) or not cls.normalize_due_time(clock):
-            raise ValueError("Bitte Datum und Uhrzeit für die Benachrichtigung angeben.")
+            raise ValueError(glide_i18n.t("ui.local_reminder_time.please_enter_the_date", "Bitte Datum und Uhrzeit für die Benachrichtigung angeben."))
         local = datetime.fromisoformat(f"{day}T{clock}")
         choices = [local.replace(fold=fold).astimezone(timezone.utc) for fold in (0, 1)]
         valid = [value for value in choices
                  if value.astimezone().replace(tzinfo=None) == local]
         if not valid and strict:
-            raise ValueError("Diese Ortszeit gibt es wegen der Zeitumstellung nicht. Bitte eine andere Uhrzeit wählen.")
+            raise ValueError(glide_i18n.t("ui.local_reminder_time.this_local_time_does", "Diese Ortszeit gibt es wegen der Zeitumstellung nicht. Bitte eine andere Uhrzeit wählen."))
         # Relative Fristen in einer ausgelassenen Stunde werden um die Lücke
         # nach vorn verschoben; feste Eingaben werden dagegen zurückgewiesen.
         return (min(valid) if valid else max(choices)).isoformat(timespec="seconds")
@@ -51183,8 +51264,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 entry["rich_note"] = copy.deepcopy(document)
                 entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
                 change.mark()
-        elif self.dirty:
-            self.save_items()
+            if change.saved and self.is_page_list(entry) and list_id == self.active_list_id:
+                self.update_page_chips()
+        elif self.dirty and self.save_items():
+            if self.is_page_list(entry) and list_id == self.active_list_id:
+                self.update_page_chips()
         return not self.dirty
 
     # --- Seitenart „Seite“ (26.09.2026) ------------------------------------
@@ -51196,7 +51280,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def change_page_feature(self, page_id, field, value, attachments=()):
         if field not in ('live_lists', 'cover'):
-            raise ValueError('Unbekannter Seiteninhalt.')
+            raise ValueError(glide_i18n.t("ui.change_page_feature.unknown_page_content", 'Unbekannter Seiteninhalt.'))
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
             return False
         if self.flush_rich_note() is False:
@@ -51485,7 +51569,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 or found[3]['id'] != document_id or target.get('list_kind', 'tasks') != 'tasks'
                 or self.is_archived_entry(target)):
             return False
-        with self.guarded_structural_change('Aufgabe in Liste übernehmen'):
+        with self.guarded_structural_change(glide_i18n.t("ui.transfer_document_task.move_task_into_list", 'Aufgabe in Liste übernehmen')):
             with self.item_change((), restore=False, update_sidebar=True) as change:
                 removed = self._pop_item(source.get('items', []), item_id)
                 if removed:
@@ -51564,7 +51648,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for item_id, title in titles.items():
                 found = self.find_item_in_lists(item_id)
                 if found and title != " ".join(str(found[0].get("text") or "").split()) and len(title) > self.CONTAINER_TITLE_MAX:
-                    raise ValueError("Aufgabentitel: höchstens 40 Zeichen; die Eingabe bleibt im Editor erhalten.")
+                    raise ValueError(glide_i18n.t("ui.rename_page_tasks.task_title_at_most", "Aufgabentitel: höchstens 40 Zeichen; die Eingabe bleibt im Editor erhalten."))
         geaendert = False
         for item_id, title in titles.items():
             found = self.find_item_in_lists(item_id)
@@ -51893,7 +51977,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         text = dokument["text"]
         spans = list(dokument["spans"])
         for item in fehlend:
-            titel = " ".join(str(item.get("text") or "Aufgabe").split())
+            titel = " ".join(str(item.get("text") or glide_i18n.t("editor.toolbar.task", "Aufgabe")).split())
             if text:
                 text += "\n"
             start = len(text)
@@ -51923,7 +52007,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "gallery"):
             self.show_info(glide_i18n.t("ui.create_area.create", "Anlegen"), glide_i18n.t("ui.create_new_note.this_document_type_does", "Diese Dokumentart gehört nicht in diesen Bereich."))
             return "break"
-        entry = self.new_list_object("Neue Galerie", [], folder_id=folder_id, list_kind=self.LIST_KIND_GALLERY)
+        entry = self.new_list_object(glide_i18n.t("menu.file.new_gallery", "Neue Galerie"), [], folder_id=folder_id, list_kind=self.LIST_KIND_GALLERY)
         with self.sidebar_change(refresh_tree=True) as change:
             self.lists.append(entry)
             self.set_active_list(entry["id"], refresh=False)
@@ -52605,7 +52689,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def read_drawing_animation_snapshot(self, attachment):
         path = self.resolve_attachment_path(attachment)
         if not path or not os.path.isfile(path):
-            raise OSError("Die Datei des Zwischenstands fehlt auf diesem Gerät.")
+            raise OSError(glide_i18n.t("ui.read_drawing_animation_snapshot.the_snapshot_file_is", "Die Datei des Zwischenstands fehlt auf diesem Gerät."))
         with open(path, "rb") as source:
             content = source.read(glide_animation.MAX_JSON_BYTES + 1)
         return glide_animation.from_snapshot(content)
@@ -52712,7 +52796,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         fields = glide_animation.entry_fields(animation)
         folder = self.get_folder(folder_id) if folder_id else None
         entry = self.new_list_object(
-            " ".join(str(title or "Zeichnung").split())[:120] or "Zeichnung", [],
+            " ".join(str(title or glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung")).split())[:120] or glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung"), [],
             folder_id=folder_id if folder else None, list_kind=self.LIST_KIND_DRAWING,
             drawing=fields["drawing"], animation=fields["animation"],
             journal={"moment_date": date.today().isoformat()} if folder and folder.get("folder_kind") == "journal" else None,
@@ -52880,7 +52964,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def parse_drawing_text(self, text):
         """JSON-Zellmodell oder Glide-SVG aus Text; liefert (Modell, Warnungen)."""
         if not isinstance(text, str) or not text.strip():
-            raise glide_drawing.DrawingFormatError("Die Zwischenablage enthält keinen Text.")
+            raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.paste_items_from_clipboard.the_clipboard_contains_no", "Die Zwischenablage enthält keinen Text."))
         stripped = text.lstrip("﻿ \t\r\n")
         if stripped.startswith("<"):
             imported = glide_drawing.import_glide_svg(stripped)
@@ -53022,7 +53106,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 animation.set_duration(common)
                 animation.set_duration(single, identity)
             else:
-                raise glide_drawing.DrawingFormatError("Unbekannte Bildfolgenaktion.")
+                raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.change_animation_frames.unknown_animation_action", "Unbekannte Bildfolgenaktion."))
             fields = glide_animation.entry_fields(animation)
         except (ValueError, TypeError, glide_drawing.DrawingFormatError) as exc:
             self.show_error(glide_i18n.t("ui.change_animation_frames.frame_sequence", "Bildfolge"), str(exc))
@@ -53212,7 +53296,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     target_directory = candidate
                     break
                 else:
-                    raise OSError("Für die Bildfolge ist kein freier Ordnername vorhanden.")
+                    raise OSError(glide_i18n.t("ui.drawing_animation_export.no_free_folder_name", "Für die Bildfolge ist kein freier Ordnername vorhanden."))
                 glide_animation_export.write_files(target_directory, files)
                 location = target_directory
             else:
@@ -53282,7 +53366,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return path
         if endung in glide_image_preview.VECTOR:
             if not self.previews.reads_svg(self.root):
-                raise glide_drawing.DrawingFormatError("SVG braucht Tk 9 (Python 3.14).")
+                raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.reference_png_path.svg_needs_tk_9", "SVG braucht Tk 9 (Python 3.14)."))
             ziel = os.path.join(tempfile.mkdtemp(prefix="glide-referenz-"),
                                 os.path.splitext(os.path.basename(path))[0] + ".png")
             bild = tk.PhotoImage(master=self.root, file=path, format="svg -scaletowidth 1024")
@@ -53292,7 +53376,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             ziel = self.previews.existing_conversion(path)
             if not ziel:
                 raise glide_drawing.DrawingFormatError(
-                    "Dieses Bildformat lässt sich hier nicht umwandeln. Bitte als PNG speichern.")
+                    glide_i18n.t("ui.reference_png_path.this_image_format_cannot", "Dieses Bildformat lässt sich hier nicht umwandeln. Bitte als PNG speichern."))
             if ziel.endswith(".ppm"):
                 # Unter Linux liefert `djpeg` PPM (N08); die Referenz erwartet PNG.
                 png = os.path.join(tempfile.mkdtemp(prefix="glide-referenz-"),
@@ -53305,21 +53389,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                 os.path.splitext(os.path.basename(path))[0] + ".png")
             tk.PhotoImage(master=self.root, file=path).write(ziel, format="png")
             return ziel
-        raise glide_drawing.DrawingFormatError("Das ist kein unterstütztes Bildformat.")
+        raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.reference_png_path.this_is_not_a", "Das ist kein unterstütztes Bildformat."))
 
     def read_reference_png(self, path):
         """Liest ein lokales PNG mit festen Grenzen für Datei- und Bildgröße."""
         size = os.path.getsize(path)
         if size > glide_drawing_image.MAX_REFERENCE_BYTES:
-            raise glide_drawing.DrawingFormatError("Das PNG ist größer als 32 MB.")
+            raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.read_reference_png.the_png_is_larger", "Das PNG ist größer als 32 MB."))
         with open(path, "rb") as source:
             if source.read(8) != b"\x89PNG\r\n\x1a\n":
-                raise glide_drawing.DrawingFormatError("Die Datei ist kein PNG-Bild.")
+                raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.read_reference_png.the_file_is_not", "Die Datei ist kein PNG-Bild."))
         image = tk.PhotoImage(master=self.root, file=path, format="png")
         limit = glide_drawing_image.MAX_REFERENCE_DIMENSION
         if max(image.width(), image.height()) > limit:
             raise glide_drawing.DrawingFormatError(
-                f"PNG-Referenzen dürfen höchstens {limit} × {limit} Pixel groß sein.")
+                glide_i18n.t("ui.read_reference_png.png_references_may_be", 'PNG-Referenzen dürfen höchstens {limit} × {limit2} Pixel groß sein.', limit=limit, limit2=limit))
         return image
 
     def hide_drawing_chrome(self):
@@ -53630,7 +53714,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         if getattr(self, "_data_read_only", False) or not self.flush_drawing_editor():
             return False
-        with self.guarded_structural_change("Zeichnung ändern"):
+        with self.guarded_structural_change(glide_i18n.t("ui.apply_drawing_change.change_drawing", "Zeichnung ändern")):
             with self.sidebar_change(refresh_tree=True, feedback=False) as record:
                 if self.undo_stack:
                     self.undo_stack[-1]["drawing_restore"] = [entry.get("id")]
@@ -53947,7 +54031,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             imported = glide_drawing.import_glide_svg(content)
             return imported.model, list(imported.warnings)
         if len(content) > glide_drawing.MAX_JSON_BYTES:
-            raise glide_drawing.DrawingFormatError("Zeichnungsdaten überschreiten 512 KiB")
+            raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.read_drawing_file.drawing_data_exceeds_512", "Zeichnungsdaten überschreiten 512 KiB"))
         return glide_drawing.DrawingModel.from_json(content), []
 
     def drawing_export(self, editor, fmt):
@@ -58396,21 +58480,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         erfassung = parse_capture(str(text or "").strip(), self.labels, ignore=ignore)
         text, felder = erfassung.titel, dict(erfassung.felder)
         if not text:
-            raise ValueError("Bitte einen Aufgabentitel eingeben.")
+            raise ValueError(glide_i18n.t("ui.capture_item.please_enter_a_task", "Bitte einen Aufgabentitel eingeben."))
         if len(text) > self.CONTAINER_TITLE_MAX:
-            raise ValueError("Der Titel darf höchstens 40 Zeichen enthalten. Für längere Inhalte die Beschreibung nutzen.")
+            raise ValueError(glide_i18n.t("ui.capture_item.the_title_may_contain", "Der Titel darf höchstens 40 Zeichen enthalten. Für längere Inhalte die Beschreibung nutzen."))
         target = next((entry for entry in self.lists if entry["id"] == list_id), None)
         if target is None:
-            raise ValueError("Die Zielliste ist nicht mehr vorhanden. Bitte erneut auswählen.")
+            raise ValueError(glide_i18n.t("ui.capture_item.the_target_list_no", "Die Zielliste ist nicht mehr vorhanden. Bitte erneut auswählen."))
         if not self.list_accepts_items(target):
-            raise ValueError("Eine Zeichnung nimmt keine Aufgaben auf. Bitte eine andere Liste wählen.")
+            raise ValueError(glide_i18n.t("ui.capture_item.a_drawing_does_not", "Eine Zeichnung nimmt keine Aufgaben auf. Bitte eine andere Liste wählen."))
         due, due_time = parse_capture_due(due_text)
         if due:
             felder["due"], felder["due_time"] = due, due_time
         felder = self.capture_item_fields(felder)
         beschreibung = str(description or "").strip()
         if getattr(self, "_data_read_only", False):
-            raise ValueError("Die Datenablage ist schreibgeschützt. Die Aufgabe wurde nicht angelegt.")
+            raise ValueError(glide_i18n.t("ui.capture_item.the_data_folder_is", "Die Datenablage ist schreibgeschützt. Die Aufgabe wurde nicht angelegt."))
         item = self.new_item(text, description=beschreibung, **felder)
         undo_before, dirty_before = list(self.undo_stack), self.dirty
         items = target.setdefault("items", [])
@@ -58872,13 +58956,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 or any(found[1] is not first_found[1] for found in resolved.values())):
             self.show_warning(glide_i18n.t("ui.board_controls.group", "Gruppieren"), glide_i18n.t("ui.group_selected_items.the_selection_has_changed", "Die Auswahl hat sich zwischenzeitlich verändert. Bitte erneut auswählen."))
             return "break"
-        with self.guarded_structural_change("Gruppieren") as guard:
+        with self.guarded_structural_change(glide_i18n.t("ui.board_controls.group", "Gruppieren")) as guard:
             with self.item_change(item_ids, restore=False) as change:
                 resolved = ItemIndex(self.items).selected(item_ids)
                 first_found = resolved.get(item_ids[0])
                 if (not first_found or len(resolved) != len(item_ids)
                         or any(found[1] is not first_found[1] for found in resolved.values())):
-                    raise DataIntegrityError("Die Auswahl hat sich zwischenzeitlich verändert")
+                    raise DataIntegrityError(glide_i18n.t("ui.group_selected_items.the_selection_has_changed_2", "Die Auswahl hat sich zwischenzeitlich verändert"))
                 target_siblings, insert_index = first_found[1:3]
                 moved = []
                 for item_id in item_ids:
@@ -58886,7 +58970,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     if removed:
                         moved.append(removed)
                 if len(moved) != len(item_ids):
-                    raise DataIntegrityError("Gruppieren hätte Punkte zurückgelassen")
+                    raise DataIntegrityError(glide_i18n.t("ui.group_selected_items.grouping_would_have_left", "Gruppieren hätte Punkte zurückgelassen"))
                 group = self.new_item(title, False, children=moved, kind=self.ITEM_KIND_GROUP)
                 insert_index = max(0, min(insert_index, len(target_siblings)))
                 target_siblings.insert(insert_index, group)
@@ -58932,7 +59016,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return "break"
         group = found[0]
         # Nur die Hülle der Gruppe darf verschwinden – kein enthaltener Punkt.
-        with self.guarded_structural_change("Gruppe auflösen", expected_removals={group.get("id")}):
+        with self.guarded_structural_change(glide_i18n.t("ui.menubar_structure.dissolve_group", "Gruppe auflösen"), expected_removals={group.get("id")}):
             with self.item_change((), restore=False, lists=self.changed_item_lists([group.get("id")])) as change:
                 found = self.find_item(item_id)
                 if not found or not self.is_group_item(found[0]):
@@ -58944,7 +59028,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 for offset, child in enumerate(children):
                     siblings.insert(index + offset, child)
                 if expected - self.collect_item_ids(self.items):
-                    raise DataIntegrityError("Gruppe auflösen hätte Punkte entfernt")
+                    raise DataIntegrityError(glide_i18n.t("ui.dissolve_selected_group.dissolving_the_group_would", "Gruppe auflösen hätte Punkte entfernt"))
                 self.keep_branch_expanded(children)
                 change.mark(children[0]["id"] if children else None)
         return "break"
@@ -61289,7 +61373,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             glide_i18n.t("ui.drop_items_on_list.move_to_the_items", '{subject} nach „{target_name}“ verschieben?\n\nDie Punkte verlassen damit diese Liste. Rückgängig machen: Strg+Z.', subject=subject, target_name=target_name),
         ):
             return False
-        with self.guarded_structural_change("In andere Liste verschieben") as guard:
+        with self.guarded_structural_change(glide_i18n.t("ui.drop_items_on_list.move_to_another_list", "In andere Liste verschieben")) as guard:
             moved = self.move_items_to_list(movable, destination_id)
         return moved and not guard.aborted
 
@@ -61348,7 +61432,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return 'break'
         self.trim_undo_stack()
         self.finish_import_ui([(glide_i18n.t("ui.import_txt_as_new_lists.open_new_list", 'Neue Liste öffnen'),lambda:self.set_active_list(created[-1]['id'])),
-            (glide_i18n.t("ui.import_txt_as_new_lists.import_record", 'Importvermerk'),lambda:self.record_data_operation('imported',paths[0] if len(paths)==1 else f'{len(paths)} Textdateien')),
+            (glide_i18n.t("ui.import_txt_as_new_lists.import_record", 'Importvermerk'),lambda:self.record_data_operation('imported',paths[0] if len(paths)==1 else glide_i18n.t("ui.import_txt_as_new_lists.text_files_2", '{len} Textdateien', len=len(paths)))),
             (glide_i18n.t("ui.import_txt_as_new_lists.import_feedback", 'Importrückmeldung'),lambda:self.show_info(glide_i18n.t("ui.import_txt_as_new_lists.import_successful", 'Import erfolgreich'),glide_i18n.t("ui.import_txt_as_new_lists.list_s_imported", '{len} Liste(n) importiert.', len=len(created))))])
         return 'break'
 
@@ -61782,7 +61866,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return raw.decode(name), name
         except (UnicodeDecodeError, LookupError):
             raise ValueError(
-                f"Die Datei lässt sich nicht als {name} lesen. Wähle eine andere Kodierung."
+                glide_i18n.t("ui.decode_csv_bytes.the_file_cannot_be", 'Die Datei lässt sich nicht als {name} lesen. Wähle eine andere Kodierung.', name=name)
             )
 
     @classmethod
@@ -61840,14 +61924,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         groesse = os.path.getsize(path)
         if groesse > cls.MAX_CSV_IMPORT_BYTES:
             raise ValueError(
-                f"Die Datei ist {groesse / (1024 * 1024):.1f} MB groß. Der Import liest "
-                f"höchstens {cls.MAX_CSV_IMPORT_BYTES // (1024 * 1024)} MB."
+                glide_i18n.t("ui.read_csv_table.the_file_is_mb", 'Die Datei ist {wert} MB groß. Der Import liest höchstens {wert2} MB.', wert=f'{groesse / (1024 * 1024):.1f}', wert2=cls.MAX_CSV_IMPORT_BYTES // (1024 * 1024))
             )
         with open(path, "rb") as datei:
             raw = datei.read()
         text, kodierung = cls.decode_csv_bytes(raw, encoding)
         if not text.strip():
-            raise ValueError("Die Datei enthält keine Daten.")
+            raise ValueError(glide_i18n.t("ui.read_csv_table.the_file_contains_no", "Die Datei enthält keine Daten."))
         aktives_trennzeichen = (cls.detect_csv_delimiter(text)
                                 if delimiter in (None, "", cls.CSV_AUTO) else delimiter)
         rohzeilen = []
@@ -61860,18 +61943,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     rohzeilen.append(zeile)
                 if len(rohzeilen) > cls.MAX_CSV_IMPORT_ROWS + 1:
                     raise ValueError(
-                        f"Die Datei enthält mehr als {cls.MAX_CSV_IMPORT_ROWS} Datenzeilen. "
-                        "Teile sie auf und importiere sie in mehreren Schritten."
+                        glide_i18n.t("ui.read_csv_table.the_file_contains_more", 'Die Datei enthält mehr als {max_csv_import_rows} Datenzeilen. Teile sie auf und importiere sie in mehreren Schritten.', max_csv_import_rows=cls.MAX_CSV_IMPORT_ROWS)
                     )
         except csv.Error as fehler:
-            raise ValueError(f"Die Datei konnte nicht zerlegt werden: {fehler}")
+            raise ValueError(glide_i18n.t("ui.read_csv_table.the_file_could_not", 'Die Datei konnte nicht zerlegt werden: {fehler}', fehler=fehler))
         if not rohzeilen:
-            raise ValueError("Die Datei enthält keine Datenzeilen.")
+            raise ValueError(glide_i18n.t("ui.read_csv_table.the_file_contains_no_2", "Die Datei enthält keine Datenzeilen."))
         spaltenzahl = max(len(zeile) for zeile in rohzeilen)
         if spaltenzahl > cls.MAX_CSV_IMPORT_COLUMNS:
             raise ValueError(
-                f"Die Datei hat {spaltenzahl} Spalten. Der Import liest höchstens "
-                f"{cls.MAX_CSV_IMPORT_COLUMNS}."
+                glide_i18n.t("ui.read_csv_table.the_file_has_columns", 'Die Datei hat {spaltenzahl} Spalten. Der Import liest höchstens {max_csv_import_columns}.', spaltenzahl=spaltenzahl, max_csv_import_columns=cls.MAX_CSV_IMPORT_COLUMNS)
             )
         kopf = cls.guess_csv_header(rohzeilen) if has_header is None else bool(has_header)
         if kopf:
@@ -61884,8 +61965,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             datenzeilen = rohzeilen
         if len(datenzeilen) > cls.MAX_CSV_IMPORT_ROWS:
             raise ValueError(
-                f"Die Datei enthält mehr als {cls.MAX_CSV_IMPORT_ROWS} Datenzeilen. "
-                "Teile sie auf und importiere sie in mehreren Schritten."
+                glide_i18n.t("ui.read_csv_table.the_file_contains_more", 'Die Datei enthält mehr als {max_csv_import_rows} Datenzeilen. Teile sie auf und importiere sie in mehreren Schritten.', max_csv_import_rows=cls.MAX_CSV_IMPORT_ROWS)
             )
         zeilen = [[cls.clean_csv_cell(zelle) for zelle in zeile]
                   + [""] * (spaltenzahl - len(zeile)) for zeile in datenzeilen]
@@ -62208,10 +62288,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def import_csv_table(self, table, mapping, nest=True, append_to_current=False):
         """Punkte aus der Tabelle übernehmen – ein Schritt, voll zurücknehmbar."""
         if not isinstance(mapping.get("text"), int):
-            raise ValueError("Ordne zuerst die Spalte mit dem Aufgabentext zu.")
+            raise ValueError(glide_i18n.t("ui.import_csv_table.first_assign_the_column", "Ordne zuerst die Spalte mit dem Aufgabentext zu."))
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
                 or not self.prepare_inspector_switch()):
-            raise ValueError('Der Bestand ist schreibgeschützt oder offene Eingaben konnten nicht übernommen werden.')
+            raise ValueError(glide_i18n.t("ui.import_csv_table.the_data_is_read", 'Der Bestand ist schreibgeschützt oder offene Eingaben konnten nicht übernommen werden.'))
         self.sync_current_list_reference()
         # Der Schnappschuss entsteht vor dem Auswerten, weil dabei neue Labels
         # angelegt werden. Rückgängig nimmt sie dadurch mit zurück.
@@ -62243,7 +62323,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.lists.append(ziel_liste)
         if not self.save_items():
             zurueck()
-            raise ValueError("Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen.")
+            raise ValueError(glide_i18n.t("ui.import_csv_table.the_data_could_not", "Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen."))
         self.trim_undo_stack()
         if append_to_current and ziel_liste is not None and ziel_liste is self.current_list():
             self.finish_import_ui([(glide_i18n.t("ui.clear_page_labels.page_labels", 'Seitenlabels'),self.update_page_labels),
@@ -62765,7 +62845,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def read_exchange_file(self, path):
         """Liest eine Austauschdatei oder das Manifest eines Austauschpakets mit Größenprüfung."""
         if not path or not os.path.isfile(path):
-            raise OSError("Die Austauschdatei ist nicht mehr vorhanden.")
+            raise OSError(glide_i18n.t("ui.read_exchange_file.the_exchange_file_no", "Die Austauschdatei ist nicht mehr vorhanden."))
         if zipfile.is_zipfile(path):
             with zipfile.ZipFile(path, "r") as archive:
                 payload_info, _attachments = self.inspect_exchange_archive(archive)
@@ -62774,8 +62854,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         groesse = os.path.getsize(path)
         if groesse > self.MAX_EXCHANGE_BYTES:
             raise ValueError(
-                f"Die Datei ist {groesse // (1024 * 1024)} MB groß; erlaubt sind "
-                f"höchstens {self.MAX_EXCHANGE_BYTES // (1024 * 1024)} MB.")
+                glide_i18n.t("ui.read_exchange_file.the_file_is_mb", 'Die Datei ist {wert} MB groß; erlaubt sind höchstens {wert2} MB.', wert=groesse // (1024 * 1024), wert2=self.MAX_EXCHANGE_BYTES // (1024 * 1024)))
         with open(path, "r", encoding="utf-8-sig") as handle:
             return handle.read()
 
@@ -62788,7 +62867,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         infos = archive.infolist()
         if len(infos) > self.MAX_BACKUP_MEMBERS:
-            raise ValueError("Das Austauschpaket enthält zu viele Dateien.")
+            raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_exchange_package_contains", "Das Austauschpaket enthält zu viele Dateien."))
         seen_names = set()
         attachment_infos = {}
         payload_info = None
@@ -62797,40 +62876,40 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             name = info.filename
             canonical_key = name.casefold()
             if canonical_key in seen_names:
-                raise ValueError("Das Austauschpaket enthält doppelte Dateinamen.")
+                raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_exchange_package_contains_2", "Das Austauschpaket enthält doppelte Dateinamen."))
             seen_names.add(canonical_key)
             if info.flag_bits & 0x1:
-                raise ValueError("Verschlüsselte Einträge werden nicht unterstützt.")
+                raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.encrypted_entries_are_not", "Verschlüsselte Einträge werden nicht unterstützt."))
             unix_mode = (info.external_attr >> 16) & 0xFFFF
             if unix_mode and stat.S_ISLNK(unix_mode):
-                raise ValueError("Symbolische Links sind im Austauschpaket nicht zulässig.")
+                raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.symbolic_links_are_not", "Symbolische Links sind im Austauschpaket nicht zulässig."))
             if info.is_dir():
                 if name.rstrip("/") != "attachments":
-                    raise ValueError(f"Unbekannter Ordner im Austauschpaket: {name}")
+                    raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.unknown_folder_in_the", 'Unbekannter Ordner im Austauschpaket: {name}', name=name))
                 continue
             if name in ("exchange.json", "data.json"):
                 if info.file_size > self.MAX_EXCHANGE_BYTES:
-                    raise ValueError(f"{name} im Austauschpaket ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.in_the_exchange_package", '{name} im Austauschpaket ist zu groß.', name=name))
                 if payload_info is None or name == "exchange.json":
                     payload_info = info
             else:
                 storage = self.validate_attachment_storage(name)
                 if storage != name:
-                    raise ValueError("Das Austauschpaket enthält einen nicht kanonischen Anhangspfad.")
+                    raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_exchange_package_contains_3", "Das Austauschpaket enthält einen nicht kanonischen Anhangspfad."))
                 if info.file_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
-                    raise ValueError(f"Der Anhang {name} ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_attachment_is_too", 'Der Anhang {name} ist zu groß.', name=name))
                 attachment_infos[storage] = info
             total_size += info.file_size
             if total_size > self.MAX_BACKUP_TOTAL_BYTES:
-                raise ValueError("Das Austauschpaket überschreitet die zulässige Gesamtgröße.")
+                raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_exchange_package_exceeds", "Das Austauschpaket überschreitet die zulässige Gesamtgröße."))
             if (
                 info.file_size > self.BACKUP_COPY_CHUNK
                 and info.compress_size > 0
                 and info.file_size / info.compress_size > self.MAX_BACKUP_COMPRESSION_RATIO
             ):
-                raise ValueError("Das Austauschpaket weist eine unplausibel hohe Kompressionsrate auf.")
+                raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.the_exchange_package_has", "Das Austauschpaket weist eine unplausibel hohe Kompressionsrate auf."))
         if payload_info is None:
-            raise ValueError("Im Austauschpaket fehlt exchange.json.")
+            raise ValueError(glide_i18n.t("ui.inspect_exchange_archive.exchange_json_is_missing", "Im Austauschpaket fehlt exchange.json."))
         return payload_info, attachment_infos
 
     def extract_exchange_archive(self, archive_path, destination_dir):
@@ -63460,10 +63539,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             recipe = glide_recipes.normalize_update(recipe, previous)
         existing = self.exchange_recipe_catalog()
         if any(r['id'] == recipe['id'] for r in existing if r['id'] not in {v['id'] for v in own}):
-            raise ValueError('Mitgelieferte Aufträge bleiben unverändert. Eine eigene Kopie anlegen.')
+            raise ValueError(glide_i18n.t("ui.save_exchange_recipe.built_in_tasks_stay", 'Mitgelieferte Aufträge bleiben unverändert. Eine eigene Kopie anlegen.'))
         if not remove and any(r['id'] != recipe['id'] and r['title'].casefold() == recipe['title'].casefold()
                               for r in existing):
-            raise ValueError('Dieser Auftragstitel ist bereits vergeben.')
+            raise ValueError(glide_i18n.t("ui.save_exchange_recipe.this_task_title_is", 'Dieser Auftragstitel ist bereits vergeben.'))
         updated = [r for r in own if r['id'] != recipe['id']]
         if not remove:
             updated.append(recipe)
@@ -63486,7 +63565,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         elif mode == 'create':
             payload = self.build_exchange_payload(lists=lists, folders=folders, include_done=include_done)
         else:
-            raise ValueError('Unbekannter Austauschzweck.')
+            raise ValueError(glide_i18n.t("ui.build_recipe_exchange.unknown_exchange_purpose", 'Unbekannter Austauschzweck.'))
         return glide_recipes.prepare(payload, recipe)
 
     def edit_exchange_recipe(self, initial=None, mode='patch'):
@@ -63509,9 +63588,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                insertbackground=self.theme['text'], font=app_font(11), relief='flat')
         title_entry.pack(fill='x', padx=10, pady=8)
         self.limit_title_entry(title_entry)
-        purpose = tk.StringVar(master=dialog, value='Neues anlegen' if initial.get('mode', mode) == 'create' else 'Vorhandenes überarbeiten')
+        purpose = tk.StringVar(master=dialog, value=glide_i18n.t("ui.edit_exchange_recipe.create_new", "Neues anlegen") if initial.get('mode', mode) == 'create' else glide_i18n.t("ui.edit_exchange_recipe.revise_existing", "Vorhandenes überarbeiten"))
         self._make_field_label(body, glide_i18n.t("ui.edit_exchange_recipe.purpose", 'Zweck')).pack(anchor='w', pady=(8, 4))
-        options, _ = self._make_option_menu(body, purpose, ['Neues anlegen', 'Vorhandenes überarbeiten'])
+        options, _ = self._make_option_menu(body, purpose, [glide_i18n.t("ui.edit_exchange_recipe.create_new", "Neues anlegen"), glide_i18n.t("ui.edit_exchange_recipe.revise_existing", "Vorhandenes überarbeiten")])
         options.pack(fill='x')
         self._make_field_label(body, glide_i18n.t("ui.edit_exchange_recipe.instruction_at_most_12", 'Anweisung (höchstens 12.000 Zeichen)')).pack(anchor='w', pady=(8, 4))
         border, field = self._make_field(body); border.pack(fill='both', expand=True); field.pack(fill='both', expand=True, padx=1, pady=1)
@@ -63526,7 +63605,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def submit(remove=False):
             try:
                 record = glide_recipes.normalize(initial if remove else dict(id=identity, title=title.get(),
-                    instruction=text.get('1.0', 'end-1c'), mode='create' if purpose.get() == 'Neues anlegen' else 'patch',
+                    instruction=text.get('1.0', 'end-1c'), mode='create' if purpose.get() == glide_i18n.t("ui.edit_exchange_recipe.create_new", "Neues anlegen") else 'patch',
                     fields=list(glide_exchange_patch.FIELDS)))
                 if self.save_exchange_recipe(record, remove=remove):
                     result['value'] = {} if remove else record
@@ -64298,7 +64377,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             with open(path, 'rb') as source:
                 original_bytes = source.read(glide_notion_archive.MAX_ARCHIVE_BYTES+1)
             if len(original_bytes) > glide_notion_archive.MAX_ARCHIVE_BYTES:
-                raise ValueError('Das Notion-Archiv darf höchstens 200 MiB groß sein.')
+                raise ValueError(glide_i18n.t("ui.import_notion_archive.the_notion_archive_may", 'Das Notion-Archiv darf höchstens 200 MiB groß sein.'))
             export = glide_notion_archive.inspect_export(io.BytesIO(original_bytes))
             current = copy.deepcopy(self.data_payload())
             page_hashes, asset_hashes, issues = glide_notion_import.current_sources(
@@ -64325,7 +64404,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.lists, self.resolve_attachment_path, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
         if (glide_page_restore.fingerprint(current) != selection.current_hash
                 or fresh_page_hashes != page_hashes or fresh_asset_hashes != asset_hashes):
-            raise ValueError('Der Bestand oder eine Anhangsdatei hat sich geändert; bitte erneut vergleichen.')
+            raise ValueError(glide_i18n.t("ui.apply_notion_selection.the_data_or_an", 'Der Bestand oder eine Anhangsdatei hat sich geändert; bitte erneut vergleichen.'))
         pre_backup = os.path.join(BACKUP_DIR, 'vor_notion_import_'
                                  + datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.glidebackup')
         self.write_complete_backup(pre_backup, self.complete_backup_payload())
@@ -64342,7 +64421,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             checked_pages, checked_assets, _issues = glide_notion_import.current_sources(
                 self.lists, self.resolve_attachment_path, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
             if checked_pages != page_hashes or checked_assets != asset_hashes:
-                raise ValueError('Eine Anhangsdatei hat sich beim Vorbereiten geändert; bitte erneut vergleichen.')
+                raise ValueError(glide_i18n.t("ui.apply_notion_selection.an_attachment_file_changed", 'Eine Anhangsdatei hat sich beim Vorbereiten geändert; bitte erneut vergleichen.'))
             planned = glide_notion_import.content(selection, current, export, staged.metadata,
                 page_factory=self.new_list_object, item_factory=self.new_item, folder_factory=self.new_folder_object,
                 now=datetime.now().astimezone().isoformat(timespec='seconds'), max_trash=self.MAX_TRASH_ENTRIES,
@@ -64364,7 +64443,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self._saved_comparison_parts = None
                 self.clear_render_cache();self.update_sidebar_list();self.refresh_tree()
             try:
-                with self.guarded_structural_change('Notion-Export übernehmen'):
+                with self.guarded_structural_change(glide_i18n.t("ui.import_notion_archive.take_over_notion_export", 'Notion-Export übernehmen')):
                     with self.sidebar_change(refresh_tree=False, feedback=False) as change:
                         self.lists, self.folders, self.trash = new_lists, new_folders, new_trash
                         for folder in selection.folders.folders:
@@ -64480,7 +64559,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         # Vorschau erfolgte Bestandsänderung führt vorher zum Abbruch.
         current = copy.deepcopy(self.data_payload())
         if not plan.ready or glide_page_restore.fingerprint(current) != plan.current_hash:
-            raise ValueError('Der Bestand hat sich geändert oder Sicherungsdateien fehlen; bitte neu vergleichen.')
+            raise ValueError(glide_i18n.t("ui.apply_page_restore.the_data_has_changed", 'Der Bestand hat sich geändert oder Sicherungsdateien fehlen; bitte neu vergleichen.'))
         original = next(page for page in snapshot.data['lists'] if page.get('id') == plan.page['id'])
         pre_backup = os.path.join(BACKUP_DIR, 'vor_seitenrestore_'
                                  + datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.glidebackup')
@@ -64521,7 +64600,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.update_sidebar_list()
                 self.refresh_tree()
             try:
-                with self.guarded_structural_change('Einzelne Seite wiederherstellen'):
+                with self.guarded_structural_change(glide_i18n.t("ui.page_restore_preview.restore_single_page", 'Einzelne Seite wiederherstellen')):
                     with self.sidebar_change(refresh_tree=False, feedback=False) as change:
                         self.lists, self.labels, self.trash = new_lists, new_labels, new_trash
                         if self.active_list_id == restored['id']:
@@ -64743,7 +64822,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if isinstance(data, list):
             data = {"lists": data}
         if not isinstance(data, dict) or not isinstance(data.get("lists"), list):
-            raise ValueError("In der Datei stehen keine Listen.")
+            raise ValueError(glide_i18n.t("ui.read_backup_for_compare.there_are_no_lists", "In der Datei stehen keine Listen."))
         return data
 
     def backup_compare_text(self, ergebnis):
@@ -65222,17 +65301,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 source = self.resolve_attachment_path(attachment)
                 if not source or not os.path.isfile(source):
                     raise FileNotFoundError(
-                        f"Der Anhang „{attachment.get('name', storage)}“ fehlt. "
-                        "Das Aufgabensicherung wurde nicht erstellt."
+                        glide_i18n.t("ui.collect_attachment_sources.the_attachment_is_missing", 'Der Anhang „{get}“ fehlt. Das Aufgabensicherung wurde nicht erstellt.', get=attachment.get('name', storage))
                     )
                 size = os.path.getsize(source)
                 if size > self.MAX_BACKUP_ATTACHMENT_BYTES:
-                    raise ValueError(f"Der Anhang „{attachment.get('name', storage)}“ ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.collect_attachment_sources.the_attachment_is_too", 'Der Anhang „{get}“ ist zu groß.', get=attachment.get('name', storage)))
                 if storage not in sources:
                     sources[storage] = source
                     total_size += size
         if total_size > self.MAX_BACKUP_TOTAL_BYTES:
-            raise ValueError("Die Anhänge überschreiten die zulässige Gesamtgröße eines Backups.")
+            raise ValueError(glide_i18n.t("ui.collect_attachment_sources.the_attachments_exceed_the", "Die Anhänge überschreiten die zulässige Gesamtgröße eines Backups."))
         return sources
 
     def validate_backup_target(self, path):
@@ -65242,14 +65320,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             os.path.normcase(os.path.realpath(SETTINGS_FILE)),
         }
         if target in protected:
-            raise ValueError("Diese Glide-Systemdatei darf nicht als Backupziel überschrieben werden.")
+            raise ValueError(glide_i18n.t("ui.validate_backup_target.this_glide_system_file", "Diese Glide-Systemdatei darf nicht als Backupziel überschrieben werden."))
         attachments_root = os.path.normcase(os.path.realpath(ATTACHMENTS_DIR))
+        # commonpath wirft ValueError bei verschiedenen Laufwerken; die
+        # Pfadregel selbst steht außerhalb, damit keine übersetzte Meldung
+        # über Abbruch oder Weiterlaufen entscheidet.
         try:
-            if os.path.commonpath([target, attachments_root]) == attachments_root:
-                raise ValueError("Ein Aufgabensicherung darf nicht im internen Anhangsordner liegen.")
-        except ValueError as exc:
-            if "Anhangsordner" in str(exc):
-                raise
+            inside_attachments = os.path.commonpath([target, attachments_root]) == attachments_root
+        except ValueError:
+            inside_attachments = False
+        if inside_attachments:
+            raise ValueError(glide_i18n.t("ui.validate_backup_target.a_task_backup_must", "Ein Aufgabensicherung darf nicht im internen Anhangsordner liegen."))
         return target
 
     def write_complete_backup(self, path, payload):
@@ -65260,7 +65341,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         )
         data_bytes = json.dumps(payload, ensure_ascii=False, indent=4).encode("utf-8")
         if len(data_bytes) > self.MAX_BACKUP_DATA_BYTES:
-            raise ValueError("Die Glide-Daten sind für ein einzelnes Backup zu groß.")
+            raise ValueError(glide_i18n.t("ui.write_complete_backup.the_glide_data_is", "Die Glide-Daten sind für ein einzelnes Backup zu groß."))
         target_dir = os.path.dirname(target)
         os.makedirs(target_dir, exist_ok=True)
         fd, temp_path = tempfile.mkstemp(prefix=".glide-backup-", suffix=".tmp", dir=target_dir)
@@ -65273,7 +65354,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             with zipfile.ZipFile(temp_path, "r") as check_archive:
                 damaged = check_archive.testzip()
                 if damaged:
-                    raise OSError(f"Das erzeugte Backup ist bei {damaged} beschädigt.")
+                    raise OSError(glide_i18n.t("ui.write_complete_backup.the_created_backup_is", 'Das erzeugte Backup ist bei {damaged} beschädigt.', damaged=damaged))
             with open(temp_path, "r+b") as file:
                 file.flush()
                 os.fsync(file.fileno())
@@ -65290,7 +65371,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def inspect_backup_archive(self, archive):
         infos = archive.infolist()
         if len(infos) > self.MAX_BACKUP_MEMBERS:
-            raise ValueError("Das Backup enthält zu viele Dateien.")
+            raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_contains_too", "Das Backup enthält zu viele Dateien."))
         seen_names = set()
         attachment_infos = {}
         data_info = None
@@ -65299,37 +65380,37 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             name = info.filename
             canonical_key = name.casefold()
             if canonical_key in seen_names:
-                raise ValueError("Das Backup enthält doppelte Dateinamen.")
+                raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_contains_duplicate", "Das Backup enthält doppelte Dateinamen."))
             seen_names.add(canonical_key)
             if info.flag_bits & 0x1:
-                raise ValueError("Verschlüsselte Backup-Einträge werden nicht unterstützt.")
+                raise ValueError(glide_i18n.t("ui.inspect_backup_archive.encrypted_backup_entries_are", "Verschlüsselte Backup-Einträge werden nicht unterstützt."))
             unix_mode = (info.external_attr >> 16) & 0xFFFF
             if unix_mode and stat.S_ISLNK(unix_mode):
-                raise ValueError("Symbolische Links sind in einem Backup nicht zulässig.")
+                raise ValueError(glide_i18n.t("ui.inspect_backup_archive.symbolic_links_are_not", "Symbolische Links sind in einem Backup nicht zulässig."))
             if info.is_dir():
                 if name != "attachments/":
-                    raise ValueError(f"Unbekannter Ordner im Backup: {name}")
+                    raise ValueError(glide_i18n.t("ui.inspect_backup_archive.unknown_folder_in_the", 'Unbekannter Ordner im Backup: {name}', name=name))
                 continue
             if name == "data.json":
                 if info.file_size > self.MAX_BACKUP_DATA_BYTES:
-                    raise ValueError("data.json im Backup ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.inspect_backup_archive.data_json_in_the", "data.json im Backup ist zu groß."))
                 data_info = info
             else:
                 storage = self.validate_attachment_storage(name)
                 if storage != name:
-                    raise ValueError("Das Backup enthält einen nicht kanonischen Anhangspfad.")
+                    raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_contains_a", "Das Backup enthält einen nicht kanonischen Anhangspfad."))
                 if info.file_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
-                    raise ValueError(f"Der Backup-Anhang {name} ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_attachment_is", 'Der Backup-Anhang {name} ist zu groß.', name=name))
                 attachment_infos[storage] = info
             total_size += info.file_size
             if total_size > self.MAX_BACKUP_TOTAL_BYTES:
-                raise ValueError("Das Backup überschreitet die zulässige Gesamtgröße.")
+                raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_exceeds_the", "Das Backup überschreitet die zulässige Gesamtgröße."))
             if (
                 info.file_size > self.BACKUP_COPY_CHUNK
                 and info.compress_size > 0
                 and info.file_size / info.compress_size > self.MAX_BACKUP_COMPRESSION_RATIO
             ):
-                raise ValueError("Das Backup weist eine unplausibel hohe Kompressionsrate auf.")
+                raise ValueError(glide_i18n.t("ui.inspect_backup_archive.the_backup_has_an", "Das Backup weist eine unplausibel hohe Kompressionsrate auf."))
         if data_info is None:
             raise ValueError("Im Glide-Backup fehlt data.json.")
         return data_info, attachment_infos
@@ -65344,10 +65425,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     break
                 total += len(chunk)
                 if total > limit:
-                    raise ValueError("Ein Backup-Inhalt überschreitet die zulässige Größe.")
+                    raise ValueError(glide_i18n.t("ui.read_zip_member_limited.a_backup_content_exceeds", "Ein Backup-Inhalt überschreitet die zulässige Größe."))
                 chunks.append(chunk)
         if total != info.file_size:
-            raise ValueError("Eine Dateigröße im Backup ist inkonsistent.")
+            raise ValueError(glide_i18n.t("ui.read_zip_member_limited.a_file_size_in", "Eine Dateigröße im Backup ist inkonsistent."))
         return b"".join(chunks)
 
     def copy_zip_member_limited(self, archive, info, target_path, limit):
@@ -65359,12 +65440,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     break
                 total += len(chunk)
                 if total > limit:
-                    raise ValueError("Ein Backup-Anhang überschreitet die zulässige Größe.")
+                    raise ValueError(glide_i18n.t("ui.copy_zip_member_limited.a_backup_attachment_exceeds", "Ein Backup-Anhang überschreitet die zulässige Größe."))
                 target.write(chunk)
             target.flush()
             os.fsync(target.fileno())
         if total != info.file_size:
-            raise ValueError("Eine Anhangsgröße im Backup ist inkonsistent.")
+            raise ValueError(glide_i18n.t("ui.copy_zip_member_limited.an_attachment_size_in", "Eine Anhangsgröße im Backup ist inkonsistent."))
         return total
 
     @classmethod
@@ -65422,8 +65503,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                             break
                     if new_storage is None:
                         raise OSError(
-                            "Für einen Anhang aus dem Backup konnte kein freier Zielname "
-                            "erzeugt werden."
+                            glide_i18n.t("ui.remap_import_attachments.no_free_target_name", "Für einen Anhang aus dem Backup konnte kein freier Zielname "
+                            "erzeugt werden.")
                         )
                     storage_map[old_storage] = new_storage
                     used_destinations.add(new_storage)
@@ -65591,7 +65672,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def build_print_html(self, fmt, options=None, day=None):
         """Vollständige, eigenständige Druckseite ohne externe Verweise."""
         if fmt not in dict(tr_table(self.PRINT_FORMATS)):
-            raise ValueError(f"Unbekanntes Druckformat: {fmt}")
+            raise ValueError(glide_i18n.t("ui.build_print_html.unknown_print_format", 'Unbekanntes Druckformat: {fmt}', fmt=fmt))
         options = dict(self.print_default_options(), **(options or {}))
         titel, untertitel, abschnitte = self.print_document_sections(fmt, day=day)
         name = str(self.settings.get("profile_name") or "").strip()
@@ -66020,7 +66101,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def build_ics_document(self, scope, options=None, day=None):
         """Vollständige ICS-Datei als Text; liefert (Text, Bericht)."""
         if scope not in dict(tr_table(self.ICS_SCOPES)):
-            raise ValueError(f"Unbekannter Umfang für die Kalenderausgabe: {scope!r}")
+            raise ValueError(glide_i18n.t("ui.build_ics_document.unknown_scope_for_the", 'Unbekannter Umfang für die Kalenderausgabe: {scope}', scope=f'{scope!r}'))
         options = options if isinstance(options, dict) else self.ics_default_options()
         name, paare = self.ics_sources(scope, day)
         bericht = {"events": 0, "skipped": 0, "truncated": False}
@@ -66400,8 +66481,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         groesse = os.path.getsize(path)
         if groesse > self.MAX_ICS_IMPORT_BYTES:
             raise ValueError(
-                f"Die Datei ist {groesse / (1024 * 1024):.1f} MB groß. Der Import liest höchstens "
-                f"{self.MAX_ICS_IMPORT_BYTES // (1024 * 1024)} MB."
+                glide_i18n.t("ui.read_ics_file.the_file_is_mb", 'Die Datei ist {wert} MB groß. Der Import liest höchstens {wert2} MB.', wert=f'{groesse / (1024 * 1024):.1f}', wert2=self.MAX_ICS_IMPORT_BYTES // (1024 * 1024))
             )
         with open(path, "rb") as datei:
             roh = datei.read()
@@ -66414,12 +66494,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         else:
             text = roh.decode("latin-1")
         if "BEGIN:VCALENDAR" not in text.upper():
-            raise ValueError("Die Datei enthält keinen Kalender (BEGIN:VCALENDAR fehlt).")
+            raise ValueError(glide_i18n.t("ui.read_ics_file.the_file_contains_no", "Die Datei enthält keinen Kalender (BEGIN:VCALENDAR fehlt)."))
         ereignisse = self.parse_ics_events(text)
         if len(ereignisse) > self.MAX_ICS_IMPORT_EVENTS:
             raise ValueError(
-                f"Die Datei enthält {len(ereignisse)} Termine. Der Import liest höchstens "
-                f"{self.MAX_ICS_IMPORT_EVENTS}."
+                glide_i18n.t("ui.read_ics_file.the_file_contains_events", 'Die Datei enthält {len} Termine. Der Import liest höchstens {max_ics_import_events}.', len=len(ereignisse), max_ics_import_events=self.MAX_ICS_IMPORT_EVENTS)
             )
         kopf = {"path": path, "name": "", "prodid": ""}
         for zeile in self.unfold_ics_lines(text):
@@ -66431,7 +66510,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             elif name == "BEGIN" and wert.strip().upper() == "VEVENT":
                 break
         if not ereignisse:
-            raise ValueError("Die Datei enthält keine Termine (VEVENT).")
+            raise ValueError(glide_i18n.t("ui.read_ics_file.the_file_contains_no_2", "Die Datei enthält keine Termine (VEVENT)."))
         return kopf, ereignisse
 
     def known_glide_item_ids(self):
@@ -66621,7 +66700,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Termine übernehmen – ein Schritt, vollständig zurücknehmbar."""
         if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
                 or not self.prepare_inspector_switch()):
-            raise ValueError('Der Bestand ist schreibgeschützt oder offene Eingaben konnten nicht übernommen werden.')
+            raise ValueError(glide_i18n.t("ui.import_ics_events.the_data_is_read", 'Der Bestand ist schreibgeschützt oder offene Eingaben konnten nicht übernommen werden.'))
         self.sync_current_list_reference()
         undo_before, dirty_before = tuple(self.undo_stack), self.dirty
         self.snapshot_undo(trim=False)
@@ -66646,13 +66725,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             titel = str(kopf.get("name") or "").strip()
             if not titel:
                 titel = os.path.splitext(os.path.basename(kopf.get("path") or ""))[0]
-            titel = " ".join(titel.replace("_", " ").split())[:80] or "Kalenderimport"
+            titel = " ".join(titel.replace("_", " ").split())[:80] or glide_i18n.t("ui.importiere.calendar_import", "Kalenderimport")
             ordner = self.active_folder_id if self.view_mode == "folder" else None
             ziel = self.new_list_object(titel, punkte, folder_id=ordner)
             self.lists.append(ziel)
         if not self.save_items():
             zurueck()
-            raise ValueError("Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen.")
+            raise ValueError(glide_i18n.t("ui.import_ics_events.the_data_could_not", "Der Bestand konnte nicht gespeichert werden; es wurde nichts übernommen."))
         self.trim_undo_stack()
         if append_to_current and ziel is self.current_list():
             self.finish_import_ui([(glide_i18n.t("ui.clear_page_labels.page_labels", 'Seitenlabels'),self.update_page_labels),
@@ -66846,20 +66925,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         version = section.get("format_version")
         if not isinstance(version, int) or isinstance(version, bool) or not 1 <= version <= self.APP_BACKUP_FORMAT_VERSION:
-            raise ValueError("Der Zusatzteil dieses App-Sicherungs stammt aus einer nicht unterstützten Fassung.")
+            raise ValueError(glide_i18n.t("ui.app_backup_section.the_additional_part_of", "Der Zusatzteil dieses App-Sicherungs stammt aus einer nicht unterstützten Fassung."))
         for key in ("settings", "templates", "activity"):
             value = section.get(key)
             if value is not None and not isinstance(value, dict):
-                raise ValueError(f"Der Abschnitt „{key}“ im App-Sicherung ist ungültig.")
+                raise ValueError(glide_i18n.t("ui.app_backup_section.the_section_in_the", 'Der Abschnitt „{key_}“ im App-Sicherung ist ungültig.', key_=key))
         templates = section.get("templates") or {}
         records = templates.get("templates", [])
         if not isinstance(records, list):
-            raise ValueError("Der Vorlagenkatalog im App-Sicherung ist ungültig.")
+            raise ValueError(glide_i18n.t("ui.app_backup_section.the_template_catalogue_in", "Der Vorlagenkatalog im App-Sicherung ist ungültig."))
         activity = section.get("activity") or {}
         for key in self.APP_BACKUP_ACTIVITY_KEYS:
             history = activity.get(key, {})
             if not isinstance(history, dict):
-                raise ValueError("Die Aktivitätsdaten im App-Sicherung sind ungültig.")
+                raise ValueError(glide_i18n.t("ui.app_backup_section.the_activity_data_in", "Die Aktivitätsdaten im App-Sicherung sind ungültig."))
         return section
 
     def describe_app_backup(self, data, section=None):
@@ -66956,8 +67035,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def read_app_backup_file(self, path):
         """Liest Daten und Zusatzabschnitt eines Archivs ohne Änderung am Bestand."""
         if not zipfile.is_zipfile(path):
-            raise ValueError("Ein App-Sicherung ist eine Archivdatei. Bitte eine "
-                             f"{self.APP_BACKUP_EXTENSION}- oder .glidebackup-Datei wählen.")
+            raise ValueError(glide_i18n.t("ui.read_app_backup_file.an_app_backup_is", 'Ein App-Sicherung ist eine Archivdatei. Bitte eine {app_backup_extension}- oder .glidebackup-Datei wählen.', app_backup_extension=self.APP_BACKUP_EXTENSION))
         with zipfile.ZipFile(path, "r") as archive:
             data_info, _attachments = self.inspect_backup_archive(archive)
             raw = self.read_zip_member_limited(archive, data_info, self.MAX_BACKUP_DATA_BYTES)
@@ -67000,7 +67078,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 try:
                     shutil.copy2(SETTINGS_FILE, os.path.join(BACKUP_DIR, f"settings_vor_restore_{stempel}.json"))
                 except OSError as exc:
-                    raise OSError(f"Die Einstellungen konnten nicht gesichert werden: {exc}")
+                    raise OSError(glide_i18n.t("ui.restore_app_backup_extras.the_settings_could_not", 'Die Einstellungen konnten nicht gesichert werden: {exc}', exc=exc))
             self.settings = self.normalize_personal_settings(neu)
             if settings and isinstance(section.get("settings"), dict):
                 gespeichertes_theme = section["settings"].get("theme")
@@ -67009,7 +67087,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if not self.save_settings(show_error=True):
                 self.settings = vorher
                 self.theme_name = vorher_theme
-                raise OSError("Die Einstellungen konnten nicht geschrieben werden.")
+                raise OSError(glide_i18n.t("ui.restore_app_backup_extras.the_settings_could_not_2", "Die Einstellungen konnten nicht geschrieben werden."))
             angewendet.append(glide_i18n.t("settings.title", "Einstellungen") if settings else glide_i18n.t("ui.restore_app_backup_extras.activity_data", "Aktivitätsdaten"))
             if settings and activity:
                 angewendet[-1] = glide_i18n.t("ui.restore_app_backup_extras.settings_and_activity_data", "Einstellungen und Aktivitätsdaten")
@@ -67020,11 +67098,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 try:
                     shutil.copy2(TEMPLATES_FILE, os.path.join(BACKUP_DIR, f"vorlagen_vor_restore_{stempel}.json"))
                 except OSError as exc:
-                    raise OSError(f"Der Vorlagenkatalog konnte nicht gesichert werden: {exc}")
+                    raise OSError(glide_i18n.t("ui.restore_app_backup_extras.the_template_catalogue_could", 'Der Vorlagenkatalog konnte nicht gesichert werden: {exc}', exc=exc))
             self.templates = self.normalize_template_records(copy.deepcopy(records))
             if not self.save_templates():
                 self.templates = vorher
-                raise OSError("Der Vorlagenkatalog konnte nicht geschrieben werden.")
+                raise OSError(glide_i18n.t("ui.restore_app_backup_extras.the_template_catalogue_could_2", "Der Vorlagenkatalog konnte nicht geschrieben werden."))
             angewendet.append(glide_i18n.t("ui.restore_app_backup_extras.template_catalog", "Vorlagenkatalog"))
         return angewendet
 
@@ -67212,11 +67290,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 data = json.loads(raw_json.decode("utf-8"))
             else:
                 if os.path.getsize(path) > self.MAX_BACKUP_DATA_BYTES:
-                    raise ValueError("Die JSON-Backupdatei ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.import_full_backup.the_json_backup_file", "Die JSON-Backupdatei ist zu groß."))
                 with open(path, "rb") as file:
                     raw_json = file.read(self.MAX_BACKUP_DATA_BYTES + 1)
                 if len(raw_json) > self.MAX_BACKUP_DATA_BYTES:
-                    raise ValueError("Die JSON-Backupdatei ist zu groß.")
+                    raise ValueError(glide_i18n.t("ui.import_full_backup.the_json_backup_file", "Die JSON-Backupdatei ist zu groß."))
                 data = json.loads(raw_json.decode("utf-8-sig"))
 
             referenced = self.validate_backup_schema(data, portable=is_portable)
@@ -67228,7 +67306,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     details.append(glide_i18n.t("ui.import_full_backup.missing", 'fehlend: {join}', join=", ".join(missing[:5])))
                 if extra:
                     details.append(glide_i18n.t("ui.import_full_backup.not_referenced", 'nicht referenziert: {join}', join=", ".join(extra[:5])))
-                raise ValueError("Die Anhänge im Backup sind unvollständig oder unerwartet (" + "; ".join(details) + ").")
+                raise ValueError(glide_i18n.t("ui.import_full_backup.the_attachments_in_the", 'Die Anhänge im Backup sind unvollständig oder unerwartet ({join}).', join="; ".join(details)))
 
             # normalize_lists_data setzt folders, labels und trash; der aktuelle
             # Zustand wird bis zum erfolgreichen Commit unverändert bewahrt.
@@ -67245,7 +67323,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.labels = previous_labels
                 self.trash = previous_trash
             if not new_lists and not (additive and new_folders):
-                raise ValueError("In der Datei wurden keine Listen gefunden.")
+                raise ValueError(glide_i18n.t("ui.import_full_backup.no_lists_were_found", "In der Datei wurden keine Listen gefunden."))
             if additive:
                 raw_ids = {entry.get("id") for entry in data.get("lists", [])}
                 new_lists = [entry for entry in new_lists if entry.get("id") in raw_ids]
@@ -67280,7 +67358,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     )
                     total_written += written
                     if total_written > self.MAX_BACKUP_TOTAL_BYTES:
-                        raise ValueError("Die extrahierten Anhänge überschreiten die zulässige Gesamtgröße.")
+                        raise ValueError(glide_i18n.t("ui.import_full_backup.the_extracted_attachments_exceed", "Die extrahierten Anhänge überschreiten die zulässige Gesamtgröße."))
                     staged_files[new_storage] = staged_path
                 if source_restore_before is not None:
                     restored_hashes = glide_source_metadata.staged_source_hashes(
@@ -67297,8 +67375,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ]
                 if missing_local:
                     raise ValueError(
-                        "Dieses JSON verweist auf Anhänge, enthält die Dateien aber nicht. "
-                        "Bitte stattdessen das zugehörige .glidebackup verwenden."
+                        glide_i18n.t("ui.import_full_backup.this_json_refers_to", "Dieses JSON verweist auf Anhänge, enthält die Dateien aber nicht. "
+                        "Bitte stattdessen das zugehörige .glidebackup verwenden.")
                     )
 
             imported_count = len(new_lists)
@@ -67356,19 +67434,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for new_storage, staged_path in staged_files.items():
                 final_path = self.resolve_attachment_path({"storage": new_storage})
                 if not final_path or os.path.exists(final_path):
-                    raise OSError("Ein sicherer Zielpfad für einen importierten Anhang konnte nicht erstellt werden.")
+                    raise OSError(glide_i18n.t("ui.import_full_backup.a_safe_target_path", "Ein sicherer Zielpfad für einen importierten Anhang konnte nicht erstellt werden."))
                 os.replace(staged_path, final_path)
                 created_paths.append(final_path)
 
             if recovering:
                 if not self.recovery_lock_owned():
-                    raise OSError('Die Datensperre gehört nicht mehr dieser Wiederherstellung.')
+                    raise OSError(glide_i18n.t("ui.import_full_backup.the_data_lock_no", 'Die Datensperre gehört nicht mehr dieser Wiederherstellung.'))
                 if replacement.original_missing:
                     if os.path.lexists(SAVE_FILE):
-                        raise OSError('Am zuvor fehlenden Originalpfad ist inzwischen eine Datei erschienen.')
+                        raise OSError(glide_i18n.t("ui.import_full_backup.a_file_has_appeared", 'Am zuvor fehlenden Originalpfad ist inzwischen eine Datei erschienen.'))
                 elif hashlib.sha256(glide_backup_snapshot.regular_bytes(
                         SAVE_FILE, self.MAX_BACKUP_DATA_BYTES)).hexdigest() != replacement.sha256:
-                    raise OSError('Die Originaldatei wurde nach ihrer Vorsicherung verändert.')
+                    raise OSError(glide_i18n.t("ui.import_full_backup.the_original_file_was", 'Die Originaldatei wurde nach ihrer Vorsicherung verändert.'))
             self.write_json_atomic(SAVE_FILE, imported_payload)
             committed = True
 
@@ -67412,7 +67490,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self._history_baseline = None
                 self._history_replacement = f"Backup {os.path.basename(path)}"
             if not self.save_items(show_error=False) and recovering:
-                raise OSError('Der Wiederherstellungsstand ist gespeichert; der Speichernachlauf ist fehlgeschlagen.')
+                raise OSError(glide_i18n.t("ui.import_full_backup.the_restored_state_is", 'Der Wiederherstellungsstand ist gespeichert; der Speichernachlauf ist fehlgeschlagen.'))
             # Erst nachdem die Aufgaben stehen, bekommen die
             # Pinnwände ihre Karten – vorher gäbe es nichts, worauf sie zeigen
             # könnten, und `prune` würde sie sofort wieder leeren.
@@ -67579,12 +67657,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     if name == "Bearbeitungstag":
                         parsed = self.parse_due_input(raw)
                         if parsed is None:
-                            raise ValueError("Ungültiger Bearbeitungstag im TXT-Import.")
+                            raise ValueError(glide_i18n.t("ui.parse_txt_items.invalid_planned_day_in", "Ungültiger Bearbeitungstag im TXT-Import."))
                         last_item.update(self.normalize_planning(parsed or None, last_item.get("estimated_minutes")))
                     else:
                         raw = raw.removesuffix(" min")
                         if len(raw) > 5 or not raw.isascii() or not raw.isdigit():
-                            raise ValueError("Ungültiger Aufwand im TXT-Import.")
+                            raise ValueError(glide_i18n.t("ui.parse_txt_items.invalid_effort_in_the", "Ungültiger Aufwand im TXT-Import."))
                         last_item.update(self.normalize_planning(last_item.get("planned_date"), int(raw)))
                 continue
             if stripped.startswith("Wiederholung:"):
@@ -69317,7 +69395,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Beschriftungen sind Anzeige; die Aktionskennungen und Gruppen stehen
         in action_catalog. Anonyme Varianten erhalten explizite Kennungen.
         """
-        loeschen = "Rückschritt" if IS_MACOS else "Entf"
+        loeschen = glide_i18n.t("ui.show_shortcuts_dialog.backspace", "Rückschritt") if IS_MACOS else glide_i18n.t("ui.show_shortcuts_dialog.delete", "Entf")
         return (
             (glide_i18n.t("menu.file", "Datei"), (
                 (glide_i18n.t("menu.file.new", "Neu anlegen"), (
@@ -69625,7 +69703,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         etwas führen soll, keinen eigenen Nachbau der ganzen Maske.
         """
         if kind not in ("info", "warning", "error", "yesno", "yesnocancel"):
-            raise ValueError(f"Unbekannte Dialogart: {kind}")
+            raise ValueError(glide_i18n.t("ui.themed_message_dialog.unknown_dialog_type", 'Unbekannte Dialogart: {kind}', kind=kind))
         previous_focus = self.current_focus_widget()
         owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else None
         if owner is None:
@@ -69673,7 +69751,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         buttons = {}
         specs = [("ok", "OK", "ok", "confirm")]
         if is_question:
-            specs = [("yes", "Ja", True, "confirm"), ("no", glide_i18n.t("ui.themed_message_dialog.no", "Nein"), False, "muted")]
+            specs = [("yes", glide_i18n.t("ui.themed_message_dialog.yes", "Ja"), True, "confirm"), ("no", glide_i18n.t("ui.themed_message_dialog.no", "Nein"), False, "muted")]
             if kind == "yesnocancel":
                 specs.append(("cancel", glide_i18n.t("button.cancel", "Abbrechen"), None, "muted"))
         for index, (name, label, value, color) in enumerate(specs):
@@ -69760,7 +69838,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def about_text(self):
         """Der Text von „Über Glide“ – eine Stelle für Fenster und Prüfung."""
         return (
-            glide_i18n.t("ui.about_text.version_thank_you_for", '{app_name} – {description}\nVersion {app_version} · {app_release_name}\n\nDanke, dass du meine App benutzt.\nMit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\nWarum mir Glide wichtig ist\nIch wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\nAufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\nGlide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\nShaye.de – mailme@shaye.de\n\nSoftwarelizenz: Mozilla Public License 2.0 ({license_id}).\nQuellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\nMitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\nDeine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\nSpeicherort der Daten:\n{base_dir}', app_name=APP_NAME, description=glide_brand.DESCRIPTION, app_version=APP_VERSION, app_release_name=APP_RELEASE_NAME, license_id=glide_brand.LICENSE_ID, base_dir=BASE_DIR)
+            glide_i18n.t("ui.about_text.version_thank_you_for", '{app_name} – {description}\nVersion {app_version} · {app_release_name}\n\nDanke, dass du meine App benutzt.\nMit Glide kannst du Aufgaben planen und Ideen weiterentwickeln. Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\nWarum mir Glide wichtig ist\nIch wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\nAufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\nGlide verbindet deine Tagesplanung mit Seiten, Pinnwänden und eigenen Zeichnungen.\n\n{brand} · {copyright}\nShaye.de – mailme@shaye.de\n\nSoftwarelizenz: Mozilla Public License 2.0 ({license_id}).\nQuellcode und Lizenztext: https://github.com/n05a-design/glide-to-do\nMitgelieferte Drittkomponenten behalten ihre eigenen Lizenzen.\n\nDeine Inhalte und Einstellungen werden in deinem gewählten Datenordner gespeichert. Automatische Sicherungen und Exporte helfen dir, deine Arbeit aufzubewahren.\nSpeicherort der Daten:\n{base_dir}', app_name=APP_NAME, description=glide_i18n.t("brand.description", glide_brand.DESCRIPTION), brand=glide_brand.BRAND_NAME, copyright=glide_brand.COPYRIGHT, app_version=APP_VERSION, app_release_name=APP_RELEASE_NAME, license_id=glide_brand.LICENSE_ID, base_dir=BASE_DIR)
         )
 
     def about_actions(self):
@@ -70208,7 +70286,7 @@ class TemplateDraft(ListApp):
             roots = ([folder for folder in self.folders if not folder.get("parent_id")]
                      if template["kind"] == "folder" else self.lists)
             if len(roots) != 1:
-                raise ValueError("Die Vorlage muss genau eine Stammliste oder einen Stammordner enthalten.")
+                raise ValueError(glide_i18n.t("ui.init.the_template_must_contain", "Die Vorlage muss genau eine Stammliste oder einen Stammordner enthalten."))
             self.holder = roots[0]
             self.holder.update({key: copy.deepcopy(template.get(key))
                                 for key in ("title", "note", "color", "labels")})
@@ -70254,7 +70332,7 @@ class TemplateDraft(ListApp):
 
     def store_attachment(self, source_path, name=None):
         if not os.path.isfile(source_path) or os.path.getsize(source_path) > self.MAX_BACKUP_ATTACHMENT_BYTES:
-            raise OSError("Die Datei fehlt oder überschreitet die erlaubte Anhangsgröße.")
+            raise OSError(glide_i18n.t("ui.store_attachment.the_file_is_missing", "Die Datei fehlt oder überschreitet die erlaubte Anhangsgröße."))
         identity = uuid.uuid4().hex
         name = " ".join(str(name or os.path.basename(source_path)).split())
         if glide_attachment_names.too_long(name):
@@ -70713,6 +70791,7 @@ def show_start_window(root):
 def main():
     """Startet Glide – direkt oder über `glide_start.py` (mit Bytecode-Cache)."""
     glide_diagnostics.start_session(APP_VERSION)
+    activate_runtime()
     try:
         set_windows_app_user_model_id()
         # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.

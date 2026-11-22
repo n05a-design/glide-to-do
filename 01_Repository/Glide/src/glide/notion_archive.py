@@ -63,10 +63,10 @@ def safe_member(name):
     if (not isinstance(name, str) or not name or len(name) > 4096 or "\\" in name
             or name.startswith("/") or re.match(r"^[A-Za-z]:", name)
             or any(ord(char) < 32 for char in name)):
-        raise NotionFormatError("Das Archiv enthält einen ungültigen Dateipfad.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.safe_member.the_archive_contains_an", "Das Archiv enthält einen ungültigen Dateipfad."))
     parts = name.rstrip("/").split("/")
     if any(part in ("", ".", "..") or len(part) > 255 for part in parts):
-        raise NotionFormatError("Das Archiv enthält einen unzulässigen Dateipfad.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.safe_member.the_archive_contains_a", "Das Archiv enthält einen unzulässigen Dateipfad."))
     return unicodedata.normalize("NFC", "/".join(parts))
 
 
@@ -137,12 +137,12 @@ def _read_members(source):
         from pathlib import Path
         source_size = Path(source).stat().st_size
     if source_size > MAX_ARCHIVE_BYTES:
-        raise NotionFormatError("Das Notion-Archiv darf höchstens 200 MiB groß sein.")
+        raise NotionFormatError(glide_i18n.t("ui.import_notion_archive.the_notion_archive_may", "Das Notion-Archiv darf höchstens 200 MiB groß sein."))
     try:
         with zipfile.ZipFile(source) as archive:
             infos = archive.infolist()
             if not 1 <= len(infos) <= MAX_MEMBERS:
-                raise NotionFormatError("Das Archiv enthält keine oder mehr als 5.000 Einträge.")
+                raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_archive_contains_no", "Das Archiv enthält keine oder mehr als 5.000 Einträge."))
             members = {}
             paths, folded = set(), set()
             total = 0
@@ -152,33 +152,33 @@ def _read_members(source):
                 # Nullbytes. Den ungekürzten Archivnamen vor jeder Nutzung prüfen.
                 name = safe_member(info.orig_filename)
                 if name in paths or name.casefold() in folded:
-                    raise NotionFormatError("Das Archiv enthält doppelte oder mehrdeutige Dateipfade.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_archive_contains_duplicate", "Das Archiv enthält doppelte oder mehrdeutige Dateipfade."))
                 paths.add(name); folded.add(name.casefold())
                 mode = info.external_attr >> 16
                 if stat.S_ISLNK(mode) or (stat.S_IFMT(mode) and not (stat.S_ISREG(mode) or stat.S_ISDIR(mode))):
-                    raise NotionFormatError("Verknüpfungen und Sonderdateien sind im Import nicht erlaubt.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.links_and_special_files", "Verknüpfungen und Sonderdateien sind im Import nicht erlaubt."))
                 if info.flag_bits & 1:
-                    raise NotionFormatError("Verschlüsselte Archive werden nicht unterstützt.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.encrypted_archives_are_not", "Verschlüsselte Archive werden nicht unterstützt."))
                 if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
-                    raise NotionFormatError("Das Kompressionsverfahren wird nicht unterstützt; ZIP ohne Kompression oder mit Deflate verwenden.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_compression_method_is", "Das Kompressionsverfahren wird nicht unterstützt; ZIP ohne Kompression oder mit Deflate verwenden."))
                 if info.is_dir():
                     continue
                 limit = MAX_MARKDOWN_BYTES if name.lower().endswith(".md") else MAX_MEMBER_BYTES
                 if info.file_size > limit or info.file_size < 0:
-                    raise NotionFormatError("Ein Archivbestandteil überschreitet die erlaubte Größe: " + name)
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.an_archive_member_exceeds", 'Ein Archivbestandteil überschreitet die erlaubte Größe: {name}', name=name))
                 total += info.file_size
                 if total > MAX_EXPANDED_BYTES:
-                    raise NotionFormatError("Die entpackten Inhalte dürfen höchstens 256 MiB belegen.")
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_unpacked_contents_may", "Die entpackten Inhalte dürfen höchstens 256 MiB belegen."))
                 inspected.append((info, name, limit))
             for info, name, limit in inspected:
                 with archive.open(info) as stream:
                     data = stream.read(limit + 1)
                 if len(data) > limit or len(data) != info.file_size:
-                    raise NotionFormatError("Die Größe eines Archivbestandteils ist ungültig: " + name)
+                    raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_size_of_an", 'Die Größe eines Archivbestandteils ist ungültig: {name}', name=name))
                 members[name] = data
             return members
     except (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError, EOFError, zlib.error) as exc:
-        raise NotionFormatError("Das Notion-Archiv konnte nicht gelesen werden: " + str(exc)) from exc
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.read_members.the_notion_archive_could", 'Das Notion-Archiv konnte nicht gelesen werden: {str}', str=str(exc))) from exc
 
 
 def inspect_export(source):
@@ -198,13 +198,13 @@ def inspect_export(source):
         try:
             text = raw.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
         except UnicodeError as exc:
-            raise NotionFormatError("Seite enthält ungültiges UTF-8: " + path) from exc
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.page_contains_invalid_utf", 'Seite enthält ungültiges UTF-8: {path}', path=path)) from exc
         if "\x00" in text:
-            raise NotionFormatError("Seite enthält ein Nullzeichen: " + path)
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.page_contains_a_null", 'Seite enthält ein Nullzeichen: {path}', path=path))
         semantic_path = path[len(wrapper) + 1:] if wrapper else path
         key = source_key(semantic_path)
         if key in identities:
-            raise NotionFormatError("Eine Notion-Quellenkennung kommt mehrfach vor: " + path)
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.a_notion_source_id", 'Eine Notion-Quellenkennung kommt mehrfach vor: {path}', path=path))
         identities.add(key)
         if key.startswith("path:"):
             losses.append(Loss(path, "path-identity", glide_i18n.t("mod.notion_archive.inspect_export.no_notion_id_in", "Keine Notion-Kennung im Dateinamen; die Wiedererkennung nutzt den Archivpfad. Umbenennungen müssen gegebenenfalls zugeordnet werden.")))
@@ -254,7 +254,7 @@ def inspect_export(source):
         pages.append(Page(key, path, title[:200] or glide_i18n.t("ui.page_card_blocks.untitled", "Ohne Titel"), tuple(folders), text,
                           digest.hexdigest(), tuple(sorted(assets))))
     if not pages:
-        raise NotionFormatError("Das Archiv enthält keine Seiten.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.inspect_export.the_archive_contains_no", "Das Archiv enthält keine Seiten."))
     return Export(tuple(pages), members, tuple(dict.fromkeys(losses)))
 
 
@@ -314,23 +314,23 @@ def bind_page_tasks(document, item_factory):
     """
     import copy
     if not isinstance(document, dict) or not isinstance(document.get("spans"), list):
-        raise NotionFormatError("Das Seitendokument enthält keine gültigen Formatspannen.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_page_document_contains", "Das Seitendokument enthält keine gültigen Formatspannen."))
     tasks = document.get("tasks", [])
     if not isinstance(tasks, list):
-        raise NotionFormatError("Die Seitenaufgaben sind keine Liste.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_page_tasks_are", "Die Seitenaufgaben sind keine Liste."))
     mapped, items, used_ids = {}, [], set()
     for task in tasks:
         if (not isinstance(task, dict) or set(task) != {"ref", "text", "done"}
                 or type(task["ref"]) is not int or task["ref"] < 0
                 or not isinstance(task["text"], str) or type(task["done"]) is not bool):
-            raise NotionFormatError("Eine Seitenaufgabe enthält ungültige Angaben.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_page_task_contains", "Eine Seitenaufgabe enthält ungültige Angaben."))
         tag = "taskref:" + str(task["ref"])
         if tag in mapped:
-            raise NotionFormatError("Eine Quellenaufgabe ist mehrfach definiert.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_source_task_is", "Eine Quellenaufgabe ist mehrfach definiert."))
         item = item_factory(task["text"], done=task["done"])
         identity = item.get("id") if isinstance(item, dict) else None
         if not isinstance(identity, str) or not identity or identity in used_ids:
-            raise NotionFormatError("Die Aufgabenwerkzeuge lieferten keine eindeutige Kennung.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.the_task_tools_did", "Die Aufgabenwerkzeuge lieferten keine eindeutige Kennung."))
         used_ids.add(identity)
         mapped[tag] = "item:" + identity
         items.append(copy.deepcopy(item))
@@ -339,13 +339,13 @@ def bind_page_tasks(document, item_factory):
     seen = set()
     for span in result["spans"]:
         if not isinstance(span, dict) or not isinstance(span.get("tag"), str):
-            raise NotionFormatError("Eine Formatspanne ist ungültig.")
+            raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_format_span_is", "Eine Formatspanne ist ungültig."))
         tag = span["tag"]
         if tag.startswith("taskref:"):
             if tag not in mapped:
-                raise NotionFormatError("Ein Kästchen verweist auf eine fehlende Quellenaufgabe.")
+                raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_checkbox_refers_to", "Ein Kästchen verweist auf eine fehlende Quellenaufgabe."))
             span["tag"] = mapped[tag]
             seen.add(tag)
     if seen != set(mapped):
-        raise NotionFormatError("Eine Quellenaufgabe hat keine sichtbare Textstelle.")
+        raise NotionFormatError(glide_i18n.t("mod.notion_archive.bind_page_tasks.a_source_task_has", "Eine Quellenaufgabe hat keine sichtbare Textstelle."))
     return result, tuple(items)

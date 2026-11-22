@@ -1,10 +1,10 @@
 # Glide user guide (English)
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 <p align="right"><a href="../20_FUNKTIONEN.md">Deutsch</a></p>
 
-This guide explains how to use Glide 1.0.0 in English. It is a **controlled translation** of the German function reference [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md). It is not a second source of truth. The German text sets the product behavior. If the two ever differ, the German text applies, and the English page is corrected to match. The guide describes only features that exist in the 1.0.0 source baseline. It leaves out internal test, delivery and audit details, which stay in the German source and the [QA report](../07_QA_BERICHT.md).
+This guide explains how to use Glide 1.0.1 in English. It is a **controlled translation** of the German function reference [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md). It is not a second source of truth. The German text sets the product behavior. If the two ever differ, the German text applies, and the English page is corrected to match. The guide describes only features that exist in the 1.0.1 source baseline. It leaves out internal test, delivery and audit details, which stay in the German source and the [QA report](../07_QA_BERICHT.md).
 
 ## Contents
 
@@ -25,13 +25,11 @@ This guide explains how to use Glide 1.0.0 in English. It is a **controlled tran
 
 ## Interface language
 
-Glide 1.0.0 offers German and English. Choose **Settings › Appearance & Controls › Language** (*Einstellungen › Darstellung und Bedienung › Sprache*): *Automatic (System)*, *Deutsch* or *English*. The automatic setting uses English when the operating system reports an English locale and German otherwise. Your saved settings and data do not change when you switch the language.
+Glide 1.0.1 offers German and English. Choose **Settings › Appearance & Controls › Language** (*Einstellungen › Darstellung und Bedienung › Sprache*): *Automatic (System)*, *Deutsch* or *English*. The automatic setting uses English when the operating system reports an English locale and German otherwise. Your saved settings and data do not change when you switch the language.
 
-**The English interface is not complete yet.** In the 1.0.0 baseline on `main`, these areas are available in English: the menu titles and some menu entries, selected sidebar labels, the Settings dialog, the page editor toolbar, its format and block labels and context menu, action feedback including undo/redo, the task inspector with its calendar, repeat and reminder fields, static editor status messages, the shared editor *More* menu, saved views and boards, and the drawing editor's tools, display profiles, reference and preview buttons, zoom, option menus and status line (PR #157).
+**The whole interface is available in English** (D93, since Glide 1.0.0): menus, views, dialogs, messages, the built-in manual and the keyboard shortcut overview, the AI format description, the built-in templates and the default titles of new lists, pages and drawings. TXT and CSV exports use the chosen language, and Glide reads exports in either language. Quick capture understands English and German date and repeat words (for example `tomorrow`, `every week`, `morgen`, `jede Woche`). Only the names you gave your own content stay as you wrote them. Date formats and system dialogs follow your operating system. After switching the language in Settings, some fixed bars of the main window change after the next start; Glide says so when you switch. Please report missing or wrong translations with the [localization issue form](https://github.com/n05a-design/glide-to-do/issues/new?template=lokalisierung.yml).
 
-Many submenu entries (for example under *Sicherung*, *Datenaustausch* and *Ansichten*) and other dialogs are still German. So are dynamic undo texts, some status, error and validation messages, the built-in manual (**Help › Manual …**, F1) and the keyboard shortcut overview. Date formats and system dialogs follow your operating system. The drawing editor's animation bar, More-menu entries, palettes and export dialogs are being translated in open pull request [#158](https://github.com/n05a-design/glide-to-do/pull/158). The remaining-work list is kept in the [development plan](../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), §21.146 of the branch behind #158. Please report missing or wrong translations with the [localization issue form](https://github.com/n05a-design/glide-to-do/issues/new?template=lokalisierung.yml).
-
-**How this guide names controls:** labels in **bold** are what the English interface shows today. Labels in *italics* are German labels that Glide still shows in English mode; an English explanation follows in parentheses. Example: **File › Backups › *Sicherungsübersicht …*** (backup overview). When a label is translated later, the guide is updated.
+**How this guide names controls:** labels in **bold** are what the English interface shows. Quick-capture words are given in `code` style.
 
 ## Keeping the guide in sync
 

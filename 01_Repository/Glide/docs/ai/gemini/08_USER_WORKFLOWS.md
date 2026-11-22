@@ -13,7 +13,7 @@ related_documents: [GLIDE-FEATURES, GLIDE-DATA, GLIDE-UX]
 
 # User workflows
 
-Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
 
 These are documented product flows, not a usability study. Exact labels can vary by language and platform; consult the active UI catalog and current feature contract.
 

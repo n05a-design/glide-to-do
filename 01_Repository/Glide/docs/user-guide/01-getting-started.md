@@ -1,10 +1,10 @@
 # Getting started – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen §1 Grundbegriffe](../20_FUNKTIONEN.md#1-grundbegriffe), [§2 Seitenleiste und Navigation](../20_FUNKTIONEN.md#2-seitenleiste-und-navigation), [§7 Startseite](../20_FUNKTIONEN.md#7-startseite) · [Guide contents](README.md) · Next: [Installation](02-installation.md)
 
-> Controlled translation of the German function reference. If the texts differ, the German text applies. Parts of the interface are still German; see [Interface language](README.md#interface-language).
+> Controlled translation of the German function reference. If the texts differ, the German text applies. The interface is available in English; see [Interface language](README.md#interface-language).
 
 Glide is a local desktop planner. Your tasks, pages, notes, pinboards and drawings live in one data folder on your computer. You need no account, internet connection or cloud service.
 
@@ -20,16 +20,16 @@ When you create something in Glide, you choose its type. The type cannot be chan
 | **Drawing** | A pixel canvas of 16, 32, 64 or 128 cells per side. |
 | **Gallery** | A collection of images stored as attachments. |
 
-Folders come in three kinds: a normal **folder**, a **book** (*Buch*; new entries are pages) and a **notebook** (*Notizbuch*; entries are sorted by their date). Subfolders inherit the kind of a book or notebook.
+Folders come in three kinds: a normal **folder**, a **book** (new entries are pages) and a **notebook** (entries are sorted by their date). Subfolders inherit the kind of a book or notebook.
 
-A list contains **items** of four kinds: **task**, **long text** (multi-line), **group** and **subheading** (*Zwischenüberschrift*). Groups and subheadings structure a list. They have no planning fields and no checklist.
+A list contains **items** of four kinds: **task**, **long text** (multi-line), **group** and **subheading**. Groups and subheadings structure a list. They have no planning fields and no checklist.
 
 ## Due date and planned day
 
 Glide keeps two dates apart:
 
-- The **due date** (*Fälligkeit*) says when something must be finished.
-- The **planned day** (*Bearbeitungstag*) says when you intend to work on it.
+- The **due date** says when something must be finished.
+- The **planned day** says when you intend to work on it.
 
 A task can also have effort, tracked time, importance, labels, a color, a repeat rule, reminders, attachments and relations (**linked with**, **waiting for**). A checklist holds up to 50 steps of up to 200 characters each. Ticking a step does not complete the task.
 
@@ -48,14 +48,14 @@ The sidebar shows system rows: **Home**, **Today**, **Labels**, **Templates** an
 - Drag entries to reorder them, or drop them onto a folder to move them in. Dragging an item onto **Today** plans it for the day shown.
 - Alt+↑/↓ moves the selected row among its siblings, Alt+→ moves it into the folder above, Alt+← moves it up one level. Every move can be undone.
 - Up to 20 pages can be **pinned** from their context menu.
-- **View › *Oberfläche* › *Seitenleiste schmal*** (narrow sidebar) shows a 64 px icon strip instead of the trees.
+- **View › Interface › Narrow sidebar** shows a 64 px icon strip instead of the trees.
 
 ## Home
 
-**Home** (*Startseite*) is a grid of tiles. The default layout "Calm" (*Ruhig*) shows Today, Gismo, the next seven days, recently edited items, a pinboard preview, drawings, gallery images and pinned items. You can add more tiles, such as the clock, next task, templates, calendar preview, overdue items, progress, labels and pinned filters.
+**Home** is a grid of tiles. The default layout "Calm" shows Today, Gismo, the next seven days, recently edited items, a pinboard preview, drawings, gallery images and pinned items. You can add more tiles, such as the clock, next task, templates, calendar preview, overdue items, progress, labels and pinned filters.
 
-- *Startseite anpassen* (customize Home), below the tiles, lets you drag, hide and resize tiles. **Settings › Appearance & Controls › Configure Home …** offers *Standard wiederherstellen* (restore default).
-- After an update, a "New in Glide" card lists what changed in the last three versions with entries. **Help › About Glide › *Neuerungen …*** (what's new) keeps the full history.
+- **Customize home**, below the tiles, lets you drag, hide and resize tiles. **Settings › Appearance & Controls › Configure Home …** offers **Restore default**.
+- After an update, a "New in Glide" card lists what changed in the last three versions with entries. **Help › About Glide › What's new …** keeps the full history.
 - **Gismo** is Glide's drawn companion. His mood mirrors your task collection, not you. Hide his tile if you do not want him.
 
 ## Search and the command palette

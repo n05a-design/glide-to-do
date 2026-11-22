@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Deutsche Schnelleingabe ohne Tk (G01).
+"""Deutsch-englische Schnelleingabe ohne Tk (G01/N21).
 
 Erkennt in einer Eingabezeile Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand,
 Wichtigkeit, Wiederholung und vorhandene Labels. Die Bedeutung folgt D01/D10:
@@ -23,8 +23,14 @@ from typing import NamedTuple
 import i18n as glide_i18n
 
 WEEKDAYS = ("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag")
+EN_WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+EN_MONTHS = ("january", "february", "march", "april", "may", "june", "july", "august",
+             "september", "october", "november", "december")
+WEEKDAY_INDEX = {name: index for names in (WEEKDAYS, EN_WEEKDAYS) for index, name in enumerate(names)}
+EN_OFFSETS = {"today": 0, "tomorrow": 1}
 WEEKDAY_SHORT = ("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
 OFFSETS = {"heute": 0, "morgen": 1, "übermorgen": 2, "uebermorgen": 2}
+DUE_WORDS = ("bis", "fällig", "faellig", "due", "by")
 IMPORTANCE = {"wichtig": 3, "hoch": 3, "mittel": 2, "niedrig": 1}
 IMPORTANCE_NAMES = {3: "hoch", 2: "mittel", 1: "niedrig"}
 MAX_ESTIMATE_MINUTES = 24 * 60
@@ -61,26 +67,29 @@ REMINDER_MAX_MINUTES = 525600
 
 
 def parse_capture_due(value, today=None):
-    """Bewusst begrenzte deutsche Datumseingabe für ein Feld mit fester Bedeutung."""
+    """Freitextdatum auf Deutsch oder Englisch für ein Feld mit fester Bedeutung."""
     today = today or date.today()
     text = " ".join(str(value or "").strip().lower().split())
     if not text:
         return None, None
     due_time = None
-    clock = re.search(r"(?:\s+(?:um\s+)?)(\d{1,2}):(\d{2})(?:\s+uhr)?$", text)
+    clock = re.search(r"(?:\s+(?:(?:um|at)\s+)?)(\d{1,2}):(\d{2})(?:\s+uhr)?$", text)
     if clock:
         hour, minute = int(clock[1]), int(clock[2])
         if hour > 23 or minute > 59:
-            raise ValueError("Bitte eine Uhrzeit zwischen 00:00 und 23:59 eingeben.")
+            raise ValueError(glide_i18n.t("mod.capture_parser.due_time_error",
+                "Bitte eine Uhrzeit zwischen 00:00 und 23:59 eingeben."))
         due_time = f"{hour:02d}:{minute:02d}"
         text = text[:clock.start()].strip()
     try:
         if text in OFFSETS:
             day = today + timedelta(days=OFFSETS[text])
-        elif text in WEEKDAYS:
-            day = today + timedelta(days=(WEEKDAYS.index(text) - today.weekday()) % 7)
-        elif (relative := re.fullmatch(r"in (\d{1,4}) (tag(?:en)?|woche(?:n)?)", text)):
-            days = int(relative[1]) * (7 if relative[2].startswith("woche") else 1)
+        elif text in EN_OFFSETS:
+            day = today + timedelta(days=EN_OFFSETS[text])
+        elif text in WEEKDAY_INDEX:
+            day = today + timedelta(days=(WEEKDAY_INDEX[text] - today.weekday()) % 7)
+        elif (relative := re.fullmatch(r"in (\d{1,4}) (tag(?:en)?|woche(?:n)?|days?|weeks?)", text)):
+            days = int(relative[1]) * (7 if relative[2].startswith(("woche", "week")) else 1)
             if days > 3650:
                 raise ValueError
             day = today + timedelta(days=days)
@@ -89,16 +98,24 @@ def parse_capture_due(value, today=None):
         elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
             day = date.fromisoformat(text)
         else:
-            raise ValueError
+            words = _woerter(text, ())
+            parsed = _datum(words, 0, today)
+            if parsed is None or parsed[0] != len(words):
+                raise ValueError
+            day = parsed[1]
     except (ValueError, OverflowError):
-        raise ValueError("Datum nicht erkannt: z. B. morgen, Montag, in 3 Tagen oder 24.09.2026; optional um 14:30.") from None
+        raise ValueError(glide_i18n.t("mod.capture_parser.due_date_error",
+            "Datum nicht erkannt. Beispiele: morgen, Montag, in 3 Tagen oder 24.09.2026, optional um 14:30.")) from None
     return day.isoformat(), due_time
 
 
 def slash_suggestions(teil, labels=()):
     """Befehle, die zum angefangenen Wort „/mo…“ passen – für die Vorschlagszeile."""
     teil = str(teil or "").lower()
-    treffer = [befehl for befehl, _text in SLASH_COMMANDS if befehl.startswith(teil)]
+    deutsch = tuple(befehl for befehl, _text in SLASH_COMMANDS)
+    englisch = (*EN_OFFSETS, *EN_WEEKDAYS, "due")
+    befehle = englisch + deutsch if glide_i18n.get_language() == "en" else deutsch + englisch
+    treffer = [befehl for befehl in befehle if befehl.startswith(teil)]
     treffer += [str(label.get("name")) for label in labels or ()
                 if isinstance(label, dict) and str(label.get("name") or "").lower().startswith(teil)]
     return treffer[:8]
@@ -130,6 +147,8 @@ class _Wort(NamedTuple):
 
 def format_day(iso):
     tag = date.fromisoformat(iso)
+    if glide_i18n.get_language() == "en":
+        return f"{EN_WEEKDAYS[tag.weekday()][:3].title()} {tag:%Y-%m-%d}"
     return f"{WEEKDAY_SHORT[tag.weekday()]} {tag:%d.%m.%Y}"
 
 
@@ -144,6 +163,8 @@ def _woerter(text, geschuetzt):
     result = []
     for treffer in re.finditer(r"\S+", text):
         if any(a <= treffer.start() < b for a, b in geschuetzt):
+            # Ein wörtlicher Bereich unterbricht mehrteilige Angaben.
+            result.append(_Wort(treffer.start(), treffer.end(), treffer.end(), "", "", ""))
             continue
         roh = treffer.group()
         klein = roh.lower()
@@ -163,8 +184,10 @@ def _tag(wort, today):
     """Datum aus einem Wort oder None."""
     if wort.datum in OFFSETS or wort.wort in OFFSETS:
         return today + timedelta(days=OFFSETS.get(wort.wort, OFFSETS.get(wort.datum, 0)))
-    if wort.wort in WEEKDAYS:
-        return today + timedelta(days=(WEEKDAYS.index(wort.wort) - today.weekday()) % 7)
+    if wort.wort in EN_OFFSETS:
+        return today + timedelta(days=EN_OFFSETS[wort.wort])
+    if wort.wort in WEEKDAY_INDEX:
+        return today + timedelta(days=(WEEKDAY_INDEX[wort.wort] - today.weekday()) % 7)
     if (teile := re.fullmatch(r"(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})?", wort.datum)):
         tag, monat, jahr = int(teile[1]), int(teile[2]), teile[3]
         try:
@@ -185,7 +208,7 @@ def _tag(wort, today):
 def _zeit(woerter, i):
     """Uhrzeit ab Wort i: (Anzahl Wörter, „HH:MM“) oder None."""
     n = 0
-    if i < len(woerter) and woerter[i].wort == "um":
+    if i < len(woerter) and woerter[i].wort in ("um", "at"):
         n = 1
     if i + n >= len(woerter):
         return None
@@ -207,13 +230,39 @@ def _zeit(woerter, i):
     return n, f"{stunde:02d}:{minute:02d}"
 
 
+def _english_calendar_date(words, i, today):
+    """Erkennt einen ausgeschriebenen Monat mit Tag in beiden üblichen Reihenfolgen."""
+    if i + 1 >= len(words):
+        return None
+    first, second = words[i].wort, words[i + 1].wort
+    month, day = (first, second) if first in EN_MONTHS else (second, first)
+    if month not in EN_MONTHS or not re.fullmatch(r"[0-9]{1,2}", day):
+        return None
+    month, day = EN_MONTHS.index(month) + 1, int(day)
+    if i + 2 < len(words) and re.fullmatch(r"[0-9]{4}", words[i + 2].wort):
+        try:
+            return 3, date(int(words[i + 2].wort), month, day)
+        except ValueError:
+            return None
+    for year in range(today.year, min(today.year + 9, 10000)):
+        try:
+            candidate = date(year, month, day)
+        except ValueError:
+            if (month, day) == (2, 29):
+                continue
+            return None
+        if candidate >= today:
+            return 2, candidate
+    return None
+
+
 def _datum(woerter, i, today):
     """Datumsausdruck ab Wort i: (Anzahl Wörter, Tag) oder None."""
     n = 0
-    if i < len(woerter) and woerter[i].wort in ("am", "zum"):
+    if i < len(woerter) and woerter[i].wort in ("am", "zum", "on"):
         n = 1
     nur_kuenftig = False
-    if i + n < len(woerter) and woerter[i + n].wort in ("nächsten", "naechsten", "kommenden"):
+    if i + n < len(woerter) and woerter[i + n].wort in ("nächsten", "naechsten", "kommenden", "next"):
         nur_kuenftig = True
         n += 1
     if i + n >= len(woerter):
@@ -223,14 +272,16 @@ def _datum(woerter, i, today):
         zahl = woerter[i + n + 1].wort
         einheit = woerter[i + n + 2].wort
         menge = 1 if zahl in ("einem", "einer") else int(zahl) if re.fullmatch(r"\d{1,3}", zahl) else None
-        if menge is not None and re.fullmatch(r"tag(?:en)?|woche(?:n)?", einheit):
-            return n + 3, today + timedelta(days=menge * (7 if einheit.startswith("woche") else 1))
+        if menge is not None and re.fullmatch(r"tag(?:en)?|woche(?:n)?|days?|weeks?", einheit):
+            return n + 3, today + timedelta(days=menge * (7 if einheit.startswith(("woche", "week")) else 1))
         return None
+    if not nur_kuenftig and (calendar := _english_calendar_date(woerter, i + n, today)):
+        return n + calendar[0], calendar[1]
     tag = _tag(wort, today)
     if tag is None:
         return None
     if nur_kuenftig:
-        if wort.wort not in WEEKDAYS:
+        if wort.wort not in WEEKDAY_INDEX:
             return None
         if tag <= today:
             tag += timedelta(days=7)
@@ -363,8 +414,63 @@ def _extended_wiederholung(words, i, today):
     return None
 
 
+_EN_REPEAT_ALIASES = {"daily": "täglich", "weekly": "wöchentlich", "monthly": "monatlich",
+                      "yearly": "jährlich", "weekdays": "werktags"}
+_EN_REPEAT_UNITS = {"day": ("jeden", "tag"), "week": ("jede", "woche"),
+                    "month": ("jeden", "monat"), "year": ("jedes", "jahr"),
+                    "weekday": ("jeden", "werktag")}
+_EN_REPEAT_WORDS = {"on": "am", "and": "und", **dict(zip(EN_WEEKDAYS, WEEKDAYS)),
+                    **{f"{en}s": f"{de}s" for en, de in zip(EN_WEEKDAYS, WEEKDAYS)}}
+_EN_INTERVAL_UNITS = {"day": "tag", "days": "tage", "week": "woche", "weeks": "wochen",
+                      "month": "monat", "months": "monate", "year": "jahr", "years": "jahre"}
+
+
+def _english_repeat(words, i, today):
+    """Übersetzt nur Regelwörter für den bestehenden Wiederholungsparser."""
+    word = words[i].wort
+    if word in _EN_REPEAT_ALIASES:
+        prefix = (_EN_REPEAT_ALIASES[word],)
+    elif word == "every" and i + 1 < len(words):
+        following = words[i + 1].wort
+        if following in _EN_REPEAT_UNITS:
+            prefix = _EN_REPEAT_UNITS[following]
+        elif following in EN_WEEKDAYS:
+            prefix = ("jeden",)
+        elif (i + 2 < len(words) and re.fullmatch(r"[0-9]{1,3}", following)
+              and (unit := _EN_INTERVAL_UNITS.get(words[i + 2].wort))):
+            prefix = ("alle", following, unit)
+        else:
+            return None
+    else:
+        return None
+    # So viele Wörter wie der erweiterte Parser liest: lange Wochentagslisten bleiben vollständig.
+    source = words[i:i + 18]
+    normalized = (*prefix, *(_EN_REPEAT_WORDS.get(part.wort, part.wort) for part in source[len(prefix):]))
+    mapped = [part._replace(wort=alias, datum=alias if alias != part.wort else part.datum)
+              for part, alias in zip(source, normalized)]
+    # Jährliche Regel mit ausgeschriebenem Datum („every year on 24 May“): Das
+    # Datum ist der Jahresanker, nicht ein zusätzlicher Bearbeitungstag.
+    yearly = normalized[0] == "jährlich" or tuple(normalized[:2]) == ("jedes", "jahr")
+    every_n_years = (normalized[0] == "alle" and normalized[2] in ("jahr", "jahre")
+                     and 1 <= int(normalized[1]) <= 365)  # gleiche Grenze wie der erweiterte Parser
+    if yearly or every_n_years:
+        k = len(prefix) + (1 if len(source) > len(prefix) and source[len(prefix)].wort == "on" else 0)
+        anchor = _english_calendar_date(source, k, today)
+        if anchor:
+            count, day = anchor
+            if every_n_years:
+                rule = repeat_logic.from_series_fields("serie_jahr", int(normalized[1]))
+                return k + count, rule, day, repeat_logic.describe_series(rule)
+            return k + count, {"art": REPEAT_YEARLY}, day, glide_i18n.t(
+                "mod.capture_parser.base_wiederholung.yearly_on", 'jährlich am {erster}', erster=f'{day:%d.%m.}')
+    # Dieselben Fähigkeiten wie die deutsche Eingabe: zuerst der erweiterte Parser
+    # (Monats-/Jahresintervalle, mehrere Wochentage), dann der Grundparser.
+    return _extended_wiederholung(mapped, 0, today) or _base_wiederholung(mapped, 0, today)
+
+
 def _wiederholung(words, i, today):
-    value = _extended_wiederholung(words, i, today) or _base_wiederholung(words, i, today)
+    value = (_extended_wiederholung(words, i, today) or _base_wiederholung(words, i, today)
+             or _english_repeat(words, i, today))
     if value is None or value[1] is None:
         return value
     n, rule, first, text = value
@@ -423,7 +529,8 @@ def _base_wiederholung(woerter, i, today):
         return sorted(set(tage)), n - start
 
     def tage_text(tage):
-        namen = [WEEKDAYS[tag] + "s" for tag in tage]
+        weekdays = EN_WEEKDAYS if glide_i18n.get_language() == "en" else WEEKDAYS
+        namen = [weekdays[tag] + "s" for tag in tage]
         return namen[0] if len(namen) == 1 else glide_i18n.t("mod.capture_parser.tage_text.and", '{join} und {wert}', join=", ".join(namen[:-1]), wert=namen[-1])
 
     def ordinal(k):
@@ -449,14 +556,15 @@ def _base_wiederholung(woerter, i, today):
         return (tage, n + laenge) if tage else ([], 0)
 
     def hinweis(n, was):
-        return n, None, None, glide_i18n.t("mod.capture_parser.hinweis.repeat", 'Wiederholung „{was}“ {unsupported_repeat}', was=was, unsupported_repeat=UNSUPPORTED_REPEAT)
+        return n, None, None, glide_i18n.t("mod.capture_parser.hinweis.repeat", 'Wiederholung „{was}“ {unsupported_repeat}', was=was, unsupported_repeat=glide_i18n.t(
+            "mod.capture_parser.unsupported_repeat", UNSUPPORTED_REPEAT))
 
     if w[0] in ("täglich", "taeglich") or w[:2] == ["jeden", "tag"]:
         n = 1 if w[0] != "jeden" else 2
         return n, {"art": REPEAT_DAILY}, today, glide_i18n.t("repeat.daily", "täglich")
     if w[0] == "werktags" or w[:2] == ["jeden", "werktag"] or w[:2] == ["an", "werktagen"]:
         n = 1 if w[0] == "werktags" else 2
-        return n, {"art": REPEAT_WEEKDAYS, "tage": [0, 1, 2, 3, 4]}, naechster(range(5)), "werktags"
+        return n, {"art": REPEAT_WEEKDAYS, "tage": [0, 1, 2, 3, 4]}, naechster(range(5)), glide_i18n.t("repeat.weekdays", "werktags")
     if w[0] in ("wöchentlich", "woechentlich") or w[:2] == ["jede", "woche"]:
         n = 1 if w[0] != "jede" else 2
         tage, laenge = nach_tagen(n)
@@ -477,7 +585,7 @@ def _base_wiederholung(woerter, i, today):
             laenge = k + 1 + (1 if k + 1 < len(w) and w[k + 1] in ("tag", "werktag") else 0)
             return hinweis(laenge, " ".join(woerter[i + x].roh for x in range(laenge)))
         if tag is None:
-            return n, {"art": REPEAT_MONTHLY}, today, "monatlich"
+            return n, {"art": REPEAT_MONTHLY}, today, glide_i18n.t("repeat.monthly", "monatlich")
         if not 1 <= tag <= 31:
             return None
         erster = today
@@ -535,7 +643,7 @@ def _base_wiederholung(woerter, i, today):
         tage, laenge = wochentage(start)
         if not tage:
             return None
-        text = (glide_i18n.t("mod.capture_parser.base_wiederholung.every", 'jeden {capitalize}', capitalize=WEEKDAYS[tage[0]].capitalize())) if len(tage) == 1 else tage_text(tage)
+        text = (glide_i18n.t("mod.capture_parser.base_wiederholung.every", 'jeden {capitalize}', capitalize=(EN_WEEKDAYS if glide_i18n.get_language() == "en" else WEEKDAYS)[tage[0]].capitalize())) if len(tage) == 1 else tage_text(tage)
         regel = {"art": REPEAT_WEEKLY} if len(tage) == 1 else {"art": REPEAT_WEEKDAYS, "tage": tage}
         return start + laenge, regel, naechster(tage), text
     if w[0] == "alle" and len(w) >= 3:
@@ -649,7 +757,7 @@ def parse_capture(text, labels=(), today=None, ignore=()):
             pass
         elif wort.startswith("/") and len(wort) > 1:
             befehl = wort[1:]
-            if befehl in ("bis", "fällig", "faellig") and "faellig" not in belegt:
+            if befehl in DUE_WORDS and "faellig" not in belegt:
                 if (datum := _datum(woerter, i + 1, today)):
                     n, tag = 1 + datum[0], datum[1]
                     felder = {"due": tag.isoformat()}
@@ -675,7 +783,7 @@ def parse_capture(text, labels=(), today=None, ignore=()):
         elif wort.startswith("#") and wort[1:] in namen:
             kennung, name = namen[wort[1:]]
             verbraucht = neu(i, 1, {"labels": [kennung]}, f"Label {name}", "label")
-        elif wort in ("bis", "fällig", "faellig") and "faellig" not in belegt:
+        elif wort in DUE_WORDS and "faellig" not in belegt:
             n = 1
             if wort != "bis" and i + 1 < len(woerter) and woerter[i + 1].wort in ("bis", "am"):
                 n = 2

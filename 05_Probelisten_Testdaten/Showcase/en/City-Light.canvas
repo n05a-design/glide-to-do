@@ -1,0 +1,106 @@
+{
+    "nodes": [
+        {
+            "id": "area:global-auswahl",
+            "type": "group",
+            "x": 370,
+            "y": 30,
+            "width": 640,
+            "height": 620,
+            "label": "Selection and travel book",
+            "color": "6"
+        },
+        {
+            "id": "page:0a6a1d85cb6c494a8c912e1decbd7d1d",
+            "type": "text",
+            "x": 34,
+            "y": 63,
+            "width": 240,
+            "height": 295,
+            "text": "### Travel guide · Overview (Page)\n\nSeven cities, two weeks A photo journey by train and two flights. Every city has its own page with places, times and tips; the travel diary records how it re…\nAttachments: 1\n\nReference: `glide://list/0a6a1d85cb6c494a8c912e1decbd7d1d`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:40aaf8d4124042dfafc37f9abf63633b",
+            "type": "text",
+            "x": 34,
+            "y": 355,
+            "width": 240,
+            "height": 147,
+            "text": "### Evening round · Open questions (Note)\n\nEvening after coming home The journey is over, the selection begins. Out of roughly 230 pictures, 14 should go into the travel book. • Two pictures per city…\n\nLabels: `Photo`\nAttachments: 1\n\nReference: `glide://list/40aaf8d4124042dfafc37f9abf63633b`",
+            "color": "#217E39"
+        },
+        {
+            "id": "88a48a7eb86d4be9a27a285640a58dff",
+            "type": "text",
+            "x": 390,
+            "y": 64,
+            "width": 312,
+            "height": 426,
+            "text": "### [ ] Choose photos for the travel book\n3 hoch · Planned day: 20.11.2026, 09:00 · Due: 20.11.2026, 11:00 · List: Travel plan\n\nChoose two pictures per city that tell a small story together.\n\n- [x] Raw files backed up\n- [x] First selection marked with stars\n- [ ] Second round: check black and white\n\nLabels: `Photo`, `Approval`\nAttachments: 1\n\nReference: `glide://item/88a48a7eb86d4be9a27a285640a58dff`",
+            "color": "#217E39"
+        },
+        {
+            "id": "9854cda934f14d2fbf1c70f0790cf9c0",
+            "type": "text",
+            "x": 735,
+            "y": 58,
+            "width": 240,
+            "height": 337,
+            "text": "### [ ] Write the captions\n2 mittel · Planned day: 20.11.2026, 11:00 · Due: 21.11.2026 · List: Travel plan\n\nShort, with place and moment. No camera data in the caption.\n\nLabels: `Photo`\nAttachments: 2\n\nReference: `glide://item/9854cda934f14d2fbf1c70f0790cf9c0`",
+            "color": "#217E39"
+        },
+        {
+            "id": "page:cafafefbde0d4e7b91c4ab85b1f25920",
+            "type": "text",
+            "x": 735,
+            "y": 470,
+            "width": 187,
+            "height": 215,
+            "text": "### Travel stamp · Light cycle (Drawing)\n\nA travel stamp with four sky colours from morning to night, a PNG reference and a 16-pixel icon.\nAttachments: 2\n\nReference: `glide://list/cafafefbde0d4e7b91c4ab85b1f25920`",
+            "color": "#217E39"
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge:1:page:0a6a1d85cb6c494a8c912e1decbd7d1d:88a48a7eb86d4be9a27a285640a58dff",
+            "fromNode": "page:0a6a1d85cb6c494a8c912e1decbd7d1d",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "88a48a7eb86d4be9a27a285640a58dff",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Review the route"
+        },
+        {
+            "id": "edge:2:page:40aaf8d4124042dfafc37f9abf63633b:88a48a7eb86d4be9a27a285640a58dff",
+            "fromNode": "page:40aaf8d4124042dfafc37f9abf63633b",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "88a48a7eb86d4be9a27a285640a58dff",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "Settle questions"
+        },
+        {
+            "id": "edge:3:88a48a7eb86d4be9a27a285640a58dff:9854cda934f14d2fbf1c70f0790cf9c0",
+            "fromNode": "88a48a7eb86d4be9a27a285640a58dff",
+            "fromSide": "right",
+            "fromEnd": "none",
+            "toNode": "9854cda934f14d2fbf1c70f0790cf9c0",
+            "toSide": "left",
+            "toEnd": "none",
+            "label": "then caption"
+        },
+        {
+            "id": "edge:4:9854cda934f14d2fbf1c70f0790cf9c0:page:cafafefbde0d4e7b91c4ab85b1f25920",
+            "fromNode": "9854cda934f14d2fbf1c70f0790cf9c0",
+            "fromSide": "bottom",
+            "fromEnd": "none",
+            "toNode": "page:cafafefbde0d4e7b91c4ab85b1f25920",
+            "toSide": "top",
+            "toEnd": "none",
+            "label": "Stamp on the cover"
+        }
+    ]
+}

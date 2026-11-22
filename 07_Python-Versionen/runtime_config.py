@@ -3,14 +3,19 @@
 
 Trennt die Pfadauflösung und Konfigurationsprüfung strikt von der Dateisystem-
 Erzeugung und dem App-Start. Ermöglicht Tests und Analysen ohne Seiteneffekte
-im Benutzerprofil.
+im Benutzerprofil. Die Auflösungsmechanik (Plattformordner, Umgebung,
+Zeiger, Reihenfolge) liegt seit V1.69 in `glide_shell.runtime_paths` (D98);
+hier bleiben Produktname, Variablen- und Dateinamen, der Pfadvertrag und
+die Meldungen.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
 import os
 import sys
+
+from glide_shell import runtime_paths as _paths
+import i18n as glide_i18n
 
 APP_NAME = "Glide"
 IS_MACOS = sys.platform == "darwin"
@@ -18,28 +23,20 @@ IS_WINDOWS = os.name == "nt"
 IS_LINUX = sys.platform.startswith("linux")
 
 
+def _platform() -> str:
+    # Zur Aufrufzeit gelesen, damit Tests `IS_MACOS`/`IS_WINDOWS` und `os` ersetzen können.
+    return "darwin" if IS_MACOS else ("win32" if IS_WINDOWS else "linux")
+
+
 def resolve_default_data_dir() -> str:
     """Standard-Speicherort für Nutzerdaten nach Plattformkonvention."""
-    if IS_MACOS:
-        base = os.path.join(os.path.expanduser("~/Library/Application Support"), APP_NAME)
-    elif IS_WINDOWS:
-        base = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~"), APP_NAME)
-    else:
-        base_dir = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
-        base = os.path.join(base_dir, APP_NAME)
-    return os.path.abspath(base)
+    return _paths.platform_data_dir(APP_NAME, platform=_platform(), environ=os.environ, path=os.path)
 
 
 def resolve_default_cache_dir() -> str:
     """Standard-Speicherort für Cache und Bytecode nach Plattformkonvention."""
-    if IS_MACOS:
-        base = os.path.expanduser("~/Library/Caches/Glide")
-    elif IS_WINDOWS:
-        base = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), APP_NAME, "Cache")
-    else:
-        base_dir = os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache")
-        base = os.path.join(base_dir, "glide")
-    return os.path.abspath(base)
+    return _paths.platform_cache_dir(APP_NAME, platform=_platform(), environ=os.environ, path=os.path,
+                                     windows_subdir="Cache", linux_name="glide")
 
 
 @dataclass(frozen=True)
@@ -88,20 +85,20 @@ def prepare_data_dir(paths: RuntimePaths, origin: RuntimePaths | None = None) ->
 
 def unreachable_message(paths: RuntimePaths, error: OSError | None = None) -> str:
     """Meldung für einen Datenordner, der sich nicht anlegen oder öffnen lässt."""
-    teile = [f"Glide erreicht den Datenordner nicht:\n{paths.base_dir}"]
+    teile = [glide_i18n.t("mod.runtime_config.unreachable_message.glide_cannot_reach_the", 'Glide erreicht den Datenordner nicht:\n{base_dir}', base_dir=paths.base_dir)]
     if paths.is_overridden:
-        teile.append("Der Ordner ist über die Umgebungsvariable GLIDE_DATA_DIR gesetzt.")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.the_folder_is_set", "Der Ordner ist über die Umgebungsvariable GLIDE_DATA_DIR gesetzt."))
     elif os.path.normcase(paths.base_dir) != os.path.normcase(paths.default_dir):
-        teile.append(f"Der Ordner ist eingetragen in:\n{paths.pointer_file}")
-    teile.append("Binde das Laufwerk oder den Ordner ein und starte Glide erneut. "
-                 "Glide beendet sich jetzt, ohne den Bestand zu ändern.")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.the_folder_is_entered", 'Der Ordner ist eingetragen in:\n{pointer_file}', pointer_file=paths.pointer_file))
+    teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.connect_the_drive_or", "Binde das Laufwerk oder den Ordner ein und starte Glide erneut. "
+                 "Glide beendet sich jetzt, ohne den Bestand zu ändern."))
     grund = getattr(error, "strerror", None)
     if grund:
-        teile.append(f"Systemmeldung: {grund}")
+        teile.append(glide_i18n.t("mod.runtime_config.unreachable_message.system_message", 'Systemmeldung: {grund}', grund=grund))
     return "\n\n".join(teile)
 
 
-def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> RuntimePaths:
+def resolve_paths(data_dir: str | None = None, env: dict | None = None, *, read_pointer: bool = True) -> RuntimePaths:
     """Löst alle Pfade rein rechnerisch und seiteneffektfrei auf.
 
     Reihenfolge:
@@ -118,27 +115,10 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
     default_dir = resolve_default_data_dir()
     pointer_file = os.path.join(default_dir, "datenordner.json")
 
-    override = data_dir or env.get("GLIDE_DATA_DIR")
-    if override:
-        base_dir = os.path.abspath(os.path.expanduser(override))
-    else:
-        base_dir = default_dir
-        if os.path.isfile(pointer_file):
-            try:
-                # utf-8-sig: Ein von Hand mit Byte-Order-Mark gespeicherter Zeiger bleibt gültig.
-                with open(pointer_file, "r", encoding="utf-8-sig") as f:
-                    data = json.load(f)
-                selected = data.get("path") if isinstance(data, dict) else None
-                if isinstance(selected, str) and selected.strip():
-                    base_dir = os.path.abspath(os.path.expanduser(selected.strip()))
-            except (OSError, ValueError, TypeError):
-                pass
-
-    cache_override = env.get("GLIDE_CACHE_DIR")
-    if cache_override:
-        cache_dir = os.path.abspath(os.path.expanduser(cache_override))
-    else:
-        cache_dir = resolve_default_cache_dir()
+    # `read_pointer=False`: beim Import von app.pyw nur rechnen, den Zeiger erst beim Start lesen (WA-49).
+    base_dir, overridden = _paths.resolve_base(data_dir, env, "GLIDE_DATA_DIR", default_dir,
+                                               pointer_file if read_pointer else None)
+    cache_dir = _paths.env_dir(env, "GLIDE_CACHE_DIR") or resolve_default_cache_dir()
 
     return RuntimePaths(
         base_dir=base_dir,
@@ -152,7 +132,7 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
         lock_file=os.path.join(base_dir, "glide.lock"),
         error_log_file=os.path.join(base_dir, "fehlerprotokoll.txt"),
         cache_dir=cache_dir,
-        is_overridden=bool(override),
+        is_overridden=overridden,
     )
 
 

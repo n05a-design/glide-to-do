@@ -1,0 +1,128 @@
+{
+  "app_version": "1.0.1",
+  "format_version": 26,
+  "sprache": "en",
+  "thema": "City Light · Photo journey",
+  "bearbeitungstag": "2026-11-20",
+  "listen": 25,
+  "dokumente": [
+    {
+      "titel": "Travel plan",
+      "art": "tasks"
+    },
+    {
+      "titel": "Evening round · Open questions",
+      "art": "note"
+    },
+    {
+      "titel": "City Light · Selection",
+      "art": "gallery"
+    },
+    {
+      "titel": "Travel stamp · Light cycle",
+      "art": "drawing"
+    },
+    {
+      "titel": "Before every change of city",
+      "art": "tasks"
+    },
+    {
+      "titel": "Photo routines",
+      "art": "tasks"
+    },
+    {
+      "titel": "Starting at the Wupper",
+      "art": "note"
+    },
+    {
+      "titel": "Berlin in shades of grey",
+      "art": "note"
+    },
+    {
+      "titel": "Rhythm in Munich",
+      "art": "note"
+    },
+    {
+      "titel": "Vienna in the morning",
+      "art": "note"
+    },
+    {
+      "titel": "High above Monaco",
+      "art": "note"
+    },
+    {
+      "titel": "Wind over Bilbao",
+      "art": "note"
+    },
+    {
+      "titel": "Last evening in Seoul",
+      "art": "note"
+    },
+    {
+      "titel": "Back home",
+      "art": "note"
+    },
+    {
+      "titel": "First route via Paris",
+      "art": "tasks"
+    },
+    {
+      "titel": "Travel guide · Overview",
+      "art": "page"
+    },
+    {
+      "titel": "Wuppertal · The city on a frame",
+      "art": "page"
+    },
+    {
+      "titel": "Berlin · Concrete, glass and sky",
+      "art": "page"
+    },
+    {
+      "titel": "Munich · Arches and cables",
+      "art": "page"
+    },
+    {
+      "titel": "Vienna · Iron, glass and ornament",
+      "art": "page"
+    },
+    {
+      "titel": "Monaco · Between rock and sea",
+      "art": "page"
+    },
+    {
+      "titel": "Bilbao · Steel and light",
+      "art": "page"
+    },
+    {
+      "titel": "Seoul · Lights in the evening",
+      "art": "page"
+    },
+    {
+      "titel": "Travel kitty",
+      "art": "page"
+    }
+  ],
+  "bilder": 14,
+  "seitenbilder": 8,
+  "projektpinnwaende": 2,
+  "vorlagen": 2,
+  "dateien": {
+    "Glide-Showcase.glidebackup": {
+      "bytes": 10322759,
+      "sha256": "9bbb824d9fd7cde47d5a8c1eb87612fa76d7b3bef0cf30d95fc551b86f2c9208"
+    },
+    "Glide-Showcase_App.glideapp": {
+      "bytes": 10366037,
+      "sha256": "8151badcc8b5057d595613adb1541101ba62e4283c59f5a1b7be3a639a1091c2"
+    },
+    "Glide-Showcase.glidetemplates": {
+      "bytes": 16525,
+      "sha256": "63a24e8825cea40269b79b6640fbd4d88c111460e660535cb26d5f7381d1ef48"
+    },
+    "City-Light.canvas": {
+      "bytes": 4692,
+      "sha256": "030ca285951d3769561d78132a3000f91e64c7ead2bea9d1d00af4c3cadd1200"
+    }
+  }
+}

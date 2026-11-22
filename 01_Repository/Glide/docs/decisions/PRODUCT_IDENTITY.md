@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 17.11.2026 · App-Version 1.0.0 · Datenformat 26
+Stand 22.11.2026 · App-Version 1.0.1 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -15,7 +15,7 @@ ersetzt werden.
 | Technischer Langname | Glide – Aufgaben und Listen; vorhandene Fenster-/Export-/Paketbezeichnung | `APP_PRODUCT_NAME`, unverändert |
 | Öffentliche Beschreibung | Glide – Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72/D74, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
 | Softwarelizenz | Mozilla Public License 2.0 (`MPL-2.0`), kommerzielle Nutzung nach Bedingungen zulässig | [kanonischer Lizenztext](../../../../LICENSE), D72 |
-| App-Version | 1.0.0 | `APP_VERSION`, `VERSION` |
+| App-Version | 1.0.1 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
@@ -52,8 +52,8 @@ ersetzt werden.
 
 | Feld | Stand | Wer entscheidet |
 |---|---|---|
-| Publisher / Herausgebername | Tim von Trostorff | Entwicklungsauftrag 3.26.0 |
-| Copyright-Zeile | offen | Inhaber |
+| Publisher / Herausgebername | Tim von Trostorff – shaye Design – N05A Foundry – shaye.de (`brand.PUBLISHER`) | Inhaberentscheid 21.11.2026 |
+| Copyright-Zeile | © 2026 Tim von Trostorff – shaye Design – N05A Foundry (`brand.COPYRIGHT`; „Über Glide“, macOS `NSHumanReadableCopyright`) | Inhaberentscheid 21.11.2026 |
 | Support-E-Mail | mailme@shaye.de | Inhaber |
 | Website | Shaye.de | Inhaber |
 | Datenschutz-URL | offen | Inhaber, für beide Stores Pflicht |
@@ -64,7 +64,7 @@ ersetzt werden.
 | macOS Mindestversion | offen | folgt aus Build-Laufzeit und Tests auf Zielgeräten |
 | macOS Architektur | arm64 (Apple Silicon) – entschieden 27.09.2026; Universal 2 nur, wenn Intel-Macs gebraucht werden | Inhaber |
 | Sicherheitskontakt | offen | Inhaber |
-| Markenprüfung „Glide“ | offen | Fachanwalt, nicht durch Recherche ersetzbar |
+| Markenprüfung | „Glide To Do“ ist als Marke geprüft (`brand.BRAND_NAME`); „Glide“ darf als Kurzform in App, Repo und Texten stehen | Inhaberentscheid 21.11.2026 |
 
 Für Copyright, Datenschutz-URL, Sicherheitskontakt, Inno-AppId und
 macOS-Mindestversion liegen seit dem 27.09.2026 Vorschläge bereit

@@ -2,12 +2,40 @@
 """Live-Listen, Titelbilder und gefüllte Vorlagenvorschauen; ohne Tk (Format 23)."""
 import copy
 from bisect import bisect_left, bisect_right
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import re
 
 import drawing
 import object_references as objects
 import i18n as glide_i18n
+
+
+def edit_time_text(value, now=None):
+    """Relativer Text und exakte Ortszeit aus dem gespeicherten Änderungszeitpunkt."""
+    if not isinstance(value, str) or len(value.strip()) <= 10:
+        return None
+    try:
+        stamp = datetime.fromisoformat(value.strip().replace("Z", "+00:00")).astimezone()
+        age = int(max(0, ((now or datetime.now().astimezone()).timestamp() - stamp.timestamp())))
+    except (ValueError, OverflowError, OSError):
+        return None
+    tr = glide_i18n.t
+    exact = stamp.isoformat(sep=" ", timespec="seconds")
+    if age < 60:
+        relative = tr("page.edit_time.just_now", "Gerade bearbeitet")
+    elif age < 3600:
+        count = age // 60
+        relative = (tr("page.edit_time.minute", "Vor 1 Minute bearbeitet") if count == 1
+                    else tr("page.edit_time.minutes", "Vor {count} Minuten bearbeitet", count=count))
+    elif age < 86400:
+        count = age // 3600
+        relative = (tr("page.edit_time.hour", "Vor 1 Stunde bearbeitet") if count == 1
+                    else tr("page.edit_time.hours", "Vor {count} Stunden bearbeitet", count=count))
+    else:
+        count = age // 86400
+        relative = (tr("page.edit_time.day", "Vor 1 Tag bearbeitet") if count == 1
+                    else tr("page.edit_time.days", "Vor {count} Tagen bearbeitet", count=count))
+    return relative, exact
 
 
 def block_lines(document, line):
@@ -53,7 +81,7 @@ def move_document_block(document, first, last, target):
     rows = text.split('\n')
     count = len(rows)
     if not (0 <= first < last <= count and 0 <= target <= count):
-        raise ValueError('Ungültige Blockposition.')
+        raise ValueError(glide_i18n.t("mod.page_features.move_document_block.invalid_block_position", 'Ungültige Blockposition.'))
     if first <= target <= last:
         return copy.deepcopy(document), sum(len(row) + 1 for row in rows[:first])
     order = list(range(count))
@@ -111,9 +139,9 @@ def live_lists(values):
     if values is None:
         return []
     if not isinstance(values, list) or len(values) > 20:
-        raise ValueError('Eine Seite darf höchstens 20 Live-Listen enthalten.')
+        raise ValueError(glide_i18n.t("ui.choose_live_list.a_page_may_contain", 'Eine Seite darf höchstens 20 Live-Listen enthalten.'))
     if any(objects.parse(value) is None or objects.parse(value)[0] != 'list' for value in values):
-        raise ValueError('Ungültiges Ziel einer Live-Liste.')
+        raise ValueError(glide_i18n.t("mod.page_features.live_lists.invalid_live_list_target", 'Ungültiges Ziel einer Live-Liste.'))
     return list(dict.fromkeys(objects.uri(*objects.parse(value)) for value in values))
 
 
@@ -121,13 +149,13 @@ def cover(value):
     if value is None:
         return None
     if not isinstance(value, dict):
-        raise ValueError('Ungültiges Titelbild.')
+        raise ValueError(glide_i18n.t("mod.page_features.cover.invalid_cover_image", 'Ungültiges Titelbild.'))
     if value.get('kind') == 'image' and isinstance(value.get('attachment'), str):
         if re.fullmatch(r'[A-Za-z0-9_-]{1,64}', value['attachment']):
             return {'kind': 'image', 'attachment': value['attachment']}
     if value.get('kind') == 'drawing':
         return {'kind': 'drawing', 'document': drawing.DrawingModel.from_document(value.get('document')).to_document()}
-    raise ValueError('Ungültiges Titelbild.')
+    raise ValueError(glide_i18n.t("mod.page_features.cover.invalid_cover_image", 'Ungültiges Titelbild.'))
 
 
 def live_rows(target, lists, trash=(), folders=()):

@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MPL-2.0
-"""Reproduzierbare Windows-Aufnahmen der echten Glide-Fenster für GitHub.
+"""Reproduzierbare Aufnahmen der echten Glide-Fenster für GitHub (Windows und macOS).
 
-Lädt den Showcase in eine temporäre Ablage. Aufruf aus 01_Repository/Glide:
+Lädt den Showcase in eine temporäre Ablage und startet Glide darauf neu, damit die
+Oberfläche vollständig in der Sprache des Showcase erscheint. Aufruf aus 01_Repository/Glide:
 
     py -3.14 -B tests/tools/projektseite_aufnahmen.py --out assets/marketing
+    python3 -B tests/tools/projektseite_aufnahmen.py --out assets/marketing --sprache en
+
+Unter macOS nimmt `screencapture` nur das eigene Glide-Fenster auf (Fensternummer über
+CoreGraphics); unter Windows `PrintWindow`.
 
 Einzelne Szenen können als name=design:art[:titel] angegeben werden.
 """
@@ -21,30 +26,34 @@ import sys
 import tempfile
 
 from releasedaten import save_windows_screenshot
-from showcase import BRIEFING_TITLE, FOCUS_TASK, MAIN_TITLE, PHOTO_TITLE, PIXEL_TITLE
+from pruefe_showcase import photo
+from showcase import TITEL, ziel_fuer
 
 REPO = Path(__file__).resolve().parents[2]
-SHOWCASE = REPO / "tests/fixtures/showcase/Glide-Showcase_App.glideapp"
 LISTEN_SZENEN = ("list", "board", "table", "split", "item")
-ARTEN = ("home", "today", "calendar", "global", "pages", "relief", "locations",
+ARTEN = ("home", "today", "calendar", "global", "folder", "pages", "relief", "locations",
          "settings", "week", *LISTEN_SZENEN)
-GALERIE = (
-    ("pinnwand", "light", "global", ""),
-    ("kalender", "light", "calendar", ""),
-    ("liste", "light", "list", "Studioroutinen"),
-    ("seite", "light", "list", BRIEFING_TITLE),
-    ("geteilt", "light", "split", MAIN_TITLE),
-    ("startseite", "light", "home", ""),
-    ("pixel", "pixel", "list", PIXEL_TITLE),
-    ("heute", "dark", "today", ""),
-    ("seitenuebersicht", "light", "pages", ""),
-    ("punkt", "light", "item", MAIN_TITLE),
-    ("tag-entlasten", "light", "relief", ""),
-    ("fundorte", "light", "locations", ""),
-    ("wochenrueckblick", "light", "week", ""),
-    ("einstellungen", "light", "settings", ""),
-    ("raumstudien", "light", "list", PHOTO_TITLE),
-)
+def galerie(sprache):
+    T = TITEL[sprache]
+    return (
+        ("pinnwand", "light", "global", ""),
+        ("projektpinnwand", "light", "folder", T["PROJEKT"]),
+        ("kalender", "light", "calendar", ""),
+        ("liste", "light", "list", T["ROUTINEN"]),
+        ("seite", "light", "list", T["BRIEFING_TITLE"]),
+        ("stadtseite", "light", "list", TITEL[sprache]["STADTSEITE"]),
+        ("geteilt", "light", "split", T["MAIN_TITLE"]),
+        ("startseite", "light", "home", ""),
+        ("pixel", "pixel", "list", T["PIXEL_TITLE"]),
+        ("heute", "dark", "today", ""),
+        ("seitenuebersicht", "light", "pages", ""),
+        ("punkt", "light", "item", T["MAIN_TITLE"]),
+        ("tag-entlasten", "light", "relief", ""),
+        ("fundorte", "light", "locations", ""),
+        ("wochenrueckblick", "light", "week", ""),
+        ("einstellungen", "light", "settings", ""),
+        ("galerie", "light", "list", T["PHOTO_TITLE"]),
+    )
 
 
 def szene(text):
@@ -71,22 +80,50 @@ def lade_app(daten, app_pfad):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--showcase", type=Path, default=SHOWCASE)
+    parser.add_argument("--sprache", choices=("de", "en"), default="de")
+    parser.add_argument("--showcase", type=Path)
     parser.add_argument("szenen", nargs="*", type=szene)
-    parser.add_argument("--prefix", default="glide-3.60-")
+    parser.add_argument("--prefix", default="glide-1.0-")
+    parser.add_argument("--nur-laden", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
-    if sys.platform != "win32":
-        raise SystemExit("Aufnahme nur unter Windows; für Linux tests/tools/screenshots.py verwenden.")
-    scenes = args.szenen or [(args.prefix + name, design, art, title)
-                             for name, design, art, title in GALERIE]
-    args.out.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="glide-projektseite-") as ordner:
-        modul = lade_app(Path(ordner) / "Glide", REPO / "src/glide/app.pyw")
+    if args.nur_laden:
+        # Kindprozess: Showcase in den Datenordner laden und regulär beenden.
+        modul = lade_app(args.nur_laden, REPO / "src/glide/app.pyw")
         root = modul.tk.Tk()
         app = modul.ListApp(root)
-        if not app.restore_app_backup(str(args.showcase), sections={
-                "tasks": True, "settings": True, "templates": True, "activity": True}, show_success=False):
-            raise SystemExit("Showcase nicht geladen")
+        ok = app.restore_app_backup(str(args.showcase), sections={
+            "tasks": True, "settings": True, "templates": True, "activity": True}, show_success=False)
+        app.save_items()
+        app.save_settings()
+        getattr(app, "finish_recovery_session", lambda: None)()
+        app.cancel_pending_callbacks()
+        app.release_data_lock()
+        root.destroy()
+        return 0 if ok else 1
+    if sys.platform not in ("win32", "darwin"):
+        raise SystemExit("Aufnahme nur unter Windows und macOS; für Linux tests/tools/screenshots.py verwenden.")
+    args.showcase = args.showcase or ziel_fuer(args.sprache) / "Glide-Showcase_App.glideapp"
+    T = TITEL[args.sprache]
+    endung = "-en" if args.sprache == "en" else ""
+    scenes = args.szenen or [(args.prefix + name + endung, design, art, title)
+                             for name, design, art, title in galerie(args.sprache)]
+    args.out.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="glide-projektseite-") as ordner:
+        # Erst laden (eigener Prozess), dann wie beim Nutzer auf dem Bestand starten:
+        # Sprache und Oberfläche erscheinen so vollständig in der Sprache des Showcase.
+        # Unter macOS verträgt Tk keinen zweiten Interpreter im selben Prozess.
+        import subprocess
+        daten = Path(ordner) / "Glide"
+        kind = subprocess.run([sys.executable, "-B", __file__, "--out", str(args.out), "--showcase", str(args.showcase),
+                               "--nur-laden", str(daten)], capture_output=True, text=True, timeout=180)
+        if kind.returncode != 0:
+            raise SystemExit("Showcase nicht geladen\n" + kind.stdout + kind.stderr)
+        modul = lade_app(daten, REPO / "src/glide/app.pyw")
+        # Wie `main()`: Aqua legt den Schriftbestand beim ersten Tk-Interpreter fest;
+        # ohne vorherige Registrierung fehlt DejaVu Sans und Symbole fallen auf Text zurück.
+        modul.register_private_fonts()
+        root = modul.tk.Tk()
+        app = modul.ListApp(root)
         import interaction_policy
         app.settings[interaction_policy.HINTS_SETTING] = False
         root.geometry("1480x950+24+24")
@@ -101,8 +138,8 @@ def main(argv=None):
 
         root.report_callback_exception = callback_error
         app.settings["release_notes_seen"] = modul.APP_VERSION
-        projektaufgaben = next(entry["items"] for entry in app.lists if entry["title"] == MAIN_TITLE)
-        focus_item = next(item for item in projektaufgaben if item.get("text") == FOCUS_TASK)
+        projektaufgaben = next(entry["items"] for entry in app.lists if entry["title"] == T["MAIN_TITLE"])
+        focus_item = next(item for item in projektaufgaben if item.get("text") == T["FOCUS_TASK"])
 
         def finde(titel):
             treffer = [e["id"] for e in app.lists if (e.get("title") or "").startswith(titel)]
@@ -112,7 +149,12 @@ def main(argv=None):
 
         def aufnehmen(name, fenster):
             ziel = args.out / f"{name}.png"
-            save_windows_screenshot(fenster, ziel)
+            if sys.platform == "darwin":
+                fenster.lift()
+                fenster.update()
+                photo(args.out, name)
+            else:
+                save_windows_screenshot(fenster, ziel)
             print("Aufgenommen", ziel.name, flush=True)
 
         def modal_aufnehmen(name, art, command):
@@ -125,7 +167,7 @@ def main(argv=None):
                             tree = next(w for w in app.iter_descendants(dialog)
                                         if w.winfo_name() == "day_relief_tasks")
                             druck = next(item for item in projektaufgaben
-                                         if item.get("text") == "Druckdatei für den Eingang bauen")
+                                         if item.get("text") == T["LAYOUT_TASK"])
                             tree.selection_set(druck["id"])
                             ziel = next(w for w in app.iter_descendants(dialog)
                                         if isinstance(w, modul.tk.Entry) and
@@ -176,6 +218,10 @@ def main(argv=None):
             elif art == "week":
                 app.settings["week_start"] = "monday"
                 app.show_week_review()
+            elif art == "folder":
+                ordner_id = next(f["id"] for f in app.folders if f.get("title") == titel)
+                app.set_active_folder(ordner_id)
+                app.workspace.configure_board("zoom", 75)
             elif art == "global":
                 app.open_global_board()
                 app.workspace.configure_board("zoom", 90)
@@ -192,7 +238,7 @@ def main(argv=None):
                 if art in ("board", "split"):
                     app.open_board_view()
                     if art == "split":
-                        assert app.open_side_view(finde(BRIEFING_TITLE))
+                        assert app.open_side_view(finde(T["BRIEFING_TITLE"]))
                 elif art == "table":
                     app.set_table_view()
                 elif art == "item":
