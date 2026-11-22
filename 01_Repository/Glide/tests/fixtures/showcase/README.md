@@ -4,7 +4,7 @@ Stand 21.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Vorlagen 2 · [English v
 
 Eine Fotoreise durch sieben Städte: Wuppertal, Berlin, München, Wien, Monaco, Bilbao und Seoul. Zwei Wochen mit der Bahn und zwei Flügen, danach die Auswahl für ein kleines Reisebuch. Der Showcase zeigt denselben Bestand aus vielen Blickwinkeln: Reiseplan, Reiseführer mit einer Seite pro Stadt, Reisetagebuch, Galerie, Pixelstempel und drei Pinnwände.
 
-Alle Fotos sind eigene Aufnahmen von Tim von Trostorff (shaye Design); die Rechte liegen beim Urheber. Der [Quellennachweis](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt Original und Prüfsumme jeder Arbeitskopie.
+Alle Fotos sind eigene Aufnahmen von Tim von Trostorff (shaye Design) und stehen wie der Quellcode unter der Mozilla Public License 2.0 ([LICENSE](https://github.com/n05a-design/glide-to-do/blob/main/LICENSE)); Urheber bleibt Tim von Trostorff. Der [Quellennachweis](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt Original und Prüfsumme jeder Arbeitskopie.
 
 ## Öffnen und bearbeiten
 

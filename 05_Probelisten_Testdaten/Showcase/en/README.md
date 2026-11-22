@@ -4,7 +4,7 @@ Status as of 21.11.2026 · Glide 1.0.0 · Task format 26 · Templates 2 · [Deut
 
 A photo journey through seven cities: Wuppertal, Berlin, Munich, Vienna, Monaco, Bilbao and Seoul. Two weeks by train and two flights, followed by the selection for a small travel book. The showcase presents the same data from many angles: travel plan, a travel guide with one page per city, a travel diary, a gallery, a pixel stamp and three pinboards.
 
-All photos were taken by Tim von Trostorff (shaye Design); all rights remain with the photographer. The [source record](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) lists the original and checksum of every working copy.
+All photos were taken by Tim von Trostorff (shaye Design) and, like the source code, are licensed under the Mozilla Public License 2.0 ([LICENSE](https://github.com/n05a-design/glide-to-do/blob/main/LICENSE)); Tim von Trostorff remains the author. The [source record](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) lists the original and checksum of every working copy.
 
 ## Open and edit
 
