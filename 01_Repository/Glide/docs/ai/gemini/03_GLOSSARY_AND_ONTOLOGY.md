@@ -4,8 +4,8 @@ document_id: GLIDE-GLOSSARY
 title: Glossary and ontology
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GEMINI-MASTER, GLIDE-DATA]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-DATA]
 
 # Glossary and ontology
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 Terms below are aligned with [`skills/glide-to-do/references/glide-aufbau.md`](../../../skills/glide-to-do/references/glide-aufbau.md), the canonical German feature contract, and schema names. Technical identifiers are not necessarily UI labels.
 
@@ -47,8 +47,8 @@ Terms below are aligned with [`skills/glide-to-do/references/glide-aufbau.md`](.
 | Undo / redo | Rückgängig / Wiederholen | In-memory history with explicit save/guard semantics; not an archival version history |
 | Exchange format | Austauschformat | `glide.exchange`, version 2; not the same as data schema 26 |
 | Data schema | Aufgabenformat / Datenformat | Main persisted-list schema, currently 26 |
-| System catalog | Glide-System | Independent module/feature/test inventory version; PR #152 diagnostic candidate V1.49, prior evidence refresh V1.50, callback-collector correction V1.51, no-event callback handling V1.52 (focused Linux/Windows UI39 passed; full matrix remains pending) |
-| Glide Shell | Glide-Shell | Set of extracted shell-oriented modules inside Glide; not yet a separately released/shared package |
+| System catalog | Glide-System | Independent module/feature/test inventory version; V1.84 on `main` (22.11.2026) |
+| Glide Shell | Glide-Shell | Subpackage `src/glide/glide_shell` (0.6.0) with demo host, self-test and guide; follow-up projects copy it with `shell_uebernehmen.py`. Completed by owner decision D99; no separate repository or release |
 
 ## Ontology notes
 

@@ -15,6 +15,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Architektur, Bestand und Zielbild:** [Architektur](02_ARCHITECTURE.md), [Glide-System](../src/glide/README.md) und [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) haben getrennte Zuständigkeiten.
 - **An der Glide Shell arbeiten:** [Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md), Nutzung für Folgeprojekte in [`glide_shell/README.de.md`](../src/glide/glide_shell/README.de.md).
+- **Mit der Glide Shell ein neues Projekt bauen (KI-Agenten):** [`glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md`](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) ([English](../src/glide/glide_shell/AI_GUIDE_NEW_PROJECTS.md)) – Aufbau von Glide, Glide-System und Shell, Architekturregeln, Design-Richtlinien, Prozesse, Prüfungen und Prüflisten.
 - **Shell-Migration vorbereiten:** [Fable-Masterprompt](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) mit Quellstand, Planungsauftrag und Freigabegrenzen.
 - **Änderungen übergreifend abgleichen und Dokumente konsolidieren:** [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und [Abgleich ohne doppelte Pflege](DOKUMENTENPFLEGE.md#abgleich-ohne-doppelte-pflege).
 
@@ -31,10 +32,10 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [English user guide](user-guide/README.md) | Kontrollierte englische Übersetzung von 20 Funktionen für Nutzer, keine zweite Fachautorität; Lokalisierungsstand der Oberfläche |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D91 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D99 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
 | [Gemini-Wissensbasis](ai/gemini/README.md) | Englischsprachige, quellengebundene Wissensbasis für Gemini; abgeleitete Zusammenfassung, keine zusätzliche Fachautorität |
-| [Glide Shell – Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md) | Einstieg für Agenten: Bausteine, Host-Verträge, erzwungene Regeln, Tests T055/T312–T334, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Prüfliste für neue Bausteine; verweist auf die führenden Quellen |
+| [Glide Shell – Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md) | Einstieg für Agenten: Bausteine, Host-Verträge, erzwungene Regeln, Tests T055/T312–T336, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Prüfliste für neue Bausteine; verweist auf die führenden Quellen |
 | [Glide Shell Framework](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | Architektur- und Entkopplungskonzept für das wiederverwendbare Desktop-Fundament, Fensterorchestrierung und Migrationspfad |
 | [Arbeitsvorlage zur Shell-Migration](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) | Arbeitsübergabe für die Shell-Migration: Abschnitt 1 und die Pakete 1–2c sind mit 3.60.0 umgesetzt; jedes Folgepaket braucht eine eigene Freigabe ([Plan §21.89](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2189-glide-3600-erste-shell-schnitte-start-baseline-und-beruhigter-einstellungsdialog-13112026)) |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |

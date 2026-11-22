@@ -2,7 +2,7 @@
 
 Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
 
-Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. Ein unabhängig nutzbares Shell-Paket und die unten skizzierten Schnittstellen sind noch nicht abgenommen. Die Umsetzung erfolgt nur im jeweils beauftragten Umfang.
+Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. **Abgeschlossen (D99, 22.11.2026):** Alle fünf Phasen aus §4 sind umgesetzt; das Paket `glide_shell` 0.6.0 enthält zuletzt Befehlsverlauf (Phase 4) und App-Host (Phase 5), dazu Demohost, Selbsttest, Anleitung, [KI-Handbuch](GLIDE_SHELL_KI_HANDBUCH.md) und die [Anleitung für neue Projekte](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) (§7). S12 bleibt außerhalb; weitere Bausteine nur aus konkretem Bedarf eines Folgeprojekts.
 
 **Zuständigkeiten:** Der tatsächliche Architekturzustand steht in der [Architektur](02_ARCHITECTURE.md), vorhandene Module, Tests, Kopplungen und Übernahmeverträge im [Glide-System](../src/glide/README.md). Auftrag, Priorität und Umsetzungsrest von WA-49/50 stehen ausschließlich in der [Roadmap](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md); Prüfungen und Abnahme im [QA-Bericht](07_QA_BERICHT.md). Änderungen werden nach der [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) abgeglichen.
 
@@ -94,21 +94,26 @@ Das Zielbild sieht einen zentralen `WindowManager` vor. Die folgenden Namen und 
 Diese Reihenfolge beschreibt technische Abhängigkeiten, keine zweite Aufgaben- oder Statusliste. Beauftragter Umfang und Rest von WA-49/50 werden nur in der Roadmap geführt. Istbelege kommen aus Architektur/Systemregister; jede Umsetzung benötigt neue passende Prüfungen.
 
 ### Phase 1: Laufzeit- und Pfad-Entkopplung
+- **Stand:** ✅ `runtime_config` (3.55.0), Import ohne Ordneranlage (3.60.0), `glide_shell.runtime_paths` (V1.69), Import ohne Menüaufschub und Zeigerlesen (WA-49, V1.83).
 - **Architekturschritt:** Auf der Tk-freien Pfadauflösung aufbauen und App-Import, CLI-Auswertung, Verzeichnisanlage und Tk-Initialisierung explizit trennen. Seiteneffektfreiheit für jeden Einstieg gesondert prüfen; Eigenschaften von `runtime_config.py` nicht auf den App-Import übertragen.
 
 ### Phase 2: Design- und Widget-Extraktion
+- **Stand:** ✅ `custom_controls` (3.67.0), `system_appearance` und `window_geometry` (V1.67), `text_fit` (V1.69) im Paket `glide_shell`; Glide-gebundene Teile bleiben beim Host (Tabelle in §6).
 - **Aufgabe:** Zusammenfassung von [`appearance.py`](../src/glide/appearance.py), [`ui_design.py`](../src/glide/ui_design.py) und den D78-Custom-Controls in ein Teilpaket `glide_shell.ui`. Lieferabgleich und Paketbau erfassen heute nur flache Module; bis zur Entscheidung über Namensraum und Paketgrenze bleibt die Shell-Zugehörigkeit eine Modulliste mit Importregel.
 - **Ziel:** Einheitliche Widget-Schnittstelle (`keys()`, `configure()`, Event-Binding) unabhängig vom konkreten Glide-Inhalt.
 
 ### Phase 3: Modal- und Dialog-Manager
+- **Stand:** ✅ `modal_session` mit Dialogfabrik und Fokusrückgabe; T316 18 Fälle.
 - **Aufgabe:** Formalisierung von `run_modal` aus `app.pyw` in ein isoliertes Modul. Erster Schritt umgesetzt in 3.62.0: `modal_session.py`, zunächst als flaches Modul; seit V1.64 (D95) im Paket als `glide_shell.modal_session`. Die Liste der Shell-Module führt `tests/unit/test_shell_importregel.py`.
 - **Ziel:** Schutz vor Livelocks, standardisierte Bestätigungs-, Eingabe- und Auswahldialoge mit einheitlicher Tastaturbedienung (Escape zum Abbrechen, Enter zum Bestätigen).
 
 ### Phase 4: Undo/Command-Abstraktion
+- **Stand:** ✅ `glide_shell.command_history` (V1.84): `CommandHistory` mit Zustandsabbildern (`capture`, `apply`, `rollback`) und Befehlsobjekten (`Command` mit `execute`/`undo`/`redo`), Rückweg bei gescheitertem Herstellen; Glides Rückgängig/Wiederholen läuft darüber, Glide liefert nur Stand, Herstellen und Stapel.
 - **Aufgabe:** Entkopplung von [`undo_history.py`](../src/glide/undo_history.py) von den Datenstrukturen der Aufgabenliste.
 - **Ziel:** Einen noch zu definierenden Undo-/Command-Vertrag für Memento- oder Command-Objekte schaffen; `execute()` und `undo()` wären vorgeschlagene Schnittstellen, keine heutige `UndoHistory`-API. Vor einer Verlagerung steht der Nachweis fachlicher Unabhängigkeit; bis dahin bleibt Undo beim Host.
 
 ### Phase 5: Trennung von Shell und App-Controller
+- **Stand:** ✅ `glide_shell.app_host` (V1.84): `AppHost` legt das Fenster an, führt Startprüfungen, Platzhalter und Ereignisschleife; `attach_menubar`, `bind_shortcuts` und `install_close` übernehmen Menüleiste, Kürzeltabelle und Schließweg. Glides `main()` startet über `AppHost`, `ListApp` ist der Controller und behält seine Ansichten; eine Zerlegung der Ansichten in eigene Module ist nicht Teil der Phase.
 - **Aufgabe:** Reduzierung von `ListApp` in `app.pyw` auf die reine Controller-Rolle für die Aufgabenverwaltung.
 - **Ziel:** Die Shell initialisiert das Tk-Fenster, die Menüs und die globalen Shortcuts und bettet den `GlideAppController` als primären Inhalt ein.
 
@@ -173,7 +178,8 @@ Die Architekturvalidierung auf `45ab307e` hat die Zielgrenzen an den tatsächlic
 | `ui_design` | Kürzen, Breitenausgleich und ruhige Umbruchbreite liegen seit V1.69 in `glide_shell.text_fit` (S10, D98) | Skalen, Titelgrenze (`clip_title`), `task_title`, `today_columns`, `page_icon_layout` |
 | `action_menu` | Eintragsmodell, Ordnen, Suchen und Gruppieren liegen seit V1.69 in `glide_shell.action_picker` (D98) | Sperrgründe, Platzhalter, Zustandstexte, Kopfverweise, Suchschlüssel aus `content_search` |
 | `accessibility`, `accessibility_bindings`, `core_accessibility` | `Attributes`, `set_attributes`, `Binding`, allgemeine Binder | `task_value`, alle Binder mit `app` |
-| `undo_history` | `RedoHistory` liegt seit V1.67 in `glide_shell.redo_history` (D96) | Board-Einträge, Rückgängig-Stapel in `ListApp` |
+| `undo_history` | `RedoHistory` liegt seit V1.67 in `glide_shell.redo_history` (D96); Ablauf von Rückgängig/Wiederholen seit V1.84 in `glide_shell.command_history` | Board-Einträge, Inhalt der Schritte (`undo_state`, `apply_snapshot`) |
+| `app.pyw` (Start, Kürzel, Schließen) | Fensterlebenslauf, Startprüfungen, Kürzeltabelle, Menüleiste und Schließweg seit V1.84 in `glide_shell.app_host` | Prüfungen, Platzhalter, Kürzeltabelle `keyboard_shortcuts`, `on_close` |
 | `runtime_config` | Plattformordner, Umgebung, Zeiger und Reihenfolge liegen seit V1.69 in `glide_shell.runtime_paths` (D98) | Produktname, Datei- und Variablennamen, `RuntimePaths`, Meldungen |
 
 ### Locale-Vertrag für sichtbare Shell-Beschriftungen
@@ -184,7 +190,7 @@ Shell-Module erhalten bereits angezeigte Menütexte, Aktionen und Beschriftungen
 
 ## 7. Paket `glide_shell` und Übernahme in Folgeprojekte (D95, 20.11.2026)
 
-Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit eigener Paketversion `SHELL_VERSION` (getrennt von App- und Systemversion; 0.1.0 mit V1.64, 0.2.0 seit V1.66 mit `motion`, 0.3.0 seit V1.67 mit den D96-Bausteinen, 0.4.0 seit V1.68 mit dem Selbsttest). Es enthält `modal_session` (Dialogfabrik `create_dialog`, modaler Warteweg, Fokusrückgabe), `window_lifetime` (`AfterScope`, `scope_for`), `custom_controls` (Canvas-Bedienelemente), `desktop_adapter` (Menüleiste, Tastaturkürzel, Betriebssystemaktionen), seit V1.66 `motion` (kurze, unterbrechbare Übergänge mit injizierter Zeitplanung, etwa über `AfterScope.after`/`cancel`) seit V1.67 `window_geometry` (Geometrietexte, Fenster auf der Arbeitsfläche halten), `system_appearance` (Hell/Dunkel des Systems deuten) und `redo_history` (Wiederholen-Stapel) sowie den Demonstrationshost `demo` (Paket 6) und seit V1.68 den Selbsttest `selftest` (D97). Die bisherigen Glide-Module `compact_mode`, `appearance` und `undo_history` reichen die neutralen Namen weiter.
+Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit eigener Paketversion `SHELL_VERSION` (getrennt von App- und Systemversion; 0.1.0 mit V1.64, 0.2.0 seit V1.66 mit `motion`, 0.3.0 seit V1.67 mit den D96-Bausteinen, 0.4.0 seit V1.68 mit dem Selbsttest, 0.5.0 seit V1.69 mit `text_fit`, `action_picker` und `runtime_paths`, 0.6.0 seit V1.84 mit `command_history` und `app_host`). Es enthält `modal_session` (Dialogfabrik `create_dialog`, modaler Warteweg, Fokusrückgabe), `window_lifetime` (`AfterScope`, `scope_for`), `custom_controls` (Canvas-Bedienelemente), `desktop_adapter` (Menüleiste, Tastaturkürzel, Betriebssystemaktionen), seit V1.66 `motion` (kurze, unterbrechbare Übergänge mit injizierter Zeitplanung, etwa über `AfterScope.after`/`cancel`) seit V1.67 `window_geometry` (Geometrietexte, Fenster auf der Arbeitsfläche halten), `system_appearance` (Hell/Dunkel des Systems deuten) und `redo_history` (Wiederholen-Stapel) sowie den Demonstrationshost `demo` (Paket 6) und seit V1.68 den Selbsttest `selftest` (D97). Die bisherigen Glide-Module `compact_mode`, `appearance` und `undo_history` reichen die neutralen Namen weiter.
 
 **Übernahme:** Ein Folgeprojekt übernimmt den Ordner `glide_shell` unverändert in seinen Quellbaum, seit V1.66 über `python3 -B scripts/pflege/shell_uebernehmen.py <Quellordner des Folgeprojekts>`. Das Werkzeug schreibt `glide_shell/SHELL_MANIFEST.json` (Paketversion, Glide-Systemversion, Quell-Commit, SHA-256 je Datei); `--pruefen` meldet je Datei aktuell, veraltet oder verändert. Lokale Änderungen in der Kopie überschreibt es nur mit `--ersetzen`, Dateien ohne Manifesteintrag lässt es stehen. Danach importiert das Folgeprojekt die Bausteine einzeln, etwa `from glide_shell import modal_session, window_lifetime`. Voraussetzungen sind Python mit `tkinter` (geprüft mit 3.14.5 und Tk 9.1.0 auf macOS, Linux/Xvfb und Windows über Glides Matrix); es gibt keine weitere Abhängigkeit. Jede Datei trägt `SPDX-License-Identifier: MPL-2.0`. Texte, Farben, Schriften und Aktionskennungen liefert der Host; `custom_controls` nimmt Schrift, Tinte und Hintergrund über `set_font_provider`, `set_ink_provider` und `set_backdrop_painter` an. `python -m glide_shell.demo` zeigt das Nutzungsmuster.
 
@@ -196,4 +202,4 @@ Seit Glide-System V1.64 ist die Shell ein Unterpaket `src/glide/glide_shell` mit
 
 Für Agenten bündelt das [Arbeitshandbuch](GLIDE_SHELL_KI_HANDBUCH.md) Bausteine, Regeln, Tests, Prüfwege und Versionierung.
 
-**Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Noch nicht zur Shell gehören die Barrierefreiheit (S12, nicht freigegeben) und der Rückgängig-Stapel; von `ui_design`, `action_menu` und `runtime_config` liegt seit V1.69 nur der neutrale Teil in der Shell (D98).
+**Grenzen:** Kein eigenes Repository und keine eigene Veröffentlichung; Änderungen entstehen weiter in Glide und werden von Folgeprojekten als Kopie übernommen. Die Kompatibilitätsnamen (`_glide_modal_active`, `_glide_after_scope`, Klassennamen `Glide…`) bleiben. Nicht zur Shell gehört die Barrierefreiheit (S12, nicht freigegeben); den Rückgängig-Stapel führt seit V1.84 `command_history`, der Inhalt der Schritte bleibt Glides. Von `ui_design`, `action_menu` und `runtime_config` liegt seit V1.69 nur der neutrale Teil in der Shell (D98).

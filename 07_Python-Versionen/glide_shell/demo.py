@@ -7,9 +7,11 @@ Menüleiste über `desktop_adapter`, ein wiederkehrender Zeitgeber im eigenen
 Bedienelemente aus `custom_controls`, ein modaler Dialog über
 `modal_session.create_dialog` und `run_modal`, eine Fensterlage über
 `window_geometry`, das Systemdesign über `system_appearance` (nur ohne
-vorgegebene Farben) und ein Zähler mit Rückgängig/Wiederholen über
-`redo_history`. Texte und Farben liefert der
-Host selbst; die Shell kennt sie nicht.
+vorgegebene Farben) und ein Zähler mit Rückgängig/Wiederholen als
+Befehlsobjekte über `command_history`. `main` startet über `app_host`:
+Fenster, Kürzel (Strg/Cmd+Z, Wiederholen) und Schließweg kommen aus der
+Shell, der Demohost ist der Controller. Texte und Farben liefert der Host
+selbst; die Shell kennt sie nicht.
 
 Start: `python -m glide_shell.demo` mit dem Ordner über `glide_shell` im
 Suchpfad. Vertrag: `tests/integration/test_shell_demohost.py`.
@@ -18,7 +20,7 @@ Suchpfad. Vertrag: `tests/integration/test_shell_demohost.py`.
 import time
 import tkinter as tk
 
-from glide_shell import (custom_controls, desktop_adapter, modal_session, motion, redo_history,
+from glide_shell import (app_host, command_history, custom_controls, desktop_adapter, modal_session, motion,
                          system_appearance, window_geometry, window_lifetime)
 
 PALETTE = {"bg": "#F5F5F7", "card": "#FFFFFF", "text": "#15243C", "muted": "#6E6E73", "accent": "#0A84FF"}
@@ -43,6 +45,21 @@ TEXTS = {
 TICK_MS = 1000
 
 
+class _Increment(command_history.Command):
+    """Ein Schritt des Zählers als Befehl."""
+
+    def __init__(self, host):
+        self.host = host
+
+    def execute(self):
+        self.host.count += 1
+        self.host._show_count()
+
+    def undo(self):
+        self.host.count -= 1
+        self.host._show_count()
+
+
 class DemoHost:
     """Hauptfenster des Beispielhosts; besitzt seine Zeitgeber über einen Bereich."""
 
@@ -52,16 +69,19 @@ class DemoHost:
         # Ohne Farben des Hosts folgt der Demohost dem Systemdesign.
         self.system_dark = None if colors else system_dark(root)
         self.colors = dict(DARK_PALETTE if self.system_dark else PALETTE, **(colors or {}))
-        self.count, self.undo_stack = 0, []
-        self.redo = redo_history.RedoHistory()
+        self.count = 0
+        self.history = command_history.CommandHistory()
+        self.redo = self.history.redo
         if geometry:
             self.place(geometry)
         self.scope = window_lifetime.scope_for(root)
         self.transitions = motion.Transitions(self.scope.after, self.scope.cancel)
         self.dialogs_opened = 0
+        self.counter = None
         root.title(self.texts["title"])
         root.configure(bg=self.colors["bg"])
         self.menus = []
+        self.platform = app_host.platform_of(root.tk.call("tk", "windowingsystem"))
         self.menubar = desktop_adapter.build_menu_tree(root, [
             (self.texts["menu_file"], [
                 (self.texts["menu_dialog"], self.open_dialog,
@@ -74,7 +94,11 @@ class DemoHost:
                 (self.texts["menu_redo"], self.redo_step, desktop_adapter.format_redo_accelerator(), "redo"),
             ]),
         ], menus_out=self.menus)
-        root.configure(menu=self.menubar)
+        app_host.attach_menubar(root, self.menubar)
+        app_host.bind_shortcuts(root, app_host.primary_shortcuts("z", lambda _e: self.undo_step(), self.platform)
+                                + app_host.primary_shortcuts("Z", lambda _e: self.redo_step(), self.platform, shift=True),
+                                self.platform)
+        app_host.install_close(root, self.request_close, self.platform, scope=self.scope)
         tk.Label(root, text=self.texts["hint"], bg=self.colors["bg"], fg=self.colors["muted"]).pack(
             padx=20, pady=(16, 4), anchor="w")
         self.seconds = tk.BooleanVar(root, value=True)
@@ -101,33 +125,18 @@ class DemoHost:
         return placed
 
     def _show_count(self):
-        self.counter.configure(text=self.texts["count"].format(count=self.count))
+        if self.counter is not None:
+            self.counter.configure(text=self.texts["count"].format(count=self.count))
 
     def add(self):
-        """Eine Änderung: Rückgängig-Schritt anlegen, Wiederholen verwerfen."""
-        self.undo_stack.append(self.count)
-        self.count += 1
-        self.redo.note_write()
-        self._show_count()
+        """Eine Änderung als Befehl; ein neuer Schritt verwirft Wiederholen."""
+        self.history.execute(_Increment(self))
 
     def undo_step(self):
-        if not self.undo_stack:
-            return False
-        self.redo.validate(self.undo_stack)
-        current, self.count = self.count, self.undo_stack.pop()
-        self.redo.push(current, self.undo_stack)
-        self._show_count()
-        return True
+        return self.history.undo() == command_history.DONE
 
     def redo_step(self):
-        if not self.redo.validate(self.undo_stack):
-            return False
-        entry = self.redo.pop()
-        self.undo_stack.append(self.count)
-        self.count = entry
-        self.redo.mark(self.undo_stack)
-        self._show_count()
-        return True
+        return self.history.redo_step() == command_history.DONE
 
     def _toggled(self):
         self.tick()
@@ -164,6 +173,10 @@ class DemoHost:
         modal_session.run_modal(self.root, dialog, background=self.colors["bg"])
         return "break"
 
+    def request_close(self):
+        """Schließweg des App-Hosts: Fensterknopf und unter macOS Cmd+Q."""
+        self.close()
+
     def close(self):
         """Fenster schließen; Übergänge enden, der Bereich bricht alle Zeitgeber ab."""
         self.transitions.close()
@@ -181,9 +194,8 @@ def system_dark(root):
 
 
 def main():
-    root = tk.Tk()
-    DemoHost(root)
-    root.mainloop()
+    """Start über den App-Host der Shell; der Demohost ist der Controller."""
+    return app_host.AppHost().run(DemoHost)
 
 
 if __name__ == "__main__":

@@ -4,8 +4,8 @@ document_id: GLIDE-KNOWLEDGE-CHANGELOG
 title: Knowledge base changelog
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: current
 maintainer: project
 related_documents: [GLIDE-GEMINI-INDEX, GLIDE-AUDIT]
@@ -13,7 +13,13 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-AUDIT]
 
 # Knowledge base changelog
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+
+## 1.1 — 2026-11-22 — status refresh for Glide 1.0.1
+
+- Refreshed version, localization, shell and release status against `main` `4ce3697a`: Glide 1.0.1, system catalog V1.83, complete DE/EN interface, `glide_shell` 0.5.0 completed (D99), PRs #185–#188 merged.
+- Removed claims that localization is partial and that the shell package is a post-1.0 goal; marked the PR #152 timeout issues as historical.
+- Topic content outside these status facts keeps its original snapshot `5631333a`; the source manifest names which files were refreshed.
 
 ## 1.0 — 2026-11-19 — initial Gemini knowledge base
 

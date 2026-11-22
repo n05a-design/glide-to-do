@@ -1,16 +1,16 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 22.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.83 · Glide Shell 0.5.0 (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.84 · Glide Shell 0.6.0 (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
-**Aktueller Stand (22.11.2026):** `main` enthält Glide 1.0.0 mit Glide-System bis V1.80. Die PRs [#185](https://github.com/n05a-design/glide-to-do/pull/185) (eigene Fotos, Showcase „Stadtlicht“ DE/EN, Marke „Glide To Do“, Fotolizenz MPL-2.0), [#186](https://github.com/n05a-design/glide-to-do/pull/186) (englische Schnellerfassung, V1.81, N21) und [#187](https://github.com/n05a-design/glide-to-do/pull/187) (V1.82) sind in die Release-Runde `claude/v101-release` zusammengeführt. Diese Runde schließt WA-49 (V1.83: importfreie App-Schicht, Menüaufschub und Datenordnerzeiger erst beim Start) und hebt den Lieferstand auf **1.0.1** einschließlich `07_Python-Versionen`.
+**Aktueller Stand (22.11.2026):** `main` steht auf `4ce3697a`: PR #188 hat die Release-Runde 1.0.1 mit den PRs #185 (eigene Fotos, Showcase „Stadtlicht“ DE/EN, Marke „Glide To Do“), #186 (englische Schnellerfassung) und #187 (Bearbeitungszeit im Seitenkopf) gemergt, dazu WA-49 (V1.83) und den Lieferstand 1.0.1 in `07_Python-Versionen`. Auf `claude/v101-audit` folgen der Prüfabgleich der Dokumentation und die Shell-Phasen 4 und 5 (V1.84, Shell 0.6.0, D99) samt Anleitung für KI-Agenten in neuen Projekten.
 
 > [!IMPORTANT]
 > **Release 1.0 (D93) – Soll-Ist**
 > - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ abgeschlossen (PR #130, PR #133, V1.39, T328)
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
-> - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.5.0 mit Demonstrationshost, Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69); WA-49 mit V1.83 geschlossen
+> - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.0 mit Demonstrationshost, Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
 > - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
 >
@@ -37,10 +37,10 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.83** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
+| **Version & Schemata** | **Glide 1.0.1** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.84** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
 | **Meilenstein Release 1.0** | Feature Freeze (D93). Skill, Lokalisierung, Shell und Paketbau sind abgeschlossen; offen sind nur Veröffentlichung, Paketmanager-Einreichung und menschliche Abnahme. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
-| **Shell-Paket `glide_shell`** | Abgeschlossen: Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.5.0, Demonstrationshost, Selbsttest, Anleitung DE/EN und [KI-Handbuch](../01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md); Übernahme in Folgeprojekte mit `scripts/pflege/shell_uebernehmen.py`. Weitere Shell-Arbeit nur aus konkretem Bedarf. |
+| **Shell-Paket `glide_shell`** | Abgeschlossen: Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.6.0, Demonstrationshost, Selbsttest, Anleitung DE/EN und [KI-Handbuch](../01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md); Übernahme in Folgeprojekte mit `scripts/pflege/shell_uebernehmen.py`. Weitere Shell-Arbeit nur aus konkretem Bedarf. |
 | **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) mit dem lokalen macOS-Volllauf, Paket und DMG der Release-Runde 1.0.1. |
 | **Lieferstand** | `07_Python-Versionen` wird in der Produktionsrunde 1.0.1 mit `abgleich_07.py` und SHA-256 auf den Quellstand gebracht. |
 | **Ablage-Schutz** | Unberührt und NICHT in Git: `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/`, `glide_master_audit_bericht.md` und `SQLite-Copyright.md`. Diese Pfade dürfen unter keinen Umständen gestaget oder committet werden. |
@@ -54,7 +54,7 @@ In diesem Projekt gilt die Regel **„Ein Thema, ein führendes Dokument“**. K
 
 ```mermaid
 flowchart TD
-    AR["ARBEITSRICHTUNG.md<br/>(Verbindliche Entscheidungen D01–D98)"] --> EP["Glide_Entwicklungsplan.md<br/>(Gesamter Arbeitsvorrat & Historie)"]
+    AR["ARBEITSRICHTUNG.md<br/>(Verbindliche Entscheidungen D01–D99)"] --> EP["Glide_Entwicklungsplan.md<br/>(Gesamter Arbeitsvorrat & Historie)"]
     MPLAN["Glide_Meilenstein_v1_Plan.md<br/>(Verbindlicher Schnittpunkt Release 1.0)"] --> EP
     ISSUE["GitHub Issue #129<br/>(Meilenstein-Tracking v1.0.0)"] --> MPLAN
     PC["01_PRODUCT_CONSTRAINTS.md<br/>(Unverrückbare Produktgrenzen)"] --> EP
@@ -78,7 +78,7 @@ flowchart TD
 | [`01_Repository/Glide/docs/07_QA_BERICHT.md`](../01_Repository/Glide/docs/07_QA_BERICHT.md) | **Prüf- und Lieferstände:** Führt die tatsächlichen Testergebnisse, CI-Status, Plattformnachweise und Grenzwerte geordnet nach Version und Commit. |
 | [`00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md`](Glide_Manuelle_Pruefung.md) | **Menschliche Abnahmeliste:** Fälle, die ausschließlich vom Inhaber interaktiv am Mac geprüft werden können (DPI, Sicht, Bedienung). |
 | [`01_Repository/Glide/docs/DOKUMENTENPFLEGE.md`](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) | **Pflegematrix:** Regelt, welche Dateien bei Versionswechsel, Merges oder neuen Modulen zwingend synchron nachgezogen werden müssen. |
-| [`01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | **Shell-Grenzen und Entkopplungsziel** (Post-1.0 Zielbild für `glide_shell` und Demonstrationshost). |
+| [`01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](../01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) | **Shell-Grenzen und Entkopplungsziel** (abgeschlossen nach D99; Bausteine und Grenzen von `glide_shell` und Demonstrationshost). |
 | [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md) | **Agenten-Regeln:** Repository-spezifische Richtlinien für autonome Agenten. |
 
 ---

@@ -4,8 +4,8 @@ document_id: GLIDE-FEATURES
 title: Feature inventory
 language: en
 document_version: 1.0
-source_commit: "5631333a1c5a80c11c48226016ab115c434b0a64"
-verified_at: "2026-11-19"
+source_commit: "4ce3697a11321686119313ae5a8e8c891413c85f"
+verified_at: "2026-11-22"
 status: verified-with-known-gaps
 maintainer: project
 related_documents: [GLIDE-GEMINI-MASTER, GLIDE-DATA, GLIDE-ROADMAP]
@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-DATA, GLIDE-ROADMAP]
 
 # Feature inventory
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 This document is the English navigation and status layer. The canonical register is the detailed feature table in [`src/glide/README.md`](../../../src/glide/README.md), with user-visible behavior in [`20_FUNKTIONEN.md`](../../20_FUNKTIONEN.md). The system catalog reports 148 feature entries: 128 product/UI entries (including the external agent skill) and 20 technical system capabilities. The counts are inventory counts, not a claim that every row has current cross-platform acceptance.
 
@@ -28,9 +28,10 @@ This document is the English navigation and status layer. The canonical register
 | Drawing/gallery | Pixel drawing, image attachments, gallery and animation | Implemented with file/system-dependent preview capabilities |
 | Import/export/backup | Exchange/context files, Markdown, CSV, ICS, Notion, drawings and app backups | Implemented with per-format size/compatibility limits |
 | Appearance/accessibility | Multiple design profiles, themes, custom Tk controls, keyboard and accessibility adapters | Implemented in parts; human/native acceptance remains independent |
-| Internationalization | DE/EN catalog mechanism, language preference, growing localized UI coverage | Partially integrated; not complete for v1.0 target |
+| Internationalization | Complete DE/EN interface, manual, exchange format, templates, home page, AI output and release notes; quick capture understands English and German words | Completed for 1.0 (V1.70–V1.81, T335, `test_i18n`); human acceptance open |
 | Product agent skill | `glide-to-do` skill generates/imports supported data documents and has format-coupled tests | Present outside app UI; not a general agent API |
-| Technical shell capabilities | modal lifecycle, custom controls, window callback scope, desktop adapters | Modules present inside Glide; package/host extraction is not complete |
+| Showcase and editing time | Bilingual “City Light” showcase with own photos (MPL-2.0); open pages show their last edit time | V1.80, V1.82 |
+| Technical shell capabilities | `glide_shell` 0.6.0: modal lifecycle, custom controls, window callback scope, desktop adapters, motion, geometry, appearance, redo, text fit, action picker, runtime paths | Modules present inside Glide; package/host extraction is not complete |
 
 ## Example stable feature rows
 

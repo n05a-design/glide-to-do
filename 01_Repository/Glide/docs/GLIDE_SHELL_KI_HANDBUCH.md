@@ -1,6 +1,6 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.69 · Glide Shell 0.5.0 · Aufgabenformat 26
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.84 · Glide Shell 0.6.0 (abgeschlossen, D99) · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 
@@ -16,7 +16,7 @@ Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell 
 
 ## 1. Zweck in einem Absatz
 
-Die Glide Shell ist das wiederverwendbare Tk-Fundament aus Glide: Dialoge, Zeitgeberbesitz, Übergänge, Bedienelemente, Menüleiste, Fenstergeometrie, Systemdesign, Wiederholen-Stapel, Textkürzung, Aktionsauswahl und Datenordner-Auflösung. Sie liegt als Unterpaket `src/glide/glide_shell/` in Glide, kennt keine Glide-Inhalte und wird von Folgeprojekten als Kopie übernommen (D95). Es gibt **kein eigenes Repository und keine eigene Veröffentlichung**; Änderungen entstehen in Glide.
+Die Glide Shell ist das wiederverwendbare Tk-Fundament aus Glide: Fensterlebenslauf mit Startprüfungen, Kürzeln und Schließweg (App-Host), Rückgängig/Wiederholen (Befehlsverlauf), Dialoge, Zeitgeberbesitz, Übergänge, Bedienelemente, Menüleiste, Fenstergeometrie, Systemdesign, Textkürzung, Aktionsauswahl und Datenordner-Auflösung. Sie liegt als Unterpaket `src/glide/glide_shell/` in Glide, kennt keine Glide-Inhalte und wird von Folgeprojekten als Kopie übernommen (D95). Es gibt **kein eigenes Repository und keine eigene Veröffentlichung**; Änderungen entstehen in Glide.
 
 ## 2. Aufbau des Pakets
 
@@ -36,8 +36,12 @@ src/glide/glide_shell/
   text_fit.py          Shell-Paket 12  Text auf Zeichen-/Pixelbreite kürzen, Marker ausgleichen
   action_picker.py     Shell-Paket 13  durchsuchbare Auswahl aus einem fertigen Menü
   runtime_paths.py     Shell-Paket 14  Daten-/Cacheordner nach Plattform, Umgebung, Zeiger
+  command_history.py   Shell-Paket 15  Rückgängig/Wiederholen für Befehle und Zustandsabbilder (Phase 4)
+  app_host.py          Shell-Paket 16  Hauptfenster, Startprüfungen, Menüleiste, Kürzel, Schließweg (Phase 5)
   README.de.md         Anleitung für Folgeprojekte (führend)
   README.md            kontrollierte englische Fassung
+  KI_ANLEITUNG_NEUE_PROJEKTE.md  Anleitung für KI-Agenten in neuen Projekten (führend)
+  AI_GUIDE_NEW_PROJECTS.md       kontrollierte englische Fassung
 ```
 
 Die erste Zeile jedes Modul-Docstrings beginnt mit `Shell-Paket N:`. T319 verlangt, dass jedes so gekennzeichnete Modul in `SHELL_MODULE` steht und umgekehrt.
@@ -59,6 +63,8 @@ Die verbindliche Liste aller öffentlichen Funktionen und Methoden mit Parameter
 | `text_fit` | `clip`, `fit`, `settled_wrap_width`, `pad_to_width`, `aligned_markers`, `HAIR_SPACE` | Messfunktion (`font.measure`), Grenzen |
 | `action_picker` | `Entry`, `entries`, `search`, `grouped`, `first_enabled`, `counts`, `check_label`, `clean_label` | Menüzeilen, Abschnittsnamen, Platzhalter, Sperrgrund-Rückruf, optional Suchschlüssel |
 | `runtime_paths` | `platform_data_dir`, `platform_cache_dir`, `env_dir`, `read_pointer`, `resolve_base` | Produktname, Variablen- und Dateinamen |
+| `command_history` | `Command` (`execute`, `undo`, `redo`), `CommandHistory` (`record`, `execute`, `trim`, `undo`, `redo_step`, `clear`), `is_command`, `EMPTY`/`DONE`/`FAILED`/`HANDLED` | Befehlsobjekte oder `capture`, `apply`, `rollback`, optional `stack`, `redo`, `can_trim`, `prepare`, `link` |
+| `app_host` | `AppHost` (`create_root`, `check`, `build`, `run`), `attach_menubar`, `primary_shortcuts`, `bind_shortcuts`, `install_close`, `platform_of`, `ALL`/`MACOS`/`WINDOWS`/`LINUX` | Controller-Klasse, `before_tk`, `preflight`, `splash`, `on_ready`, `show_error`, Kürzeltabelle, Schließhandler, optional Zeitgeberbereich |
 | `selftest` | `run`, `CHECKS`, `check_*` | nichts; läuft mit `python -m glide_shell.selftest` |
 | `demo` | `DemoHost`, `main`, `system_dark` | optional Texte, Farben, Geometrie |
 
@@ -85,12 +91,13 @@ Kompatibilitätsnamen mit `glide` bleiben bewusst: `_glide_modal_active`, `_glid
 | T055 | [`tests/unit/test_motion.py`](../tests/unit/test_motion.py) | Unit | `motion` |
 | T332 | [`tests/unit/test_shell_d96.py`](../tests/unit/test_shell_d96.py) | Unit | `window_geometry`, `system_appearance`, `redo_history`; Weitergabe durch Glide |
 | T334 | [`tests/unit/test_shell_d98.py`](../tests/unit/test_shell_d98.py) | Unit | `text_fit`, `action_picker`, `runtime_paths`; Weitergabe durch Glide |
+| T336 | [`tests/unit/test_shell_phasen45.py`](../tests/unit/test_shell_phasen45.py) | Unit, ohne Tk-Fenster | `command_history`, `app_host`; Glides Einbindung (`ListApp.command_history`, Kürzeltabelle, `app_host()`) |
 | T312 | [`tests/integration/test_custom_controls.py`](../tests/integration/test_custom_controls.py) | echtes Tk | Bedienelemente |
 | T316 | [`tests/integration/test_modalvertrag.py`](../tests/integration/test_modalvertrag.py) | echtes Tk, 18 Fälle | Grab, Fokus, Verschachtelung |
 | T318 | [`tests/integration/test_abbauvertrag.py`](../tests/integration/test_abbauvertrag.py) | volle App | Abbau ohne offene Zeitgeber |
 | T320 | [`tests/integration/test_fensterlebensdauer.py`](../tests/integration/test_fensterlebensdauer.py) | echtes Tk, ohne Glide, 10 Fälle | `window_lifetime` |
 | T330 | [`tests/integration/test_shell_demohost.py`](../tests/integration/test_shell_demohost.py) | Paketkopie ohne Glide | Demohost, Paketgrenze |
-| T333 | [`tests/integration/test_shell_selbsttest.py`](../tests/integration/test_shell_selbsttest.py) | Paketkopie, eigener Prozess | Selbsttest 10/10, Gegenprobe ohne und mit `-O` |
+| T333 | [`tests/integration/test_shell_selbsttest.py`](../tests/integration/test_shell_selbsttest.py) | Paketkopie, eigener Prozess | Selbsttest 12/12, Gegenprobe ohne und mit `-O` |
 | T331 | [`tests/tools/test_shell_uebernahme.py`](../tests/tools/test_shell_uebernahme.py) | Werkzeugtest | Übernahme, Manifest, Schutz lokaler und fremder Dateien |
 
 Glide-seitige Verhaltenstests, die beim Umbau eines Glide-Moduls unverändert grün bleiben müssen: `test_ui_design.py`, `test_action_menu.py`, `test_runtime_config.py` (simuliert macOS/Windows/Linux über `rc.os`, `rc.IS_MACOS`, `rc.IS_WINDOWS` – deshalb liest `runtime_config._platform()` diese Werte zur Aufrufzeit), `test_appearance.py`, `test_compact_mode.py`, `test_undo_history.py`, `test_i18n.py` (T329, `modifier_labels`).
@@ -102,7 +109,7 @@ Immer mit isoliertem `GLIDE_DATA_DIR`, künstlichen Daten und `python3 -B`; nie 
 ```bash
 cd 01_Repository/Glide
 export GLIDE_DATA_DIR="$(mktemp -d)"
-python3 -B -m unittest tests/unit/test_shell_importregel.py tests/unit/test_shell_d96.py tests/unit/test_shell_d98.py
+python3 -B -m unittest tests/unit/test_shell_importregel.py tests/unit/test_shell_d96.py tests/unit/test_shell_d98.py tests/unit/test_shell_phasen45.py
 python3 -B -m unittest tests/tools/test_shell_uebernahme.py
 python3 -B tests/integration/test_shell_selbsttest.py
 python3 -B tests/integration/test_shell_demohost.py
@@ -132,13 +139,13 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
-| `SHELL_VERSION` (SemVer, derzeit 0.5.0) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
-| Glide-System-Version (derzeit 1.83) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
-| App-Version (1.0.0) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
+| `SHELL_VERSION` (SemVer, derzeit 0.6.0) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
+| Glide-System-Version (derzeit 1.84) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
+| App-Version (1.0.1) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |
 
-Verlauf: 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0).
+Verlauf: 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0) · V1.84 `command_history` und `app_host`, Konzeptphasen 4 und 5, Anleitung für neue Projekte (D99, 0.6.0).
 
 ## 7. Übernahme in ein Folgeprojekt
 
@@ -159,14 +166,17 @@ python3 -B 01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --ersetzen <p
 | Glide-Modul | Shell-Baustein | Was beim Host bleibt |
 |---|---|---|
 | `app.pyw` | `modal_session`, `window_lifetime`, `custom_controls`, `desktop_adapter`, `motion` (`from glide_shell import …`) | Fassaden wie `ListApp.run_modal`, Designs, Texte |
+| `app.pyw` (`main`, `app_host()`) | `app_host.AppHost` | `before_tk` (Schriften, Windows-Kennung), `preflight` (`startup_tk_check`, `startup_data_dir_check`), Startfenster, `ListApp` als Controller |
+| `app.pyw` (`ListApp`) | `app_host.bind_shortcuts`, `attach_menubar`, `install_close` | Kürzeltabelle `keyboard_shortcuts`, `host_platform`, `on_close`, Windows-Menüknöpfe |
+| `app.pyw` (`ListApp.command_history`) | `command_history.CommandHistory` | Stand `undo_state`, Herstellen `apply_snapshot`, Rückweg, Pinnwand-Einträge beim Wiederholen, Meldungen |
 | `compact_mode.py` | `window_geometry` | Mindestmaße (`COMPACT_MIN`), Kürzelregel, Kompaktlage |
 | `appearance.py` | `system_appearance` | Designpaare, Hintergrundwahl |
-| `undo_history.py` | `redo_history` | Pinnwand-Einträge, Rückgängig-Stapel |
+| `undo_history.py` | `redo_history` | Pinnwand-Einträge |
 | `ui_design.py` | `text_fit` | Skalen, Titelgrenze `clip_title`, `task_title`, `today_columns` |
 | `action_menu.py` | `action_picker` | Sperrgründe, Platzhalter, Zustandstexte, Suchschlüssel aus `content_search` |
 | `runtime_config.py` | `runtime_paths` | `Glide`, `GLIDE_DATA_DIR`, `GLIDE_CACHE_DIR`, `datenordner.json`, `RuntimePaths`, Meldungen |
 
-Nicht in der Shell und nicht freigegeben: S12 Barrierefreiheit (`accessibility*`), der Rückgängig-Stapel von `ListApp`.
+Nicht in der Shell und nicht freigegeben: S12 Barrierefreiheit (`accessibility*`). Den Inhalt der Rückgängig-Schritte und die Ansichten behält `ListApp`.
 
 ## 9. Ablauf: neuen Baustein hinzufügen (Prüfliste)
 
@@ -192,7 +202,8 @@ Nicht in der Shell und nicht freigegeben: S12 Barrierefreiheit (`accessibility*`
 ## 11. Einstieg für eine neue KI-Sitzung
 
 1. [AGENTS.md](../AGENTS.md) und [CLAUDE.md](../../../CLAUDE.md) lesen.
-2. Dieses Handbuch, dann [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) §6–§7 und D94–D98 in der [Arbeitsrichtung](ARBEITSRICHTUNG.md).
+2. Dieses Handbuch, dann [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) §6–§7 und D94–D99 in der [Arbeitsrichtung](ARBEITSRICHTUNG.md).
 3. `SHELL_MODULE` in T319 als Schnittstellenvertrag; Quelltext des betroffenen Moduls **und seiner Glide-Aufrufer** (Funktionsnamen suchen).
 4. Gezielte Prüfung aus §5, dann Grundstufe.
 5. In Claude-Code-Sitzungen lädt der Projekt-Skill `glide-shell` (`.claude/skills/glide-shell/SKILL.md`) dieses Handbuch.
+6. Wer die Shell nicht ändert, sondern in einem **neuen Projekt nutzt**, liest stattdessen [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) im Paket.
