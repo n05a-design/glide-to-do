@@ -51,7 +51,7 @@ _SAFE_URL = re.compile(r"^(https?://|mailto:)[^\s]+$")
 def insert_blocks(document, addition, position, link_map):
     """Blöcke einfügen, vorhandene Bilder und geteilte Formatbereiche bewahren."""
     if type(position) is not int or not 0 <= position <= len(document['text']):
-        raise ValueError('Ungültige Einfügeposition.')
+        raise ValueError(glide_i18n.t("mod.page_markdown.insert_blocks.invalid_insert_position", 'Ungültige Einfügeposition.'))
     delta = len(addition['text']) + 2
     spans = []
     for span in document['spans']:

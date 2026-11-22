@@ -4190,9 +4190,9 @@ def fall_abnahme3505(lauf):
         app.set_home_view()
         idle(lauf, 8)
         assert app.overview_search_entry.winfo_ismapped(), "Startseiten-Suche fehlt"
-        app.overview_search_var.set("Rundgang")
+        app.overview_search_var.set("Stadtlicht")
         taste(app.overview_search_entry, "<Return>", lauf)
-        assert app._quick_open["entry"].get() == "Rundgang"
+        assert app._quick_open["entry"].get() == "Stadtlicht"
         assert app._quick_open["results"], "Globale Suche ohne Bestandstreffer"
         app.close_quick_open()
         app.set_template_view()
@@ -4211,7 +4211,7 @@ def fall_abnahme3505(lauf):
         assert len(app.template_cards) == len(app.templates)
         app.set_home_view()
         idle(lauf, 6)
-        assert app.overview_search_var.get() == "Rundgang"
+        assert app.overview_search_var.get() == "Stadtlicht"
         app.overview_search_var.set("")
     return f"{checks} Heute-/Abschnitts-Geometrien und vier Suchabläufe: globaler Bestandstreffer, Vorlagenfilter/Trefferleerstand/Escape, getrennte Suchzustände"
 
@@ -4350,7 +4350,7 @@ def fall_suchbreite3504(lauf):
     app = lauf.app
     lauf.showcase()
     library = next(e for e in app.folders if e.get("folder_kind") == "library")
-    source = next(e for e in app.lists if e["title"] == "Studioroutinen")
+    source = next(e for e in app.lists if e["title"] == "Fotoroutinen")
     checks = 0
 
     def pruefen(context):
@@ -4407,7 +4407,7 @@ def fall_suchbreite3504(lauf):
                 context = (design, size, geometry, visible, narrow, view)
                 pruefen((*context, "ohne Suchanfrage"))
                 app.clear_search_placeholder()
-                app.search_var.set("Werkhaus")
+                app.search_var.set("Stadtlicht")
                 idle(lauf, 6)
                 pruefen((*context, "mit Suche löschen"))
                 app.clear_search()
@@ -4661,7 +4661,7 @@ def fall_menschen3503(lauf):
     lauf.showcase()
     page = next(e for e in app.lists if e["title"] == BRIEFING_TITLE)
     library = next(e for e in app.folders if e.get("folder_kind") == "library")
-    source = next(e for e in app.lists if e["title"] == "Studioroutinen")
+    source = next(e for e in app.lists if e["title"] == "Fotoroutinen")
     drawing = next(e for e in app.lists if app.is_drawing_list(e))
     checks = 0
 
@@ -4707,7 +4707,7 @@ def fall_menschen3503(lauf):
             assert str(app.header_controls.pack_info()["in"]) == str(app.input_frame)
             assert app.add_button.winfo_ismapped(), "Hinzufügen bei Kopfumbau verdrängt"
             assert app.add_button.winfo_rootx() + app.add_button.winfo_width() <= app.header_controls.winfo_rootx()
-            assert app.title_label.cget("text").startswith("Werkstattbuch"), app.title_label.cget("text")
+            assert app.title_label.cget("text").startswith("Reiseführer"), app.title_label.cget("text")
             assert all(button.winfo_rooty() < app.input_frame.winfo_rooty()
                        for button in getattr(app, "custom_menu_buttons", ()))
         assert int(app.tree.column("#0", "width")) >= min(220, app.tree.winfo_width() - 4)
@@ -5643,7 +5643,7 @@ def fall_pinnwandleiste(lauf):
     lauf.showcase()
     app.settings["release_notes_seen"] = mod.APP_VERSION
     liste = next(e for e in app.lists if e["title"] == MAIN_TITLE)
-    ordner = next(f for f in app.folders if f.get("title") == "Werkhaus West")
+    ordner = next(f for f in app.folders if f.get("title") == "Stadtlicht · Fotoreise")
     schrift = mod.ui_font_object(font=mod.app_font(10, "bold"))
     feldschrift = mod.ui_font_object(font=mod.app_font(11))
     geprueft, befunde = 0, []
@@ -5867,6 +5867,11 @@ def fall_restflaechen(lauf):
     # 1) Seite: „Erwähnt ohne Verweis“ auf und zu (Inhaberbefund).
     app.set_active_list(seite["id"])
     warte(lauf, 0.3)
+    # Seit dem Showcase „Stadtlicht“ (V1.79) hat die Überblicksseite ein Titelbild;
+    # die Ausgangshöhe gilt ohne Titelbild, wie beim Setzen und Entfernen unten.
+    if app.page_entry(seite["id"]).get("cover"):
+        app.change_page_feature(seite["id"], "cover", None)
+        warte(lauf, 0.3)
     ed = app.rich_note_editor
     # Live-Liste ohne Lücke: Ihr Rahmen ist nicht höher als die Liste (Befund 07.11.2026,
     # die Glide-Leiste beanspruchte als Canvas 265 px Standardhöhe).

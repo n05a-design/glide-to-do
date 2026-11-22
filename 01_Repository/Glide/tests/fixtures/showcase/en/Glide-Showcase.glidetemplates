@@ -1,0 +1,346 @@
+{
+    "format_version": 2,
+    "templates": [
+        {
+            "id": "cb43e92fadc14618ae08be23c17c0f27",
+            "kind": "list",
+            "title": "{{Weekday}} week {{Week}} · {{City}}",
+            "note": "Evening note for every travel day: date fields fill themselves, the city is asked for. Tasks and attachment are kept.",
+            "color": null,
+            "labels": [
+                "0785891fa7694a63a35f50008e83f8f1"
+            ],
+            "items": [],
+            "list_kind": "note",
+            "payload": {
+                "version": 26,
+                "app": "Glide",
+                "app_version": "1.0.0",
+                "exported_at": "2026-11-21T20:20:17",
+                "active_list_id": "9a3b78049d9341f2abdcceb92465857a",
+                "active_folder_id": null,
+                "folders": [],
+                "labels": [
+                    {
+                        "id": "aab7bcd2fe1940c9a53e8cada5cd33b8",
+                        "name": "Langtext",
+                        "color": "clear",
+                        "system": "long"
+                    },
+                    {
+                        "id": "8ebefc0833594134a71388ade45e3df6",
+                        "name": "Zwischenüberschrift",
+                        "color": "accent",
+                        "system": "heading"
+                    },
+                    {
+                        "id": "0785891fa7694a63a35f50008e83f8f1",
+                        "name": "Photo",
+                        "color": "accent"
+                    }
+                ],
+                "lists": [
+                    {
+                        "id": "9a3b78049d9341f2abdcceb92465857a",
+                        "title": "Evening round · Open questions",
+                        "folder_id": null,
+                        "color": null,
+                        "note": "",
+                        "list_kind": "note",
+                        "rich_note": {
+                            "text": "Evening after coming home\nThe journey is over, the selection begins. Out of roughly 230 pictures, 14 should go into the travel book.\n• Two pictures per city that tell a small story together.\n• Black and white only where line matters more than colour.\n• The order follows the route, not the favourite city.\nBetter one strong page per city than three mediocre ones.",
+                            "spans": [
+                                {
+                                    "tag": "h2",
+                                    "start": 0,
+                                    "end": 25
+                                },
+                                {
+                                    "tag": "bullet",
+                                    "start": 133,
+                                    "end": 190
+                                },
+                                {
+                                    "tag": "bullet",
+                                    "start": 191,
+                                    "end": 250
+                                },
+                                {
+                                    "tag": "bullet",
+                                    "start": 251,
+                                    "end": 305
+                                },
+                                {
+                                    "tag": "quote",
+                                    "start": 306,
+                                    "end": 363
+                                }
+                            ],
+                            "links": {}
+                        },
+                        "created_at": "2026-11-21T20:20:14+01:00",
+                        "updated_at": "2026-11-21T20:20:14+01:00",
+                        "journal": {
+                            "favorite": false,
+                            "mood": "",
+                            "location": "",
+                            "moment_date": "2026-11-21",
+                            "prompt": ""
+                        },
+                        "system_role": null,
+                        "labels": [
+                            "0785891fa7694a63a35f50008e83f8f1"
+                        ],
+                        "attachments": [
+                            {
+                                "id": "eb8f16c365e24f4299fad1953b74e07d",
+                                "name": "Route.csv",
+                                "storage": "attachments/eb8f16c365e24f4299fad1953b74e07d_Route.csv",
+                                "size": 252,
+                                "mime": "text/csv",
+                                "added_at": "2026-11-21T20:20:14"
+                            }
+                        ],
+                        "icon": null,
+                        "archived": false,
+                        "archived_at": null,
+                        "items": [
+                            {
+                                "id": "37fc73fd54214cd389e353b0259a58bb",
+                                "text": "Get a second opinion on the selection",
+                                "done": false,
+                                "importance": 0,
+                                "due": "2026-11-20",
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": null,
+                                "estimated_minutes": null,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": null,
+                                "children": []
+                            },
+                            {
+                                "id": "031881c2f80048d98d7617fd15626283",
+                                "text": "Mark the favourite picture per city",
+                                "done": false,
+                                "importance": 0,
+                                "due": null,
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": "2026-11-21",
+                                "estimated_minutes": 30,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": null,
+                                "children": []
+                            }
+                        ],
+                        "references": [
+                            "glide://item/d05435a89ed6473697d4c5ca58011aaa",
+                            "glide://list/8f5aa8a1492d46fdab6841ed17910936",
+                            "glide://list/d249a040c3de43238916bef2f47f685d"
+                        ]
+                    }
+                ],
+                "trash": []
+            },
+            "files": {
+                "attachments/eb8f16c365e24f4299fad1953b74e07d_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
+            }
+        },
+        {
+            "id": "4bf547578002453eafc0790944a6b353",
+            "kind": "list",
+            "title": "Journey · Change of city",
+            "note": "",
+            "color": "due_action",
+            "labels": [],
+            "items": [],
+            "list_kind": "tasks",
+            "payload": {
+                "version": 26,
+                "app": "Glide",
+                "app_version": "1.0.0",
+                "exported_at": "2026-11-21T20:20:17",
+                "active_list_id": "64f121f7aebf4b8f8a5ecec383f17408",
+                "active_folder_id": null,
+                "folders": [],
+                "labels": [
+                    {
+                        "id": "aab7bcd2fe1940c9a53e8cada5cd33b8",
+                        "name": "Langtext",
+                        "color": "clear",
+                        "system": "long"
+                    },
+                    {
+                        "id": "8ebefc0833594134a71388ade45e3df6",
+                        "name": "Zwischenüberschrift",
+                        "color": "accent",
+                        "system": "heading"
+                    }
+                ],
+                "lists": [
+                    {
+                        "id": "64f121f7aebf4b8f8a5ecec383f17408",
+                        "title": "Before every change of city",
+                        "folder_id": null,
+                        "color": "due_action",
+                        "note": "",
+                        "list_kind": "tasks",
+                        "rich_note": {
+                            "text": "",
+                            "spans": [],
+                            "links": {}
+                        },
+                        "created_at": "2026-11-21T20:20:14+01:00",
+                        "updated_at": "2026-11-21T20:20:14+01:00",
+                        "journal": {
+                            "favorite": false,
+                            "mood": "",
+                            "location": "",
+                            "moment_date": "2026-11-21",
+                            "prompt": ""
+                        },
+                        "system_role": null,
+                        "labels": [],
+                        "attachments": [
+                            {
+                                "id": "eb8f16c365e24f4299fad1953b74e07d",
+                                "name": "Route.csv",
+                                "storage": "attachments/eb8f16c365e24f4299fad1953b74e07d_Route.csv",
+                                "size": 252,
+                                "mime": "text/csv",
+                                "added_at": "2026-11-21T20:20:14"
+                            }
+                        ],
+                        "icon": null,
+                        "archived": false,
+                        "archived_at": null,
+                        "items": [
+                            {
+                                "id": "bc0e645446ba49718e697c9efa713563",
+                                "text": "Charge batteries and power bank",
+                                "done": false,
+                                "importance": 0,
+                                "due": null,
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": null,
+                                "estimated_minutes": null,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": null,
+                                "children": []
+                            },
+                            {
+                                "id": "83f8cc7bab0c4fcfa6c85028a19ccb03",
+                                "text": "Back up the day's pictures",
+                                "done": true,
+                                "importance": 0,
+                                "due": null,
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": null,
+                                "estimated_minutes": null,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": "2026-11-21T20:20:14+01:00",
+                                "children": []
+                            },
+                            {
+                                "id": "d7f6ff0460cf4c93b990ef1090a60e6c",
+                                "text": "Check ticket and accommodation",
+                                "done": false,
+                                "importance": 0,
+                                "due": null,
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": null,
+                                "estimated_minutes": null,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": null,
+                                "children": []
+                            },
+                            {
+                                "id": "5793e361993140caa8ccd0048e725c86",
+                                "text": "Clean the lenses",
+                                "done": false,
+                                "importance": 0,
+                                "due": null,
+                                "due_time": null,
+                                "description": "",
+                                "attachments": [],
+                                "color": null,
+                                "kind": "task",
+                                "labels": [],
+                                "repeat": null,
+                                "reminder": null,
+                                "planned_date": null,
+                                "estimated_minutes": null,
+                                "checklist": [],
+                                "links": [],
+                                "blocked_by": [],
+                                "planned_time": null,
+                                "time_spent_minutes": null,
+                                "done_at": null,
+                                "children": []
+                            }
+                        ],
+                        "recurring_checklist": true
+                    }
+                ],
+                "trash": []
+            },
+            "files": {
+                "attachments/eb8f16c365e24f4299fad1953b74e07d_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
+            }
+        }
+    ]
+}

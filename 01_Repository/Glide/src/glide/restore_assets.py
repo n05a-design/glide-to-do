@@ -9,6 +9,7 @@ import re
 import uuid
 import unicodedata
 import attachment_paths as paths
+import i18n as glide_i18n
 
 
 def valid_id(value):
@@ -53,12 +54,12 @@ def stage(attachments, directory, open_source, *, occupied_ids=(), occupied_stor
     Aufrufer behält die Dateien erst nach erfolgreicher Bestandsübernahme.
     """
     if type(max_bytes)is not int or max_bytes<0:
-        raise ValueError('Ungültige Anhangsgrenze.')
+        raise ValueError(glide_i18n.t("mod.restore_assets.stage.invalid_attachment_limit", 'Ungültige Anhangsgrenze.'))
     attachments=tuple(attachments)
     original_ids=[a.get('id')for a in attachments if isinstance(a,dict)]
     if (len(original_ids)!=len(attachments) or any(not valid_id(x)for x in original_ids)
             or len(set(original_ids))!=len(original_ids)):
-        raise ValueError('Sicherungsanhänge nicht eindeutig.')
+        raise ValueError(glide_i18n.t("mod.restore_assets.stage.backup_attachments_are_not", 'Sicherungsanhänge nicht eindeutig.'))
     directory=Path(directory)
     directory.mkdir(parents=True,exist_ok=True)
     occupied=set(occupied_ids)|set(original_ids)
@@ -71,10 +72,10 @@ def stage(attachments, directory, open_source, *, occupied_ids=(), occupied_stor
         for original in attachments:
             size=original.get('size')
             if type(size)is not int or not 0<=size<=max_bytes:
-                raise ValueError('Unzulässige Sicherungsanhangsgröße.')
+                raise ValueError(glide_i18n.t("mod.restore_assets.stage.invalid_backup_attachment_size", 'Unzulässige Sicherungsanhangsgröße.'))
             old_storage=paths.validate_storage(original.get('storage'))
             if old_storage!=original['storage']:
-                raise ValueError('Nicht kanonischer Sicherungsanhangspfad.')
+                raise ValueError(glide_i18n.t("mod.restore_assets.stage.non_canonical_backup_attachment", 'Nicht kanonischer Sicherungsanhangspfad.'))
             for _attempt in range(100):
                 identity=factory()
                 if not valid_id(identity)or identity in occupied:
@@ -93,7 +94,7 @@ def stage(attachments, directory, open_source, *, occupied_ids=(), occupied_stor
                     continue
                 break
             else:
-                raise OSError('Kein freier Anhangsname für die Wiederherstellung.')
+                raise OSError(glide_i18n.t("mod.restore_assets.stage.no_free_attachment_name", 'Kein freier Anhangsname für die Wiederherstellung.'))
             # Diese Datei gehört allein dieser Transaktion; nie vorhandene Bytes entfernen.
             st=os.fstat(output.fileno());created.append((target,(st.st_dev,st.st_ino,stat.S_IFMT(st.st_mode))))
             result.created=tuple(created)
@@ -105,10 +106,10 @@ def stage(attachments, directory, open_source, *, occupied_ids=(), occupied_stor
                         break
                     total+=len(chunk)
                     if total>size or total>max_bytes:
-                        raise ValueError('Sicherungsanhang ist größer als angegeben.')
+                        raise ValueError(glide_i18n.t("mod.restore_assets.stage.backup_attachment_is_larger", 'Sicherungsanhang ist größer als angegeben.'))
                     output.write(chunk)
                 if total!=size:
-                    raise ValueError('Sicherungsanhang ist unvollständig.')
+                    raise ValueError(glide_i18n.t("mod.restore_assets.stage.backup_attachment_is_incomplete", 'Sicherungsanhang ist unvollständig.'))
                 output.flush();os.fsync(output.fileno())
             metadata=copy.deepcopy(original)
             metadata.update(id=identity,storage=storage)

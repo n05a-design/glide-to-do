@@ -45,11 +45,11 @@ def select(current, export, comparison, selected_keys, overwrite_keys, original_
     """Nur auswählbare Zeilen; Kennungen und Ordner vor dem Dateikopieren festlegen."""
     rows = reimport.selected_changes(comparison, selected_keys, overwrite_keys)
     if not rows:
-        raise ValueError('Keine Seite zur Übernahme ausgewählt.')
+        raise ValueError(glide_i18n.t("mod.notion_import.select.no_page_selected_for", 'Keine Seite zur Übernahme ausgewählt.'))
     if not isinstance(original_bytes, bytes) or len(original_bytes) > archive.MAX_ARCHIVE_BYTES:
-        raise ValueError('Ungültiges oder zu großes Originalarchiv.')
+        raise ValueError(glide_i18n.t("mod.notion_import.select.invalid_or_too_large", 'Ungültiges oder zu großes Originalarchiv.'))
     if tuple(row.page for row in comparison.rows) != export.pages:
-        raise ValueError('Der Vergleich gehört nicht zu diesem Export.')
+        raise ValueError(glide_i18n.t("mod.notion_import.select.the_comparison_does_not", 'Der Vergleich gehört nicht zu diesem Export.'))
     records = source_metadata.records(current.get('lists', []))
     by_key = {record.key: record for record in records}
     occupied = {identity for _kind, identity in objects.nodes(current.get('lists', []), current.get('trash', []))}
@@ -63,16 +63,16 @@ def select(current, export, comparison, selected_keys, overwrite_keys, original_
                     and all(c.isascii() and (c.isalnum() or c in '_-') for c in value)):
                 occupied.add(value)
                 return value
-        raise ValueError('Keine freie Kennung für den Import verfügbar.')
+        raise ValueError(glide_i18n.t("mod.notion_import.fresh.no_free_id_available", 'Keine freie Kennung für den Import verfügbar.'))
     page_ids = {record.key: record.target_id for record in records}
     for row in rows:
         record = by_key.get(row.page.key)
         if row.status in ('changed', 'conflict'):
             if record is None or row.target_id != record.target_id:
-                raise ValueError('Die gewählte Quellzuordnung ist veraltet.')
+                raise ValueError(glide_i18n.t("mod.notion_import.select.the_chosen_source_mapping", 'Die gewählte Quellzuordnung ist veraltet.'))
         else:
             if row.status == 'new' and record is not None:
-                raise ValueError('Die Quelle ist inzwischen zugeordnet.')
+                raise ValueError(glide_i18n.t("mod.notion_import.select.the_source_has_been", 'Die Quelle ist inzwischen zugeordnet.'))
             page_ids[row.page.key] = fresh()
     report_id = fresh()
     folder_plan = hierarchy.prepare([row.page for row in rows], current.get('folders', []),
@@ -102,9 +102,9 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
             now, max_trash=200, new_id=None, current_asset_hashes=None):
     """Dateien sind bereits exklusiv kopiert; derselbe Plan erzeugt einen einzigen Undo-Schritt."""
     if page_restore.fingerprint(current) != selection.current_hash:
-        raise ValueError('Der Bestand hat sich geändert; bitte erneut vergleichen.')
+        raise ValueError(glide_i18n.t("mod.notion_import.content.the_data_has_changed", 'Der Bestand hat sich geändert; bitte erneut vergleichen.'))
     if set(stored) != {value['id'] for value in selection.assets}:
-        raise ValueError('Die Importdateien sind nicht vollständig zugeordnet.')
+        raise ValueError(glide_i18n.t("mod.notion_import.content.the_import_files_are", 'Die Importdateien sind nicht vollständig zugeordnet.'))
     originals = {value['storage']: value for value in selection.assets}
     hashes = dict(current_asset_hashes or {})
     assets_by_path = {}
@@ -129,7 +129,7 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
                     and all(c.isascii() and (c.isalnum() or c in '_-') for c in identity)):
                 occupied.add(identity)
                 return identity
-        raise ValueError('Keine freie Aufgaben- oder Papierkorbkennung verfügbar.')
+        raise ValueError(glide_i18n.t("mod.notion_import.fresh.no_free_task_or", 'Keine freie Aufgaben- oder Papierkorbkennung verfügbar.'))
     def new_item(text, done):
         item = item_factory(text, done=done)
         item['id'] = fresh()
@@ -146,7 +146,7 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
         original = next((value for value in lists if value['id'] == identity), None)
         if original is not None:
             if original.get('list_kind') != 'page':
-                raise ValueError('Die Zielkennung gehört keiner Seite.')
+                raise ValueError(glide_i18n.t("mod.notion_import.content.the_target_id_does", 'Die Zielkennung gehört keiner Seite.'))
             # Nur von Notion übernommene Inhalte ersetzen. Glide-Metadaten,
             # Titelbild und Anhänge daraus bleiben erhalten und kontrollierbar.
             retained = copy.deepcopy(original)
@@ -172,7 +172,7 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
         # deren Hashes ausdrücklich, statt einen sauberen Stand zu erfinden.
         for value in replacement['attachments']:
             if value['id'] not in asset_hashes or len(asset_hashes[value['id']]) != 64:
-                raise ValueError('Ein erhaltenes Titelbild braucht seinen aktuellen Dateihash.')
+                raise ValueError(glide_i18n.t("mod.notion_import.content.a_kept_cover_image", 'Ein erhaltenes Titelbild braucht seinen aktuellen Dateihash.'))
         record = reimport.SourceRecord(page.key, identity, page.source_hash,
                                        reimport.content_fingerprint(replacement, asset_hashes), page.path)
         replacement['notion_source'] = record.to_document()
@@ -181,7 +181,7 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
             lists.append(replacement)
         imported.append(identity)
     if len(trash) > max_trash:
-        raise ValueError('Die Übernahme würde den Papierkorb kürzen; bitte zuerst Platz schaffen.')
+        raise ValueError(glide_i18n.t("mod.notion_import.content.taking_over_would_shorten", 'Die Übernahme würde den Papierkorb kürzen; bitte zuerst Platz schaffen.'))
     lines = ['Notion-Importbericht', '', glide_i18n.t("mod.notion_import.content.page_s_explicitly_taken", '{len} Seite(n) ausdrücklich übernommen.', len=len(imported)), '',
              glide_i18n.t("mod.notion_import.content.original_export_fully_kept", 'Originalexport: als ZIP-Anhang vollständig erhalten.'),
              glide_i18n.t("mod.notion_import.content.earlier_page_tasks_stay", 'Frühere Seitenaufgaben bleiben im Papierkorb; andere Seiten bleiben erhalten.'), '',
@@ -205,7 +205,7 @@ def content(selection, current, export, stored, *, page_factory, item_factory, f
 def current_sources(pages, resolve_path, *, max_bytes):
     """Lokale Dateien begrenzt vergleichen; fehlende Bytes sind ein sichtbarer Konflikt."""
     if type(max_bytes) is not int or max_bytes < 0:
-        raise ValueError('Ungültige Dateiprüfgrenze.')
+        raise ValueError(glide_i18n.t("mod.notion_import.current_sources.invalid_file_check_limit", 'Ungültige Dateiprüfgrenze.'))
     source_metadata.records(pages)
     page_hashes, file_hashes, issues, total = {}, {}, [], 0
     by_storage = {}
@@ -221,12 +221,12 @@ def current_sources(pages, resolve_path, *, max_bytes):
                 try:
                     path = resolve_path(asset)
                     if not path:
-                        raise OSError('Anhangspfad fehlt')
+                        raise OSError(glide_i18n.t("mod.notion_import.current_sources.attachment_path_missing", 'Anhangspfad fehlt'))
                     with open(path, 'rb') as stream:
                         while block := stream.read(128*1024):
                             size += len(block);total += len(block)
                             if total > max_bytes:
-                                raise ValueError('Die Dateiprüfung überschreitet ihre Gesamtgrenze.')
+                                raise ValueError(glide_i18n.t("mod.notion_import.current_sources.the_file_check_exceeds", 'Die Dateiprüfung überschreitet ihre Gesamtgrenze.'))
                             digest.update(block)
                     by_storage[storage] = digest.hexdigest()
                     if size != asset['size']:
@@ -238,7 +238,7 @@ def current_sources(pages, resolve_path, *, max_bytes):
                                   glide_i18n.t("mod.notion_import.current_sources.a_current_attachment_is", 'Ein heutiger Anhang fehlt oder ist nicht lesbar: {name}', name=asset['name'])))
             previous = file_hashes.get(asset['id'])
             if previous is not None and previous != by_storage[storage]:
-                raise ValueError('Die heutige Anhangskennung ist nicht eindeutig.')
+                raise ValueError(glide_i18n.t("mod.notion_import.current_sources.the_current_attachment_id", 'Die heutige Anhangskennung ist nicht eindeutig.'))
             file_hashes[asset['id']] = by_storage[storage]
         page_hashes[page['id']] = reimport.content_fingerprint(page, file_hashes)
     return page_hashes, file_hashes, tuple(issues)

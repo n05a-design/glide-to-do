@@ -1,29 +1,89 @@
 {
-  "zweck": "Werkhaus West: sRGB-PNG-Arbeitskopien vorhandener Projektmotive, längste Kante 1200 px. Tk liest PNG auch ohne Systemdecoder. Originale im Grafikmaster.",
+  "zweck": "Stadtlicht: sRGB-PNG-Arbeitskopien eigener Fotos des Inhabers (Tim von Trostorff, alle Rechte beim Inhaber), längste Kante 640 px, ohne Metadaten. Tk liest PNG auch ohne Systemdecoder. Die Originale liegen nur in der lokalen Ablage des Inhabers unter 20_Grafik_Master/06_Beispielbilder und sind nicht versioniert.",
   "bilder": [
     {
-      "datei": "Planstudie.png",
-      "original": "20_Grafik_Master/06_Beispielbilder/Haus-auf-Zeichnung-942956610.jpeg",
-      "sha256": "8cf2f95a7811311417e6134db841b5409564b53e0ba3d98f1fcd99d3663b6d5e",
-      "bytes": 586724
+      "datei": "Wuppertal-Schwebebahn.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Wuppertal/Bruecke_Fluss-452.jpg",
+      "sha256": "6f3dd8336787f59737f5cc3f08735d3b88adab53347ac87e16d7558f5d885b8e",
+      "bytes": 683443
     },
     {
-      "datei": "Licht-zum-Hof.png",
-      "original": "20_Grafik_Master/06_Beispielbilder/modernes-Haus-aus-der-Planung.png",
-      "sha256": "6e671d0b733e6b0a6afe41e5340cd7a7ad79d58ecd242a716f251733d41180fe",
-      "bytes": 1252964
+      "datei": "Wuppertal-Bahnsteig.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Wuppertal/Bahnhof_Bahnsteig-150.jpg",
+      "sha256": "8658d2ce672955a8df7ab8fbe109f69b6fc5971334c57ba123dca34f9876bc27",
+      "bytes": 548334
     },
     {
-      "datei": "Materialwand.png",
-      "original": "20_Grafik_Master/06_Beispielbilder/Welche-Kunst-passt-zu-ihrer-wohnung.png",
-      "sha256": "735c0b6c6e10cb60c42646410ca1419264e1797e74ae7b740827ef7704b51c27",
-      "bytes": 1568089
+      "datei": "Berlin-Nationalgalerie.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Berlin/Arch-Innen_Grautoene-017.jpg",
+      "sha256": "d2556b5387ca6741ffe35b44f91dc501e28e988bc1e48f19dd6faf2ec95a6eb6",
+      "bytes": 271102
     },
     {
-      "datei": "Sitzbereich.png",
-      "original": "20_Grafik_Master/06_Beispielbilder/Tipps-in-der-Einrichtung.png",
-      "sha256": "2183366508e5248ee6cd8e51f4b23fa6b749c48fbf17640b54ee6d5997686208",
-      "bytes": 1572720
+      "datei": "Berlin-Spreeufer.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Berlin/Arch-Moderne-Blautoene-035.jpg",
+      "sha256": "49011af210aaa49be8425b3b630abd4385c156c0b42acaf72928fc64f686007c",
+      "bytes": 529938
+    },
+    {
+      "datei": "Muenchen-Arkade.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Munich/Arch-Innen_Orangetoene.jpg",
+      "sha256": "7f4120c4ddfb08b629c903a8ab11098a6b1ee0d90ffd7b6141d3e070ca49acfc",
+      "bytes": 354146
+    },
+    {
+      "datei": "Muenchen-Zeltdach.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Munich/Olympiapark_Zeltdach.jpg",
+      "sha256": "f2c1e68320703327ceccb92069b4934ac2c184428b3a42ea41fc6f7f1807a9c8",
+      "bytes": 560872
+    },
+    {
+      "datei": "Wien-Pavillon.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Wien/Arch-Pavillon.jpg",
+      "sha256": "0a23cbdd501ca982d165987595a352ddaee9bcc402655b4cfa983d1a3344f882",
+      "bytes": 480694
+    },
+    {
+      "datei": "Wien-Palmenhaus.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Wien/Arch-Palmen.jpg",
+      "sha256": "aa0b301ce7593991f5e4c7e50f68cf41cabb8f80bb24b56211ffb614564f4805",
+      "bytes": 530052
+    },
+    {
+      "datei": "Monaco-Kueste.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Monaco/Stadt_Kueste_Boote-2.jpg",
+      "sha256": "3acef87fbaf152d0eb836faffe140d26e7e2af99eb98aebf3440d2f60c78e764",
+      "bytes": 560122
+    },
+    {
+      "datei": "Monaco-Treppe.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Monaco/Innen_Treppe_Orangetoene.jpg",
+      "sha256": "d3b08b940eb7ce02aca25f3839e97478abc846a1358f64089a801f48b88c04b8",
+      "bytes": 592244
+    },
+    {
+      "datei": "Bilbao-Bruecke.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Bilbao/Bruecke_Rote_Stahlkonstruktion-3.jpg",
+      "sha256": "14f171e4d1d3392276b03361488d8fb023683febc636791f5ffd18d0327d6641",
+      "bytes": 345226
+    },
+    {
+      "datei": "Bilbao-Bank.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Bilbao/Arch-Sitzbank_Licht.jpg",
+      "sha256": "6bc143285f1a6675d6799f225d0dfb3d80655f4e794b695b2618b99e77cbb718",
+      "bytes": 334598
+    },
+    {
+      "datei": "Seoul-Turm.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Seoul/Arch-Hoch_Blautoene.jpg",
+      "sha256": "6c527f505fd6d3ab327c5881e0a9da5405233e7a1ad256a7bc70262935e4f109",
+      "bytes": 319347
+    },
+    {
+      "datei": "Seoul-Gasse.png",
+      "original": "20_Grafik_Master/06_Beispielbilder/Seoul/Gebaeude_Wohn.jpg",
+      "sha256": "83f14c6e045356687106cac84a26bf1d3090f0ca10ae752b421215e998770a3e",
+      "bytes": 495080
     }
   ]
 }

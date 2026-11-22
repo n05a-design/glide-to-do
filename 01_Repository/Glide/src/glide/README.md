@@ -898,7 +898,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T257 | [`releasedaten.py`](../../tests/tools/releasedaten.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T258 | [`rundgang.py`](../../tests/tools/rundgang.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T259 | [`screenshots.py`](../../tests/tools/screenshots.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
-| T260 | [`showcase.py`](../../tests/tools/showcase.py) | Erzeugt den Werkhaus-Showcase mit PNG-Arbeitskopien der Projektmotive. |
+| T260 | [`showcase.py`](../../tests/tools/showcase.py) | Erzeugt den Showcase „Stadtlicht“ (DE) bzw. „City Light“ (`--sprache en`) mit 14 PNG-Arbeitskopien eigener Fotos. |
 | T261 | [`standpruefung.py`](../../tests/tools/standpruefung.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |
 | T262 | [`symbolpruefung.py`](../../tests/tools/symbolpruefung.py) | Native Glyphen-/Ersatzschriftdiagnose für alle vier Stile und beide Tk-Gewichte |
 | T263 | [`synchronisationswaechter.py`](../../tests/tools/synchronisationswaechter.py) | Werkzeugcode vorhanden; aktueller Einzelbefund nicht isoliert geprüft |

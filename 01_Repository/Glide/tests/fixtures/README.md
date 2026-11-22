@@ -15,7 +15,7 @@ Unter `beispiele` liegen `glide_beispieldaten.glidebackup`, `glide_rundgang.glid
 
 `glide_rundgang.glidebackup` ist ein Teilbackup mit dem Ordner „Rundgang“ – je eine Liste, Notiz, Seite und Zeichnung. Die Seite erklärt die Funktionen mit fünf Aufnahmen des Glide-Fensters; diese Bilder liegen unter `rundgang/` und zeigen nur künstliche Beispieldaten. Erzeuger: `tests/tools/rundgang.py`; `test_bilder330` liest die Datei ein. Der Rundgang wird nicht im Vollmodus neu erzeugt, weil die Seitenbilder über den sichtbaren Seiteneditor eingesetzt werden.
 
-`showcase/` enthält den Showcase (Teil-, App-Backup, Vorlagen, Starter, Manifest) und unter `bilder/` die PNG-Arbeitskopien der vier aktiven Stockmotive; `quellen.json` belegt ihre Herkunft und SHA-256-Prüfsummen. Erzeuger `tests/tools/showcase.py`, Prüfung `tests/tools/pruefe_showcase.py`, Auslieferung nach `05_Probelisten_Testdaten/Showcase` mit `scripts/pflege/showcase_abgleich.py`.
+`showcase/` enthält den Showcase „Stadtlicht“ (Teil-, App-Backup, Vorlagen, Starter, Manifest, JSON Canvas), unter `showcase/en/` die englische Fassung „City Light“ und unter `bilder/` die 14 PNG-Arbeitskopien eigener Fotos des Inhabers; `quellen.json` belegt ihre Herkunft und SHA-256-Prüfsummen. Erzeuger `tests/tools/showcase.py [--sprache en]`, Prüfung `tests/tools/pruefe_showcase.py` (beide Fassungen), Auslieferung nach `05_Probelisten_Testdaten/Showcase` und `…/Showcase/en` mit `scripts/pflege/showcase_abgleich.py`.
 
 ## Releaseplanungen
 

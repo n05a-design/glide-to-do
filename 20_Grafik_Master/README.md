@@ -75,8 +75,8 @@ Das Werkzeug öffnet echte Ansichten und Dialoge aus einer separaten Kopie des S
 
 ## Weitere Grafikquellen
 
-`05_Inspiration` enthält historische Stilvorlagen und Entwurfsbelege. Sie sind keine aktuelle Logo-Quelle. Fremdbilder vor öffentlicher Veröffentlichung nach ihrer jeweiligen Lizenz prüfen.
+`05_Inspiration` enthält nur noch eigene Entwurfsbelege (Logo- und Oberflächenvergleiche). Sie sind keine aktuelle Logo-Quelle. Fremdbilder wurden am 21.11.2026 entfernt und werden nicht mehr eingecheckt.
 
 `07_Fonts` enthält die unveränderten Originale und Lizenztexte für Rubik, Charis SIL, DM Serif Display und DM Mono. Die Runtime führt zusätzlich DejaVu Sans als internen Symbolbegleiter und Pixelify Sans für Pixel-Überschriften; Details im Schriftkatalog und Veröffentlichungsdokument.
 
-Die vier Stock-Referenzen des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md) stammen aus `06_Beispielbilder`. Die [Herkunftsdatei](../01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt die Originale und die Prüfsummen der für die Demo komprimierten Arbeitskopien. Frühere Logo- und Showcase-Stände sind in Git nachvollziehbar.
+`06_Beispielbilder` enthält die eigenen Originalfotos des Inhabers, nach Städten geordnet. Der Ordner bleibt lokal (`.gitignore`, rund 400 MB); versioniert sind nur die 14 Arbeitskopien des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md). Die [Herkunftsdatei](../01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt Original und Prüfsumme jeder Arbeitskopie. Frühere Logo- und Showcase-Stände sind in Git nachvollziehbar.

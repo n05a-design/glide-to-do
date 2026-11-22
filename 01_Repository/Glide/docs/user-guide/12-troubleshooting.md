@@ -30,7 +30,7 @@ The hint *Speicherproblem · Details* (storage problem) appears at the bottom of
 
 - An item you deleted is in the **Trash**.
 - To undo a recent change, use Undo (Ctrl/Cmd+Z). The **change history** (Ctrl/Cmd+H) lists changes.
-- To go further back, use *Sicherungen vergleichen …* (compare backups) or *Einzelne Seite wiederherstellen …* (restore a single page). See [Backups](10-backups.md).
+- To go further back, use **Compare backups …** or **Restore single page …**. See [Backups](10-backups.md).
 
 ## Reminders did not appear
 
@@ -45,7 +45,7 @@ Reminders and daily prompts are delivered **only while Glide is running**. Misse
 
 ## Help inside Glide
 
-- **Help › Manual …** (F1) and **Help › Show keyboard shortcuts** explain the app. Both are still German.
+- **Help › Manual …** (F1) and **Help › Show keyboard shortcuts** explain the app in the chosen language.
 - **Help › Open error log** opens the local error log. If no error has occurred, Glide says so.
 - Nothing from these help functions leaves your computer.
 

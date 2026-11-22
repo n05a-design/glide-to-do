@@ -71,7 +71,7 @@ def parse_capture_due(value, today=None):
     if clock:
         hour, minute = int(clock[1]), int(clock[2])
         if hour > 23 or minute > 59:
-            raise ValueError("Bitte eine Uhrzeit zwischen 00:00 und 23:59 eingeben.")
+            raise ValueError(glide_i18n.t("mod.capture_parser.parse_capture_due.please_enter_a_time", "Bitte eine Uhrzeit zwischen 00:00 und 23:59 eingeben."))
         due_time = f"{hour:02d}:{minute:02d}"
         text = text[:clock.start()].strip()
     try:
@@ -91,7 +91,7 @@ def parse_capture_due(value, today=None):
         else:
             raise ValueError
     except (ValueError, OverflowError):
-        raise ValueError("Datum nicht erkannt: z. B. morgen, Montag, in 3 Tagen oder 24.09.2026; optional um 14:30.") from None
+        raise ValueError(glide_i18n.t("mod.capture_parser.parse_capture_due.date_not_recognised_e", "Datum nicht erkannt: z. B. morgen, Montag, in 3 Tagen oder 24.09.2026; optional um 14:30.")) from None
     return day.isoformat(), due_time
 
 

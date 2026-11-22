@@ -28,10 +28,10 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="01_Repository/Glide/assets/marketing/github-social-preview.png">
-  <img alt="Glide pinboard with tasks, notes, and connected ideas" src="01_Repository/Glide/assets/marketing/glide-3.60-pinnwand.png" width="100%">
+  <img alt="Glide pinboard with pages, tasks and labelled connections" src="01_Repository/Glide/assets/marketing/glide-1.0-pinnwand-en.png" width="100%">
 </picture>
 
-<p align="center"><sub>The English interface is partially translated; some areas and detailed guides remain in German. Screenshots show Glide 3.60.0 with synthetic data and are not test or package evidence for 1.0.0.</sub></p>
+<p align="center"><sub>Glide is available in English and German. Screenshots show Glide 1.0.0 on macOS with the showcase “City Light”, a fictional photo journey; the photos are by Tim von Trostorff. They are not test or package evidence.</sub></p>
 
 ## Why Glide?
 
@@ -43,20 +43,20 @@ Glide brings tasks and project notes into one local workspace. The same task sta
 
 ## A look at Glide
 
-All images show a synthetic showcase dataset.
+All images show the showcase “City Light”: fictional data, real photos by the author.
 
 <table>
   <tr>
-    <td><strong>Home</strong><br><img alt="Glide home with day plan and project tiles" src="01_Repository/Glide/assets/marketing/glide-3.60-startseite.png" width="100%"></td>
-    <td><strong>Calendar</strong><br><img alt="Glide week calendar with planned tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-kalender.png" width="100%"></td>
+    <td><strong>Home</strong><br><img alt="Glide home with day plan and project tiles" src="01_Repository/Glide/assets/marketing/glide-1.0-startseite-en.png" width="100%"></td>
+    <td><strong>Calendar</strong><br><img alt="Glide week calendar with planned tasks" src="01_Repository/Glide/assets/marketing/glide-1.0-kalender-en.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Today</strong><br><img alt="Day plan with tasks and time blocks in dark theme" src="01_Repository/Glide/assets/marketing/glide-3.60-heute.png" width="100%"></td>
-    <td><strong>Pages</strong><br><img alt="Project page with formatted text, images, and tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-seite.png" width="100%"></td>
+    <td><strong>Today</strong><br><img alt="Day plan with tasks and time blocks in dark theme" src="01_Repository/Glide/assets/marketing/glide-1.0-heute-en.png" width="100%"></td>
+    <td><strong>Pages</strong><br><img alt="Project page with formatted text, images, and tasks" src="01_Repository/Glide/assets/marketing/glide-1.0-seite-en.png" width="100%"></td>
   </tr>
   <tr>
-    <td><strong>Task list</strong><br><img alt="Task list with labels and repeating tasks" src="01_Repository/Glide/assets/marketing/glide-3.60-liste.png" width="100%"></td>
-    <td><strong>Pixel workshop</strong><br><img alt="Pixel workshop with a hand-drawn direction sign" src="01_Repository/Glide/assets/marketing/glide-3.60-pixel.png" width="100%"></td>
+    <td><strong>Task list</strong><br><img alt="Task list with labels and repeating tasks" src="01_Repository/Glide/assets/marketing/glide-1.0-liste-en.png" width="100%"></td>
+    <td><strong>Pixel workshop</strong><br><img alt="Pixel workshop with an animated travel stamp" src="01_Repository/Glide/assets/marketing/glide-1.0-pixel-en.png" width="100%"></td>
   </tr>
 </table>
 

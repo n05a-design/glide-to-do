@@ -131,7 +131,7 @@ def minutes(timer, now):
 def pause(timer, now):
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.pause.no_focus_session", "Keine Fokussitzung."))
     result.update(elapsed_seconds=elapsed(result, now), started_at=None)
     return result
 
@@ -139,7 +139,7 @@ def pause(timer, now):
 def resume(timer, now):
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.resume.no_focus_session", "Keine Fokussitzung."))
     if result["started_at"] is not None:
         return result
     if result["elapsed_seconds"] >= result["goal_seconds"]:
@@ -156,7 +156,7 @@ def extend(timer, now, seconds=300):
     """
     result = normalize(timer)
     if not result or not result.get("focus"):
-        raise ValueError("Keine Fokussitzung.")
+        raise ValueError(glide_i18n.t("mod.focus_timer.extend.no_focus_session", "Keine Fokussitzung."))
     bisher = elapsed(result, now)
     am_ende = result["started_at"] is None and bisher >= result["goal_seconds"]
     result["goal_seconds"] = min(max(result["goal_seconds"], bisher) + seconds, 86400 * 365)

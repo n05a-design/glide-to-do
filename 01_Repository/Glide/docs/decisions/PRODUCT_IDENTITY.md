@@ -52,8 +52,8 @@ ersetzt werden.
 
 | Feld | Stand | Wer entscheidet |
 |---|---|---|
-| Publisher / Herausgebername | Tim von Trostorff | Entwicklungsauftrag 3.26.0 |
-| Copyright-Zeile | offen | Inhaber |
+| Publisher / Herausgebername | Tim von Trostorff – shaye Design – N05A Foundry – shaye.de (`brand.PUBLISHER`) | Inhaberentscheid 21.11.2026 |
+| Copyright-Zeile | © 2026 Tim von Trostorff – shaye Design – N05A Foundry (`brand.COPYRIGHT`; „Über Glide“, macOS `NSHumanReadableCopyright`) | Inhaberentscheid 21.11.2026 |
 | Support-E-Mail | mailme@shaye.de | Inhaber |
 | Website | Shaye.de | Inhaber |
 | Datenschutz-URL | offen | Inhaber, für beide Stores Pflicht |
@@ -64,7 +64,7 @@ ersetzt werden.
 | macOS Mindestversion | offen | folgt aus Build-Laufzeit und Tests auf Zielgeräten |
 | macOS Architektur | arm64 (Apple Silicon) – entschieden 27.09.2026; Universal 2 nur, wenn Intel-Macs gebraucht werden | Inhaber |
 | Sicherheitskontakt | offen | Inhaber |
-| Markenprüfung „Glide“ | offen | Fachanwalt, nicht durch Recherche ersetzbar |
+| Markenprüfung | „Glide To Do“ ist als Marke geprüft (`brand.BRAND_NAME`); „Glide“ darf als Kurzform in App, Repo und Texten stehen | Inhaberentscheid 21.11.2026 |
 
 Für Copyright, Datenschutz-URL, Sicherheitskontakt, Inno-AppId und
 macOS-Mindestversion liegen seit dem 27.09.2026 Vorschläge bereit

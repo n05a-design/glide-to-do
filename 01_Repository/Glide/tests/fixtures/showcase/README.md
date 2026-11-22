@@ -1,31 +1,41 @@
-# Werkhaus West · Glide-Showcase
+# Stadtlicht · Glide-Showcase
 
-Stand 17.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Vorlagen 2
+Stand 21.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Vorlagen 2 · [English version](en/README.md)
 
-Ein kleines Studio bereitet einen offenen Werkstatttag vor. Lea prüft den Weg vom Hof zur Modellwand, Mira wartet auf das Papiermuster, und Jona bringt die Materialplatten aus dem Lager. Die Aufnahmen zeigen denselben Arbeitsstand aus mehreren Blickwinkeln.
+Eine Fotoreise durch sieben Städte: Wuppertal, Berlin, München, Wien, Monaco, Bilbao und Seoul. Zwei Wochen mit der Bahn und zwei Flügen, danach die Auswahl für ein kleines Reisebuch. Der Showcase zeigt denselben Bestand aus vielen Blickwinkeln: Reiseplan, Reiseführer mit einer Seite pro Stadt, Reisetagebuch, Galerie, Pixelstempel und drei Pinnwände.
+
+Alle Fotos sind eigene Aufnahmen von Tim von Trostorff (shaye Design); die Rechte liegen beim Urheber. Der [Quellennachweis](quellen.json) nennt Original und Prüfsumme jeder Arbeitskopie.
 
 ## Öffnen und bearbeiten
 
-Im Projektordner unter Windows `py -3.14 05_Probelisten_Testdaten/Showcase/Showcase_starten.pyw` ausführen. Der Starter lädt die App-Sicherung beim ersten Öffnen in den Ordner `Arbeitsstand-Werkhaus`. Eigene Änderungen bleiben dort gespeichert. Die Beispieldaten sind auf Freitag, den 13.11.2026, bezogen. In Heute und Kalender lässt sich dieser Tag direkt auswählen.
+Im Projektordner `py -3.14 05_Probelisten_Testdaten/Showcase/Showcase_starten.pyw` (Windows) oder `python3 05_Probelisten_Testdaten/Showcase/Showcase_starten.pyw` (macOS) ausführen. Der Starter lädt die App-Sicherung beim ersten Öffnen in den Ordner `Arbeitsstand-Stadtlicht`; eigene Änderungen bleiben dort gespeichert. Die Beispieldaten sind auf Freitag, den 20.11.2026, bezogen. In Heute und Kalender lässt sich dieser Tag direkt auswählen.
 
 | Datei | Verwendung |
 |---|---|
-| [Glide-Showcase_App.glideapp](Glide-Showcase_App.glideapp) | Gesamtes Beispiel mit Startseite, globaler Pinnwand, Einstellungen und Studiojournal. Für einen separaten Datenordner. |
+| [Glide-Showcase_App.glideapp](Glide-Showcase_App.glideapp) | Gesamtes Beispiel mit Startseite, globaler Pinnwand, Einstellungen und Reisetagebuch. Für einen separaten Datenordner. |
 | [Glide-Showcase.glidebackup](Glide-Showcase.glidebackup) | Bearbeitbares Projekt über **Datei → Listen/Ordner hinzufügen …** in einen Bestand übernehmen. |
-| [Glide-Showcase.glidetemplates](Glide-Showcase.glidetemplates) | Kurzprotokoll mit Datums- und Projektfeldern sowie die wiederkehrende Checkliste fürs Aufschließen. |
-| [Werkhaus-West.canvas](Werkhaus-West.canvas) | JSON Canvas 1.0 aus der globalen Pinnwand. Enthält Karten, Positionen und beschriftete Verbindungen. |
+| [Glide-Showcase.glidetemplates](Glide-Showcase.glidetemplates) | Abendnotiz mit Datums- und Stadtfeld sowie die wiederkehrende Checkliste für jeden Stadtwechsel. |
+| [Stadtlicht.canvas](Stadtlicht.canvas) | JSON Canvas 1.0 aus der globalen Pinnwand mit Karten, Bereich und beschrifteten Verbindungen. |
 | [manifest.json](manifest.json) | Dokumente, Formatversion und SHA-256 der vier Dateien. |
 
 ## Ein Rundgang durch die Funktionen
 
-- Auf der **globalen Pinnwand** führt die Seite zum Laufweg, die Freitagsnotiz liefert Rückfragen und das Einladungsmotiv verweist auf das Leitschild. Die Karten öffnen ihre Originale. Dieselbe Karte lässt sich in alternativen Arbeitskontexten über **Fundorte anzeigen** finden. Über das Pinnwandmenü ist der JSON-Canvas-Export verfügbar.
-- Die **Startseite** zeigt Terminwoche und Arbeitsstand. **Heute** und der **Kalender** tragen Bearbeitungstag und Fälligkeit getrennt. Am 13.11. sind 200 Minuten bei 150 Minuten Kapazität eingeplant. In **Tag entlasten** lässt sich der Druckentwurf auf einen anderen Bearbeitungstag schieben und die Bilanz vorab ansehen. Der **Wochenrückblick** führt den Aufwand und das Erledigte zusammen.
-- **Studioroutinen** kombiniert farbige Labels, reguläre Fälligkeiten, wiederkehrende Aufgaben und Serienregeln. **Offene Werkstatt** zeigt Anhänge, Prioritäten, Abhängigkeiten und die Bearbeitung im Punktinspektor. Zwei gespeicherte Ansichten führen zu Freigaben und einer nach Eisenhower gruppierten Wochenübersicht.
-- Das **Werkstattbuch** hat fünf Seiten. Die Rundgangsseite enthält Bilder, Blöcke, eine eingebettete Live-Liste und einen Klappblock. Die **Nebenansicht** hält den Rundgang beim Bearbeiten des Boards lesbar und hat Suche, Abschnitte, Verweise und Verlauf.
-- In **Raumstudien** liegen vier vorhandene Architektur- und Innenraummotive mit Arbeitskommentaren. In der **Pixel-Fabrik** lässt sich das Leitschild in vier Lichtstufen bearbeiten und abspielen. Die Freitagsnotiz, das Studiojournal und der archivierte Probelauf ergänzen den aktuellen Stand.
-
-Der Showcase verwendet fiktive Texte und vorhandene Stock-Referenzen aus dem Grafikmaster. Der [Quellennachweis](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) nennt die Originaldateien und die Prüfsummen der komprimierten Arbeitskopien. Die [GitHub-Galerie](https://github.com/n05a-design/glide-to-do#ein-blick-hinein) zeigt die Windows-Aufnahmen.
+- **Reiseführer (Buch):** Die Überblicksseite hat eine Pixelzeichnung als Titelbild, ein Seitensymbol, eine Routentabelle, ein Zitat, eine Trennlinie, Aufgaben, einen zugeklappten Block mit Packtipps und eine eingebettete Live-Liste des Reiseplans. Jede der sieben Stadtseiten trägt ihr Foto als Titelbild und im Text (rechts, links oder mittig), eine Tabelle mit Orten, Zeiten und Tipps, ein Zitat, eine Hervorhebung, einen Codeblock mit Kameradaten und Aufgaben. Die Seite **Reisekasse** zeigt eine schlichte Kostentabelle ohne Titelbild.
+- **Projektpinnwand:** Vier Regionen als Bereiche (Deutschland, Österreich, Mittelmeer und Atlantik, Korea) und ein Bereich „Nach der Reise“. Die Stadtseiten sind als Karten verbunden; die Verbindungen tragen die Etappen („ICE · 3 Std.“, „Flug nach Nizza“), Flüge gestrichelt. Die **globale Pinnwand** hat einen eigenen Bereich, Linienhintergrund und vier beschriftete Verbindungen; über das Pinnwandmenü als JSON Canvas exportierbar. Der **Reiseplan** zeigt sich zusätzlich als Spaltenpinnwand nach Bearbeitungstag.
+- **Reiseplan:** Überschriften, Langtext, Gruppe mit Unterpunkten, Wichtigkeit, Fälligkeit mit Uhrzeit, Bearbeitungstag und -zeit, Aufwand und erfasste Zeit, Checklisten, Abhängigkeiten, Verknüpfungen, Erwähnung der Galerie, feste Erinnerung, Anhänge und farbige Labels. Am 20.11. sind mehr Minuten eingeplant als Kapazität vorhanden ist; **Tag entlasten** schiebt Arbeit auf andere Tage.
+- **Fotoroutinen** zeigen alle Wiederholungsarten, Serien am letzten Werktag und am zweiten Dienstag, Abstand nach Erledigung, begrenzte Anzahl und eine pausierte Reihe. **Vor jedem Stadtwechsel** ist eine wiederkehrende Checkliste.
+- **Galerie „Stadtlicht · Auswahl“** mit 14 Fotos, Titeln und Bildunterschriften in großer Kachelgröße. Die **Abendrunde** ist eine Notiz mit Aufgaben, Anhang und Verweisen auf Aufgabe, Seite und Galerie.
+- **Reisetagebuch (Notizbuch):** ein datierter Eintrag pro Stadt mit Ort, Stimmung, Leitfrage und Favoriten, dazu der Abend nach der Rückkehr.
+- **Pixel-Werkstatt:** Der Reisestempel wechselt in vier Bildern die Himmelsfarbe von Morgen bis Nacht, mit PNG-Referenz, 16-Pixel-Symbol und Palette als GPL und HEX.
+- Außerdem: zwei gespeicherte Ansichten (Freigaben, Eisenhower-Woche als Tabelle), angeheftete Seiten, Favoriten, Reiter, ein eigener KI-Auftrag, ein archivierter Ordner mit der ersten Route und zwei Punkte im Eingang.
 
 ## Aktualisieren
 
-Im Verzeichnis `01_Repository/Glide` den Bestand mit `py -3.14 -B tests/tools/showcase.py --tag 2026-11-13` erzeugen. `py -3.14 -B scripts/pflege/showcase_abgleich.py` prüft Import, Vorlagen, Referenzen, Export und Neustart und gleicht die Dateien ab. Der [Aufnahmeablauf](https://github.com/n05a-design/glide-to-do/blob/main/20_Grafik_Master/README.md#projektaufnahmen-erneuern) erzeugt die Projektbilder.
+Im Verzeichnis `01_Repository/Glide` beide Sprachen erzeugen:
+
+```
+python3 -B tests/tools/showcase.py --tag 2026-11-20
+python3 -B tests/tools/showcase.py --tag 2026-11-20 --sprache en
+```
+
+`python3 -B scripts/pflege/showcase_abgleich.py` prüft beide Fassungen über Import, Vorlagen, Verweise, Export und Neustart und gleicht sie nach `05_Probelisten_Testdaten/Showcase` und `…/Showcase/en` ab.

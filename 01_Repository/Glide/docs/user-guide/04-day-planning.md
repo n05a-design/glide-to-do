@@ -8,29 +8,29 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 
 ## Today
 
-**Today** (*Heute*) shows each task exactly once, in these sections:
+**Today** shows each task exactly once, in these sections:
 
 | Section | Contents |
 |---|---|
 | Next task | One task: planned for today, otherwise overdue or due today, otherwise left over |
-| Overdue (*Verspätet*) | Past due date, not planned for today |
-| Left over (*Liegen geblieben*) | Planned for an earlier day, still open, not overdue |
-| Day plan (*Tagesplan*) | Planned for today, with a timed schedule and an untimed part |
-| Due today (*Heute fällig*) | Due today but not planned |
+| Overdue | Past due date, not planned for today |
+| Left over | Planned for an earlier day, still open, not overdue |
+| Day plan | Planned for today, with a timed schedule and an untimed part |
+| Due today | Due today but not planned |
 | Routines | Selected repeating checklists with their open steps |
 | Inbox | Items without a planned day (up to 50) |
 
-Use ◂/▸ to look at other days. **Clear day** (*Tag leeren*) removes the planned day from its tasks and keeps the tasks themselves.
+Use ◂/▸ to look at other days. **Clear day** removes the planned day from its tasks and keeps the tasks themselves.
 
-**Coming up** (*Demnächst*) lists every task with a due date in time order, overdue first. It is reached from Today, **View › *Ansichten* › *Demnächst***, search and Home.
+**Coming up** lists every task with a due date in time order, overdue first. It is reached from Today, **View › Views › Coming up**, search and Home.
 
 ## Scheduling
 
-**Schedule** (*Einplanen*) sets only the planned day. Due date, effort, time, repeat rule and attachments stay unchanged. It is available from the context menu, the selection bar, the "…" row button, Ctrl/Cmd+Shift+P and the command palette. The targets are Today, Tomorrow, Weekend, Next week, Date … and No day. The menu shows the actual date and the free time left on that day.
+**Schedule** sets only the planned day. Due date, effort, time, repeat rule and attachments stay unchanged. It is available from the context menu, the selection bar, the "…" row button, Ctrl/Cmd+Shift+P and the command palette. The targets are Today, Tomorrow, Weekend, Next week, Date … and No day. The menu shows the actual date and the free time left on that day.
 
 ## Available time and capacity
 
-Set a **daily capacity** in minutes, globally or per weekday, in **Settings** (*Tageskapazität*, *Kapazität je Wochentag*). The day balance shows:
+Set a **daily capacity** in minutes, globally or per weekday, in **Settings** (**Daily capacity** and **Capacity by weekday**). The day balance shows:
 
 - free time left, or the time you are over-planned (for example "45 min overplanned"),
 - time blocked by calendar events (see [Calendar](05-calendar.md)),
@@ -40,7 +40,7 @@ Completed tasks still count towards the day. A capacity of 0 means "not set". Ov
 
 ## Schedule and hourly grid
 
-Tasks with a time appear first. Dragging sets the time, and Alt+↑/↓ moves a block by 15 minutes. The **grid** (*Raster*) shows 6:00–22:00 with a red line for now. Drag tasks onto it in 15-minute steps. *Zeitblock festlegen …* (time block, Ctrl/Cmd+Shift+T) sets date and time in a dialog. Overlaps are named, not moved.
+Tasks with a time appear first. Dragging sets the time, and Alt+↑/↓ moves a block by 15 minutes. The **grid** shows 6:00–22:00 with a red line for now. Drag tasks onto it in 15-minute steps. *Zeitblock festlegen …* (time block, Ctrl/Cmd+Shift+T) sets date and time in a dialog. Overlaps are named, not moved.
 
 ## Suggestions and relief
 
@@ -54,13 +54,13 @@ The *Tag …* (day) switch in Today and **View › *Ansichten*** offer two modes
 - *Tagesbeginn* (start of day) walks through overdue tasks, left-over tasks and the Inbox.
 - *Tagesabschluss* (end of day) shows what you completed, moves left-over tasks to tomorrow and can add a note to your notebook.
 
-The *Wochenrückblick* (weekly review) compares estimated and tracked time per day.
+The **Week review** compares estimated and tracked time per day.
 
-**Daily prompts** (**Settings › Daily prompts …**, or **View › *Ansichten* › *Tageshinweise einstellen …***) can remind you at chosen times to start or end the day. They are off by default and arrive only while Glide is running.
+**Daily prompts** (**Settings › Daily prompts …**, or **View › Views › Set up daily hints …**) can remind you at chosen times to start or end the day. They are off by default and arrive only while Glide is running.
 
 ## Focus timer
 
-Ctrl/Cmd+Shift+F starts a focus session for the selected or next open task. Choose 15, 25 or 50 minutes, or the task's effort. **+5 minutes** extends a session. **Switch to …** changes to another task for today. Ending a session books the time to the task. **Done & next** (*Erledigt & weiter*) books the time, completes the task and starts the next one. There is a single timer, shared with time tracking.
+Ctrl/Cmd+Shift+F starts a focus session for the selected or next open task. Choose 15, 25 or 50 minutes, or the task's effort. **+5 minutes** extends a session. **Switch to …** changes to another task for today. Ending a session books the time to the task. **Done & next** books the time, completes the task and starts the next one. There is a single timer, shared with time tracking.
 
 ## Reminders
 

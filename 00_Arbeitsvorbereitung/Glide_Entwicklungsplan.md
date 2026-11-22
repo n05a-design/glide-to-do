@@ -373,15 +373,15 @@ Die Spalte „Stand“ nennt datierte Messungen mit ihrer Version; keine Zeile i
 
 | Nr. | Aufgabe | Stand |
 |---|---|---|
-| I1 | Inhaberangaben bestätigen | ○ Vorschläge in [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#inhaberangaben) |
+| I1 | Inhaberangaben bestätigen | ◐ 21.11.2026: Herausgeber „Tim von Trostorff – shaye Design – N05A Foundry – shaye.de“ und Copyright-Zeile bestätigt und eingebaut; Datenschutz-URL, Sicherheitskontakt und Inno-AppId weiter offen ([Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#inhaberangaben)) |
 | I2 | Softwarelizenz | ✅ 07.11.2026: MPL-2.0 in Root-LICENSE, Dokumentation und Erzeugern integriert (D72); neue native Weitergabepakete separat prüfen |
-| I3 | Apple-Developer-Konto, Windows-Code-Signing-Zertifikat | ○ |
-| I4 | Markenprüfung „Glide“ | ○ Fachanwalt für Markenrecht |
+| I3 | Apple-Developer-Konto, Windows-Code-Signing-Zertifikat | ◇ bewusst zurückgestellt (21.11.2026): kostet Geld, erst nach Aufbau des Software-Katalogs |
+| I4 | Markenprüfung „Glide“ | ✅ 21.11.2026: „Glide To Do“ als Marke geprüft; „Glide“ als Kurzform in App, Repo und Texten erlaubt |
 | I5 | Aktuelles Python auf dem Mac installieren | ◐ Referenz-Mac mit Python 3.14.5/Tk 9.0.3 trägt die Volläufe; python.org führt 3.14.8 (Windows-Absturz W09 beobachten); Installation braucht das Passwort des Inhabers |
 | I6 | Windows-Vollprüfung des aktuellen Stands und manuelle Prüfsitzungen | ▶ Windows je neuer Lieferung gewählt (D42); native Vollprüfungen 3.36.0–3.38.0 grün; Folgepakete jeweils erneut prüfen. Tatsächliche Sicht-/Bedienabnahme getrennt; Reader bis Bedarf zurückgestellt, siehe §21.43. Native Abnahmen getrennt nach der [Prüfliste](Glide_Manuelle_Pruefung.md) |
 | I7 | Referenzentwürfe für „Heute“, Liste, Seite und Inspektor | ✅ Bild 1 gewählt (D19/D21); vier Funktionen D22–D25 vollständig mit 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen |
 | I8 | Lösungsweg für das Logo unter Tk 8.6 (LG01–LG04) | ✅ technische Wege D28 und Master/Kleingrößen D41/D45 in 3.37.0 geliefert; Menschen-/DPI-Abnahme getrennt |
-| I9 | Rechte an Fremdbildern im öffentlichen Repository (`20_Grafik_Master/05_Inspiration`, `06_Beispielbilder`, die sechs Showcase-Motive) | ○ behalten mit Rechtenachweis oder entfernen und den Showcase mit eigenen Motiven neu erzeugen; Empfehlung: ohne Nachweis entfernen |
+| I9 | Rechte an Fremdbildern im öffentlichen Repository (`20_Grafik_Master/05_Inspiration`, `06_Beispielbilder`, die sechs Showcase-Motive) | ✅ 21.11.2026 (V1.79): alle Fremd- und Stockbilder aus dem aktuellen Stand entfernt; Showcase „Stadtlicht“ mit 14 eigenen Fotos des Inhabers neu erzeugt (DE/EN). Ältere Versionen in der Git-Historie behalten sie; laut Inhaber unerheblich, keine Historienbereinigung |
 | I10 | Git-Historie bereinigen (gelöschte Protokolle mit Benutzerpfaden, frühere Archivkopien) | ○ eigener Auftrag; ändert alle Commit-Kennungen ([Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt)) |
 | I11 | GitHub-Auftritt: Beschreibung, Tags, Wiki, Issues, KI-Codeprüfung | ○ Empfehlungen in der [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt) |
 | I12 | CodeQL-Einrichtung festlegen: Der eigene Workflow mit `.pyw`-Spiegelung ist seit 01.10.2026 deaktiviert, die Standardeinrichtung analysiert die Hauptdatei voraussichtlich nicht | ○ in den Repository-Einstellungen prüfen; Empfehlung: eigenen Workflow wieder einschalten und die Standardeinrichtung abschalten (nie beide) – [Analyse §13.12](Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026), WA-43 |

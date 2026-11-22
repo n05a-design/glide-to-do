@@ -176,11 +176,11 @@ Lizenz, Preise für spätere Distribution/Services, Marke, Support und Releasefr
 
 ## Inhaberangaben
 
-Vorschläge vom 27.09.2026 (E-11). **Keiner gilt vor Bestätigung durch den Inhaber** (I1); bis dahin fließen sie in keine Build- oder Store-Konfiguration.
+**Bestätigt am 21.11.2026 (I1, teilweise):** Herausgeber „Tim von Trostorff – shaye Design – N05A Foundry – shaye.de“, Copyright-Zeile „© 2026 Tim von Trostorff – shaye Design – N05A Foundry“ und die geprüfte Marke „Glide To Do“ mit der Kurzform „Glide“. Sie stehen in `src/glide/brand.py`, in „Über Glide“ und im macOS-Paket (`NSHumanReadableCopyright`). Die Code-Signierung (I3) ist bewusst zurückgestellt, bis der Software-Katalog des Inhabers steht. Die übrigen Zeilen sind weiterhin Vorschläge vom 27.09.2026 (E-11) und gelten erst nach Bestätigung.
 
 | Feld | Vorschlag | Begründung |
 |---|---|---|
-| Copyright-Zeile | `© 2026 Tim von Trostorff` | Herausgeber laut Register, Jahr der ersten Veröffentlichung |
+| Copyright-Zeile | `© 2026 Tim von Trostorff – shaye Design – N05A Foundry` | ✅ bestätigt 21.11.2026 |
 | Datenschutz-URL | `https://shaye.de/glide/datenschutz` | unter der eingetragenen Website; beide Stores verlangen eine erreichbare Seite |
 | Sicherheitskontakt | `mailme@shaye.de` (Betreff „Glide Sicherheit“) | wie Support, bis ein eigenes Postfach sinnvoll ist |
 | Inno-Setup-AppId | `{0A756FC5-5DDB-4B0F-9EC8-B4AA85753597}` | einmal erzeugt am 27.09.2026; nach Bestätigung nie mehr ändern |

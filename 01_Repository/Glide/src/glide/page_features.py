@@ -53,7 +53,7 @@ def move_document_block(document, first, last, target):
     rows = text.split('\n')
     count = len(rows)
     if not (0 <= first < last <= count and 0 <= target <= count):
-        raise ValueError('Ungültige Blockposition.')
+        raise ValueError(glide_i18n.t("mod.page_features.move_document_block.invalid_block_position", 'Ungültige Blockposition.'))
     if first <= target <= last:
         return copy.deepcopy(document), sum(len(row) + 1 for row in rows[:first])
     order = list(range(count))
@@ -111,9 +111,9 @@ def live_lists(values):
     if values is None:
         return []
     if not isinstance(values, list) or len(values) > 20:
-        raise ValueError('Eine Seite darf höchstens 20 Live-Listen enthalten.')
+        raise ValueError(glide_i18n.t("ui.choose_live_list.a_page_may_contain", 'Eine Seite darf höchstens 20 Live-Listen enthalten.'))
     if any(objects.parse(value) is None or objects.parse(value)[0] != 'list' for value in values):
-        raise ValueError('Ungültiges Ziel einer Live-Liste.')
+        raise ValueError(glide_i18n.t("mod.page_features.live_lists.invalid_live_list_target", 'Ungültiges Ziel einer Live-Liste.'))
     return list(dict.fromkeys(objects.uri(*objects.parse(value)) for value in values))
 
 
@@ -121,13 +121,13 @@ def cover(value):
     if value is None:
         return None
     if not isinstance(value, dict):
-        raise ValueError('Ungültiges Titelbild.')
+        raise ValueError(glide_i18n.t("mod.page_features.cover.invalid_cover_image", 'Ungültiges Titelbild.'))
     if value.get('kind') == 'image' and isinstance(value.get('attachment'), str):
         if re.fullmatch(r'[A-Za-z0-9_-]{1,64}', value['attachment']):
             return {'kind': 'image', 'attachment': value['attachment']}
     if value.get('kind') == 'drawing':
         return {'kind': 'drawing', 'document': drawing.DrawingModel.from_document(value.get('document')).to_document()}
-    raise ValueError('Ungültiges Titelbild.')
+    raise ValueError(glide_i18n.t("mod.page_features.cover.invalid_cover_image", 'Ungültiges Titelbild.'))
 
 
 def live_rows(target, lists, trash=(), folders=()):

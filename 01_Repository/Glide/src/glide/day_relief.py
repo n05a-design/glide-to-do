@@ -10,7 +10,7 @@ import i18n as glide_i18n
 
 def iso_day(value):
     if not isinstance(value, str) or date.fromisoformat(value).isoformat() != value:
-        raise ValueError("Bitte einen gültigen Bearbeitungstag wählen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.iso_day.please_choose_a_valid", "Bitte einen gültigen Bearbeitungstag wählen."))
     return value
 
 
@@ -128,16 +128,16 @@ def propose(items, selected, target, *, capacity, blocks, zone, schedulable):
     items = tuple(items)
     identities = [item["id"] for item in items]
     if len(set(identities)) != len(identities):
-        raise ValueError("Mehrdeutige Aufgabenkennungen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.propose.ambiguous_task_ids", "Mehrdeutige Aufgabenkennungen."))
     index = dict(zip(identities, items))
     selected = tuple(dict.fromkeys(selected))
     if not selected:
-        raise ValueError("Bitte mindestens eine Aufgabe wählen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.propose.please_choose_at_least", "Bitte mindestens eine Aufgabe wählen."))
     moves = []
     for identity in selected:
         item = index.get(identity)
         if item is None or not schedulable(item) or item.get("done"):
-            raise ValueError("Ausgewählte Aufgabe ist nicht mehr offen verfügbar.")
+            raise ValueError(glide_i18n.t("mod.day_relief.propose.the_selected_task_is", "Ausgewählte Aufgabe ist nicht mehr offen verfügbar."))
         source = iso_day(item.get("planned_date"))
         if source != target:
             moves.append(Move(identity, source, item.get("planned_time"), target))
@@ -159,20 +159,20 @@ def validate(plan, items, schedulable, *, capacity=None, blocks=None, zone=None)
     items = tuple(items)
     index = {item["id"]:item for item in items}
     if len(index) != len(items):
-        raise ValueError("Mehrdeutige Aufgabenkennungen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.validate.ambiguous_task_ids", "Mehrdeutige Aufgabenkennungen."))
     if fingerprint(items, schedulable) != plan.snapshot:
-        raise ValueError("Die Planung hat sich inzwischen geändert; bitte neu vergleichen.")
+        raise ValueError(glide_i18n.t("mod.day_relief.validate.the_planning_has_changed", "Die Planung hat sich inzwischen geändert; bitte neu vergleichen."))
     if any(value is not None for value in (capacity, blocks, zone)):
         if any(value is None for value in (capacity, blocks, zone)):
-            raise ValueError("Kapazität, Belegzeiten und Zeitzone werden gemeinsam benötigt.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.capacity_busy_times_and", "Kapazität, Belegzeiten und Zeitzone werden gemeinsam benötigt."))
         fresh = propose(items, [move.identity for move in plan.moves],
                         plan.moves[0].target if plan.moves else None,
                         capacity=capacity, blocks=blocks, zone=zone, schedulable=schedulable) if plan.moves else plan
         if fresh.before != plan.before or fresh.after != plan.after:
-            raise ValueError("Die Kapazität hat sich inzwischen geändert; bitte neu vergleichen.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.the_capacity_has_changed", "Die Kapazität hat sich inzwischen geändert; bitte neu vergleichen."))
     for move in plan.moves:
         item = index.get(move.identity)
         if (item is None or not schedulable(item) or item.get("done")
                 or item.get("planned_date") != move.source or item.get("planned_time") != move.clock):
-            raise ValueError("Die Planung hat sich inzwischen geändert; bitte neu vergleichen.")
+            raise ValueError(glide_i18n.t("mod.day_relief.validate.the_planning_has_changed", "Die Planung hat sich inzwischen geändert; bitte neu vergleichen."))
     return tuple((move.identity, move.target, move.clock if move.target else None) for move in plan.moves)

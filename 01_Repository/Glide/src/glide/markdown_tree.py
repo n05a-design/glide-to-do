@@ -52,13 +52,13 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
     target = Path(target).absolute()
     data_root = Path(data_root).absolute()
     if target.exists() or target.is_symlink():
-        raise FileExistsError('Der Ausgabeordner existiert bereits.')
+        raise FileExistsError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_folder_already", 'Der Ausgabeordner existiert bereits.'))
     if not target.parent.is_dir():
-        raise ValueError('Der übergeordnete Ausgabeordner fehlt.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.the_parent_output_folder", 'Der übergeordnete Ausgabeordner fehlt.'))
     if len(str(target)) > 130:
-        raise ValueError('Bitte einen kürzeren Ausgabeort wählen (höchstens 130 Zeichen).')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.please_choose_a_shorter", 'Bitte einen kürzeren Ausgabeort wählen (höchstens 130 Zeichen).'))
     if target.resolve() == data_root.resolve() or data_root.resolve() in target.resolve().parents:
-        raise ValueError('Die Ausgabe muss außerhalb der Glide-Datenablage liegen.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_must_be", 'Die Ausgabe muss außerhalb der Glide-Datenablage liegen.'))
     losses = []
     inventory = {'format': 'Glide-Markdown-Inventar', 'version': 1,
                  'objekte': [], 'anhaenge': [], 'hinweise': losses, 'bestand': snapshot}
@@ -69,7 +69,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
 
     def check():
         if cancel is not None and cancel.is_set():
-            raise ExportCancelled('Ausgabe abgebrochen.')
+            raise ExportCancelled(glide_i18n.t("mod.markdown_tree.check.output_cancelled", 'Ausgabe abgebrochen.'))
 
     def note(kind, owner, field, detail):
         losses.append({'art': kind, 'objekt': owner, 'feld': field, 'detail': detail})
@@ -82,7 +82,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
 
     by_folder = {f['id']: f for f in folders}
     if len(by_folder) != len(folders):
-        raise ValueError('Doppelte Ordnerkennungen.')
+        raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.duplicate_folder_ids", 'Doppelte Ordnerkennungen.'))
 
     def folder_path(identity, trail=()):
         if identity in folder_paths:
@@ -109,7 +109,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
     def register(kind, holder, relative):
         key = kind, holder.get('id')
         if not isinstance(key[1], str) or not key[1] or key in seen:
-            raise ValueError('Fehlende oder doppelte Objektkennung.')
+            raise ValueError(glide_i18n.t("mod.markdown_tree.register.missing_or_duplicate_object", 'Fehlende oder doppelte Objektkennung.'))
         seen.add(key)
         paths[key] = relative
         holders.append((kind, holder, relative))
@@ -127,7 +127,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
         for item in objects.walk(entry.get('items', [])):
             key = 'item', item.get('id')
             if not isinstance(key[1], str) or not key[1] or key in seen:
-                raise ValueError('Fehlende oder doppelte Punktkennung.')
+                raise ValueError(glide_i18n.t("mod.markdown_tree.write_tree.missing_or_duplicate_item", 'Fehlende oder doppelte Punktkennung.'))
             seen.add(key)
             paths[key] = Path(relative.as_posix()+'#punkt-'+quote(key[1], safe=''))
             inventory['objekte'].append({'art': 'item', 'id': key[1], 'datei': str(paths[key]).replace('\\', '/')})
@@ -205,7 +205,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                         check();dst.write(data);digest.update(data)
                     after = os.fstat(src.fileno())
                     if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
-                        raise OSError('Eine Anhangsdatei wurde während der Ausgabe verändert.')
+                        raise OSError(glide_i18n.t("mod.markdown_tree.attachment.an_attachment_file_was", 'Eine Anhangsdatei wurde während der Ausgabe verändert.'))
                 record['sha256'] = digest.hexdigest()
                 attachment_digests[storage] = record['sha256']
             else:
@@ -361,7 +361,7 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
         try:
             os.close(fd)
             if target.exists() or target.is_symlink():
-                raise FileExistsError('Der Ausgabeordner wurde inzwischen angelegt.')
+                raise FileExistsError(glide_i18n.t("mod.markdown_tree.write_tree.the_output_folder_has", 'Der Ausgabeordner wurde inzwischen angelegt.'))
             check()
             os.rename(stage, target)
         finally:

@@ -72,7 +72,7 @@ def _unique_object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise ValueError("Die JSON-Datei enthält doppelte Feldnamen.")
+            raise ValueError(glide_i18n.t("mod.session_guard.unique_object.the_json_file_contains", "Die JSON-Datei enthält doppelte Feldnamen."))
         result[key] = value
     return result
 
@@ -89,25 +89,25 @@ def _basic_data_check(data, schema_version):
     elif isinstance(data, dict):
         version = data.get("version")
         if version is not None and (type(version) is not int or not 1 <= version <= schema_version):
-            raise ValueError("Die Datenformat-Version wird nicht unterstützt.")
+            raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.the_data_format_version", "Die Datenformat-Version wird nicht unterstützt."))
         lists, folders = data.get("lists"), data.get("folders", [])
         if not isinstance(lists, list) or not isinstance(folders, list):
-            raise ValueError("Listen- oder Ordnerfelder sind ungültig.")
+            raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.list_or_folder_fields", "Listen- oder Ordnerfelder sind ungültig."))
         for name in ("labels", "trash", "history"):
             if not isinstance(data.get(name, []), list):
-                raise ValueError("Ein gemeinsames Bestandsfeld ist ungültig.")
+                raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.a_shared_data_field", "Ein gemeinsames Bestandsfeld ist ungültig."))
     else:
-        raise ValueError("Die Datei enthält keinen Glide-Bestand.")
+        raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.the_file_contains_no", "Die Datei enthält keinen Glide-Bestand."))
 
     def ids(entries, label):
         found = set()
         for entry in entries:
             if not isinstance(entry, dict):
-                raise ValueError(f"Ein {label} ist ungültig.")
+                raise ValueError(glide_i18n.t("mod.session_guard.ids.a_is_invalid", 'Ein {label} ist ungültig.', label=label))
             ident = entry.get("id")
             if ident is not None:
                 if not isinstance(ident, str) or not ident or ident in found:
-                    raise ValueError(f"Eine {label}-ID ist ungültig oder doppelt.")
+                    raise ValueError(glide_i18n.t("mod.session_guard.ids.a_id_is_invalid", 'Eine {label}-ID ist ungültig oder doppelt.', label=label))
                 found.add(ident)
         return found
 
@@ -119,34 +119,34 @@ def _basic_data_check(data, schema_version):
         seen = {ident}
         while parent is not None:
             if not isinstance(parent, str) or parent not in folder_ids or parent in seen:
-                raise ValueError("Ein Ordnerbezug fehlt oder bildet einen Kreis.")
+                raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.a_folder_reference_is", "Ein Ordnerbezug fehlt oder bildet einen Kreis."))
             seen.add(parent)
             parent = parents.get(parent)
     item_ids = set()
     for entry in lists:
         folder = entry.get("folder_id")
         if folder is not None and (not isinstance(folder, str) or folder not in folder_ids):
-            raise ValueError("Eine Liste verweist auf einen fehlenden Ordner.")
+            raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.a_list_refers_to", "Eine Liste verweist auf einen fehlenden Ordner."))
         items = entry.get("items", [])
         if not isinstance(items, list):
-            raise ValueError("Das Aufgabenfeld einer Liste ist ungültig.")
+            raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_task_field_of_2", "Das Aufgabenfeld einer Liste ist ungültig."))
         stack = [(item, 0) for item in items]
         while stack:
             item, depth = stack.pop()
             if depth > 100:
-                raise ValueError("Der Aufgabenbestand ist zu tief verschachtelt.")
+                raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.the_task_data_is", "Der Aufgabenbestand ist zu tief verschachtelt."))
             if isinstance(item, str):
                 continue
             if not isinstance(item, dict):
-                raise ValueError("Ein Aufgabenpunkt ist ungültig.")
+                raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.a_task_item_is", "Ein Aufgabenpunkt ist ungültig."))
             ident = item.get("id")
             if ident is not None:
                 if not isinstance(ident, str) or not ident or ident in item_ids:
-                    raise ValueError("Eine Aufgaben-ID ist ungültig oder doppelt.")
+                    raise ValueError(glide_i18n.t("mod.session_guard.basic_data_check.a_task_id_is", "Eine Aufgaben-ID ist ungültig oder doppelt."))
                 item_ids.add(ident)
             children = item.get("children", [])
             if not isinstance(children, list):
-                raise ValueError("Die Unterpunkte einer Aufgabe sind ungültig.")
+                raise ValueError(glide_i18n.t("ui.validate_backup_schema.the_subtasks_of_a", "Die Unterpunkte einer Aufgabe sind ungültig."))
             stack.extend((child, depth + 1) for child in children)
 
 
@@ -279,7 +279,7 @@ class SessionGuard:
                 os.fsync(stream.fileno())
             _, _, actual_digest = self._marker()
             if actual_digest != expected_digest:
-                raise OSError("Der Sitzungsnachweis wurde zwischenzeitlich verändert.")
+                raise OSError(glide_i18n.t("mod.session_guard.atomic_marker.the_session_record_was", "Der Sitzungsnachweis wurde zwischenzeitlich verändert."))
             os.replace(temporary, self.marker_path)
             _sync_directory(self.state_dir)
         finally:
@@ -325,7 +325,7 @@ class SessionGuard:
         content = regular_bytes(self.data_file, MAX_JSON_BYTES)
         digest = hashlib.sha256(content).hexdigest()
         if expected_sha256 is not None and digest != expected_sha256:
-            raise ValueError("Die Datendatei wurde seit der Prüfung verändert.")
+            raise ValueError(glide_i18n.t("mod.session_guard.preserve_original.the_data_file_was", "Die Datendatei wurde seit der Prüfung verändert."))
         directory = Path(destination_dir) if destination_dir is not None else self.data_dir / "backups/wiederanlauf"
         directory.mkdir(parents=True, exist_ok=True)
         stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
@@ -339,7 +339,7 @@ class SessionGuard:
                 stream.flush()
                 os.fsync(stream.fileno())
             if hashlib.sha256(regular_bytes(target, MAX_JSON_BYTES)).hexdigest() != digest:
-                raise OSError("Die Originalvorsicherung stimmt nicht mit den gelesenen Bytes überein.")
+                raise OSError(glide_i18n.t("mod.session_guard.preserve_original.the_original_pre_backup", "Die Originalvorsicherung stimmt nicht mit den gelesenen Bytes überein."))
             _sync_directory(directory)
         except (OSError, ValueError):
             if created:
@@ -365,7 +365,7 @@ class SessionGuard:
         try:
             preserved = self.preserve_original(expected_sha256=expected_sha256)
             if hashlib.sha256(regular_bytes(self.data_file, MAX_JSON_BYTES)).hexdigest() != expected_sha256:
-                raise ValueError("Die Datendatei wurde während der Vorsicherung verändert.")
+                raise ValueError(glide_i18n.t("mod.session_guard.resume.the_data_file_was", "Die Datendatei wurde während der Vorsicherung verändert."))
         except (OSError, ValueError) as exc:
             return Assessment("preservation_failed", False,
                               glide_i18n.t("mod.session_guard.resume.the_original_pre_backup", 'Die Originalvorsicherung ist fehlgeschlagen ({name}). Der Bestand bleibt schreibgeschützt.', name=type(exc).__name__), assessment.marker_kind, assessment.sha256)
@@ -376,7 +376,7 @@ class SessionGuard:
             content = regular_bytes(self.data_file, MAX_JSON_BYTES)
         except FileNotFoundError:
             if os.path.lexists(self.data_file):
-                raise OSError("Der vorhandene Datenpfad ist nicht als reguläre Datei lesbar.") from None
+                raise OSError(glide_i18n.t("mod.session_guard.original_digest.the_existing_data_path", "Der vorhandene Datenpfad ist nicht als reguläre Datei lesbar.")) from None
             return None
         return hashlib.sha256(content).hexdigest()
 
@@ -429,7 +429,7 @@ class SessionGuard:
             return Assessment("recovery_changed", False, glide_i18n.t("mod.session_guard.begin_replacement.the_session_record_was", "Der Sitzungsnachweis wurde seit der Vorschau verändert."), marker_kind)
         try:
             if not callable(validate_data):
-                raise ValueError("Ein strenger Schema-Prüfer ist erforderlich.")
+                raise ValueError(glide_i18n.t("mod.session_guard.begin_replacement.a_strict_schema_checker", "Ein strenger Schema-Prüfer ist erforderlich."))
             _basic_data_check(replacement_data, self.schema_version)
             validate_data(replacement_data)
         except (ValueError, TypeError, KeyError, UnicodeError, RecursionError) as exc:
@@ -444,7 +444,7 @@ class SessionGuard:
             preserved = (self._preserve_absence() if original_digest is None else
                          self.preserve_original(expected_sha256=original_digest))
             if self._original_digest() != original_digest:
-                raise ValueError("Der Originalzustand wurde während der Vorsicherung verändert.")
+                raise ValueError(glide_i18n.t("mod.session_guard.begin_replacement.the_original_state_was", "Der Originalzustand wurde während der Vorsicherung verändert."))
         except (OSError, ValueError) as exc:
             return Assessment("preservation_failed", False,
                               glide_i18n.t("mod.session_guard.begin_replacement.the_original_pre_backup", 'Die Originalvorsicherung ist fehlgeschlagen ({name}). Der Bestand bleibt schreibgeschützt.', name=type(exc).__name__), marker_kind)

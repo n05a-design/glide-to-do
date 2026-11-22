@@ -77,7 +77,7 @@ def _split(text, separator):
         else:
             current.append(character)
     if quoted:
-        raise ValueError("Nicht geschlossenes Anführungszeichen in ICS-Eigenschaft.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.split.unclosed_quotation_mark_in", "Nicht geschlossenes Anführungszeichen in ICS-Eigenschaft."))
     result.append(''.join(current))
     return result
 
@@ -85,7 +85,7 @@ def _split(text, separator):
 def property_line(line):
     pieces = _split(line, ':')
     if len(pieces) < 2:
-        raise ValueError("ICS-Eigenschaft ohne Doppelpunkt.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.property_line.ics_property_without_a", "ICS-Eigenschaft ohne Doppelpunkt."))
     head, value = pieces[0], ':'.join(pieces[1:])
     pieces = _split(head, ';')
     params = {}
@@ -93,7 +93,7 @@ def property_line(line):
         name, separator, content = piece.partition('=')
         name = name.upper()
         if not separator or name in params:
-            raise ValueError("Ungültige oder doppelte ICS-Parameter.")
+            raise ValueError(glide_i18n.t("mod.ics_busy.property_line.invalid_or_duplicate_ics", "Ungültige oder doppelte ICS-Parameter."))
         params[name] = content.strip('"')
     return Property(pieces[0].upper(), params, value)
 
@@ -103,7 +103,7 @@ def components(text):
     for line in str(text).lstrip('\ufeff').splitlines():
         if line.startswith((' ', '\t')):
             if not lines:
-                raise ValueError("ICS-Faltung ohne vorherige Zeile.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.components.ics_folding_without_a", "ICS-Faltung ohne vorherige Zeile."))
             lines[-1] += line[1:]
         elif line:
             lines.append(line)
@@ -114,12 +114,12 @@ def components(text):
             name = prop.value.upper()
             if not stack:
                 if name != 'VCALENDAR' or calendar_seen:
-                    raise ValueError("Genau ein VCALENDAR-Kalender wird benötigt.")
+                    raise ValueError(glide_i18n.t("mod.ics_busy.components.exactly_one_vcalendar_calendar", "Genau ein VCALENDAR-Kalender wird benötigt."))
                 calendar_seen = True
             stack.append((name, [], []))
         elif prop.name == 'END':
             if not stack or stack[-1][0] != prop.value.upper():
-                raise ValueError("Nicht zusammenpassende ICS-Komponenten.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.components.mismatched_ics_components", "Nicht zusammenpassende ICS-Komponenten."))
             name, properties, children = stack.pop()
             if stack:
                 stack[-1][2].append((name,tuple(properties),tuple(children)))
@@ -128,11 +128,11 @@ def components(text):
             elif name == 'VTIMEZONE':
                 zones.append((tuple(properties),tuple(children)))
         elif not stack:
-            raise ValueError("ICS-Eigenschaft außerhalb des Kalenders.")
+            raise ValueError(glide_i18n.t("mod.ics_busy.components.ics_property_outside_the", "ICS-Eigenschaft außerhalb des Kalenders."))
         else:
             stack[-1][1].append(prop)
     if stack or not calendar_seen:
-        raise ValueError("Unvollständiger ICS-Kalender.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.components.incomplete_ics_calendar", "Unvollständiger ICS-Kalender."))
     return events, zones
 
 
@@ -149,22 +149,22 @@ def moment(prop, zone, resolver, date_zone=None):
     date_only = prop.params.get('VALUE', '').upper() == 'DATE'
     if date_only:
         if prop.params.get('TZID') or not re.fullmatch(r'\d{8}', value):
-            raise ValueError("Ganztägiges Datum muss ohne TZID als JJJJMMTT vorliegen.")
+            raise ValueError(glide_i18n.t("mod.ics_busy.moment.an_all_day_date", "Ganztägiges Datum muss ohne TZID als JJJJMMTT vorliegen."))
         return datetime.strptime(value, '%Y%m%d').replace(tzinfo=date_zone or zone), True
     if prop.params.get('VALUE', 'DATE-TIME').upper() != 'DATE-TIME':
-        raise ValueError("Nicht unterstützter Zeitwert: " + prop.params['VALUE'])
+        raise ValueError(glide_i18n.t("mod.ics_busy.moment.unsupported_time_value", 'Nicht unterstützter Zeitwert: {value}', value=prop.params['VALUE']))
     if not re.fullmatch(r'\d{8}T\d{6}Z?', value):
-        raise ValueError("Zeitpunkt muss als JJJJMMTTTHHMMSS mit optionalem Z vorliegen.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.moment.a_time_must_be", "Zeitpunkt muss als JJJJMMTTTHHMMSS mit optionalem Z vorliegen."))
     if value.endswith('Z'):
         if prop.params.get('TZID'):
-            raise ValueError("UTC-Zeitpunkt darf keine zusätzliche TZID haben.")
+            raise ValueError(glide_i18n.t("mod.ics_busy.moment.a_utc_time_must", "UTC-Zeitpunkt darf keine zusätzliche TZID haben."))
         tz = UTC
     else:
         tzid = prop.params.get('TZID')
         try:
             tz = resolver(tzid) if tzid else zone
         except (ValueError, ZoneInfoNotFoundError):
-            raise ValueError("Zeitzone nicht verfügbar: " + tzid) from None
+            raise ValueError(glide_i18n.t("mod.ics_busy.moment.time_zone_not_available", 'Zeitzone nicht verfügbar: {tzid}', tzid=tzid)) from None
     value = value.removesuffix('Z')
     found = datetime.strptime(value, '%Y%m%dT%H%M%S').replace(tzinfo=tz, fold=0)
     utc(found)
@@ -174,10 +174,10 @@ def moment(prop, zone, resolver, date_zone=None):
 def duration(text, all_day):
     match = re.fullmatch(r'\+?P(?:(\d+)W|(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?)', text)
     if not match or text.endswith('T') or not any(value is not None for value in match.groups()):
-        raise ValueError("Nicht unterstützte oder negative ICS-Dauer.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.duration.unsupported_or_negative_ics", "Nicht unterstützte oder negative ICS-Dauer."))
     week, day, hour, minute, second = (int(value or 0) for value in match.groups())
     if all_day and any((hour, minute, second)):
-        raise ValueError("Ganztägige Dauer muss aus Tagen oder Wochen bestehen.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.duration.an_all_day_duration", "Ganztägige Dauer muss aus Tagen oder Wochen bestehen."))
     return Span(week * 7 + day, hour * 3600 + minute * 60 + second)
 
 
@@ -191,7 +191,7 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
         name = next((p.value for p in properties if p.name == 'TZID'), '')
         try:
             if name in embedded or name in invalid_zones:
-                raise ValueError('Zeitzonenkennung ist mehrfach definiert: ' + name)
+                raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.time_zone_id_is", 'Zeitzonenkennung ist mehrfach definiert: {name}', name=name))
             embedded[name] = ics_timezone.parse_zone(properties, children)
         except ValueError as exc:
             invalid_zones.add(name)
@@ -200,7 +200,7 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
     original_resolver = resolver
     def resolver(name):
         if name in invalid_zones:
-            raise ValueError('Ungültige eingebettete Zeitzone: ' + name)
+            raise ValueError(glide_i18n.t("mod.ics_busy.resolver.invalid_embedded_time_zone", 'Ungültige eingebettete Zeitzone: {name}', name=name))
         return embedded[name] if name in embedded else original_resolver(name)
     for properties in raw_events:
         lookup = {}
@@ -211,28 +211,28 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
             def one(name, required=False):
                 found = lookup.get(name, ())
                 if len(found) > 1 or (required and not found):
-                    raise ValueError("ICS-Eigenschaft fehlt oder ist mehrfach vorhanden: " + name)
+                    raise ValueError(glide_i18n.t("mod.ics_busy.one.ics_property_is_missing", 'ICS-Eigenschaft fehlt oder ist mehrfach vorhanden: {name}', name=name))
                 return found[0] if found else None
             uid = one('UID', True).value
             if not uid:
-                raise ValueError("Leere Ereigniskennung.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.empty_event_id", "Leere Ereigniskennung."))
             cancelled = (one('STATUS').value.upper() == 'CANCELLED') if one('STATUS') else False
             transparent = (one('TRANSP').value.upper() == 'TRANSPARENT') if one('TRANSP') else False
             identity = one('RECURRENCE-ID')
             if identity and identity.params.get('RANGE'):
-                raise ValueError("Serienausnahme mit RANGE wird nicht unterstützt.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.series_exception_with_range", "Serienausnahme mit RANGE wird nicht unterstützt."))
             identity, identity_all_day = moment(identity, zone, resolver, date_zone) if identity else (None,None)
             start_prop = one('DTSTART', not cancelled)
             start, all_day = moment(start_prop, zone, resolver, date_zone) if start_prop else (None, False)
             span = Span()
             end, length = one('DTEND'), one('DURATION')
             if end and length:
-                raise ValueError("DTEND und DURATION dürfen nicht gemeinsam vorkommen.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.dtend_and_duration_must", "DTEND und DURATION dürfen nicht gemeinsam vorkommen."))
             if start:
                 if end:
                     finish, end_all_day = moment(end, zone, resolver, date_zone)
                     if end_all_day != all_day or utc(finish) <= utc(start):
-                        raise ValueError("Ereignisende passt nicht zum Beginn.")
+                        raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.event_end_does_not", "Ereignisende passt nicht zum Beginn."))
                     span = Span((finish.date()-start.date()).days) if all_day else Span(seconds=int((utc(finish)-utc(start)).total_seconds()))
                 elif length:
                     span = duration(length.value, all_day)
@@ -244,12 +244,12 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
                 try:
                     rule = recurrence.parse_rule(one('RRULE').value)
                     if not recurrence.matches_start(start.date(),rule):
-                        raise ValueError('DTSTART stimmt nicht mit dem Serienfilter überein; die Folge ist laut RFC nicht definiert.')
+                        raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.dtstart_does_not_match", 'DTSTART stimmt nicht mit dem Serienfilter überein; die Folge ist laut RFC nicht definiert.'))
                     if rule.until:
                         if not all_day and not start_prop.params.get('TZID') and not start_prop.value.endswith('Z') and rule.until.endswith('Z'):
-                            raise ValueError('UNTIL einer lokalen Serie ohne TZID muss ebenfalls lokal vorliegen.')
+                            raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.until_of_a_local", 'UNTIL einer lokalen Serie ohne TZID muss ebenfalls lokal vorliegen.'))
                         if not all_day and (start_prop.params.get('TZID') or start_prop.value.endswith('Z')) and not rule.until.endswith('Z'):
-                            raise ValueError('UNTIL einer zonierten Serie muss in UTC vorliegen.')
+                            raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.until_of_a_zoned", 'UNTIL einer zonierten Serie muss in UTC vorliegen.'))
                         until_prop = Property('UNTIL', {'VALUE':'DATE'} if all_day else {}, rule.until)
                         until = moment(until_prop, start.tzinfo, resolver, date_zone)[0]
                         if all_day:
@@ -263,19 +263,19 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
                     for value in prop.value.split(','):
                         found, date_only = moment(Property(prop.name, prop.params, value), zone, resolver, date_zone)
                         if date_only != all_day:
-                            raise ValueError(name + ' hat einen anderen Datumstyp als DTSTART.')
+                            raise ValueError(glide_i18n.t("mod.ics_busy.moments.has_a_different_date", '{name} hat einen anderen Datumstyp als DTSTART.', name=name))
                         result.append(found)
                 return tuple(result)
             extra = moments('RDATE')
             excluded = frozenset(utc(value) for value in moments('EXDATE'))
             sequence = int(one('SEQUENCE').value) if one('SEQUENCE') else 0
             if sequence < 0:
-                raise ValueError("Negative Serienrevision.")
+                raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.negative_series_revision", "Negative Serienrevision."))
             stamp = one('DTSTAMP').value if one('DTSTAMP') else ''
             if stamp:
                 stamp_moment,stamp_date = moment(one('DTSTAMP'),zone,resolver,date_zone)
                 if stamp_date or not stamp.endswith('Z'):
-                    raise ValueError('DTSTAMP muss eine UTC-Uhrzeit enthalten.')
+                    raise ValueError(glide_i18n.t("mod.ics_busy.parse_calendar.dtstamp_must_contain_a", 'DTSTAMP muss eine UTC-Uhrzeit enthalten.'))
             title = text_value(one('SUMMARY').value) if one('SUMMARY') else glide_i18n.t("ui.show_busy_calendar_dialog.busy_time", 'Belegte Zeit')
             events.append(Event(uid, title, start, span, all_day, rule, until, extra, excluded,
                                 identity, cancelled, transparent, sequence, stamp, identity_all_day))
@@ -287,7 +287,7 @@ def parse_calendar(text, zone, resolver=None, date_zone=None):
 def expand(calendar, start, end, *, max_periods=200000, max_blocks=100000):
     lower, upper = utc(start), utc(end)
     if upper <= lower:
-        raise ValueError("Betrachtungszeitraum muss positiv sein.")
+        raise ValueError(glide_i18n.t("mod.ics_busy.expand.viewing_period_must_be", "Betrachtungszeitraum muss positiv sein."))
     groups, issues, blocks = {}, list(calendar.issues), []
     budget = recurrence.Budget(max_periods)
     for event in calendar.events:
@@ -305,7 +305,7 @@ def expand(calendar, start, end, *, max_periods=200000, max_blocks=100000):
         if utc(finish) > utc(occurrence) and utc(occurrence) < upper and utc(finish) > lower:
             if len(blocks) >= max_blocks:
                 raise recurrence.ExpansionLimitError(
-                    "Zu viele Kalenderintervalle; bitte den Kalenderzeitraum begrenzen.")
+                    glide_i18n.t("mod.ics_busy.add.too_many_calendar_intervals", "Zu viele Kalenderintervalle; bitte den Kalenderzeitraum begrenzen."))
             blocks.append(Block(occurrence, finish, event.title, event.all_day))
     for uid, group in groups.items():
         before = len(blocks)

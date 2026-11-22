@@ -4,7 +4,7 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 
 **Deutsch:** Shortcuts are described in their sections of [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md), for example [§2 Seitenleiste](../20_FUNKTIONEN.md#2-seitenleiste-und-navigation), [§6 Pinnwand](../20_FUNKTIONEN.md#6-pinnwand), [§9 Pixel-Werkstatt](../20_FUNKTIONEN.md#9-pixel-werkstatt) and [§10 Suche, Aktionen, Erinnerungen](../20_FUNKTIONEN.md#10-suche-aktionen-erinnerungen) · [Guide contents](README.md) · Previous: [Backups](10-backups.md) · Next: [Troubleshooting](12-troubleshooting.md)
 
-> Controlled translation of the German function reference. If the texts differ, the German text applies. Inside Glide, **Help › Show keyboard shortcuts** lists every shortcut by group; that overview is still German.
+> Controlled translation of the German function reference. If the texts differ, the German text applies. Inside Glide, **Help › Show keyboard shortcuts** lists every shortcut by group.
 
 "Ctrl/Cmd" means Ctrl on Windows and Linux and Cmd on macOS. Shortcuts shown with only "Ctrl" use the Control key on every platform. Planning shortcuts do not work while a text editor has focus.
 

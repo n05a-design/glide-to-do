@@ -26,7 +26,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `prozessdiagnose.py` / `test_prozessdiagnose.py` | Ergänzt den gemeinsamen Prüfungsstarter um lesenden Systemkontext und signaturbezogene WA-41A-/WA-41B-Hinweise; keine Fehlerunterdrückung, CPU-Skips oder automatischen Wiederholungen. [Vertrag und Grenzen](../../docs/05_QA_TESTPLAN.md#prozessabstürze-und-möglicher-prüfplatzfehler-wa-41) |
 | `pruefe_tk.py` | Tk-Voraussetzung und unter macOS die native Mausisolierung der Prüffenster |
 | `pruefe_showcase.py` | Pflichtprüfung des gelieferten Showcase (Import, Remapping, Vorschauen, Undo, Vorlagen, Neustart) |
-| `showcase.py [--tag JJJJ-MM-TT]` | Erzeugt den Showcase aus den Bildern in `tests/fixtures/showcase/bilder` |
+| `showcase.py [--tag JJJJ-MM-TT] [--sprache en]` | Erzeugt den Showcase „Stadtlicht“ bzw. „City Light“ (`showcase/en`) aus den eigenen Fotos in `tests/fixtures/showcase/bilder` |
 | `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Format |
 | `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT [--screenshot PFAD.png]` | Release-Arbeitslisten zum aktuellen Stand; Planungsfristen folgen dem Stichtag, Webquellen nicht. Unter Windows zusätzlich Aufnahmen im hellen Design und seinem dunklen Gegenstück; gleiche Bilder brechen ab |
 | `rundgang.py` | Probedaten „Rundgang“ (Liste, Notiz, Seite mit Bildern, Zeichnung) |

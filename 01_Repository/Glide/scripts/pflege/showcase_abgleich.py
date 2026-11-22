@@ -45,17 +45,24 @@ def main():
         env["GLIDE_QA_HINTERGRUND"] = "1"
         env["PYTHONPATH"] = os.pathsep.join(filter(None, (str(REPO/"tests/tools/hintergrund"), env.get("PYTHONPATH"))))
     subprocess.run([sys.executable,"-B",str(REPO/"tests/tools/pruefe_showcase.py")],cwd=REPO,env=env,check=True)
-    TARGET.mkdir(parents=True,exist_ok=True)
-    names = ["Glide-Showcase.glidebackup","Glide-Showcase_App.glideapp","Glide-Showcase.glidetemplates",
-             "Werkhaus-West.canvas","manifest.json","Showcase_starten.pyw","README.md"]
     records = {}
-    for name in names:
-        source, target = SOURCE/name, TARGET/name
-        assert source.is_file(), source
-        copy_atomic(source,target)
-        sha = hashlib.sha256(source.read_bytes()).hexdigest()
-        assert hashlib.sha256(target.read_bytes()).hexdigest() == sha
-        records[name] = sha
+    # Deutsche Fassung im Showcase-Ordner, englische im Unterordner `en` (D93).
+    for source_dir, target_dir in ((SOURCE, TARGET), (SOURCE/"en", TARGET/"en")):
+        target_dir.mkdir(parents=True,exist_ok=True)
+        canvas = sorted(source_dir.glob("*.canvas"))
+        assert len(canvas) == 1, source_dir
+        for alt in target_dir.glob("*.canvas"):
+            if alt.name != canvas[0].name:
+                alt.unlink()
+        names = ["Glide-Showcase.glidebackup","Glide-Showcase_App.glideapp","Glide-Showcase.glidetemplates",
+                 canvas[0].name,"manifest.json","Showcase_starten.pyw","README.md"]
+        for name in names:
+            source, target = source_dir/name, target_dir/name
+            assert source.is_file(), source
+            copy_atomic(source,target)
+            sha = hashlib.sha256(source.read_bytes()).hexdigest()
+            assert hashlib.sha256(target.read_bytes()).hexdigest() == sha
+            records[str(target.relative_to(TARGET))] = sha
     print(json.dumps({"ziel":str(TARGET),"sha256":records},ensure_ascii=False,indent=2))
 
 

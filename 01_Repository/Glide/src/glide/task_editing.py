@@ -61,15 +61,14 @@ def creation_target(lists, identity, allowed_kinds):
 def new_label_name(labels, name, *, max_labels, max_length):
     """Nach jeder Dialoggrenze am aktuellen Bestand prüfen, ohne Mutation."""
     if len(labels) >= max_labels:
-        raise ValueError(f"Es sind höchstens {max_labels} Labels möglich.")
+        raise ValueError(glide_i18n.t("ui.create_label_interactively.at_most_labels_are", 'Es sind höchstens {max_labels} Labels möglich.', max_labels=max_labels))
     if not isinstance(name, str) or not name.strip():
-        raise ValueError("Bitte einen Namen eingeben.")
+        raise ValueError(glide_i18n.t("ui.rename_label.please_enter_a_name", "Bitte einen Namen eingeben."))
     name = name.strip()
     if len(name) > max_length:
-        raise ValueError(f"Labelnamen dürfen höchstens {max_length} Zeichen lang sein – "
-                         "so viel zeigt die Labelspalte einer Liste.")
+        raise ValueError(glide_i18n.t("mod.task_editing.new_label_name.label_names_may_be", 'Labelnamen dürfen höchstens {max_length} Zeichen lang sein – so viel zeigt die Labelspalte einer Liste.', max_length=max_length))
     if any(str(label.get('name') or '').strip().casefold() == name.casefold() for label in labels):
-        raise ValueError("Es gibt bereits ein Label mit diesem Namen.")
+        raise ValueError(glide_i18n.t("ui.rename_label.a_label_with_this", "Es gibt bereits ein Label mit diesem Namen."))
     return name
 
 
@@ -119,7 +118,7 @@ def displaced_payloads(existing, incoming, limit):
     Nur lesen; der Aufrufer ermittelt daraus erlaubte ID-Verluste des Wächters.
     """
     if type(limit) is not int or limit < 1:
-        raise ValueError('Ungültige Papierkorbgrenze.')
+        raise ValueError(glide_i18n.t("mod.task_editing.displaced_payloads.invalid_trash_limit", 'Ungültige Papierkorbgrenze.'))
     return list(incoming[:max(0, len(incoming)-limit)]) + list(existing[max(0, limit-len(incoming)):])
 
 
@@ -130,26 +129,26 @@ def batch_plan(items, operation, value=None, *, max_labels=50, max_estimated=600
     bleiben erhalten; der Aufrufer liefert ausschließlich reguläre Label-IDs.
     """
     if operation not in ('importance', 'label_add', 'label_remove', 'due', 'estimated_minutes'):
-        raise ValueError('Unbekannte Mehrfachaktion.')
+        raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.unknown_bulk_action", 'Unbekannte Mehrfachaktion.'))
     if operation == 'importance' and (type(value) is not int or not 0 <= value <= 3):
-        raise ValueError('Die Wichtigkeit muss zwischen 0 und 3 liegen.')
+        raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.importance_must_be_between", 'Die Wichtigkeit muss zwischen 0 und 3 liegen.'))
     if operation.startswith('label_') and (not isinstance(value, str) or not value):
-        raise ValueError('Kein gültiges Label ausgewählt.')
+        raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.no_valid_label_selected", 'Kein gültiges Label ausgewählt.'))
     if operation == 'due' and value is not None:
         try:
             valid = isinstance(value, str) and date.fromisoformat(value).isoformat() == value
         except ValueError:
             valid = False
         if not valid:
-            raise ValueError('Die Fälligkeit muss ein gültiges Datum im Format JJJJ-MM-TT sein.')
+            raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.the_due_date_must", 'Die Fälligkeit muss ein gültiges Datum im Format JJJJ-MM-TT sein.'))
     if operation == 'estimated_minutes' and value is not None:
         if type(value) is not int or not 1 <= value <= max_estimated:
-            raise ValueError(f'Der Aufwand muss zwischen 1 und {max_estimated} ganzen Minuten liegen.')
+            raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.the_effort_must_be", 'Der Aufwand muss zwischen 1 und {max_estimated} ganzen Minuten liegen.', max_estimated=max_estimated))
     result = {}
     for item in items:
         identity = item.get('id')
         if not isinstance(identity, str) or not identity or item.get('done'):
-            raise ValueError('Die Auswahl enthält keine offene Aufgabe mehr.')
+            raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.the_selection_no_longer", 'Die Auswahl enthält keine offene Aufgabe mehr.'))
         if operation == 'importance':
             if item.get('importance', 0) != value:
                 result[identity] = {'importance': value}
@@ -158,7 +157,7 @@ def batch_plan(items, operation, value=None, *, max_labels=50, max_estimated=600
             changes = {}
             if item.get(operation) != value:
                 if operation == 'due' and item.get('repeat'):
-                    raise ValueError('Die Fälligkeit von Serien bitte einzeln bearbeiten; die Auswahl bleibt unverändert.')
+                    raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.please_edit_the_due", 'Die Fälligkeit von Serien bitte einzeln bearbeiten; die Auswahl bleibt unverändert.'))
                 changes[operation] = value
             if operation == 'due' and value is None and item.get('due_time'):
                 changes['due_time'] = None
@@ -169,7 +168,7 @@ def batch_plan(items, operation, value=None, *, max_labels=50, max_estimated=600
         updated = [label for label in labels if label != value] if operation == 'label_remove' else labels[:]
         if operation == 'label_add' and value not in updated:
             if len(updated) >= max_labels:
-                raise ValueError('Mindestens eine Aufgabe hat bereits die maximale Anzahl Labels.')
+                raise ValueError(glide_i18n.t("mod.task_editing.batch_plan.at_least_one_task", 'Mindestens eine Aufgabe hat bereits die maximale Anzahl Labels.'))
             updated.append(value)
         if labels != updated:
             result[identity] = {'labels': updated}
@@ -204,7 +203,7 @@ def merge(baseline, entered, current):
     """
     for values in (baseline, entered, current):
         if not isinstance(values, dict) or set(values) != FIELDS:
-            raise ValueError("Unvollständiger Feldvertrag des Aufgabeneditors.")
+            raise ValueError(glide_i18n.t("mod.task_editing.merge.incomplete_field_contract_of", "Unvollständiger Feldvertrag des Aufgabeneditors."))
     changed = tuple(sorted(key for key in FIELDS if baseline[key] != entered[key]))
     conflicts = {key for key in changed if current[key] != baseline[key] and current[key] != entered[key]}
     for group in GROUPS:
@@ -235,7 +234,7 @@ def overview_change(item, field, value, *, normalize_date, normalize_importance,
     if field in ('due', 'planned_date'):
         normalized = normalize_date(value) if value else None
         if value and normalized is None:
-            raise ValueError('Das Fälligkeitsdatum ist ungültig.' if field == 'due' else 'Das Bearbeitungsdatum ist ungültig.')
+            raise ValueError(glide_i18n.t("calendar.invalid_due", 'Das Fälligkeitsdatum ist ungültig.') if field == 'due' else glide_i18n.t("mod.task_editing.overview_change.the_planned_date_is", 'Das Bearbeitungsdatum ist ungültig.'))
         if field == 'planned_date' and not schedulable:
             return {}
     elif field == 'importance':
