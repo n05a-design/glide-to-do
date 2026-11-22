@@ -323,7 +323,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 | G22 | Verschlüsselte Ablage | ✕ | keine Priorität |
 | G12, G13 | Spalten in Seiten, Graph | ✕ | Entscheidungen 29./30.09.2026 |
 | ZF-200 | Eigene Felder je Liste | ✕ | am 25.09.2026 nicht gewählt |
-| N21 | Englische Eingabewörter der Schnellerfassung („tomorrow“, „next Monday“, „every week“, englische Wochentage und Monate) | ◇ | nicht Teil von 1.0.0, ausdrücklich nicht gestrichen (Inhaberentscheid 21.11.2026); Auslöser: Folgeversion nach 1.0.0. Deutsche Eingabewörter bleiben gültig; Handbuch und Platzhalter nennen sie bis dahin als deutsche Beispiele |
+| N21 | Englische Eingabewörter der Schnellerfassung („tomorrow“, „next Monday“, „every week“, englische Wochentage und Monate) | ◐ | Folgepaket umgesetzt, siehe §21.170; öffentlicher Lieferstand ausstehend; Auslöser: Folgeversion nach 1.0.0. Deutsche Eingabewörter bleiben gültig; Handbuch und Platzhalter nennen sie bis dahin als deutsche Beispiele |
 | N15–N20 | N15 Sprache, N16 Gewohnheitsstatistik (=G06, vorerst), N17 Team, N18 freie Felder, N19 Unterseiten/Graph, N20 Web Clipper | ✕ bzw. zurückgestellt N16 | konkrete Produktgrenzen; Cloud-KI separat durch Q3 ausgeschlossen |
 
 ## 8. Abhängigkeiten und Regeln
@@ -3841,3 +3841,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, Tk 9.1.0, künstliche Daten: 1.284 Unit-Tests, beide Showcase-Fassungen, T335 mit zehn Fällen. Vollprüfung `pruefen.py --modus voll --vordergrund`: 131 Schritte grün bis auf zwei Befunde, die behoben und nachgeprüft wurden: erster Lauf rot an `test_startwege` (Bytecode `__pycache__` aus einer eigenen Kompilierprobe im Quellbaum, entfernt, Lauf vollständig wiederholt), zweiter Lauf rot an der Standprüfung (englische Showcase-README ohne Standzeile, relativer Link auf `quellen.json` in der Lieferkopie; korrigiert, Standprüfung grün). Die danach übersprungenen Schritte Attribut-, Dublettenprüfung sowie Beispieldaten- und Releaseplan-Reproduktion wurden nachgeholt und sind grün. macOS-Paket `Glide-1.0.0-macos-arm64.tar.gz` (492 Dateien, Ad-hoc-Signatur geprüft, isolierte Startprobe Exit 0, Quellvergleich unverändert, `NSHumanReadableCopyright` „© 2026 Tim von Trostorff – shaye Design – N05A Foundry“), SHA-256 `2582000d9c810727eecf044225d4a51f9362ba1876b5cefe936c619bf085c1b4`, gebaut aus Commit `996c1e88`. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Abnahme.
 
 **D – Rest und Git:** Lizenz der Fotos am 22.11.2026 vom Inhaber entschieden: MPL-2.0 wie der Quellcode (Showcase-READMEs DE/EN, `quellen.json`, Grafikquellen). Offen beim Inhaber: Signierung (I3, zurückgestellt), Datenschutz-URL, Sicherheitskontakt, Inno-AppId. Englische Eingabewörter der Schnellerfassung bleiben N21. Die GitHub-Kartenvorschau muss zusätzlich in den Repository-Einstellungen ersetzt werden. Lieferkopie `07_Python-Versionen` mit der nächsten Produktionsrunde (einschließlich `glide_vorlagen.en.glidetemplates`).
+
+### 21.170 Englische Schnellerfassung (N21) (V1.81, 21.11.2026)
+
+**A – Auftrag:** Der Inhaber gab das für nach 1.0 vorgesehene Folgepaket zur Umsetzung in einem eigenen PR frei.
+
+**B – Umsetzung:** Englische Datumswörter, ausgeschriebene Monatsnamen, Fälligkeiten und Wiederholungen werden in Eingabezeile und Schnellerfassung erkannt. Der Parser erhält die ursprünglichen Textstellen für Vorschau und Rücknahme. Das Datenformat bleibt unverändert.
+
+**C – Prüfung:** Parser-Unitfälle und Schnellerfassung in echtem Tk mit künstlichen Daten. Details im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+
+**D – Rest:** Native GitHub-Matrix und Auslieferung folgen getrennt.

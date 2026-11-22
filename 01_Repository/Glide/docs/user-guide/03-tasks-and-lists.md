@@ -12,6 +12,8 @@ Type a title into the entry line and press Enter or the round **+** button. Shif
 
 The entry line and quick capture read dates and other details from the title. Each detected value appears as a chip below the line before you save. Click × on a chip to keep the text as plain title text.
 
+English dates and repeats work in both the entry line and quick capture. Try `tomorrow`, `next Monday`, `in 3 days`, `24 May`, `May 24, 2027`, `due next Monday at 14:30`, `every week` or `every 2 weeks on Monday`. The separate due field accepts English dates too. Quoted text stays in the title. German examples are listed below.
+
 | Typed (German) | Sets |
 |---|---|
 | `heute`, `morgen`, a weekday, `in 3 Tagen`, `24.12.` | Planned day |

@@ -52,6 +52,15 @@ with tempfile.TemporaryDirectory(prefix="glide-features311-") as folder:
         app.undo_last_change()
         target_after_undo = next(entry for entry in app.lists if entry["id"] == target["id"])
         assert not any(item["id"] == created["id"] for item in target_after_undo["items"])
+        english = app.capture_item("Review draft tomorrow every week /due today", target["id"],
+                                   "tomorrow at 14:30")
+        assert english and app.item_display_text(english) == "Review draft", english
+        assert english["planned_date"] == tomorrow.isoformat(), english
+        assert (english["due"], english["due_time"]) == (tomorrow.isoformat(), "14:30"), english
+        assert english["repeat"]["art"] == "woechentlich", english
+        app.undo_last_change()
+        target_after_undo = next(entry for entry in app.lists if entry["id"] == target["id"])
+        assert not any(item["id"] == english["id"] for item in target_after_undo["items"])
         try:
             app.capture_item("", inbox["id"])
         except ValueError:
@@ -110,4 +119,4 @@ with tempfile.TemporaryDirectory(prefix="glide-features311-") as folder:
         app.release_data_lock()
         root.destroy()
 
-print("OK: Schnellerfassung, deutsche Fristvorschau, gespeicherte Filter, Persistenz und Rollback")
+print("OK: Schnellerfassung, deutsche und englische Eingabe, gespeicherte Filter, Persistenz und Rollback")

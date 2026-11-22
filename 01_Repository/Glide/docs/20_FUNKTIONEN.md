@@ -278,6 +278,8 @@ Die Schnelleingabe erkennt unter anderem „alle 3 Monate am 15.“, „alle 2 W
 
 **Eingabezeile und Schnellerfassung** lesen den Titel mit demselben Parser (`capture_parser.py`, 3.33.3). Jede Erkennung erscheint vor dem Speichern als Chip unter der Zeile; × nimmt sie zurück, der Text bleibt im Titel und wird nicht teilweise neu gedeutet.
 
+**Englische Datumswörter (N21):** Die Titelerkennung versteht auch `today`, `tomorrow`, `next Monday`, `in 3 days`, `24 May` und `May 24, 2027`. `due`, `by` oder `/due` leiten eine Fälligkeit ein, etwa `due next Monday at 14:30`. Wiederholungen erkennen unter anderem `every week`, `every Monday` und `every 2 weeks on Monday`. Das separate Feld „Fällig“ versteht die englischen Datumsangaben ebenfalls. Beide Schreibweisen funktionieren unabhängig von der Oberflächensprache.
+
 | Eingabe | Feld |
 |---|---|
 | Datum ohne Zusatz: heute, morgen, übermorgen, Wochentag, „nächsten Freitag“, „in 3 Tagen“, „in einer Woche“, „24.12.“, „24.12.2026“ | Bearbeitungstag (D01) |

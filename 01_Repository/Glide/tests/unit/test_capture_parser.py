@@ -98,4 +98,83 @@ class CaptureTests(unittest.TestCase):
   self.assertEqual(p('Sport jeden Montag',ignore={'jeden montag'}).felder,{})
  def test_suggestions(self):
   self.assertEqual(c.slash_suggestions('bi',L),['bis']);self.assertIn('Büro',c.slash_suggestions('bü',L))
+
+class EnglishCaptureTests(unittest.TestCase):
+    def test_planning_due_and_time(self):
+        capture = p("Review today /due next Friday at 14:30")
+        self.assertEqual(capture.titel, "Review")
+        self.assertEqual(capture.felder, {"planned_date": "2026-10-02", "due": "2026-10-09", "due_time": "14:30"})
+        self.assertEqual(p("Review /tomorrow").felder, {"planned_date": "2026-10-03"})
+        self.assertEqual(p("Review next Monday").felder, {"planned_date": "2026-10-05"})
+        self.assertEqual(p("Review in 2 weeks").felder, {"planned_date": "2026-10-16"})
+        self.assertIn("tomorrow", c.slash_suggestions("tom"))
+
+    def test_english_named_months(self):
+        for expression in ("May 24, 2027", "24 May 2027", "24 May"):
+            with self.subTest(expression=expression):
+                self.assertEqual(p(f"Review {expression}").felder, {"planned_date": "2027-05-24"})
+        self.assertEqual(p("Review 29 February").felder, {"planned_date": "2028-02-29"})
+        for text in ("May I call", "Review 30 February", "Review May 24 0000"):
+            self.assertEqual((p(text).titel, p(text).felder), (text, {}))
+        self.assertEqual(c.parse_capture_due("24 May at 9:30", HEUTE), ("2027-05-24", "09:30"))
+        self.assertEqual(c.parse_capture_due("next Friday at 14:30", HEUTE), ("2026-10-09", "14:30"))
+        with self.assertRaises(ValueError):
+            c.parse_capture_due("in 600 weeks", HEUTE)
+
+    def test_recurrences_keep_existing_rule_shape(self):
+        cases = (
+            ("every week", "jede Woche"),
+            ("every Monday", "jeden Montag"),
+            ("weekly on Monday and Thursday at 09:15", "wöchentlich am Montag und Donnerstag um 09:15"),
+            ("every 2 weeks on Monday", "alle 2 Wochen am Montag"),
+            ("every month", "jeden Monat"),
+            ("every weekday", "jeden Werktag"),
+        )
+        for english, german in cases:
+            with self.subTest(expression=english):
+                actual = p(f"Review {english}")
+                self.assertEqual(actual.titel, "Review")
+                self.assertEqual(actual.felder, p(f"Review {german}").felder)
+        self.assertEqual(p("Review every week due 12 October").felder["repeat"]["start"], "2026-10-12")
+
+    def test_extended_and_yearly_anchor_recurrences_match_german(self):
+        """Review #186: Intervalle über den erweiterten Parser, ausgeschriebenes Datum als Jahresanker."""
+        cases = (
+            ("every 3 months on 15", "alle 3 Monate am 15"),
+            ("every 2 weeks on Monday and Thursday", "alle 2 Wochen am Montag und Donnerstag"),
+            ("every year on 24 May", "jedes Jahr am 24.05."),
+            ("yearly on May 24", "jährlich am 24.05."),
+        )
+        for english, german in cases:
+            with self.subTest(english=english):
+                self.assertEqual(p(f"Review {english}").felder, p(f"Review {german}").felder)
+                self.assertEqual(p(f"Review {english}").titel, "Review")
+        felder = p("Review every year on 24 May").felder
+        self.assertNotIn("planned_date", felder)
+        self.assertEqual(felder["due"], "2027-05-24")
+        zwei = p("Review every 2 years on 24 May").felder
+        self.assertEqual((zwei["repeat"]["rrule"], zwei["due"]), ("FREQ=YEARLY;INTERVAL=2", "2027-05-24"))
+        lang = "every 2 weeks on Monday and Tuesday and Wednesday and Thursday and Friday"
+        self.assertEqual(p(f"Review {lang}").felder,
+                         p("Review alle 2 Wochen am Montag und Dienstag und Mittwoch und Donnerstag und Freitag").felder)
+        self.assertEqual(p(f"Review {lang}").titel, "Review")
+        for ungueltig in ("every 0 years on 24 May", "every 366 years on 24 May"):
+            with self.subTest(ungueltig=ungueltig):
+                self.assertNotIn("repeat", p(f"Review {ungueltig}").felder)  # kein Absturz, bleibt Text
+
+    def test_original_text_protection_and_localized_chips(self):
+        text = 'Review "tomorrow" every week'
+        self.assertEqual(p(text).titel, 'Review "tomorrow"')
+        self.assertEqual((p(text, ignore={"every week"}).titel, p(text, ignore={"every week"}).felder), (text, {}))
+        self.assertEqual(p('Review 12 "May"').felder, {})
+        previous = c.glide_i18n.get_language()
+        try:
+            c.glide_i18n.set_language("en")
+            self.assertIn("Mon 2026-10-05", p("Review next Monday").teile[0].text)
+            self.assertIn("Monday", p("Review every Monday").teile[0].text)
+            with self.assertRaisesRegex(ValueError, "Date not recognized"):
+                c.parse_capture_due("30 February", HEUTE)
+        finally:
+            c.glide_i18n.set_language(previous)
+
 if __name__=='__main__':unittest.main()
