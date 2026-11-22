@@ -1,5 +1,8 @@
 # QA-Bericht – Glide 1.0.0
 
+## Bearbeitungszeit im Seitenkopf (WA-25) (V1.82, 21.11.2026)
+
+T065 prüft fehlende und ungültige Werte, Zeitzonen, Einheiten und beide Oberflächensprachen. T182 nutzt den echten Seiteneditor, prüft die Kopfzeile, den genauen Zeitpunkt im Menü und die Aktualisierung nach dem Speichern. Die GitHub-Matrix und menschliche Abnahme sind offen.
 ## Englische Schnellerfassung (N21) (V1.81, 21.11.2026)
 
 Geprüft werden deutsche und englische Eingaben, beide Reihenfolgen ausgeschriebener Monatsdaten, Wiederholungsregeln, rücknehmbare Chips und wörtliche Abschnitte. T139 (`test_features311.py`) nutzt den echten Speicher- und Rückgängig-Weg der Schnellerfassung mit künstlichen Daten. Die GitHub-Matrix und menschliche Abnahme sind offen.

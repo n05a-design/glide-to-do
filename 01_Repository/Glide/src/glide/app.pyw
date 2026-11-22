@@ -12084,6 +12084,9 @@ class PageEditor(RichNoteEditor):
                          command=self.toggle_width)
         self.add_outline_menu(menu)
         self.add_object_reference_menu(menu)
+        if self.app.is_page_list(entry := self.app.page_entry(self.entry_id)) and glide_pages.edit_time_text(entry.get("updated_at")):
+            menu.add_command(label=glide_i18n.t("page.edit_time.action", "Bearbeitungszeit anzeigen …"),
+                             command=self.show_page_edit_time)
         menu.add_separator()
         menu.add_command(label=glide_i18n.t("ui.build_page_menu.embed_live_list", 'Live-Liste einbetten …'), command=lambda: self.app.choose_live_list(self.entry_id))
         menu.add_cascade(label=glide_i18n.t("ui.build_page_menu.cover_image", 'Titelbild'), menu=self.app.page_cover_menu(self.entry_id, menu))
@@ -12104,6 +12107,11 @@ class PageEditor(RichNoteEditor):
         menu.add_command(label=glide_i18n.t("menu.edit.undo", 'Rückgängig'), command=self.undo)
         menu.add_command(label=glide_i18n.t("menu.edit.redo", 'Wiederholen'), command=self.redo)
         return menu
+
+    def show_page_edit_time(self):
+        entry = self.app.page_entry(self.entry_id)
+        if entry and (edit := glide_pages.edit_time_text(entry.get("updated_at"))):
+            self.app.show_info(glide_i18n.t("page.edit_time.title", "Letzte Bearbeitung"), edit[1])
 
     def show_page_actions(self, event=None):
         """„Mehr“: die Einträge des Seitenmenüs als eingebettete Auswahl mit Filterfeld (E-U3 A)."""
@@ -41406,6 +41414,8 @@ class ListApp:
             return "break"
         with self.sidebar_change(refresh_tree=True) as change:
             page.update(values)
+            if self.is_page_list(page):
+                page["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
             if self.is_drawing_list(page):
                 # Wurde das Referenz-PNG als Anhang entfernt, entfällt der Verweis.
                 page["drawing_reference"] = self.normalize_drawing_reference(
@@ -45278,7 +45288,10 @@ class ListApp:
         notiz = self.header_note_text()
         kennzahlen = bool(str(getattr(self, "_stats_full_text", "") or "").strip())
         self._chip_stats_flag = kennzahlen
-        signatur = (tuple(chips), notiz, bearbeitbar, kennzahlen, self.theme.get("bg"), self.theme.get("muted"))
+        entry = self.current_list() if self.view_mode == "list" else None
+        edit = (glide_pages.edit_time_text(entry.get("updated_at"))
+                if chips and self.is_page_list(entry) else None)
+        signatur = (tuple(chips), edit, notiz, bearbeitbar, kennzahlen, self.theme.get("bg"), self.theme.get("muted"))
         sichtbar = bool(chips or notiz)
         if signatur == getattr(self, "_chip_signature", None) and sichtbar == bool(zeile.winfo_manager()):
             return
@@ -45291,9 +45304,13 @@ class ListApp:
             return
         # Kennzahlen als Text mit Trennpunkt, ohne Kasten: Auf dem Verlauf stand
         # jede als eigenes Feld in der Eingabefarbe (Rückmeldung 26.09.2026).
-        for index, text in enumerate(chips):
-            CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
-                        font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True).pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+        for index, text in enumerate(([edit[0]] if edit else []) + chips):
+            chip = CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
+                               font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True)
+            chip.pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+            if edit and index == 0:
+                self.add_tooltip(chip, glide_i18n.t("page.edit_time.exact", "Letzte Bearbeitung: {stamp}", stamp=edit[1]))
+                glide_window_lifetime.scope_for(chip).after(60000, self.tick_page_edit_time, chip)
         if notiz:
             vorsatz = "·  " if chips or kennzahlen else ""
             etikett = CanvasLabel(zeile, text=vorsatz + notiz, bg=self.theme["bg"], fg=self.theme["muted"],
@@ -45307,6 +45324,11 @@ class ListApp:
         if not zeile.winfo_manager():
             zeile.pack(side="left", anchor="w", fill="x", expand=True)
         self.fit_page_chips()
+
+    def tick_page_edit_time(self, chip):
+        self.update_page_chips()
+        if chip.winfo_exists():
+            glide_window_lifetime.scope_for(chip).after(60000, self.tick_page_edit_time, chip)
 
     def fit_page_chips(self, event=None):
         """Zeigt nur ganze Kennzahlen: Was nicht passt, fällt von hinten weg.
@@ -51199,8 +51221,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 entry["rich_note"] = copy.deepcopy(document)
                 entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
                 change.mark()
-        elif self.dirty:
-            self.save_items()
+            if change.saved and self.is_page_list(entry) and list_id == self.active_list_id:
+                self.update_page_chips()
+        elif self.dirty and self.save_items():
+            if self.is_page_list(entry) and list_id == self.active_list_id:
+                self.update_page_chips()
         return not self.dirty
 
     # --- Seitenart „Seite“ (26.09.2026) ------------------------------------
