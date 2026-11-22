@@ -11,6 +11,8 @@ Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
 A **page** is a long document with a reading column of up to 760 px. It scrolls without end and has no sub-pages. Its title is the title in the header. Double-click the header title to rename the page.
 
 - **Markdown shortcuts** work while you type. **/** at the start of a line opens the block picker. Enter continues lists and tasks.
+An open page shows when it was last edited in the header. Hover over the time or choose **More › Show last edit time …** to see the exact local date, time and UTC offset. The menu also works when the header is too narrow.
+
 - **Blocks:** headings 1–4, bulleted and numbered lists, tasks, quote, code, divider, table, indents, toggle list, toggle heading and callout.
 - **Block actions:** Ctrl/Cmd+/ or the ⠿ handle left of a line. Drag the handle to move a block, or press Escape to cancel. A floating format bar appears over selected text.
 - **More** (*Mehr*) opens a searchable list of every page action. Disabled entries say why they are disabled.

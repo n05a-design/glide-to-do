@@ -1110,7 +1110,7 @@ Die Versionsangaben in den Bestandszeilen bezeichnen historische Einführung bzw
 | **WA-22** | Pinnwandlayout in Komplettbackup und Tagesständen erhalten | Vorschlag E-P3; nicht implementiert/geprüft/geliefert | Backupbegriff und Restorevertrag erweitern, vorhandene Archive weiter lesen; Quelldaten und Layout gemeinsam konsistent, Vorsicherung/Undo/fehlende Ziele. `backup_diff.py`, App-Backup/Restore. **Nicht pauschal ohne Datenwirkung:** Backupformat und Wiederherstellung verändern sich, Schutzschema explizit versionieren. Phase 4 nach Schutzrunde |
 | **WA-23** | einen einzelnen Serientermin verschieben/auslassen | Vorschlag E-P3; nicht implementiert/geprüft/geliefert | reine Fortschreibung einer Aufgabe reicht für künftige Ausnahme nicht; Instanzidentität, Ausnahmedatum, Nachfolgetermin, Abhaken/Undo/ICS definieren. Eng mit FP-02, gemeinsames Formattor nur nach fertiger Modellprüfung. Phase 2, nicht als bereits genehmigter Teil von D49 behandeln |
 | **WA-24** | erledigte Serientermine in Datumsansichten behalten | Vorschlag E-P3; nicht implementiert/geprüft/geliefert | ursprüngliche Annahme „nur Ableitung, kein Format“ **nicht belegt**: dauerhafte einzelne Vorkommen benötigen belastbare Abschluss-/Instanzdaten. Vorhandenen begrenzten Aktivitätsverlauf nicht zum dauerhaften Serienarchiv erklären. Mit WA-23/FP-02 Modell/Retention/Export klären, sonst nur vorhandene letzte Abschlüsse zeigen und Grenze nennen. Phase 2 |
-| **WA-25** | relative Bearbeitungszeit für Seiten | Vorschlag E-P3 bzw. E-U3 B, nicht implementiert/geprüft/geliefert | Notion-Rang 4; aus vorhandenem Änderungsdatum berechnen, ohne jede Minute alle Seiten neu aufzubauen; exakte Zeit zugänglich. `page_features.py`, Seitenkopf; kein eigener Auftrag neben E-U3. Phase 1 optional |
+| **WA-25** | relative Bearbeitungszeit für Seiten | Inhaberwahl, Folgepaket umgesetzt (siehe §21.171), Lieferstand ausstehend | Notion-Rang 4; aus vorhandenem Änderungsdatum berechnen, ohne jede Minute alle Seiten neu aufzubauen; exakte Zeit zugänglich. `page_features.py`, Seitenkopf; kein eigener Auftrag neben E-U3. Phase 1 optional |
 | **TK9-RAD** | Rad-/Zoombindungen für Tk 9 vereinheitlichen | technischer Vorschlag, nicht implementiert/geprüft/geliefert | Tk 9 behandelt Button-4/5 anders, Tk 8 braucht den Linux-Weg; echte Rad-/Seitentasten getrennt nach Laufzeit prüfen, nicht einfach Bindungen löschen. `interaction_policy.py`, App-/Editor-Radadapter. Phase 1 bzw. WA-26 |
 | **PS-01** | wackelige Windows-Prüfsuiten stabilisieren | Prüfauftrag 17.10.; upstream Werkzeugkorrektur teilweise vorhanden, lokal veraltet | `test_tag3390`/`test_template_workflows` upstream 17.10. korrigiert, `test_ui_followup36` und Features330-Zoom nur bei belegter Ursache. Gegenproben und Plattformstände erhalten. Phase 0, keine Produktkorrektur aus einem Fokus-/Dialogtest allein ableiten |
 | **PS-02** | fremder Seiteninhalt oberhalb Showcase-Pinnwand | Untersuchungsauftrag 17.10.; Ursache offen, keine bestätigte Korrektur | künstliche isolierte Fixture; Hostwechsel/Widgetabbau/Ansichtsmodus prüfen, Datenreferenz gegen UI-Rest unterscheiden. App-Ansichtswechsel, `ItemWorkspace`; nur im Fehlerfall produktiv korrigieren, keine echten Showcase-Nutzerdaten ersetzen. Phase 0/Schutzrunde |
@@ -3821,3 +3821,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, eigene Tk 9.1, künstliche Daten: `test_ansichten.py --fall altfilter` grün; Wartehilfe mit simulierter Uhrzeit (23:58:30 wartet 92 s, 23:50:00 und 0:00:10 warten nicht). Kein echter Lauf über Mitternacht.
 
 **D – Rest und Git:** Eigener PR nur für Testcode und Plan; `src/glide` und `07_Python-Versionen` bleiben unberührt. Hover-Fall `seitenleistenabstand3504` nur beobachten.
+
+### 21.171 Bearbeitungszeit im Seitenkopf (WA-25) (V1.82, 21.11.2026)
+
+**A – Auftrag:** Der Inhaber gab das für nach 1.0 vorgesehene Folgepaket zur Umsetzung in einem eigenen PR frei.
+
+**B – Umsetzung:** Geöffnete Seiten zeigen den vorhandenen Änderungszeitpunkt relativ im Kopf. Der genaue Zeitstempel ist im Hinweis und über das Seitenmenü erreichbar. Das Datenformat bleibt unverändert.
+
+**C – Prüfung:** Einheiten- und Sprachwechsel in Unit-Tests; Seitenkopf, Zeitdialog und Speichern in echtem Tk. Details im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+
+**D – Rest:** Native GitHub-Matrix und Auslieferung folgen getrennt.

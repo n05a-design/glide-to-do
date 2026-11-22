@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import copy
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 import sys
 import unittest
@@ -11,6 +11,31 @@ import page_features as pages
 
 
 class PageFeaturesTests(unittest.TestCase):
+    def test_edit_time_uses_stored_instant_and_active_language(self):
+        now = datetime(2026, 11, 21, 18, tzinfo=timezone.utc)
+        previous = pages.glide_i18n.get_language()
+        cases = ((59, "Gerade bearbeitet", "Edited just now"),
+                 (60, "Vor 1 Minute bearbeitet", "Edited 1 minute ago"),
+                 (120, "Vor 2 Minuten bearbeitet", "Edited 2 minutes ago"),
+                 (3600, "Vor 1 Stunde bearbeitet", "Edited 1 hour ago"),
+                 (7200, "Vor 2 Stunden bearbeitet", "Edited 2 hours ago"),
+                 (86400, "Vor 1 Tag bearbeitet", "Edited 1 day ago"),
+                 (172800, "Vor 2 Tagen bearbeitet", "Edited 2 days ago"))
+        try:
+            for seconds, german, english in cases:
+                # The stored offset can differ from the reader's time zone.
+                stamp = (now - timedelta(seconds=seconds)).astimezone(timezone(timedelta(hours=5)))
+                for language, expected in (("de", german), ("en", english)):
+                    with self.subTest(seconds=seconds, language=language):
+                        pages.glide_i18n.set_language(language)
+                        relative, exact = pages.edit_time_text(stamp.isoformat(), now)
+                        self.assertEqual(relative, expected)
+                        self.assertEqual(datetime.fromisoformat(exact), stamp)
+        finally:
+            pages.glide_i18n.set_language(previous)
+        for value in (None, "", "2026-11-21", "2026-02-30T12:00:00", 1):
+            self.assertIsNone(pages.edit_time_text(value, now))
+
     def test_block_move_preserves_formats_references_images_and_unicode(self):
         doc = {'text': '😀 Erst\nBild\nAufgabe', 'links': {'link:1': 'glide://list/a'},
                'images': {'img:1': {'attachment': 'a', 'width': 320, 'mode': 'center'}},

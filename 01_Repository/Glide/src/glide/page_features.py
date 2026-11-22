@@ -2,12 +2,40 @@
 """Live-Listen, Titelbilder und gefüllte Vorlagenvorschauen; ohne Tk (Format 23)."""
 import copy
 from bisect import bisect_left, bisect_right
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import re
 
 import drawing
 import object_references as objects
 import i18n as glide_i18n
+
+
+def edit_time_text(value, now=None):
+    """Relativer Text und exakte Ortszeit aus dem gespeicherten Änderungszeitpunkt."""
+    if not isinstance(value, str) or len(value.strip()) <= 10:
+        return None
+    try:
+        stamp = datetime.fromisoformat(value.strip().replace("Z", "+00:00")).astimezone()
+        age = int(max(0, ((now or datetime.now().astimezone()).timestamp() - stamp.timestamp())))
+    except (ValueError, OverflowError, OSError):
+        return None
+    tr = glide_i18n.t
+    exact = stamp.isoformat(sep=" ", timespec="seconds")
+    if age < 60:
+        relative = tr("page.edit_time.just_now", "Gerade bearbeitet")
+    elif age < 3600:
+        count = age // 60
+        relative = (tr("page.edit_time.minute", "Vor 1 Minute bearbeitet") if count == 1
+                    else tr("page.edit_time.minutes", "Vor {count} Minuten bearbeitet", count=count))
+    elif age < 86400:
+        count = age // 3600
+        relative = (tr("page.edit_time.hour", "Vor 1 Stunde bearbeitet") if count == 1
+                    else tr("page.edit_time.hours", "Vor {count} Stunden bearbeitet", count=count))
+    else:
+        count = age // 86400
+        relative = (tr("page.edit_time.day", "Vor 1 Tag bearbeitet") if count == 1
+                    else tr("page.edit_time.days", "Vor {count} Tagen bearbeitet", count=count))
+    return relative, exact
 
 
 def block_lines(document, line):

@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Bearbeitungszeit im Seitenkopf (WA-25) (V1.82, 21.11.2026)
+
+T065 prüft fehlende und ungültige Werte, Zeitzonen, Einheiten und beide Oberflächensprachen. T182 nutzt den echten Seiteneditor, prüft die Kopfzeile, den genauen Zeitpunkt im Menü und die Aktualisierung nach dem Speichern. Die GitHub-Matrix und menschliche Abnahme sind offen.
+
 ## D93: zweisprachiger Austausch und englische Vorlagen (V1.78, 21.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/v178-austausch-zweisprachig` über `main` `3a7e9170`. Grün: 1.284 Unit-Tests einschließlich `test_i18n.py` mit dem neuen Abgleich des englischen Vorlagenkatalogs, T335 mit allen neun Fällen (L1–L8 und `v178_austausch_und_vorlagen`) auf Englisch und Deutsch sowie die Schnellprüfung `pruefen.py --modus schnell --vordergrund`. Die englischen Vorlagentexte wurden in der Sitzung übersetzt und auf die Titelgrenze von 40 Zeichen gekürzt, sodass kein „Originaltitel“-Nachsatz entsteht. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sprach- und Sichtabnahme der englischen Vorlagen und Exporte.
