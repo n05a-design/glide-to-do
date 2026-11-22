@@ -120,6 +120,24 @@ class Neuerungen(unittest.TestCase):
         self.assertIn(version, rn.CATALOG)
         self.assertTrue(rn.notes_since(rn.BEFORE_CATALOG, version))
 
+    def test_builtin_notes_follow_interface_language(self):
+        import i18n
+        vorher = i18n.get_language()
+        try:
+            i18n.set_language("en")
+            englisch = rn.notes_since("1.0.0", "1.0.1")[0][1]
+            self.assertIn("tomorrow", englisch[1])
+            self.assertNotIn("Schnellerfassung", " ".join(englisch))
+            i18n.set_language("de")
+            self.assertEqual(rn.notes_since("1.0.0", "1.0.1")[0][1], list(rn.CATALOG["1.0.1"]))
+            # Jeder eingebaute Satz hat eine englische Fassung.
+            englischer_katalog = i18n.load_catalog("en")
+            for version, punkte in rn.CATALOG.items():
+                for index, _punkt in enumerate(punkte):
+                    self.assertIn(rn.note_key(version, index), englischer_katalog, version)
+        finally:
+            i18n.set_language(vorher)
+
 
 if __name__ == "__main__":
     unittest.main()

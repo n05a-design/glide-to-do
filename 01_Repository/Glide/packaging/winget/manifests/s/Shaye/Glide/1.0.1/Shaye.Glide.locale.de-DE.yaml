@@ -1,7 +1,6 @@
-# Entwurf 14.11.2026 – nicht eingereicht. Texte aus brand.DESCRIPTION und dem Produktregister.
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.10.0.schema.json
 PackageIdentifier: Shaye.Glide
-PackageVersion: 3.62.0
+PackageVersion: 1.0.1
 PackageLocale: de-DE
 Publisher: Tim von Trostorff
 PublisherUrl: https://github.com/n05a-design
@@ -23,6 +22,6 @@ Tags:
 - todo
 - notizen
 - pinnwand
-ReleaseNotesUrl: https://github.com/n05a-design/glide-to-do/releases/tag/v3.62.0
+ReleaseNotesUrl: https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.1
 ManifestType: defaultLocale
 ManifestVersion: 1.10.0

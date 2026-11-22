@@ -1,5 +1,5 @@
 <!--
-Stand 17.11.2026 · Glide 1.0.0 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill.
+Stand 22.11.2026 · Glide 1.0.1 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill.
 
 Herkunft: Skill „apple-design“ aus https://github.com/emilkowalski/skills (MIT,
 Copyright (c) 2026 Emil Kowalski, Lizenztext in ../LICENSE). Fassung des

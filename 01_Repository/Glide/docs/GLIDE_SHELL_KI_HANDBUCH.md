@@ -1,6 +1,6 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 21.11.2026 · Glide 1.0.0 · Glide-System V1.69 · Glide Shell 0.5.0 · Aufgabenformat 26
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.69 · Glide Shell 0.5.0 · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 

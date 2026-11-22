@@ -186,7 +186,7 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
   - Startmenü-Verknüpfung mit sauber gesetzter `AppUserModelID: Shaye.Glide`.
   - Saubere Deinstallation ohne Rückstände.
 - **CI-Integration:** In `.github/workflows/windows-paket.yml` Inno Setup (`iscc`) ausführen und `Glide-<version>-windows-x64-setup.exe` erzeugen.
-- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.0/` für `winget install Shaye.Glide`.
+- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.1/` für `winget install Shaye.Glide`.
 
 ---
 

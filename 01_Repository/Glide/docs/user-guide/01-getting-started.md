@@ -1,6 +1,6 @@
 # Getting started – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen §1 Grundbegriffe](../20_FUNKTIONEN.md#1-grundbegriffe), [§2 Seitenleiste und Navigation](../20_FUNKTIONEN.md#2-seitenleiste-und-navigation), [§7 Startseite](../20_FUNKTIONEN.md#7-startseite) · [Guide contents](README.md) · Next: [Installation](02-installation.md)
 
@@ -54,8 +54,8 @@ The sidebar shows system rows: **Home**, **Today**, **Labels**, **Templates** an
 
 **Home** is a grid of tiles. The default layout "Calm" shows Today, Gismo, the next seven days, recently edited items, a pinboard preview, drawings, gallery images and pinned items. You can add more tiles, such as the clock, next task, templates, calendar preview, overdue items, progress, labels and pinned filters.
 
-- *Startseite anpassen* (customize Home), below the tiles, lets you drag, hide and resize tiles. **Settings › Appearance & Controls › Configure Home …** offers *Standard wiederherstellen* (restore default).
-- After an update, a "New in Glide" card lists what changed in the last three versions with entries. **Help › About Glide › *Neuerungen …*** (what's new) keeps the full history.
+- **Customize home**, below the tiles, lets you drag, hide and resize tiles. **Settings › Appearance & Controls › Configure Home …** offers **Restore default**.
+- After an update, a "New in Glide" card lists what changed in the last three versions with entries. **Help › About Glide › What's new …** keeps the full history.
 - **Gismo** is Glide's drawn companion. His mood mirrors your task collection, not you. Hide his tile if you do not want him.
 
 ## Search and the command palette

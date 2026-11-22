@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.locale.1.10.0.schema.json
 PackageIdentifier: Shaye.Glide
-PackageVersion: 3.70.0
+PackageVersion: 1.0.1
 PackageLocale: en-US
 Publisher: Tim von Trostorff
 PublisherUrl: https://github.com/n05a-design
@@ -21,6 +21,6 @@ Tags:
 - todo
 - notes
 - pinboard
-ReleaseNotesUrl: https://github.com/n05a-design/glide-to-do/releases/tag/v3.70.0
+ReleaseNotesUrl: https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.1
 ManifestType: locale
 ManifestVersion: 1.10.0

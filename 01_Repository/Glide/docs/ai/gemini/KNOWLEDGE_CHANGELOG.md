@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-AUDIT]
 
 # Knowledge base changelog
 
-Stand 19.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## 1.0 — 2026-11-19 — initial Gemini knowledge base
 

@@ -1,6 +1,6 @@
 # Contributing to Glide
 
-Status as of 19.11.2026 · Glide 1.0.0
+Status as of 19.11.2026 · Glide 1.0.1
 
 [Read this guide in German](CONTRIBUTING.de.md).
 

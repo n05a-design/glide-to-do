@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 20.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.55 auf `main`; V1.57 auf PR #157
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.55 auf `main`; V1.57 auf PR #157
 
 **Aktueller Prüfstand (20.11.2026):** `origin/main` steht auf `4b6bce08`; PR #154 wurde am 19.11. auf `448eee7f`, PR #156 am 20.11. auf `4b6bce08` gemergt. PR-#156-Head `f1d00bc9` besteht Dokumentation/YAML/Stand, Linux-Grundstufe, alle drei Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung. Bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung [Job #136248611305](https://github.com/n05a-design/glide-to-do/actions/runs/44719992687/job/136248611305); UI-Diagnose, NVDA und Orca wurden übersprungen. Der V1.57-Schnitt ist als [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) gegen `main` eröffnet; seine jeweils aktuellen GitHub-Prüfergebnisse sind live dort nachzuverfolgen.
 
@@ -3865,7 +3865,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **A – Auftrag:** Alle besprochenen Änderungen zusammenführen (PRs #185–#187), Lücken für 1.0 schließen, Dokumentation abgleichen, Volllauf mit macOS-Paket und DMG, danach Lieferstand und alle Stände auf 1.0.1. Die Glide Shell gilt damit als abgeschlossen.
 
-**B – Umsetzung:** Der Import von `app.pyw` verändert `tk.Menu` nicht mehr und liest den Datenordnerzeiger nicht mehr (`resolve_paths(read_pointer=False)`). `activate_runtime()` setzt beim ersten `ListApp` bzw. in `main()` einmal je Prozess den Menüaufschub und löst die Pfade samt Zeiger neu auf. Der Direktstart prüft die Python-Version (D89) nach der Bytecode-Umleitung und vor allen schweren Importen. Dazu Dokumentationsabgleich: N21 englische Schnellerfassung im Handbuch, Meilensteinplan, Übergabe und Arbeitsvorrat.
+**B – Umsetzung:** Der Import von `app.pyw` verändert `tk.Menu` nicht mehr und liest den Datenordnerzeiger nicht mehr (`resolve_paths(read_pointer=False)`). `activate_runtime()` setzt beim ersten `ListApp` bzw. in `main()` einmal je Prozess den Menüaufschub und löst die Pfade samt Zeiger neu auf. Der Direktstart prüft die Python-Version (D89) nach der Bytecode-Umleitung und vor allen schweren Importen. Dazu Dokumentationsabgleich: N21 englische Schnellerfassung im Handbuch, Meilensteinplan, Übergabe und Arbeitsvorrat. Lücken der Prüfung geschlossen: Die Karte „Neu in Glide“ und „Über Glide › Neuerungen“ folgen der Oberflächensprache (`release_notes.localized`, 119 Katalogsätze, Neuerungen 1.0.1); der unzutreffende Satz zu Homebrew/winget in den Neuerungen 1.0.0 entfällt. Das englische Benutzerhandbuch nennt alle Bedienelemente mit ihren englischen Beschriftungen. Versionswechsel auf 1.0.1 mit Skillkopplung, Paketvorlagen (Inno Setup, Homebrew, winget nur `1.0.1/`) und öffentlichen Einstiegen.
 
 **C – Prüfung:** `test_runtime_config` (Importauflösung ohne Zeiger), `test_startwege` 17/17 (Import ohne Menüaufschub), Volllauf, Paket und DMG im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 

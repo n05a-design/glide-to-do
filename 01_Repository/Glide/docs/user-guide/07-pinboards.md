@@ -1,12 +1,12 @@
 # Pinboards – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen §6 Pinnwand](../20_FUNKTIONEN.md#6-pinnwand), [JSON-Canvas-Export](../20_FUNKTIONEN.md#fundortübersicht-json-canvas-10-und-themengerechte-steuerelemente-3540-10112026) · [Guide contents](README.md) · Previous: [Pages and notes](06-pages-and-notes.md) · Next: [Pixel workshop](08-pixel-workshop.md)
 
 > Controlled translation of the German function reference. If the texts differ, the German text applies.
 
-A **pinboard** (in the English interface: *board*) is a view of the tasks of a list, a folder or your whole collection. It is not a separate content type. A card is the original task, and editing the card edits the task. There is a board per list, per folder and one **global board**.
+A **pinboard** (called **Board** in the interface) is a view of the tasks of a list, a folder or your whole collection. It is not a separate content type. A card is the original task, and editing the card edits the task. There is a board per list, per folder and one **global board**.
 
 ## Layouts
 

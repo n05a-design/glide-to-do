@@ -1,6 +1,6 @@
 # Backups – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.0 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 **Deutsch:** [Funktionen – Sicherungsübersicht](../20_FUNKTIONEN.md#sicherungsübersicht-und-anhangsrückfrage-3450), [§11 Sicherungen](../20_FUNKTIONEN.md#11-import-ausgabe-und-austausch), [Daten und Migration](../06_DATA_BACKUP_MIGRATION.md#automatische-sicherungen) · [Guide contents](README.md) · Previous: [Import and export](09-import-and-export.md) · Next: [Keyboard shortcuts](11-keyboard-shortcuts.md)
 
@@ -46,7 +46,7 @@ Templates travel separately as a template catalog (`.glidetemplates`, **File ›
 
 ## Storage status
 
-**File › Backups › Storage status …** shows open save problems for tasks, settings, templates and automatic backups, and the size of the data files. **Save again** retries. A hint **Storage problem · details** stays at the bottom of the window until saving works again. Above 80 % of the 32 MiB budget, a *Sicherungsreserve · Details* (backup reserve) warning appears. Glide never deletes data on its own to make space. See [Troubleshooting](12-troubleshooting.md).
+**File › Backups › Storage status …** shows open save problems for tasks, settings, templates and automatic backups, and the size of the data files. **Save again** retries. A hint **Storage problem · details** stays at the bottom of the window until saving works again. Above 80 % of the 32 MiB budget, a **Backup reserve · details** warning appears. Glide never deletes data on its own to make space. See [Troubleshooting](12-troubleshooting.md).
 
 ## Moving to another computer
 
