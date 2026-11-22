@@ -2,11 +2,17 @@
 """Übernahmewerkzeug der Glide Shell (D95): Kopie, Manifest, Prüfung und Schutz lokaler Änderungen.
 
 Prüft `scripts/pflege/shell_uebernehmen.py` gegen Temporärordner, nie gegen
-den Quellbaum: Erstkopie mit Manifest, Prüfung „aktuell“, verweigerte
-Übernahme bei lokaler Änderung, bewusstes Ersetzen, veraltete Kopie,
-Entfernen nicht mehr gelieferter Dateien bei Erhalt fremder Dateien, Schutz
-eigener Dateien vor neuen Shell-Dateien gleichen Namens und die
-Sperre gegen ein Ziel im Glide-Quellbaum. Ohne Tk-Import.
+den Quellbaum: Erstkopie mit Manifest und Lizenztext, Prüfung „aktuell“,
+verweigerte Übernahme bei lokaler Änderung, bewusstes Ersetzen, veraltete
+Kopie, Entfernen nicht mehr gelieferter Dateien bei Erhalt fremder Dateien,
+Schutz eigener Dateien vor neuen Shell-Dateien gleichen Namens und die Sperre
+gegen ein Ziel im Glide-Quellbaum. Negative Vertragsfälle: manipulierte Datei,
+inkonsistentes Manifest, abweichende Version, fehlende Datei, zusätzliches
+Modul, lokal veränderte Quelle, fehlende oder beschädigte Quelle und
+unbekannter Commit, jeweils mit eindeutigem Exitcode (1 Abweichung, 2 Konflikt
+im Ziel, 3 Quelle unbrauchbar). Die Quellfälle laufen gegen ein temporäres
+Git-Repository mit derselben Ordnerstruktur, nie gegen die Arbeitskopie.
+Ohne Tk-Import.
 
 Aufruf: python3 -B -m unittest tests/tools/test_shell_uebernahme.py
 """
@@ -15,6 +21,7 @@ import importlib.util
 import io
 import json
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -30,10 +37,11 @@ spec.loader.exec_module(werkzeug)
 
 
 def lauf(*argumente):
+    """Ruft das Werkzeug gegen die Arbeitskopie auf; deren Sauberkeit prüfen die Quellfälle getrennt."""
     ausgabe = io.StringIO()
     with contextlib.redirect_stdout(ausgabe):
         try:
-            code = werkzeug.main([str(a) for a in argumente])
+            code = werkzeug.main(["--unsauber-erlauben"] + [str(a) for a in argumente])
         except SystemExit as fehler:
             code = fehler.code
     return code, ausgabe.getvalue()
@@ -51,7 +59,7 @@ class Uebernahme(unittest.TestCase):
     def test_erstkopie_mit_manifest_und_pruefung_aktuell(self):
         code, text = lauf(self.projekt)
         self.assertEqual(code, 0, text)
-        quelle = sorted(p.name for p in QUELLE.iterdir() if p.suffix in (".py", ".md"))
+        quelle = sorted([p.name for p in QUELLE.iterdir() if p.suffix in (".py", ".md")] + ["LICENSE"])
         self.assertIn("README.md", quelle)
         self.assertIn("README.de.md", quelle)
         self.assertIn("selftest.py", quelle)
@@ -61,6 +69,7 @@ class Uebernahme(unittest.TestCase):
         self.assertEqual(manifest["shell_version"], werkzeug.shell_version())
         self.assertEqual(manifest["lizenz"], "MPL-2.0")
         self.assertIn(manifest["quelle_unveraendert"], (True, False, None))
+        self.assertTrue((self.kopie / "LICENSE").read_text(encoding="utf-8").startswith("Mozilla Public License Version 2.0"))
         self.assertEqual(sorted(manifest["dateien"]), quelle)
         for name, wert in manifest["dateien"].items():
             self.assertEqual(werkzeug.sha(self.kopie / name), wert, name)
@@ -111,7 +120,10 @@ class Uebernahme(unittest.TestCase):
         (self.kopie / "motion.py").write_bytes(alt)
         (self.kopie / "entfallen.py").write_bytes(alt)
         (self.kopie / "notizen.txt").write_text("vom Folgeprojekt\n", encoding="utf-8")
+        init = self.kopie / "__init__.py"
+        init.write_text(init.read_text(encoding="utf-8").replace(werkzeug.shell_version(), "0.0.9"), encoding="utf-8")
         manifest["shell_version"] = "0.0.9"
+        manifest["dateien"]["__init__.py"] = werkzeug.sha(init)
         manifest["dateien"]["motion.py"] = werkzeug.sha(self.kopie / "motion.py")
         manifest["dateien"]["entfallen.py"] = werkzeug.sha(self.kopie / "entfallen.py")
         pfad.write_text(json.dumps(manifest), encoding="utf-8")
@@ -152,6 +164,153 @@ class Uebernahme(unittest.TestCase):
                 self.assertNotEqual(code, 0)
         self.assertFalse((QUELLE / "SHELL_MANIFEST.json").exists())
         self.assertFalse((QUELLE / "glide_shell").exists())
+
+    def _manifest(self):
+        return json.loads((self.kopie / "SHELL_MANIFEST.json").read_text(encoding="utf-8"))
+
+    def _manifest_schreiben(self, daten):
+        (self.kopie / "SHELL_MANIFEST.json").write_text(json.dumps(daten), encoding="utf-8")
+
+    def test_inkonsistentes_manifest_wird_erkannt_und_nicht_ueberschrieben(self):
+        faelle = {
+            "falsches Paket": lambda m: m.update(paket="anderes"),
+            "kein SemVer": lambda m: m.update(shell_version="neu"),
+            "Pfad im Dateinamen": lambda m: m["dateien"].update({"../host.py": "0" * 64}),
+            "kein SHA-256": lambda m: m["dateien"].update({"motion.py": "abc"}),
+            "falsche Lizenz": lambda m: m.update(lizenz="MIT"),
+            "abweichende Version": lambda m: m.update(shell_version="9.9.9"),
+        }
+        lauf(self.projekt)
+        gut = self._manifest()
+        for name, aendern in faelle.items():
+            with self.subTest(fall=name):
+                daten = json.loads(json.dumps(gut))
+                aendern(daten)
+                self._manifest_schreiben(daten)
+                code, text = lauf("--pruefen", self.projekt)
+                self.assertEqual(code, 1, text)
+                self.assertIn("SHELL_MANIFEST.json: ungültig", text)
+                code, text = lauf(self.projekt)
+                self.assertEqual(code, 2, text)
+                self.assertEqual(self._manifest(), daten, "verweigerte Übernahme darf nichts schreiben")
+        (self.kopie / "SHELL_MANIFEST.json").write_text("{kaputt", encoding="utf-8")
+        self.assertEqual(lauf(self.projekt)[0], 2)
+        self.assertEqual(lauf("--ersetzen", self.projekt)[0], 0)
+        self.assertEqual(lauf("--pruefen", self.projekt)[0], 0)
+
+    def test_fehlende_datei_und_zusaetzliches_modul(self):
+        lauf(self.projekt)
+        (self.kopie / "text_fit.py").unlink()
+        code, text = lauf("--pruefen", self.projekt)
+        self.assertEqual(code, 1)
+        self.assertIn("text_fit.py: fehlt", text)
+        self.assertEqual(lauf(self.projekt)[0], 2)
+        lauf("--ersetzen", self.projekt)
+        (self.kopie / "fremd.py").write_text("import os\n", encoding="utf-8")
+        code, text = lauf("--pruefen", self.projekt)
+        self.assertEqual(code, 1)
+        self.assertIn("fremd.py: zusätzlich", text)
+
+    def test_update_laesst_hostdateien_ausserhalb_unberuehrt(self):
+        (self.projekt / "app.py").parent.mkdir(parents=True, exist_ok=True)
+        (self.projekt / "app.py").write_text("# Host\n", encoding="utf-8")
+        (self.projekt / "glide_shell_extra.py").write_text("# Host\n", encoding="utf-8")
+        vorher = {p.name: p.read_bytes() for p in self.projekt.iterdir() if p.is_file()}
+        lauf(self.projekt)
+        lauf(self.projekt)
+        nachher = {p.name: p.read_bytes() for p in self.projekt.iterdir() if p.is_file()}
+        self.assertEqual(vorher, nachher)
+        self.assertEqual(sorted(p.name for p in self.projekt.iterdir()), ["app.py", "glide_shell", "glide_shell_extra.py"])
+
+
+def git(ordner, *argumente):
+    return subprocess.run(["git", "-C", str(ordner), "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                           "-c", "commit.gpgsign=false", *argumente], capture_output=True, text=True, check=True)
+
+
+class Quelle(unittest.TestCase):
+    """Quellfälle in einem temporären Git-Repository mit der Struktur von Glide (Exitcode 3)."""
+
+    def setUp(self):
+        self._temp = tempfile.TemporaryDirectory(prefix="glide-shell-quelle-")
+        basis = pathlib.Path(self._temp.name)
+        self.repo, self.ziel = basis / "repo", basis / "ziel"
+        glide = self.repo / "01_Repository" / "Glide"
+        shutil.copytree(QUELLE, glide / "src" / "glide" / "glide_shell", ignore=shutil.ignore_patterns("__pycache__"))
+        (glide / "scripts" / "pflege").mkdir(parents=True)
+        shutil.copy2(WERKZEUG, glide / "scripts" / "pflege" / WERKZEUG.name)
+        shutil.copy2(REPO / "GLIDE_SYSTEM_VERSION", glide / "GLIDE_SYSTEM_VERSION")
+        shutil.copy2(REPO.parents[1] / "LICENSE", self.repo / "LICENSE")
+        git(self.repo, "init", "-q")
+        git(self.repo, "add", ".")
+        git(self.repo, "commit", "-q", "-m", "basis")
+        self.commit = git(self.repo, "rev-parse", "HEAD").stdout.strip()
+        self.shell = glide / "src" / "glide" / "glide_shell"
+        self.werkzeug = glide / "scripts" / "pflege" / WERKZEUG.name
+
+    def tearDown(self):
+        self._temp.cleanup()
+
+    def aufruf(self, *argumente):
+        lauf_ = subprocess.run([sys.executable, "-B", str(self.werkzeug), *map(str, argumente)], capture_output=True,
+                               text=True, timeout=60)
+        return lauf_.returncode, lauf_.stdout + lauf_.stderr
+
+    def manifest(self):
+        return json.loads((self.ziel / "glide_shell" / "SHELL_MANIFEST.json").read_text(encoding="utf-8"))
+
+    def test_saubere_quelle_mit_commit_herkunft(self):
+        code, text = self.aufruf(self.ziel)
+        self.assertEqual(code, 0, text)
+        self.assertEqual(self.manifest()["quell_commit"], self.commit)
+        self.assertIs(self.manifest()["quelle_unveraendert"], True)
+
+    def test_lokale_quellaenderung_braucht_zustimmung(self):
+        datei = self.shell / "motion.py"
+        datei.write_text(datei.read_text(encoding="utf-8") + "\n# lokal\n", encoding="utf-8")
+        code, text = self.aufruf(self.ziel)
+        self.assertEqual(code, 3, text)
+        self.assertIn("lokal verändert", text)
+        self.assertFalse((self.ziel / "glide_shell").exists())
+        (self.shell / "unversioniert.py").write_text("x = 1\n", encoding="utf-8")
+        code, text = self.aufruf(self.ziel)
+        self.assertEqual(code, 3, text)
+        code, text = self.aufruf("--unsauber-erlauben", self.ziel)
+        self.assertEqual(code, 0, text)
+        self.assertIs(self.manifest()["quelle_unveraendert"], False)
+        self.assertIn("lokale Änderungen", text)
+
+    def test_commit_pin_ist_reproduzierbar_trotz_lokaler_aenderung(self):
+        init = self.shell / "__init__.py"
+        init.write_text(init.read_text(encoding="utf-8").replace("SHELL_VERSION = \"", "SHELL_VERSION = \"9"), encoding="utf-8")
+        (self.shell / "unversioniert.py").write_text("x = 1\n", encoding="utf-8")
+        code, text = self.aufruf("--commit", self.commit[:10], self.ziel)
+        self.assertEqual(code, 0, text)
+        manifest = self.manifest()
+        self.assertEqual(manifest["quell_commit"], self.commit)
+        self.assertEqual(manifest["shell_version"], werkzeug.shell_version())
+        self.assertNotIn("unversioniert.py", manifest["dateien"])
+        self.assertIn("LICENSE", manifest["dateien"])
+        self.assertEqual(self.aufruf("--pruefen", "--commit", self.commit, self.ziel)[0], 0)
+
+    def test_unbekannter_commit_fehlende_und_beschaedigte_quelle(self):
+        self.assertEqual(self.aufruf("--commit", "0" * 40, self.ziel)[0], 3)
+        init = self.shell / "__init__.py"
+        init.write_text("# ohne Version\n", encoding="utf-8")
+        git(self.repo, "commit", "-qam", "kaputt")
+        code, text = self.aufruf(self.ziel)
+        self.assertEqual(code, 3, text)
+        self.assertIn("SHELL_VERSION", text)
+        (self.repo / "LICENSE").unlink()
+        git(self.repo, "commit", "-qam", "ohne Lizenz")
+        code, text = self.aufruf("--commit", "HEAD", self.ziel)
+        self.assertEqual(code, 3, text)
+        shutil.rmtree(self.shell)
+        git(self.repo, "commit", "-qam", "ohne Shell")
+        code, text = self.aufruf(self.ziel)
+        self.assertEqual(code, 3, text)
+        self.assertIn("Shell-Quelle fehlt", text)
+        self.assertFalse((self.ziel / "glide_shell" / "SHELL_MANIFEST.json").exists())
 
 
 if __name__ == "__main__":

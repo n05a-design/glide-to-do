@@ -3,30 +3,48 @@
 
 Aufruf (Ziel ist der Quellordner des Folgeprojekts, in dem `glide_shell/` liegen soll):
 
-    python3 -B scripts/pflege/shell_uebernehmen.py <Ziel>             # anlegen oder aktualisieren
-    python3 -B scripts/pflege/shell_uebernehmen.py --pruefen <Ziel>   # nur prüfen, nichts schreiben
-    python3 -B scripts/pflege/shell_uebernehmen.py --ersetzen <Ziel>  # lokale Änderungen überschreiben
+    python3 -B scripts/pflege/shell_uebernehmen.py <Ziel>                   # anlegen oder aktualisieren
+    python3 -B scripts/pflege/shell_uebernehmen.py --commit <Rev> <Ziel>    # reproduzierbar aus einem Commit
+    python3 -B scripts/pflege/shell_uebernehmen.py --pruefen <Ziel>         # nur prüfen, nichts schreiben
+    python3 -B scripts/pflege/shell_uebernehmen.py --ersetzen <Ziel>        # lokale Änderungen überschreiben
 
-Das Werkzeug kopiert alle `*.py` und die Anleitungen `README.md`/`README.de.md`
-aus `src/glide/glide_shell` nach
+Das Werkzeug kopiert alle `*.py` und `*.md` aus `src/glide/glide_shell` sowie
+den vollständigen Lizenztext `LICENSE` (MPL-2.0) aus der Repository-Wurzel nach
 `<Ziel>/glide_shell` und schreibt daneben `SHELL_MANIFEST.json` mit
-`SHELL_VERSION`, Glide-Systemversion, Quell-Commit (falls bekannt), ob das
-Paket diesem Commit entspricht (`quelle_unveraendert`), und SHA-256 jeder Datei. Beim Aktualisieren gilt:
+`SHELL_VERSION`, Glide-Systemversion, Quell-Commit, ob die Quelle diesem Commit
+entspricht (`quelle_unveraendert`), Lizenz und SHA-256 jeder Datei.
 
-- Stimmt die Kopie mit ihrem eigenen Manifest überein, wird sie ersetzt.
-  Dateien, die das alte Manifest nennt und die es in der Quelle nicht mehr
-  gibt, werden entfernt; Dateien ohne Manifesteintrag bleiben stehen.
+Quelle:
+
+- Ohne `--commit` dient die Arbeitskopie als Quelle. Ist sie im Shell-Ordner
+  oder beim Lizenztext lokal verändert (auch unversionierte Dateien), verweigert
+  das Werkzeug die Übernahme mit Exitcode 3; `--unsauber-erlauben` übernimmt
+  bewusst und vermerkt `quelle_unveraendert: false`.
+- Mit `--commit <Rev>` liest das Werkzeug genau die versionierten Dateien dieses
+  Commits aus Git, unabhängig von der Arbeitskopie (reproduzierbare Übernahme).
+
+Ziel:
+
+- Stimmt die Kopie mit ihrem eigenen, gültigen Manifest überein, wird sie
+  ersetzt. Dateien, die das alte Manifest nennt und die es in der Quelle nicht
+  mehr gibt, werden entfernt; Dateien ohne Manifesteintrag bleiben stehen.
   Liefert die Shell neu eine Datei, die es in der Kopie schon ohne
   Manifesteintrag und mit anderem Inhalt gibt, bricht das Werkzeug ab.
-- Weicht eine Datei von ihrem Manifest ab oder fehlt das Manifest bei einem
-  nicht leeren Ordner, bricht das Werkzeug mit Exitcode 2 ab; `--ersetzen`
+- Weicht eine Datei von ihrem Manifest ab, ist das Manifest ungültig oder fehlt
+  es bei einem nicht leeren Ordner, bricht das Werkzeug ab; `--ersetzen`
   überschreibt dann bewusst.
 
 `--pruefen` meldet je Datei `aktuell`, `veraltet` (unverändert, aber älter
-als die Quelle), `verändert` (abweichend vom eigenen Manifest), `fehlt` oder
-`neu in der Quelle`; Exitcode 0 nur, wenn alles aktuell ist.
+als die Quelle), `verändert` (abweichend vom eigenen Manifest), `fehlt`,
+`neu in der Quelle`, `nicht mehr in der Quelle` oder `zusätzlich` (ein Modul
+ohne Manifesteintrag, das als `glide_shell.<name>` importierbar wäre) sowie
+Verstöße gegen das Manifestschema; Exitcode 0 nur, wenn alles aktuell ist.
+Ohne Glide-Checkout prüft das Folgeprojekt seine Kopie mit
+`python -m glide_shell.selftest` (Prüfung `manifest`).
 
-Exitcodes: 0 in Ordnung, 1 Prüfung mit Abweichung, 2 Übernahme verweigert.
+Exitcodes: 0 in Ordnung, 1 Prüfung mit Abweichung, 2 Übernahme verweigert
+(Konflikt im Ziel), 3 Quelle unbrauchbar (fehlt, beschädigt, lokal verändert
+ohne Zustimmung oder Commit unbekannt).
 """
 import argparse
 import ast
@@ -34,64 +52,176 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide" / "glide_shell"
+LIZENZ = REPO.parents[1] / "LICENSE"
 PAKET = "glide_shell"
 MANIFEST = "SHELL_MANIFEST.json"
-# Quelltext und die Anleitung für Folgeprojekte (README.md, README.de.md).
+LIZENZDATEI = "LICENSE"
+# Quelltext und die Anleitungen für Folgeprojekte; dazu der Lizenztext.
 ANTEILE = (".py", ".md")
+SEMVER = re.compile(r"\d+\.\d+\.\d+")
+HEX64 = re.compile(r"[0-9a-f]{64}")
+HEX40 = re.compile(r"[0-9a-f]{40}")
+OK, ABWEICHUNG, VERWEIGERT, QUELLFEHLER = 0, 1, 2, 3
+
+
+class QuellFehler(Exception):
+    """Die Quelle ist nicht nutzbar (Exitcode 3)."""
 
 
 def sha(pfad):
     return hashlib.sha256(pfad.read_bytes()).hexdigest()
 
 
-def shell_version(ordner=QUELLE):
-    baum = ast.parse((ordner / "__init__.py").read_text(encoding="utf-8"))
+def sha_bytes(inhalt):
+    return hashlib.sha256(inhalt).hexdigest()
+
+
+def version_aus_text(text):
+    """SHELL_VERSION aus dem Quelltext von `__init__.py`; None, wenn sie fehlt oder kein SemVer ist."""
+    try:
+        baum = ast.parse(text)
+    except SyntaxError:
+        return None
     for knoten in baum.body:
         if (isinstance(knoten, ast.Assign) and isinstance(knoten.value, ast.Constant)
                 and any(getattr(z, "id", None) == "SHELL_VERSION" for z in knoten.targets)):
-            return knoten.value.value
-    raise SystemExit("SHELL_VERSION fehlt in glide_shell/__init__.py")
+            wert = knoten.value.value
+            return wert if isinstance(wert, str) and SEMVER.fullmatch(wert) else None
+    return None
+
+
+def shell_version(ordner=QUELLE):
+    pfad = ordner / "__init__.py"
+    wert = version_aus_text(pfad.read_text(encoding="utf-8")) if pfad.is_file() else None
+    if wert is None:
+        raise QuellFehler(f"{pfad}: SHELL_VERSION fehlt oder ist kein SemVer")
+    return wert
+
+
+def _git(*argumente, text=True):
+    try:
+        return subprocess.run(["git", "-C", str(REPO), *argumente], capture_output=True, text=text, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return None
 
 
 def quell_commit():
-    try:
-        lauf = subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True,
-                              text=True, timeout=10)
-    except (OSError, subprocess.SubprocessError):
-        return None
-    return (lauf.stdout.strip() or None) if lauf.returncode == 0 else None
+    lauf = _git("rev-parse", "HEAD")
+    return (lauf.stdout.strip() or None) if lauf and lauf.returncode == 0 else None
 
 
 def quelle_unveraendert():
-    """True, wenn `glide_shell` dem Quell-Commit entspricht; None ohne Git."""
+    """True, wenn `glide_shell` und der Lizenztext dem Quell-Commit entsprechen; None ohne Git."""
+    lauf = _git("status", "--porcelain", "--untracked-files=all", "--", str(QUELLE), str(LIZENZ))
+    return not lauf.stdout.strip() if lauf and lauf.returncode == 0 else None
+
+
+def _quelle_arbeitskopie(unsauber_erlauben):
+    if not (QUELLE / "__init__.py").is_file():
+        raise QuellFehler(f"{QUELLE}: Shell-Quelle fehlt")
+    if not LIZENZ.is_file():
+        raise QuellFehler(f"{LIZENZ}: Lizenztext fehlt")
+    unveraendert = quelle_unveraendert()
+    if unveraendert is False and not unsauber_erlauben:
+        raise QuellFehler(f"{QUELLE}: lokal verändert gegenüber dem Commit – committen, mit --commit "
+                          "aus einem Commit übernehmen oder mit --unsauber-erlauben bewusst übernehmen")
+    dateien = {p.name: p.read_bytes() for p in sorted(QUELLE.iterdir()) if p.is_file() and p.suffix in ANTEILE}
+    dateien[LIZENZDATEI] = LIZENZ.read_bytes()
+    system = REPO / "GLIDE_SYSTEM_VERSION"
+    return {"dateien": dateien, "commit": quell_commit(), "unveraendert": unveraendert,
+            "system": system.read_text(encoding="utf-8").strip() if system.is_file() else None}
+
+
+def _git_datei(commit, pfad):
+    lauf = _git("show", f"{commit}:{pfad}", text=False)
+    if not lauf or lauf.returncode != 0:
+        raise QuellFehler(f"{commit[:12]}:{pfad} fehlt im Commit")
+    return lauf.stdout
+
+
+def _quelle_commit(rev):
+    lauf = _git("rev-parse", "--verify", "--quiet", f"{rev}^{{commit}}")
+    if not lauf or lauf.returncode != 0 or not lauf.stdout.strip():
+        raise QuellFehler(f"{rev}: Commit unbekannt")
+    commit = lauf.stdout.strip()
+    praefix = _git("rev-parse", "--show-prefix").stdout.strip()
+    ordner = f"{praefix}src/glide/glide_shell/"
+    liste = _git("ls-tree", "--full-tree", "--name-only", commit, ordner)
+    namen = [pathlib.PurePosixPath(z).name for z in liste.stdout.splitlines()] if liste.returncode == 0 else []
+    namen = sorted(n for n in namen if pathlib.PurePosixPath(n).suffix in ANTEILE)
+    if "__init__.py" not in namen:
+        raise QuellFehler(f"{commit[:12]}: Shell-Quelle fehlt im Commit")
+    dateien = {n: _git_datei(commit, ordner + n) for n in namen}
+    dateien[LIZENZDATEI] = _git_datei(commit, LIZENZDATEI)
+    system = _git_datei(commit, f"{praefix}GLIDE_SYSTEM_VERSION").decode("utf-8").strip()
+    return {"dateien": dateien, "commit": commit, "unveraendert": True, "system": system}
+
+
+def quelle_lesen(commit=None, unsauber_erlauben=False):
+    """Liefert die zu übernehmende Quelle; QuellFehler, wenn sie fehlt, beschädigt oder unsauber ist."""
+    quelle = _quelle_commit(commit) if commit else _quelle_arbeitskopie(unsauber_erlauben)
     try:
-        lauf = subprocess.run(["git", "-C", str(REPO), "status", "--porcelain", "--", str(QUELLE)],
-                              capture_output=True, text=True, timeout=10)
-    except (OSError, subprocess.SubprocessError):
-        return None
-    return not lauf.stdout.strip() if lauf.returncode == 0 else None
+        version = version_aus_text(quelle["dateien"]["__init__.py"].decode("utf-8"))
+    except UnicodeDecodeError:
+        version = None
+    if version is None:
+        raise QuellFehler("__init__.py der Quelle: SHELL_VERSION fehlt oder ist kein SemVer")
+    quelle["version"] = version
+    quelle["hashes"] = {name: sha_bytes(inhalt) for name, inhalt in quelle["dateien"].items()}
+    return quelle
 
 
 def quelldateien():
-    return {p.name: sha(p) for p in sorted(QUELLE.iterdir()) if p.is_file() and p.suffix in ANTEILE}
+    """SHA-256 der Shell-Dateien der Arbeitskopie (ohne Sauberkeitsprüfung)."""
+    return quelle_lesen(unsauber_erlauben=True)["hashes"]
+
+
+def manifest_fehler(daten, ordner=None):
+    """Verstöße gegen das Manifestschema; leer, wenn das Manifest gültig und in sich stimmig ist."""
+    if not isinstance(daten, dict):
+        return ["kein JSON-Objekt"]
+    fehler = []
+    dateien = daten.get("dateien")
+    if daten.get("paket") != PAKET:
+        fehler.append(f"paket ist nicht {PAKET}")
+    if daten.get("lizenz") != "MPL-2.0":
+        fehler.append("lizenz ist nicht MPL-2.0")
+    if not (isinstance(daten.get("shell_version"), str) and SEMVER.fullmatch(daten["shell_version"])):
+        fehler.append("shell_version fehlt oder ist kein SemVer")
+    commit = daten.get("quell_commit")
+    if commit is not None and not (isinstance(commit, str) and HEX40.fullmatch(commit)):
+        fehler.append("quell_commit ist kein Commit-Hash")
+    if not isinstance(dateien, dict) or "__init__.py" not in dateien:
+        return fehler + ["dateien fehlt oder nennt kein __init__.py"]
+    for name, wert in sorted(dateien.items()):
+        if not isinstance(name, str) or name in ("", ".", "..") or "/" in name or "\\" in name or name == MANIFEST:
+            fehler.append(f"unzulässiger Dateiname {name!r}")
+        elif not (isinstance(wert, str) and HEX64.fullmatch(wert)):
+            fehler.append(f"{name}: kein SHA-256")
+    if ordner is not None and not fehler and (ordner / "__init__.py").is_file():
+        version = version_aus_text((ordner / "__init__.py").read_text(encoding="utf-8", errors="replace"))
+        if version != daten["shell_version"]:
+            fehler.append(f"shell_version {daten['shell_version']} widerspricht __init__.py ({version})")
+    return fehler
 
 
 def manifest_lesen(ordner):
+    """(Manifest, Fehlerliste); (None, []) ohne Manifest."""
     pfad = ordner / MANIFEST
     if not pfad.is_file():
-        return None
+        return None, []
     try:
         daten = json.loads(pfad.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        return None
-    dateien = daten.get("dateien")
-    return daten if isinstance(dateien, dict) else None
+        return {}, ["nicht lesbar"]
+    return daten, manifest_fehler(daten, ordner)
 
 
 def schreiben_atomar(ziel, inhalt):
@@ -123,11 +253,18 @@ def fremde_kollisionen(ordner, manifest, quelle):
             and (ordner / name).is_file() and sha(ordner / name) != quelle[name]]
 
 
-def pruefen(ordner):
-    quelle = quelldateien()
-    manifest = manifest_lesen(ordner)
-    eigen = manifest["dateien"] if manifest else {}
-    zeilen = []
+def zusaetzliche_module(ordner, bekannt):
+    """Module im Paketordner ohne Eintrag, die als `glide_shell.<name>` importierbar wären."""
+    return sorted(p.name for p in ordner.iterdir()
+                  if p.name not in bekannt and (p.suffix == ".py" or (p.is_dir() and (p / "__init__.py").is_file())))
+
+
+def pruefen(ordner, quelle=None):
+    """(Manifest, Zeilen) der Kopie gegenüber der Quelle; Manifestfehler stehen als Zeilen `SHELL_MANIFEST.json`."""
+    quelle = quelle if quelle is not None else quelldateien()
+    manifest, fehler = manifest_lesen(ordner)
+    eigen = manifest["dateien"] if manifest and not fehler else {}
+    zeilen = [(MANIFEST, f"ungültig: {f}") for f in fehler]
     for name in sorted(set(quelle) | set(eigen)):
         pfad = ordner / name
         if name not in quelle:
@@ -140,49 +277,53 @@ def pruefen(ordner):
             zeilen.append((name, "veraltet"))
         else:
             zeilen.append((name, "verändert"))
-    return manifest, zeilen
+    zeilen.extend((name, "zusätzlich, ohne Manifesteintrag als Modul importierbar")
+                  for name in zusaetzliche_module(ordner, set(quelle) | set(eigen) | {"__pycache__"}))
+    return (manifest if not fehler else None), zeilen
 
 
-def uebernehmen(ordner, ersetzen=False):
+def _verweigern(ordner, manifest, fehler, quelle):
+    """Gründe, die Übernahme ohne `--ersetzen` abzulehnen; leer, wenn sie gefahrlos ist."""
+    vorhanden = [p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__")]
+    hinweis = " – mit --ersetzen bewusst überschreiben"
+    if manifest is None:
+        return [f"{ordner}: Ordner ist nicht leer und hat kein {MANIFEST}{hinweis}"] if vorhanden else []
+    if fehler:
+        return [f"{MANIFEST}: ungültig ({f}){hinweis}" for f in fehler]
+    gruende = [f"{name}: {art} gegenüber {MANIFEST}{hinweis}" for name, art in lokale_abweichungen(ordner, manifest)]
+    gruende += [f"{name}: eigene Datei ohne Manifesteintrag, die Shell liefert jetzt dieselbe Datei{hinweis}"
+                for name in fremde_kollisionen(ordner, manifest, quelle)]
+    return gruende
+
+
+def uebernehmen(ordner, ersetzen=False, quelle=None):
+    quelle = quelle if quelle is not None else quelle_lesen(unsauber_erlauben=True)
     ordner.mkdir(parents=True, exist_ok=True)
-    manifest = manifest_lesen(ordner)
+    manifest, fehler = manifest_lesen(ordner)
+    if not ersetzen:
+        gruende = _verweigern(ordner, manifest, fehler, quelle["hashes"])
+        if gruende:
+            return VERWEIGERT, gruende
+    alt = manifest["dateien"] if manifest and not fehler else {}
     vorhanden = sorted(p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__"))
-    if manifest is None and vorhanden and not ersetzen:
-        return 2, [f"{ordner}: Ordner ist nicht leer und hat kein {MANIFEST} – mit --ersetzen bewusst überschreiben"]
-    if manifest is not None and not ersetzen:
-        abweichend = lokale_abweichungen(ordner, manifest)
-        if abweichend:
-            return 2, [f"{name}: {art} gegenüber {MANIFEST} – mit --ersetzen bewusst überschreiben"
-                       for name, art in abweichend]
-    quelle = quelldateien()
-    if manifest is not None and not ersetzen:
-        kollision = fremde_kollisionen(ordner, manifest, quelle)
-        if kollision:
-            return 2, [f"{name}: eigene Datei ohne Manifesteintrag, die Shell liefert jetzt dieselbe Datei – "
-                       "mit --ersetzen bewusst überschreiben" for name in kollision]
     meldungen = []
-    for name in quelle:
-        schreiben_atomar(ordner / name, (QUELLE / name).read_bytes())
-    for name in sorted(set(manifest["dateien"]) - set(quelle)) if manifest else ():
+    for name, inhalt in quelle["dateien"].items():
+        schreiben_atomar(ordner / name, inhalt)
+    for name in sorted(set(alt) - set(quelle["dateien"])):
         (ordner / name).unlink(missing_ok=True)
         meldungen.append(f"{name}: entfernt (nicht mehr Teil der Shell)")
-    fremd = sorted(n for n in vorhanden if n not in quelle and not (manifest and n in manifest["dateien"]))
+    fremd = sorted(n for n in vorhanden if n not in quelle["dateien"] and n not in alt)
     meldungen.extend(f"{name}: bleibt stehen (kein Teil der Shell)" for name in fremd)
-    daten = {
-        "paket": PAKET,
-        "shell_version": shell_version(),
-        "glide_system_version": (REPO / "GLIDE_SYSTEM_VERSION").read_text(encoding="utf-8").strip(),
-        "quell_commit": quell_commit(),
-        "quelle_unveraendert": quelle_unveraendert(),
-        "lizenz": "MPL-2.0",
-        "dateien": quelle,
-    }
+    daten = {"paket": PAKET, "shell_version": quelle["version"], "glide_system_version": quelle["system"],
+             "quell_commit": quelle["commit"], "quelle_unveraendert": quelle["unveraendert"],
+             "lizenz": "MPL-2.0", "dateien": quelle["hashes"]}
     schreiben_atomar(ordner / MANIFEST, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
-    for name, art in pruefen(ordner)[1]:
+    for name, art in pruefen(ordner, quelle["hashes"])[1]:
         if art != "aktuell":
-            return 1, meldungen + [f"{name}: {art} nach dem Kopieren"]
-    meldungen.append(f"glide_shell {daten['shell_version']} mit {len(quelle)} Dateien nach {ordner}")
-    return 0, meldungen
+            return ABWEICHUNG, meldungen + [f"{name}: {art} nach dem Kopieren"]
+    herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
+    meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
+    return OK, meldungen
 
 
 def zielordner(text):
@@ -190,8 +331,20 @@ def zielordner(text):
     ordner = ziel if ziel.name == PAKET else ziel / PAKET
     quelle = QUELLE.resolve()
     if ordner == quelle or quelle in ordner.parents or (REPO / "src").resolve() in ordner.parents:
-        raise SystemExit("Ziel liegt im Glide-Quellbaum; Folgeprojekte übernehmen die Shell in ihren eigenen Ordner")
+        return None
     return ordner
+
+
+def _pruefen_ausgeben(ordner, quelle):
+    if not ordner.is_dir():
+        print(f"{ordner}: keine Kopie vorhanden")
+        return ABWEICHUNG
+    manifest, zeilen = pruefen(ordner, quelle["hashes"])
+    stand = manifest.get("shell_version") if manifest else "ohne gültiges Manifest"
+    print(f"Kopie {stand}, Quelle {quelle['version']} ({(quelle['commit'] or 'ohne Git')[:12]})")
+    for name, art in zeilen:
+        print(f"  {name}: {art}")
+    return OK if manifest and all(art == "aktuell" for _, art in zeilen) else ABWEICHUNG
 
 
 def main(argv=None):
@@ -200,19 +353,22 @@ def main(argv=None):
     gruppe = parser.add_mutually_exclusive_group()
     gruppe.add_argument("--pruefen", action="store_true", help="nur prüfen, nichts schreiben")
     gruppe.add_argument("--ersetzen", action="store_true", help="lokale Änderungen bewusst überschreiben")
+    parser.add_argument("--commit", metavar="REV", help="Shell aus diesem Commit statt aus der Arbeitskopie lesen")
+    parser.add_argument("--unsauber-erlauben", action="store_true",
+                        help="lokal veränderte Shell-Quelle bewusst übernehmen (im Manifest vermerkt)")
     args = parser.parse_args(argv)
     ordner = zielordner(args.ziel)
+    if ordner is None:
+        print("Ziel liegt im Glide-Quellbaum; Folgeprojekte übernehmen die Shell in ihren eigenen Ordner")
+        return VERWEIGERT
+    try:
+        quelle = quelle_lesen(args.commit, args.unsauber_erlauben or args.pruefen)
+    except QuellFehler as fehler:
+        print(f"Quelle unbrauchbar: {fehler}")
+        return QUELLFEHLER
     if args.pruefen:
-        if not ordner.is_dir():
-            print(f"{ordner}: keine Kopie vorhanden")
-            return 1
-        manifest, zeilen = pruefen(ordner)
-        stand = manifest.get("shell_version") if manifest else "ohne Manifest"
-        print(f"Kopie {stand}, Quelle {shell_version()}")
-        for name, art in zeilen:
-            print(f"  {name}: {art}")
-        return 0 if manifest and all(art == "aktuell" for _, art in zeilen) else 1
-    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen)
+        return _pruefen_ausgeben(ordner, quelle)
+    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle)
     for zeile in meldungen:
         print(zeile)
     return code

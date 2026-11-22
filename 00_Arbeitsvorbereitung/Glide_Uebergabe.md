@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.85 · Glide Shell 0.6.1 (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
@@ -10,13 +10,23 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > **Release 1.0 (D93) – Soll-Ist**
 > - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ abgeschlossen (PR #130, PR #133, V1.39, T328)
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
-> - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.1 mit Demonstrationshost, Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
+> - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.2 mit Demonstrationshost, Referenzhost (T337), Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
 > - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
 >
 > **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 
 ---
+
+
+### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 22.11.2026)
+
+- **Agentenübergreifender Einstieg (T338):** Schlanker `AGENTS.md` in der Repository-Wurzel, `glide-shell`-Skill unter `.agents/skills/` gespiegelt zu `.claude/skills/`, `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt. Trennung von Produkt-Skill `glide-to-do` und Shell-Entwicklungsskill strikt gewahrt.
+- **Reproduzierbare Übernahme & Provenienz (T331):** `shell_uebernehmen.py` erweitert um `--commit <Rev>` (Pin-Übernahme unabhängig vom Arbeitsbaum), Schutz vor lokal veränderten Quellen (Exit 3, `--unsauber-erlauben`), vollständigen Lizenztext `LICENSE` (MPL-2.0) im Paket und Manifest-Validierung.
+- **Selbsttest (T333):** Auf 13/13 Prüfungen erweitert: prüft eine übernommene Kopie autonom gegen ihr `SHELL_MANIFEST.json` ohne Glide-Checkout.
+- **Portabler Designvertrag:** In `DESIGN_RICHTLINIEN.md` verankert: Trennung von universellen Regeln (P1–P6, B15, B11, B01/B16, B03, Kontrast, Tastatur/Fokus), Shell-Schnittstellen (`custom_controls`-Provider, `system_appearance.resolve`) und Host-Gestaltungsfreiheit.
+- **End-to-End-Referenzhost (T337):** Dauerhafter Testfall für isolierten Host mit AppHost, Dialogen, Undo/Redo, Timern und Wächter gegen Glide-Abhängigkeiten.
+- **Prüfergebnis:** CI-Grundstufe und alle Shell-Suiten (58 Tests) lokal bestanden.
 
 ## 0. Sofortübergabe WA-41 – zuerst lesen
 

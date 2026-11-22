@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.85 auf `main` (PR #189, `62ae1dde`) · Glide Shell 0.6.1 abgeschlossen (D99)
+Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
 **Aktueller Stand (22.11.2026):** `main` steht auf `4ce3697a` (PR #188 mit #185–#187). Release 1.0 ist bis auf die Freigabeschritte des Inhabers umgesetzt: Lokalisierung DE/EN vollständig (V1.70–V1.81), Glide Shell abgeschlossen (D99), WA-49 geschlossen (V1.83), Lieferstand 1.0.1 in `07_Python-Versionen`, macOS-Paket und DMG lokal geprüft ([§21.172](#21172-wa-49-abgeschlossen-und-release-runde-101-v183-22112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung, Paketmanager-Einreichung und die menschliche Sicht- und Bedienabnahme.
 
@@ -3875,6 +3875,24 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** T336, T319, Modulbudget, `test_undo_history`, Demohost, Selbsttest 12/12 auch mit `-O`, Startwege 17/17, Abbauvertrag, Modalvertrag 18/18, `test_wiederholen` 9/9, Fensterlebensdauer; das Gerüst der Anleitung läuft in einem leeren Projekt mit frisch übernommener Shell. Volllauf, Paket und Lieferabgleich im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 **D – Rest:** Barrierefreiheit S12 bleibt außerhalb der Shell. Die Ansichten von `ListApp` sind nicht in eigene Module zerlegt; das ist nicht Teil von Phase 5. Tag, Release und Einreichungen weiter nur mit Freigabe.
+
+### 21.175 Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 22.11.2026)
+
+- **A – Auftrag:** Glide Shell für lokale KI-Agenten optimieren (Antigravity, Codex, Copilot, Claude, Gemini). Reproduzierbare Übernahme, Manifest-Integrität, portabler Designvertrag, isolierter Referenzhost, Test- und Dokumentenabgleich.
+- **B – Umsetzung:**
+  - Wurzel-`AGENTS.md` für agentenneutralen Einstieg.
+  - Skill `glide-shell` nach `.agents/skills/` gespiegelt und in `.claude/skills/` synchronisiert (T338).
+  - `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt.
+  - `shell_uebernehmen.py` erweitert um `--commit <Rev>`, Lizenznachweis MPL-2.0 und Integritätswächter gegen unsaubere Quellen (T331).
+  - `selftest.py` auf 13/13 Checks erweitert: prüft eine übernommene Kopie autonom gegen `SHELL_MANIFEST.json` (T333).
+  - Portabler Designvertrag in `DESIGN_RICHTLINIEN.md` verankert (universelle Regeln, Shell-Provider, Host-Freiheiten).
+  - `test_shell_referenzhost.py` (T337) als dauerhafter E2E-Referenzhost mit Wächter gegen unzulässige Glide-Kopplung.
+  - `GLIDE_SYSTEM_VERSION` auf V1.86 angehoben und Register gepflegt.
+- **C – Prüfung:**
+  - T331 (14 Fälle), T333 (13/13 + Gegenproben), T337 (Referenzhost + Wächter), T338 (Agenten-Einstieg) und alle Shell-Suiten grün (58 Tests).
+  - CI-Grundstufe vollständig bestanden.
+- **D – Rest:**
+  - Release-Tag / Wheel-Distribution (P2-Entscheidungsvorlage).
 
 ### 21.174 Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
 

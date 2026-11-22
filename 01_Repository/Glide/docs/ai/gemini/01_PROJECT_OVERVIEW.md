@@ -39,7 +39,7 @@ These are documented product constraints, not security certification claims. See
 
 ## Platforms and maturity
 
-**VERIFIED at `main` `4ce3697a` (22.11.2026):** App version `1.0.1`, data schema `26`, settings schema `2`, template schema `2`, exchange format `glide.exchange` version `2`, system catalog V1.85, `glide_shell` 0.6.1. PRs #185–#188 are merged. No tag, GitHub release, notarization or package-manager submission exists; human acceptance remains open.
+**VERIFIED at `main` `4ce3697a` (22.11.2026):** App version `1.0.1`, data schema `26`, settings schema `2`, template schema `2`, exchange format `glide.exchange` version `2`, system catalog V1.86, `glide_shell` 0.6.2. PRs #185–#188 are merged. No tag, GitHub release, notarization or package-manager submission exists; human acceptance remains open.
 
 Python/Tk builds and tests target macOS, Windows, and Linux. Current documented reference is Python 3.14 and Tk 9.1; Tk 8.6 remains a compatibility/basic-CI layer with reduced native integrations. Platform support does not mean every platform had a green current full run.
 

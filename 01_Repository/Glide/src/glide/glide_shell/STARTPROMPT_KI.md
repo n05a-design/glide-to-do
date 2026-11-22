@@ -1,6 +1,6 @@
 # Glide Shell – Startprompt für KI-Agenten
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.85 · Glide Shell 0.6.1
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Glide Shell 0.6.2
 
 Diese Datei gibt einer neuen KI-Sitzung in einem Schritt alles, was sie braucht, um mit der Glide Shell ein Projekt zu beginnen oder weiterzuführen. Den passenden Prompt unten unverändert in die Sitzung kopieren und die Platzhalter in `<…>` ersetzen. Die Datei liegt im Paket `glide_shell` und kommt mit jeder Übernahme ins Projekt.
 

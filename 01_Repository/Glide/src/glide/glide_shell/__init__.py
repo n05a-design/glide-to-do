@@ -30,7 +30,7 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.6.1"
+SHELL_VERSION = "0.6.2"
 
 __all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
            "window_geometry", "system_appearance", "redo_history", "text_fit", "action_picker",

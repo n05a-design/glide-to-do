@@ -33,7 +33,7 @@ The persisted language preference is distinct from task data and the active proc
 
 ## Glide-Shell boundary
 
-`i18n.py` is a module within the Glide source tree. The shell (`glide_shell` 0.6.1) loads no catalogs: the host passes already translated labels in (locale contract in the shell concept). There is no shared language service between separate applications.
+`i18n.py` is a module within the Glide source tree. The shell (`glide_shell` 0.6.2) loads no catalogs: the host passes already translated labels in (locale contract in the shell concept). There is no shared language service between separate applications.
 
 ## Safe extension strategy
 

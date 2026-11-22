@@ -25,7 +25,7 @@ It is not a cloud collaboration service, automatic multi-device sync, built-in A
 
 - App: Glide 1.0.1.
 - Main data schema: 26. Settings: 2. Templates: 2. Exchange format: `glide.exchange` v2.
-- Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.85, `glide_shell` 0.6.1 (completed, D99).
+- Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.86, `glide_shell` 0.6.2 (completed, D99).
 - PRs #185–#188 are merged: own photos and bilingual showcase, English quick capture, page edit time, WA-49 and localized release notes.
 - No GitHub tag/release, notarization or Homebrew/winget submission exists; no final owner acceptance was recorded.
 

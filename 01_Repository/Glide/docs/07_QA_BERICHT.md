@@ -1,3 +1,14 @@
+## Multi-Agent Readiness & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 22.11.2026)
+
+| Gegenstand | Befehl / Nachweis | Ergebnis |
+|---|---|---|
+| Shell-Suiten gesamt | `python3 -B -m unittest tests/unit/test_shell_importregel.py tests/unit/test_shell_d96.py tests/unit/test_shell_d98.py tests/unit/test_shell_phasen45.py tests/tools/test_shell_uebernahme.py tests/tools/test_agent_einstieg.py tests/integration/test_shell_selbsttest.py tests/integration/test_shell_demohost.py tests/integration/test_shell_referenzhost.py` | 58 Tests bestanden in 7.9s |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | Bestanden (Syntax 467 Dateien, Versionen 1.0.1, V1.86, Werkzeuge, Fachlogik, Datenschutz) |
+| Selbsttest-Gegenproben | `tests/integration/test_shell_selbsttest.py` (T333) | 13/13 bestanden; Gegenproben für kaputte Geometrie (auch mit -O), manipuliertes Modul und fremdes Modul schlagen isoliert fehl |
+| Übernahme-Vertrag | `tests/tools/test_shell_uebernahme.py` (T331, 14 Tests) | Alle Vertragsfälle grün: Saubere Übernahme, Commit-Pin, Verweigerung bei lokaler Änderung (Exit 3), ungültiges Manifest (Exit 2), Ersetzen |
+| Referenzhost & Wächter | `tests/integration/test_shell_referenzhost.py` (T337) | Isolierter Host läuft grün; verbotene Glide-Abhängigkeit führt zu kontrolliertem Abbruch |
+| Agenten-Einstiege | `tests/tools/test_agent_einstieg.py` (T338) | Wurzel-AGENTS.md, Skill-Spiegelung, Copilot/Gemini-Adapter und Trennung von Produkt-Skill verifiziert |
+
 # QA-Bericht – Glide 1.0.1
 
 ## Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
