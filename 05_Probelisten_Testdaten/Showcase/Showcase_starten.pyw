@@ -9,6 +9,7 @@ import importlib.util
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 
@@ -32,7 +33,16 @@ def main():
         raise SystemExit(tx("Glide-Showcase_App.glideapp fehlt neben dem Starter.",
                              "Glide-Showcase_App.glideapp is missing next to the starter."))
     data = here/tx("Arbeitsstand-Stadtlicht", "Workspace-City-Light")
+    restore_only = "--nur-wiederherstellen" in sys.argv[1:]
     first_start = not (data/"liste_speicher.json").exists()
+    if first_start and not restore_only:
+        # Die Sicherung trägt die Oberflächensprache. ListApp liest sie beim
+        # Aufbau; deshalb stellt ein eigener Prozess zuerst den Bestand her
+        # (ein zweites Tk() im selben Prozess ist unter macOS nicht stabil).
+        lauf = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--nur-wiederherstellen"])
+        if lauf.returncode:
+            return lauf.returncode
+        first_start = False
     os.environ["GLIDE_DATA_DIR"] = str(data)
     os.environ.pop("GLIDE_TEST_MODE", None)
     sys.path.insert(0, str(runtime.parent))
@@ -43,6 +53,8 @@ def main():
     loader.exec_module(mod)
     mod.set_windows_app_user_model_id()
     root = mod.tk.Tk()
+    if restore_only:
+        root.withdraw()
     app = mod.ListApp(root)
     if first_start:
         restored = app.restore_app_backup(str(backup), sections={
@@ -52,6 +64,9 @@ def main():
                                           "The base could not be loaded. Check the separate workspace."))
             root.destroy()
             return 1
+    if restore_only:
+        root.destroy()
+        return 0
     root.mainloop()
     return 0
 
