@@ -1,5 +1,23 @@
 # QA-Bericht – Glide 1.0.1
 
+## Shell 0.6.0: Phasen 4 und 5, Volllauf, Paket, DMG und Barrierefreiheitsjobs (V1.84, 22.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem Datenordner, künstlichen Daten, Vordergrundmodus bei entsperrtem Bildschirm, auf `claude/v101-audit` (`425f5111`, aufbauend auf `main` `4ce3697a`).
+
+| Gegenstand | Ergebnis |
+|---|---|
+| Gezielte Prüfungen | T336 `test_shell_phasen45` (Befehlsverlauf, App-Host, Glides Einbindung), T319 Schnittstellenvertrag, Modulbudget, `test_undo_history`, T332, T331 Übernahme grün. Tk-Suiten nacheinander: Demohost, Selbsttest 12/12 (auch `-O`), Startwege 17/17, Abbauvertrag 5/5, Modalvertrag 18/18, `test_wiederholen` 9/9, Fensterlebensdauer 10/10. |
+| Gerüst der Anleitung | Code aus `KI_ANLEITUNG_NEUE_PROJEKTE.md` §3.3 in einem leeren Projekt mit frisch übernommener Shell (19 Dateien samt Anleitung): Selbsttest 12/12, Start über `AppHost`, Rückgängig/Wiederholen mit Befehlen. |
+| Volllauf | `pruefen.py --modus voll --vordergrund`: 138 Schritte, Exitcode 0; übersprungen nur Screenshots (nur Linux/X11) und die menschliche Sichtprüfung. |
+| CI-Grundstufe | bestanden; Fremdcodeabgleich von tkinterdnd2 ohne Netz nicht möglich (Hinweis). |
+| macOS-Paket | Isolierte Paketprobe Exit 0 mit blockiertem externem Python; `command_history` und `app_host` als Paketimporte im Bau; `Glide-1.0.1-macos-arm64.tar.gz` SHA-256 `b2e63307d41319baaa3331ff929915f2ba04a0aaa7ceb6cf544b2e7286b457c6`, 492 Dateien. |
+| DMG | `hdiutil verify` gültig, Inventar und Inhalte gleich dem Paket (562 Einträge), `/Applications`-Verknüpfung, `codesign --verify --deep --strict` gültig; `Glide-1.0.1-macos-arm64.dmg` (21,3 MB) SHA-256 `c6c722297b87e1c4e095c434e0143dc0b1b797c1b5c6bd69a3c1b3e10c352ac9`. Ad-hoc signiert, nicht notarisiert, nicht veröffentlicht. |
+| Lieferstand 07 | `abgleich_07.py`: 110 Code-Dateien und 169 Ressourcen, keine Abweichungen; echter Start der 07-Fassung mit leerem Datenordner: Menüleiste Datei/Bearbeiten/Ansicht/Hilfe, Datenordner angelegt, keine Fehlermeldung. |
+| Manuelle CI-Jobs auf `main` `4ce3697a` | UI-Diagnose `aufgaben-layout` ([#45011711491](https://github.com/n05a-design/glide-to-do/actions/runs/45011711491)) und `tagesdialoge` ([#45011713817](https://github.com/n05a-design/glide-to-do/actions/runs/45011713817)) grün. `zugang400` ([#45011709194](https://github.com/n05a-design/glide-to-do/actions/runs/45011709194)): native AT-SPI- und MSAA-Kennungen, Tcl-Klassenbindungen, Kernablauf und isolierter Windows-Prototyp grün; rot sind nur die Schritte mit echter Orca- und NVDA-Sprachausgabe. Screenreader-Sprachausgabe ist laut Abnahmestand bis Bedarf zurückgestellt und keine 1.0-Restaufgabe. |
+| GitHub-Matrix `main` `4ce3697a` | Dokumentation, macOS-Paket, Grundstufe und Linux-Vollprüfung grün; Windows-Vollprüfung lief bei Abfrage noch. |
+
+**Offen:** GitHub-Matrix für den PR dieses Stands; menschliche Sicht- und Bedienabnahme; Screenreader-Sprachausgabe (zurückgestellt); Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe.
+
 ## Release-Runde 1.0.1: Volllauf, macOS-Paket und DMG (V1.83, 22.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, Vordergrundmodus, auf `claude/v101-release` (`841fb56a`; enthält PRs #185–#187 und WA-49).

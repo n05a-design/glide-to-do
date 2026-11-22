@@ -215,6 +215,8 @@ import side_view as glide_side_view  # noqa: E402
 import compact_mode as glide_compact  # noqa: E402
 from glide_shell import modal_session as glide_modal_session  # noqa: E402
 from glide_shell import window_lifetime as glide_window_lifetime  # noqa: E402
+from glide_shell import app_host as glide_app_host  # noqa: E402
+from glide_shell import command_history as glide_command_history  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -18114,107 +18116,111 @@ class ListApp:
         self.init_daily_planning()
         glide_core_accessibility.install_core(self)
 
-        # Tastaturkürzel
-        # Enter wird direkt im Eingabefeld behandelt, damit add_item nicht doppelt ausgelöst wird.
-        self.root.bind("<Delete>", self.delete_item)
-        # F1 ist die Taste, auf der jeder zuerst nach Hilfe
-        # sucht.
-        self.root.bind("<F1>", self.show_manual_dialog)
-        self.root.bind("<Control-e>", lambda e: self.export_as_txt())
-        self.root.bind("<Control-i>", lambda e: self.import_from_txt())
-        self.root.bind("<Control-s>", lambda e: self.save_items())
-        self.root.bind("<Control-q>", lambda e: self.on_close())
-        self.root.bind("<Control-z>", self.undo_last_change)
-        # Wiederholen (FP-01): Umschalt+Z überall, unter Windows zusätzlich
-        # Strg+Y. Kleines z deckt eine eingerastete Feststelltaste ab.
-        for sequence in ("<Control-Shift-Z>", "<Control-Shift-z>") + (("<Control-y>",) if IS_WINDOWS else ()):
-            self.root.bind(sequence, self.redo_last_change)
-        self.root.bind("<Control-c>", self.copy_selected_to_clipboard)
-        self.root.bind("<Control-v>", self.paste_items_from_clipboard)
-        self.root.bind("<Control-a>", self.select_all_items)
-        # Command ist nur unter macOS Meta/Cmd. Unter Windows ordnet Tk diesen
-        # Modifikator Num-Lock zu; dadurch wurden normale Buchstaben wie a/f
-        # fälschlich als Tastenkürzel behandelt und der Fokus sprang zur Suche.
-        if IS_MACOS:
-            self.root.bind("<Command-c>", self.copy_selected_to_clipboard)
-            self.root.bind("<Command-v>", self.paste_items_from_clipboard)
-            self.root.bind("<Command-a>", self.select_all_items)
-            self.root.bind("<Command-z>", self.undo_last_change)
-            self.root.bind("<Command-Shift-Z>", self.redo_last_change)
-            self.root.bind("<Command-Shift-z>", self.redo_last_change)
-            self.root.bind("<Command-f>", self.focus_search)
-            self.root.bind("<Command-F>", self.handle_control_f)
-            self.root.bind("<Command-t>", self.set_due_date_selected)
-            self.root.bind("<Command-s>", lambda e: self.save_items())
-            self.root.bind("<Command-e>", lambda e: self.export_as_txt())
-            self.root.bind("<Command-i>", lambda e: self.import_from_txt())
-            self.root.bind("<Command-d>", lambda e: self.toggle_theme())
-            self.root.bind("<Command-g>", lambda e: self.group_selected_items())
-            self.root.bind("<Command-n>", self.handle_control_n)
-            self.root.bind("<Command-N>", self.handle_control_n)
-            # Mac-Tastaturen besitzen meist keine Entf-Taste; Rückschritt löscht
-            # den ausgewählten Punkt. In Text- und Suchfeldern bleibt sie normal.
-            self.root.bind("<BackSpace>", self.delete_item)
-            self.root.bind("<Command-BackSpace>", self.delete_item)
-            # Cmd+Q wird von macOS abgefangen und würde WM_DELETE_WINDOW und
-            # damit die Speicherabfrage überspringen.
-            try:
-                # Auch das läuft innerhalb der Menüverfolgung von macOS; eine
-                # Rückfrage beim Beenden hinge dort fest (30.09.2026).
-                self.root.createcommand("::tk::mac::Quit", lambda *_args: self.after_scope().after_idle(self.on_close))
-            except tk.TclError:
-                pass
-        self.root.bind("<Control-Alt-n>", self.show_quick_capture)
-        if IS_MACOS:
-            self.root.bind("<Command-Alt-n>", self.show_quick_capture)
-        self.root.bind("<Control-n>", self.handle_control_n)
-        self.root.bind("<Control-N>", self.handle_control_n)
-        self.root.bind("<Control-w>", self.delete_current_list)
-        self.root.bind("<Control-Shift-O>", lambda e: self.workspace.open_tab())
-        self.root.bind("<Control-Shift-W>", lambda e: self.workspace.close_tab())
-        self.root.bind("<Control-Next>", lambda e: self.workspace.cycle_tabs(1))
-        self.root.bind("<Control-Prior>", lambda e: self.workspace.cycle_tabs(-1))
-        if IS_MACOS:
-            self.root.bind("<Command-Shift-O>", lambda e: self.workspace.open_tab())
-            self.root.bind("<Command-Shift-W>", lambda e: self.workspace.close_tab())
-        self.root.bind("<Control-f>", self.handle_control_f)
-        self.root.bind("<Control-F>", self.handle_control_f)
-        self.root.bind("<Alt-p>", self.cycle_importance_selected)
-        self.root.bind("<Control-g>", lambda e: self.group_selected_items())
-        self.root.bind("<Escape>", self.handle_escape)
-        self.root.bind("<F2>", lambda e: self.edit_item())
-        self.root.bind("<F3>", lambda e: self.edit_title())
-        self.root.bind("<Control-d>", lambda e: self.toggle_theme())
-        self.root.bind("<Control-t>", self.set_due_date_selected)
-        self.root.bind("<Control-m>", self.edit_page_note)
-        self.root.bind("<Control-l>", self.open_label_manager)
-        self.root.bind("<Control-k>", self.open_calendar_view)
-        self.root.bind("<Control-o>", self.show_quick_open)
-        self.root.bind("<Control-p>", self.show_print_dialog)
-        self.root.bind("<Control-Shift-P>", self.show_quick_plan_menu)
-        self.root.bind("<Control-Shift-T>", self.choose_time_block)
-        self.root.bind("<Control-Shift-F>", self.start_focus_selected)
-        self.root.bind("<Control-h>", self.open_history_view)
-        # Kompaktmodus (E-U1 A); kleines k deckt eine eingerastete Feststelltaste ab.
-        for sequence in ("<Control-Shift-K>", "<Control-Shift-k>"):
-            self.root.bind(sequence, self.handle_compact_shortcut)
-        for sequence in ("<KeyRelease-K>", "<KeyRelease-k>"):
-            self.root.bind(sequence, self.handle_compact_shortcut)
+        # Tastaturkürzel: Tabelle in `keyboard_shortcuts`, gebunden über den
+        # App-Host der Shell (Phase 5). Cmd+Q liegt seit V1.84 in `install_close`.
+        glide_app_host.bind_shortcuts(self.root, self.keyboard_shortcuts(), self.host_platform())
         for key in ("Control_L", "Control_R", "Shift_L", "Shift_R", "Meta_L", "Meta_R"):
             self.root.bind(f"<KeyRelease-{key}>", self.reset_compact_shortcut, add="+")
         self.root.bind("<FocusOut>", self.reset_compact_shortcut_on_focus_out, add="+")
-        if IS_MACOS:
-            for sequence in ("<Command-Shift-K>", "<Command-Shift-k>"):
-                self.root.bind(sequence, self.handle_compact_shortcut)
-            self.root.bind("<Command-l>", self.open_label_manager)
-            self.root.bind("<Command-k>", self.open_calendar_view)
-            self.root.bind("<Command-o>", self.show_quick_open)
-            self.root.bind("<Command-p>", self.show_print_dialog)
-            self.root.bind("<Command-Shift-P>", self.show_quick_plan_menu)
-            self.root.bind("<Command-Shift-T>", self.choose_time_block)
-            self.root.bind("<Command-Shift-F>", self.start_focus_selected)
-            self.root.bind("<Command-h>", self.open_history_view)
         self.guard_x11_emacs_navigation()
+
+    @staticmethod
+    def host_platform():
+        """Plattformkennung für den App-Host der Shell."""
+        return glide_app_host.MACOS if IS_MACOS else glide_app_host.WINDOWS if IS_WINDOWS else glide_app_host.LINUX
+
+    def keyboard_shortcuts(self):
+        """Globale Kürzel des Hauptfensters als Tabelle (Sequenz, Handler, Plattform).
+
+        Reihenfolge wie bisher: Eine spätere Bindung derselben Sequenz ersetzt
+        eine frühere. Enter behandelt das Eingabefeld selbst, damit `add_item`
+        nicht doppelt läuft. Command gilt nur unter macOS; unter Windows ordnet
+        Tk ihn Num-Lock zu, normale Buchstaben würden sonst zu Kürzeln. Kleine
+        z/k decken eine eingerastete Feststelltaste ab.
+        """
+        alle, mac, win = glide_app_host.ALL, glide_app_host.MACOS, glide_app_host.WINDOWS
+        save = lambda e: self.save_items()  # noqa: E731
+        export = lambda e: self.export_as_txt()  # noqa: E731
+        import_txt = lambda e: self.import_from_txt()  # noqa: E731
+        theme_toggle = lambda e: self.toggle_theme()  # noqa: E731
+        group = lambda e: self.group_selected_items()  # noqa: E731
+        return [
+            ("<Delete>", self.delete_item, alle),
+            ("<F1>", self.show_manual_dialog, alle),
+            ("<Control-e>", export, alle),
+            ("<Control-i>", import_txt, alle),
+            ("<Control-s>", save, alle),
+            ("<Control-q>", lambda e: self.on_close(), alle),
+            ("<Control-z>", self.undo_last_change, alle),
+            ("<Control-Shift-Z>", self.redo_last_change, alle),
+            ("<Control-Shift-z>", self.redo_last_change, alle),
+            ("<Control-y>", self.redo_last_change, win),
+            ("<Control-c>", self.copy_selected_to_clipboard, alle),
+            ("<Control-v>", self.paste_items_from_clipboard, alle),
+            ("<Control-a>", self.select_all_items, alle),
+            ("<Command-c>", self.copy_selected_to_clipboard, mac),
+            ("<Command-v>", self.paste_items_from_clipboard, mac),
+            ("<Command-a>", self.select_all_items, mac),
+            ("<Command-z>", self.undo_last_change, mac),
+            ("<Command-Shift-Z>", self.redo_last_change, mac),
+            ("<Command-Shift-z>", self.redo_last_change, mac),
+            ("<Command-f>", self.focus_search, mac),
+            ("<Command-F>", self.handle_control_f, mac),
+            ("<Command-t>", self.set_due_date_selected, mac),
+            ("<Command-s>", save, mac),
+            ("<Command-e>", export, mac),
+            ("<Command-i>", import_txt, mac),
+            ("<Command-d>", theme_toggle, mac),
+            ("<Command-g>", group, mac),
+            ("<Command-n>", self.handle_control_n, mac),
+            ("<Command-N>", self.handle_control_n, mac),
+            # Mac-Tastaturen haben meist keine Entf-Taste; in Textfeldern bleibt sie normal.
+            ("<BackSpace>", self.delete_item, mac),
+            ("<Command-BackSpace>", self.delete_item, mac),
+            ("<Control-Alt-n>", self.show_quick_capture, alle),
+            ("<Command-Alt-n>", self.show_quick_capture, mac),
+            ("<Control-n>", self.handle_control_n, alle),
+            ("<Control-N>", self.handle_control_n, alle),
+            ("<Control-w>", self.delete_current_list, alle),
+            ("<Control-Shift-O>", lambda e: self.workspace.open_tab(), alle),
+            ("<Control-Shift-W>", lambda e: self.workspace.close_tab(), alle),
+            ("<Control-Next>", lambda e: self.workspace.cycle_tabs(1), alle),
+            ("<Control-Prior>", lambda e: self.workspace.cycle_tabs(-1), alle),
+            ("<Command-Shift-O>", lambda e: self.workspace.open_tab(), mac),
+            ("<Command-Shift-W>", lambda e: self.workspace.close_tab(), mac),
+            ("<Control-f>", self.handle_control_f, alle),
+            ("<Control-F>", self.handle_control_f, alle),
+            ("<Alt-p>", self.cycle_importance_selected, alle),
+            ("<Control-g>", group, alle),
+            ("<Escape>", self.handle_escape, alle),
+            ("<F2>", lambda e: self.edit_item(), alle),
+            ("<F3>", lambda e: self.edit_title(), alle),
+            ("<Control-d>", theme_toggle, alle),
+            ("<Control-t>", self.set_due_date_selected, alle),
+            ("<Control-m>", self.edit_page_note, alle),
+            ("<Control-l>", self.open_label_manager, alle),
+            ("<Control-k>", self.open_calendar_view, alle),
+            ("<Control-o>", self.show_quick_open, alle),
+            ("<Control-p>", self.show_print_dialog, alle),
+            ("<Control-Shift-P>", self.show_quick_plan_menu, alle),
+            ("<Control-Shift-T>", self.choose_time_block, alle),
+            ("<Control-Shift-F>", self.start_focus_selected, alle),
+            ("<Control-h>", self.open_history_view, alle),
+            ("<Control-Shift-K>", self.handle_compact_shortcut, alle),
+            ("<Control-Shift-k>", self.handle_compact_shortcut, alle),
+            ("<KeyRelease-K>", self.handle_compact_shortcut, alle),
+            ("<KeyRelease-k>", self.handle_compact_shortcut, alle),
+            ("<Command-Shift-K>", self.handle_compact_shortcut, mac),
+            ("<Command-Shift-k>", self.handle_compact_shortcut, mac),
+            ("<Command-l>", self.open_label_manager, mac),
+            ("<Command-k>", self.open_calendar_view, mac),
+            ("<Command-o>", self.show_quick_open, mac),
+            ("<Command-p>", self.show_print_dialog, mac),
+            ("<Command-Shift-P>", self.show_quick_plan_menu, mac),
+            ("<Command-Shift-T>", self.choose_time_block, mac),
+            ("<Command-Shift-F>", self.start_focus_selected, mac),
+            ("<Command-h>", self.open_history_view, mac),
+        ]
 
     def guard_x11_emacs_navigation(self, force=False):
         """Strg+Buchstabe bleibt in Listen Glides Kürzel (X11 und macOS ab Tk 9.1).
@@ -46410,7 +46416,11 @@ class ListApp:
                     self.root.geometry(default_geometry)
         except Exception:
             self.root.geometry(default_geometry)
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        # Fenster schließen und Cmd+Q über denselben Weg (App-Host der Shell,
+        # Phase 5): macOS fängt Cmd+Q ab und übersprünge sonst die
+        # Speicherabfrage; das Beenden läuft im Leerlauf, weil es in der
+        # Menüverfolgung von macOS eintrifft (30.09.2026).
+        glide_app_host.install_close(self.root, self.on_close, self.host_platform(), scope=self.after_scope())
 
     def on_close(self):
         # Ein zweiter Aufruf – Cmd+Q während der Speicherabfrage oder ein von
@@ -57498,9 +57508,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if (self.settings.get("time_booking") and not getattr(self, "_time_booking_recovering", False)
                 and not self.recover_time_booking()):
             raise glide_focus.PendingBookingError()
-        self.undo_stack.append(self.undo_state())
-        if trim:
-            self.trim_undo_stack()
+        self.command_history().record(self.undo_state(), trim=trim)
 
     def undo_state(self):
         """Der aktuelle Stand im Format des Rückgängig-Stapels."""
@@ -57529,10 +57537,31 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         den ersten Schritt ab der gemerkten Tiefe, auch bei vollem Stapel
         (WA-27). Der Wächter holt das Kürzen an seinem Ende nach.
         """
-        if getattr(self, "_integrity_guards", None):
-            return
-        while len(self.undo_stack) > self.MAX_UNDO_STEPS:
-            self.undo_stack.pop(0)
+        self.command_history().trim()
+
+    def command_history(self, dirty=None):
+        """Befehlsverlauf der Shell (Phase 4) über Glides Rückgängig-Stapel.
+
+        Die Shell führt Rückgängig, Wiederholen und den Rückweg bei
+        gescheitertem Speichern; Glide liefert Stand (`undo_state`),
+        Herstellen (`apply_snapshot`) und den Stapel. `dirty` ist der
+        Änderungsstand vor dem Schritt, den der Rückweg wiederherstellt.
+        """
+        def rollback(state):
+            self.apply_snapshot(state, save=False)
+            if dirty is not None:
+                self.dirty = dirty
+
+        def link(entry, current):
+            # Wiederholen muss dieselbe Zeichnung wieder auf den Stand danach bringen.
+            if entry.get("drawing_restore"):
+                current["drawing_restore"] = list(entry["drawing_restore"])
+
+        return glide_command_history.CommandHistory(
+            self.undo_state, self.apply_snapshot, rollback,
+            stack=lambda: self.undo_stack, redo=self.redo_steps, limit=self.MAX_UNDO_STEPS,
+            can_trim=lambda: not getattr(self, "_integrity_guards", None),
+            prepare=self.snapshot_keeping_drawings, link=link)
 
     def redo_steps(self):
         """Wiederholen-Stapel (FP-01); Prüfattrappen ohne `__init__` bekommen ihn bei Bedarf."""
@@ -57612,7 +57641,6 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         blocked = self.history_step_blocked(event, lambda editor: editor.undo())
         if blocked is not False:
             return blocked
-        redo = self.redo_steps()
         workspace = getattr(self, "workspace", None)
         if workspace is not None and workspace.view_undo_pending():
             # Aufräumen und Bereichsänderungen der Pinnwand (3.30) sind je ein
@@ -57622,22 +57650,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not self.undo_stack:
             self.show_info(glide_i18n.t("menu.edit.undo", "Rückgängig"), glide_i18n.t("ui.undo_last_change.there_is_no_change", "Es gibt keine Änderung zum Rückgängigmachen."))
             return "break"
-        redo.validate(self.undo_stack)
-        current = self.undo_state()
-        snapshot = self.undo_stack.pop()
-        if snapshot.get("drawing_restore"):
-            # Wiederholen muss dieselbe Zeichnung wieder auf den Stand danach bringen.
-            current["drawing_restore"] = list(snapshot["drawing_restore"])
-        dirty = self.dirty
-        if self.apply_snapshot(self.snapshot_keeping_drawings(snapshot)):
-            redo.push(current, self.undo_stack)
+        # Speichern gescheitert: Die Shell stellt den Arbeitsspeicher wie die
+        # Datei her, beide Stapel bleiben unverändert; die Fehlermeldung hat
+        # `save_items` gezeigt.
+        if self.command_history(dirty=self.dirty).undo() == glide_command_history.DONE:
             self.feedback("undone")
-        else:
-            # Speichern gescheitert: Arbeitsspeicher wieder wie die Datei, beide
-            # Stapel unverändert. Die Fehlermeldung hat `save_items` gezeigt.
-            self.undo_stack.append(snapshot)
-            self.apply_snapshot(current, save=False)
-            self.dirty = dirty
         return "break"
 
     def redo_last_change(self, event=None):
@@ -57645,28 +57662,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         blocked = self.history_step_blocked(event, lambda editor: editor.redo())
         if blocked is not False:
             return blocked
-        redo = self.redo_steps()
-        if not redo.validate(self.undo_stack):
+        def board(entry):
+            if glide_undo.is_board_entry(entry):
+                self.redo_board_view(entry)
+                return True
+            return False
+
+        result = self.command_history(dirty=self.dirty).redo_step(handle=board)
+        if result == glide_command_history.EMPTY:
             self.show_info(glide_i18n.t("menu.edit.redo", "Wiederholen"), glide_i18n.t("ui.redo_last_change.there_is_no_change", "Es gibt keine Änderung zum Wiederholen."))
-            return "break"
-        entry = redo.pop()
-        if glide_undo.is_board_entry(entry):
-            self.redo_board_view(entry)
-            return "break"
-        before = self.undo_state()
-        if entry.get("drawing_restore"):
-            before["drawing_restore"] = list(entry["drawing_restore"])
-        self.undo_stack.append(before)
-        dirty = self.dirty
-        if self.apply_snapshot(self.snapshot_keeping_drawings(entry)):
-            self.trim_undo_stack()
-            redo.mark(self.undo_stack)
+        elif result == glide_command_history.DONE:
             self.feedback("redone")
-        else:
-            self.undo_stack.pop()
-            self.apply_snapshot(before, save=False)
-            self.dirty = dirty
-            redo.restore(entry)
         return "break"
 
     def redo_available(self):
@@ -69674,10 +69680,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     lambda event, b=button, m=menu: self._post_custom_menu(b, m),
                 )
         else:
-            try:
-                self.root.config(menu=menubar)
-            except tk.TclError:
-                pass
+            glide_app_host.attach_menubar(self.root, menubar)
         self.menubar = menubar
 
     def _post_custom_menu(self, button, menu):
@@ -70788,37 +70791,43 @@ def show_start_window(root):
     return platzhalter
 
 
+def startup_tk_check(_root):
+    """Mindestversion von Tk vor dem Öffnen eines Bestands bewahren."""
+    stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
+    if stufe == "zu_alt":
+        return glide_i18n.t("ui.main.glide_cannot_start", "Glide kann nicht starten"), meldung
+    return None
+
+
+def startup_data_dir_check(_root):
+    """Ein nicht erreichbarer Datenordner wird vor dem App-Fenster gemeldet.
+
+    Etwa ein nicht eingebundenes Laufwerk hinter datenordner.json: Glide legt
+    dann nichts an und schaltet nicht still auf einen anderen Bestand um.
+    """
+    return glide_runtime_config.prepare_data_dir(glide_runtime_config.resolve_paths(BASE_DIR), RUNTIME_PATHS)
+
+
+def app_host():
+    """Glides Start im App-Host der Shell: vor Tk, Prüfungen, Platzhalter, fertig."""
+    return glide_app_host.AppHost(
+        # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.
+        before_tk=(set_windows_app_user_model_id, register_private_fonts),
+        preflight=(startup_tk_check, startup_data_dir_check),
+        splash=show_start_window,
+        on_ready=lambda root: glide_diagnostics.record_phase(
+            'ui_ready', tk_version=root.tk.call('package', 'provide', 'Tk')),
+        show_error=lambda title, message, parent=None: messagebox.showerror(title, message, parent=parent))
+
+
 def main():
     """Startet Glide – direkt oder über `glide_start.py` (mit Bytecode-Cache)."""
     glide_diagnostics.start_session(APP_VERSION)
     activate_runtime()
     try:
-        set_windows_app_user_model_id()
-        # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.
-        register_private_fonts()
-        root = tk.Tk()
-        # Mindestversion vor dem Öffnen eines Bestands bewahren.
-        stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
-        if stufe == "zu_alt":
-            root.withdraw()
-            messagebox.showerror(glide_i18n.t("ui.main.glide_cannot_start", "Glide kann nicht starten"), meldung, parent=root)
-            root.destroy()
-            raise SystemExit(1)
-        # Ein nicht erreichbarer Datenordner (etwa ein nicht eingebundenes
-        # Laufwerk hinter datenordner.json) wird vor dem App-Fenster gemeldet.
-        # Glide legt dann nichts an und schaltet nicht still auf einen anderen
-        # Bestand um.
-        problem = glide_runtime_config.prepare_data_dir(glide_runtime_config.resolve_paths(BASE_DIR), RUNTIME_PATHS)
-        if problem:
-            root.withdraw()
-            messagebox.showerror(*problem, parent=root)
-            root.destroy()
-            raise SystemExit(1)
-        platzhalter = show_start_window(root)
-        ListApp(root)
-        platzhalter.destroy()
-        glide_diagnostics.record_phase('ui_ready', tk_version=root.tk.call('package', 'provide', 'Tk'))
-        root.mainloop()
+        # Den Lebenslauf des Hauptfensters führt der App-Host der Shell
+        # (Phase 5); ListApp ist der Controller darin.
+        app_host().run(ListApp)
     except BaseException as error:
         code = (0 if error.code is None else error.code if isinstance(error.code, int) else 1) if isinstance(error, SystemExit) else 1
         glide_diagnostics.finish(code)

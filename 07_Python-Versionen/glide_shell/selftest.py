@@ -6,7 +6,8 @@ Suchpfad. Der Test öffnet ein kleines, sofort wieder geschlossenes Tk-Fenster
 und prüft jeden Baustein mit echtem Tk: Paketversion, Geometrie, Systemmodus,
 Wiederholen-Stapel, Zeitgeberbereich, Übergang, Menüleiste, Bedienelement,
 Textkürzung mit echter Schrift, Aktionsauswahl, Pfadauflösung ohne
-Seiteneffekt und modalen Dialog mit Griff und Freigabe. Ausgabe je Prüfung `ok` oder `FAIL`,
+Seiteneffekt, Befehlsverlauf mit Befehl und Zustandsabbild, App-Host mit
+Startprüfung, Kürzeln und Schließweg sowie modalen Dialog mit Griff und Freigabe. Ausgabe je Prüfung `ok` oder `FAIL`,
 Die Prüfungen greifen auch unter
 `python -O`. Exitcode 0 nur, wenn alles bestanden ist; 2, wenn kein Tk-Fenster möglich ist
 (etwa ohne Anzeige). Meldungen sind Englisch (D96). Vertrag:
@@ -21,8 +22,9 @@ import tkinter as tk
 import tkinter.font as tkfont
 
 from glide_shell import SHELL_VERSION
-from glide_shell import (action_picker, custom_controls, desktop_adapter, modal_session, motion, redo_history,
-                         runtime_paths, system_appearance, text_fit, window_geometry, window_lifetime)
+from glide_shell import (action_picker, app_host, command_history, custom_controls, desktop_adapter, modal_session,
+                         motion, redo_history, runtime_paths, system_appearance, text_fit, window_geometry,
+                         window_lifetime)
 
 
 def expect(condition, detail):
@@ -164,11 +166,60 @@ def check_runtime_paths(_root):
     return "pointer, override and platform folder resolved without side effects"
 
 
+class _Counter(command_history.Command):
+    def __init__(self, box):
+        self.box = box
+
+    def execute(self):
+        self.box[0] += 1
+
+    def undo(self):
+        self.box[0] -= 1
+
+
+def check_command_history(_root):
+    box = [0]
+    history = command_history.CommandHistory(limit=2)
+    history.execute(_Counter(box))
+    expect(box == [1] and history.undo() == command_history.DONE and box == [0], "command undo failed")
+    expect(history.redo_step() == command_history.DONE and box == [1], "command redo failed")
+    state = {"value": 1}
+    memento = command_history.CommandHistory(lambda: dict(state), lambda saved: state.update(saved) or True)
+    memento.record()
+    state["value"] = 2
+    expect(memento.undo() == command_history.DONE and state["value"] == 1, "memento undo failed")
+    failing = command_history.CommandHistory(lambda: dict(state), lambda _saved: False, lambda saved: state.update(saved))
+    failing.record()
+    expect(failing.undo() == command_history.FAILED and len(failing) == 1, "a failed apply must keep the step")
+    return "commands and mementos, failure keeps both stacks"
+
+
+def check_app_host(root):
+    shown = []
+    host = app_host.AppHost(preflight=(lambda _w: ("Title", "Message"),),
+                            show_error=lambda *args, **_kw: shown.append(args), tk_factory=lambda: tk.Toplevel(root))
+    try:
+        host.run(lambda window: window, mainloop=False)
+    except SystemExit as stop:
+        expect(stop.code == 1 and shown == [("Title", "Message")], "preflight must report and exit with 1")
+    else:
+        raise AssertionError("preflight finding did not stop the start")
+    built = app_host.AppHost(tk_factory=lambda: tk.Toplevel(root)).run(lambda window: window, mainloop=False)
+    platform = app_host.platform_of(root.tk.call("tk", "windowingsystem"))
+    bound = app_host.bind_shortcuts(built, app_host.primary_shortcuts("z", lambda _e: None, platform), platform)
+    expect(bound[0] == "<Control-z>" and len(bound) == (2 if platform == app_host.MACOS else 1), bound)
+    app_host.install_close(built, built.destroy, platform, quit_command=False)
+    expect(app_host.attach_menubar(built, tk.Menu(built)), "menubar was rejected")
+    built.destroy()
+    return f"preflight, shortcuts and close path on {platform}"
+
+
 CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("system_appearance", check_appearance), ("redo_history", check_redo),
           ("window_lifetime+motion", check_scope_and_motion), ("desktop_adapter+custom_controls", check_controls),
           ("text_fit", check_text_fit), ("action_picker", check_action_picker),
-          ("runtime_paths", check_runtime_paths), ("modal_session", check_modal))
+          ("runtime_paths", check_runtime_paths), ("command_history", check_command_history),
+          ("app_host", check_app_host), ("modal_session", check_modal))
 
 
 def run(out=sys.stdout):

@@ -48,9 +48,9 @@ flowchart TD
    - **Homebrew:** Cask `packaging/homebrew/Casks/glide.rb` im Repository `n05a-design/homebrew-glide`.
    - **winget:** Manifeste `packaging/winget/manifests/s/Shaye/Glide/` für `winget install Shaye.Glide`.
    - Ist: Versionierte Vorlagen sind im Repository vorhanden; ohne öffentliches Release wurden sie nicht in den Tap bzw. das winget-Repository eingereicht.
-5. **Qualität und Freigabe (◐ Quellstand geprüft, Release offen):**
+5. **Qualität und Freigabe (✅ geprüft; Release offen):**
    - PR #138 wurde am 18.11.2026 nach `main` gemergt; die Grundstufe, CodeQL sowie Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem geprüften PR-Head erfolgreich.
-   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Menschliche Sicht-/Bedienabnahme sowie übersprungene UI-/Barrierefreiheitsjobs bleiben offen.
+   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Seit 22.11.2026 sind auch die manuell zu startenden UI-Diagnosen und die nativen AT-SPI-/MSAA-Prüfungen auf `main` grün; die echte Screenreader-Sprachausgabe (Orca, NVDA) bleibt zurückgestellt. Offen bleibt die menschliche Sicht-/Bedienabnahme.
    - Am 18.11.2026 wurden weder GitHub-Release noch Git-Tags gefunden. Öffentliche Freigabe und Paketmanager-Einreichungen sind nicht erfolgt.
 
 > [!NOTE]
@@ -124,4 +124,4 @@ Statusabgleich vom 22.11.2026: [Issue #129](https://github.com/n05a-design/glide
 - [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (vollständige Oberfläche über PR #148, #157, #158 und die Lokalisierungsrunden V1.70–V1.79; englische Schnellerfassung V1.81, PR #186; menschliche Abnahme läuft mit der Freigabe)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
 - [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
-- [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. Öffentlicher Tag/Release, vollständige menschliche Abnahme und übersprungene UI-/Barrierefreiheitsjobs offen)
+- [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. UI-Diagnosen und native Barrierefreiheitsprüfungen am 22.11.2026 grün, Screenreader-Sprachausgabe zurückgestellt; öffentlicher Tag/Release und menschliche Abnahme offen)

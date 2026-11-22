@@ -20,6 +20,8 @@ Bausteine:
 - `text_fit`: Text auf Zeichen- oder Pixelbreite kürzen, Zeichen auf gleiche Breite bringen.
 - `action_picker`: durchsuchbare Aktionsauswahl aus einem fertigen Menü (Ordnen, Suchen, Gruppieren).
 - `runtime_paths`: Daten- und Cacheordner nach Plattformkonvention auflösen, ohne Dateisystemmutation.
+- `command_history`: Rückgängig/Wiederholen für Zustandsabbilder und Befehlsobjekte (Phase 4).
+- `app_host`: Hauptfenster, Startprüfungen, Menüleiste, Kürzel und Beenden für einen Controller (Phase 5).
 - `selftest`: Prüfung einer übernommenen Kopie auf dem Zielrechner (`python -m glide_shell.selftest`).
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
@@ -28,8 +30,8 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.5.0"
+SHELL_VERSION = "0.6.0"
 
 __all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
            "window_geometry", "system_appearance", "redo_history", "text_fit", "action_picker",
-           "runtime_paths", "selftest", "demo"]
+           "runtime_paths", "command_history", "app_host", "selftest", "demo"]
