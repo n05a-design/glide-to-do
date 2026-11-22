@@ -1,5 +1,18 @@
 # QA-Bericht – Glide 1.0.1
 
+## Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
+
+macOS arm64, Python 3.14.5, Tk 9.1, künstliche Daten, auf `claude/shell-startprompt` über `main` `62ae1dde`.
+
+| Gegenstand | Ergebnis |
+|---|---|
+| Übernahme in ein leeres Projekt | `shell_uebernehmen.py`: 20 Dateien samt Anleitungen und Startprompt; `--pruefen` meldet nach einer Quelländerung „veraltet“, `--ersetzen` aktualisiert. Selbsttest 12/12 mit und ohne `-O`; englisches Gerüst aus `AI_GUIDE_NEW_PROJECTS.md` §3.3 läuft (Start über `AppHost`, Rückgängig/Wiederholen). |
+| Befund | `install_close` mit einem eingebetteten `Toplevel` unter macOS: `AttributeError` (`createcommand`). Behoben in 0.6.1; T336 deckt den Fall ab; eingebetteter Demohost läuft danach. |
+| Links | Alle GitHub-Verweise der beiden KI-Anleitungen zeigen auf vorhandene Dateien. |
+| Gezielte Prüfungen | T336, T319, `test_glide_system`, T331, `test_standpruefung`, Selbsttest, Demohost, Startwege 17/17, Abbauvertrag 5/5 grün; Standprüfung ohne Befund; `abgleich_07.py`: 110 Code-Dateien, 169 Ressourcen, keine Abweichungen. |
+
+**Grenze:** Kein erneuter Volllauf; Glides Schließweg nutzt das Hauptfenster und ist unverändert. Der vollständige Lauf auf Shell 0.6.0 steht im folgenden Abschnitt.
+
 ## Shell 0.6.0: Phasen 4 und 5, Volllauf, Paket, DMG und Barrierefreiheitsjobs (V1.84, 22.11.2026)
 
 Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem Datenordner, künstlichen Daten, Vordergrundmodus bei entsperrtem Bildschirm, auf `claude/v101-audit` (`425f5111`, aufbauend auf `main` `4ce3697a`).

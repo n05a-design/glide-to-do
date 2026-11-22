@@ -17,7 +17,7 @@ Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## What Glide is
 
-Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source state is Glide 1.0.1 on `main` (`4ce3697a`, 22.11.2026): schema 26, exchange format 2, system catalog V1.83, `glide_shell` 0.5.0.
+Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source state is Glide 1.0.1 on `main` (`62ae1dde`, 22.11.2026): schema 26, exchange format 2, system catalog V1.85, `glide_shell` 0.6.1 (completed, D99).
 
 ## How it works
 

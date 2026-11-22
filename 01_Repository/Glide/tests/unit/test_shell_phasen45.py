@@ -197,6 +197,20 @@ class AppHost(unittest.TestCase):
         mac_wurzel.quit()
         self.assertEqual(bereich.idle, [schliessen], "Cmd+Q läuft im Leerlauf über den Bereich")
 
+        class Unterfenster:
+            """Wie ein Toplevel: Fensterknopf, aber kein createcommand."""
+
+            def __init__(self):
+                self.log = []
+
+            def protocol(self, name, handler):
+                self.log.append((name, handler))
+
+        unter = Unterfenster()
+        self.assertFalse(app_host.install_close(unter, schliessen, app_host.MACOS, scope=bereich),
+                         "ein eingebettetes Fenster übernimmt nicht das Beenden der Anwendung")
+        self.assertEqual(unter.log, [("WM_DELETE_WINDOW", schliessen)])
+
 
 def lade_glide():
     os.environ["GLIDE_DATA_DIR"] = tempfile.mkdtemp(prefix="glide-phase45-")

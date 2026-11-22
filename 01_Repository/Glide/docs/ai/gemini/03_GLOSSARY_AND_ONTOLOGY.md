@@ -47,8 +47,8 @@ Terms below are aligned with [`skills/glide-to-do/references/glide-aufbau.md`](.
 | Undo / redo | Rückgängig / Wiederholen | In-memory history with explicit save/guard semantics; not an archival version history |
 | Exchange format | Austauschformat | `glide.exchange`, version 2; not the same as data schema 26 |
 | Data schema | Aufgabenformat / Datenformat | Main persisted-list schema, currently 26 |
-| System catalog | Glide-System | Independent module/feature/test inventory version; V1.84 on `main` (22.11.2026) |
-| Glide Shell | Glide-Shell | Subpackage `src/glide/glide_shell` (0.6.0) with demo host, self-test and guide; follow-up projects copy it with `shell_uebernehmen.py`. Completed by owner decision D99; no separate repository or release |
+| System catalog | Glide-System | Independent module/feature/test inventory version; V1.85 on `main` (22.11.2026) |
+| Glide Shell | Glide-Shell | Subpackage `src/glide/glide_shell` (0.6.1) with demo host, self-test and guide; follow-up projects copy it with `shell_uebernehmen.py`. Completed by owner decision D99; no separate repository or release |
 
 ## Ontology notes
 

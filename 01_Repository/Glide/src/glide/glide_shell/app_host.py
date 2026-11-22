@@ -138,7 +138,10 @@ def install_close(root, on_close, platform, quit_command=True, scope=None):
     eigenem Zeitgeberbereich für das Hauptfenster reicht ihn als `scope` ein.
     """
     root.protocol("WM_DELETE_WINDOW", on_close)
-    if platform != MACOS or not quit_command:
+    # Das Beenden aus dem App-Menü gehört zum Hauptfenster (`tk.Tk`). Ein
+    # eingebettetes Fenster (`Toplevel`) setzt nur seinen Fensterknopf und
+    # überschreibt nicht den Beenden-Weg der Anwendung.
+    if platform != MACOS or not quit_command or not callable(getattr(root, "createcommand", None)):
         return False
     if scope is None:
         scope = window_lifetime.scope_for(root)

@@ -25,13 +25,13 @@ It is not a cloud collaboration service, automatic multi-device sync, built-in A
 
 - App: Glide 1.0.1.
 - Main data schema: 26. Settings: 2. Templates: 2. Exchange format: `glide.exchange` v2.
-- Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.84, `glide_shell` 0.6.0 (completed, D99).
+- Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.85, `glide_shell` 0.6.1 (completed, D99).
 - PRs #185–#188 are merged: own photos and bilingual showcase, English quick capture, page edit time, WA-49 and localized release notes.
 - No GitHub tag/release, notarization or Homebrew/winget submission exists; no final owner acceptance was recorded.
 
 ## Architecture
 
-The main desktop host is `src/glide/app.pyw` (`ListApp`). `glide_start.py` bootstraps the process. The host integrates Tk widgets/views/dialogs, smaller domain modules, local persistence, locale catalog, and desktop adapters. Many domain modules are Tk-free; no-Tk import does not automatically mean a module is application-neutral. Some shell modules are extracted inside Glide; a separate released/shared `glide_shell` package/host is a post-1.0 target.
+The main desktop host is `src/glide/app.pyw` (`ListApp`). `glide_start.py` bootstraps the process. The host integrates Tk widgets/views/dialogs, smaller domain modules, local persistence, locale catalog, and desktop adapters. Many domain modules are Tk-free; no-Tk import does not automatically mean a module is application-neutral. The reusable shell is the subpackage `glide_shell` 0.6.0 (copied into follow-up projects with `shell_uebernehmen.py`); since V1.84 `app_host` runs the main window and `command_history` undo/redo, with `ListApp` as the controller.
 
 Data is local JSON plus attachments and backups. Writes use same-directory temporary files and atomic replacement. A per-directory lock guards recognized local concurrent writers; it cannot merge unsynchronized cloud/device copies. Newer schema or failed safety checks must not silently overwrite data.
 

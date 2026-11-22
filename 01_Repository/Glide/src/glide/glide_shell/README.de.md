@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für Folgeprojekte
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.0
+Stand 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.1
 
 <p align="right"><a href="README.md">English</a></p>
 
@@ -79,7 +79,7 @@ class App:
 app_host.AppHost(preflight=(lambda root: None,)).run(App)
 ```
 
-Für KI-Agenten, die mit der Shell ein neues Projekt bauen, steht der vollständige Ablauf mit Prozessen, Design-Richtlinien und Prüfungen in [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md) (englisch: [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md)).
+Für KI-Agenten, die mit der Shell ein neues Projekt bauen, steht der vollständige Ablauf mit Prozessen, Design-Richtlinien und Prüfungen in [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md) (englisch: [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md)); einen fertigen Startprompt für die erste Sitzung enthält [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md).
 
 Ein Muster aus dem Demohost: Zeitgeber und Übergänge eines Fensters über denselben Bereich planen, damit beim Schließen nichts weiterläuft.
 
