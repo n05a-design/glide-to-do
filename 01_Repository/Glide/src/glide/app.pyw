@@ -91,7 +91,9 @@ def defer_window_menu_commands():
     tk.Menu.insert_command = huelle_einfuegen(tk.Menu.insert_command)
     tk.Menu._glide_defers_windows = True
 
-defer_window_menu_commands()
+
+# Seit V1.83 (Rest WA-49) wird der Aufschub erst beim App-Start eingerichtet
+# (`activate_runtime`); der Import verändert `tk.Menu` nicht mehr.
 
 
 def bytecode_cache_dir():
@@ -114,6 +116,16 @@ def bytecode_cache_dir():
 
 if not sys.pycache_prefix and not getattr(sys, "frozen", False):
     sys.pycache_prefix = bytecode_cache_dir()
+
+# D89 (Rest WA-49): Beim Direktstart prüft Glide die Python-Version, nach der Bytecode-Umleitung und bevor ein
+# weiteres Glide-Modul geladen oder ein Nutzerdatum berührt wird. Ein Import
+# (Tests, Schnellstart, Paket) bleibt unberührt; dort prüft der jeweilige Starter.
+if __name__ == "__main__":
+    import runtime_check as _glide_startpruefung
+    _stufe, _meldung = _glide_startpruefung.python_status()
+    if _stufe == "zu_alt":
+        print(_meldung, file=sys.stderr)
+        sys.exit(1)
 import drawing as glide_drawing  # noqa: E402
 import animation as glide_animation  # noqa: E402
 import notion_archive as glide_notion_archive  # noqa: E402
@@ -598,7 +610,9 @@ def get_app_data_dir():
     return glide_runtime_config.resolve_paths().base_dir
 
 
-RUNTIME_PATHS = glide_runtime_config.resolve_paths()
+# Beim Import nur rechnen, ohne den Benutzerzeiger `datenordner.json` zu lesen
+# (Rest WA-49). `activate_runtime()` liest ihn einmal beim Start.
+RUNTIME_PATHS = glide_runtime_config.resolve_paths(read_pointer=False)
 BASE_DIR = RUNTIME_PATHS.base_dir
 SAVE_FILE = RUNTIME_PATHS.save_file
 SETTINGS_FILE = RUNTIME_PATHS.settings_file
@@ -612,6 +626,34 @@ ERROR_LOG_MAX_BYTES = 200_000
 
 # Der Import legt keine Ordner an, auch nicht mit GLIDE_DATA_DIR (WA-49). Die
 # Bereitstellung erfolgt beim App-Start in ListApp.__init__ und beim Ordnerwechsel.
+
+_RUNTIME_ACTIVE = False
+
+
+def activate_runtime():
+    """Einmal je Prozess beim Start: Menüaufschub und Datenordner samt Benutzerzeiger.
+
+    Bis V1.82 geschah beides schon beim Import (Rest WA-49). Ein späterer
+    Ordnerwechsel im selben Prozess (`change_data_folder`) bleibt unberührt,
+    weil die Funktion nur beim ersten Aufruf wirkt.
+    """
+    global _RUNTIME_ACTIVE, RUNTIME_PATHS, BASE_DIR, SAVE_FILE, SETTINGS_FILE, BACKUP_DIR
+    global ATTACHMENTS_DIR, TEMPLATES_FILE, DATA_POINTER_FILE, LOCK_FILE, ERROR_LOG_FILE
+    if _RUNTIME_ACTIVE:
+        return RUNTIME_PATHS
+    _RUNTIME_ACTIVE = True
+    defer_window_menu_commands()
+    RUNTIME_PATHS = glide_runtime_config.resolve_paths()
+    BASE_DIR = RUNTIME_PATHS.base_dir
+    SAVE_FILE = RUNTIME_PATHS.save_file
+    SETTINGS_FILE = RUNTIME_PATHS.settings_file
+    BACKUP_DIR = RUNTIME_PATHS.backup_dir
+    ATTACHMENTS_DIR = RUNTIME_PATHS.attachments_dir
+    TEMPLATES_FILE = RUNTIME_PATHS.templates_file
+    DATA_POINTER_FILE = RUNTIME_PATHS.pointer_file
+    LOCK_FILE = RUNTIME_PATHS.lock_file
+    ERROR_LOG_FILE = RUNTIME_PATHS.error_log_file
+    return RUNTIME_PATHS
 
 
 def register_private_fonts(font_dir=None):
@@ -17897,6 +17939,7 @@ class ListApp:
 
     def __init__(self, root):
         self.root = root
+        activate_runtime()
         self.paths = glide_runtime_config.resolve_paths(BASE_DIR)
         self.paths.ensure_dirs()
         # Der eigene Fehlerbericht steht vor
@@ -70745,6 +70788,7 @@ def show_start_window(root):
 def main():
     """Startet Glide – direkt oder über `glide_start.py` (mit Bytecode-Cache)."""
     glide_diagnostics.start_session(APP_VERSION)
+    activate_runtime()
     try:
         set_windows_app_user_model_id()
         # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.

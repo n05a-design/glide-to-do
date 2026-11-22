@@ -1,30 +1,20 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 21.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.68 auf `main` (PRs #168–#172 gemergt, `0efa33ae`) · Glide Shell 0.4.0; V1.69 Shell-Bausteine D98 (`text_fit`, `action_picker`, `runtime_paths`, Shell 0.5.0, Selbsttest unter `-O`) in PR #173 (`claude/v169-shell-text-menu-paths`); KI-Handbuch und Skill `glide-shell` auf `claude/v169-shell-ki-handbuch` über #173; V1.70 D93-Volllokalisierung L1 (Pinnwand, Reiter, Seiten, Galerie, Datenordner, Tageshinweise, Belegzeiten) auf `claude/v170-i18n-l1-pr`; V1.71 D93-Volllokalisierung L2 (Tagesplanung, Nebenansicht, Inspektor, Seitenleiste, Startseite) auf `claude/v171-i18n-l2`; V1.72 D93-Volllokalisierung L3 (Vorlagen, Bibliothek, Labels, Punktmaske, Verweise, Kalender, Seitenleiste) auf `claude/v172-i18n-l3`; V1.73 D93-Volllokalisierung L4 (Seitenleistenmenüs, Papierkorb, Anlegen, Kopf, Hinweise, Speichern, Erinnerungen) auf `claude/v173-i18n-l4`; V1.74 D93-Volllokalisierung L5 (Benachrichtigungen, Statuszeile, Seiten, Zeichnungsdialoge, Übersichten, Schnellerfassung, Kontextmenüs) auf `claude/v174-i18n-l5`; V1.75 D93-Volllokalisierung L6 (Fokus, Verschieben, Import/Export, KI-Austausch, Sicherungen, CSV, Druck) auf `claude/v175-i18n-l6`; V1.76 D93-Volllokalisierung L7 (Kalenderdatei, App-Sicherung, Verlauf, Suche, Menüleiste, Über Glide, Tastenkürzel, Vorlageneditor) auf `claude/v176-i18n-l7`; V1.77 D93-Volllokalisierung L8 (Handbuch, Klassentabellen, Module, Knopfrollen, Kurzformen) auf `claude/v177-i18n-l8`; Volllokalisierung damit vollständig; V1.78 D93 zweisprachiger Austausch, Systemlabels, KI-Formatbeschreibung und mitgelieferte Vorlagen auf Englisch auf `claude/v178-austausch-zweisprachig`; V1.80 Showcase „Stadtlicht“ (DE/EN) mit eigenen Fotos, Fremdbilder entfernt, Restlokalisierung, Herausgeberzeile auf `claude/v179-eigene-fotos`
+Stand 22.11.2026 · Glide 1.0.0 · Aufgabenformat 26 · Glide-System V1.83 · Glide Shell 0.5.0 (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
-**Aktueller Main-Stand:** PR #154 wurde am 19.11.2026 auf `448eee7f`, PR #156 am 20.11.2026 auf `4b6bce08` gemergt; `origin/main` steht auf `4b6bce08`. Main-Workflow [#44720125213](https://github.com/n05a-design/glide-to-do/actions/runs/44720125213) ist vollständig grün: Grundstufe, Linux- und Windows-Vollprüfung mit Tk 9.1 sowie Windows-Paketbau; UI-Diagnose, NVDA und Orca wurden übersprungen. Auf PR #157 (`2f10ba9d`) bestanden Grundstufe, Dokumentation, CodeQL/Analyze und Linux-Vollprüfung; die Windows-Vollprüfung lief bei letzter Abfrage noch.
-
-**Git-/Remote-Handoff (20.11.2026, Nachmittag):** PR #157 wurde am 20.11.2026 als Squash-Commit `55ad7e95` nach `main` gemergt; sein geprüfter Head `2f10ba9d` hat denselben Baum. Der V1.58-Schnitt liegt auf `claude/d93-drawing-animation-more-i18n`; der Zweig wurde danach remote auf `main` umgesetzt (`1ef50992`, `28e68167`, Baum unverändert), [PR #158](https://github.com/n05a-design/glide-to-do/pull/158) zielt jetzt auf `main`. Auf dem Head `28e68167` bestand Workflow [#44745571619](https://github.com/n05a-design/glide-to-do/actions/runs/44745571619) vollständig: Grundstufe, Linux- und Windows-Vollprüfung mit Tk 9.1 sowie Windows-Paketbau; UI-Diagnose, NVDA und Orca wurden übersprungen. Die OneDrive-Hauptablage stand auf dem alten lokalen Zweig `claude/etappe4-release-v1` (`f62e7bd8`, 105 Dateien hinter `main`, Inhalt schon über PR #138 in `main`). Sie wurde ohne lokale Änderungen auf `main` = `origin/main` `4b6bce08` umgestellt; der alte Zweig bleibt lokal erhalten. Die vier geschützten unversionierten Pfade blieben unangetastet; `SQLite-Copyright.md` ist zusätzlich unter `~/gq/s1120` gesichert. Keine Konfliktkopien gefunden. Die OneDrive-Cloudsynchronisierung bleibt unverifiziert. Das CLI-Konto meldet jetzt `ADMIN` auf dem Repository; die englische About-Beschreibung wurde nach Inhaberfreigabe gesetzt und live bestätigt.
-
-**Ganzheitsaudit – verifizierter Umfang und Grenzen:** `main` und `origin/main` stehen auf `a53e7790`; der aktive PR-#154-Branch stand vor den neuen Änderungen lokal und remote auf `42fa060f`. Die alten lokalen Branches `claude/macos-nachtraege-main` (`5bcdf8bf`) und `shaye-musik-onedrive-worktree-abgleich` (`84cdd04a`) sind Vorfahren von `main`. Die Stände `f62e7bd8` (`claude/etappe4-release-v1`) und `8fba89a0` (`glide_ci_recovery`) liegen in der Historie des finalen PR-#138-Heads `7d2d5cf`; PR #138 wurde als Squash-Commit `a303e405` gemergt, dessen Baum mit dem finalen PR-Head übereinstimmt. Diese alten Branches sind daher keine eigenen unübertragenen Änderungen; ihre GitHub-Remote-Branches wurden gelöscht. Der detached Prewarm-Stand `1e99bf1d` ist Basis dieses Merges. Es gibt keinen Git-Stash. Der separate Hauptcheckout auf `claude/etappe4-release-v1` wurde nicht geöffnet; sein Dirty-/Untracked-Zustand bleibt unbekannt. Finder bestätigt den Projektpfad in OneDrive und lokale Offlineverfügbarkeit, aber keinen erfolgreichen Cloud-Upload. Eine uneingeschränkte Synchronisationsbestätigung ist daher nicht möglich.
-
-**GitHub-Governance-Folgepaket:** PR #154 mit den zweisprachigen Issue-Formularen, Verhaltensgrundsätzen, Supportleitfaden, Dokumentationsworkflow und verknüpften DE/EN-Einstiegen ist gemergt. Issue #129 bleibt offen; Release/Tags, vollständige Lokalisierung, externe Homebrew-/winget-Einreichungen und menschliche Sicht-/Bedienabnahme bleiben Inhaber- bzw. Folgeaufgaben. About-Beschreibung ist seit 20.11.2026 englisch (Inhaberfreigabe, live bestätigt); neue 1.0.0-Aufnahmen und GIF bleiben offen. Wiki-Quellen/Synchronisation sind nach I11 B nicht ausgewählt.
-
-**English-first Korrektur nach Steps (Plan §21.141):** `main/README.md` war beim Live-Abruf noch deutsch, obwohl `README.en.md` existierte. `README.md` ist jetzt die englische Primärseite, Deutsch liegt in `README.de.md`; CONTRIBUTING und SECURITY haben verlinkte deutsche Fassungen, die übrigen öffentlichen Community-Einstiege führen Englisch zuerst. Der geprüfte Commit `38165982` wurde auf PR #154 gepusht; beim damaligen Stand am 19.11. war der PR noch offen, inzwischen ist er auf Merge-Commit `448eee7f` in `main`. Für diesen Head bestand der Dokumentations-/YAML-/Standworkflow; Analyze (Actions/Ruby) bestand, CodeQL wurde übersprungen, Analyze (Python) und Linux-Grundstufe liefen bei damaliger Abfrage noch. `gh repo edit` und REST-PATCH zur About-Beschreibung antworteten mit HTTP 404; die Metadaten bleiben deutsch.
+**Aktueller Stand (22.11.2026):** `main` enthält Glide 1.0.0 mit Glide-System bis V1.80. Die PRs [#185](https://github.com/n05a-design/glide-to-do/pull/185) (eigene Fotos, Showcase „Stadtlicht“ DE/EN, Marke „Glide To Do“, Fotolizenz MPL-2.0), [#186](https://github.com/n05a-design/glide-to-do/pull/186) (englische Schnellerfassung, V1.81, N21) und [#187](https://github.com/n05a-design/glide-to-do/pull/187) (V1.82) sind in die Release-Runde `claude/v101-release` zusammengeführt. Diese Runde schließt WA-49 (V1.83: importfreie App-Schicht, Menüaufschub und Datenordnerzeiger erst beim Start) und hebt den Lieferstand auf **1.0.1** einschließlich `07_Python-Versionen`.
 
 > [!IMPORTANT]
-> **Aktueller strategischer Fokus: Soll-Ist-Abschluss Release 1.0 (v1.0.0 / D93)**
-> Der Inhaber beschloss am 17.11.2026 den Feature Freeze für Glide 1.0.0. Der Quellstand wurde gemergt, aber nicht öffentlich veröffentlicht. Das Soll – vollständige DE/EN-Oberfläche und bereitgestellte GitHub-/Homebrew-/winget-Releases – ist noch nicht vollständig erfüllt.
-> - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ **ABGESCHLOSSEN** (PR #130, PR #133, V1.39, T328)
-> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ◐ Spracheinstellung, Einstellungsdialog, ausgewählte Menüs/Seitenleistenbereiche, Seiteneditor, Aktionsfeedback, Aufgabeninspektor, Kalenderfelder und Kernsteuerungen des Zeicheneditors sind in den geprüften Flächen zweisprachig; weitere Dialoge, Animations-/Mehr-Menüs, dynamische Undo-Texte, einzelne Status-/Fehlertexte und Teile der Shell bleiben offen.
-> - **Etappe 3: Paketierung & Installer:** ◐ Bauwege, Installer und Paketmanager-Manifeste technisch vorbereitet; Homebrew-/winget-Vorlagen nicht eingereicht.
-> - **Etappe 4: Release Cut v1.0.0 & Veröffentlichung:** ◐ Quellstand in `main`, Pflichtchecks auf PR #138 grün; kein Tag/Release, öffentliche Einreichung und menschliche Abnahme offen.
+> **Release 1.0 (D93) – Soll-Ist**
+> - **Etappe 1: Skill komplettieren (K4 & K5):** ✅ abgeschlossen (PR #130, PR #133, V1.39, T328)
+> - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
+> - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.5.0 mit Demonstrationshost, Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69); WA-49 mit V1.83 geschlossen
+> - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
+> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
 >
-> **Erste Handgriffe einer neuen Sitzung:** (1) V1.65 bis V1.68 sind am 21.11.2026 als PRs #168–#171 per Squash auf `main` gemergt (`17ff9263`, `b7e6934f`, `24ed51c0`, `0ba533af`); `main` entspricht exakt dem lokal geprüften V1.68-Stand, und die Hauptablage steht darauf. Aufeinander aufbauende Zweige gegen `main` mit „Create a merge commit“ mergen; nach einem Squash-Merge `origin/main` in den Folgezweig mergen und dessen Baum behalten (ohne Force-Push). (2) Native macOS-Nachweise: Lauf [#44805921979](https://github.com/n05a-design/glide-to-do/actions/runs/44805921979) (Vollprüfung, #164-Stand) und [#44816037432](https://github.com/n05a-design/glide-to-do/actions/runs/44816037432) (Paket, #167-Code) sind grün. (3) Nach D94 ist die Shell-Restkopplung aufgelöst (Plan §21.148–§21.150); `glide_shell` und Paket 6 sind mit D95 umgesetzt (§21.152), `motion` und das Übernahmewerkzeug `scripts/pflege/shell_uebernehmen.py` folgen in V1.66 (§21.154). D96 gibt `window_geometry`, `system_appearance` und `redo_history` frei (V1.67, §21.155); D98 gibt `text_fit`, `action_picker` und `runtime_paths` frei (V1.69, §21.157); Barrierefreiheit (S12) ist nicht freigegeben. Offene Etappe-2-Flächen stehen in Plan §21.151 D. Die Hauptablage steht auf `main`; offen ist nur die Bestätigung der OneDrive-Cloudsynchronisierung.
->
-> **Nachtrag für die aktuelle Sitzung:** English-first-Nachführung `38165982` ist auf PR #154 gepusht. Bei der letzten Abfrage für diesen Head bestand der Dokumentations-/YAML-/Standworkflow; Analyze (Actions/Ruby) bestand, CodeQL war übersprungen, Analyze (Python) und Linux-Grundstufe liefen noch. Den aktuellen Status erneut live ermitteln; PR #154 nicht ohne ausdrückliche Freigabe mergen.
+> **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 
 ---
 
@@ -47,15 +37,14 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.59 auf `main`**, V1.60 auf `claude/shell-r1-dialogfabrik` (100 Source-Module M001–M100, 115 Integrationssuiten, 329 Test-/Werkzeugdateien, 5 Analysen). PR #156 ist auf `4b6bce08` gemergt. |
-| **Meilenstein Release 1.0** | Verbindlicher Feature Freeze (D93). Etappe 1 Skill K4/K5 ist erledigt. Etappe 2 i18n ist teilweise integriert; vollständige UI-Lokalisierung fehlt. Etappe 3 ist technisch vorbereitet, aber Homebrew-/winget-Vorlagen sind nicht eingereicht. Etappe 4 Quellcut ist in `main`; Tag, GitHub-Release und menschliche Abnahme fehlen. Issue #129 bleibt offen. |
+| **Version & Schemata** | **Glide 1.0.0** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.83** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
+| **Meilenstein Release 1.0** | Feature Freeze (D93). Skill, Lokalisierung, Shell und Paketbau sind abgeschlossen; offen sind nur Veröffentlichung, Paketmanager-Einreichung und menschliche Abnahme. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
-| **Shell-Paket `glide_shell`** | Seit V1.64 (D95) Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.4.0 (seit V1.68), Modulbudget WA-50 eingehalten; Übernahme in Folgeprojekte nach Shell-Konzept §7 mit `scripts/pflege/shell_uebernehmen.py` (Manifest, T331):<br/>1. `modal_session.py` (M096, 3.62.0, T317): Entkoppelter modaler Warteweg.<br/>2. `window_lifetime.py` (M097, 3.64.0, T318/T320): Zeitgeberbesitz je Fenster/Ansicht (`after_scope`).<br/>3. `custom_controls.py` (M098, 3.67.0, T312): Thementaugliche Canvas-Bedienelemente.<br/>4. `desktop_adapter.py` (M099, 3.68.0, T326): Menüleiste, Tastaturkürzel, OS-Aktionen.<br/>5. `motion.py` (M016, seit V1.66 im Paket, T055): Unterbrechbare Übergänge mit injizierter Zeitplanung.<br/>6.–8. `window_geometry.py`, `system_appearance.py`, `redo_history.py` (M103–M105, V1.67, D96, T332): neutrale Teile von `compact_mode`, `appearance`, `undo_history`.<br/>9. `selftest.py` (M106, V1.68, D97, T333): Selbsttest einer übernommenen Kopie; Anleitung `glide_shell/README.de.md` mit englischer Fassung `README.md`.<br/>Fokusrückgabe D87 (3.65.0) in modalen Dialogen aktiv; Dialogfabrik und Zeitgeberbereiche nach R1–R4 (D94). Demonstrationshost `demo.py` (M102, Paket 6) mit Paketnachweis T330. |
-| **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). PR #156 ist gemergt; seine Linux/Tk-9.1-Vollprüfung bestand, Windows lief bei letzter Abfrage noch. PR #157 ist gemergt (Linux- und Windows-Vollprüfung sowie Windows-Paketbau auf dem Head bestanden); PR #158 ist am 20.11.2026 als `9c18f030` gemergt (Baum gleich dem geprüften Head `4bc27c97`); PR #159 (englisches Benutzerhandbuch) ist als `bde7fa12` gemergt. Der Shell-Schnitt R1 (V1.60, D94) hat einen eigenen PR; seine Checks am Live-PR prüfen. Lieferkopie-/SHA-Abgleich und menschliche Abnahme bleiben offen. |
-| **Lieferstand** | `07_Python-Versionen` und `src/glide` werden außerhalb einer Produktionsrunde weiterhin getrennt geführt. PR #153 ist in `main`; daraus folgt keine neue freigegebene Lieferfassung oder SHA-256-Aussage. |
+| **Shell-Paket `glide_shell`** | Abgeschlossen: Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.5.0, Demonstrationshost, Selbsttest, Anleitung DE/EN und [KI-Handbuch](../01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md); Übernahme in Folgeprojekte mit `scripts/pflege/shell_uebernehmen.py`. Weitere Shell-Arbeit nur aus konkretem Bedarf. |
+| **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) mit dem lokalen macOS-Volllauf, Paket und DMG der Release-Runde 1.0.1. |
+| **Lieferstand** | `07_Python-Versionen` wird in der Produktionsrunde 1.0.1 mit `abgleich_07.py` und SHA-256 auf den Quellstand gebracht. |
 | **Ablage-Schutz** | Unberührt und NICHT in Git: `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/`, `glide_master_audit_bericht.md` und `SQLite-Copyright.md`. Diese Pfade dürfen unter keinen Umständen gestaget oder committet werden. |
 
-**Statuskorrektur zu den älteren Laufangaben oben:** PR #150-Workflow #44489695633 ist abgeschlossen und rot; Linux scheiterte am Accelerator-Erwartungswert, Windows-Vollprüfung und Paketbau bestanden. PR #151-Linux #44493977406 prüfte einen älteren Head und scheiterte; sein Windows-Volltest samt Paketbau bestand. PR #152-Workflow #44498011031 auf `f34fb73d` scheiterte in `schriftstile`; der spätere V1.48-Fix ist als `5631333a` gepusht. Der V1.49-Diagnose-/Dokumentationsnachlauf und die 27 Gemini-Dateien wurden mit `042a8d7` auf PR #152 gepusht; `cada01bf` aktualisierte den damaligen Ergebnisstand. Die aktuelle Diagnose und Prüfgrenzen stehen in Plan §21.129–§21.135 und im QA-Bericht.
 
 ---
 
@@ -106,15 +95,13 @@ Der verbindliche Soll-Umfang steht im [Meilenstein-Plan Release 1.0](Glide_Meile
 flowchart TD
     subgraph MEILENSTEIN ["Meilenstein Version 1.0 (v1.0.0)"]
         E1["Etappe 1: Skill komplettieren (K4 & K5)<br/><b>✅ ERLEDIGT (PR #130, V1.39)</b>"]
-        E2["Etappe 2: Mehrsprachigkeit i18n DE/EN<br/><b>◐ TEILWEISE</b>"]
+        E2["Etappe 2: Mehrsprachigkeit i18n DE/EN<br/><b>✅ ERLEDIGT</b>"]
         E3["Etappe 3: Paketbau, Installer & Paketmanager<br/><b>◐ VORBEREITET, NICHT EINGEREICHT</b>"]
         E4["Etappe 4: Release Cut v1.0.0 & Veröffentlichung<br/><b>◐ QUELLCUT GEMERGT, RELEASE OFFEN</b>"]
         E1 --> E2 --> E3 --> E4
     end
 
     subgraph POST ["Post-1.0 Arbeiten (Version 1.1+)"]
-        P1["Shell-Paket 6 Demonstrationshost"]
-        P2["glide_shell Namespace-Bündelung"]
         P3["CalDAV & zusätzliche Sprachen"]
     end
 
@@ -126,13 +113,13 @@ flowchart TD
 ### Status der Etappen bis Release 1.0
 
 - **Etappe 1 (Skill K4 & K5):** Vollständige Dateianhang-Unterstützung im ZIP-Container, Bildauflösung, Export-Aktion, Manifest-Hashprüfung.
-- **Etappe 2 (Mehrsprachigkeit i18n DE/EN) – teilweise:** i18n-Modul, Kataloge, Spracheinstellung sowie ausgewählte Menü- und Seitenleistenbeschriftungen sind vorhanden. Vollständige Lokalisierung aller Bereiche ist nicht erreicht.
+- **Etappe 2 (Mehrsprachigkeit i18n DE/EN) – erledigt:** Gesamte Oberfläche, Handbuch, Austauschformat, Startseite, Vorlagen, Showcase und Schnellerfassung sind zweisprachig.
 - **Etappe 3 (Paketbau & Installer) – technische Vorbereitung erledigt:** Bauwege, Windows-Installer und Homebrew-/winget-Manifeste sind vorbereitet; externe Einreichung und Installationsprüfung fehlen.
 - **Etappe 4 (Release Cut v1.0.0) – teilweise:** Quellstand 1.0.0 und Pflichtchecks von PR #138 sind in `main`; Tag, GitHub-Release, menschliche Abnahme sowie öffentliche Paketmanager-Einreichung fehlen.
 
 ---
 
-### Offene Soll-Lokalisierung (Etappe 2)
+### Lokalisierung (Etappe 2) – umgesetzt
 
 #### Motivation & Ziel
 Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenstein vollständige Zweisprachigkeit (**Englisch und Deutsch**). Die Spracheinstellung existiert, aber der Integrationsstand deckt die Oberfläche nicht vollständig ab. Die folgenden Bereiche beschreiben den Soll-Umfang; die noch fehlende Arbeit ist im Entwicklungsplan nachgeführt.
@@ -221,8 +208,8 @@ PR #144 hat drei eng begrenzte Dokumentationspakete umgesetzt. Der gesamte Maste
 
 - Die öffentliche README-Navigation ist mit PR #146 zweisprachig; öffentliche Wiki-Quellen fehlen (nicht ausgewählt, I11 B).
 - Weitere Issue-Formulare, Projektansichten, Discussion-Richtlinien und belastbare Governance-Automatisierung fehlen.
-- Die App ist nur teilweise zweisprachig; trotz lokalisierter Einstellungen bleiben weitere Dialoge, Inspektoren, Werkzeugleisten, Status-, Fehler-, Platzhalter- und weitere feste UI-Texte teilweise deutsch.
-- Die Shell besitzt kein dokumentiertes oder geprüftes Host-/Locale-Übersetzungskonzept.
+- ~~Die App ist nur teilweise zweisprachig~~ – mit V1.70–V1.81 erledigt.
+- ~~Die Shell besitzt kein Host-/Locale-Übersetzungskonzept~~ – die Shell übernimmt Texte vom Host (Shell-Anleitung, D96–D98).
 - Funding ist nicht eingerichtet. Keine externe Sponsoring- oder Zahlungsfreigabe ist erfolgt.
 - Tag, GitHub-Release, externe Homebrew-/winget-Einreichung und saubere öffentliche Installationsprüfungen fehlen.
 - Menschliche Sicht-/Bedien- und Accessibility-Abnahmen bleiben offen.
@@ -234,10 +221,8 @@ Die vollständige Matrix und die Priorisierung stehen in Entwicklungsplan §21.1
 ### Schritt 4: Post-1.0 Arbeiten (Zurückgestellt bis Version 1.1+)
 
 Folgende Themen sind bewusst bis nach Release 1.0 zurückgestellt, um den Fokus nicht zu verlieren:
-1. **Shell-Paket 6 (Demonstrationshost):** Minimaler Demo-Host zur isolierten Wiederverwendbarkeit von `glide_shell`.
-2. **Namespace-Bündelung `glide_shell`:** Zusammenfassung der vier Shell-Module unter einem gemeinsamen Paket-Namespace (D86/D88).
-3. **Zusätzliche Sprachen:** Französisch, Spanisch, etc.
-4. **CalDAV & Cloud-Optionen:** Kalender-Synchronisation.
+1. **Zusätzliche Sprachen:** Französisch, Spanisch, etc.
+2. **CalDAV & Cloud-Optionen:** Kalender-Synchronisation.
 
 ---
 

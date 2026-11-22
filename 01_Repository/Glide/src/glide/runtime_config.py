@@ -98,7 +98,7 @@ def unreachable_message(paths: RuntimePaths, error: OSError | None = None) -> st
     return "\n\n".join(teile)
 
 
-def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> RuntimePaths:
+def resolve_paths(data_dir: str | None = None, env: dict | None = None, *, read_pointer: bool = True) -> RuntimePaths:
     """Löst alle Pfade rein rechnerisch und seiteneffektfrei auf.
 
     Reihenfolge:
@@ -115,7 +115,9 @@ def resolve_paths(data_dir: str | None = None, env: dict | None = None) -> Runti
     default_dir = resolve_default_data_dir()
     pointer_file = os.path.join(default_dir, "datenordner.json")
 
-    base_dir, overridden = _paths.resolve_base(data_dir, env, "GLIDE_DATA_DIR", default_dir, pointer_file)
+    # `read_pointer=False`: beim Import von app.pyw nur rechnen, den Zeiger erst beim Start lesen (WA-49).
+    base_dir, overridden = _paths.resolve_base(data_dir, env, "GLIDE_DATA_DIR", default_dir,
+                                               pointer_file if read_pointer else None)
     cache_dir = _paths.env_dir(env, "GLIDE_CACHE_DIR") or resolve_default_cache_dir()
 
     return RuntimePaths(

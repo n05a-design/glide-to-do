@@ -133,7 +133,7 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
 | `SHELL_VERSION` (SemVer, derzeit 0.5.0) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
-| Glide-System-Version (derzeit 1.69) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
+| Glide-System-Version (derzeit 1.83) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
 | App-Version (1.0.0) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |
