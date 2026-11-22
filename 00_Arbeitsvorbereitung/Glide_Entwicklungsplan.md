@@ -323,7 +323,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 | G22 | Verschlüsselte Ablage | ✕ | keine Priorität |
 | G12, G13 | Spalten in Seiten, Graph | ✕ | Entscheidungen 29./30.09.2026 |
 | ZF-200 | Eigene Felder je Liste | ✕ | am 25.09.2026 nicht gewählt |
-| N21 | Englische Eingabewörter der Schnellerfassung („tomorrow“, „next Monday“, „every week“, englische Wochentage und Monate) | ◇ | nicht Teil von 1.0.0, ausdrücklich nicht gestrichen (Inhaberentscheid 21.11.2026); Auslöser: Folgeversion nach 1.0.0. Deutsche Eingabewörter bleiben gültig; Handbuch und Platzhalter nennen sie bis dahin als deutsche Beispiele |
+| N21 | Englische Eingabewörter der Schnellerfassung („tomorrow“, „next Monday“, „every week“, englische Wochentage und Monate) | ◐ | Folgepaket umgesetzt, siehe §21.170; öffentlicher Lieferstand ausstehend; Auslöser: Folgeversion nach 1.0.0. Deutsche Eingabewörter bleiben gültig; Handbuch und Platzhalter nennen sie bis dahin als deutsche Beispiele |
 | N15–N20 | N15 Sprache, N16 Gewohnheitsstatistik (=G06, vorerst), N17 Team, N18 freie Felder, N19 Unterseiten/Graph, N20 Web Clipper | ✕ bzw. zurückgestellt N16 | konkrete Produktgrenzen; Cloud-KI separat durch Q3 ausgeschlossen |
 
 ## 8. Abhängigkeiten und Regeln
@@ -3821,3 +3821,13 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 **C – Prüfung:** macOS arm64, Python 3.14.5, eigene Tk 9.1, künstliche Daten: `test_ansichten.py --fall altfilter` grün; Wartehilfe mit simulierter Uhrzeit (23:58:30 wartet 92 s, 23:50:00 und 0:00:10 warten nicht). Kein echter Lauf über Mitternacht.
 
 **D – Rest und Git:** Eigener PR nur für Testcode und Plan; `src/glide` und `07_Python-Versionen` bleiben unberührt. Hover-Fall `seitenleistenabstand3504` nur beobachten.
+
+### 21.170 Englische Schnellerfassung (N21) (V1.81, 21.11.2026)
+
+**A – Auftrag:** Der Inhaber gab das für nach 1.0 vorgesehene Folgepaket zur Umsetzung in einem eigenen PR frei.
+
+**B – Umsetzung:** Englische Datumswörter, ausgeschriebene Monatsnamen, Fälligkeiten und Wiederholungen werden in Eingabezeile und Schnellerfassung erkannt. Der Parser erhält die ursprünglichen Textstellen für Vorschau und Rücknahme. Das Datenformat bleibt unverändert.
+
+**C – Prüfung:** Parser-Unitfälle und Schnellerfassung in echtem Tk mit künstlichen Daten. Details im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+
+**D – Rest:** Native GitHub-Matrix und Auslieferung folgen getrennt.
