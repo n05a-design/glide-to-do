@@ -65254,12 +65254,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if target in protected:
             raise ValueError(glide_i18n.t("ui.validate_backup_target.this_glide_system_file", "Diese Glide-Systemdatei darf nicht als Backupziel überschrieben werden."))
         attachments_root = os.path.normcase(os.path.realpath(ATTACHMENTS_DIR))
+        # commonpath wirft ValueError bei verschiedenen Laufwerken; die
+        # Pfadregel selbst steht außerhalb, damit keine übersetzte Meldung
+        # über Abbruch oder Weiterlaufen entscheidet.
         try:
-            if os.path.commonpath([target, attachments_root]) == attachments_root:
-                raise ValueError(glide_i18n.t("ui.validate_backup_target.a_task_backup_must", "Ein Aufgabensicherung darf nicht im internen Anhangsordner liegen."))
-        except ValueError as exc:
-            if "Anhangsordner" in str(exc):
-                raise
+            inside_attachments = os.path.commonpath([target, attachments_root]) == attachments_root
+        except ValueError:
+            inside_attachments = False
+        if inside_attachments:
+            raise ValueError(glide_i18n.t("ui.validate_backup_target.a_task_backup_must", "Ein Aufgabensicherung darf nicht im internen Anhangsordner liegen."))
         return target
 
     def write_complete_backup(self, path, payload):

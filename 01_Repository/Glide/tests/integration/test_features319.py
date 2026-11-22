@@ -385,6 +385,20 @@ with tempfile.TemporaryDirectory(prefix="glide-features319-") as folder:
             pass
         else:
             raise AssertionError("Die Nutzdatendatei wurde als Ausgabeziel akzeptiert")
+        # Der Anhangsordner bleibt in jeder Oberflächensprache gesperrt; die
+        # Regel hängt nicht am Wortlaut der Meldung.
+        vorher = mod.glide_i18n.get_language()
+        try:
+            for sprache in ("de", "en"):
+                mod.glide_i18n.set_language(sprache)
+                try:
+                    app.validate_backup_target(os.path.join(mod.ATTACHMENTS_DIR, "ziel.glidebackup"))
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError(f"Ziel im Anhangsordner akzeptiert ({sprache})")
+        finally:
+            mod.glide_i18n.set_language(vorher)
         assert not callbacks, callbacks
     finally:
         app.cancel_pending_callbacks()
