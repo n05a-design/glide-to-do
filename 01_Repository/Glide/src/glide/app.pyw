@@ -32644,11 +32644,11 @@ class ListApp:
             if chosen_lang_code != previous_lang:
                 # Menüs, Ansichten und Dialoge wechseln sofort; einige beim Start gebaute
                 # Leisten des Hauptfensters erst mit dem nächsten Start (V1.79).
-                self.root.after(80, lambda: self.show_info(
+                self._register_after(self.root.after(80, lambda: self.show_info(
                     glide_i18n.t("ui.settings.language_changed", "Sprache geändert"),
                     glide_i18n.t("ui.settings.language_restart_hint",
                                  "Menüs, Ansichten und Dialoge erscheinen jetzt in der neuen Sprache. "
-                                 "Einige feste Leisten des Hauptfensters wechseln nach einem Neustart von Glide.")))
+                                 "Einige feste Leisten des Hauptfensters wechseln nach einem Neustart von Glide."))))
             return "break"
 
         dialog._glide_modal_finished = tk.BooleanVar(master=dialog, value=False)

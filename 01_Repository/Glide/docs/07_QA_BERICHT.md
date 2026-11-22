@@ -1,5 +1,9 @@
 # QA-Bericht – Glide 1.0.0
 
+## Showcase „Stadtlicht“, Fremdbilder entfernt, Restlokalisierung (V1.80, 22.11.2026)
+
+Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1.0, isoliertem `GLIDE_DATA_DIR`, künstlichen Daten, auf `claude/v179-eigene-fotos` über `main` `27540f9b` mit `codex/macos-drucktempo` (V1.79). Grün: 1.284 Unit-Tests, `pruefe_showcase.py` für beide Sprachen, T335 mit zehn Fällen, die zuvor angepassten Fälle von `test_arbeitsmodi` und `test_uiux_paket` sowie Vollprüfung und macOS-Paket (siehe Plan). Sichtprüfung der Galerie durch den Agenten: deutsche Reste der Startseite, „Raster“ und ein Symbolrückfall des Aufnahmewerkzeugs (Schriften vor `Tk()` registrieren) wurden gefunden und behoben. Nicht geprüft: Windows und Linux (GitHub-Matrix), menschliche Sicht- und Sprachabnahme.
+
 ## Mac-Nachprüfung: Pinnwandaufbau in `druck_tempo` (V1.79, 21.11.2026)
 
 Lokale Vergleichsmessung auf macOS arm64, Python 3.14.5, Tcl/Tk 9.1.0, `LANGUAGE=de`, mit künstlichen Daten pro Prozess. Je zehn Einzelläufe auf `27540f9b` und mit der Korrektur, jeweils mit zwei Vorwärmrunden und fünf abwechselnd angeordneten Messpaaren. Gemessen wird `draw_board()` für je 200 Karten. Der HTML-Druckexport wird anschließend auf Inhalt geprüft.

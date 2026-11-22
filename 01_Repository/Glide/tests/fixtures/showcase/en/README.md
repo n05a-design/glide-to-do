@@ -1,10 +1,10 @@
 # City Light · Glide showcase
 
-As of 21 Nov 2026 · Glide 1.0.0 · task format 26 · templates 2 · [Deutsche Fassung](../README.md)
+Status as of 21.11.2026 · Glide 1.0.0 · Task format 26 · Templates 2 · [Deutsche Fassung](../README.md)
 
 A photo journey through seven cities: Wuppertal, Berlin, Munich, Vienna, Monaco, Bilbao and Seoul. Two weeks by train and two flights, followed by the selection for a small travel book. The showcase presents the same data from many angles: travel plan, a travel guide with one page per city, a travel diary, a gallery, a pixel stamp and three pinboards.
 
-All photos were taken by Tim von Trostorff (shaye Design); all rights remain with the photographer. The [source record](../quellen.json) lists the original and checksum of every working copy.
+All photos were taken by Tim von Trostorff (shaye Design); all rights remain with the photographer. The [source record](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/tests/fixtures/showcase/quellen.json) lists the original and checksum of every working copy.
 
 ## Open and edit
 
