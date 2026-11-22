@@ -1,5 +1,7 @@
 # GitHub Copilot – Glide
 
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Glide Shell 0.6.2
+
 Dünner Adapter ohne eigene Regeln. Verbindlich ist [`AGENTS.md`](../AGENTS.md) in der Repository-Wurzel und von dort [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md).
 
 - Arbeit an der Glide Shell: Skill `glide-shell` (`.claude/skills/glide-shell/SKILL.md`) → `01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md`.
