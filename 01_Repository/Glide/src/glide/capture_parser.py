@@ -447,7 +447,23 @@ def _english_repeat(words, i, today):
     normalized = (*prefix, *(_EN_REPEAT_WORDS.get(part.wort, part.wort) for part in source[len(prefix):]))
     mapped = [part._replace(wort=alias, datum=alias if alias != part.wort else part.datum)
               for part, alias in zip(source, normalized)]
-    return _base_wiederholung(mapped, 0, today)
+    # Jährliche Regel mit ausgeschriebenem Datum („every year on 24 May“): Das
+    # Datum ist der Jahresanker, nicht ein zusätzlicher Bearbeitungstag.
+    yearly = normalized[0] == "jährlich" or tuple(normalized[:2]) == ("jedes", "jahr")
+    every_n_years = normalized[0] == "alle" and normalized[2] in ("jahr", "jahre")
+    if yearly or every_n_years:
+        k = len(prefix) + (1 if len(source) > len(prefix) and source[len(prefix)].wort == "on" else 0)
+        anchor = _english_calendar_date(source, k, today)
+        if anchor:
+            count, day = anchor
+            if every_n_years:
+                rule = repeat_logic.from_series_fields("serie_jahr", int(normalized[1]))
+                return k + count, rule, day, repeat_logic.describe_series(rule)
+            return k + count, {"art": REPEAT_YEARLY}, day, glide_i18n.t(
+                "mod.capture_parser.base_wiederholung.yearly_on", 'jährlich am {erster}', erster=f'{day:%d.%m.}')
+    # Dieselben Fähigkeiten wie die deutsche Eingabe: zuerst der erweiterte Parser
+    # (Monats-/Jahresintervalle, mehrere Wochentage), dann der Grundparser.
+    return _extended_wiederholung(mapped, 0, today) or _base_wiederholung(mapped, 0, today)
 
 
 def _wiederholung(words, i, today):

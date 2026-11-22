@@ -137,6 +137,24 @@ class EnglishCaptureTests(unittest.TestCase):
                 self.assertEqual(actual.felder, p(f"Review {german}").felder)
         self.assertEqual(p("Review every week due 12 October").felder["repeat"]["start"], "2026-10-12")
 
+    def test_extended_and_yearly_anchor_recurrences_match_german(self):
+        """Review #186: Intervalle über den erweiterten Parser, ausgeschriebenes Datum als Jahresanker."""
+        cases = (
+            ("every 3 months on 15", "alle 3 Monate am 15"),
+            ("every 2 weeks on Monday and Thursday", "alle 2 Wochen am Montag und Donnerstag"),
+            ("every year on 24 May", "jedes Jahr am 24.05."),
+            ("yearly on May 24", "jährlich am 24.05."),
+        )
+        for english, german in cases:
+            with self.subTest(english=english):
+                self.assertEqual(p(f"Review {english}").felder, p(f"Review {german}").felder)
+                self.assertEqual(p(f"Review {english}").titel, "Review")
+        felder = p("Review every year on 24 May").felder
+        self.assertNotIn("planned_date", felder)
+        self.assertEqual(felder["due"], "2027-05-24")
+        zwei = p("Review every 2 years on 24 May").felder
+        self.assertEqual((zwei["repeat"]["rrule"], zwei["due"]), ("FREQ=YEARLY;INTERVAL=2", "2027-05-24"))
+
     def test_original_text_protection_and_localized_chips(self):
         text = 'Review "tomorrow" every week'
         self.assertEqual(p(text).titel, 'Review "tomorrow"')
