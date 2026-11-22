@@ -62,7 +62,7 @@ The app's runtime is based on the Python standard library plus optional `tkinter
 ## Architecture boundaries and risks
 
 - `ListApp` remains large; extraction is incremental, not a mandate for a rewrite.
-- The reusable shell is the subpackage `glide_shell` 0.6.0 (modal session, window lifetime, custom controls, desktop adapter, motion, window geometry, system appearance, redo history, text fit, action picker, runtime paths), with demo host and self-test. It is copied into follow-up projects, not published separately. D99 closes the shell work; `ListApp` stays the host with facades.
+- The reusable shell is the subpackage `glide_shell` 0.6.1 (modal session, window lifetime, custom controls, desktop adapter, motion, window geometry, system appearance, redo history, text fit, action picker, runtime paths), with demo host and self-test. It is copied into follow-up projects, not published separately. D99 closes the shell work; `ListApp` stays the host with facades.
 - Existing UI/API facades and mutation boundaries must remain compatible.
 - Tk event order and geometry are platform-sensitive; full current platform runs on PR #152 are red in `test_ui39.py`.
 - Future architecture proposals belong in the plan as proposals until the owner selects them.

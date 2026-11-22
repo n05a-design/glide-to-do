@@ -1,6 +1,6 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.84 · Glide Shell 0.6.0 (abgeschlossen, D99) · Aufgabenformat 26
+Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.85 · Glide Shell 0.6.1 (abgeschlossen, D99) · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 
@@ -42,6 +42,7 @@ src/glide/glide_shell/
   README.md            kontrollierte englische Fassung
   KI_ANLEITUNG_NEUE_PROJEKTE.md  Anleitung für KI-Agenten in neuen Projekten (führend)
   AI_GUIDE_NEW_PROJECTS.md       kontrollierte englische Fassung
+  STARTPROMPT_KI.md              Startprompt für neue KI-Sitzungen (DE/EN), Übersicht was wo liegt
 ```
 
 Die erste Zeile jedes Modul-Docstrings beginnt mit `Shell-Paket N:`. T319 verlangt, dass jedes so gekennzeichnete Modul in `SHELL_MODULE` steht und umgekehrt.
@@ -139,13 +140,13 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
-| `SHELL_VERSION` (SemVer, derzeit 0.6.0) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
-| Glide-System-Version (derzeit 1.84) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
+| `SHELL_VERSION` (SemVer, derzeit 0.6.1) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
+| Glide-System-Version (derzeit 1.85) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
 | App-Version (1.0.1) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |
 
-Verlauf: 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0) · V1.84 `command_history` und `app_host`, Konzeptphasen 4 und 5, Anleitung für neue Projekte (D99, 0.6.0).
+Verlauf: 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0) · V1.84 `command_history` und `app_host`, Konzeptphasen 4 und 5, Anleitung für neue Projekte (D99, 0.6.0) · V1.85 `install_close` für eingebettete Fenster, Startprompt (0.6.1).
 
 ## 7. Übernahme in ein Folgeprojekt
 
@@ -206,4 +207,4 @@ Nicht in der Shell und nicht freigegeben: S12 Barrierefreiheit (`accessibility*`
 3. `SHELL_MODULE` in T319 als Schnittstellenvertrag; Quelltext des betroffenen Moduls **und seiner Glide-Aufrufer** (Funktionsnamen suchen).
 4. Gezielte Prüfung aus §5, dann Grundstufe.
 5. In Claude-Code-Sitzungen lädt der Projekt-Skill `glide-shell` (`.claude/skills/glide-shell/SKILL.md`) dieses Handbuch.
-6. Wer die Shell nicht ändert, sondern in einem **neuen Projekt nutzt**, liest stattdessen [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) im Paket.
+6. Wer die Shell nicht ändert, sondern in einem **neuen Projekt nutzt**, liest stattdessen [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) im Paket; der Startprompt dafür steht in [`STARTPROMPT_KI.md`](../src/glide/glide_shell/STARTPROMPT_KI.md).

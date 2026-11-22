@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.0
+Status as of 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.1
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
@@ -79,7 +79,7 @@ class App:
 app_host.AppHost(preflight=(lambda root: None,)).run(App)
 ```
 
-For AI agents building a new project on the shell, the complete workflow with processes, design rules and checks is in [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md) (German: [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md)).
+For AI agents building a new project on the shell, the complete workflow with processes, design rules and checks is in [`AI_GUIDE_NEW_PROJECTS.md`](AI_GUIDE_NEW_PROJECTS.md) (German: [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](KI_ANLEITUNG_NEUE_PROJEKTE.md)); a ready start prompt for the first session is in [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md).
 
 A pattern from the demo host: schedule a window's timers and transitions through the same scope so that nothing keeps running after it closes.
 

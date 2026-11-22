@@ -44,4 +44,4 @@ GitHub Actions validate source and prepare release/package paths. Homebrew Cask 
 
 ## Glide Shell
 
-The reusable shell is the subpackage `glide_shell` 0.6.0; follow-up projects copy it with `scripts/pflege/shell_uebernehmen.py` and check the copy with `python -m glide_shell.selftest`. There is no separate repository or release; D99 closes the shell work.
+The reusable shell is the subpackage `glide_shell` 0.6.1; follow-up projects copy it with `scripts/pflege/shell_uebernehmen.py` and check the copy with `python -m glide_shell.selftest`. There is no separate repository or release; D99 closes the shell work.
