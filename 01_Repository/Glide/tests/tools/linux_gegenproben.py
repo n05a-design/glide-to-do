@@ -69,7 +69,7 @@ CASES = (
      'for knopf, rand in reversed(soll):',
      'assert reihenfolge() == erwartet'),
     ("svg-fähigkeit", "test_befunde330.py",
-     'if not self.previews.reads_svg(self.root):\n                raise glide_drawing.DrawingFormatError("SVG braucht Tk 9 (Python 3.14).")',
+     'if not self.previews.reads_svg(self.root):\n                raise glide_drawing.DrawingFormatError(glide_i18n.t("ui.reference_png_path.svg_needs_tk_9", "SVG braucht Tk 9 (Python 3.14)."))',
      'if True:\n                return path', 'SVG ohne SVG-Leser muss verständlich abgelehnt werden'),
     ("scrollen", "test_tempo330.py",
      'def _on_mousewheel(self, event, widget, precise=False):\n        if event is None:\n            return "break"\n        self.note_scrolling()',
