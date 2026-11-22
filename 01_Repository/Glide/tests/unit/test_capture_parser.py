@@ -154,6 +154,13 @@ class EnglishCaptureTests(unittest.TestCase):
         self.assertEqual(felder["due"], "2027-05-24")
         zwei = p("Review every 2 years on 24 May").felder
         self.assertEqual((zwei["repeat"]["rrule"], zwei["due"]), ("FREQ=YEARLY;INTERVAL=2", "2027-05-24"))
+        lang = "every 2 weeks on Monday and Tuesday and Wednesday and Thursday and Friday"
+        self.assertEqual(p(f"Review {lang}").felder,
+                         p("Review alle 2 Wochen am Montag und Dienstag und Mittwoch und Donnerstag und Freitag").felder)
+        self.assertEqual(p(f"Review {lang}").titel, "Review")
+        for ungueltig in ("every 0 years on 24 May", "every 366 years on 24 May"):
+            with self.subTest(ungueltig=ungueltig):
+                self.assertNotIn("repeat", p(f"Review {ungueltig}").felder)  # kein Absturz, bleibt Text
 
     def test_original_text_protection_and_localized_chips(self):
         text = 'Review "tomorrow" every week'

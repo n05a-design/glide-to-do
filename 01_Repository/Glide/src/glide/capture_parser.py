@@ -443,14 +443,16 @@ def _english_repeat(words, i, today):
             return None
     else:
         return None
-    source = words[i:i + 10]
+    # So viele Wörter wie der erweiterte Parser liest: lange Wochentagslisten bleiben vollständig.
+    source = words[i:i + 18]
     normalized = (*prefix, *(_EN_REPEAT_WORDS.get(part.wort, part.wort) for part in source[len(prefix):]))
     mapped = [part._replace(wort=alias, datum=alias if alias != part.wort else part.datum)
               for part, alias in zip(source, normalized)]
     # Jährliche Regel mit ausgeschriebenem Datum („every year on 24 May“): Das
     # Datum ist der Jahresanker, nicht ein zusätzlicher Bearbeitungstag.
     yearly = normalized[0] == "jährlich" or tuple(normalized[:2]) == ("jedes", "jahr")
-    every_n_years = normalized[0] == "alle" and normalized[2] in ("jahr", "jahre")
+    every_n_years = (normalized[0] == "alle" and normalized[2] in ("jahr", "jahre")
+                     and 1 <= int(normalized[1]) <= 365)  # gleiche Grenze wie der erweiterte Parser
     if yearly or every_n_years:
         k = len(prefix) + (1 if len(source) > len(prefix) and source[len(prefix)].wort == "on" else 0)
         anchor = _english_calendar_date(source, k, today)
