@@ -14,7 +14,7 @@ Der Quellstand 1.0.2 schließt die menschliche Sicht- und Bedienabnahme (Release
 - **Kollisionsfreier Bild- und Tabellenumfluss:** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, sodass Tabellenzeilen und Bilder nicht überlappen.
 - **Natürliche Datumswörter:** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog und formatiert sie direkt in das Tagesdatum.
 - **Multi-Agent Bootstrap & Transaktionssicherheit (PR #193):** Rollback-Fehlererfassung ohne `except: pass`, Symlink- und Dateitypschutz, inhaltliche Bootstrap-Prüfung (`--pruefen --agenten-bootstrap`), verschachtelte Projektlayouts und relative Links.
-- **Regressionstests & Shell-Integritätshärtung (T340):** 15 neue Regressionstests (`test_release_1_0_2_regressions.py`), defensive Typprüfung in `lokale_abweichungen` und JSON-Decode-Härtung in `selftest.py`.
+- **Regressionstests & Shell-Integritätshärtung (T340):** 18 substanzielle Regressionstests (`test_release_1_0_2_regressions.py`) mit echten Tk-Widget-Integrationsprüfungen (DueField, adaptive Canvas-Skalierung, Ecksymbol-Lifecycle, Fußleistendichte, Wortumbruch bei Tabellenumfluss, Sprachwechsel). Synchronisierte Manifest-Integrität in `shell_uebernehmen.py` und `selftest.py` (Ausschluss maskierter lokaler Änderungen, explizite Fehleranzeige bei fehlendem/ungültigem Manifest), gehärtete zsh-/bash-/PowerShell-Bootstrap-Kommandos (`shlex.quote`, `-LiteralPath` ohne `&&`) und transaktionale Rollback-Sicherheit für den eigenständigen `bootstrap_agenten()`-Aufruf (33 Tests in `test_shell_uebernahme.py`).
 
 
 ## 1.0.1 – 22.11.2026 (Quellstand, nicht separat veröffentlicht)

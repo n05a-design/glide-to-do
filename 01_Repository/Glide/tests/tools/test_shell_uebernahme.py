@@ -777,6 +777,96 @@ class Uebernahme(unittest.TestCase):
         self.assertEqual(code, 0, text)
         self.assertIn("AGENTS.md: korrekt verwaltet", text)
 
+    def test_manifest_integritaet_und_lokale_abweichung_synchron(self):
+        """Wenn eine Datei lokal geändert wird, darf sie nicht als 'aktuell' maskiert werden."""
+        lauf(self.projekt)
+        manifest_pfad = self.kopie / "SHELL_MANIFEST.json"
+        manifest = json.loads(manifest_pfad.read_text(encoding="utf-8"))
+        # Simuliere alten Manifest-Hash für motion.py (z.B. Stand 0.6.1)
+        alter_hash = "a" * 64
+        manifest["dateien"]["motion.py"] = alter_hash
+        manifest_pfad.write_text(json.dumps(manifest), encoding="utf-8")
+
+        # motion.py auf der Festplatte entspricht der Quelle, weicht aber vom Manifest ab!
+        self.assertEqual(werkzeug.sha(self.kopie / "motion.py"), werkzeug.quelldateien()["motion.py"])
+        self.assertNotEqual(werkzeug.sha(self.kopie / "motion.py"), alter_hash)
+
+        # pruefen() muss "verändert" melden und darf es NICHT als "aktuell" maskieren
+        manifest_res, zeilen = werkzeug.pruefen(self.kopie)
+        zeilen_dict = dict(zeilen)
+        self.assertEqual(zeilen_dict.get("motion.py"), "verändert")
+
+        # Auch lokale_abweichungen() und _verweigern() müssen übereinstimmen
+        abw = werkzeug.lokale_abweichungen(self.kopie, manifest)
+        self.assertIn(("motion.py", "verändert"), abw)
+
+        code, text = lauf("--pruefen", self.projekt)
+        self.assertEqual(code, 1)
+        self.assertIn("motion.py: verändert", text)
+
+    def test_fehlendes_manifest_in_pruefen(self):
+        """pruefen() meldet ein fehlendes Manifest explizit als 'fehlt'."""
+        self.kopie.mkdir(parents=True)
+        (self.kopie / "motion.py").write_text("x = 1\n", encoding="utf-8")
+        manifest_res, zeilen = werkzeug.pruefen(self.kopie)
+        self.assertIsNone(manifest_res)
+        zeilen_dict = dict(zeilen)
+        self.assertEqual(zeilen_dict.get("SHELL_MANIFEST.json"), "fehlt")
+
+    def test_datei_ohne_manifesteintrag_in_pruefen(self):
+        """Eine Datei, die in der Quelle existiert, aber im Manifest fehlt, meldet 'ohne Manifesteintrag'."""
+        lauf(self.projekt)
+        manifest_pfad = self.kopie / "SHELL_MANIFEST.json"
+        manifest = json.loads(manifest_pfad.read_text(encoding="utf-8"))
+        # Entferne motion.py aus dem Manifest, Datei bleibt aber auf Festplatte vorhanden
+        del manifest["dateien"]["motion.py"]
+        manifest_pfad.write_text(json.dumps(manifest), encoding="utf-8")
+
+        _m, zeilen = werkzeug.pruefen(self.kopie)
+        zeilen_dict = dict(zeilen)
+        self.assertEqual(zeilen_dict.get("motion.py"), "ohne Manifesteintrag")
+
+    def test_standalone_bootstrap_agenten_transaktions_rollback(self):
+        """bootstrap_agenten() führt bei Schreibfehlern vollständigen atomaren Rollback aus."""
+        proj = pathlib.Path(self._temp.name) / "standalone_test_proj"
+        proj.mkdir()
+        (proj / "AGENTS.md").write_text("# Vorheriger Bestand\n", encoding="utf-8")
+
+        original_schreiben = werkzeug.schreiben_atomar
+        def fehler_schreiben(ziel, inhalt):
+            if "glide-shell/SKILL.md" in str(ziel).replace("\\", "/"):
+                raise IOError("Festplatte voll (Testsimulation)")
+            return original_schreiben(ziel, inhalt)
+
+        import unittest.mock
+        with unittest.mock.patch.object(werkzeug, "schreiben_atomar", side_effect=fehler_schreiben):
+            with self.assertRaises(RuntimeError) as ctx:
+                werkzeug.bootstrap_agenten(proj, self.kopie, ersetzen=True)
+            self.assertIn("Festplatte voll", str(ctx.exception))
+            self.assertIn("Rollback erfolgreich ausgeführt", str(ctx.exception))
+
+        # AGENTS.md muss unverändert ihren alten Inhalt haben
+        self.assertEqual((proj / "AGENTS.md").read_text(encoding="utf-8"), "# Vorheriger Bestand\n")
+        # .agents und .claude Ordner müssen entfernt sein
+        self.assertFalse((proj / ".agents").exists())
+        self.assertFalse((proj / ".claude").exists())
+
+    def test_bootstrap_kommandos_posix_und_powershell(self):
+        """generiere_bootstrap_inhalte erzeugt sichere Kommandos für POSIX (shlex.quote) und PowerShell (-LiteralPath)."""
+        complex_proj = pathlib.Path(self._temp.name) / "Firma & Co" / "Projekt $VAR (2026)"
+        shell_dir = complex_proj / "app" / "unter ordner $VAR" / "glide_shell"
+        shell_dir.mkdir(parents=True)
+        for name in ("KI_ANLEITUNG_NEUE_PROJEKTE.md", "AI_GUIDE_NEW_PROJECTS.md",
+                     "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
+            (shell_dir / name).write_text("# Test\n", encoding="utf-8")
+
+        inhalt_agents, _, _ = werkzeug.generiere_bootstrap_inhalte(complex_proj, shell_dir)
+        # POSIX enthält shlex.quote mit Single Quotes, keine ungequotete Variablenexpansion
+        self.assertIn("cd 'app/unter ordner $VAR' && python3 -m glide_shell.selftest", inhalt_agents)
+        # PowerShell verwendet -LiteralPath und Semikolon statt &&
+        self.assertIn("cd -LiteralPath 'app/unter ordner $VAR'; python -m glide_shell.selftest", inhalt_agents)
+        self.assertNotIn('cd "app/unter ordner $VAR" &&', inhalt_agents)
+
 
 def git(ordner, *argumente):
     return subprocess.run(["git", "-C", str(ordner), "-c", "user.name=Test", "-c", "user.email=test@example.invalid",

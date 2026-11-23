@@ -53,6 +53,7 @@ import json
 import os
 import pathlib
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -277,7 +278,11 @@ def pruefen(ordner, quelle=None):
     quelle = quelle if quelle is not None else quelldateien()
     manifest, fehler = manifest_lesen(ordner)
     eigen = manifest["dateien"] if manifest and not fehler else {}
-    zeilen = [(MANIFEST, f"ungültig: {f}") for f in fehler]
+    zeilen = []
+    if manifest is None:
+        zeilen.append((MANIFEST, "fehlt"))
+    else:
+        zeilen.extend((MANIFEST, f"ungültig: {f}") for f in fehler)
     for name in sorted(set(quelle) | set(eigen)):
         pfad = ordner / name
         if pfad.is_symlink():
@@ -286,10 +291,17 @@ def pruefen(ordner, quelle=None):
             zeilen.append((name, "nicht mehr in der Quelle"))
         elif not pfad.is_file():
             zeilen.append((name, "fehlt" if name in eigen else "neu in der Quelle"))
+        elif name in eigen:
+            if sha(pfad) != eigen[name]:
+                zeilen.append((name, "verändert"))
+            elif sha(pfad) == quelle[name]:
+                zeilen.append((name, "aktuell"))
+            else:
+                zeilen.append((name, "veraltet"))
+        elif manifest is not None and not fehler:
+            zeilen.append((name, "ohne Manifesteintrag"))
         elif sha(pfad) == quelle[name]:
             zeilen.append((name, "aktuell"))
-        elif name in eigen and sha(pfad) == eigen[name]:
-            zeilen.append((name, "veraltet"))
         else:
             zeilen.append((name, "verändert"))
     zeilen.extend((name, "zusätzlich, ohne Manifesteintrag als Modul importierbar")
@@ -389,11 +401,21 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
     link_manifest_root = _rel_url(manifest, projekt_root)
 
     rel_shell_from_root = os.path.relpath(shell_ordner, projekt_root).replace("\\", "/")
-    cmd_cd = ""
+    cmd_cd_posix = ""
+    cmd_cd_ps = ""
     if rel_shell_from_root not in (".", "glide_shell"):
         parent_dir = rel_shell_from_root.rsplit("/", 1)[0]
-        cmd_cd = f'cd "{parent_dir}" && '
-    selftest_cmd = f"{cmd_cd}python3 -m glide_shell.selftest"
+        cmd_cd_posix = f"cd {shlex.quote(parent_dir)} && "
+        ps_path = parent_dir.replace("'", "''")
+        cmd_cd_ps = f"cd -LiteralPath '{ps_path}'; "
+
+    selftest_cmd_posix = f"{cmd_cd_posix}python3 -m glide_shell.selftest"
+    selftest_cmd_ps = f"{cmd_cd_ps}python -m glide_shell.selftest"
+    selftest_cmd = selftest_cmd_posix
+    if cmd_cd_posix:
+        selftest_doc = f"`{selftest_cmd_posix}` (Windows: `{selftest_cmd_ps}`)"
+    else:
+        selftest_doc = f"`python3 -m glide_shell.selftest` (Windows: `python -m glide_shell.selftest`)"
 
     inhalt_agents = (
         "# Einstieg für KI-Agenten (Folgeprojekt mit Glide Shell)\n\n"
@@ -404,7 +426,7 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
         f"2. **Startprompt für KI-Sitzungen:** [`{rel_shell_from_root}/STARTPROMPT_KI.md`]({link_prompt_root})\n"
         f"3. **Portabler Designvertrag:** [`{rel_shell_from_root}/DESIGN_RICHTLINIEN.md`]({link_design_root})\n"
         f"4. **Shell-Manifest:** [`{rel_shell_from_root}/SHELL_MANIFEST.json`]({link_manifest_root})\n"
-        f"5. **Selbsttest der Shell:** `{selftest_cmd}`\n\n"
+        f"5. **Selbsttest der Shell:** {selftest_doc}\n\n"
         "## Grundregeln\n\n"
         f"- **Keine Modifikation der Shell:** Die Dateien unter `{rel_shell_from_root}/` werden nicht manuell editiert; Updates erfolgen über `shell_uebernehmen.py`.\n"
         "- **Fachlogik im Host:** Fachlogik, Domänenmodelle und Fach-UI gehören in das Host-Projekt, nicht in die Shell.\n"
@@ -431,7 +453,7 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
         f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_agents})\n\n"
         "## Regeln\n\n"
         f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
-        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
+        f"- Vor und nach UI-Arbeiten: {selftest_doc}.\n"
         "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
     )
 
@@ -455,7 +477,31 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
         f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_claude})\n\n"
         "## Regeln\n\n"
         f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
-        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
+        f"- Vor und nach UI-Arbeiten: {selftest_doc}.\n"
+        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
+    )
+
+    skill_claude_dir = projekt_root / ".claude" / "skills" / "glide-shell"
+    link_de_claude = _rel_url(anleitung_de, skill_claude_dir)
+    link_prompt_claude = _rel_url(startprompt, skill_claude_dir)
+    link_design_claude = _rel_url(design, skill_claude_dir)
+    link_manifest_claude = _rel_url(manifest, skill_claude_dir)
+
+    inhalt_skill_claude = (
+        "---\n"
+        "name: glide-shell\n"
+        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
+        "---\n\n"
+        "# Glide Shell – Projektnutzung\n\n"
+        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
+        "## Wichtige Referenzen\n\n"
+        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_claude})\n"
+        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_claude})\n"
+        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_claude})\n"
+        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_claude})\n\n"
+        "## Regeln\n\n"
+        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
+        f"- Vor und nach UI-Arbeiten: {selftest_doc}.\n"
         "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
     )
 
@@ -691,12 +737,24 @@ def pruefe_bootstrap(projekt_root, shell_ordner):
 
 
 def bootstrap_agenten(projekt_ordner, shell_ordner=None, ersetzen=False):
-    """Kompatibilitäts-Funktion für Agenten-Bootstrap."""
+    """Kompatibilitäts-Funktion für Agenten-Bootstrap mit atomarem Rollback bei Fehlern."""
     p_root = pathlib.Path(projekt_ordner).resolve()
     s_ordner = pathlib.Path(shell_ordner).resolve() if shell_ordner else (p_root / PAKET)
     tx = BootstrapTransaction(p_root, s_ordner, ersetzen=ersetzen)
     tx.prepare()
-    return tx.execute()
+    try:
+        return tx.execute()
+    except BaseException as exc:
+        rollback_errors = tx.rollback()
+        if isinstance(exc, (KeyboardInterrupt, SystemExit)):
+            raise
+        if rollback_errors:
+            raise RuntimeError(
+                f"Agenten-Bootstrap fehlgeschlagen ({exc}) und Rollback unvollständig: {'; '.join(rollback_errors)}"
+            ) from exc
+        raise RuntimeError(
+            f"Agenten-Bootstrap fehlgeschlagen ({exc}) – Rollback erfolgreich ausgeführt"
+        ) from exc
 
 
 def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, projekt_root=None):

@@ -3961,7 +3961,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - Paketierungsvorlagen (`glide.rb`, `glide_setup.iss`, `winget/manifests/.../1.0.2/`) aktualisiert.
   - Öffentliche Projektdateien (`README.md`, `README.de.md`, `AGENTS.md`, `SECURITY.md`, `CHANGELOG.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`) angepasst.
 - **C – Prüfung:**
-  - `test_release_1_0_2_regressions.py` (T340): 15/15 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
+  - `test_release_1_0_2_regressions.py` (T340): 18/18 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
   - `test_agenten_skill.py`: 18/18 Tests grün.
   - `test_i18n.py`: 24/24 Tests grün.
   - `ci_grundstufe.py`: 19/19 Schritte grün.
@@ -3969,3 +3969,22 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - `test_shell_selbsttest.py`: 13/13 Checks grün.
 - **D – Rest:**
   - Veröffentlichung, Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei Inhaberfreigabe.
+
+### 21.179 Release-Härtung Glide 1.0.2 & Unabhängiges Qualitätsaudit (23.11.2026)
+
+- **A – Auftrag:** Abschließende technische Nachbesserung des in `main` integrierten Entwicklungsstands Glide 1.0.2 (PR #194 Merge `1d5f01a2`). Unabhängige Reproduktion und Behebung aller verbliebenen Sicherheits-, Integritäts-, Test- und Dokumentationslücken.
+- **B – Umsetzung:**
+  - *Shell-Manifest-Integrität synchronisiert:* `shell_uebernehmen.py` (`pruefen()`) und `selftest.py` (`check_manifest()`) synchronisiert. Lokale Dateiänderungen gegenüber dem Manifest werden nicht mehr als `aktuell` maskiert, sondern als `verändert` gemeldet; fehlendes Manifest wird explizit als `fehlt` geführt; unmanifestierte Moduldateien werden als `ohne Manifesteintrag` gemeldet.
+  - *Robuste Bootstrap-Befehle:* `generiere_bootstrap_inhalte()` generiert plattformgerechte Befehle mit `shlex.quote` für zsh/bash (verhindert Variablen-/Befehlsexpansion bei `$VAR` oder `$(cmd)`) und `-LiteralPath` mit Semikolon für Windows PowerShell (verhindert PowerShell 5.1 `&&` Syntaxfehler).
+  - *Transaktionale Rollback-Sicherheit:* Eigenständige Funktion `bootstrap_agenten()` mit vollständigem atomarem Rollback (`BootstrapTransaction`) bei Schreib-, Berechtigungs- oder Dateisystemfehlern abgesichert.
+  - *Substanzielle T340-Regressionstests:* `test_release_1_0_2_regressions.py` von vereinfachten Testdoubles auf 18 echte Widget-Integrationsprüfungen gehärtet (reales `DueField`, `PageEditor`-Lifecycle & `clear_corner_cover`, adaptive `Canvas`-Skalierung, Fußleistendichte und dynamische Lokalisierung).
+  - *Testsuite-Ausbau:* `test_shell_uebernahme.py` von 28 auf 33 Tests erweitert.
+- **C – Prüfung:**
+  - `test_release_1_0_2_regressions.py` (T340): 18/18 Tests grün.
+  - `test_shell_uebernahme.py`: 33/33 Tests grün.
+  - `ci_grundstufe.py`: 19/19 Schritte grün.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - `pruefe_showcase.py`: DE und EN grün.
+  - `abgleich_07.py`: bytegleich abgeglichen (110 Code-Dateien, 169 Ressourcen).
+- **D – Rest:**
+  - PR zur Prüfung und Freigabe durch den Inhaber einreichen; Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei ausdrücklicher Inhaberfreigabe.

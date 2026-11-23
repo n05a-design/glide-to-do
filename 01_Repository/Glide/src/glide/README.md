@@ -740,7 +740,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T112 | [`test_week_planning.py`](../../tests/unit/test_week_planning.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T313 | [`test_day_capacity.py`](../../tests/unit/test_day_capacity.py) | Unit-Tests für Tageskapazitätsanalyse, Überlastungsgründe und Entlastungsvorschau (WA-12) |
 | T314 | [`test_runtime_config.py`](../../tests/unit/test_runtime_config.py) | Unit-Tests für seiteneffektfreie Pfadauflösung und Konfiguration; Gleichheit der drei Bytecode-Pfad-Auflösungen je Plattform ohne Tk-Import (WA-49) |
-| T340 | [`test_release_1_0_2_regressions.py`](../../tests/unit/test_release_1_0_2_regressions.py) | Regressionstests für Glide 1.0.2: Dynamischer Sprachwechsel der Seitenleiste, adaptiver Titelbildzuschnitt, Pixel-Ecksymbol, Fußleistendichte bei schmalen Fenstern, Tabellenumfluss und natürliche Datumswörter |
+| T340 | [`test_release_1_0_2_regressions.py`](../../tests/unit/test_release_1_0_2_regressions.py) | Regressionstests für Glide 1.0.2: Dynamischer Sprachwechsel der Seitenleiste, adaptiver Titelbildzuschnitt, Pixel-Ecksymbol, Fußleistendichte bei schmalen Fenstern, Tabellenumfluss, natürliche Datumswörter, Manifest-Integrität und plattformgerechte Bootstrap-Kommandos (18 Tests) |
 
 ### Integration
 
