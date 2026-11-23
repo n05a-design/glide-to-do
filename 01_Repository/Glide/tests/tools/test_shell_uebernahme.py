@@ -271,6 +271,33 @@ class Uebernahme(unittest.TestCase):
 
         self.assertFalse(ziel_neu.exists(), "Neuer Ordner muss nach fehlgeschlagener Übernahme entfernt werden")
 
+    def test_snapshot_erstellung_fehler_laesst_ziel_unberuehrt(self):
+        lauf(self.projekt)
+        vorher = {p.name: p.read_bytes() for p in self.kopie.iterdir() if p.is_file()}
+        self.assertGreater(len(vorher), 10)
+
+        original_copy2 = shutil.copy2
+        aufrufe = [0]
+
+        def fehlerhafter_snapshot(src, dst, **kw):
+            aufrufe[0] += 1
+            if aufrufe[0] >= 2:
+                raise OSError("Simulierter Lese-/Kopierfehler während Snapshot-Erstellung")
+            return original_copy2(src, dst, **kw)
+
+        try:
+            shutil.copy2 = fehlerhafter_snapshot
+            code, meldungen = werkzeug.uebernehmen(self.kopie, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Sicherung fehlgeschlagen" in m for m in meldungen))
+        finally:
+            shutil.copy2 = original_copy2
+
+        nachher = {p.name: p.read_bytes() for p in self.kopie.iterdir() if p.is_file()}
+        self.assertEqual(sorted(vorher.keys()), sorted(nachher.keys()))
+        for name, inhalt in vorher.items():
+            self.assertEqual(inhalt, nachher[name], f"Datei {name} wurde trotz Snapshot-Abbruch verändert!")
+
     def test_symlinks_im_zielordner_werden_verweigert(self):
         self.kopie.mkdir(parents=True)
         link = self.kopie / "link.py"
@@ -295,6 +322,45 @@ class Uebernahme(unittest.TestCase):
         code, text = lauf("--pruefen", self.projekt)
         self.assertEqual(code, 1, text)
         self.assertIn("symbolischer Link ist unzulässig", text)
+
+    def test_agenten_bootstrap_in_leerem_workspace(self):
+        code, text = lauf("--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertIn("AGENTS.md: angelegt", text)
+        self.assertIn("Antigravity/Codex-Skill", text)
+        self.assertIn("Claude-Skill", text)
+
+        agents_md = self.projekt / "AGENTS.md"
+        self.assertTrue(agents_md.is_file())
+        inhalt_agents = agents_md.read_text(encoding="utf-8")
+        self.assertIn("KI_ANLEITUNG_NEUE_PROJEKTE.md", inhalt_agents)
+        self.assertIn("STARTPROMPT_KI.md", inhalt_agents)
+        self.assertIn("DESIGN_RICHTLINIEN.md", inhalt_agents)
+        self.assertIn("selftest", inhalt_agents)
+        # Sicherstellen: Keine Glide-internen Domänenbegriffe
+        self.assertNotIn("D86", inhalt_agents)
+        self.assertNotIn("Aufgabenformat", inhalt_agents)
+
+        skill_agents = self.projekt / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        self.assertTrue(skill_agents.is_file())
+        self.assertIn("name: glide-shell", skill_agents.read_text(encoding="utf-8"))
+
+        skill_claude = self.projekt / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+        self.assertTrue(skill_claude.is_file())
+        self.assertIn("name: glide-shell", skill_claude.read_text(encoding="utf-8"))
+
+        design_md = self.kopie / "DESIGN_RICHTLINIEN.md"
+        self.assertTrue(design_md.is_file())
+        inhalt_design = design_md.read_text(encoding="utf-8")
+        self.assertIn("Portabler Designvertrag", inhalt_design)
+        self.assertIn("B15", inhalt_design)
+        self.assertIn("B11", inhalt_design)
+
+        # Re-Run überschreibt existierende AGENTS.md nicht
+        agents_md.write_text("# Eigener Titel\n", encoding="utf-8")
+        code, text = lauf("--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertEqual(agents_md.read_text(encoding="utf-8"), "# Eigener Titel\n")
 
 
 def git(ordner, *argumente):

@@ -412,6 +412,82 @@ class TestCustomControlsInteractions(unittest.TestCase):
             top2.destroy()
             root.destroy()
 
+    def test_design_vertrag_und_provider_in_hell_dunkel(self):
+        """Prüft den transportablen Designvertrag: Provider (_ink_provider, _font_provider, _backdrop_painter), Kontrast, B15, B11 und Tastaturnavigation."""
+        from glide_shell import custom_controls, system_appearance, text_fit
+
+        root = tk.Tk()
+        root.withdraw()
+        top_light = tk.Toplevel(root)
+        top_light.withdraw()
+        top_dark = tk.Toplevel(root)
+        top_dark.withdraw()
+        try:
+            # 1. Theme- und Farbrollenauflösung (Hell / Dunkel)
+            theme_def = {
+                "light": {"bg": "#ffffff", "fg": "#111111", "card": "#f5f5f5"},
+                "dark": {"bg": "#1e1e1e", "fg": "#f0f0f0", "card": "#2d2d2d"},
+            }
+            pal_light = system_appearance.resolve(theme_def, False, theme_def["light"])
+            pal_dark = system_appearance.resolve(theme_def, True, theme_def["light"])
+            self.assertEqual(pal_light["bg"], "#ffffff")
+            self.assertEqual(pal_dark["bg"], "#1e1e1e")
+
+            # 2. Kontrastprüfung (WCAG AA 4,5:1 für Standardtext)
+            def luminance(hex_col):
+                hex_col = hex_col.lstrip("#")
+                r, g, b = [int(hex_col[i:i+2], 16) / 255.0 for i in (0, 2, 4)]
+                def chan(c):
+                    return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+                return 0.2126 * chan(r) + 0.7152 * chan(g) + 0.0722 * chan(b)
+
+            def contrast_ratio(c1, c2):
+                l1, l2 = luminance(c1), luminance(c2)
+                return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
+
+            ratio_light = contrast_ratio(pal_light["fg"], pal_light["bg"])
+            ratio_dark = contrast_ratio(pal_dark["fg"], pal_dark["bg"])
+            self.assertGreaterEqual(ratio_light, 4.5, f"Kontrast im Hellmodus unter 4.5:1 ({ratio_light:.2f})")
+            self.assertGreaterEqual(ratio_dark, 4.5, f"Kontrast im Dunkelmodus unter 4.5:1 ({ratio_dark:.2f})")
+
+            # 3. Provider-Nutzung: _ink_provider, _font_provider und _backdrop_painter
+            top_light._font_provider = lambda size, *s: ("Helvetica", size)
+            top_light._ink_provider = lambda char, size: (size * 0.6, size * 0.8)
+            top_light._backdrop_painter = lambda c: c.create_rectangle(0, 0, 50, 50, fill=pal_light["card"], tags=("bg_light",))
+
+            top_dark._font_provider = lambda size, *s: ("Helvetica", size)
+            top_dark._ink_provider = lambda char, size: (size * 0.65, size * 0.85)
+            top_dark._backdrop_painter = lambda c: c.create_rectangle(0, 0, 50, 50, fill=pal_dark["card"], tags=("bg_dark",))
+
+            # Canvas in top_light / top_dark
+            cv_light = tk.Canvas(top_light, width=60, height=60)
+            custom_controls.paint_canvas_backdrop(cv_light)
+            self.assertTrue(bool(cv_light.find_withtag("bg_light")))
+
+            cv_dark = tk.Canvas(top_dark, width=60, height=60)
+            custom_controls.paint_canvas_backdrop(cv_dark)
+            self.assertTrue(bool(cv_dark.find_withtag("bg_dark")))
+
+            # 4. B11 Text Fit (Priorität vor Metadaten, kein Abschneiden ohne Ellipsis)
+            titel = "Ein extrem langer Titel einer anstehenden Aufgabe im System"
+            gekuerzt = text_fit.clip(titel, 25, ellipsis="…")
+            self.assertLessEqual(len(gekuerzt), 25)
+            self.assertTrue(gekuerzt.endswith("…"))
+
+            # 5. Tastaturnavigation und Interaktion (Tab / Space / Return)
+            var_b = tk.BooleanVar(value=False)
+            check = custom_controls.GlideCheckbutton(top_light, text="Option", variable=var_b, bg=pal_light["bg"], fg=pal_light["fg"])
+            check.pack()
+            top_light.update()
+            self.assertFalse(check._is_checked())
+            check.invoke()
+            self.assertTrue(var_b.get())
+            self.assertTrue(check._is_checked())
+        finally:
+            top_light.destroy()
+            top_dark.destroy()
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])

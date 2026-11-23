@@ -225,6 +225,12 @@ def check_manifest(_root=None, folder=None):
     folder = pathlib.Path(folder or os.path.dirname(os.path.abspath(__file__)))
     path = folder / "SHELL_MANIFEST.json"
     if not path.is_file():
+        is_glide_tree = (
+            folder.name == "glide_shell"
+            and (folder.parent / "app.pyw").is_file()
+            and (folder.parent / "glide_start.py").is_file()
+        )
+        expect(is_glide_tree, "manifest: SHELL_MANIFEST.json is missing in consumer copy")
         return "source tree without manifest"
     expect(not path.is_symlink(), "manifest: SHELL_MANIFEST.json must not be a symlink")
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -243,7 +249,11 @@ def check_manifest(_root=None, folder=None):
         expect(target.is_file(), f"{name}: missing")
         expect(not target.is_symlink(), f"{name}: symlinks are forbidden")
         expect(hashlib.sha256(target.read_bytes()).hexdigest() == digest, f"{name}: modified")
-    extra = sorted(p.name for p in folder.iterdir() if p.suffix == ".py" and p.name not in files)
+    extra = sorted(
+        p.name for p in folder.iterdir()
+        if p.name not in files and p.name != "__pycache__"
+        and (p.suffix == ".py" or (p.is_dir() and (p / "__init__.py").is_file()))
+    )
     expect(not extra, f"modules without manifest entry: {extra}")
     return f"{len(files)} files match manifest ({str(data.get('quell_commit') or 'no commit')[:12]})"
 

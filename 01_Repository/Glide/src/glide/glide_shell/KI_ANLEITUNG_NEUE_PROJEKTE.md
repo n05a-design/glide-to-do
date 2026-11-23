@@ -87,14 +87,17 @@ Nur anlegen, was das Projekt braucht; aber jede Aussage hat **genau eine führen
 ### 3.2 Shell übernehmen
 
 ```bash
-python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>             # anlegen oder aktualisieren
-python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <projekt>/src/<app>   # nur prüfen
-cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                 # Exitcode 0 = alles ok
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>                          # anlegen oder aktualisieren
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agenten-bootstrap <projekt>/src/<app>     # inklusive AGENTS.md und Agenten-Skills
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <projekt>/src/<app>          # aus einem festen Git-Commit übernehmen
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <projekt>/src/<app>                # nur prüfen
+cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 13/13 Prüfungen bestanden
 ```
 
-- Das Werkzeug kopiert alle `*.py` und `*.md` aus `glide_shell/` und schreibt `SHELL_MANIFEST.json` mit Paketversion, Glide-Systemversion, Quell-Commit und SHA-256 je Datei.
+- Das Werkzeug kopiert alle `*.py` und `*.md` aus `glide_shell/` (inklusive `DESIGN_RICHTLINIEN.md` als offline-fähigem Gestaltungsvertrag) und schreibt `SHELL_MANIFEST.json` mit Paketversion, Glide-Systemversion, Quell-Commit und SHA-256 je Datei.
+- Mit `--agenten-bootstrap` werden automatisch eine neutrale `AGENTS.md` in der Projektwurzel sowie Skills unter `.agents/skills/glide-shell/SKILL.md` und `.claude/skills/glide-shell/SKILL.md` eingerichtet.
 - **Die Kopie nie von Hand ändern.** Änderungen an der Shell entstehen in Glide (mit Freigabe des Glide-Inhabers) und kommen über das Werkzeug zurück. `--pruefen` meldet veraltete oder veränderte Dateien; `--ersetzen` überschreibt bewusst.
-- Lizenz: MPL-2.0. Kopfzeile `# SPDX-License-Identifier: MPL-2.0` und Lizenztext bleiben erhalten.
+- Lizenz: MPL-2.0. Kopfzeile `# SPDX-License-Identifier: MPL-2.0` und Lizenztext `LICENSE` bleiben erhalten.
 
 ### 3.3 Gerüst einer Anwendung
 

@@ -311,7 +311,63 @@ def _verweigern(ordner, manifest, fehler, quelle):
     return gruende
 
 
-def uebernehmen(ordner, ersetzen=False, quelle=None):
+def bootstrap_agenten(projekt_ordner):
+    """Erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner."""
+    agents_md = projekt_ordner / "AGENTS.md"
+    skill_agents = projekt_ordner / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+    skill_claude = projekt_ordner / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+
+    inhalt_agents = (
+        "# Einstieg für KI-Agenten (Folgeprojekt mit Glide Shell)\n\n"
+        "Dieses Projekt nutzt die **Glide Shell** (`glide_shell/`) als anwendungsneutrales Desktop- und Tk-Fundament.\n\n"
+        "## Verbindliche Quellen für Agenten\n\n"
+        "1. **KI-Anleitung für neue Projekte:** [`glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md`](glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) "
+        "(Englisch: [`glide_shell/AI_GUIDE_NEW_PROJECTS.md`](glide_shell/AI_GUIDE_NEW_PROJECTS.md))\n"
+        "2. **Startprompt für KI-Sitzungen:** [`glide_shell/STARTPROMPT_KI.md`](glide_shell/STARTPROMPT_KI.md)\n"
+        "3. **Portabler Designvertrag:** [`glide_shell/DESIGN_RICHTLINIEN.md`](glide_shell/DESIGN_RICHTLINIEN.md)\n"
+        "4. **Selbsttest der Shell:** `python3 -m glide_shell.selftest`\n\n"
+        "## Grundregeln\n\n"
+        "- **Keine Modifikation der Shell:** Die Dateien unter `glide_shell/` werden nicht manuell editiert; Updates erfolgen über `shell_uebernehmen.py`.\n"
+        "- **Fachlogik im Host:** Fachlogik, Domänenmodelle und Fach-UI gehören in das Host-Projekt, nicht in die Shell.\n"
+        "- **Designvertrag einhalten:** Universelle Gestaltungsregeln P1–P6, B15 (Knopfschutz), B11 (Hierarchie vor Metadaten), Fokus und Kontrast gelten für alle Oberflächen.\n"
+    )
+
+    inhalt_skill = (
+        "---\n"
+        "name: glide-shell\n"
+        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
+        "---\n\n"
+        "# Glide Shell – Projektnutzung\n\n"
+        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
+        "## Wichtige Referenzen\n\n"
+        "- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md](../../glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md)\n"
+        "- Startprompt: [STARTPROMPT_KI.md](../../glide_shell/STARTPROMPT_KI.md)\n"
+        "- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md](../../glide_shell/DESIGN_RICHTLINIEN.md)\n\n"
+        "## Regeln\n\n"
+        "- Dateien in `glide_shell/` nicht manuell ändern.\n"
+        "- Vor und nach UI-Arbeiten: `python3 -m glide_shell.selftest`.\n"
+        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
+    )
+
+    meldungen = []
+    if not agents_md.exists():
+        agents_md.write_text(inhalt_agents, encoding="utf-8")
+        meldungen.append(f"{agents_md.name}: angelegt (Agenten-Einstiegspunkt)")
+
+    skill_agents.parent.mkdir(parents=True, exist_ok=True)
+    if not skill_agents.exists():
+        skill_agents.write_text(inhalt_skill, encoding="utf-8")
+        meldungen.append(".agents/skills/glide-shell/SKILL.md: angelegt (Antigravity/Codex-Skill)")
+
+    skill_claude.parent.mkdir(parents=True, exist_ok=True)
+    if not skill_claude.exists():
+        skill_claude.write_text(inhalt_skill, encoding="utf-8")
+        meldungen.append(".claude/skills/glide-shell/SKILL.md: angelegt (Claude-Skill)")
+
+    return meldungen
+
+
+def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False):
     quelle = quelle if quelle is not None else quelle_lesen(unsauber_erlauben=True)
     ordner_existierte = ordner.exists()
     ordner.mkdir(parents=True, exist_ok=True)
@@ -323,7 +379,7 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
                 ordner.rmdir()
             return VERWEIGERT, gruende
 
-    # Vorbereitung Rollback-Sicherung des bestehenden Zustands
+    # Phase 1: Vollständige Vorbereitung der Sicherung (vor Beginn jeder Mutation)
     backup_temp = tempfile.TemporaryDirectory(prefix="glide-shell-backup-")
     backup_ordner = pathlib.Path(backup_temp.name)
     try:
@@ -338,6 +394,20 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
             elif item.is_dir():
                 shutil.copytree(item, ziel_backup, symlinks=True)
 
+        quell_namen = {p.name for p in ordner.iterdir() if p.name != "__pycache__"}
+        backup_namen = {p.name for p in backup_ordner.iterdir()}
+        if quell_namen != backup_namen:
+            raise RuntimeError(f"Snapshot unvollständig: {quell_namen - backup_namen} fehlt im Backup")
+    except BaseException as fehler_snapshot:
+        backup_temp.cleanup()
+        if not ordner_existierte and not any(ordner.iterdir()):
+            ordner.rmdir()
+        if isinstance(fehler_snapshot, (KeyboardInterrupt, SystemExit)):
+            raise fehler_snapshot
+        return ABWEICHUNG, [f"Sicherung fehlgeschlagen ({fehler_snapshot}) – Zielordner unverändert beibehalten"]
+
+    # Phase 2: Mutation des Zielordners mit garantierter Rollback-Möglichkeit
+    try:
         alt = manifest["dateien"] if manifest and not fehler else {}
         vorhanden = sorted(p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__"))
         meldungen = []
@@ -368,12 +438,14 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
 
         herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
         meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
+        if agenten_bootstrap:
+            meldungen.extend(bootstrap_agenten(ordner.parent))
         return OK, meldungen
 
     except BaseException as fehler_kopie:
-        # Rollback: Zustand exakt wiederherstellen
+        # Rollback: Zustand exakt aus dem verifizierten Backup wiederherstellen
         try:
-            if not ordner_existierte:
+            if not ordner_existierte and not any(backup_ordner.iterdir()):
                 shutil.rmtree(ordner, ignore_errors=True)
             else:
                 backup_namen = {p.name for p in backup_ordner.iterdir()}
@@ -437,6 +509,8 @@ def main(argv=None):
     parser.add_argument("--commit", metavar="REV", help="Shell aus diesem Commit statt aus der Arbeitskopie lesen")
     parser.add_argument("--unsauber-erlauben", action="store_true",
                         help="lokal veränderte Shell-Quelle bewusst übernehmen (im Manifest vermerkt)")
+    parser.add_argument("--agenten-bootstrap", "--agent-bootstrap", action="store_true",
+                        help="erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner")
     args = parser.parse_args(argv)
     ordner = zielordner(args.ziel)
     if ordner is None:
@@ -449,7 +523,8 @@ def main(argv=None):
         return QUELLFEHLER
     if args.pruefen:
         return _pruefen_ausgeben(ordner, quelle)
-    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle)
+    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle,
+                                  agenten_bootstrap=args.agenten_bootstrap)
     for zeile in meldungen:
         print(zeile)
     return code

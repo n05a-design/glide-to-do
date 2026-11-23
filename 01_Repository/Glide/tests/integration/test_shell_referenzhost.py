@@ -22,6 +22,7 @@ Aufruf: python3 -B tests/integration/test_shell_referenzhost.py
 import json
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -150,41 +151,60 @@ class ReferenceHostApp:
         self.scope.close()
         self.root.destroy()
 
+def expect(condition, message="Prüfung fehlgeschlagen"):
+    if not condition:
+        raise AssertionError(message)
+
 def run_isolated_verification():
-    root = tk.Tk()
-    root.withdraw()
+    def create_test_root():
+        root = tk.Tk()
+        root.withdraw()
+        return root
+
+    def no_glide_in_runtime(_root):
+        forbidden = [m for m in sys.modules if m == "glide" or (m.startswith("glide.") and not m.startswith("glide.glide_shell"))]
+        if forbidden:
+            return ("Architekturfehler", f"Unzulässige Glide-Kopplung: {forbidden}")
+        return None
+
+    host = app_host.AppHost(
+        tk_factory=create_test_root,
+        preflight=(no_glide_in_runtime,),
+        show_error=lambda title, msg, **kw: sys.stderr.write(f"{title}: {msg}\n"),
+    )
+    app = host.run(lambda r: ReferenceHostApp(r, lang="de", dark=True), mainloop=False)
+    root = app.root
     try:
-        app = ReferenceHostApp(root, lang="de", dark=True)
         root.update()
 
         # 1. Start & Theme
-        assert app.palette["bg"] == THEME["dark"]["bg"]
-        assert app.counter == 0
-        assert "Zähler: 0" in app.label.cget("text")
+        expect(app.palette["bg"] == THEME["dark"]["bg"], "Theme-Hintergrund stimmt nicht mit Palette überein")
+        expect(app.counter == 0, "Zähler muss initial 0 sein")
+        expect("Zähler: 0" in app.label.cget("text"), "Labeltext muss Zähler: 0 enthalten")
 
         # 2. Fachlogik & Undo/Redo
         app.do_increment()
         root.update()
-        assert app.counter == 1
-        assert "Zähler: 1" in app.label.cget("text")
+        expect(app.counter == 1, "Zähler nach Inkrement muss 1 sein")
+        expect("Zähler: 1" in app.label.cget("text"), "Labeltext muss Zähler: 1 enthalten")
 
         app.undo()
         root.update()
-        assert app.counter == 0
-        assert "Zähler: 0" in app.label.cget("text")
+        expect(app.counter == 0, "Zähler nach Undo muss 0 sein")
+        expect("Zähler: 0" in app.label.cget("text"), "Labeltext muss Zähler: 0 enthalten")
 
         app.redo()
         root.update()
-        assert app.counter == 1
+        expect(app.counter == 1, "Zähler nach Redo muss 1 sein")
 
         # 3. Dialog & Focus
         root.after(50, lambda: [app.root.winfo_children()[-1].destroy()])
         app.open_dialog()
-        assert app.dialog_shown is True
+        expect(app.dialog_shown is True, "Dialog wurde nicht geöffnet")
 
         # 4. Timer & Cleanup
         app.request_close()
-        assert len(app.scope.pending()) == 0, f"Offene Timer nach Schließen: {app.scope.pending()}"
+        expect(len(app.scope.pending()) == 0, f"Offene Timer nach Schließen: {app.scope.pending()}")
         print("VERIFIED_ISOLATED_HOST_OK")
     finally:
         try:
@@ -217,70 +237,126 @@ class ReferenzHostIntegrationTest(unittest.TestCase):
     def tearDown(self):
         self._temp.cleanup()
 
-    def run_host_script(self, code_file):
-        """Führt ein Skript in isolierter Umgebung ohne Glide im PYTHONPATH aus."""
+    def run_host_script(self, code_file, *extra_args):
+        """Führt ein Skript in isolierter Umgebung ohne Glide im PYTHONPATH aus (optional mit Flags wie -O)."""
         env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONDONTWRITEBYTECODE="1")
         env.pop("PYTHONPATH", None)
-        sub = subprocess.run([sys.executable, "-B", str(code_file)],
+        sub = subprocess.run([sys.executable, "-B", *extra_args, str(code_file)],
                              capture_output=True, text=True, cwd=self.proj_dir, env=env, timeout=60)
         return sub.returncode, sub.stdout, sub.stderr
 
     def test_referenzhost_laeuft_isoliert_und_erfuellt_vertraege(self):
-        code, stdout, stderr = self.run_host_script(self.host_file)
-        self.assertEqual(code, 0, f"Referenzhost fehlgeschlagen (Exit {code}):\nSTDOUT: {stdout}\nSTDERR: {stderr}")
-        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
+        for args in ((), ("-O",)):
+            code, stdout, stderr = self.run_host_script(self.host_file, *args)
+            self.assertEqual(code, 0, f"Referenzhost mit Flag {args} fehlgeschlagen (Exit {code}):\nSTDOUT: {stdout}\nSTDERR: {stderr}")
+            self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
 
     def test_unzulässige_glide_abhaengigkeit_wird_erkannt_und_schlaegt_fehl(self):
-        # Wir fügen absichtlich einen verbotenen Glide-Import hinzu
-        bad_code = "import glide.version\n" + HOST_CODE
-        bad_file = self.proj_dir / "bad_host.py"
-        bad_file.write_text(bad_code, encoding="utf-8")
+        # 1. Fall A: Echter Architekturverstoß – Glide ist im Modulsuchpfad physisch vorhanden,
+        #    aber der Laufzeit-Architekturwächter im AppHost erkennt den Import von Glide-Fachlogik
+        #    und verweigert den Start vor Aufbau der Anwendung.
+        bad_code_coupling = (
+            "import sys, pathlib\n"
+            f"sys.path.insert(0, {str(REPO / 'src')!r})\n"
+            "import glide.glide_start\n"  # Echter Glide-Fachlogikimport!
+            + HOST_CODE
+        )
+        bad_file_a = self.proj_dir / "bad_host_coupling.py"
+        bad_file_a.write_text(bad_code_coupling, encoding="utf-8")
 
-        code, stdout, stderr = self.run_host_script(bad_file)
-        self.assertNotEqual(code, 0, "Host mit unzulässiger Glide-Abhängigkeit hätte fehlschlagen müssen!")
-        self.assertTrue("ModuleNotFoundError" in stderr or "No module named 'glide'" in stderr or "ImportError" in stderr,
-                        f"Unerwarteter Fehler: {stderr}")
+        code_a, stdout_a, stderr_a = self.run_host_script(bad_file_a)
+        self.assertEqual(code_a, 1, f"Architekturverstoß hätte mit Exitcode 1 abbrechen müssen:\nSTDOUT: {stdout_a}\nSTDERR: {stderr_a}")
+        self.assertTrue("Architekturfehler" in stderr_a or "Unzulässige Glide-Kopplung" in stderr_a,
+                        f"Erwartete Architekturfehlermeldung in STDERR, erhalten:\n{stderr_a}")
+
+        # 2. Fall B: Fehlender Import ohne Quellpfad
+        bad_code_missing = "import glide.version\n" + HOST_CODE
+        bad_file_b = self.proj_dir / "bad_host_missing.py"
+        bad_file_b.write_text(bad_code_missing, encoding="utf-8")
+
+        code_b, stdout_b, stderr_b = self.run_host_script(bad_file_b)
+        self.assertNotEqual(code_b, 0, "Host mit unzulässiger Glide-Abhängigkeit hätte fehlschlagen müssen!")
+        self.assertTrue("ModuleNotFoundError" in stderr_b or "No module named 'glide'" in stderr_b or "ImportError" in stderr_b,
+                        f"Unerwarteter Fehler: {stderr_b}")
 
     def test_consumer_upgrade_und_erhalt_der_hostdateien(self):
-        # 1. Ausgangszustand: Host besitzt Daten und eine ältere Shell-Kopie (Version 0.5.0)
-        host_data_file = self.proj_dir / "host_data.json"
-        host_data_file.write_text('{"db_version": 1, "custom_setting": 42}', encoding="utf-8")
+        # 1. Ausgangszustand: Host verwendet echten historischen Git-Stand von Shell 0.5.0 (Commit 3c91e0c8)
+        host_050_code = r'''# -*- coding: utf-8 -*-
+import sys
+import tkinter as tk
+from glide_shell import modal_session, motion, redo_history, system_appearance, window_geometry, window_lifetime
+
+def expect(cond, msg="Prüfung fehlgeschlagen"):
+    if not cond:
+        raise AssertionError(msg)
+
+root = tk.Tk()
+root.withdraw()
+try:
+    scope = window_lifetime.scope_for(root)
+    transitions = motion.Transitions(scope.after, scope.cancel)
+    redo = redo_history.RedoHistory(limit=10)
+    cw, ch, cx, cy = window_geometry.clamp(400, 300, 50, 50, 1920, 1080, (320, 200))
+    root.geometry(window_geometry.format_geometry(cw, ch, cx, cy))
+    palette = system_appearance.resolve({"light": {"bg": "#ffffff"}, "dark": {"bg": "#1e1e1e"}}, True, {"bg": "#ffffff"})
+    root.configure(bg=palette["bg"])
+    expect(palette["bg"] == "#1e1e1e", "Theme mismatch")
+    scope.close()
+    print("VERIFIED_050_HOST_OK")
+finally:
+    try:
+        root.destroy()
+    except Exception:
+        pass
+'''
+        # Projekt leeren und echten Quellstand 0.5.0 aus Git via --commit holen
+        shutil.rmtree(self.proj_dir)
+        self.proj_dir.mkdir(parents=True, exist_ok=True)
+        cmd_checkout_050 = [sys.executable, "-B", str(WERKZEUG), "--commit", "3c91e0c8", str(self.proj_dir)]
+        lauf_050 = subprocess.run(cmd_checkout_050, capture_output=True, text=True, timeout=60)
+        self.assertEqual(lauf_050.returncode, 0, f"Checkout 0.5.0 fehlgeschlagen:\n{lauf_050.stdout}\n{lauf_050.stderr}")
+
         shell_dir = self.proj_dir / "glide_shell"
         manifest_file = shell_dir / "SHELL_MANIFEST.json"
+        manifest_050 = json.loads(manifest_file.read_text(encoding="utf-8"))
+        self.assertEqual(manifest_050["shell_version"], "0.5.0")
+        self.assertEqual(len(manifest_050["dateien"]), 17)
 
-        init_file = shell_dir / "__init__.py"
-        init_code = init_file.read_text(encoding="utf-8")
-        import re
-        old_init_code = re.sub(r'SHELL_VERSION = "[^"]+"', 'SHELL_VERSION = "0.5.0"', init_code)
-        init_file.write_text(old_init_code, encoding="utf-8")
+        # Host-eigene Dateien anlegen
+        host_data_file = self.proj_dir / "host_data.json"
+        host_data_file.write_text('{"db_version": 1, "custom_setting": 42}', encoding="utf-8")
+        host_050_file = self.proj_dir / "host_050.py"
+        host_050_file.write_text(host_050_code, encoding="utf-8")
 
-        import hashlib
-        manifest_data = json.loads(manifest_file.read_text(encoding="utf-8"))
-        manifest_data["shell_version"] = "0.5.0"
-        manifest_data["dateien"]["__init__.py"] = hashlib.sha256(init_file.read_bytes()).hexdigest()
-        manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+        # Host mit echtem Stand 0.5.0 ausführen
+        code_050, stdout_050, stderr_050 = self.run_host_script(host_050_file)
+        self.assertEqual(code_050, 0, f"Host mit echtem Stand 0.5.0 sollte laufen:\n{stderr_050}")
+        self.assertIn("VERIFIED_050_HOST_OK", stdout_050)
 
-        # Referenzhost läuft mit Stand 0.5.0
-        code, stdout, stderr = self.run_host_script(self.host_file)
-        self.assertEqual(code, 0, f"Host mit Stand 0.5.0 sollte laufen:\n{stderr}")
-        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
-
-        # 2. Reguläres Upgrade auf neuesten Shell-Stand durchführen
+        # 2. Reguläres Upgrade auf neuesten Shell-Stand (0.6.2) durchführen
         cmd_upgrade = [sys.executable, "-B", str(WERKZEUG), "--unsauber-erlauben", str(self.proj_dir)]
         lauf_up = subprocess.run(cmd_upgrade, capture_output=True, text=True, timeout=60)
         self.assertEqual(lauf_up.returncode, 0, f"Upgrade fehlgeschlagen:\n{lauf_up.stdout}\n{lauf_up.stderr}")
 
         # 3. Nach dem Upgrade prüfen:
-        # a) Host-Dateien sind unversehrt
+        # a) Host-Dateien sind byte-identisch unversehrt
         self.assertTrue(host_data_file.is_file())
         self.assertEqual(host_data_file.read_text(encoding="utf-8"), '{"db_version": 1, "custom_setting": 42}')
-        # b) Manifest ist aktualisiert und gültig
+        # b) Manifest ist aktualisiert auf 0.6.2 und umfasst neue Module
         new_manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-        self.assertNotEqual(new_manifest["shell_version"], "0.5.0")
-        # c) Host läuft weiterhin fehlerfrei
-        code_after, stdout_after, stderr_after = self.run_host_script(self.host_file)
-        self.assertEqual(code_after, 0, f"Host nach Upgrade fehlgeschlagen:\n{stderr_after}")
-        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout_after)
+        self.assertEqual(new_manifest["shell_version"], "0.6.2")
+        self.assertIn("app_host.py", new_manifest["dateien"])
+        self.assertIn("command_history.py", new_manifest["dateien"])
+        # c) Host-Anwendungen laufen: 0.5.0-Host und neuer 0.6.2-Host (auch mit -O)
+        code_old_after, stdout_old_after, stderr_old_after = self.run_host_script(host_050_file)
+        self.assertEqual(code_old_after, 0, f"0.5.0-Host nach Upgrade fehlgeschlagen:\n{stderr_old_after}")
+        self.assertIn("VERIFIED_050_HOST_OK", stdout_old_after)
+
+        self.host_file.write_text(HOST_CODE, encoding="utf-8")
+        for args in ((), ("-O",)):
+            code_after, stdout_after, stderr_after = self.run_host_script(self.host_file, *args)
+            self.assertEqual(code_after, 0, f"Host nach Upgrade fehlgeschlagen mit Flag {args}:\n{stderr_after}")
+            self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout_after)
 
     def test_consumer_upgrade_rollback_bei_fehler(self):
         host_data_file = self.proj_dir / "host_data.json"
