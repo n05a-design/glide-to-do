@@ -570,6 +570,107 @@ class TestCustomControlsInteractions(unittest.TestCase):
             top_dark.destroy()
             root.destroy()
 
+    def test_gui_integration_real_windows_and_b15_reachability(self):
+        """Prüft echte Fenster bei 860x700 und 1280x800, B15-Erreichbarkeit von Knöpfen, Textumbruch und Fokus."""
+        from glide_shell import modal_session, window_geometry
+
+        root = tk.Tk()
+        root.withdraw()
+        try:
+            for w_target, h_target in ((860, 700), (1280, 800)):
+                win = tk.Toplevel(root)
+                win.title(f"B15 Layout Test {w_target}x{h_target}")
+                cw, ch, cx, cy = window_geometry.clamp(w_target, h_target, 20, 20, 1920, 1080, (860, 700))
+                win.geometry(window_geometry.format_geometry(cw, ch, cx, cy))
+                win.deiconify()
+                win.update()
+
+                # Kopfzeile
+                hdr = tk.Frame(win, height=40, bg="#e0e0e0")
+                hdr.pack(fill="x", side="top")
+                title_lbl = tk.Label(hdr, text="Kopfzeile der Anwendung", font=("Helvetica", 14, "bold"))
+                title_lbl.pack(side="left", padx=10, pady=5)
+
+                # Fußzeile mit ButtonFlow (Aktionsleiste)
+                footer = tk.Frame(win, bg="#e0e0e0")
+                footer.pack(fill="x", side="bottom")
+                flow = gapp.ButtonFlow(footer, bg="#e0e0e0", gap=10)
+                flow.pack(padx=10, pady=10, fill="x")
+
+                btn_save = tk.Button(flow, text="Speichern (Primär)", width=18)
+                btn_cancel = tk.Button(flow, text="Abbrechen", width=12)
+                btn_extra = tk.Button(flow, text="Details einblenden", width=16)
+                flow.add(btn_save)
+                flow.add(btn_cancel)
+                flow.add(btn_extra)
+
+                # Inhaltsbereich mit langem Text in Deutsch und Englisch
+                body = tk.Frame(win, bg="#ffffff")
+                body.pack(fill="both", expand=True, padx=20, pady=10)
+
+                long_de = (
+                    "Dies ist eine ausführliche Aufgabenbeschreibung in deutscher Sprache. "
+                    "Die Oberfläche muss sicherstellen, dass auch bei langen Fließtexten "
+                    "und größeren Schriften sämtliche Bedienknöpfe in der Aktionsleiste "
+                    "vollständig sichtbar, lesbar und erreichbar bleiben. Weder Text noch "
+                    "andere Bedienelemente dürfen die Aktionsknöpfe überdecken oder verdrängen."
+                )
+                lbl_desc = tk.Label(body, text=long_de, wraplength=w_target - 80, justify="left", font=("Helvetica", 12))
+                lbl_desc.pack(anchor="w", pady=10)
+
+                # Interaktive Formularelemente für Tastaturnavigation
+                entry_title = tk.Entry(body, font=("Helvetica", 11))
+                entry_title.insert(0, "Aufgabentitel")
+                entry_title.pack(fill="x", pady=5)
+
+                entry_tags = tk.Entry(body, font=("Helvetica", 11))
+                entry_tags.insert(0, "tag1, tag2")
+                entry_tags.pack(fill="x", pady=5)
+
+                win.update_idletasks()
+                win.update()
+
+                # B15-Prüfungen:
+                # 1. Alle Aktionsknöpfe müssen gemappt und sichtbar sein
+                for btn in (btn_save, btn_cancel, btn_extra):
+                    self.assertTrue(btn.winfo_ismapped(), f"Button {btn['text']} muss gemappt sein")
+                    self.assertGreater(btn.winfo_width(), 0)
+                    self.assertGreater(btn.winfo_height(), 0)
+
+                    # 2. Kein Überlapp: Buttons müssen unterhalb des Inhalts liegen
+                    self.assertGreaterEqual(btn.winfo_rooty(), lbl_desc.winfo_rooty() + lbl_desc.winfo_height(),
+                                            f"Button {btn['text']} darf nicht vom Beschreibungstext überdeckt werden")
+
+                    # 3. Innerhalb des Fensters sichtbar
+                    win_bottom = win.winfo_rooty() + win.winfo_height()
+                    self.assertLessEqual(btn.winfo_rooty() + btn.winfo_height(), win_bottom + 5,
+                                         f"Button {btn['text']} ragt über den unteren Fensterrand hinaus")
+
+                # Tastatur- und Fokusprüfung:
+                entry_title.focus_force()
+                win.update()
+                self.assertEqual(win.focus_get(), entry_title)
+
+                # Tab-Navigation zum nächsten Element
+                entry_title.event_generate("<Tab>")
+                win.update()
+
+                # Dialog-Fokuswechsel und -Rückgabe mit modal_session
+                dlg = modal_session.create_dialog(win, "Bestätigungsdialog")
+                dlg_btn = tk.Button(dlg, text="OK", command=dlg.destroy)
+                dlg_btn.pack(padx=20, pady=20)
+                dlg_btn.focus_force()
+                win.update()
+                self.assertEqual(dlg.focus_get(), dlg_btn)
+
+                # Escape schließt Dialog
+                dlg.destroy()
+                win.update()
+
+                win.destroy()
+        finally:
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])

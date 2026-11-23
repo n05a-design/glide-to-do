@@ -396,6 +396,94 @@ finally:
         self.assertEqual(code, 0, f"Host nach Rollback muss voll lauffähig sein:\n{stderr}")
         self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
 
+    def test_consumer_damaged_installation_diagnostics(self):
+        """Testprojekt C: Diagnose beschädigter oder manipulierter Installationen."""
+        # 1. Fehlendes Manifest im Consumer-Projekt
+        shell_dir = self.proj_dir / "glide_shell"
+        manifest_file = shell_dir / "SHELL_MANIFEST.json"
+        manifest_backup = manifest_file.read_bytes()
+        manifest_file.unlink()
+
+        # Selftest muss fehlendes Manifest abweisen
+        cmd_selftest = [sys.executable, "-B", "-m", "glide_shell.selftest", "manifest"]
+        env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONDONTWRITEBYTECODE="1")
+        env.pop("PYTHONPATH", None)
+        sub_st = subprocess.run(cmd_selftest, capture_output=True, text=True, cwd=self.proj_dir, env=env, timeout=60)
+        self.assertEqual(sub_st.returncode, 1)
+        self.assertIn("SHELL_MANIFEST.json is missing in consumer copy", sub_st.stdout + sub_st.stderr)
+
+        # Prüfung über shell_uebernehmen --pruefen meldet Abweichung
+        cmd_pruefen = [sys.executable, "-B", str(WERKZEUG), "--pruefen", str(self.proj_dir)]
+        sub_p = subprocess.run(cmd_pruefen, capture_output=True, text=True, timeout=60)
+        self.assertEqual(sub_p.returncode, 1)
+        self.assertIn("ohne gültiges Manifest", sub_p.stdout)
+
+        manifest_file.write_bytes(manifest_backup)
+
+        # 2. Verändertes Modul (z. B. lokaler Eingriff in motion.py)
+        motion_file = shell_dir / "motion.py"
+        motion_orig = motion_file.read_bytes()
+        motion_file.write_text("# manipulierter Code\n", encoding="utf-8")
+
+        sub_p_mod = subprocess.run(cmd_pruefen, capture_output=True, text=True, timeout=60)
+        self.assertEqual(sub_p_mod.returncode, 1)
+        self.assertIn("motion.py: verändert", sub_p_mod.stdout)
+
+        # Übernahme ohne --ersetzen muss verweigert werden (Exit 2)
+        cmd_ueb = [sys.executable, "-B", str(WERKZEUG), "--unsauber-erlauben", str(self.proj_dir)]
+        sub_ueb = subprocess.run(cmd_ueb, capture_output=True, text=True, timeout=60)
+        self.assertEqual(sub_ueb.returncode, 2)
+        self.assertIn("verändert gegenüber SHELL_MANIFEST.json", sub_ueb.stdout)
+
+        motion_file.write_bytes(motion_orig)
+
+        # 3. Unerlaubtes Unterpaket / zusätzliches importierbares Modul
+        extra_pkg = shell_dir / "forbidden_plugin"
+        extra_pkg.mkdir()
+        (extra_pkg / "__init__.py").write_text("# unauthorized\n", encoding="utf-8")
+
+        sub_p_extra = subprocess.run(cmd_pruefen, capture_output=True, text=True, timeout=60)
+        self.assertEqual(sub_p_extra.returncode, 1)
+        self.assertIn("zusätzlich, ohne Manifesteintrag als Modul importierbar", sub_p_extra.stdout)
+        shutil.rmtree(extra_pkg)
+
+        # 4. Ungültiger Symlink im Shell-Paket (an Stelle einer echten Shell-Datei)
+        motion_file = shell_dir / "motion.py"
+        motion_orig = motion_file.read_bytes()
+        motion_file.unlink()
+        try:
+            motion_file.symlink_to(shell_dir / "README.md")
+            sub_p_link = subprocess.run(cmd_pruefen, capture_output=True, text=True, timeout=60)
+            self.assertEqual(sub_p_link.returncode, 1)
+            self.assertIn("symbolischer Link", sub_p_link.stdout)
+
+            # Übernahme verweigert wegen Symlink
+            sub_ueb_link = subprocess.run(cmd_ueb, capture_output=True, text=True, timeout=60)
+            self.assertEqual(sub_ueb_link.returncode, 2)
+            self.assertIn("symbolischer Link", sub_ueb_link.stdout)
+
+            motion_file.unlink()
+            motion_file.write_bytes(motion_orig)
+        except OSError:
+            motion_file.write_bytes(motion_orig)
+
+        # 5. Bootstrap mit totem Link / fehlendem Frontmatter
+        cmd_boot = [sys.executable, "-B", str(WERKZEUG), "--unsauber-erlauben", "--agenten-bootstrap", str(self.proj_dir)]
+        subprocess.run(cmd_boot, capture_output=True, text=True, timeout=60)
+        skill_file = self.proj_dir / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        skill_file.write_text("# Kein Frontmatter\n[Toter Link](tot.md)\n", encoding="utf-8")
+
+        cmd_boot_check = [sys.executable, "-B", str(WERKZEUG), "--pruefen", "--agenten-bootstrap", str(self.proj_dir)]
+        sub_boot = subprocess.run(cmd_boot_check, capture_output=True, text=True, timeout=60)
+        self.assertEqual(sub_boot.returncode, 1)
+        self.assertIn("veraltet", sub_boot.stdout)
+
+        # 6. Selftest unter python -O
+        for check in ("manifest", "motion", "lifetime", "adapter"):
+            cmd_opt = [sys.executable, "-B", "-O", "-m", "glide_shell.selftest", check]
+            sub_opt = subprocess.run(cmd_opt, capture_output=True, text=True, cwd=self.proj_dir, env=env, timeout=60)
+            self.assertEqual(sub_opt.returncode, 0, f"Selftest {check} unter -O fehlgeschlagen:\n{sub_opt.stderr}")
+
 
 if __name__ == "__main__":
     unittest.main()

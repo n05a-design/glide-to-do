@@ -101,6 +101,7 @@ Kompatibilitätsnamen mit `glide` bleiben bewusst: `_glide_modal_active`, `_glid
 | T333 | [`tests/integration/test_shell_selbsttest.py`](../tests/integration/test_shell_selbsttest.py) | Paketkopie, eigener Prozess | Selbsttest 13/13, Gegenprobe ohne und mit `-O` |
 | T337 | [`tests/integration/test_shell_referenzhost.py`](../tests/integration/test_shell_referenzhost.py) | Paketkopie | End-to-End-Referenzhost, Start über AppHost, Fachlogik, Dialog, Undo/Redo, sauberer Timerabbau, Glide-Isolationswächter |
 | T338 | [`tests/tools/test_agent_einstieg.py`](../tests/tools/test_agent_einstieg.py) | Werkzeugtest | Agentenübergreifende Einstiege (Wurzel-AGENTS.md, Skill-Spiegelung, Copilot/Gemini) |
+| T339 | [`tests/tools/test_design_vertrag_konsistenz.py`](../tests/tools/test_design_vertrag_konsistenz.py) | Werkzeugtest | Konsistenzprüfung des portablen Designvertrags (P1–P6, B15, B11, B01/B16, B03, B10/B12/B14, Kontrast, Fokus, Provider) |
 | T331 | [`tests/tools/test_shell_uebernahme.py`](../tests/tools/test_shell_uebernahme.py) | Werkzeugtest | Übernahme, Manifest, Schutz lokaler und fremder Dateien |
 
 Glide-seitige Verhaltenstests, die beim Umbau eines Glide-Moduls unverändert grün bleiben müssen: `test_ui_design.py`, `test_action_menu.py`, `test_runtime_config.py` (simuliert macOS/Windows/Linux über `rc.os`, `rc.IS_MACOS`, `rc.IS_WINDOWS` – deshalb liest `runtime_config._platform()` diese Werte zur Aufrufzeit), `test_appearance.py`, `test_compact_mode.py`, `test_undo_history.py`, `test_i18n.py` (T329, `modifier_labels`).

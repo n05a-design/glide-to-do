@@ -57,6 +57,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.parse
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide" / "glide_shell"
@@ -366,9 +367,9 @@ def ermittle_projekt_root(ordner, explizit=None):
 
 
 def _rel_url(ziel_pfad, basis_ordner):
-    """Berechnet einen relativen POSIX-Pfad für Markdown-Links mit Leerzeichen-Codierung."""
+    """Berechnet einen relativen POSIX-Pfad für Markdown-Links mit RFC 3986-Codierung."""
     rel = os.path.relpath(ziel_pfad, basis_ordner).replace("\\", "/")
-    return rel.replace(" ", "%20")
+    return urllib.parse.quote(rel, safe="/@:")
 
 
 def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
@@ -389,7 +390,7 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
     cmd_cd = ""
     if rel_shell_from_root not in (".", "glide_shell"):
         parent_dir = rel_shell_from_root.rsplit("/", 1)[0]
-        cmd_cd = f"cd {parent_dir} && "
+        cmd_cd = f'cd "{parent_dir}" && '
     selftest_cmd = f"{cmd_cd}python3 -m glide_shell.selftest"
 
     inhalt_agents = (
@@ -476,13 +477,26 @@ class BootstrapTransaction:
             self.projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md",
         ]
         for t in targets:
-            if t.exists():
-                if t.is_file():
-                    self.files_before[t] = t.read_bytes()
-                elif t.is_symlink():
-                    self.files_before[t] = os.readlink(t)
+            try:
+                t.parent.resolve().relative_to(self.projekt_root)
+            except ValueError:
+                raise ValueError(f"Sicherheitsfehler: Zielpfad {t} liegt außerhalb der Projektwurzel {self.projekt_root}")
+
+            if t.is_symlink():
+                link_ziel = (t.parent / os.readlink(t)).resolve()
+                try:
+                    link_ziel.relative_to(self.projekt_root)
+                except ValueError:
+                    raise ValueError(f"Sicherheitsfehler: Symlink {t.name} verweist auf externes Ziel außerhalb des Projekts ({link_ziel})")
+                self.files_before[t] = ("symlink", os.readlink(t))
+            elif t.is_dir():
+                raise ValueError(f"{t}: Zielpfad ist ein Verzeichnis (Dateityp unzulässig)")
+            elif t.is_file():
+                self.files_before[t] = ("file", t.read_bytes())
+            elif t.exists():
+                raise ValueError(f"{t}: Zielpfad ist ein unzulässiger Dateisystemtyp")
             else:
-                self.files_before[t] = None
+                self.files_before[t] = ("absent", None)
 
     def execute(self):
         inhalt_agents, inhalt_agents_skill, inhalt_claude_skill = generiere_bootstrap_inhalte(
@@ -500,10 +514,14 @@ class BootstrapTransaction:
         ]
 
         for target_file, content, label in plan:
-            existed = self.files_before.get(target_file) is not None
+            file_type, old_data = self.files_before.get(target_file, ("absent", None))
+            existed = (file_type != "absent")
             if existed and not self.ersetzen:
                 meldungen.append(f"{target_file.relative_to(self.projekt_root)}: existiert bereits (unverändert beibehalten)")
                 continue
+
+            if target_file.is_symlink():
+                target_file.unlink()
 
             cur = target_file.parent
             parents_to_create = []
@@ -522,25 +540,152 @@ class BootstrapTransaction:
         return meldungen
 
     def rollback(self):
-        for target_file, old_content in self.files_before.items():
+        """Führt Rollback aus und gibt eine Liste aller aufgetretenen Fehler zurück.
+
+        Gibt eine leere Liste zurück, wenn der Rollback vollständig und verifiziert erfolgreich war.
+        """
+        errors = []
+        for target_file, (file_type, old_data) in self.files_before.items():
             try:
-                if old_content is None:
+                if file_type == "absent":
                     target_file.unlink(missing_ok=True)
-                else:
-                    if isinstance(old_content, bytes):
-                        schreiben_atomar(target_file, old_content)
-                    else:
+                elif file_type == "file":
+                    if target_file.is_symlink() or target_file.is_dir():
                         target_file.unlink(missing_ok=True)
-                        target_file.symlink_to(old_content)
-            except Exception:
-                pass
+                    schreiben_atomar(target_file, old_data)
+                elif file_type == "symlink":
+                    target_file.unlink(missing_ok=True)
+                    target_file.symlink_to(old_data)
+            except Exception as exc:
+                errors.append(f"{target_file.name}: Wiederherstellung fehlgeschlagen ({exc})")
 
         for d in reversed(self.dirs_created):
             try:
                 if d.exists() and not any(d.iterdir()):
                     d.rmdir()
-            except Exception:
-                pass
+            except Exception as exc:
+                errors.append(f"{d.name}: Verzeichnisbereinigung fehlgeschlagen ({exc})")
+
+        # Integritätsprüfung nach Rollback
+        for target_file, (file_type, old_data) in self.files_before.items():
+            try:
+                if file_type == "absent":
+                    if target_file.is_symlink() or target_file.exists():
+                        errors.append(f"{target_file.name}: Datei sollte nach Rollback nicht existieren")
+                elif file_type == "file":
+                    if target_file.is_symlink():
+                        errors.append(f"{target_file.name}: ist nach Rollback symbolischer Link statt Datei")
+                    elif not target_file.is_file():
+                        errors.append(f"{target_file.name}: fehlt nach Rollback")
+                    elif target_file.read_bytes() != old_data:
+                        errors.append(f"{target_file.name}: Dateiinhalt weicht nach Rollback ab")
+                elif file_type == "symlink":
+                    if not target_file.is_symlink():
+                        errors.append(f"{target_file.name}: ist nach Rollback kein symbolischer Link")
+                    elif os.readlink(target_file) != old_data:
+                        errors.append(f"{target_file.name}: Symlink-Ziel weicht nach Rollback ab")
+            except Exception as exc:
+                errors.append(f"{target_file.name}: Integritätsprüfung nach Rollback fehlgeschlagen ({exc})")
+
+        return errors
+
+
+def pruefe_bootstrap(projekt_root, shell_ordner):
+    """Prüft den Agenten-Bootstrap inhaltlich und strukturell.
+
+    Gibt ein Dict zurück: {rel_name: (status, detail_meldung)}
+
+    Statuswerte:
+    - korrekt verwaltet: Entspricht exakt dem aktuellen generierten Standard
+    - gültig angepasst: Eigene Datei, aber mit gültigem YAML-Frontmatter (bei Skills)
+                        und funktionierenden relativen Links zur Shell
+    - veraltet: Datei existiert, aber verweist auf tote Pfade oder alte Shell-Strukturen
+    - beschädigt: Dateisystemfehler, ungültiges YAML-Frontmatter oder beschädigte Syntax
+    - nicht vorhanden: Datei fehlt
+    - nicht überprüfbar: Lesefehler / Berechtigungsproblem
+    """
+    projekt_root = pathlib.Path(projekt_root).resolve()
+    shell_ordner = pathlib.Path(shell_ordner).resolve()
+
+    standard_agents, standard_skill_agents, standard_skill_claude = generiere_bootstrap_inhalte(
+        projekt_root, shell_ordner
+    )
+
+    ziele = [
+        (projekt_root / "AGENTS.md", standard_agents, "AGENTS.md", False),
+        (projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md", standard_skill_agents, ".agents/skills/glide-shell/SKILL.md", True),
+        (projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md", standard_skill_claude, ".claude/skills/glide-shell/SKILL.md", True),
+    ]
+
+    ergebnisse = {}
+
+    for pfad, standard_inhalt, rel_name, is_skill in ziele:
+        if pfad.is_symlink():
+            ergebnisse[rel_name] = ("beschädigt", "symbolischer Link ist unzulässig")
+            continue
+        if pfad.is_dir():
+            ergebnisse[rel_name] = ("beschädigt", "ist ein Verzeichnis statt regulärer Datei")
+            continue
+        if not pfad.exists():
+            ergebnisse[rel_name] = ("nicht vorhanden", "Datei fehlt")
+            continue
+
+        try:
+            inhalt = pfad.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            ergebnisse[rel_name] = ("beschädigt", "kein gültiges UTF-8")
+            continue
+        except OSError as exc:
+            ergebnisse[rel_name] = ("nicht überprüfbar", f"Lesefehler ({exc})")
+            continue
+
+        if inhalt == standard_inhalt:
+            ergebnisse[rel_name] = ("korrekt verwaltet", "entspricht dem aktuellen Standard")
+            continue
+
+        fehlliste = []
+
+        if is_skill:
+            if not inhalt.startswith("---\n"):
+                fehlliste.append("fehlendes YAML-Frontmatter (muss mit '---' beginnen)")
+            else:
+                ende = inhalt.find("\n---\n", 4)
+                if ende == -1:
+                    fehlliste.append("unvollständiges YAML-Frontmatter (schließendes '---' fehlt)")
+                else:
+                    fm = inhalt[4:ende]
+                    if "name:" not in fm or "description:" not in fm:
+                        fehlliste.append("YAML-Frontmatter muss 'name' und 'description' enthalten")
+
+        link_muster = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+        links = link_muster.findall(inhalt)
+        tote_links = []
+        for text, url in links:
+            url_clean = url.strip()
+            if url_clean.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            ziel_rel = urllib.parse.unquote(url_clean.split("#")[0])
+            if not ziel_rel:
+                continue
+            ziel_datei = (pfad.parent / ziel_rel).resolve()
+            if not ziel_datei.exists():
+                tote_links.append(f"{ziel_rel}")
+
+        if tote_links:
+            fehlliste.append(f"tote Dokumentverweise: {', '.join(tote_links[:3])}")
+
+        if "glide_shell" not in inhalt:
+            fehlliste.append("keine Referenz auf glide_shell enthalten")
+
+        if fehlliste:
+            if any("tote Dokumentverweise" in f for f in fehlliste):
+                ergebnisse[rel_name] = ("veraltet", "; ".join(fehlliste))
+            else:
+                ergebnisse[rel_name] = ("beschädigt", "; ".join(fehlliste))
+        else:
+            ergebnisse[rel_name] = ("gültig angepasst", "benutzerdefinierte Inhalte mit gültigen Verweisen und Frontmatter")
+
+    return ergebnisse
 
 
 def bootstrap_agenten(projekt_ordner, shell_ordner=None, ersetzen=False):
@@ -567,9 +712,14 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
     # Phase 1: Vollständige Vorbereitung der Sicherung (vor Beginn jeder Mutation)
     bootstrap_tx = None
     if agenten_bootstrap:
-        root_dir = ermittle_projekt_root(ordner, projekt_root)
-        bootstrap_tx = BootstrapTransaction(root_dir, ordner, ersetzen=ersetzen)
-        bootstrap_tx.prepare()
+        try:
+            root_dir = ermittle_projekt_root(ordner, projekt_root)
+            bootstrap_tx = BootstrapTransaction(root_dir, ordner, ersetzen=ersetzen)
+            bootstrap_tx.prepare()
+        except ValueError as fehler_bootstrap:
+            if not ordner_existierte and not any(ordner.iterdir()):
+                ordner.rmdir()
+            return VERWEIGERT, [f"Agenten-Bootstrap abgewiesen: {fehler_bootstrap}"]
 
     backup_temp = tempfile.TemporaryDirectory(prefix="glide-shell-backup-")
     backup_ordner = pathlib.Path(backup_temp.name)
@@ -635,11 +785,15 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
 
     except BaseException as fehler_kopie:
         # Rollback: Zustand exakt aus dem verifizierten Backup wiederherstellen
+        rollback_fehler = []
         if bootstrap_tx is not None:
-            bootstrap_tx.rollback()
+            b_errors = bootstrap_tx.rollback()
+            if b_errors:
+                rollback_fehler.extend([f"Bootstrap-Rollback: {e}" for e in b_errors])
+
         try:
             if not ordner_existierte and not any(backup_ordner.iterdir()):
-                shutil.rmtree(ordner, ignore_errors=True)
+                shutil.rmtree(ordner, ignore_errors=False)
             else:
                 backup_namen = {p.name for p in backup_ordner.iterdir()}
                 for item in list(ordner.iterdir()):
@@ -647,9 +801,9 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
                         continue
                     if item.name not in backup_namen:
                         if item.is_dir() and not item.is_symlink():
-                            shutil.rmtree(item, ignore_errors=True)
+                            shutil.rmtree(item)
                         else:
-                            item.unlink(missing_ok=True)
+                            item.unlink()
                 for item in backup_ordner.iterdir():
                     ziel_item = ordner / item.name
                     if item.is_symlink():
@@ -659,14 +813,32 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
                         shutil.copy2(item, ziel_item)
                     elif item.is_dir():
                         if ziel_item.exists():
-                            shutil.rmtree(ziel_item, ignore_errors=True)
+                            if ziel_item.is_symlink():
+                                ziel_item.unlink()
+                            else:
+                                shutil.rmtree(ziel_item)
                         shutil.copytree(item, ziel_item, symlinks=True)
+
+                # Integritätsprüfung nach Rollback von ordner
+                for item in backup_ordner.iterdir():
+                    ziel_item = ordner / item.name
+                    if item.is_symlink():
+                        if not ziel_item.is_symlink() or os.readlink(ziel_item) != os.readlink(item):
+                            rollback_fehler.append(f"Shell-Rollback: {item.name} Symlink weicht nach Wiederherstellung ab")
+                    elif item.is_file():
+                        if not ziel_item.is_file() or sha(ziel_item) != sha(item):
+                            rollback_fehler.append(f"Shell-Rollback: {item.name} Datei weicht nach Wiederherstellung ab")
         except Exception as fehler_rollback:
-            return ABWEICHUNG, [f"Fehler bei Übernahme ({fehler_kopie}) und Rollback fehlgeschlagen ({fehler_rollback})"]
+            rollback_fehler.append(f"Shell-Rollback fehlgeschlagen ({fehler_rollback})")
 
         if isinstance(fehler_kopie, (KeyboardInterrupt, SystemExit)):
             raise fehler_kopie
-        return ABWEICHUNG, [f"Übernahme fehlgeschlagen ({fehler_kopie}) – Rollback ausgeführt (Zustand wiederhergestellt)"]
+
+        if rollback_fehler:
+            return ABWEICHUNG, [
+                f"Übernahme fehlgeschlagen ({fehler_kopie}) und Rollback unvollständig: {'; '.join(rollback_fehler)}"
+            ]
+        return ABWEICHUNG, [f"Übernahme fehlgeschlagen ({fehler_kopie}) – Rollback ausgeführt (Zustand vollständig wiederhergestellt)"]
 
     finally:
         backup_temp.cleanup()
@@ -696,14 +868,10 @@ def _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=False, projekt_root=None
     if agenten_bootstrap:
         root_dir = ermittle_projekt_root(ordner, projekt_root)
         print(f"Agenten-Bootstrap ({root_dir}):")
-        b_tx = BootstrapTransaction(root_dir, ordner)
-        b_tx.prepare()
-        for target_file, old_content in b_tx.files_before.items():
-            rel_name = target_file.relative_to(root_dir)
-            if old_content is not None:
-                print(f"  {rel_name}: vorhanden")
-            else:
-                print(f"  {rel_name}: fehlt")
+        b_ergebnisse = pruefe_bootstrap(root_dir, ordner)
+        for rel_name, (status, detail) in b_ergebnisse.items():
+            print(f"  {rel_name}: {status} ({detail})")
+            if status not in ("korrekt verwaltet", "gültig angepasst"):
                 bootstrap_ok = ABWEICHUNG
 
     return OK if (shell_ok == OK and bootstrap_ok == OK) else ABWEICHUNG

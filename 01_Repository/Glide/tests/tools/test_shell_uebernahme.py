@@ -20,6 +20,7 @@ import contextlib
 import importlib.util
 import io
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -480,18 +481,301 @@ class Uebernahme(unittest.TestCase):
         self.assertFalse(shell_target.exists(), "glide_shell muss nach Rollback entfernt sein")
 
     def test_agenten_bootstrap_pruefen_konsistenz(self):
-        """Prüft --pruefen zusammen mit --agenten-bootstrap."""
+        """Prüft --pruefen zusammen mit --agenten-bootstrap und den genauen Statuswerten."""
         lauf("--agenten-bootstrap", self.projekt)
         code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
         self.assertEqual(code, 0, text)
         self.assertIn("Agenten-Bootstrap", text)
-        self.assertIn("AGENTS.md: vorhanden", text)
+        self.assertIn("AGENTS.md: korrekt verwaltet", text)
+        self.assertIn(".agents/skills/glide-shell/SKILL.md: korrekt verwaltet", text)
 
-        # Löschen von AGENTS.md macht --pruefen rot
+        # Gültig angepasste Datei wird als "gültig angepasst" und Exitcode 0 akzeptiert
+        skill_file = self.projekt / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        custom_skill = (
+            "---\n"
+            "name: glide-shell\n"
+            "description: Eigene angepasste Skill-Beschreibung.\n"
+            "---\n\n"
+            "# Angepasster Skill\n"
+            f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({werkzeug._rel_url(self.kopie / 'KI_ANLEITUNG_NEUE_PROJEKTE.md', skill_file.parent)})\n"
+            "Nutzung von glide_shell im Projekt.\n"
+        )
+        skill_file.write_text(custom_skill, encoding="utf-8")
+        code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertIn(".agents/skills/glide-shell/SKILL.md: gültig angepasst", text)
+
+        # Beschädigtes YAML-Frontmatter wird als "beschädigt" erkannt (Exitcode 1)
+        skill_file.write_text("# Kein Frontmatter\nNutzung von glide_shell.\n", encoding="utf-8")
+        code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn(".agents/skills/glide-shell/SKILL.md: beschädigt", text)
+
+        # Toter Dokumentlink wird als "veraltet" erkannt (Exitcode 1)
+        skill_file.write_text(
+            "---\nname: glide-shell\ndescription: Test.\n---\n[Toter Link](nicht_vorhanden.md)\nglide_shell.\n",
+            encoding="utf-8"
+        )
+        code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn(".agents/skills/glide-shell/SKILL.md: veraltet", text)
+
+        # Löschen von AGENTS.md macht --pruefen rot ("nicht vorhanden")
         (self.projekt / "AGENTS.md").unlink()
         code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
         self.assertEqual(code, 1, text)
-        self.assertIn("AGENTS.md: fehlt", text)
+        self.assertIn("AGENTS.md: nicht vorhanden", text)
+
+    def test_fehlinjektion_zehn_szenarien_und_rollback_verifikation(self):
+        """Simuliert die geforderten 10 Fehlerzustände und beweist vollständige oder erkannte Rollbacks."""
+        # 1. Fehler beim Schreiben der ersten Agentendatei (AGENTS.md)
+        ziel_1 = self.projekt / "sub1"
+        ziel_1.mkdir(parents=True)
+        orig_schreiben = werkzeug.schreiben_atomar
+        def fail_agents(z, c):
+            if z.name == "AGENTS.md":
+                raise IOError("Fehler 1: AGENTS.md blockiert")
+            return orig_schreiben(z, c)
+        try:
+            werkzeug.schreiben_atomar = fail_agents
+            code, msgs = werkzeug.uebernehmen(ziel_1 / "glide_shell", agenten_bootstrap=True, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in msgs))
+            self.assertFalse((ziel_1 / "AGENTS.md").exists())
+            self.assertFalse((ziel_1 / ".agents").exists())
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+
+        # 2. Fehler beim Schreiben des zweiten Skills (.claude/skills/.../SKILL.md)
+        ziel_2 = self.projekt / "sub2"
+        ziel_2.mkdir(parents=True)
+        def fail_claude(z, c):
+            if ".claude" in str(z):
+                raise IOError("Fehler 2: Claude-Skill blockiert")
+            return orig_schreiben(z, c)
+        try:
+            werkzeug.schreiben_atomar = fail_claude
+            code, msgs = werkzeug.uebernehmen(ziel_2 / "glide_shell", agenten_bootstrap=True, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in msgs))
+            self.assertFalse((ziel_2 / "AGENTS.md").exists())
+            self.assertFalse((ziel_2 / ".agents").exists())
+            self.assertFalse((ziel_2 / ".claude").exists())
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+
+        # 3. Fehler während Snapshot-Erstellung (mit agenten_bootstrap)
+        ziel_3 = self.projekt / "sub3"
+        ziel_3.mkdir(parents=True)
+        orig_copy2 = shutil.copy2
+        def fail_copy(s, d, **kw):
+            raise OSError("Fehler 3: Snapshot Lesefehler")
+        try:
+            werkzeug.uebernehmen(ziel_3 / "glide_shell", agenten_bootstrap=True)
+            shutil.copy2 = fail_copy
+            code, msgs = werkzeug.uebernehmen(ziel_3 / "glide_shell", agenten_bootstrap=True, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Sicherung fehlgeschlagen" in m for m in msgs))
+        finally:
+            shutil.copy2 = orig_copy2
+
+        # 4. Fehler mitten während der Shell-Kopie (nach 5 Dateien)
+        ziel_4 = self.projekt / "sub4"
+        ziel_4.mkdir(parents=True)
+        counts = [0]
+        def fail_mid_copy(z, c):
+            counts[0] += 1
+            if counts[0] >= 5 and z.name.endswith(".py"):
+                raise OSError("Fehler 4: Plattenabbruch mitten im Shell-Kopieren")
+            return orig_schreiben(z, c)
+        try:
+            werkzeug.schreiben_atomar = fail_mid_copy
+            code, msgs = werkzeug.uebernehmen(ziel_4 / "glide_shell", agenten_bootstrap=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in msgs))
+            self.assertFalse((ziel_4 / "glide_shell").exists())
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+
+        # 5. Fehler beim Zurückschreiben einer gesicherten Datei -> unvollständiger Rollback gemeldet!
+        ziel_5 = self.projekt / "sub5"
+        ziel_5.mkdir(parents=True)
+        werkzeug.uebernehmen(ziel_5 / "glide_shell")
+        phase = [0]
+        def fail_rollback_restore(s, d, **kw):
+            if phase[0] == 2 and str(ziel_5) in str(d):
+                raise OSError("Fehler 5: Wiederherstellung im Rollback blockiert")
+            return orig_copy2(s, d, **kw)
+        try:
+            def fail_both(z, c):
+                phase[0] = 2  # Mutation abgebrochen, Rollback beginnt
+                raise IOError("Kopierabbruch")
+            werkzeug.schreiben_atomar = fail_both
+            shutil.copy2 = fail_rollback_restore
+            code, msgs = werkzeug.uebernehmen(ziel_5 / "glide_shell", ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback unvollständig" in m for m in msgs), f"Unerwartete Meldung: {msgs}")
+            self.assertFalse(any("Rollback ausgeführt (Zustand vollständig wiederhergestellt)" in m for m in msgs))
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+            shutil.copy2 = orig_copy2
+
+        # 6. Fehler beim Entfernen neu angelegter Dateien während Rollback -> Rollback unvollständig!
+        ziel_6 = self.projekt / "sub6"
+        ziel_6.mkdir(parents=True)
+        werkzeug.uebernehmen(ziel_6 / "glide_shell")
+        orig_unlink = pathlib.Path.unlink
+        phase_6 = [0]
+        def fail_unlink(p, missing_ok=False):
+            if phase_6[0] == 2 and p.name == "extra_temp.py":
+                raise OSError("Fehler 6: Unlink blockiert")
+            return orig_unlink(p, missing_ok=missing_ok)
+        try:
+            def fail_write(z, c):
+                (ziel_6 / "glide_shell" / "extra_temp.py").write_text("# neu\n", encoding="utf-8")
+                phase_6[0] = 2
+                raise IOError("Abbruch")
+            werkzeug.schreiben_atomar = fail_write
+            pathlib.Path.unlink = fail_unlink
+            code, msgs = werkzeug.uebernehmen(ziel_6 / "glide_shell", ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback unvollständig" in m for m in msgs))
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+            pathlib.Path.unlink = orig_unlink
+
+        # 7. Fehler beim Aufräumen erstellter Ordner
+        tx = werkzeug.BootstrapTransaction(self.projekt, self.projekt / "glide_shell")
+        tx.dirs_created = [self.projekt / ".nonexistent_dir_dummy"]
+        errors = tx.rollback()
+        self.assertIsInstance(errors, list)
+
+        # 8. Unzulässige Zugriffsrechte / Verzeichnis als Zieldatei
+        ziel_8 = self.projekt / "sub8"
+        ziel_8.mkdir(parents=True)
+        (ziel_8 / "AGENTS.md").mkdir()
+        code, msgs = werkzeug.uebernehmen(ziel_8 / "glide_shell", agenten_bootstrap=True)
+        self.assertEqual(code, werkzeug.VERWEIGERT)
+        self.assertTrue(any("Verzeichnis (Dateityp unzulässig)" in m for m in msgs))
+
+        # 9. Unterbrochene Dateisystemoperation: Broken replace in schreiben_atomar
+        ziel_9 = self.projekt / "sub9"
+        ziel_9.mkdir(parents=True)
+        orig_replace = os.replace
+        def fail_replace(src, dst):
+            raise OSError("Fehler 9: Dateisystemunterbrechung bei os.replace")
+        try:
+            os.replace = fail_replace
+            code, msgs = werkzeug.uebernehmen(ziel_9 / "glide_shell")
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in msgs))
+        finally:
+            os.replace = orig_replace
+
+        # 10. Teilweise beschädigte Sicherung (Integritätsprüfung erkennt Hash-Mismatch nach Rollback)
+        ziel_10 = self.projekt / "sub10"
+        ziel_10.mkdir(parents=True)
+        werkzeug.uebernehmen(ziel_10 / "glide_shell")
+        phase_10 = [1]
+        def corrupt_copy2(s, d, **kw):
+            orig_copy2(s, d, **kw)
+            if phase_10[0] == 2 and pathlib.Path(d).name == "motion.py":
+                pathlib.Path(d).write_bytes(b"corrupt payload")
+        try:
+            shutil.copy2 = corrupt_copy2
+            def fail_mutation(z, c):
+                if z.name == "selftest.py":
+                    phase_10[0] = 2
+                    raise IOError("Abbruch")
+                return orig_schreiben(z, c)
+            werkzeug.schreiben_atomar = fail_mutation
+            code, msgs = werkzeug.uebernehmen(ziel_10 / "glide_shell", ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback unvollständig" in m for m in msgs))
+            self.assertTrue(any("weicht nach Wiederherstellung ab" in m for m in msgs))
+        finally:
+            shutil.copy2 = orig_copy2
+            werkzeug.schreiben_atomar = orig_schreiben
+
+    def test_symlink_und_pfad_schutz_im_bootstrap(self):
+        """Verifiziert Symlink-Schutz und Pfadtraversierungsabwehr im Agenten-Bootstrap."""
+        sub = self.projekt / "symlink_safety_test"
+        sub.mkdir(parents=True)
+        agents_target = sub / "AGENTS.md"
+
+        # 1. Externer Symlink auf Datei außerhalb des Projekts muss vor Mutation abgewiesen werden
+        outside_file = self.projekt / "outside_secret.txt"
+        outside_file.write_text("sensibler Inhalt", encoding="utf-8")
+        try:
+            agents_target.symlink_to(outside_file)
+        except OSError:
+            self.skipTest("Symlinks auf diesem Dateisystem nicht unterstützt")
+
+        code, msgs = werkzeug.uebernehmen(sub / "glide_shell", agenten_bootstrap=True)
+        self.assertEqual(code, werkzeug.VERWEIGERT)
+        self.assertTrue(any("externes Ziel außerhalb des Projekts" in m for m in msgs))
+        self.assertEqual(outside_file.read_text(encoding="utf-8"), "sensibler Inhalt")
+
+        # 2. Interner Symlink auf projektinterne Datei
+        internal_file = sub / "my_custom_agents.md"
+        internal_file.write_text("# Interne Vorlage\n", encoding="utf-8")
+        agents_target.unlink()
+        agents_target.symlink_to(internal_file.name)
+
+        # 2a. Ohne --ersetzen: Vorhandener interner Symlink bleibt unberührt
+        code, msgs = werkzeug.uebernehmen(sub / "glide_shell", agenten_bootstrap=True, ersetzen=False)
+        self.assertEqual(code, 0)
+        self.assertTrue(agents_target.is_symlink())
+        self.assertEqual(os.readlink(agents_target), internal_file.name)
+        self.assertEqual(internal_file.read_text(encoding="utf-8"), "# Interne Vorlage\n")
+
+        # 2b. Mit --ersetzen: Symlink wird ersetzt
+        code, msgs = werkzeug.uebernehmen(sub / "glide_shell", agenten_bootstrap=True, ersetzen=True)
+        self.assertEqual(code, 0)
+        self.assertFalse(agents_target.is_symlink())
+        self.assertTrue(agents_target.is_file())
+        self.assertIn("Glide Shell", agents_target.read_text(encoding="utf-8"))
+        self.assertEqual(internal_file.read_text(encoding="utf-8"), "# Interne Vorlage\n")
+
+        # 2c. Rollback stellt bestehenden internen Symlink wieder her
+        agents_target.unlink()
+        agents_target.symlink_to(internal_file.name)
+        orig_schreiben = werkzeug.schreiben_atomar
+        phase_sym = [1]
+        def fail_at_skill(z, c):
+            if phase_sym[0] == 1 and ".claude" in str(z):
+                phase_sym[0] = 2  # Ab jetzt darf Rollback wieder ungestört schreiben
+                raise IOError("Abbruch")
+            return orig_schreiben(z, c)
+        try:
+            werkzeug.schreiben_atomar = fail_at_skill
+            code, msgs = werkzeug.uebernehmen(sub / "glide_shell", agenten_bootstrap=True, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in msgs))
+            self.assertTrue(agents_target.is_symlink(), "Symlink muss nach Rollback wieder ein Symlink sein")
+            self.assertEqual(os.readlink(agents_target), internal_file.name)
+        finally:
+            werkzeug.schreiben_atomar = orig_schreiben
+
+    def test_pfade_mit_leerzeichen_klammern_und_unicode(self):
+        """Prüft Projektpfade mit Leerzeichen, Klammern und Unicode wie 'Mein Projekt 2026/Haupt App (v2)'."""
+        complex_proj = pathlib.Path(self._temp.name) / "Mein Projekt 2026" / "Haupt App (v2)"
+        complex_proj.mkdir(parents=True)
+        (complex_proj / "pyproject.toml").write_text("[project]\nname='complex'\n", encoding="utf-8")
+
+        code, text = lauf("--agenten-bootstrap", complex_proj)
+        self.assertEqual(code, 0, text)
+
+        agents_md = complex_proj / "AGENTS.md"
+        self.assertTrue(agents_md.is_file())
+        inhalt = agents_md.read_text(encoding="utf-8")
+
+        self.assertIn("KI_ANLEITUNG_NEUE_PROJEKTE.md", inhalt)
+        self.assertIn("python3 -m glide_shell.selftest", inhalt)
+
+        code, text = lauf("--pruefen", "--agenten-bootstrap", complex_proj)
+        self.assertEqual(code, 0, text)
+        self.assertIn("AGENTS.md: korrekt verwaltet", text)
 
 
 def git(ordner, *argumente):
