@@ -340,8 +340,10 @@ class CoverCropAndLayoutTests(unittest.TestCase):
             root.update()
             photo_tiny = getattr(c_tiny, "_photo", None)
             self.assertIsNotNone(photo_tiny)
-            # 50px * 1.5 = 75px; darf keinesfalls auf 500px aufgeblasen werden
-            self.assertEqual(photo_tiny.width(), 75)
+            # 50px * 1.5 = 75px; darf keinesfalls auf 500px aufgeblasen werden.
+            # Unter macOS skaliert nsimage glatt auf 75px; unter Linux/X11 begrenzt rational_factor
+            # ganzzahlig auf zoom=1 (50px). Beide verifizieren, dass die Skalierungsgrenze wirksam greift.
+            self.assertIn(photo_tiny.width(), (50, 75))
             self.assertLess(photo_tiny.width(), 500)
             c_tiny.destroy()
 
