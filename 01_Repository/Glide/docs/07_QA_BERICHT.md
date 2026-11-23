@@ -1,3 +1,19 @@
+## Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2, 23.11.2026)
+
+| Gegenstand | Befehl / Nachweis | Ergebnis |
+|---|---|---|
+| Menschliche Abnahme | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` | Alle 5 Prüfschritte durch den Inhaber auf dem Kandidatenstand positiv abgenommen (Spracheinstellung DE/EN, Erscheinungsbild Hell/Dunkel/Mindestmaß, Tastatur & Fokus D87, Seiteneditor & Undo, Aufgabeninspektor) |
+| Dynamischer Sprachwechsel | `refresh_sidebar_locale()` | Umschaltung Deutsch/Englisch in den Einstellungen aktualisiert Seitenleistentitel und Tooltips unmittelbar ohne Neustart |
+| Adaptiver Titelbild-Zuschnitt | `make_page_cover(..., adaptive=True)` | Bildhöhe adaptiv auf 0.34 begrenzt (max. 240px); zentrierter Zuschnitt ohne vertikale Verzerrung |
+| Zeichnungen als Eckstempel | `show_corner_cover` | Pixel-Zeichnungen als Cover sitzen kompakt als 56px-Miniatur oben rechts in der Lesespalte und scrollen mit dem Text |
+| Fußleisten-Dichte | `sync_foot_density()` | „Erwähnt ohne Verweis …“ wird in kleinster Kopfstufe (`minimal`) ausgeblendet, so dass die Fußzeile einzeilig bleibt |
+| Bild- und Tabellenumfluss | `tag_configure(fluss, wrap='word')` | Text- und Tabellenzeilen umfließen rechtsbündige Bilder sauber mit Wortumbruch ohne horizontale Überlappung; Showcase-Stadtseiten mit Tabellen (Wuppertal, Berlin) linksbündig platziert |
+| Natürliche Datumswörter | `parse_due_words` | Akzeptiert „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Fälligkeitsfeld und Kalenderdialog |
+| Showcase-Prüfung | `python3 -B tests/tools/pruefe_showcase.py` | Showcase DE und EN vollständig grün (Exitcode 0) |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | Alle 19 Schritte vollständig grün (Exitcode 0) |
+| Standprüfung | `python3 -B tests/tools/standpruefung.py` | 148 Dokumente fehlerfrei (Exitcode 0) |
+| Lieferabgleich | `python3 -B scripts/pflege/abgleich_07.py` | 110 Code-Dateien, 169 Ressourcen bytegleich (0 Abweichungen) |
+
 ## Multi-Agent Readiness, Bootstrap & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 23.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |
@@ -41,7 +57,7 @@ Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem Datenordner, k
 | Manuelle CI-Jobs auf `main` `4ce3697a` | UI-Diagnose `aufgaben-layout` ([#45011711491](https://github.com/n05a-design/glide-to-do/actions/runs/45011711491)) und `tagesdialoge` ([#45011713817](https://github.com/n05a-design/glide-to-do/actions/runs/45011713817)) grün. `zugang400` ([#45011709194](https://github.com/n05a-design/glide-to-do/actions/runs/45011709194)): native AT-SPI- und MSAA-Kennungen, Tcl-Klassenbindungen, Kernablauf und isolierter Windows-Prototyp grün; rot sind nur die Schritte mit echter Orca- und NVDA-Sprachausgabe. Screenreader-Sprachausgabe ist laut Abnahmestand bis Bedarf zurückgestellt und keine 1.0-Restaufgabe. |
 | GitHub-Matrix `main` `4ce3697a` | Vollständig grün: Dokumentation, macOS-Paket, Grundstufe, Linux- und Windows-Vollprüfung (Tk 9.1) sowie eigenständiges Windows-Paket ([#45011160530](https://github.com/n05a-design/glide-to-do/actions/runs/45011160530)). |
 
-**Offen:** GitHub-Matrix für den PR dieses Stands; menschliche Sicht- und Bedienabnahme; Screenreader-Sprachausgabe (zurückgestellt); Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe.
+**Offen:** GitHub-Matrix für den PR dieses Stands; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Screenreader-Sprachausgabe (zurückgestellt); Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe.
 
 ## Release-Runde 1.0.1: Volllauf, macOS-Paket und DMG (V1.83, 22.11.2026)
 

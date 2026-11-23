@@ -12,11 +12,24 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
 > - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.2 mit Demonstrationshost, Referenzhost (T337), Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
-> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
+> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
 >
 > **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 
 ---
+
+
+### Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) & Layout-Verfeinerung (23.11.2026)
+
+- **Menschliche Abnahme durchgeführt:** Alle 5 Prüfschritte aus `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` wurden durch den Inhaber auf dem Kandidatenstand durchlaufen und positiv abgenommen.
+- **Dynamischer Sprachwechsel (Schritt 1):** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in `apply_settings()` sofort ohne Neustart.
+- **Adaptiver Zuschnitt von Titelbildern (Schritt 2):** `make_page_cover(..., adaptive=True)` mit `COVER_RATIO = 0.34`, `COVER_MAX_HEIGHT = 240`, `COVER_FOCUS = 0.38`, `COVER_MAX_UPSCALE = 1.5` verhindert vertikale Verzerrung und zentriert das Bild optimal.
+- **Zeichnungen als kompakter Eckstempel (Schritt 2):** Pixel-Zeichnungen als Cover sitzen als 56px-Miniatur (`CORNER_COVER_SIZE = 56`) oben rechts in der Lesespalte und scrollen mit dem Text (`show_corner_cover`, `layout_corner_cover`, `place_corner_cover`).
+- **Fußleisten-Dichte (Schritt 2):** `sync_foot_density()` blendet „Erwähnt ohne Verweis …“ bei minimaler Kopfstufe (`minimal`) aus, so dass die Fußzeile einzeilig bleibt.
+- **Kollisionsfreier Bild- und Tabellenumfluss (Schritt 2):** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, so dass Tabellen und Bildflächen niemals überlappen. Stadtseiten mit Tabellen (Wuppertal, Berlin) nutzen im Showcase linksbündige Bilder (`mode='left'`), und alle 3 Modi (`left`, `center`, `right`) sind im Showcase vertreten.
+- **Tastatur & Editor (Schritte 3 & 4):** Vom Inhaber vollständig positiv abgenommen („Passt komplett“, „Funktioniert perfekt!“).
+- **Natürliche Datumswörter (Schritt 5):** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog.
+- **Geprüfter Stand:** `pruefe_showcase.py` (DE und EN), `ci_grundstufe.py` (19/19 Schritte) und `standpruefung.py` (148 Dokumente) vollständig grün; `07_Python-Versionen` bytegleich abgeglichen.
 
 
 ### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 23.11.2026)

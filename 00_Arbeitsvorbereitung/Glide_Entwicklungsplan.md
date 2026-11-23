@@ -12,7 +12,7 @@
 
 Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
-**Aktueller Stand (22.11.2026):** `main` steht auf `4ce3697a` (PR #188 mit #185–#187). Release 1.0 ist bis auf die Freigabeschritte des Inhabers umgesetzt: Lokalisierung DE/EN vollständig (V1.70–V1.81), Glide Shell abgeschlossen (D99), WA-49 geschlossen (V1.83), Lieferstand 1.0.1 in `07_Python-Versionen`, macOS-Paket und DMG lokal geprüft ([§21.172](#21172-wa-49-abgeschlossen-und-release-runde-101-v183-22112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung, Paketmanager-Einreichung und die menschliche Sicht- und Bedienabnahme.
+**Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 und PR #192 sind gemergt. PR #193 schließt die Multi-Agent Readiness der Glide Shell ab. Die menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) wurde am 23.11.2026 durch den Inhaber vollständig durchlaufen und positiv abgenommen ([§21.177](#21177-menschliche-sicht--und-bedienabnahme-release-10-etappe-2--layout-verfeinerung-23112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung und Paketmanager-Einreichung mit Freigabe des Inhabers.
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
@@ -3924,4 +3924,26 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - CI-Grundstufe (19/19) vollständig bestanden (468 Dateien).
   - Standprüfung fehlerfrei (148 Dokumente).
 - **D – Rest:**
-  - Unverändert: Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
+  - Unverändert: Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+
+### 21.177 Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) & Layout-Verfeinerung (23.11.2026)
+
+- **A – Auftrag:** Durchführung der menschlichen Sicht- und Bedienabnahme gemäß `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` für Release 1.0, Etappe 2 (5 Prüfschritte: Spracheinstellung & Umschaltung DE/EN, Erscheinungsbild & Fluchten Hell/Dunkel/Mindestmaß, Tastaturbedienung & Fokusrückgabe D87, Seiteneditor & Undo, Aufgabeninspektor). Prüfung durch den Inhaber anhand des Kandidaten (`python3 -B 01_Repository/Glide/tests/tools/kandidat_starten.pyw --neu`).
+- **B – Umsetzung:**
+  - *Schritt 1 (Spracheinstellung):* `refresh_sidebar_locale()` in `apply_settings()` ergänzt; aktualisiert `sidebar_title`, `pages_title`, `notes_title`, `drawings_title` und Tooltips bei Umschaltung von Deutsch auf Englisch sofort ohne Neustart.
+  - *Schritt 2 (Editor & Umbruch):*
+    - Adaptiver Titelbild-Zuschnitt (`make_page_cover(..., adaptive=True)` mit `COVER_RATIO = 0.34`, `COVER_MAX_HEIGHT = 240`, `COVER_FOCUS = 0.38`, `COVER_MAX_UPSCALE = 1.5`): zentriert und schneidet Bilder sauber zu, verhindert vertikale Verzerrung.
+    - Pixel-Zeichnungen als Cover sitzen als 56px-Miniatur (`CORNER_COVER_SIZE = 56`) oben rechts in der Lesespalte und scrollen mit dem Text (`show_corner_cover`, `layout_corner_cover`, `place_corner_cover`).
+    - Fußleiste in Mindestfenstergröße: `sync_foot_density()` blendet „Erwähnt ohne Verweis …“ bei kleinster Kopfstufe (`minimal`) aus, so dass die Fußzeile einzeilig bleibt.
+    - Text- und Tabellen-Umfluss bei rechtsbündigen Bildern: `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, so dass Tabellen und Bildflächen niemals kollidieren. Stadtseiten mit Tabellen (Wuppertal, Berlin) nutzen im Showcase linksbündige Bilder (`mode='left'`), und alle 3 Modi (`left`, `center`, `right`) sind im Showcase vertreten.
+  - *Schritt 3 (Tastatur & Fokus):* Vom Nutzer vollständig abgenommen („Passt komplett“).
+  - *Schritt 4 (Seiteneditor & Undo):* Vom Nutzer vollständig abgenommen („Funktioniert perfekt!“).
+  - *Schritt 5 (Aufgabeninspektor):* Erkennung natürlicher Datumswörter (`DUE_WORDS`, `parse_due_words`) für „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Fälligkeitsfeld und Kalenderdialog.
+  - *Synchronisation & Showcase:* `abgleich_07.py` synchronisiert (110 Code-Dateien, 169 Ressourcen, 0 Abweichungen). Showcase-Fixtures DE/EN mit `showcase.py` neu erzeugt und mit `pruefe_showcase.py` verifiziert.
+- **C – Prüfung:**
+  - `pruefe_showcase.py` (DE und EN): vollständig grün mit Exitcode 0.
+  - `ci_grundstufe.py`: alle 19 Schritte vollständig grün mit Exitcode 0.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - Protokoll in `Glide_Manuelle_Pruefung.md` vollständig gepflegt.
+- **D – Rest:**
+  - Tag, GitHub-Release, Notarisierung und Paketmanager-Einreichung nur mit ausdrücklicher Freigabe des Inhabers.

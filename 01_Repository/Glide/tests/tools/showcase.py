@@ -611,7 +611,9 @@ def build(app, mod, root, anchor):
     # Eine schlichte Seite ohne Titelbild und ohne Bilder: Kostentabelle der Reise.
     app.new_page_from_markdown(kasse_text(), title=tx("Reisekasse", "Travel kitty"), folder_id=library["id"])
     ruhe(root)
-    modes = ("right", "left", "center")
+    # Abnahme 23.11.2026: Wuppertal und Berlin nutzen linksbündige Bilder („left“),
+    # damit Tabelle und Text rechts daneben uneingeschränkt Platz finden.
+    modes = ("left", "left", "center", "right", "left", "center", "right")
 
     def bild_einsetzen(page, datei, mode, width):
         app.set_active_list(page["id"])
@@ -626,7 +628,7 @@ def build(app, mod, root, anchor):
 
     for index, stadt in enumerate(STAEDTE):
         page = seiten[stadt["key"]]
-        mode = modes[index % 3]
+        mode = modes[index % len(modes)]
         editor, attachment_id = bild_einsetzen(page, stadt["fotos"][0][0], mode, 420 if mode == "center" else 250)
         # Hinweiszeile als Hervorhebung (Callout).
         lines = editor.text.get("1.0", "end-1c").splitlines()
