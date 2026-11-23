@@ -880,10 +880,11 @@ class Uebernahme(unittest.TestCase):
             "app/$VARIABLE/pfad",
             "app/$(subshell)/pfad",
             "app/O'Connor's/ordner",
-            'app/"doppelte_quotes"/ordner',
             "app/version (v2.0)/unterordner",
             "tief/verschachtelt/eins/zwei/drei/ordner",
         ]
+        if os.name != "nt":
+            pfad_varianten.append('app/"doppelte_quotes"/ordner')
         base = pathlib.Path(self._temp.name) / "matrix_test"
         base.mkdir(parents=True, exist_ok=True)
 
@@ -904,6 +905,8 @@ class Uebernahme(unittest.TestCase):
 
     def test_posix_bootstrap_befehlsausfuehrung(self):
         """Führt den erzeugten POSIX-Befehl unter bash/zsh tatsächlich aus und prüft Abbruch bei fehlendem Ordner."""
+        if os.name == "nt":
+            self.skipTest("POSIX-Befehlsausführung unter Windows übersprungen (wird durch dedizierten PowerShell-Test geprüft)")
         proj = pathlib.Path(self._temp.name) / "exec_proj"
         shell = proj / "sub ordner mit leerzeichen" / "glide_shell"
         shell.mkdir(parents=True)
@@ -973,33 +976,34 @@ class Uebernahme(unittest.TestCase):
             "app/$VARIABLE/ziel",
             "app/$(subshell)/ziel",
             "app/O'Connor's/ziel",
-            'app/"doppelte_quotes"/ziel',
             "app/version (v2.0)/ziel",
             "tief/verschachtelt/eins/zwei/drei/ziel",
         ]
+        if os.name != "nt":
+            pfad_matrix.append('app/"doppelte_quotes"/ziel')
 
         for pwsh in pwsh_bins:
             # 1. Reproduktion des Altverhaltens: 'cd -LiteralPath "kaputt"; Folgebefehl' führt Folgebefehl aus!
             proj_repro = pathlib.Path(self._temp.name) / f"pwsh_repro_{pathlib.Path(pwsh).stem}"
             proj_repro.mkdir(parents=True, exist_ok=True)
             marker_repro = proj_repro / "marker_repro.txt"
-            alt_cmd = f"cd -LiteralPath 'nicht_vorhanden_xyz'; [IO.File]::WriteAllText('{marker_repro.name}', 'ausgefuehrt')"
+            alt_cmd = f"cd -LiteralPath 'nicht_vorhanden_xyz'; Set-Content -LiteralPath '{marker_repro.name}' -Value 'ausgefuehrt'"
             res_alt = subprocess.run([pwsh, "-NoProfile", "-Command", alt_cmd], cwd=str(proj_repro), capture_output=True, text=True)
+            self.assertTrue(marker_repro.exists(), "Altverhalten ohne -ErrorAction Stop muss Folgebefehl ausführen")
             if marker_repro.exists():
                 marker_repro.unlink()
 
             # 2. Härtung mit Set-Location -LiteralPath '...' -ErrorAction Stop über die gesamte Pfadmatrix
             for rel in pfad_matrix:
                 proj_base = pathlib.Path(self._temp.name) / f"pwsh_run_{pathlib.Path(pwsh).stem}"
-                safe_rel = rel.replace('"', '_')
-                proj = proj_base / safe_rel
+                proj = proj_base / rel
                 shell = proj / "glide_shell"
                 shell.mkdir(parents=True, exist_ok=True)
                 for name in ("KI_ANLEITUNG_NEUE_PROJEKTE.md", "AI_GUIDE_NEW_PROJECTS.md",
                              "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
                     (shell / name).write_text("# Test\n", encoding="utf-8")
 
-                agents, _, _ = werkzeug.generiere_bootstrap_inhalte(proj.parent, shell)
+                agents, _, _ = werkzeug.generiere_bootstrap_inhalte(proj_base, shell)
                 ps_cmd_full = [part for part in agents.split("`") if "glide_shell.selftest" in part and "Set-Location" in part][0]
                 set_loc_part = ps_cmd_full.split("; python")[0]
 
@@ -1007,19 +1011,20 @@ class Uebernahme(unittest.TestCase):
                 marker_ok = shell.parent / "marker_ok.txt"
                 if marker_ok.exists():
                     marker_ok.unlink()
-                cmd_ok = f"{set_loc_part}; [IO.File]::WriteAllText('{marker_ok.name}', 'ok')"
-                res_ok = subprocess.run([pwsh, "-NoProfile", "-Command", cmd_ok], cwd=str(proj.parent), capture_output=True, text=True)
+                cmd_ok = f"{set_loc_part}; Set-Content -LiteralPath '{marker_ok.name}' -Value 'ok'"
+                res_ok = subprocess.run([pwsh, "-NoProfile", "-Command", cmd_ok], cwd=str(proj_base), capture_output=True, text=True)
                 self.assertEqual(res_ok.returncode, 0, f"{pwsh} fehlgeschlagen auf {rel}: {res_ok.stderr}")
                 self.assertTrue(marker_ok.exists(), f"Marker wurde in {shell.parent} nicht erzeugt")
                 marker_ok.unlink()
 
                 # Negativtest: Zielverzeichnis fehlt -> Set-Location -ErrorAction Stop bricht sofort mit Fehler ab
-                marker_fail = proj.parent / "marker_fail.txt"
+                marker_fail = proj_base / "marker_fail.txt"
                 if marker_fail.exists():
                     marker_fail.unlink()
-                bad_set_loc = f"Set-Location -LiteralPath '{safe_rel}/nicht_vorhanden_unterordner' -ErrorAction Stop"
-                cmd_fail = f"{bad_set_loc}; [IO.File]::WriteAllText('{marker_fail.name}', 'fail')"
-                res_fail = subprocess.run([pwsh, "-NoProfile", "-Command", cmd_fail], cwd=str(proj.parent), capture_output=True, text=True)
+                ps_escaped_rel = rel.replace("'", "''")
+                bad_set_loc = f"Set-Location -LiteralPath '{ps_escaped_rel}/nicht_vorhanden_unterordner' -ErrorAction Stop"
+                cmd_fail = f"{bad_set_loc}; Set-Content -LiteralPath '{marker_fail.name}' -Value 'fail'"
+                res_fail = subprocess.run([pwsh, "-NoProfile", "-Command", cmd_fail], cwd=str(proj_base), capture_output=True, text=True)
                 self.assertNotEqual(res_fail.returncode, 0, f"{pwsh} hätte abbrechen müssen bei nicht existentem Pfad {rel}")
                 self.assertFalse(marker_fail.exists(), f"Folgebefehl wurde trotz fehlerhaftem Pfad ausgeführt unter {pwsh}!")
                 self.assertFalse((shell.parent / "marker_fail.txt").exists())
