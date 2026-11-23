@@ -14,6 +14,7 @@ Der Quellstand 1.0.2 schließt die menschliche Sicht- und Bedienabnahme (Release
 - **Kollisionsfreier Bild- und Tabellenumfluss:** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, sodass Tabellenzeilen und Bilder nicht überlappen.
 - **Natürliche Datumswörter:** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog und formatiert sie direkt in das Tagesdatum.
 - **Multi-Agent Bootstrap & Transaktionssicherheit (PR #193):** Rollback-Fehlererfassung ohne `except: pass`, Symlink- und Dateitypschutz, inhaltliche Bootstrap-Prüfung (`--pruefen --agenten-bootstrap`), verschachtelte Projektlayouts und relative Links.
+- **Regressionstests & Shell-Integritätshärtung (T340):** 15 neue Regressionstests (`test_release_1_0_2_regressions.py`), defensive Typprüfung in `lokale_abweichungen` und JSON-Decode-Härtung in `selftest.py`.
 
 
 ## 1.0.1 – 22.11.2026 (Quellstand, nicht separat veröffentlicht)

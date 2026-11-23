@@ -3961,8 +3961,11 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - Paketierungsvorlagen (`glide.rb`, `glide_setup.iss`, `winget/manifests/.../1.0.2/`) aktualisiert.
   - Öffentliche Projektdateien (`README.md`, `README.de.md`, `AGENTS.md`, `SECURITY.md`, `CHANGELOG.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`) angepasst.
 - **C – Prüfung:**
+  - `test_release_1_0_2_regressions.py` (T340): 15/15 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
   - `test_agenten_skill.py`: 18/18 Tests grün.
   - `test_i18n.py`: 24/24 Tests grün.
+  - `ci_grundstufe.py`: 19/19 Schritte grün.
   - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - `test_shell_selbsttest.py`: 13/13 Checks grün.
 - **D – Rest:**
   - Veröffentlichung, Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei Inhaberfreigabe.

@@ -241,7 +241,11 @@ def check_manifest(_root=None, folder=None):
         expect(is_glide_tree, "manifest: SHELL_MANIFEST.json is missing in consumer copy")
         return "source tree without manifest"
     expect(not path.is_symlink(), "manifest: SHELL_MANIFEST.json must not be a symlink")
-    data = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        expect(False, f"manifest: SHELL_MANIFEST.json is not valid JSON ({exc})")
+    expect(isinstance(data, dict), "manifest: SHELL_MANIFEST.json is not a JSON object")
     files = data.get("dateien")
     expect(data.get("paket") == "glide_shell" and isinstance(files, dict) and "__init__.py" in files,
            "manifest: package name or file list invalid")

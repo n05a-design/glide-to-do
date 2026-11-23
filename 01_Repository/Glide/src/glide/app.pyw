@@ -12873,7 +12873,7 @@ class PageEditor(RichNoteEditor):
             else:
                 fluss = 'imgflow:' + kennung
                 if info['mode'] == 'left':
-                    text.tag_configure(fluss, lmargin1=breite + self.IMAGE_GAP, lmargin2=breite + self.IMAGE_GAP)
+                    text.tag_configure(fluss, lmargin1=breite + self.IMAGE_GAP, lmargin2=breite + self.IMAGE_GAP, wrap='word')
                 else:
                     text.tag_configure(fluss, rmargin=breite + self.IMAGE_GAP, wrap='word')
                 if schub:

@@ -13,6 +13,7 @@
 | CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | Alle 19 Schritte vollständig grün (Exitcode 0) |
 | Standprüfung | `python3 -B tests/tools/standpruefung.py` | 148 Dokumente fehlerfrei (Exitcode 0) |
 | Lieferabgleich | `python3 -B scripts/pflege/abgleich_07.py` | 110 Code-Dateien, 169 Ressourcen bytegleich (0 Abweichungen) |
+| Regressionstests 1.0.2 | `tests/unit/test_release_1_0_2_regressions.py` (T340) | 15/15 Tests grün: Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel-Skalierung/Clear, Fußleisten-Dichte, Wortumbruch bei Tabellenumfluss, Fälligkeitswörter ('today'/'heute') und Shell-Manifest-Härtung |
 
 ## Multi-Agent Readiness, Bootstrap & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 23.11.2026)
 

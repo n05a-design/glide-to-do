@@ -29,7 +29,7 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 - **Kollisionsfreier Bild- und Tabellenumfluss (Schritt 2):** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, so dass Tabellen und Bildflächen niemals überlappen. Stadtseiten mit Tabellen (Wuppertal, Berlin) nutzen im Showcase linksbündige Bilder (`mode='left'`), und alle 3 Modi (`left`, `center`, `right`) sind im Showcase vertreten.
 - **Tastatur & Editor (Schritte 3 & 4):** Vom Inhaber vollständig positiv abgenommen („Passt komplett“, „Funktioniert perfekt!“).
 - **Natürliche Datumswörter (Schritt 5):** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog.
-- **Geprüfter Stand:** `pruefe_showcase.py` (DE und EN), `ci_grundstufe.py` (19/19 Schritte) und `standpruefung.py` (148 Dokumente) vollständig grün; `07_Python-Versionen` bytegleich abgeglichen.
+- **Geprüfter Stand:** `pruefe_showcase.py` (DE und EN), `ci_grundstufe.py` (19/19 Schritte), `standpruefung.py` (148 Dokumente) und `test_release_1_0_2_regressions.py` (T340, 15/15 Tests) vollständig grün; `07_Python-Versionen` bytegleich abgeglichen.
 
 
 ### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 23.11.2026)
