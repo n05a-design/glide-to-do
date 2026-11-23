@@ -13,7 +13,7 @@
 | CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | Alle 19 Schritte vollständig grün (Exitcode 0) |
 | Standprüfung | `python3 -B tests/tools/standpruefung.py` | 148 Dokumente fehlerfrei (Exitcode 0) |
 | Lieferabgleich | `python3 -B scripts/pflege/abgleich_07.py` | 110 Code-Dateien, 169 Ressourcen bytegleich (0 Abweichungen) |
-| Regressionstests 1.0.2 | `tests/unit/test_release_1_0_2_regressions.py` (T340) | 19/19 Tests grün: Echte Tk-Widget-Integrationsprüfungen für DueField-Lebenszyklus, adaptiven Cover-Zuschnitt (300/500/1000px, Hoch-/Querformat, Skalierungsgrenze, Fokus 38 %, Bildfehler-Fallback), Pixel-Eckstempel-Lebenszyklus mit echtem DrawingModel, Scroll-Repositionierung und vollständiger Tag-/Widget-Bereinigung, Fußleisten-Dichte, Wortumbruch bei Bild- und Tabellenumfluss, Fälligkeitswörter ('today'/'heute'), Shell-Manifest-Integrität und sichere POSIX/PowerShell-Bootstrap-Kommandos |
+| Regressionstests 1.0.2 | `tests/unit/test_release_1_0_2_regressions.py` (T340) | 20/20 Tests grün: Echte Tk-Widget-Integrationsprüfungen für DueField-Lebenszyklus und echte Dateipersistenz, adaptiven Cover-Zuschnitt (300/500/1000px, Hoch-/Querformat, Skalierungsgrenze, Fokus 38 %, Bildfehler-Fallback), Pixel-Eckstempel-Lebenszyklus mit echtem DrawingModel, Scroll-Repositionierung, Offscreen-Unmapping und vollständiger Tag-/Widget-Bereinigung, Fußleisten-Dichte, Wortumbruch bei Bild- und Tabellenumfluss, Fälligkeitswörter ('today'/'heute'), Shell-Manifest-Integrität und sichere POSIX/PowerShell-Bootstrap-Kommandos |
 
 ## Multi-Agent Readiness, Bootstrap & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 23.11.2026)
 

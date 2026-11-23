@@ -68,8 +68,12 @@ def get_shared_root():
         try:
             _SHARED_ROOT = tk.Tk()
             _SHARED_ROOT.withdraw()
-        except tk.TclError:
+        except tk.TclError as exc:
+            if os.environ.get("GLIDE_REQUIRE_TK") == "1":
+                raise RuntimeError(f"GLIDE_REQUIRE_TK=1 ist aktiv, aber Tk konnte nicht initialisiert werden: {exc}") from exc
             _SHARED_ROOT = False
+    if _SHARED_ROOT is False and os.environ.get("GLIDE_REQUIRE_TK") == "1":
+        raise RuntimeError("GLIDE_REQUIRE_TK=1 ist aktiv, aber kein Tk-Display verfügbar!")
     return _SHARED_ROOT if _SHARED_ROOT is not False else None
 
 
@@ -177,6 +181,8 @@ class CoverCropAndLayoutTests(unittest.TestCase):
         app_mod = lade_app()
         root = get_shared_root()
         if not root:
+            if os.environ.get("GLIDE_REQUIRE_TK") == "1":
+                self.fail("GLIDE_REQUIRE_TK=1: Kein Display verfuegbar")
             self.skipTest("Kein Display verfuegbar")
 
         class CoverAppAdapter:
@@ -219,6 +225,8 @@ class CoverCropAndLayoutTests(unittest.TestCase):
         app_mod = lade_app()
         root = get_shared_root()
         if not root:
+            if os.environ.get("GLIDE_REQUIRE_TK") == "1":
+                self.fail("GLIDE_REQUIRE_TK=1: Kein Display verfuegbar")
             self.skipTest("Kein Display verfuegbar")
         for child in list(root.winfo_children()):
             try:
@@ -461,9 +469,13 @@ class WidgetIntegration102Tests(unittest.TestCase):
     def setUpClass(cls):
         cls.root = get_shared_root()
         cls.tk_available = cls.root is not None
+        if not cls.tk_available and os.environ.get("GLIDE_REQUIRE_TK") == "1":
+            raise RuntimeError("GLIDE_REQUIRE_TK=1 ist gesetzt, aber kein Tk-Display verfügbar!")
 
     def setUp(self):
         if not self.tk_available:
+            if os.environ.get("GLIDE_REQUIRE_TK") == "1":
+                self.fail("GLIDE_REQUIRE_TK=1: Kein Tkinter Display verfuegbar")
             self.skipTest("Kein Tkinter Display verfuegbar")
         for child in list(self.root.winfo_children()):
             try:
@@ -487,13 +499,9 @@ class WidgetIntegration102Tests(unittest.TestCase):
             except tk.TclError:
                 pass
 
-    def test_due_field_on_date_focus_out_formatting(self):
-        """Testet echtes DueField-Widget mit Parsing von 'today', 'tomorrow', 'yesterday' und read()."""
-        app_mod = lade_app()
-        ref_today = date(2026, 11, 23)
-
-        class AppAdapter:
-            def __init__(self, today_ref):
+    def _make_due_app_adapter(self, app_mod, today_ref=None):
+        class DueAppAdapter:
+            def __init__(self, t_ref):
                 self.theme = {
                     "input": "#ffffff", "text": "#000000", "selection": "#0000ff",
                     "selection_text": "#ffffff", "bg": "#f0f0f0", "card": "#ffffff",
@@ -508,7 +516,7 @@ class WidgetIntegration102Tests(unittest.TestCase):
                 self.FIELD_PAD_X = 4
                 self.FIELD_PAD_Y = 2
                 self.ICONS = {"calendar": "cal"}
-                self._today_ref = today_ref
+                self._today_ref = t_ref or date.today()
 
             def _make_field_label(self, parent, text):
                 return tk.Label(parent, text=text)
@@ -547,7 +555,13 @@ class WidgetIntegration102Tests(unittest.TestCase):
                 f = tk.Frame(b)
                 return b, f
 
-        app_obj = AppAdapter(ref_today)
+        return DueAppAdapter(today_ref)
+
+    def test_due_field_on_date_focus_out_formatting(self):
+        """Testet echtes DueField-Widget mit Parsing von 'today', 'tomorrow', 'yesterday' und read()."""
+        app_mod = lade_app()
+        ref_today = date(2026, 11, 23)
+        app_obj = self._make_due_app_adapter(app_mod, ref_today)
         field = app_mod.DueField(self.root, app_obj, compact=True)
         entry = field.date_entry
 
@@ -607,6 +621,89 @@ class WidgetIntegration102Tests(unittest.TestCase):
 
         field.destroy()
 
+    def test_due_field_real_persistence_lifecycle(self):
+        """Verifiziert den vollständigen Persistenzpfad natürlicher Fälligkeiten über DueField und Dateispeicherung.
+
+        Ablauf:
+        1. Aufgabe anlegen
+        2. Natürliche Eingabe ('today' und 'tomorrow') im DueField-Widget tätigen
+        3. Dialog-Übernahme simulieren (<Return>/FocusOut und read())
+        4. Echten atomaren Speichermechanismus (write_json_atomic mit Format 26) ausführen
+        5. Datei von Platte neu einlesen und gespeichertes ISO-Datum validieren
+        6. Reimportiertes Datum im DueField erneut darstellen
+        7. Sicherstellen, dass das angezeigte formatiertes Datum zum gespeicherten ISO-Datum passt.
+        """
+        app_mod = lade_app()
+        ref_today = date.today()
+        ref_tomorrow = ref_today + timedelta(days=1)
+
+        with tempfile.TemporaryDirectory(prefix="glide-due-persist-") as temp_dir:
+            save_path = Path(temp_dir) / "aufgaben.json"
+
+            # 1. & 2. Aufgabe mit DueField bearbeiten: 'today'
+            app_mock_today = self._make_due_app_adapter(app_mod, ref_today)
+            field_today = app_mod.DueField(self.root, app_mock_today, due=None, compact=True)
+            field_today.date_entry.delete(0, tk.END)
+            field_today.date_entry.insert(0, "today")
+            field_today._on_date_focus_out()
+            val_today, err_today = field_today.read()
+            self.assertIsNone(err_today)
+            self.assertEqual(val_today, (ref_today.isoformat(), None))
+            iso_today = val_today[0]
+
+            # 3. & 4. In Datenstruktur überführen und atomar speichern
+            item1 = {"id": "t_persist_today", "title": "Aufgabe Heute", "due": iso_today}
+            payload1 = {
+                "format": 26,
+                "version": "1.0.2",
+                "lists": [{"id": "list_due_1", "name": "Persistenzliste", "items": [item1]}]
+            }
+            app_mod.ListApp.write_json_atomic(str(save_path), payload1)
+            self.assertTrue(save_path.is_file())
+
+            # 5. Von Platte neu einlesen
+            loaded1 = json.loads(save_path.read_text(encoding="utf-8"))
+            reloaded_item1 = loaded1["lists"][0]["items"][0]
+            self.assertEqual(reloaded_item1["due"], ref_today.isoformat())
+
+            # 6. & 7. Erneut im DueField darstellen und prüfen
+            field_reloaded1 = app_mod.DueField(self.root, app_mock_today, due=reloaded_item1["due"], compact=True)
+            self.assertEqual(field_reloaded1.date_entry.get(), ref_today.strftime("%d.%m.%Y"))
+            self.assertEqual(field_reloaded1.read(), ((ref_today.isoformat(), None), None))
+
+            field_today.destroy()
+            field_reloaded1.destroy()
+
+            # Gegenprobe mit 'tomorrow'
+            app_mock_tom = self._make_due_app_adapter(app_mod, ref_today)
+            field_tomorrow = app_mod.DueField(self.root, app_mock_tom, due=None, compact=True)
+            field_tomorrow.date_entry.delete(0, tk.END)
+            field_tomorrow.date_entry.insert(0, "tomorrow")
+            field_tomorrow._on_date_focus_out()
+            val_tom, err_tom = field_tomorrow.read()
+            self.assertIsNone(err_tom)
+            self.assertEqual(val_tom, (ref_tomorrow.isoformat(), None))
+            iso_tom = val_tom[0]
+
+            item2 = {"id": "t_persist_tom", "title": "Aufgabe Morgen", "due": iso_tom}
+            payload2 = {
+                "format": 26,
+                "version": "1.0.2",
+                "lists": [{"id": "list_due_2", "name": "Persistenzliste 2", "items": [item2]}]
+            }
+            app_mod.ListApp.write_json_atomic(str(save_path), payload2)
+
+            loaded2 = json.loads(save_path.read_text(encoding="utf-8"))
+            reloaded_item2 = loaded2["lists"][0]["items"][0]
+            self.assertEqual(reloaded_item2["due"], ref_tomorrow.isoformat())
+
+            field_reloaded2 = app_mod.DueField(self.root, app_mock_tom, due=reloaded_item2["due"], compact=True)
+            self.assertEqual(field_reloaded2.date_entry.get(), ref_tomorrow.strftime("%d.%m.%Y"))
+            self.assertEqual(field_reloaded2.read(), ((ref_tomorrow.isoformat(), None), None))
+
+            field_tomorrow.destroy()
+            field_reloaded2.destroy()
+
     def test_page_editor_flow_around_and_table_wrap(self):
         """Prüft den produktiven Layoutpfad des Seiteneditors mit echtem Text, Tabelle und Bildumfluss.
 
@@ -649,6 +746,7 @@ class WidgetIntegration102Tests(unittest.TestCase):
                 self.text = t
             flow_around = app_mod.PageEditor.flow_around
             ypixels = app_mod.PageEditor.ypixels
+            column_bounds = app_mod.PageEditor.column_bounds
 
         editor = FlowEditorAdapter(text)
 
@@ -674,9 +772,44 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertTrue(bool(ranges_l1))
         self.assertTrue(bool(ranges_r1))
 
-        # Umfluss darf sich nicht mit Tabelle überschneiden
+        # Geometrische Überprüfungen via Tk-API (bbox, dlineinfo, column_bounds):
+        # 1. Text neben linksbündigem Bild:
+        # Erste Zeile des Umflusses muss messbar um den linken Rand versetzt sein
+        l1_start = ranges_l1[0]
+        dline_normal = text.dlineinfo('1.0')
+        dline_flow_l = text.dlineinfo(l1_start)
+        if dline_normal and dline_flow_l:
+            self.assertGreaterEqual(dline_flow_l[0], 120)
+            self.assertGreater(dline_flow_l[0], dline_normal[0])
+
+        # 2. Text neben rechtsbündigem Bild:
+        r1_start = ranges_r1[0]
+        dline_flow_r = text.dlineinfo(r1_start)
+        if dline_flow_r:
+            self.assertLessEqual(dline_flow_r[0] + dline_flow_r[2], text.winfo_width())
+
+        # 3. Tabellenbereich: Tag 'table' besitzt wrap='none' und lmargin1=14
+        # Tabelle darf keine Umflussträger enthalten (Ausschluss räumlicher Überlappung)
         table_start_idx = text.index(anchor_table)
+        table_end_idx = text.index(end_table)
         self.assertTrue(text.compare(ranges_l1[-1], '<=', table_start_idx))
+        self.assertTrue(text.compare(ranges_r1[0], '>=', table_end_idx))
+
+        # 4. Verhalten bei schmalem Fenster (400 px) vs breitem Fenster (850 px)
+        self.root.geometry("400x450")
+        self.root.update()
+        rand_s, spalte_s = editor.column_bounds()
+        self.assertLessEqual(spalte_s, 400)
+        editor.flow_around('imgflow:l1', anchor_l1, 70, 'l1')
+        self.root.update()
+
+        self.root.geometry("850x550")
+        self.root.update()
+        rand_b, spalte_b = editor.column_bounds()
+        self.assertGreater(spalte_b, spalte_s)
+        editor.flow_around('imgflow:l1', anchor_l1, 70, 'l1')
+        self.root.update()
+        self.assertTrue(bool(text.tag_ranges('imgflow:l1')))
 
         text.destroy()
 
@@ -698,6 +831,8 @@ class WidgetIntegration102Tests(unittest.TestCase):
 
         long_para = "Titel der Seite\n" + ("Fließtext der Seite, der neben dem Pixel-Ecksymbol umbricht. " * 6) + "\n\n"
         text.insert('1.0', long_para)
+        for i in range(80):
+            text.insert('end', f"Fortlaufende Inhaltszeile {i} für verlässliche Scroll-Tests.\n")
         self.root.update()
 
         class FullCornerEditorAdapter:
@@ -728,7 +863,7 @@ class WidgetIntegration102Tests(unittest.TestCase):
 
         editor = FullCornerEditorAdapter(text)
 
-        # 1. Erzeugung & Anfangsplatzierung
+        # 1. Erzeugung & exakte Anfangsplatzierung
         doc1 = glide_drawing.DrawingModel().to_document()
         editor.show_corner_cover({'kind': 'drawing', 'document': doc1})
         self.root.update()
@@ -737,24 +872,53 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertIsNotNone(lbl1)
         self.assertTrue(lbl1.winfo_exists())
         self.assertEqual(lbl1.winfo_manager(), "place")
-        self.assertGreater(lbl1.winfo_x(), 100)
+        
+        # Koordinatenprüfung gegen die Produktionsberechnung in place_corner_cover
+        links, spalte = editor.column_bounds()
+        req_w = lbl1.winfo_reqwidth()
+        exp_x = links + spalte - req_w
+        exp_y = editor.line_top('1.0') + 4
+        self.assertEqual(int(lbl1.place_info()['x']), exp_x)
+        self.assertEqual(int(lbl1.place_info()['y']), exp_y)
         self.assertEqual(text.tag_cget('cornerflow', 'wrap'), 'word')
         self.assertTrue(bool(text.tag_ranges('cornerflow')))
 
-        # 2. Scrollen im Text & Neupositionierung
+        # 2. Scrollen im Text: Partielle Verschiebung und vollständiges Ausblenden (keine Geister-Overlays)
+        # 2a. Leichtes Scrollen: Y-Koordinate passt sich an
         text.yview_scroll(2, 'units')
         self.root.update()
         editor.place_corner_cover()
         self.root.update()
-        # Symbol bleibt gemappt oder wird bei weitem Scrollen ausgeblendet
-        self.assertTrue(lbl1.winfo_exists())
+        new_y = editor.line_top('1.0') + 4
+        if new_y + lbl1.winfo_reqheight() >= 0 and new_y <= text.winfo_height() and lbl1.place_info():
+            self.assertEqual(int(lbl1.place_info()['y']), new_y)
 
-        # 3. Layoutaktualisierung bei Größenänderung
+        # 2b. Weites Scrollen: Zeile 1 weit außerhalb des Sichtbereichs -> place_forget() muss greifen!
+        text.yview_moveto(0.6)
+        self.root.update()
+        editor.place_corner_cover()
+        self.root.update()
+        self.assertFalse(bool(lbl1.place_info()), "Aus dem Sichtbereich gescrolltes Ecksymbol muss mit place_forget entkoppelt werden")
+
+        # 2c. Zurück an den Anfang scrollen -> Symbol wird wieder exakt platziert
+        text.yview_moveto(0.0)
+        self.root.update()
+        editor.place_corner_cover()
+        self.root.update()
+        self.assertTrue(bool(lbl1.place_info()))
+        self.assertEqual(int(lbl1.place_info()['x']), exp_x)
+        self.assertEqual(int(lbl1.place_info()['y']), exp_y)
+
+        # 3. Layoutaktualisierung bei Fenstergrößenänderung
+        self.root.geometry("850x550")
+        self.root.update()
         editor.layout_corner_cover()
         self.root.update()
+        new_links, new_spalte = editor.column_bounds()
+        self.assertEqual(int(lbl1.place_info()['x']), new_links + new_spalte - req_w)
         self.assertTrue(bool(text.tag_ranges('cornerflow')))
 
-        # 4. Ersetzen durch ein anderes Cover
+        # 4. Ersetzen durch ein anderes Cover (Atomarität)
         doc2 = glide_drawing.DrawingModel().to_document()
         editor.show_corner_cover({'kind': 'drawing', 'document': doc2})
         self.root.update()
@@ -762,7 +926,7 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertIsNotNone(lbl2)
         self.assertTrue(lbl2.winfo_exists())
 
-        # 5. Vollständige Bereinigung via clear_corner_cover
+        # 5. Vollständige Bereinigung via clear_corner_cover (keine Reste, keine Geistertags)
         editor.clear_corner_cover()
         self.root.update()
         self.assertIsNone(editor._corner_cover)
