@@ -408,7 +408,11 @@ Die Shell stellt neutrale Mechanismen bereit, die der Host mit seinen Theme-Wert
 - **Glyphenmetrik (`custom_controls.set_ink_provider`):** Rechner für genaue Textpositionierung und optische Mitte.
 - **Hintergrund (`custom_controls.set_backdrop_painter`):** Zeichnet themespezifische Verläufe oder Flächen auf Canvas.
 - **Farben & Theme (`system_appearance.resolve`):** Host übergibt Farbwörterbücher für Hell/Dunkel (`{"light": ..., "dark": ...}`) und löst sie systemabhängig auf.
-- **Tastatur & Menüs (`desktop_adapter`, `app_host`):** Menübäume und Tastaturkürzel (`primary_shortcuts`) passen sich an OS-Konventionen (macOS Command vs. Windows/Linux Control) an.
+- **Tastatur & Menüs (`desktop_adapter`, `app_host`):** Menübäume und Tastaturkürzel (`primary_shortcuts`, `bind_shortcuts`) passen sich an OS-Konventionen (macOS Command vs. Windows/Linux Control) an; sauberes Schließen und Quit-Handler über `install_close`.
+- **Modale Dialoge (`modal_session.create_dialog`, `modal_session.run_modal`):** Dialogfabrik und modale Sitzungen mit Fokusverwaltung.
+- **Übergänge & Animationen (`motion.Transitions`):** Unterbrechbare UI-Animationen mit Lebenszyklus-Bindung.
+- **Undo / Redo (`command_history.CommandHistory`):** Universelle Befehlshistorie für anwendungsneutrale Rückgängig-/Wiederholen-Aktionen.
+- **Fenstermaße & Begrenzung (`window_geometry.clamp`, `window_geometry.format_geometry`):** Schutz von Mindestgrößen und Schirmgrenzen.
 
 ### 3. Produktspezifische Gestaltung (Freiheit des Hosts)
 

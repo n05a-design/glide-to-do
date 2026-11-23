@@ -57,6 +57,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.parse
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide" / "glide_shell"
@@ -311,7 +312,392 @@ def _verweigern(ordner, manifest, fehler, quelle):
     return gruende
 
 
-def uebernehmen(ordner, ersetzen=False, quelle=None):
+PROJEKT_WURZEL_MARKER = (
+    ".git",
+    "pyproject.toml",
+    "setup.py",
+    "setup.cfg",
+    "Pipfile",
+    "requirements.txt",
+    "AGENTS.md",
+    "CLAUDE.md",
+)
+
+
+def ermittle_projekt_root(ordner, explizit=None):
+    """Ermittelt die Projektwurzel für den Agenten-Bootstrap.
+
+    Unterscheidet eindeutig zwischen:
+    - Glide-Repository-Wurzel (wird als Ziel abgewiesen)
+    - Consumer-Projektwurzel (wo AGENTS.md, .agents/, .claude/ platziert werden)
+    - Shell-Zielverzeichnis (ordner, wo glide_shell/ liegt)
+    """
+    quelle = QUELLE.resolve()
+    repo_src = (REPO / "src").resolve()
+
+    if explizit is not None:
+        root = pathlib.Path(explizit).expanduser().resolve()
+        if root == quelle or quelle in root.parents or repo_src in root.parents or root == REPO.resolve():
+            raise ValueError(f"Projektwurzel {root} darf nicht im Glide-Repository liegen")
+        if root.exists() and not root.is_dir():
+            raise ValueError(f"Projektwurzel {root} ist kein Verzeichnis")
+        return root
+
+    # Automatische Erkennung: Aufstieg von ordner.parent
+    start = ordner.parent.resolve()
+    kandidat = start
+    while True:
+        if kandidat == quelle or quelle in kandidat.parents or repo_src in kandidat.parents or kandidat == REPO.resolve():
+            break
+        for marker in PROJEKT_WURZEL_MARKER:
+            if (kandidat / marker).exists():
+                return kandidat
+        if kandidat.parent == kandidat:
+            break
+        kandidat = kandidat.parent
+
+    # Layout-Heuristik für Standard-Python-Strukturen (z. B. projekt/src/app/glide_shell)
+    if start.parent.name == "src" and start.parent.parent != start.parent:
+        return start.parent.parent
+    if start.name == "src" and start.parent != start:
+        return start.parent
+
+    # Flache Struktur als Standard-Fallback: consumer/glide_shell -> consumer
+    return start
+
+
+def _rel_url(ziel_pfad, basis_ordner):
+    """Berechnet einen relativen POSIX-Pfad für Markdown-Links mit RFC 3986-Codierung."""
+    rel = os.path.relpath(ziel_pfad, basis_ordner).replace("\\", "/")
+    return urllib.parse.quote(rel, safe="/@:")
+
+
+def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
+    """Erzeugt dynamisch korrekte Inhalte für AGENTS.md und die Skills mit exakten relativen Pfaden."""
+    anleitung_de = shell_ordner / "KI_ANLEITUNG_NEUE_PROJEKTE.md"
+    anleitung_en = shell_ordner / "AI_GUIDE_NEW_PROJECTS.md"
+    startprompt = shell_ordner / "STARTPROMPT_KI.md"
+    design = shell_ordner / "DESIGN_RICHTLINIEN.md"
+    manifest = shell_ordner / "SHELL_MANIFEST.json"
+
+    link_de_root = _rel_url(anleitung_de, projekt_root)
+    link_en_root = _rel_url(anleitung_en, projekt_root)
+    link_prompt_root = _rel_url(startprompt, projekt_root)
+    link_design_root = _rel_url(design, projekt_root)
+    link_manifest_root = _rel_url(manifest, projekt_root)
+
+    rel_shell_from_root = os.path.relpath(shell_ordner, projekt_root).replace("\\", "/")
+    cmd_cd = ""
+    if rel_shell_from_root not in (".", "glide_shell"):
+        parent_dir = rel_shell_from_root.rsplit("/", 1)[0]
+        cmd_cd = f'cd "{parent_dir}" && '
+    selftest_cmd = f"{cmd_cd}python3 -m glide_shell.selftest"
+
+    inhalt_agents = (
+        "# Einstieg für KI-Agenten (Folgeprojekt mit Glide Shell)\n\n"
+        f"Dieses Projekt nutzt die **Glide Shell** (`{rel_shell_from_root}/`) als anwendungsneutrales Desktop- und Tk-Fundament.\n\n"
+        "## Verbindliche Quellen für Agenten\n\n"
+        f"1. **KI-Anleitung für neue Projekte:** [`{rel_shell_from_root}/KI_ANLEITUNG_NEUE_PROJEKTE.md`]({link_de_root}) "
+        f"(Englisch: [`{rel_shell_from_root}/AI_GUIDE_NEW_PROJECTS.md`]({link_en_root}))\n"
+        f"2. **Startprompt für KI-Sitzungen:** [`{rel_shell_from_root}/STARTPROMPT_KI.md`]({link_prompt_root})\n"
+        f"3. **Portabler Designvertrag:** [`{rel_shell_from_root}/DESIGN_RICHTLINIEN.md`]({link_design_root})\n"
+        f"4. **Shell-Manifest:** [`{rel_shell_from_root}/SHELL_MANIFEST.json`]({link_manifest_root})\n"
+        f"5. **Selbsttest der Shell:** `{selftest_cmd}`\n\n"
+        "## Grundregeln\n\n"
+        f"- **Keine Modifikation der Shell:** Die Dateien unter `{rel_shell_from_root}/` werden nicht manuell editiert; Updates erfolgen über `shell_uebernehmen.py`.\n"
+        "- **Fachlogik im Host:** Fachlogik, Domänenmodelle und Fach-UI gehören in das Host-Projekt, nicht in die Shell.\n"
+        "- **Designvertrag einhalten:** Universelle Gestaltungsregeln P1–P6, B15 (Knopfschutz), B11 (Hierarchie vor Metadaten), Fokus und Kontrast gelten für alle Oberflächen.\n"
+    )
+
+    skill_agents_dir = projekt_root / ".agents" / "skills" / "glide-shell"
+    link_de_agents = _rel_url(anleitung_de, skill_agents_dir)
+    link_prompt_agents = _rel_url(startprompt, skill_agents_dir)
+    link_design_agents = _rel_url(design, skill_agents_dir)
+    link_manifest_agents = _rel_url(manifest, skill_agents_dir)
+
+    inhalt_skill_agents = (
+        "---\n"
+        "name: glide-shell\n"
+        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
+        "---\n\n"
+        "# Glide Shell – Projektnutzung\n\n"
+        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
+        "## Wichtige Referenzen\n\n"
+        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_agents})\n"
+        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_agents})\n"
+        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_agents})\n"
+        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_agents})\n\n"
+        "## Regeln\n\n"
+        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
+        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
+        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
+    )
+
+    skill_claude_dir = projekt_root / ".claude" / "skills" / "glide-shell"
+    link_de_claude = _rel_url(anleitung_de, skill_claude_dir)
+    link_prompt_claude = _rel_url(startprompt, skill_claude_dir)
+    link_design_claude = _rel_url(design, skill_claude_dir)
+    link_manifest_claude = _rel_url(manifest, skill_claude_dir)
+
+    inhalt_skill_claude = (
+        "---\n"
+        "name: glide-shell\n"
+        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
+        "---\n\n"
+        "# Glide Shell – Projektnutzung\n\n"
+        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
+        "## Wichtige Referenzen\n\n"
+        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_claude})\n"
+        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_claude})\n"
+        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_claude})\n"
+        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_claude})\n\n"
+        "## Regeln\n\n"
+        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
+        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
+        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
+    )
+
+    return inhalt_agents, inhalt_skill_agents, inhalt_skill_claude
+
+
+class BootstrapTransaction:
+    """Verwaltet den transaktionssicheren Bootstrap mit Snapshot und Rollback."""
+
+    def __init__(self, projekt_root, shell_ordner, ersetzen=False):
+        self.projekt_root = pathlib.Path(projekt_root).resolve()
+        self.shell_ordner = pathlib.Path(shell_ordner).resolve()
+        self.ersetzen = ersetzen
+        self.files_before = {}
+        self.dirs_created = []
+
+    def prepare(self):
+        targets = [
+            self.projekt_root / "AGENTS.md",
+            self.projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md",
+            self.projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md",
+        ]
+        for t in targets:
+            try:
+                t.parent.resolve().relative_to(self.projekt_root)
+            except ValueError:
+                raise ValueError(f"Sicherheitsfehler: Zielpfad {t} liegt außerhalb der Projektwurzel {self.projekt_root}")
+
+            if t.is_symlink():
+                link_ziel = (t.parent / os.readlink(t)).resolve()
+                try:
+                    link_ziel.relative_to(self.projekt_root)
+                except ValueError:
+                    raise ValueError(f"Sicherheitsfehler: Symlink {t.name} verweist auf externes Ziel außerhalb des Projekts ({link_ziel})")
+                self.files_before[t] = ("symlink", os.readlink(t))
+            elif t.is_dir():
+                raise ValueError(f"{t}: Zielpfad ist ein Verzeichnis (Dateityp unzulässig)")
+            elif t.is_file():
+                self.files_before[t] = ("file", t.read_bytes())
+            elif t.exists():
+                raise ValueError(f"{t}: Zielpfad ist ein unzulässiger Dateisystemtyp")
+            else:
+                self.files_before[t] = ("absent", None)
+
+    def execute(self):
+        inhalt_agents, inhalt_agents_skill, inhalt_claude_skill = generiere_bootstrap_inhalte(
+            self.projekt_root, self.shell_ordner
+        )
+        meldungen = []
+        agents_md = self.projekt_root / "AGENTS.md"
+        skill_agents = self.projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        skill_claude = self.projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+
+        plan = [
+            (agents_md, inhalt_agents, "Agenten-Einstiegspunkt"),
+            (skill_agents, inhalt_agents_skill, "Antigravity/Codex-Skill"),
+            (skill_claude, inhalt_claude_skill, "Claude-Skill"),
+        ]
+
+        for target_file, content, label in plan:
+            file_type, old_data = self.files_before.get(target_file, ("absent", None))
+            existed = (file_type != "absent")
+            if existed and not self.ersetzen:
+                meldungen.append(f"{target_file.relative_to(self.projekt_root)}: existiert bereits (unverändert beibehalten)")
+                continue
+
+            if target_file.is_symlink():
+                target_file.unlink()
+
+            cur = target_file.parent
+            parents_to_create = []
+            while cur != self.projekt_root and not cur.exists():
+                parents_to_create.append(cur)
+                cur = cur.parent
+            for p in reversed(parents_to_create):
+                p.mkdir(parents=True, exist_ok=True)
+                if p not in self.dirs_created:
+                    self.dirs_created.append(p)
+
+            schreiben_atomar(target_file, content.encode("utf-8"))
+            action = "aktualisiert" if existed else "angelegt"
+            meldungen.append(f"{target_file.relative_to(self.projekt_root)}: {action} ({label})")
+
+        return meldungen
+
+    def rollback(self):
+        """Führt Rollback aus und gibt eine Liste aller aufgetretenen Fehler zurück.
+
+        Gibt eine leere Liste zurück, wenn der Rollback vollständig und verifiziert erfolgreich war.
+        """
+        errors = []
+        for target_file, (file_type, old_data) in self.files_before.items():
+            try:
+                if file_type == "absent":
+                    target_file.unlink(missing_ok=True)
+                elif file_type == "file":
+                    if target_file.is_symlink() or target_file.is_dir():
+                        target_file.unlink(missing_ok=True)
+                    schreiben_atomar(target_file, old_data)
+                elif file_type == "symlink":
+                    target_file.unlink(missing_ok=True)
+                    target_file.symlink_to(old_data)
+            except Exception as exc:
+                errors.append(f"{target_file.name}: Wiederherstellung fehlgeschlagen ({exc})")
+
+        for d in reversed(self.dirs_created):
+            try:
+                if d.exists() and not any(d.iterdir()):
+                    d.rmdir()
+            except Exception as exc:
+                errors.append(f"{d.name}: Verzeichnisbereinigung fehlgeschlagen ({exc})")
+
+        # Integritätsprüfung nach Rollback
+        for target_file, (file_type, old_data) in self.files_before.items():
+            try:
+                if file_type == "absent":
+                    if target_file.is_symlink() or target_file.exists():
+                        errors.append(f"{target_file.name}: Datei sollte nach Rollback nicht existieren")
+                elif file_type == "file":
+                    if target_file.is_symlink():
+                        errors.append(f"{target_file.name}: ist nach Rollback symbolischer Link statt Datei")
+                    elif not target_file.is_file():
+                        errors.append(f"{target_file.name}: fehlt nach Rollback")
+                    elif target_file.read_bytes() != old_data:
+                        errors.append(f"{target_file.name}: Dateiinhalt weicht nach Rollback ab")
+                elif file_type == "symlink":
+                    if not target_file.is_symlink():
+                        errors.append(f"{target_file.name}: ist nach Rollback kein symbolischer Link")
+                    elif os.readlink(target_file) != old_data:
+                        errors.append(f"{target_file.name}: Symlink-Ziel weicht nach Rollback ab")
+            except Exception as exc:
+                errors.append(f"{target_file.name}: Integritätsprüfung nach Rollback fehlgeschlagen ({exc})")
+
+        return errors
+
+
+def pruefe_bootstrap(projekt_root, shell_ordner):
+    """Prüft den Agenten-Bootstrap inhaltlich und strukturell.
+
+    Gibt ein Dict zurück: {rel_name: (status, detail_meldung)}
+
+    Statuswerte:
+    - korrekt verwaltet: Entspricht exakt dem aktuellen generierten Standard
+    - gültig angepasst: Eigene Datei, aber mit gültigem YAML-Frontmatter (bei Skills)
+                        und funktionierenden relativen Links zur Shell
+    - veraltet: Datei existiert, aber verweist auf tote Pfade oder alte Shell-Strukturen
+    - beschädigt: Dateisystemfehler, ungültiges YAML-Frontmatter oder beschädigte Syntax
+    - nicht vorhanden: Datei fehlt
+    - nicht überprüfbar: Lesefehler / Berechtigungsproblem
+    """
+    projekt_root = pathlib.Path(projekt_root).resolve()
+    shell_ordner = pathlib.Path(shell_ordner).resolve()
+
+    standard_agents, standard_skill_agents, standard_skill_claude = generiere_bootstrap_inhalte(
+        projekt_root, shell_ordner
+    )
+
+    ziele = [
+        (projekt_root / "AGENTS.md", standard_agents, "AGENTS.md", False),
+        (projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md", standard_skill_agents, ".agents/skills/glide-shell/SKILL.md", True),
+        (projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md", standard_skill_claude, ".claude/skills/glide-shell/SKILL.md", True),
+    ]
+
+    ergebnisse = {}
+
+    for pfad, standard_inhalt, rel_name, is_skill in ziele:
+        if pfad.is_symlink():
+            ergebnisse[rel_name] = ("beschädigt", "symbolischer Link ist unzulässig")
+            continue
+        if pfad.is_dir():
+            ergebnisse[rel_name] = ("beschädigt", "ist ein Verzeichnis statt regulärer Datei")
+            continue
+        if not pfad.exists():
+            ergebnisse[rel_name] = ("nicht vorhanden", "Datei fehlt")
+            continue
+
+        try:
+            inhalt = pfad.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            ergebnisse[rel_name] = ("beschädigt", "kein gültiges UTF-8")
+            continue
+        except OSError as exc:
+            ergebnisse[rel_name] = ("nicht überprüfbar", f"Lesefehler ({exc})")
+            continue
+
+        if inhalt == standard_inhalt:
+            ergebnisse[rel_name] = ("korrekt verwaltet", "entspricht dem aktuellen Standard")
+            continue
+
+        fehlliste = []
+
+        if is_skill:
+            if not inhalt.startswith("---\n"):
+                fehlliste.append("fehlendes YAML-Frontmatter (muss mit '---' beginnen)")
+            else:
+                ende = inhalt.find("\n---\n", 4)
+                if ende == -1:
+                    fehlliste.append("unvollständiges YAML-Frontmatter (schließendes '---' fehlt)")
+                else:
+                    fm = inhalt[4:ende]
+                    if "name:" not in fm or "description:" not in fm:
+                        fehlliste.append("YAML-Frontmatter muss 'name' und 'description' enthalten")
+
+        link_muster = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+        links = link_muster.findall(inhalt)
+        tote_links = []
+        for text, url in links:
+            url_clean = url.strip()
+            if url_clean.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            ziel_rel = urllib.parse.unquote(url_clean.split("#")[0])
+            if not ziel_rel:
+                continue
+            ziel_datei = (pfad.parent / ziel_rel).resolve()
+            if not ziel_datei.exists():
+                tote_links.append(f"{ziel_rel}")
+
+        if tote_links:
+            fehlliste.append(f"tote Dokumentverweise: {', '.join(tote_links[:3])}")
+
+        if "glide_shell" not in inhalt:
+            fehlliste.append("keine Referenz auf glide_shell enthalten")
+
+        if fehlliste:
+            if any("tote Dokumentverweise" in f for f in fehlliste):
+                ergebnisse[rel_name] = ("veraltet", "; ".join(fehlliste))
+            else:
+                ergebnisse[rel_name] = ("beschädigt", "; ".join(fehlliste))
+        else:
+            ergebnisse[rel_name] = ("gültig angepasst", "benutzerdefinierte Inhalte mit gültigen Verweisen und Frontmatter")
+
+    return ergebnisse
+
+
+def bootstrap_agenten(projekt_ordner, shell_ordner=None, ersetzen=False):
+    """Kompatibilitäts-Funktion für Agenten-Bootstrap."""
+    p_root = pathlib.Path(projekt_ordner).resolve()
+    s_ordner = pathlib.Path(shell_ordner).resolve() if shell_ordner else (p_root / PAKET)
+    tx = BootstrapTransaction(p_root, s_ordner, ersetzen=ersetzen)
+    tx.prepare()
+    return tx.execute()
+
+
+def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, projekt_root=None):
     quelle = quelle if quelle is not None else quelle_lesen(unsauber_erlauben=True)
     ordner_existierte = ordner.exists()
     ordner.mkdir(parents=True, exist_ok=True)
@@ -323,7 +709,18 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
                 ordner.rmdir()
             return VERWEIGERT, gruende
 
-    # Vorbereitung Rollback-Sicherung des bestehenden Zustands
+    # Phase 1: Vollständige Vorbereitung der Sicherung (vor Beginn jeder Mutation)
+    bootstrap_tx = None
+    if agenten_bootstrap:
+        try:
+            root_dir = ermittle_projekt_root(ordner, projekt_root)
+            bootstrap_tx = BootstrapTransaction(root_dir, ordner, ersetzen=ersetzen)
+            bootstrap_tx.prepare()
+        except ValueError as fehler_bootstrap:
+            if not ordner_existierte and not any(ordner.iterdir()):
+                ordner.rmdir()
+            return VERWEIGERT, [f"Agenten-Bootstrap abgewiesen: {fehler_bootstrap}"]
+
     backup_temp = tempfile.TemporaryDirectory(prefix="glide-shell-backup-")
     backup_ordner = pathlib.Path(backup_temp.name)
     try:
@@ -338,6 +735,20 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
             elif item.is_dir():
                 shutil.copytree(item, ziel_backup, symlinks=True)
 
+        quell_namen = {p.name for p in ordner.iterdir() if p.name != "__pycache__"}
+        backup_namen = {p.name for p in backup_ordner.iterdir()}
+        if quell_namen != backup_namen:
+            raise RuntimeError(f"Snapshot unvollständig: {quell_namen - backup_namen} fehlt im Backup")
+    except BaseException as fehler_snapshot:
+        backup_temp.cleanup()
+        if not ordner_existierte and not any(ordner.iterdir()):
+            ordner.rmdir()
+        if isinstance(fehler_snapshot, (KeyboardInterrupt, SystemExit)):
+            raise fehler_snapshot
+        return ABWEICHUNG, [f"Sicherung fehlgeschlagen ({fehler_snapshot}) – Zielordner unverändert beibehalten"]
+
+    # Phase 2: Mutation des Zielordners mit garantierter Rollback-Möglichkeit
+    try:
         alt = manifest["dateien"] if manifest and not fehler else {}
         vorhanden = sorted(p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__"))
         meldungen = []
@@ -368,13 +779,21 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
 
         herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
         meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
+        if bootstrap_tx is not None:
+            meldungen.extend(bootstrap_tx.execute())
         return OK, meldungen
 
     except BaseException as fehler_kopie:
-        # Rollback: Zustand exakt wiederherstellen
+        # Rollback: Zustand exakt aus dem verifizierten Backup wiederherstellen
+        rollback_fehler = []
+        if bootstrap_tx is not None:
+            b_errors = bootstrap_tx.rollback()
+            if b_errors:
+                rollback_fehler.extend([f"Bootstrap-Rollback: {e}" for e in b_errors])
+
         try:
-            if not ordner_existierte:
-                shutil.rmtree(ordner, ignore_errors=True)
+            if not ordner_existierte and not any(backup_ordner.iterdir()):
+                shutil.rmtree(ordner, ignore_errors=False)
             else:
                 backup_namen = {p.name for p in backup_ordner.iterdir()}
                 for item in list(ordner.iterdir()):
@@ -382,9 +801,9 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
                         continue
                     if item.name not in backup_namen:
                         if item.is_dir() and not item.is_symlink():
-                            shutil.rmtree(item, ignore_errors=True)
+                            shutil.rmtree(item)
                         else:
-                            item.unlink(missing_ok=True)
+                            item.unlink()
                 for item in backup_ordner.iterdir():
                     ziel_item = ordner / item.name
                     if item.is_symlink():
@@ -394,14 +813,32 @@ def uebernehmen(ordner, ersetzen=False, quelle=None):
                         shutil.copy2(item, ziel_item)
                     elif item.is_dir():
                         if ziel_item.exists():
-                            shutil.rmtree(ziel_item, ignore_errors=True)
+                            if ziel_item.is_symlink():
+                                ziel_item.unlink()
+                            else:
+                                shutil.rmtree(ziel_item)
                         shutil.copytree(item, ziel_item, symlinks=True)
+
+                # Integritätsprüfung nach Rollback von ordner
+                for item in backup_ordner.iterdir():
+                    ziel_item = ordner / item.name
+                    if item.is_symlink():
+                        if not ziel_item.is_symlink() or os.readlink(ziel_item) != os.readlink(item):
+                            rollback_fehler.append(f"Shell-Rollback: {item.name} Symlink weicht nach Wiederherstellung ab")
+                    elif item.is_file():
+                        if not ziel_item.is_file() or sha(ziel_item) != sha(item):
+                            rollback_fehler.append(f"Shell-Rollback: {item.name} Datei weicht nach Wiederherstellung ab")
         except Exception as fehler_rollback:
-            return ABWEICHUNG, [f"Fehler bei Übernahme ({fehler_kopie}) und Rollback fehlgeschlagen ({fehler_rollback})"]
+            rollback_fehler.append(f"Shell-Rollback fehlgeschlagen ({fehler_rollback})")
 
         if isinstance(fehler_kopie, (KeyboardInterrupt, SystemExit)):
             raise fehler_kopie
-        return ABWEICHUNG, [f"Übernahme fehlgeschlagen ({fehler_kopie}) – Rollback ausgeführt (Zustand wiederhergestellt)"]
+
+        if rollback_fehler:
+            return ABWEICHUNG, [
+                f"Übernahme fehlgeschlagen ({fehler_kopie}) und Rollback unvollständig: {'; '.join(rollback_fehler)}"
+            ]
+        return ABWEICHUNG, [f"Übernahme fehlgeschlagen ({fehler_kopie}) – Rollback ausgeführt (Zustand vollständig wiederhergestellt)"]
 
     finally:
         backup_temp.cleanup()
@@ -416,7 +853,7 @@ def zielordner(text):
     return ordner
 
 
-def _pruefen_ausgeben(ordner, quelle):
+def _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=False, projekt_root=None):
     if not ordner.is_dir():
         print(f"{ordner}: keine Kopie vorhanden")
         return ABWEICHUNG
@@ -425,7 +862,19 @@ def _pruefen_ausgeben(ordner, quelle):
     print(f"Kopie {stand}, Quelle {quelle['version']} ({(quelle['commit'] or 'ohne Git')[:12]})")
     for name, art in zeilen:
         print(f"  {name}: {art}")
-    return OK if manifest and all(art == "aktuell" for _, art in zeilen) else ABWEICHUNG
+    shell_ok = OK if manifest and all(art == "aktuell" for _, art in zeilen) else ABWEICHUNG
+
+    bootstrap_ok = OK
+    if agenten_bootstrap:
+        root_dir = ermittle_projekt_root(ordner, projekt_root)
+        print(f"Agenten-Bootstrap ({root_dir}):")
+        b_ergebnisse = pruefe_bootstrap(root_dir, ordner)
+        for rel_name, (status, detail) in b_ergebnisse.items():
+            print(f"  {rel_name}: {status} ({detail})")
+            if status not in ("korrekt verwaltet", "gültig angepasst"):
+                bootstrap_ok = ABWEICHUNG
+
+    return OK if (shell_ok == OK and bootstrap_ok == OK) else ABWEICHUNG
 
 
 def main(argv=None):
@@ -437,19 +886,35 @@ def main(argv=None):
     parser.add_argument("--commit", metavar="REV", help="Shell aus diesem Commit statt aus der Arbeitskopie lesen")
     parser.add_argument("--unsauber-erlauben", action="store_true",
                         help="lokal veränderte Shell-Quelle bewusst übernehmen (im Manifest vermerkt)")
+    parser.add_argument("--agenten-bootstrap", "--agent-bootstrap", action="store_true",
+                        help="erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner")
+    parser.add_argument("--projekt-root", "--project-root", metavar="PFAD",
+                        help="Projektwurzel des Folgeprojekts für den Agenten-Bootstrap (Standard: automatisch ermittelt)")
     args = parser.parse_args(argv)
     ordner = zielordner(args.ziel)
     if ordner is None:
         print("Ziel liegt im Glide-Quellbaum; Folgeprojekte übernehmen die Shell in ihren eigenen Ordner")
         return VERWEIGERT
+
+    projekt_root_dir = None
+    if args.agenten_bootstrap or args.projekt_root:
+        try:
+            projekt_root_dir = ermittle_projekt_root(ordner, args.projekt_root)
+        except ValueError as fehler:
+            print(f"Projektwurzel unzulässig: {fehler}")
+            return VERWEIGERT
+
     try:
         quelle = quelle_lesen(args.commit, args.unsauber_erlauben or args.pruefen)
     except QuellFehler as fehler:
         print(f"Quelle unbrauchbar: {fehler}")
         return QUELLFEHLER
     if args.pruefen:
-        return _pruefen_ausgeben(ordner, quelle)
-    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle)
+        return _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=args.agenten_bootstrap,
+                                 projekt_root=projekt_root_dir)
+    code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle,
+                                  agenten_bootstrap=args.agenten_bootstrap,
+                                  projekt_root=projekt_root_dir)
     for zeile in meldungen:
         print(zeile)
     return code
