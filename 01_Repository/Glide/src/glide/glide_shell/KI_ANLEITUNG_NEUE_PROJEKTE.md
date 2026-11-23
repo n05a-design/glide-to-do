@@ -349,7 +349,7 @@ Kompatibilitätsnamen mit `glide` (`_glide_after_scope`, `GlideCheckbutton` …)
 **Projektstart**
 
 - [ ] Struktur aus 3.1 angelegt; `AGENTS.md` mit Arbeitsregeln und Abschlusskriterium
-- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 12/12 (auch mit `-O`)
+- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 13/13 (auch mit `-O`)
 - [ ] Start über `AppHost` mit `preflight`; Import ohne Seiteneffekte
 - [ ] Datenordner über `runtime_paths` und eigene Umgebungsvariable für Tests
 - [ ] Kataloge `de.json`/`en.json` mit Paritätstest; Entwicklermeldungen Englisch

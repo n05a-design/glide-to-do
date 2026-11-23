@@ -57,7 +57,7 @@ Dann:
    Design-Richtlinien, QA-Bericht und Pflegematrix).
 2. Übernimm die Shell mit
    python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>
-   und prüfe sie mit `python3 -m glide_shell.selftest` (erwartet: 12/12, auch mit `python3 -O`).
+   und prüfe sie mit `python3 -m glide_shell.selftest` (erwartet: 13/13, auch mit `python3 -O`).
 3. Baue das Gerüst aus Abschnitt 3.3: Start über app_host.AppHost mit preflight, Controller-Klasse,
    Kürzel über bind_shortcuts, Schließweg über install_close, Rückgängig über command_history,
    Datenordner über runtime_paths, Texte aus de.json/en.json.
@@ -119,7 +119,7 @@ Then:
    design rules, QA report and maintenance matrix).
 2. Adopt the shell with
    python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <project>/src/<app>
-   and check it with `python3 -m glide_shell.selftest` (expected: 12/12, also with `python3 -O`).
+   and check it with `python3 -m glide_shell.selftest` (expected: 13/13, also with `python3 -O`).
 3. Build the skeleton from section 3.3: start through app_host.AppHost with preflight, a controller class,
    shortcuts through bind_shortcuts, close path through install_close, undo through command_history,
    data folder through runtime_paths, texts from de.json/en.json.
