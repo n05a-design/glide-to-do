@@ -1,6 +1,6 @@
 # Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer
 
-Stand 22.11.2026 · Glide 1.0.1 · entschieden vom Inhaber am 27.09.2026
+Stand 23.11.2026 · Glide 1.0.2 · entschieden vom Inhaber am 27.09.2026
 
 AGENTS.md, Regel 4: keine neue Laufzeitabhängigkeit ohne dokumentierte
 Entscheidung. Dies ist sie.

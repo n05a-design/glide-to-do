@@ -1,6 +1,6 @@
 # Security policy
 
-Status as of 22.11.2026 · Glide 1.0.1 · data format 26
+Status as of 23.11.2026 · Glide 1.0.2 · data format 26
 
 [Read this policy in German](SECURITY.de.md).
 

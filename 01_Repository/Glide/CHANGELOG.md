@@ -1,9 +1,22 @@
 # Änderungsverlauf
 
-Stand 20.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 23.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
-## 1.0.1 – 22.11.2026 (Quellstand, zur Veröffentlichung vorgesehen)
+## 1.0.2 – 23.11.2026 (Quellstand, zur Veröffentlichung vorgesehen)
+
+Der Quellstand 1.0.2 schließt die menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) erfolgreich ab und behebt sämtliche dabei identifizierten Detailbefunde:
+
+- **Dynamische Lokalisierung der Seitenleiste:** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in `apply_settings()` sofort ohne Neustart.
+- **Adaptiver Titelbild-Zuschnitt:** `make_page_cover(..., adaptive=True)` begrenzt die Bildhöhe auf ein proportionales Verhältnis (Fokus 38 %, maximal 240 px) und verhindert vertikale Bildverzerrungen.
+- **Zeichnungen als kompakter Eckstempel:** Pixel-Zeichnungen als Cover sitzen als 56px-Miniatur oben rechts in der Lesespalte und scrollen mit dem Text mit.
+- **Fußleisten-Dichte:** `sync_foot_density()` blendet „Erwähnt ohne Verweis …“ bei minimaler Kopfstufe (`minimal`) aus, sodass die Fußzeile bei Mindestbreite (860 px) sauber einzeilig bleibt.
+- **Kollisionsfreier Bild- und Tabellenumfluss:** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, sodass Tabellenzeilen und Bilder nicht überlappen.
+- **Natürliche Datumswörter:** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog und formatiert sie direkt in das Tagesdatum.
+- **Multi-Agent Bootstrap & Transaktionssicherheit (PR #193):** Rollback-Fehlererfassung ohne `except: pass`, Symlink- und Dateitypschutz, inhaltliche Bootstrap-Prüfung (`--pruefen --agenten-bootstrap`), verschachtelte Projektlayouts und relative Links.
+
+
+## 1.0.1 – 22.11.2026 (Quellstand, nicht separat veröffentlicht)
 
 1.0.0 wurde nie veröffentlicht; 1.0.1 ist der erste zur Veröffentlichung vorgesehene Stand. Er enthält alle Einträge unten seit dem Schnitt 1.0.0, mit Glide-System V1.83, vollständiger Lokalisierung, abgeschlossener Glide Shell 0.5.0 und lokalisierten Neuerungen.
 

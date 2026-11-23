@@ -108,7 +108,7 @@ class Neuerungen(unittest.TestCase):
 
     def test_later_official_updates_follow_1_0_0(self):
         katalog = dict(rn.CATALOG, **{"1.0.1": ("x",), "1.1.0": ("y",)})
-        self.assertEqual([v for v, _ in rn.notes_since("1.0.0", "1.1.0", katalog)], ["1.1.0", "1.0.1"])
+        self.assertEqual([v for v, _ in rn.notes_since("1.0.0", "1.1.0", katalog)], ["1.1.0", "1.0.2", "1.0.1"])
         self.assertEqual([v for v, _ in rn.notes_since("3.70.0", "1.0.1", katalog)][:2], ["1.0.1", "1.0.0"])
         verlauf = [v for v, _ in rn.history("1.0.0")]
         self.assertEqual(verlauf[0], "1.0.0")

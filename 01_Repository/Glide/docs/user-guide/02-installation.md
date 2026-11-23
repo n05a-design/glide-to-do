@@ -1,6 +1,6 @@
 # Installation – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
 
 **Deutsch:** [Funktionen – Eigenständiger Start](../20_FUNKTIONEN.md#eigenständiger-start-3450), [§13 Bekannte Grenzen](../20_FUNKTIONEN.md#13-bekannte-grenzen), [technischer Schnellstart](../../README.md#schnellstart-aus-dem-quellstand) · [Guide contents](README.md) · Previous: [Getting started](01-getting-started.md) · Next: [Tasks and lists](03-tasks-and-lists.md)
 
@@ -8,7 +8,7 @@ Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
 
 ## Availability
 
-**No public installer has been released for Glide 1.0.1 yet.** No GitHub release or tag exists yet. The [project README](../../../../README.md#download) shows what is available today:
+**No public installer has been released for Glide 1.0.2 yet.** No GitHub release or tag exists yet. The [project README](../../../../README.md#download) shows what is available today:
 
 - **Run from source** on Windows, macOS and Linux (described below).
 - **Development builds** for Windows x64 and macOS Apple Silicon from GitHub Actions. They need a GitHub sign-in. They carry no Windows certificate, or only an ad-hoc macOS signature. They are not a published installer.

@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 <a id="offene-sicht-und-bedienabnahme-deen-release-10-etappe-2"></a>
 ## Menschliche Sicht- und Bedienabnahme DE/EN – Release 1.0, Etappe 2 (Vollständig erfolgt, 23.11.2026)

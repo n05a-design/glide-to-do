@@ -1,6 +1,6 @@
 # Glide Shell Framework – Architektur- und Entkopplungskonzept
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 Dieses Konzeptdokument beschreibt das Zielbild für die Entkopplung des wiederverwendbaren Desktop-Fundaments (**Glide Shell Framework**) von Glides Fachmodulen. **Abgeschlossen (D99, 22.11.2026):** Alle fünf Phasen aus §4 sind umgesetzt; das Paket `glide_shell` 0.6.0 enthält zuletzt Befehlsverlauf (Phase 4) und App-Host (Phase 5), dazu Demohost, Selbsttest, Anleitung, [KI-Handbuch](GLIDE_SHELL_KI_HANDBUCH.md) und die [Anleitung für neue Projekte](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) (§7). S12 bleibt außerhalb; weitere Bausteine nur aus konkretem Bedarf eines Folgeprojekts.
 

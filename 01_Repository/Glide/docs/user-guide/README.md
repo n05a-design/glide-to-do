@@ -1,10 +1,10 @@
 # Glide user guide (English)
 
-Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
 
 <p align="right"><a href="../20_FUNKTIONEN.md">Deutsch</a></p>
 
-This guide explains how to use Glide 1.0.1 in English. It is a **controlled translation** of the German function reference [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md). It is not a second source of truth. The German text sets the product behavior. If the two ever differ, the German text applies, and the English page is corrected to match. The guide describes only features that exist in the 1.0.1 source baseline. It leaves out internal test, delivery and audit details, which stay in the German source and the [QA report](../07_QA_BERICHT.md).
+This guide explains how to use Glide 1.0.2 in English. It is a **controlled translation** of the German function reference [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md). It is not a second source of truth. The German text sets the product behavior. If the two ever differ, the German text applies, and the English page is corrected to match. The guide describes only features that exist in the 1.0.2 source baseline. It leaves out internal test, delivery and audit details, which stay in the German source and the [QA report](../07_QA_BERICHT.md).
 
 ## Contents
 
@@ -25,7 +25,7 @@ This guide explains how to use Glide 1.0.1 in English. It is a **controlled tran
 
 ## Interface language
 
-Glide 1.0.1 offers German and English. Choose **Settings › Appearance & Controls › Language** (*Einstellungen › Darstellung und Bedienung › Sprache*): *Automatic (System)*, *Deutsch* or *English*. The automatic setting uses English when the operating system reports an English locale and German otherwise. Your saved settings and data do not change when you switch the language.
+Glide 1.0.2 offers German and English. Choose **Settings › Appearance & Controls › Language** (*Einstellungen › Darstellung und Bedienung › Sprache*): *Automatic (System)*, *Deutsch* or *English*. The automatic setting uses English when the operating system reports an English locale and German otherwise. Your saved settings and data do not change when you switch the language.
 
 **The whole interface is available in English** (D93, since Glide 1.0.0): menus, views, dialogs, messages, the built-in manual and the keyboard shortcut overview, the AI format description, the built-in templates and the default titles of new lists, pages and drawings. TXT and CSV exports use the chosen language, and Glide reads exports in either language. Quick capture understands English and German date and repeat words (for example `tomorrow`, `every week`, `morgen`, `jede Woche`). Only the names you gave your own content stay as you wrote them. Date formats and system dialogs follow your operating system. After switching the language in Settings, some fixed bars of the main window change after the next start; Glide says so when you switch. Please report missing or wrong translations with the [localization issue form](https://github.com/n05a-design/glide-to-do/issues/new?template=lokalisierung.yml).
 

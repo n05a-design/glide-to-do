@@ -93,7 +93,7 @@ Eigene Austauschaufträge zusätzlich an beiden Eingängen prüfen: Feldvalidier
 
 **UI-Nachlauf 02.11.2026:** `test_arbeitsmodi.py --fall ansichtssymbole` prüft Symbolvertrag/Klartextnamen/aktive Ansicht/Tastatur in vier Größen-/Schriftkombinationen und alle drei Zeilenaktionen. `beta350` prüft zusätzlich reale X-/Y-Kanten der Block-Einfügemarke; `test_aufgaben3380.py --fall klicks` begrenzt die tatsächlichen Textboxen aller Zeilenknöpfe, auch im Schrift-Rückfall. `test_wiederanlauf.py --fall freigabe` prüft Rückmeldung und unveränderte Original-/Einstellungsbytes bei gesperrtem Hintergrundwechsel. [Nachweise](https://github.com/n05a-design/glide-to-do/blob/13bcb66a7ba2007c3d8828ba1e0e082cb8918c91/01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md).
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 **3.69.0-Nachpflege:** Unit-Tests fassen keine Systemressourcen des Prüfrechners an; `test_desktop_adapter.py` prüft die Zwischenablage über eine Attrappe (Windows-CI-Absturz `0xC0000005`). `test_ki_ausgabe_darstellung.py` (T325) gehört zu `SUITEN` der Vollprüfung. In `test_modalvertrag.py` gibt `fall_fokus_drittes_fenster` vor dem Fokussieren des Drittfensters den Dialoggriff frei (`d.grab_release()`), sodass Windows-Tk den Fokuswechsel verarbeitet. [Nachweis](07_QA_BERICHT.md#nachpflege-3690--windows-ci-t325-und-vollprüfungsstand-16112026).
 

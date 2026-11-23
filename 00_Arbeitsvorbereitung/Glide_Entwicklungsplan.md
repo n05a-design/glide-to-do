@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
 **Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 und PR #192 sind gemergt. PR #193 schließt die Multi-Agent Readiness der Glide Shell ab. Die menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) wurde am 23.11.2026 durch den Inhaber vollständig durchlaufen und positiv abgenommen ([§21.177](#21177-menschliche-sicht--und-bedienabnahme-release-10-etappe-2--layout-verfeinerung-23112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung und Paketmanager-Einreichung mit Freigabe des Inhabers.
 
@@ -67,9 +67,9 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 
 ## Aktueller Arbeitsvorrat
 
-Offene Arbeit auf einen Blick, Stand 22.11.2026 (Release-Runde 1.0.1). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
+Offene Arbeit auf einen Blick, Stand 23.11.2026 (Release-Runde 1.0.2). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
-**Aktueller Schnitt (22.11.2026):** Release-Runde 1.0.1 auf `claude/v101-release`: PRs #185–#187 zusammengeführt, WA-49 mit V1.83 geschlossen ([§21.172](#21172-wa-49-abgeschlossen-und-release-runde-101-v183-22112026)), Volllauf mit macOS-Paket und DMG, Lieferstand 1.0.1 in `07_Python-Versionen`. Lokalisierung (D93 Etappe 2) und Glide Shell sind abgeschlossen.
+**Aktueller Schnitt (23.11.2026):** Release-Runde 1.0.2: Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig bestanden, alle Abnahmebefunde (dynamische Lokalisierung der Seitenleiste, adaptiver Titelbild-Zuschnitt, Pixel-Zeichnungen als Ecksymbol, einzeilige Fußleistendichte bei Minimalbreite, kollisionsfreier Tabellen-/Bildumfluss und natürliche Datumswörter „today“/„heute“) behoben und getestet. Multi-Agent Readiness und transaktionale Übernahme (PR #193) integriert.
 
 | Kennung | Gegenstand | Status | Nächster Schritt | Freigabe |
 |---|---|---|---|---|
@@ -3948,3 +3948,21 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - Menschliche Sicht- und Bedienabnahme durch den Inhaber am 23.11.2026 vollständig positiv abgenommen („es funktioniert alles, die menschliche Abnahme gilt als erfolgt“).
 - **D – Rest:**
   - Tag, GitHub-Release, Notarisierung und Paketmanager-Einreichung nur mit ausdrücklicher Freigabe des Inhabers.
+
+### 21.178 Release-Runde 1.0.2 – Abschluss der menschlichen Abnahme und Versionsanhebung (23.11.2026)
+
+- **A – Auftrag:** Vollständige Versionanhebung auf 1.0.2 nach erfolgreicher menschlicher Sicht- und Bedienabnahme durch den Inhaber. Alle Dokumente, Übergaben, Metadaten, Fixtures, Neuerungen, Paketierungsvorlagen und Lieferstände ganzheitlich auf 1.0.2 aktualisieren und Lücken schließen.
+- **B – Umsetzung:**
+  - Version `1.0.2` in `VERSION`, `app.pyw`, `releasedaten.py` und Integrationstests gesetzt.
+  - Neuerungskatalog (`release_notes.py`) und Lokalisierungsschlüssel (`mod.release_notes.v1_0_2.0`–`4`) in `de.json` und `en.json` gepflegt.
+  - Englischer Vorlagenkatalog (`vorlagen_englisch.py`) neu generiert.
+  - Fixtures und Showcase mit neuem Versionsstand 1.0.2 generiert (`beispieldaten.py`, `rundgang.py`, `showcase.py`, `vorlagendaten.py`, `releasedaten.py`).
+  - Agent-Skill `glide-to-do` auf `glide-version: "1.0.2"` gehoben (`SKILL.md`, `abdeckung.json`, `glide_datei.py`, `kontextpaket.glidecontext`, `MANIFEST.json`).
+  - Paketierungsvorlagen (`glide.rb`, `glide_setup.iss`, `winget/manifests/.../1.0.2/`) aktualisiert.
+  - Öffentliche Projektdateien (`README.md`, `README.de.md`, `AGENTS.md`, `SECURITY.md`, `CHANGELOG.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`) angepasst.
+- **C – Prüfung:**
+  - `test_agenten_skill.py`: 18/18 Tests grün.
+  - `test_i18n.py`: 24/24 Tests grün.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+- **D – Rest:**
+  - Veröffentlichung, Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei Inhaberfreigabe.

@@ -14,7 +14,7 @@
 <p align="center">
   <img alt="Windows, macOS und Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Quellstand 1.0.1" src="https://img.shields.io/badge/Quellstand-1.0.1-9E4AC8">
+  <img alt="Quellstand 1.0.2" src="https://img.shields.io/badge/Quellstand-1.0.2-9E4AC8">
   <a href="LICENSE"><img alt="Lizenz MPL-2.0" src="https://img.shields.io/badge/Lizenz-MPL--2.0-2E7D32"></a>
 </p>
 
@@ -28,7 +28,7 @@
 
 <img alt="Glide-Pinnwand mit Seiten, Aufgaben und beschrifteten Verbindungen" src="01_Repository/Glide/assets/marketing/glide-1.0-pinnwand.png" width="100%">
 
-<p align="center"><sub>Glide gibt es auf Deutsch und Englisch. Die Aufnahmen zeigen Glide 1.0.1 unter macOS mit dem Showcase „Stadtlicht“, einer fiktiven Fotoreise; die Fotos stammen von Tim von Trostorff. Sie sind kein Prüf- oder Paketnachweis.</sub></p>
+<p align="center"><sub>Glide gibt es auf Deutsch und Englisch. Die Aufnahmen zeigen Glide 1.0.2 unter macOS mit dem Showcase „Stadtlicht“, einer fiktiven Fotoreise; die Fotos stammen von Tim von Trostorff. Sie sind kein Prüf- oder Paketnachweis.</sub></p>
 
 ## Warum Glide?
 
@@ -148,7 +148,7 @@ Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vert
 
 ## Entwicklung und Qualität
 
-Stand 22.11.2026 · Glide 1.0.1
+Stand 23.11.2026 · Glide 1.0.2
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen auf main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 
@@ -157,7 +157,7 @@ Mehr zum Quellcode, Entwicklungsablauf und Prüfstand:
 [Roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) ·
 [Qualität und Prüfungen](01_Repository/Glide/docs/07_QA_BERICHT.md)
 
-Der Quellstand für Glide 1.0.1 ist für die Veröffentlichung vorbereitet; ein öffentlicher Release ist noch nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`, nicht auf diesen README-Branch oder einen anderen Pull Request. Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
+Der Quellstand für Glide 1.0.2 ist für die Veröffentlichung vorbereitet; ein öffentlicher Release ist noch nicht freigegeben. Das Prüf-Badge oben bezieht sich auf `main`, nicht auf diesen README-Branch oder einen anderen Pull Request. Der [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) ordnet Ergebnisse konkreten Commits zu und trennt CI, verfügbare Entwicklungsbauten und offene menschliche Abnahmen.
 
 ## Lizenz
 

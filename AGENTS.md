@@ -1,6 +1,6 @@
 # Glide – Einstieg für KI-Agenten (Repository-Wurzel)
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Glide Shell 0.6.2
+Stand 23.11.2026 · Glide 1.0.2 · Glide-System V1.86 · Glide Shell 0.6.2
 
 Dünner, agentenneutraler Adapter für Antigravity, Codex, GitHub Copilot, Gemini und andere Werkzeuge, die `AGENTS.md` in der Repository-Wurzel lesen. Er enthält **keine eigenen Regeln**; verbindlich sind die verlinkten Quellen. Claude Code liest zusätzlich [`CLAUDE.md`](CLAUDE.md).
 

@@ -1,6 +1,6 @@
 # Sicherheitsrichtlinie
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 [English version](SECURITY.md).
 

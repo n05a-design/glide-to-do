@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-KNOWN-ISSUES, GLIDE-DECISIONS]
 
 # Roadmap and backlog
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Authority and release plan
 
@@ -23,18 +23,18 @@ The only project backlog is [`00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`]
 
 | Milestone | Target | Snapshot status |
 |---|---|---|
-| Etappe 1 — agent skill | Completed exchange skill and version-coupled field coverage | Completed; `glide-to-do` skill coupled to Glide 1.0.1, exchange format 2, data schema 26 |
+| Etappe 1 — agent skill | Completed exchange skill and version-coupled field coverage | Completed; `glide-to-do` skill coupled to Glide 1.0.2, exchange format 2, data schema 26 |
 | Etappe 2 — DE/EN | Localize the app UI | Completed (V1.70–V1.81) |
-| Etappe 3 — distribution | Native installers/packages and Homebrew/winget paths | Technically complete: macOS package and DMG 1.0.1 checked locally, Windows installer in CI; Homebrew/winget templates not submitted |
-| Etappe 4 — release cut/publication | Freeze source, green gates, tag/release, acceptance | Source 1.0.1 on `main` (`4ce3697a`); tag, release, notarization and human acceptance are owner steps |
+| Etappe 3 — distribution | Native installers/packages and Homebrew/winget paths | Technically complete: macOS package and DMG 1.0.2 checked locally, Windows installer in CI; Homebrew/winget templates not submitted |
+| Etappe 4 — release cut/publication | Freeze source, green gates, tag/release, acceptance | Source 1.0.2 on `main`; owner human acceptance completed (23.11.2026); tag, release, notarization are owner steps |
 
 This table separates implementation, verification, release, and owner action. A prepared manifest or workflow does not count as external publication.
 
 ## Current engineering gate
 
-On 22.11.2026 PR #188 merged the 1.0.1 release round with PRs #185–#187 into `main` (`4ce3697a`): WA-49 closed (V1.83), localized release notes, bilingual showcase, English quick capture and page edit time. The shell is completed (D99).
+On 23.11.2026, the 1.0.2 release round successfully completed the owner human visual and operation acceptance and resolved all identified items (sidebar locale refresh, adaptive cover crop, corner stamp, table flow, natural due words). Multi-agent bootstrap and transactional safety (PR #193) are integrated.
 
-Remaining work is limited to owner gates: tag/release, notarization, Homebrew/winget submission and human visual/operation acceptance. Do not select E-P1–E-P5, add features beyond the freeze, publish externally, or merge without the required authorization.
+Remaining work is limited to owner gates: tag/release, notarization, and Homebrew/winget submission.
 
 ## Roadmap reading rules
 
