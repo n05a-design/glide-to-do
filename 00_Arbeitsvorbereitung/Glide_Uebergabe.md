@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.1 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Release-Runde 1.0.2 auf `claude/v101-release` · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
@@ -12,11 +12,24 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
 > - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.2 mit Demonstrationshost, Referenzhost (T337), Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
-> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
+> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
 >
 > **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 
 ---
+
+
+### Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) & Layout-Verfeinerung (23.11.2026)
+
+- **Menschliche Abnahme durchgeführt:** Alle 5 Prüfschritte aus `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` wurden durch den Inhaber auf dem Kandidatenstand durchlaufen und positiv abgenommen.
+- **Dynamischer Sprachwechsel (Schritt 1):** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in `apply_settings()` sofort ohne Neustart.
+- **Adaptiver Zuschnitt von Titelbildern (Schritt 2):** `make_page_cover(..., adaptive=True)` mit `COVER_RATIO = 0.34`, `COVER_MAX_HEIGHT = 240`, `COVER_FOCUS = 0.38`, `COVER_MAX_UPSCALE = 1.5` verhindert vertikale Verzerrung und zentriert das Bild optimal.
+- **Zeichnungen als kompakter Eckstempel (Schritt 2):** Pixel-Zeichnungen als Cover sitzen als 56px-Miniatur (`CORNER_COVER_SIZE = 56`) oben rechts in der Lesespalte und scrollen mit dem Text (`show_corner_cover`, `layout_corner_cover`, `place_corner_cover`).
+- **Fußleisten-Dichte (Schritt 2):** `sync_foot_density()` blendet „Erwähnt ohne Verweis …“ bei minimaler Kopfstufe (`minimal`) aus, so dass die Fußzeile einzeilig bleibt.
+- **Kollisionsfreier Bild- und Tabellenumfluss (Schritt 2):** `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, so dass Tabellen und Bildflächen niemals überlappen. Stadtseiten mit Tabellen (Wuppertal, Berlin) nutzen im Showcase linksbündige Bilder (`mode='left'`), und alle 3 Modi (`left`, `center`, `right`) sind im Showcase vertreten.
+- **Tastatur & Editor (Schritte 3 & 4):** Vom Inhaber vollständig positiv abgenommen („Passt komplett“, „Funktioniert perfekt!“).
+- **Natürliche Datumswörter (Schritt 5):** `parse_due_words` erkennt „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Datumsfeld und Kalenderdialog.
+- **Geprüfter Stand:** `pruefe_showcase.py` (DE und EN), `ci_grundstufe.py` (19/19 Schritte), `standpruefung.py` (148 Dokumente) und `test_release_1_0_2_regressions.py` (T340, 15/15 Tests) vollständig grün; `07_Python-Versionen` bytegleich abgeglichen.
 
 
 ### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 23.11.2026)
@@ -49,12 +62,12 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 1.0.1** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.86** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
-| **Meilenstein Release 1.0** | Feature Freeze (D93). Skill, Lokalisierung, Shell und Paketbau sind abgeschlossen; offen sind nur Veröffentlichung, Paketmanager-Einreichung und menschliche Abnahme. |
+| **Version & Schemata** | **Glide 1.0.2** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.86** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
+| **Meilenstein Release 1.0** | Feature Freeze (D93). Skill, Lokalisierung, Shell, Paketbau und menschliche Sicht- und Bedienabnahme (23.11.2026) sind vollständig abgeschlossen; offen sind nur Veröffentlichung und Paketmanager-Einreichung nach Inhaberfreigabe. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
 | **Shell-Paket `glide_shell`** | Abgeschlossen: Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.6.2, Demonstrationshost, Referenzhost (T337), Selbsttest (13/13), Anleitung DE/EN und [KI-Handbuch](../01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md); Übernahme in Folgeprojekte mit `scripts/pflege/shell_uebernehmen.py`. Weitere Shell-Arbeit nur aus konkretem Bedarf. |
-| **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) mit dem lokalen macOS-Volllauf, Paket und DMG der Release-Runde 1.0.1. |
-| **Lieferstand** | `07_Python-Versionen` wird in der Produktionsrunde 1.0.1 mit `abgleich_07.py` und SHA-256 auf den Quellstand gebracht. |
+| **Prüfstand** | Führend ist der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) mit dem lokalen macOS-Volllauf, Paket und DMG der Release-Runde 1.0.2. |
+| **Lieferstand** | `07_Python-Versionen` wird in der Produktionsrunde 1.0.2 mit `abgleich_07.py` und SHA-256 auf den Quellstand gebracht. |
 | **Ablage-Schutz** | Unberührt und NICHT in Git: `20_Grafik_Master/09_Inspiration/`, `GLIDE_STEPS_GESAMTAUDIT_V2_2026-11-10/`, `glide_master_audit_bericht.md` und `SQLite-Copyright.md`. Diese Pfade dürfen unter keinen Umständen gestaget oder committet werden. |
 
 
@@ -198,7 +211,7 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
   - Startmenü-Verknüpfung mit sauber gesetzter `AppUserModelID: Shaye.Glide`.
   - Saubere Deinstallation ohne Rückstände.
 - **CI-Integration:** In `.github/workflows/windows-paket.yml` Inno Setup (`iscc`) ausführen und `Glide-<version>-windows-x64-setup.exe` erzeugen.
-- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.1/` für `winget install Shaye.Glide`.
+- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.2/` für `winget install Shaye.Glide`.
 
 ---
 

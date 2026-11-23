@@ -1,6 +1,6 @@
 # Glide-System V1.86
 
-Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 23.11.2026 · Glide 1.0.2 · Glide-System V1.86 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 **Eigenständige Katalogversion:** `V1.86` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
@@ -114,7 +114,7 @@ Stand 22.11.2026 · Glide 1.0.1 · Glide-System V1.86 · Aufgabenformat 26 · Ei
 | Features | 148 | 128 Produkt-/Oberflächeneinträge (einschließlich des Agenten-Skills F148 außerhalb der App) und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 339 | Einschließlich öffentlicher DE/EN-README-Prüfung (T299), Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 340 | Einschließlich öffentlicher DE/EN-README-Prüfung (T299), Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen, Agenten-Skill, zentraler KI-Ausgabeprüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -615,7 +615,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 
 ## 5. Test- und Werkzeugkatalog
 
-304 erfasste Test-/Werkzeugdateien (112 Unit-, 111 Integrations- und 81 Werkzeugdateien) und die neue `test_glide_system.py` als 305. Datei. **Dateiexistenz bedeutet nicht, dass der entsprechende Test bestanden wurde.** Aktuelle grüne/rote Testergebnisse sind separat hash- und plattformgebunden zu erfassen.
+305 erfasste Test-/Werkzeugdateien (113 Unit-, 111 Integrations- und 81 Werkzeugdateien) und die neue `test_glide_system.py` als 306. Datei. **Dateiexistenz bedeutet nicht, dass der entsprechende Test bestanden wurde.** Aktuelle grüne/rote Testergebnisse sind separat hash- und plattformgebunden zu erfassen.
 
 <!-- GLIDE-SYSTEM:TESTS-START -->
 
@@ -740,6 +740,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T112 | [`test_week_planning.py`](../../tests/unit/test_week_planning.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T313 | [`test_day_capacity.py`](../../tests/unit/test_day_capacity.py) | Unit-Tests für Tageskapazitätsanalyse, Überlastungsgründe und Entlastungsvorschau (WA-12) |
 | T314 | [`test_runtime_config.py`](../../tests/unit/test_runtime_config.py) | Unit-Tests für seiteneffektfreie Pfadauflösung und Konfiguration; Gleichheit der drei Bytecode-Pfad-Auflösungen je Plattform ohne Tk-Import (WA-49) |
+| T340 | [`test_release_1_0_2_regressions.py`](../../tests/unit/test_release_1_0_2_regressions.py) | Regressionstests für Glide 1.0.2: Dynamischer Sprachwechsel der Seitenleiste, adaptiver Titelbildzuschnitt, Pixel-Ecksymbol, Fußleistendichte bei schmalen Fenstern, Tabellenumfluss und natürliche Datumswörter |
 
 ### Integration
 

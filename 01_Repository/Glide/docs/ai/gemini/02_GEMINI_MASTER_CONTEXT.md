@@ -13,11 +13,11 @@ related_documents: [GLIDE-GEMINI-CORE, GLIDE-ARCHITECTURE, GLIDE-DATA, GLIDE-PLA
 
 # Gemini master context
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## What Glide is
 
-Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source state is Glide 1.0.1 on `main` (`62ae1dde`, 22.11.2026): schema 26, exchange format 2, system catalog V1.86, `glide_shell` 0.6.2 (completed, D99).
+Glide is a local-first desktop workspace for an individual's tasks, lists, pages, notes, notebooks, pinboards, galleries, and pixel drawings. The app is implemented in Python with Tk. Its current source state is Glide 1.0.2 on `main` (23.11.2026): schema 26, exchange format 2, system catalog V1.86, `glide_shell` 0.6.2 (completed, D99).
 
 ## How it works
 
@@ -25,11 +25,11 @@ The canonical app starts through `src/glide/glide_start.py` or `src/glide/app.py
 
 ## Facts versus plans
 
-- **Current snapshot:** `main` at `4ce3697a` (PR #188 with PRs #185–#187 merged, 22.11.2026).
-- **App/data versions:** 1.0.1 / 26. Settings 2, templates 2, exchange format 2.
+- **Current snapshot:** `main` (23.11.2026).
+- **App/data versions:** 1.0.2 / 26. Settings 2, templates 2, exchange format 2.
 - **Localization:** The whole interface is available in German and English, including manual, exchange format, templates, AI output and release notes; quick capture understands English and German words.
-- **Release:** 1.0.1 is on `main`; no tag, GitHub release, notarization or package-manager submission. Owner acceptance is open.
-- **QA:** the 1.0.1 release round passed the macOS/Tk 9.1 full run (one focus case blocked by a locked screen), built and checked the macOS package and DMG, and synced `07_Python-Versionen`; see the QA report.
+- **Release:** 1.0.2 is on `main`; no tag, GitHub release, notarization or package-manager submission. Owner human acceptance is completed (23.11.2026).
+- **QA:** the 1.0.2 release round incorporates the complete human acceptance, verified showcase DE/EN, and passed CI basic stage; see the QA report.
 
 ## Architecture and critical rules
 

@@ -11,22 +11,22 @@
     {
       "path": "README.md",
       "size": 6775,
-      "sha256": "2f836669cffc3c2ea647b9a774a209e7134356534f96860b12d753da4c268507"
+      "sha256": "4429ded7c0186f1797fa3a0b826a35108457d1a1d9895be180754b3067851615"
     },
     {
       "path": "SKILL.md",
       "size": 8937,
-      "sha256": "16cbcbafe9dcc2d9a6bc4991a2496d5f7a35da71f00778048e9a0ff78a190e9a"
+      "sha256": "6e0dbb5956b5111dfc37274d04b0c45d7c17fd4249dbbdc01834496c611a3816"
     },
     {
       "path": "VERTEILUNG.md",
       "size": 4358,
-      "sha256": "18651504f7bd091a94d8cd9f398536c67f233b560fe079357eee07584fb2acf9"
+      "sha256": "d565d596019e87b4014cb6ce1be76f0e695232d54cf5de8164736c2c007111f8"
     },
     {
       "path": "abdeckung.json",
       "size": 7504,
-      "sha256": "4b9d5f572fae2f4c8c460676e13ea6d61fd1e1134cfbd9bd335f0fce562b68cb"
+      "sha256": "52dd96e22403ca9aeb43a4a3bf8253fea6674cb753d3cfd003895f0cb5cf4d69"
     },
     {
       "path": "assets/beispiele/aenderungsvorschlag.glideexchange",
@@ -41,7 +41,7 @@
     {
       "path": "assets/beispiele/kontextpaket.glidecontext",
       "size": 1686,
-      "sha256": "4de59900db2d7e2c25e8f2e0c684d51b35dd07b34597272cd26b0a906f9223a6"
+      "sha256": "1ec700ef5bd8a2fca372cf16f74ad61d24f289e07cc76cb43121d3d7ecee944c"
     },
     {
       "path": "assets/beispiele/notiz.glideexchange",
@@ -71,32 +71,32 @@
     {
       "path": "references/aenderungsvorschlag.md",
       "size": 2605,
-      "sha256": "867d54389e7be160ed652a07e0f2790c28571022aaf7cee294bc319668a42758"
+      "sha256": "ef959396bf09564e474dc07700804834e166a6f4767b67a364c1440e382446eb"
     },
     {
       "path": "references/austauschformat.md",
       "size": 6857,
-      "sha256": "a6f364d272ceb2e39ac1d8067e8736c5f32e998c3b41c82142b44116a1fdf533"
+      "sha256": "8a9a1ebc167880708db3e1b549869c96158f699072221e40affe8541b6ac7275"
     },
     {
       "path": "references/dokumentarten.md",
       "size": 2813,
-      "sha256": "1e1939a6ea312014cb7d4d5961daaf2570ebe2ef39e618bde3f549bc311815e0"
+      "sha256": "a36fd3b76ec58df6aebec160f667beaa2f2853197de7e93167735cc8d63e6775"
     },
     {
       "path": "references/glide-aufbau.md",
       "size": 5197,
-      "sha256": "4af81bc33f3b935ee7a38d98fc5f9b93a0ab7571da4d63e93651df309a57145d"
+      "sha256": "02b23b9903d1d9a708557eb3eb23adc4ba08dc77f5b897399978b62eb2711ef9"
     },
     {
       "path": "references/seiten-markdown.md",
       "size": 2221,
-      "sha256": "09c48ad948e23daf260d503369143e5e342d4eae40b88bd1c2522752495f5a15"
+      "sha256": "9fc028a2037ec6b11ae222477fae7fd97c8cf6426e862cf29bb2cbae06f4a126"
     },
     {
       "path": "scripts/glide_datei.py",
       "size": 38996,
-      "sha256": "8d243cafb0397cf5321d278f1bc429a87486418e4b3d9905e6458af68f8f458a"
+      "sha256": "9bb8fc4cb13b42b89f4a1bd610fef30d2167ba012b0f8ad3b05b271ca24c4276"
     }
   ]
 }

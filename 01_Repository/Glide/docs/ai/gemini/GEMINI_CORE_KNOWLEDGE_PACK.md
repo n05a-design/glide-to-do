@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
 
 # Glide Core Knowledge Pack
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Identity
 
@@ -23,7 +23,7 @@ It is not a cloud collaboration service, automatic multi-device sync, built-in A
 
 ## Version and source status
 
-- App: Glide 1.0.1.
+- App: Glide 1.0.2.
 - Main data schema: 26. Settings: 2. Templates: 2. Exchange format: `glide.exchange` v2.
 - Checked source: `main` at `4ce3697a` (22.11.2026), system catalog V1.86, `glide_shell` 0.6.2 (completed, D99).
 - PRs #185–#188 are merged: own photos and bilingual showcase, English quick capture, page edit time, WA-49 and localized release notes.

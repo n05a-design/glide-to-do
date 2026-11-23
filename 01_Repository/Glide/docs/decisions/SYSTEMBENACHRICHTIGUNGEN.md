@@ -1,6 +1,6 @@
 # Systembenachrichtigungen für Erinnerungen – Entscheidung
 
-Stand: 22.11.2026 · Glide 1.0.1, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
+Stand: 23.11.2026 · Glide 1.0.2, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
 Diese Entscheidung ist nach Regel 4 der [Arbeitsregeln](../../AGENTS.md) nötig,
 bevor ein Hilfsprozess, ein Autostart oder eine neue Abhängigkeit entsteht.
 

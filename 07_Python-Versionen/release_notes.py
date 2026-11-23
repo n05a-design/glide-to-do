@@ -21,6 +21,13 @@ import i18n as glide_i18n
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "1.0.2": (
+        "Seitenleistentitel wechseln beim Umschalten der Sprache sofort ohne Neustart.",
+        "Titelbilder von Seiten werden adaptiv zugeschnitten und nicht mehr verzerrt.",
+        "Pixel-Zeichnungen als Titelbild erscheinen als kompaktes Ecksymbol und scrollen mit dem Text mit.",
+        "Im Datumsfeld werden Wörter wie „today“, „heute“, „tomorrow“ oder „morgen“ direkt erkannt.",
+        "Die Fußleiste bleibt auch bei kleinen Fenstergrößen einzeilig.",
+    ),
     "1.0.1": (
         "Der neue Showcase „Stadtlicht“ zeigt alle Funktionen an einer Fotoreise durch sieben Städte, auf Deutsch und Englisch.",
         "Die Schnellerfassung versteht englische Wörter wie „tomorrow“, „next Monday“ oder „every week“; deutsche Wörter gelten weiter.",

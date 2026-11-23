@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-SOURCE-MANIFEST, GLIDE-GAPS]
 
 # Final audit summary
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 
 **Status refresh 22.11.2026:** Version, localization, shell and release facts were refreshed against `main` `4ce3697a` (Glide 1.0.1, catalog V1.83, `glide_shell` 0.5.0); a second refresh on 22.11.2026 recorded catalog V1.84 and `glide_shell` 0.6.0 with command history and app host (D99). The PR #152 statements below are historical.

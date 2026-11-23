@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 22.11.2026 · Glide 1.0.1 · Glide Shell 0.6.2
+Status as of 22.11.2026 · Glide 1.0.2 · Glide Shell 0.6.2
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 

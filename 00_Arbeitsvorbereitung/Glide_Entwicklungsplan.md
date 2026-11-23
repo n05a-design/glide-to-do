@@ -10,9 +10,9 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
-**Aktueller Stand (22.11.2026):** `main` steht auf `4ce3697a` (PR #188 mit #185–#187). Release 1.0 ist bis auf die Freigabeschritte des Inhabers umgesetzt: Lokalisierung DE/EN vollständig (V1.70–V1.81), Glide Shell abgeschlossen (D99), WA-49 geschlossen (V1.83), Lieferstand 1.0.1 in `07_Python-Versionen`, macOS-Paket und DMG lokal geprüft ([§21.172](#21172-wa-49-abgeschlossen-und-release-runde-101-v183-22112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung, Paketmanager-Einreichung und die menschliche Sicht- und Bedienabnahme.
+**Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 und PR #192 sind gemergt. PR #193 schließt die Multi-Agent Readiness der Glide Shell ab. Die menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) wurde am 23.11.2026 durch den Inhaber vollständig durchlaufen und positiv abgenommen ([§21.177](#21177-menschliche-sicht--und-bedienabnahme-release-10-etappe-2--layout-verfeinerung-23112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung und Paketmanager-Einreichung mit Freigabe des Inhabers.
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
@@ -67,9 +67,9 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 
 ## Aktueller Arbeitsvorrat
 
-Offene Arbeit auf einen Blick, Stand 22.11.2026 (Release-Runde 1.0.1). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
+Offene Arbeit auf einen Blick, Stand 23.11.2026 (Release-Runde 1.0.2). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
-**Aktueller Schnitt (22.11.2026):** Release-Runde 1.0.1 auf `claude/v101-release`: PRs #185–#187 zusammengeführt, WA-49 mit V1.83 geschlossen ([§21.172](#21172-wa-49-abgeschlossen-und-release-runde-101-v183-22112026)), Volllauf mit macOS-Paket und DMG, Lieferstand 1.0.1 in `07_Python-Versionen`. Lokalisierung (D93 Etappe 2) und Glide Shell sind abgeschlossen.
+**Aktueller Schnitt (23.11.2026):** Release-Runde 1.0.2: Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig bestanden, alle Abnahmebefunde (dynamische Lokalisierung der Seitenleiste, adaptiver Titelbild-Zuschnitt, Pixel-Zeichnungen als Ecksymbol, einzeilige Fußleistendichte bei Minimalbreite, kollisionsfreier Tabellen-/Bildumfluss und natürliche Datumswörter „today“/„heute“) behoben und getestet. Multi-Agent Readiness und transaktionale Übernahme (PR #193) integriert.
 
 | Kennung | Gegenstand | Status | Nächster Schritt | Freigabe |
 |---|---|---|---|---|
@@ -3924,4 +3924,48 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - CI-Grundstufe (19/19) vollständig bestanden (468 Dateien).
   - Standprüfung fehlerfrei (148 Dokumente).
 - **D – Rest:**
-  - Unverändert: Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.
+  - Unverändert: Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+
+### 21.177 Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) & Layout-Verfeinerung (23.11.2026)
+
+- **A – Auftrag:** Durchführung der menschlichen Sicht- und Bedienabnahme gemäß `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` für Release 1.0, Etappe 2 (5 Prüfschritte: Spracheinstellung & Umschaltung DE/EN, Erscheinungsbild & Fluchten Hell/Dunkel/Mindestmaß, Tastaturbedienung & Fokusrückgabe D87, Seiteneditor & Undo, Aufgabeninspektor). Prüfung durch den Inhaber anhand des Kandidaten (`python3 -B 01_Repository/Glide/tests/tools/kandidat_starten.pyw --neu`).
+- **B – Umsetzung:**
+  - *Schritt 1 (Spracheinstellung):* `refresh_sidebar_locale()` in `apply_settings()` ergänzt; aktualisiert `sidebar_title`, `pages_title`, `notes_title`, `drawings_title` und Tooltips bei Umschaltung von Deutsch auf Englisch sofort ohne Neustart.
+  - *Schritt 2 (Editor & Umbruch):*
+    - Adaptiver Titelbild-Zuschnitt (`make_page_cover(..., adaptive=True)` mit `COVER_RATIO = 0.34`, `COVER_MAX_HEIGHT = 240`, `COVER_FOCUS = 0.38`, `COVER_MAX_UPSCALE = 1.5`): zentriert und schneidet Bilder sauber zu, verhindert vertikale Verzerrung.
+    - Pixel-Zeichnungen als Cover sitzen als 56px-Miniatur (`CORNER_COVER_SIZE = 56`) oben rechts in der Lesespalte und scrollen mit dem Text (`show_corner_cover`, `layout_corner_cover`, `place_corner_cover`).
+    - Fußleiste in Mindestfenstergröße: `sync_foot_density()` blendet „Erwähnt ohne Verweis …“ bei kleinster Kopfstufe (`minimal`) aus, so dass die Fußzeile einzeilig bleibt.
+    - Text- und Tabellen-Umfluss bei rechtsbündigen Bildern: `imgflow:right` und `cornerflow` erzwingen `wrap='word'` im Umflussbereich, so dass Tabellen und Bildflächen niemals kollidieren. Stadtseiten mit Tabellen (Wuppertal, Berlin) nutzen im Showcase linksbündige Bilder (`mode='left'`), und alle 3 Modi (`left`, `center`, `right`) sind im Showcase vertreten.
+  - *Schritt 3 (Tastatur & Fokus):* Vom Nutzer vollständig abgenommen („Passt komplett“).
+  - *Schritt 4 (Seiteneditor & Undo):* Vom Nutzer vollständig abgenommen („Funktioniert perfekt!“).
+  - *Schritt 5 (Aufgabeninspektor):* Erkennung natürlicher Datumswörter (`DUE_WORDS`, `parse_due_words`) für „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Fälligkeitsfeld und Kalenderdialog.
+  - *Synchronisation & Showcase:* `abgleich_07.py` synchronisiert (110 Code-Dateien, 169 Ressourcen, 0 Abweichungen). Showcase-Fixtures DE/EN mit `showcase.py` neu erzeugt und mit `pruefe_showcase.py` verifiziert.
+- **C – Prüfung:**
+  - `pruefe_showcase.py` (DE und EN): vollständig grün mit Exitcode 0.
+  - `ci_grundstufe.py`: alle 19 Schritte vollständig grün mit Exitcode 0.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - Protokoll in `Glide_Manuelle_Pruefung.md` vollständig gepflegt.
+  - Menschliche Sicht- und Bedienabnahme durch den Inhaber am 23.11.2026 vollständig positiv abgenommen („es funktioniert alles, die menschliche Abnahme gilt als erfolgt“).
+- **D – Rest:**
+  - Tag, GitHub-Release, Notarisierung und Paketmanager-Einreichung nur mit ausdrücklicher Freigabe des Inhabers.
+
+### 21.178 Release-Runde 1.0.2 – Abschluss der menschlichen Abnahme und Versionsanhebung (23.11.2026)
+
+- **A – Auftrag:** Vollständige Versionanhebung auf 1.0.2 nach erfolgreicher menschlicher Sicht- und Bedienabnahme durch den Inhaber. Alle Dokumente, Übergaben, Metadaten, Fixtures, Neuerungen, Paketierungsvorlagen und Lieferstände ganzheitlich auf 1.0.2 aktualisieren und Lücken schließen.
+- **B – Umsetzung:**
+  - Version `1.0.2` in `VERSION`, `app.pyw`, `releasedaten.py` und Integrationstests gesetzt.
+  - Neuerungskatalog (`release_notes.py`) und Lokalisierungsschlüssel (`mod.release_notes.v1_0_2.0`–`4`) in `de.json` und `en.json` gepflegt.
+  - Englischer Vorlagenkatalog (`vorlagen_englisch.py`) neu generiert.
+  - Fixtures und Showcase mit neuem Versionsstand 1.0.2 generiert (`beispieldaten.py`, `rundgang.py`, `showcase.py`, `vorlagendaten.py`, `releasedaten.py`).
+  - Agent-Skill `glide-to-do` auf `glide-version: "1.0.2"` gehoben (`SKILL.md`, `abdeckung.json`, `glide_datei.py`, `kontextpaket.glidecontext`, `MANIFEST.json`).
+  - Paketierungsvorlagen (`glide.rb`, `glide_setup.iss`, `winget/manifests/.../1.0.2/`) aktualisiert.
+  - Öffentliche Projektdateien (`README.md`, `README.de.md`, `AGENTS.md`, `SECURITY.md`, `CHANGELOG.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`) angepasst.
+- **C – Prüfung:**
+  - `test_release_1_0_2_regressions.py` (T340): 15/15 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
+  - `test_agenten_skill.py`: 18/18 Tests grün.
+  - `test_i18n.py`: 24/24 Tests grün.
+  - `ci_grundstufe.py`: 19/19 Schritte grün.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - `test_shell_selbsttest.py`: 13/13 Checks grün.
+- **D – Rest:**
+  - Veröffentlichung, Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei Inhaberfreigabe.

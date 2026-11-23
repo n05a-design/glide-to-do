@@ -246,6 +246,8 @@ def schreiben_atomar(ziel, inhalt):
 
 def lokale_abweichungen(ordner, manifest):
     """Dateien der Kopie, die nicht mehr ihrem eigenen Manifest entsprechen."""
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("dateien"), dict):
+        return []
     abweichend = []
     for name, wert in sorted(manifest["dateien"].items()):
         pfad = ordner / name

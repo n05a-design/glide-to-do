@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -12,7 +12,7 @@ Der Live-Nachweis des PR-#156-Heads `f1d00bc9461819e7d366230ac85c8d08079257d3` b
 
 Die Enum-Normalisierung wurde auf PR #156 geliefert. Der D93-Etappe-2-Schnitt V1.57 mit DE/EN-Statusmeldungen und Kernsteuerungen des Zeicheneditors wurde mit [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) als `55ad7e95` nach `main` gemergt; V1.58 liegt in [PR #158](https://github.com/n05a-design/glide-to-do/pull/158). Das ist weder ein Release noch eine Änderung an About-Beschreibung, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
 
-**Stand 22.11.2026:** Zur ersten Veröffentlichung ist **1.0.1** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.1/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
+**Stand 23.11.2026:** Zur ersten Veröffentlichung ist **1.0.2** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.2/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
 
 ## Release-Cut-Prüfung vom 18.11.2026
 
@@ -72,7 +72,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 | | Windows: winget | macOS: Homebrew Cask |
 |---|---|---|
 | Befehl für Nutzer | `winget install Shaye.Glide` | `brew install --cask n05a-design/glide/glide` |
-| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/1.0.1/`](../packaging/winget/manifests/s/Shaye/Glide/1.0.1/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
+| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/1.0.2/`](../packaging/winget/manifests/s/Shaye/Glide/1.0.2/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
 | Einreichung | Pull Request an `microsoft/winget-pkgs`, am einfachsten mit `wingetcreate new <ZIP-URL>` bzw. für Folgeversionen `wingetcreate update Shaye.Glide --version <v> --urls <ZIP-URL>` | eigenes Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
 | Prüfung durch Dritte | automatische Validierung und Moderation durch Microsoft | keine im eigenen Tap; das offizielle `homebrew/cask` setzt Signierung und Notarisierung voraus |
 | Ohne Signierung (I3) | SmartScreen warnt beim ersten Start | Gatekeeper blockiert den ersten Start, Freigabe unter Systemeinstellungen › Datenschutz & Sicherheit |

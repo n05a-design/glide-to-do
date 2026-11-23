@@ -2,46 +2,46 @@
     "format_version": 2,
     "templates": [
         {
-            "id": "174884da904b470ea32c3714997d58aa",
+            "id": "e52735fc08974ff5bcabd8015bf9eaa9",
             "kind": "list",
             "title": "{{Weekday}} week {{Week}} · {{City}}",
             "note": "Evening note for every travel day: date fields fill themselves, the city is asked for. Tasks and attachment are kept.",
             "color": null,
             "labels": [
-                "de89db6c151f4a4ab985ba01f531a7de"
+                "8315742841884434a328b700d059cbcd"
             ],
             "items": [],
             "list_kind": "note",
             "payload": {
                 "version": 26,
                 "app": "Glide",
-                "app_version": "1.0.1",
-                "exported_at": "2026-11-22T03:11:52",
-                "active_list_id": "40aaf8d4124042dfafc37f9abf63633b",
+                "app_version": "1.0.2",
+                "exported_at": "2026-11-23T16:24:05",
+                "active_list_id": "7ddb3788556a44639b680b513641f5a8",
                 "active_folder_id": null,
                 "folders": [],
                 "labels": [
                     {
-                        "id": "6e752a2dae794239bd4d7bc336bfab4c",
+                        "id": "2e0fd8d05b394b19973aef84a0bfe5ec",
                         "name": "Langtext",
                         "color": "clear",
                         "system": "long"
                     },
                     {
-                        "id": "20cc3c11ff294306b671cfebb17967db",
+                        "id": "0e548f4ea6b44f058198a466ab60143d",
                         "name": "Zwischenüberschrift",
                         "color": "accent",
                         "system": "heading"
                     },
                     {
-                        "id": "de89db6c151f4a4ab985ba01f531a7de",
+                        "id": "8315742841884434a328b700d059cbcd",
                         "name": "Photo",
                         "color": "accent"
                     }
                 ],
                 "lists": [
                     {
-                        "id": "40aaf8d4124042dfafc37f9abf63633b",
+                        "id": "7ddb3788556a44639b680b513641f5a8",
                         "title": "Evening round · Open questions",
                         "folder_id": null,
                         "color": null,
@@ -78,27 +78,27 @@
                             ],
                             "links": {}
                         },
-                        "created_at": "2026-11-22T03:11:48+01:00",
-                        "updated_at": "2026-11-22T03:11:48+01:00",
+                        "created_at": "2026-11-23T16:24:01+01:00",
+                        "updated_at": "2026-11-23T16:24:01+01:00",
                         "journal": {
                             "favorite": false,
                             "mood": "",
                             "location": "",
-                            "moment_date": "2026-11-22",
+                            "moment_date": "2026-11-23",
                             "prompt": ""
                         },
                         "system_role": null,
                         "labels": [
-                            "de89db6c151f4a4ab985ba01f531a7de"
+                            "8315742841884434a328b700d059cbcd"
                         ],
                         "attachments": [
                             {
-                                "id": "94a17e9241484c3d875dba63ed9cc18d",
+                                "id": "798adf6e8ec94837a1e45eb424190cc6",
                                 "name": "Route.csv",
-                                "storage": "attachments/94a17e9241484c3d875dba63ed9cc18d_Route.csv",
+                                "storage": "attachments/798adf6e8ec94837a1e45eb424190cc6_Route.csv",
                                 "size": 252,
                                 "mime": "text/csv",
-                                "added_at": "2026-11-22T03:11:48"
+                                "added_at": "2026-11-23T16:24:01"
                             }
                         ],
                         "icon": null,
@@ -106,11 +106,11 @@
                         "archived_at": null,
                         "items": [
                             {
-                                "id": "e27e6111613241d38eb6fafe3c4bbc14",
+                                "id": "db26d0e0364e4425bd939b208d7cb5d5",
                                 "text": "Get a second opinion on the selection",
                                 "done": false,
                                 "importance": 0,
-                                "due": "2026-11-20",
+                                "due": "2026-11-23",
                                 "due_time": null,
                                 "description": "",
                                 "attachments": [],
@@ -130,7 +130,7 @@
                                 "children": []
                             },
                             {
-                                "id": "de4908b85e134985ae9fc6808923e12e",
+                                "id": "ed4fb87727fa4e8f91b12b0007e4cebf",
                                 "text": "Mark the favourite picture per city",
                                 "done": false,
                                 "importance": 0,
@@ -143,7 +143,7 @@
                                 "labels": [],
                                 "repeat": null,
                                 "reminder": null,
-                                "planned_date": "2026-11-21",
+                                "planned_date": "2026-11-24",
                                 "estimated_minutes": 30,
                                 "checklist": [],
                                 "links": [],
@@ -155,20 +155,20 @@
                             }
                         ],
                         "references": [
-                            "glide://item/88a48a7eb86d4be9a27a285640a58dff",
-                            "glide://list/0a6a1d85cb6c494a8c912e1decbd7d1d",
-                            "glide://list/dcca28371a1740ca82c3e8bb2caf6e7e"
+                            "glide://item/6486ca2c6a2441bc8d12b58bcc2f7d82",
+                            "glide://list/6630fa205bc649d3899e6d38abdcb2da",
+                            "glide://list/2026b78cef004e4da37eddabadffcf69"
                         ]
                     }
                 ],
                 "trash": []
             },
             "files": {
-                "attachments/94a17e9241484c3d875dba63ed9cc18d_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
+                "attachments/798adf6e8ec94837a1e45eb424190cc6_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
             }
         },
         {
-            "id": "d8a4972889304ae3abd3f0196a5f0def",
+            "id": "ad8a3772f995430088196165f1210c08",
             "kind": "list",
             "title": "Journey · Change of city",
             "note": "",
@@ -179,20 +179,20 @@
             "payload": {
                 "version": 26,
                 "app": "Glide",
-                "app_version": "1.0.1",
-                "exported_at": "2026-11-22T03:11:52",
-                "active_list_id": "fc8594bce81646fdbc1db701ae7ea65c",
+                "app_version": "1.0.2",
+                "exported_at": "2026-11-23T16:24:05",
+                "active_list_id": "c22bed0bef8f427bacadddc8441cca97",
                 "active_folder_id": null,
                 "folders": [],
                 "labels": [
                     {
-                        "id": "6e752a2dae794239bd4d7bc336bfab4c",
+                        "id": "2e0fd8d05b394b19973aef84a0bfe5ec",
                         "name": "Langtext",
                         "color": "clear",
                         "system": "long"
                     },
                     {
-                        "id": "20cc3c11ff294306b671cfebb17967db",
+                        "id": "0e548f4ea6b44f058198a466ab60143d",
                         "name": "Zwischenüberschrift",
                         "color": "accent",
                         "system": "heading"
@@ -200,7 +200,7 @@
                 ],
                 "lists": [
                     {
-                        "id": "fc8594bce81646fdbc1db701ae7ea65c",
+                        "id": "c22bed0bef8f427bacadddc8441cca97",
                         "title": "Before every change of city",
                         "folder_id": null,
                         "color": "due_action",
@@ -211,25 +211,25 @@
                             "spans": [],
                             "links": {}
                         },
-                        "created_at": "2026-11-22T03:11:48+01:00",
-                        "updated_at": "2026-11-22T03:11:48+01:00",
+                        "created_at": "2026-11-23T16:24:01+01:00",
+                        "updated_at": "2026-11-23T16:24:01+01:00",
                         "journal": {
                             "favorite": false,
                             "mood": "",
                             "location": "",
-                            "moment_date": "2026-11-22",
+                            "moment_date": "2026-11-23",
                             "prompt": ""
                         },
                         "system_role": null,
                         "labels": [],
                         "attachments": [
                             {
-                                "id": "94a17e9241484c3d875dba63ed9cc18d",
+                                "id": "798adf6e8ec94837a1e45eb424190cc6",
                                 "name": "Route.csv",
-                                "storage": "attachments/94a17e9241484c3d875dba63ed9cc18d_Route.csv",
+                                "storage": "attachments/798adf6e8ec94837a1e45eb424190cc6_Route.csv",
                                 "size": 252,
                                 "mime": "text/csv",
-                                "added_at": "2026-11-22T03:11:48"
+                                "added_at": "2026-11-23T16:24:01"
                             }
                         ],
                         "icon": null,
@@ -237,7 +237,7 @@
                         "archived_at": null,
                         "items": [
                             {
-                                "id": "b18925cb353d4c848c90677771917e0d",
+                                "id": "18752f3847a341ecb98bed75934e6d02",
                                 "text": "Charge batteries and power bank",
                                 "done": false,
                                 "importance": 0,
@@ -261,7 +261,7 @@
                                 "children": []
                             },
                             {
-                                "id": "b20ed7c8fc7f497197036256f220f0ec",
+                                "id": "76f7ecf9f15d4f54b3f10a2079c4ab1d",
                                 "text": "Back up the day's pictures",
                                 "done": true,
                                 "importance": 0,
@@ -281,11 +281,11 @@
                                 "blocked_by": [],
                                 "planned_time": null,
                                 "time_spent_minutes": null,
-                                "done_at": "2026-11-22T03:11:48+01:00",
+                                "done_at": "2026-11-23T16:24:01+01:00",
                                 "children": []
                             },
                             {
-                                "id": "d1e73cace44843eba093c6e6e45ba3c4",
+                                "id": "1855bce18f6143ada6fb050d5de57344",
                                 "text": "Check ticket and accommodation",
                                 "done": false,
                                 "importance": 0,
@@ -309,7 +309,7 @@
                                 "children": []
                             },
                             {
-                                "id": "01b44a654e2d48c0aeb03dfbe558b9d8",
+                                "id": "16afec30623f488297e151456dec6007",
                                 "text": "Clean the lenses",
                                 "done": false,
                                 "importance": 0,
@@ -339,7 +339,7 @@
                 "trash": []
             },
             "files": {
-                "attachments/94a17e9241484c3d875dba63ed9cc18d_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
+                "attachments/798adf6e8ec94837a1e45eb424190cc6_Route.csv": "TGVnO0Zyb207VG87VHJhbnNwb3J0O1JvdXRlCjE7V3VwcGVydGFsO0JlcmxpbjtUcmFpbjtJQ0UgwrcgMyBoCjI7QmVybGluO011bmljaDtUcmFpbjtJQ0UgwrcgNCBoCjM7TXVuaWNoO1ZpZW5uYTtUcmFpbjtSYWlsamV0IMK3IDQgaAo0O1ZpZW5uYTtNb25hY287RmxpZ2h0O0ZsaWdodCB0byBOaWNlCjU7TW9uYWNvO0JpbGJhbztGbGlnaHQ7RmxpZ2h0IHZpYSBQYXJpcwo2O0JpbGJhbztTZW91bDtGbGlnaHQ7TG9uZyBoYXVsIMK3IDE0IGgK"
             }
         }
     ]

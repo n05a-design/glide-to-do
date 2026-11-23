@@ -1,6 +1,6 @@
 # Calendar – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
 
 **Deutsch:** [Funktionen – Kalender im Tagespaket](../20_FUNKTIONEN.md#tagespaket-33314-au01-au03-g05au05-h-02), [Tagesplanung 3.39.0](../20_FUNKTIONEN.md#tagesplanung-3390), [§11 Kalenderdatei](../20_FUNKTIONEN.md#11-import-ausgabe-und-austausch) · [Guide contents](README.md) · Previous: [Day planning](04-day-planning.md) · Next: [Pages and notes](06-pages-and-notes.md)
 

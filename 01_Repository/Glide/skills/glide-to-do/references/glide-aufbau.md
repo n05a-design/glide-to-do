@@ -1,6 +1,6 @@
 # Glide verstehen: Aufbau und Datenmodell
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Austauschformat 2
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Austauschformat 2
 
 Für Agenten, die Nutzern Glide erklären oder an Glide mitarbeiten. Was der Skill davon anlegen kann, steht je Feld in `abdeckung.json`.
 

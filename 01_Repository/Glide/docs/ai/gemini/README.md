@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-GEMINI-CORE]
 
 # Glide knowledge base for Gemini
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 5631333a
 
 This collection is a curated, evidence-linked view of Glide at the source snapshot named above. It is not a replacement for the application, the canonical product contract, or the dated QA record. Read [Gemini Master Context](./02_GEMINI_MASTER_CONTEXT.md) first; use [Source Manifest](./SOURCE_MANIFEST.md) to navigate primary evidence.
 

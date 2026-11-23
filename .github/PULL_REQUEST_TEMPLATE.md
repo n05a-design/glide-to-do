@@ -1,6 +1,6 @@
 ## Summary / Überblick
 
-Status as of / Stand: Glide 1.0.1
+Status as of / Stand: Glide 1.0.2
 
 <!-- What changes, and why? / Was ändert sich, und warum? -->
 

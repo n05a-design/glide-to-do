@@ -14,7 +14,7 @@
 <p align="center">
   <img alt="Windows, macOS, and Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Source baseline 1.0.1" src="https://img.shields.io/badge/Source%20baseline-1.0.1-9E4AC8">
+  <img alt="Source baseline 1.0.2" src="https://img.shields.io/badge/Source%20baseline-1.0.2-9E4AC8">
   <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/License-MPL--2.0-2E7D32"></a>
 </p>
 
@@ -31,7 +31,7 @@
   <img alt="Glide pinboard with pages, tasks and labelled connections" src="01_Repository/Glide/assets/marketing/glide-1.0-pinnwand-en.png" width="100%">
 </picture>
 
-<p align="center"><sub>Glide is available in English and German. Screenshots show Glide 1.0.1 on macOS with the showcase “City Light”, a fictional photo journey; the photos are by Tim von Trostorff. They are not test or package evidence.</sub></p>
+<p align="center"><sub>Glide is available in English and German. Screenshots show Glide 1.0.2 on macOS with the showcase “City Light”, a fictional photo journey; the photos are by Tim von Trostorff. They are not test or package evidence.</sub></p>
 
 ## Why Glide?
 
@@ -70,7 +70,7 @@ All images show the showcase “City Light”: fictional data, real photos by th
 - **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home screen; multiple themes, font styles, and a pixel workshop.
 - **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
 
-The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.1, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
+The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.2, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
 
 ## What Glide is not
 
@@ -150,11 +150,11 @@ Please use synthetic example data only. Report security vulnerabilities confiden
 
 ## Development and quality
 
-Status as of 19.11.2026 · Glide 1.0.1
+Status as of 23.11.2026 · Glide 1.0.2
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks on main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 
-The Glide 1.0.1 source baseline is prepared for release; no public release has been approved yet. The badge above tracks checks on `main`, not this README's branch or another pull request. The [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
+The Glide 1.0.2 source baseline is prepared for release; no public release has been approved yet. The badge above tracks checks on `main`, not this README's branch or another pull request. The [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
 
 ## License
 

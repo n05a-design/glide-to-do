@@ -13,7 +13,13 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-AUDIT]
 
 # Knowledge base changelog
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
+
+## 1.2 — 2026-11-23 — status refresh for Glide 1.0.2
+
+- Refreshed version and release facts to Glide 1.0.2 across the knowledge base.
+- Recorded full owner completion of human visual and operation acceptance (Release 1.0, Etappe 2) and resolution of all acceptance findings.
+- Recorded multi-agent bootstrap and transactional safety integration (PR #193).
 
 ## 1.1 — 2026-11-22 — status refresh for Glide 1.0.1
 

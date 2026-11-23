@@ -1,6 +1,6 @@
 # Pages and notes – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
 
 **Deutsch:** [Funktionen §8 Seiten, Notizen, Notizbuch, Galerie](../20_FUNKTIONEN.md#8-seiten-notizen-notizbuch-galerie), [Arbeitsmodi und Seitenbedienung](../20_FUNKTIONEN.md#arbeitsmodi-und-seitenbedienung-d55-seit-3450-geliefert), [Aufgaben im Wissen](../20_FUNKTIONEN.md#aufgaben-im-wissen-33315-g29g31g32), [Seiten im Alltag](../20_FUNKTIONEN.md#seiten-im-alltag-33318-g28g09u08) · [Guide contents](README.md) · Previous: [Calendar](05-calendar.md) · Next: [Pinboards](07-pinboards.md)
 

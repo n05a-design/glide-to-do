@@ -1,6 +1,6 @@
 # Probedaten
 
-Stand 22.11.2026 · Glide 1.0.1 · Speicherstufe 26 · Vorlagen 2
+Stand 23.11.2026 · Glide 1.0.2 · Speicherstufe 26 · Vorlagen 2
 
 Der [Showcase „Stadtlicht“](Showcase/README.md) ist eine Fotoreise durch sieben Städte: 24 bearbeitbare Dokumente mit Reiseplan, Reiseführer, Reisetagebuch, Galerie mit 14 eigenen Fotos des Inhabers, drei Pinnwänden mit Bereichen und beschrifteten Verbindungen, Vorlagen und JSON-Canvas-Export. Die [englische Fassung „City Light“](Showcase/en/README.md) liegt in `Showcase/en`. Die Starter halten den Bestand im eigenen Arbeitsordner `Arbeitsstand-Stadtlicht` bzw. `Workspace-City-Light`.
 

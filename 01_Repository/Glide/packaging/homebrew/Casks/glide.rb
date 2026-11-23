@@ -3,7 +3,7 @@
 # Gehört in ein eigenes Tap-Repository n05a-design/homebrew-glide (Casks/glide.rb).
 # sha256 ist ein Platzhalter: Wert aus Glide-<v>-macos-arm64.dmg.sha256 eintragen.
 cask "glide" do
-  version "1.0.1"
+  version "1.0.2"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
 
   url "https://github.com/n05a-design/glide-to-do/releases/download/v#{version}/Glide-#{version}-macos-arm64.dmg"

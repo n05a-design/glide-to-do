@@ -4,7 +4,7 @@
 
 Der Umfang ist `pre-build`, einschließlich Bauhilfen, und `compositions.aggregate = incomplete`: kein behaupteter vollständiger transitiver Laufzeitgraph. Eine vollständige offizielle JSON-Schemaprobe mit jsonschema 4.26.0 bestand am 08.11.2026 für eine explizite MPL-Modellfixture und die unveränderte historische Mac-Lizenzbasis (23 Komponenten); Schemaquellen/Hashes und Aussagegrenzen im QA-Nachtrag. Die späteren nativen Entwicklungsbauten 3.55.0 enthalten das Inventar. WA-46 bleibt teilweise umgesetzt. Der vollständige transitive Laufzeitgraph ist weiterhin offen.
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen in Git-Fassung vom 05.11.2026](https://github.com/n05a-design/glide-to-do/blob/d55ff46da11f1ffb57cd1a71dbdc828565e3ffff/01_Repository/Glide/tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 
@@ -57,7 +57,7 @@ python3 -B packaging/macos/baue_app.py --ziel build/macos-vorstufe [--symbol and
 
 Baut `Glide.app` mit Quellen und Modulen (Start über `glide_start.py`), Ressourcen, dem macOS-Teil von `vendor/tkinterdnd2`, einer Kopie des Python-Starters aus dem installierten python.org-Framework, `Glide.icns` und Ad-hoc-Signatur. macOS führt den Prozess als „Glide“ mit `de.shaye.glide`. Das Bundle braucht das installierte Python mit Tk und ist nicht zur Weitergabe gedacht.
 
-**Installation per Terminal – [`winget/`](winget/manifests/s/Shaye/Glide/1.0.1/Shaye.Glide.installer.yaml) und [`homebrew/`](homebrew/Casks/glide.rb):** Entwürfe für `winget install Shaye.Glide` (Inno-Setup-Installer) und einen Homebrew-Cask aus den Release-Dateien; nicht eingereicht. Ablauf und offene Freigaben in [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf).
+**Installation per Terminal – [`winget/`](winget/manifests/s/Shaye/Glide/1.0.2/Shaye.Glide.installer.yaml) und [`homebrew/`](homebrew/Casks/glide.rb):** Entwürfe für `winget install Shaye.Glide` (Inno-Setup-Installer) und einen Homebrew-Cask aus den Release-Dateien; nicht eingereicht. Ablauf und offene Freigaben in [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf).
 
 **Windows-Installer & Verknüpfung – [`windows/glide_setup.iss`](windows/glide_setup.iss) und [`windows/verknuepfung_anlegen.ps1`](windows/verknuepfung_anlegen.ps1):** Inno-Setup-6-Skript zur Erzeugung von `Glide-<v>-windows-x64-setup.exe` für unprivilegierte Benutzerinstallation nach `%LOCALAPPDATA%\Programs\Glide` mit Startmenüeintrag (`AppUserModelID: "Shaye.Glide"`) und Deinstallation. Das PowerShell-Skript dient alternativ für Entwickler-Startmenüverknüpfungen am Quellstand.
 

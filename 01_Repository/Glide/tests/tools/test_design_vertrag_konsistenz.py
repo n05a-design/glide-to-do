@@ -18,6 +18,7 @@ import re
 import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
+VERSION = (REPO / "VERSION").read_text(encoding="utf-8").strip()
 DOCS_DESIGN = REPO / "docs" / "DESIGN_RICHTLINIEN.md"
 SHELL_DESIGN = REPO / "src" / "glide" / "glide_shell" / "DESIGN_RICHTLINIEN.md"
 
@@ -142,7 +143,7 @@ class TestDesignVertragKonsistenz(unittest.TestCase):
         self.assertIn("Portabler Designvertrag", lines[0])
         stand_line = lines[2]
         self.assertTrue(stand_line.startswith("Stand "))
-        self.assertIn("Glide 1.0.1", stand_line)
+        self.assertIn(f"Glide {VERSION}", stand_line)
         self.assertIn("Glide Shell 0.6.2", stand_line)
         self.assertIn("MPL-2.0", stand_line)
 

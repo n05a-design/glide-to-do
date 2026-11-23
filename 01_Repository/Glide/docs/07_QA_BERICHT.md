@@ -1,3 +1,20 @@
+## Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2, 23.11.2026)
+
+| Gegenstand | Befehl / Nachweis | Ergebnis |
+|---|---|---|
+| Menschliche Abnahme | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` | Alle 5 Prüfschritte durch den Inhaber auf dem Kandidatenstand positiv abgenommen (Spracheinstellung DE/EN, Erscheinungsbild Hell/Dunkel/Mindestmaß, Tastatur & Fokus D87, Seiteneditor & Undo, Aufgabeninspektor) |
+| Dynamischer Sprachwechsel | `refresh_sidebar_locale()` | Umschaltung Deutsch/Englisch in den Einstellungen aktualisiert Seitenleistentitel und Tooltips unmittelbar ohne Neustart |
+| Adaptiver Titelbild-Zuschnitt | `make_page_cover(..., adaptive=True)` | Bildhöhe adaptiv auf 0.34 begrenzt (max. 240px); zentrierter Zuschnitt ohne vertikale Verzerrung |
+| Zeichnungen als Eckstempel | `show_corner_cover` | Pixel-Zeichnungen als Cover sitzen kompakt als 56px-Miniatur oben rechts in der Lesespalte und scrollen mit dem Text |
+| Fußleisten-Dichte | `sync_foot_density()` | „Erwähnt ohne Verweis …“ wird in kleinster Kopfstufe (`minimal`) ausgeblendet, so dass die Fußzeile einzeilig bleibt |
+| Bild- und Tabellenumfluss | `tag_configure(fluss, wrap='word')` | Text- und Tabellenzeilen umfließen rechtsbündige Bilder sauber mit Wortumbruch ohne horizontale Überlappung; Showcase-Stadtseiten mit Tabellen (Wuppertal, Berlin) linksbündig platziert |
+| Natürliche Datumswörter | `parse_due_words` | Akzeptiert „today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“ im Fälligkeitsfeld und Kalenderdialog |
+| Showcase-Prüfung | `python3 -B tests/tools/pruefe_showcase.py` | Showcase DE und EN vollständig grün (Exitcode 0) |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | Alle 19 Schritte vollständig grün (Exitcode 0) |
+| Standprüfung | `python3 -B tests/tools/standpruefung.py` | 148 Dokumente fehlerfrei (Exitcode 0) |
+| Lieferabgleich | `python3 -B scripts/pflege/abgleich_07.py` | 110 Code-Dateien, 169 Ressourcen bytegleich (0 Abweichungen) |
+| Regressionstests 1.0.2 | `tests/unit/test_release_1_0_2_regressions.py` (T340) | 15/15 Tests grün: Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel-Skalierung/Clear, Fußleisten-Dichte, Wortumbruch bei Tabellenumfluss, Fälligkeitswörter ('today'/'heute') und Shell-Manifest-Härtung |
+
 ## Multi-Agent Readiness, Bootstrap & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 23.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |
@@ -10,7 +27,7 @@
 | Referenzhost & Consumer-Projekte | `tests/integration/test_shell_referenzhost.py` (T337, 5 Tests) | Testprojekt A (isolierter Host mit AppHost, Dialogen, Timern und Wächter gegen Glide-Abhängigkeiten); Testprojekt B (historischer Upgrade 0.5.0 Commit `3c91e0c8` auf 0.6.2 unter Erhalt aller Host-Dateien und Rollback bei Fehler); Testprojekt C (Diagnose beschädigter Installationen und `python -O` Selbsttest) |
 | Agenten-Einstiege | `tests/tools/test_agent_einstieg.py` (T338, 4 Tests) | Wurzel-AGENTS.md, vollständige Skill-Spiegelung (.agents ↔ .claude), Copilot/Gemini-Adapter und Trennung von Produkt-Skill verifiziert |
 
-# QA-Bericht – Glide 1.0.1
+# QA-Bericht – Glide 1.0.2
 
 ## Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
 
@@ -41,7 +58,7 @@ Geprüft auf macOS arm64 mit Python 3.14.5 und Tk 9.1, isoliertem Datenordner, k
 | Manuelle CI-Jobs auf `main` `4ce3697a` | UI-Diagnose `aufgaben-layout` ([#45011711491](https://github.com/n05a-design/glide-to-do/actions/runs/45011711491)) und `tagesdialoge` ([#45011713817](https://github.com/n05a-design/glide-to-do/actions/runs/45011713817)) grün. `zugang400` ([#45011709194](https://github.com/n05a-design/glide-to-do/actions/runs/45011709194)): native AT-SPI- und MSAA-Kennungen, Tcl-Klassenbindungen, Kernablauf und isolierter Windows-Prototyp grün; rot sind nur die Schritte mit echter Orca- und NVDA-Sprachausgabe. Screenreader-Sprachausgabe ist laut Abnahmestand bis Bedarf zurückgestellt und keine 1.0-Restaufgabe. |
 | GitHub-Matrix `main` `4ce3697a` | Vollständig grün: Dokumentation, macOS-Paket, Grundstufe, Linux- und Windows-Vollprüfung (Tk 9.1) sowie eigenständiges Windows-Paket ([#45011160530](https://github.com/n05a-design/glide-to-do/actions/runs/45011160530)). |
 
-**Offen:** GitHub-Matrix für den PR dieses Stands; menschliche Sicht- und Bedienabnahme; Screenreader-Sprachausgabe (zurückgestellt); Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe.
+**Offen:** GitHub-Matrix für den PR dieses Stands; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Screenreader-Sprachausgabe (zurückgestellt); Tag, Release, Notarisierung und Paketmanager-Einreichung nur mit Freigabe.
 
 ## Release-Runde 1.0.1: Volllauf, macOS-Paket und DMG (V1.83, 22.11.2026)
 
@@ -482,7 +499,7 @@ Der Werkzeugtest T299 (`tests/tools/test_standpruefung.py`) prüft jetzt die Spr
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
-**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.1, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
+**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.2, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
 
 **Vollprüfung:** `tests/tools/pruefen.py --modus voll --timeout 900 --arbeitsablage ~/GlidePruefung`; Ergebnis `~/GlidePruefung/voll-141-20261118-r4/ergebnis.json`, dauerhafter WA-42-Nachweis `~/GlidePruefung/lauf-esdb9s05`. Exitcode 0: **135 ausgeführte Schritte erfolgreich, 2 ausdrücklich übersprungen**. Syntax 447 Python-Dateien, Versions-/Dokument-/Fixtureprüfungen, Fachlogik-Unit-Tests, sämtliche Integrationssuiten, Showcase, statische und Erreichbarkeitsanalyse, Stand-/Attribut-/Duplikatprüfungen sowie Beispieldaten- und Releaseabgleich bestanden. Quellhash von `app.pyw`: `bd7d9f90aed799e233b945914f34bba1fbb9485aa9fa06dddcd0f3d44698548b`. Screenshots wurden übersprungen, da `screenshots.py` Linux/X11 voraussetzt; die Sichtprüfung bleibt ausdrücklich menschlich und offen.
 
@@ -531,7 +548,7 @@ Nachweisstand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pa
 
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
-Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.1, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.2, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -549,7 +566,7 @@ Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skil
 
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
-Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.1, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.2, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -1111,7 +1128,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

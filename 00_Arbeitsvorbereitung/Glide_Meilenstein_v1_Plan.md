@@ -1,6 +1,6 @@
-# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.1)
+# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.2)
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung; diese Schritte bleiben dem Inhaber vorbehalten.
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung; diese Schritte bleiben dem Inhaber vorbehalten.
 
 Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
 

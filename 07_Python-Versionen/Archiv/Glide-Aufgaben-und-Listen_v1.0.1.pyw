@@ -2925,7 +2925,8 @@ class DueField(tk.Frame):
 
         # Eine Eingabe von Hand springt im Kalender auf den passenden Monat.
         self.date_entry.bind("<KeyRelease>", self._on_typed_date)
-        self.date_entry.bind("<FocusOut>", self._on_typed_date)
+        self.date_entry.bind("<FocusOut>", self._on_date_focus_out)
+        self.date_entry.bind("<Return>", self._on_date_focus_out)
 
     MIN_INLINE_TIME_WIDTH = 380
 
@@ -2971,7 +2972,7 @@ class DueField(tk.Frame):
         Was gerade in den Feldern steht, ist der Ausgangswert – auch dann, wenn
         es von Hand getippt und noch nicht übernommen wurde.
         """
-        typed_due = self.app.parse_due_input(self.date_entry.get())
+        typed_due = self.app.parse_due_words(self.date_entry.get())
         start_due = self._selected if typed_due is None else (typed_due or None)
         typed_time = self.app.parse_due_time_input(self.time_entry.get())
         start_time = (typed_time or None) if typed_time is not None else None
@@ -3102,7 +3103,7 @@ class DueField(tk.Frame):
 
     # --- Schnittstelle --------------------------------------------------
     def _on_typed_date(self, _event=None):
-        parsed = self.app.parse_due_input(self.date_entry.get())
+        parsed = self.app.parse_due_words(self.date_entry.get())
         if not parsed:
             return
         self._selected = parsed
@@ -3110,6 +3111,16 @@ class DueField(tk.Frame):
         if typed:
             self._year, self._month = typed.year, typed.month
         self._render_month()
+
+    def _on_date_focus_out(self, _event=None):
+        self._on_typed_date(_event)
+        raw = self.date_entry.get().strip()
+        if raw.casefold() in self.app.DUE_WORDS:
+            parsed = self.app.parse_due_words(raw)
+            if parsed:
+                display = self.app.format_due_display(parsed)
+                self.date_entry.delete(0, tk.END)
+                self.date_entry.insert(0, display)
 
     def set_due(self, iso_value):
         """Setzt das Datum aus dem Kalender heraus und hält das Feld gleich."""
@@ -3132,7 +3143,7 @@ class DueField(tk.Frame):
         Die Prüfung sitzt hier und nicht im Dialog, damit jede Verwendung
         dieselbe Fehlermeldung und dieselben zulässigen Schreibweisen bekommt.
         """
-        parsed_due = self.app.parse_due_input(self.date_entry.get())
+        parsed_due = self.app.parse_due_words(self.date_entry.get())
         if parsed_due is None:
             return None, glide_i18n.t("calendar.invalid_date", "Bitte ein Datum im Format TT.MM.JJJJ eingeben.")
         parsed_time = self.app.parse_due_time_input(self.time_entry.get()) if self.show_time else ""
@@ -10407,6 +10418,9 @@ class PageEditor(RichNoteEditor):
             self._foot_row, glide_i18n.t("ui.init.mentioned_without_reference", 'Erwähnt ohne Verweis …'), self.toggle_mentions, 'muted', width=1, height=28)
         self._mentions_button.pack(side='left', anchor='w')
         self.status.pack(side='left', fill='x', expand=True, padx=(12, 0))
+        # Abnahme 23.11.2026: In der kleinsten Kopfstufe (Logo ausgeblendet) verschwindet
+        # auch „Erwähnt ohne Verweis“, damit die Fußleiste nicht zweizeilig wird.
+        self.bind('<Configure>', lambda _event: self.sync_foot_density(), add='+')
         self._mentions_rows = tk.Frame(self._mentions_host, bg=theme['card'])
         self._features_signature = None
         self.live_tree = None
@@ -11104,6 +11118,21 @@ class PageEditor(RichNoteEditor):
         self.rename_page()
         return 'break'
 
+    def sync_foot_density(self):
+        """„Erwähnt ohne Verweis …“ nur zeigen, solange der Kopf nicht in der kleinsten Stufe steht."""
+        knopf = getattr(self, '_mentions_button', None)
+        if knopf is None:
+            return
+        try:
+            eng = self.app.header_density() == 'minimal'
+            sichtbar = bool(knopf.winfo_manager())
+            if eng and sichtbar and not self._mentions_open:
+                knopf.pack_forget()
+            elif not eng and not sichtbar:
+                knopf.pack(side='left', anchor='w', before=self.status)
+        except tk.TclError:
+            pass
+
     def toggle_mentions(self):
         if self._mentions_open:
             self._mentions_rows.pack_forget()
@@ -11237,8 +11266,14 @@ class PageEditor(RichNoteEditor):
             # Titelbild/Live-Liste entfernt: Bereich nicht in alter Höhe stehen lassen.
             self.app.collapse_if_empty(host)
         self.live_tree = None
-        if entry.get('cover'):
-            self.app.make_page_cover(self._cover_host, entry, height=110).pack(fill='x', pady=(0, 6))
+        self.clear_corner_cover()
+        cover = entry.get('cover') or {}
+        if cover.get('kind') == 'drawing':
+            # Abnahme 23.11.2026: Ein Pixelsymbol als Titelbild stand verloren in einem
+            # breiten Band. Es sitzt jetzt klein in der rechten oberen Ecke und scrollt mit.
+            self.show_corner_cover(cover)
+        elif cover:
+            self.app.make_page_cover(self._cover_host, entry, height=110, adaptive=True).pack(fill='x', pady=(0, 6))
         if not rows:
             return
         self._live_target = current if current in targets else targets[0]
@@ -11430,6 +11465,8 @@ class PageEditor(RichNoteEditor):
         if self.images:
             # Beim ersten Aufbau sofort, danach gebündelt.
             self.schedule_image_layout(0 if not self._image_views else 120)
+        if getattr(self, '_corner_cover', None) is not None:
+            self.layout_corner_cover()
 
     # --- Dokument ---------------------------------------------------------
     def document(self):
@@ -12800,6 +12837,7 @@ class PageEditor(RichNoteEditor):
                 and not any(getattr(view, '_conversion_pending', False) for view in self._image_views.values())):
             geaendert = {key for key in keys if teile[key] != vorher[1][key]}
             if not geaendert:
+                self.layout_corner_cover()
                 self.place_images()
                 return
         if geaendert is None:
@@ -12837,7 +12875,7 @@ class PageEditor(RichNoteEditor):
                 if info['mode'] == 'left':
                     text.tag_configure(fluss, lmargin1=breite + self.IMAGE_GAP, lmargin2=breite + self.IMAGE_GAP)
                 else:
-                    text.tag_configure(fluss, rmargin=breite + self.IMAGE_GAP)
+                    text.tag_configure(fluss, rmargin=breite + self.IMAGE_GAP, wrap='word')
                 if schub:
                     # Die Ankerzeile rückt unter das vorige Bild; ihr Abstand
                     # zählt im Umfluss mit.
@@ -12858,6 +12896,7 @@ class PageEditor(RichNoteEditor):
         for tag in [t for t in text.tag_names() if str(t).startswith(('imgflow:', 'imgpad:', 'imgend:', 'imgpush:'))]:
             text.tag_raise(tag)
         self._image_layout_signature = self.image_layout_signature(keys, links, spalte)
+        self.layout_corner_cover()
         self.place_images()
 
     # Bilder weiter oben als diese Pixelzahl über dem Anker können nicht mehr
@@ -13040,7 +13079,72 @@ class PageEditor(RichNoteEditor):
         dx, dy = self.place_origin()
         widget.place(x=x - dx, y=y - dy, **optionen)
 
+    CORNER_COVER_SIZE = 56
+
+    def clear_corner_cover(self):
+        """Pixelsymbol-Titelbild in der Ecke und seinen Umfluss entfernen."""
+        label = getattr(self, '_corner_cover', None)
+        self._corner_cover = None
+        try:
+            for tag in ('cornerflow', 'imgend:corner'):
+                self.text.tag_remove(tag, '1.0', 'end')
+        except tk.TclError:
+            pass
+        if label is not None:
+            try:
+                label.destroy()
+            except tk.TclError:
+                pass
+
+    def show_corner_cover(self, cover):
+        """Zeichnung als kleines Titelsymbol rechts oben in der Lesespalte; sie scrollt mit dem Text."""
+        try:
+            model = glide_drawing.DrawingModel.from_document(cover['document'])
+            foto = glide_drawing_image.thumbnail_photo(model, self.CORNER_COVER_SIZE, master=self.text)
+        except (ValueError, KeyError, tk.TclError):
+            return
+        name = glide_i18n.t("ui.build_page_menu.cover_image", 'Titelbild')
+        label = tk.Label(self.text, image=foto, bg=self.app.theme['card'], bd=0, padx=0, pady=0)
+        label._photo = foto
+        label._accessible_name = name
+        self.app.add_tooltip(label, name)
+        self.app.bind_mousewheel(label, self.text)
+        self._corner_cover = label
+        self.layout_corner_cover()
+
+    def layout_corner_cover(self):
+        """Text neben dem Eckbild umfließen lassen und das Bild an seine Stelle setzen."""
+        label = getattr(self, '_corner_cover', None)
+        text = self.text
+        try:
+            for tag in ('cornerflow', 'imgend:corner'):
+                text.tag_remove(tag, '1.0', 'end')
+            if label is None or not label.winfo_exists() or text.winfo_width() <= 1:
+                return
+            breite, hoehe = label.winfo_reqwidth(), label.winfo_reqheight()
+            text.tag_configure('cornerflow', rmargin=breite + self.IMAGE_GAP, wrap='word')
+            self.flow_around('cornerflow', '1.0', hoehe + 6, 'corner')
+            text.tag_raise('cornerflow')
+            self.place_corner_cover()
+        except tk.TclError:
+            pass
+
+    def place_corner_cover(self):
+        label = getattr(self, '_corner_cover', None)
+        if label is None:
+            return
+        try:
+            links, spalte = self.column_bounds()
+            y = self.line_top('1.0') + 4
+            if y > self.text.winfo_height() or y + label.winfo_reqheight() < 0:
+                label.place_forget()
+                return
+            self.place_at(label, links + spalte - label.winfo_reqwidth(), y)
+        except tk.TclError:
+            pass
+
     def place_images(self):
+        self.place_corner_cover()
         if not self._image_views or self._image_drag is not None:
             return
         text = self.text
@@ -32692,6 +32796,7 @@ class ListApp:
             self.apply_theme()
             if chosen_lang_code != previous_lang:
                 self._home_signature = None  # Startseite in der neuen Sprache neu aufbauen
+                self.refresh_sidebar_locale()
                 editor = self.current_drawing_editor()
                 if editor is not None:
                     editor.refresh_locale()
@@ -39984,6 +40089,48 @@ class ListApp:
         except tk.TclError:
             self._sidebar_heights_after = None
             self._sidebar_heights_pending = False
+
+    def refresh_sidebar_locale(self):
+        """Überschriften und Hinweise der Seitenleisten-Bereiche in der gewählten Sprache.
+
+        Sie entstehen beim Start; ohne diesen Lauf blieben „Seiten“, „Listen“,
+        „Notizen“ und „Zeichnungen“ nach einem Sprachwechsel bis zum Neustart
+        deutsch (Abnahme 23.11.2026).
+        """
+        t = glide_i18n.t
+        bereiche = (
+            ("sidebar_title", "sidebar_heading_icon", None,
+             t("sidebar.lists", "Listen"),
+             t("ui.create_list_sidebar.show_all_lists_and", "Alle Listen und Ordner als Kacheln anzeigen"), None),
+            ("pages_title", "pages_heading_icon", "add_pages_button",
+             t("sidebar.pages", "Seiten"),
+             t("ui.create_pages_sidebar.all_pages_with_favorites", "Alle Seiten mit Favoriten und Zuletzt geöffnet"),
+             t("ui.create_pages_sidebar.new_page_book_or", "Neue Seite, Buch oder Import")),
+            ("notes_title", "notes_heading_icon", "add_notes_button",
+             t("sidebar.notes", "Notizen"),
+             t("ui.create_notes_sidebar.all_notes_and_notebooks", "Alle Notizen und Notizbücher"),
+             t("ui.create_notes_sidebar.new_note_template_or", "Neue Notiz, Vorlage oder Notizbuch")),
+            ("drawings_title", "drawings_heading_icon", "add_drawings_button",
+             t("sidebar.drawings", "Zeichnungen"),
+             t("ui.create_drawings_sidebar.all_drawings", "Alle Zeichnungen"),
+             t("ui.create_drawings_sidebar.new_drawing_or_folder", "Neue Zeichnung oder Ordner")),
+        )
+        for titel_name, pfeil_name, plus_name, titel, hinweis, plus_hinweis in bereiche:
+            label = getattr(self, titel_name, None)
+            if label is None:
+                continue
+            try:
+                label.configure(text=titel)
+            except tk.TclError:
+                continue
+            self.add_tooltip(label, hinweis)
+            pfeil = getattr(self, pfeil_name, None)
+            if pfeil is not None:
+                self.add_tooltip(pfeil, t("ui.build_sidebar_section.expand_or_collapse",
+                                          '{titel} ein- oder ausklappen', titel=titel))
+            plus = getattr(self, plus_name, None) if plus_name else None
+            if plus is not None and plus_hinweis:
+                self.add_tooltip(plus, plus_hinweis)
 
     def update_section_heading(self, key, hover=False):
         if key == "drawings":
@@ -47649,6 +47796,29 @@ class ListApp:
                 continue
         return None
 
+    # Wörter, die ein Datumsfeld zusätzlich zu TT.MM.JJJJ annimmt (Abnahme 23.11.2026):
+    # „today“ bzw. „heute“ setzt den heutigen Tag, „tomorrow“/„morgen“ den nächsten usw.
+    DUE_WORDS = {
+        "today": 0, "heute": 0, "tomorrow": 1, "morgen": 1,
+        "day after tomorrow": 2, "übermorgen": 2, "uebermorgen": 2,
+        "yesterday": -1, "gestern": -1,
+    }
+
+    @classmethod
+    def parse_due_words(cls, text, today=None):
+        """Wie `parse_due_input`, nimmt aber zusätzlich Tageswörter („today“, „heute“ …) an.
+
+        Nur für Eingabefelder gedacht; Importe bleiben bei `parse_due_input`, damit
+        ein Wort in fremden Daten nie stillschweigend zu einem Datum wird.
+        """
+        if text is None:
+            return None
+        wort = " ".join(str(text).split()).casefold()
+        if wort in cls.DUE_WORDS:
+            basis = today or datetime.now().date()
+            return (basis + timedelta(days=cls.DUE_WORDS[wort])).strftime("%Y-%m-%d")
+        return cls.parse_due_input(text)
+
     @staticmethod
     def format_due_display(iso_value):
         """Formatiert ein ISO-Datum als TT.MM.JJJJ für die Anzeige."""
@@ -51411,13 +51581,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 os.remove(stored)
         return ok
 
-    def make_page_cover(self, host, entry, height=110, image_path=None):
+    COVER_RATIO = 0.34       # Höhe des Titelbilds im Seiteneditor je Breite
+    COVER_MAX_HEIGHT = 240
+    COVER_FOCUS = 0.38       # Bildausschnitt: Blick etwas über der Mitte
+    COVER_MAX_UPSCALE = 1.5  # Kleine Bilder werden nicht beliebig aufgeblasen
+
+    def make_page_cover(self, host, entry, height=110, image_path=None, adaptive=False):
         canvas = tk.Canvas(host, height=height, bg=self.theme['input'], highlightthickness=0)
         value = copy.deepcopy(entry.get('cover'))
         def render(event=None):
             if not canvas.winfo_exists():
                 return
             width = max(80, canvas.winfo_width()); canvas.delete('all'); image = None
+            cover_height = height
+            if adaptive:
+                # Abnahme 23.11.2026: Ein Hochformatfoto in einem 110-px-Streifen wirkte wie
+                # ein stark gezogener Ausschnitt. Höhe folgt der Breite, Ausschnitt mit Blickpunkt.
+                cover_height = max(height, min(self.COVER_MAX_HEIGHT, round(width * self.COVER_RATIO)))
+                if int(float(canvas.cget('height'))) != cover_height:
+                    canvas.configure(height=cover_height)
             try:
                 if value and value.get('kind') == 'drawing':
                     model = glide_drawing.DrawingModel.from_document(value['document'])
@@ -51427,14 +51609,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     path = image_path or (self.resolve_attachment_path(attachment) if attachment else None)
                     if path and self.previews.needs_conversion(canvas, path):
                         self.previews.request_conversion(canvas, path, lambda _result: render())
-                    if path: image = self.previews.image(canvas, path, width=width)
+                    if path:
+                        natur = self.previews.natural_size(canvas, path) if adaptive else None
+                        ziel = width
+                        if natur:
+                            # Nie stärker vergrößern als COVER_MAX_UPSCALE; schmale Bilder stehen mittig.
+                            ziel = min(width, max(1, round(natur[0] * self.COVER_MAX_UPSCALE)))
+                        image = self.previews.image(canvas, path, width=ziel)
             except (ValueError, tk.TclError):
                 image = None
             canvas._photo = image
             if image is not None:
-                canvas.create_image(width//2, height//2, anchor='center', image=image)
+                if adaptive and image.height() > cover_height:
+                    # Zuschnitt statt Verzerrung: gleicher Maßstab, Blickpunkt oberhalb der Mitte.
+                    oben = -round((image.height() - cover_height) * self.COVER_FOCUS)
+                    canvas.create_image(width//2, oben, anchor='n', image=image)
+                else:
+                    canvas.create_image(width//2, cover_height//2, anchor='center', image=image)
             else:
-                canvas.create_text(width//2, height//2, text=glide_i18n.t("ui.render.cover_image_no_preview", 'Titelbild · Keine Vorschau'), width=width-12,
+                canvas.create_text(width//2, cover_height//2, text=glide_i18n.t("ui.render.cover_image_no_preview", 'Titelbild · Keine Vorschau'), width=width-12,
                                    fill=self.theme['muted'], font=app_font(10))
         canvas.bind('<Configure>', render)
         return canvas

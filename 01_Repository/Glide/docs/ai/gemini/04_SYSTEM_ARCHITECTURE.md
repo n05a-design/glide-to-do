@@ -13,7 +13,7 @@ related_documents: [GLIDE-CODEBASE, GLIDE-DATA, GLIDE-I18N]
 
 # System architecture
 
-Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Runtime shape
 

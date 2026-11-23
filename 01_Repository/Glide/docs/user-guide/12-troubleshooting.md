@@ -1,6 +1,6 @@
 # Troubleshooting – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.1 · Task format 26
+Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
 
 **Deutsch:** [Funktionen – Speicherstatus](../20_FUNKTIONEN.md#speicherstatus-und-sicherungsreserve-wa-40wa-47-seit-3450-geliefert), [Schreibbesitz](../20_FUNKTIONEN.md#schreibbesitz-und-mehrfachaktionen-roadmap-paket-1), [§13 Bekannte Grenzen](../20_FUNKTIONEN.md#13-bekannte-grenzen), [Wiederanlauf](../06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-lokaler-kandidat-3490) · [Guide contents](README.md) · Previous: [Keyboard shortcuts](11-keyboard-shortcuts.md)
 
