@@ -220,7 +220,7 @@ def check_app_host(root):
     return f"preflight, shortcuts and close path on {platform}"
 
 
-def _check_manifest(_root, folder=None):
+def check_manifest(_root=None, folder=None):
     """Prüft eine übernommene Kopie gegen ihr eigenes Manifest, ohne Glide-Checkout (shell_uebernehmen.py)."""
     folder = pathlib.Path(folder or os.path.dirname(os.path.abspath(__file__)))
     path = folder / "SHELL_MANIFEST.json"
@@ -248,13 +248,15 @@ def _check_manifest(_root, folder=None):
     return f"{len(files)} files match manifest ({str(data.get('quell_commit') or 'no commit')[:12]})"
 
 
+_check_manifest = check_manifest
+
 CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("system_appearance", check_appearance), ("redo_history", check_redo),
           ("window_lifetime+motion", check_scope_and_motion), ("desktop_adapter+custom_controls", check_controls),
           ("text_fit", check_text_fit), ("action_picker", check_action_picker),
           ("runtime_paths", check_runtime_paths), ("command_history", check_command_history),
           ("app_host", check_app_host), ("modal_session", check_modal),
-          ("manifest", _check_manifest))
+          ("manifest", check_manifest))
 
 
 def run(out=sys.stdout):

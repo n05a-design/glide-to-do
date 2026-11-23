@@ -365,6 +365,53 @@ class TestCustomControlsInteractions(unittest.TestCase):
         finally:
             root.destroy()
 
+    def test_multi_host_provider_isolation(self):
+        """Prüft, dass Schriften, Hintergründe und Tintenberechnung hierarchisch aufgelöst werden."""
+        from glide_shell import custom_controls
+
+        root = tk.Tk()
+        root.withdraw()
+        top1 = tk.Toplevel(root)
+        top1.withdraw()
+        top2 = tk.Toplevel(root)
+        top2.withdraw()
+        try:
+            # 1. Globaler Fallback
+            custom_controls.set_font_provider(lambda size, *s: ("Courier", size))
+            custom_controls.set_backdrop_painter(lambda c: c.create_line(0, 0, 10, 10, tags=("global_bg",)))
+            self.assertEqual(custom_controls._default_font(12), ("Courier", 12))
+
+            # 2. Toplevel-spezifischer Override (top1)
+            top1._font_provider = lambda size, *s: ("Times", size)
+            top1._backdrop_painter = lambda c: c.create_line(0, 0, 20, 20, tags=("top1_bg",))
+            lbl1 = custom_controls.CanvasLabel(top1, text="Test 1")
+            self.assertEqual(custom_controls._default_font(14, widget=lbl1), ("Times", 14))
+
+            # Canvas in top1 erhält top1-Painter
+            cv1 = tk.Canvas(top1, width=50, height=50)
+            custom_controls.paint_canvas_backdrop(cv1)
+            self.assertTrue(bool(cv1.find_withtag("top1_bg")))
+            self.assertFalse(bool(cv1.find_withtag("global_bg")))
+
+            # 3. top2 ohne Override fällt auf global zurück (Multi-Host Isolation)
+            lbl2 = custom_controls.CanvasLabel(top2, text="Test 2")
+            self.assertEqual(custom_controls._default_font(14, widget=lbl2), ("Courier", 14))
+
+            cv2 = tk.Canvas(top2, width=50, height=50)
+            custom_controls.paint_canvas_backdrop(cv2)
+            self.assertTrue(bool(cv2.find_withtag("global_bg")))
+            self.assertFalse(bool(cv2.find_withtag("top1_bg")))
+
+            # 4. Widget-spezifischer Override überstimmt Toplevel
+            lbl1._font_provider = lambda size, *s: ("Helvetica", size)
+            self.assertEqual(custom_controls._default_font(16, widget=lbl1), ("Helvetica", 16))
+        finally:
+            custom_controls.set_font_provider(None)
+            custom_controls.set_backdrop_painter(None)
+            top1.destroy()
+            top2.destroy()
+            root.destroy()
+
 
 def main():
     suite = unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])

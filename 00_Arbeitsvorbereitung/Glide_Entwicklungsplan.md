@@ -3881,16 +3881,16 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 - **A – Auftrag:** Glide Shell für lokale KI-Agenten optimieren (Antigravity, Codex, Copilot, Claude, Gemini). Reproduzierbare Übernahme, Manifest-Integrität, portabler Designvertrag, isolierter Referenzhost, Test- und Dokumentenabgleich.
 - **B – Umsetzung:**
   - Wurzel-`AGENTS.md` für agentenneutralen Einstieg.
-  - Skill `glide-shell` nach `.agents/skills/` gespiegelt und in `.claude/skills/` synchronisiert (T338).
+  - Skill `glide-shell` nach `.agents/skills/` gespiegelt und in `.claude/skills/` synchronisiert; ebenso `design-richtlinien` und `glide-aufbau` gespiegelt (T338).
   - `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt.
   - `shell_uebernehmen.py` erweitert um `--commit <Rev>`, Lizenznachweis MPL-2.0, Integritätswächter gegen unsaubere Quellen, Symlink-Sperre sowie atomares Snapshot-Rollback bei abgebrochenem oder fehlerhaftem Schreibvorgang (T331).
-  - `selftest.py` auf 13/13 Checks erweitert: prüft eine übernommene Kopie autonom gegen `SHELL_MANIFEST.json` inklusive Pfadsicherheit und Symlink-Ausschluss (T333).
-  - `custom_controls.py` erweitert um hierarchische UI-Provider-Isolation (`widget` → `toplevel` → global) für Schrift, Hintergründe und Glyphenmetrik (T336).
+  - `selftest.py` auf 13/13 Checks erweitert: prüft eine übernommene Kopie autonom gegen `SHELL_MANIFEST.json` inklusive Pfadsicherheit und Symlink-Ausschluss (T333); `check_manifest` als öffentliche Schnittstelle in `SHELL_MODULE` (T319) registriert.
+  - `custom_controls.py` erweitert um hierarchische UI-Provider-Isolation (`widget` → `toplevel` → global) für Schrift, Hintergründe und Glyphenmetrik (T336); Testfall `test_multi_host_provider_isolation` in `test_custom_controls.py` integriert.
   - Portabler Designvertrag in `DESIGN_RICHTLINIEN.md` verankert (universelle Regeln, Shell-Provider, Host-Freiheiten).
   - `test_shell_referenzhost.py` (T337) als dauerhafter E2E-Referenzhost mit Wächter gegen unzulässige Glide-Kopplung, unterbrechungsfreiem Upgrade von Altversionen (0.5.0 → 0.6.2) unter Erhalt aller Host-Dateien sowie Rollback-Verifikation.
   - `GLIDE_SYSTEM_VERSION` auf V1.86 angehoben und Register gepflegt.
 - **C – Prüfung:**
-  - T331 (18 Fälle), T333 (13/13 + Gegenproben), T337 (4 Fälle), T338 (4 Fälle) und alle Shell-Suiten grün (64 Tests).
+  - T331 (18 Fälle), T333 (13/13 + Gegenproben), T337 (4 Fälle), T338 (4 Fälle) und alle Shell-Suiten grün (79 Tests).
   - CI-Grundstufe vollständig bestanden.
 - **D – Rest:**
   - Release-Tag / Wheel-Distribution (P2-Entscheidungsvorlage).

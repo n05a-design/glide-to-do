@@ -29,13 +29,17 @@ class AgentEinstiegTest(unittest.TestCase):
         self.assertIn("Die Shell bleibt frei von Glide-Fachlogik", text)
 
     def test_skills_sind_gespiegelt_und_konsistent(self):
-        claude_skill = PROJEKT / ".claude" / "skills" / "glide-shell" / "SKILL.md"
-        agent_skill = PROJEKT / ".agents" / "skills" / "glide-shell" / "SKILL.md"
-        self.assertTrue(claude_skill.is_file(), "Claude glide-shell SKILL.md fehlt")
-        self.assertTrue(agent_skill.is_file(), "Agent glide-shell SKILL.md fehlt")
-        self.assertEqual(claude_skill.read_text(encoding="utf-8"),
-                         agent_skill.read_text(encoding="utf-8"),
-                         "Skills zwischen .claude und .agents weichen ab")
+        claude_dir = PROJEKT / ".claude" / "skills"
+        agent_dir = PROJEKT / ".agents" / "skills"
+        self.assertTrue(claude_dir.is_dir(), ".claude/skills fehlt")
+        self.assertTrue(agent_dir.is_dir(), ".agents/skills fehlt")
+        claude_files = sorted(p.relative_to(claude_dir) for p in claude_dir.rglob("*") if p.is_file())
+        agent_files = sorted(p.relative_to(agent_dir) for p in agent_dir.rglob("*") if p.is_file())
+        self.assertEqual(claude_files, agent_files, "Dateiliste zwischen .claude/skills und .agents/skills weicht ab")
+        for rel in claude_files:
+            c_bytes = (claude_dir / rel).read_bytes()
+            a_bytes = (agent_dir / rel).read_bytes()
+            self.assertEqual(c_bytes, a_bytes, f"Skill-Datei {rel} weicht zwischen .claude und .agents ab")
 
     def test_copilot_und_gemini_adapter_vorhanden(self):
         copilot = PROJEKT / ".github" / "copilot-instructions.md"
