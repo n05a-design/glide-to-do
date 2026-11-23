@@ -70,6 +70,13 @@ jobs:
       - name: CI-Grundstufe
         run: python -B tests/tools/ci_grundstufe.py --protokoll "$RUNNER_TEMP/grundstufe"
 
+      - name: Verpflichtende Tk-Regressionstests (Glide 1.0.2)
+        env:
+          GLIDE_REQUIRE_TK: "1"
+        run: |
+          xvfb-run -a --server-args="-screen 0 1400x1100x24" \
+            python -B -m unittest -v tests/unit/test_release_1_0_2_regressions.py
+
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -78,6 +85,32 @@ jobs:
           path: ${{ runner.temp }}/grundstufe
           retention-days: 14
           if-no-files-found: ignore
+
+  windows-powershell-bootstrap:
+    if: github.event_name != 'workflow_dispatch' || (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
+    name: PowerShell-Bootstrap & Übernahme (Windows x64)
+    runs-on: windows-2025
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - name: Lange Git-Pfade zulassen
+        working-directory: ${{ github.workspace }}
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: PowerShell 5.1 & pwsh 7 Bootstrap- und Übernahmetests
+        env:
+          GLIDE_REQUIRE_PWSH: "1"
+        run: |
+          python -B -m unittest -v tests/tools/test_shell_uebernahme.py
 
   integrationssuiten-linux:
     name: ${{ github.event.inputs.bereich == 'ui-nachlauf' && 'UI-Nachlauf (Linux/Xvfb, eigene Tk 9.1)' || github.event.inputs.bereich == 'ui39' && 'UI39 Diagnose (Linux/Xvfb, eigene Tk 9.1)' || 'Vollprüfung (Linux/Xvfb, eigene Tk 9.1)' }}

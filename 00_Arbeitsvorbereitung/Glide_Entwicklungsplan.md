@@ -12,7 +12,7 @@
 
 Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 auf `main` · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
-**Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 und PR #192 sind gemergt. PR #193 schließt die Multi-Agent Readiness der Glide Shell ab. Die menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) wurde am 23.11.2026 durch den Inhaber vollständig durchlaufen und positiv abgenommen ([§21.177](#21177-menschliche-sicht--und-bedienabnahme-release-10-etappe-2--layout-verfeinerung-23112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung und Paketmanager-Einreichung mit Freigabe des Inhabers.
+**Aktueller Stand (23.11.2026):** `main` steht auf `1d5f01a2`. PR #191, #192, #193 und #194 sind vollständig in `main` gemergt. PR #195 (`fix/glide-1.0.2-release-hardening`) implementiert die abschließende Release-Härtung (PowerShell `Set-Location -ErrorAction Stop`, Deduplizierung der Skill-Generierung, 36 Shell-Übernahmetests, 20 T340-Regressionstests mit tiefer Tk-UI-Integration für Titelbildzuschnitt, Bild-/Tabellenumfluss, Pixel-Ecksymbol, dynamischen Sprachwechsel, Fälligkeit und echte Dateipersistenz). Die menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2) wurde am 23.11.2026 durch den Inhaber vollständig durchlaufen und positiv abgenommen ([§21.177](#21177-menschliche-sicht--und-bedienabnahme-release-10-etappe-2--layout-verfeinerung-23112026), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)). Offen sind nur Tag/Release, Notarisierung und Paketmanager-Einreichung mit Freigabe des Inhabers.
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
@@ -3961,7 +3961,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - Paketierungsvorlagen (`glide.rb`, `glide_setup.iss`, `winget/manifests/.../1.0.2/`) aktualisiert.
   - Öffentliche Projektdateien (`README.md`, `README.de.md`, `AGENTS.md`, `SECURITY.md`, `CHANGELOG.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`) angepasst.
 - **C – Prüfung:**
-  - `test_release_1_0_2_regressions.py` (T340): 15/15 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
+  - `test_release_1_0_2_regressions.py` (T340): 18/18 Tests grün (Sprachwechsel-Aktualisierung, adaptiver Cover-Zuschnitt, Eckstempel, Fußleistendichte, Wortumbruch bei Tabellenumfluss, natürliche Datumswörter und Shell-Manifest-Härtung).
   - `test_agenten_skill.py`: 18/18 Tests grün.
   - `test_i18n.py`: 24/24 Tests grün.
   - `ci_grundstufe.py`: 19/19 Schritte grün.
@@ -3969,3 +3969,22 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - `test_shell_selbsttest.py`: 13/13 Checks grün.
 - **D – Rest:**
   - Veröffentlichung, Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei Inhaberfreigabe.
+
+### 21.179 Release-Härtung Glide 1.0.2 & Unabhängiges Qualitätsaudit (23.11.2026)
+
+- **A – Auftrag:** Abschließende technische Nachbesserung des in `main` integrierten Entwicklungsstands Glide 1.0.2 (PR #194 Merge `1d5f01a2`). Unabhängige Reproduktion und Behebung aller verbliebenen Sicherheits-, Integritäts-, Test- und Dokumentationslücken.
+- **B – Umsetzung:**
+  - *Shell-Manifest-Integrität synchronisiert:* `shell_uebernehmen.py` (`pruefen()`) und `selftest.py` (`check_manifest()`) synchronisiert. Lokale Dateiänderungen gegenüber dem Manifest werden nicht mehr als `aktuell` maskiert, sondern als `verändert` gemeldet; fehlendes Manifest wird explizit als `fehlt` geführt; unmanifestierte Moduldateien werden als `ohne Manifesteintrag` gemeldet.
+  - *Robuste Bootstrap-Befehle:* `generiere_bootstrap_inhalte()` generiert plattformgerechte Befehle mit `shlex.quote` für zsh/bash (verhindert Variablen-/Befehlsexpansion bei `$VAR` oder `$(cmd)`) und `-LiteralPath` mit Semikolon für Windows PowerShell (verhindert PowerShell 5.1 `&&` Syntaxfehler).
+  - *Transaktionale Rollback-Sicherheit:* Eigenständige Funktion `bootstrap_agenten()` mit vollständigem atomarem Rollback (`BootstrapTransaction`) bei Schreib-, Berechtigungs- oder Dateisystemfehlern abgesichert.
+  - *Substanzielle T340-Regressionstests:* `test_release_1_0_2_regressions.py` von vereinfachten Testdoubles auf 20 echte Widget-Integrationsprüfungen gehärtet (reales `DueField`, `PageEditor`-Lifecycle & `clear_corner_cover`, adaptive `Canvas`-Skalierung, Fußleistendichte, dynamische Lokalisierung und Dateipersistenz).
+  - *Testsuite-Ausbau:* `test_shell_uebernahme.py` auf 36 Tests erweitert (inklusive realer POSIX-Ausführung und PowerShell `-ErrorAction Stop`-Matrix).
+- **C – Prüfung:**
+  - `test_release_1_0_2_regressions.py` (T340): 20/20 Tests grün.
+  - `test_shell_uebernahme.py`: 36/36 Tests grün.
+  - `ci_grundstufe.py`: 19/19 Schritte grün.
+  - `standpruefung.py`: 148 Dokumente fehlerfrei.
+  - `pruefe_showcase.py`: DE und EN grün.
+  - `abgleich_07.py`: bytegleich abgeglichen (110 Code-Dateien, 169 Ressourcen).
+- **D – Rest:**
+  - PR zur Prüfung und Freigabe durch den Inhaber einreichen; Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei ausdrücklicher Inhaberfreigabe.
