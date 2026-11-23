@@ -3876,6 +3876,19 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 **D – Rest:** Barrierefreiheit S12 bleibt außerhalb der Shell. Die Ansichten von `ListApp` sind nicht in eigene Module zerlegt; das ist nicht Teil von Phase 5. Tag, Release und Einreichungen weiter nur mit Freigabe.
 
+### 21.174 Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
+
+**A – Auftrag:** Nach dem Merge von PR #189 Ablage, Dokumentation und Glide Shell erneut prüfen, damit die Shell für weitere Projekte nutzbar ist; einen Startprompt für die nächsten KI-Agenten schreiben, der sagt, was wo liegt, und ihn ablegen.
+
+**B – Umsetzung:**
+- Übernahme in ein leeres Projekt durchgespielt (Kopie, `--pruefen`, Selbsttest mit und ohne `-O`, Gerüst der Anleitung, eingebetteter Demohost). Dabei gefunden: `app_host.install_close` stürzte unter macOS ab, wenn ein Host ein `Toplevel` statt des Hauptfensters übergab (`createcommand` fehlt). Korrektur: Ein eingebettetes Fenster setzt nur seinen Fensterknopf und übernimmt nicht das Beenden der Anwendung; T336 um den Fall ergänzt. Shell 0.6.1 (Patch), Glide-System V1.85.
+- Startprompt `glide_shell/STARTPROMPT_KI.md` mit Übersicht „was liegt wo“ (Glide-Repository und neues Projekt) und je zwei fertigen Prompts (neues Projekt, Weiterarbeit) auf Deutsch und Englisch; verlinkt aus Shell-Anleitungen, KI-Anleitung, KI-Handbuch, Index, `CLAUDE.md` und Skill `glide-shell`.
+- Überholte Stellen korrigiert: Register M101 (Bausteinliste, Versionsfolge) und T333 (12/12), Gemini-Wissensbasis (Shell als „post-1.0“, Versionen), Arbeitsvorrat Shell, Entscheidungsbereich im Gemini-Playbook, Übergabekopf.
+
+**C – Prüfung:** Alle Links der KI-Anleitungen zeigen auf vorhandene Dateien. T336, T319, `test_glide_system`, T331, `test_standpruefung`, Selbsttest 12/12, Demohost, Startwege 17/17, Abbauvertrag, Standprüfung, `abgleich_07.py` ohne Abweichung. Glide übergibt sein Hauptfenster (`tk.Tk`); sein Schließweg bleibt unverändert, deshalb kein neuer Volllauf nach dem vollständigen Lauf auf 0.6.0 (§21.173).
+
+**D – Rest:** Unverändert: menschliche Abnahme, Screenreader-Sprachausgabe zurückgestellt, Tag und Release nur mit Freigabe.
+
 ### 21.175 Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 22.11.2026)
 
 - **A – Auftrag:** Glide Shell für lokale KI-Agenten optimieren (Antigravity, Codex, Copilot, Claude, Gemini). Reproduzierbare Übernahme, Manifest-Integrität, portabler Designvertrag, isolierter Referenzhost, Test- und Dokumentenabgleich.
@@ -3895,15 +3908,19 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 - **D – Rest:**
   - Release-Tag / Wheel-Distribution (P2-Entscheidungsvorlage).
 
-### 21.174 Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
+### 21.176 Multi-Agent Bootstrap, Verschachtelte Layouts & Transaktionssicherheit (PR #193, 23.11.2026)
 
-**A – Auftrag:** Nach dem Merge von PR #189 Ablage, Dokumentation und Glide Shell erneut prüfen, damit die Shell für weitere Projekte nutzbar ist; einen Startprompt für die nächsten KI-Agenten schreiben, der sagt, was wo liegt, und ihn ablegen.
-
-**B – Umsetzung:**
-- Übernahme in ein leeres Projekt durchgespielt (Kopie, `--pruefen`, Selbsttest mit und ohne `-O`, Gerüst der Anleitung, eingebetteter Demohost). Dabei gefunden: `app_host.install_close` stürzte unter macOS ab, wenn ein Host ein `Toplevel` statt des Hauptfensters übergab (`createcommand` fehlt). Korrektur: Ein eingebettetes Fenster setzt nur seinen Fensterknopf und übernimmt nicht das Beenden der Anwendung; T336 um den Fall ergänzt. Shell 0.6.1 (Patch), Glide-System V1.85.
-- Startprompt `glide_shell/STARTPROMPT_KI.md` mit Übersicht „was liegt wo“ (Glide-Repository und neues Projekt) und je zwei fertigen Prompts (neues Projekt, Weiterarbeit) auf Deutsch und Englisch; verlinkt aus Shell-Anleitungen, KI-Anleitung, KI-Handbuch, Index, `CLAUDE.md` und Skill `glide-shell`.
-- Überholte Stellen korrigiert: Register M101 (Bausteinliste, Versionsfolge) und T333 (12/12), Gemini-Wissensbasis (Shell als „post-1.0“, Versionen), Arbeitsvorrat Shell, Entscheidungsbereich im Gemini-Playbook, Übergabekopf.
-
-**C – Prüfung:** Alle Links der KI-Anleitungen zeigen auf vorhandene Dateien. T336, T319, `test_glide_system`, T331, `test_standpruefung`, Selbsttest 12/12, Demohost, Startwege 17/17, Abbauvertrag, Standprüfung, `abgleich_07.py` ohne Abweichung. Glide übergibt sein Hauptfenster (`tk.Tk`); sein Schließweg bleibt unverändert, deshalb kein neuer Volllauf nach dem vollständigen Lauf auf 0.6.0 (§21.173).
-
-**D – Rest:** Unverändert: menschliche Abnahme, Screenreader-Sprachausgabe zurückgestellt, Tag und Release nur mit Freigabe.
+- **A – Auftrag:** Vollständige Fehlerbehebung, Integrationsabnahme, Qualitätsaudit und Fertigstellung von PR #193. Korrekte Platzierung von `AGENTS.md` und Agenten-Skills bei verschachtelten Ziel-Layouts (`<projekt>/src/<app>/glide_shell`), dynamische relative Linkberechnung, einheitliche Bootstrap-Transaktionssicherheit mit atomarem Rollback, Härtung der Quellbaum-Erkennung in `selftest.py` gegen Spoofing, Vertiefung der Designvertragsprüfungen in `test_custom_controls.py` und dauerhafte Konsistenzprüfung `test_design_vertrag_konsistenz.py`.
+- **B – Umsetzung:**
+  - `shell_uebernehmen.py`: `ermittle_projekt_root` mit Marker-Hierarchie und Python-Layout-Erkennung; `--projekt-root` / `--project-root`; `generiere_bootstrap_inhalte` mit `_rel_url` für dynamische POSIX-Links mit Leerzeichen-Encoding (`%20`); `BootstrapTransaction` mit vollständigem Snapshot, geordneter Erstellung und atomarem Rollback ohne Teilzustände; Konsistenzprüfung `--pruefen`.
+  - `selftest.py`: Härtung von `check_manifest` gegen Spoof-Versuche (Glide-Quellbaum muss zwingend `folder.name == "glide_shell"`, Kernmodule `app.pyw`, `glide_start.py`, `data_lock.py`, `persistence.py`, `VERSION`, `GLIDE_SYSTEM_VERSION` und `01_Repository` enthalten).
+  - `test_shell_uebernahme.py`: 6 neue Testfälle für verschachtelte Layouts, explizite Projektwurzel, Leerzeichen/Unicode in Pfaden, Link-Gültigkeit aller erzeugten Markdown-Dokumente, Fehlersimulation und atomaren Rollback sowie Konsistenzprüfung (25 Tests gesamt).
+  - `test_custom_controls.py`: Erweiterung von `test_design_vertrag_und_provider_in_hell_dunkel` um 4-Argument-Signatur von `_ink_provider`, dynamisches Theme-Switching zur Laufzeit, Tk-Keyboard-Events (`<space>`, `<Return>`, `<Escape>`), WCAG AA Kontrastmessungen und Fenstergrenzen (14 Tests gesamt).
+  - `test_design_vertrag_konsistenz.py`: Neue dauerhafte Werkzeugsuite zur Verifikation der inhaltlichen Übereinstimmung des portablen Designvertrags mit den Hauptrichtlinien (6 Tests).
+  - Dokumentation: `KI_ANLEITUNG_NEUE_PROJEKTE.md`, `AI_GUIDE_NEW_PROJECTS.md`, `GLIDE_SHELL_KI_HANDBUCH.md`, `DESIGN_RICHTLINIEN.md`, `Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md`, `07_QA_BERICHT.md`.
+- **C – Prüfung:**
+  - T331 (25 Tests), T333 (13/13 + Gegenproben und Spoofing-Schutz), T336 (14 Tests), T337 (4 Tests), T338 (4 Tests), Konsistenzsuite (6 Tests) und alle Shell-Suiten grün (92 Tests).
+  - CI-Grundstufe vollständig bestanden (468 Dateien).
+  - Standprüfung fehlerfrei (148 Dokumente).
+- **D – Rest:**
+  - Unverändert: Tag, GitHub-Release, Paketmanager-Einreichung und menschliche Abnahme nur mit Freigabe des Inhabers.

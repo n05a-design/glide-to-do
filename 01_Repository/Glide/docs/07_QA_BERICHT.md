@@ -1,13 +1,13 @@
-## Multi-Agent Readiness & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 22.11.2026)
+## Multi-Agent Readiness, Bootstrap & Shell-Wiederverwendung (V1.86, Shell 0.6.2, 23.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |
 |---|---|---|
-| Shell-Suiten gesamt | `python3 -B -m unittest tests/unit/test_shell_importregel.py tests/unit/test_shell_d96.py tests/unit/test_shell_d98.py tests/unit/test_shell_phasen45.py tests/tools/test_shell_uebernahme.py tests/tools/test_agent_einstieg.py tests/integration/test_shell_referenzhost.py tests/integration/test_custom_controls.py` | 79 Tests bestanden in 8.7s |
-| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | Bestanden (Syntax 467 Dateien, Versionen 1.0.1, V1.86, Werkzeuge, Fachlogik, Datenschutz) |
-| Selbsttest-Gegenproben | `tests/integration/test_shell_selbsttest.py` (T333) | 13/13 bestanden; Gegenproben für kaputte Geometrie (auch mit -O), manipuliertes Modul, fremdes Modul und Symlinks schlagen isoliert fehl |
-| Übernahme- & Transaktionsvertrag | `tests/tools/test_shell_uebernahme.py` (T331, 18 Tests) | Alle Vertragsfälle grün: Saubere Übernahme, Commit-Pin, Verweigerung bei lokaler Änderung (Exit 3), ungültiges Manifest (Exit 2), Ersetzen, Symlink-Sperre sowie atomares Rollback bei Schreib-/Verifikationsabbruch |
+| Shell-Suiten gesamt | `python3 -B -m unittest tests/unit/test_shell_importregel.py tests/unit/test_shell_d96.py tests/unit/test_shell_d98.py tests/unit/test_shell_phasen45.py tests/tools/test_shell_uebernahme.py tests/tools/test_agent_einstieg.py tests/tools/test_design_vertrag_konsistenz.py tests/integration/test_shell_referenzhost.py tests/integration/test_custom_controls.py` | 92 Tests bestanden |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | Bestanden (Syntax 468 Dateien, Versionen 1.0.1, V1.86, Werkzeuge, Fachlogik, Datenschutz) |
+| Selbsttest & Spoofing-Schutz | `tests/integration/test_shell_selbsttest.py` (T333) | 13/13 bestanden; Gegenproben für kaputte Geometrie (auch mit -O), manipuliertes Modul, fremdes Modul/Unterpaket, Symlinks sowie vorgetäuschten Quellbaum schlagen isoliert fehl |
+| Übernahme- & Bootstrap-Transaktion | `tests/tools/test_shell_uebernahme.py` (T331, 25 Tests) | Alle Vertragsfälle grün: Saubere Übernahme, Commit-Pin, Verweigerung bei lokaler Änderung (Exit 3), ungültiges Manifest (Exit 2), Ersetzen, Symlink-Sperre, atomares Snapshot-Rollback, verschachtelte Layouts (`src/app/glide_shell`), dynamische relative POSIX-Links, explizite `--projekt-root` und `BootstrapTransaction` |
+| Portabler Designvertrag & Provider | `tests/tools/test_design_vertrag_konsistenz.py` (6 Tests) & `tests/integration/test_custom_controls.py` | Vertragskonsistenz P1–P6, B15, B11, B01/B16, B03, B10/B12/B14, Kontrast, Fokus; 4-Argument-Signatur von `_ink_provider`, dynamisches Theme-Switching, Tk-Keyboard-Events (`<space>`, `<Return>`, `<Escape>`), WCAG AA Kontrast |
 | Referenzhost & Consumer-Upgrade | `tests/integration/test_shell_referenzhost.py` (T337, 4 Tests) | Isolierter Host läuft grün; verbotene Glide-Abhängigkeit führt zu kontrolliertem Abbruch; Migration/Upgrade von 0.5.0 auf 0.6.2 unter Erhalt aller Host-Dateien sowie Rollback bei Fehler verifiziert |
-| Multi-Host UI-Provider-Isolation | `tests/integration/test_custom_controls.py` (`test_multi_host_provider_isolation`) | Hierarchischer Fallback (`widget` → `toplevel` → global → Standard) für `_default_font`, `paint_canvas_backdrop` und `CanvasLabel._render` verifiziert |
 | Agenten-Einstiege | `tests/tools/test_agent_einstieg.py` (T338, 4 Tests) | Wurzel-AGENTS.md, vollständige Skill-Spiegelung (.agents ↔ .claude), Copilot/Gemini-Adapter und Trennung von Produkt-Skill verifiziert |
 
 # QA-Bericht – Glide 1.0.1

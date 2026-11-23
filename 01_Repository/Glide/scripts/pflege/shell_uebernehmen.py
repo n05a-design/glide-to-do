@@ -311,28 +311,110 @@ def _verweigern(ordner, manifest, fehler, quelle):
     return gruende
 
 
-def bootstrap_agenten(projekt_ordner):
-    """Erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner."""
-    agents_md = projekt_ordner / "AGENTS.md"
-    skill_agents = projekt_ordner / ".agents" / "skills" / "glide-shell" / "SKILL.md"
-    skill_claude = projekt_ordner / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+PROJEKT_WURZEL_MARKER = (
+    ".git",
+    "pyproject.toml",
+    "setup.py",
+    "setup.cfg",
+    "Pipfile",
+    "requirements.txt",
+    "AGENTS.md",
+    "CLAUDE.md",
+)
+
+
+def ermittle_projekt_root(ordner, explizit=None):
+    """Ermittelt die Projektwurzel für den Agenten-Bootstrap.
+
+    Unterscheidet eindeutig zwischen:
+    - Glide-Repository-Wurzel (wird als Ziel abgewiesen)
+    - Consumer-Projektwurzel (wo AGENTS.md, .agents/, .claude/ platziert werden)
+    - Shell-Zielverzeichnis (ordner, wo glide_shell/ liegt)
+    """
+    quelle = QUELLE.resolve()
+    repo_src = (REPO / "src").resolve()
+
+    if explizit is not None:
+        root = pathlib.Path(explizit).expanduser().resolve()
+        if root == quelle or quelle in root.parents or repo_src in root.parents or root == REPO.resolve():
+            raise ValueError(f"Projektwurzel {root} darf nicht im Glide-Repository liegen")
+        if root.exists() and not root.is_dir():
+            raise ValueError(f"Projektwurzel {root} ist kein Verzeichnis")
+        return root
+
+    # Automatische Erkennung: Aufstieg von ordner.parent
+    start = ordner.parent.resolve()
+    kandidat = start
+    while True:
+        if kandidat == quelle or quelle in kandidat.parents or repo_src in kandidat.parents or kandidat == REPO.resolve():
+            break
+        for marker in PROJEKT_WURZEL_MARKER:
+            if (kandidat / marker).exists():
+                return kandidat
+        if kandidat.parent == kandidat:
+            break
+        kandidat = kandidat.parent
+
+    # Layout-Heuristik für Standard-Python-Strukturen (z. B. projekt/src/app/glide_shell)
+    if start.parent.name == "src" and start.parent.parent != start.parent:
+        return start.parent.parent
+    if start.name == "src" and start.parent != start:
+        return start.parent
+
+    # Flache Struktur als Standard-Fallback: consumer/glide_shell -> consumer
+    return start
+
+
+def _rel_url(ziel_pfad, basis_ordner):
+    """Berechnet einen relativen POSIX-Pfad für Markdown-Links mit Leerzeichen-Codierung."""
+    rel = os.path.relpath(ziel_pfad, basis_ordner).replace("\\", "/")
+    return rel.replace(" ", "%20")
+
+
+def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
+    """Erzeugt dynamisch korrekte Inhalte für AGENTS.md und die Skills mit exakten relativen Pfaden."""
+    anleitung_de = shell_ordner / "KI_ANLEITUNG_NEUE_PROJEKTE.md"
+    anleitung_en = shell_ordner / "AI_GUIDE_NEW_PROJECTS.md"
+    startprompt = shell_ordner / "STARTPROMPT_KI.md"
+    design = shell_ordner / "DESIGN_RICHTLINIEN.md"
+    manifest = shell_ordner / "SHELL_MANIFEST.json"
+
+    link_de_root = _rel_url(anleitung_de, projekt_root)
+    link_en_root = _rel_url(anleitung_en, projekt_root)
+    link_prompt_root = _rel_url(startprompt, projekt_root)
+    link_design_root = _rel_url(design, projekt_root)
+    link_manifest_root = _rel_url(manifest, projekt_root)
+
+    rel_shell_from_root = os.path.relpath(shell_ordner, projekt_root).replace("\\", "/")
+    cmd_cd = ""
+    if rel_shell_from_root not in (".", "glide_shell"):
+        parent_dir = rel_shell_from_root.rsplit("/", 1)[0]
+        cmd_cd = f"cd {parent_dir} && "
+    selftest_cmd = f"{cmd_cd}python3 -m glide_shell.selftest"
 
     inhalt_agents = (
         "# Einstieg für KI-Agenten (Folgeprojekt mit Glide Shell)\n\n"
-        "Dieses Projekt nutzt die **Glide Shell** (`glide_shell/`) als anwendungsneutrales Desktop- und Tk-Fundament.\n\n"
+        f"Dieses Projekt nutzt die **Glide Shell** (`{rel_shell_from_root}/`) als anwendungsneutrales Desktop- und Tk-Fundament.\n\n"
         "## Verbindliche Quellen für Agenten\n\n"
-        "1. **KI-Anleitung für neue Projekte:** [`glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md`](glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) "
-        "(Englisch: [`glide_shell/AI_GUIDE_NEW_PROJECTS.md`](glide_shell/AI_GUIDE_NEW_PROJECTS.md))\n"
-        "2. **Startprompt für KI-Sitzungen:** [`glide_shell/STARTPROMPT_KI.md`](glide_shell/STARTPROMPT_KI.md)\n"
-        "3. **Portabler Designvertrag:** [`glide_shell/DESIGN_RICHTLINIEN.md`](glide_shell/DESIGN_RICHTLINIEN.md)\n"
-        "4. **Selbsttest der Shell:** `python3 -m glide_shell.selftest`\n\n"
+        f"1. **KI-Anleitung für neue Projekte:** [`{rel_shell_from_root}/KI_ANLEITUNG_NEUE_PROJEKTE.md`]({link_de_root}) "
+        f"(Englisch: [`{rel_shell_from_root}/AI_GUIDE_NEW_PROJECTS.md`]({link_en_root}))\n"
+        f"2. **Startprompt für KI-Sitzungen:** [`{rel_shell_from_root}/STARTPROMPT_KI.md`]({link_prompt_root})\n"
+        f"3. **Portabler Designvertrag:** [`{rel_shell_from_root}/DESIGN_RICHTLINIEN.md`]({link_design_root})\n"
+        f"4. **Shell-Manifest:** [`{rel_shell_from_root}/SHELL_MANIFEST.json`]({link_manifest_root})\n"
+        f"5. **Selbsttest der Shell:** `{selftest_cmd}`\n\n"
         "## Grundregeln\n\n"
-        "- **Keine Modifikation der Shell:** Die Dateien unter `glide_shell/` werden nicht manuell editiert; Updates erfolgen über `shell_uebernehmen.py`.\n"
+        f"- **Keine Modifikation der Shell:** Die Dateien unter `{rel_shell_from_root}/` werden nicht manuell editiert; Updates erfolgen über `shell_uebernehmen.py`.\n"
         "- **Fachlogik im Host:** Fachlogik, Domänenmodelle und Fach-UI gehören in das Host-Projekt, nicht in die Shell.\n"
         "- **Designvertrag einhalten:** Universelle Gestaltungsregeln P1–P6, B15 (Knopfschutz), B11 (Hierarchie vor Metadaten), Fokus und Kontrast gelten für alle Oberflächen.\n"
     )
 
-    inhalt_skill = (
+    skill_agents_dir = projekt_root / ".agents" / "skills" / "glide-shell"
+    link_de_agents = _rel_url(anleitung_de, skill_agents_dir)
+    link_prompt_agents = _rel_url(startprompt, skill_agents_dir)
+    link_design_agents = _rel_url(design, skill_agents_dir)
+    link_manifest_agents = _rel_url(manifest, skill_agents_dir)
+
+    inhalt_skill_agents = (
         "---\n"
         "name: glide-shell\n"
         "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
@@ -340,34 +422,137 @@ def bootstrap_agenten(projekt_ordner):
         "# Glide Shell – Projektnutzung\n\n"
         "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
         "## Wichtige Referenzen\n\n"
-        "- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md](../../glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md)\n"
-        "- Startprompt: [STARTPROMPT_KI.md](../../glide_shell/STARTPROMPT_KI.md)\n"
-        "- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md](../../glide_shell/DESIGN_RICHTLINIEN.md)\n\n"
+        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_agents})\n"
+        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_agents})\n"
+        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_agents})\n"
+        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_agents})\n\n"
         "## Regeln\n\n"
-        "- Dateien in `glide_shell/` nicht manuell ändern.\n"
-        "- Vor und nach UI-Arbeiten: `python3 -m glide_shell.selftest`.\n"
+        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
+        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
         "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
     )
 
-    meldungen = []
-    if not agents_md.exists():
-        agents_md.write_text(inhalt_agents, encoding="utf-8")
-        meldungen.append(f"{agents_md.name}: angelegt (Agenten-Einstiegspunkt)")
+    skill_claude_dir = projekt_root / ".claude" / "skills" / "glide-shell"
+    link_de_claude = _rel_url(anleitung_de, skill_claude_dir)
+    link_prompt_claude = _rel_url(startprompt, skill_claude_dir)
+    link_design_claude = _rel_url(design, skill_claude_dir)
+    link_manifest_claude = _rel_url(manifest, skill_claude_dir)
 
-    skill_agents.parent.mkdir(parents=True, exist_ok=True)
-    if not skill_agents.exists():
-        skill_agents.write_text(inhalt_skill, encoding="utf-8")
-        meldungen.append(".agents/skills/glide-shell/SKILL.md: angelegt (Antigravity/Codex-Skill)")
+    inhalt_skill_claude = (
+        "---\n"
+        "name: glide-shell\n"
+        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
+        "---\n\n"
+        "# Glide Shell – Projektnutzung\n\n"
+        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
+        "## Wichtige Referenzen\n\n"
+        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_claude})\n"
+        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_claude})\n"
+        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_claude})\n"
+        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_claude})\n\n"
+        "## Regeln\n\n"
+        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
+        f"- Vor und nach UI-Arbeiten: `{selftest_cmd}`.\n"
+        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
+    )
 
-    skill_claude.parent.mkdir(parents=True, exist_ok=True)
-    if not skill_claude.exists():
-        skill_claude.write_text(inhalt_skill, encoding="utf-8")
-        meldungen.append(".claude/skills/glide-shell/SKILL.md: angelegt (Claude-Skill)")
-
-    return meldungen
+    return inhalt_agents, inhalt_skill_agents, inhalt_skill_claude
 
 
-def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False):
+class BootstrapTransaction:
+    """Verwaltet den transaktionssicheren Bootstrap mit Snapshot und Rollback."""
+
+    def __init__(self, projekt_root, shell_ordner, ersetzen=False):
+        self.projekt_root = pathlib.Path(projekt_root).resolve()
+        self.shell_ordner = pathlib.Path(shell_ordner).resolve()
+        self.ersetzen = ersetzen
+        self.files_before = {}
+        self.dirs_created = []
+
+    def prepare(self):
+        targets = [
+            self.projekt_root / "AGENTS.md",
+            self.projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md",
+            self.projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md",
+        ]
+        for t in targets:
+            if t.exists():
+                if t.is_file():
+                    self.files_before[t] = t.read_bytes()
+                elif t.is_symlink():
+                    self.files_before[t] = os.readlink(t)
+            else:
+                self.files_before[t] = None
+
+    def execute(self):
+        inhalt_agents, inhalt_agents_skill, inhalt_claude_skill = generiere_bootstrap_inhalte(
+            self.projekt_root, self.shell_ordner
+        )
+        meldungen = []
+        agents_md = self.projekt_root / "AGENTS.md"
+        skill_agents = self.projekt_root / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        skill_claude = self.projekt_root / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+
+        plan = [
+            (agents_md, inhalt_agents, "Agenten-Einstiegspunkt"),
+            (skill_agents, inhalt_agents_skill, "Antigravity/Codex-Skill"),
+            (skill_claude, inhalt_claude_skill, "Claude-Skill"),
+        ]
+
+        for target_file, content, label in plan:
+            existed = self.files_before.get(target_file) is not None
+            if existed and not self.ersetzen:
+                meldungen.append(f"{target_file.relative_to(self.projekt_root)}: existiert bereits (unverändert beibehalten)")
+                continue
+
+            cur = target_file.parent
+            parents_to_create = []
+            while cur != self.projekt_root and not cur.exists():
+                parents_to_create.append(cur)
+                cur = cur.parent
+            for p in reversed(parents_to_create):
+                p.mkdir(parents=True, exist_ok=True)
+                if p not in self.dirs_created:
+                    self.dirs_created.append(p)
+
+            schreiben_atomar(target_file, content.encode("utf-8"))
+            action = "aktualisiert" if existed else "angelegt"
+            meldungen.append(f"{target_file.relative_to(self.projekt_root)}: {action} ({label})")
+
+        return meldungen
+
+    def rollback(self):
+        for target_file, old_content in self.files_before.items():
+            try:
+                if old_content is None:
+                    target_file.unlink(missing_ok=True)
+                else:
+                    if isinstance(old_content, bytes):
+                        schreiben_atomar(target_file, old_content)
+                    else:
+                        target_file.unlink(missing_ok=True)
+                        target_file.symlink_to(old_content)
+            except Exception:
+                pass
+
+        for d in reversed(self.dirs_created):
+            try:
+                if d.exists() and not any(d.iterdir()):
+                    d.rmdir()
+            except Exception:
+                pass
+
+
+def bootstrap_agenten(projekt_ordner, shell_ordner=None, ersetzen=False):
+    """Kompatibilitäts-Funktion für Agenten-Bootstrap."""
+    p_root = pathlib.Path(projekt_ordner).resolve()
+    s_ordner = pathlib.Path(shell_ordner).resolve() if shell_ordner else (p_root / PAKET)
+    tx = BootstrapTransaction(p_root, s_ordner, ersetzen=ersetzen)
+    tx.prepare()
+    return tx.execute()
+
+
+def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, projekt_root=None):
     quelle = quelle if quelle is not None else quelle_lesen(unsauber_erlauben=True)
     ordner_existierte = ordner.exists()
     ordner.mkdir(parents=True, exist_ok=True)
@@ -380,6 +565,12 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False):
             return VERWEIGERT, gruende
 
     # Phase 1: Vollständige Vorbereitung der Sicherung (vor Beginn jeder Mutation)
+    bootstrap_tx = None
+    if agenten_bootstrap:
+        root_dir = ermittle_projekt_root(ordner, projekt_root)
+        bootstrap_tx = BootstrapTransaction(root_dir, ordner, ersetzen=ersetzen)
+        bootstrap_tx.prepare()
+
     backup_temp = tempfile.TemporaryDirectory(prefix="glide-shell-backup-")
     backup_ordner = pathlib.Path(backup_temp.name)
     try:
@@ -438,12 +629,14 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False):
 
         herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
         meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
-        if agenten_bootstrap:
-            meldungen.extend(bootstrap_agenten(ordner.parent))
+        if bootstrap_tx is not None:
+            meldungen.extend(bootstrap_tx.execute())
         return OK, meldungen
 
     except BaseException as fehler_kopie:
         # Rollback: Zustand exakt aus dem verifizierten Backup wiederherstellen
+        if bootstrap_tx is not None:
+            bootstrap_tx.rollback()
         try:
             if not ordner_existierte and not any(backup_ordner.iterdir()):
                 shutil.rmtree(ordner, ignore_errors=True)
@@ -488,7 +681,7 @@ def zielordner(text):
     return ordner
 
 
-def _pruefen_ausgeben(ordner, quelle):
+def _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=False, projekt_root=None):
     if not ordner.is_dir():
         print(f"{ordner}: keine Kopie vorhanden")
         return ABWEICHUNG
@@ -497,7 +690,23 @@ def _pruefen_ausgeben(ordner, quelle):
     print(f"Kopie {stand}, Quelle {quelle['version']} ({(quelle['commit'] or 'ohne Git')[:12]})")
     for name, art in zeilen:
         print(f"  {name}: {art}")
-    return OK if manifest and all(art == "aktuell" for _, art in zeilen) else ABWEICHUNG
+    shell_ok = OK if manifest and all(art == "aktuell" for _, art in zeilen) else ABWEICHUNG
+
+    bootstrap_ok = OK
+    if agenten_bootstrap:
+        root_dir = ermittle_projekt_root(ordner, projekt_root)
+        print(f"Agenten-Bootstrap ({root_dir}):")
+        b_tx = BootstrapTransaction(root_dir, ordner)
+        b_tx.prepare()
+        for target_file, old_content in b_tx.files_before.items():
+            rel_name = target_file.relative_to(root_dir)
+            if old_content is not None:
+                print(f"  {rel_name}: vorhanden")
+            else:
+                print(f"  {rel_name}: fehlt")
+                bootstrap_ok = ABWEICHUNG
+
+    return OK if (shell_ok == OK and bootstrap_ok == OK) else ABWEICHUNG
 
 
 def main(argv=None):
@@ -511,20 +720,33 @@ def main(argv=None):
                         help="lokal veränderte Shell-Quelle bewusst übernehmen (im Manifest vermerkt)")
     parser.add_argument("--agenten-bootstrap", "--agent-bootstrap", action="store_true",
                         help="erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner")
+    parser.add_argument("--projekt-root", "--project-root", metavar="PFAD",
+                        help="Projektwurzel des Folgeprojekts für den Agenten-Bootstrap (Standard: automatisch ermittelt)")
     args = parser.parse_args(argv)
     ordner = zielordner(args.ziel)
     if ordner is None:
         print("Ziel liegt im Glide-Quellbaum; Folgeprojekte übernehmen die Shell in ihren eigenen Ordner")
         return VERWEIGERT
+
+    projekt_root_dir = None
+    if args.agenten_bootstrap or args.projekt_root:
+        try:
+            projekt_root_dir = ermittle_projekt_root(ordner, args.projekt_root)
+        except ValueError as fehler:
+            print(f"Projektwurzel unzulässig: {fehler}")
+            return VERWEIGERT
+
     try:
         quelle = quelle_lesen(args.commit, args.unsauber_erlauben or args.pruefen)
     except QuellFehler as fehler:
         print(f"Quelle unbrauchbar: {fehler}")
         return QUELLFEHLER
     if args.pruefen:
-        return _pruefen_ausgeben(ordner, quelle)
+        return _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=args.agenten_bootstrap,
+                                 projekt_root=projekt_root_dir)
     code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle,
-                                  agenten_bootstrap=args.agenten_bootstrap)
+                                  agenten_bootstrap=args.agenten_bootstrap,
+                                  projekt_root=projekt_root_dir)
     for zeile in meldungen:
         print(zeile)
     return code

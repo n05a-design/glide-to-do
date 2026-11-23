@@ -414,7 +414,7 @@ class TestCustomControlsInteractions(unittest.TestCase):
 
     def test_design_vertrag_und_provider_in_hell_dunkel(self):
         """Prüft den transportablen Designvertrag: Provider (_ink_provider, _font_provider, _backdrop_painter), Kontrast, B15, B11 und Tastaturnavigation."""
-        from glide_shell import custom_controls, system_appearance, text_fit
+        from glide_shell import custom_controls, system_appearance, text_fit, window_geometry, modal_session
 
         root = tk.Tk()
         root.withdraw()
@@ -425,15 +425,15 @@ class TestCustomControlsInteractions(unittest.TestCase):
         try:
             # 1. Theme- und Farbrollenauflösung (Hell / Dunkel)
             theme_def = {
-                "light": {"bg": "#ffffff", "fg": "#111111", "card": "#f5f5f5"},
-                "dark": {"bg": "#1e1e1e", "fg": "#f0f0f0", "card": "#2d2d2d"},
+                "light": {"bg": "#ffffff", "fg": "#111111", "card": "#f5f5f5", "accent": "#0066cc"},
+                "dark": {"bg": "#1e1e1e", "fg": "#f0f0f0", "card": "#2d2d2d", "accent": "#4da6ff"},
             }
             pal_light = system_appearance.resolve(theme_def, False, theme_def["light"])
             pal_dark = system_appearance.resolve(theme_def, True, theme_def["light"])
             self.assertEqual(pal_light["bg"], "#ffffff")
             self.assertEqual(pal_dark["bg"], "#1e1e1e")
 
-            # 2. Kontrastprüfung (WCAG AA 4,5:1 für Standardtext)
+            # 2. Kontrastprüfung nach WCAG AA (>= 4.5:1 für Fließtext, >= 3.0:1 für UI-Elemente)
             def luminance(hex_col):
                 hex_col = hex_col.lstrip("#")
                 r, g, b = [int(hex_col[i:i+2], 16) / 255.0 for i in (0, 2, 4)]
@@ -445,21 +445,29 @@ class TestCustomControlsInteractions(unittest.TestCase):
                 l1, l2 = luminance(c1), luminance(c2)
                 return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
 
-            ratio_light = contrast_ratio(pal_light["fg"], pal_light["bg"])
-            ratio_dark = contrast_ratio(pal_dark["fg"], pal_dark["bg"])
-            self.assertGreaterEqual(ratio_light, 4.5, f"Kontrast im Hellmodus unter 4.5:1 ({ratio_light:.2f})")
-            self.assertGreaterEqual(ratio_dark, 4.5, f"Kontrast im Dunkelmodus unter 4.5:1 ({ratio_dark:.2f})")
+            ratio_light_text = contrast_ratio(pal_light["fg"], pal_light["bg"])
+            ratio_dark_text = contrast_ratio(pal_dark["fg"], pal_dark["bg"])
+            self.assertGreaterEqual(ratio_light_text, 4.5, f"Textkontrast im Hellmodus unter 4.5:1 ({ratio_light_text:.2f})")
+            self.assertGreaterEqual(ratio_dark_text, 4.5, f"Textkontrast im Dunkelmodus unter 4.5:1 ({ratio_dark_text:.2f})")
 
-            # 3. Provider-Nutzung: _ink_provider, _font_provider und _backdrop_painter
+            ratio_light_ui = contrast_ratio(pal_light["accent"], pal_light["bg"])
+            ratio_dark_ui = contrast_ratio(pal_dark["accent"], pal_dark["bg"])
+            self.assertGreaterEqual(ratio_light_ui, 3.0, f"UI-Akzentkontrast im Hellmodus unter 3.0:1 ({ratio_light_ui:.2f})")
+            self.assertGreaterEqual(ratio_dark_ui, 3.0, f"UI-Akzentkontrast im Dunkelmodus unter 3.0:1 ({ratio_dark_ui:.2f})")
+
+            # 3. Provider-Nutzung mit exakten Signaturen:
+            # - _font_provider(size, *styles) -> font
+            # - _ink_provider(widget, font, text, width) -> (ink_top, text_h)
+            # - _backdrop_painter(canvas) -> None
             top_light._font_provider = lambda size, *s: ("Helvetica", size)
-            top_light._ink_provider = lambda char, size: (size * 0.6, size * 0.8)
+            top_light._ink_provider = lambda widget, font, text, width: (3, 24)
             top_light._backdrop_painter = lambda c: c.create_rectangle(0, 0, 50, 50, fill=pal_light["card"], tags=("bg_light",))
 
             top_dark._font_provider = lambda size, *s: ("Helvetica", size)
-            top_dark._ink_provider = lambda char, size: (size * 0.65, size * 0.85)
+            top_dark._ink_provider = lambda widget, font, text, width: (5, 26)
             top_dark._backdrop_painter = lambda c: c.create_rectangle(0, 0, 50, 50, fill=pal_dark["card"], tags=("bg_dark",))
 
-            # Canvas in top_light / top_dark
+            # Teste _backdrop_painter auf Canvas
             cv_light = tk.Canvas(top_light, width=60, height=60)
             custom_controls.paint_canvas_backdrop(cv_light)
             self.assertTrue(bool(cv_light.find_withtag("bg_light")))
@@ -468,22 +476,96 @@ class TestCustomControlsInteractions(unittest.TestCase):
             custom_controls.paint_canvas_backdrop(cv_dark)
             self.assertTrue(bool(cv_dark.find_withtag("bg_dark")))
 
-            # 4. B11 Text Fit (Priorität vor Metadaten, kein Abschneiden ohne Ellipsis)
+            # Teste _ink_provider auf CanvasLabel (Toplevel-Provider)
+            lbl_top = custom_controls.CanvasLabel(top_light, text="Ink Test", fit_ink=True)
+            self.assertEqual(lbl_top._text_ink_top, 3)
+            self.assertEqual(lbl_top._text_h, 24)
+
+            # Teste _ink_provider Widget-Override
+            lbl_top._ink_provider = lambda widget, font, text, width: (7, 30)
+            lbl_top.configure(text="Ink Test Changed")
+            self.assertEqual(lbl_top._text_ink_top, 7)
+            self.assertEqual(lbl_top._text_h, 30)
+
+            # Teste globalen set_ink_provider Fallback
+            custom_controls.set_ink_provider(lambda widget, font, text, width: (9, 32))
+            lbl_global = custom_controls.CanvasLabel(root, text="Global Ink", fit_ink=True)
+            self.assertEqual(lbl_global._text_ink_top, 9)
+            self.assertEqual(lbl_global._text_h, 32)
+
+            # 4. Dynamisches Theme-Switching zur Laufzeit über Widgets hinweg
+            widgets = [
+                custom_controls.CanvasLabel(top_light, text="Label", bg=pal_light["bg"], fg=pal_light["fg"]),
+                custom_controls.GlideCheckbutton(top_light, text="Check", bg=pal_light["bg"], fg=pal_light["fg"]),
+                custom_controls.GlideRadiobutton(top_light, text="Radio", bg=pal_light["bg"], fg=pal_light["fg"]),
+                custom_controls.GlideListbox(top_light, bg=pal_light["bg"], fg=pal_light["fg"]),
+                custom_controls.GlideScale(top_light, bg=pal_light["bg"], fg=pal_light["fg"]),
+            ]
+            # Umschalten auf Dunkel
+            theme_active = pal_dark
+            for w in widgets:
+                w.configure(bg=theme_active["bg"], fg=theme_active["fg"])
+                self.assertEqual(w.cget("bg"), theme_active["bg"])
+                self.assertEqual(w.cget("fg"), theme_active["fg"])
+
+            # 5. B11 Text Fit (Priorität vor Metadaten, Ellipsis-Kürzung)
             titel = "Ein extrem langer Titel einer anstehenden Aufgabe im System"
             gekuerzt = text_fit.clip(titel, 25, ellipsis="…")
             self.assertLessEqual(len(gekuerzt), 25)
             self.assertTrue(gekuerzt.endswith("…"))
 
-            # 5. Tastaturnavigation und Interaktion (Tab / Space / Return)
+            # 6. Tastaturnavigation & Interaktion (<space>, <Return>, <Escape>)
+            top_light.deiconify()
+            top_light.update()
             var_b = tk.BooleanVar(value=False)
             check = custom_controls.GlideCheckbutton(top_light, text="Option", variable=var_b, bg=pal_light["bg"], fg=pal_light["fg"])
             check.pack()
+            check.focus_force()
             top_light.update()
             self.assertFalse(check._is_checked())
-            check.invoke()
+
+            # <space> schaltet um
+            check.event_generate("<space>")
+            top_light.update()
             self.assertTrue(var_b.get())
             self.assertTrue(check._is_checked())
+
+            # <Return> schaltet um
+            check.event_generate("<Return>")
+            top_light.update()
+            self.assertFalse(var_b.get())
+            self.assertFalse(check._is_checked())
+
+            # <Escape> schließt Dialog
+            dlg = modal_session.create_dialog(top_light, "Modal Escape Test")
+            escaped = False
+            def on_escape(_event):
+                nonlocal escaped
+                escaped = True
+                dlg.destroy()
+            dlg.bind("<Escape>", on_escape)
+            dlg.focus_force()
+            top_light.update()
+            dlg.event_generate("<Escape>")
+            top_light.update()
+            self.assertTrue(escaped, "Modal-Dialog muss per <Escape> schließbar sein")
+            top_light.withdraw()
+
+            # 7. B15 Fenstergrößen: 860x700 Minimalgröße, 1280x800 Standardarbeitsgröße
+            geom_min = window_geometry.format_geometry(860, 700, 100, 100)
+            self.assertEqual(geom_min, "860x700+100+100")
+            w_min, h_min, x_min, y_min = window_geometry.parse(geom_min)
+            self.assertGreaterEqual(w_min, 860)
+            self.assertGreaterEqual(h_min, 700)
+
+            geom_std = window_geometry.format_geometry(1280, 800, 50, 50)
+            w_std, h_std, _, _ = window_geometry.parse(geom_std)
+            self.assertEqual(w_std, 1280)
+            self.assertEqual(h_std, 800)
         finally:
+            custom_controls.set_ink_provider(None)
+            custom_controls.set_font_provider(None)
+            custom_controls.set_backdrop_painter(None)
             top_light.destroy()
             top_dark.destroy()
             root.destroy()

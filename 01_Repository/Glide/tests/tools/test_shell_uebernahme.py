@@ -21,11 +21,13 @@ import importlib.util
 import io
 import json
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.parse
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 WERKZEUG = REPO / "scripts" / "pflege" / "shell_uebernehmen.py"
@@ -356,11 +358,140 @@ class Uebernahme(unittest.TestCase):
         self.assertIn("B15", inhalt_design)
         self.assertIn("B11", inhalt_design)
 
-        # Re-Run überschreibt existierende AGENTS.md nicht
+        # Re-Run überschreibt existierende AGENTS.md nicht ohne --ersetzen
         agents_md.write_text("# Eigener Titel\n", encoding="utf-8")
         code, text = lauf("--agenten-bootstrap", self.projekt)
         self.assertEqual(code, 0, text)
         self.assertEqual(agents_md.read_text(encoding="utf-8"), "# Eigener Titel\n")
+        self.assertIn("existiert bereits", text)
+
+        # Mit --ersetzen wird auch AGENTS.md aktualisiert
+        code, text = lauf("--agenten-bootstrap", "--ersetzen", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertIn("aktualisiert", text)
+        self.assertNotEqual(agents_md.read_text(encoding="utf-8"), "# Eigener Titel\n")
+
+    def test_agenten_bootstrap_verschachtelte_struktur_und_link_gueltigkeit(self):
+        """Prüft verschachtelte Struktur projekt/src/app/glide_shell und die Gültigkeit aller Links."""
+        nested_proj = pathlib.Path(self._temp.name) / "nested_project"
+        nested_proj.mkdir(parents=True)
+        (nested_proj / "pyproject.toml").write_text("[project]\nname='nested'\n", encoding="utf-8")
+        app_dir = nested_proj / "src" / "myapp"
+        app_dir.mkdir(parents=True)
+
+        code, text = lauf("--agenten-bootstrap", app_dir)
+        self.assertEqual(code, 0, text)
+
+        # 1. Platzierung an der Projektwurzel (nicht in src/myapp!)
+        agents_md = nested_proj / "AGENTS.md"
+        self.assertTrue(agents_md.is_file(), "AGENTS.md muss an der Projektwurzel liegen")
+        self.assertFalse((app_dir / "AGENTS.md").exists(), "AGENTS.md darf nicht in src/myapp liegen")
+
+        skill_agents = nested_proj / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        skill_claude = nested_proj / ".claude" / "skills" / "glide-shell" / "SKILL.md"
+        self.assertTrue(skill_agents.is_file())
+        self.assertTrue(skill_claude.is_file())
+
+        shell_dir = app_dir / "glide_shell"
+        self.assertTrue(shell_dir.is_dir())
+        self.assertTrue((shell_dir / "DESIGN_RICHTLINIEN.md").is_file())
+
+        # 2. Automatisierter Linktest für alle generierten Dokumente
+        for doc_file in (agents_md, skill_agents, skill_claude):
+            doc_text = doc_file.read_text(encoding="utf-8")
+            raw_links = re.findall(r'\[(?:[^\]]+)\]\(([^)]+)\)', doc_text)
+            self.assertGreater(len(raw_links), 0, f"Keine Links in {doc_file.name} gefunden")
+            for link in raw_links:
+                if link.startswith("http://") or link.startswith("https://"):
+                    continue
+                # URL-Decoding für lokale Dateilinks
+                decoded_path = urllib.parse.unquote(link)
+                target = (doc_file.parent / decoded_path).resolve()
+                self.assertTrue(target.is_file(),
+                                f"In {doc_file.relative_to(nested_proj)}: Link '{link}' -> '{target}' existiert nicht!")
+
+    def test_agenten_bootstrap_explizite_projekt_root(self):
+        """Prüft explizite Vorgabe von --projekt-root / --project-root und Ablehnung im Glide-Quellbaum."""
+        custom_root = pathlib.Path(self._temp.name) / "custom_root"
+        custom_root.mkdir()
+        target_shell = pathlib.Path(self._temp.name) / "irgendwo" / "tief" / "glide_shell"
+
+        code, text = lauf("--agenten-bootstrap", "--projekt-root", custom_root, target_shell)
+        self.assertEqual(code, 0, text)
+        self.assertTrue((custom_root / "AGENTS.md").is_file())
+        self.assertTrue((custom_root / ".agents" / "skills" / "glide-shell" / "SKILL.md").is_file())
+        self.assertTrue((target_shell / "SHELL_MANIFEST.json").is_file())
+
+        # Ablehnung wenn projekt-root im Glide-Quellbaum liegt
+        code, text = lauf("--agenten-bootstrap", "--projekt-root", QUELLE, target_shell)
+        self.assertEqual(code, 2, text)
+        self.assertIn("Projektwurzel unzulässig", text)
+
+    def test_agenten_bootstrap_pfade_mit_leerzeichen_und_unicode(self):
+        """Prüft Pfade mit Leerzeichen und Sonderzeichen/Unicode."""
+        space_proj = pathlib.Path(self._temp.name) / "Mein Projekt 2026 🚀"
+        app_dir = space_proj / "src" / "Haupt App"
+        app_dir.mkdir(parents=True)
+
+        code, text = lauf("--agenten-bootstrap", app_dir)
+        self.assertEqual(code, 0, text)
+
+        agents_md = space_proj / "AGENTS.md"
+        self.assertTrue(agents_md.is_file())
+        skill_file = space_proj / ".agents" / "skills" / "glide-shell" / "SKILL.md"
+        self.assertTrue(skill_file.is_file())
+
+        for doc_file in (agents_md, skill_file):
+            doc_text = doc_file.read_text(encoding="utf-8")
+            raw_links = re.findall(r'\[(?:[^\]]+)\]\(([^)]+)\)', doc_text)
+            for link in raw_links:
+                if link.startswith("http"):
+                    continue
+                decoded = urllib.parse.unquote(link)
+                target = (doc_file.parent / decoded).resolve()
+                self.assertTrue(target.is_file(), f"Ungültiger Link '{link}' in {doc_file}")
+
+    def test_agenten_bootstrap_transaktions_rollback_bei_fehler(self):
+        """Simuliert Fehler beim Schreiben von Agentendateien und beweist vollständigen Rollback."""
+        proj = pathlib.Path(self._temp.name) / "fail_proj"
+        shell_target = proj / "glide_shell"
+
+        original_schreiben = werkzeug.schreiben_atomar
+        aufrufe = [0]
+
+        def fehler_beim_zweiten_skill(ziel, inhalt):
+            # Erlaube Schreiben der Shell-Dateien
+            if ".claude" in str(ziel):
+                raise OSError("Künstlicher Plattenfehler beim Schreiben des Claude-Skills")
+            return original_schreiben(ziel, inhalt)
+
+        try:
+            werkzeug.schreiben_atomar = fehler_beim_zweiten_skill
+            code, meldungen = werkzeug.uebernehmen(shell_target, agenten_bootstrap=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in meldungen))
+        finally:
+            werkzeug.schreiben_atomar = original_schreiben
+
+        # Verifikation: Vollständiger Rollback – keine halben Agentenordner oder Shell-Reste
+        self.assertFalse((proj / "AGENTS.md").exists(), "AGENTS.md muss nach Rollback entfernt sein")
+        self.assertFalse((proj / ".agents").exists(), ".agents muss nach Rollback entfernt sein")
+        self.assertFalse((proj / ".claude").exists(), ".claude muss nach Rollback entfernt sein")
+        self.assertFalse(shell_target.exists(), "glide_shell muss nach Rollback entfernt sein")
+
+    def test_agenten_bootstrap_pruefen_konsistenz(self):
+        """Prüft --pruefen zusammen mit --agenten-bootstrap."""
+        lauf("--agenten-bootstrap", self.projekt)
+        code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 0, text)
+        self.assertIn("Agenten-Bootstrap", text)
+        self.assertIn("AGENTS.md: vorhanden", text)
+
+        # Löschen von AGENTS.md macht --pruefen rot
+        (self.projekt / "AGENTS.md").unlink()
+        code, text = lauf("--pruefen", "--agenten-bootstrap", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn("AGENTS.md: fehlt", text)
 
 
 def git(ordner, *argumente):

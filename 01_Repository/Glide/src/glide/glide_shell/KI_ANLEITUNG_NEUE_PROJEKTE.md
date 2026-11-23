@@ -89,13 +89,17 @@ Nur anlegen, was das Projekt braucht; aber jede Aussage hat **genau eine führen
 ```bash
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>                          # anlegen oder aktualisieren
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agenten-bootstrap <projekt>/src/<app>     # inklusive AGENTS.md und Agenten-Skills
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agenten-bootstrap --projekt-root <root> <projekt>/src/<app>  # explizite Projektwurzel
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <projekt>/src/<app>          # aus einem festen Git-Commit übernehmen
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <projekt>/src/<app>                # nur prüfen
 cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 13/13 Prüfungen bestanden
 ```
 
 - Das Werkzeug kopiert alle `*.py` und `*.md` aus `glide_shell/` (inklusive `DESIGN_RICHTLINIEN.md` als offline-fähigem Gestaltungsvertrag) und schreibt `SHELL_MANIFEST.json` mit Paketversion, Glide-Systemversion, Quell-Commit und SHA-256 je Datei.
-- Mit `--agenten-bootstrap` werden automatisch eine neutrale `AGENTS.md` in der Projektwurzel sowie Skills unter `.agents/skills/glide-shell/SKILL.md` und `.claude/skills/glide-shell/SKILL.md` eingerichtet.
+- **Projektwurzel-Erkennung:** Mit `--agenten-bootstrap` ermittelt das Werkzeug die Projektwurzel automatisch aufwärts anhand von Projektmarkern (`.git`, `pyproject.toml`, `setup.py`, `Pipfile`, `requirements.txt`, `AGENTS.md`, `CLAUDE.md`) oder Standard-Python-Layouts (`src/<app>/glide_shell`). Alternativ kann die Wurzel per `--projekt-root <PFAD>` bzw. `--project-root <PFAD>` explizit vorgegeben werden (eine Platzierung innerhalb des Glide-Quellbaums wird strikt abgewiesen).
+- **Dynamische relative Links:** Die generierten `AGENTS.md` und Agenten-Skills (`.agents/skills/glide-shell/SKILL.md`, `.claude/skills/glide-shell/SKILL.md`) berechnen relative POSIX-Pfade dynamisch anhand der relativen Lage zur übernommenen `glide_shell/`-Kopie. Alle Markdown-Verweise lösen zuverlässig auf, auch in tief verschachtelten Projektbäumen und bei Pfaden mit Leerzeichen (`%20`).
+- **Transaktionssicherheit & Schutz:** Der gesamte Übernahme- und Bootstrap-Prozess ist transaktionsgesichert (`BootstrapTransaction`). Vor Beginn der Mutation wird ein vollständiger Schnappschuss erstellt; bei Lese-, Schreib- oder Abbruchfehlern erfolgt ein automatischer Rollback aller erzeugten oder veränderten Dateien und Verzeichnisse ohne Teilzustände. Bestehende Dateien der Zielanwendung bleiben geschützt und werden nur mit `--ersetzen` überschrieben.
+- **Manifest & Vertrauensgrenzen:** `SHELL_MANIFEST.json` dient als Integritätsanker. Der Selbsttest (`selftest.py`) prüft die SHA-256-Prüfsummen aller Module, erkennt unzulässige Modifikationen, gelöschte oder hinzugefügte unmanaged Dateien/Unterpakete und blockiert Symlinks. In Fremdkopien wird ein fehlendes Manifest zwingend mit Exitcode 1 abgewiesen; die quellinterne Ausnahmeregel ist manipulationssicher gegen vorgetäuschte Quellbäume abgesichert.
 - **Die Kopie nie von Hand ändern.** Änderungen an der Shell entstehen in Glide (mit Freigabe des Glide-Inhabers) und kommen über das Werkzeug zurück. `--pruefen` meldet veraltete oder veränderte Dateien; `--ersetzen` überschreibt bewusst.
 - Lizenz: MPL-2.0. Kopfzeile `# SPDX-License-Identifier: MPL-2.0` und Lizenztext `LICENSE` bleiben erhalten.
 

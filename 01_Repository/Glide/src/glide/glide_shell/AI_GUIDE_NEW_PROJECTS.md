@@ -89,13 +89,17 @@ Create only what the project needs, but every statement has **exactly one leadin
 ```bash
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <project>/src/<app>                         # create or update
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agent-bootstrap <project>/src/<app>      # includes AGENTS.md and agent skills
+python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agent-bootstrap --project-root <root> <project>/src/<app>  # explicit project root
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <project>/src/<app>         # adopt from a specific Git commit
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <project>/src/<app>               # check only
 cd <project>/src/<app> && python3 -m glide_shell.selftest                                                              # exit code 0 = all 13/13 checks passed
 ```
 
 - The tool copies every `*.py` and `*.md` from `glide_shell/` (including `DESIGN_RICHTLINIEN.md` as an offline-accessible design contract) and writes `SHELL_MANIFEST.json` with package version, Glide-System version, source commit and SHA-256 per file.
-- Passing `--agent-bootstrap` automatically provisions a neutral `AGENTS.md` at project root as well as skills under `.agents/skills/glide-shell/SKILL.md` and `.claude/skills/glide-shell/SKILL.md`.
+- **Project root detection:** Passing `--agent-bootstrap` (or `--agenten-bootstrap`) automatically discovers the project root upwards using standard markers (`.git`, `pyproject.toml`, `setup.py`, `Pipfile`, `requirements.txt`, `AGENTS.md`, `CLAUDE.md`) or Python package heuristics (`src/<app>/glide_shell`). The project root can also be passed explicitly via `--project-root <PATH>` or `--projekt-root <PATH>` (placement inside the Glide source tree is rejected).
+- **Dynamic relative links:** The generated `AGENTS.md` and agent skills (`.agents/skills/glide-shell/SKILL.md`, `.claude/skills/glide-shell/SKILL.md`) compute POSIX relative paths dynamically from their actual location to the adopted `glide_shell/` directory. All markdown links resolve cleanly across nested folder layouts and directory names with spaces (`%20`).
+- **Transactional safety:** The adoption and bootstrap operation is atomic and transaction-managed (`BootstrapTransaction`). A complete snapshot is taken before mutations start; any read, write, or interruption triggers a complete rollback of created or modified files and directories without leaving partial state. Pre-existing user files are preserved and never overwritten unless `--ersetzen` is passed.
+- **Manifest & trust boundaries:** `SHELL_MANIFEST.json` acts as the cryptographic trust anchor. The self-test (`selftest.py`) verifies SHA-256 digests for all modules, detects modifications, unmanaged subpackages or extraneous modules, and forbids symlinks. Consumer copies without a manifest exit with code 1; the source-tree exemption is spoof-proof.
 - **Never edit the copy by hand.** Shell changes happen in Glide (approved by the Glide owner) and come back through the tool. `--pruefen` reports outdated or modified files; `--ersetzen` overwrites on purpose.
 - License: MPL-2.0. Keep the `# SPDX-License-Identifier: MPL-2.0` header and the `LICENSE` file.
 

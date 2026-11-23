@@ -4,7 +4,7 @@ Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26 · Glide-System V1.86 · Gl
 
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
 
-**Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 (Multi-Agent Readiness & Verified Reuse, Shell 0.6.2, V1.86) und PR #192 (Transactional reuse, manifest security and multi-host isolation) sind vollständig in `main` gemergt. Die Glide Shell verfügt über transaktionale Übernahme mit Snapshot-Integrität, isolierten Referenzhost (T337), agentenübergreifende Einstiege (T338), 13/13 Selbsttests, Agenten-Bootstrap (`--agenten-bootstrap`) und den offline verfügbaren portablen Designvertrag (`glide_shell/DESIGN_RICHTLINIEN.md`).
+**Aktueller Stand (23.11.2026):** `main` steht auf `e0c9f08f`. PR #191 (Multi-Agent Readiness & Verified Reuse, Shell 0.6.2, V1.86) und PR #192 (Transactional reuse, manifest security and multi-host isolation) sind vollständig in `main` gemergt. PR #193 (Multi-Agent Bootstrap, Nested Layouts, Relative Links & Transactional Safety) schließt sämtliche verbleibenden Mängel ab: Die Glide Shell verfügt über transaktionale Übernahme mit Snapshot-Integrität und atomarem Bootstrap-Rollback (`BootstrapTransaction`), Unterstützung verschachtelter Ziel-Layouts (`src/app/glide_shell`), dynamische relative Linkberechnung mit Leerzeichen-Encoding (`%20`), isolierten Referenzhost (T337), agentenübergreifende Einstiege (T338), manipulationssichere 13/13 Selbsttests mit Spoofing-Schutz, den offline verfügbaren portablen Designvertrag (`glide_shell/DESIGN_RICHTLINIEN.md`) sowie dessen automatisierte Konsistenzprüfung (`test_design_vertrag_konsistenz.py`).
 
 > [!IMPORTANT]
 > **Release 1.0 (D93) – Soll-Ist**
@@ -19,15 +19,16 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 ---
 
 
-### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 22.11.2026)
+### Multi-Agent Readiness & Verified Reuse (V1.86, Shell 0.6.2, 23.11.2026)
 
 - **Agentenübergreifender Einstieg (T338):** Schlanker `AGENTS.md` in der Repository-Wurzel, `glide-shell`-Skill unter `.agents/skills/` gespiegelt zu `.claude/skills/`, `.github/copilot-instructions.md` und `.gemini/settings.json` ergänzt. Trennung von Produkt-Skill `glide-to-do` und Shell-Entwicklungsskill strikt gewahrt.
 - **Reproduzierbare & transaktionssichere Übernahme (T331):** `shell_uebernehmen.py` erweitert um `--commit <Rev>` (Pin-Übernahme unabhängig vom Arbeitsbaum), Schutz vor lokal veränderten Quellen (Exit 3, `--unsauber-erlauben`), vollständigen Lizenztext `LICENSE` (MPL-2.0) im Paket, Manifest-Validierung, Symlink-Sperre sowie atomares Snapshot-Rollback bei abgebrochenem oder fehlerhaftem Schreibvorgang.
-- **Selbsttest (T333):** Auf 13/13 Prüfungen erweitert: prüft eine übernommene Kopie autonom gegen ihr `SHELL_MANIFEST.json` ohne Glide-Checkout, inklusive Pfad- und Symlinksicherheit.
-- **Multi-Host UI-Provider-Isolation (T336):** Hierarchischer Fallback (`widget` → `toplevel` → global) für Schriften (`_default_font`), Hintergrundverläufe (`paint_canvas_backdrop`) und Glyphenmetrik (`CanvasLabel._render`) in `custom_controls.py`.
-- **Portabler Designvertrag:** In `DESIGN_RICHTLINIEN.md` verankert: Trennung von universellen Regeln (P1–P6, B15, B11, B01/B16, B03, Kontrast, Tastatur/Fokus), Shell-Schnittstellen (`custom_controls`-Provider, `system_appearance.resolve`) und Host-Gestaltungsfreiheit.
+- **Verschachtelte Layouts & Bootstrap-Transaktion:** Automatische Ermittlung der Projektwurzel anhand von Markern oder Python-Layouts sowie Vorgabe per `--projekt-root <PFAD>`. Dynamische Berechnung relativer POSIX-Links in `AGENTS.md` und Skills für beliebige Ordnertiefen und Pfade mit Leerzeichen (`%20`). Atomarer Schutz bestehender Nutzerkonfigurationen und vollständiger Rollback via `BootstrapTransaction`.
+- **Selbsttest & Spoofing-Schutz (T333):** Auf 13/13 Prüfungen erweitert: prüft eine übernommene Kopie autonom gegen ihr `SHELL_MANIFEST.json` ohne Glide-Checkout, inklusive Pfad- und Symlinksicherheit sowie gehärteter Quellbaum-Erkennung.
+- **Multi-Host UI-Provider-Isolation (T336):** Hierarchischer Fallback (`widget` → `toplevel` → global) für Schriften (`_default_font`), Hintergrundverläufe (`paint_canvas_backdrop`) und Glyphenmetrik (`CanvasLabel._render`) mit 4-Argument-Signatur in `custom_controls.py`.
+- **Portabler Designvertrag & Konsistenzprüfung:** In `DESIGN_RICHTLINIEN.md` verankert (P1–P6, B15, B11, B01/B16, B03, Kontrast, Tastatur/Fokus, Provider und Host-Grenzen); automatisiert verifiziert über `test_design_vertrag_konsistenz.py` und `test_custom_controls.py`.
 - **End-to-End-Referenzhost & Consumer-Upgrade (T337):** Dauerhafter Testfall für isolierten Host mit AppHost, Dialogen, Undo/Redo, Timern, Wächter gegen Glide-Abhängigkeiten, sauberem Upgrade von Altversionen (0.5.0 → 0.6.2) unter Erhalt aller Host-Dateien sowie intaktem Rollback bei Abbruch.
-- **Prüfergebnis:** CI-Grundstufe und alle Shell-Suiten (64 Tests) lokal bestanden.
+- **Prüfergebnis:** CI-Grundstufe und alle Shell-Suiten (92 Tests) lokal bestanden.
 
 ## 0. Sofortübergabe WA-41 – zuerst lesen
 

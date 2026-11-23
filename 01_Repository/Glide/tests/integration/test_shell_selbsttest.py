@@ -85,6 +85,15 @@ def manifestfaelle(fehler):
         code, text = lauf(ordner)
         if code != 1 or "manifest: SHELL_MANIFEST.json is missing in consumer copy" not in text:
             fehler.append(f"gelöschtes Manifest: Exit {code}, erwartet Ablehnung wegen fehlendem Manifest\n{text}")
+
+        # Gegenprobe: vorgetäuschter Quellbaum (nur einzelne Glide-Dateien vorhanden)
+        fake_app = pathlib.Path(ordner) / "app.pyw"
+        fake_app.write_text("# fake\n", encoding="utf-8")
+        code, text = lauf(ordner)
+        if code != 1 or "manifest: SHELL_MANIFEST.json is missing in consumer copy" not in text:
+            fehler.append(f"vorgetäuschter Quellbaum: Exit {code}, erwartet Ablehnung trotz fake app.pyw\n{text}")
+        fake_app.unlink()
+
         manifest_pfad.write_bytes(manifest_inhalt)
 
         # Gegenprobe: Symlink statt Datei
