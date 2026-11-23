@@ -2925,7 +2925,8 @@ class DueField(tk.Frame):
 
         # Eine Eingabe von Hand springt im Kalender auf den passenden Monat.
         self.date_entry.bind("<KeyRelease>", self._on_typed_date)
-        self.date_entry.bind("<FocusOut>", self._on_typed_date)
+        self.date_entry.bind("<FocusOut>", self._on_date_focus_out)
+        self.date_entry.bind("<Return>", self._on_date_focus_out)
 
     MIN_INLINE_TIME_WIDTH = 380
 
@@ -3110,6 +3111,16 @@ class DueField(tk.Frame):
         if typed:
             self._year, self._month = typed.year, typed.month
         self._render_month()
+
+    def _on_date_focus_out(self, _event=None):
+        self._on_typed_date(_event)
+        raw = self.date_entry.get().strip()
+        if raw.casefold() in self.app.DUE_WORDS:
+            parsed = self.app.parse_due_words(raw)
+            if parsed:
+                display = self.app.format_due_display(parsed)
+                self.date_entry.delete(0, tk.END)
+                self.date_entry.insert(0, display)
 
     def set_due(self, iso_value):
         """Setzt das Datum aus dem Kalender heraus und hält das Feld gleich."""
