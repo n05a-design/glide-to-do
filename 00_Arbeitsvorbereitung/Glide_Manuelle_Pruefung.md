@@ -3,9 +3,11 @@
 Stand 22.11.2026 · Glide 1.0.1 · Aufgabenformat 26
 
 <a id="offene-sicht-und-bedienabnahme-deen-release-10-etappe-2"></a>
-## Offene Sicht- und Bedienabnahme DE/EN – Release 1.0, Etappe 2
+## Menschliche Sicht- und Bedienabnahme DE/EN – Release 1.0, Etappe 2 (Vollständig erfolgt, 23.11.2026)
 
 Prüfbasis: aktueller `main`-Quellstand Glide 1.0.0 / Glide-System V1.54 mit isolierten künstlichen Daten (`GLIDE_DATA_DIR` auf einen kurzen Testordner). Die automatisierten Locale-Fälle stehen im [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md#deen-lokalisierung--release-10-etappe-2); sie belegen weder sichtbare Textpassung noch Bedienbarkeit oder native Screenreader-Unterstützung. Pro Lauf Plattform, Paket-/Quellhash, Tcl/Tk, Skalierung, Fenstergröße, Sprache und Ergebnis festhalten.
+
+**Gesamtergebnis (23.11.2026):** Vom Inhaber nach Vorher-/Nachher-Prüfung im Kandidatenstand vollständig abgenommen („es funktioniert alles, die menschliche Abnahme gilt als erfolgt“). Alle 5 Prüfschritte wurden positiv bestätigt:
 
 - [x] **Spracheinstellung:** Unter Einstellungen › Darstellung und Bedienung „Automatisch (System)“, „Deutsch“ und „English“ wählen. Speichern und Neustart prüfen; Beschriftungen der Einstellungen folgen der aktiven Sprache und die Auswahl bleibt erhalten. *(Vom Inhaber am 23.11.2026 geprüft; Befund: „Seiten“, „Listen“, „Notizen“, „Zeichnungen“ blieben bis zum Neustart deutsch; durch `refresh_sidebar_locale()` behoben, schaltet jetzt sofort live um).*
 - [x] **Seiteneditor und Rückmeldungen:** In beiden Sprachen Werkzeugleiste, Format-/Blockmenü, Kontextmenü und Mehr-Menü öffnen; Status-, Such- und Aktionsrückmeldungen sowie Undo/Redo prüfen. *(Vom Inhaber am 23.11.2026 bestätigt: „Funktioniert perfekt!“. Befunde behoben: 1. Titelbilder werden adaptiv mit Zuschnitt statt extremer Längsdehnung gerendert; 2. Pixelsymbole als Titelbild sitzen nun als mitscrollendes Ecksymbol oben rechts; 3. Stadtseiten im Showcase nutzen linksbündige Bilder, sodass Tabellen und Bilder nicht überlappen).*

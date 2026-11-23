@@ -3945,5 +3945,6 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - `ci_grundstufe.py`: alle 19 Schritte vollständig grün mit Exitcode 0.
   - `standpruefung.py`: 148 Dokumente fehlerfrei.
   - Protokoll in `Glide_Manuelle_Pruefung.md` vollständig gepflegt.
+  - Menschliche Sicht- und Bedienabnahme durch den Inhaber am 23.11.2026 vollständig positiv abgenommen („es funktioniert alles, die menschliche Abnahme gilt als erfolgt“).
 - **D – Rest:**
   - Tag, GitHub-Release, Notarisierung und Paketmanager-Einreichung nur mit ausdrücklicher Freigabe des Inhabers.
