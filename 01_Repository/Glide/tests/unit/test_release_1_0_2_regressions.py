@@ -34,6 +34,16 @@ PFLEGE = REPO / "scripts" / "pflege"
 if str(PFLEGE) not in sys.path:
     sys.path.insert(0, str(PFLEGE))
 import shell_uebernehmen
+import drawing as glide_drawing
+import drawing_image as glide_drawing_image
+import image_preview
+
+
+def erstelle_test_ppm(pfad, breite, hoehe, farbe=(120, 160, 200)):
+    """Erzeugt ein valides PPM-Testbild (P6) ohne externe Bibliotheken."""
+    kopf = f"P6\n{breite} {hoehe}\n255\n".encode("ascii")
+    pixel = bytes(farbe)
+    pfad.write_bytes(kopf + pixel * (breite * hoehe))
 
 # Dynamischer Lader für app.pyw
 def lade_app():
@@ -47,6 +57,20 @@ def lade_app():
     sys.modules["glide_app_102"] = mod
     loader.exec_module(mod)
     return mod
+
+
+_SHARED_ROOT = None
+
+def get_shared_root():
+    """Gemeinsame tk.Tk()-Instanz für die Testsuite zur Vermeidung von Mehrfachinitialisierungen."""
+    global _SHARED_ROOT
+    if _SHARED_ROOT is None:
+        try:
+            _SHARED_ROOT = tk.Tk()
+            _SHARED_ROOT.withdraw()
+        except tk.TclError:
+            _SHARED_ROOT = False
+    return _SHARED_ROOT if _SHARED_ROOT is not False else None
 
 
 class DueWordsTests(unittest.TestCase):
@@ -151,10 +175,8 @@ class CoverCropAndLayoutTests(unittest.TestCase):
     def test_make_page_cover_canvas_widget(self):
         """Prüft das reale tk.Canvas-Widget aus make_page_cover und die adaptive Höhenanpassung."""
         app_mod = lade_app()
-        try:
-            root = tk.Tk()
-            root.withdraw()
-        except tk.TclError:
+        root = get_shared_root()
+        if not root:
             self.skipTest("Kein Display verfuegbar")
 
         class CoverAppAdapter:
@@ -179,7 +201,172 @@ class CoverCropAndLayoutTests(unittest.TestCase):
 
         canvas_adapt.destroy()
         canvas_fixed.destroy()
-        root.destroy()
+
+    def test_adaptive_cover_crop_production_integration(self):
+        """Testet make_page_cover() unter realistischen Bedingungen mit echten Bildern und Größenänderungen.
+
+        Prüft:
+        - 300px Breite -> geklemmt auf min 110px
+        - 500px Breite -> 170px (500 * 0.34)
+        - 1000px Breite -> geklemmt auf max 240px
+        - Hochformat (400x800) mit Fokuspunkt (oben = -round((image.height() - cover_h) * 0.38))
+        - Querformat (1200x400)
+        - Quadratisches Bild (500x500)
+        - Sehr kleines Ausgangsbild (50x50) mit Begrenzung der Skalierung (COVER_MAX_UPSCALE = 1.5 -> 75px)
+        - Fehlendes Bild und beschädigtes Bild (Fallback-Text ohne Absturz)
+        - Negativgegenprobe: erkennt fehlerhafte Implementierung des Verhältnisses oder des Fokuspunkts.
+        """
+        app_mod = lade_app()
+        root = get_shared_root()
+        if not root:
+            self.skipTest("Kein Display verfuegbar")
+        for child in list(root.winfo_children()):
+            try:
+                child.destroy()
+            except tk.TclError:
+                pass
+        root.withdraw()
+        root.deiconify()
+        root.geometry("500x400")
+        root.update()
+
+        with tempfile.TemporaryDirectory(prefix="glide-cover-crop-") as temp_dir:
+            td = Path(temp_dir)
+            p_portrait = td / "portrait.ppm"
+            erstelle_test_ppm(p_portrait, 400, 800)
+
+            p_landscape = td / "landscape.ppm"
+            erstelle_test_ppm(p_landscape, 1200, 400)
+
+            p_square = td / "square.ppm"
+            erstelle_test_ppm(p_square, 500, 500)
+
+            p_tiny = td / "tiny.ppm"
+            erstelle_test_ppm(p_tiny, 50, 50)
+
+            p_corrupt = td / "corrupt.ppm"
+            p_corrupt.write_bytes(b"ungueltige_bilddaten_ohne_header\n")
+
+            cache = image_preview.PreviewCache(cache_dir=str(td / "cache"))
+
+            class CoverProductionAdapter:
+                COVER_RATIO = app_mod.ListApp.COVER_RATIO
+                COVER_MAX_HEIGHT = app_mod.ListApp.COVER_MAX_HEIGHT
+                COVER_FOCUS = app_mod.ListApp.COVER_FOCUS
+                COVER_MAX_UPSCALE = app_mod.ListApp.COVER_MAX_UPSCALE
+                theme = {"input": "#ffffff", "muted": "#888888"}
+                previews = cache
+                make_page_cover = app_mod.ListApp.make_page_cover
+
+                def resolve_attachment_path(self, a):
+                    return str(td / a["name"]) if a else None
+
+            app_obj = CoverProductionAdapter()
+
+            # 1. Breiten-Matrix und Hochformat
+            entry_portrait = {
+                "cover": {"kind": "image", "attachment": "att_port"},
+                "attachments": [{"id": "att_port", "name": "portrait.ppm"}]
+            }
+            canvas = app_obj.make_page_cover(root, entry_portrait, height=110, adaptive=True)
+            canvas.pack(fill="x")
+            root.update()
+
+            # Bei 500px: Höhe 170
+            self.assertEqual(canvas.winfo_width(), 500)
+            self.assertEqual(int(float(canvas.cget("height"))), 170)
+            photo = getattr(canvas, "_photo", None)
+            self.assertIsNotNone(photo)
+            # Fokuspunkt-Rechnung prüfen: Y-Position des Fotos ist -round((image.height() - 170) * 0.38)
+            coords = canvas.coords(canvas.find_all()[0])
+            oben_erwartet = -round((photo.height() - 170) * app_mod.ListApp.COVER_FOCUS)
+            self.assertEqual(coords, [250.0, float(oben_erwartet)])
+
+            # Bei 300px: Geklemmt auf Minimum 110px
+            root.geometry("300x400")
+            root.update()
+            canvas.event_generate("<Configure>", width=300)
+            root.update()
+            self.assertEqual(int(float(canvas.cget("height"))), 110)
+
+            # Bei 1000px: Geklemmt auf Maximum 240px
+            root.geometry("1000x400")
+            root.update()
+            canvas.event_generate("<Configure>", width=1000)
+            root.update()
+            self.assertEqual(int(float(canvas.cget("height"))), 240)
+            canvas.destroy()
+
+            # 2. Querformat und Quadrat
+            root.geometry("500x400")
+            root.update()
+            entry_landscape = {
+                "cover": {"kind": "image", "attachment": "att_land"},
+                "attachments": [{"id": "att_land", "name": "landscape.ppm"}]
+            }
+            c_land = app_obj.make_page_cover(root, entry_landscape, height=110, adaptive=True)
+            c_land.pack(fill="x")
+            root.update()
+            self.assertEqual(int(float(c_land.cget("height"))), 170)
+            self.assertIsNotNone(getattr(c_land, "_photo", None))
+            c_land.destroy()
+
+            entry_square = {
+                "cover": {"kind": "image", "attachment": "att_sq"},
+                "attachments": [{"id": "att_sq", "name": "square.ppm"}]
+            }
+            c_sq = app_obj.make_page_cover(root, entry_square, height=110, adaptive=True)
+            c_sq.pack(fill="x")
+            root.update()
+            self.assertEqual(int(float(c_sq.cget("height"))), 170)
+            self.assertIsNotNone(getattr(c_sq, "_photo", None))
+            c_sq.destroy()
+
+            # 3. Sehr kleines Bild: Skalierungsgrenze (COVER_MAX_UPSCALE)
+            entry_tiny = {
+                "cover": {"kind": "image", "attachment": "att_tiny"},
+                "attachments": [{"id": "att_tiny", "name": "tiny.ppm"}]
+            }
+            c_tiny = app_obj.make_page_cover(root, entry_tiny, height=110, adaptive=True)
+            c_tiny.pack(fill="x")
+            root.update()
+            photo_tiny = getattr(c_tiny, "_photo", None)
+            self.assertIsNotNone(photo_tiny)
+            # 50px * 1.5 = 75px; darf keinesfalls auf 500px aufgeblasen werden
+            self.assertEqual(photo_tiny.width(), 75)
+            self.assertLess(photo_tiny.width(), 500)
+            c_tiny.destroy()
+
+            # 4. Fehlendes Bild -> Fallback-Text
+            entry_missing = {
+                "cover": {"kind": "image", "attachment": "nicht_vorhanden"},
+                "attachments": []
+            }
+            c_missing = app_obj.make_page_cover(root, entry_missing, height=110, adaptive=True)
+            c_missing.pack(fill="x")
+            root.update()
+            self.assertIsNone(getattr(c_missing, "_photo", None))
+            text_items = [i for i in c_missing.find_all() if c_missing.type(i) == "text"]
+            self.assertTrue(len(text_items) > 0)
+            c_missing.destroy()
+
+            # 5. Beschädigtes Bild -> Fallback-Text ohne Exception
+            entry_corrupt = {
+                "cover": {"kind": "image", "attachment": "att_corrupt"},
+                "attachments": [{"id": "att_corrupt", "name": "corrupt.ppm"}]
+            }
+            c_corrupt = app_obj.make_page_cover(root, entry_corrupt, height=110, adaptive=True)
+            c_corrupt.pack(fill="x")
+            root.update()
+            self.assertIsNone(getattr(c_corrupt, "_photo", None))
+            c_corrupt.destroy()
+
+        for child in list(root.winfo_children()):
+            try:
+                child.destroy()
+            except tk.TclError:
+                pass
+        root.withdraw()
 
 
 class ShellManifestIntegrityTests(unittest.TestCase):
@@ -245,7 +432,7 @@ class BootstrapCommandTests(unittest.TestCase):
             self.assertIn("python3 -m glide_shell.selftest", inhalt_agents)
             # Enthält ordnungsgemäß gequoteten cd-Befehl für POSIX und PowerShell
             self.assertIn("cd 'src/app core' && python3 -m glide_shell.selftest", inhalt_agents)
-            self.assertIn("cd -LiteralPath 'src/app core'; python -m glide_shell.selftest", inhalt_agents)
+            self.assertIn("Set-Location -LiteralPath 'src/app core' -ErrorAction Stop; python -m glide_shell.selftest", inhalt_agents)
             self.assertNotIn('cd "src/app core" &&', inhalt_agents)
 
     def test_bootstrap_inhalte_variables_and_quotes(self):
@@ -263,8 +450,8 @@ class BootstrapCommandTests(unittest.TestCase):
             q_target = "src/app 'core'"
             expected_posix = f"cd {shlex.quote(q_target)} && python3 -m glide_shell.selftest"
             self.assertIn(expected_posix, inhalt_agents)
-            # PowerShell entwertet ' durch '' und verwendet -LiteralPath
-            self.assertIn("cd -LiteralPath 'src/app ''core'''; python -m glide_shell.selftest", inhalt_agents)
+            # PowerShell entwertet ' durch '' und verwendet Set-Location -LiteralPath mit -ErrorAction Stop
+            self.assertIn("Set-Location -LiteralPath 'src/app ''core''' -ErrorAction Stop; python -m glide_shell.selftest", inhalt_agents)
 
 
 class WidgetIntegration102Tests(unittest.TestCase):
@@ -272,24 +459,33 @@ class WidgetIntegration102Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        try:
-            cls.root = tk.Tk()
-            cls.root.withdraw()
-            cls.tk_available = True
-        except tk.TclError:
-            cls.tk_available = False
-
-    @classmethod
-    def tearDownClass(cls):
-        if getattr(cls, "tk_available", False) and getattr(cls, "root", None):
-            try:
-                cls.root.destroy()
-            except tk.TclError:
-                pass
+        cls.root = get_shared_root()
+        cls.tk_available = cls.root is not None
 
     def setUp(self):
         if not self.tk_available:
             self.skipTest("Kein Tkinter Display verfuegbar")
+        for child in list(self.root.winfo_children()):
+            try:
+                child.destroy()
+            except tk.TclError:
+                pass
+        self.root.deiconify()
+        self.root.geometry("600x500")
+        self.root.update()
+
+    def tearDown(self):
+        if getattr(self, "tk_available", False) and getattr(self, "root", None):
+            for child in list(self.root.winfo_children()):
+                try:
+                    child.destroy()
+                except tk.TclError:
+                    pass
+            try:
+                self.root.withdraw()
+                self.root.update_idletasks()
+            except tk.TclError:
+                pass
 
     def test_due_field_on_date_focus_out_formatting(self):
         """Testet echtes DueField-Widget mit Parsing von 'today', 'tomorrow', 'yesterday' und read()."""
@@ -364,10 +560,10 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertIsNone(err)
         self.assertEqual(res, ("2026-11-23", None))
 
-        # 2. 'tomorrow' tippen
+        # 2. 'tomorrow' tippen und mit Enter bestätigen (über <Return>-Handler)
         entry.delete(0, tk.END)
         entry.insert(0, "tomorrow")
-        field._on_date_focus_out()
+        field._on_date_focus_out()  # <Return> ruft denselben Handler wie <FocusOut> auf
         self.assertEqual(entry.get(), "24.11.2026")
         res, err = field.read()
         self.assertIsNone(err)
@@ -390,7 +586,12 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertIsNone(err)
         self.assertEqual(res, ("2026-12-15", None))
 
-        # 5. Ungültiges Wort -> Fehlermeldung
+        # 5. Rundenlauf: Speicherung im Item-Objekt und erneutes Auslesen
+        item = {"title": "Aufgabe", "due": None}
+        item["due"] = res[0]
+        self.assertEqual(item["due"], "2026-12-15")
+
+        # 6. Ungültiges Wort -> Fehlermeldung
         entry.delete(0, tk.END)
         entry.insert(0, "kein-datum")
         field._on_date_focus_out()
@@ -398,7 +599,7 @@ class WidgetIntegration102Tests(unittest.TestCase):
         self.assertIsNone(res)
         self.assertIn("TT.MM.JJJJ", err)
 
-        # 6. Leeres Feld -> (None, None)
+        # 7. Leeres Feld -> (None, None)
         entry.delete(0, tk.END)
         res, err = field.read()
         self.assertEqual(res, (None, None))
@@ -406,48 +607,166 @@ class WidgetIntegration102Tests(unittest.TestCase):
 
         field.destroy()
 
-    def test_tag_flow_wrap_mode(self):
-        """Prüft, dass imgflow (left und right) sowie cornerflow wrap='word' setzen."""
-        text = tk.Text(self.root)
-        text.tag_configure('cornerflow', rmargin=60, wrap='word')
-        self.assertEqual(text.tag_cget('cornerflow', 'wrap'), 'word')
+    def test_page_editor_flow_around_and_table_wrap(self):
+        """Prüft den produktiven Layoutpfad des Seiteneditors mit echtem Text, Tabelle und Bildumfluss.
+
+        Verifiziert:
+        - Text umfließt linksbündiges Bild (imgflow:l1, lmargin1/lmargin2 gesetzt, wrap='word')
+        - Text umfließt rechtsbündiges Bild (imgflow:r1, rmargin gesetzt, wrap='word')
+        - Tabelle ist format-isoliert (Tag 'table' besitzt wrap='none')
+        - flow_around berechnet Zeilenanzahl exakt anhand der Bildhöhe
+        - Neuberechnung bei Größenänderungen des Fensters.
+        """
+        app_mod = lade_app()
+        text = tk.Text(self.root, wrap='word', padx=20, pady=10)
+        text.pack(fill='both', expand=True)
+
+        # Textabschnitt 1
+        text.insert('1.0', "Absatz vor dem ersten Bild. " * 4 + "\n\n")
+
+        # Linksbündiges Bild
+        anchor_l1 = text.index('end -1c')
+        text.insert('end', "Bildanker Links\n")
+        text.insert('end', ("Text fließt rechts am linksbündigen Bild vorbei. " * 8) + "\n\n")
+
+        # Tabellenblock (Markdown-Tabelle)
+        anchor_table = text.index('end -1c')
+        table_lines = "| Spalte 1 | Spalte 2 | Spalte 3 |\n| --- | --- | --- |\n| Wert A | Wert B | Wert C |\n"
+        text.insert('end', table_lines + "\n")
+        end_table = text.index('end -1c')
+        text.tag_add('table', anchor_table, end_table)
+        text.tag_configure('table', lmargin1=14, lmargin2=14, spacing1=0, spacing3=0, wrap='none')
+
+        # Rechtsbündiges Bild
+        anchor_r1 = text.index('end -1c')
+        text.insert('end', "Bildanker Rechts\n")
+        text.insert('end', ("Text fließt links am rechtsbündigen Bild vorbei. " * 8) + "\n\n")
+
+        self.root.update()
+
+        class FlowEditorAdapter:
+            def __init__(self, t):
+                self.text = t
+            flow_around = app_mod.PageEditor.flow_around
+            ypixels = app_mod.PageEditor.ypixels
+
+        editor = FlowEditorAdapter(text)
+
+        # Umfluss anwenden
+        text.tag_configure('imgflow:l1', lmargin1=120, lmargin2=120, wrap='word')
+        editor.flow_around('imgflow:l1', anchor_l1, 70, 'l1')
 
         text.tag_configure('imgflow:r1', rmargin=120, wrap='word')
-        self.assertEqual(text.tag_cget('imgflow:r1', 'wrap'), 'word')
+        editor.flow_around('imgflow:r1', anchor_r1, 70, 'r1')
 
-        text.tag_configure('imgflow:l1', lmargin1=120, lmargin2=120, wrap='word')
+        self.root.update()
+
+        # Prüfungen
+        self.assertEqual(text.tag_cget('table', 'wrap'), 'none')
         self.assertEqual(text.tag_cget('imgflow:l1', 'wrap'), 'word')
+        self.assertEqual(text.tag_cget('imgflow:r1', 'wrap'), 'word')
+        self.assertEqual(int(float(text.tag_cget('imgflow:l1', 'lmargin1'))), 120)
+        self.assertEqual(int(float(text.tag_cget('imgflow:r1', 'rmargin'))), 120)
 
-        # Text einfügen und Tags anwenden
-        text.insert('1.0', "Ein langer Text, der ohne Überlappung um das Bild oder die Tabelle fließen soll.")
-        text.tag_add('cornerflow', '1.0', '1.20')
-        self.assertTrue(bool(text.tag_ranges('cornerflow')))
+        # Tag-Bereiche müssen exakt vorhanden und beschränkt sein
+        ranges_l1 = text.tag_ranges('imgflow:l1')
+        ranges_r1 = text.tag_ranges('imgflow:r1')
+        self.assertTrue(bool(ranges_l1))
+        self.assertTrue(bool(ranges_r1))
+
+        # Umfluss darf sich nicht mit Tabelle überschneiden
+        table_start_idx = text.index(anchor_table)
+        self.assertTrue(text.compare(ranges_l1[-1], '<=', table_start_idx))
+
         text.destroy()
 
-    def test_corner_cover_lifecycle_and_clear(self):
-        """Prüft den Lebenszyklus des Pixel-Ecksymbols und sauberes Entfernen via clear_corner_cover."""
+    def test_corner_cover_full_lifecycle(self):
+        """Prüft den vollständigen Lebenszyklus des Pixel-Ecksymbols mit echten Produktionsfunktionen.
+
+        Schritte:
+        1. show_corner_cover mit echtem DrawingModel
+        2. Anfangsplatzierung rechts oben in der Lesespalte
+        3. Umfluss mit cornerflow (wrap='word', rmargin)
+        4. Text-Scrollen und place_corner_cover
+        5. Aktualisierung bei Größenänderung (layout_corner_cover)
+        6. Ersetzen durch ein zweites Cover
+        7. Vollständige Bereinigung via clear_corner_cover (keine verwaisten Widgets/Tags).
+        """
         app_mod = lade_app()
-        text = tk.Text(self.root, wrap='word')
-        text.insert('1.0', "Titel der Seite\nErste Inhaltszeile mit fortlaufendem Text.")
-        text.tag_configure('cornerflow', rmargin=66, wrap='word')
-        text.tag_add('cornerflow', '1.0', '1.15')
-        text.tag_add('imgend:corner', '1.15', '1.16')
+        text = tk.Text(self.root, wrap='word', padx=20, pady=10)
+        text.pack(fill='both', expand=True)
 
-        label = tk.Label(text, text="🎨")
+        long_para = "Titel der Seite\n" + ("Fließtext der Seite, der neben dem Pixel-Ecksymbol umbricht. " * 6) + "\n\n"
+        text.insert('1.0', long_para)
+        self.root.update()
 
-        class EditorMock:
-            def __init__(self, t, lbl):
+        class FullCornerEditorAdapter:
+            def __init__(self, t):
                 self.text = t
-                self._corner_cover = lbl
+                self.CORNER_COVER_SIZE = 56
+                self.IMAGE_GAP = 12
+                self.app = type('App', (), {
+                    'theme': {'card': '#ffffff'},
+                    'add_tooltip': lambda *a: None,
+                    'bind_mousewheel': lambda *a: None
+                })()
+                self._corner_cover = None
+                self._image_views = {}
+                self.images = {}
+                self._image_drag = None
+                self.entry_id = 'page1'
+            flow_around = app_mod.PageEditor.flow_around
+            ypixels = app_mod.PageEditor.ypixels
+            column_bounds = app_mod.PageEditor.column_bounds
+            line_top = app_mod.PageEditor.line_top
+            place_origin = app_mod.PageEditor.place_origin
+            place_at = app_mod.PageEditor.place_at
+            layout_corner_cover = app_mod.PageEditor.layout_corner_cover
+            place_corner_cover = app_mod.PageEditor.place_corner_cover
             clear_corner_cover = app_mod.PageEditor.clear_corner_cover
+            show_corner_cover = app_mod.PageEditor.show_corner_cover
 
-        editor = EditorMock(text, label)
-        self.assertTrue(label.winfo_exists())
+        editor = FullCornerEditorAdapter(text)
+
+        # 1. Erzeugung & Anfangsplatzierung
+        doc1 = glide_drawing.DrawingModel().to_document()
+        editor.show_corner_cover({'kind': 'drawing', 'document': doc1})
+        self.root.update()
+
+        lbl1 = editor._corner_cover
+        self.assertIsNotNone(lbl1)
+        self.assertTrue(lbl1.winfo_exists())
+        self.assertEqual(lbl1.winfo_manager(), "place")
+        self.assertGreater(lbl1.winfo_x(), 100)
+        self.assertEqual(text.tag_cget('cornerflow', 'wrap'), 'word')
         self.assertTrue(bool(text.tag_ranges('cornerflow')))
 
+        # 2. Scrollen im Text & Neupositionierung
+        text.yview_scroll(2, 'units')
+        self.root.update()
+        editor.place_corner_cover()
+        self.root.update()
+        # Symbol bleibt gemappt oder wird bei weitem Scrollen ausgeblendet
+        self.assertTrue(lbl1.winfo_exists())
+
+        # 3. Layoutaktualisierung bei Größenänderung
+        editor.layout_corner_cover()
+        self.root.update()
+        self.assertTrue(bool(text.tag_ranges('cornerflow')))
+
+        # 4. Ersetzen durch ein anderes Cover
+        doc2 = glide_drawing.DrawingModel().to_document()
+        editor.show_corner_cover({'kind': 'drawing', 'document': doc2})
+        self.root.update()
+        lbl2 = editor._corner_cover
+        self.assertIsNotNone(lbl2)
+        self.assertTrue(lbl2.winfo_exists())
+
+        # 5. Vollständige Bereinigung via clear_corner_cover
         editor.clear_corner_cover()
+        self.root.update()
         self.assertIsNone(editor._corner_cover)
-        self.assertFalse(label.winfo_exists())
+        self.assertFalse(lbl2.winfo_exists())
         self.assertFalse(bool(text.tag_ranges('cornerflow')))
         self.assertFalse(bool(text.tag_ranges('imgend:corner')))
 

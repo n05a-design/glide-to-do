@@ -118,10 +118,10 @@ flowchart TD
 
 ## 3. GitHub Issue Tracking (#129)
 
-Statusabgleich vom 22.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt bis zur öffentlichen Freigabe offen. Lokalisierung und Glide Shell sind abgeschlossen; offen sind nur Tag/Release, Paketmanager-Einreichung und die menschliche Abnahme, alle mit Freigabe des Inhabers.
+Statusabgleich vom 23.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt bis zur öffentlichen Veröffentlichung offen. Lokalisierung, Glide Shell und die menschliche Sicht- und Bedienabnahme (23.11.2026) sind positiv abgeschlossen; die Release-Härtung für Glide 1.0.2 läuft in PR #195 (`fix/glide-1.0.2-release-hardening`). Offen bleiben ausschließlich der erste öffentliche Release/Tag (Glide 1.0.2) und die anschließende externe Paketmanager-Einreichung (Homebrew, winget), jeweils unter ausdrücklichem Inhabervorbehalt.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
-- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (vollständige Oberfläche über PR #148, #157, #158 und die Lokalisierungsrunden V1.70–V1.79; englische Schnellerfassung V1.81, PR #186; menschliche Abnahme läuft mit der Freigabe)
-- [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; öffentliche Artefakte nicht veröffentlicht)
-- [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlichem Release offen)
-- [ ] **5. Qualität & Freigabe** (PR #138 auf dem geprüften Head mit grünen Pflichtchecks gemergt; lokaler macOS-Nachweis vorhanden. UI-Diagnosen und native Barrierefreiheitsprüfungen am 22.11.2026 grün, Screenreader-Sprachausgabe zurückgestellt; öffentlicher Tag/Release und menschliche Abnahme offen)
+- [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (vollständige Oberfläche über PR #148, #157, #158 und die Lokalisierungsrunden V1.70–V1.79; englische Schnellerfassung V1.81, PR #186; menschliche Abnahme am 23.11.2026 erfolgreich abgeschlossen)
+- [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; Vorbereitung für Release 1.0.2 technisch verifiziert)
+- [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlicher Freigabe durch den Inhaber offen)
+- [x] **5. Qualität & menschliche Abnahme** (Menschliche Sicht- und Bedienabnahme am 23.11.2026 positiv abgeschlossen; T340-Regressionstests und Release-Härtung in PR #195 vollständig verifiziert; öffentlicher Tag/Release bleibt unter Inhabervorbehalt)

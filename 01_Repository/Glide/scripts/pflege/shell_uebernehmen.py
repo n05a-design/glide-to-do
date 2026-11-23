@@ -407,7 +407,7 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
         parent_dir = rel_shell_from_root.rsplit("/", 1)[0]
         cmd_cd_posix = f"cd {shlex.quote(parent_dir)} && "
         ps_path = parent_dir.replace("'", "''")
-        cmd_cd_ps = f"cd -LiteralPath '{ps_path}'; "
+        cmd_cd_ps = f"Set-Location -LiteralPath '{ps_path}' -ErrorAction Stop; "
 
     selftest_cmd_posix = f"{cmd_cd_posix}python3 -m glide_shell.selftest"
     selftest_cmd_ps = f"{cmd_cd_ps}python -m glide_shell.selftest"
@@ -451,30 +451,6 @@ def generiere_bootstrap_inhalte(projekt_root, shell_ordner):
         f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_agents})\n"
         f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_agents})\n"
         f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_agents})\n\n"
-        "## Regeln\n\n"
-        f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
-        f"- Vor und nach UI-Arbeiten: {selftest_doc}.\n"
-        "- Designvertrag (P1–P6, B15, B11, Kontrast, Fokus) beachten.\n"
-    )
-
-    skill_claude_dir = projekt_root / ".claude" / "skills" / "glide-shell"
-    link_de_claude = _rel_url(anleitung_de, skill_claude_dir)
-    link_prompt_claude = _rel_url(startprompt, skill_claude_dir)
-    link_design_claude = _rel_url(design, skill_claude_dir)
-    link_manifest_claude = _rel_url(manifest, skill_claude_dir)
-
-    inhalt_skill_claude = (
-        "---\n"
-        "name: glide-shell\n"
-        "description: Anleitung und Regeln für die Nutzung der Glide Shell in diesem Projekt. Verwenden bei UI-Entwicklung mit Tkinter, Dialogen, Tastaturkürzeln oder beim Aktualisieren der Shell.\n"
-        "---\n\n"
-        "# Glide Shell – Projektnutzung\n\n"
-        "Dieses Projekt verwendet die **Glide Shell** als UI-Fundament.\n\n"
-        "## Wichtige Referenzen\n\n"
-        f"- Anleitung: [KI_ANLEITUNG_NEUE_PROJEKTE.md]({link_de_claude})\n"
-        f"- Startprompt: [STARTPROMPT_KI.md]({link_prompt_claude})\n"
-        f"- Portabler Designvertrag: [DESIGN_RICHTLINIEN.md]({link_design_claude})\n"
-        f"- Manifest: [SHELL_MANIFEST.json]({link_manifest_claude})\n\n"
         "## Regeln\n\n"
         f"- Dateien in `{rel_shell_from_root}/` nicht manuell ändern.\n"
         f"- Vor und nach UI-Arbeiten: {selftest_doc}.\n"

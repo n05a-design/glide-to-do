@@ -21,7 +21,7 @@ Der Quellstand 1.0.0 wurde über PR #138 am 18.11.2026 in `main` gemergt (Merge-
 | Bereich | Beobachteter Stand |
 |---|---|
 | GitHub Release und Tags | Keine veröffentlichten Releases und keine Git-Tags gefunden. |
-| Meilenstein | Issue [#129](https://github.com/n05a-design/glide-to-do/issues/129) ist offen; die vollständige UI-Lokalisierung, externe Paketmanager-Einreichungen und Freigabe bleiben offen. |
+| Meilenstein | Issue [#129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt bis zum Release offen; Lokalisierung, Glide Shell und menschliche Abnahme sind erfolgt, Release-Härtung für 1.0.2 läuft in PR #195, externe Paketmanager-Einreichungen und Inhaberfreigabe stehen vor Veröffentlichung an. |
 | Pflichtprüfungen PR #138 | Grundstufe, CodeQL, Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem geprüften PR-Head erfolgreich. Nachgelagerte `main`-Workflows und PR #142 sind davon getrennt; deren aktuellen Status im [QA-Bericht](07_QA_BERICHT.md) prüfen. |
 | Native und menschliche Abnahme | Der lokale macOS-Volllauf und Paketstart sind gesondert belegt. Menschliche Sicht-/Bedienabnahme sowie übersprungene UI-/Barrierefreiheitsjobs sind nicht belegt. |
 | Issue- und PR-Vorlagen | Die zweisprachigen Fehler-/Wunschformulare und die PR-Vorlage wurden mit PR #145 in `main` aufgenommen. PR #154 ergänzt zweisprachige Dokumentations-, Lokalisierungs- und Accessibility-Formulare als GitHub-YAML-Vorlagen. Diese zusätzlichen Formulare verwenden bewusst keine Labels, bevor neue Repository-Labels separat freigegeben sind. |

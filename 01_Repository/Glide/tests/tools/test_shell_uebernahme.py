@@ -852,7 +852,7 @@ class Uebernahme(unittest.TestCase):
         self.assertFalse((proj / ".claude").exists())
 
     def test_bootstrap_kommandos_posix_und_powershell(self):
-        """generiere_bootstrap_inhalte erzeugt sichere Kommandos für POSIX (shlex.quote) und PowerShell (-LiteralPath)."""
+        """generiere_bootstrap_inhalte erzeugt sichere Kommandos für POSIX und PowerShell mit Stop bei Fehler."""
         complex_proj = pathlib.Path(self._temp.name) / "Firma & Co" / "Projekt $VAR (2026)"
         shell_dir = complex_proj / "app" / "unter ordner $VAR" / "glide_shell"
         shell_dir.mkdir(parents=True)
@@ -860,12 +860,117 @@ class Uebernahme(unittest.TestCase):
                      "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
             (shell_dir / name).write_text("# Test\n", encoding="utf-8")
 
-        inhalt_agents, _, _ = werkzeug.generiere_bootstrap_inhalte(complex_proj, shell_dir)
+        inhalt_agents, inhalt_skill_agents, inhalt_skill_claude = werkzeug.generiere_bootstrap_inhalte(complex_proj, shell_dir)
         # POSIX enthält shlex.quote mit Single Quotes, keine ungequotete Variablenexpansion
         self.assertIn("cd 'app/unter ordner $VAR' && python3 -m glide_shell.selftest", inhalt_agents)
-        # PowerShell verwendet -LiteralPath und Semikolon statt &&
-        self.assertIn("cd -LiteralPath 'app/unter ordner $VAR'; python -m glide_shell.selftest", inhalt_agents)
+        # PowerShell verwendet Set-Location -LiteralPath mit -ErrorAction Stop
+        self.assertIn("Set-Location -LiteralPath 'app/unter ordner $VAR' -ErrorAction Stop; python -m glide_shell.selftest", inhalt_agents)
         self.assertNotIn('cd "app/unter ordner $VAR" &&', inhalt_agents)
+        self.assertNotIn("cd -LiteralPath", inhalt_agents)
+        # Überprüfe, dass Claude- und Agents-Skill synchron generiert werden
+        self.assertIn("Set-Location -LiteralPath 'app/unter ordner $VAR' -ErrorAction Stop;", inhalt_skill_claude)
+        self.assertIn("Set-Location -LiteralPath 'app/unter ordner $VAR' -ErrorAction Stop;", inhalt_skill_agents)
+
+    def test_bootstrap_kommandos_sonderzeichen_matrix(self):
+        """Prüft diverse Pfadmuster: Leerzeichen, Umlaute, Variablen, Subshells, einfache/doppelte Quotes, Klammern."""
+        pfad_varianten = [
+            "einfach/pfad",
+            "ordner mit leerzeichen/unterordner",
+            "pröjëkt/äöü €/ordner",
+            "app/$VARIABLE/pfad",
+            "app/$(subshell)/pfad",
+            "app/O'Connor's/ordner",
+            'app/"doppelte_quotes"/ordner',
+            "app/version (v2.0)/unterordner",
+            "tief/verschachtelt/eins/zwei/drei/ordner",
+        ]
+        base = pathlib.Path(self._temp.name) / "matrix_test"
+        base.mkdir(parents=True, exist_ok=True)
+
+        for rel in pfad_varianten:
+            proj = base / "proj"
+            shell = proj / rel / "glide_shell"
+            shell.mkdir(parents=True, exist_ok=True)
+            for name in ("KI_ANLEITUNG_NEUE_PROJEKTE.md", "AI_GUIDE_NEW_PROJECTS.md",
+                         "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
+                (shell / name).write_text("# Test\n", encoding="utf-8")
+
+            agents, _, _ = werkzeug.generiere_bootstrap_inhalte(proj, shell)
+            # PowerShell muss immer Set-Location -LiteralPath mit -ErrorAction Stop enthalten
+            self.assertIn("Set-Location -LiteralPath", agents)
+            self.assertIn("-ErrorAction Stop; python -m glide_shell.selftest", agents)
+            # POSIX muss cd mit && enthalten
+            self.assertIn(" && python3 -m glide_shell.selftest", agents)
+
+    def test_posix_bootstrap_befehlsausfuehrung(self):
+        """Führt den erzeugten POSIX-Befehl unter bash/zsh tatsächlich aus und prüft Abbruch bei fehlendem Ordner."""
+        proj = pathlib.Path(self._temp.name) / "exec_proj"
+        shell = proj / "sub ordner mit leerzeichen" / "glide_shell"
+        shell.mkdir(parents=True)
+        for name in ("KI_ANLEITUNG_NEUE_PROJEKTE.md", "AI_GUIDE_NEW_PROJECTS.md",
+                     "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
+            (shell / name).write_text("# Test\n", encoding="utf-8")
+
+        agents, _, _ = werkzeug.generiere_bootstrap_inhalte(proj, shell)
+
+        # Extrahiere das exakte POSIX-Kommando aus den Backticks
+        posix_cmd = [part for part in agents.split("`") if "python3 -m glide_shell.selftest" in part][0]
+        cd_teil = posix_cmd.split("python3")[0]  # z. B. "cd 'sub ordner mit leerzeichen' && "
+
+        shells = [s for s in ("bash", "zsh") if shutil.which(s)]
+        self.assertTrue(len(shells) > 0, "Mindestens eine POSIX-Shell muss verfügbar sein")
+
+        marker = shell.parent / "marker_posix.txt"
+        for sh in shells:
+            if marker.exists():
+                marker.unlink()
+
+            # Positivtest: Zielverzeichnis existiert -> zweiter Befehl wird ausgeführt (im Zielordner!)
+            cmd_ok = f"{cd_teil} touch '{marker.name}'"
+            res_ok = subprocess.run([sh, "-c", cmd_ok], cwd=str(proj), capture_output=True, text=True)
+            self.assertEqual(res_ok.returncode, 0, f"{sh} fehlgeschlagen: {res_ok.stderr}")
+            self.assertTrue(marker.exists(), f"Marker wurde durch {sh} nicht erzeugt")
+            marker.unlink()
+
+            # Negativtest: Verzeichnis fehlt -> Abbruch durch &&, Folgebefehl darf NIE ausgeführt werden!
+            cmd_fail = f"cd 'nicht_vorhandenes_verzeichnis_xyz' && touch '{marker.name}'"
+            res_fail = subprocess.run([sh, "-c", cmd_fail], cwd=str(proj), capture_output=True, text=True)
+            self.assertNotEqual(res_fail.returncode, 0, f"{sh} hätte fehlschlagen müssen")
+            self.assertFalse(marker.exists(), f"Folgebefehl wurde trotz fehlerhaftem cd ausgeführt unter {sh}!")
+
+    def test_powershell_erroraction_stop_reproduktion_und_absicherung(self):
+        """Verifiziert PowerShell -ErrorAction Stop: Bei fehlendem Ziel bricht die Ausführung sofort ab."""
+        pwsh = shutil.which("pwsh") or shutil.which("powershell") or shutil.which("powershell.exe")
+        if not pwsh:
+            # Auf Non-Windows Host ohne pwsh dokumentieren wir die syntaktische Korrektheit
+            proj = pathlib.Path(self._temp.name) / "pwsh_dummy"
+            shell = proj / "app" / "unterordner" / "glide_shell"
+            shell.mkdir(parents=True)
+            for name in ("KI_ANLEITUNG_NEUE_PROJEKTE.md", "AI_GUIDE_NEW_PROJECTS.md",
+                         "STARTPROMPT_KI.md", "DESIGN_RICHTLINIEN.md", "SHELL_MANIFEST.json"):
+                (shell / name).write_text("# Test\n", encoding="utf-8")
+            agents, _, _ = werkzeug.generiere_bootstrap_inhalte(proj, shell)
+            self.assertIn("Set-Location -LiteralPath 'app/unterordner' -ErrorAction Stop; python -m glide_shell.selftest", agents)
+            return
+
+        # Wenn PowerShell verfügbar ist (z. B. auf Windows CI oder Entwicklerrechner mit pwsh):
+        proj = pathlib.Path(self._temp.name) / "pwsh_real"
+        proj.mkdir(parents=True, exist_ok=True)
+        marker = proj / "marker_pwsh.txt"
+
+        # 1. Reproduktion des Altverhaltens: 'cd -LiteralPath "kaputt"; Folgebefehl' führt Folgebefehl aus!
+        alt_cmd = f"cd -LiteralPath 'nicht_vorhanden_xyz'; [IO.File]::WriteAllText('{marker.name}', 'ausgefuehrt')"
+        res_alt = subprocess.run([pwsh, "-NoProfile", "-Command", alt_cmd], cwd=str(proj), capture_output=True, text=True)
+        # Im alten Zustand wurde trotz Fehler der Folgebefehl ausgeführt
+        alt_erzeugt = marker.exists()
+        if marker.exists():
+            marker.unlink()
+
+        # 2. Härtung mit Set-Location -LiteralPath '...' -ErrorAction Stop; Folgebefehl
+        neu_cmd = f"Set-Location -LiteralPath 'nicht_vorhanden_xyz' -ErrorAction Stop; [IO.File]::WriteAllText('{marker.name}', 'ausgefuehrt')"
+        res_neu = subprocess.run([pwsh, "-NoProfile", "-Command", neu_cmd], cwd=str(proj), capture_output=True, text=True)
+        self.assertNotEqual(res_neu.returncode, 0, "PowerShell muss bei nicht existierendem Pfad mit Fehler beenden")
+        self.assertFalse(marker.exists(), "Folgebefehl darf bei Set-Location -ErrorAction Stop keinesfalls ausgeführt werden!")
 
 
 def git(ordner, *argumente):
