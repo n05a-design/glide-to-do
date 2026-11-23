@@ -1,6 +1,6 @@
 # Portabler Designvertrag für Folgeprojekte der Glide Shell
 
-Stand 23.11.2026 · Glide Shell 0.6.2 · Lizenz MPL-2.0
+Stand 23.11.2026 · Glide 1.0.1 · Glide Shell 0.6.2 · Lizenz MPL-2.0
 
 Dieses Dokument definiert den verbindlichen, transportablen Gestaltungs- und Interaktionsvertrag für alle Anwendungen, die die **Glide Shell** als UI-Fundament einsetzen. Es ist offline-fähig und unabhängig vom Glide-Hauptrepository nutzbar.
 
