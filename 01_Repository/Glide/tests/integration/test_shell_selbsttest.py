@@ -61,6 +61,17 @@ def manifestfaelle(fehler):
         code, text = lauf(ordner)
         if code != 1 or "modules without manifest entry: ['fremd.py']" not in text:
             fehler.append(f"zusätzliches Modul: Exit {code}\n{text}")
+        (paket / "fremd.py").unlink()
+        (paket / "motion.py").unlink()
+        try:
+            (paket / "motion.py").symlink_to(PAKET / "motion.py")
+            code, text = lauf(ordner)
+            if code != 1 or "symlinks are forbidden" not in text:
+                fehler.append(f"Symlink statt Shell-Datei: Exit {code}\n{text}")
+            (paket / "motion.py").unlink()
+            (paket / "motion.py").write_bytes((PAKET / "motion.py").read_bytes())
+        except OSError:
+            pass
 
 
 def main():

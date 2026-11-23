@@ -19,6 +19,7 @@ Dieser Test verifiziert:
 
 Aufruf: python3 -B tests/integration/test_shell_referenzhost.py
 """
+import json
 import os
 import pathlib
 import subprocess
@@ -239,6 +240,85 @@ class ReferenzHostIntegrationTest(unittest.TestCase):
         self.assertNotEqual(code, 0, "Host mit unzulässiger Glide-Abhängigkeit hätte fehlschlagen müssen!")
         self.assertTrue("ModuleNotFoundError" in stderr or "No module named 'glide'" in stderr or "ImportError" in stderr,
                         f"Unerwarteter Fehler: {stderr}")
+
+    def test_consumer_upgrade_und_erhalt_der_hostdateien(self):
+        # 1. Ausgangszustand: Host besitzt Daten und eine ältere Shell-Kopie (Version 0.5.0)
+        host_data_file = self.proj_dir / "host_data.json"
+        host_data_file.write_text('{"db_version": 1, "custom_setting": 42}', encoding="utf-8")
+        shell_dir = self.proj_dir / "glide_shell"
+        manifest_file = shell_dir / "SHELL_MANIFEST.json"
+
+        init_file = shell_dir / "__init__.py"
+        init_code = init_file.read_text(encoding="utf-8")
+        import re
+        old_init_code = re.sub(r'SHELL_VERSION = "[^"]+"', 'SHELL_VERSION = "0.5.0"', init_code)
+        init_file.write_text(old_init_code, encoding="utf-8")
+
+        import hashlib
+        manifest_data = json.loads(manifest_file.read_text(encoding="utf-8"))
+        manifest_data["shell_version"] = "0.5.0"
+        manifest_data["dateien"]["__init__.py"] = hashlib.sha256(init_file.read_bytes()).hexdigest()
+        manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+        # Referenzhost läuft mit Stand 0.5.0
+        code, stdout, stderr = self.run_host_script(self.host_file)
+        self.assertEqual(code, 0, f"Host mit Stand 0.5.0 sollte laufen:\n{stderr}")
+        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
+
+        # 2. Reguläres Upgrade auf neuesten Shell-Stand durchführen
+        cmd_upgrade = [sys.executable, "-B", str(WERKZEUG), "--unsauber-erlauben", str(self.proj_dir)]
+        lauf_up = subprocess.run(cmd_upgrade, capture_output=True, text=True, timeout=60)
+        self.assertEqual(lauf_up.returncode, 0, f"Upgrade fehlgeschlagen:\n{lauf_up.stdout}\n{lauf_up.stderr}")
+
+        # 3. Nach dem Upgrade prüfen:
+        # a) Host-Dateien sind unversehrt
+        self.assertTrue(host_data_file.is_file())
+        self.assertEqual(host_data_file.read_text(encoding="utf-8"), '{"db_version": 1, "custom_setting": 42}')
+        # b) Manifest ist aktualisiert und gültig
+        new_manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+        self.assertNotEqual(new_manifest["shell_version"], "0.5.0")
+        # c) Host läuft weiterhin fehlerfrei
+        code_after, stdout_after, stderr_after = self.run_host_script(self.host_file)
+        self.assertEqual(code_after, 0, f"Host nach Upgrade fehlgeschlagen:\n{stderr_after}")
+        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout_after)
+
+    def test_consumer_upgrade_rollback_bei_fehler(self):
+        host_data_file = self.proj_dir / "host_data.json"
+        host_data_file.write_text('{"state": "safe"}', encoding="utf-8")
+        shell_dir = self.proj_dir / "glide_shell"
+        init_file = shell_dir / "__init__.py"
+        init_before = init_file.read_bytes()
+        manifest_file = shell_dir / "SHELL_MANIFEST.json"
+        manifest_before = manifest_file.read_bytes()
+
+        inject_script = (
+            "import sys, pathlib\n"
+            f"sys.path.insert(0, {str(REPO / 'scripts' / 'pflege')!r})\n"
+            "import shell_uebernehmen as ueb\n"
+            "original = ueb.schreiben_atomar\n"
+            "def broken_schreiben(ziel, inhalt):\n"
+            "    if ziel.name.endswith('.py') and ziel.name != '__init__.py':\n"
+            "        raise IOError('Künstlicher Abbruch mitten im Kopieren')\n"
+            "    return original(ziel, inhalt)\n"
+            "ueb.schreiben_atomar = broken_schreiben\n"
+            f"code, meldungen = ueb.uebernehmen(pathlib.Path({str(shell_dir)!r}), ersetzen=True)\n"
+            "print('CODE:', code)\n"
+            "for m in meldungen: print('MSG:', m)\n"
+        )
+        sub = subprocess.run([sys.executable, "-B", "-c", inject_script],
+                             capture_output=True, text=True, cwd=self.proj_dir, timeout=60)
+        self.assertIn("CODE: 1", sub.stdout)
+        self.assertIn("Rollback ausgeführt", sub.stdout)
+
+        # Verifikation: Zustand ist exakt wie vor dem Abbruch
+        self.assertEqual(init_file.read_bytes(), init_before)
+        self.assertEqual(manifest_file.read_bytes(), manifest_before)
+        self.assertEqual(host_data_file.read_text(encoding="utf-8"), '{"state": "safe"}')
+
+        # Referenzhost läuft weiterhin stabil
+        code, stdout, stderr = self.run_host_script(self.host_file)
+        self.assertEqual(code, 0, f"Host nach Rollback muss voll lauffähig sein:\n{stderr}")
+        self.assertIn("VERIFIED_ISOLATED_HOST_OK", stdout)
 
 
 if __name__ == "__main__":

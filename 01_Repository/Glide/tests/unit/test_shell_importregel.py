@@ -167,6 +167,7 @@ SHELL_MODULE = {
         "check_runtime_paths": ["_root"],
         "check_command_history": ["_root"],
         "check_app_host": ["root"],
+        "check_manifest": ["_root", "folder"],
         "run": ["out"],
     },
     "demo": {

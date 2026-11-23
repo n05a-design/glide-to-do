@@ -53,6 +53,7 @@ import json
 import os
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -201,10 +202,15 @@ def manifest_fehler(daten, ordner=None):
     if not isinstance(dateien, dict) or "__init__.py" not in dateien:
         return fehler + ["dateien fehlt oder nennt kein __init__.py"]
     for name, wert in sorted(dateien.items()):
-        if not isinstance(name, str) or name in ("", ".", "..") or "/" in name or "\\" in name or name == MANIFEST:
+        if (not isinstance(name, str) or name in ("", ".", "..") or "/" in name or "\\" in name or
+                name == MANIFEST or name.startswith(".") or ".." in name or os.path.basename(name) != name):
             fehler.append(f"unzulässiger Dateiname {name!r}")
         elif not (isinstance(wert, str) and HEX64.fullmatch(wert)):
             fehler.append(f"{name}: kein SHA-256")
+        elif ordner is not None and (ordner / name).is_symlink():
+            fehler.append(f"{name}: symbolischer Link ist unzulässig")
+    if ordner is not None and (ordner / MANIFEST).is_symlink():
+        fehler.append(f"{MANIFEST}: symbolischer Link ist unzulässig")
     if ordner is not None and not fehler and (ordner / "__init__.py").is_file():
         version = version_aus_text((ordner / "__init__.py").read_text(encoding="utf-8", errors="replace"))
         if version != daten["shell_version"]:
@@ -217,6 +223,8 @@ def manifest_lesen(ordner):
     pfad = ordner / MANIFEST
     if not pfad.is_file():
         return None, []
+    if pfad.is_symlink():
+        return {}, [f"{MANIFEST}: symbolischer Link ist unzulässig"]
     try:
         daten = json.loads(pfad.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -240,7 +248,9 @@ def lokale_abweichungen(ordner, manifest):
     abweichend = []
     for name, wert in sorted(manifest["dateien"].items()):
         pfad = ordner / name
-        if not pfad.is_file():
+        if pfad.is_symlink():
+            abweichend.append((name, "symbolischer Link"))
+        elif not pfad.is_file():
             abweichend.append((name, "fehlt"))
         elif sha(pfad) != wert:
             abweichend.append((name, "verändert"))
@@ -267,7 +277,9 @@ def pruefen(ordner, quelle=None):
     zeilen = [(MANIFEST, f"ungültig: {f}") for f in fehler]
     for name in sorted(set(quelle) | set(eigen)):
         pfad = ordner / name
-        if name not in quelle:
+        if pfad.is_symlink():
+            zeilen.append((name, "symbolischer Link (unzulässig)"))
+        elif name not in quelle:
             zeilen.append((name, "nicht mehr in der Quelle"))
         elif not pfad.is_file():
             zeilen.append((name, "fehlt" if name in eigen else "neu in der Quelle"))
@@ -286,6 +298,9 @@ def _verweigern(ordner, manifest, fehler, quelle):
     """Gründe, die Übernahme ohne `--ersetzen` abzulehnen; leer, wenn sie gefahrlos ist."""
     vorhanden = [p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__")]
     hinweis = " – mit --ersetzen bewusst überschreiben"
+    symlinks = [p.name for p in ordner.iterdir() if p.is_symlink()]
+    if symlinks:
+        return [f"{name}: symbolischer Link im Zielordner (unzulässig){hinweis}" for name in sorted(symlinks)]
     if manifest is None:
         return [f"{ordner}: Ordner ist nicht leer und hat kein {MANIFEST}{hinweis}"] if vorhanden else []
     if fehler:
@@ -298,32 +313,98 @@ def _verweigern(ordner, manifest, fehler, quelle):
 
 def uebernehmen(ordner, ersetzen=False, quelle=None):
     quelle = quelle if quelle is not None else quelle_lesen(unsauber_erlauben=True)
+    ordner_existierte = ordner.exists()
     ordner.mkdir(parents=True, exist_ok=True)
     manifest, fehler = manifest_lesen(ordner)
     if not ersetzen:
         gruende = _verweigern(ordner, manifest, fehler, quelle["hashes"])
         if gruende:
+            if not ordner_existierte and not any(ordner.iterdir()):
+                ordner.rmdir()
             return VERWEIGERT, gruende
-    alt = manifest["dateien"] if manifest and not fehler else {}
-    vorhanden = sorted(p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__"))
-    meldungen = []
-    for name, inhalt in quelle["dateien"].items():
-        schreiben_atomar(ordner / name, inhalt)
-    for name in sorted(set(alt) - set(quelle["dateien"])):
-        (ordner / name).unlink(missing_ok=True)
-        meldungen.append(f"{name}: entfernt (nicht mehr Teil der Shell)")
-    fremd = sorted(n for n in vorhanden if n not in quelle["dateien"] and n not in alt)
-    meldungen.extend(f"{name}: bleibt stehen (kein Teil der Shell)" for name in fremd)
-    daten = {"paket": PAKET, "shell_version": quelle["version"], "glide_system_version": quelle["system"],
-             "quell_commit": quelle["commit"], "quelle_unveraendert": quelle["unveraendert"],
-             "lizenz": "MPL-2.0", "dateien": quelle["hashes"]}
-    schreiben_atomar(ordner / MANIFEST, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
-    for name, art in pruefen(ordner, quelle["hashes"])[1]:
-        if art != "aktuell":
-            return ABWEICHUNG, meldungen + [f"{name}: {art} nach dem Kopieren"]
-    herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
-    meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
-    return OK, meldungen
+
+    # Vorbereitung Rollback-Sicherung des bestehenden Zustands
+    backup_temp = tempfile.TemporaryDirectory(prefix="glide-shell-backup-")
+    backup_ordner = pathlib.Path(backup_temp.name)
+    try:
+        for item in ordner.iterdir():
+            if item.name == "__pycache__":
+                continue
+            ziel_backup = backup_ordner / item.name
+            if item.is_symlink():
+                ziel_backup.symlink_to(os.readlink(item))
+            elif item.is_file():
+                shutil.copy2(item, ziel_backup)
+            elif item.is_dir():
+                shutil.copytree(item, ziel_backup, symlinks=True)
+
+        alt = manifest["dateien"] if manifest and not fehler else {}
+        vorhanden = sorted(p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__"))
+        meldungen = []
+
+        # Schritt 1: Quell-Dateien schreiben
+        for name, inhalt in quelle["dateien"].items():
+            schreiben_atomar(ordner / name, inhalt)
+
+        # Schritt 2: Veraltete Shell-Dateien entfernen
+        for name in sorted(set(alt) - set(quelle["dateien"])):
+            (ordner / name).unlink(missing_ok=True)
+            meldungen.append(f"{name}: entfernt (nicht mehr Teil der Shell)")
+
+        # Schritt 3: Fremde Dateien beibehalten
+        fremd = sorted(n for n in vorhanden if n not in quelle["dateien"] and n not in alt)
+        meldungen.extend(f"{name}: bleibt stehen (kein Teil der Shell)" for name in fremd)
+
+        # Schritt 4: Manifest schreiben
+        daten = {"paket": PAKET, "shell_version": quelle["version"], "glide_system_version": quelle["system"],
+                 "quell_commit": quelle["commit"], "quelle_unveraendert": quelle["unveraendert"],
+                 "lizenz": "MPL-2.0", "dateien": quelle["hashes"]}
+        schreiben_atomar(ordner / MANIFEST, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+
+        # Schritt 5: Verifizierung des Ergebnisses
+        abw = [f"{name}: {art} nach dem Kopieren" for name, art in pruefen(ordner, quelle["hashes"])[1] if art != "aktuell"]
+        if abw:
+            raise RuntimeError("; ".join(abw))
+
+        herkunft = (quelle["commit"] or "ohne Git")[:12] + ("" if quelle["unveraendert"] is not False else " + lokale Änderungen")
+        meldungen.append(f"glide_shell {quelle['version']} ({herkunft}) mit {len(quelle['dateien'])} Dateien nach {ordner}")
+        return OK, meldungen
+
+    except BaseException as fehler_kopie:
+        # Rollback: Zustand exakt wiederherstellen
+        try:
+            if not ordner_existierte:
+                shutil.rmtree(ordner, ignore_errors=True)
+            else:
+                backup_namen = {p.name for p in backup_ordner.iterdir()}
+                for item in list(ordner.iterdir()):
+                    if item.name == "__pycache__":
+                        continue
+                    if item.name not in backup_namen:
+                        if item.is_dir() and not item.is_symlink():
+                            shutil.rmtree(item, ignore_errors=True)
+                        else:
+                            item.unlink(missing_ok=True)
+                for item in backup_ordner.iterdir():
+                    ziel_item = ordner / item.name
+                    if item.is_symlink():
+                        ziel_item.unlink(missing_ok=True)
+                        ziel_item.symlink_to(os.readlink(item))
+                    elif item.is_file():
+                        shutil.copy2(item, ziel_item)
+                    elif item.is_dir():
+                        if ziel_item.exists():
+                            shutil.rmtree(ziel_item, ignore_errors=True)
+                        shutil.copytree(item, ziel_item, symlinks=True)
+        except Exception as fehler_rollback:
+            return ABWEICHUNG, [f"Fehler bei Übernahme ({fehler_kopie}) und Rollback fehlgeschlagen ({fehler_rollback})"]
+
+        if isinstance(fehler_kopie, (KeyboardInterrupt, SystemExit)):
+            raise fehler_kopie
+        return ABWEICHUNG, [f"Übernahme fehlgeschlagen ({fehler_kopie}) – Rollback ausgeführt (Zustand wiederhergestellt)"]
+
+    finally:
+        backup_temp.cleanup()
 
 
 def zielordner(text):

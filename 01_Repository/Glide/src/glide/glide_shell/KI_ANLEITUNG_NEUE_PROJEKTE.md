@@ -219,7 +219,7 @@ Diese Regeln stammen aus Glide und sind dort durch Tests erzwungen. Übernimm si
 
 ## 5. Design-Richtlinien
 
-Glides Gestaltungsvertrag steht in [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md). Übernimm die Grundsätze in ein eigenes `DESIGN_RICHTLINIEN.md` des Projekts; konkrete Glide-Maße und -Entscheidungen gelten nur, wenn dein Projekt sie ausdrücklich übernimmt.
+Glides Gestaltungsvertrag und der verbindliche transportable Rahmen für Folgeprojekte stehen in [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) (siehe Abschnitt [*Portabler Designvertrag für Folgeprojekte*](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md#portabler-designvertrag-für-folgeprojekte)). Übernimm die Grundsätze in ein eigenes `DESIGN_RICHTLINIEN.md` des Projekts; konkrete Glide-Maße und -Entscheidungen gelten nur, wenn dein Projekt sie ausdrücklich übernimmt.
 
 **Sechs Grundsätze (P1–P6):**
 
@@ -349,7 +349,7 @@ Kompatibilitätsnamen mit `glide` (`_glide_after_scope`, `GlideCheckbutton` …)
 **Projektstart**
 
 - [ ] Struktur aus 3.1 angelegt; `AGENTS.md` mit Arbeitsregeln und Abschlusskriterium
-- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 12/12 (auch mit `-O`)
+- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 13/13 (auch mit `-O`)
 - [ ] Start über `AppHost` mit `preflight`; Import ohne Seiteneffekte
 - [ ] Datenordner über `runtime_paths` und eigene Umgebungsvariable für Tests
 - [ ] Kataloge `de.json`/`en.json` mit Paritätstest; Entwicklermeldungen Englisch
@@ -399,7 +399,7 @@ Kompatibilitätsnamen mit `glide` (`_glide_after_scope`, `GlideCheckbutton` …)
 | Shell für Agenten, die an der Shell arbeiten | [`docs/GLIDE_SHELL_KI_HANDBUCH.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md) |
 | Shell-Grenzen und Phasen | [`docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) |
 | Architektur | [`docs/02_ARCHITECTURE.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/02_ARCHITECTURE.md) |
-| Design | [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) |
+| Design | [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) (Abschnitt *Portabler Designvertrag*) |
 | Entscheidungen | [`docs/ARBEITSRICHTUNG.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Prüfplan und QA | [`docs/05_QA_TESTPLAN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/05_QA_TESTPLAN.md), [`docs/07_QA_BERICHT.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/07_QA_BERICHT.md) |
 | Register und Übernahmevertrag | [`src/glide/README.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/src/glide/README.md) |

@@ -222,6 +222,80 @@ class Uebernahme(unittest.TestCase):
         self.assertEqual(vorher, nachher)
         self.assertEqual(sorted(p.name for p in self.projekt.iterdir()), ["app.py", "glide_shell", "glide_shell_extra.py"])
 
+    def test_rollback_stellt_ausgangszustand_bei_abbruch_wieder_her(self):
+        lauf(self.projekt)
+        datei = self.kopie / "motion.py"
+        inhalt_vorher = datei.read_bytes()
+        manifest_vorher = (self.kopie / "SHELL_MANIFEST.json").read_bytes()
+        host_datei = self.kopie / "host_config.json"
+        host_datei.write_text('{"host": true}', encoding="utf-8")
+
+        original_schreiben = werkzeug.schreiben_atomar
+        aufrufe = [0]
+
+        def fehlerhaftes_schreiben(ziel, inhalt):
+            aufrufe[0] += 1
+            if aufrufe[0] >= 3:
+                raise OSError("Simulierter I/O-Fehler beim Kopieren")
+            return original_schreiben(ziel, inhalt)
+
+        try:
+            werkzeug.schreiben_atomar = fehlerhaftes_schreiben
+            code, meldungen = werkzeug.uebernehmen(self.kopie, ersetzen=True)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in meldungen))
+        finally:
+            werkzeug.schreiben_atomar = original_schreiben
+
+        self.assertEqual(datei.read_bytes(), inhalt_vorher)
+        self.assertEqual((self.kopie / "SHELL_MANIFEST.json").read_bytes(), manifest_vorher)
+        self.assertTrue(host_datei.is_file())
+        self.assertEqual(host_datei.read_text(encoding="utf-8"), '{"host": true}')
+
+    def test_rollback_entfernt_neu_angelegten_ordner_bei_abbruch(self):
+        ziel_neu = self.projekt / "neu_glide_shell"
+        self.assertFalse(ziel_neu.exists())
+
+        original_schreiben = werkzeug.schreiben_atomar
+
+        def fehlerhaftes_schreiben(ziel, inhalt):
+            raise OSError("Simulierter Plattenfehler")
+
+        try:
+            werkzeug.schreiben_atomar = fehlerhaftes_schreiben
+            code, meldungen = werkzeug.uebernehmen(ziel_neu, ersetzen=False)
+            self.assertEqual(code, werkzeug.ABWEICHUNG)
+            self.assertTrue(any("Rollback ausgeführt" in m for m in meldungen))
+        finally:
+            werkzeug.schreiben_atomar = original_schreiben
+
+        self.assertFalse(ziel_neu.exists(), "Neuer Ordner muss nach fehlgeschlagener Übernahme entfernt werden")
+
+    def test_symlinks_im_zielordner_werden_verweigert(self):
+        self.kopie.mkdir(parents=True)
+        link = self.kopie / "link.py"
+        try:
+            link.symlink_to(QUELLE / "motion.py")
+        except OSError:
+            self.skipTest("Symlinks auf diesem Dateisystem nicht unterstützt")
+
+        code, text = lauf(self.projekt)
+        self.assertEqual(code, 2, text)
+        self.assertIn("symbolischer Link", text)
+
+    def test_symlink_als_manifest_oder_modul_wird_als_ungueltig_erkannt(self):
+        lauf(self.projekt)
+        manifest_pfad = self.kopie / "SHELL_MANIFEST.json"
+        manifest_pfad.unlink()
+        try:
+            manifest_pfad.symlink_to(QUELLE / "README.md")
+        except OSError:
+            self.skipTest("Symlinks auf diesem Dateisystem nicht unterstützt")
+
+        code, text = lauf("--pruefen", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn("symbolischer Link ist unzulässig", text)
+
 
 def git(ordner, *argumente):
     return subprocess.run(["git", "-C", str(ordner), "-c", "user.name=Test", "-c", "user.email=test@example.invalid",

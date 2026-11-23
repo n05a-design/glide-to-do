@@ -145,7 +145,7 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
 | `SHELL_VERSION` (SemVer, derzeit 0.6.2) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
-| Glide-System-Version (derzeit 1.85) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
+| Glide-System-Version (derzeit 1.86) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
 | App-Version (1.0.1) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |
@@ -163,6 +163,9 @@ python3 -B 01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --ersetzen <p
 - Kopiert alle `*.py` und `*.md` aus `glide_shell/` und schreibt `glide_shell/SHELL_MANIFEST.json` (`paket`, `shell_version`, `glide_system_version`, `quell_commit`, `quelle_unveraendert`, `lizenz` MPL-2.0, `dateien` mit SHA-256).
 - `--pruefen` meldet je Datei `aktuell`, `veraltet`, `verändert`, `fehlt`, `neu in der Quelle` oder `nicht mehr in der Quelle`.
 - Ohne `--ersetzen` bricht die Übernahme ab (Exitcode 2), wenn eine Datei vom eigenen Manifest abweicht, der Zielordner ohne Manifest nicht leer ist oder eine neue Shell-Datei eine eigene Datei gleichen Namens überschreiben würde.
+- **Transaktionssicherheit & atomares Rollback:** Vor Schreiboperationen wird ein Snapshot des Bestands angelegt. Tritt beim Kopieren, Löschen veralteter Module oder Schreiben des Manifests ein Fehler auf (oder weicht die Nachprüfung ab), stellt das Werkzeug den Ausgangszustand vollständig wieder her; neu angelegte Ordner werden rückstandslos bereinigt.
+- **Pfad- und Manifestsicherheit:** Symlinks im Zielordner oder im Manifest sowie unzulässige Pfadtraversale (`..`, führende Slashes) werden strikt abgewiesen.
+- **Multi-Host Provider-Isolation:** `custom_controls._default_font`, `paint_canvas_backdrop` und `CanvasLabel._render` prüfen vor globalen Providern zunächst widget- und toplevel-spezifische Attribute (`_font_provider`, `_backdrop_painter`, `_ink_provider`), sodass mehrere Hosts oder Fenster im selben Prozess isoliert mit unterschiedlichen Schriften und Hintergründen betrieben werden können.
 - Ziele im Glide-Quellbaum lehnt das Werkzeug ab.
 - Danach im Folgeprojekt `python3 -m glide_shell.selftest` ausführen.
 

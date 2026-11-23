@@ -221,7 +221,7 @@ These rules come from Glide, where tests enforce them. Adopt them with tests of 
 
 ## 5. Design rules
 
-Glide's design contract is [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) (German). Adopt the principles into your project's own design document; concrete Glide sizes and decisions apply only if your project adopts them explicitly.
+Glide's design contract and the portable design contract for consumer projects are documented in [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) (German; see section [*Portabler Designvertrag für Folgeprojekte*](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md#portabler-designvertrag-für-folgeprojekte)). Adopt the principles into your project's own design document; concrete Glide sizes and decisions apply only if your project adopts them explicitly.
 
 **Six principles (P1–P6):**
 
@@ -351,7 +351,7 @@ Compatibility names containing `glide` (`_glide_after_scope`, `GlideCheckbutton`
 **Project start**
 
 - [ ] Layout from 3.1 created; `AGENTS.md` with working rules and completion criterion
-- [ ] Shell adopted, `SHELL_MANIFEST.json` present, self-test 12/12 (also with `-O`)
+- [ ] Shell adopted, `SHELL_MANIFEST.json` present, self-test 13/13 (also with `-O`)
 - [ ] Start through `AppHost` with `preflight`; imports without side effects
 - [ ] Data folder via `runtime_paths` and its own environment variable for tests
 - [ ] `de.json`/`en.json` catalogs with a parity test; developer messages in English
@@ -401,7 +401,7 @@ Compatibility names containing `glide` (`_glide_after_scope`, `GlideCheckbutton`
 | Shell for agents working on the shell itself | [`docs/GLIDE_SHELL_KI_HANDBUCH.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md) |
 | Shell boundaries and phases | [`docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/GLIDE_SHELL_FRAMEWORK_KONZEPT.md) |
 | Architecture | [`docs/02_ARCHITECTURE.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/02_ARCHITECTURE.md) |
-| Design | [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) |
+| Design | [`docs/DESIGN_RICHTLINIEN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) (section *Portabler Designvertrag*) |
 | Decisions | [`docs/ARBEITSRICHTUNG.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Test plan and QA | [`docs/05_QA_TESTPLAN.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/05_QA_TESTPLAN.md), [`docs/07_QA_BERICHT.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/07_QA_BERICHT.md) |
 | Register and adoption contract | [`src/glide/README.md`](https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/src/glide/README.md) |

@@ -220,12 +220,13 @@ def check_app_host(root):
     return f"preflight, shortcuts and close path on {platform}"
 
 
-def _check_manifest(_root, folder=None):
+def check_manifest(_root=None, folder=None):
     """Prüft eine übernommene Kopie gegen ihr eigenes Manifest, ohne Glide-Checkout (shell_uebernehmen.py)."""
     folder = pathlib.Path(folder or os.path.dirname(os.path.abspath(__file__)))
     path = folder / "SHELL_MANIFEST.json"
     if not path.is_file():
         return "source tree without manifest"
+    expect(not path.is_symlink(), "manifest: SHELL_MANIFEST.json must not be a symlink")
     data = json.loads(path.read_text(encoding="utf-8"))
     files = data.get("dateien")
     expect(data.get("paket") == "glide_shell" and isinstance(files, dict) and "__init__.py" in files,
@@ -233,14 +234,21 @@ def _check_manifest(_root, folder=None):
     expect(data.get("shell_version") == SHELL_VERSION, f"manifest version {data.get('shell_version')} != {SHELL_VERSION}")
     expect(data.get("lizenz") == "MPL-2.0", "manifest: license is not MPL-2.0")
     for name, digest in sorted(files.items()):
-        expect(name not in ("", ".", "..") and "/" not in name and "\\" not in name, f"manifest: bad file name {name!r}")
+        expect(isinstance(name, str) and name not in ("", ".", "..") and "/" not in name and "\\" not in name
+               and not name.startswith(".") and os.path.basename(name) == name and ".." not in name,
+               f"manifest: bad file name {name!r}")
+        expect(isinstance(digest, str) and len(digest) == 64 and all(c in "0123456789abcdef" for c in digest.lower()),
+               f"{name}: invalid sha256 digest")
         target = folder / name
         expect(target.is_file(), f"{name}: missing")
+        expect(not target.is_symlink(), f"{name}: symlinks are forbidden")
         expect(hashlib.sha256(target.read_bytes()).hexdigest() == digest, f"{name}: modified")
     extra = sorted(p.name for p in folder.iterdir() if p.suffix == ".py" and p.name not in files)
     expect(not extra, f"modules without manifest entry: {extra}")
     return f"{len(files)} files match manifest ({str(data.get('quell_commit') or 'no commit')[:12]})"
 
+
+_check_manifest = check_manifest
 
 CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("system_appearance", check_appearance), ("redo_history", check_redo),
@@ -248,7 +256,7 @@ CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("text_fit", check_text_fit), ("action_picker", check_action_picker),
           ("runtime_paths", check_runtime_paths), ("command_history", check_command_history),
           ("app_host", check_app_host), ("modal_session", check_modal),
-          ("manifest", _check_manifest))
+          ("manifest", check_manifest))
 
 
 def run(out=sys.stdout):

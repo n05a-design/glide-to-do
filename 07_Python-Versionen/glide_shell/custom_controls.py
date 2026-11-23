@@ -37,10 +37,18 @@ def set_backdrop_painter(painter):
     _BACKDROP_PAINTER = painter
 
 
-def _default_font(size=10):
-    if callable(_FONT_PROVIDER):
+def _default_font(size=10, widget=None):
+    provider = getattr(widget, "_font_provider", None) if widget is not None else None
+    if not callable(provider) and widget is not None:
         try:
-            return _FONT_PROVIDER(size)
+            provider = getattr(widget.winfo_toplevel(), "_font_provider", None)
+        except Exception:
+            pass
+    if not callable(provider):
+        provider = _FONT_PROVIDER
+    if callable(provider):
+        try:
+            return provider(size)
         except Exception:
             pass
     return ("TkDefaultFont", size)
@@ -87,9 +95,17 @@ def bind_resize(widget, callback, add=None):
 
 def paint_canvas_backdrop(canvas):
     """Legt den Hintergrundverlauf als unterste Ebene in eine Canvas-Fläche."""
-    if callable(_BACKDROP_PAINTER):
+    painter = getattr(canvas, "_backdrop_painter", None)
+    if not callable(painter):
         try:
-            return _BACKDROP_PAINTER(canvas)
+            painter = getattr(canvas.winfo_toplevel(), "_backdrop_painter", None)
+        except Exception:
+            pass
+    if not callable(painter):
+        painter = _BACKDROP_PAINTER
+    if callable(painter):
+        try:
+            return painter(canvas)
         except Exception:
             pass
     try:
@@ -217,14 +233,23 @@ class CanvasLabel(tk.Canvas):
         pady = int(float(o["pady"] or 0)) + self.LABEL_INSET_Y
         self._text_w, self._text_h = box[2] - box[0], box[3] - box[1]
         self._text_ink_top = 0
-        if self._fit_ink and callable(_INK_PROVIDER):
-            try:
-                ink = _INK_PROVIDER(self, o["font"], o["text"], breite)
-                if ink is not None:
-                    self._text_ink_top, self._text_h = ink
-                    self._text_ids = [(haupt, 0, -self._text_ink_top)]
-            except Exception:
-                pass
+        if self._fit_ink:
+            provider = getattr(self, "_ink_provider", None)
+            if not callable(provider):
+                try:
+                    provider = getattr(self.winfo_toplevel(), "_ink_provider", None)
+                except Exception:
+                    pass
+            if not callable(provider):
+                provider = _INK_PROVIDER
+            if callable(provider):
+                try:
+                    ink = provider(self, o["font"], o["text"], breite)
+                    if ink is not None:
+                        self._text_ink_top, self._text_h = ink
+                        self._text_ids = [(haupt, 0, -self._text_ink_top)]
+                except Exception:
+                    pass
         self._required = (self._text_w + 2 * padx, self._text_h + 2 * pady)
         super().configure(width=max(1, self._required[0]), height=max(1, self._required[1]))
         self._place_text()
@@ -302,7 +327,7 @@ class GlideCheckbutton(tk.Canvas):
     def _init_opts(self, kwargs, bg):
         self._opts = {
             "text": str(kwargs.pop("text", "") or ""),
-            "font": kwargs.pop("font", None) or _default_font(10),
+            "font": kwargs.pop("font", None) or _default_font(10, widget=self),
             "bg": bg,
             "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
             "activebackground": kwargs.pop("activebackground", bg),
@@ -669,7 +694,7 @@ class GlideListbox(tk.Canvas):
             "fg": kwargs.pop("fg", kwargs.pop("foreground", "#e5e5e5")),
             "selectbackground": kwargs.pop("selectbackground", "#335588"),
             "selectforeground": kwargs.pop("selectforeground", "#ffffff"),
-            "font": kwargs.pop("font", None) or _default_font(10),
+            "font": kwargs.pop("font", None) or _default_font(10, widget=self),
             "activestyle": kwargs.pop("activestyle", "none"),
             "relief": kwargs.pop("relief", "flat"),
             "bd": kwargs.pop("bd", kwargs.pop("borderwidth", 0)),
