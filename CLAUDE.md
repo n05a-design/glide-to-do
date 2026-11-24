@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87
 
 Aktueller Quell-, Prüf- und Lieferstand: [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Aufgabenstatus und konkrete Gitautorisierung stehen im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) sowie im [Meilenstein-Plan v1.0](00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md).
 

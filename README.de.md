@@ -157,7 +157,7 @@ Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vert
 
 ## Entwicklung und Qualität
 
-Stand 24.11.2026 · Glide 1.0.2
+Stand 24.11.2026 · Glide 1.0.3
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen auf main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 

@@ -1,6 +1,6 @@
-# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.2)
+# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.3)
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Erster öffentlicher Prerelease v1.0.2 am 23.11.2026 veröffentlicht; Homebrew/winget-Einreichung bleibt nach Tor I3 dem Inhaber vorbehalten.
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Erster öffentlicher Prerelease v1.0.3 am 23.11.2026 veröffentlicht; Homebrew/winget-Einreichung bleibt nach Tor I3 dem Inhaber vorbehalten.
 
 Dieser Plan dokumentiert den strategischen Schnittpunkt (Feature Freeze / D93) sowie die erfolgreiche Umsetzung und Veröffentlichung des ersten öffentlichen Prereleases **Glide 1.0.2** (Tag `v1.0.2`, 23.11.2026). Die technischen Vorlagen für Paketmanager (Homebrew, winget) sind mit verifizierten Prüfsummen vorbereitet; ihre Einreichung in externe Kataloge bleibt nach Inhaberentscheidung I3 (D43) dem Inhaber vorbehalten. Nachfolgende Weiterentwicklungen (Glide Bento Box System 0.1.0, V1.87) gehören zur Post-1.0-Roadmap.
 

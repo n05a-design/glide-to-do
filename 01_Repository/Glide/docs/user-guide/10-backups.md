@@ -1,6 +1,6 @@
 # Backups – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
 
 **Deutsch:** [Funktionen – Sicherungsübersicht](../20_FUNKTIONEN.md#sicherungsübersicht-und-anhangsrückfrage-3450), [§11 Sicherungen](../20_FUNKTIONEN.md#11-import-ausgabe-und-austausch), [Daten und Migration](../06_DATA_BACKUP_MIGRATION.md#automatische-sicherungen) · [Guide contents](README.md) · Previous: [Import and export](09-import-and-export.md) · Next: [Keyboard shortcuts](11-keyboard-shortcuts.md)
 

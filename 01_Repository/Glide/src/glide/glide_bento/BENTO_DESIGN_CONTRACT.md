@@ -1,6 +1,6 @@
 # Bento Design Contract – Portabler Gestaltungsvertrag
 
-Stand 24.11.2026 · Glide 1.0.2 · Bento Version 0.1.0 · Glide-System V1.87 · Entscheidung D100
+Stand 24.11.2026 · Glide 1.0.3 · Bento Version 0.1.0 · Glide-System V1.87 · Entscheidung D100
 
 Dieser Gestaltungsvertrag definiert die verbindlichen visuellen und interaktiven Standards für alle Bento-Komponenten (`glide_bento`). Er gilt gleichermaßen für Glide als Host sowie für jedes Folgeprojekt, das Bento übernimmt.
 

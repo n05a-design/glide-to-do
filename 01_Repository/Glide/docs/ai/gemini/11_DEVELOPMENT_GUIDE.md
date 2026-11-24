@@ -13,7 +13,7 @@ related_documents: [GLIDE-TESTING, GLIDE-ARCHITECTURE, GLIDE-PLAYBOOK]
 
 # Development guide
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## Environment
 

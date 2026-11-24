@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-PRODUCT-CONSTRAINTS, GLIDE-ROADMA
 
 # Project overview
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## Identity and purpose
 
