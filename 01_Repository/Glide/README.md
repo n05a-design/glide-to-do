@@ -1,10 +1,10 @@
 # Glide – Desktop-Planer
 
-Stand 23.11.2026 · Quellstand 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Quellstand 1.0.2 · Aufgabenformat 26
 
 Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
-> **Projektstatus:** Quellstand Glide 1.0.2, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2, Glide-System V1.86. Oberfläche vollständig Deutsch und Englisch, Glide Shell abgeschlossen. Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig erfolgt; ein öffentlicher Release ist nicht freigegeben. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand und offene Abnahmen.
+> **Projektstatus:** Quellstand Glide 1.0.2, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2, Glide-System V1.87, Glide Bento 0.1.0, Glide Shell 0.6.2. Oberfläche vollständig Deutsch und Englisch, Glide Shell abgeschlossen, Glide Bento Box System integriert (D100). Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig erfolgt; ein öffentlicher Release ist nicht freigegeben. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand und offene Abnahmen.
 
 **Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md), eigenständig versioniert in [`GLIDE_SYSTEM_VERSION`](GLIDE_SYSTEM_VERSION) (Start **V1.0**) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege. Diese Katalogversion ist unabhängig von Glides Anwendungs- und Datenformatversion.
 
@@ -60,7 +60,7 @@ Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner L
 
 | Pfad | Inhalt |
 |---|---|
-| `src/glide/` | Anwendung, Tk-freie Fachmodule, Ressourcen, `vendor/tkinterdnd2` ([Modulübersicht](src/glide/README.md)) |
+| `src/glide/` | Anwendung, Tk-freie Fachmodule, Ressourcen, Unterpaket `glide_bento` (UI-Komposition, Ebene B), Unterpaket `glide_shell` (Desktop-Fundament, Ebene C), `vendor/tkinterdnd2` ([Modulübersicht](src/glide/README.md)) |
 | `tests/` | Integrationssuiten, Unit-Tests, Fixtures, Prüfwerkzeuge und Nachweise der sieben neuesten Versionen ([Übersicht](tests/README.md)) |
 | `docs/` | Produkt, Architektur, Funktionen, Daten, Prüfung, Veröffentlichung, Entscheidungen ([Index](docs/00_INDEX.md)) |
 | `scripts/pflege/` | Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen ([Übersicht](scripts/pflege/README.md)) |

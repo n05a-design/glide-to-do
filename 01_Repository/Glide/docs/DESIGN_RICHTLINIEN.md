@@ -2,7 +2,7 @@
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87
 
 **Aufbau:** [Quellen und Geltung](#quellen-und-geltung) · [Gestaltungsgrundsätze P1–P6](#gestaltungsgrundsätze-p1p6) · [verbindliche Vorgaben](#verbindliche-gestaltungsvorgaben) mit den [Grundsätzen aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610) und den [Fortschreibungen aus Abnahmen](#fortschreibungen-aus-abnahmen-und-aufträgen) · [Gestaltungsregister](#gestaltungsregister) mit Entscheidungen, Fachentscheidungen und Inhaberzitaten · [Skill-Grundsätze](#übernommene-grundsätze-aus-den-skillquellen-übersetzt-nach-tk-b20) · [Pflege](#pflege-und-prüfung) und [appweite Übertragung](#appweite-übertragung-und-zukünftige-entwicklung).
 
@@ -262,6 +262,7 @@ Hier steht jede Entscheidung, Fachentscheidung und Inhaberaussage mit Gestaltung
 | D83 | Die sechs neuen Gestaltungslehren aus Markt §14 sind verbindlich | [Grundsätze aus der Marktanalyse](#grundsätze-aus-der-marktanalyse-d83-verbindlich-ab-3610) |
 | D84 | Appweit kleine, flache, gefüllte Dreiecke aus einer gemeinsamen Rasterform; Größe folgt der Schrift, Klickflächen und Tastaturwege bleiben | [Klare Formen](#klare-formen-und-stabile-symbolbedeutung-b10-b12-b14), [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
 | D85 | „…“-Schalter randlos und kompakt; Aktionsspalte und Aufgabe bilden eine durchgehende Hover-/Auswahlfläche; Tabellenkopf fluchtet mit dem Inhalt; Zeichen-Anzeigeprofile ändern nur sichtbare Leisten | [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
+| D100 | Glide Bento Box System: 18 px Außenradius für Bento-Karten, 12 px Innenradius, 12 px Rasterabstand, reaktiver Spaltenumbruch (1/2/3 Spalten bei 616 / 932 px) und deklarativer Bento Design Contract | [Bento-Konzept](GLIDE_BENTO_SYSTEM_KONZEPT.md), [Bento Design Contract](../src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md) |
 
 ### Fachentscheidungen mit Gestaltungsfolge
 

@@ -1,3 +1,20 @@
+## Glide Bento Box System 0.1.0 & Startseiten-Komposition (V1.87, Bento 0.1.0, 24.11.2026)
+
+| Gegenstand | Befehl / Nachweis | Ergebnis |
+|---|---|---|
+| Modul- & Importregeln | `python3 -B tests/unit/test_bento_importregel.py` (T341) | 6/6 Tests grün: Strikte Isolation von Ebene B (`glide_bento` importiert keine Ebene A); Ebene C (`glide_shell`) importiert kein Bento; vollständige Exporte; `stage_modules` und `manifest` im Paketbau verifiziert |
+| Layout-Engine & Schwellen | `python3 -B tests/unit/test_bento_layout.py` (T342) | 8/8 Tests grün: Deterministischer `BentoLayoutPlanner`, Schwellen 616 px und 932 px (1, 2, 3 Spalten), gierige Gewichtsverteilung, Full-Width-Trennung und Randfälle ohne Tk |
+| Komponenten unter Tk | `python3 -B tests/unit/test_bento_components.py` (T343) | 7/7 Tests grün: `BentoCard`, `BentoHeader`, `BentoMetric`, `BentoActions`, `BentoEmptyState`, `BentoDivider`, Tastaturfokus, Farbaktualisierung |
+| Responsive Geometrie | `python3 -B tests/integration/test_bento_integration.py` (T344) | 2/2 Tests grün: `BentoGrid`-Geometrie, dynamischer Umbruch, kollisions- und überlappungsfreie Kartenplatzierung |
+| Autonomer Selbsttest | `python3 -B -m glide_bento.selftest` | 13/13 Checks bestanden (Tokens, Context, Specs, Planner, Widgets, Divider) |
+| Interaktive Demogalerie | `python3 -B -m glide_bento.demo --test` | Testmodus erfolgreich initialisiert |
+| Startseiten-Regression | `python3 -B tests/integration/test_startseite3332.py` | Bestanden (Retention bestehender Knöpfe, Kachelauswahl, Theme-Wechsel, Undo/Redo) |
+| Startseiten-Unit-Tests | `python3 -B -m unittest discover -s tests/unit -p "test_home*.py"` | 41/41 Tests grün in 0.006s |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | 19/19 Prüfschritte grün (Exitcode 0) |
+| Standprüfung | `python3 -B tests/tools/standpruefung.py` | 154 Dokumente fehlerfrei (Exitcode 0) |
+| Paket- & Lizenzvertrag | `python3 -B tests/tools/test_paket_license_contract.py` | 12/12 Tests grün: `glide_bento` als internes Paket der Komponente Glide zugeordnet |
+| Systemregister | `python3 -B tests/tools/test_glide_system.py` | 5/5 Tests grün: M112–M121 und T341–T344 vollständig im Systemregister V1.87 verifiziert |
+
 ## Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2, 23.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |

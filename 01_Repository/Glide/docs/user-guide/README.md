@@ -1,6 +1,6 @@
 # Glide user guide (English)
 
-Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.2 · Task format 26
 
 <p align="right"><a href="../20_FUNKTIONEN.md">Deutsch</a></p>
 

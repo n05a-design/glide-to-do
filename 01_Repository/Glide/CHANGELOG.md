@@ -1,11 +1,13 @@
 # Änderungsverlauf
 
-Stand 23.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
+Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
-## 1.0.2 – 23.11.2026 (Quellstand, zur Veröffentlichung vorgesehen)
+## 1.0.2 – 24.11.2026 (Quellstand, zur Veröffentlichung vorgesehen)
 
 Der Quellstand 1.0.2 schließt die menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) erfolgreich ab und behebt sämtliche dabei identifizierten Detailbefunde:
+
+- **Glide Bento Box System 0.1.0 (D100, V1.87, 24.11.2026):** Einführung des modularen UI-Kompositionssystems (`glide_bento` 0.1.0, Ebene B) zwischen Fachapplikation (Ebene A) und Framework Shell (Ebene C). Umfasst semantische Gestaltungs-Tokens (`BentoTokens`), Dependency-Injection-Behälter (`BentoContext`), deklarative Spezifikationen (`BentoCardSpec`, `BentoGridSpec`, `BentoLayoutPlan`), deterministischen Tk-freien Layout-Planner (`BentoLayoutPlanner` mit gieriger Spaltenverteilung und Schwellenwerten bei 616 px und 932 px), universelle Bento-Karte (`BentoCard`, `BentoHeader`), Metriken (`BentoMetric`), Aktionen (`BentoActions`), Leerstati (`BentoEmptyState`), Trennlinien (`BentoDivider`) sowie responsives Spaltenraster (`BentoGrid`). Pilot-Migration der Startseite (`render_home`, `home_column_count`) mit dynamischem 1–3-Spaltenumbruch unter voller Wahrung der Render-Retention. Autonomer 13-Punkte-Selbsttest (`glide_bento.selftest`), Demogalerie (`glide_bento.demo`), Testsuite T341–T344 sowie synchronisierte Paketierung für macOS und Windows.
 
 - **Dynamische Lokalisierung der Seitenleiste:** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in `apply_settings()` sofort ohne Neustart.
 - **Adaptiver Titelbild-Zuschnitt:** `make_page_cover(..., adaptive=True)` begrenzt die Bildhöhe auf ein proportionales Verhältnis (Fokus 38 %, maximal 240 px) und verhindert vertikale Bildverzerrungen.

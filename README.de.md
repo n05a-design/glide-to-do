@@ -64,7 +64,7 @@ Alle Aufnahmen zeigen den Showcase „Stadtlicht“: fiktive Daten, echte Fotos 
 - **Aufgaben verwalten:** Listen, Ordner, Unteraufgaben, Checklisten, Labels, eigene Farben, Fälligkeiten, Wiederholungen, Abhängigkeiten und gespeicherte Ansichten.
 - **Tag und Woche planen:** Bearbeitungstage, Fristen, Aufwand, Kalendertermine, Routinen, Fokuszeiten und freie Kapazität getrennt sehen; Planungsvorschläge vor dem Übernehmen vergleichen.
 - **Wissen verbinden:** Formatierte Seiten und Blöcke, Notizen, Notizbücher, Anhänge, lokale Verweise, Rückverweise und Fundorte.
-- **Ansichten gestalten:** Liste, Tabelle, Board, Pinnwand, Wochen- und Monatskalender sowie eine anpassbare Startseite; mehrere Designs, Schriftstile und die Pixel-Werkstatt.
+- **Ansichten gestalten:** Liste, Tabelle, Board, Pinnwand, Wochen- und Monatskalender sowie eine anpassbare Bento-Startseite mit responsivem 1–3-Spalten-Raster; mehrere Designs, Schriftstile und die Pixel-Werkstatt.
 - **Mitnehmen und sichern:** Markdown, CSV, Kalenderdateien, JSON Canvas und Glide-Austauschdateien importieren oder exportieren; automatische Sicherungen und Wiederherstellungen unterstützen den Rückweg.
 
 Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md). Eine kontrollierte englische Übersetzung ist der [English user guide](01_Repository/Glide/docs/user-guide/README.md).
@@ -112,7 +112,7 @@ Glide speichert Inhalte und Anhänge in einem Datenordner außerhalb des Program
 
 | Pfad | Inhalt |
 |---|---|
-| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Anwendung, Tests, technische Dokumentation und Paketierung |
+| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Anwendung, Bento-System (`glide_bento`), Framework Shell (`glide_shell`), Tests, technische Dokumentation und Paketierung |
 | [`07_Python-Versionen/`](07_Python-Versionen/) | Separater Python-Lieferstand; Prüfstatus und Quellabgleich im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) |
 | [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Künstlicher Showcase-Datensatz zum Ausprobieren |
 | [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Entwicklungsplan und Übergabe |
@@ -148,7 +148,7 @@ Bitte verwende nur künstliche Beispieldaten. Sicherheitslücken meldest du vert
 
 ## Entwicklung und Qualität
 
-Stand 23.11.2026 · Glide 1.0.2
+Stand 24.11.2026 · Glide 1.0.2
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automatische Prüfungen auf main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 

@@ -4,8 +4,10 @@
 
 **Dokumentationsbezug:** Hier steht das Bedienverhalten. Modul-/Testzuordnung und Wiederverwendung gehören ins [Glide-System](../src/glide/README.md); die [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet Funktionsänderungen mit Roadmap, Architektur, Prüfungen und öffentlichen Texten.
 
-## Einstieg in Glide 1.0.1
+## Einstieg in Glide 1.0.2
 
+- **Glide Bento Box System 0.1.0 & Startseite (D100):** Die Startseite (`render_home`) basiert auf dem wiederverwendbaren Bento Box System (`glide_bento`). Der deterministische `BentoLayoutPlanner` ordnet Inhaltskarten flüssig in ein responsives Raster ein: 1 Spalte bei `< 616 px`, 2 Spalten zwischen `616 px` und `931 px` und 3 Spalten ab `932 px`. Breitenkarten (`span="wide"` / `variant="full_width"`) wie Begrüßung und Kernstatistiken spannen sich über die volle Breite oberhalb der Spalten. Kartenanatomie (`BentoCard`), Header (`BentoHeader`), Kennzahlen (`BentoMetric`), Aktionen (`BentoActions`), Leerstände (`BentoEmptyState`) und Trenner (`BentoDivider`) arbeiten unter voller Erhaltung der Widget-Retention (bestehende Knöpfe und Tastaturfokus bleiben bei Aktualisierungen stabil erhalten).
+- **Detailverbesserungen in 1.0.2:** Dynamischer Sprachwechsel der Seitenleistentitel (`refresh_sidebar_locale()`) ohne Neustart, proportional adaptiver Titelbild-Zuschnitt ohne vertikale Verzerrung, Pixel-Zeichnungen als kompakter 56px-Eckstempel im Editor, einzeilige Fußleistendichte bei Mindestbreite, kollisionsfreier Bild- und Tabellenumfluss sowie direkte Erkennung natürlicher Datumswörter („today“, „heute“, „tomorrow“, „morgen“) im Fälligkeitsfeld.
 - **Neu in 1.0.1:** Die ganze Oberfläche, das Handbuch, Austauschformat, Systemlabels, Vorlagen, Startseite, KI-Ausgabe und die Neuerungen gibt es auf Deutsch und Englisch; die Schnellerfassung versteht auch englische Eingabewörter. Geöffnete Seiten zeigen im Kopf ihre Bearbeitungszeit. Der Showcase „Stadtlicht“ führt mit eigenen Fotos durch alle Funktionen.
 
 - **Tagesplanung:** [Tageskapazität und Entlastung](#tageskapazität-und-entlastung-seit-3550) erklärt Aufgabenaufwand, Kalenderbelegung und Umplanung.
@@ -15,7 +17,7 @@
 
 ## Technische Grundlage für Folgeprojekte
 
-Glide enthält neben seinen sichtbaren Produktfunktionen wiederverwendbare Systemfähigkeiten. Sie stehen direkt in der [Featureübersicht des Glide-Systems, F128–F147](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte): Speicher-/Commitsteuerung, Schreibbesitz, Wiederanlauf und Sicherungen; Format-/Eingabevalidierung und Settings-Kompatibilität; Quellzuordnung und Reimport; Widget-/Callback-Lebensdauer; Logo-/Rastererzeugung und Medienworker; begrenzte Rendering-Caches; Diagnostik und isolierte Prüfungen mit Integritätswächter; native CI-, Bau-, Lizenz- und Liefernachweise; versionierte Systempflege, Bewahrung, Runtimeprüfung sowie Architektur-/Design-/Übergabeverträge.
+Glide enthält neben seinen sichtbaren Produktfunktionen wiederverwendbare Systemfähigkeiten. Sie stehen direkt in der [Featureübersicht des Glide-Systems, F128–F147](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte): Speicher-/Commitsteuerung, Schreibbesitz, Wiederanlauf und Sicherungen; Format-/Eingabevalidierung und Settings-Kompatibilität; Quellzuordnung und Reimport; Widget-/Callback-Lebensdauer; Logo-/Rastererzeugung und Medienworker; begrenzte Rendering-Caches; Diagnostik und isolierte Prüfungen mit Integritätswächter; native CI-, Bau-, Lizenz- und Liefernachweise; versionierte Systempflege, Bewahrung, Runtimeprüfung sowie Architektur-/Design-/Übergabeverträge. Das **Glide Bento Box System** (Ebene B, `glide_bento` 0.1.0) stellt anwendungsneutrale UI-Komposition, Gestaltungs-Tokens und adaptive Raster für Folgeprojekte bereit; die **Glide Shell** (Ebene C, `glide_shell` 0.6.2) das Desktop-Fundament.
 
 Die vollständige Modul-/Paketzuordnung wird ausschließlich im Glide-System gepflegt. Der dortige [Steps-Übernahmevertrag](../src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte) nennt Abhängigkeiten, Produktkopplungen und notwendige neue Prüfungen. Das ist vorhandener Bestand und Auswahlmaterial für Steps; es wurden weder neue App-Funktionen noch ein unabhängiges Framework oder Steps-Repository erstellt. Bestehende Light-/Dark-Designs, Themenfarben, responsive Fenster, Haupt-/Nebenansicht und Import-/Exportwege bleiben mit ihren aktuellen Bedienverträgen weiter unten beschrieben.
 
@@ -33,7 +35,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 

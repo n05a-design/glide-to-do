@@ -3988,3 +3988,27 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - `abgleich_07.py`: bytegleich abgeglichen (110 Code-Dateien, 169 Ressourcen).
 - **D – Rest:**
   - PR zur Prüfung und Freigabe durch den Inhaber einreichen; Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei ausdrücklicher Inhaberfreigabe.
+
+### 21.180 Glide Bento Box System 0.1.0 – Architektur, Layout-Engine und Home-Pilot (24.11.2026)
+
+- **A – Auftrag:** Konzeption, Architektur, Implementierung und Integration des Glide Bento Box Systems 0.1.0 (`glide_bento`, D100, V1.87) als anwendungsneutrale UI-Kompositionsschicht (Ebene B) zwischen Fachanwendung (Ebene A) und Framework Shell (Ebene C). Responsive Startseiten-Pilot-Migration unter 100%iger Wahrung der Render-Retention und bestehender Nutzerfunktionen.
+- **B – Umsetzung:**
+  - *Paketstruktur:* `src/glide/glide_bento` mit 10 Modulen (`tokens`, `context`, `specs`, `layout`, `card`, `grid`, `components`, `selftest`, `demo`, `__init__`).
+  - *Architekturtrennung (D100):* Strikte Schichtung: Ebene B importiert keine Fachmodule aus Ebene A; Ebene C (`glide_shell`) importiert kein Bento. Dynamische Theme-, Icon- und Tooltip-Injektion über `BentoContext`.
+  - *Layout-Engine & Schwellenwerte:* Deterministischer, algebraischer `BentoLayoutPlanner` ohne Tk-Abhängigkeit; 1 Spalte (< 616 px), 2 Spalten (616–931 px), 3 Spalten (≥ 932 px); gieriger Spaltenausgleich nach Höhengewichtung und getrennte Vollbreiten-Karten (`span="wide"` / `variant="full_width"`).
+  - *Startseiten-Pilot:* `render_home` und `home_column_count` in `app.pyw` adaptiert; stabile Kartenfabrik `make_bento_card` auf `ListApp` verhindert Widget-Zerstörung in `render_retention.py`.
+  - *Gestaltungsvertrag & Dokumentation:* `BENTO_DESIGN_CONTRACT.md`, `GLIDE_BENTO_SYSTEM_KONZEPT.md`, zweisprachige Anleitungen `README.de.md` und `README.md`.
+  - *Systemregister & Paketierung:* Register V1.87 mit Modulen M112–M121 und Suiten T341–T344 gepflegt; Paketmanifeste (`baue_app.py`, `package_sources.py`, `license_contract.py`, `abgleich_07.py`) synchronisiert.
+- **C – Prüfung:**
+  - `test_bento_importregel.py` (T341): 6/6 Tests grün (Modulisolation, AST-Importverbote, Paketbau).
+  - `test_bento_layout.py` (T342): 8/8 Tests grün (Schwellen, Greedy-Gewichtung, Breitenstufen).
+  - `test_bento_components.py` (T343): 7/7 Tests grün (Widgets unter Tk, Event-Handler, Farbwechsel).
+  - `test_bento_integration.py` (T344): 2/2 Tests grün (Responsive Bounding-Boxen, Überlappungsfreiheit).
+  - Autonomer Selbsttest `glide_bento.selftest`: 13/13 Checks bestanden.
+  - Interaktive Demo `glide_bento.demo --test`: bestanden.
+  - `test_startseite3332.py`: bestanden (alle Knöpfe, Kacheln und Retention grün).
+  - `test_home*.py`: 41/41 Unit-Tests grün in 0.006s.
+  - `ci_grundstufe.py`: 19/19 Schritte grün (Exitcode 0).
+  - `standpruefung.py`: 154 Dokumente fehlerfrei (Exitcode 0).
+- **D – Rest:**
+  - Pull Request #196 auf GitHub eröffnet; CI-Workflows auf `feature/glide-bento-system` prüfen; Merge und Veröffentlichung nur mit Inhaberfreigabe.

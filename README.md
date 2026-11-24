@@ -67,7 +67,7 @@ All images show the showcase “City Light”: fictional data, real photos by th
 - **Manage tasks:** Lists, folders, subtasks, checklists, labels, custom colors, due dates, recurrence, dependencies, and saved views.
 - **Plan days and weeks:** See work dates, due dates, effort, calendar events, routines, focus sessions, and available time separately; compare planning suggestions before applying them.
 - **Connect knowledge:** Formatted pages and blocks, notes, journals, attachments, local references, backlinks, and usage locations.
-- **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home screen; multiple themes, font styles, and a pixel workshop.
+- **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable bento home screen with responsive 1–3-column grid; multiple themes, font styles, and a pixel workshop.
 - **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
 
 The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.2, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
@@ -115,7 +115,7 @@ Glide stores content and attachments in a data folder outside the program direct
 
 | Path | Contents |
 |---|---|
-| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Application, tests, technical documentation, and packaging |
+| [`01_Repository/Glide/`](01_Repository/Glide/README.md) | Application, Bento system (`glide_bento`), framework shell (`glide_shell`), tests, technical documentation, and packaging |
 | [`07_Python-Versionen/`](07_Python-Versionen/) | Separate Python delivery; see the [QA report (German)](01_Repository/Glide/docs/07_QA_BERICHT.md) for validation and source alignment |
 | [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Synthetic showcase dataset |
 | [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Development plan and handover |
@@ -150,7 +150,7 @@ Please use synthetic example data only. Report security vulnerabilities confiden
 
 ## Development and quality
 
-Status as of 23.11.2026 · Glide 1.0.2
+Status as of 24.11.2026 · Glide 1.0.2
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks on main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 
