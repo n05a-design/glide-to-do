@@ -66,6 +66,8 @@ Vor der Konzeption oder Implementierung einer neuen oder angefassten Funktion mu
 
 14. Jede Entwicklungsrunde führt den vorhandenen `Glide_Entwicklungsplan.md` fort (aktueller Roadmap-Abgleich §21): Entscheidung/Auftrag und Implementierung/Prüfung/Lieferung/Menschenabnahme trennen, Restumfang und passende Belege nennen. Vor UI-Arbeit betroffene Designkontexte/Rollen festlegen, nachher echte Bedien-/Geometrie-/Sichtbelege bzw. offene native Grenzen dokumentieren. Neue Integrationsoptionen bleiben bis zur konkreten Auswahl Vorschläge; kein Hintergrundjob entscheidet Features oder pusht eigenständig.
 
+15. **Referenzprüfpflicht:** Bevor eine Datei, Klasse, Methode, Funktion, Datenstruktur, Testkennung oder ein Modulname als vorhandene Implementierung in Dokumenten, Kommentaren oder Strategie-Papieren genannt wird, muss ihre tatsächliche Existenz anhand des Quellcodes des Repositorys geprüft werden (z. B. `git grep`, `find`, tatsächlicher Datei-Inhalt). Nicht existierende Bezeichner dürfen nicht als vorhanden dokumentiert werden.
+
 ## Prüfphasen
 
 D51 bündelt mehrere zusammenhängende Pakete in einer Phase: gezielte Unit-/Bereichsprüfungen während der Arbeit, Versionswechsel, eingefrorene Vollprüfung, native Matrix und Lieferung am Phasenende. Die vorgeschlagenen Phasen und E-P1–E-P5 sind noch nicht als Gesamtumfang bestätigt; D17/D42/D43 und Datenformat-Tore gelten weiter.
