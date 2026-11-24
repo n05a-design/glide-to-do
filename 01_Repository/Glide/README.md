@@ -4,7 +4,7 @@ Stand 24.11.2026 · Quellstand 1.0.2 · Aufgabenformat 26
 
 Glide ist ein Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen. Seiten, Notizen und Galerien ergänzen die Arbeit. Technische Grundlage ist Python 3.14 mit Tk 9 (Tk 8.6 eingeschränkt); Nutzerdaten liegen außerhalb des Programmordners.
 
-> **Projektstatus:** Quellstand Glide 1.0.2, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2, Glide-System V1.87, Glide Bento 0.1.0, Glide Shell 0.6.2. Oberfläche vollständig Deutsch und Englisch, Glide Shell abgeschlossen, Glide Bento Box System integriert (D100). Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig erfolgt; ein öffentlicher Release ist nicht freigegeben. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand und offene Abnahmen.
+> **Projektstatus:** Quellstand Glide 1.0.2, Aufgabenformat 26, Einstellungen 2 und Vorlagen 2, Glide-System V1.87, Glide Bento 0.1.0, Glide Shell 0.6.2. Oberfläche vollständig Deutsch und Englisch, Glide Shell abgeschlossen, Glide Bento Box System integriert (D100). Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig erfolgt; erster öffentlicher Prerelease Glide 1.0.2 am 23.11.2026 auf GitHub veröffentlicht. Die [Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) bündelt den aktuellen Arbeitsstand und offene Abnahmen.
 
 **Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md), eigenständig versioniert in [`GLIDE_SYSTEM_VERSION`](GLIDE_SYSTEM_VERSION) (Start **V1.0**) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege. Diese Katalogversion ist unabhängig von Glides Anwendungs- und Datenformatversion.
 
@@ -20,7 +20,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Eigenständige Paketstände, Quellhashes und Verfügbarkeit werden im [aktuellen QA-/Liefernachweis](docs/07_QA_BERICHT.md) getrennt geführt. Native Entwicklungsbauten sind ihrem jeweiligen Quellcommit zugeordnet; ein bestätigtes eigenständiges Linux-Paket fehlt. Ein frischer Clone enthält keine ignorierten lokalen Bauartefakte. Öffentliche Release-Downloads sind noch nicht freigegeben.
+Eigenständige Paketstände, Quellhashes und Verfügbarkeit werden im [aktuellen QA-/Liefernachweis](docs/07_QA_BERICHT.md) getrennt geführt. Native Entwicklungsbauten sind ihrem jeweiligen Quellcommit zugeordnet; ein bestätigtes eigenständiges Linux-Paket fehlt. Ein frischer Clone enthält keine ignorierten lokalen Bauartefakte. Öffentliche Release-Downloads für Windows und macOS stehen als Prerelease auf GitHub Releases (v1.0.2) bereit; Linux läuft aus dem Quellstand.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

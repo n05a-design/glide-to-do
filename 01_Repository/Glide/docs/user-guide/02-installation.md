@@ -21,22 +21,30 @@ Glide 1.0.2 is available as a **public prerelease** on [GitHub Releases (v1.0.2)
 
 ### macOS Gatekeeper notes
 
-Standalone macOS bundles are ad-hoc signed but not yet notarized with an Apple Developer ID (decision I3 / D43). On first launch, macOS Gatekeeper may show a warning:
+Standalone macOS application bundles are ad-hoc signed but not yet notarized with an Apple Developer ID certificate (decision I3 / D43; commercial certificates are deferred until software catalog expansion). On first launch, macOS Gatekeeper may display a security alert.
 
-1. **System Settings path:** Open **System Settings › Privacy & Security**, scroll to **Security**, and click **Open Anyway** next to Glide.
-2. **Terminal command:** If preferred, clear the quarantine attribute after copying to `/Applications`:
-   ```bash
-   xattr -cr /Applications/Glide.app
-   ```
+1. **Recommended System Settings path (Standard macOS flow):**
+   - Attempt to open `Glide.app`. When the warning appears, click **Cancel**.
+   - Open **System Settings › Privacy & Security** (*Systemeinstellungen › Datenschutz & Sicherheit*).
+   - Scroll down to the **Security** section where a notification states: *"Glide.app was blocked from use because it is not from an identified developer."*
+   - Click **Open Anyway** (*Dennoch öffnen*) and confirm with your password or Touch ID.
+2. **Targeted Terminal command (Advanced users):**
+   - If preferred, you can explicitly remove only the quarantine flag from the application bundle after moving it to `/Applications`:
+     ```bash
+     xattr -d com.apple.quarantine /Applications/Glide.app
+     ```
+   - *Note:* Do not run broad recursive commands like `xattr -cr`, which strip all extended attributes; `xattr -d com.apple.quarantine` targets solely the downloaded quarantine attribute.
 
 ### Windows SmartScreen notes
 
-The Windows installer is self-contained and unprivileged. Because commercial EV code signing certificates are deferred (decision I3 / D43), Windows Defender SmartScreen may display an "Unknown publisher" prompt:
-- Click **More info** (*Weitere Informationen*), then click **Run anyway** (*Trotzdem ausführen*).
+The Windows installer is self-contained and completely unprivileged. Because commercial EV code signing certificates are deferred (decision I3 / D43), Windows Defender SmartScreen may display an "Unknown publisher" (*Der Computer wurde durch Windows geschützt*) prompt:
+1. In the SmartScreen dialog, click **More info** (*Weitere Informationen*).
+2. Verify the publisher is listed as unknown and the file name matches `Glide-1.0.2-windows-x64-setup.exe`.
+3. Click **Run anyway** (*Trotzdem ausführen*).
 
 ### Checksum verification (SHA-256)
 
-You can verify download integrity with cryptographic SHA-256 checksums:
+You can verify the cryptographic integrity and authenticity of your downloaded files using the official SHA-256 digests:
 
 ```text
 1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc  Glide-1.0.2-macos-arm64.dmg
@@ -46,7 +54,69 @@ e82b045ffdbd8caf1c00ff861195be580ed9b987841866424e0c5bbf74ba4799  Glide-1.0.2-wi
 c1b35c21084c3848c7aae401f93720bcd6330728a74c7ea2caa51d80bc9c9ae6  glide-to-do-skill-v1.0.2.zip
 ```
 
-*Note:* Inside both Windows packages, the standalone executable `Glide.exe` carries SHA-256 `77d720d5208ddcb41e36ef8e25a40306855bd54d66f1e6dd818e04ca567606fd`.
+*Note:* Inside both Windows packages, the compiled executable `Glide.exe` carries SHA-256 `77d720d5208ddcb41e36ef8e25a40306855bd54d66f1e6dd818e04ca567606fd`.
+
+#### Executable verification commands
+
+**Windows (PowerShell):**
+```powershell
+Get-FileHash -LiteralPath ".\Glide-1.0.2-windows-x64-setup.exe" -Algorithm SHA256
+```
+Compare the resulting `Hash` string with the table above.
+
+**macOS (Terminal):**
+```bash
+shasum -a 256 "Glide-1.0.2-macos-arm64.dmg"
+```
+
+**Linux (Terminal):**
+```bash
+sha256sum "Glide-1.0.2-macos-arm64.tar.gz"
+```
+
+If the output digest matches the table above, the package is unaltered and complete. If any hash differs, do not execute the file; discard it and download freshly from the official [GitHub Release v1.0.2](https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.2).
+
+## Detailed installation paths
+
+### 1. Windows Setup Wizard (`Glide-1.0.2-windows-x64-setup.exe`)
+- **Architecture:** 64-bit Windows (x64 / AMD64 / Intel 64). Windows 10 (version 1809+) or Windows 11.
+- **Prerequisites:** None. Bundles Python 3.14, Tk, typography, and libraries. No administrator privileges required.
+- **Installation:** Run the setup executable. By default, it installs into `%LOCALAPPDATA%\Programs\Glide` (per-user, non-admin). It adds an entry to the Windows Start menu and creates an uninstaller.
+- **First Launch:** Launch from Start menu or desktop shortcut. Handle the SmartScreen prompt as described above.
+- **Updating:** Download the new setup version and run it. It cleanly replaces the program files without affecting your database.
+- **Uninstallation:** Use **Windows Settings › Apps › Installed apps** and choose **Uninstall**. All program binaries are removed; your user workspace in `%APPDATA%\Glide` remains untouched.
+- **Limitations:** 32-bit Windows and Windows on ARM (native arm64) are not supported by the x64 binary.
+
+### 2. Windows Portable Archive (`Glide-1.0.2-windows-x64.zip`)
+- **Architecture:** 64-bit Windows (x64).
+- **Prerequisites:** None.
+- **Installation:** Unzip the archive to any desired location (e.g. `C:\Tools\Glide` or an external drive).
+- **First Launch:** Double-click `Glide.exe`.
+- **Updating:** Overwrite the application directory with the files from the newer `.zip` archive.
+- **Uninstallation:** Delete the extracted directory.
+- **Limitations:** Does not register Start menu entries or file type associations automatically.
+
+### 3. macOS Disk Image (`Glide-1.0.2-macos-arm64.dmg`)
+- **Architecture:** Apple Silicon (arm64, M1/M2/M3/M4). macOS 13 (Ventura), macOS 14 (Sonoma), or macOS 15 (Sequoia).
+- **Prerequisites:** Apple Silicon Mac.
+- **Installation:** Double-click `Glide-1.0.2-macos-arm64.dmg` to mount the disk image. Drag `Glide.app` into `/Applications`.
+- **First Launch:** Open `/Applications/Glide.app`. On the Gatekeeper prompt, follow the System Settings flow or run `xattr -d com.apple.quarantine /Applications/Glide.app`.
+- **Updating:** Mount the new `.dmg`, drag `Glide.app` into `/Applications`, and select **Replace**.
+- **Uninstallation:** Drag `/Applications/Glide.app` to the Trash. User data in `~/Library/Application Support/Glide` is preserved.
+- **Limitations:** Intel Macs (x86_64) require running from source with Python.
+
+### 4. macOS Portable Archive (`Glide-1.0.2-macos-arm64.tar.gz`)
+- **Architecture:** Apple Silicon (arm64).
+- **Installation:** Extract the archive using `tar -xzf Glide-1.0.2-macos-arm64.tar.gz`.
+- **First Launch:** Run `open Glide.app` or `./Glide.app/Contents/MacOS/Glide`. Gatekeeper notes apply as above.
+- **Uninstallation:** Delete the extracted bundle.
+
+### 5. AI Agent Skill (`glide-to-do-skill-v1.0.2.zip`)
+- **Purpose:** Document-based AI agent exchange skill conforming to the open Agent Skills standard.
+- **Compatible Agents:** Google Antigravity, OpenAI Codex / ChatGPT, Claude Code, Gemini CLI.
+- **Installation:** Unzip the skill package into your agent skill directory (e.g. `.agents/skills/glide-to-do/` or `.claude/skills/glide-to-do/`).
+- **Capabilities:** Enables agents to create structured project plans, task collections, notes, and pixel stamps directly formatted as `.glideexchange` and Markdown files matching task format 26.
+- **Validation:** Test agent output files locally using `python3 -B tests/tools/ki_ausgabe.py <FILE>`.
 
 ## Run from source (macOS, Windows, Linux)
 

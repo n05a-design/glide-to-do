@@ -1,7 +1,7 @@
 # Entwurf 14.11.2026 – nicht veröffentlicht. Erklärung:
 # docs/10_VEROEFFENTLICHUNG.md#winget-und-homebrew-entwurf
 # Gehört in ein eigenes Tap-Repository n05a-design/homebrew-glide (Casks/glide.rb).
-# sha256 ist ein Platzhalter: Wert aus Glide-<v>-macos-arm64.dmg.sha256 eintragen.
+# sha256 ist verifiziert für v1.0.2 (aus Glide-1.0.2-macos-arm64.dmg.sha256).
 cask "glide" do
   version "1.0.2"
   sha256 "1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc"

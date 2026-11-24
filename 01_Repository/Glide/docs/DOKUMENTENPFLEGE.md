@@ -2,7 +2,7 @@
 
 **Schutzauftrag 08.11.2026:** Im laufenden Gesamt-/Steps-Audit bleiben die historischen Originalnachweise erhalten. Die vorbereitete Alterskürzung von `tests/qa-3.50.0` und der zugehörigen Releaseplanungsfixture wurde zurückgenommen; 225 Dateien gegen die Git-Blobs von Main `d7e017f` geprüft. `ablagegroesse.GESCHUETZTE_QA_VERSIONEN` und `GESCHUETZTE_REFERENZEN` schützen diesen konkreten Bestand auch vor `ablage_kuerzen.py`. Die Größen-, Bild- und Fremdrestprüfungen gelten weiter. Der ursprüngliche Kürzungsnachweis bleibt datierte Vorgeschichte, der [Bewahrungsnachtrag](../tests/qa-3.50.7/validierung_2026-11-07/bewahrung_nachtrag.json) belegt die Rücknahme. Allgemeine neue Archivkopien entstehen dadurch nicht.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 
@@ -62,6 +62,29 @@ Diese Tabelle ist die zentrale Pflegematrix. Sie verbindet den jeweils führende
 | App-, System- oder Formatversion | [VERSION](../VERSION), [GLIDE_SYSTEM_VERSION](../GLIDE_SYSTEM_VERSION), Formatkonstanten im Code | [Versionswerkzeuge](../scripts/pflege/README.md), Systemverlauf und betroffene aktive Standzeilen; jede Version behält ihren eigenen Zweck, datierte Prüfstände bleiben unverändert |
 | Änderungsverlauf | [CHANGELOG](../CHANGELOG.md) | Tatsächliche Änderung beschreiben und auf Fachquelle/Nachweis verweisen; sieben neueste Versionen ausführlich, ältere als Zeile. Kein zweites Backlog und keine zweite aktuelle QA-Matrix |
 | Dokumentpfad, Zuständigkeit oder Gliederung | Diese Pflegematrix und [Dokumentationsindex](00_INDEX.md) | Eingehende Links und Abschnittsanker, Projekt-/Bereichs-READMEs und Contributing prüfen; eindeutige Inhalte vor einer Konsolidierung übernehmen und alte Anker bei Bedarf als Alias erhalten |
+
+<a id="strategische-themenfelder"></a>
+
+### Strategische Themenfelder und Dokumentenautorität (Post-Release)
+
+Für die strategische Weiterentwicklung nach Glide 1.0.2 gilt folgende verbindliche Zuordnung von führenden Quellen, Zielgruppen, inhaltlicher Zuständigkeit, abgeleiteten Quellen, Aktualisierungsanlässen und Pflegeprozessen:
+
+| Strategisches Themenfeld | Führende Quelle | Zielgruppe | Inhaltliche Zuständigkeit | Abgeleitete Quellen | Aktualisierungsanlass | Verantwortlicher Pflegeprozess |
+|---|---|---|---|---|---|---|
+| **1. Produktvision** | [README.md](../../../README.md), [README.de.md](../../../README.de.md), [Funktionen](20_FUNKTIONEN.md) | Nutzer, Interessenten, Mitwirkende | Projektinhaber, Product Lead | [Marketing & Launch](../../../00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md), [Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Strategiewechsel, Meilensteinfreigaben | Inhaberprüfung vor Releases |
+| **2. Zielgruppen & Positionierung** | [Markt und Vorbilder §18](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#18-vertiefte-wettbewerbsanalyse-post-release-strategie-24112026), [Marketing & Launch](../../../00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md) | Produktstrategen, Marketing, Inhaber | Product Strategy Lead | Projekt-READMEs, Landingpage-Spezifikation | Neue Wettbewerber, veränderte Marktlage | Quartalsweiser Marktabgleich |
+| **3. Öffentliche Roadmap** | [README.md](../../../README.md#development-and-quality), GitHub Projects (Now / Next / Later) | Nutzer, Open-Source-Community | Technical Product Owner | Release Notes, Issue Epics | Release-Tags, Phasenwechsel | Synchronisation bei GitHub-Releases |
+| **4. Interne Roadmap** | [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Entwickler, KI-Agenten, Inhaber | Senior Architect & Release Manager | [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), [QA-Bericht](07_QA_BERICHT.md) | Jede Sitzung, neue Feature-Beauftragung | Sitzungsabschluss & PR-Verifikation |
+| **5. Feature-Spezifikationen** | [Entwicklungsplan (R-Schema)](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#spezifikationen-post-release), [Funktionen](20_FUNKTIONEN.md) | Software Engineers, QA Leads | Feature Owner & Architect | Modul-Docstrings, Testsuiten, [User Guide](user-guide/README.md) | Start & Abschluss eines Entwicklungspakets | Spezifikationsreview vor Code-Implementierung |
+| **6. Entscheidungsvorlagen** | [Post-Release-Vorlagen](decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md) (M01–M14), [Arbeitsrichtung](ARBEITSRICHTUNG.md) (D01–D100) | Projektinhaber | Principal Software Architect | [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), [Architektur](02_ARCHITECTURE.md) | Grundsatzentscheidungen, API-Gabelungen | Inhaber-Sign-off-Protokoll |
+| **7. Funktionsreferenz** | [Funktionen](20_FUNKTIONEN.md) (DE), [User Guide](user-guide/README.md) (EN) | Endanwender, Power User | Documentation Lead | Internes Handbuch (`resources/manual`), Tooltips | Sichtbare UI- oder Workflow-Änderungen | Parallele DE/EN-Pflege (Test T299) |
+| **8. Kompatibilitätsmatrix** | [Veröffentlichung §Kompatibilität](10_VEROEFFENTLICHUNG.md#kompatibilitätsmatrix) | Anwender, Administratoren, Tester | QA Lead & Release Engineer | Installationsanleitung, Issue-Templates | Neue OS-Releases, Python-/Tk-Versionen | Matrix-Testlauf bei Minor-Releases |
+| **9. Marketingstrategie** | [Marketing & Launch](../../../00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md) | Marketing, Creator, Inhaber | Marketing & Brand Strategist | Video-Storyboard, Social-Media, Press Kit | Kampagnenstart, Major-Releases | Abgleich vor Veröffentlichung |
+| **10. Distributionsstrategie** | [Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Release Engineers, Paketbetreuer | Release & Packaging Lead | `packaging/`, GitHub Actions `release.yml` | Neue Distributionskanäle (Homebrew, winget, Linux) | Hash- und Signaturabgleich je Tag |
+| **11. Bento-Komponentenvertrag** | [Bento-Konzept](GLIDE_BENTO_SYSTEM_KONZEPT.md), [Bento-Designvertrag](../src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md) | UI-Entwickler, Fremdprojekte (Steps, Chess) | Design System Architect | `glide_bento/selftest.py`, Demo, Tests T341–T344 | Neue Karten, Token-Erweiterungen, Layoutregeln | Bento-Selbsttest & Schichtenprüfung |
+| **12. Shell-/Bento-Übernahme** | [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md), [Bento-Konzept](GLIDE_BENTO_SYSTEM_KONZEPT.md) | Entwickler von Folgeprojekten | Framework Architect | `shell_uebernehmen.py`, [KI-Anleitung](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) | Versionserhöhung (`SHELL_VERSION`, `BENTO_VERSION`) | Referenzhost-Validierung (Test T337) |
+| **13. Agenten-Einstiege** | [AGENTS.md](../../../AGENTS.md), [Arbeitsregeln](../AGENTS.md), [CLAUDE.md](../../../CLAUDE.md), [Copilot](../../../.github/copilot-instructions.md) | Autonome KI-Agenten, Entwickler | AI Workflow Architect | `.agents/skills/`, `.claude/skills/` | Neue Systemregeln, Einstiegs-Workflows | Verifikation agentenneutraler Adapter |
+| **14. Release-Status** | [CHANGELOG](../CHANGELOG.md), [Meilensteinplan](../../../00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md), [QA-Bericht](07_QA_BERICHT.md), GitHub Tag | Öffentlichkeit, Projektbeteiligte | Release Lead & Auditor | Projekt-READMEs, Release Notes | Release-Cuts, Prerelease-Publikationen | Vier-Augen-Prüfung & Standprüfung |
 
 Neue Dokumente nur, wenn kein bestehendes das Thema trägt. Neue Fachquellen gehören in diese Matrix und den [Index](00_INDEX.md); Einstiegsdateien verweisen auf sie. Der datierte [Bestandsaufnahmebericht](../../../00_Arbeitsvorbereitung/Glide_Projektbestandsaufnahme_2026-11-10.md) bleibt ein historischer Befund und wird nicht als zweites aktuelles Systemregister fortgeschrieben.
 

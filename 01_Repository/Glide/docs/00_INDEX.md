@@ -90,6 +90,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | Entscheidung | Gegenstand |
 |---|---|
 | [Produktregister](decisions/PRODUCT_IDENTITY.md) | Technisch belegte Werte und offene Inhaber-/Store-Angaben; Quelle für Build- und Store-Konfigurationen |
+| [Post-Release Entscheidungsvorlagen](decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md) | 14 vollständige Entscheidungsvorlagen (M01–M14) für die strategische Weiterentwicklung nach v1.0.2 |
 | [tkinterdnd2](decisions/ABHAENGIGKEIT_TKDND.md) | Einzige mitgelieferte Bibliothek für das Ziehen aus Finder/Explorer |
 | [Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md) | Gismo als Markenfigur, Zustände, Grenzen |
 | [Gruppe, Ordner, Überschrift](decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md) | Wann welches Gliederungsmittel |

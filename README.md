@@ -8,19 +8,20 @@
 
 <p align="center">
   <strong>Plan tasks. Connect ideas.</strong><br>
-  A local desktop planner for projects, tasks, day planning, pinboards, and pixel drawings.
+  Glide is an open-source desktop workspace that brings tasks, daily planning, notes, and visual project organization together. Work locally, connect your ideas, and stay in control of your data.
 </p>
 
 <p align="center">
   <img alt="Windows, macOS, and Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-blue">
-  <img alt="Source baseline 1.0.2" src="https://img.shields.io/badge/Source%20baseline-1.0.2-9E4AC8">
+  <a href="https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.2"><img alt="Prerelease v1.0.2" src="https://img.shields.io/badge/Prerelease-v1.0.2-9E4AC8"></a>
   <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/License-MPL--2.0-2E7D32"></a>
 </p>
 
 <p align="center">
-  <a href="#quickstart-and-system-requirements"><strong>Run from source</strong></a> ·
-  <a href="05_Probelisten_Testdaten/Showcase/README.md">Explore the showcase</a> ·
+  <a href="#download"><strong>Download Glide 1.0.2</strong></a> ·
+  <a href="#quickstart-and-system-requirements">Run from source</a> ·
+  <a href="05_Probelisten_Testdaten/Showcase/README.md">Showcase</a> ·
   <a href="#what-glide-does">Features</a> ·
   <a href="#a-look-at-glide">Screenshots</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
@@ -64,13 +65,14 @@ All images show the showcase “City Light”: fictional data, real photos by th
 
 ## What Glide does
 
-- **Manage tasks:** Lists, folders, subtasks, checklists, labels, custom colors, due dates, recurrence, dependencies, and saved views.
-- **Plan days and weeks:** See work dates, due dates, effort, calendar events, routines, focus sessions, and available time separately; compare planning suggestions before applying them.
-- **Connect knowledge:** Formatted pages and blocks, notes, journals, attachments, local references, backlinks, and usage locations.
-- **Shape your workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable bento home screen with responsive 1–3-column grid; multiple themes, font styles, and a pixel workshop.
-- **Take your data with you:** Import and export Markdown, CSV, calendar files, JSON Canvas, and Glide exchange files; automatic backups and recovery support a way back.
+Glide's capabilities are structured across six cohesive product pillars:
 
-The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.2, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
+1. **Task Management:** Hierarchical lists, folders, subtasks, checklists, labels, custom colors, due dates, recurrence, dependencies, and saved views.
+2. **Day Planning:** Separate work dates, due dates, effort estimates, calendar events, routines, focus sessions, and available time; compare planning suggestions before applying them.
+3. **Personal Knowledge:** Formatted pages, blocks, notes, journals, local file attachments, backlinks, and explicit usage locations.
+4. **Visual Workspace:** Lists, tables, boards, pinboards, weekly and monthly calendars, and a configurable home dashboard. *(Note: The responsive Glide Bento Box System 0.1.0 with dynamic 1–3-column grid reflow is currently in active development on `main` following 1.0.2).*
+5. **Creative Tools:** Integrated pixel workshop with animated stamps, color palettes, and custom artwork generation for projects and covers.
+6. **Open Data & AI Exchange:** Local-first file storage, import/export for Markdown, CSV, iCalendar, JSON Canvas, and `.glideexchange` files; AI integration via the open [agent skill](01_Repository/Glide/skills/glide-to-do/README.md) without cloud lock-in.
 
 ## What Glide is not
 
@@ -92,7 +94,7 @@ Glide 1.0.2 is available as an official **public prerelease** on [GitHub Release
 | **Linux (x64 / arm64)** | [Run from source](#quickstart-and-system-requirements) | — | Python 3.14 + Tk 9 recommended; no standalone binary yet |
 
 > [!NOTE]
-> **Prerelease & Signature Status:** Commercial EV and Apple Developer ID certificates are deferred until software catalog expansion (decision I3 / D43). On macOS, Gatekeeper may require opening **System Settings › Privacy & Security › Open Anyway** or running `xattr -cr /Applications/Glide.app`. On Windows, click **More info › Run anyway** on the SmartScreen prompt.
+> **Prerelease & Signature Status:** Commercial EV and Apple Developer ID certificates are deferred until software catalog expansion (decision I3 / D43). On macOS, Gatekeeper may require opening **System Settings › Privacy & Security › Open Anyway** or running `xattr -d com.apple.quarantine /Applications/Glide.app`. On Windows, click **More info › Run anyway** on the SmartScreen prompt.
 > All packages can be verified using official cryptographic SHA-256 checksums; see the [Installation Guide](01_Repository/Glide/docs/user-guide/02-installation.md).
 
 ## Quickstart and system requirements
@@ -105,6 +107,8 @@ python3 src/glide/app.pyw
 ```
 
 On Windows, use `python src\glide\app.pyw` for the second command. The main window requires at least **860 × 700 px**; compact mode can use **480 × 560 px**. See the [technical quickstart (German)](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) for other start options and prerequisites. Try the [showcase (German)](05_Probelisten_Testdaten/Showcase/README.md) with synthetic data.
+
+The [English user guide](01_Repository/Glide/docs/user-guide/README.md) explains the features of Glide 1.0.2, from getting started to troubleshooting. It is a controlled translation of the authoritative [German function reference](01_Repository/Glide/docs/20_FUNKTIONEN.md), which also covers every limit in detail.
 
 ## Your data
 
@@ -125,6 +129,7 @@ Glide stores content and attachments in a data folder outside the program direct
 | [`05_Probelisten_Testdaten/Showcase/`](05_Probelisten_Testdaten/Showcase/README.md) | Synthetic showcase dataset |
 | [`00_Arbeitsvorbereitung/`](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) | Development plan and handover |
 | [`20_Grafik_Master/`](20_Grafik_Master/README.md) | Source files for project artwork |
+
 ## Frequently asked questions
 
 <details>
@@ -159,7 +164,7 @@ Status as of 24.11.2026 · Glide 1.0.2
 
 <a href="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml"><img alt="Automated checks on main" src="https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main"></a>
 
-The Glide 1.0.2 source baseline is prepared for release; no public release has been approved yet. The badge above tracks checks on `main`, not this README's branch or another pull request. The [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
+Glide 1.0.2 was officially published as a public prerelease on 23.11.2026 (Tag `v1.0.2`, Commit `7dcd8dc0`). Development continues on `main` towards post-1.0 milestones (Glide-System V1.87, Glide Bento 0.1.0). The badge above tracks checks on `main`, not this README's branch or another pull request. The [quality and testing report](01_Repository/Glide/docs/07_QA_BERICHT.md) ties results to specific commits and distinguishes CI, available development builds, and outstanding human acceptance. See the [contributing guide](CONTRIBUTING.md) and [roadmap](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) for the development process and open work.
 
 ## License
 

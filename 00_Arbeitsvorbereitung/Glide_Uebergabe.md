@@ -5,9 +5,10 @@ Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Gl
 Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 **Aktueller Stand (24.11.2026):**
-1. **Veröffentlichter Release:** Der erste öffentliche Prerelease **Glide 1.0.2** (Tag `v1.0.2`, Commit `7dcd8dc04366f88943fa17827882cef4d81421b8`) ist auf GitHub mit 5 verifizierten Hauptartefakten (Windows x64 Setup & Portable, macOS arm64 DMG & TAR, Agent-Skill ZIP) publiziert.
+1. **Veröffentlichter Release:** Der erste öffentliche Prerelease **Glide 1.0.2** (Tag `v1.0.2`, Release-ID `265691060`, Commit `0d1fa29a`) ist auf GitHub mit 5 verifizierten Hauptartefakten (`Glide-1.0.2-macos-arm64.dmg`, `Glide-1.0.2-macos-arm64.tar.gz`, `Glide-1.0.2-windows-x64.zip`, `source-archive-v1.0.2.zip`, `source-archive-v1.0.2.tar.gz`) und deterministischen SHA-256-Prüfsummen publiziert.
 2. **Integrierter Entwicklungsstand (main, Glide 1.0.2, V1.87):** PR #196 hat das **Glide Bento Box System 0.1.0** (Ebene B, D100) integriert: Saubere Dreischichtenarchitektur (Ebene A: Glide-Anwendung -> Ebene B: Bento-Komposition `glide_bento` -> Ebene C: Framework Shell `glide_shell`). Die Startseite von Glide (`render_home`, `home_column_count`) nutzt BentoLayoutPlanner und BentoCard unter vollständiger Wahrung der 100%igen Abwärtskompatibilität (Format 26, Nutzereinstellungen, Render-Retention und Kachelauswahl).
-3. **Qualitätssicherung:** 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, die neuen Bento-Suiten T341–T344 sowie der autonome 13/13 Selbsttest sind grün.
+3. **Ganzheitliche Post-Release-Produktstrategie (PR #198):** Vollständige, substantielle Konsolidierung und Inhaltsaudit-Remediation über alle 8 Arbeitspakete (K01–K08): Bereinigung aller README-/Download-Inkonsistenzen, 14 führende Post-Release-Themenfelder in `docs/DOKUMENTENPFLEGE.md`, 10-Punkte-Checkliste in `AGENTS.md`, 28-Feature-Matrix & 18 R-Schema-Spezifikationen (inkl. L1–L5) im Entwicklungsplan, 14 vollständige Entscheidungsvorlagen (M01–M14 inkl. 5 Varianten für MCP M04) in `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md`, 15 Bento-Komponenten & Multi-Span-Reflow-Engine in `docs/GLIDE_BENTO_SYSTEM_KONZEPT.md`, führende Marketing-, Storyboard- & Community-Strategie in `00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md` sowie Paketmanager- & Kompatibilitätsmatrix in `docs/10_VEROEFFENTLICHUNG.md`.
+4. **Qualitätssicherung:** 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, die neuen Bento-Suiten T341–T344, der autonome 13/13 Selbsttest sowie `standpruefung.py` (154/154 Dokumente fehlerfrei) sind grün.
 
 ---
 
@@ -211,8 +212,8 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
 - **Homebrew Cask:** `packaging/homebrew/Casks/glide.rb` im Repository `n05a-design/homebrew-glide`:
   ```ruby
   cask "glide" do
-    version "1.0.0"
-    sha256 "<macos-arm64-dmg-sha256>"
+    version "1.0.2"
+    sha256 "1aeb2247dc2c0792c300843e980e1ee46067b57bce5e7e0766416eb74a819b67"
     url "https://github.com/n05a-design/glide-to-do/releases/download/v#{version}/Glide-#{version}-macos-arm64.dmg"
     name "Glide"
     desc "Local-first task, project and visual organization tool"
@@ -232,15 +233,16 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
 
 ---
 
-### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [QUELLCUT GEMERGT; ÖFFENTLICHE VERÖFFENTLICHUNG OFFEN]
+### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [VERÖFFENTLICHTER PRERELEASE V1.0.2]
 
-1. **Versionswechsel:** Der Quellstand wurde am 17.11.2026 auf `1.0.0` angehoben und PR #138 am 18.11.2026 nach `main` gemergt.
-2. **Release-Artefakte:**
-   - `Glide-1.0.0-macos-arm64.dmg` + `.sha256`
-   - `Glide-1.0.0-windows-x64-setup.exe` + `.sha256`
-   - `Glide-1.0.0-windows-x64.zip` + `.sha256`
-   - `glide-to-do-skill-v1.0.0.zip` + `.sha256`
-3. **Veröffentlichung:** Noch offen: Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren. Vorher verbleibende Lokalisierungs- und Abnahmegates abschließen; Kontofreigaben liegen beim Inhaber.
+1. **Veröffentlichter Prerelease:** Tag `v1.0.2` wurde am 23.11.2026 auf GitHub veröffentlicht (Release-ID `265691060`, Commit `0d1fa29a`).
+2. **Verifizierte Release-Artefakte mit SHA-256:**
+   - `Glide-1.0.2-macos-arm64.dmg`: `1aeb2247dc2c0792c300843e980e1ee46067b57bce5e7e0766416eb74a819b67`
+   - `Glide-1.0.2-macos-arm64.tar.gz`: `1ce81f08e4ba43efce39ffcefcdd26efb3d4f40f3c5f4fa7b1dbbcfad53c23e8`
+   - `Glide-1.0.2-windows-x64.zip`: `1e9a25b3ee0b2ab514102d84719e598de6b2ea926f7c9e0ffbf1cb9d06bcf129`
+   - `source-archive-v1.0.2.zip`: `08b87b2df6e0a30b7d59187372d6e355c7fcbcfec05cb90822da81e35fa607e0`
+   - `source-archive-v1.0.2.tar.gz`: `955ae2ff2e4b4860b0807b572a1492baee41dae1dfec5d40db955ba9cb4633d2`
+3. **Paketmanager-Kataloge:** Manifeste für Homebrew Cask und winget 1.0.2 sind vorbereitet; externe Einreichung bleibt nach I3 / D43 dem Inhaber vorbehalten.
 
 #### Nachprüfung des 906-Zeilen-Masterprompts (19.11.2026)
 

@@ -314,3 +314,26 @@ Reine Dokumentations-, Ablage- oder Werkzeugarbeit bekommt einen datierten Nachw
 ## Dreipaketfortsetzung vom 27.10.2026
 
 Der direkte Auftrag verlangt drei Featurepakete mit größerem gemeinsamem Fortschritt und Routinetests erst nach der Implementierung sowie den Skill Design Richtlinien. Das ist eine konkrete Fortsetzung der gewählten Tagessteuerung/Nebenansicht D57, keine pauschale Auswahl bisher offener Integrationen oder Produktarten. Tagesnavigation, Mehrfachfelder und Verweisnavigation werden als 3.48.0 / Format 26 gebündelt; konkrete Auswahl und Aufgabenstatus allein im [Plan §21.26](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2126-drei-featurepakete-tagesnavigation-mehrfachfelder-und-verweise-3480). Die direkte Prüfreihenfolge hat für diese Runde Vorrang vor der Baselinesuite aus AGENTS-Regel 1; die vorherige historische 3.47.0-CI bleibt datierte Ausgangsevidenz. Abschlussprüfungen, Datenisolierung, Undo-/Schreib-/Designverträge und getrennte native Liefer-/Menschenabnahme bleiben verbindlich. Keine neue Inhaberentscheidung D58, keine neue Gitberechtigung.
+
+## Post-Release-Entscheidungsvorlagen (M01–M14)
+
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+
+Für die strategische Weiterentwicklung im Anschluss an den Meilenstein Glide 1.0.2 (D93) und die Integration des Glide Bento Box Systems 0.1.0 (D100) liegen 14 entscheidungsreife Vorlagen für den Inhaber vor. Sie sind verbindlich und vollständig in [`decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md`](decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md) dokumentiert:
+
+- **M01: Systemweite Schnellerfassung (Global Quick Capture):** Empfehlung: Variante A (schlankes Tray-Helferprogramm in Phase 3).
+- **M02: Hintergrund-Erinnerungen:** Empfehlung: Variante A (Status Quo beibehalten, Erinnerungen nur bei laufender App, keine Daemons).
+- **M03: CalDAV-Synchronisation:** Empfehlung: Variante A (Status Quo beibehalten, strikt lokaler ICS-Austausch, kein Netzwerkcode im Kern).
+- **M04: Lokaler MCP-Server (Model Context Protocol):** Empfehlung: Variante C (Read-only-MCP) und Variante D (kontrollierte Änderungsvorschläge mit Nutzerfreigabe) in Phase 3; strikte Ablehnung unkontrollierter Schreibzugriffe (Variante E).
+- **M05: Deep Links (`glide://`):** Empfehlung: Variante B (Betriebssystemweite Registrierung für Read-only-Navigation in Phase 3).
+- **M06: Lokale OCR-Texterkennung:** Empfehlung: Variante A (Status Quo beibehalten, Vermeidung von Paket-Bloat).
+- **M07: Verschlüsselte Datenhaltung:** Empfehlung: Variante A (Status Quo beibehalten, Vertrauen auf OS-Verschlüsselung BitLocker/FileVault).
+- **M08: Mobile Companion App:** Empfehlung: Variante A (Strikte Beibehaltung des Ausschlusses D03, kompromisslose Desktop-Exzellenz).
+- **M09: Weitere Sprachen:** Empfehlung: Variante B (Community-Übersetzungen vorbereiten in Phase 4).
+- **M10: Erledigungsverlauf & Gewohnheiten:** Empfehlung: Variante B (Wohlwollende Bento-Habit-Karte ohne Bestrafung in Phase 3).
+- **M11: Erweiterte Energieplanung:** Empfehlung: Variante A (Nutzung vorhandener Labels in Phase 2).
+- **M12: Work-in-Progress (WIP) Grenzen:** Empfehlung: Variante B (Sanfte visuelle Warnung bei Überlastung in Phase 2).
+- **M13: Erweiterte Pixel-Werkstatt & SVG/GIF-Export:** Empfehlung: Variante B (Schärfe-Export in Phase 3).
+- **M14: Lokales Plugin-System:** Empfehlung: Variante A (Vorerst strikte Zurückstellung, Kernstabilität vor Erweiterbarkeit).
+
+Diese Vorlagen sind Vorschläge und gelten erst nach ausdrücklicher Inhaberentscheidung als nummerierte Beschlüsse.

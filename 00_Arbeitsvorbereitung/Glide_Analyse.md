@@ -22,7 +22,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
@@ -1184,3 +1184,23 @@ Eine Runde ist eine Arbeitssitzung mit Umsetzung, gezielten Prüfungen und Dokum
 | K6 Optionen | Pinnwand aus JSON Canvas importieren, Import aus der Zwischenablage, Dateizuordnung für `.glideexchange` | ja | je 1–2 Runden | 21 ✓ + 1 ◐; Anzeige und Sicherung bleiben bewusst Glide-intern |
 
 Gesamt für alle Ebenen ohne bewusste Ausnahmen: etwa 6–9 Runden plus Phasenabschluss. Nutzbar ist der Skill nach K1; ohne K2 muss jede Änderung am Austauschweg den Skill von Hand nachziehen. Hauptrisiken: Antwortqualität fremder Modelle (Glide prüft, garantiert sie aber nicht), unbestätigte Agentenpfade (Markt §17.2), Platzbedarf des Einstiegs bei wachsendem Feldkatalog (daher Referenzen statt `SKILL.md`), Markenprüfung des Namens (I4).
+
+---
+
+## 14. Unabhängiges Post-Release-Audit & Inhaltsnachaudit (24.11.2026, Glide 1.0.2)
+
+Das nach Veröffentlichung von Glide 1.0.2 durchgeführte unabhängige Inhaltsaudit sowie die anschließende Nachprüfung identifizierten zwölf primäre Inhaltsbefunde (IN-01 bis IN-12) und mehrere Vertiefungslücken in der Dokumentations- und Produktstrategie. Diese wurden verbindlich in den führenden Dokumenten aufgelöst:
+
+| Befund-ID | Beschreibung & Ursache | Führende Lösungsquelle | Status nach Härtung |
+|---|---|---|---|
+| **IN-01 / IN-02** | Veraltete Aussage „No public installer / kein öffentlicher Release“ in den READMEs und technische Restaussagen. | [`README.md`](../README.md), [`README.de.md`](../README.de.md), [`01_Repository/Glide/README.md`](../01_Repository/Glide/README.md) | ✅ Vollständig bereinigt; Downloads für Windows & macOS stehen an oberster Stelle; Prerelease v1.0.2 sauber dokumentiert. |
+| **IN-03** | Unvollständige Installationsanleitung; ungenaue Gatekeeper-Empfehlung (`xattr -cr`) und fehlende ausführbare Checksum-Befehle. | [`docs/user-guide/02-installation.md`](../01_Repository/Glide/docs/user-guide/02-installation.md) | ✅ Gezieltes `xattr -d com.apple.quarantine`, System Settings als Primärweg, PowerShell/shasum/sha256sum Prüfbefehle und 6 Installationswege dokumentiert. |
+| **IN-04** | Dokumentationsüberschneidung zwischen PR #197 und PR #198. | PR #198 und Git-Historie | ✅ Dokumentiert: PR #198 schließt die Commits aus PR #197 vollständig ein und führt sie verbindlich fort. |
+| **IN-05** | Tracking-Issue #129 nicht auf Post-Release-Stand aktualisiert. | [`Glide_Meilenstein_v1_Plan.md`](Glide_Meilenstein_v1_Plan.md#3-github-issue-tracking-129) | ✅ Tore 1–5 geschlossen; Tor 6 (externe Paketmanager-Einreichung) als Inhabervorbehalt (I3 / D43) isoliert. |
+| **IN-06** | Meilensteinplan enthielt historische Widersprüche zu Releasestatus und Paketmanagern. | [`Glide_Meilenstein_v1_Plan.md`](Glide_Meilenstein_v1_Plan.md) | ✅ Post-Release-Stand konsolidiert: v1.0.2 ist veröffentlicht; Bento gehört zur Post-1.0-Roadmap. |
+| **IN-07** | Funktionsübersicht trennte v1.0.2 und Bento-Entwicklung nicht klar; unvollständige Einstiegsnavigation. | [`docs/20_FUNKTIONEN.md`](../01_Repository/Glide/docs/20_FUNKTIONEN.md) | ✅ Strukturierter Einstieg mit thematischer Navigation; Bento 0.1.0 (nach Glide 1.0.2) als Entwicklungsstand auf `main` gekennzeichnet. |
+| **IN-08** | Produktgrenzen enthielten veralteten Hinweis auf unvollständige Lokalisierung. | [`docs/01_PRODUCT_CONSTRAINTS.md`](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) | ✅ DE/EN-Lokalisierung als in 1.0.2 vollständig geliefert und verifiziert (D93, V1.70–V1.81) verankert. |
+| **IN-09** | Entwicklungsplan wuchs additiv ohne vollständige Konsolidierung von altem und neuem Arbeitsvorrat. | [`Glide_Entwicklungsplan.md`](Glide_Entwicklungsplan.md) | ✅ Bereinigt: Phasenmodell (Phase 0–4), führender aktiver Arbeitsvorrat (P0–P3), vollständige R-Schema-Spezifikationen. |
+| **IN-10** | Changelog führte Bento unter derselben Releaseüberschrift wie v1.0.2. | [`CHANGELOG.md`](../01_Repository/Glide/CHANGELOG.md) | ✅ Eindeutig getrennt: `[Unreleased]` für Bento 0.1.0 (V1.87 nach Glide 1.0.2) vs. `[1.0.2]` für veröffentlichten Tag v1.0.2. |
+| **IN-11** | Paketmanager-Manifeste enthielten veraltete Platzhalterkommentare. | [`packaging/homebrew/Casks/glide.rb`](../01_Repository/Glide/packaging/homebrew/Casks/glide.rb), `packaging/winget/` | ✅ Verifizierte SHA-256-Digests eingetragen und dokumentiert; Vorlagen für Inhabereinreichung bereitgestellt. |
+| **IN-12** | Bento-Status repositoryweit uneinheitlich zwischen Feature-Branch und `main`. | Repository-weit (Übergabe, Register, Shell) | ✅ Synchronisiert: 4-Ebenen-Architektur (A -> B -> C -> D) sauber verankert; v1.0.2 als Basis, Bento 0.1.0 als `main`. |

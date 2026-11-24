@@ -892,33 +892,33 @@ Auftrag des Inhabers vom 16.11.2026: Recherche, wie aufwendig ein Glide-Skill f�
 
 ## 18. Post-Release Wettbewerbsabgleich und strategische Marktpositionierung (Glide 1.0.2, 24.11.2026)
 
-Der erfolgreiche erste öffentliche Prerelease von Glide 1.0.2 erfordert eine Schärfung der Marktpositionierung und eine systematische Einordnung gegenüber den vier wichtigsten Referenzprodukten der aktuellen Produktivitätslandschaft:
+Der erfolgreiche erste öffentliche Prerelease von Glide 1.0.2 erfordert eine sachliche Schärfung der Marktpositionierung und eine systematische Einordnung gegenüber den vier wichtigsten Referenzprodukten der aktuellen Produktivitätslandschaft:
 
 ### 18.1 Vertiefte Analyse der vier Kern-Wettbewerber
 
 #### 1. Super Productivity (Open Source, Local-First Aufgaben & Zeit)
-- **Offizielle Quellen:** <https://super-productivity.com/>, <https://github.com/johannesjo/super-productivity>
+- **Offizielle Quellen:** <https://super-productivity.com/> (Abruf 24.11.2026), <https://github.com/johannesjo/super-productivity> (Releases v19.3.0, Abruf 24.11.2026)
 - **Profil:** Open-Source-Desktop-Anwendung (Electron/Angular) für Aufgabenverwaltung, Timeboxing, Zeiterfassung und Integration in Entwicklerwerkzeuge (Jira, GitHub, GitLab). Komplett offline ohne Konto.
 - **Stärken:** Transparente Zeiterfassung, Pomodoro-Timer, Soll-Ist-Zeitvergleich, keine Registrierung, Synchronisation über WebDAV/Dropbox.
 - **Grenzen gegenüber Glide:** Hohe Bedien- und Konfigurationskomplexität, stark technisch-tabellarische Benutzeroberfläche, keine formatierten Notizseiten/Dokumente, keine visuellen Pinnwände (Canvas), keine kreative Pixel-Werkstatt.
-- **Lehren für Glide:** Transparente Zeiterfassung und der Soll-Ist-Schätzvergleich (WA-08) sind starke Treiber für Entwickler und Freelancer. Glides ruhigere Typografie und integrierte Wissensseiten bieten einen spürbar menschlicheren Arbeitsplatz.
+- **Lehren für Glide:** Transparente Zeiterfassung und der Soll-Ist-Schätzvergleich (WA-08) sind starke Treiber für Entwickler und Freelancer. Glides fokussierte Typografie und integrierte Wissensseiten bieten eine ruhige Arbeitsumgebung ohne konfigurative Reizüberflutung.
 
 #### 2. Things 3 (Cultured Code, Reduktion & Klarheit)
-- **Offizielle Quelle:** <https://culturedcode.com/things/>
+- **Offizielle Quelle:** <https://culturedcode.com/things/> (Abruf 24.11.2026)
 - **Profil:** Proprietäre macOS-/iOS-Aufgabenverwaltung mit kompromissloser visueller Reduktion und eleganter Interaktionshierarchie.
 - **Stärken:** Gestalterische Ruhe, klare Trennung von Arbeitsdatum (Heute) und Fälligkeit (Deadline), reibungslose Schnellerfassung, natürliche Datumseingaben, geringe kognitive Belastung.
 - **Grenzen gegenüber Glide:** Ausschließlich Apple-Ökosystem (kein Windows/Linux), proprietäres Datenformat ohne offenen Dateizugriff, keine formatierten Dokumente jenseits kurzer Notizfelder, keine visuellen Boards, kein offener Datenaustausch via Markdown/JSON Canvas, keine Agent-Skills.
 - **Lehren für Glide:** Reduktion und Informationshierarchie sind Glides Vorbild für P1–P6. Die mit Glide 1.0.2 eingeführten natürlichen Datumswörter und der adaptive Titelbildzuschnitt folgen genau dieser Schule, jedoch plattformübergreifend und mit voller Datenhoheit.
 
 #### 3. Sunsama (Geführte Tagesplanung & Achtsamkeit)
-- **Offizielle Quellen:** <https://www.sunsama.com/>, <https://help.sunsama.com/>
+- **Offizielle Quellen:** <https://www.sunsama.com/> (Abruf 24.11.2026), <https://help.sunsama.com/> (Abruf 24.11.2026)
 - **Profil:** Premium-Planer (Abonnement ~20 $/Monat) für Wissensarbeiter mit täglichem geführten Planungs- und Reflexionsritual.
 - **Stärken:** Realistische Arbeitszeitplanung mit Pufferzeiten, Überlastungswarnungen, Frage „Morgen planen oder heute verlängern?“, Zusammenführung von Kalenderterminen und Aufgaben.
 - **Grenzen gegenüber Glide:** Teures Abonnementmodell, zwingender Cloud-Account, proprietäre Plattform, keine lokalen Notizbücher/Dokumente, keine visuellen Pinnwände, keine kreativen Werkzeuge, keine Offline-Datenhoheit.
-- **Lehren für Glide:** Glides Tageskapazität (WA-12) und Entlastungsdialog bieten bereits die Grundsteine dieses Ablaufs. Mit dem WA-12-Rest (Pufferzeiten, Spätstart-Frage) kann Glide denselben kognitiven Schutz bieten – dauerhaft kostenlos, lokal und ohne Kontozwang.
+- **Lehren für Glide:** Glides Tageskapazität (WA-12) und Entlastungsdialog bieten bereits die Grundsteine dieses Ablaufs. Mit dem WA-12-Rest (Pufferzeiten, Spätstart-Frage) kann Glide denselben kognitiven Schutz bieten – quelloffen unter MPL-2.0, lokal und ohne Kontozwang.
 
 #### 4. Obsidian (Personal Knowledge Management & Canvas)
-- **Offizielle Quellen:** <https://obsidian.md/>, <https://help.obsidian.md/>, <https://jsoncanvas.org/>
+- **Offizielle Quellen:** <https://obsidian.md/> (Abruf 24.11.2026), <https://help.obsidian.md/> (Abruf 24.11.2026), <https://jsoncanvas.org/> (Spezifikation 1.0, Abruf 24.11.2026)
 - **Profil:** Lokale Markdown-Wissensdatenbank mit Canvas-Leinwand, Plugin-Ökosystem und bidirektionalen Verknüpfungen.
 - **Stärken:** Reines Dateiformat (Markdown), offener Canvas-Standard, riesiges Ökosystem, tiefe Wissensorganisation.
 - **Grenzen gegenüber Glide:** Reine Textdateien erfordern Plugins (Dataview, Tasks) für Aufgaben- und Tagesplanung; keine integrierte Kapazitätsplanung, kein nativer Kalendertagesablauf ohne Skripting, keine Zeichenwerkzeuge ohne Drittanbieter-Plugins, hohe Einstiegshürde.
@@ -956,7 +956,7 @@ Der erfolgreiche erste öffentliche Prerelease von Glide 1.0.2 erfordert eine Sc
 
 3. **Persönliche Produktivitätsnutzer & Minimalisten (Priorität: Hoch):**
    - *Problem:* Zwang zu Benutzerkonten, Cloud-Lock-in und datenhungriger Telemetrie bei kommerziellen Planern.
-   - *Nutzenversprechen:* 100% offline, kein Konto, portable Installation auf USB-Stick oder Netzlaufwerk, garantierter Datenschutz.
+   - *Nutzenversprechen:* 100% offline, kein Konto, portable Installation auf USB-Stick oder Netzlaufwerk, lokal-first Datenhaltung ohne Cloudübertragung.
    - *Hürden:* Keine mobile Begleit-App (Synchrone Nutzung erfordert Disziplin beim Schließen und Ordnersynchronisieren).
 
 4. **Entwickler & Power-User (Priorität: Hoch):**
