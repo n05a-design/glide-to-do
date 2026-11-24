@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "freelancer_kundenprojekt",
+      "kind": "list",
+      "title": "Kundenprojekt (Freelancer)",
+      "note": "Strukturierte Projektabwicklung von Briefing über Meilensteine bis zur Abnahme und Rechnungsstellung.",
+      "labels": [],
+      "color": "accent",
+      "items": [
+        {
+          "title": "Projekt-Kickoff & Briefing-Freigabe",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Anforderungsanalyse & Leistungsbeschreibung",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Konzept- und Designentwurf vorlegen",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Kundenfeedback einarbeiten & Freigabe einholen",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Umsetzung & Qualitätssicherung",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Abschlussabnahme & Rechnungsstellung",
+          "done": false,
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}

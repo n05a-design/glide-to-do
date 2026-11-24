@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Aktueller Veröffentlichungsstand (Glide 1.0.2, 24.11.2026)
 
-Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub veröffentlicht (`tag: v1.0.2`, Release-ID 265691060). Er basiert auf Commit `0d1fa29a` und stellt fünf verifizierte Artefakte mit deterministischen SHA-256-Prüfsummen bereit:
+Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub veröffentlicht (`tag: v1.0.2`, Release-ID 265691060). Er basiert auf Commit `7dcd8dc04366f88943fa17827882cef4d81421b8` und stellt fünf verifizierte Artefakte mit deterministischen SHA-256-Prüfsummen bereit:
 
 | Artefakt | Plattform / Architektur | SHA-256-Prüfsumme | Status |
 |---|---|---|---|
@@ -17,7 +17,7 @@ Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub
 | `glide-to-do-skill-v1.0.2.zip` | Plattformunabhängig (KI-Agenten-Skill Paket) | `c1b35c21084c3848c7aae401f93720bcd6330728a74c7ea2caa51d80bc9c9ae6` | Veröffentlicht (Prerelease) |
 
 > [!NOTE]
-> Die veröffentlichte Version v1.0.2 enthält das Aufgabenformat 26, das Glide-System V1.86 und die Framework-Shell 0.6.2. Das **Glide Bento Box System 0.1.0** (D100) wurde nach dem Release v1.0.2 auf `main` integriert (Glide-System V1.87) und ist Bestandteil künftiger Releases ab v1.1.0. Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
+> Die veröffentlichte Version v1.0.2 enthält das Aufgabenformat 26, das Glide-System V1.86 und die Framework-Shell 0.6.2. Das **Glide Bento Box System 0.1.0** (D100) wurde nach dem Release v1.0.2 auf `main` integriert (Glide-System V1.87) und ist Bestandteil von **Glide 1.0.3** (Entwicklungsstand, Branch `docs/glide-post-release-product-strategy`). Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
 
 ## Historischer GitHub-Stand 20.11.2026
 
@@ -27,7 +27,7 @@ Der Live-Nachweis des PR-#156-Heads `f1d00bc9461819e7d366230ac85c8d08079257d3` b
 
 Die Enum-Normalisierung wurde auf PR #156 geliefert. Der D93-Etappe-2-Schnitt V1.57 mit DE/EN-Statusmeldungen und Kernsteuerungen des Zeicheneditors wurde mit [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) als `55ad7e95` nach `main` gemergt; V1.58 liegt in [PR #158](https://github.com/n05a-design/glide-to-do/pull/158). Das ist weder ein Release noch eine Änderung an About-Beschreibung, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
 
-**Stand 23.11.2026:** Zur ersten Veröffentlichung ist **1.0.2** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.2/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
+**Stand 24.11.2026:** Zur ersten Veröffentlichung ist **1.0.3** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.3/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
 
 ## Release-Cut-Prüfung vom 18.11.2026
 
@@ -92,7 +92,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## winget und Homebrew (Paketmanager-Strategie)
 
-**Stand 24.11.2026 (Glide 1.0.2):** Ziel ist die Bereitstellung von Glide über automatisierte Terminalbefehle, ohne dass Endanwender eine Python- oder Tcl/Tk-Laufzeit manuell konfigurieren müssen. Beide Paketmanager-Manifeste sind im Repository vorbereitet, bleiben jedoch bis zur formellen Einreichung durch den Projektinhaber (Entscheidung I3 / D43) interne Vorlagen:
+**Stand 24.11.2026 (Glide 1.0.3):** Ziel ist die Bereitstellung von Glide über automatisierte Terminalbefehle, ohne dass Endanwender eine Python- oder Tcl/Tk-Laufzeit manuell konfigurieren müssen. Beide Paketmanager-Manifeste sind im Repository vorbereitet, bleiben jedoch bis zur formellen Einreichung durch den Projektinhaber (Entscheidung I3 / D43) interne Vorlagen:
 
 | Parameter | Windows: winget | macOS: Homebrew Cask |
 |---|---|---|
@@ -287,7 +287,7 @@ Diese Rechte betreffen die Fontkomponenten. Glides eigene Nutzungs-/Vertriebsliz
 
 ## Linux-Distributionsstrategie
 
-**Stand 24.11.2026 (Glide 1.0.2):** Linux-Anwender schätzen Glides schlanke Architektur ohne Electron-Ballast (< 80 MB RAM). Die Distribution gliedert sich in eine dreistufige Einführungsstrategie:
+**Stand 24.11.2026 (Glide 1.0.3):** Linux-Anwender schätzen Glides schlanke Architektur ohne Electron-Ballast (< 80 MB RAM). Die Distribution gliedert sich in eine dreistufige Einführungsstrategie:
 
 ### Vergleich der Distributionswege für Linux
 

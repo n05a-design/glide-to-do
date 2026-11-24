@@ -1,6 +1,6 @@
 # Post-Release-Entscheidungsvorlagen (M01–M14)
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inhaber von Glide im Anschluss an die Veröffentlichung von Glide 1.0.2. Jede Vorlage ist vollständig nach dem verbindlichen 26-Punkte-Katalog ausgearbeitet und bietet entscheidungsreife Varianten.
 

@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "kreatives_designprojekt",
+      "kind": "list",
+      "title": "Kreatives Designprojekt",
+      "note": "Iterativer Design-Workflow: Moodboard, Typografie, Farbkonzept, Prototypen und Design-Tokens.",
+      "labels": [],
+      "color": "purple",
+      "items": [
+        {
+          "title": "Moodboard & visuelle Recherche anlegen",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Farbpalette, Kontraste & Token-Definition festlegen",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Typografie-Hierarchie & Rastersystem definieren",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Komponenten-Design & Varianten ausarbeiten",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Klickbaren Prototyp für Usability-Test erstellen",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Design-Assets exportieren & Dokumentation übergeben",
+          "done": false,
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}

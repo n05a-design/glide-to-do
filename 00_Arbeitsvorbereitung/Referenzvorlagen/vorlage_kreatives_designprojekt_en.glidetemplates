@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "creative_design_project",
+      "kind": "list",
+      "title": "Creative Design Project",
+      "note": "Iterative design workflow: moodboard, typography, color scheme, prototypes, and design tokens.",
+      "labels": [],
+      "color": "purple",
+      "items": [
+        {
+          "title": "Set up moodboard & visual research",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Define color palette, contrast ratios & tokens",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Establish typography hierarchy & layout grid",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Design key components & interactive states",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Build interactive prototype for usability testing",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Export production assets & hand over documentation",
+          "done": false,
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}

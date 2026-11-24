@@ -1,6 +1,6 @@
 # Glide – Marketing, Launch, Positionierung & Community
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 Dieses Dokument ist die verbindliche strategische Quelle für Glides Marktpositionierung, Zielgruppenansprache, Marketing-Assets, Launch-Kommunikation, Webpräsenz und Nutzervalidierung nach der Veröffentlichung von Glide 1.0.2. Aufgaben und Meilensteine stehen im [Entwicklungsplan](Glide_Entwicklungsplan.md), technische Befunde in der [Analyse](Glide_Analyse.md), Architekturentscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) und Verteilungswege in [docs/10_VEROEFFENTLICHUNG.md](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md).
 
@@ -185,7 +185,7 @@ Die Videostrategie wird strikt nach veröffentlichter Version und Arbeitsstand z
 - **UI-Elemente:** Texteditor mit Markdown-Formatierung, Seitenleiste, Fundortübersicht.
 
 #### Szene 4: Tageskapazität & Kognitiver Schutz (0:22 – 0:30)
-- **Visuelle Handlung:** Blick auf die "Heute"-Ansicht. Der Nutzer plant eine vierte Aufgabe ein. Der Tagesbalken erreicht 105%. Ein dezenter, warmer Dialog öffnet sich: *Tageskapazität überschritten (5,5h von 5,0h)*. Der Nutzer wählt gelassen: *Aufgabe auf morgen verschieben*. Der Balken wird wieder ruhig grün.
+- **Visuelle Handlung:** Blick auf die "Heute"-Ansicht. Der Nutzer plant eine vierte Aufgabe ein. Der Tagesbalken erreicht 110%. Ein dezenter, warmer Dialog öffnet sich: *Tageskapazität überschritten (5,5h von 5,0h)*. Der Nutzer wählt gelassen: *Aufgabe auf morgen verschieben*. Der Balken wird wieder ruhig grün.
 - **Voiceover (DE):** "Ein Planer, der dich schützt, statt dich anzutreiben. Plane nur, was du heute wirklich schaffen kannst."
 - **Voiceover (EN):** "A planner that protects your time instead of pushing you. Keep today realistic."
 - **Text-Overlay:** *Tageskapazität & Sanfter Entlastungsdialog.*

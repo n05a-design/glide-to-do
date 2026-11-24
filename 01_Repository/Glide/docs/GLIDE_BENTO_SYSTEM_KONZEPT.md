@@ -1,6 +1,6 @@
 # Glide Bento Box System – Architektur- und UI-Kompositionskonzept
 
-Stand 24.11.2026 · Glide 1.0.2 · Glide Bento Version 0.1.0 · Glide-System V1.87 · Glide Shell 0.6.2 · Format 26 · Entscheidung D100
+Stand 24.11.2026 · Glide 1.0.3 · Glide Bento Version 0.1.0 · Glide-System V1.87 · Glide Shell 0.6.2 · Format 26 · Entscheidung D100
 
 Das **Glide Bento Box System** (Kurzbezeichnung: **Glide Bento**, Paketname: `glide_bento`) ist eine wiederverwendbare, modulare UI-Kompositionsschicht für kartenbasierte Benutzeroberflächen, Bento-Dashboards und adaptive Inhaltsraster in Python/Tkinter. Es bildet die architektonische **Ebene B** im Glide-Gesamtsystem.
 
@@ -135,7 +135,7 @@ Der Komponentenbestand von `glide_bento` gliedert sich in deklarative Datenstruk
 | Komponente | Quelldatei | Zweck & Öffentliche API | Unterstützte Varianten & Zustände | Aktueller Einsatzort | Geplanter Ausbau (0.2.0+) |
 |---|---|---|---|---|---|
 | **`BentoCard`** | `card.py` | Universeller Karten-Container. API: `BentoCard(parent, spec, context)`. | Varianten: `standard`, `compact`, `featured`. Zustände: Normal, Hover, Focus, Selected. | Startseite `home_task_tiles.py` (Pilot). | Subtile Randverläufe, adaptive Schatten, Tastaturfokus-Ring. |
-| **`BentoHeader`** | `card.py` | Kopfleiste für Karten mit Titel, Unterzeile, Symbol und Aktionen. API: `BentoHeader(parent, spec, context, on_action=None)`. | Varianten: `default`, `compact`, `minimal`. | Startseiten-Kacheln. | Integrierte Status-Badges, Tooltip-Anbindung. |
+| **`BentoHeader`** | `card.py` | Kopfleiste für Karten mit Titel, Unterzeile, Symbol und Aktionen. API: `BentoHeader(master, context, title=None, icon=None, subtitle=None, action=None, **kwargs)`. | Varianten: `default`, `compact`, `minimal`. | Startseiten-Kacheln. | Integrierte Status-Badges, Tooltip-Anbindung. |
 | **`BentoGrid`** | `grid.py` | Responsiver Raster-Container mit Canvas-Scrollsupport und dynamischem Spaltenumbruch. | Spalten: 1, 2 oder 3 Spalten basierend auf Breite. | Startseite `render_home`. | Multi-Span Rendering (`span=2`), ruckelfreies Resize. |
 | **`BentoContext`** | `context.py` | Dependency-Injection-Behälter für Theme, Schriften, Icons und Lokalisierung. | Auflösung über Host-Provider oder neutrale Fallbacks. | Alle Bento-Widgets. | Dynamisches Event-Abonnement bei Theme-Wechsel ohne Neuaufbau. |
 | **`BentoTokens`** | `tokens.py` | Semantische Design-Tokens für Abstände, Radien, Höhen und Typografie. | Immutable Dataclass mit Skalen. | `card.py`, `grid.py`, `components.py`. | Vollständiger Abgleich mit Host-Thementokens (Variante C). |
@@ -252,7 +252,7 @@ Zur Platzierung von Bento-Karten wurden drei grundlegende Algorithmen abgewogen:
    - *Problem in Tkinter:* Erfordert zweistufiges Messen (`update_idletasks()`), was bei Fenstergrößenänderungen zu Doppel-Layout-Events und sichtbarem Flackern führt.
 3. **Deterministischer Column Flow mit Band-Struktur (Glides Wahl):**
    - *Verhalten:* Vollbreitenkarten (`span="full"`) bilden saubere horizontale Bänder. Darunter liegende Karten werden anhand ihres statischen Inhaltsgewichts (`weight`) über einen gierigen Algorithmus auf Spalten verteilt.
-   - *Vorteil:* 100 % flackerfreies Resize ohne Mehrfach-Events; maximale Raumausnutzung ohne leere Löcher im Raster.
+   - *Vorteil:* Flackerarmes Resize mit stabiler Entprellung; maximale Raumausnutzung ohne leere Löcher im Raster.
 
 ---
 

@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "persoenliche_wochenplanung",
+      "kind": "list",
+      "title": "Wochenplanung & Reflexion",
+      "note": "Wöchentlicher Fokus: Top-3-Ziele, Pufferzeiten, Tagesprioritäten und Wochenrückblick.",
+      "labels": [],
+      "color": "green",
+      "items": [
+        {
+          "title": "Wochenfokus: Drei wichtigste Wochenergebnisse definieren",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Feste Termine & Pufferzeiten im Kalender reservieren",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Prioritäten für Montag & Dienstag festlegen",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Wochenmitte: Review & Nachjustierung der Zwischenstände",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Freitagsabschluss: Offene Punkte klären oder delegieren",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Wochenreflexion: Was lief gut? Erkenntnisse für nächste Woche",
+          "done": false,
+          "priority": "low"
+        }
+      ]
+    }
+  ]
+}
