@@ -148,6 +148,7 @@ import home_tiles as glide_home  # noqa: E402
 import home_dashboard as glide_home_dashboard  # noqa: E402
 import home_task_tiles as glide_task_tiles  # noqa: E402
 from glide_shell import motion as glide_motion
+import glide_bento  # noqa: E402
 import task_editing as glide_task_editing
 import core_accessibility as glide_core_accessibility
 import daily_hints
@@ -18628,7 +18629,7 @@ class ListApp:
                 if isinstance(kind, (tk.Toplevel, tk.Menu)) or getattr(kind, "_is_backdrop", False):
                     continue
                 stapel.append(kind)
-                if isinstance(kind, RoundedContainer):
+                if isinstance(kind, (RoundedContainer, glide_bento.BentoCard)):
                     karten.append(kind)
                 try:
                     if not kind.winfo_ismapped() or str(kind.cget("bg")).lower() != grundfarbe:
@@ -18652,7 +18653,7 @@ class ListApp:
                     if getattr(kind, "_backdrop", None) != ziel or (ziel and not kind.find_withtag("backdrop")):
                         kind._backdrop = ziel
                         paint_canvas_backdrop(kind)
-                        if isinstance(kind, RoundedContainer) and kind.find_withtag("surface"):
+                        if isinstance(kind, (RoundedContainer, glide_bento.BentoCard)) and kind.find_withtag("surface"):
                             kind.tag_lower("backdrop")
                     aktiv.add(kind)
                     if isinstance(kind, CanvasLabel):
@@ -18769,7 +18770,7 @@ class ListApp:
                 return []
             rechtecke = [(x0, y0, x1, y1)]
             loecher = []
-            if isinstance(widget, RoundedContainer) and widget.find_withtag("surface"):
+            if isinstance(widget, (RoundedContainer, glide_bento.BentoCard)) and widget.find_withtag("surface"):
                 # Die Form beginnt einen Pixel innerhalb der Fläche (Rand der
                 # Kontur); dieser Streifen bleibt sichtbar.
                 r, rand = widget.radius + 1, 2
@@ -18896,7 +18897,7 @@ class ListApp:
             if getattr(kind, "_is_backdrop", False) or isinstance(kind, (tk.Toplevel, tk.Menu)):
                 continue
             try:
-                if isinstance(kind, RoundedContainer):
+                if isinstance(kind, (RoundedContainer, glide_bento.BentoCard)):
                     neu_bg = zuordnung.get(str(kind.bg_color).lower())
                     neu_fill = zuordnung.get(str(kind.fill_color).lower()) if karten_mit else None
                     if neu_bg or neu_fill:
@@ -19031,7 +19032,7 @@ class ListApp:
         # Punktdialog endlos neu anordnen (26.09.2026).
         if fenster is self.root:
             kachel = widget
-            while kachel is not None and not isinstance(kachel, RoundedContainer):
+            while kachel is not None and not isinstance(kachel, (RoundedContainer, glide_bento.BentoCard)):
                 kachel = getattr(kachel, "master", None)
             if kachel is not None:
                 kachel._frost_dirty = True
@@ -28774,10 +28775,8 @@ class ListApp:
         return key not in versteckt if isinstance(versteckt, list) else True
 
     def home_column_count(self, width=None):
-        """Spaltenzahl des Kachelrasters für die gemessene Breite."""
+        """Spaltenzahl des Kachelrasters für die gemessene Breite (delegiert an BentoLayoutPlanner)."""
         wahl = str(self.settings.get("home_columns", "auto"))
-        if wahl in ("1", "2", "3"):
-            return int(wahl)
         if width is None:
             width = self.home_canvas.winfo_width() if hasattr(self, "home_canvas") else 0
             if hasattr(self, "content_frame") and (width <= 1 or not self.home_canvas.winfo_ismapped()):
@@ -28785,11 +28784,12 @@ class ListApp:
                 # kennt die verfügbare Breite bereits; sonst entsteht erst ein
                 # einspaltiges Raster und im Configure-Rückruf sofort ein zweites.
                 width = self.content_frame.winfo_width()
-        if width >= self.HOME_THREE_COLUMN_WIDTH:
-            return 3
-        if width >= self.HOME_TWO_COLUMN_WIDTH:
-            return 2
-        return 1
+        grid_spec = glide_bento.BentoGridSpec(
+            columns=int(wahl) if wahl in ("1", "2", "3") else "auto",
+            card_min_width=self.HOME_TILE_MIN_WIDTH,
+            gap=self.HOME_TILE_GAP,
+        )
+        return glide_bento.BentoLayoutPlanner().compute_column_count(width, grid_spec)
 
     # Über der Stufe 2 liegt alles, was weder heute geplant
     # noch fällig ist – für die Startseitenkachel kein „nächster Schritt“.
@@ -29806,7 +29806,7 @@ class ListApp:
             return widget
 
         def card(parent, title=None, pad_y=None, heading_action=None):
-            container = _ui.make(self.make_rounded_container,
+            container = _ui.make(self.make_bento_card,
                 parent,
                 fill_key="card",
                 outline_key="line",
@@ -29814,15 +29814,13 @@ class ListApp:
                 inner_pad_x=self.HOME_CARD_PAD_X,
                 inner_pad_y=self.HOME_CARD_PAD_Y if pad_y is None else pad_y,
                 auto_height=True,
-                natural_height=True,
-                register=False,
             )
             initial_width = getattr(parent, "_home_build_width", 0)
             if initial_width > 1 and not getattr(container, "_home_width_seeded", False):
                 container._home_width_seeded = True
                 container.configure(width=initial_width)
                 container.inner._home_build_width = max(1, initial_width - 2 * container.inner_pad_x)
-                if isinstance(container, RoundedContainer):
+                if isinstance(container, (RoundedContainer, glide_bento.BentoCard)):
                     container.itemconfigure(container._window_id, width=container.inner._home_build_width)
             _ui.pack(container, fill="x", pady=(glide_design.SPACING[0], self.HOME_CARD_GAP))
             heading_parent = container.inner
@@ -30706,8 +30704,29 @@ class ListApp:
                 for punkt in punkte:
                     label(neu_karte, f"• {punkt}", 10, pady=(glide_design.SPACING[0], glide_design.SPACING[2]))
 
-        for key in [k for k in sichtbar if k in breite_kacheln]:
-            bauer[key](kopfbereich)
+        # Bento Layout Plan zur deterministischen Ermittlung von Spalten und Verteilung (D100)
+        card_specs = [
+            glide_bento.BentoCardSpec(
+                key=k,
+                weight=gewichte.get(k, 2),
+                span="wide" if k in breite_kacheln else "single",
+            )
+            for k in sichtbar
+        ]
+        bento_grid_spec = glide_bento.BentoGridSpec(
+            columns=spalten_zahl,
+            card_min_width=self.HOME_TILE_MIN_WIDTH,
+            gap=self.HOME_CARD_GAP,
+        )
+        layout_plan = glide_bento.BentoLayoutPlanner().plan(
+            available_width=available_width,
+            cards=card_specs,
+            grid_spec=bento_grid_spec,
+            column_count=spalten_zahl,
+        )
+
+        for card_spec in layout_plan.header_cards:
+            bauer[card_spec.key](kopfbereich)
 
         raster = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
         _ui.pack(raster, fill="both", expand=True)
@@ -30719,20 +30738,24 @@ class ListApp:
             _ui.grid(spalte, row=0, column=index, sticky="new",
                         padx=(glide_design.SPACING[0] if index == 0 else self.HOME_CARD_GAP, glide_design.SPACING[0]))
             raster.columnconfigure(index, weight=1, uniform="home_columns")
-            spalten.append([spalte, 0])
+            spalten.append(spalte)
             self._bind_home_wheel(spalte)
-        # Greedy: Jede Kachel kommt in die bislang kürzeste Spalte. Ohne diese
-        # Verteilung stünde die hohe Bestandskachel allein und ließe neben sich
-        # eine leere Spalte stehen.
-        for key in [k for k in sichtbar if k not in breite_kacheln]:
-            ziel = min(spalten, key=lambda eintrag: eintrag[1])
-            bauer[key](ziel[0])
-            ziel[1] += gewichte.get(key, 2)
+
+        # Deterministische Platzierung der Spaltenkarten gemäß BentoLayoutPlan
+        for col_idx, col_cards in enumerate(layout_plan.columns):
+            if col_idx < len(spalten):
+                for card_spec in col_cards:
+                    bauer[card_spec.key](spalten[col_idx])
         if not sichtbar:
-            leer = _ui.make(self.make_rounded_container,
-                raster, fill_key="card", outline_key="line", radius=self.HOME_CARD_RADIUS,
-                inner_pad_x=self.HOME_CARD_PAD_X, inner_pad_y=self.HOME_CARD_PAD_Y,
-                auto_height=True, register=False)
+            leer = _ui.make(self.make_bento_card,
+                raster,
+                fill_key="card",
+                outline_key="line",
+                radius=self.HOME_CARD_RADIUS,
+                inner_pad_x=self.HOME_CARD_PAD_X,
+                inner_pad_y=self.HOME_CARD_PAD_Y,
+                auto_height=True,
+            )
             _ui.grid(leer, row=0, column=0, sticky="new")
             label(leer.inner, glide_i18n.t("ui.render_home.all_tiles_are_hidden", "Alle Kacheln sind ausgeblendet."), 12, True)
             action(leer.inner, glide_i18n.t("ui.home_more_actions.set_up_home", "Startseite einrichten …"), self.show_home_tiles_dialog, "accent")
@@ -33388,6 +33411,37 @@ class ListApp:
             ]
             self.rounded_containers.append(container)
         return container
+
+    def make_bento_card(self, master, fill_key="card", outline_key="line", radius=18, inner_pad_x=None, inner_pad_y=None, auto_height=True, **kwargs):
+        """Erzeugt eine standardkonforme Bento-Karte (Ebene B, D100) für Startseite und Dialoge."""
+        ctx = getattr(self, "_home_bento_context", None)
+        if ctx is None:
+            ctx = self._home_bento_context = glide_bento.BentoContext(
+                theme=self.theme,
+                font_provider=app_font,
+                icon_provider=lambda k: self.ICONS.get(k, ""),
+                glass_mode=self.glass_enabled(),
+                glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
+                glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
+                tooltip_installer=self.add_tooltip,
+            )
+        else:
+            ctx.theme = self.theme
+            ctx.glass_mode = self.glass_enabled()
+            ctx.glass_shadow = self.theme.get("glass_shadow", self.theme["bg"])
+            ctx.glass_highlight = self.theme.get("glass_highlight", self.theme[outline_key])
+        card = glide_bento.BentoCard(
+            master,
+            context=ctx,
+            radius=radius,
+            inner_pad_x=inner_pad_x,
+            inner_pad_y=inner_pad_y,
+            auto_height=auto_height,
+            fill_key=fill_key,
+            outline_key=outline_key,
+            **kwargs,
+        )
+        return card
 
     # Farbe nur mit Bedeutung (Rückmeldung 26.09.2026). Vorher trug fast jeder
     # Knopf eine eigene Farbe – Blau, Orange, Türkis, Lila, Grün nebeneinander –

@@ -40,12 +40,13 @@ def registry() -> tuple[str, dict[str, str]]:
 
 
 def actual_source_modules() -> set[str]:
-    # Seit D95 liegt die Shell als Unterpaket `glide_shell`; ihre Dateien stehen
-    # mit relativem Pfad im Register (etwa `glide_shell/modal_session.py`).
+    # Seit D95 liegt die Shell als Unterpaket `glide_shell`, seit D100 Bento als `glide_bento`;
+    # ihre Dateien stehen mit relativem Pfad im Register (etwa `glide_bento/card.py`).
     quelle = ROOT / "src" / "glide"
     flach = {p.name for p in quelle.iterdir() if p.is_file() and p.suffix in (".py", ".pyw")}
     shell = {p.relative_to(quelle).as_posix() for p in (quelle / "glide_shell").glob("*.py") if p.is_file()}
-    return flach | shell
+    bento = {p.relative_to(quelle).as_posix() for p in (quelle / "glide_bento").glob("*.py") if p.is_file()}
+    return flach | shell | bento
 
 
 def actual_test_paths() -> set[str]:

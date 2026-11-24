@@ -16,6 +16,7 @@ Dünner, agentenneutraler Adapter für Antigravity, Codex, GitHub Copilot, Gemin
 | Aufgabe | Einstieg |
 |---|---|
 | Arbeit **an** der Glide Shell (`src/glide/glide_shell`, `shell_uebernehmen.py`, T319/T330–T338) | Skill `glide-shell` (`.agents/skills/` bzw. `.claude/skills/`) → [`GLIDE_SHELL_KI_HANDBUCH.md`](01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md) |
+| Arbeit am **Glide Bento Box System** (`src/glide/glide_bento`, T341–T344) | Skill `glide-bento` (`.agents/skills/` bzw. `.claude/skills/`) → [`GLIDE_BENTO_SYSTEM_KONZEPT.md`](01_Repository/Glide/docs/GLIDE_BENTO_SYSTEM_KONZEPT.md) |
 | Shell in einem **anderen** Projekt nutzen | [`KI_ANLEITUNG_NEUE_PROJEKTE.md`](01_Repository/Glide/src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md), Startprompt [`STARTPROMPT_KI.md`](01_Repository/Glide/src/glide/glide_shell/STARTPROMPT_KI.md) |
 | Ergebnisse als Glide-Importdatei erzeugen | Produkt-Skill [`01_Repository/Glide/skills/glide-to-do`](01_Repository/Glide/skills/glide-to-do/SKILL.md) – **nicht** für Shell-Entwicklung |
 | Gestaltung & Designvertrag | Skill `design-richtlinien` (`.agents/skills/` bzw. `.claude/skills/`) → [`docs/DESIGN_RICHTLINIEN.md`](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) |

@@ -42,8 +42,8 @@ def included(relative, target):
         return (p.name == "app.pyw" or p.suffix == ".py") and p.name != "drawing_prototype.py"
     if p.parts[0] == "resources":
         return True
-    # Das Shell-Paket (D95) liegt eine Ebene tief; nur seine Python-Dateien.
-    if p.parts[0] == "glide_shell":
+    # Interne Pakete: Shell-Paket (D95) und Bento Box System (D100) liegen eine Ebene tief; nur ihre Python-Dateien.
+    if p.parts[0] in ("glide_shell", "glide_bento"):
         return len(p.parts) == 2 and p.suffix == ".py"
     if p.parts[0] != "vendor":
         return False
