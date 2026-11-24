@@ -10,13 +10,14 @@ Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub
 
 | Artefakt | Plattform / Architektur | SHA-256-Prüfsumme | Status |
 |---|---|---|---|
-| `Glide-1.0.2-macos-arm64.dmg` | macOS (Apple Silicon, arm64) | `1aeb2247dc2c0792c300843e980e1ee46067b57bce5e7e0766416eb74a819b67` | Veröffentlicht (Prerelease) |
-| `Glide-1.0.2-macos-arm64.tar.gz` | macOS (Apple Silicon, Archiv) | `1ce81f08e4ba43efce39ffcefcdd26efb3d4f40f3c5f4fa7b1dbbcfad53c23e8` | Veröffentlicht (Prerelease) |
-| `Glide-1.0.2-windows-x64.zip` | Windows 10/11 (x64, portabel) | `1e9a25b3ee0b2ab514102d84719e598de6b2ea926f7c9e0ffbf1cb9d06bcf129` | Veröffentlicht (Prerelease) |
-| `source-archive-v1.0.2.zip` | Plattformunabhängig (Quellcode) | `08b87b2df6e0a30b7d59187372d6e355c7fcbcfec05cb90822da81e35fa607e0` | Veröffentlicht (Prerelease) |
-| `source-archive-v1.0.2.tar.gz` | Plattformunabhängig (Quellcode) | `955ae2ff2e4b4860b0807b572a1492baee41dae1dfec5d40db955ba9cb4633d2` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-macos-arm64.dmg` | macOS (Apple Silicon, arm64, DMG-Installer) | `1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-macos-arm64.tar.gz` | macOS (Apple Silicon, Archiv) | `6240b163480507bfcf0b7ec2adb2c7fde4c5bab52026f9738c257fe53f518b71` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-windows-x64-setup.exe` | Windows 10/11 (x64, Inno Setup Installer) | `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-windows-x64.zip` | Windows 10/11 (x64, portables ZIP-Archiv) | `e82b045ffdbd8caf1c00ff861195be580ed9b987841866424e0c5bbf74ba4799` | Veröffentlicht (Prerelease) |
+| `glide-to-do-skill-v1.0.2.zip` | Plattformunabhängig (KI-Agenten-Skill Paket) | `c1b35c21084c3848c7aae401f93720bcd6330728a74c7ea2caa51d80bc9c9ae6` | Veröffentlicht (Prerelease) |
 
-Auf `main` schreitet die Entwicklung nach Glide 1.0.2 fort (Glide-System V1.87, Glide Bento System 0.1.0, Glide Shell 0.6.2). Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
+> [!NOTE]
+> Die veröffentlichte Version v1.0.2 enthält das Aufgabenformat 26, das Glide-System V1.86 und die Framework-Shell 0.6.2. Das **Glide Bento Box System 0.1.0** (D100) wurde nach dem Release v1.0.2 auf `main` integriert (Glide-System V1.87) und ist Bestandteil künftiger Releases ab v1.1.0. Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
 
 ## Historischer GitHub-Stand 20.11.2026
 
@@ -99,7 +100,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 | **Manifest-Quelle** | [`packaging/winget/manifests/s/Shaye/Glide/1.0.2/`](../packaging/winget/manifests/s/Shaye/Glide/1.0.2/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
 | **Einreichungsweg** | Pull Request an `microsoft/winget-pkgs` via `wingetcreate` | Eigenes Tap-Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
 | **Externe Prüfung** | Automatische Microsoft-Validierung, Schema 1.10.0 | Syntax- & Hash-Validierung im eigenen Tap; offizielles `homebrew/cask` erfordert Notarisierung |
-| **Aktueller Prüfsummen-Status** | SHA-256 verifiziert: `1e9a25b3ee0b2ab514102d84719e598de6b2ea926f7c9e0ffbf1cb9d06bcf129` | SHA-256 verifiziert: `1aeb2247dc2c0792c300843e980e1ee46067b57bce5e7e0766416eb74a819b67` |
+| **Aktueller Prüfsummen-Status** | SHA-256 verifiziert: `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e` | SHA-256 verifiziert: `1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc` |
 | **Verhalten ohne Code-Signing** | SmartScreen-Hinweis „Unbekannter Herausgeber“ | Gatekeeper-Blockade, Freigabe via Systemeinstellungen |
 | **Installationsumfang** | User-Scope (`%LOCALAPPDATA%\Programs\Glide`), Inno Setup Installer | System-Scope (`/Applications/Glide.app`), DMG-Kopierbefehl |
 
@@ -330,13 +331,13 @@ v1.0.2 (Shipped, 23.11.2026) ──> v1.0.3 (Patch) ──> v1.1.0 (Minor) ─�
 ```
 
 1. **Glide 1.0.2 (Veröffentlichter Prerelease, 23.11.2026, Stand 24.11.2026):**
-   - Release-Härtung, Framework-Shell 0.6.2, Bento System 0.1.0, 5 verifizierte Artefakte auf GitHub, bereinigte Manifeste.
+   - Release-Härtung, Framework-Shell 0.6.2, 5 verifizierte Artefakte auf GitHub, bereinigte Manifeste (Bento System 0.1.0 folgt ab v1.1.0 auf Basis des aktuellen `main`-Stands).
 2. **Glide 1.0.3 (Wartungs- & Ergänzungspatch):**
    - WA-08: Transparenter Soll-Ist-Zeiterfassungs-Export (CSV & JSON).
    - WA-12-Rest: Pufferzeiten-Berechnung und interaktive Spätstart-Frage im Entlastungsdialog.
    - Vollautomatisierte Standprüfung als nativer GitHub Action Check.
 3. **Glide 1.1.0 (Bento & Vorlagen Meilenstein):**
-   - Bento Box System 0.2.0: Multi-Span-Karten (`col_span=2`), adaptive Reflow-Engine bei 616 px und 932 px.
+   - Bento Box System 0.2.0: Multi-Span-Karten (`span=2`), adaptive Reflow-Engine bei 616 px und 932 px.
    - Feature L4: Integrierte Vorlagen-Bibliothek (Kreativ-Projekt, Freelancer-Woche, Semesterplaner).
    - Vorbereitung für M04 (Entscheidungsvorlage für lokalen MCP-Server).
 4. **Glide 1.2.0 (Plattform & Dashboard):**
@@ -361,5 +362,5 @@ Das Repository folgt einer klaren, strikt abgegrenzten Verzeichnisstruktur. Alle
 | `00_Arbeitsvorbereitung/` | Strategische Leitdokumente, Meilensteinpläne, Marktanalysen, Marketingkonzepte, Übergabeprotokolle | Fortlaufend aktualisiert; obsolete Zwischenstände werden bereinigt und in Git-Historie belassen | [`docs/DOKUMENTENPFLEGE.md`](DOKUMENTENPFLEGE.md) |
 | `01_Repository/Glide/` | Produktiver Anwendungsquellcode (`src/glide`), Testsuiten (`tests/`), Entwicklerdokumentation (`docs/`), Paketierungsskripte (`packaging/`) | Produktiver Kern; alle Änderungen unterliegen Code-Reviews, T340-Regressionstests und CI-Prüfungen | [`AGENTS.md`](../AGENTS.md) |
 | `05_Probelisten_Testdaten/` | Synthetische Testdatensätze, Beispiellisten, Showcase-Dateien (`Werkhaus West`), JSON-Canvas-Referenzen | Streng synthetisch! Keine echten Nutzerdaten, keine personenbezogenen Inhalte | [`05_Probelisten_Testdaten/Showcase/README.md`](../../../05_Probelisten_Testdaten/Showcase/README.md) |
-| `07_Archiv_Historie/` | Historische Sprint-Protokolle, archivierte Auditberichte, frühere experimentelle Notizen | Reines Archiv (Read-only); dient der historischen Nachvollziehbarkeit früherer Architekturphasen | Git-Historie |
+| `07_Python-Versionen/` | Archiv und Synchronisationsbestand der startbaren Python-Versionen (z. B. `07_Python-Versionen/3.55/`); mit `abgleich_07.py` gepflegt | Read-only Referenzstand; bytegleich zu historischen Quellständen | Entwicklungsplan |
 | `20_Grafik_Master/` | Vektorielle Marken-Assets, Logo-Masterdateien (SVG, EPS, PNG), Pixel-Art-Vorlagen, Farbpaletten | Master-Quelle für Branding-Grafiken; Änderungen nur nach Abstimmung mit den Design-Richtlinien | [`20_Grafik_Master/README.md`](../../../20_Grafik_Master/README.md) |

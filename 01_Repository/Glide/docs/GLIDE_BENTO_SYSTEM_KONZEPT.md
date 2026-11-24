@@ -134,15 +134,15 @@ Der Komponentenbestand von `glide_bento` gliedert sich in deklarative Datenstruk
 
 | Komponente | Quelldatei | Zweck & Öffentliche API | Unterstützte Varianten & Zustände | Aktueller Einsatzort | Geplanter Ausbau (0.2.0+) |
 |---|---|---|---|---|---|
-| **`BentoCard`** | `card.py` | Universeller Karten-Container. API: `BentoCard(parent, spec, context)`. | Varianten: `standard`, `compact`, `featured`, `ghost`. Zustände: Normal, Hover, Focus, Selected. | Startseite `home_task_tiles.py` (Pilot). | Subtile Randverläufe, adaptive Schatten, Tastaturfokus-Ring. |
-| **`BentoHeader`** | `card.py` | Kopfleiste für Karten mit Titel, Unterzeile, Symbol und Aktionen. API: `set_title()`, `add_action()`. | Varianten: `default`, `compact`, `minimal`. | Startseiten-Kacheln. | Integrierte Status-Badges, Tooltip-Anbindung. |
-| **`BentoGrid`** | `grid.py` | Responsiver Raster-Container mit Canvas-Scrollsupport und dynamischem Spaltenumbruch. | Spalten: 1, 2 oder 3 Spalten basierend auf Breite. | Startseite `render_home`. | Multi-Span Rendering (`col_span=2`), ruckelfreies Resize. |
+| **`BentoCard`** | `card.py` | Universeller Karten-Container. API: `BentoCard(parent, spec, context)`. | Varianten: `standard`, `compact`, `featured`. Zustände: Normal, Hover, Focus, Selected. | Startseite `home_task_tiles.py` (Pilot). | Subtile Randverläufe, adaptive Schatten, Tastaturfokus-Ring. |
+| **`BentoHeader`** | `card.py` | Kopfleiste für Karten mit Titel, Unterzeile, Symbol und Aktionen. API: `BentoHeader(parent, spec, context, on_action=None)`. | Varianten: `default`, `compact`, `minimal`. | Startseiten-Kacheln. | Integrierte Status-Badges, Tooltip-Anbindung. |
+| **`BentoGrid`** | `grid.py` | Responsiver Raster-Container mit Canvas-Scrollsupport und dynamischem Spaltenumbruch. | Spalten: 1, 2 oder 3 Spalten basierend auf Breite. | Startseite `render_home`. | Multi-Span Rendering (`span=2`), ruckelfreies Resize. |
 | **`BentoContext`** | `context.py` | Dependency-Injection-Behälter für Theme, Schriften, Icons und Lokalisierung. | Auflösung über Host-Provider oder neutrale Fallbacks. | Alle Bento-Widgets. | Dynamisches Event-Abonnement bei Theme-Wechsel ohne Neuaufbau. |
 | **`BentoTokens`** | `tokens.py` | Semantische Design-Tokens für Abstände, Radien, Höhen und Typografie. | Immutable Dataclass mit Skalen. | `card.py`, `grid.py`, `components.py`. | Vollständiger Abgleich mit Host-Thementokens (Variante C). |
-| **`BentoCardSpec`** | `specs.py` | Deklarative Spezifikation einer Karte (ID, Titel, Span, Gewicht, Inhalt). | `col_span` (1..3), `weight`, `priority`, `min_height`. | Kachel-Definitionen in `app.pyw`. | Deklarative Sichtbarkeitsregeln, Persistenzschlüssel. |
+| **`BentoCardSpec`** | `specs.py` | Deklarative Spezifikation einer Karte (`key`, `title`, `span`, `weight`, `order`, `visible`, `variant`, `heading_action`, `extra`). | `span` (`1` oder `"full"` in 0.1.0; `2` in 0.2.0), `weight` (int), `variant`. | Kachel-Definitionen in `app.pyw`. | Deklarative Sichtbarkeitsregeln, erweiterte Layout-Parameter. |
 | **`BentoGridSpec`** | `specs.py` | Deklarative Rasterspezifikation (Lücken, Schwellenwerte, Randabstände). | Standard-Gaps: 12 px, Margin: 16 px, Breakpoints: 616/932 px. | `grid.py`. | Benutzerdefinierte Breakpoints je Host. |
 | **`BentoLayoutPlan`**| `specs.py` | Unveränderlicher Berechnungsplan für die Kartenplatzierung. | Spaltenanzahl, Spaltenbreiten, Karten-zu-Spalte-Zuordnung. | Ausgabe von `BentoLayoutPlanner`. | Zeilen- und Spaltenkoordinaten für Multi-Span-Karten. |
-| **`BentoLayoutPlanner`**| `layout.py` | Deterministischer, Tk-freier Layout-Rechner mit gieriger Spaltenverteilung. | Reine Berechnungslogik ohne Tkinter-Import. | `grid.py`, Unittests T341. | Echter 2-von-3-Spalten-Algorithmus mit Lückenminimierung. |
+| **`BentoLayoutPlanner`**| `layout.py` | Deterministischer, Tk-freier Layout-Rechner mit gieriger Spaltenverteilung. | Reine Berechnungslogik ohne Tkinter-Import. | `grid.py`, Unittests T341/T342. | Echter 2-von-3-Spalten-Algorithmus mit Lückenminimierung. |
 | **`BentoMetric`** | `components.py` | Darstellung prominenter Kennzahlen (Zahl, Einheit, Trend, Beschriftung). | Varianten: `large`, `medium`, `compact`. | Heute-Zusammenfassung auf Startseite. | Miniatur-Sparklines / Verlaufsbalken. |
 | **`BentoActions`** | `components.py` | Einheitliche Aktionsleiste für sekundäre Kartenaktionen. | Anordnung: Horizontal rechtsbündig oder vertikal gestapelt. | Fußleisten komplexer Kacheln. | Dropdown-Menü-Unterstützung für Overflow-Aktionen. |
 | **`BentoEmptyState`**| `components.py` | Visueller Leerzustand mit Illustration/Symbol, Titel, Text und Aktion. | Kompakt oder zentriert. | Leere Startseiten-Bereiche. | Universeller Einsatz in Fachmodulen (WA-52). |
@@ -189,15 +189,15 @@ Zwischen dem Host-Gestaltungsmodul `src/glide/ui_design.py` und dem Bento-Token-
 
 ## 10. Multi-Span Layout-Algorithmus (Spezifikation für Bento 0.2.0)
 
-In Bento 0.1.0 unterstützen Karten entweder eine einzelne Spalte (`col_span=1`) oder die volle Breite über alle verfügbaren Spalten (`span="full"`). Bento 0.2.0 führt echte Mehrspaltenkarten ein (`col_span=2` im 3-Spalten-Raster).
+In Bento 0.1.0 unterstützen Karten entweder eine einzelne Spalte (`span=1`) oder die volle Breite über alle verfügbaren Spalten (`span="full"`). Bento 0.2.0 führt echte Mehrspaltenkarten ein (`span=2` im 3-Spalten-Raster).
 
 ### 10.1 Trennung von visueller Variante und Spaltenbelegung
 
 Um semantische Klarheit zu gewährleisten, werden Layout-Geometrie und visuelle Darstellung strikt entkoppelt:
 
-1. **`col_span` (Layout-Geometrie):** Gibt an, wie viele Spalten die Karte im aktuellen Spaltenraster belegt (`1`, `2`, oder `3`).
-2. **`variant` (Visuelle Stilistik):** Bestimmt Rahmen, Polsterung und Hintergrund (`standard`, `compact`, `featured`, `ghost`).
-3. **`priority` (Informationsdichte):** Steuert das Verhalten bei Platzmangel (`high`, `normal`, `low`).
+1. **`span` (Layout-Geometrie):** Gibt an, wie viele Spalten die Karte im aktuellen Spaltenraster belegt (`1`, `2`, oder `"full"`).
+2. **`variant` (Visuelle Stilistik):** Bestimmt Rahmen, Polsterung und Hintergrund (`standard`, `compact`, `featured`).
+3. **`weight` (Relatives Inhaltsgewicht):** Steuert die vertikale Gewichtsverteilung ohne synchrone Render-Messung (`1` bis `5`).
 
 ### 10.2 Reflow-Regeln bei variabler Fensterbreite
 
@@ -234,11 +234,25 @@ Der `BentoLayoutPlanner` wendet folgende deterministische Reflow-Regeln an:
 
 1. **Zeilen-Tracking:** Der Planner führt ein Belegungs-Array für jede Spalte mit aktuellem Höhenstand (`column_heights = [0, 0, 0]`).
 2. **Span-Prüfung:** 
-   - `col_span=1`: Wird in die Spalte mit der minimalen Höhe gesetzt (`min(column_heights)`).
-   - `col_span=2` (im 3-Spalten-Raster): Prüft die beiden möglichen Spaltenpaare (Spalte 0+1 vs. Spalte 1+2). Wählt das Paar, dessen maximale Höhe geringer ist. Beide Spalten werden auf `max(h_a, h_b) + card_height` angeglichen.
-   - `col_span=3` oder `span="full"`: Wird über alle Spalten gelegt; alle Spalten werden auf `max(column_heights) + card_height` gesetzt.
+   - `span=1`: Wird in die Spalte mit der minimalen Höhe gesetzt (`min(column_heights)`).
+   - `span=2` (im 3-Spalten-Raster): Prüft die beiden möglichen Spaltenpaare (Spalte 0+1 vs. Spalte 1+2). Wählt das Paar, dessen maximale Höhe geringer ist. Beide Spalten werden auf `max(h_a, h_b) + card_height` angeglichen.
+   - `span="full"`: Wird über alle Spalten gelegt; alle Spalten werden auf `max(column_heights) + card_height` gesetzt.
 3. **Widget-Retention:** Bei Neuberechnung durch Fenster-Resize werden bestehende Tk-Karten-Instanzen wiederverwendet und lediglich per `grid(row=..., column=..., columnspan=...)` neu positioniert. Kein Flackern, kein Zerstören des internen Widget-Zustands.
 4. **Fokus-Erhalt:** Der aktive Tastaturfokus bleibt während des Spaltenumbruchs auf dem fokussierten Element erhalten.
+
+### 10.4 Architektonischer Vergleich: Grid vs. Column Flow vs. Masonry
+
+Zur Platzierung von Bento-Karten wurden drei grundlegende Algorithmen abgewogen:
+
+1. **Row-based Grid (Starres Zeilenraster):**
+   - *Verhalten:* Alle Karten einer Zeile brechen synchron um; die Zeilenhöhe richtet sich nach der höchsten Karte.
+   - *Problem:* Bei unterschiedlich hohen Karten entstehen große ungenutzte Leerflächen unter kürzeren Kacheln (Verletzung von Gestaltungsprinzip P4 „Kein Platz verschwenden“).
+2. **Dynamische Masonry-Engine (Kachelwand):**
+   - *Verhalten:* Karten werden nach tatsächlicher Pixelhöhe erst nach dem Rendern auf dem Bildschirm platziert.
+   - *Problem in Tkinter:* Erfordert zweistufiges Messen (`update_idletasks()`), was bei Fenstergrößenänderungen zu Doppel-Layout-Events und sichtbarem Flackern führt.
+3. **Deterministischer Column Flow mit Band-Struktur (Glides Wahl):**
+   - *Verhalten:* Vollbreitenkarten (`span="full"`) bilden saubere horizontale Bänder. Darunter liegende Karten werden anhand ihres statischen Inhaltsgewichts (`weight`) über einen gierigen Algorithmus auf Spalten verteilt.
+   - *Vorteil:* 100 % flackerfreies Resize ohne Mehrfach-Events; maximale Raumausnutzung ohne leere Löcher im Raster.
 
 ---
 
@@ -302,7 +316,23 @@ flowchart TD
 
 Glide Bento ist so konzipiert, dass es wie die Glide Shell als eigenständiges Unterpaket in Schwesterprojekte übernommen werden kann:
 
-1. **Übernahmewerkzeug:** Ähnlich wie `shell_uebernehmen.py` wird ein Übernahmeskript `bento_uebernehmen.py` bereitgestellt, das den Stand von `src/glide/glide_bento` als isoliertes Paket kopiert.
-2. **Keine Code-Änderungen im Folgeprojekt:** Das übernehmende Projekt ändert niemals Bento-Dateien von Hand, sondern steuert Darstellung und Inhalte ausschließlich über `BentoCardSpec`, `BentoGridSpec` und den `BentoContext`.
-3. **Einsatz in STEPS:** STEPS nutzt Bento zur Darstellung von Schrittfolgen, Zielmetriken und Etappendashboards.
-4. **Einsatz in Chess & Chains:** Nutzt Bento für Spielanalysen, Zugstatistiken und Notationstafeln.
+1. **Übernahmeprinzip:** Folgeprojekte binden `glide_bento` als isoliertes Unterpaket ein. Das übernehmende Projekt ändert niemals Bento-Dateien von Hand, sondern steuert Darstellung und Inhalte ausschließlich deklarativ über `BentoCardSpec`, `BentoGridSpec` und den `BentoContext`.
+2. **Einsatz in STEPS:** STEPS ist ein spezialisiertes musikalisches Werkzeug für Akkordprogressionen, Tonleitern, Skalenstufen und melodische Sequenzen. Bento-Karten in STEPS dienen der flexiblen Darstellung von Akkordblöcken, Skalenstufen, Voicings, Taktmustern und Instrumentenbelegungen.
+3. **Einsatz in Chess & Chains:** Nutzt Bento für Spielanalysen, Zugstatistiken, Schachuhr-Metriken und Notationstafeln.
+
+### 14.1 Differenzierung der Werkzeugoptionen für die Bento-Übernahme
+
+Für die Bereitstellung des Bento-Pakets in Folgeprojekten stehen drei Werkzeugwege zur Auswahl:
+
+- **Option A: Eigenständiges Skript `bento_uebernehmen.py`**
+  - *Konzept:* Analog zu `shell_uebernehmen.py` existiert ein dediziertes Skript für `glide_bento`.
+  - *Vorteile:* Klare funktionale Trennung; Projekte, die nur Bento (ohne Shell) nutzen, bleiben schlank.
+  - *Nachteile:* Doppelter Pflegeaufwand für zwei getrennte Übernahmeskripte.
+- **Option B: Integriertes Übernahmeskript `shell_uebernehmen.py --mit-bento` (Empfohlen)**
+  - *Konzept:* Die bestehende, transaktionssichere Übernahme-Engine von `shell_uebernehmen.py` (T331) wird um einen Schalter `--mit-bento` erweitert.
+  - *Vorteile:* Nutzt alle 36 gehärteten Sicherheitsprüfungen (Rollback, Symlink-Schutz, Pfad-Quoting) ohne Codeduplikation; ein einziger Befehl stattet Folgeprojekte vollständig aus.
+  - *Nachteile:* Leichte Kopplung der Übernahmewerkzeuge auf Quellskriptebene.
+- **Option C: Rein dateibasiertes Kopieren mit Manifest-Prüfung**
+  - *Konzept:* Manuelles Kopieren von `src/glide/glide_bento/` mit nachgelagerter Prüfung durch `python -m glide_bento.selftest`.
+  - *Vorteile:* Keine zusätzlichen Skripte im Quellbaum.
+  - *Nachteile:* Fehleranfällig bei manueller Ausführung; keine automatisierte Snapshot-Historie.

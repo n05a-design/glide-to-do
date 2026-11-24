@@ -8,11 +8,15 @@ Dieses Dokument ist die verbindliche strategische Quelle für Glides Marktpositi
 
 ## 1. Strategische Marktpositionierung & Kernbotschaft
 
-Glide ist die ruhige, lokale Arbeitsumgebung für Menschen, die Aufgaben, Notizen, visuelle Pinnwände und kreative Pixel-Entwürfe an einem einzigen Ort zusammenführen möchten – ohne Cloud-Zwang, ohne Benutzerkonto, ohne monatliche Abonnementkosten und ohne kognitive Überlastung.
+Glide ist die ruhige, lokale Arbeitsumgebung für Menschen, die Aufgaben, Notizen, visuelle Pinnwände und kreative Pixel-Entwürfe an einem einzigen Ort zusammenführen möchten – ohne Cloud-Zwang, ohne Benutzerkonto, ohne monatliche Abonnementkosten und entwickelt mit dem Ziel, kognitive Reizüberflutung zu minimieren.
 
 ### 1.1 Der Kern-Claim
-- **Deutsch:** *Klarheit für deine Tage. Raum für deine Ideen.*
-- **Englisch:** *Calm planning for your days. Space for your ideas.*
+- **Primärer Produkt-Claim (Verbindliche Inhaberentscheidung D72 / D74):**
+  - **Deutsch:** *Aufgaben planen. Ideen verbinden. Selbst gestalten.*
+  - **Englisch:** *Plan tasks. Connect ideas. Shape your world.*
+- **Sekundärer alternativer Marketing-Claim:**
+  - **Deutsch:** *Klarheit für deine Tage. Raum für deine Ideen.*
+  - **Englisch:** *Calm planning for your days. Space for your ideas.*
 
 ### 1.2 Die drei Säulen des Produktversprechens
 1. **Kognitive Entlastung statt Überwachung (Calm Tech):**
@@ -126,10 +130,11 @@ Um die Veröffentlichung von Glide 1.0.2 professionell zu begleiten, werden neun
 
 | Nr. | Asset-Name | Format / Spezifikation | Dauer / Umfang | Visueller Inhalt & Kernaussage | Call to Action | Zielgruppe |
 |---|---|---|---|---|---|---|
-| **B01** | **Hero-Produktvideo** | MP4 (H.264), 1920x1080 @ 60fps, 16:9 | 35–42 Sekunden | Schnellerfassungs-Flow -> Pinnwand-Canvas -> Bento-Dashboard -> Tageskapazitäts-Schutz. Sanfte Typografie, echte Software-Aufnahmen. | "Download Glide 1.0.2 on GitHub – 100% Free & Local" | Designer, Freelancer, Techies |
-| **B02** | **Feature-GIF-Serie** | GIF & WebM, 1280x720, optimierte Palette | 6 Loops à 4–8s | Siehe §4.1: Schnellerfassung, Pinnwand-Kabel, Bento-Grid, Shortcuts, Export, Paletten. | In Docs & Readme eingebettet | Alle Zielgruppen |
-| **B03** | **Download-Grafiken** | PNG & SVG, 1200x630 (OG-Image) & Badges | 5 Grafiken (Win, Mac, Linux, Source, Hash) | Betriebssystem-Icons mit klaren Versionsangaben (v1.0.2, Stand 24.11.2026), SHA-256-Badge und Prerelease-Kennzeichnung. | "Herunterladen für macOS / Windows" | Erstbesucher |
-| **B04** | **Bento-Screenshots** | PNG, 2560x1440 Retina, Lossless | 4 Hero-Shots (Hell, Dunkel, Split, Kompakt) | Volle Bento-Startseite mit aktiven Widgets: Metriken, Heute-Liste, Notizbuch-Raster und Pinnwand-Vorschau. | Zur Verwendung in Pressekit & Readme | Presse, Designer |
+| **B01** | **Hero-Produktvideo (Release v1.0.2)** | MP4 (H.264), 1920x1080 @ 60fps, 16:9 | 35–40 Sekunden | Format A (v1.0.2 Stand): Schnellerfassungs-Flow -> Strukturierte Notizbücher -> Pinnwand-Canvas -> Pixel-Werkstatt -> Tageskapazitäts-Schutz. Sanfte Typografie, echte Software-Aufnahmen ohne Bento. | "Download Glide 1.0.2 on GitHub – 100% Free & Local" | Designer, Freelancer, Techies |
+| **B01b**| **Preview-Trailer (Bento System)** | MP4 (H.264), 1920x1080 @ 60fps, 16:9 | 25–30 Sekunden | Format B (Vorschau auf `main` / v1.1.0): Modulares Bento-Dashboard, adaptive 3-/2-spaltige Anordnung, Kachel-Presets und Widget-Metriken. | "Explore Glide Bento on GitHub main" | UI/UX-Designer, Entwickler |
+| **B02** | **Feature-GIF-Serie** | GIF & WebM, 1280x720, optimierte Palette | 6 Loops à 4–8s | Siehe §4.1: Schnellerfassung, Pinnwand-Kabel, Shortcuts, Export, Paletten, Bento-Vorschau. | In Docs & Readme eingebettet | Alle Zielgruppen |
+| **B03** | **Download-Grafiken** | PNG & SVG, 1200x630 (OG-Image) & Badges | 5 Grafiken (Win Setup/ZIP, Mac DMG/TAR, Quellstart, Hash, Skill) | Betriebssystem-Icons mit klaren Versionsangaben (v1.0.2, Stand 24.11.2026), SHA-256-Badge und Prerelease-Kennzeichnung (macOS Apple Silicon & Windows x64 nativ; Linux & Intel-Macs via Quellstart). | "Herunterladen für macOS / Windows" | Erstbesucher |
+| **B04** | **Bento-Screenshots (Entwicklungsstand)** | PNG, 2560x1440 Retina, Lossless | 4 Hero-Shots (Hell, Dunkel, Split, Kompakt) | Bento-Startseite (Stand `main`): Metriken, Heute-Liste, Notizbuch-Raster und Pinnwand-Vorschau. | Zur Verwendung in Pressekit & Readme | Presse, Designer |
 | **B05** | **Feature-Cards** | PNG, 1080x1080 (1:1) & 1200x675 (16:9) | 6 Cards für Social Media | Großes Bildzitat der Funktion (z.B. Entlastungsdialog), kurzer Claim, Tastenkürzel. | "Entdecke ruhige Produktivität" | Social Media (Mastodon, X) |
 | **B06** | **Vergleichsmatrix** | PNG & PDF (Vektor), 1920x1080 | 1 Übersichtsgrafik | Differenzierte Matrix Glide vs. Notion vs. Things 3 vs. Sunsama vs. Obsidian (§18.2). | "Vergleiche die Ansätze" | Wechselbereite Nutzer |
 | **B07** | **Pressekit-Paket** | ZIP-Archiv mit Markdown, Logos & Assets | One-Pager + 10 Hi-Res Shots | Factsheet, Gründerphilosophie, Datenschutzversprechen, offizielle Logos (Dark/Light). | "Pressekontakt via GitHub" | Tech-Journalisten, Blogger |
@@ -138,7 +143,15 @@ Um die Veröffentlichung von Glide 1.0.2 professionell zu begleiten, werden neun
 
 ---
 
-## 4. Produktvideo-Storyboard (§41)
+## 4. Produktvideo-Storyboards (§41)
+
+Die Videostrategie wird strikt nach veröffentlichter Version und Arbeitsstand zweigeteilt:
+- **Format A:** Offizielles Release-Video für Version v1.0.2 (Fokus auf bereits freigegebene Kernfunktionen ohne Bento).
+- **Format B:** Vorschau-Trailer für das Glide Bento Box System `0.1.0` (Vorschau auf Branch `main` nach Glide 1.0.2).
+
+---
+
+### 4.1 Format A: Release-Video Glide 1.0.2 (Laufzeit: 38 Sekunden)
 
 **Titel:** *Glide – Der ruhige Raum für deine Gedanken*  
 **Laufzeit:** 38 Sekunden  
@@ -147,53 +160,96 @@ Um die Veröffentlichung von Glide 1.0.2 professionell zu begleiten, werden neun
 ```
 0:00 ── Szene 1: Schnellerfassung ──> 0:06 ── Szene 2: Visuelle Pinnwand ──> 0:14
 0:14 ── Szene 3: Strukturierte Notizen ──> 0:22 ── Szene 4: Kapazität & Schutz ──> 0:30
-0:30 ── Szene 5: Pixel-Werkstatt & Bento ──> 0:35 ── Szene 6: Endcard & Download ──> 0:38
+0:30 ── Szene 5: Pixel-Werkstatt & Cover ──> 0:35 ── Szene 6: Endcard & Download ──> 0:38
 ```
 
-### Szene 1: Schnellerfassung & Chaos-Befreiung (0:00 – 0:06)
+#### Szene 1: Schnellerfassung & Chaos-Befreiung (0:00 – 0:06)
 - **Visuelle Handlung:** Nahaufnahme des Glide-Fensters. Ein Nutzer tippt blitzschnell über die Schnellerfassung: `Kundenpräsentation vorbereiten morgen 90m`. Das System hebt `morgen` und `90m` sanft hervor und ordnet die Aufgabe sofort ein.
 - **Voiceover (DE):** "Gedanken festhalten, bevor sie verfliegen. Ohne Klickmarathon. Ohne Reizüberflutung."
 - **Voiceover (EN):** "Capture thoughts before they slip away. No friction. No distractions."
 - **Text-Overlay:** *Schnellerfassung mit natürlicher Spracheingabe.*
 - **UI-Elemente:** Quick-Entry-Overlay, System-Schriftbild.
 
-### Szene 2: Die visuelle Pinnwand (0:06 – 0:14)
+#### Szene 2: Die visuelle Pinnwand (0:06 – 0:14)
 - **Visuelle Handlung:** Sanfte Kamerafahrt auf die Pinnwand (Canvas). Drei Bildkarten werden platziert. Eine Verbindungslinie schnappt mit magnetischer Eleganz zwischen Notizkarte und Aufgabenblock ein.
 - **Voiceover (DE):** "Verbinde, was zusammengehört. Deine Notizen, Skizzen und Aufgaben auf einer freien Fläche."
 - **Voiceover (EN):** "Connect what matters. Notes, sketches, and tasks on an open visual canvas."
 - **Text-Overlay:** *Visuelle Pinnwand · Voller JSON Canvas 1.0 Standard.*
 - **UI-Elemente:** Canvas-Nodes, bezier-basierte Verbindungslinien, Bildkarten mit adaptivem Beschnitt.
 
-### Szene 3: Strukturierte Notizen & Bücher (0:14 – 0:22)
+#### Szene 3: Strukturierte Notizen & Bücher (0:14 – 0:22)
 - **Visuelle Handlung:** Wechsel in ein Projekt-Notizbuch. Strukturierter Text mit Checklisten. Am rechten Rand zeigt der Aufgabeninspektor die verknüpften Fälligkeiten. Ein Klick auf "Fundorte" zeigt alle verstreuten Erwähnungen.
 - **Voiceover (DE):** "Schreibe mit Fokus. Deine Dokumente bleiben bei dir – in offenem Markdown, ohne Cloud-Zwang."
 - **Voiceover (EN):** "Write in depth. Your documents stay with you – open Markdown, zero cloud lock-in."
-- **Text-Overlay:** *Offenes Markdown · Lokale JSON-Dateien · 100% Offline.*
+- **Text-Overlay:** *Offenes Markdown · Lokale JSON-Dateien · Lokale Datenhaltung.*
 - **UI-Elemente:** Texteditor mit Markdown-Formatierung, Seitenleiste, Fundortübersicht.
 
-### Szene 4: Tageskapazität & Kognitiver Schutz (0:22 – 0:30)
+#### Szene 4: Tageskapazität & Kognitiver Schutz (0:22 – 0:30)
 - **Visuelle Handlung:** Blick auf die "Heute"-Ansicht. Der Nutzer plant eine vierte Aufgabe ein. Der Tagesbalken erreicht 105%. Ein dezenter, warmer Dialog öffnet sich: *Tageskapazität überschritten (5,5h von 5,0h)*. Der Nutzer wählt gelassen: *Aufgabe auf morgen verschieben*. Der Balken wird wieder ruhig grün.
 - **Voiceover (DE):** "Ein Planer, der dich schützt, statt dich anzutreiben. Plane nur, was du heute wirklich schaffen kannst."
 - **Voiceover (EN):** "A planner that protects your time instead of pushing you. Keep today realistic."
 - **Text-Overlay:** *Tageskapazität & Sanfter Entlastungsdialog.*
 - **UI-Elemente:** Kapazitätsanzeige, Entlastungsdialog-Aktionen.
 
-### Szene 5: Pixel-Werkstatt & Bento-Startseite (0:30 – 0:35)
-- **Visuelle Handlung:** Kurzer Schnitt in die Pixel-Werkstatt: Ein Icon wird mit der 16-Farben-Palette pixelgenau schattiert. Dann Wechsel zur Bento-Übersicht, in der das neue Icon als Buch-Cover erstrahlt.
-- **Voiceover (DE):** "Von der schnellen Skizze bis zur persönlichen Übersicht."
-- **Voiceover (EN):** "From a quick sketch to your personal overview."
-- **Text-Overlay:** *Integrierte Pixel-Werkstatt · Glide Bento System 0.1.0.*
-- **UI-Elemente:** Pixel-Canvas, Farbauswahl, Bento-Dashboard-Raster.
+#### Szene 5: Integrierte Pixel-Werkstatt & Cover-Gestaltung (0:30 – 0:35)
+- **Visuelle Handlung:** Kurzer Schnitt in die Pixel-Werkstatt: Ein Icon wird mit der 16-Farben-Palette pixelgenau schattiert und direkt als Titelbild für das Notizbuch übernommen.
+- **Voiceover (DE):** "Von der schnellen Skizze bis zum eigenen Buch-Cover. Alles an einem Ort."
+- **Voiceover (EN):** "From a quick sketch to your custom cover. All in one place."
+- **Text-Overlay:** *Integrierte Pixel-Werkstatt · Kreativer Ausgleich.*
+- **UI-Elemente:** Pixel-Canvas, Farbauswahl, Notizbuch-Titelbild.
 
-### Szene 6: Endcard & GitHub Prerelease v1.0.2 (0:35 – 0:38)
-- **Visuelle Handlung:** Schlichter, eleganter Ausklang. Zentriertes Glide-Logo. Darunter der Claim und die Download-Hinweise für macOS, Windows und Linux.
+#### Szene 6: Endcard & GitHub Release v1.0.2 (0:35 – 0:38)
+- **Visuelle Handlung:** Schlichter, eleganter Ausklang. Zentriertes Glide-Logo. Darunter der verbindliche Claim (D72/D74) und die Download-Hinweise für macOS (Apple Silicon arm64), Windows (x64) sowie Quellstart für Linux und macOS Intel.
 - **Voiceover (DE):** "Glide 1.0.2. Jetzt quelloffen und kostenlos auf GitHub."
 - **Voiceover (EN):** "Glide 1.0.2. Open source and free on GitHub now."
 - **Text-Overlay:**
   **Glide 1.0.2**  
-  *Klarheit für deine Tage. Raum für deine Ideen.*  
+  *Aufgaben planen. Ideen verbinden. Selbst gestalten.*  
   `github.com/n05a-design/glide-to-do` · MPL-2.0
 - **Audio:** Warmer Schlussakkord.
+
+---
+
+### 4.2 Format B: Preview-Trailer Glide Bento Box System (Laufzeit: 26 Sekunden)
+
+**Titel:** *Glide Bento – Die modulare Startseite der nächsten Generation*  
+**Laufzeit:** 26 Sekunden  
+**Sounddesign:** Moderner, rhythmischer Ambient-Synth mit sanften Klicks; technisch fokussiert.
+
+```
+0:00 ── Szene B1: Modulare Übersicht ──> 0:08 ── Szene B2: Adaptive Spalten ──> 0:16
+0:16 ── Szene B3: Widget-Interaktion ──> 0:22 ── Szene B4: Entwicklungs-Endcard ──> 0:26
+```
+
+#### Szene B1: Modulare Übersicht (0:00 – 0:08)
+- **Visuelle Handlung:** Die neue Bento-Startseite öffnet sich. Strukturierte Kacheln ordnen Aufgaben, Metriken, Notizbuch-Raster und Pinnwand-Vorschau in einem harmonischen Raster an.
+- **Voiceover (DE):** "Ein Blick, der Ordnung schafft. Das neue Glide Bento Box System."
+- **Voiceover (EN):** "Clarity at a glance. The new Glide Bento Box System."
+- **Text-Overlay:** *Glide Bento System 0.1.0 · Modulare Startseite.*
+- **UI-Elemente:** BentoGrid, BentoCard, BentoHeader, BentoMetric.
+
+#### Szene B2: Adaptive Spalten & Responsivität (0:08 – 0:16)
+- **Visuelle Handlung:** Das Fenster wird verkleinert. Das Layout wechselt nahtlos und flackerfrei vom 3-spaltigen Standard-Grid in das 2-spaltige Fokus-Grid. Die Karten passen ihren Inhalt harmonisch an.
+- **Voiceover (DE):** "Passt sich deinem Bildschirm an. Vom großen Monitor bis zum kompakten Laptop."
+- **Voiceover (EN):** "Adapts to your screen. From widescreen displays to compact laptops."
+- **Text-Overlay:** *Adaptive Spaltenplanung · 3-Spalten & 2-Spalten Layout.*
+- **UI-Elemente:** Responsive Breakpoints, dynamische Kachelreorganisation.
+
+#### Szene B3: Widget-Interaktion & Schnellaktionen (0:16 – 0:22)
+- **Visuelle Handlung:** Klick auf eine Schnellaktion in der Heute-BentoCard; die Tageskapazität aktualisiert sich live; Umschalten zwischen Kompakt- und Detailansicht.
+- **Voiceover (DE):** "Schnelle Aktionen, lebendige Metriken, nahtlose Navigation."
+- **Voiceover (EN):** "Quick actions, live metrics, seamless navigation."
+- **Text-Overlay:** *BentoActions · Live-Metriken · Nahtlose Shell-Integration.*
+- **UI-Elemente:** BentoActions, BentoMetric, Hover-Zustände.
+
+#### Szene B4: Entwicklungs-Endcard (0:22 – 0:26)
+- **Visuelle Handlung:** Vorschau-Badge: "Entwicklungsstand auf main – Vorschau auf kommende Releases". Verweis auf die Dokumentation und das Repository.
+- **Voiceover (DE):** "Das Bento-System wächst auf GitHub main. Gestalte die Zukunft von Glide mit."
+- **Voiceover (EN):** "The Bento System is evolving on GitHub main. Shape the future with us."
+- **Text-Overlay:**
+  **Glide Bento 0.1.0** · Preview auf `main`  
+  `src/glide/glide_bento` · MPL-2.0
+- **Audio:** Sanfter Ausklang.
 
 ---
 
@@ -245,7 +301,9 @@ Alle GIFs werden mit 1280x720 Pixeln bei 30 fps und einer Farbreduktion auf 128 
 
 ### 6.1 Logo & Wortmarke
 - **Wortmarke:** `Glide` (Großes G, runde und geometrische Minuskeln).
-- **Claim:** *Klarheit für deine Tage. Raum für deine Ideen.*
+- **Claim:**
+  - **Primär (Inhaberentscheidung D72 / D74):** *Aufgaben planen. Ideen verbinden. Selbst gestalten.*
+  - **Sekundär (Marketing-Baseline):** *Klarheit für deine Tage. Raum für deine Ideen.*
 - **Schutzraum:** Mindestens die Höhe des Großbuchstabens `G` auf allen vier Seiten.
 - **Mindestgröße:** Digital: 32 px Höhe; Print: 12 mm Höhe.
 - **Hintergründe:** Das primäre Logo steht auf dunklem Graphit (`#18191B`) oder warmem Papierweiß (`#F8F9FA`). Niemals auf unruhig gemusterten Hintergründen platzieren.
@@ -297,22 +355,22 @@ Die offizielle Produkt-Landingpage (vorgesehen unter `n05a-design.github.io/glid
 ### 7.1 Vollständige 21-Sektionen-Struktur
 
 1. **Top Announcement Bar:**  
-   *Neu: Glide 1.0.2 Prerelease jetzt auf GitHub verfügbar · Lokale Datenhoheit & Bento System 0.1.0* (Link zu GitHub Releases).
+   *Neu: Glide 1.0.2 Release jetzt auf GitHub verfügbar · Lokale Datenhaltung & ruhige Produktivität (Bento 0.1.0 Vorschau auf main)* (Link zu GitHub Releases).
 2. **Navigation Header:**  
-   Logo, Links zu *Philosophie*, *Funktionen*, *Bento System*, *Dokumentation*, *GitHub* und primärer CTA-Button *Herunterladen (v1.0.2)*.
+   Logo, Links zu *Philosophie*, *Funktionen*, *Bento System (Vorschau)*, *Dokumentation*, *GitHub* und primärer CTA-Button *Herunterladen (v1.0.2)*.
 3. **Hero-Sektion:**  
-   - Headline: *Klarheit für deine Tage. Raum für deine Ideen.*
+   - Headline: *Aufgaben planen. Ideen verbinden. Selbst gestalten.* (Inhaberentscheidung D72/D74; sekundär: *Klarheit für deine Tage. Raum für deine Ideen.*)
    - Subline: *Die ruhige, lokale Arbeitsumgebung für Aufgaben, Notizen, visuelle Pinnwände und Pixel-Art. Ohne Cloud-Zwang, ohne Tracking, quelloffen.*
-   - CTA-Duo: Primär `[Für macOS herunterladen]` / `[Für Windows herunterladen]` (automatische OS-Erkennung) + Sekundär `[GitHub Repository ansehen]`.
-   - Micro-Copy: *Glide 1.0.2 · Quelloffen unter MPL-2.0 · 100% Offline-fähig*.
+   - CTA-Duo: Primär `[Für macOS (Apple Silicon) herunterladen]` / `[Für Windows (x64) herunterladen]` + Quellstart-Hinweis für Linux & macOS Intel + Sekundär `[GitHub Repository ansehen]`.
+   - Micro-Copy: *Glide 1.0.2 · Quelloffen unter MPL-2.0 · Lokale Datenhaltung ohne externe Server*.
 4. **Hero Visual / Interaktiver Vorschau-Frame:**  
-   Großer, hochauflösender Screenshot des Bento-Dashboards mit Live-Zoom-Effekten bei Mouseover.
+   Großer, hochauflösender Screenshot der Arbeitsumgebung mit Aufgaben, Pinnwand und Notizbüchern (Vorschau-Frame mit Bento-Dashboard als kommender Entwicklungsstand).
 5. **Drei Grundpfeiler (Social Proof der Philosophie):**  
    - *1. Kognitive Ruhe:* Keine Benachrichtigungen, keine Streaks, kein Gamification-Druck.
    - *2. Volle Datenhoheit:* Reines lokales Dateisystem. Du besitzt deine Daten für immer.
    - *3. Vier Werkzeuge in Einem:* Aufgaben, Notizen, Canvas und Pixel-Studio nahtlos vereint.
-6. **Das Bento-Dashboard (Glide Bento System 0.1.0):**  
-   Präsentation der modularen Startseite. Interaktive Darstellung der Widgets: Tageskapazität, Schnellzugriff, offene Fälligkeiten.
+6. **Das Bento-Dashboard (Glide Bento System `0.1.0` – Vorschau auf `main` nach Glide 1.0.2):**  
+   Präsentation der modularen Startseite für zukünftige Releases. Interaktive Darstellung der Widgets: Tageskapazität, Schnellzugriff, offene Fälligkeiten.
 7. **Produktsäule 1: Aufgaben & Tageskapazität (WA-12):**  
    Erklärung des kognitiven Schutzes. Warum feste Stundenlimits Überlastung verhindern und wie der sanfte Entlastungsdialog hilft.
 8. **Produktsäule 2: Visuelle Pinnwand (JSON Canvas 1.0):**  
@@ -349,16 +407,16 @@ Die offizielle Produkt-Landingpage (vorgesehen unter `n05a-design.github.io/glid
 ### 7.2 Zweisprachiges Copywriting (Auszug Hero-Bereich)
 
 #### Deutsch (DE)
-- **Titelzeile:** *Klarheit für deine Tage. Raum für deine Ideen.*
-- **Subline:** *Glide vereint Aufgaben, Notizen, visuelle Pinnwände und eine Pixel-Werkstatt in einer schnellen Desktop-App. 100% lokal, quelloffen und frei von kognitiver Überlastung.*
+- **Titelzeile:** *Aufgaben planen. Ideen verbinden. Selbst gestalten.* (Sekundär: *Klarheit für deine Tage. Raum für deine Ideen.*)
+- **Subline:** *Glide vereint Aufgaben, Notizen, visuelle Pinnwände und eine Pixel-Werkstatt in einer schnellen Desktop-App. 100% lokal, quelloffen und entwickelt mit dem Ziel, kognitive Reizüberflutung zu minimieren.*
 - **Buttons:** `[Glide 1.0.2 herunterladen]` · `[Quellcode auf GitHub]`
-- **Prerelease-Hinweis:** *Aktueller Prerelease v1.0.2 für macOS (Apple Silicon / Intel), Windows (x64) und Linux.*
+- **Prerelease-Hinweis:** *Aktueller Prerelease v1.0.2 mit nativen Binärpaketen für macOS (Apple Silicon arm64) und Windows (x64); Quellstart für Linux und macOS Intel.*
 
 #### Englisch (EN)
-- **Headline:** *Calm planning for your days. Space for your ideas.*
-- **Subline:** *Glide seamlessly brings together tasks, structured notes, visual pinboards, and a pixel-art workshop in a calm desktop environment. 100% local-first, open-source, and free from cognitive clutter.*
+- **Headline:** *Plan tasks. Connect ideas. Shape your world.* (Secondary: *Calm planning for your days. Space for your ideas.*)
+- **Subline:** *Glide seamlessly brings together tasks, structured notes, visual pinboards, and a pixel-art workshop in a calm desktop environment. 100% local-first, open-source, designed to minimize cognitive overload.*
 - **Buttons:** `[Download Glide 1.0.2]` · `[View Source on GitHub]`
-- **Prerelease Badge:** *Current Prerelease v1.0.2 available for macOS (Universal), Windows (x64), and Linux.*
+- **Prerelease Badge:** *Current Prerelease v1.0.2 with native packages for macOS (Apple Silicon arm64) and Windows (x64); run from source on Linux and Intel Macs.*
 
 ---
 
@@ -382,7 +440,7 @@ Die offizielle Produkt-Landingpage (vorgesehen unter `n05a-design.github.io/glid
 - **Kurz (bis 140 Zeichen):**  
   *Ruhiger, lokaler Desktop-Planer für Aufgaben, Notizen, Pinnwand & Pixel-Art. 100% offline, kein Konto, quelloffen unter MPL-2.0.*
 - **Mittel (bis 300 Zeichen):**  
-  *Glide ist der kognitiv beruhigende Local-First-Arbeitsplatz für Windows, macOS und Linux. Verbindet realistische Tageskapazitätsplanung, Markdown-Notizen, visuelle Pinnwände (JSON Canvas 1.0) und eine Pixel-Werkstatt in einer schnellen Python/Tkinter-Architektur. Quelloffen unter MPL-2.0.*
+  *Glide ist der kognitiv beruhigende Local-First-Arbeitsplatz für Windows, macOS und Linux. Verbindet realistische Tageskapazitätsplanung, Markdown-Notizen, visuelle Pinnwände (JSON Canvas 1.0) und eine Pixel-Werkstatt. Nativ für Windows (x64) & macOS (Apple Silicon); Quellstart für Linux. Quelloffen unter MPL-2.0.*
 - **Englisch (Standard About):**  
   *Calm, local-first desktop workspace for realistic daily planning, structured notes, visual pinboards (JSON Canvas), and pixel art. 100% offline, no cloud lock-in, open-source under MPL-2.0.*
 
@@ -410,7 +468,7 @@ Die offizielle Produkt-Landingpage (vorgesehen unter `n05a-design.github.io/glid
 
 ### 8.3 Briefing für das Social Preview Image (1280x640 px)
 - **Aufbau:** Dunkler Graphit-Hintergrund (`#18191B`) mit dezentem 1px-Raster im Hintergrund.
-- **Zentrum links:** Elegantes Glide-Logo mit Text *Glide* in Weiß, darunter der Claim *Klarheit für deine Tage. Raum für deine Ideen.* in Hellgrau (`#8A909A`) und die drei Badges `v1.0.2`, `100% Local-First`, `MPL-2.0`.
+- **Zentrum links:** Elegantes Glide-Logo mit Text *Glide* in Weiß, darunter der Claim *Aufgaben planen. Ideen verbinden. Selbst gestalten.* (Inhaberentscheidung D72/D74) in Hellgrau (`#8A909A`) und die drei Badges `v1.0.2`, `100% Local-First`, `MPL-2.0`.
 - **Zentrum rechts:** Perspektivisch leicht geneigter, gestochen scharfer Ausschnitt des Bento-Dashboards mit der aktiven Pinnwand und der Pixel-Werkstatt.
 - **Typografie:** SF Pro / Segoe UI, absolut lesbar auch als verkleinertes Thumbnail (600x300 px) in Twitter/Mastodon-Feeds.
 

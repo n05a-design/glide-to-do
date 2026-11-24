@@ -33,30 +33,62 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 1. **Fragestellung:** Soll Glide eine globale Tastenkombination (z. B. `Ctrl+Alt+Space` / `Cmd+Shift+Space`) unterstützen, um Aufgaben aus jeder beliebigen Anwendung heraus ohne sichtbares Hauptfenster blitzschnell zu erfassen?
 2. **Konkrete Problemstellung:** Nutzer arbeiten in Browser, IDE oder Textverarbeitung und müssen den aktuellen Arbeitskontext verlassen, das Glide-Hauptfenster in den Vordergrund holen und die Schnellerfassung aufrufen. Das unterbricht den Denkfluss.
 3. **Bestehende Inhaberentscheidung:** G07 / Q2: Glide läuft als Einzelfenster-Anwendung ohne ressourcenfressende Hintergrund-Daemons; Schnellerfassung ist innerhalb der App voll integriert.
-4. **Tatsächlich vorhandene Funktionalität:** Schnellerfassung (`quick_capture.py`) mit zweisprachiger Datumserkennung (DE/EN) bei aktivem Glide-Fenster.
-5. **Relevante Marktbeobachtung:** Things 3 bietet das Branchen-Vorbild für globale Schnellerfassung (Quick Entry mit Autofill). Obsidian nutzt globale Hotkeys über Dritt-Plugins oder Helper.
+4. **Tatsächlich vorhandene Funktionalität:** Schnellerfassung (`quick_capture.py`, `capture_parser.py`) mit zweisprachiger Datumserkennung (DE/EN) bei aktivem Glide-Fenster.
+5. **Relevante Marktbeobachtung:** Things 3 bietet das Branchen-Vorbild für globale Schnellerfassung (Quick Entry mit Autofill). Obsidian nutzt globale Hotkeys über Dritt-Plugins oder externe Launcher (Alfred, Raycast).
 6. **Erwarteter Nutzermehrwert:** Reduziert die Erfassungshürde für spontane Ideen auf unter 2 Sekunden; verhindert Kontextwechsel.
-7. **Lösungsvarianten:**
-   - *Variante A (Empfohlen):* Ein schlankes, eigenständiges Hintergrund-Helferprogramm (`glide_quick_entry.pyw`), das im System-Tray / Menüleiste sitzt, auf den globalen Hotkey lauscht, ein minimalistisches 400x120px Erfassungsfenster öffnet und neue Aufgaben atomar in die lokale Aufgabenablage schreibt.
-   - *Variante B:* Integration direkt in die Hauptanwendung, sodass das Glide-Hauptfenster beim Schließen optional in den Hintergrund minimiert bleibt und den Hotkey registriert.
-8. **Option, den bisherigen Stand beizubehalten (Status Quo):** Schnellerfassung bleibt nur bei geöffnetem, fokussiertem Glide-Hauptfenster verfügbar.
+7. **Differenzierte Untersuchung der fünf Lösungsvarianten:**
+   - **Variante A: Aktiver Hintergrundprozess mit globalem Hotkey**
+     - *Mechanismus:* Ein schlankes, eigenständiges Helferprogramm (`glide_quick_entry.pyw`), das im System-Tray / in der macOS-Menüleiste sitzt, auf den globalen Hotkey lauscht, ein minimalistisches 400x120px Erfassungsfenster öffnet und neue Aufgaben atomar in die lokale Aufgabenablage schreibt.
+     - *Ressourcen:* Ca. 25–35 MB RAM dauerhaft im Leerlauf; vernachlässigbare CPU-Last.
+     - *Plattformen:* Win32 `RegisterHotKey` (stabil); macOS Carbon/Cocoa Event Taps (erfordert explizite Bedienungshilfen-Rechte in den Systemeinstellungen); Linux unter X11 gut machbar, unter Wayland jedoch restriktiv (erfordert Desktop-Portal oder globale Compositor-Keybindings).
+     - *Datenintegrität:* Schreibt atomar über Dateisperren in den `item_change`-Weg; bei laufender Hauptanwendung muss diese Dateiänderungen neu einlesen.
+     - *Inhaberphilosophie:* Steht im leichten Spannungsfeld mit der Grenze Stufe C (keine dauerhaften Hintergrund-Daemons); als optionales Werkzeug vertretbar.
+   - **Variante B: Dateibasierte Schnellerfassung über ein Eingangsverzeichnis (Inbox Directory Watcher)**
+     - *Mechanismus:* Glide überwacht beim Start oder periodisch einen lokalen Eingangsordner (z. B. `~/.glide/inbox/` oder `inbox.txt`). Externe Skripte, Notiztools oder Kurzbefehle legen Textdateien dort ab; Glide importiert sie beim nächsten Öffnen oder im Hintergrund.
+     - *Ressourcen:* Null zusätzlicher RAM, wenn Glide geschlossen ist.
+     - *Plattformen:* 100 % plattformübergreifend und OS-unabhängig.
+     - *Datenintegrität:* Extrem robust; atomare Dateiverschiebung (`os.replace`).
+     - *Inhaberphilosophie:* Entspricht perfekt Glides dateibasierter Unix-Philosophie (D01, D02).
+   - **Variante C: CLI-Aufruf über Startparameter (z. B. `glide --quick-add "..."`)**
+     - *Mechanismus:* Aufruf von Glide über die Befehlszeile mit Parametern. Ein minimalistischer Parser übernimmt den Text, parst Datumswörter via `capture_parser.py`, hängt die Aufgabe an den Aufgabenbestand an und terminiert sofort ohne Tkinter-GUI-Aufbau.
+     - *Ressourcen:* Nur kurzlebiger Prozess für ca. 150–200 ms; kein Dauerläufer.
+     - *Plattformen:* Funktioniert identisch unter Windows, macOS und Linux. Lässt sich systemweit mit beliebigem OS-Shortcut-Manager (z. B. Raycast, Alfred, Windows PowerToys Run, AutoHotkey, Sway/i3) verknüpfen.
+     - *Datenintegrität:* Sehr hoch, wenn Datei-Locking beachtet wird.
+     - *Inhaberphilosophie:* Sehr sympathisch für Power-User und Shell-Integratoren; keine Daemons nötig.
+   - **Variante D: Direktes Schreiben in eine lokale JSON-Datei ohne GUI-Start**
+     - *Mechanismus:* Ein autarkes Python-Skript oder CLI liest und manipuliert `tasks.json` direkt auf Plattenebene.
+     - *Ressourcen:* Minimal.
+     - *Plattformen:* Universell.
+     - *Datenintegrität:* Risikoreich bei gleichzeitig geöffneter Haupt-App (Race Condition, Überschreiben nicht gespeicherter Änderungen).
+     - *Inhaberphilosophie:* Widerspricht der Integrität von Glides Transaktionsschicht (`guarded_structural_change`).
+   - **Variante E: Beibehaltung des Status Quo (Schnellerfassung nur bei geöffnetem Fenster)**
+     - *Mechanismus:* Schnellerfassung (`quick_capture.py`) bleibt wie bisher an das aktive, fokussierte Glide-Hauptfenster gebunden.
+     - *Ressourcen:* 0 MB Zusatzressourcen, 0 Hintergrundprozesse.
+     - *Inhaberphilosophie:* Reinste Lehre (D24, Grenze Stufe C).
+8. **Option, den bisherigen Stand beizubehalten (Status Quo):** Entspricht Variante E.
 9. **Technische Abhängigkeiten:** Plattformübergreifende Hotkey-Registrierung erfordert OS-spezifische Schnittstellen (z. B. `pynput` oder native Windows/macOS API-Aufrufe).
-10. **Betroffene Quellmodule:** `src/glide/quick_capture.py`, `src/glide/app.pyw`, neues Hilfsmodul `glide_tray.py`.
-11. **Auswirkungen auf die Benutzeroberfläche:** Neues Kontextmenü im System-Tray / in der macOS-Menüleiste; kleiner, schwebender Schnellerfassungsdialog.
+10. **Betroffene Quellmodule:** `src/glide/quick_capture.py`, `src/glide/capture_parser.py`, `src/glide/app.pyw`, optional `src/glide/cli.py`.
+11. **Auswirkungen auf die Benutzeroberfläche:** In Variante A: Neues Kontextmenü im System-Tray / in der macOS-Menüleiste; kleiner, schwebender Schnellerfassungsdialog. In Variante C: Keine GUI-Änderung.
 12. **Datenschutz:** Vollständig lokal; keine Datenübertragung.
 13. **Sicherheit:** Unter macOS erfordert das Abfangen globaler Tastendrücke Bedienungshilfen-Rechte (Accessibility Permissions), was Nutzer misstrauisch machen kann.
 14. **Plattformfolgen:** Unterschiedliche Registrierungsmechanismen unter Windows (Win32 `RegisterHotKey`), macOS (Carbon/Cocoa Event Taps) und Linux (X11 / Wayland). Unter Wayland sind globale Hotkeys restriktiv.
 15. **Datenformatfolgen:** Keine; nutzt atomaren `item_change`-Dateischreibweg in Format 26.
 16. **Auswirkungen auf Glide Shell:** Keine; läuft im Host oder separatem Helfer.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Stärkt Säule 1 (Task Management) und Säule 2 (Day Planning).
-19. **Aufwand mit Begründung:** **M** (ca. 4 Entwicklertage wegen plattformspezifischer Hotkey- und Berechtigungsbehandlung unter macOS und Wayland).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Gedanken können unmittelbar im Entstehen festgehalten werden.
+    - *P2 (Form folgt Funktion):* Schwebendes Erfassungsfeld beschränkt sich auf eine klare Zeile.
+    - *P3 (Keine Funktion doppelt):* `capture_parser.py` wird 1:1 wiederverwendet.
+    - *P4 (Kein Platz verschwenden):* Kein permanenter Bildschirmplatz belegt.
+    - *P5 (Nur das Wesentliche):* Keine ablenkenden Zusatzfelder bei der Erfassung.
+    - *P6 (Geringe Komplexität):* Varianten B und C halten die interne Systemkomplexität minimal; Variante A erhöht sie durch Tray- und Hook-Logik.
+19. **Aufwand mit Begründung:** **M** (ca. 3–4 Entwicklertage für Variante C oder A).
 20. **Risiken:** Berechtigungshürden unter macOS; Hängenbleiben verwaister Tray-Prozesse.
-21. **Wartungsaufwand:** Moderat (Testen bei neuen macOS- und Windows-Releases).
+21. **Wartungsaufwand:** Moderat bei Betriebssystem-Updates.
 22. **Mögliche Kosten:** 0 €.
-23. **Begründete Empfehlung:** **Variante A in Phase 3** umsetzen, sobald der Kern stabil ist. Als rein optionales Zusatzwerkzeug ausliefern.
-24. **Geeignete Entwicklungsphase:** Phase 3.
-25. **Konkrete Akzeptanzkriterien:** 1. Hotkey öffnet schwebendes Eingabefeld in < 150 ms. 2. `Enter` speichert die Aufgabe im Eingang und schließt das Fenster. 3. `Esc` bricht ab.
+23. **Begründete Empfehlung:** **Variante C (CLI-Aufruf) in Phase 2 umsetzen**, da sie zero Hintergrund-Ressourcen verbraucht und mit externen Launchern (Raycast, Alfred, PowerToys) perfekt harmoniert; **Variante A als optionales Hilfsprogramm in Phase 3** evaluieren.
+24. **Geeignete Entwicklungsphase:** Phase 2 (Variante C) / Phase 3 (Variante A).
+25. **Konkrete Akzeptanzkriterien:** 1. Aufruf speichert die Aufgabe im Eingang in < 200 ms. 2. Datumswörter werden korrekt erkannt. 3. Keine GUI-Blockade.
 26. **Erforderliche Inhaberfreigabe:** **Ja (Architektur- und Berechtigungsentscheidung).**
 
 ---
@@ -82,7 +114,21 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Keine.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Berührt Säule 1 (Task Management).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Verlässliche Benachrichtigung nur bei aktiver Anwendung ist ehrlich und transparent.
+    - *P2 (Form folgt Funktion):* Diskreter Erinnerungsdialog, keine aufdringlichen Overlays.
+    - *P3 (Keine Funktion doppelt):* Betriebssystem-Kalender übernehmen die externe Alarmierung besser als ein zweiter Daemon.
+    - *P4 (Kein Platz verschwenden):* Keine persistenten Tray-Icons.
+    - *P5 (Nur das Wesentliche):* Konzentration auf den eigentlichen Arbeitskontext.
+    - *P6 (Geringe Komplexität):* Variante A vermeidet die enorme Komplexität fehleranfälliger OS-Scheduler-Integrationen.
+19. **Aufwand mit Begründung:** **L** für Variante B (ca. 5 Entwicklertage wegen robuster Fehlerbehandlung bei Zeitumstellungen und System-Standby).
+20. **Risiken:** Verwaiste System-Tasks bei gelöschten Aufgaben; Beschwerden über Hintergrund-Aktivität.
+21. **Wartungsaufwand:** Hoch bei Betriebssystem-Updates.
+22. **Mögliche Kosten:** 0 €.
+23. **Begründete Empfehlung:** **Variante A (Status Quo beibehalten).** Die Trennung ist ehrlich und ressourcenschonend. Für Alarme ist der iCalendar-Export der verlässlichere Weg.
+24. **Geeignete Entwicklungsphase:** Zurückgestellt / Phase 4.
+25. **Konkrete Akzeptanzkriterien:** Bestehende Erinnerungen bei laufender App bleiben zu 100 % zuverlässig.
+26. **Erforderliche Inhaberfreigabe:** **Ja (Bestätigung der Grenze Stufe C).**
 19. **Aufwand mit Begründung:** **L** für Variante B (ca. 5 Entwicklertage wegen robuster Fehlerbehandlung bei Zeitumstellungen und System-Standby).
 20. **Risiken:** Verwaiste System-Tasks bei gelöschten Aufgaben; Beschwerden über Hintergrund-Aktivität.
 21. **Wartungsaufwand:** Hoch bei Betriebssystem-Updates.
@@ -115,7 +161,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Zusätzliche externe Kalender-UIDs müssen persistent gespeichert werden.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Berührt Säule 2 (Day Planning).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Manueller Datei-Import (.ics) funktioniert ohne Netzwerk-Abbrüche oder Fehlermeldungen.
+    - *P2 (Form folgt Funktion):* Keine unübersichtlichen Sync-Einstellungsdialoge im Kern.
+    - *P3 (Keine Funktion doppelt):* Kalenderprogramme (Apple Kalender, Thunderbird, Outlook) synchronisieren bereits; Glide muss keinen CalDAV-Client nachbauen.
+    - *P4 (Kein Platz verschwenden):* Keine Sync-Status-Icons oder Verbindungsbalken.
+    - *P5 (Nur das Wesentliche):* Lokale Tagesplanung bleibt im Mittelpunkt.
+    - *P6 (Geringe Komplexität):* Vermeidet hunderte Zeilen fehleranfälligen Netzwerk- und Synchronisations-Code (D01).
 19. **Aufwand mit Begründung:** **XL** (mindestens 10 Entwicklertage für Konfliktlösung, Netzwerkausfall-Handling, Keyring-Integration und Tests).
 20. **Risiken:** Hohe Fehleranfälligkeit bei schlechter Internetverbindung; Konflikte bei gleichzeitiger Änderung auf zwei Geräten; Bruch des Offline-First-Markenkerns.
 21. **Wartungsaufwand:** Sehr hoch.
@@ -138,8 +190,8 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 7. **Differenzierte Untersuchung der Lösungsvarianten:**
    - **Variante A: Bestehender dateibasierter Austausch (Status Quo)**
      - *Mechanismus:* Agent erzeugt `.glideexchange`-Dateien, Nutzer importiert sie manuell über den Glide-Importdialog mit Vorschau, Transaktionssicherung und Undo.
-     - *Vorteile:* 100 % sicher, keine Angriffsfläche, kein Socket- oder Stdio-Server, bewährte Technologie (Format 2).
-     - *Nachteile:* Hoher manueller Klickaufwand; Agent kann den aktuellen Stand nicht direkt einsehen.
+     - *Vorteile:* Bewährte dateibasierte Technologie (Format 2); kein offener Socket-Server; Nutzer behält vor dem Einlesen die volle manuelle Sicht- und Freigabekontrolle.
+     - *Nachteile:* Manueller Klickaufwand; Agent kann den aktuellen Stand nicht direkt automatisiert einsehen.
    - **Variante B: Lokales CLI-Export-Werkzeug (`glide-cli`)**
      - *Mechanismus:* Ein Konsolenbefehl (z. B. `python -m glide.cli export-context`), der Kontextpakete auf die Standardausgabe schreibt oder neue Pakete validiert.
      - *Vorteile:* Einfach zu scripten, kein permanenter Hintergrunddienst.
@@ -147,7 +199,7 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
    - **Variante C: Read-only MCP-Server über `stdio` (Empfohlener Pilot)**
      - *Mechanismus:* Ein autarkes Python-Skript (`src/glide/mcp/server.py`), das als lokaler MCP-Server konfiguriert wird (Start via `stdio` durch Claude Desktop oder Antigravity). Bietet standardisierte Read-Tools an: `list_tasks(status, due)`, `get_project(name)`, `read_page(title)`.
      - *Sicherheit:* **Reiner Lesezugriff.** Der MCP-Server kann niemals Daten in Glide verändern oder löschen.
-     - *Vorteile:* Höchster Komfort für Recherchen und Kontextübergabe bei 100 % garantierter Datenintegrität.
+     - *Vorteile:* Höchster Komfort für Recherchen und Kontextübergabe bei garantierter Datenintegrität.
    - **Variante D: MCP-Server mit strukturierter Vorschlagserzeugung (Proposal Flow)**
      - *Mechanismus:* Ergänzt Variante C um ein Tool `propose_tasks(items)`. Der Agent schreibt diese Aufgaben jedoch nicht direkt in die Datenbank, sondern legt ein signiertes Änderungsvorschlagspaket in Glides Eingangsbereich ab. In Glide erscheint ein dezenter Badge: „1 neuer KI-Änderungsvorschlag“. Der Nutzer prüft die Elemente einzeln (WA-56) und bestätigt die Übernahme.
      - *Vorteile:* Perfekte Symbiose aus modernem MCP-Workflow und Glides unverrückbarem Prinzip der Nutzerkontrolle.
@@ -156,15 +208,21 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
      - *Sicherheitsbewertung:* **Strikte Ablehnung.** Umgeht Glides Transaktionssperren (`guarded_structural_change`), den atomaren Befehlsverlauf (`command_history`), führt zu Race Conditions bei gleichzeitig geöffneter GUI und öffnet Tür und Tor für versehentliche Datenlöschung durch Prompt Injection.
 8. **Option, den bisherigen Stand beizubehalten (Status Quo):** Reine Beibehaltung von Variante A (Agent-Skill `glide-to-do`).
 9. **Technische Abhängigkeiten:** Standard-Bibliotheken oder leichtgewichtiges `mcp`-Python-SDK über `stdio` (JSON-RPC 2.0). Kein Netzwerk-Port (kein HTTP/SSE-Server), ausschließlich lokale Standard-E/A.
-10. **Betroffene Quellmodule:** Neues isoliertes Unterpaket `src/glide/mcp/` (Ebene D), `src/glide/core.py`.
+10. **Betroffene Quellmodule:** Neues isoliertes Unterpaket `src/glide/mcp/` an der Anwendungs- und Schnittstellengrenze (Ebene A), `src/glide/core.py`.
 11. **Auswirkungen auf die Benutzeroberfläche:** In Variante D: Diskreter Eingangs-Indikator für KI-Vorschläge.
-12. **Datenschutz:** Lokale Kommunikation über Prozess-Pipes (`stdin`/`stdout`); Daten verlassen den Rechner ausschließlich in Richtung des vom Nutzer selbst betriebenen LLM-Clients.
+12. **Datenschutz:** Lokale Prozesskommunikation über Standard-E/A-Pipes (`stdio`). **Wichtige Präzisierung:** Werden cloudbasierte LLM-Clients (z. B. Claude Desktop über Anthropic API, Google Antigravity oder OpenAI) angebunden, verlassen die übermittelten Aufgaben und Notizauszüge den Rechner in Richtung der Cloud-Server des jeweiligen Modellanbieters. Ein vollständig isolierter Datenschutz besteht ausschließlich beim Einsatz lokaler Open-Source-Modelle (z. B. via Ollama oder LocalAI).
 13. **Sicherheit:** Exzellent in Variante C und D; katastrophal in Variante E.
 14. **Plattformfolgen:** Plattformübergreifend identisch (Standard-Python `sys.stdin`/`sys.stdout`).
 15. **Datenformatfolgen:** Keine; nutzt die bestehenden Datenabfrageroutinen von Format 26.
 16. **Auswirkungen auf Glide Shell:** Vollkommen entkoppelt von der Framework Shell.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Maximaler Ausbau von Säule 6 (Open Data & AI Exchange).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Standardisiertes Protokoll erleichtert Anbindung an moderne KI-Assistenten ohne proprietäre Skripte.
+    - *P2 (Form folgt Funktion):* Reine Daten- und Tool-Schnittstelle ohne visuelle Überfrachtung.
+    - *P3 (Keine Funktion doppelt):* Nutzt die bestehenden Validierungsregeln aus `ki_ausgabe.py` und das Austauschformat 2.
+    - *P4 (Kein Platz verschwenden):* Keine zusätzlichen permanenten UI-Elemente; diskreter Indikator nur bei vorliegenden Vorschlägen.
+    - *P5 (Nur das Wesentliche):* Tools beschränken sich strikt auf die Kernentitäten (Aufgaben, Notizen, Projekte).
+    - *P6 (Geringe Komplexität):* Variante C (Read-only stdio) hält die Komplexität minimal; Variante E würde extreme Nebenläufigkeits- und Locking-Komplexität erzwingen und wird daher strikt verworfen.
 19. **Aufwand mit Begründung:** **L** (ca. 5 Entwicklertage für Variante C + D inklusive MCP-Tools, JSON-RPC-Parser und Validierung).
 20. **Risiken:** Nutzer könnten erwarten, dass Schreibzugriffe direkt ohne Bestätigung erfolgen; klare Kommunikation der Proposal-Architektur zwingend.
 21. **Wartungsaufwand:** Gering, da JSON-RPC über `stdio` sehr stabil ist.
@@ -197,7 +255,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Keine; nutzt bestehende UUIDs.
 16. **Auswirkungen auf Glide Shell:** `app_host.py` muss URL-Startargumente verarbeiten.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Stärkt Säule 1, 3 und 6.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Klick auf einen externen Verweis öffnet die Aufgabe direkt in Glide.
+    - *P2 (Form folgt Funktion):* Das URL-Schema bildet die interne Datenstruktur transparent ab.
+    - *P3 (Keine Funktion doppelt):* Nutzt die vorhandene UUID-Auflösung aus `references.py`.
+    - *P4 (Kein Platz verschwenden):* Keine zusätzlichen Bedienelemente im Hauptfenster nötig.
+    - *P5 (Nur das Wesentliche):* Beschränkung auf sichere Lese- und Navigationsaktionen (`open`, `show`).
+    - *P6 (Geringe Komplexität):* Schlanker URL-Dispatcher im App-Host ohne externe Frameworks.
 19. **Aufwand mit Begründung:** **M** (ca. 4 Entwicklertage für Installer-Registrierung, IPC-Single-Instance-Signalisierung und Sicherheitshärtung).
 20. **Risiken:** Sicherheitslücken bei ungeprüfter URL-Parameterauswertung; muss strikt auf Lese-/Anzeigeaktionen begrenzt werden.
 21. **Wartungsaufwand:** Gering.
@@ -230,7 +294,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Zusätzliches Datenfeld `extracted_text` in den Metadaten.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Berührt Säule 3 (Personal Knowledge).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Verzicht auf fehleranfällige Hintergrund-OCR verhindert Hänger und Lärm.
+    - *P2 (Form folgt Funktion):* Textnotizen gehören in Markdown-Felder, nicht in unsichtbare OCR-Schichten.
+    - *P3 (Keine Funktion doppelt):* OS-Werkzeuge (Live Text, PowerToys) leisten OCR bereits auf Systemebene.
+    - *P4 (Kein Platz verschwenden):* Keine Fortschrittsbalken oder unfertigen OCR-Texte in Karten.
+    - *P5 (Nur das Wesentliche):* Schützt die Binärgröße (< 20 MB) vor 100+ MB schweren OCR-Modellen.
+    - *P6 (Geringe Komplexität):* Variante A hält den Codebestand frei von nativen C-Bindings und Sprachdateien.
 19. **Aufwand mit Begründung:** **XL** (mindestens 8 Entwicklertage für Paketierung, Sprachmodelle und Performance).
 20. **Risiken:** Explosion der Downloadgröße von 20 MB auf über 100 MB; hohe CPU-/Lüfterlast bei Bildimporten.
 21. **Wartungsaufwand:** Sehr hoch.
@@ -263,7 +333,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Fundamentaler Bruch mit Format 26 (lesbares JSON).
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Berührt Säule 6.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Dateien lassen sich ohne Passwortabfrage oder Krypto-Hänger öffnen.
+    - *P2 (Form folgt Funktion):* Transparentes JSON-Format ermöglicht Reparatur und Inspektion.
+    - *P3 (Keine Funktion doppelt):* Betriebssysteme (FileVault, BitLocker) bieten bereits hardwarenahe Vollverschlüsselung.
+    - *P4 (Kein Platz verschwenden):* Keine modalen Entsperr-Dialoge beim Programmstart.
+    - *P5 (Nur das Wesentliche):* Fokussiert auf Kernfunktionen statt proprietärer Krypto-Verwaltung.
+    - *P6 (Geringe Komplexität):* Schließt C-Erweiterungen (`cryptography`) aus und bewahrt die reine Standardbibliothek.
 19. **Aufwand mit Begründung:** **XL** (mindestens 10 Entwicklertage + Risiko).
 20. **Risiken:** Hohes Risiko von Datenverlust bei Passwortverlust; keine Reparaturmöglichkeit für beschädigte Datenbanken.
 21. **Wartungsaufwand:** Sehr hoch.
@@ -296,7 +372,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Vollständiger Zwang zu Mehrgeräte-Konfliktauflösung (CRDTs).
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine.
-18. **Auswirkungen auf P1–P6:** Verwässert den Fokus.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Kompromisslose Tastatur- und Mausoptimierung auf dem Desktop.
+    - *P2 (Form folgt Funktion):* Desktop-Oberfläche muss sich nicht für kleine Touchscreens verbiegen.
+    - *P3 (Keine Funktion doppelt):* Keine redundanten Apps auf mehreren Plattformen.
+    - *P4 (Kein Platz verschwenden):* Volle Ausnutzung von Desktop-Breiten (Bento-Raster, Mehrspalten-Karten).
+    - *P5 (Nur das Wesentliche):* Volle Konzentration auf das exzellente Desktop-Erlebnis.
+    - *P6 (Geringe Komplexität):* Verhindert mehrjährige Pflege paralleler mobiler Codebasen und Cloud-Syncs.
 19. **Aufwand mit Begründung:** **Astronomisch (mehrere Personenjahre).**
 20. **Risiken:** Scheitern des Gesamtprojekts an den Wartungskosten mobiler Plattformen.
 21. **Wartungsaufwand:** Enorm.
@@ -329,7 +411,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Keine.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Keine (Bento liest Tokens aus dem Host).
-18. **Auswirkungen auf P1–P6:** Stärkt internationale Nutzung.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Benutzeroberfläche spricht die Sprache des Nutzers ohne Nachjustieren.
+    - *P2 (Form folgt Funktion):* Sprachumschaltung erfolgt nahtlos zur Laufzeit (`refresh_sidebar_locale()`).
+    - *P3 (Keine Funktion doppelt):* Zentrale Übersetzungsschlüssel in `i18n.py` ohne Doppelungen.
+    - *P4 (Kein Platz verschwenden):* Sorgfältige Längenprüfung verhindert Überläufe in Menüs und Leisten.
+    - *P5 (Nur das Wesentliche):* Priorität auf vollständige DE/EN-Qualität vor unfertigen Übersetzungen.
+    - *P6 (Geringe Komplexität):* Flache JSON-Kataloge ohne schwere Gettext-Kompilierungsschritte.
 19. **Aufwand mit Begründung:** **M** je Sprache (ca. 2 Entwicklertage für Prüfung, Qualitätssicherung und Schnittstellenanpassung).
 20. **Risiken:** Unvollständige Übersetzungen bei Feature-Updates; erfordert englische Fallbacks für fehlende Schlüssel.
 21. **Wartungsaufwand:** Moderat.
@@ -362,7 +450,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Aufgabenformat 26: Speicherung als Liste mit `list_kind: "habits"`.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Bereicherung des Komponenten-Katalogs.
-18. **Auswirkungen auf P1–P6:** Stärkt Säule 1, 2 und 4.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Gewohnheiten lassen sich mit einem Klick auf den Tagespunkt abhaken.
+    - *P2 (Form folgt Funktion):* Diskrete 7-Tage-Punktematrix ohne visuelle Bestrafung oder Druck.
+    - *P3 (Keine Funktion doppelt):* Nutzt das Aufgaben- und Wiederholungsmodell statt paralleler Datenstrukturen.
+    - *P4 (Kein Platz verschwenden):* Integriert als kompakte Bento-Karte auf der Startseite.
+    - *P5 (Nur das Wesentliche):* Keine künstlichen Levels, Erfahrungspunkte oder Flammen-Icons.
+    - *P6 (Geringe Komplexität):* Leichtgewichtige Komponente im Bento-System.
 19. **Aufwand mit Begründung:** **M** (ca. 3 Entwicklertage).
 20. **Risiken:** Entstehung von psychologischem Druck; muss strikt wohlwollend gestaltet sein.
 21. **Wartungsaufwand:** Gering.
@@ -395,7 +489,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Keine bei Variante A (Aufgabenformat 26 bleibt absolut stabil).
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Optionale Metrik auf der Startseite.
-18. **Auswirkungen auf P1–P6:** Stärkt Säule 1 und 2.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Filterung nach Leistungsfähigkeit über bekannte Farblabels.
+    - *P2 (Form folgt Funktion):* Aufgaben bleiben Aufgaben; Energietags sind freiwillige Kennzeichnungen.
+    - *P3 (Keine Funktion doppelt):* Nutzt das bestehende, mächtige Label-System (`labels.py`) ohne neues Datenfeld.
+    - *P4 (Kein Platz verschwenden):* Keine separaten Eingabefelder im Aufgabeninspektor.
+    - *P5 (Nur das Wesentliche):* Schützt vor Schema-Aufblähung in Format 26.
+    - *P6 (Geringe Komplexität):* Null zusätzliche Persistenzlogik oder Migrationen nötig.
 19. **Aufwand mit Begründung:** **S** für Variante A (ca. 1 Entwicklertag für Vorlagenpflege und Filterhilfe).
 20. **Risiken:** Überfrachtung von Aufgabenmasken durch zu viele Pflichtfelder; Variante A hält die Eingabe freiwillig.
 21. **Wartungsaufwand:** Minimal.
@@ -428,7 +528,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Einstellungsformat 2: Optionales Limit in Benutzereinstellungen.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Bento-Metrik `BentoMetric` kann Auslastungsfarbe anpassen.
-18. **Auswirkungen auf P1–P6:** Stärkt Säule 1 und 2.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Sanfte visuelle Tönung warnt vor Zersplitterung ohne harte Blockaden.
+    - *P2 (Form folgt Funktion):* Zahl der aktiven Aufgaben spiegelt mentale Kapazität wider.
+    - *P3 (Keine Funktion doppelt):* Ergänzt den zeitbasierten Entlastungsdialog um stückzahlbasierte Heuristik.
+    - *P4 (Kein Platz verschwenden):* Dezente Zählererweiterung im bestehenden Spaltenkopf `(4/5)`.
+    - *P5 (Nur das Wesentliche):* Keine zeitraubenden Konfigurationsdialoge; einfache Obergrenze.
+    - *P6 (Geringe Komplexität):* Reine Zählerprüfung im View-Rendering.
 19. **Aufwand mit Begründung:** **S** (ca. 1 Entwicklertag).
 20. **Risiken:** Bevormundung des Nutzers; darf niemals das Anlegen weiterer Aufgaben blockieren.
 21. **Wartungsaufwand:** Minimal.
@@ -461,7 +567,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Keine.
 16. **Auswirkungen auf Glide Shell:** Keine.
 17. **Auswirkungen auf Glide Bento:** Bento-Karten können exportierte PNGs als Header-Illustrationen laden.
-18. **Auswirkungen auf P1–P6:** Maximaler Ausbau von Säule 5 (Creative Tools).
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Gezeichnete Stempel und Icons lassen sich sofort als PNG/GIF exportieren.
+    - *P2 (Form folgt Funktion):* Pixel-Art wird pixelgenau ohne Unschärfe skaliert.
+    - *P3 (Keine Funktion doppelt):* Nutzt den internen Canvas-Puffer direkt für den Byte-Export.
+    - *P4 (Kein Platz verschwenden):* Export-Dialog öffnet sich nur auf Nutzerbefehl.
+    - *P5 (Nur das Wesentliche):* Standardformate PNG und animiertes GIF statt überkomplexer Vektorisierer.
+    - *P6 (Geringe Komplexität):* Reiner Python-Byte-Encoder ohne externe Grafikbibliotheken.
 19. **Aufwand mit Begründung:** **M** (ca. 2–3 Entwicklertage für reinen Python-GIF/PNG-Encoder und Speicherdialog).
 20. **Risiken:** Keine; bewährte Tk-freie Auslagerung.
 21. **Wartungsaufwand:** Gering.
@@ -494,7 +606,13 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 15. **Datenformatfolgen:** Gefahr von Datenkorruption bei fehlerhaften Plugin-Schreiboperationen.
 16. **Auswirkungen auf Glide Shell:** Hohe Architekturkomplexität.
 17. **Auswirkungen auf Glide Bento:** Ermöglicht externe BentoCard-Registrierungen.
-18. **Auswirkungen auf P1–P6:** Berührt alle Säulen.
+18. **Auswirkungen auf Gestaltungsprinzipien P1–P6:**
+    - *P1 (Funktioniert selbstverständlich):* Die Anwendung läuft absolut stabil ohne abstürzende Dritt-Plugins.
+    - *P2 (Form folgt Funktion):* Klare Architektur mit 4 definierten Ebenen (A, B, C, D) statt offener Laufzeit-Mutation.
+    - *P3 (Keine Funktion doppelt):* Framework-Shell und Bento-System werden im Repository gepflegt, nicht fragmentiert.
+    - *P4 (Kein Platz verschwenden):* Keine Plugin-Stores, Download-Manager oder Update-Benachrichtigungen im UI.
+    - *P5 (Nur das Wesentliche):* Bewahrt Glides Kern als verlässliches Monolith-Werkzeug.
+    - *P6 (Geringe Komplexität):* Verhindert API-Fragmentierung, Sandbox-Komplexität und Sicherheitslücken.
 19. **Aufwand mit Begründung:** **XL** (mindestens 15 Entwicklertage für sichere API, Fehlerisolierung und Berechtigungsarchitektur).
 20. **Risiken:** Fragmentierung des Projekts, Supportaufwand durch abstürzende Plugins Dritter, Verlust des Vertrauens in die Datensicherheit.
 21. **Wartungsaufwand:** Extrem hoch.
