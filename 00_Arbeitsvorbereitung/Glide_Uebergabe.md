@@ -1,14 +1,17 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Bento Box System implementiert (D100, Branch `feature/glide-bento-system`) · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Veröffentlichter Prerelease v1.0.2 auf GitHub · Bento Box System auf main integriert (D100, PR #196)
 
-Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
+Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
-**Aktueller Stand (24.11.2026):** Der Branch `feature/glide-bento-system` implementiert das **Glide Bento Box System 0.1.0** (Ebene B, D100). Es führt eine saubere Dreischichtenarchitektur ein (Ebene A: Glide-Anwendung -> Ebene B: Bento-Komposition `glide_bento` -> Ebene C: Framework Shell `glide_shell`). Die Schicht B ist vollständig frei von Fachlogik, Farben oder Host-Singletons und kann isoliert in Folgeprojekten wiederverwendet werden. Die Startseite von Glide (`render_home`, `home_column_count`) nutzt BentoLayoutPlanner und BentoCard unter vollständiger Wahrung der 100%igen Abwärtskompatibilität (Format 26, Nutzereinstellungen, Render-Retention und Kachelauswahl). 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py` sowie die neuen Bento-Suiten T341–T344 und der autonome 13/13 Selbsttest sind grün.
+**Aktueller Stand (24.11.2026):**
+1. **Veröffentlichter Release:** Der erste öffentliche Prerelease **Glide 1.0.2** (Tag `v1.0.2`, Commit `7dcd8dc04366f88943fa17827882cef4d81421b8`) ist auf GitHub mit 5 verifizierten Hauptartefakten (Windows x64 Setup & Portable, macOS arm64 DMG & TAR, Agent-Skill ZIP) publiziert.
+2. **Integrierter Entwicklungsstand (main, Glide 1.0.2, V1.87):** PR #196 hat das **Glide Bento Box System 0.1.0** (Ebene B, D100) integriert: Saubere Dreischichtenarchitektur (Ebene A: Glide-Anwendung -> Ebene B: Bento-Komposition `glide_bento` -> Ebene C: Framework Shell `glide_shell`). Die Startseite von Glide (`render_home`, `home_column_count`) nutzt BentoLayoutPlanner und BentoCard unter vollständiger Wahrung der 100%igen Abwärtskompatibilität (Format 26, Nutzereinstellungen, Render-Retention und Kachelauswahl).
+3. **Qualitätssicherung:** 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, die neuen Bento-Suiten T341–T344 sowie der autonome 13/13 Selbsttest sind grün.
 
 ---
 
-### Glide Bento Box System 0.1.0 (D100, Ebene B, 24.11.2026)
+### Glide Bento Box System 0.1.0 (D100, Ebene B, Glide 1.0.2, 24.11.2026)
 
 - **Schichtenarchitektur & Unabhängigkeit (D100):** Einführung von `glide_bento` als wiederverwendbare Ebene B zwischen Glide-Anwendung (Ebene A) und Framework Shell (Ebene C). `glide_bento` importiert keine Module aus Ebene A (erzwungen durch T341).
 - **Komponentenbibliothek:** Universelle abgerundete Karten (`BentoCard`, `BentoHeader`), adaptive Inhaltsbausteine (`BentoMetric`, `BentoActions`, `BentoEmptyState`, `BentoDivider`). Volle Unterstützung für Tastaturfokus, Barrierefreiheit, Tooltips und Glass-Backdrop-Effekte.
@@ -25,7 +28,7 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
 > - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.2 mit Demonstrationshost, Referenzhost (T337), Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
-> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+> - **Etappe 4: Release & Veröffentlichung:** ✅ Erster öffentlicher Prerelease v1.0.2 veröffentlicht (23.11.2026, Tag `v1.0.2`); Homebrew/winget-Vorlagen mit verifizierten Prüfsummen vorbereitet; Einreichung bleibt nach Tor I3 (D43) dem Inhaber vorbehalten.
 >
 > **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 

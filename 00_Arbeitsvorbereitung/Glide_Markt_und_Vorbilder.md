@@ -15,7 +15,7 @@
 
 **Erweiterung 21.10.2026:** Die frische Konkurrenz-, Komponenten- und Integrationsuntersuchung steht in [§12](#12-erweiterte-recherche-vom-21102026). Die älteren Abschnitte behalten ihre Abrufdaten. Aktuelle Glide-Restlücken ergeben sich aus dem [Roadmap-Abgleich](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), nicht aus den historischen „fehlt“-Spalten des Vorzustands. Neue Integrationen werden auf ausdrücklichen Wunsch erneut bewertet; daraus folgt keine Aktivierung von Netzwerkzugriff oder eine stillschweigende Änderung der bisherigen Kernentscheidungen.
 
-Stand 23.11.2026 · Glide 1.0.2 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
 
 Zusammengeführt am 18.10.2026. Dieses Dokument ist die einzige aktuelle Wettbewerbsquelle. Es konsolidiert die Hersteller-Matrix vom 01.10., die Vertiefungen vom 05.–13.10. und die Notion-Bildauswertung vom 15.10.2026. Frühere Fassungen liegen in Git. Aufgaben, Paketfolge und Auswahl stehen ausschließlich im [Entwicklungsplan](Glide_Entwicklungsplan.md), technische Befunde und Nutzungsszenarien in der [Analyse](Glide_Analyse.md); bestätigte Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Dieser Analyseauftrag setzt keine neuen Produktentscheidungen um.
 
@@ -887,3 +887,84 @@ Auftrag des Inhabers vom 16.11.2026: Recherche, wie aufwendig ein Glide-Skill f�
 3. **Ausbaufähigkeit kommt aus der Quelle, nicht aus dem Skilltext.** Hand gepflegte Feldlisten veralten mit jeder Glide-Version. Glide erzeugt seine KI-Anleitung bereits aus den Konstanten; derselbe Weg soll die Skill-Referenzen erzeugen und in der CI prüfen (Analyse §13.39, Paket K2).
 4. **Wettbewerb:** Agentenzugriff wird Standard (§16). Glides Abstand bleibt der geprüfte Import ohne stilles Überschreiben und ohne Konto. Ein Skill, der in jedem gängigen Agenten Glide-Dateien erzeugt, ist dazu ein sichtbarer Mehrwert ohne Produktgrenzenbruch.
 5. **Grenzen der Recherche:** Pfade und Zählungen der Sekundärquellen sind nicht beim Hersteller bestätigt. Vor einer veröffentlichten Installationsanleitung je Agent die Herstellerdokumentation erneut prüfen (Paket K5).
+
+---
+
+## 18. Post-Release Wettbewerbsabgleich und strategische Marktpositionierung (Glide 1.0.2, 24.11.2026)
+
+Der erfolgreiche erste öffentliche Prerelease von Glide 1.0.2 erfordert eine Schärfung der Marktpositionierung und eine systematische Einordnung gegenüber den vier wichtigsten Referenzprodukten der aktuellen Produktivitätslandschaft:
+
+### 18.1 Vertiefte Analyse der vier Kern-Wettbewerber
+
+#### 1. Super Productivity (Open Source, Local-First Aufgaben & Zeit)
+- **Offizielle Quellen:** <https://super-productivity.com/>, <https://github.com/johannesjo/super-productivity>
+- **Profil:** Open-Source-Desktop-Anwendung (Electron/Angular) für Aufgabenverwaltung, Timeboxing, Zeiterfassung und Integration in Entwicklerwerkzeuge (Jira, GitHub, GitLab). Komplett offline ohne Konto.
+- **Stärken:** Transparente Zeiterfassung, Pomodoro-Timer, Soll-Ist-Zeitvergleich, keine Registrierung, Synchronisation über WebDAV/Dropbox.
+- **Grenzen gegenüber Glide:** Hohe Bedien- und Konfigurationskomplexität, stark technisch-tabellarische Benutzeroberfläche, keine formatierten Notizseiten/Dokumente, keine visuellen Pinnwände (Canvas), keine kreative Pixel-Werkstatt.
+- **Lehren für Glide:** Transparente Zeiterfassung und der Soll-Ist-Schätzvergleich (WA-08) sind starke Treiber für Entwickler und Freelancer. Glides ruhigere Typografie und integrierte Wissensseiten bieten einen spürbar menschlicheren Arbeitsplatz.
+
+#### 2. Things 3 (Cultured Code, Reduktion & Klarheit)
+- **Offizielle Quelle:** <https://culturedcode.com/things/>
+- **Profil:** Proprietäre macOS-/iOS-Aufgabenverwaltung mit kompromissloser visueller Reduktion und eleganter Interaktionshierarchie.
+- **Stärken:** Gestalterische Ruhe, klare Trennung von Arbeitsdatum (Heute) und Fälligkeit (Deadline), reibungslose Schnellerfassung, natürliche Datumseingaben, geringe kognitive Belastung.
+- **Grenzen gegenüber Glide:** Ausschließlich Apple-Ökosystem (kein Windows/Linux), proprietäres Datenformat ohne offenen Dateizugriff, keine formatierten Dokumente jenseits kurzer Notizfelder, keine visuellen Boards, kein offener Datenaustausch via Markdown/JSON Canvas, keine Agent-Skills.
+- **Lehren für Glide:** Reduktion und Informationshierarchie sind Glides Vorbild für P1–P6. Die mit Glide 1.0.2 eingeführten natürlichen Datumswörter und der adaptive Titelbildzuschnitt folgen genau dieser Schule, jedoch plattformübergreifend und mit voller Datenhoheit.
+
+#### 3. Sunsama (Geführte Tagesplanung & Achtsamkeit)
+- **Offizielle Quellen:** <https://www.sunsama.com/>, <https://help.sunsama.com/>
+- **Profil:** Premium-Planer (Abonnement ~20 $/Monat) für Wissensarbeiter mit täglichem geführten Planungs- und Reflexionsritual.
+- **Stärken:** Realistische Arbeitszeitplanung mit Pufferzeiten, Überlastungswarnungen, Frage „Morgen planen oder heute verlängern?“, Zusammenführung von Kalenderterminen und Aufgaben.
+- **Grenzen gegenüber Glide:** Teures Abonnementmodell, zwingender Cloud-Account, proprietäre Plattform, keine lokalen Notizbücher/Dokumente, keine visuellen Pinnwände, keine kreativen Werkzeuge, keine Offline-Datenhoheit.
+- **Lehren für Glide:** Glides Tageskapazität (WA-12) und Entlastungsdialog bieten bereits die Grundsteine dieses Ablaufs. Mit dem WA-12-Rest (Pufferzeiten, Spätstart-Frage) kann Glide denselben kognitiven Schutz bieten – dauerhaft kostenlos, lokal und ohne Kontozwang.
+
+#### 4. Obsidian (Personal Knowledge Management & Canvas)
+- **Offizielle Quellen:** <https://obsidian.md/>, <https://help.obsidian.md/>, <https://jsoncanvas.org/>
+- **Profil:** Lokale Markdown-Wissensdatenbank mit Canvas-Leinwand, Plugin-Ökosystem und bidirektionalen Verknüpfungen.
+- **Stärken:** Reines Dateiformat (Markdown), offener Canvas-Standard, riesiges Ökosystem, tiefe Wissensorganisation.
+- **Grenzen gegenüber Glide:** Reine Textdateien erfordern Plugins (Dataview, Tasks) für Aufgaben- und Tagesplanung; keine integrierte Kapazitätsplanung, kein nativer Kalendertagesablauf ohne Skripting, keine Zeichenwerkzeuge ohne Drittanbieter-Plugins, hohe Einstiegshürde.
+- **Lehren für Glide:** Glide bietet JSON Canvas 1.0 Export (WA-07) und Fundortübersichten (WA-21), um sich nahtlos in diesen Denkstil einzuklinken. Glide ist jedoch sofort ohne Plugin-Bastelei einsatzbereit („out-of-the-box calmness“).
+
+---
+
+### 18.2 Qualitative Positionierungsmatrix
+
+| Dimension | Glide 1.0.2 | Super Productivity | Things 3 | Sunsama | Obsidian |
+|---|---|---|---|---|---|
+| **Datenmodell** | Lokale JSON-Dateien & offene Exporte | Lokale IndexedDB / WebDAV | Proprietäre Cloud / SQLite | Cloud (proprietär) | Lokale Markdown-Dateien |
+| **Aufgaben- & Tagesplanung** | **Hoch** (Kapazität, Heute, Entlastung) | **Hoch** (Zeiterfassung, Timeboxing) | **Sehr hoch** (Heute, Geplant, Deadlines) | **Sehr hoch** (Geführter Ablauf, Puffer) | Gering (benötigt Plugins) |
+| **Wissens- & Dokumentorganisation** | **Mittel–Hoch** (Seiten, Notizen, Bücher) | Sehr gering (nur Aufgabennotizen) | Gering (einfache Notizen) | Gering (Aufgabenkontext) | **Sehr hoch** (Verknüpfte Markdown-Vaults) |
+| **Visuelle Arbeitsfläche (Canvas)** | **Mittel–Hoch** (Pinnwand, JSON Canvas 1.0) | Keine | Keine | Keine | **Sehr hoch** (JSON Canvas) |
+| **Kreativwerkzeuge** | **Einzigartig** (Pixel-Werkstatt, Sprites) | Keine | Keine | Keine | Keine (nur über Plugins) |
+| **KI-Zusammenarbeit** | **Dokumentbasiert** (Agent-Skill, Safe Import) | Keine | Keine | Cloud-KI | Community-Plugins / MCP |
+| **Plattformen** | Windows, macOS, Linux (Quellstart) | Windows, macOS, Linux, Web, Mobile | macOS, iOS, iPadOS, watchOS | Web, Desktop, Mobile | Windows, macOS, Linux, Mobile |
+| **Kosten & Lizenz** | **Kostenlos, Open Source (MPL-2.0)** | Kostenlos, Open Source (MIT) | Einmalkauf (~80 $ gesamt) | Abonnement (~240 $/Jahr) | Kostenlos für privat (proprietär) |
+| **Kognitive Ruhe & Einfachheit** | **Sehr hoch** (P1–P6, keine Telemetrie) | Mittel (viele Metriken/Knöpfe) | **Sehr hoch** (Maßstab für Ruhe) | Hoch (aber ständige Erinnerungen) | Gering (Konfigurationsaufwand) |
+
+---
+
+### 18.3 Strategische Zielgruppen & Nutzenargumentation
+
+1. **Kreative, Designer & Illustratoren (Priorität: Sehr hoch):**
+   - *Problem:* Zerrissenheit zwischen gestalterischen Notizen, Aufgaben und Moodboards; Tools wie Notion sind oft überladen und träge.
+   - *Nutzenversprechen:* Aufgaben, visuelle Pinnwände, Notizseiten und die integrierte Pixel-Werkstatt an einem Ort. Eigene Cover und Eckstempel visualisieren den Arbeitsstand.
+   - *Hürden:* Gatekeeper/SmartScreen-Warnungen bei der Erstinstallation; fehlende Stiftunterstützung auf Tablets.
+
+2. **Freelancer & Selbstständige (Priorität: Sehr hoch):**
+   - *Problem:* Unklare Tageskapazitäten, Überbuchung durch Kundentermine, Zersplitterung über mehrere Tools.
+   - *Nutzenversprechen:* Realistische Tagesplanung, Entlastungsdialog, Projekt-Notizbücher und lückenlose Fundortübersicht ohne monatliche Abokosten.
+   - *Hürden:* Fehlender direkter Zeiterfassungs-Soll-Ist-Export (Adressiert durch WA-08).
+
+3. **Persönliche Produktivitätsnutzer & Minimalisten (Priorität: Hoch):**
+   - *Problem:* Zwang zu Benutzerkonten, Cloud-Lock-in und datenhungriger Telemetrie bei kommerziellen Planern.
+   - *Nutzenversprechen:* 100% offline, kein Konto, portable Installation auf USB-Stick oder Netzlaufwerk, garantierter Datenschutz.
+   - *Hürden:* Keine mobile Begleit-App (Synchrone Nutzung erfordert Disziplin beim Schließen und Ordnersynchronisieren).
+
+4. **Entwickler & Power-User (Priorität: Hoch):**
+   - *Problem:* Proprietäre Datenformate verhindern Skripting und automatisierte Dokumentation.
+   - *Nutzenversprechen:* Lokale Text- und JSON-Dateien, Export nach Markdown und JSON Canvas 1.0, dokumentbasierter `glide-to-do` Agent-Skill für LLMs (Claude, Codex, Gemini).
+   - *Hürden:* Quellstart unter Linux erfordert Python 3.14/Tk 9 für volle Native-Erfahrung.
+
+5. **Studierende & Wissensarbeiter (Priorität: Mittel):**
+   - *Problem:* Trennung von Vorlesungsnotizen, Hausarbeiten und täglichen Abgabefristen.
+   - *Nutzenversprechen:* Strukturierte Notizbücher mit Bearbeitungszeiten, Checklisten und Fundortübersichten in einem ruhigen Fenster.
+   - *Hürden:* Keine hierarchischen Unterseiten (D05 bleibt bewusste Grenze).

@@ -77,15 +77,20 @@ Die vollständige Bedienbeschreibung und Funktionsgrenzen stehen im [Handbuch](0
 
 ## Herunterladen
 
-**Ein öffentlicher Release-Download ist noch nicht freigegeben.** Die geprüften Actions-Artefakte sind Entwicklungsbauten, erfordern eine GitHub-Anmeldung und sind kein Ersatz für ein veröffentlichtes Installationspaket.
+Glide 1.0.2 ist als offizieller **öffentlicher Prerelease** unter [GitHub Releases (v1.0.2)](https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.2) verfügbar. Die eigenständigen Pakete bündeln Python, Tk, Schriften und Abhängigkeiten; eine separate Python-Installation ist für die Binärpakete nicht erforderlich.
 
-| Plattform | Derzeit verfügbar | Hinweise |
-|---|---|---|
-| Windows x64 | Prüf- und Paket-Artefakte in [GitHub Actions](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) | Anmeldung erforderlich; kein öffentlicher Installer |
-| macOS Apple Silicon | [Prüf- und Paketstand](01_Repository/Glide/docs/07_QA_BERICHT.md) | Kein öffentlich freigegebenes Paket |
-| Linux | [Python-Quellstand](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand) | Python 3.14 und Tk erforderlich; kein eigenständiges Paket |
+| Plattform | Download-Asset | Größe | Hinweise |
+|---|---|---|---|
+| **Windows 10/11 (x64)** | [Glide-1.0.2-windows-x64-setup.exe](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-windows-x64-setup.exe) | ~17,0 MB | Setup-Assistent (installiert unprivilegiert nach `%LOCALAPPDATA%\Programs\Glide`) |
+| **Windows 10/11 (x64)** | [Glide-1.0.2-windows-x64.zip](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-windows-x64.zip) | ~19,5 MB | Portables Archiv (entpacken und `Glide.exe` direkt starten) |
+| **macOS (Apple Silicon, arm64)** | [Glide-1.0.2-macos-arm64.dmg](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-macos-arm64.dmg) | ~20,7 MB | Festplattenabbild (`Glide.app` in `/Applications` ziehen) |
+| **macOS (Apple Silicon, arm64)** | [Glide-1.0.2-macos-arm64.tar.gz](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-macos-arm64.tar.gz) | ~18,2 MB | Portables Tarball-Archiv |
+| **Agent-Skill** | [glide-to-do-skill-v1.0.2.zip](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/glide-to-do-skill-v1.0.2.zip) | ~39 KB | Dokumentbasierter Austausch-Skill für KI-Entwicklungsagenten |
+| **Linux (x64 / arm64)** | [Quellstart](#schnellstart-und-systemanforderungen) | — | Python 3.14 + Tk 9 empfohlen; derzeit kein Standalone-Paket |
 
-Wenn ein öffentlicher Download freigegeben ist, erscheint er unter [Releases](https://github.com/n05a-design/glide-to-do/releases). Prüfe dort Version, Plattform, Prüfsumme und Signaturhinweise.
+> [!NOTE]
+> **Prerelease- und Signaturhinweise:** Kommerzielle EV- und Apple-Developer-ID-Zertifikate sind bis zum Aufbau eines breiteren Softwarekatalogs zurückgestellt (Entscheidung I3 / D43). Unter macOS erfordert Gatekeeper beim Erststart das Öffnen über **Systemeinstellungen › Datenschutz & Sicherheit › Dennoch öffnen** oder den Terminalbefehl `xattr -cr /Applications/Glide.app`. Unter Windows im SmartScreen-Dialog auf **Weitere Informationen › Trotzdem ausführen** klicken.
+> Alle Downloads können über die offiziellen SHA-256-Prüfsummen kryptographisch verifiziert werden; siehe [Installationsanleitung](01_Repository/Glide/docs/user-guide/02-installation.md).
 
 ## Schnellstart und Systemanforderungen
 

@@ -4,7 +4,7 @@
 # sha256 ist ein Platzhalter: Wert aus Glide-<v>-macos-arm64.dmg.sha256 eintragen.
 cask "glide" do
   version "1.0.2"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc"
 
   url "https://github.com/n05a-design/glide-to-do/releases/download/v#{version}/Glide-#{version}-macos-arm64.dmg"
   name "Glide"
@@ -14,6 +14,8 @@ cask "glide" do
   livecheck do
     url :url
     strategy :github_latest
+    # Hinweis: Bei GitHub-Prereleases greift :github_latest erst, sobald ein volles
+    # Stable-Release publiziert wird. Alternativ kann auf GitHub-Releases geprüft werden.
   end
 
   depends_on arch: :arm64

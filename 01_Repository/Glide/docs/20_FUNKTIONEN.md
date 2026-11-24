@@ -4,16 +4,40 @@
 
 **Dokumentationsbezug:** Hier steht das Bedienverhalten. Modul-/Testzuordnung und Wiederverwendung gehören ins [Glide-System](../src/glide/README.md); die [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet Funktionsänderungen mit Roadmap, Architektur, Prüfungen und öffentlichen Texten.
 
-## Einstieg in Glide 1.0.2
+## Einstieg und Funktionsumfang von Glide 1.0.2
 
-- **Glide Bento Box System 0.1.0 & Startseite (D100):** Die Startseite (`render_home`) basiert auf dem wiederverwendbaren Bento Box System (`glide_bento`). Der deterministische `BentoLayoutPlanner` ordnet Inhaltskarten flüssig in ein responsives Raster ein: 1 Spalte bei `< 616 px`, 2 Spalten zwischen `616 px` und `931 px` und 3 Spalten ab `932 px`. Breitenkarten (`span="wide"` / `variant="full_width"`) wie Begrüßung und Kernstatistiken spannen sich über die volle Breite oberhalb der Spalten. Kartenanatomie (`BentoCard`), Header (`BentoHeader`), Kennzahlen (`BentoMetric`), Aktionen (`BentoActions`), Leerstände (`BentoEmptyState`) und Trenner (`BentoDivider`) arbeiten unter voller Erhaltung der Widget-Retention (bestehende Knöpfe und Tastaturfokus bleiben bei Aktualisierungen stabil erhalten).
-- **Detailverbesserungen in 1.0.2:** Dynamischer Sprachwechsel der Seitenleistentitel (`refresh_sidebar_locale()`) ohne Neustart, proportional adaptiver Titelbild-Zuschnitt ohne vertikale Verzerrung, Pixel-Zeichnungen als kompakter 56px-Eckstempel im Editor, einzeilige Fußleistendichte bei Mindestbreite, kollisionsfreier Bild- und Tabellenumfluss sowie direkte Erkennung natürlicher Datumswörter („today“, „heute“, „tomorrow“, „morgen“) im Fälligkeitsfeld.
-- **Neu in 1.0.1:** Die ganze Oberfläche, das Handbuch, Austauschformat, Systemlabels, Vorlagen, Startseite, KI-Ausgabe und die Neuerungen gibt es auf Deutsch und Englisch; die Schnellerfassung versteht auch englische Eingabewörter. Geöffnete Seiten zeigen im Kopf ihre Bearbeitungszeit. Der Showcase „Stadtlicht“ führt mit eigenen Fotos durch alle Funktionen.
+Glide ist ein lokaler Desktop-Arbeitsplatz, der Aufgabenverwaltung, Tagesplanung, Notizen, visuelle Pinnwände und integrierte Pixel-Zeichnungen nahtlos miteinander verknüpft. Das Dokument beschreibt das tatsächliche Bedienverhalten.
 
-- **Tagesplanung:** [Tageskapazität und Entlastung](#tageskapazität-und-entlastung-seit-3550) erklärt Aufgabenaufwand, Kalenderbelegung und Umplanung.
-- **Verknüpfte Inhalte:** [Fundorte und JSON-Canvas-Export](#fundortübersicht-json-canvas-10-und-themengerechte-steuerelemente-3540-10112026) beschreibt Navigation zu Verwendungen und offenen Pinnwandexport.
-- **Neuerungen nach dem Update:** Auf der Startseite zeigt „Neu in Glide <Version>“ in der Oberflächensprache die seit dem letzten bestätigten Stand hinzugekommenen Einträge aus höchstens drei Versionen. „Gelesen“ blendet die Karte aus. Unter Hilfe › Über Glide › Neuerungen bleibt die Versionshistorie aufrufbar.
-- **Daten und Wiederherstellung:** Die [Anleitung für Daten und Backups](06_DATA_BACKUP_MIGRATION.md) beschreibt Speicherorte, Sicherung, Wiederherstellung und Austausch. Die [Praxisanleitung für Vorlagen](27_VORLAGEN_PRAXISANLEITUNG.md) erklärt die getrennte Vorlagenablage.
+### Funktionsüberblick im veröffentlichten Release 1.0.2
+
+- **Vollständige Zweisprachigkeit (DE/EN, D93):** Die gesamte Benutzeroberfläche, Dialoge, Inspektoren, Tastaturkürzel, Statusmeldungen, das Benutzerhandbuch, Systemvorlagen und der Showcase „Stadtlicht“ stehen auf Deutsch und Englisch zur Verfügung. Die Schnellerfassung und Datumsfelder erkennen natürliche Zeitwörter in beiden Sprachen („today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“).
+- **Dynamischer Sprachwechsel:** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in den Einstellungen unmittelbar ohne Anwendungsneustart.
+- **Erweitertes Dokumenten-Layout:** Proportional adaptiver Titelbild-Zuschnitt (`make_page_cover(..., adaptive=True)`) ohne vertikale Bildverzerrung, Pixel-Zeichnungen als kompakter 56px-Eckstempel im Notizkopf, kollisionsfreier Wortumbruch bei Bild- und Tabellenumfluss (`imgflow:right`, `cornerflow`).
+- **Responsive Fußleistendichte:** `sync_foot_density()` hält die Fußzeile selbst bei Mindestfensterbreite (860 px) sauber einzeilig.
+- **Tagesplanung & Kapazität (WA-12):** Transparente Tageskapazitätsanalyse mit ungeschätzter Aufgabenerfassung, Überlastungserkennung und geführtem Entlastungsdialog.
+- **Verknüpfte Inhalte & Fundortübersicht (WA-21 / D78):** Lückenlose Fundortnavigation über acht Verwendungsarten (Container, Referenzen, Textlinks, Aufgabenzeilen, Live-Listen, Relationen, Pinnwandkarten, Erwähnungen) mit Sprung in Haupt- oder Nebenansicht.
+- **Offener Pinnwand-Export (WA-07 / D78):** Export von Pinnwänden in das offene Format JSON Canvas 1.0 (`.canvas`) mit detailliertem Verlustbericht.
+- **Datensicherheit & Offline-Betrieb:** Automatische atomare Wechselsicherungen, Papierkorb mit bis zu 200 Einträgen, 20-stufiges In-Memory-Redo, ZIP-basierter Agentenaustausch (`.glideexchange`).
+
+### Nachfolgeentwicklung auf dem aktuellen Entwicklungsstand (main, V1.87)
+
+- **Glide Bento Box System 0.1.0 (D100, Ebene B):** Die Startseite (`render_home`) basiert auf der modularen Kompositionsbibliothek `glide_bento`. Der deterministische `BentoLayoutPlanner` ordnet Inhaltskarten flüssig in ein responsives Raster ein: 1 Spalte bei `< 616 px`, 2 Spalten zwischen `616 px` und `931 px` und 3 Spalten ab `932 px`. Breitenkarten (`span="wide"` / `variant="full_width"`) wie Begrüßung und Kernstatistiken spannen sich über die volle Breite oberhalb der Spalten. Kartenanatomie (`BentoCard`), Header (`BentoHeader`), Kennzahlen (`BentoMetric`), Aktionen (`BentoActions`), Leerstände (`BentoEmptyState`) und Trenner (`BentoDivider`) arbeiten unter voller Erhaltung der Widget-Retention.
+
+### Thematische Navigation
+
+- [§1 Grundbegriffe](#1-grundbegriffe) – Arten von Inhalten, Status, Fälligkeiten und Arbeitsprinzipien.
+- [§2 Seitenleiste und Navigation](#2-seitenleiste-und-navigation) – Systemzeilen, Abschnitte, Baumstruktur und Kompaktleiste.
+- [§3 Erfassen](#3-erfassen) – Schnellerfassung, natürliche Datumswörter, Titelbegrenzungen und Eingaberegeln.
+- [§4 Heute, Demnächst und Planung](#4-heute-demnächst-und-planung) – Tages- und Wochenplanung, Kalender und Kapazität.
+- [§5 Liste, Tabelle, Gruppierung](#5-liste-tabelle-gruppierung) – Arbeitsansichten, Sortierung, Filter und Mehrfachbearbeitung.
+- [§6 Pinnwand](#6-pinnwand) – Freie Arbeitsfläche, Kärtchen, Verbindungen und JSON Canvas 1.0.
+- [§7 Startseite](#7-startseite) – Bento-Raster, Kacheln, Gismo und Anpassung.
+- [§8 Seiten, Notizen, Notizbuch, Galerie](#8-seiten-notizen-notizbuch-galerie) – Dokumente, Textblöcke und Bildersammlungen.
+- [§9 Pixel-Werkstatt](#9-pixel-werkstatt) – Zeichenfläche, Werkzeuge, Raster und Farbfelder.
+- [§10 Suche und Befehlspalette](#10-suche-und-befehlspalette) – Schnelle Navigation und Tastaturbedienung.
+- [§11 Import, Ausgabe und Austausch](#11-import-ausgabe-und-austausch) – Markdown, CSV, ICS, JSON Canvas und Agenten-Skill.
+- [§12 Sicherungen und Wiederherstellung](#12-sicherungen-und-wiederherstellung) – Automatische Backups und Reimport.
+- [§13 Bekannte Grenzen](#13-bekannte-grenzen) – Bewusste Produktgrenzen und Systemvoraussetzungen.
 
 ## Technische Grundlage für Folgeprojekte
 

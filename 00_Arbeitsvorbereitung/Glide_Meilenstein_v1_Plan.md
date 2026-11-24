@@ -1,8 +1,8 @@
 # Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.2)
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung; diese Schritte bleiben dem Inhaber vorbehalten.
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Erster öffentlicher Prerelease v1.0.2 am 23.11.2026 veröffentlicht; Homebrew/winget-Einreichung bleibt nach Tor I3 dem Inhaber vorbehalten.
 
-Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
+Dieser Plan dokumentiert den strategischen Schnittpunkt (Feature Freeze / D93) sowie die erfolgreiche Umsetzung und Veröffentlichung des ersten öffentlichen Prereleases **Glide 1.0.2** (Tag `v1.0.2`, 23.11.2026). Die technischen Vorlagen für Paketmanager (Homebrew, winget) sind mit verifizierten Prüfsummen vorbereitet; ihre Einreichung in externe Kataloge bleibt nach Inhaberentscheidung I3 (D43) dem Inhaber vorbehalten. Nachfolgende Weiterentwicklungen (Glide Bento Box System 0.1.0, V1.87) gehören zur Post-1.0-Roadmap.
 
 Tracking-Issue: [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129)
 
@@ -48,10 +48,11 @@ flowchart TD
    - **Homebrew:** Cask `packaging/homebrew/Casks/glide.rb` im Repository `n05a-design/homebrew-glide`.
    - **winget:** Manifeste `packaging/winget/manifests/s/Shaye/Glide/` für `winget install Shaye.Glide`.
    - Ist: Versionierte Vorlagen sind im Repository vorhanden; ohne öffentliches Release wurden sie nicht in den Tap bzw. das winget-Repository eingereicht.
-5. **Qualität und Freigabe (✅ geprüft; Release offen):**
-   - PR #138 wurde am 18.11.2026 nach `main` gemergt; die Grundstufe, CodeQL sowie Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem geprüften PR-Head erfolgreich.
-   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Seit 22.11.2026 sind auch die manuell zu startenden UI-Diagnosen und die nativen AT-SPI-/MSAA-Prüfungen auf `main` grün; die echte Screenreader-Sprachausgabe (Orca, NVDA) bleibt zurückgestellt. Offen bleibt die menschliche Sicht-/Bedienabnahme.
-   - Am 18.11.2026 wurden weder GitHub-Release noch Git-Tags gefunden. Öffentliche Freigabe und Paketmanager-Einreichungen sind nicht erfolgt.
+5. **Qualität und Freigabe (✅ Erster öffentlicher Prerelease veröffentlicht):**
+   - Der Quellstand 1.0.2 wurde auf Commit `7dcd8dc04366f88943fa17827882cef4d81421b8` am 23.11.2026 als Git-Tag `v1.0.2` und öffentlicher GitHub-Prerelease mit Windows- und macOS-Paketen veröffentlicht (Workflow #45262980791).
+   - Die Grundstufe, CodeQL sowie Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem Release-Kandidaten erfolgreich.
+   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Seit 22.11.2026 sind auch die manuell zu startenden UI-Diagnosen und die nativen AT-SPI-/MSAA-Prüfungen auf `main` grün; die echte Screenreader-Sprachausgabe (Orca, NVDA) bleibt zurückgestellt. Die menschliche Sicht- und Bedienabnahme wurde am 23.11.2026 positiv bestätigt.
+   - Öffentliche Paketmanager-Einreichungen (Homebrew, winget) bleiben nach Inhabervorbehalt Tor I3 (D43) zurückgestellt, bis kommerzielle Codesignatur-Zertifikate vorliegen. Die Vorlagen im Repository sind vollständig vorbereitet.
 
 > [!NOTE]
 > **Glide Shell abgeschlossen:** Das Unterpaket `glide_shell` (Shell 0.6.2) mit Demonstrationshost, Referenzhost (T337), Selbsttest (13/13, T333), Anleitung, KI-Handbuch und den Bausteinen aus D94–D98 ist in V1.65–V1.69 geliefert; WA-49 (importfreie App-Schicht) ist mit V1.83 abgeschlossen; Befehlsverlauf und App-Host schließen mit V1.84 die Konzeptphasen 4 und 5 (D99), dazu eine Anleitung für KI-Agenten in neuen Projekten. Weitere Shell-Arbeit entsteht nur noch aus konkretem Bedarf eines Folgeprojekts.

@@ -10,9 +10,69 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 auf `feature/glide-bento-system` · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
+Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
-**Aktueller Stand (24.11.2026):** Auf dem Branch `feature/glide-bento-system` wurde das **Glide Bento Box System 0.1.0** (Ebene B, D100) implementiert: Universelle BentoCard, BentoHeader, responsive BentoGrid, Inhaltskomponenten (BentoMetric, BentoActions, BentoEmptyState, BentoDivider) und deterministischer Tk-freier BentoLayoutPlanner (Schwellenwerte 616 / 932 px). Pilot-Integration in Glide-Startseite (`render_home`, `home_column_count`) über Render-Retention-Fabrik `make_bento_card`. 100% abwärtskompatibel zu Format 26. 19/19 CI-Grundstufenschritte, 41 Home-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, T341–T344 sowie der 13/13 Selbsttest sind grün.
+---
+
+## Strategische Post-Release Roadmap & Aktiver Arbeitsvorrat (24.11.2026)
+
+### 1. Aktueller Status
+- **Veröffentlichter Prerelease:** **Glide 1.0.2** (Tag `v1.0.2`, Commit `7dcd8dc0`) ist mit vollständigen Windows- und macOS-Paketen sowie dem Agent-Skill `glide-to-do` auf GitHub Releases publiziert.
+- **Integrierter Entwicklungsstand (`main`, Glide 1.0.2, V1.87):** Das **Glide Bento Box System 0.1.0** (`glide_bento`, D100, Ebene B) ist als modulare Kompositionsbibliothek integriert und treibt das adaptive 1–3-Spalten-Raster der Startseite (`render_home`).
+- **Verifizierte Qualität:** 19/19 CI-Grundstufenprüfungen, 20 T340-Regressionstests mit echter Tk-Widget-Integration, 36 Shell-Übernahmetests, 23 Bento-Tests T341–T344 und 13/13 Bento-Selbsttest bestanden.
+
+---
+
+### 2. Die fünf strategischen Arbeitsstränge
+
+```mermaid
+flowchart TD
+    subgraph STRANDS ["Strategische Arbeitsstränge"]
+        P["<b>1. Product</b><br/>Tagesplanung WA-12, Leerzustände WA-52,<br/>Mehrfacherfassung WA-54, Projekt-Dashboards"]
+        D["<b>2. Design</b><br/>Glide Bento 0.1.0+, Design-Tokens,<br/>Multi-Span, Presets, Component Gallery"]
+        E["<b>3. Engineering</b><br/>Glide Shell 0.6.2, Schichtenarchitektur,<br/>Portabilität, Referenzhosts"]
+        DI["<b>4. Distribution</b><br/>GitHub Releases aktiv, Homebrew & winget<br/>vorbereitet, Signierung (I3/D43)"]
+        G["<b>5. Growth</b><br/>README DE/EN, Video-Storyboard,<br/>Landingpage-Konzept, Testnutzer-Feedback"]
+    end
+```
+
+---
+
+### 3. Phasenübersicht und Priorisierung
+
+| Phase | Horizont | Fokus | Kernthemen | Status |
+|---|---|---|---|---|
+| **Phase 0** | Unmittelbar | **Post-Release Consolidation** | Behebung der Befunde IN-01–IN-12; Release-Links & Checksummen in README/Installationsanleitungen; Trennung von v1.0.2 und Bento im Changelog; Konsolidierung von Meilensteinplan & Issue #129 | **In Arbeit** |
+| **Phase 1** | Kurzfristig | **Product Experience** | Konsolidierung des Bento-Fundaments; Leerzustände (WA-52); Vorlagenbibliothek erschließen; Überfällige Aufgaben ergonomisch behandeln (WA-53); Erstes Testnutzer-Feedback | Geplant |
+| **Phase 2** | Mittelfristig | **Planning & Workspace** | Realistischer Arbeitstag (WA-12 Rest: Puffer, Zeiten); Mehrfacherfassung mit Vorschau (WA-54); Wochenabsichten (WA-20); Soll-Ist-Schätzvergleich (WA-08); Projekt-Dashboards; KI-Import mit kontrollierter Einzelannahme (WA-56) | Geplant |
+| **Phase 3** | Mittelfristig | **Distribution & Ecosystem** | Paketmanager Homebrew & winget nach Inhaberentscheidung I3 (D43); Schlanke Produktwebsite; Produktvideo (30–45s Storyboard); Zweiter Bento-Referenzhost; Update-Erkennung | Geplant |
+| **Phase 4** | Langfristig | **Advanced Product Development** | Individuell konfigurierbare Bento-Layoutprofile; Persönliche Insights; Optionale systemweite Schnellerfassung; Erweiterte visuelle Pinnwände; Weitere Sprachversionen | Konzeptionell |
+
+---
+
+### 4. Priorisierter Arbeitsvorrat (P0–P3)
+
+- **[P0] IN-01 / IN-02:** Öffentliche README (DE & EN) mit verifizierten Release-Download-Links, Plattformangaben und Signaturhinweisen aktualisieren (**Erledigt**).
+- **[P0] IN-03:** Installationsanleitung `docs/user-guide/02-installation.md` auf veröffentlichten Prerelease umstellen (**Erledigt**).
+- **[P0] IN-10:** Changelog-Struktur bereinigen: Bento 0.1.0 / V1.87 als Nachfolgeentwicklung abgrenzen (**Erledigt**).
+- **[P0] IN-11:** Homebrew Cask und winget Manifeste mit echten SHA-256 Prüfsummen des Releases v1.0.2 befüllen (**Erledigt**).
+- **[P0] IN-06 / IN-08:** Meilensteinplan und Produktgrenzen (DE/EN-Lokalisierung als geliefert) konsolidieren (**Erledigt**).
+- **[P1] Bento-Tokens & Multi-Span:** Klärung der Token-Quelle zwischen `ui_design.py` und `glide_bento/tokens.py`; echtes 2-von-3 Spalten Multi-Span Layout spezifizieren.
+- **[P1] WA-52 Leerzustände & Erststart:** Ersteinstieg ohne Pflichtassistenten, kontextuelle Leerstati und Erkundung mit Showcase-Daten.
+- **[P1] Vorlagen-Bibliothek:** Strukturierte DE/EN-Projektvorlagen für Designer, Freelancer und Wissensarbeiter.
+- **[P2] WA-12 Rest (Tagesplanung):** Pufferzeiten nach Terminen, realistisch verfügbare Arbeitszeit und geführte Entlastungsfragen.
+- **[P2] Projekt-Dashboard:** Bento-Projektionsdashboard für verknüpfte Aufgaben, Notizen, Meilensteine und Fortschritt.
+- **[P2] WA-54 Mehrfacherfassung:** Schnelle Serienerfassung mit deterministischer Aufteilungsvorschau und vollem Undo.
+- **[P2] WA-20 Wochenabsicht:** Wenige bewusst gewählte Wochenziele mit Bezug zu Projekten und Wochenrückblick.
+- **[P2] WA-08 Soll-Ist-Schätzvergleich:** Neutraler Vergleich von geschätztem und tatsächlichem Aufwand ohne Leistungsdruck.
+- **[P3] Bento-Presets & Custom Layouts:** Presets (Fokus, Planung, Kreativ) und spätere freie Layoutanordnung.
+
+---
+
+### 5. Archivierte historische Entwicklungsprotokolle
+Die nachfolgenden Abschnitte (§21.01 bis §21.180) dokumentieren die detaillierten historischen Entwicklungsrunden von Glide 3.32 bis 1.0.2 und bleiben unverändert als Nachweisarchiv erhalten.
+
+---
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
