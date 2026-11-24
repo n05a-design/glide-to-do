@@ -5,20 +5,21 @@ import re
 
 
 SHELL_PACKAGE = "glide_shell"
+GLIDE_PACKAGES = frozenset(("glide_shell", "glide_bento"))
 
 
 def _shell_path(stage, name):
-    """Erwarteter Ort eines Moduls des Shell-Pakets (D95) oder None.
+    """Erwarteter Ort eines Moduls eines internen Glide-Pakets (D95, D100) oder None.
 
-    Nur `glide_shell` selbst und genau eine Ebene darunter gehören zu Glide;
+    Nur `glide_shell` und `glide_bento` selbst und genau eine Ebene darunter gehören zu Glide;
     jede andere Lage bleibt ohne belegte Herkunft.
     """
     parts = name.split(".")
-    if parts[0] != SHELL_PACKAGE or len(parts) > 2:
+    if parts[0] not in GLIDE_PACKAGES or len(parts) > 2:
         return None
     if len(parts) == 1:
-        return stage / SHELL_PACKAGE / "__init__.py"
-    return stage / SHELL_PACKAGE / (parts[1] + ".py")
+        return stage / parts[0] / "__init__.py"
+    return stage / parts[0] / (parts[1] + ".py")
 
 
 def pure_components(records, *, stage, stdlib, pyinstaller):
