@@ -1,8 +1,8 @@
-# Glide Bento Box System 0.1.0
+# Glide Bento Box System – Anleitung für Folgeprojekte
 
 **Wiederverwendbare UI-Kompositionsschicht (Ebene B) für Python/Tkinter**
 
-Stand: 24.11.2026 · Bento-Version: `0.1.0` · System-Ebene: Ebene B (D100)
+Stand 24.11.2026 · Glide 1.0.2 · Bento 0.1.0 · Glide-System V1.87 · Ebene B (D100)
 
 ---
 
