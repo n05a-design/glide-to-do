@@ -3,11 +3,16 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
-## Unreleased – Entwicklungsstand nach v1.0.2 (main, Glide-System V1.87)
+## 1.0.3 – 24.11.2026
 
-### Added
+### Entwicklungs- und Release-Kandidat (Glide 1.0.3, Bento 0.1.0, Glide-System V1.87)
 
 - **Glide Bento Box System 0.1.0 (D100, V1.87, 24.11.2026):** Einführung des modularen UI-Kompositionssystems (`glide_bento` 0.1.0, Ebene B) zwischen Fachapplikation (Ebene A) und Framework Shell (Ebene C). Umfasst semantische Gestaltungs-Tokens (`BentoTokens`), Dependency-Injection-Behälter (`BentoContext`), deklarative Spezifikationen (`BentoCardSpec`, `BentoGridSpec`, `BentoLayoutPlan`), deterministischen Tk-freien Layout-Planner (`BentoLayoutPlanner` mit gieriger Spaltenverteilung und Schwellenwerten bei 616 px und 932 px), universelle Bento-Karte (`BentoCard`, `BentoHeader`), Metriken (`BentoMetric`), Aktionen (`BentoActions`), Leerstati (`BentoEmptyState`), Trennlinien (`BentoDivider`) sowie responsives Spaltenraster (`BentoGrid`). Pilot-Migration der Startseite (`render_home`, `home_column_count`) mit dynamischem 1–3-Spaltenumbruch unter voller Wahrung der Render-Retention. Autonomer 13-Punkte-Selbsttest (`glide_bento.selftest`), Demogalerie (`glide_bento.demo`), Testsuite T341–T344 sowie synchronisierte Paketierung für macOS und Windows.
+- **Konsolidierung der Post-Release-Produktstrategie:** Bereinigung aller Quellcode-, Modul- und API-Referenzen (u. a. Tilgung fiktiver Module wie `canvas_editor.py`, `pixel_workspace.py` und Korrektur von Testpfaden). Härtung der Dokumentationsintegrität mit verbindlicher Prüfpflicht für KI-Agenten vor Dokumentations- oder Auftragserteilung.
+- **Synchronisierte Roadmap & Versionsabstimmung:** Belastbare Ausrichtung des Meilensteinplans: Glide 1.0.3 integriert Bento 0.1.0 und festigt die technische Basis; weitergehende Bento-Erweiterungen (Bento 0.2.0 mit Multi-Span-Grid `span=2`, Token-Reconciliation Variante C) und Produkterfahrungs-Features (WA-52, WA-53) sind für Glide 1.1.0 eingeordnet.
+- **Entscheidungsvorlagen M01–M14:** Vollständige thematische Synchronisation aller 14 Vorlagen (u. a. M07 Verschlüsselte Datenhaltung; M01 Systemweite Schnellerfassung mit Absicherung gegen unkoordinierte Dateizugriffe und Fokus auf kontrollierte Importwarteschlangen; M04 Lokaler MCP-Server mit Schutz vor externem Datenabfluss und ohne fiktiven Ausführungscode in D).
+- **Bereitstellung von Referenz-Vorlagen:** Dreisprachig/zweisprachig nutzbare Vorlagen (Freelancer-/Kundenprojekt, Kreatives Designprojekt, Persönliche Wochenplanung) im Vorlagenformat 2 als eigenständige Referenzdateien.
+- **Release- und Distributionsvorbereitung:** Vorbereitung der technischen Metadaten für Glide 1.0.3 (Installer-Konfiguration, App-Metadaten) bei strikter Erhaltung der historischen v1.0.2-Artefakte, -Prüfsummen und -Manifeste. Keine eigenmächtige Veröffentlichung oder vorzeitige Tag-Erstellung.
 
 
 ## 1.0.2 – 23.11.2026

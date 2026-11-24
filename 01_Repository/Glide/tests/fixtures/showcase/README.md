@@ -1,6 +1,6 @@
 # Stadtlicht · Glide-Showcase
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Vorlagen 2 · [English version](en/README.md)
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Vorlagen 2 · [English version](en/README.md)
 
 Eine Fotoreise durch sieben Städte: Wuppertal, Berlin, München, Wien, Monaco, Bilbao und Seoul. Zwei Wochen mit der Bahn und zwei Flügen, danach die Auswahl für ein kleines Reisebuch. Der Showcase zeigt denselben Bestand aus vielen Blickwinkeln: Reiseplan, Reiseführer mit einer Seite pro Stadt, Reisetagebuch, Galerie, Pixelstempel und drei Pinnwände.
 

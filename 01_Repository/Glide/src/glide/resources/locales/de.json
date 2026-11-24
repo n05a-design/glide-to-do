@@ -5348,5 +5348,8 @@
   "mod.release_notes.v3_35_0.0": "Eine KI kann vorhandene Aufgaben überarbeiten: Kontextpaket hin, Vorschlag geprüft zurück.",
   "mod.release_notes.v3_35_0.1": "Sicherungen vergleichen zeigt, was sich zwischen zwei Ständen geändert hat.",
   "mod.release_notes.v3_35_0.2": "Pixel-Werkstatt: Farbe ändern mit Vorschau – Doppelklick auf die Farbleiste.",
-  "mod.release_notes.v3_35_0.3": "Vor dem Symbolexport zeigt Glide 16, 32 und 48 Pixel auf hellem und dunklem Grund."
+  "mod.release_notes.v3_35_0.3": "Vor dem Symbolexport zeigt Glide 16, 32 und 48 Pixel auf hellem und dunklem Grund.",
+  "mod.release_notes.v1_0_3.0": "Das Glide Bento Box System 0.1.0 strukturiert die Startseite responsiv mit wiederverwendbaren Karten.",
+  "mod.release_notes.v1_0_3.1": "Saubere Schichtenarchitektur trennt Anwendung, Bento-Komposition und Desktop-Shell.",
+  "mod.release_notes.v1_0_3.2": "Erweiterte Referenzintegrität und konsolidierte Produktstrategie für die nächsten Ausbaustufen."
 }
