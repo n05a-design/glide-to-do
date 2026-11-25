@@ -169,3 +169,15 @@ Antigravity_Glide_Bericht.zip
 # Originalfotos des Inhabers (rund 400 MB) bleiben lokal; versioniert werden nur die
 # Showcase-Arbeitskopien unter 01_Repository/Glide/tests/fixtures/showcase/bilder.
 20_Grafik_Master/06_Beispielbilder/
+
+# Ausschliesslich lokale Arbeitsmaterialien
+/01_Repository/Glide/packaging/paket/lizenzen/macos/SQLite-Copyright.md
+/glide_master_audit_bericht.md
+/20_Grafik_Master/01_Logo/Logo_Chess-&-Chains.af
+/20_Grafik_Master/01_Logo/svg/Logo_Chess-&-Chains-01.svg
+/20_Grafik_Master/01_Logo/svg/Logo_Chess-&-Chains-02.svg
+/20_Grafik_Master/01_Logo/svg/Logo_Chess-&-Chains-03.svg
+/20_Grafik_Master/01_Logo/Archiv/2026-Glide-Logo-App-und-Fav-Icon.svg
+/20_Grafik_Master/01_Logo/Archiv/2026-Glide-Logo-in-App.svg
+/20_Grafik_Master/01_Logo/Archiv/2026-Glide-Logo.ai
+/20_Grafik_Master/09_Inspiration/
