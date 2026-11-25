@@ -1,6 +1,6 @@
 # Keyboard shortcuts – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
 
 **Deutsch:** Shortcuts are described in their sections of [`20_FUNKTIONEN.md`](../20_FUNKTIONEN.md), for example [§2 Seitenleiste](../20_FUNKTIONEN.md#2-seitenleiste-und-navigation), [§6 Pinnwand](../20_FUNKTIONEN.md#6-pinnwand), [§9 Pixel-Werkstatt](../20_FUNKTIONEN.md#9-pixel-werkstatt) and [§10 Suche, Aktionen, Erinnerungen](../20_FUNKTIONEN.md#10-suche-aktionen-erinnerungen) · [Guide contents](README.md) · Previous: [Backups](10-backups.md) · Next: [Troubleshooting](12-troubleshooting.md)
 

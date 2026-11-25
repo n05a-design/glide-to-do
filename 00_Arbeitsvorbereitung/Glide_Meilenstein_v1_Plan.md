@@ -1,8 +1,8 @@
-# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.2)
+# Meilenstein- und Fahrplan Release 1.0 (Glide 1.0.3)
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.86 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung; diese Schritte bleiben dem Inhaber vorbehalten.
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 (Multi-Agent Readiness) · Lokalisierung DE/EN vollständig (V1.70–V1.81) · Showcase „Stadtlicht“ zweisprachig mit eigenen Fotos (MPL-2.0) · Erster öffentlicher Prerelease v1.0.3 am 23.11.2026 veröffentlicht; Homebrew/winget-Einreichung bleibt nach Tor I3 dem Inhaber vorbehalten.
 
-Dieser Plan definiert den verbindlichen **Schnittpunkt (Feature Freeze / D93)** für **Version 1.0 von Glide** und die vorgesehenen Veröffentlichungswege über GitHub, **Homebrew** (macOS) und **winget** (Windows). Er beantwortet die Frage, wo die Grenze gezogen wird, um endlosen Scope Creep zu verhindern. Der Quellstand 1.0.0 ist am 18.11.2026 nach `main` gemergt; ein Tag, GitHub-Release und öffentliche Paketmanager-Einreichungen sind nicht vorhanden. Das Soll ist daher nicht mit einer erfolgten Veröffentlichung gleichzusetzen.
+Dieser Plan dokumentiert den strategischen Schnittpunkt (Feature Freeze / D93) sowie die erfolgreiche Umsetzung und Veröffentlichung des ersten öffentlichen Prereleases **Glide 1.0.2** (Tag `v1.0.2`, 23.11.2026). Die technischen Vorlagen für Paketmanager (Homebrew, winget) sind mit verifizierten Prüfsummen vorbereitet; ihre Einreichung in externe Kataloge bleibt nach Inhaberentscheidung I3 (D43) dem Inhaber vorbehalten. Nachfolgende Weiterentwicklungen (Glide Bento Box System 0.1.0, V1.87) gehören zur Post-1.0-Roadmap.
 
 Tracking-Issue: [GitHub Issue #129](https://github.com/n05a-design/glide-to-do/issues/129)
 
@@ -18,8 +18,8 @@ flowchart TD
         S["1. Agenten-Skill komplett<br/>(K4 Bilder/Anhänge + K5 Verteilung)<br/><b>✅ ERLEDIGT (PR #130)</b>"]
         I["2. Mehrsprachigkeit<br/>(vollständige Oberfläche DE/EN)<br/><b>✅ ERLEDIGT (V1.70–V1.81)</b>"]
         P["3. Paketierung & Installer<br/>(macOS DMG / Windows Setup.exe)<br/><b>✅ ERLEDIGT (PR #135)</b>"]
-        M["4. Paketmanager-Einbindung<br/>(Homebrew Cask + winget Manifest)<br/><b>◐ VORLAGEN, NICHT EINGEREICHT</b>"]
-        Q["5. Grüne CI-Vollmatrix & Release Cut<br/>(macOS arm64, Windows x64, Linux)<br/><b>◐ QUELLCUT GEMERGT, RELEASE OFFEN</b>"]
+        M["4. Paketmanager-Einbindung<br/>(Homebrew Cask + winget Manifest)<br/><b>◐ VORLAGEN BEREIT (I3 / D43)</b>"]
+        Q["5. Grüne CI-Vollmatrix & Release Cut<br/>(macOS arm64, Windows x64, Linux)<br/><b>✅ PRERELEASE V1.0.2 VERÖFFENTLICHT</b>"]
     end
 
     subgraph POST ["Version 1.1+ / Spätere Versionen"]
@@ -48,10 +48,11 @@ flowchart TD
    - **Homebrew:** Cask `packaging/homebrew/Casks/glide.rb` im Repository `n05a-design/homebrew-glide`.
    - **winget:** Manifeste `packaging/winget/manifests/s/Shaye/Glide/` für `winget install Shaye.Glide`.
    - Ist: Versionierte Vorlagen sind im Repository vorhanden; ohne öffentliches Release wurden sie nicht in den Tap bzw. das winget-Repository eingereicht.
-5. **Qualität und Freigabe (✅ geprüft; Release offen):**
-   - PR #138 wurde am 18.11.2026 nach `main` gemergt; die Grundstufe, CodeQL sowie Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem geprüften PR-Head erfolgreich.
-   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Seit 22.11.2026 sind auch die manuell zu startenden UI-Diagnosen und die nativen AT-SPI-/MSAA-Prüfungen auf `main` grün; die echte Screenreader-Sprachausgabe (Orca, NVDA) bleibt zurückgestellt. Offen bleibt die menschliche Sicht-/Bedienabnahme.
-   - Am 18.11.2026 wurden weder GitHub-Release noch Git-Tags gefunden. Öffentliche Freigabe und Paketmanager-Einreichungen sind nicht erfolgt.
+5. **Qualität und Freigabe (✅ Erster öffentlicher Prerelease veröffentlicht):**
+   - Der Quellstand 1.0.2 wurde auf Commit `7dcd8dc04366f88943fa17827882cef4d81421b8` am 23.11.2026 als Git-Tag `v1.0.2` und öffentlicher GitHub-Prerelease mit Windows- und macOS-Paketen veröffentlicht (Workflow #45262980791).
+   - Die Grundstufe, CodeQL sowie Linux-/Windows-Vollprüfung und Windows-Paketbau waren auf dem Release-Kandidaten erfolgreich.
+   - Der getrennte lokale macOS-Volllauf und native Paketstart sind im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegt. Seit 22.11.2026 sind auch die manuell zu startenden UI-Diagnosen und die nativen AT-SPI-/MSAA-Prüfungen auf `main` grün; die echte Screenreader-Sprachausgabe (Orca, NVDA) bleibt zurückgestellt. Die menschliche Sicht- und Bedienabnahme wurde am 23.11.2026 positiv bestätigt.
+   - Öffentliche Paketmanager-Einreichungen (Homebrew, winget) bleiben nach Inhabervorbehalt Tor I3 (D43) zurückgestellt, bis kommerzielle Codesignatur-Zertifikate vorliegen. Die Vorlagen im Repository sind vollständig vorbereitet.
 
 > [!NOTE]
 > **Glide Shell abgeschlossen:** Das Unterpaket `glide_shell` (Shell 0.6.2) mit Demonstrationshost, Referenzhost (T337), Selbsttest (13/13, T333), Anleitung, KI-Handbuch und den Bausteinen aus D94–D98 ist in V1.65–V1.69 geliefert; WA-49 (importfreie App-Schicht) ist mit V1.83 abgeschlossen; Befehlsverlauf und App-Host schließen mit V1.84 die Konzeptphasen 4 und 5 (D99), dazu eine Anleitung für KI-Agenten in neuen Projekten. Weitere Shell-Arbeit entsteht nur noch aus konkretem Bedarf eines Folgeprojekts.
@@ -103,25 +104,26 @@ flowchart TD
   - Release-Workflow `.github/workflows/release.yml` um Installer-Einbindung und Download-Tabelleneintrag erweitert.
   - winget-Manifeste unter `packaging/winget/manifests/s/Shaye/Glide/<Version>/` (nur der aktuelle Stand) auf `InstallerType: inno` und zweisprachige Metadaten (de-DE, en-US) umgestellt.
 
-### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – ◐ QUELLCUT ERLEDIGT, VERÖFFENTLICHUNG OFFEN
-- **Versionierung:**
-  - Anheben der Version auf `1.0.0` (über `scripts/pflege/versionswechsel.py 1.0.0 17.11.2026 --ohne-ablagekuerzung`).
-  - Beim Release-Cut am 18.11.2026 stand das Systemregister auf V1.40 (100 Module M001–M100, 329 Testdateien T001–T329); aktueller Stand V1.42.
-  - Standprüfung (86 Dokumente, 0 Befunde) und Lieferabgleich `abgleich_07.py` (0 Abweichungen).
-  - GitHub Actions `release.yml` ist für den Bau von Artefakten und SHA-256-Prüfsummen bei einem Tag `v1.0.0` vorbereitet; ein solcher Tag wurde nicht veröffentlicht.
-- **Veröffentlichung:**
-  - Offen: GitHub Release v1.0.0 mit freigegebenen Artefakten veröffentlichen.
-  - Offen: Homebrew-Tap anlegen/bestätigen und Cask einreichen; winget-Manifest einreichen. Die Vorlagen im Hauptrepository sind keine erfolgten Einreichungen.
-  - Offen: erforderliche menschliche Sicht-/Bedienabnahme und separate Freigaben aus der Veröffentlichungsvorgabe abschließen.
+### Etappe 4: Release Cut, GitHub-Release & Veröffentlichung – ✅ ERSTER ÖFFENTLICHER PRERELEASE V1.0.2 VERÖFFENTLICHT
+- **Versionierung & Release-Cut:**
+  - Anheben der Version auf `1.0.2` (über `scripts/pflege/versionswechsel.py 1.0.2 22.11.2026`).
+  - Beim Release-Cut am 23.11.2026 stand das Systemregister auf V1.86 (100 Module M001–M100, 340 Testdateien T001–T340); aktueller Stand auf `main` ist V1.87 (Glide Bento 0.1.0).
+  - Standprüfung (154 Dokumente, 0 Befunde) und Lieferabgleich `abgleich_07.py` (0 Abweichungen).
+  - GitHub Actions `release.yml` baute auf Tag `v1.0.2` (Commit `7dcd8dc04366f88943fa17827882cef4d81421b8`, Workflow #45262980791) alle 5 offiziellen Artefakte (Windows Setup & Portable, macOS DMG & TAR, Agent-Skill ZIP) samt SHA-256-Digests.
+- **Veröffentlichung & Tor-Status:**
+  - ✅ **GitHub Prerelease v1.0.2:** Am 23.11.2026 offiziell publiziert mit allen Binärartefakten.
+  - ◐ **Paketmanager (Tor 6):** Versionierte Vorlagen mit verifizierten Prüfsummen liegen im Repository bereit (`packaging/homebrew/Casks/glide.rb`, `packaging/winget/`). Die tatsächliche Einreichung in externe Kataloge bleibt nach Inhaberentscheidung I3 (D43) dem Inhaber vorbehalten.
+  - ✅ **Menschliche Abnahme:** Sicht- und Bedienabnahme (Release 1.0, Etappe 2) sowie T340-Regressionen erfolgreich abgeschlossen.
 
 ---
 
 ## 3. GitHub Issue Tracking (#129)
 
-Statusabgleich vom 23.11.2026: [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) bleibt bis zur öffentlichen Veröffentlichung offen. Lokalisierung, Glide Shell und die menschliche Sicht- und Bedienabnahme (23.11.2026) sind positiv abgeschlossen; die Release-Härtung für Glide 1.0.2 läuft in PR #195 (`fix/glide-1.0.2-release-hardening`). Offen bleiben ausschließlich der erste öffentliche Release/Tag (Glide 1.0.2) und die anschließende externe Paketmanager-Einreichung (Homebrew, winget), jeweils unter ausdrücklichem Inhabervorbehalt.
+Statusabgleich vom 24.11.2026: In [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129) sind sämtliche Kern-Tore 1 bis 5 für Glide 1.0.2 erfolgreich erfüllt und verifiziert. Der erste öffentliche Prerelease v1.0.2 ist auf GitHub veröffentlicht. Als einzige nachgelagerte Teilaufgabe verbleibt Tor 6 (Einreichung in externe Paketmanager-Kataloge Homebrew und winget), welche gemäß Architekturentscheidung I3 / D43 als Inhabervorbehalt isoliert ist.
 
 - [x] **1. Agenten-Skill `glide-to-do` (WA-61)** (K1–K5 vollständig abgeschlossen via PR #127, PR #128, PR #130)
 - [x] **2. Mehrsprachigkeit (i18n: Deutsch / Englisch)** (vollständige Oberfläche über PR #148, #157, #158 und die Lokalisierungsrunden V1.70–V1.79; englische Schnellerfassung V1.81, PR #186; menschliche Abnahme am 23.11.2026 erfolgreich abgeschlossen)
 - [x] **3. Paketierung & Installer – technische Vorbereitung** (macOS-/Windows-Bauwege und Inno-Setup via PR #135; Vorbereitung für Release 1.0.2 technisch verifiziert)
-- [ ] **4. Paketmanager** (Homebrew- und winget-Vorlagen vorhanden; externe Einreichung und Installationsprüfung nach öffentlicher Freigabe durch den Inhaber offen)
-- [x] **5. Qualität & menschliche Abnahme** (Menschliche Sicht- und Bedienabnahme am 23.11.2026 positiv abgeschlossen; T340-Regressionstests und Release-Härtung in PR #195 vollständig verifiziert; öffentlicher Tag/Release bleibt unter Inhabervorbehalt)
+- [x] **4. Qualität, Härtung & menschliche Abnahme** (Menschliche Sicht- und Bedienabnahme am 23.11.2026 positiv abgeschlossen; T340-Regressionstests und Release-Härtung in PR #195 vollständig verifiziert)
+- [x] **5. Erster öffentlicher Prerelease Glide 1.0.2** (Tag `v1.0.2` auf Commit `7dcd8dc0` am 23.11.2026 veröffentlicht; alle 5 Assets und SHA-256-Digests online)
+- [ ] **6. Externe Paketmanager-Einreichung (I3 / D43)** (Homebrew- und winget-Vorlagen mit echten Prüfsummen bereitgestellt; Einreichung in externe Kataloge bleibt nach I3 dem Inhaber vorbehalten)

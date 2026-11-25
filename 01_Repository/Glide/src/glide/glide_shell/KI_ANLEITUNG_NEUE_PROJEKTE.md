@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für KI-Agenten in neuen Projekten
 
-Stand 23.11.2026 · Glide 1.0.2 · Glide-System V1.86 · Glide Shell 0.6.2 · [English version](AI_GUIDE_NEW_PROJECTS.md)
+Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2 · [English version](AI_GUIDE_NEW_PROJECTS.md)
 
 Diese Anleitung richtet sich an KI-Agenten (Claude Code, Codex, Cursor, Gemini und andere), die mit der Glide Shell eine **neue** Tk-Desktopanwendung bauen. Sie erklärt den Aufbau von Glide, Glide-System und Glide Shell, den Start eines Projekts, die Architekturregeln, die Design-Richtlinien, die Arbeitsprozesse und die Prüfungen. Sie liegt im Paket `glide_shell` und wird bei jeder Übernahme mitkopiert. Einen fertigen Prompt für die erste Sitzung samt Übersicht, was wo liegt, enthält [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md).
 
@@ -15,7 +15,7 @@ Glide (die App)                 Glide-System (der Bestand)            Glide Shel
 src/glide/app.pyw               src/glide/README.md                   src/glide/glide_shell/
 ListApp = Controller            Register: Module M…, Features F…,     neutrale Tk-Bausteine,
 Fachmodule (Tk-frei)            Bausteine, Tests T…, Versionsverlauf   keine Glide-Werte
-Daten, Ansichten, Texte         GLIDE_SYSTEM_VERSION (V1.86)          SHELL_VERSION (0.6.2)
+Daten, Ansichten, Texte         GLIDE_SYSTEM_VERSION (V1.87)          SHELL_VERSION (0.6.2)
         │                                 │                                  ▲
         └──── nutzt ──────────────────────┼──────────── Host → Shell → Tk ───┘
                                           └─ dokumentiert beides, versioniert unabhängig

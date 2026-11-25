@@ -5348,5 +5348,8 @@
   "mod.release_notes.v3_35_0.0": "An AI can revise existing tasks: send a context package, get a checked suggestion back.",
   "mod.release_notes.v3_35_0.1": "Comparing backups shows what changed between two states.",
   "mod.release_notes.v3_35_0.2": "Pixel workshop: change a colour with preview – double-click the colour bar.",
-  "mod.release_notes.v3_35_0.3": "Before exporting a symbol, Glide shows 16, 32 and 48 pixels on light and dark backgrounds."
+  "mod.release_notes.v3_35_0.3": "Before exporting a symbol, Glide shows 16, 32 and 48 pixels on light and dark backgrounds.",
+  "mod.release_notes.v1_0_3.0": "Glide Bento Box System 0.1.0 arranges the home view responsively with reusable cards.",
+  "mod.release_notes.v1_0_3.1": "A clean layered architecture separates application, Bento composition, and desktop shell.",
+  "mod.release_notes.v1_0_3.2": "Enhanced reference integrity and consolidated product strategy for upcoming milestones."
 }

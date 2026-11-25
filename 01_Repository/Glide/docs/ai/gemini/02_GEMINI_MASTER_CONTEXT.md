@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-CORE, GLIDE-ARCHITECTURE, GLIDE-DATA, GLIDE-PLA
 
 # Gemini master context
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
 
 ## What Glide is
 

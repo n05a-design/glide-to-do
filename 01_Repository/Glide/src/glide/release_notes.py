@@ -21,6 +21,11 @@ import i18n as glide_i18n
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "1.0.3": (
+        "Das Glide Bento Box System 0.1.0 strukturiert die Startseite responsiv mit wiederverwendbaren Karten.",
+        "Saubere Schichtenarchitektur trennt Anwendung, Bento-Komposition und Desktop-Shell.",
+        "Erweiterte Referenzintegrität und konsolidierte Produktstrategie für die nächsten Ausbaustufen.",
+    ),
     "1.0.2": (
         "Seitenleistentitel wechseln beim Umschalten der Sprache sofort ohne Neustart.",
         "Titelbilder von Seiten werden adaptiv zugeschnitten und nicht mehr verzerrt.",

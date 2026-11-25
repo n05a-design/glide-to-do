@@ -30,6 +30,23 @@ D74 (08.11.2026) ersetzt diese Bezeichnungen für aktive Produkttexte. Die histo
 
 ## Entwicklungsregeln
 
+### 10-Punkte-Prüfung vor jeder Feature-Entwicklung (verbindlich für alle Agenten)
+
+Vor der Konzeption oder Implementierung einer neuen oder angefassten Funktion muss jeder Agent (Antigravity, Codex, Copilot, Claude Code, Gemini CLI) folgende zehn Fragen verbindlich prüfen:
+
+1. **Existiert die Funktion bereits?** Codebase und `docs/20_FUNKTIONEN.md` prüfen, ob das Verhalten bereits vorhanden ist.
+2. **Existiert eine ähnliche Funktion?** Verwandte Module und Interaktionsmuster untersuchen, um Doppelstrukturen zu vermeiden.
+3. **Gibt es eine passende Roadmap-ID?** Eintrag im `Glide_Entwicklungsplan.md` prüfen (z. B. WA-xx, L1–L5, Bento-Tickets).
+4. **Gibt es eine gültige Inhaberentscheidung?** `docs/ARBEITSRICHTUNG.md` (D01–D100) und `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` (M01–M14) konsultieren.
+5. **Wurde die Funktion früher abgelehnt oder zurückgestellt?** Produktgrenzen (`docs/01_PRODUCT_CONSTRAINTS.md`) und abgelehnte Entwürfe prüfen (z. B. kein Cloud-Sync, keine mobile Begleit-App).
+6. **Wird sie gerade durch einen anderen Agenten bearbeitet?** Aktuelle Übergabe (`../../00_Arbeitsvorbereitung/Glide_Uebergabe.md`) und offene Branches/PRs prüfen.
+7. **Gehört sie zur Fachanwendung, zu Bento oder zur Shell?** Schichtenarchitektur respektieren: Fachanwendung (Ebene A), UI-Komposition Bento (`glide_bento`, Ebene B) oder Framework-Shell (`glide_shell`, Ebene C, absolut fachlogikfrei).
+8. **Welche Dokumente sind führend?** Pflegematrix in `docs/DOKUMENTENPFLEGE.md` beachten; kanonische Quellen pflegen, keine Parallelregister aufbauen.
+9. **Welche Datenformatfolgen entstehen?** Prüfen, ob Aufgabenformat 26, Austauschformat 2 oder Einstellungen betroffen sind; Formatversionen nur mit Migration und Tests anheben.
+10. **Welche Freigabe ist erforderlich?** Inhabervorbehalt (I1–I14), Sichtabnahme, automatisierte CI-Matrix und Standprüfung beachten.
+
+### Allgemeine Entwicklungsregeln
+
 1. Vor Produktionsänderungen eine passende bestehende Baselineprüfung ausführen und Nutzerdatenpfade prüfen. Dokumentations-/Prüfwerkzeugnachläufe nach `docs/ARBEITSRICHTUNG.md` behandeln; unveränderte App-Version erhalten.
 2. Bestehende Funktionen, Nutzerdaten und Migrationen bewahren.
 3. Datenformatänderungen nur mit eigener Migration, Sicherung und Tests vornehmen. Eine neue Listen- oder Ordnerart ist eine Datenformatänderung und hebt `DATA_SCHEMA_VERSION` – nur so öffnet eine ältere Fassung den Bestand schreibgeschützt, statt ihn zu überschreiben (29.09.2026).
@@ -48,6 +65,8 @@ D74 (08.11.2026) ersetzt diese Bezeichnungen für aktive Produkttexte. Die histo
 13. Nach D17 entsteht neue oder angefasste Fachlogik als Tk-freies Modul mit eigenen Unit-Tests; bestehende UI- und Mutationseinstiege bleiben erhalten. Seit D09 ist die Git-Arbeitskopie des gesamten Projektordners maßgeblich.
 
 14. Jede Entwicklungsrunde führt den vorhandenen `Glide_Entwicklungsplan.md` fort (aktueller Roadmap-Abgleich §21): Entscheidung/Auftrag und Implementierung/Prüfung/Lieferung/Menschenabnahme trennen, Restumfang und passende Belege nennen. Vor UI-Arbeit betroffene Designkontexte/Rollen festlegen, nachher echte Bedien-/Geometrie-/Sichtbelege bzw. offene native Grenzen dokumentieren. Neue Integrationsoptionen bleiben bis zur konkreten Auswahl Vorschläge; kein Hintergrundjob entscheidet Features oder pusht eigenständig.
+
+15. **Referenzprüfpflicht:** Bevor eine Datei, Klasse, Methode, Funktion, Datenstruktur, Testkennung oder ein Modulname als vorhandene Implementierung in Dokumenten, Kommentaren oder Strategie-Papieren genannt wird, muss ihre tatsächliche Existenz anhand des Quellcodes des Repositorys geprüft werden (z. B. `git grep`, `find`, tatsächlicher Datei-Inhalt). Nicht existierende Bezeichner dürfen nicht als vorhanden dokumentiert werden.
 
 ## Prüfphasen
 

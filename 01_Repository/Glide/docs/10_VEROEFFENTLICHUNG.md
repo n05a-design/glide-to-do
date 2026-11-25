@@ -1,18 +1,33 @@
 # Veröffentlichung – Glide
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
-## Aktueller GitHub-Stand 20.11.2026
+## Aktueller Veröffentlichungsstand (Glide 1.0.2, 24.11.2026)
 
-`main` enthält PR #154 auf Merge-Commit `448eee7f` und PR #156 auf Merge-Commit `4b6bce08`; beide sind gemergt. Der aktuelle `main`-Head ist `4b6bce08`. Die englische README liegt in `main/README.md`, die deutsche Gegenfassung in `README.de.md`; das Repository zeigt 15 Topics, öffentliche Issues und bilinguale Community-Vorlagen. PR-#156-Dokumentation, Linux-Grundstufe, alle drei Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung bestanden; bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung, mehrere native Accessibility-/UI-Jobs wurden übersprungen. Keine Tags oder GitHub-Releases sind veröffentlicht. Die About-Beschreibung ist seit 20.11.2026 englisch: „Desktop planner for projects, tasks, day planning, pinboards and pixel drawings. Connect tasks with pages and notes and shape your ideas.“. Der Inhaber gab die Änderung frei; sie wurde mit `gh repo edit` gesetzt, nachdem das CLI-Konto Repository-Admin-Rechte erhalten hatte, und live bestätigt. Frühere HTTP-404-Versuche ohne Admin-Rechte bleiben als historische Einträge erhalten. Vor einem öffentlichen Release alle Metadaten und Prüfstände erneut live verifizieren.
+Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub veröffentlicht (`tag: v1.0.2`, Release-ID 265691060). Er basiert auf Commit `7dcd8dc04366f88943fa17827882cef4d81421b8` und stellt fünf verifizierte Artefakte mit deterministischen SHA-256-Prüfsummen bereit:
+
+| Artefakt | Plattform / Architektur | SHA-256-Prüfsumme | Status |
+|---|---|---|---|
+| `Glide-1.0.2-macos-arm64.dmg` | macOS (Apple Silicon, arm64, DMG-Installer) | `1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-macos-arm64.tar.gz` | macOS (Apple Silicon, Archiv) | `6240b163480507bfcf0b7ec2adb2c7fde4c5bab52026f9738c257fe53f518b71` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-windows-x64-setup.exe` | Windows 10/11 (x64, Inno Setup Installer) | `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e` | Veröffentlicht (Prerelease) |
+| `Glide-1.0.2-windows-x64.zip` | Windows 10/11 (x64, portables ZIP-Archiv) | `e82b045ffdbd8caf1c00ff861195be580ed9b987841866424e0c5bbf74ba4799` | Veröffentlicht (Prerelease) |
+| `glide-to-do-skill-v1.0.2.zip` | Plattformunabhängig (KI-Agenten-Skill Paket) | `c1b35c21084c3848c7aae401f93720bcd6330728a74c7ea2caa51d80bc9c9ae6` | Veröffentlicht (Prerelease) |
+
+> [!NOTE]
+> Die veröffentlichte Version v1.0.2 enthält das Aufgabenformat 26, das Glide-System V1.86 und die Framework-Shell 0.6.2. Das **Glide Bento Box System 0.1.0** (D100) wurde nach dem Release v1.0.2 auf `main` integriert (Glide-System V1.87) und ist Bestandteil von **Glide 1.0.3** (Entwicklungsstand, Branch `docs/glide-post-release-product-strategy`). Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
+
+## Historischer GitHub-Stand 20.11.2026
+
+`main` enthielt PR #154 auf Merge-Commit `448eee7f` und PR #156 auf Merge-Commit `4b6bce08`; beide wurden gemergt. Der Head war damals `4b6bce08`. Die englische README liegt in `main/README.md`, die deutsche Gegenfassung in `README.de.md`; das Repository zeigt 15 Topics, öffentliche Issues und bilinguale Community-Vorlagen. PR-#156-Dokumentation, Linux-Grundstufe, alle drei Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung bestanden; bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung, mehrere native Accessibility-/UI-Jobs wurden übersprungen. Keine Tags oder GitHub-Releases waren zu diesem Zeitpunkt veröffentlicht. Die About-Beschreibung ist seit 20.11.2026 englisch: „Desktop planner for projects, tasks, day planning, pinboards and pixel drawings. Connect tasks with pages and notes and shape your ideas.“. Der Inhaber gab die Änderung frei; sie wurde mit `gh repo edit` gesetzt, nachdem das CLI-Konto Repository-Admin-Rechte erhalten hatte, und live bestätigt. Frühere HTTP-404-Versuche ohne Admin-Rechte bleiben als historische Einträge erhalten. Vor einem öffentlichen Release alle Metadaten und Prüfstände erneut live verifizieren.
 
 Der Live-Nachweis des PR-#156-Heads `f1d00bc9461819e7d366230ac85c8d08079257d3` bestätigt die gemeinsame Reparatur in Merge-Commit `4b6bce08`. Dokumentation, YAML, Stand, Linux-Grundstufe, alle Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung bestanden. Bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung; CodeQL und mehrere native UI-/Accessibility-Jobs wurden übersprungen. Die früheren roten Läufe auf `92255dc0647b1b4b63706dca9be51fa28552ecf7` gehören zum ursprünglichen Fehlerstand und bleiben historische Belege.
 
 Die Enum-Normalisierung wurde auf PR #156 geliefert. Der D93-Etappe-2-Schnitt V1.57 mit DE/EN-Statusmeldungen und Kernsteuerungen des Zeicheneditors wurde mit [PR #157](https://github.com/n05a-design/glide-to-do/pull/157) als `55ad7e95` nach `main` gemergt; V1.58 liegt in [PR #158](https://github.com/n05a-design/glide-to-do/pull/158). Das ist weder ein Release noch eine Änderung an About-Beschreibung, Homepage-, Wiki-, Tag- oder Veröffentlichungsstatus.
 
-**Stand 23.11.2026:** Zur ersten Veröffentlichung ist **1.0.2** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.2/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
+**Stand 24.11.2026:** Zur ersten Veröffentlichung ist **1.0.3** vorgesehen; 1.0.0 wurde nie als Release veröffentlicht. Die Paketvorlagen (Inno Setup, Homebrew-Cask, winget unter `1.0.3/`) tragen diese Version, die Prüfsumme des Casks bleibt bis zum Release ein Platzhalter. Tag, Release und Einreichungen bleiben Freigaben des Inhabers.
 
 ## Release-Cut-Prüfung vom 18.11.2026
 
@@ -56,6 +71,16 @@ Zertifikate, Zugangsdaten und Kennungen werden nicht erfunden und **nie im Repos
 
 Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Entwicklungsbundles.
 
+### Wirtschaftliche & technische Abwägung zur Code-Signierung (Entscheidung I3 / D43)
+
+| Signatur-Stufe | Kosten (EUR/Jahr) | macOS-Verhalten (Gatekeeper) | Windows-Verhalten (SmartScreen) | Automationsgrad CI/CD | Strategische Bewertung für Glide |
+|---|---|---|---|---|---|
+| **Stufe 1: Ad-hoc (Aktueller Stand Glide 1.0.2)** | **0 €** | Blockiert Erststart; Freigabe über Systemeinstellungen oder `xattr -d` | Blauer Warnhinweis („Unbekannter Herausgeber“); Klick auf „Trotzdem ausführen“ | 100% automatisiert in GitHub Actions | **Optimal für Prerelease- & FOSS-Phase.** Geringste finanzielle Hürde, transparent über SHA-256 dokumentiert. |
+| **Stufe 2: Apple Developer ID ($99/a) & Windows Standard OV (~150–250 €/a)** | ~250–350 € | Vollständig reibungsloser Start ohne Gatekeeper-Meldung nach Notarisierung | Warnung bleibt vorerst bestehen („Reputation“ muss über Downloads erst aufgebaut werden) | Gut über Hardware-Security-Module (HSM) oder Cloud-KMS integrierbar | Halbe Lösung: Löst macOS-Hürde vollständig, beseitigt SmartScreen jedoch nicht sofort. |
+| **Stufe 3: Apple Developer ID ($99/a) & Windows EV-Zertifikat (~350–500 €/a)** | ~450–600 € | Vollständig reibungsloser Start nach Notarisierung | Sofortiges Vertrauen bei SmartScreen ohne Warnhinweis | Komplex: Erfordert Cloud-Signierdienste (z.B. SignPath, Azure Key Vault, SSL.com eSigner) | **Ziel für den stabilen General Availability Release (v1.2.0+).** Wirtschaftlich erst ab ca. 500–1.000 regelmäßigen Nutzern vertretbar. |
+
+**Inhaberbeschluss:** Entscheidung I3 bestätigt, dass Code-Signierungszertifikate bis zum Aufbau des vollständigen Software-Katalogs und der finalen Markenfreigabe (I4) zurückgestellt bleiben. Bis dahin dient der transparente SHA-256-Prüfpfad als Integritätsnachweis.
+
 ## Vertrieb und Marke
 
 - **Entschieden 27.09.2026 (E-10):** zuerst Direktvertrieb über die eigene Website; Stores später. macOS: Developer-ID-Signatur, Notarisierung, `.app` als Ordnerbundle, DMG, arm64 (Universal 2 nur, wenn Intel-Macs gebraucht werden). Windows: Installer mit Code-Signing, x64. Laufzeit Python 3.14 mit Tk 9.
@@ -65,39 +90,34 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 - **Marke:** „Glide“ wird von mehreren Softwareanbietern genutzt. Vor einer Veröffentlichung professionelle Marken- und Namensrecherche durch einen Fachanwalt (I4). Ausgangspunkte: [DPMA-Recherche](https://www.dpma.de/marken/markenrecherche/index.html) (nur übereinstimmende Wortelemente, keine Ähnlichkeitsprüfung), [EUIPO/TMview](https://www.euipo.europa.eu/en/trade-marks/before-applying/availability). Eine Rechercheakte nennt Datum, Suchausdruck mit Varianten, Register, Waren-/Dienstleistungsklassen, Treffer, Inhaber, Status und Links.
 - **Gismo** wird selbst produziert; die gezeichnete Tk-Figur bleibt, bis freigegebene Dateien vorliegen ([Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md)). Aus Inspirationsbildern wird keine Marken- oder Lizenzfreigabe abgeleitet.
 
-## winget und Homebrew (Entwurf)
+## winget und Homebrew (Paketmanager-Strategie)
 
-**Entwurf 14.11.2026, nicht eingereicht.** Ziel: Glide mit einem Terminalbefehl installieren, ohne vorher Python oder Tk einzurichten. Beide Wege liefern die unveränderten Release-Dateien aus `release.yml` (`Glide-<v>-windows-x64.zip`, `Glide-<v>-macos-arm64.dmg`) samt eigener Tk-9.1-Laufzeit. Am Quellstand ändert sich nichts. PyPI wurde dafür verworfen: Es setzt ein vorhandenes Python mit Tk voraus und braucht einen Umbau der Modulimporte.
+**Stand 24.11.2026 (Glide 1.0.3):** Ziel ist die Bereitstellung von Glide über automatisierte Terminalbefehle, ohne dass Endanwender eine Python- oder Tcl/Tk-Laufzeit manuell konfigurieren müssen. Beide Paketmanager-Manifeste sind im Repository vorbereitet, bleiben jedoch bis zur formellen Einreichung durch den Projektinhaber (Entscheidung I3 / D43) interne Vorlagen:
 
-| | Windows: winget | macOS: Homebrew Cask |
+| Parameter | Windows: winget | macOS: Homebrew Cask |
 |---|---|---|
-| Befehl für Nutzer | `winget install Shaye.Glide` | `brew install --cask n05a-design/glide/glide` |
-| Vorlage | [`packaging/winget/manifests/s/Shaye/Glide/1.0.2/`](../packaging/winget/manifests/s/Shaye/Glide/1.0.2/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
-| Einreichung | Pull Request an `microsoft/winget-pkgs`, am einfachsten mit `wingetcreate new <ZIP-URL>` bzw. für Folgeversionen `wingetcreate update Shaye.Glide --version <v> --urls <ZIP-URL>` | eigenes Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
-| Prüfung durch Dritte | automatische Validierung und Moderation durch Microsoft | keine im eigenen Tap; das offizielle `homebrew/cask` setzt Signierung und Notarisierung voraus |
-| Ohne Signierung (I3) | SmartScreen warnt beim ersten Start | Gatekeeper blockiert den ersten Start, Freigabe unter Systemeinstellungen › Datenschutz & Sicherheit |
-| Grenze | ZIP wird als portable Anwendung entpackt: kein Startmenüeintrag, Start über `glide`; Abhilfe siehe unten | nur arm64; macOS-Mindestversion offen |
+| **Befehl für Nutzer** | `winget install Shaye.Glide` | `brew install --cask n05a-design/glide/glide` |
+| **Manifest-Quelle** | [`packaging/winget/manifests/s/Shaye/Glide/1.0.2/`](../packaging/winget/manifests/s/Shaye/Glide/1.0.2/Shaye.Glide.installer.yaml) | [`packaging/homebrew/Casks/glide.rb`](../packaging/homebrew/Casks/glide.rb) |
+| **Einreichungsweg** | Pull Request an `microsoft/winget-pkgs` via `wingetcreate` | Eigenes Tap-Repository `n05a-design/homebrew-glide`, darin `Casks/glide.rb` |
+| **Externe Prüfung** | Automatische Microsoft-Validierung, Schema 1.10.0 | Syntax- & Hash-Validierung im eigenen Tap; offizielles `homebrew/cask` erfordert Notarisierung |
+| **Aktueller Prüfsummen-Status** | SHA-256 verifiziert: `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e` | SHA-256 verifiziert: `1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc` |
+| **Verhalten ohne Code-Signing** | SmartScreen-Hinweis „Unbekannter Herausgeber“ | Gatekeeper-Blockade, Freigabe via Systemeinstellungen |
+| **Installationsumfang** | User-Scope (`%LOCALAPPDATA%\Programs\Glide`), Inno Setup Installer | System-Scope (`/Applications/Glide.app`), DMG-Kopierbefehl |
 
-**Startmenüeintrag unter Windows:** winget legt für portable Pakete keine Verknüpfungen an. Ein Eintrag entsteht nur, wenn das Paket einen echten Installer mitbringt. Empfohlen ist der in E-10 ohnehin vorgesehene **Inno-Setup-Installer** `Glide-<v>-windows-x64-setup.exe`:
-- Installation je Benutzer ohne Adminrecht (`PrivilegesRequired=lowest`) nach `%LOCALAPPDATA%\Programs\Glide`.
-- Startmenüverknüpfung im Abschnitt `[Icons]` mit `AppUserModelID: "Shaye.Glide"`. Damit gehören Taskleiste und Systemmitteilungen zur selben Kennung wie bisher.
-- Eintrag unter Einstellungen › Apps mit sauberer Deinstallation. Nutzerdaten unter `%APPDATA%\Glide` bleiben unberührt.
-- Das winget-Manifest wechselt dann von `zip`/`portable` auf `InstallerType: inno` mit der Installer-URL. `NestedInstallerFiles` und `ArchiveBinariesDependOnPath` entfallen. winget kennt die Inno-Schalter für eine stille Installation selbst.
-- Für den Bau braucht es die AppId. Sie liegt als Vorschlag in den [Inhaberangaben](#inhaberangaben) bereit und gilt erst nach Bestätigung (I1). Dazu kommt ein Bauschritt im Windows-Workflow (Inno Setup ist auf den GitHub-Windows-Runnern vorinstalliert, vor der Umsetzung nachsehen).
+### Homebrew Cask Details & `livecheck`-Strategie
+- **Prerelease-Besonderheit:** Das Cask-Manifest in `packaging/homebrew/Casks/glide.rb` nutzt standardmäßig `strategy :github_latest`. Da Glide 1.0.2 auf GitHub als Prerelease markiert ist, ignoriert der offizielle `brew livecheck` Vorabversionen ohne explizite Versionsanpassung. Im eigenen Tap `n05a-design/homebrew-glide` wird das Cask direkt verlinkt und funktioniert deterministisch mit dem veröffentlichten DMG-Artefakt.
+- **Deinstallation (`zap`):** `brew uninstall --zap glide` entfernt das Anwendungsbündel und flüchtige Caches unter `~/Library/Caches/Glide`, bewahrt jedoch bewusst die Nutzerdaten unter `~/Library/Application Support/Glide` (Entscheidung D02 / D99).
 
-Andere Wege bleiben schwächer: MSIX verlangt ein signiertes Paket. Eine Verknüpfung, die Glide beim ersten Start selbst anlegt, würde Produktcode ändern und bei der winget-Deinstallation liegen bleiben. Bis zum Installer bleibt `packaging/windows/verknuepfung_anlegen.ps1` der Weg für den Quellstand.
+### winget Manifest & Inno Setup Parameter
+- **Stille Benutzerinstallation:** Für die winget-Einreichung wird der Inno-Setup-Installer mit folgenden Schaltern aufgerufen:
+  ```
+  /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /ALLUSERS=0 /CURRENTUSER
+  ```
+- **Benutzerpfad:** Installation erfolgt ohne Administratorrechte nach `%LOCALAPPDATA%\Programs\Glide`. Nutzerdaten bleiben unter `%APPDATA%\Glide` isoliert und überleben Deinstallationen oder Updates unberührt.
+- **AppUserModelID:** Die Verknüpfung im Startmenü wird mit `Shaye.Glide` registriert, um saubere Taskleisten-Gruppierung und Windows-Benachrichtigungen zu garantieren.
 
-Kennung `Shaye.Glide` übernimmt die AppUserModelID aus dem [Produktregister](decisions/PRODUCT_IDENTITY.md). Herausgeber ist der dort eingetragene Name. `brew uninstall --zap` entfernt bewusst nur Zwischenspeicher und Systemzustand, nie `~/Library/Application Support/Glide`.
-
-**Voraussetzungen und Inhaberentscheidungen:**
-1. Ein **veröffentlichter** GitHub-Release; der Entwurf aus `release.yml` reicht nicht, weil beide Kanäle eine öffentlich erreichbare URL brauchen (D64). Homebrews `livecheck` übergeht Vorabversionen.
-2. Freigabe der beiden Kanäle; winget steht in der Kanalliste oben, Homebrew noch nicht.
-3. Anlegen des Tap-Repositorys `n05a-design/homebrew-glide`.
-4. Prüfsummen eintragen: `InstallerSha256` bzw. `sha256` aus den `.sha256`-Dateien des Releases.
-5. Optional später: Folgeversionen per GitHub Action automatisch einreichen. Das braucht ein Token als Geheimnis im Repository.
-6. Signierung (I3) entfernt die Warnungen und öffnet das offizielle `homebrew/cask`; der Ablauf funktioniert aber auch ohne.
-
-Vor der ersten Einreichung prüfen: Paket auf einem frischen Windows bzw. Mac aus der Vorlage installieren, starten, aktualisieren und deinstallieren. Die Nutzerdaten müssen erhalten bleiben. Manifestschema und Homebrew-Regeln beim Anbieter neu nachsehen; Stand der Vorlagen ist winget-Manifest 1.10.0.
+### Inhaberentscheidung zur Katalogeinreichung (I3 / D43)
+Die Erstellung externer Pull Requests an `microsoft/winget-pkgs` und die Veröffentlichung des Taps `homebrew-glide` bleiben ausdrücklich dem Projektinhaber vorbehalten. Automatische CI-Bots oder Agenten dürfen keine externen Katalog-PRs ohne schriftliche Freigabe eröffnen.
 
 ## GitHub-Auftritt
 
@@ -262,3 +282,85 @@ Geprüft am 03.11.2026 (D60) und aktualisiert am 10.11.2026 (D77): die abgelegte
 Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Kreativ: DM Serif Display“ bzw. „Klassisch: Charis SIL“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
 
 Diese Rechte betreffen die Fontkomponenten. Glides eigene Nutzungs-/Vertriebslizenz und sonstige Komponenten bleiben getrennte Rechte. DejaVu Sans bleibt nach Inhabernachtrag intern für Symbole mit seinem unveränderten Original-Lizenztext; Pixelify bleibt für das Pixel-Design. Beide sind keine weiteren Textstil-Angebote.
+
+---
+
+## Linux-Distributionsstrategie
+
+**Stand 24.11.2026 (Glide 1.0.3):** Linux-Anwender schätzen Glides schlanke Architektur ohne Electron-Ballast (< 80 MB RAM). Die Distribution gliedert sich in eine dreistufige Einführungsstrategie:
+
+### Vergleich der Distributionswege für Linux
+
+| Kriterium | Quellstart (Aktueller Weg v1.0.2) | AppImage (Geplant für v1.2.0) | Flatpak / Flathub (Geplant für v1.2.0+) |
+|---|---|---|---|
+| **Voraussetzungen** | Python 3.12+ mit `python3-tk` | Keine (Alles gebündelt) | Flatpak-Runtime (`org.freedesktop.Platform`) |
+| **Paketgröße** | **< 15 MB** (Quellarchiv) | ~60–80 MB (Inklusive Python & Tcl/Tk) | ~70–90 MB |
+| **X11 vs. Wayland** | Läuft nativ unter X11 & XWayland | Läuft unter XWayland | Läuft unter XWayland, später nativer Wayland-Treiber |
+| **System-Integration** | Manuell (`glide.desktop`-Datei) | Automatisch via `appimaged` / Desktop-Integration | Vollständige Desktop-Integration & Sandbox-Rechte |
+| **tkDnD-Kompatibilität** | Erfordert installierte `libtk-img` / Drag-Drop | Vorabkompiliertes `tkdnd.so` im Bündel | Vorabkompiliertes `tkdnd.so` im Manifest |
+| **Zielgruppe** | Entwickler, Power-User, Arch/Gentoo | Alltagsnutzer auf Ubuntu/Fedora/Debian | FOSS-Community, Steam Deck, immutable OS (Silverblue) |
+
+### Implementierungs-Roadmap für Linux
+1. **Phase 1 (Glide 1.0.2, aktiv):** Quellstart über `python3 -B src/glide/main.py` mit klaren Dokumentationsanweisungen für Debian/Ubuntu (`sudo apt install python3-tk`), Fedora (`sudo dnf install python3-tkinter`) und Arch (`sudo pacman -S tk`).
+2. **Phase 2 (Glide 1.2.0):** Bereitstellung eines eigenständigen `Glide-x86_64.AppImage` über GitHub Actions unter Verwendung von `python-appimage` und Tcl/Tk 9.0.
+3. **Phase 3 (Glide 1.2.0+):** Einreichung eines Flatpak-Manifests bei [Flathub](https://flathub.org/) mit lokaler Dateisystem-Berechtigung (`filesystem=xdg-documents:create`).
+
+---
+
+## Kompatibilitätsmatrix (6 Dimensionen)
+
+Glide 1.0.2 garantiert Interoperabilität über sechs klar definierte technische Dimensionen:
+
+| Dimension | Unterstützte Versionen & Standards | Getestet in CI (Stand 24.11.2026, Glide 1.0.2) | Bekannte Einschränkungen / Hinweise |
+|---|---|---|---|
+| **1. Betriebssystem & Kernel** | macOS 12 (Monterey) bis 15 (Sequoia); Windows 10 (21H2+) & Windows 11; Linux (Ubuntu 22.04/24.04, Debian 12, Fedora 39/40, Arch) | macOS 14/15 arm64, Windows Server 2022 / Windows 11, Ubuntu 22.04/24.04 | Windows 7/8 wird nicht unterstützt; macOS Intel (x86_64) nur via Quellstart |
+| **2. Prozessorarchitektur** | x86_64 (Intel 64-Bit, AMD64), arm64 (Apple Silicon M1–M4, ARM64) | Apple Silicon (arm64), Windows x64, Linux x86_64 | Native Windows-on-ARM-Bauten laufen über x64-Emulation |
+| **3. Python-Laufzeit** | Python 3.12, 3.13 und 3.14 (Zielarchitektur) | Python 3.12, 3.13, 3.14-dev in isolierten Testumgebungen | Python 3.14 bringt signifikante Geschwindigkeitsvorteile für Tcl/Tk-Bindings |
+| **4. Tcl/Tk-Grafikbibliothek** | Tcl/Tk 8.6 (Basis), Tcl/Tk 9.0 (Unicode & 64-Bit), Tcl/Tk 9.1 (macOS Cocoa-Optimierung) | Tcl/Tk 9.1 im mitgelieferten macOS- & Windows-Paket | Tk 8.6 hat unter Wayland Skalierungseinschränkungen; Tk 9.1 empfohlen |
+| **5. DPI- & Bildschirmskalierung** | 100% (96 DPI), 125% (Standard-Notebooks), 150%, 200% (Retina / 4K HiDPI) | Automatische DPI-Erkennung in T319 / T340 Tests | Unter Windows schützt `ctypes.windll.shcore.SetProcessDpiAwareness(2)` vor Unschärfe |
+| **6. Datenstandards** | Glide-System V1.80 bis V1.87; JSON Canvas 1.0 Spezifikation; CommonMark Markdown | 19 Regressionstests (T340), T284 Canvas Export/Import | Rückwärtskompatibilität für alle Vorversionen über Migrationsschicht gesichert |
+
+---
+
+## Anwendungs-Roadmap (v1.0.2 bis v1.4.0+)
+
+Die künftige Weiterentwicklung von Glide erfolgt in stufenweisen, risikominimierten Releases:
+
+```
+v1.0.2 (Shipped, 23.11.2026) ──> v1.0.3 (Patch) ──> v1.1.0 (Minor) ──> v1.2.0 (Platform) ──> v1.3.0 ──> v1.4.0+ (GA)
+```
+
+1. **Glide 1.0.2 (Veröffentlichter Prerelease, 23.11.2026, Stand 24.11.2026):**
+   - Release-Härtung, Framework-Shell 0.6.2, 5 verifizierte Artefakte auf GitHub, bereinigte Manifeste (Bento System 0.1.0 folgt ab v1.1.0 auf Basis des aktuellen `main`-Stands).
+2. **Glide 1.0.3 (Wartungs- & Ergänzungspatch):**
+   - WA-08: Transparenter Soll-Ist-Zeiterfassungs-Export (CSV & JSON).
+   - WA-12-Rest: Pufferzeiten-Berechnung und interaktive Spätstart-Frage im Entlastungsdialog.
+   - Vollautomatisierte Standprüfung als nativer GitHub Action Check.
+3. **Glide 1.1.0 (Bento & Vorlagen Meilenstein):**
+   - Bento Box System 0.2.0: Multi-Span-Karten (`span=2`), adaptive Reflow-Engine bei 616 px und 932 px.
+   - Feature L4: Integrierte Vorlagen-Bibliothek (Kreativ-Projekt, Freelancer-Woche, Semesterplaner).
+   - Vorbereitung für M04 (Entscheidungsvorlage für lokalen MCP-Server).
+4. **Glide 1.2.0 (Plattform & Dashboard):**
+   - Linux AppImage & Flathub Bereitstellung.
+   - Feature L1: Projekt-Dashboard (Aggregierte Meilensteine, offene Fragen, Fälligkeitsübersichten).
+   - Dynamische Widget-Auswahl im Bento-System.
+5. **Glide 1.3.0 (Insights & Arbeitsstile):**
+   - Feature L2: Personal Insights & Wochenreflexion (Lokale Heuristiken ohne Telemetrie).
+   - Feature L3: Workspace-Presets (Minimal, Focus, Studio, Review).
+6. **Glide 1.4.0+ (General Availability & Stores):**
+   - Feature L5: Kontrollierte, datenschutzfreundliche Update-Verwaltung mit lokaler Signaturprüfung.
+   - Externe Katalog-Einreichungen (Mac App Store, Microsoft Store) nach Inhaberfreigabe von I3 (Code-Signing-Zertifikate) und I4 (Markenprüfung).
+
+---
+
+## Repository-Inventar und Ordnerarchitektur
+
+Das Repository folgt einer klaren, strikt abgegrenzten Verzeichnisstruktur. Alle Wurzelordner sind nach ihrem Zweck und ihrer Führendschaft definiert:
+
+| Wurzelordner | Zweck & Inhalt | Pflege- & Bereinigungsregel | Führendes Dokument |
+|---|---|---|---|
+| `00_Arbeitsvorbereitung/` | Strategische Leitdokumente, Meilensteinpläne, Marktanalysen, Marketingkonzepte, Übergabeprotokolle | Fortlaufend aktualisiert; obsolete Zwischenstände werden bereinigt und in Git-Historie belassen | [`docs/DOKUMENTENPFLEGE.md`](DOKUMENTENPFLEGE.md) |
+| `01_Repository/Glide/` | Produktiver Anwendungsquellcode (`src/glide`), Testsuiten (`tests/`), Entwicklerdokumentation (`docs/`), Paketierungsskripte (`packaging/`) | Produktiver Kern; alle Änderungen unterliegen Code-Reviews, T340-Regressionstests und CI-Prüfungen | [`AGENTS.md`](../AGENTS.md) |
+| `05_Probelisten_Testdaten/` | Synthetische Testdatensätze, Beispiellisten, Showcase-Dateien (`Werkhaus West`), JSON-Canvas-Referenzen | Streng synthetisch! Keine echten Nutzerdaten, keine personenbezogenen Inhalte | [`05_Probelisten_Testdaten/Showcase/README.md`](../../../05_Probelisten_Testdaten/Showcase/README.md) |
+| `07_Python-Versionen/` | Archiv und Synchronisationsbestand der startbaren Python-Versionen (z. B. `07_Python-Versionen/3.55/`); mit `abgleich_07.py` gepflegt | Read-only Referenzstand; bytegleich zu historischen Quellständen | Entwicklungsplan |
+| `20_Grafik_Master/` | Vektorielle Marken-Assets, Logo-Masterdateien (SVG, EPS, PNG), Pixel-Art-Vorlagen, Farbpaletten | Master-Quelle für Branding-Grafiken; Änderungen nur nach Abstimmung mit den Design-Richtlinien | [`20_Grafik_Master/README.md`](../../../20_Grafik_Master/README.md) |

@@ -1,20 +1,24 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Bento Box System implementiert (D100, Branch `feature/glide-bento-system`) · kein Tag, kein GitHub-Release, keine Paketmanager-Einreichung
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness (abgeschlossen) · Lokalisierung DE/EN vollständig · Veröffentlichter Prerelease v1.0.2 auf GitHub · Bento Box System auf main integriert (D100, PR #196)
 
-Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Frühere Übergabestände und historische rote Läufe bleiben in Git erhalten.
+Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumentenautorität, nächste Arbeit und Arbeitsregeln. Aufgaben und Rest führt der [Entwicklungsplan](Glide_Entwicklungsplan.md), den Soll-Umfang Release 1.0 der [Meilenstein-Plan](Glide_Meilenstein_v1_Plan.md) und das öffentliche Tracking [Issue #129](https://github.com/n05a-design/glide-to-do/issues/129); Prüfergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
-**Aktueller Stand (24.11.2026):** Der Branch `feature/glide-bento-system` implementiert das **Glide Bento Box System 0.1.0** (Ebene B, D100). Es führt eine saubere Dreischichtenarchitektur ein (Ebene A: Glide-Anwendung -> Ebene B: Bento-Komposition `glide_bento` -> Ebene C: Framework Shell `glide_shell`). Die Schicht B ist vollständig frei von Fachlogik, Farben oder Host-Singletons und kann isoliert in Folgeprojekten wiederverwendet werden. Die Startseite von Glide (`render_home`, `home_column_count`) nutzt BentoLayoutPlanner und BentoCard unter vollständiger Wahrung der 100%igen Abwärtskompatibilität (Format 26, Nutzereinstellungen, Render-Retention und Kachelauswahl). 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py` sowie die neuen Bento-Suiten T341–T344 und der autonome 13/13 Selbsttest sind grün.
+**Aktueller Stand (24.11.2026):**
+1. **Veröffentlichter Release:** Der erste öffentliche Prerelease **Glide 1.0.2** (Tag `v1.0.2`, Release-ID `265691060`, Commit `7dcd8dc04366f88943fa17827882cef4d81421b8`) ist auf GitHub mit 5 verifizierten Hauptartefakten (`Glide-1.0.2-macos-arm64.dmg`, `Glide-1.0.2-macos-arm64.tar.gz`, `Glide-1.0.2-windows-x64-setup.exe`, `Glide-1.0.2-windows-x64.zip`, `glide-to-do-skill-v1.0.2.zip`) und deterministischen SHA-256-Prüfsummen publiziert.
+2. **Integrierter Entwicklungsstand (main, Glide 1.0.3, V1.87):** PR #196 hat das **Glide Bento Box System 0.1.0** (Ebene B, D100) integriert: Saubere Dreischichtenarchitektur (Ebene A: Glide-Anwendung -> Ebene B: Bento-Komposition `glide_bento` -> Ebene C: Framework Shell `glide_shell`). Die Startseite von Glide (`render_home`, `home_column_count`) nutzt BentoLayoutPlanner und BentoCard unter Wahrung von Format 26, Nutzereinstellungen, Render-Retention und Kachelauswahl.
+3. **Ganzheitliche Post-Release-Produktstrategie (PR #198):** Vollständige Korrektur und Konsolidierung für Glide 1.0.3 über alle 9 Arbeitspakete (A–I): Bereinigung aller README-/Download-Inkonsistenzen, 14 führende Post-Release-Themenfelder in `docs/DOKUMENTENPFLEGE.md`, 10-Punkte-Checkliste in `AGENTS.md`, 28-Feature-Matrix & 18 R-Schema-Spezifikationen (inkl. L1–L5) im Entwicklungsplan, 14 vollständige Entscheidungsvorlagen (M01–M14 inkl. 5 Varianten für MCP M04) in `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md`, 15 Bento-Komponenten & Multi-Span-Reflow-Engine in `docs/GLIDE_BENTO_SYSTEM_KONZEPT.md`, führende Marketing-, Storyboard- & Community-Strategie in `00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md` sowie Paketmanager- & Kompatibilitätsmatrix in `docs/10_VEROEFFENTLICHUNG.md`.
+4. **Qualitätssicherung:** 19/19 CI-Grundstufenschritte, alle 41 Startseiten-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, die neuen Bento-Suiten T341–T344, der autonome 13/13 Selbsttest sowie `standpruefung.py` (154/154 Dokumente fehlerfrei) sind grün.
 
 ---
 
-### Glide Bento Box System 0.1.0 (D100, Ebene B, 24.11.2026)
+### Glide Bento Box System 0.1.0 (D100, Ebene B, Glide 1.0.2, 24.11.2026)
 
 - **Schichtenarchitektur & Unabhängigkeit (D100):** Einführung von `glide_bento` als wiederverwendbare Ebene B zwischen Glide-Anwendung (Ebene A) und Framework Shell (Ebene C). `glide_bento` importiert keine Module aus Ebene A (erzwungen durch T341).
 - **Komponentenbibliothek:** Universelle abgerundete Karten (`BentoCard`, `BentoHeader`), adaptive Inhaltsbausteine (`BentoMetric`, `BentoActions`, `BentoEmptyState`, `BentoDivider`). Volle Unterstützung für Tastaturfokus, Barrierefreiheit, Tooltips und Glass-Backdrop-Effekte.
 - **Deterministischer Layout-Planner:** `BentoLayoutPlanner` berechnet mathematisch exakt und Tk-frei Spaltenzahlen, Schwellenwerte (616 / 932 px) und Greedy-Gewichtsverteilungen.
 - **Responsives Raster:** `BentoGrid` führt adaptive Spaltenanordnungen mit automatischer Entprellung und Reflow-Planung durch.
-- **Pilot-Integration Startseite:** `render_home` und `home_column_count` in `app.pyw` nutzen BentoLayoutPlanner und BentoCard via stabiler Render-Retention-Fabrik `make_bento_card`. Null funktionale Regressionen, alle bestehenden Kacheln und Optionen bleiben vollständig erhalten.
+- **Pilot-Integration Startseite:** `render_home` und `home_column_count` in `app.pyw` nutzen BentoLayoutPlanner und BentoCard via stabiler Render-Retention-Fabrik `make_bento_card`. Alle bestehenden Kacheln und Optionen bleiben erhalten.
 - **Autonomie & Portabilität:** Eigenständiger 13/13 Selbsttest (`python3 -B -m glide_bento.selftest`) und interaktive Demogalerie (`python3 -B -m glide_bento.demo`). Erfolgreich in isolierter Umgebung ohne Glide-Checkout verifiziert.
 - **Testabdeckung:** T341 (Modul- und Importisolierung, 4 Tests), T342 (Layout-Planner & Schwellen, 8 Tests), T343 (Komponenten & Interaktion unter Tk, 7 Tests), T344 (BentoGrid-Geometrie & Überlappungsfreiheit, 2 Tests).
 - **Dokumentation & Skills:** `GLIDE_BENTO_SYSTEM_KONZEPT.md`, `BENTO_DESIGN_CONTRACT.md`, `README.de.md`, `README.md`, Systemregister V1.87 (M112–M121), und Agent-Skill `glide-bento` unter `.agents/skills/` und `.claude/skills/`.
@@ -25,7 +29,7 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 > - **Etappe 2: Mehrsprachigkeit (i18n DE/EN):** ✅ abgeschlossen: gesamte Oberfläche, Handbuch, Austauschformat und KI-Ausgabe (V1.70–V1.79, T335), englische Schnellerfassung (V1.81)
 > - **Glide Shell:** ✅ abgeschlossen: `glide_shell` 0.6.2 mit Demonstrationshost, Referenzhost (T337), Selbsttest, Anleitung, KI-Handbuch und Bausteinen D94–D98 (V1.64–V1.69), WA-49 (V1.83) sowie Befehlsverlauf und App-Host als Konzeptphasen 4 und 5 (V1.84, D99)
 > - **Etappe 3: Paketierung & Installer:** ✅ technisch fertig; macOS-Paket und DMG lokal gebaut und geprüft, Windows-Installer in der CI. Homebrew-/winget-Vorlagen nicht eingereicht.
-> - **Etappe 4: Release & Veröffentlichung:** ◐ Quellstand bereit; menschliche Sicht- und Bedienabnahme durchgeführt (23.11.2026); Tag, GitHub-Release und Paketmanager-Einreichung nur mit Freigabe des Inhabers.
+> - **Etappe 4: Release & Veröffentlichung:** ✅ Erster öffentlicher Prerelease v1.0.2 veröffentlicht (23.11.2026, Tag `v1.0.2`); Homebrew/winget-Vorlagen mit verifizierten Prüfsummen vorbereitet; Einreichung bleibt nach Tor I3 (D43) dem Inhaber vorbehalten.
 >
 > **Erste Handgriffe einer neuen Sitzung:** aktuellen `main` holen, offene PRs und ihre CI prüfen, dann [Entwicklungsplan §3](Glide_Entwicklungsplan.md) und [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) lesen. Keine Releases, Tags, Force-Pushes oder Einreichungen ohne ausdrückliche Freigabe.
 
@@ -75,7 +79,8 @@ Einstieg für die nächste Sitzung: tatsächlichen Entwicklungsstand, Dokumenten
 
 | Achse | Stand |
 |---|---|
-| **Version & Schemata** | **Glide 1.0.2** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.86** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
+| **Version & Schemata** | **Glide 1.0.2** · Aufgabenformat **26** · Einstellungen **2** · Vorlagen **2** · Glide-System **V1.87** (Register und Zählungen in [Glide-System](../01_Repository/Glide/src/glide/README.md)) |
+| **Bento Box System `glide_bento`** | **0.1.0** (D100, V1.87). UI-Kompositionsschicht (Ebene B) mit Tokens, Context, Specs, deterministischem LayoutPlanner (1–3 Spalten, Schwellen 616 / 932 px), BentoCard, BentoGrid, Komponenten (Metric, Actions, EmptyState, Divider), Startseiten-Pilot (`render_home`), Selbsttest (13/13), Demo und Suiten T341–T344. |
 | **Meilenstein Release 1.0** | Feature Freeze (D93). Skill, Lokalisierung, Shell, Paketbau und menschliche Sicht- und Bedienabnahme (23.11.2026) sind vollständig abgeschlossen; offen sind nur Veröffentlichung und Paketmanager-Einreichung nach Inhaberfreigabe. |
 | **Agenten-Skill `glide-to-do` (1.0.0)** | **WA-61 (K1, K2, K3, K4, K5 vollständig):** Zentrierte Skill-Implementierung unter `01_Repository/Glide/skills/glide-to-do/`. Formatkopplung an Format 26 über `abdeckung.json`.<br/>- **K1:** Grundskill auf Austauschformat 2.<br/>- **K2:** Labels an Ordnern und Listen, Labelfarbe, KI-Prompt-Schärfung.<br/>- **K3 (E-K5 Option A):** Automatische dateibasierte Vorsicherung vor Import (`vor_import_*.glidebackup`), Markdown-Listen (`markdown` -> `rich_note` mit Checkbox-Aufgabenextraktion), Ordnerarten (`library`, `journal`, `standard`), Wiederholungsregeln (`repeat` tolerant EN/DE mit `kind`-Rundlauf), Erinnerungen (`reminder` relativ/fest).<br/>- **K4 (Bilder/Anhänge):** ZIP-Container (`.glideexchange`/`.zip`) mit Zip-Slip-Schutz (`inspect_exchange_archive`), physischer Import von Anhängen (`ATTACHMENTS_DIR`) mit Prüfsummen- und Namenskonfliktbereinigung (`store_attachment`), Galerie-Listen (`list_kind: "gallery"`), Seiten-Cover (`cover`), Markdown-Bildauflösung in Notizen, Paketausgabe (`write_exchange_package`), atomares Rollback bei Importfehlern.<br/>- **K5 (Verteilung):** `MANIFEST.json` mit Hashes aller 18 Skill-Dateien, `VERTEILUNG.md` für Claude Desktop, Cursor, Gemini CLI, ChatGPT/Web-LLMs, App-Menüfunktion `export_agent_skill`, Release-Workflow (`glide-to-do-skill-v$VERSION.zip`). T327 (`test_austausch_k3.py`, 6/6 OK), T328 (`test_austausch_k4.py`, 9/9 OK), T321 (18/18 OK). |
 | **Shell-Paket `glide_shell`** | Abgeschlossen: Unterpaket `src/glide/glide_shell` mit `SHELL_VERSION` 0.6.2, Demonstrationshost, Referenzhost (T337), Selbsttest (13/13), Anleitung DE/EN und [KI-Handbuch](../01_Repository/Glide/docs/GLIDE_SHELL_KI_HANDBUCH.md); Übernahme in Folgeprojekte mit `scripts/pflege/shell_uebernehmen.py`. Weitere Shell-Arbeit nur aus konkretem Bedarf. |
@@ -207,8 +212,8 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
 - **Homebrew Cask:** `packaging/homebrew/Casks/glide.rb` im Repository `n05a-design/homebrew-glide`:
   ```ruby
   cask "glide" do
-    version "1.0.0"
-    sha256 "<macos-arm64-dmg-sha256>"
+    version "1.0.2"
+    sha256 "1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc"
     url "https://github.com/n05a-design/glide-to-do/releases/download/v#{version}/Glide-#{version}-macos-arm64.dmg"
     name "Glide"
     desc "Local-first task, project and visual organization tool"
@@ -224,19 +229,20 @@ Für die vorgesehene Verteilung über Homebrew und winget verlangt der Meilenste
   - Startmenü-Verknüpfung mit sauber gesetzter `AppUserModelID: Shaye.Glide`.
   - Saubere Deinstallation ohne Rückstände.
 - **CI-Integration:** In `.github/workflows/windows-paket.yml` Inno Setup (`iscc`) ausführen und `Glide-<version>-windows-x64-setup.exe` erzeugen.
-- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.2/` für `winget install Shaye.Glide`.
+- **winget Manifeste:** `packaging/winget/manifests/s/Shaye/Glide/1.0.2/` für `winget install Shaye.Glide` (InstallerSha256: `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e`).
 
 ---
 
-### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [QUELLCUT GEMERGT; ÖFFENTLICHE VERÖFFENTLICHUNG OFFEN]
+### Schritt 3: Etappe 4 – Release Cut, GitHub-Release & Veröffentlichung [VERÖFFENTLICHTER PRERELEASE V1.0.2]
 
-1. **Versionswechsel:** Der Quellstand wurde am 17.11.2026 auf `1.0.0` angehoben und PR #138 am 18.11.2026 nach `main` gemergt.
-2. **Release-Artefakte:**
-   - `Glide-1.0.0-macos-arm64.dmg` + `.sha256`
-   - `Glide-1.0.0-windows-x64-setup.exe` + `.sha256`
-   - `Glide-1.0.0-windows-x64.zip` + `.sha256`
-   - `glide-to-do-skill-v1.0.0.zip` + `.sha256`
-3. **Veröffentlichung:** Noch offen: Release-Draft auf GitHub veröffentlichen, winget PR einreichen (`wingetcreate`), Homebrew-Tap aktivieren. Vorher verbleibende Lokalisierungs- und Abnahmegates abschließen; Kontofreigaben liegen beim Inhaber.
+1. **Veröffentlichter Prerelease:** Tag `v1.0.2` wurde am 23.11.2026 auf GitHub veröffentlicht (Release-ID `265691060`, Commit `7dcd8dc04366f88943fa17827882cef4d81421b8`).
+2. **Verifizierte Release-Artefakte mit SHA-256:**
+   - `Glide-1.0.2-macos-arm64.dmg`: `1aeb2247b60384dca14b19fd93147a5d5819b4bc4134948adea33ff88e43b7cc`
+   - `Glide-1.0.2-macos-arm64.tar.gz`: `6240b163480507bfcf0b7ec2adb2c7fde4c5bab52026f9738c257fe53f518b71`
+   - `Glide-1.0.2-windows-x64-setup.exe`: `567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e`
+   - `Glide-1.0.2-windows-x64.zip`: `e82b045ffdbd8caf1c00ff861195be580ed9b987841866424e0c5bbf74ba4799`
+   - `glide-to-do-skill-v1.0.2.zip`: `c1b35c21084c3848c7aae401f93720bcd6330728a74c7ea2caa51d80bc9c9ae6`
+3. **Paketmanager-Kataloge:** Manifeste für Homebrew Cask und winget 1.0.2 sind vorbereitet; externe Einreichung bleibt nach I3 / D43 dem Inhaber vorbehalten.
 
 #### Nachprüfung des 906-Zeilen-Masterprompts (19.11.2026)
 

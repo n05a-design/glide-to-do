@@ -1,12 +1,12 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
 ## Was Glide ist
 
-- Eine primär deutschsprachige, lokale Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. D93 setzt für Version 1.0 Deutsch und Englisch als Ziel; die englische Oberfläche ist bislang nur teilweise umgesetzt. Leitsatz: *der ruhige, lokale Arbeitsplatz für den eigenen Tag – planen, erledigen, festhalten; alles in einer eigenen Datei, ohne Konto. Die Pixel-Werkstatt ist die persönliche Signatur.*
+- Eine zweisprachige (Deutsch und Englisch), lokale Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Die vollständige Lokalisierung DE/EN für Benutzeroberfläche, Dialoge, Handbuch, Vorlagen und Showcase ist in Glide 1.0.2 umgesetzt (D93, V1.70–V1.81). Leitsatz: *der ruhige, lokale Arbeitsplatz für den eigenen Tag – planen, erledigen, festhalten; alles in einer eigenen Datei, ohne Konto. Die Pixel-Werkstatt ist die persönliche Signatur.*
 - Kernfunktionen brauchen weder Internet noch Benutzerkonto oder Cloudservice. Kein automatischer Datentransfer, keine Telemetrie; nur ein angeklickter Link öffnet den Browser.
 - Laufzeit: Python 3.14 mit Tk 9 und Standardbibliothek. Tk 8.6 bleibt mit eingeschränkter Systemintegration lauffähig ([Architektur](02_ARCHITECTURE.md)). Mitgeliefert sind nur tkinterdnd2, optional geladen ([Abhängigkeitsentscheidung](decisions/ABHAENGIGKEIT_TKDND.md)), und privat registrierte Schriften (Rubik als Standard, DM Mono, DM Serif Display, Charis SIL und Pixelify Sans unter SIL OFL 1.1; DejaVu Sans ausschließlich als interner Symbolbegleiter unter eigener Bitstream-/Arev-Lizenz, Lizenztexte und Prüfsummen in `resources/fonts/provenance.json`). Eine neue Laufzeitabhängigkeit braucht eine dokumentierte Entscheidung.
 - Plattformunabhängig: macOS, Windows, Linux; keine Funktion nur für eine Plattform (Antwort des Inhabers vom 30.09.2026). Mobile und ein Toolkit-Wechsel sind zurückgestellt (D03).
@@ -20,7 +20,7 @@ Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 
 | Konten, eigener Cloudservice, Mehrbenutzerbetrieb, Kommentare, Zuweisung | Produktgrenze |
 | Gleichzeitige Bearbeitung auf zwei Geräten, Konfliktzusammenführung (G23) | Produktgrenze |
 | Zustellung bei beendetem Programm (Stufe C), externe Kalender-/Mailintegration | Produktgrenze; ICS-Import/-Ausgabe sind Dateien, keine Synchronisierung |
-| Weitere Sprachen jenseits Deutsch/Englisch | Produktgrenze; nach D93 bis Version 1.1+ zurückgestellt. Vollständige Lokalisierung DE/EN ist für Version 1.0 vorgesehen, aber noch nicht umgesetzt (siehe [Meilensteinplan](../../../00_Arbeitsvorbereitung/Glide_Meilenstein_v1_Plan.md)). |
+| Weitere Sprachen jenseits Deutsch/Englisch | Produktgrenze; nach D93 bis Version 1.1+ zurückgestellt. Vollständige Lokalisierung DE/EN ist in Glide 1.0.2 für Oberfläche, Dialoge, Statusmeldungen, Handbuch und Vorlagen geliefert und verifiziert. |
 | Eingebaute Cloud-KI (auch generative Bildfunktionen), Spracherfassung, KI-Schnittstelle (MCP) | Q3: Austausch über Dokumente |
 | Systemweiter Erfassungs-Hotkey (G07) | nur plattformeigen lösbar (Q2) |
 | Einstieg für neue Nutzer, führender Begleiter, Touren | 25./27.09.2026 nicht gewählt; Rundgang und Showcase vorhanden |

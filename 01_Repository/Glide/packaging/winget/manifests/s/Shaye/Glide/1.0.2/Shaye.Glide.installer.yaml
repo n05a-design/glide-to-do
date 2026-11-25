@@ -8,11 +8,11 @@ InstallModes:
 - silent
 - silentWithProgress
 UpgradeBehavior: install
-ReleaseDate: 2026-11-17
+ReleaseDate: 2026-11-23
 ProductCode: '{0A756FC5-5DDB-4B0F-9EC8-B4AA85753597}_is1'
 Installers:
 - Architecture: x64
   InstallerUrl: https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-windows-x64-setup.exe
-  InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+  InstallerSha256: 567e9549b1adf396d262d07d7475e7c47ef9fc561c38e4990d0ab5a31c3fee6e
 ManifestType: installer
 ManifestVersion: 1.10.0

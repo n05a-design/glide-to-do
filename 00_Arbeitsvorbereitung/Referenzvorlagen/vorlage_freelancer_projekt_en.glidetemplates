@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "freelancer_client_project",
+      "kind": "list",
+      "title": "Client Project (Freelance)",
+      "note": "Structured project workflow from briefing through milestones to client sign-off and invoicing.",
+      "labels": [],
+      "color": "accent",
+      "items": [
+        {
+          "title": "Project kickoff & briefing sign-off",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Requirements scope & deliverables specification",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Submit initial concept & design draft",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Incorporate client feedback & obtain approval",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Execution & quality assurance",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Final delivery & invoicing",
+          "done": false,
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}

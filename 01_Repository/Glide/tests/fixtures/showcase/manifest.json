@@ -1,9 +1,9 @@
 {
-  "app_version": "1.0.2",
+  "app_version": "1.0.3",
   "format_version": 26,
   "sprache": "de",
   "thema": "Stadtlicht · Fotoreise",
-  "bearbeitungstag": "2026-11-23",
+  "bearbeitungstag": "2026-11-24",
   "listen": 25,
   "dokumente": [
     {
@@ -109,20 +109,20 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 10322968,
-      "sha256": "78596a6957fe844f28f95fe1c94f45ac4e55782fa1f9f09b3b5cb74dcd40d848"
+      "bytes": 10322953,
+      "sha256": "1e0ce612f2d8f8d20704a30f235fd65936176d4867d88af7e7dc0b8b30c84c67"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 10368103,
-      "sha256": "9fcca46acf21ab7c1b8ff95450e592f22dd2ecf384cabe1523ab4a7439416159"
+      "bytes": 10368078,
+      "sha256": "956e37502bd269924e39fd1eac42553807a80a81e227f9ca952ad30f3a56dc62"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 16564,
-      "sha256": "b8cd75b1872663f20809e7841e1107579d2efab6cb9df1eeaa36bed5faa14904"
+      "sha256": "60b51451ba6ae727d34050c99aa7dc43bb1c96aac670468babcb2655e644849e"
     },
     "Stadtlicht.canvas": {
       "bytes": 4722,
-      "sha256": "8bf302639cc7d78d3f446148a9349df94091092eaa41af0b9cf7dcc2c891fc52"
+      "sha256": "18793611315e7b7dd1c1d6f1b94d53fed7d77ee6ed8185a95b0e64419d8a4c5a"
     }
   }
 }

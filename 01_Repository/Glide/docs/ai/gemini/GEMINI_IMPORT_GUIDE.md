@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-INDEX, GLIDE-GEMINI-CORE, GLIDE-GAPS]
 
 # Gemini import guide
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 5631333a
 
 ## Recommended small context
 

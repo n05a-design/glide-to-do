@@ -4,18 +4,44 @@
 
 **Dokumentationsbezug:** Hier steht das Bedienverhalten. Modul-/Testzuordnung und Wiederverwendung gehören ins [Glide-System](../src/glide/README.md); die [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) verbindet Funktionsänderungen mit Roadmap, Architektur, Prüfungen und öffentlichen Texten.
 
-## Einstieg in Glide 1.0.1
+## Einstieg und Funktionsumfang von Glide 1.0.2
 
-- **Neu in 1.0.1:** Die ganze Oberfläche, das Handbuch, Austauschformat, Systemlabels, Vorlagen, Startseite, KI-Ausgabe und die Neuerungen gibt es auf Deutsch und Englisch; die Schnellerfassung versteht auch englische Eingabewörter. Geöffnete Seiten zeigen im Kopf ihre Bearbeitungszeit. Der Showcase „Stadtlicht“ führt mit eigenen Fotos durch alle Funktionen.
+Glide ist ein lokaler Desktop-Arbeitsplatz, der Aufgabenverwaltung, Tagesplanung, Notizen, visuelle Pinnwände und integrierte Pixel-Zeichnungen nahtlos miteinander verknüpft. Das Dokument beschreibt das tatsächliche Bedienverhalten.
 
-- **Tagesplanung:** [Tageskapazität und Entlastung](#tageskapazität-und-entlastung-seit-3550) erklärt Aufgabenaufwand, Kalenderbelegung und Umplanung.
-- **Verknüpfte Inhalte:** [Fundorte und JSON-Canvas-Export](#fundortübersicht-json-canvas-10-und-themengerechte-steuerelemente-3540-10112026) beschreibt Navigation zu Verwendungen und offenen Pinnwandexport.
-- **Neuerungen nach dem Update:** Auf der Startseite zeigt „Neu in Glide <Version>“ in der Oberflächensprache die seit dem letzten bestätigten Stand hinzugekommenen Einträge aus höchstens drei Versionen. „Gelesen“ blendet die Karte aus. Unter Hilfe › Über Glide › Neuerungen bleibt die Versionshistorie aufrufbar.
-- **Daten und Wiederherstellung:** Die [Anleitung für Daten und Backups](06_DATA_BACKUP_MIGRATION.md) beschreibt Speicherorte, Sicherung, Wiederherstellung und Austausch. Die [Praxisanleitung für Vorlagen](27_VORLAGEN_PRAXISANLEITUNG.md) erklärt die getrennte Vorlagenablage.
+### Funktionsüberblick im veröffentlichten Release 1.0.2
+
+- **Vollständige Zweisprachigkeit (DE/EN, D93):** Die gesamte Benutzeroberfläche, Dialoge, Inspektoren, Tastaturkürzel, Statusmeldungen, das Benutzerhandbuch, Systemvorlagen und der Showcase „Stadtlicht“ stehen auf Deutsch und Englisch zur Verfügung. Die Schnellerfassung und Datumsfelder erkennen natürliche Zeitwörter in beiden Sprachen („today“, „heute“, „tomorrow“, „morgen“, „yesterday“, „gestern“).
+- **Dynamischer Sprachwechsel:** `refresh_sidebar_locale()` aktualisiert Seitenleisten-Titel (Seiten/Pages, Listen/Lists, Notizen/Notes, Zeichnungen/Drawings) und Tooltips bei Sprachwechsel in den Einstellungen unmittelbar ohne Anwendungsneustart.
+- **Erweitertes Dokumenten-Layout:** Proportional adaptiver Titelbild-Zuschnitt (`make_page_cover(..., adaptive=True)`) ohne vertikale Bildverzerrung, Pixel-Zeichnungen als kompakter 56px-Eckstempel im Notizkopf, kollisionsfreier Wortumbruch bei Bild- und Tabellenumfluss (`imgflow:right`, `cornerflow`).
+- **Responsive Fußleistendichte:** `sync_foot_density()` hält die Fußzeile selbst bei Mindestfensterbreite (860 px) sauber einzeilig.
+- **Tagesplanung & Kapazität (WA-12):** Transparente Tageskapazitätsanalyse mit ungeschätzter Aufgabenerfassung, Überlastungserkennung und geführtem Entlastungsdialog.
+- **Verknüpfte Inhalte & Fundortübersicht (WA-21 / D78):** Lückenlose Fundortnavigation über acht Verwendungsarten (Container, Referenzen, Textlinks, Aufgabenzeilen, Live-Listen, Relationen, Pinnwandkarten, Erwähnungen) mit Sprung in Haupt- oder Nebenansicht.
+- **Offener Pinnwand-Export (WA-07 / D78):** Export von Pinnwänden in das offene Format JSON Canvas 1.0 (`.canvas`) mit detailliertem Verlustbericht.
+- **Datensicherheit & Offline-Betrieb:** Automatische atomare Wechselsicherungen, Papierkorb mit bis zu 200 Einträgen, 20-stufiges In-Memory-Redo, ZIP-basierter Agentenaustausch (`.glideexchange`).
+
+### Nachfolgeentwicklung auf dem aktuellen Entwicklungsstand (main, V1.87)
+
+- **Glide Bento Box System 0.1.0 (D100, Ebene B):** Die Startseite (`render_home`) basiert auf der modularen Kompositionsbibliothek `glide_bento`. Der deterministische `BentoLayoutPlanner` ordnet Inhaltskarten flüssig in ein responsives Raster ein: 1 Spalte bei `< 616 px`, 2 Spalten zwischen `616 px` und `931 px` und 3 Spalten ab `932 px`. Breitenkarten (`span="wide"` / `variant="full_width"`) wie Begrüßung und Kernstatistiken spannen sich über die volle Breite oberhalb der Spalten. Kartenanatomie (`BentoCard`), Header (`BentoHeader`), Kennzahlen (`BentoMetric`), Aktionen (`BentoActions`), Leerstände (`BentoEmptyState`) und Trenner (`BentoDivider`) arbeiten unter voller Erhaltung der Widget-Retention.
+
+### Thematische Navigation
+
+- [§1 Grundbegriffe](#1-grundbegriffe) – Arten von Inhalten, Status, Fälligkeiten und Arbeitsprinzipien.
+- [§2 Seitenleiste und Navigation](#2-seitenleiste-und-navigation) – Systemzeilen, Abschnitte, Baumstruktur und Kompaktleiste.
+- [§3 Erfassen](#3-erfassen) – Schnellerfassung, natürliche Datumswörter, Titelbegrenzungen und Eingaberegeln.
+- [§4 Heute, Demnächst und Planung](#4-heute-demnächst-und-planung) – Tages- und Wochenplanung, Kalender und Kapazität.
+- [§5 Liste, Tabelle, Gruppierung](#5-liste-tabelle-gruppierung) – Arbeitsansichten, Sortierung, Filter und Mehrfachbearbeitung.
+- [§6 Pinnwand](#6-pinnwand) – Freie Arbeitsfläche, Kärtchen, Verbindungen und JSON Canvas 1.0.
+- [§7 Startseite](#7-startseite) – Bento-Raster, Kacheln, Gismo und Anpassung.
+- [§8 Seiten, Notizen, Notizbuch, Galerie](#8-seiten-notizen-notizbuch-galerie) – Dokumente, Textblöcke und Bildersammlungen.
+- [§9 Pixel-Werkstatt](#9-pixel-werkstatt) – Zeichenfläche, Werkzeuge, Raster und Farbfelder.
+- [§10 Suche und Befehlspalette](#10-suche-und-befehlspalette) – Schnelle Navigation und Tastaturbedienung.
+- [§11 Import, Ausgabe und Austausch](#11-import-ausgabe-und-austausch) – Markdown, CSV, ICS, JSON Canvas und Agenten-Skill.
+- [§12 Sicherungen und Wiederherstellung](#12-sicherungen-und-wiederherstellung) – Automatische Backups und Reimport.
+- [§13 Bekannte Grenzen](#13-bekannte-grenzen) – Bewusste Produktgrenzen und Systemvoraussetzungen.
 
 ## Technische Grundlage für Folgeprojekte
 
-Glide enthält neben seinen sichtbaren Produktfunktionen wiederverwendbare Systemfähigkeiten. Sie stehen direkt in der [Featureübersicht des Glide-Systems, F128–F147](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte): Speicher-/Commitsteuerung, Schreibbesitz, Wiederanlauf und Sicherungen; Format-/Eingabevalidierung und Settings-Kompatibilität; Quellzuordnung und Reimport; Widget-/Callback-Lebensdauer; Logo-/Rastererzeugung und Medienworker; begrenzte Rendering-Caches; Diagnostik und isolierte Prüfungen mit Integritätswächter; native CI-, Bau-, Lizenz- und Liefernachweise; versionierte Systempflege, Bewahrung, Runtimeprüfung sowie Architektur-/Design-/Übergabeverträge.
+Glide enthält neben seinen sichtbaren Produktfunktionen wiederverwendbare Systemfähigkeiten. Sie stehen direkt in der [Featureübersicht des Glide-Systems, F128–F147](../src/glide/README.md#technische-systemfähigkeiten-für-folgeprojekte): Speicher-/Commitsteuerung, Schreibbesitz, Wiederanlauf und Sicherungen; Format-/Eingabevalidierung und Settings-Kompatibilität; Quellzuordnung und Reimport; Widget-/Callback-Lebensdauer; Logo-/Rastererzeugung und Medienworker; begrenzte Rendering-Caches; Diagnostik und isolierte Prüfungen mit Integritätswächter; native CI-, Bau-, Lizenz- und Liefernachweise; versionierte Systempflege, Bewahrung, Runtimeprüfung sowie Architektur-/Design-/Übergabeverträge. Das **Glide Bento Box System** (Ebene B, `glide_bento` 0.1.0) stellt anwendungsneutrale UI-Komposition, Gestaltungs-Tokens und adaptive Raster für Folgeprojekte bereit; die **Glide Shell** (Ebene C, `glide_shell` 0.6.2) das Desktop-Fundament.
 
 Die vollständige Modul-/Paketzuordnung wird ausschließlich im Glide-System gepflegt. Der dortige [Steps-Übernahmevertrag](../src/glide/README.md#9-grundlage-für-steps-und-weitere-projekte) nennt Abhängigkeiten, Produktkopplungen und notwendige neue Prüfungen. Das ist vorhandener Bestand und Auswahlmaterial für Steps; es wurden weder neue App-Funktionen noch ein unabhängiges Framework oder Steps-Repository erstellt. Bestehende Light-/Dark-Designs, Themenfarben, responsive Fenster, Haupt-/Nebenansicht und Import-/Exportwege bleiben mit ihren aktuellen Bedienverträgen weiter unten beschrieben.
 
@@ -33,7 +59,7 @@ Notizen und Zeichnungen bieten Favorit, Stimmung, Ort und Schreibimpuls unter �
 
 Auf der Startseite öffnet Enter im Feld „Global suchen“ die vorhandene globale Suche mit der eingegebenen Anfrage. Die Suche in Vorlagen filtert live nach Titel, Beschreibung und enthaltenen Titeln; Umlaute und Großschreibung werden wie in der globalen Suche behandelt, mehrere Wörter müssen vorkommen. Escape löscht den Filter. Ein eigener Leerstand zeigt fehlende Treffer, die Anzahl nennt Treffer/Gesamtbestand. Anfragen von Startseite und Vorlagen bleiben beim Wechsel getrennt. Beide Felder liegen fest oberhalb des Scrollinhalts, Kopfaktionen nutzen bei Enge dieselbe Zeile.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87
 
 ## Fundortübersicht, JSON Canvas 1.0 und themengerechte Steuerelemente 3.54.0 (10.11.2026)
 

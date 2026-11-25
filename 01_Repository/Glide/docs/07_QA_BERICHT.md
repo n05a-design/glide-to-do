@@ -1,3 +1,20 @@
+## Glide Bento Box System 0.1.0 & Startseiten-Komposition (V1.87, Bento 0.1.0, 24.11.2026)
+
+| Gegenstand | Befehl / Nachweis | Ergebnis |
+|---|---|---|
+| Modul- & Importregeln | `python3 -B tests/unit/test_bento_importregel.py` (T341) | 6/6 Tests grün: Strikte Isolation von Ebene B (`glide_bento` importiert keine Ebene A); Ebene C (`glide_shell`) importiert kein Bento; vollständige Exporte; `stage_modules` und `manifest` im Paketbau verifiziert |
+| Layout-Engine & Schwellen | `python3 -B tests/unit/test_bento_layout.py` (T342) | 8/8 Tests grün: Deterministischer `BentoLayoutPlanner`, Schwellen 616 px und 932 px (1, 2, 3 Spalten), gierige Gewichtsverteilung, Full-Width-Trennung und Randfälle ohne Tk |
+| Komponenten unter Tk | `python3 -B tests/unit/test_bento_components.py` (T343) | 7/7 Tests grün: `BentoCard`, `BentoHeader`, `BentoMetric`, `BentoActions`, `BentoEmptyState`, `BentoDivider`, Tastaturfokus, Farbaktualisierung |
+| Responsive Geometrie | `python3 -B tests/integration/test_bento_integration.py` (T344) | 2/2 Tests grün: `BentoGrid`-Geometrie, dynamischer Umbruch, kollisions- und überlappungsfreie Kartenplatzierung |
+| Autonomer Selbsttest | `python3 -B -m glide_bento.selftest` | 13/13 Checks bestanden (Tokens, Context, Specs, Planner, Widgets, Divider) |
+| Interaktive Demogalerie | `python3 -B -m glide_bento.demo --test` | Testmodus erfolgreich initialisiert |
+| Startseiten-Regression | `python3 -B tests/integration/test_startseite3332.py` | Bestanden (Retention bestehender Knöpfe, Kachelauswahl, Theme-Wechsel, Undo/Redo) |
+| Startseiten-Unit-Tests | `python3 -B -m unittest discover -s tests/unit -p "test_home*.py"` | 41/41 Tests grün in 0.006s |
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py` | 19/19 Prüfschritte grün (Exitcode 0) |
+| Standprüfung | `python3 -B tests/tools/standpruefung.py` | 154 Dokumente fehlerfrei (Exitcode 0) |
+| Paket- & Lizenzvertrag | `python3 -B tests/tools/test_paket_license_contract.py` | 12/12 Tests grün: `glide_bento` als internes Paket der Komponente Glide zugeordnet |
+| Systemregister | `python3 -B tests/tools/test_glide_system.py` | 5/5 Tests grün: M112–M121 und T341–T344 vollständig im Systemregister V1.87 verifiziert |
+
 ## Menschliche Sicht- und Bedienabnahme Release 1.0 (Etappe 2, 23.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |
@@ -27,7 +44,7 @@
 | Referenzhost & Consumer-Projekte | `tests/integration/test_shell_referenzhost.py` (T337, 5 Tests) | Testprojekt A (isolierter Host mit AppHost, Dialogen, Timern und Wächter gegen Glide-Abhängigkeiten); Testprojekt B (historischer Upgrade 0.5.0 Commit `3c91e0c8` auf 0.6.2 unter Erhalt aller Host-Dateien und Rollback bei Fehler); Testprojekt C (Diagnose beschädigter Installationen und `python -O` Selbsttest) |
 | Agenten-Einstiege | `tests/tools/test_agent_einstieg.py` (T338, 4 Tests) | Wurzel-AGENTS.md, vollständige Skill-Spiegelung (.agents ↔ .claude), Copilot/Gemini-Adapter und Trennung von Produkt-Skill verifiziert |
 
-# QA-Bericht – Glide 1.0.2
+# QA-Bericht – Glide 1.0.3
 
 ## Nachprüfung der Shell für Folgeprojekte und Startprompt (V1.85, Shell 0.6.1, 22.11.2026)
 
@@ -499,7 +516,7 @@ Der Werkzeugtest T299 (`tests/tools/test_standpruefung.py`) prüft jetzt die Spr
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
-**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.2, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
+**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.3, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
 
 **Vollprüfung:** `tests/tools/pruefen.py --modus voll --timeout 900 --arbeitsablage ~/GlidePruefung`; Ergebnis `~/GlidePruefung/voll-141-20261118-r4/ergebnis.json`, dauerhafter WA-42-Nachweis `~/GlidePruefung/lauf-esdb9s05`. Exitcode 0: **135 ausgeführte Schritte erfolgreich, 2 ausdrücklich übersprungen**. Syntax 447 Python-Dateien, Versions-/Dokument-/Fixtureprüfungen, Fachlogik-Unit-Tests, sämtliche Integrationssuiten, Showcase, statische und Erreichbarkeitsanalyse, Stand-/Attribut-/Duplikatprüfungen sowie Beispieldaten- und Releaseabgleich bestanden. Quellhash von `app.pyw`: `bd7d9f90aed799e233b945914f34bba1fbb9485aa9fa06dddcd0f3d44698548b`. Screenshots wurden übersprungen, da `screenshots.py` Linux/X11 voraussetzt; die Sichtprüfung bleibt ausdrücklich menschlich und offen.
 
@@ -548,7 +565,7 @@ Nachweisstand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pa
 
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
-Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.2, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.3, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -566,7 +583,7 @@ Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skil
 
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
-Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.2, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.3, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -1128,7 +1145,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 23.11.2026 · Glide 1.0.2 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

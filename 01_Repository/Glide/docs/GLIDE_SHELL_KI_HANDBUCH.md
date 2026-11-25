@@ -1,13 +1,13 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 23.11.2026 · Glide 1.0.2 · Glide-System V1.86 · Glide Shell 0.6.2 · Multi-Agent Readiness · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2 · Multi-Agent Readiness · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 
 | Frage | Führende Quelle |
 |---|---|
 | Was gehört zur Shell, was bleibt bei Glide, warum? | [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md), §6 „Validierte Grenzen“ und §7 „Paket `glide_shell`“ |
-| Welche Entscheidungen gelten? | [Arbeitsrichtung](ARBEITSRICHTUNG.md), D86, D94–D98 |
+| Welche Entscheidungen gelten? | [Arbeitsrichtung](ARBEITSRICHTUNG.md), D86, D94–D100 |
 | Wie nutzt ein Folgeprojekt die Shell? | [`glide_shell/README.de.md`](../src/glide/glide_shell/README.de.md) (führend), [`README.md`](../src/glide/glide_shell/README.md) (englische Fassung) |
 | Welche Module und Tests gibt es (M-/T-Nummern)? | [Glide-System](../src/glide/README.md), Modultabelle M101–M109 und Testtabelle |
 | Wie ist die Shell in Glide eingebaut? | [Architektur](02_ARCHITECTURE.md), Absatz „Shell-Paket `glide_shell`“ |

@@ -2,7 +2,7 @@
 
 [English version](CONTRIBUTING.md).
 
-Stand 23.11.2026 · Glide 1.0.2
+Stand 24.11.2026 · Glide 1.0.3
 
 Du möchtest einen Fehler melden, eine Idee einbringen, die Dokumentation verbessern oder an Glide entwickeln? Hier findest du den Einstieg und die zuständigen Unterlagen.
 

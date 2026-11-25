@@ -1,6 +1,6 @@
 # Pixel workshop – Glide user guide
 
-Status as of 20.11.2026 · Glide 1.0.2 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
 
 **Deutsch:** [Funktionen §9 Pixel-Werkstatt](../20_FUNKTIONEN.md#9-pixel-werkstatt), [Bildfolgen](../20_FUNKTIONEN.md#bildfolgen-seit-3400), [Anzeigeprofile](../20_FUNKTIONEN.md#nachabnahme-3630-zeilenaktionen-aufschub-und-zeichenprofile) · [Guide contents](README.md) · Previous: [Pinboards](07-pinboards.md) · Next: [Import and export](09-import-and-export.md)
 

@@ -10,9 +10,902 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 24.11.2026 · Glide 1.0.2 · Aufgabenformat 26 · Glide-System V1.87 auf `feature/glide-bento-system` · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
 
-**Aktueller Stand (24.11.2026):** Auf dem Branch `feature/glide-bento-system` wurde das **Glide Bento Box System 0.1.0** (Ebene B, D100) implementiert: Universelle BentoCard, BentoHeader, responsive BentoGrid, Inhaltskomponenten (BentoMetric, BentoActions, BentoEmptyState, BentoDivider) und deterministischer Tk-freier BentoLayoutPlanner (Schwellenwerte 616 / 932 px). Pilot-Integration in Glide-Startseite (`render_home`, `home_column_count`) über Render-Retention-Fabrik `make_bento_card`. 100% abwärtskompatibel zu Format 26. 19/19 CI-Grundstufenschritte, 41 Home-Unit-Tests, 20 T340-Regressionstests, `test_startseite3332.py`, T341–T344 sowie der 13/13 Selbsttest sind grün.
+---
+
+## Strategische Post-Release Roadmap & Aktiver Arbeitsvorrat (24.11.2026)
+
+### 1. Aktueller Status
+- **Veröffentlichter Prerelease:** **Glide 1.0.2** (Tag `v1.0.2`, Commit `7dcd8dc0`) ist mit vollständigen Windows- und macOS-Paketen sowie dem Agent-Skill `glide-to-do` auf GitHub Releases publiziert.
+- **Integrierter Entwicklungsstand (`main`, Glide 1.0.3, V1.87):** Das **Glide Bento Box System 0.1.0** (`glide_bento`, D100, Ebene B) ist als modulare Kompositionsbibliothek integriert und treibt das adaptive 1–3-Spalten-Raster der Startseite (`render_home`).
+- **Verifizierte Qualität:** 19/19 CI-Grundstufenprüfungen, 20 T340-Regressionstests mit echter Tk-Widget-Integration, 36 Shell-Übernahmetests, 23 Bento-Tests T341–T344 und 13/13 Bento-Selbsttest bestanden.
+
+---
+
+### 2. Die fünf strategischen Arbeitsstränge
+
+```mermaid
+flowchart TD
+    subgraph STRANDS ["Strategische Arbeitsstränge"]
+        P["<b>1. Product</b><br/>Tagesplanung WA-12, Leerzustände WA-52,<br/>Mehrfacherfassung WA-54, Projekt-Dashboards"]
+        D["<b>2. Design</b><br/>Glide Bento 0.1.0+, Design-Tokens,<br/>Multi-Span, Presets, Component Gallery"]
+        E["<b>3. Engineering</b><br/>Glide Shell 0.6.2, Schichtenarchitektur,<br/>Portabilität, Referenzhosts"]
+        DI["<b>4. Distribution</b><br/>GitHub Releases aktiv, Homebrew & winget<br/>vorbereitet, Signierung (I3/D43)"]
+        G["<b>5. Growth</b><br/>README DE/EN, Video-Storyboard,<br/>Landingpage-Konzept, Testnutzer-Feedback"]
+    end
+```
+
+---
+
+### 3. Phasenübersicht und Priorisierung
+
+| Phase | Horizont | Fokus | Kernthemen | Status |
+|---|---|---|---|---|
+| **Phase 0** | Unmittelbar | **Post-Release Consolidation** | Behebung der Befunde IN-01–IN-12; Release-Links & Checksummen in README/Installationsanleitungen; Trennung von v1.0.2 und Bento im Changelog; Konsolidierung von Meilensteinplan & Issue #129 | **In Arbeit** |
+| **Phase 1** | Kurzfristig | **Product Experience** | Konsolidierung des Bento-Fundaments; Leerzustände (WA-52); Vorlagenbibliothek erschließen; Überfällige Aufgaben ergonomisch behandeln (WA-53); Erstes Testnutzer-Feedback | Geplant |
+| **Phase 2** | Mittelfristig | **Planning & Workspace** | Realistischer Arbeitstag (WA-12 Rest: Puffer, Zeiten); Mehrfacherfassung mit Vorschau (WA-54); Wochenabsichten (WA-20); Soll-Ist-Schätzvergleich (WA-08); Projekt-Dashboards; KI-Import mit kontrollierter Einzelannahme (WA-56) | Geplant |
+| **Phase 3** | Mittelfristig | **Distribution & Ecosystem** | Paketmanager Homebrew & winget nach Inhaberentscheidung I3 (D43); Schlanke Produktwebsite; Produktvideo (30–45s Storyboard); Zweiter Bento-Referenzhost; Update-Erkennung | Geplant |
+| **Phase 4** | Langfristig | **Advanced Product Development** | Individuell konfigurierbare Bento-Layoutprofile; Persönliche Insights; Optionale systemweite Schnellerfassung; Erweiterte visuelle Pinnwände; Weitere Sprachversionen | Konzeptionell |
+
+---
+
+### 4. Priorisierter Arbeitsvorrat (P0–P3)
+
+- **[P0] IN-01 / IN-02:** Öffentliche README (DE & EN) mit verifizierten Release-Download-Links, Plattformangaben und Signaturhinweisen aktualisieren (**Erledigt**).
+- **[P0] IN-03:** Installationsanleitung `docs/user-guide/02-installation.md` auf veröffentlichten Prerelease umstellen (**Erledigt**).
+- **[P0] IN-10:** Changelog-Struktur bereinigen: Bento 0.1.0 / V1.87 als Nachfolgeentwicklung abgrenzen (**Erledigt**).
+- **[P0] IN-11:** Homebrew Cask und winget Manifeste mit echten SHA-256 Prüfsummen des Releases v1.0.2 befüllen (**Erledigt**).
+- **[P0] IN-06 / IN-08:** Meilensteinplan und Produktgrenzen (DE/EN-Lokalisierung als geliefert) konsolidieren (**Erledigt**).
+- **[P1] Bento-Tokens & Multi-Span:** Klärung der Token-Quelle zwischen `ui_design.py` und `glide_bento/tokens.py`; echtes 2-von-3 Spalten Multi-Span Layout spezifizieren.
+- **[P1] WA-52 Leerzustände & Erststart:** Ersteinstieg ohne Pflichtassistenten, kontextuelle Leerstati und Erkundung mit Showcase-Daten.
+- **[P1] Vorlagen-Bibliothek:** Strukturierte DE/EN-Projektvorlagen für Designer, Freelancer und Wissensarbeiter.
+- **[P2] WA-12 Rest (Tagesplanung):** Pufferzeiten nach Terminen, realistisch verfügbare Arbeitszeit und geführte Entlastungsfragen.
+- **[P2] Projekt-Dashboard:** Bento-Projektionsdashboard für verknüpfte Aufgaben, Notizen, Meilensteine und Fortschritt.
+- **[P2] WA-54 Mehrfacherfassung:** Schnelle Serienerfassung mit deterministischer Aufteilungsvorschau und vollem Undo.
+- **[P2] WA-20 Wochenabsicht:** Wenige bewusst gewählte Wochenziele mit Bezug zu Projekten und Wochenrückblick.
+- **[P2] WA-08 Soll-Ist-Schätzvergleich:** Neutraler Vergleich von geschätztem und tatsächlichem Aufwand ohne Leistungsdruck.
+- **[P3] Bento-Presets & Custom Layouts:** Presets (Fokus, Planung, Kreativ) und spätere freie Layoutanordnung.
+
+---
+
+### 4.1 Vollständige Feature-Matrix (Post-Release Glide 1.0.2 & Roadmap)
+
+Die nachfolgende Matrix erfasst Glides tatsächlichen Funktionsbestand sowie geplante Ausbaustufen, strukturiert nach den sechs Produktsäulen und abgeglichen mit dem tatsächlichen Quellcode von Glide 1.0.3 sowie dem aktuellen Entwicklungsstand auf `main`:
+
+| Produktbereich | Feature-ID | Funktion & Umfang | Tatsächliches Quellmodul | Implementierungssymbol | Release v1.0.2 | Main | Geplanter Ausbau | Dokumentationsreferenz | Prüfbeleg |
+|---|---|---|---|---|---|---|---|---|---|
+| **Task Management** | **F-01** | Hierarchische Listen, Ordner und verschachtelte Aufgaben | `src/glide/persistence.py`, `app.pyw`, `sidebar_policy.py`, `side_view.py` | `Item`, `Folder`, `ListApp.tree` | ✅ Veröffentlicht | ✅ Integriert | Mehrfachebenen-Optimierung & tiefere Verschachtelung | `docs/20_FUNKTIONEN.md#1-grundbegriffe` | `tests/integration/test_aufgaben3380.py`, `test_ansichten.py` |
+| **Task Management** | **F-02** | Fälligkeiten, Bearbeitungstage (`planned day`) und Fristen | `src/glide/planning.py`, `today_view.py`, `persistence.py` | `PlanningScope`, `item_planned_date`, `is_due` | ✅ Veröffentlicht | ✅ Integriert | Trennung Fälligkeit vs. Arbeitstag, Fristenwarnungen | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_day_capacity.py`, `tests/unit/test_release_1_0_2_regressions.py` (T340) |
+| **Task Management** | **F-03** | Wiederholende Aufgaben und flexible Wiederholungsmuster | `src/glide/repeat_rules.py`, `repeat_ics.py`, `ics_recurrence.py` | `RepeatRule`, `expand_recurrence` | ✅ Veröffentlicht | ✅ Integriert | Serienausnahmen & Ausnahmetage (WA-55) | `docs/20_FUNKTIONEN.md#3-erfassen` | `tests/unit/test_repeat_rules.py`, `test_repeat_ics.py` |
+| **Task Management** | **F-04** | Checklisten, Unteraufgaben und Fortschrittstracking | `src/glide/app.pyw`, `persistence.py` | `ListApp.toggle_checklist_item`, `item_checklist` | ✅ Veröffentlicht | ✅ Integriert | Prozentuale Fortschrittsbalken & Unterpunkt-Drag | `docs/20_FUNKTIONEN.md#1-grundbegriffe` | `tests/integration/test_aufgaben3380.py` |
+| **Task Management** | **F-05** | Labels, Farbakzente und systemweite Filterung | `src/glide/app.pyw`, `persistence.py` | `ListApp.filter_by_label`, `item_labels` | ✅ Veröffentlicht | ✅ Integriert | Labelgruppen & hierarchische Farbfilter | `docs/20_FUNKTIONEN.md#5-liste-tabelle-gruppierung` | `tests/unit/test_content_search.py`, `tests/integration/test_ansichten.py` |
+| **Task Management** | **F-06** | Transaktionale Aufgabenänderungen (`item_change`) & Undo | `src/glide/glide_shell/command_history.py`, `undo_history.py` | `CommandHistory`, `UndoHistory`, `apply_snapshot` | ✅ Veröffentlicht | ✅ Integriert | Verzweigte Verlaufshistorie & Snapshot-Export | `docs/02_ARCHITECTURE.md#1-aufbau` | `tests/unit/test_shell_d96.py` (T332), `test_shell_d98.py` (T334) |
+| **Day Planning** | **F-07** | Tagesanalyse, Arbeitszeit- & Kapazitätsberechnung | `src/glide/planning.py`, `day_proposal.py` | `calculate_day_capacity`, `DayProposal` | ✅ Veröffentlicht | ✅ Integriert | 15-Min-Puffer & Spätstart-Frage (WA-12) | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_day_capacity.py`, `test_day_proposal.py` |
+| **Day Planning** | **F-08** | Arbeitsmodus „Heute“ und geführte Tagesentlastung | `src/glide/today_view.py`, `day_relief.py` | `TodayView`, `DayReliefDialog`, `propose_relief` | ✅ Veröffentlicht | ✅ Integriert | Überlastungserkennung & Reflexionsfragen | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_day_relief.py`, `tests/integration/test_arbeitsmodi.py` |
+| **Day Planning** | **F-09** | Zeitblöcke, Routinen und feste Terminfenster | `src/glide/routines.py`, `occupied_time.py`, `ics_busy.py` | `RoutineSchedule`, `get_occupied_slots` | ✅ Veröffentlicht | ✅ Integriert | Dynamische Kalenderbelegung & Zeitfenster (WA-57) | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_busy_calendar.py`, `test_timezones.py` |
+| **Day Planning** | **F-10** | Wochenabsichten und strategischer Wochenrückblick | `src/glide/week_planning.py` | `WeekPlanner`, `get_week_focus` | ◐ Vorhandene Basis | ◐ Vorhandene Basis | Strukturierte Wochenabsicht & Review (WA-20) | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_daily_hints.py` |
+| **Day Planning** | **F-11** | Soll-Ist-Schätzvergleich für Aufgaben | `src/glide/planning.py`, `persistence.py` | `estimated_minutes`, `time_spent_minutes` | ◐ Vorhandene Basis | ◐ Vorhandene Basis | Neutraler Vergleichsbalken ohne Druck (WA-08) | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_day_capacity.py` |
+| **Personal Knowledge** | **F-12** | Rich-Text-Seiten mit Markdown-Blöcken & Bildern | `src/glide/app.pyw`, `page_features.py`, `page_markdown.py`, `markdown_tree.py` | `MarkdownParser`, `PageRenderer`, `render_markdown_blocks` | ✅ Veröffentlicht | ✅ Integriert | Tabellen-WYSIWYG & Ausrichtungs-Ausbau (WA-54) | `docs/20_FUNKTIONEN.md#8-seiten-notizen-notizbuch-galerie` | `tests/integration/test_editor3338.py`, `tests/unit/test_release_1_0_2_regressions.py` (T340) |
+| **Personal Knowledge** | **F-13** | Notizbücher, strukturierte Notizen & Verwendungsorte | `src/glide/app.pyw`, `object_references.py`, `task_references.py` | `ObjectReferenceIndex`, `find_usages`, `WA-21` | ✅ Veröffentlicht | ✅ Integriert | Vollständige Fundortübersicht, bidirektionaler Graph | `docs/20_FUNKTIONEN.md#8-seiten-notizen-notizbuch-galerie` | `tests/unit/test_object_references.py` |
+| **Personal Knowledge** | **F-14** | Lokale Dateianhänge mit Metadaten und Schutz | `src/glide/attachment_paths.py`, `attachment_policy.py` | `AttachmentPolicy`, `resolve_attachment_path` | ✅ Veröffentlicht | ✅ Integriert | 40-Zeichen-Schutz & Vorschau für PDFs/Bilder | `docs/20_FUNKTIONEN.md#1-grundbegriffe` | `tests/unit/test_attachment_paths.py`, `test_attachment_policy.py` |
+| **Visual Workspace** | **F-15** | Flexible Kanban-Board-Ansicht | `src/glide/app.pyw`, `view_definition.py` | `ViewDefinition`, `ListApp.render_board_view` | ✅ Veröffentlicht | ✅ Integriert | Benutzerdefinierte Spaltenregeln & WIP-Limits (M12) | `docs/20_FUNKTIONEN.md#5-liste-tabelle-gruppierung` | `tests/integration/test_ansichten.py` |
+| **Visual Workspace** | **F-16** | Interaktive Pinnwand mit Bereichen und Verbindungslinien | `src/glide/pinboard_pages.py`, `app.pyw` | `PinboardCanvas`, `render_pinboard_items` | ✅ Veröffentlicht | ✅ Integriert | Erweiterte Schablonen & Pinnwandmuster (WA-58) | `docs/20_FUNKTIONEN.md#6-pinnwand` | `tests/integration/test_bereiche3331.py`, `test_ansichten.py` |
+| **Visual Workspace** | **F-17** | Wochen- und Monatskalender mit freien Zeitfenstern | `src/glide/calendar_service.py`, `busy_calendar.py`, `app.pyw` | `CalendarService`, `BusyCalendarIndex` | ✅ Veröffentlicht | ✅ Integriert | ICS-Alarm-Visualisierung & Terminerinnerung (WA-59) | `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung` | `tests/unit/test_calendar_service.py`, `test_busy_calendar.py` |
+| **Visual Workspace** | **F-18** | Glide Bento Box System (Responsive 1–3-Spalten-Home) | `src/glide/glide_bento/` (`card.py`, `grid.py`, `layout.py`, `specs.py`, `tokens.py`) | `BentoGrid`, `BentoCard`, `BentoLayoutPlanner`, `BentoTokens` | ◐ Vorläufer-Kacheln | ✅ 0.1.0 Integriert | Multi-Span, Host-Token-Vertrag C & Presets (0.2.0+) | `docs/GLIDE_BENTO_SYSTEM_KONZEPT.md` | `tests/unit/test_bento_layout.py`, `tests/integration/test_bento_integration.py` (T341–T344) |
+| **Visual Workspace** | **F-19** | Zusammenfassendes Projekt-Dashboard | Geplantes Modul / Konzept (Basis in `app.pyw`, Spezifikation L1) | Geplante Klasse `ProjectDashboardCard` (L1) | ◇ Konzept / Nicht enthalten | ◇ Spezifiziert (L1) | Vollständige Bento-Projektion für Vorhaben (L1) | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#l1-projekt-dashboard-bento-projektionsdashboard` | Spezifikation L1 |
+| **Visual Workspace** | **F-20** | Ergonomische Workspace-Presets (Fokus, Planung, Wissen) | Geplantes Modul / Konzept (Basis in `compact_mode.py`, `glide_bento/specs.py`) | Geplante Datenklasse `WorkspacePreset` (L3) | ◇ Konzept / Nicht enthalten | ◇ Spezifiziert (L3) | Schnelle Layoutprofile aus den 20 Startkarten (L3) | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#l3-workspace-presets-ergonomische-arbeitsbereichs-profile` | Spezifikation L3 |
+| **Creative Tools** | **F-21** | Integrierte Pixel-Werkstatt & Zeichnungserstellung | `src/glide/drawing.py`, `drawing_image.py`, `animation.py`, `drawing_prototype.pyw` | `DrawingCanvas`, `PixelMatrix`, `export_drawing_image` | ✅ Veröffentlicht | ✅ Integriert | Erweiterte Stempelbibliotheken & SVG-Export (M13) | `docs/20_FUNKTIONEN.md#9-pixel-werkstatt` | `tests/integration/test_drawing.py`, `test_drawing330.py` |
+| **Creative Tools** | **F-22** | Animierte Reisestempel als Cover-Eckminiatur | `src/glide/drawing_image.py`, `animation.py`, `app.pyw` | `render_animated_stamp`, `stamp_corner_overlay` | ✅ Veröffentlicht | ✅ Integriert | Export animierter GIFs & Stempeltausch | `docs/20_FUNKTIONEN.md#9-pixel-werkstatt` | `tests/unit/test_animation.py`, `tests/unit/test_release_1_0_2_regressions.py` (T340) |
+| **Open Data & AI** | **F-23** | Datenaustausch via `.glideexchange` und JSON Canvas 1.0 | `src/glide/exchange_patch.py`, `exchange_recipes.py`, `app.pyw` | `ExchangePatch`, `apply_exchange_recipe`, `export_json_canvas` | ✅ Veröffentlicht | ✅ Integriert | Format 2 & Canvas 1.0, selektive Einzelannahme (WA-56) | `docs/20_FUNKTIONEN.md#11-import-ausgabe-und-austausch` | `tests/integration/test_austausch3350.py`, `test_austausch_k3.py` |
+| **Open Data & AI** | **F-24** | Offener AI-Agent-Skill `glide-to-do` | `skills/glide-to-do/` (`SKILL.md`, `scripts/glide_datei.py`, etc.) | `glide_to_do_skill`, `Format 26 Validator` | ✅ Veröffentlicht | ✅ Integriert | Strikt an Format 26 gekoppelt; automatische Skill-Generierung K2/K5 | `skills/glide-to-do/README.md` | `tests/tools/test_ki_ausgabe.py` |
+| **Open Data & AI** | **F-25** | Automatisches Rollback-Backup & Desaster-Recovery | `src/glide/backup_catalog.py`, `backup_snapshot.py`, `backup_diff.py`, `schema_backups.py` | `BackupCatalog`, `create_snapshot`, `restore_snapshot` | ✅ Veröffentlicht | ✅ Integriert | Transaktionssichere ZIP-Sicherungen, Exportprüfung vor Migration | `docs/20_FUNKTIONEN.md#11-import-ausgabe-und-austausch` | `tests/unit/test_backup_catalog.py`, `test_backup_snapshot.py`, `test_backup_diff.py` |
+| **Internationalization** | **F-26** | Vollständige Zweisprachigkeit (Deutsch / Englisch) | `src/glide/i18n.py`, `resources/locales/de.json`, `resources/locales/en.json` | `tr()`, `set_language()`, `I18nCatalog` | ✅ Veröffentlicht | ✅ Integriert | UI, Dialoge, Handbuch, Status vollständig DE/EN; Vorbereitung weiterer Sprachen (M09) | `docs/01_PRODUCT_CONSTRAINTS.md#4-internationalisierung` | `tests/unit/test_i18n.py` (T329), `tests/integration/test_lokalisierung_d93.py` (T335) |
+| **Distribution** | **F-27** | Standalone Desktop-Pakete (Windows Setup/Zip, Mac DMG/Tar) | `packaging/macos/baue_app.py`, `packaging/inno/setup.iss`, `packaging/paket/` | `InnoSetupScript`, `build_dmg`, `PyInstallerSpec` | ✅ Veröffentlicht | ✅ Integriert | Autark gebündelt mit Python & Tk; externe Kataloge Homebrew/winget nach Inhabereinreichung | `docs/10_VEROEFFENTLICHUNG.md` | GitHub Release v1.0.2 Artefakt-Digests |
+| **Growth & Usability** | **F-28** | Kontextuelle Leerzustände & Onboarding-Showcase | `src/glide/glide_bento/components.py` (`BentoEmptyState`), `app.pyw` | `BentoEmptyState`, `ListApp.show_empty_placeholder` | ◐ Vorhandene Basis | ◐ Vorhandene Basis | Durchgängige Leerzustände für alle Fachansichten & Showcase-Erkundung (WA-52) | `docs/20_FUNKTIONEN.md#7-startseite` | `tests/unit/test_bento_components.py`, Spezifikation WA-52 |
+
+
+### 4.2 Vollständige Spezifikationen der Roadmap-Aufgaben (R-Schema)
+
+Die folgenden 13 Spezifikationen decken sämtliche priorisierten Post-Release-Aufgaben nach dem verbindlichen 25-Punkte-R-Schema ab:
+
+---
+
+#### [WA-52] Erststart und kontextuelle Leerzustände
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-52` |
+| **Titel** | Erststart-Erlebnis und kontextuelle Leerzustände |
+| **Arbeitsstrang** | Product & Design |
+| **Ausgangslage** | Neue oder leere Listen, Seiten und Pinnwände zeigen teilweise statische graue Hinweistexte oder leere Flächen ohne Handlungsaufforderung. |
+| **Problemstellung** | Erstnutzer stehen nach dem ersten Start vor einer leeren Arbeitsoberfläche („Blank Slate Anxiety“) und wissen oft nicht, welcher Arbeitsweg (Aufgabe, Projektseite, Tagesplan) der schnellste Einstieg ist. |
+| **Nutzermehrwert** | Reduziert kognitive Hürden beim ersten Start; bietet sofortige Orientierung mit einem Klick zur Erstellung erster Inhalte oder zum Laden des Showcase „Stadtlicht“. |
+| **Zielzustand** | Jede Ansicht (Heute, Aufgaben, Seiten, Pinnwand, Notizbuch) besitzt einen abgestimmten, ansprechenden Leerzustand (`BentoEmptyState` auf der Startseite bzw. Tk-Widget-Leerzustand in Fachmodulen) mit Titel, kurzem Mehrwertsatz und primärem Aktionsknopf. |
+| **In Scope** | Konzeption und Implementierung von 6 kontextuellen Leerzuständen (Startseite, Listenansicht, Tagesplaner Heute, Seitenübersicht, Pinnwand, Notizbuch); Angebot zur temporären Erkundung mit dem Showcase-Datensatz. |
+| **Out of Scope** | Kein cloudbasiertes Onboarding; kein aufdringlicher, blockierender Einrichtungsassistent; keine Erfassung von Nutzerdaten. |
+| **Betroffene Module** | `src/glide/glide_bento/components.py` (`BentoEmptyState`), `src/glide/today_view.py`, `src/glide/app.pyw`, `src/glide/pinboard_pages.py`, `src/glide/sidebar_policy.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#7-startseite`, `docs/DESIGN_RICHTLINIEN.md`, `docs/user-guide/01-getting-started.md`. |
+| **Produktentscheidungen**| D83 (Gestaltungslehren), D93 (1.0-Schnitt), D100 (Bento-System). |
+| **Abhängigkeiten** | Nutzt `BentoEmptyState` für Bento-Kontexte und Tk-Standardwidgets für Fachansichten. |
+| **Designbezug** | Ruhige Typografie (Charis SIL / Rubik), gedeckte Textfarben (`fg_muted`), abgerundete Aktionsknöpfe mit Hover-Zustand nach Designrichtlinien. |
+| **Shell-Bezug** | Keine Auswirkung auf die Shell; läuft vollständig im Host. |
+| **Bento-Bezug** | Standardisierte Verwendung von `BentoEmptyState(title, description, action_text, on_action)`. |
+| **Datenformat** | Aufgabenformat 26 bleibt unverändert; keine neuen Schemafelder. |
+| **Datenschutz** | Vollständig offline; keine Analyse von Nutzerinteraktionen. |
+| **Risiken** | Wiederholtes Anzeigen von Leerzuständen bei gewollt leeren Listen kann stören; muss dezent und unaufdringlich bleiben. |
+| **Aufwand** | **M** (ca. 2 Entwicklertage inklusive zweisprachiger Texte und Tests). |
+| **Priorität** | **P1** |
+| **Status** | Konzipiert & spezifiziert; bereit zur Umsetzung in Phase 1. |
+| **Akzeptanzkriterien** | 1. Beim Anlegen einer leeren Liste erscheint der Aktionsknopf „Erste Aufgabe anlegen“. 2. Auf einer leeren Pinnwand führt „Element hinzufügen“ direkt zur Objektauswahl. 3. Alle Texte sind vollständig auf Deutsch und Englisch verfügbar. 4. Tests prüfen Sichtbarkeit und Interaktion. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich (Standard-UI-Verfeinerung). |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Things 3 & Sunsama Leerzustands-Analyse). |
+
+---
+
+#### [WA-12-Rest] Realistischer Arbeitstag (Pufferzeiten und Spätstart)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-12-Rest` |
+| **Titel** | Realistischer Arbeitstag: Automatische Pufferzeiten, Spätstart und Pausen |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | In Glide 3.55.0 wurde die Grundstufe von WA-12 (Tageskapazität, Schätzaufwand und Überlastungsanalyse) geliefert. Termine werden jedoch noch nahtlos aneinandergereiht. |
+| **Problemstellung** | Reale Arbeitstage scheitern oft an fehlenden Übergangs- und Pufferzeiten zwischen Terminen sowie an unvorhergesehenem Spätstart, was zu kaskadierender Überlastung führt. |
+| **Nutzermehrwert** | Realistische Tagesplanung: Nutzer sehen sofort, ob ihr Tag durch Termindichte und Aufgaben wirklich machbar ist; automatische 15-Minuten-Puffer verhindern Terminhetze. |
+| **Zielzustand** | Der Tagesplaner bietet optionale, konfigurierbare Pufferzeiten (Standard: 15 Minuten nach festen Terminen) und erkennt einen verspäteten Tagesstart mit sanfter Nachfrage („Später gestartet? Tag jetzt umplanen“). |
+| **In Scope** | 1. Automatische Berechnung von 15-Min-Pufferblöcken nach Kalenderereignissen in `planning.py`. 2. Spätstart-Erkennung (Vergleich aktuelle Uhrzeit vs. geplanter Arbeitsbeginn). 3. Geführte Ein-Klick-Anpassung im Entlastungsdialog (`day_relief.py`). |
+| **Out of Scope** | Keine automatische KI-Umplanung im Hintergrund; keine unaufgeforderten Systembenachrichtigungen; keine Überwachung der Nutzeraktivität. |
+| **Betroffene Module** | `src/glide/planning.py` (Tk-frei), `src/glide/today_view.py`, `src/glide/day_relief.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`, `docs/user-guide/04-day-planning.md`. |
+| **Produktentscheidungen**| D01 (Fälligkeit vs. Arbeitstag), D81 (Überlastungsgründe im Entlastungsdialog). |
+| **Abhängigkeiten** | Baut auf der bestehenden Kapazitätsberechnung in `planning.py` auf; nutzt Zeitblöcke aus `routines.py` und `occupied_time.py`. |
+| **Designbezug** | Visuelle Kennzeichnung von Pufferzeiten im Tageszeitstrahl als schraffierte oder zart getönte Zwischenblöcke. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Integration der berechneten Restpufferzeit in die Startseiten-Metrik `BentoMetric` („Verfügbarer Puffer: 45 min“). |
+| **Datenformat** | Aufgabenformat 26 unverändert; Puffereinstellungen werden im vorhandenen Einstellungskatalog gespeichert (`settings_data`). |
+| **Datenschutz** | Vollständig lokale Zeitberechnung ohne Netzwerkkontakt. |
+| **Risiken** | Zu starre Pufferberechnung könnte Terminkalender überfrachten; Puffer müssen optional abschaltbar sein. |
+| **Aufwand** | **M** (ca. 3 Entwicklertage für Berechnungslogik, Entlastungsdialog-Anpassung und Unit-Tests). |
+| **Priorität** | **P1** |
+| **Status** | Spezifiziert; bereit zur Umsetzung in Phase 1 / 2. |
+| **Akzeptanzkriterien** | 1. Pufferzeit erscheint im Kapazitätsbalken als reservierte Zeit. 2. Bei Spätstart um 10:30 Uhr bietet Glide an, Aufgaben vor 10:30 Uhr mit einem Klick nach hinten zu schieben. 3. Vollständig rückgängig machbar (`undo`). |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich (Abschluss einer bereits genehmigten WA-Aufgabe). |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.86; Konkurrenzanalyse Sunsama. |
+
+---
+
+#### [WA-60] Paketmanager-Integration (Homebrew & winget)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-60` |
+| **Titel** | Externe Paketmanager-Einreichung für Homebrew und winget |
+| **Arbeitsstrang** | Distribution |
+| **Ausgangslage** | Das Repository enthält unter `packaging/homebrew/Casks/glide.rb` und `packaging/winget/` fertige, verifizierte Manifest-Vorlagen mit echten SHA-256-Prüfsummen von Glide 1.0.2. |
+| **Problemstellung** | Die Vorlagen sind noch nicht in externe Softwarekataloge (`n05a-design/homebrew-glide` bzw. `microsoft/winget-pkgs`) eingereicht; Nutzer können Glide noch nicht über `brew install --cask` oder `winget install` beziehen. |
+| **Nutzermehrwert** | Ein-Klick-Installation und automatisierte Updates über die Standard-Paketverwaltung von macOS und Windows. |
+| **Zielzustand** | 1. Eigenes Tap-Repository `n05a-design/homebrew-glide` mit funktionierendem Cask. 2. Geprüfter Pull Request im offiziellen Microsoft-Katalog `microsoft/winget-pkgs`. |
+| **In Scope** | Bereitstellung der Release-Workflows für automatisierte Manifest-Updates bei zukünftigen Releases; Dokumentation der Einreichungsschritte für den Inhaber. |
+| **Out of Scope** | Automatische Einreichung ohne Inhabergenehmigung (Inhabervorbehalt I3 / D43); Kauf kommerzieller Signaturzertifikate. |
+| **Betroffene Module** | `packaging/homebrew/Casks/glide.rb`, `packaging/winget/`, `.github/workflows/release.yml`. |
+| **Betroffene Dokumente**| `docs/10_VEROEFFENTLICHUNG.md`, `docs/user-guide/02-installation.md`. |
+| **Produktentscheidungen**| I3 / D43 (Zertifikate und Paketmanager-Einreichung bleiben Inhabervorbehalt). |
+| **Abhängigkeiten** | Öffentliche GitHub-Release-Artefakte v1.0.2 (bereits online). |
+| **Designbezug** | Keine UI-Auswirkung. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Keine Auswirkung. |
+| **Datenschutz** | Paketmanager greifen direkt auf öffentliche GitHub-Releases zu; keine Telemetrie. |
+| **Risiken** | Microsoft winget Überprüfung kann wegen unsignierter EXE nachfragen; Inno Setup Parameter müssen exakt stimmen (`/VERYSILENT /ALLUSERS=0 /CURRENTUSER`). |
+| **Aufwand** | **S** (ca. 1 Entwicklertag Vorbereitung & Dokumentation; Einreichung durch Inhaber). |
+| **Priorität** | **P2** (nachgelagert unter Inhabervorbehalt). |
+| **Status** | Vorlagen bereit; wartet auf Ausführung durch den Inhaber. |
+| **Akzeptanzkriterien** | 1. `brew audit --cask glide` läuft fehlerfrei durch. 2. `winget validate` bestätigt syntaktische und semantische Richtigkeit der YAML-Manifeste. |
+| **Freigabe** | **Inhaberentscheidung erforderlich (I3 / D43).** |
+| **Quellen** | `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#paketmanager`. |
+
+---
+
+#### [WA-54] Mehrfacherfassung mit interaktiver Aufteilungsvorschau
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-54` |
+| **Titel** | Mehrzeilige Schnellerfassung mit interaktiver Vorschaukarte |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Die Schnellerfassung in Glide (`capture_parser.py` und `app.pyw`) verarbeitet einzelne Zeilen mit Datumserkennung (deutsch und englisch, V1.81). |
+| **Problemstellung** | Beim Brainstorming oder Übertragen von Notizen aus Besprechungen müssen mehrere Aufgaben zeilenweise einzeln eingetragen werden. Ein direktes Einfügen mehrerer Zeilen führt zu einem unübersichtlichen Einzelpunkt. |
+| **Nutzermehrwert** | Schnelles Erfassen ganzer Aufgabenblöcke in Sekunden; Nutzer behalten die volle Kontrolle darüber, wie Zeilen in Aufgaben, Unteraufgaben oder Checklisten aufgeteilt werden. |
+| **Zielzustand** | Mehrzeilige Eingaben in der Schnellerfassung öffnen eine kompakte Vorschaukarte: Zeilen werden tabellarisch angezeigt mit erkannten Attributen (Fälligkeit, Label), und der Nutzer bestätigt die Anlage mit `Enter`. |
+| **In Scope** | 1. Erkennung mehrzeiliger Zwischenablagen-Inhalte. 2. Vorschau-Dialog mit Zeilen-Deduplizierung und leerer Zeilen-Bereinigung. 3. Zuordnung zu bestehender Liste oder neuem Ordner. 4. Atomares Undo über `command_history`. |
+| **Out of Scope** | Kein ungefragtes automatisches Zerlegen im Hintergrund; keine unkontrollierte KI-Strukturierung ohne Bestätigung. |
+| **Betroffene Module** | `src/glide/capture_parser.py`, `src/glide/app.pyw`, `src/glide/glide_shell/modal_session.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#3-erfassen`, `docs/user-guide/03-tasks-and-lists.md`. |
+| **Produktentscheidungen**| D17 (Tk-freie Geschäftslogik), D93 (Zweisprachigkeit DE/EN), D99 (Command History). |
+| **Abhängigkeiten** | Nutzt `capture_parser.py` zur Attributerkennung und `command_history.py` für atomare Rücknahme. |
+| **Designbezug** | Entspricht den Dialogregeln aus `docs/DESIGN_RICHTLINIEN.md` (zentriert, minimale Höhe 280 px, maximale Höhe 480 px, Tastatursteuerung mit Tab/Enter/Esc). |
+| **Shell-Bezug** | Verwendet `glide_shell.modal_session` für den modalen Dialogablauf. |
+| **Bento-Bezug** | Keine direkte Bento-Kopplung (Fachanwendungsdialog). |
+| **Datenformat** | Aufgabenformat 26 unverändert (`item_change` Batch-Aufruf). |
+| **Datenschutz** | Verarbeitet ausschließlich lokale Textdaten; keine Cloudanalyse. |
+| **Risiken** | Performance bei sehr großen Textmengen (> 500 Zeilen); Begrenzung auf maximal 100 Aufgaben pro Batch-Erfassung empfohlen. |
+| **Aufwand** | **M** (ca. 3 Entwicklertage inklusive UI-Dialog, Parser-Anbindung und Tests). |
+| **Priorität** | **P1** |
+| **Status** | Spezifiziert; bereit zur Umsetzung in Phase 2. |
+| **Akzeptanzkriterien** | 1. 10 kopierte Zeilen erzeugen nach Bestätigung exakt 10 Aufgaben. 2. Erkannte Daten (z. B. "morgen", "tomorrow") werden korrekt als Fälligkeit gesetzt. 3. Ein einziger `Strg+Z`/`Cmd+Z` Befehl nimmt alle angelegten Aufgaben rückstandsfrei zurück. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich (normale UI-Ergänzung). |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Super Productivity Batch-Add). |
+
+---
+
+#### [WA-20] Wochenabsichten und strategischer Wochenrückblick
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-20` |
+| **Titel** | Strukturierte Wochenabsichten und geführter Wochenrückblick |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Glide besitzt eine Wochenkalenderansicht und rudimentäre Rückblickelemente, aber keinen dezidierten Raum für strategische Wochenziele. |
+| **Problemstellung** | Nutzer verlieren im Tagesgeschäft leicht den Bezug zu übergeordneten Zielen; es fehlt eine bewusste Brücke zwischen Quartals-/Projektzielen und der täglichen Aufgabenwahl. |
+| **Nutzermehrwert** | Schafft Fokus für die Woche (maximal 3–5 Kernabsichten); entlastet das Gewissen durch wöchentliche Bilanzierung ohne Leistungsdruck. |
+| **Zielzustand** | Eine ruhige Wochenansicht mit zwei Bereichen: (1) „Wochenabsichten“ (3–5 fokussierte Ziele, verknüpfbar mit Aufgaben oder Projekten) und (2) „Wochenrückblick“ (gefeierte Fortschritte, übertragene Punkte, kurze Freitextreflexion). |
+| **In Scope** | Datenmodell für Wochenziele, UI-Bereich in der Seitenleiste unter „Woche“, Bento-Startseitenkarte `WeeklyIntentionCard`, zweisprachige Vorlagen. |
+| **Out of Scope** | Keine Zwangsbenachrichtigungen am Sonntagabend; keine Gamification oder Punktebewertungen. |
+| **Betroffene Module** | `src/glide/week_planning.py` (Tk-frei), `src/glide/app.pyw`, `src/glide/sidebar_policy.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`, `docs/user-guide/04-day-planning.md`. |
+| **Produktentscheidungen**| D01 (Fälligkeit vs. Planungstag), D83 (ruhige Produktivitätslehren). |
+| **Abhängigkeiten** | Integriert in Bento 0.2.0 Startseite und Fachseitenleiste. |
+| **Designbezug** | Zen-artige, großzügige Typografie; Hervorhebung des Fokusbereichs ohne grelle Alarmfarben. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Eigene Standard-Bento-Karte `WeeklyCard` im Bento-Katalog. |
+| **Datenformat** | Aufgabenformat 26: Speicherung als spezielle Systemliste oder im Datenfeld `week_intentions`. |
+| **Datenschutz** | Vollständig offline und vertraulich. |
+| **Risiken** | Zu hoher Erfassungsaufwand führt zur Nichtnutzung; muss in unter 2 Minuten ausfüllbar sein. |
+| **Aufwand** | **M** (ca. 3 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Umsetzung in Phase 2 vorgesehen. |
+| **Akzeptanzkriterien** | 1. Wochenabsichten lassen sich am Wochenanfang in 3 Feldern eintragen. 2. Aufgaben können per Klick einer Wochenabsicht zugeordnet werden. 3. Archivierte Wochen bleiben im Verlauf nachschlagbar. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Sunsama Weekly Intentions). |
+
+---
+
+#### [WA-08] Soll-Ist-Schätzvergleich ohne Leistungsdruck
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-08` |
+| **Titel** | Neutraler Soll-Ist-Schätzvergleich für Aufgaben und Fokusblöcke |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Aufgaben können mit Schätzaufwänden (z. B. `30m`, `2h`) versehen werden; die Stoppuhr/Fokus-Funktion misst tatsächliche Arbeitszeiten. |
+| **Problemstellung** | Es gibt keinen einfachen visuellen Abgleich zwischen der ursprünglichen Schätzung und der tatsächlich benötigten Zeit, um das eigene Zeitgefühl langfristig zu schärfen. |
+| **Nutzermehrwert** | Verbessert die Selbsteinschätzung realistischer Aufwände, ohne durch Ampelfarben oder Straftöne Druck aufzubauen. |
+| **Zielzustand** | In der Aufgaben-Detailansicht und im Tagesrückblick zeigt ein dezenter Balken Schätzung vs. Ist-Zeit (z. B. `Geplant: 45m · Tatsächlich: 55m`). |
+| **In Scope** | Berechnungslogik in `planning.py`, Anzeige im Aufgaben-Inspektor (`app.pyw`), Zusammenfassung im Tagesabschluss. |
+| **Out of Scope** | Keine Zeiterfassung für Rechnungsstellung an Dritte; keine Exportpflicht für Arbeitgeberüberwachung. |
+| **Betroffene Module** | `src/glide/planning.py` (Tk-frei), `src/glide/app.pyw`, `src/glide/today_view.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`. |
+| **Produktentscheidungen**| D83 (Designlehren: Wertschätzung statt Überwachung). |
+| **Abhängigkeiten** | Baut auf der Fokus- und Zeiterfassung aus V1.75 auf. |
+| **Designbezug** | Neutrale Grau- und Blauabstufungen; kein rotes Warnsignal bei Schätzungsüberschreitung. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Optionale Kennzahl `BentoMetric` für das Projekt-Dashboard. |
+| **Datenformat** | Aufgabenformat 26: Verwendet die vorhandenen Felder `estimated_minutes` und `time_spent_minutes`. |
+| **Datenschutz** | Keine Weitergabe von Leistungsdaten; strikt lokal. |
+| **Risiken** | Nutzer könnten Schätzungen als Zwang empfinden; Anzeige bleibt dezent und kann ignoriert werden. |
+| **Aufwand** | **S** (ca. 1–2 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Umsetzung in Phase 2. |
+| **Akzeptanzkriterien** | 1. Balken zeigt Soll und Ist proportional an. 2. Schätzungslose Aufgaben zeigen nur die aufgewendete Zeit. 3. Einheitliche Formatierung (`h` und `m`). |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.86. |
+
+---
+
+#### [WA-53] Ergonomischer Umgang mit überfälligen Aufgaben
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-53` |
+| **Titel** | Rescheduling & Bündelung überfälliger Aufgaben |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Aufgaben, deren Frist überschritten ist, werden rot markiert und verbleiben am Fälligkeitsdatum. |
+| **Problemstellung** | Nach wenigen Tagen Abwesenheit sammeln sich Dutzende rote Fälligkeiten an („Overdue Debt“), was demotiviert und die Sicht auf das Wesentliche blockiert. |
+| **Nutzermehrwert** | Sanftes Wiederankommen: Überfällige Aufgaben lassen sich mit einem Klick bündeln, auf heute umplanen oder bewusst ohne Fälligkeit parken. |
+| **Zielzustand** | Ein dezenter Banner im Tagesplaner und in Listen („5 überfällige Aufgaben“) bietet Aktionen an: „Alle auf heute schieben“, „Fristen entfernen“ oder „Einzeln durchsehen“. |
+| **In Scope** | Bündelungs-Dialog, Batch-Verschiebung mit vollem Undo, Entschärfung roter Alarmfarben bei älteren Aufgaben. |
+| **Out of Scope** | Kein automatisches Löschen überfälliger Aufgaben. |
+| **Betroffene Module** | `src/glide/today_view.py`, `src/glide/planning.py`, `src/glide/day_relief.py`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`. |
+| **Produktentscheidungen**| D01 (Fälligkeit vs. Arbeitstag), D83 (ruhige Oberfläche). |
+| **Abhängigkeiten** | `command_history.py` für atomares Batch-Undo. |
+| **Designbezug** | Sanfter Bernsteinton statt grellem Alarmrot; barrierefreier Farbkontrast. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Optionale Aktionskarte `OverdueActionCard` in Bento. |
+| **Datenformat** | Format 26 unverändert. |
+| **Datenschutz** | Vollständig offline. |
+| **Risiken** | Unbedachtes Weiterschieben wichtiger Fristen; deutliche Bestätigung erforderlich. |
+| **Aufwand** | **M** (ca. 2 Entwicklertage). |
+| **Priorität** | **P1** |
+| **Status** | Spezifiziert; Umsetzung in Phase 1 / 2. |
+| **Akzeptanzkriterien** | 1. 5 überfällige Aufgaben lassen sich mit 1 Klick auf heute datieren. 2. Transaktionales Undo stellt vorherige Daten exakt wieder her. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Things 3 Rescheduling). |
+
+---
+
+#### [WA-55] Komfort für Serienaufgaben & Ausnahmetage
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-55` |
+| **Titel** | Erweiterte Wiederholungslogik: Ausnahmetage und Serienpflege |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Glide beherrscht tägliche, wöchentliche und monatliche Wiederholungen (`repeat_rules.py`, `repeat_ics.py`). |
+| **Problemstellung** | Fällt eine wöchentliche Routine auf einen Feiertag oder Urlaubstag, kann die Einzelaufgabe bisher nur gelöscht oder die gesamte Serie verändert werden. |
+| **Nutzermehrwert** | Flexibilität im Alltag: Einzelne Vorkommnisse einer Serie können übersprungen oder verschoben werden, ohne die Gesamtwiederholung zu zerstören. |
+| **Zielzustand** | Beim Abhaken oder Bearbeiten einer Serienaufgabe fragt Glide: „Nur dieses Mal“ oder „Für alle zukünftigen Termine“. |
+| **In Scope** | Ausnahme-Array (`exception_dates`) in der Wiederholungsdefinition, UI-Auswahldialog. |
+| **Out of Scope** | Keine unbegrenzte Historie vergangener Serieneinzelfälle; keine komplexe RRULE-Parsing-Engine über Standard-RFC-5545 hinaus. |
+| **Betroffene Module** | `src/glide/repeat_rules.py` (Tk-frei), `src/glide/repeat_ics.py`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#3-erfassen`. |
+| **Produktentscheidungen**| D17 (Tk-freie Logik). |
+| **Abhängigkeiten** | `recurrence.py` Unit-Tests. |
+| **Designbezug** | Kompakter nativer Dialog nach Designrichtlinien. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Format 26: Erweiterung des optionalen Felds `recurrence_exceptions` (voll abwärtskompatibel). |
+| **Datenschutz** | Vollständig offline. |
+| **Risiken** | Komplexität bei Datumsverschiebungen; strenge Tests erforderlich. |
+| **Aufwand** | **M** (ca. 3 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. „Diesen Termin überspringen“ lässt die Serie am nächsten regulären Termin wieder aufleben. 2. Tests prüfen monatliche und wöchentliche Zyklen. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.70. |
+
+---
+
+#### [WA-56] Kontrollierte Einzelannahme beim KI-Import
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-56` |
+| **Titel** | Granulare Einzelübernahme aus `.glideexchange`-Importpaketen |
+| **Arbeitsstrang** | Product & Engineering |
+| **Ausgangslage** | `.glideexchange`-Dateien werden bisher als vollständiges Paket über den Importdialog importiert oder abgelehnt. |
+| **Problemstellung** | Wenn ein KI-Agent oder ein Kollege ein Paket mit 20 Aufgaben und 3 Seiten sendet, möchte der Nutzer eventuell nur 5 relevante Aufgaben übernehmen. |
+| **Nutzermehrwert** | Volle Kontrolle über einfließende Daten; kein Datenmüll im eigenen Arbeitsbereich. |
+| **Zielzustand** | Der Import-Inspektor zeigt eine Checkliste aller enthaltenen Elemente mit Vorschau; der Nutzer wählt per Checkbox aus, was übernommen wird. |
+| **In Scope** | Selektive Import-Schleife in `exchange_patch.py` / `exchange_recipes.py`, Baumansicht mit Checkboxen im Importdialog. |
+| **Out of Scope** | Kein bidirektionaler Live-Sync; kein unbestätigter Import. |
+| **Betroffene Module** | `src/glide/exchange_patch.py`, `src/glide/exchange_recipes.py`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#11-import-ausgabe-und-austausch`. |
+| **Produktentscheidungen**| D91/D92 (Agenten-Skill & Austauschformat 2). |
+| **Abhängigkeiten** | Baut auf dem sicheren JSON-Schema des Austauschformats auf. |
+| **Designbezug** | `GlideTreeview` mit Checkboxen nach Gestaltungsregister. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Format 26 und Austauschformat 2 unverändert. |
+| **Datenschutz** | Reiner lokaler Datei-Import. |
+| **Risiken** | Auflösung verknüpfter Referenzen (z. B. Aufgabe verweist auf nicht importierte Seite); muss sauber abgefangen werden (verwaiste Links neutral anzeigen). |
+| **Aufwand** | **M** (ca. 2–3 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. Nutzer wählt 3 von 10 Aufgaben ab; genau die 7 gewählten werden angelegt. 2. Automatisches Vorsicherungs-Backup wird vor dem Import erzeugt. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Analyse.md` §13.39 (Befund 7). |
+
+---
+
+#### [WA-57] Zeitvisualisierung & Tagesverlauf
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-57` |
+| **Titel** | Visuelle Zeitleiste und Tagesfortschritt im Arbeitsmodus Heute |
+| **Arbeitsstrang** | Design & Product |
+| **Ausgangslage** | Der Arbeitsmodus „Heute“ listet Aufgaben und Zeitblöcke vertikal auf; ein kleiner Indikator zeigt die aktuelle Uhrzeit. |
+| **Problemstellung** | Nutzer können schwer visualisieren, wie viel des Arbeitstages bereits vergangen ist und wo die nächste freie Lücke liegt. |
+| **Nutzermehrwert** | Visuelle Gelassenheit: Auf einen Blick erkennen, wie der Tag verläuft, ohne Zahlenkolonnen studieren zu müssen. |
+| **Zielzustand** | Ein kontinuierlicher, subtiler Zeitstrahl visualisiert den Tagesverlauf (Vergangenheit dezent abgeblendet, Jetzt-Linie, Zukunft klar). |
+| **In Scope** | Canvas-basierter Zeitstrahl in `today_view.py`, automatische Aktualisierung alle 60 Sekunden ohne Flackern. |
+| **Out of Scope** | Keine aufdringlichen Animationen; kein Sound-Effekt. |
+| **Betroffene Module** | `src/glide/today_view.py`, `src/glide/routines.py`, `src/glide/occupied_time.py`, `src/glide/ui_design.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`. |
+| **Produktentscheidungen**| D83 (Designlehren: ruhige visuelle Führung). |
+| **Abhängigkeiten** | `routines.py`, `occupied_time.py`. |
+| **Designbezug** | Kontrastarme Hilfslinien, klarer Zeitzeiger in Primärfarbe. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Miniatur-Verlaufskarte `BentoDayProgressCard`. |
+| **Datenformat** | Keine Auswirkung. |
+| **Datenschutz** | Vollständig offline. |
+| **Risiken** | CPU-Last durch Timer-Callbacks; muss mit ressourcenschonendem `after(60000, ...)` laufen. |
+| **Aufwand** | **S** (ca. 1–2 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. Jetzt-Linie wandert minütlich weiter. 2. Vergangene Zeitblöcke werden abgedunkelt. 3. Fenster-Resizing passt den Canvas verzerrungsfrei an. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.70. |
+
+---
+
+#### [WA-58] Pinnwandmuster & visuelle Strukturhilfen
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-58` |
+| **Titel** | Vordefinierte Pinnwand-Layoutmuster (Kanban, Trichter, Cluster) |
+| **Arbeitsstrang** | Creative & Product |
+| **Ausgangslage** | Die Pinnwand (`pinboard_pages.py` und `app.pyw`) bietet eine freie Canvas-Fläche mit Bereichen, Kärtchen und Verbindungslinien samt JSON Canvas 1.0 Export (D78). |
+| **Problemstellung** | Nutzer fangen oft auf einer leeren Pinnwand an und verbringen viel Zeit mit manueller Ausrichtung von Bereichen. |
+| **Nutzermehrwert** | Sofortige visuelle Ordnung: Mit einem Klick lassen sich bewährte Denkmuster (z. B. 3 Spalten, Matrix, Prozesskette) auf die Pinnwand werfen. |
+| **Zielzustand** | Menü „Muster einfügen …“ bietet 4 Schablonen an: 1. Drei Phasen (Input, Arbeit, Fertig), 2. 2x2 Prioritätenmatrix, 3. Themen-Cluster, 4. Wochenboard. |
+| **In Scope** | Schablonen-Generator in `pinboard_pages.py`, Vorlagenmenü in der Pinnwand-Symbolleiste. |
+| **Out of Scope** | Keine automatische Neuanordnung von Nutzerkarten ohne Befehl. |
+| **Betroffene Module** | `src/glide/pinboard_pages.py`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#6-pinnwand`. |
+| **Produktentscheidungen**| D78 (JSON Canvas 1.0), D93 (Zweisprachigkeit). |
+| **Abhängigkeiten** | Baut auf dem Canvas-Objektmodell auf. |
+| **Designbezug** | Harmonische Farbgebung für Bereiche nach `DESIGN_RICHTLINIEN.md`. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Format 26: Speichert reguläre Pinnwandbereiche (`canvas_groups`). |
+| **Datenschutz** | Vollständig offline. |
+| **Risiken** | Überlappung mit bestehenden Inhalten; Muster werden immer an freier Position oder auf neuer Pinnwand eingefügt. |
+| **Aufwand** | **M** (ca. 2 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. Schablone „Drei Phasen“ erzeugt 3 beschriftete Bereiche im Standardabstand (24 px). 2. Vollständig als ein Schritt rückgängig machbar. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.70. |
+
+---
+
+#### [WA-59] ICS-Alarme & Terminerinnerungen
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `WA-59` |
+| **Titel** | Unterstützung von VALARM-Attributen beim iCalendar-Import |
+| **Arbeitsstrang** | Engineering & Product |
+| **Ausgangslage** | Glide importiert Termine aus `.ics`-Dateien (`ics_busy.py` und `calendar_service.py`). Erinnerungsalarme (`VALARM`) werden bisher ignoriert. |
+| **Problemstellung** | Aus externen Kalendern importierte Termine verlieren ihre Vorwarnzeiten (z. B. „15 Minuten vorher erinnern“). |
+| **Nutzermehrwert** | Wichtige Termine behalten ihre Erinnerungszeitpunkte auch im lokalen Glide-Planer. |
+| **Zielzustand** | Beim Import von ICS-Dateien werden `VALARM`-Trigger ausgelesen und in Glides internes Erinnerungsfeld übertragen. |
+| **In Scope** | Parser-Erweiterung in `ics_busy.py`, Abbildung auf relative Vorwarnzeit in Aufgabenformat 26. |
+| **Out of Scope** | Kein CalDAV-Hintergrundsync; keine Push-Notifications über externe Cloud-Server. |
+| **Betroffene Module** | `src/glide/ics_busy.py` (Tk-frei), `src/glide/calendar_service.py`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/06_DATA_BACKUP_MIGRATION.md#kalenderimport-und--export`. |
+| **Produktentscheidungen**| D17 (Tk-freie Logik), D01 (Lokale Daten). |
+| **Abhängigkeiten** | `calendar_import.py` Unit-Tests. |
+| **Designbezug** | Glocken-Symbol in Kalender- und Listenansichten. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Format 26: Nutzt das vorhandene Feld `reminder_minutes`. |
+| **Datenschutz** | Vollständig offline. |
+| **Risiken** | Komplexe RFC-5545 Wiederholungsalarme; Beschränkung auf relative Trigger (`TRIGGER:-PT15M`). |
+| **Aufwand** | **S** (ca. 1 Entwicklertag). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. ICS-Datei mit `TRIGGER:-PT30M` setzt Erinnerung auf 30 Minuten vor Beginn. 2. Ungültige Alarme werden protokolliert und führen nicht zum Absturz. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` §21.70. |
+
+---
+
+#### [D83] Gestaltungsregeln & Marktlehren (Kontinuierliche Pflege)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `D83` |
+| **Titel** | Kontinuierliche Verankerung der Markt- und Gestaltungslehren |
+| **Arbeitsstrang** | Design |
+| **Ausgangslage** | In Entscheidung D83 wurden verbindliche Gestaltungslehren (z. B. ruhige Flächen, keine aufdringlichen Farbkodierungen, Tastaturfokus) in `docs/DESIGN_RICHTLINIEN.md` festgeschrieben. |
+| **Problemstellung** | Bei Neuentwicklungen besteht das Risiko, dass wieder Ad-hoc-Gestaltungen oder inkonsistente Abstände Einzug halten. |
+| **Nutzermehrwert** | Gleichbleibend hohe visuelle Ruhe, professionelle Ästhetik und Verlässlichkeit für den Nutzer. |
+| **Zielzustand** | Jedes neue UI-Element (Bento-Karten, Dialoge, Steuerelemente) ist strikt im Gestaltungsregister von `DESIGN_RICHTLINIEN.md` verankert und gegen T335/T336 geprüft. |
+| **In Scope** | Laufende Aktualisierung des Gestaltungsregisters bei jeder Oberflächenänderung; automatisierte Tests gegen unzulässige Schriftarten oder Symbole. |
+| **Out of Scope** | Keine vollständige Neugestaltung des bestehenden Farbschemas. |
+| **Betroffene Module** | `src/glide/ui_design.py`, `src/glide/glide_bento/tokens.py`, `docs/DESIGN_RICHTLINIEN.md`. |
+| **Betroffene Dokumente**| `docs/DESIGN_RICHTLINIEN.md#gestaltungsregister`. |
+| **Produktentscheidungen**| D83, D77 (Schriftarten), D84 (Dreiecke), D100 (Bento-Tokens). |
+| **Abhängigkeiten** | Bindend für alle Entwicklungsaufträge. |
+| **Designbezug** | Verbindlicher Kern aller Gestaltungsentscheidungen. |
+| **Shell-Bezug** | Portabler Gestaltungsvertrag gilt auch für die Framework Shell. |
+| **Bento-Bezug** | Bento-Tokens spiegeln die D83-Grundsätze wider. |
+| **Datenformat** | Keine. |
+| **Datenschutz** | Keine. |
+| **Risiken** | Stilbrüche zwischen alten Tk-Komponenten und modernen Bento-Karten; wird durch schrittweise Komponentenablösung verhindert. |
+| **Aufwand** | Kontinuierlich begleitend (**S** je Runde). |
+| **Priorität** | **P0** (verbindliche Richtlinie). |
+| **Status** | Aktiv & verbindlich verankert. |
+| **Akzeptanzkriterien** | 1. Kein neues Symbol außerhalb von `ICONS`. 2. Keine neuen Schriftarten ohne Inhaberfreigabe. 3. CI-Prüfungen der Grundstufe grün. |
+| **Freigabe** | Gilt als Inhabergrundsatzentscheidung D83. |
+| **Quellen** | `01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md`. |
+
+
+### 4.3 Die fünf neuen Produktfeatures (L1–L5, vollständige Spezifikation)
+
+Die fünf strategischen Neuentwicklungen für die kommenden Phasen sind nachfolgend vollständig mit allen 25 Merkmalen spezifiziert:
+
+---
+
+#### [L1] Projekt-Dashboard (Bento-Projektionsdashboard)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `L1` |
+| **Titel** | Projekt-Dashboard: Aggregierte Projektionsansicht für Vorhaben |
+| **Arbeitsstrang** | Product & Design |
+| **Ausgangslage** | In Glide ist ein „Projekt“ kein starrer proprietärer Datensatztyp, sondern eine strukturierte Organisationseinheit: (a) ein Projektordner (`folders`-Eintrag), der zusammengehörige Listen, Notizen und Dokumente bündelt, (b) eine Vorhaben-Liste (`lists`-Eintrag mit `list_kind: "tasks"`), die Aufgaben mit hierarchischen Unteraufgaben (`children`) und Checklisten führt, oder (c) eine verknüpfte Notizbuch- oder Pinnwandstruktur (`pinboard_pages.py`), die über den Referenzindex (`object_references.py`, `task_references.py`) verbunden ist. Bisher fehlt eine zentrale Übersichtsseite. |
+| **Problemstellung** | Um den Status eines Vorhabens zu erfassen, müssen Nutzer zwischen der Aufgabenliste, verknüpften Seiten, Notizen und Fälligkeiten hin- und herwechseln. |
+| **Nutzermehrwert** | Alles Wichtige zu einem Vorhaben auf einer Seite: Offene Meilensteine, nächste dringende Schritte, verknüpfte Notizen und Fortschrittsbalken in einem klaren Bento-Raster. |
+| **Zielzustand** | Für jeden Projektordner oder jede Hauptliste lässt sich eine dedizierte Dashboard-Ansicht aktivieren. Diese nutzt das Bento Box System, um konfigurierbare Karten für das Vorhaben anzuzeigen. |
+| **In Scope** | 1. **Pflichtkarten:** `ProjectHeaderCard` (Titel, Status, Zieltermin), `ProjectProgressCard` (Erledigte vs. offene Punkte), `NextTasksCard` (die nächsten 3–5 anstehenden Aufgaben), `LinkedNotesCard` (Zugehörige Seiten/Notizen über `object_references.py`). 2. **Optionale Karten:** `MilestonesCard` (Zwischenziele), `EffortSummaryCard` (Geplante vs. aufgewendete Stunden). 3. Nahtloser Wechsel zwischen Listen- und Dashboard-Ansicht. |
+| **Out of Scope** | Keine komplexe Gantt-Chart-Engine; kein Multi-User-Ressourcenmanagement; keine externe Cloud-Projektverwaltung. |
+| **Betroffene Module** | `src/glide/app.pyw`, `src/glide/sidebar_policy.py`, `src/glide/object_references.py`, `src/glide/glide_bento/`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#1-grundbegriffe`, `docs/GLIDE_BENTO_SYSTEM_KONZEPT.md`, `docs/user-guide/03-tasks-and-lists.md`. |
+| **Produktentscheidungen**| D100 (Glide Bento Box System als Ebene B), D01 (Fälligkeit vs. Arbeitstag). |
+| **Abhängigkeiten** | Erfordert Bento 0.2.0 (Multi-Span Layout und Host-Context-Injection). |
+| **Designbezug** | Ruhiges Bento-Raster (3-Spalten-Layout bei > 932 px, 2-Spalten bei 616–932 px, 1-Spalte bei < 616 px); semantische BentoTokens. |
+| **Shell-Bezug** | Nutzt Standard-Host-Container; keine Fachlogik in der Shell. |
+| **Bento-Bezug** | Kernanwendungsfall für die Wiederverwendbarkeit des Bento Box Systems außerhalb der Startseite. |
+| **Datenformat & Persistenz** | **Persistenzanalyse:** Aufgabenformat 26 besitzt kein generisches `folder_metadata`-Wörterbuch. Daher wird für Phase 1/2 **Variante C** festgelegt: Die Dashboard-Konfiguration (aktive Karten, Reihenfolge) wird in den Benutzereinstellungen (`settings.json` / Einstellungsformat 2) unter `project_dashboards: {<id>: ...}` gespeichert. Aufgabenformat 26 bleibt vollkommen unverändert und abwärtskompatibel. Eine spätere Schemaerweiterung um ein `metadata`-Feld (Variante B) bleibt einer gesonderten Inhaberentscheidung vorbehalten. |
+| **Kennzahlendefinitionen** | - *Projektfortschritt:* `(Erledigte Hauptaufgaben / Gesamte Hauptaufgaben) * 100`. Unteraufgaben in `children` werden separat als Subfortschritt ausgewiesen. Archivierte und gelöschte Aufgaben werden nicht mitgezählt. Bei Projekten ohne Aufgaben erscheint ein neutraler Leerzustand („Keine Aufgaben vorhanden“).<br/>- *Nächste Aufgaben:* Chronologisch nächste 3–5 offene Aufgaben (Sortierung: `planned_date`, dann `due`, dann Listenreihenfolge).<br/>- *Aufwandssumme:* Summe aller `estimated_minutes` vs. `time_spent_minutes`. |
+| **Datenschutz** | Vollständig lokale Datenaggregation; keinerlei Datenübertragung. |
+| **Risiken** | Performance bei sehr großen Projekten (> 1.000 Aufgaben); Aggregationsberechnung muss inkrementell gecacht werden. |
+| **Aufwand** | **L** (ca. 4–6 Entwicklertage für Aggregationslogik, Bento-Karten und Listenintegration). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Umsetzung in Phase 2. |
+| **Akzeptanzkriterien** | 1. Ein Klick auf „Als Dashboard anzeigen“ wechselt zur Bento-Projektion. 2. Fortschrittsbalken aktualisiert sich sofort, wenn eine Aufgabe erledigt wird. 3. Klick auf eine verknüpfte Notiz öffnet direkt das Dokument. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich (Standardausbau des Bento-Systems). |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Things 3 Projektfortschritt & Bento Dashboards). |
+
+---
+
+#### [L2] Personal Insights (Lokale Reflexions- und Produktivitätsmetriken)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `L2` |
+| **Titel** | Personal Insights: Lokale Reflexions- und Arbeitsmuster-Analysen |
+| **Arbeitsstrang** | Product |
+| **Ausgangslage** | Aufgabenformat 26 speichert für Aufgaben konkrete Datenfelder: `done_at` (Erledigungszeitpunkt als ISO-Timestamp), `due` / `due_time`, `planned_date` / `planned_time`, `estimated_minutes` und `time_spent_minutes` sowie `importance` und `checklist`. Es gibt jedoch keine aggregierte historische Auswertung. |
+| **Problemstellung** | Nutzer wissen oft nicht, an welchen Wochentagen sie am produktivsten sind, wie viele Aufgaben sie typischerweise pro Woche schaffen und wo Schätzungen regelmäßig abweichen. |
+| **Nutzermehrwert** | Selbstreflexion und realistische Lebensplanung: Erkennen eigener Arbeitsmuster, um Überlastung proaktiv vorzubeugen, ohne externen Leistungsdruck. |
+| **Zielzustand** | Eine dezente, private Übersichtsseite „Einblicke“: Zeigt Trends der letzten 4–12 Wochen (z. B. Erledigungsrate, Fokusstunden pro Woche, typische Schätzgenauigkeit, Verteilung über Wochentage). |
+| **In Scope** | 1. Tk-freies Berechnungsmodul in `planning.py` (rollierende Durchschnitte, Wochensummen). 2. Ruhige visuelle Diagramme (Tk-Canvas-Balken ohne externe Bibliotheken wie Matplotlib). 3. Strikt vertrauliche lokale Auswertung. |
+| **Out of Scope** | **Strikte Schutzprinzipien:** Keine Gamification (keine Streaks, Flammen, Level oder Strafpunkte); keine Produktivitätsbewertung des Menschen; keine Heils- oder Therapieversprechen; keine Cloud-Synchronisation; kein Vergleich mit anderen Nutzern. |
+| **Betroffene Module** | `src/glide/planning.py` (Tk-frei), `src/glide/app.pyw`, `src/glide/today_view.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung`, `docs/01_PRODUCT_CONSTRAINTS.md`. |
+| **Produktentscheidungen**| D17 (Tk-freie Logik), D83 (Marktlehren: Wertschätzung statt Selbstoptimierungsdruck). |
+| **Abhängigkeiten** | Baut auf den bestehenden Datenfeldern von Format 26 auf. |
+| **Designbezug** | Ruhige, monochrome Diagrammbalken mit feinen Akzenten in Themenfarbe; keine grellen Ampelfarben. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Optionale Monats-Zusammenfassungskarte `BentoInsightsCard` für die Startseite. |
+| **Datenverfügbarkeit & Begrenzung** | - *Direkt berechenbar:* Erledigte Aufgaben pro Tag/Woche (via `done_at`), geschätzte vs. tatsächliche Zeit (via `estimated_minutes` vs. `time_spent_minutes`), Wochentagsverteilung, Checklistenerfüllung.<br/>- *Nicht berechenbar ohne neue Persistenz:* Verschiebungshistorie (wie oft eine Aufgabe verschoben wurde), lückenlose Arbeitsunterbrechungen (nur Gesamtsumme `time_spent_minutes` gespeichert), historische Tageskapazitätsverläufe (werden on-the-fly berechnet). Bei fehlenden Werten wird kein Nullwert als Scheinpräzision eingesetzt, sondern der Fall neutral ausgewiesen („Nicht geschätzt“). |
+| **Kennzahlen & Formeln** | - *Erledigungsrate:* `Anzahl erledigter Aufgaben im Zeitfenster`.<br/>- *Schätzabweichung:* `time_spent_minutes - estimated_minutes` für Aufgaben mit beiden Werten.<br/>- *Planungstreue:* Anteil der Aufgaben, deren `done_at <= planned_date`. |
+| **Datenschutz** | **Höchste Priorität:** Die Daten verlassen niemals den Rechner; kein Analytics-Dienst, keine Telemetrie. |
+| **Risiken** | Unvollständige historische Daten bei neuen Nutzern; Anzeige muss bei geringem Datenbestand sanfte Hinweistexte („Noch nicht genügend Daten für 4-Wochen-Trend“) einblenden. |
+| **Aufwand** | **M** (ca. 3–4 Entwicklertage für Statistikberechnung, Canvas-Diagramme und DE/EN-Texte). |
+| **Priorität** | **P3** |
+| **Status** | Spezifiziert; Phase 3 / 4. |
+| **Akzeptanzkriterien** | 1. Diagramm zeigt erledigte Aufgaben pro Wochentag für die letzten 4 Wochen. 2. Keine Netzwerkaufrufe (durch Tests abgesichert). 3. Deaktivierbar über Einstellungen („Persönliche Einblicke ausblenden“). |
+| **Freigabe** | Keine gesonderte Inhaberentscheidung erforderlich (entspricht den bestehenden Datenschutzprinzipien). |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Super Productivity Metriken-Vergleich). |
+
+---
+
+#### [L3] Workspace-Presets (Ergonomische Arbeitsbereichs-Profile)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `L3` |
+| **Titel** | Workspace-Presets: Vordefinierte Bento-Karten- und Arbeitsbereichsprofile |
+| **Arbeitsstrang** | Design & Engineering |
+| **Ausgangslage** | Die Glide-Startseite bietet 20 produktive Kacheln (`HOME_TILE_DEFINITIONS` in `app.pyw`). Nutzer konfigurieren die Kacheln bisher manuell über den Dialog „Startseite einrichten …“. |
+| **Problemstellung** | Unterschiedliche Arbeitssituationen erfordern unterschiedliche Kachelkombinationen: Beim Planen zählen Kalender und Heute; beim Abarbeiten stören Notizen; beim kreativen Arbeiten stehen Skizzen und Galerie im Fokus. |
+| **Nutzermehrwert** | Ein-Klick-Umschaltung der Startseite und des Arbeitsbereichs auf den jeweiligen Kontext (z. B. Minimal, Tagesplanung, Fokus, Projekte, Kreativ, Wissen, Analyse). |
+| **Tatsächlicher Kartenbestand (20 Kacheln)** | `boardpreview`, `mascot`, `drawings`, `gallery`, `filters`, `pinned`, `clock`, `welcome`, `today`, `focus`, `week`, `labels`, `recent`, `templates`, `impulse`, `calendar`, `overdue`, `progress`, `boards`, `stats`. |
+| **Vollständige 7-Preset-Matrix** | 1. **Minimal (3 Kacheln):** `welcome`, `today`, `overdue` (radikale Reduktion auf akute Tagesanliegen).<br/>2. **Tagesplanung (5 Kacheln):** `today`, `focus`, `calendar`, `overdue`, `clock` (strukturierter Tagesablauf).<br/>3. **Fokus (3 Kacheln):** `focus`, `today`, `clock` (konzentrierte Abarbeitung ohne Ablenkung).<br/>4. **Projekte (5 Kacheln):** `boards`, `boardpreview`, `progress`, `pinned`, `stats` (Vorhaben- und Kanban-Überblick).<br/>5. **Kreativ (4 Kacheln):** `drawings`, `gallery`, `mascot`, `impulse` (Pixel-Werkstatt, Galerie und Impulse).<br/>6. **Wissen (5 Kacheln):** `templates`, `filters`, `labels`, `recent`, `pinned` (Notiz-, Dokument- und Recherchekontext).<br/>7. **Analyse (4 Kacheln):** `stats`, `progress`, `week`, `overdue` (Reflexion, Schätzabgleich und Wochenfortschritt). |
+| **In Scope** | 7 Preset-Definitionen, Auswahlschalter auf der Startseite und im Menü `Ansicht › Startseiten-Preset`, Speicherung des bevorzugten Start-Presets. |
+| **Out of Scope** | Keine unbegrenzt komplexen Fensterteilungen; keine losgelösten Multi-Window-Desktops (bleibt Einzelfenster-Prinzip). |
+| **Betroffene Module** | `src/glide/app.pyw`, `src/glide/compact_mode.py`, `src/glide/glide_bento/specs.py`. |
+| **Betroffene Dokumente**| `docs/20_FUNKTIONEN.md#7-startseite`, `docs/GLIDE_BENTO_SYSTEM_KONZEPT.md`, `docs/DESIGN_RICHTLINIEN.md`. |
+| **Produktentscheidungen**| D83 (ruhige Führung), D96 (Fenstergeometrie & Shell), D100 (Bento-System). |
+| **Abhängigkeiten** | Baut auf `HOME_TILE_DEFINITIONS` und `BentoLayoutPlanner` auf. |
+| **Designbezug** | Sanfte Übergänge beim Umschalten der Kacheln nach den Animationsregeln der Designrichtlinien. |
+| **Shell-Bezug** | Kann später in die Glide Shell als generischer Preset-Manager für Folgeprojekte übernommen werden. |
+| **Bento-Bezug** | Direkte Steuerung der Sichtbarkeiten im `BentoLayoutPlan`. |
+| **Datenformat & Zustand** | Einstellungsformat 2: Speichert aktives Preset unter `settings["home_preset"]`. Individuelle Kachelkonfigurationen des Nutzers bleiben unter `home_tile_visible` erhalten und werden bei Wahl von „Benutzerdefiniert“ wiederhergestellt. |
+| **Datenschutz** | Vollständig lokal. |
+| **Risiken** | Verwirrung bei Nutzern, wenn Kacheln ausgeblendet werden; klarer Rückschalt-Knopf („Benutzerdefiniert“) zwingend. |
+| **Aufwand** | **S** (ca. 2 Entwicklertage). |
+| **Priorität** | **P2** |
+| **Status** | Spezifiziert; Phase 2. |
+| **Akzeptanzkriterien** | 1. Auswahl eines Presets aktualisiert die Startseite in < 100 ms. 2. „Benutzerdefiniert“ stellt die individuellen Kacheleinstellungen exakt wieder her. 3. Zustand bleibt beim Neustart erhalten. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` §18 (Obsidian Workspace Layouts). |
+
+---
+
+#### [L4] Template Library (Zweisprachige Projektvorlagen-Bibliothek)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `L4` |
+| **Titel** | Template Library: Erweiterte zweisprachige Vorlagen für Vorhaben |
+| **Arbeitsstrang** | Product & Growth |
+| **Ausgangslage** | Glide liefert 16 eingebaute Vorlagen (Listen, Seiten, Notizbücher) in deutscher und englischer Sprache mit (`01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates` und `glide_vorlagen.en.glidetemplates`). |
+| **Problemstellung** | Neue Nutzer und Freelancer müssen typische Workflows (z. B. Kunden-Onboarding, Design-Sprint, persönliche Wochenplanung) von Grund auf neu anlegen. |
+| **Nutzermehrwert** | Sofortige Produktivität: Vollständig ausgearbeitete, praxiserprobte Projektstrukturen mit einem Klick übernehmen und direkt loslegen. |
+| **Zielzustand** | Drei vollständig ausgearbeitete, praxiserprobte Referenzvorlagen in deutscher und englischer Sprache, sofort instanziierbar nach Vorlagenformat 2. |
+| **Drei konkrete Beispielvorlagen (DE/EN)** | **Vorlage A: Freelancer-/Kundenprojekt (`client_project`):**<br/>- *Inhalte:* Kundenbriefing (Ziele, Ansprechpartner, Budgetrahmen), Phasenplan (Phase 1 Anforderungsanalyse, Phase 2 Entwurf & Konzept, Phase 3 Ausarbeitung, Phase 4 Abnahme & Übergabe), Meilensteine mit Fälligkeiten, Abrechnungsnotiz mit Stundenerfassung.<br/>- *Dateien:* `client_project_de`, `client_project_en`.<br/><br/>**Vorlage B: Kreatives Designprojekt (`design_project`):**<br/>- *Inhalte:* Inspiration & Moodboard (Referenzen, Farbklima), Entwurfsrunden (Skizzen in Pixel-Werkstatt, 3 Varianten), Feedback-Schleife (Korrekturen, Revisionsstand), Freigabeprotokoll und finale Asset-Exportliste.<br/>- *Dateien:* `design_project_de`, `design_project_en`.<br/><br/>**Vorlage C: Persönliche Wochenplanung (`weekly_review`):**<br/>- *Inhalte:* Wochenabsicht (3 Fokusziele), feste Termine & Pufferblöcke, priorisierte Wochenaufgaben (Wichtig & Dringend), Wochenabschluss (Was lief gut? Was wird übertragen?).<br/>- *Dateien:* `weekly_review_de`, `weekly_review_en`. |
+| **In Scope** | Vollständige JSON-Payloads für die 3 Vorlagen nach Vorlagenformat 2, Integration in `glide_vorlagen.glidetemplates` und `glide_vorlagen.en.glidetemplates`, Vorschau im Vorlagendialog. |
+| **Out of Scope** | Kein Cloud-Marktplatz für Drittanbieter; Vorlagen bleiben lokal gebündelt. |
+| **Betroffene Module** | `src/glide/resources/templates/`, `src/glide/app.pyw`. |
+| **Betroffene Dokumente**| `docs/27_VORLAGEN_PRAXISANLEITUNG.md`, `docs/20_FUNKTIONEN.md#8-seiten-notizen-notizbuch-galerie`. |
+| **Produktentscheidungen**| D78 (zweisprachige Vorlagen V1.78), D93 (Lokalisierung). |
+| **Abhängigkeiten** | Nutzt das vorhandene Vorlagensystem mit Platzhaltern (`{{Date}}`, `{{Weekday}}`). |
+| **Designbezug** | Vorlagenkarten mit Kategoriereitern und Detailvorschau nach Designrichtlinien. |
+| **Shell-Bezug** | Keine. |
+| **Bento-Bezug** | Optionale Vorlagen-Kachel auf der Startseite. |
+| **Datenformat** | Vorlagenformat 2 (`format_version: 2`) unverändert. |
+| **Datenschutz** | Vollständig offline gebündelt; synthetische Beispieldaten. |
+| **Risiken** | Redaktioneller Aufwand für sprachliche Parität DE/EN. |
+| **Aufwand** | **S** (ca. 2 Entwicklertage für JSON-Ausarbeitung und Tests). |
+| **Priorität** | **P1** |
+| **Status** | Spezifiziert; bereit zur Umsetzung in Phase 1. |
+| **Akzeptanzkriterien** | 1. Alle 3 Vorlagen lassen sich fehlerfrei auf Deutsch und Englisch anwenden. 2. Platzhalter werden korrekt expandiert. 3. Tests prüfen syntaktische Validität beider `.glidetemplates`-Kataloge. |
+| **Freigabe** | Keine Inhaberentscheidung erforderlich. |
+| **Quellen** | `01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md`. |
+
+---
+
+#### [L5] Kontrollierte Update-Verwaltung (Vier-Stufen-Strategie)
+
+| Feld | Spezifikationsinhalt |
+|---|---|
+| **Kennung** | `L5` |
+| **Titel** | Kontrollierte Update-Verwaltung: Vier-Stufen-Modell ohne Telemetrie |
+| **Arbeitsstrang** | Engineering & Distribution |
+| **Ausgangslage** | Glide besitzt standardmäßig keinerlei Netzwerkzugriff und keinen automatischen Update-Dienst. Nutzer suchen manuell auf GitHub nach neuen Versionen. |
+| **Problemstellung** | Wichtige Sicherheitsaktualisierungen oder Fehlerkorrekturen erreichen Nutzer verspätet. Ein aggressives Auto-Update würde jedoch Glides Offline-Prinzip verletzen. |
+| **Nutzermehrwert** | Nutzer bleiben über wichtige Verbesserungen informiert, ohne dass Hintergrundprozesse heimlich Daten senden oder ungefragt Software austauschen. |
+| **Das Vier-Stufen-Modell** | **Stufe 1 (Manueller Release-Link – Status Quo):**<br/>- *Funktion:* Menüeintrag `Hilfe › Versionshinweise / Releases` öffnet die offizielle GitHub-Release-Seite im Standardbrowser.<br/>- *Netzwerk:* **Null Netzwerkverkehr durch Glide.** Eindeutige Anzeige der installierten Version in der Titelleiste und im Über-Dialog.<br/><br/>**Stufe 2 (Vom Nutzer gestarteter Versionsabgleich – Phase 2):**<br/>- *Funktion:* Ausdrückliche Benutzeraktion `Hilfe › Nach Updates suchen …`. Sendet einen anonymen HTTPS-GET-Aufruf an die öffentliche GitHub Releases API (`https://api.github.com/repos/n05a-design/glide-to-do/releases`) zur Abfrage des aktuellen Stable- oder Prerelease-Kanals (unter Ausschluss von Drafts via semantischem Versionsvergleich).<br/>- *Verhalten:* Vergleicht `VERSION` semantisch. Zeigt bei neuer Version Dialog mit Versionsnummer, Neuerungen und direktem Downloadlink. Bei fehlender Internetverbindung: sanfte Meldung („Offline – Prüfung nicht möglich“).<br/>- *Datenschutz:* **Null Telemetrie.** Keine Systemdaten, keine Nutzer-IDs in HTTP-Headern.<br/><br/>**Stufe 3 (Optionaler automatischer Update-Hinweis – Phase 3, Inhaberentscheidung):**<br/>- *Funktion:* Strenges Opt-in (Standard: `False`). Wenn vom Nutzer aktiviert, prüft Glide beim Start maximal einmal alle 7 Tage diskret im Hintergrund.<br/>- *Verhalten:* Diskreter Hinweis im Menü („Update 1.0.3 verfügbar“); kein aufdringliches Popup. Jederzeit in den Einstellungen widerrufbar.<br/><br/>**Stufe 4 (Kontrollierter Download und Installationsübergang – Phase 4, Inhaberentscheidung):**<br/>- *Funktion:* Kein eigenmächtiges Ausführen von Binärdateien. Glide lädt auf Nutzerklick das Installationspaket herunter, verifiziert den SHA-256-Hash gegen den veröffentlichten Prüfsummen-Digest und leitet zur Installation an den System-Installer oder Paketmanager weiter (`winget upgrade` / `brew upgrade`). Automatisches Vorsicherungs-Backup vor dem Update. |
+| **In Scope** | Spezifikation aller vier Stufen; Implementierung von Stufe 1 und Stufe 2; strikte Entkopplung von Hintergrunddiensten. |
+| **Out of Scope** | **Absolut ausgeschlossen:** Kein ungefragtes Herunterladen oder Ausführen von Binärcode; keine Telemetrie; kein Schließen der App ohne Bestätigung. |
+| **Betroffene Module** | `src/glide/app.pyw`, `src/glide/settings_compat.py`. |
+| **Betroffene Dokumente**| `docs/10_VEROEFFENTLICHUNG.md#paketmanager-strategie`, `docs/01_PRODUCT_CONSTRAINTS.md`. |
+| **Produktentscheidungen**| D01 (Offline-First-Prinzip), I3 / D43 (Veröffentlichung & Distribution). Keine Zuordnung zu M01 (M01 ist Schnellerfassung). |
+| **Abhängigkeiten** | Standardbibliothek `urllib.request` (ausschließlich bei manuellem Klick in Stufe 2). |
+| **Designbezug** | Ruhiger Dialog mit Versionsvergleich, SHA-256-Prüfsumme und Freigabeschalter. |
+| **Shell-Bezug** | Kann als optionaler generischer Versionsprüfer für Folgeprojekte bereitgestellt werden. |
+| **Bento-Bezug** | Keine. |
+| **Datenformat** | Einstellungsformat 2: Speichert Schalter `check_updates_on_start` (Standard: `False`). |
+| **Datenschutz** | **Kritisch:** Standard bleibt strikt offline. Nur bei explizitem Nutzerklick transparenter API-Aufruf. |
+| **Risiken** | Falschmeldungen bei fehlender Verbindung; wird durch saubere Fehlerbehandlung gelöst. |
+| **Aufwand** | **S** für Stufe 2 (ca. 1–2 Entwicklertage). |
+| **Priorität** | **P3** |
+| **Status** | Spezifiziert; Stufe 2 vorbereitet für Phase 2. |
+| **Akzeptanzkriterien** | 1. Ohne Klick erfolgt kein einziger Socket-Aufruf. 2. Bei Klick wird neue Version korrekt erkannt. 3. Bei fehlender Internetverbindung erscheint eine sanfte Meldung. |
+| **Freigabe** | Keine Inhaberentscheidung für Stufe 1 und 2; Inhaberfreigabe vor Aktivierung von Stufe 3 oder 4 erforderlich. |
+| **Quellen** | `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md`. |
+
+
+### 4.4 Die nächsten fünf direkt ausführbaren Folgeaufträge (Entwicklungsübergabepakete)
+
+Für die unmittelbar anstehende Entwicklungsphase (Phase 1: *Product Experience*) sind die nächsten fünf Arbeitsaufträge so vollständig ausgearbeitet, dass ein beliebiger Entwickler oder KI-Agent sie ohne Vorbereitung direkt umsetzen kann:
+
+```mermaid
+flowchart LR
+    P1["<b>Paket 1</b><br/>Bento-Tokens & Multi-Span<br/>(Bento 0.2.0)"] --> P2["<b>Paket 2</b><br/>Leerzustände WA-52<br/>(Erststart & Showcase)"]
+    P2 --> P3["<b>Paket 3</b><br/>Tagesplanung WA-12 Rest<br/>(15-Min-Puffer & Spätstart)"]
+    P3 --> P4["<b>Paket 4</b><br/>Mehrfacherfassung WA-54<br/>(Interaktive Vorschau)"]
+    P4 --> P5["<b>Paket 5</b><br/>Template Library L4<br/>(3 Zweisprachige Vorlagen)"]
+```
+
+---
+
+#### Übergabepaket 1: Bento-Tokens & Multi-Span Layout (Bento 0.2.0)
+- **Auftragsziel:** Hebung des Glide Bento Box Systems auf Version `0.2.0`.
+- **Kernaufgaben:**
+  1. **Token-Harmonisierung (Variante C):** Implementierung der Host-Context-Injection in `BentoContext`, sodass Bento neutrale Fallback-Tokens besitzt, aber vom Glide-Host (`ui_design.py`) mit aktiven Thementokens dynamisch versorgt wird.
+  2. **Multi-Span Layout-Algorithmus:** Erweiterung des `BentoLayoutPlanner` in `layout.py`: Unterstützung von `span=2` im 3-Spalten-Raster. Bei Verengung auf 2 Spalten oder 1 Spalte bricht die Karte automatisch deterministisch um, ohne dass Lücken im Raster entstehen.
+  3. **Komponententests:** Erweiterung der Testsuite T341–T344 in `tests/integration/test_bento_integration.py` und `tests/unit/test_bento_layout.py` um Multi-Span-Reflow-Tests und Token-Injektionsprüfungen.
+- **Dateien:** `src/glide/glide_bento/tokens.py`, `src/glide/glide_bento/layout.py`, `src/glide/glide_bento/context.py`, `tests/unit/test_bento_layout.py`.
+- **Abschlusskriterium:** `python3 -m glide_bento.selftest` besteht mit allen Checks; Tests T341–T344 grün.
+
+---
+
+#### Übergabepaket 2: Erststart-Erlebnis und Leerzustände (WA-52)
+- **Auftragsziel:** Beseitigung aller leeren, unkommunikativen Flächen bei Erstnutzung.
+- **Kernaufgaben:**
+  1. **Leerzustands-Komponenten:** Bereitstellung von `BentoEmptyState` für Startseite und Fachansichten (Heute, Aufgabenlisten, Pinnwände und Notizbücher) mit klarem Aktionsknopf.
+  2. **Showcase-Erkundung:** Integrierter Schalter im Startseiten-Leerzustand: „Showcase ‚Stadtlicht‘ erkunden“, der den mitgelieferten künstlichen Datensatz temporär schreibgeschützt lädt.
+  3. **Lokalisierung:** Vollständige zweisprachige Texte (DE/EN) in den Lokalisierungskatalogen `de.json` und `en.json`.
+- **Dateien:** `src/glide/glide_bento/components.py`, `src/glide/today_view.py`, `src/glide/sidebar_policy.py`, `src/glide/app.pyw`, `resources/locales/`.
+- **Abschlusskriterium:** Neue leere Liste zeigt „Erste Aufgabe hinzufügen“; Klick öffnet Eingabezeile; Tests verifizieren Sichtbarkeit.
+
+---
+
+#### Übergabepaket 3: Realistische Tagesplanung & Pufferzeiten (WA-12 Rest)
+- **Auftragsziel:** Abschluss der Tageskapazitätsanalyse aus 3.55.0.
+- **Kernaufgaben:**
+  1. **15-Minuten-Puffer:** `planning.py` reserviert nach jedem Kalendertermin automatisch einen 15-minütigen Pufferblock, der als verplante Zeit in die Gesamtkapazität einfließt.
+  2. **Spätstart-Nachfrage:** Wenn die Heute-Ansicht nach 10:00 Uhr geöffnet wird und überfällige Aufgaben von heute früh vorliegen, blendet Glide die diskrete Option ein: „Tag jetzt anpassen (Aufgaben verschieben)“.
+  3. **Entlastungsdialog:** Integration der Pufferzeit in die Begründungsliste des Entlastungsdialogs `day_relief.py` (D81).
+- **Dateien:** `src/glide/planning.py`, `src/glide/today_view.py`, `src/glide/day_relief.py`.
+- **Abschlusskriterium:** Kapazitätsanalyse berücksichtigt Pufferzeiten; Spätstart-Verschiebung lässt sich mit einem Klick ausführen und per Undo zurücknehmen.
+
+---
+
+#### Übergabepaket 4: Mehrzeilige Schnellerfassung mit Vorschaukarte (WA-54)
+- **Auftragsziel:** Ermöglichung der schnellen Masseneingabe von Notizen und Listen.
+- **Kernaufgaben:**
+  1. **Zwischenablagen-Erkennung:** Wenn mehrzeiliger Text in die Schnellerfassungszeile eingefügt wird, öffnet sich automatisch die modale Vorschaukarte.
+  2. **Interaktive Vorschau:** Zeigt jede Zeile mit erkannten Datumswörtern (`capture_parser.py`) und erlaubt das Abwählen einzelner Zeilen per Tastatur (`Leertaste`) oder Klick.
+  3. **Atomares Batch-Commit:** Das Einfügen aller Zeilen läuft über eine einzige atomare Transaktion in `glide_shell.command_history`, sodass `Ctrl/Cmd+Z` alle erzeugten Aufgaben auf einmal entfernt.
+- **Dateien:** `src/glide/capture_parser.py`, `src/glide/app.pyw`, `src/glide/glide_shell/modal_session.py`.
+- **Abschlusskriterium:** Einfügen von 10 Zeilen erzeugt 10 strukturierte Punkte; Undo entfernt alle 10 Punkte in einem Schritt.
+
+---
+
+#### Übergabepaket 5: Zweisprachige Vorlagenbibliothek (L4)
+- **Auftragsziel:** Bereitstellung von drei praxiserprobten zweisprachigen Referenzvorlagen.
+- **Kernaufgaben:**
+  1. **Vorlagenerstellung:** Ausarbeitung von 3 Referenzvorlagen für Kundenprojekt, Kreativ-Projekt und Wochenreflexion nach Vorlagenformat 2 in deutscher und englischer Fassung.
+  2. **Vorlagen-Inspektor:** Visuelle Vorschau der Vorlageninhalte vor der Übernahme mit Erklärung der enthaltenen Abschnitte in `app.pyw`.
+  3. **Validierung:** CI-Prüftest zur Überprüfung aller Vorlagen-Syntaxen und Platzhalter-Tags.
+- **Dateien:** `src/glide/resources/templates/glide_vorlagen.glidetemplates`, `src/glide/resources/templates/glide_vorlagen.en.glidetemplates`, `src/glide/app.pyw`.
+- **Abschlusskriterium:** Alle 3 Vorlagen lassen sich in deutscher und englischer Sprache fehlerfrei in eine neue Liste oder Seite instanziieren.
+
+---
+
+### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
+
+Zur lückenlosen Dokumentation der vollständigen Bearbeitung des Post-Release-Master-Auftrags und des Inhaltsaudits werden hier die sechs kanonischen Matrizen verankert:
+
+#### Matrix 1: Auflösung der unabhängigen Audit-Befunde (IN-01 bis IN-12)
+
+| Befund-ID | Verbindliche Bedeutung | Tatsächliche Maßnahme | Führende Datei | Konkreter Abschnitt | Beleg | Status | Restarbeiten |
+|---|---|---|---|---|---|---|---|
+| **IN-01** | Englische README und prominenter Download-Einstieg | Downloads für Windows & macOS an oberster Stelle; Prerelease v1.0.2 mit Links und SHA-256-Hinweisen verankert. | [`README.md`](../README.md) | `Downloads & Quick Start` | GitHub Release v1.0.2 | VERIFIED ARTIFACT | Paketmanager nach I3/D43. |
+| **IN-02** | Deutsche README | Deutsche Einstiegsseite mit Release-Downloads, Plattformhinweisen und Gatekeeper/SmartScreen-Führung. | [`README.de.md`](../README.de.md) | `Downloads und Schnellstart` | GitHub Release v1.0.2 | VERIFIED ARTIFACT | Keine; Downloadstatus konsistent. |
+| **IN-03** | Installations- und Sicherheitsanleitungen | Schritt-für-Schritt-Anleitung für Gatekeeper (`xattr -d com.apple.quarantine`), SmartScreen und SHA-256-Prüfungen. | [`docs/user-guide/02-installation.md`](../01_Repository/Glide/docs/user-guide/02-installation.md) | §2 `Sicherheitshinweise beim Erststart` | Prüfkommandos dokumentiert | DOCUMENTED | Screenshots bei Bedarf ergänzen. |
+| **IN-04** | Überschneidungen zwischen PR #197 und PR #198 | Historische Einordnung: PR #198 schließt die Commits aus PR #197 vollständig ein und führt sie verbindlich fort. | Pull Request #198 | PR-Beschreibung | Git-Historie auf `docs/glide-post-release-product-strategy` | VERIFIED ARTIFACT | PR #198 finalisieren und mergen. |
+| **IN-05** | Aktualisierung von Issue #129 | Öffentliches Release-Tracking auf GitHub aktualisiert: Tore 1–5 geschlossen, Tor 6 (Paketmanager) & praktische Tests offen; Phase 1.0.3 eröffnet. | Issue #129 | Issue-Tracking auf GitHub | GitHub API Issue #129 | VERIFIED ARTIFACT | Praktische Installationsabnahmen durch Inhaber. |
+| **IN-06** | Aktualisierung des Meilensteinplans | Meilensteinplan auf Post-Release-Stand synchronisiert: v1.0.2 als Prerelease veröffentlicht; Bento 0.1.0 in 1.0.3 integriert. | [`Glide_Meilenstein_v1_Plan.md`](Glide_Meilenstein_v1_Plan.md) | §§1–3 | Dokumentenabgleich | VERIFIED ARTIFACT | Folgeplanung 1.1.0. |
+| **IN-07** | Funktionsübersicht und thematische Navigation | Strukturierter Einstieg mit Navigation; Trennung von v1.0.2 (veröffentlicht) und Entwicklungsstand 1.0.3 auf `main`. | [`docs/20_FUNKTIONEN.md`](../01_Repository/Glide/docs/20_FUNKTIONEN.md) | §1–§3 | `docs/20_FUNKTIONEN.md` | VERIFIED ARTIFACT | Künftige Feature-Erweiterungen. |
+| **IN-08** | Lokalisierungswidersprüche DE/EN | Widersprüchliche Angaben in Produktgrenzen bereinigt; DE/EN-Lokalisierung als in 1.0.2 vollständig geliefert bestätigt. | [`docs/01_PRODUCT_CONSTRAINTS.md`](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) | §1 `Lokalisierung` | V1.70–V1.81, D93 | VERIFIED ARTIFACT | Keine; Lokalisierung verifiziert. |
+| **IN-09** | Konsolidierung von Entwicklungsplan und Analyse | Bereinigung doppelter Backlogs; ein einziger führender Arbeitsvorrat für 1.0.3; historische Stände als historisch markiert. | [`Glide_Entwicklungsplan.md`](Glide_Entwicklungsplan.md) | §4 und §4.5 | Entwicklungsplan | VERIFIED ARTIFACT | Laufende Pflege nach DOKUMENTENPFLEGE.md. |
+| **IN-10** | Trennung von Bento und veröffentlichtem Changelog 1.0.3 | Changelog bereinigt: v1.0.3 enthält kein Bento; Bento 0.1.0 ist Teil des neuen Entwicklungsstands 1.0.3. | [`CHANGELOG.md`](../01_Repository/Glide/CHANGELOG.md) | Abschnitte `1.0.3` vs. `1.0.3` | `CHANGELOG.md` | VERIFIED ARTIFACT | Keine; strikte Trennung gewahrt. |
+| **IN-11** | Paketmanager-Prüfsummen und Vertriebsvorbereitung | Homebrew Cask und winget Manifeste für v1.0.2 mit echten SHA-256-Prüfsummen befüllt; Einreichung nach I3 zurückgestellt. | [`packaging/`](../01_Repository/Glide/packaging/) | `homebrew/` und `winget/` | Manifestdateien | VERIFIED ARTIFACT | Einreichung nach Codesignatur. |
+| **IN-12** | Repositoryweit konsistenter Bento-Status | Bento 0.1.0 als integrierter Entwicklungsstand für Glide 1.0.3 auf `main` (Ebene B, D100, V1.87) in allen 156 Dokumenten synchronisiert. | [`docs/GLIDE_BENTO_SYSTEM_KONZEPT.md`](../01_Repository/Glide/docs/GLIDE_BENTO_SYSTEM_KONZEPT.md) | Konzept & Dokumentenregister | T341–T344, `glide_bento` | VERIFIED SOURCE | Multi-Span für 0.2.0 in Phase 1. |
+
+---
+
+#### Matrix 2: Vollständigkeitsprüfung des Post-Release-Master-Auftrags (§0 bis §32)
+
+| Abschnitt | Ursprünglicher Auftrag | Führende Fundstelle | Bearbeitungsstatus |
+|---|---|---|---|
+| **§0** | Vollständiger Ausführungsauftrag | `00_Arbeitsvorbereitung/Glide_Uebergabe.md`, `Glide_Entwicklungsplan.md` | ✅ Vollständig berücksichtigt |
+| **§1** | Abgrenzung von CI-Reparaturen | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` (§2) | ✅ Strikt getrennt; CI-Reparaturen in separatem Branch |
+| **§2** | Projektreferenzen | `README.md`, `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md` | ✅ Konsolidiert (v1.0.2 Release vs. 1.0.3 Dev) |
+| **§3** | Bestandsaufnahme und Schutz paralleler Arbeiten | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` | ✅ Berücksichtigt; keine fremden Worktrees verändert |
+| **§4** | Zwölf Inhaltsbefunde IN-01–IN-12 | `Glide_Entwicklungsplan.md` (§4.5 Matrix 1), `Glide_Analyse.md` (§14) | ✅ Kanonisch zugeordnet und abgearbeitet |
+| **§5** | Produktvision und sechs Produktsäulen | `01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md`, `README.md` | ✅ Konsolidiert |
+| **§6** | Vollständige Funktionsinventur | `01_Repository/Glide/docs/20_FUNKTIONEN.md`, `Glide_Entwicklungsplan.md` (§4.1) | ✅ Vollständig mit F-01 bis F-28 verankert |
+| **§7** | Konkurrenzanalyse und Marktpositionierung | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` | ✅ Dokumentiert; keine spekulativen Vergleiche |
+| **§8** | GitHub-Startseite und Produktkommunikation | `README.md`, `README.de.md`, `01_Repository/Glide/README.md` | ✅ Bereinigt und release-sicher |
+| **§9** | Marketingstrategie und Markenkommunikation | `00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md` | ✅ Konsolidiert (110%-Korrektur, sachliche Claims) |
+| **§10** | GitHub- und Community-Strategie | `00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md` (§8), Issue #129 | ✅ Aktualisiert; Issue #129 nachgezogen |
+| **§11** | Dokumentationskonsolidierung | `01_Repository/Glide/docs/DOKUMENTENPFLEGE.md` (§14) | ✅ 14 führende Post-Release-Quellen verankert |
+| **§12** | Bento-System und strategische Roadmap | `01_Repository/Glide/docs/GLIDE_BENTO_SYSTEM_KONZEPT.md` | ✅ Bento 0.1.0 dokumentiert; 0.2.0 für 1.1.0 geplant |
+| **§13** | Bestehenden Feature-Backlog konsolidieren | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§4.2) | ✅ 13 Kernaufgaben im R-Schema konsolidiert |
+| **§14** | Neue Produktfeatures spezifizieren | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§4.3) | ✅ L1–L5 spezifiziert; architektonisch abgesichert |
+| **§15** | Produktentscheidungen vorbereiten | `01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | ✅ M01–M14 entscheidungsreif ausgearbeitet |
+| **§16** | Distribution und Veröffentlichungsstrategie | `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md` | ✅ Distributionspfade und Manifeste dokumentiert |
+| **§17** | Fünf strategische Arbeitsstränge | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§2) | ✅ Definiert (Product, Foundation, Ecosystem, etc.) |
+| **§18** | Zeitliche Entwicklungsphasen | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§3) | ✅ Phasen 0–4 mit sauberem Versionsschnitt |
+| **§19** | Versionsstrategie und Kompatibilitätsmatrix | `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md`, `VERSION` | ✅ 1.0.3 etabliert; Matrix konsolidiert |
+| **§20** | Roadmap-Spezifikationen | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§4.2, §4.3) | ✅ Technische Spezifikationen vorhanden |
+| **§21** | Priorisierte Arbeitsliste | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§4) | ✅ Ein einziger führender Arbeitsvorrat |
+| **§22** | Nutzerfeedback und Produktvalidierung | `00_Arbeitsvorbereitung/Glide_Marketing_und_Launch.md` (§9) | ✅ Feedbackkanäle und Erhebungsbogen definiert |
+| **§23** | Repository-Inventur | `01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md` (§`Repository-Inventar`) | ✅ Maschinelle Bestandsaufnahme durchgeführt |
+| **§24** | Agenten-Skills und Weiterentwicklung | `skills/glide-to-do/`, `01_Repository/Glide/AGENTS.md` | ✅ Trennung Import-Skill / Shell; Prüfpflicht verankert |
+| **§25** | Strategische Gesamtbewertung | `00_Arbeitsvorbereitung/Glide_Analyse.md` | ✅ Sachliche Bewertung ohne Vollständigkeitsbehauptung |
+| **§26** | Freigabegrenzen | `01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md`, `AGENTS.md` | ✅ Inhabervorbehalte gewahrt; kein eigenmächtiger Merge |
+| **§27** | GitHub-Sicherung und Zusammenarbeit | Git-Branch `docs/glide-post-release-product-strategy`, PR #198 | ✅ Saubere Commit-Struktur und PR-Aktualisierung |
+| **§28** | Verpflichtende Vollständigkeitsmatrix | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` (§4.5) | ✅ Matrizen 1–5 vollständig synchronisiert |
+| **§29** | Definition of Done | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`, `Glide_Uebergabe.md` | ✅ Kriterien erfüllt und verifiziert |
+| **§30** | Unabhängiger Inhaltsnachaudit | `00_Arbeitsvorbereitung/Glide_Analyse.md` (§14) | ✅ Relevante Restfehler nach Audit 3 behoben |
+| **§31** | Vollständiger Abschlussbericht | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` | ✅ Kompakter, belegter Abschlussbericht erstellt |
+| **§32** | Abschließende Ausführungsanweisung | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` | ✅ Arbeitsökonomisch und zielgerichtet abgeschlossen |
+
+---
+
+#### Matrix 3: Vollständigkeitsprüfung der Features & Roadmap-Spezifikationen
+
+| Gruppe / Feature-ID | Bezeichnung | Spezifikationsumfang (25 Felder R-Schema) | Führende Module / Nachweise | Zielversion |
+|---|---|---|---|---|
+| **L1** | Projekt-Dashboard & Meilenstein-Übersicht | Vollständig ausgearbeitet (§4.3) | `src/glide/object_references.py`, `glide_bento/`, `settings.json` (Variante C) | v1.2.0 |
+| **L2** | Personal Insights & Wochenreflexion | Vollständig ausgearbeitet (§4.3) | `src/glide/planning.py` (Tk-frei), keine Gamification/Streaks | v1.3.0 |
+| **L3** | Workspace-Presets & fokussierte Arbeitsstile | Vollständig ausgearbeitet (§4.3) | `src/glide/app.pyw` (`HOME_TILE_DEFINITIONS`, 20 Kacheln / 7 Presets) | v1.3.0 |
+| **L4** | Integrierte Vorlagen-Bibliothek | Vollständig ausgearbeitet (§4.3 & §4.4) | `resources/templates/` (3 zweisprachige Vorlagen DE/EN nach Vorlagenformat 2) | v1.1.0 |
+| **L5** | Kontrollierte, datenschutzfreundliche Update-Verwaltung | Vollständig ausgearbeitet (§4.3) | `src/glide/app.pyw`, 4-Stufen-Modell ohne Telemetrie | v1.4.0+ |
+| **WA-52** | Erststart-Erlebnis und Leerzustände | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/glide_bento/components.py` (`BentoEmptyState`), `today_view.py` | v1.1.0 (Bento 0.2.0) |
+| **WA-12-Rest** | Realistische Tagesplanung & Pufferzeiten | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/planning.py`, `day_relief.py` (15-Min-Puffer & Spätstart) | v1.0.3 |
+| **WA-60** | Terminal-Installation (winget & Homebrew Cask) | Vollständig ausgearbeitet (§4.2) | `packaging/homebrew/Casks/glide.rb`, `packaging/winget/` | v1.0.3+ |
+| **WA-54** | Mehrzeilige Schnellerfassung mit Vorschaukarte | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/capture_parser.py`, `glide_shell/modal_session.py` | v1.1.0 |
+| **WA-20** | Wochenabsichten & kognitiver Wochenfokus | Vollständig ausgearbeitet (§4.2) | `src/glide/week_planning.py`, `today_view.py` | v1.2.0 |
+| **WA-08** | Transparenter Zeiterfassungs- & Soll-Ist-Export | Vollständig ausgearbeitet (§4.2) | `src/glide/planning.py`, CSV-/JSON-Export | v1.0.3 |
+| **WA-53** | Ergonomischer Umgang mit überfälligen Aufgaben | Vollständig ausgearbeitet (§4.2) | `src/glide/sidebar_policy.py`, `app.pyw` | v1.1.0 |
+| **WA-55** | Erweiterte Wiederholungslogik (Ausnahmetage) | Vollständig ausgearbeitet (§4.2) | `src/glide/repeat_rules.py` (Tk-frei), `app.pyw` | v1.2.0 |
+| **WA-56** | Kontrollierte Einzelannahme beim KI-Import | Vollständig ausgearbeitet (§4.2) | `src/glide/exchange_patch.py`, `exchange_recipes.py` | v1.2.0 |
+| **WA-57** | Zeitvisualisierung & Tagesverlauf | Vollständig ausgearbeitet (§4.2) | `src/glide/today_view.py`, `routines.py`, `occupied_time.py` | v1.2.0 |
+| **WA-58** | Pinnwandmuster & visuelle Strukturhilfen | Vollständig ausgearbeitet (§4.2) | `src/glide/pinboard_pages.py` (JSON Canvas 1.0) | v1.2.0 |
+| **WA-59** | ICS-Alarme & Terminerinnerungen (VALARM) | Vollständig ausgearbeitet (§4.2) | `src/glide/ics_busy.py` (Tk-frei), `calendar_service.py` | v1.1.0 |
+| **D83** | Kontinuierliche Verankerung der Gestaltungslehren | Vollständig ausgearbeitet (§4.2) | `src/glide/ui_design.py`, `docs/DESIGN_RICHTLINIEN.md` | Fortlaufend |
+
+---
+
+#### Matrix 4: Status der 14 Entscheidungsvorlagen (M01 bis M14)
+
+| Vorlage-ID | Titel der Entscheidungsvorlage | Führende Vorlagendatei | Status im Entscheidungsregister (Glide 1.0.2, 24.11.2026) |
+|---|---|---|---|
+| **M01** | [Systemweite Schnellerfassung](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m01-systemweite-schnellerfassung-global-quick-capture) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Varianten A–E; Empfehlung: A in Phase 3) |
+| **M02** | [Hintergrund-Erinnerungszustellung](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m02-hintergrund-erinnerungszustellung-background-notifications) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, Status Quo) |
+| **M03** | [CalDAV-Zwei-Wege-Synchronisation](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m03-caldav-zwei-wege-synchronisation) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, Datei-Austausch) |
+| **M04** | [Lokaler MCP-Server (Model Context Protocol)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m04-lokaler-mcp-server-model-context-protocol--detaillierte-architekturanalyse) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Varianten A–E; Empfehlung: C + D in Phase 3) |
+| **M05** | [Deep Links (`glide://item/...`)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m05-deep-links-glideitem) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante B in Phase 3) |
+| **M06** | [Lokale OCR-Texterkennung für Dateianhänge](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m06-lokale-ocr-texterkennung-für-dateianhänge) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, Status Quo) |
+| **M07** | [Verschlüsselte Datenhaltung (Encryption at Rest)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m07-verschlüsselte-datenhaltung-encryption-at-rest) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, OS-Verschlüsselung) |
+| **M08** | [Mobile Begleit-App (Mobile Companion App)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m08-mobile-begleit-app-mobile-companion-app) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, Desktop-Fokus D03) |
+| **M09** | [Weitere Oberflächensprachen](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m09-weitere-oberflächensprachen-französisch-spanisch-italienisch) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante B in Phase 4) |
+| **M10** | [Erledigungsverlauf & Gewohnheiten (Habit Tracker)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m10-erledigungsverlauf--gewohnheiten-habit-tracker) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante B in Phase 3) |
+| **M11** | [Erweiterte Energie- und Belastungsplanung](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m11-erweiterte-energie--und-belastungsplanung) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A in Phase 2) |
+| **M12** | [Work-in-Progress (WIP) Grenzen](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m12-work-in-progress-wip-grenzen-für-spalten-und-heute-ansicht) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante B in Phase 2) |
+| **M13** | [Erweiterte Pixel-Werkstatt & SVG-Export](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m13-erweiterte-pixel-werkstatt--svg-export) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante B in Phase 3) |
+| **M14** | [Lokales Plugin-System (Post-1.0-Architektur)](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md#m14-lokales-plugin-system-post-10-architektur) | `docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md` | Offene Vorlage für Inhaber (Empfehlung: Variante A, Zurückstellung) |
+
+---
+
+#### Matrix 5: Komponenten- und Versionsregister
+
+| Komponente | Version | Führende Quelle | Rolle & Status im Gesamtsystem | Verifizierter Status |
+|---|---|---|---|---|
+| **Glide Anwendung** | `1.0.2` | `01_Repository/Glide/VERSION` & `src/glide/app.pyw` | Hauptanwendung (Ebene A); als Release v1.0.2 veröffentlicht | VERIFIED SOURCE |
+| **Glide-System** | `V1.86` (Release) / `V1.87` (main) | `src/glide/README.md` | Systemregister und Architekturspezifikation (Ebene D) | VERIFIED ARTIFACT |
+| **Glide Shell** | `0.6.2` | `src/glide/glide_shell/__init__.py` | Wiederverwendbares Desktop-Fundament (Ebene C); T319/T338 | VERIFIED SOURCE |
+| **Glide Bento** | `0.1.0` (unreleased main) | `src/glide/glide_bento/__init__.py` | UI-Kompositionsschicht (Ebene B); NICHT in v1.0.2 enthalten | VERIFIED SOURCE |
+| **Aufgabenformat** | `Format 26` | `docs/06_DATA_BACKUP_MIGRATION.md` | Robustes, abwärtskompatibles JSON-Datenformat | VERIFIED ARTIFACT |
+| **Austauschformat** | `Format 2` | `docs/06_DATA_BACKUP_MIGRATION.md` | Portables KI- und Kollaborationsformat (.glideexchange) | VERIFIED ARTIFACT |
+| **Vorlagenformat** | `Format 2` | `docs/27_VORLAGEN_PRAXISANLEITUNG.md` | Zweisprachiger Vorlagenkatalog (.glidetemplates) | VERIFIED ARTIFACT |
+
+---
+
+#### Matrix 6: Drittes Inhaltsaudit – Befunde und Evidenzbereinigung
+
+| Audit-Befund | Konkreter Fehler im Vorstand | Behebungsmaßnahme & Verifikation | Führende Datei | Status |
+|---|---|---|---|---|
+| **Nicht existierende Module** | Nennung von `export_engine.py`, `dashboard_layout.py`, `insights_engine.py` etc. als existierend. | Ersetzung durch 100 % real existierende Module (`pinboard_pages.py`, `layout.py`, `planning.py`, `ics_busy.py`, `exchange_patch.py`). | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` | ✅ Vollständig korrigiert |
+| **Falsche Bento-Methoden & APIs** | Dokumentation von `set_title()`, `add_action()`, `col_span`, `priority`, `min_height`, `ghost` in Bento 0.1.0. | Bereinigung auf tatsächliche 0.1.0-Signaturen (`title`, `heading_action`, `span`) in `GLIDE_BENTO_SYSTEM_KONZEPT.md` §8. | `01_Repository/Glide/docs/GLIDE_BENTO_SYSTEM_KONZEPT.md` | ✅ Vollständig korrigiert |
+| **Falsche M01–M14 Zuordnung** | 13 von 14 Entscheidungsvorlagen in Matrix 4 thematisch falsch benannt. | Vollständige Korrektur aller 14 Zeilen mit exakten Anker-Links nach `POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md`. | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` | ✅ Vollständig korrigiert |
+| **Falsche SHA-256 Hashes** | Unverifizierte Hashes (`1aeb2247dc2c...`, `1e9a25b3ee0b...`) in `10_VEROEFFENTLICHUNG.md` und Übergabe. | Ersetzung durch die 5 offiziellen GitHub-Release-v1.0.2-Hashes (DMG, TAR, Setup-EXE, ZIP, Skill-ZIP). | `docs/10_VEROEFFENTLICHUNG.md`, `Glide_Uebergabe.md` | ✅ Vollständig korrigiert |
+| **Falsche Plattformversprechen** | Behauptung von „Universal Binary“ und „Linux-Binärdownloads“. | Präzisierung: Native Bauten für macOS arm64 und Windows x64; Linux und macOS Intel via Quellstart. | `docs/10_VEROEFFENTLICHUNG.md`, `Glide_Marketing_und_Launch.md` | ✅ Vollständig korrigiert |
+| **Unbelegte Sicherheitsgarantien** | Werbeaussagen wie „100% sicher“, „garantierter Datenschutz“, „eliminiert kognitive Überlastung“. | Ersetzung durch sachliche, überprüfbare Aussagen („offline ohne Telemetrie“, „Designziel Entlastung“). | `POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md`, `Glide_Marketing_und_Launch.md` | ✅ Vollständig korrigiert |
+| **Fehlendes 8-Spalten-Format** | Matrix 1 hatte 4 statt 8 Spalten; Bedeutungen von IN-01 bis IN-12 waren verschoben. | Vollständige 8-Spalten-Tabelle mit kanonischen Bedeutungen und Evidenzstatus hergestellt. | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` | ✅ Vollständig korrigiert |
+| **Falsche Rekonstruktion §0–§32** | Abschnitte des Master-Prompts waren historisch ungenau zugeordnet. | Exakte Zuordnung der 33 Abschnitte (§0–§32) zu den echten Arbeitsbereichen hergestellt. | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` | ✅ Vollständig korrigiert |
+
+---
+
+### 5. Archivierte historische Entwicklungsprotokolle
+Die nachfolgenden Abschnitte (§21.01 bis §21.180) dokumentieren die detaillierten historischen Entwicklungsrunden von Glide 3.32 bis 1.0.2 und bleiben unverändert als Nachweisarchiv erhalten.
+
+---
 
 **Masterprompt-Abschlussaudit (19.11.2026):** Die Angabe „737 Prüfungen“ ist in keinem kanonischen Testregister oder ausführbaren Prüfbefehl belegt und wird nicht als Ziel oder Ergebnis übernommen. Tatsächlich vorhanden sind 277 Python-Testdateien mit `test*.py`/`test_*.py`-Namensmuster; die Zahl `1588` aus einer breiten `def test_`-Textsuche ist keine belastbare Fallzahl. Die kanonischen Quellen führen Testkennungen T001–T329 und konkrete Suite-/Fallnachweise. Das aktuelle Audit dokumentiert zusätzlich die nicht verifizierbare OneDrive-Cloudsynchronisation und den nicht geöffneten separaten Hauptcheckout als offene Übergabegrenzen.
 
@@ -65,9 +958,10 @@ Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen.
 
 Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). D07 ist durch D18 entschieden; Importquelle und Bauwerkzeug sind durch D26/D27 gewählt; Inhaberfreigaben bleiben eigene Entscheidungen (§11).
 
-## Aktueller Arbeitsvorrat
+## Historischer Arbeitsvorrat (Stand Release 1.0.2 – nicht mehr handlungsleitend)
 
-Offene Arbeit auf einen Blick, Stand 23.11.2026 (Release-Runde 1.0.2). Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
+> [!NOTE]
+> **Dokumentenführung:** Der handlungsleitende, aktuelle Arbeitsvorrat für Glide 1.0.3 und Folgeversionen wird verbindlich im Kopfbereich dieses Dokuments unter [**§4 Priorisierter Arbeitsvorrat (P0–P3)**](#4-priorisierter-arbeitsvorrat-p0p3) sowie in der [Post-Release-Roadmap](#3-phasenübersicht-und-priorisierung) geführt. Die nachfolgende tabellarische Übersicht dokumentiert den historischen Arbeits- und Vorschlagsbestand zum Zeitpunkt des Releases 1.0.2 und dient als Nachweisreferenz. Die Zeilen verweisen auf die führenden Abschnitte; Reihenfolge und Auswahl der Vorschläge entscheidet der Inhaber.
 
 **Aktueller Schnitt (23.11.2026):** Release-Runde 1.0.2: Menschliche Sicht- und Bedienabnahme (Release 1.0, Etappe 2) vollständig bestanden, alle Abnahmebefunde (dynamische Lokalisierung der Seitenleiste, adaptiver Titelbild-Zuschnitt, Pixel-Zeichnungen als Ecksymbol, einzeilige Fußleistendichte bei Minimalbreite, kollisionsfreier Tabellen-/Bildumfluss und natürliche Datumswörter „today“/„heute“) behoben und getestet. Multi-Agent Readiness und transaktionale Übernahme (PR #193) integriert.
 
@@ -3972,7 +4866,7 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
 
 ### 21.179 Release-Härtung Glide 1.0.2 & Unabhängiges Qualitätsaudit (23.11.2026)
 
-- **A – Auftrag:** Abschließende technische Nachbesserung des in `main` integrierten Entwicklungsstands Glide 1.0.2 (PR #194 Merge `1d5f01a2`). Unabhängige Reproduktion und Behebung aller verbliebenen Sicherheits-, Integritäts-, Test- und Dokumentationslücken.
+- **A – Auftrag:** Abschließende technische Nachbesserung des in `main` integrierten Entwicklungsstands Glide 1.0.3 (PR #194 Merge `1d5f01a2`). Unabhängige Reproduktion und Behebung aller verbliebenen Sicherheits-, Integritäts-, Test- und Dokumentationslücken.
 - **B – Umsetzung:**
   - *Shell-Manifest-Integrität synchronisiert:* `shell_uebernehmen.py` (`pruefen()`) und `selftest.py` (`check_manifest()`) synchronisiert. Lokale Dateiänderungen gegenüber dem Manifest werden nicht mehr als `aktuell` maskiert, sondern als `verändert` gemeldet; fehlendes Manifest wird explizit als `fehlt` geführt; unmanifestierte Moduldateien werden als `ohne Manifesteintrag` gemeldet.
   - *Robuste Bootstrap-Befehle:* `generiere_bootstrap_inhalte()` generiert plattformgerechte Befehle mit `shlex.quote` für zsh/bash (verhindert Variablen-/Befehlsexpansion bei `$VAR` oder `$(cmd)`) und `-LiteralPath` mit Semikolon für Windows PowerShell (verhindert PowerShell 5.1 `&&` Syntaxfehler).
@@ -3988,3 +4882,27 @@ Commit `ed9f230b3eef9c12dde21061a9687586007c5011` stellt „Kompaktmodus“ und 
   - `abgleich_07.py`: bytegleich abgeglichen (110 Code-Dateien, 169 Ressourcen).
 - **D – Rest:**
   - PR zur Prüfung und Freigabe durch den Inhaber einreichen; Tag, GitHub-Release und Paketmanager-Einreichung verbleiben unverändert bei ausdrücklicher Inhaberfreigabe.
+
+### 21.180 Glide Bento Box System 0.1.0 – Architektur, Layout-Engine und Home-Pilot (24.11.2026)
+
+- **A – Auftrag:** Konzeption, Architektur, Implementierung und Integration des Glide Bento Box Systems 0.1.0 (`glide_bento`, D100, V1.87) als anwendungsneutrale UI-Kompositionsschicht (Ebene B) zwischen Fachanwendung (Ebene A) und Framework Shell (Ebene C). Responsive Startseiten-Pilot-Migration unter 100%iger Wahrung der Render-Retention und bestehender Nutzerfunktionen.
+- **B – Umsetzung:**
+  - *Paketstruktur:* `src/glide/glide_bento` mit 10 Modulen (`tokens`, `context`, `specs`, `layout`, `card`, `grid`, `components`, `selftest`, `demo`, `__init__`).
+  - *Architekturtrennung (D100):* Strikte Schichtung: Ebene B importiert keine Fachmodule aus Ebene A; Ebene C (`glide_shell`) importiert kein Bento. Dynamische Theme-, Icon- und Tooltip-Injektion über `BentoContext`.
+  - *Layout-Engine & Schwellenwerte:* Deterministischer, algebraischer `BentoLayoutPlanner` ohne Tk-Abhängigkeit; 1 Spalte (< 616 px), 2 Spalten (616–931 px), 3 Spalten (≥ 932 px); gieriger Spaltenausgleich nach Höhengewichtung und getrennte Vollbreiten-Karten (`span="wide"` / `variant="full_width"`).
+  - *Startseiten-Pilot:* `render_home` und `home_column_count` in `app.pyw` adaptiert; stabile Kartenfabrik `make_bento_card` auf `ListApp` verhindert Widget-Zerstörung in `render_retention.py`.
+  - *Gestaltungsvertrag & Dokumentation:* `BENTO_DESIGN_CONTRACT.md`, `GLIDE_BENTO_SYSTEM_KONZEPT.md`, zweisprachige Anleitungen `README.de.md` und `README.md`.
+  - *Systemregister & Paketierung:* Register V1.87 mit Modulen M112–M121 und Suiten T341–T344 gepflegt; Paketmanifeste (`baue_app.py`, `package_sources.py`, `license_contract.py`, `abgleich_07.py`) synchronisiert.
+- **C – Prüfung:**
+  - `test_bento_importregel.py` (T341): 6/6 Tests grün (Modulisolation, AST-Importverbote, Paketbau).
+  - `test_bento_layout.py` (T342): 8/8 Tests grün (Schwellen, Greedy-Gewichtung, Breitenstufen).
+  - `test_bento_components.py` (T343): 7/7 Tests grün (Widgets unter Tk, Event-Handler, Farbwechsel).
+  - `test_bento_integration.py` (T344): 2/2 Tests grün (Responsive Bounding-Boxen, Überlappungsfreiheit).
+  - Autonomer Selbsttest `glide_bento.selftest`: 13/13 Checks bestanden.
+  - Interaktive Demo `glide_bento.demo --test`: bestanden.
+  - `test_startseite3332.py`: bestanden (alle Knöpfe, Kacheln und Retention grün).
+  - `test_home*.py`: 41/41 Unit-Tests grün in 0.006s.
+  - `ci_grundstufe.py`: 19/19 Schritte grün (Exitcode 0).
+  - `standpruefung.py`: 154 Dokumente fehlerfrei (Exitcode 0).
+- **D – Rest:**
+  - Pull Request #196 auf GitHub eröffnet; CI-Workflows auf `feature/glide-bento-system` prüfen; Merge und Veröffentlichung nur mit Inhaberfreigabe.

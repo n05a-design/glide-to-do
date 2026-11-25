@@ -1,0 +1,45 @@
+{
+  "format_version": 2,
+  "templates": [
+    {
+      "id": "personal_weekly_planning",
+      "kind": "list",
+      "title": "Weekly Planning & Reflection",
+      "note": "Weekly focus routine: Top 3 outcomes, buffer periods, daily priorities, and Friday review.",
+      "labels": [],
+      "color": "green",
+      "items": [
+        {
+          "title": "Weekly focus: define 3 core outcomes for the week",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Block fixed appointments & buffer time in calendar",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Set priorities for Monday & Tuesday",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Mid-week checkpoint: progress review & adjustment",
+          "done": false,
+          "priority": "medium"
+        },
+        {
+          "title": "Friday wrap-up: close loose ends or reschedule",
+          "done": false,
+          "priority": "high"
+        },
+        {
+          "title": "Weekly reflection: celebrate wins & capture learnings",
+          "done": false,
+          "priority": "low"
+        }
+      ]
+    }
+  ]
+}

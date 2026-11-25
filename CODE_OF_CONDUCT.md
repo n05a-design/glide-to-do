@@ -1,6 +1,6 @@
 # Code of Conduct / Verhaltensgrundsätze
 
-Stand 23.11.2026 · Glide 1.0.2
+Stand 24.11.2026 · Glide 1.0.3
 
 ## English
 
