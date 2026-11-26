@@ -65,6 +65,11 @@ for werkzeug, argumente in (("beispieldaten.py", []), ("rundgang.py", []), ("sho
                           capture_output=True, text=True, timeout=900)
     assert lauf.returncode == 0, (werkzeug, lauf.stderr[-2000:])
     print("erzeugt:", werkzeug)
+# Der englische Vorlagenkatalog folgt dem deutschen (D93, L4 seit 1.1.0).
+lauf = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/vorlagen_englisch.py")],
+                      capture_output=True, text=True, timeout=300)
+assert lauf.returncode == 0, ("vorlagen_englisch.py", lauf.stdout[-2000:], lauf.stderr[-2000:])
+print("erzeugt: vorlagen_englisch.py")
 
 befund = subprocess.run([sys.executable, "-B", str(REPO / "tests/tools/standpruefung.py")],
                         capture_output=True, text=True, cwd=ABLAGE).stdout

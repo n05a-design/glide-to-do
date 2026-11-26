@@ -37,7 +37,9 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
     try:
         # Sämtliche ausgelieferten Vorlagen durch denselben Importvalidator.
         defaults = app.default_template_records()
-        assert len(defaults) == 20
+        # 16 Katalogvorlagen, 3 L4-Referenzvorlagen (1.1.0), 4 Notizbuchvorlagen.
+        assert len(defaults) == 23
+        assert {'client-project', 'design-project', 'weekly-review'} <= {entry['id'] for entry in defaults}
         assert {entry['id'] for entry in defaults if entry['id'].startswith('journal-')} == {
             'journal-note', 'journal-gratitude', 'journal-weekly', 'journal-folder'
         }
@@ -54,7 +56,7 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
         original = json.dumps(legacy, ensure_ascii=False).encode('utf-8')
         Path(mod.TEMPLATES_FILE).write_bytes(original)
         app.templates = app.load_templates()
-        assert len(app.templates) == 20
+        assert len(app.templates) == 23
         assert all('payload' in entry for entry in app.templates
                    if not entry['id'].startswith('journal-'))
         assert app.save_templates()
@@ -339,6 +341,6 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
         for surface in app.library_cards:
             assert surface.winfo_x()+surface.winfo_width() <= surface.master.winfo_width()
         assert not errors, errors
-        print('OK: 16 vollständige Projekt-/Listen- plus 4 Tagebuchvorlagen, reproduzierbare Daten, Format-1-Sicherung/Migration, Abbruchisolierung, vollständige Dialoge in Hell/Dunkel, Struktur und Anhänge, relative/absolute Fristen, Trackpad und Übersicht.')
+        print('OK: 16 vollständige Projekt-/Listen-, 3 L4-Referenz- plus 4 Tagebuchvorlagen, reproduzierbare Daten, Format-1-Sicherung/Migration, Abbruchisolierung, vollständige Dialoge in Hell/Dunkel, Struktur und Anhänge, relative/absolute Fristen, Trackpad und Übersicht.')
     finally:
         app.on_close()
