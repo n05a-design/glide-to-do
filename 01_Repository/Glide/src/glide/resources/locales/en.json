@@ -5390,5 +5390,21 @@
   "mod.empty_states.journal.filtered_title": "No matches",
   "mod.empty_states.journal.filtered_description": "The notebook has entries; the search hides them.",
   "mod.empty_states.journal.title": "The notebook is still empty",
-  "mod.empty_states.journal.description": "An entry carries its day, mood and place. Write the first one for today."
+  "mod.empty_states.journal.description": "An entry carries its day, mood and place. Write the first one for today.",
+  "mod.overdue_review.invalid_date": "Please choose a valid date.",
+  "mod.overdue_review.date_in_past": "The new due date cannot be before today.",
+  "mod.overdue_review.one": "1 task past its due date",
+  "mod.overdue_review.many": "{n} tasks past their due date",
+  "mod.overdue_review.oldest": " · oldest for {days} days",
+  "mod.overdue_review.planned_today": " · {n} already planned for today",
+  "mod.overdue_review.confirm": "Set {n} due dates to {day}?",
+  "mod.overdue_review.confirm_recurring": "{n} recurring tasks keep their rule and stay unchanged.",
+  "mod.overdue_review.confirm_undo": "The previous due dates can be restored with Undo ({shortcut}).",
+  "ui.overdue_banner.shift_due": "Reset due dates …",
+  "ui.overdue_banner.plan_today": "Plan for today",
+  "ui.overdue_banner.plan_today_hint": "Only sets the workday to today – due dates stay unchanged",
+  "ui.overdue_banner.shift_due_hint": "Choose a new due date deliberately; recurring tasks stay unchanged",
+  "ui.overdue_banner.shift_due_title": "New due date",
+  "ui.overdue_banner.nothing": "No due date to change.",
+  "ui.overdue_banner.shifted": "{n} due dates set to {day}"
 }

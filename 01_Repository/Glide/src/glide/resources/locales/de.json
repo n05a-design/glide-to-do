@@ -5390,5 +5390,21 @@
   "mod.empty_states.journal.filtered_title": "Keine Treffer",
   "mod.empty_states.journal.filtered_description": "Das Notizbuch hat Einträge, die Suche blendet sie aus.",
   "mod.empty_states.journal.title": "Das Notizbuch ist noch leer",
-  "mod.empty_states.journal.description": "Ein Eintrag trägt seinen Tag, Stimmung und Ort. Schreib den ersten für heute."
+  "mod.empty_states.journal.description": "Ein Eintrag trägt seinen Tag, Stimmung und Ort. Schreib den ersten für heute.",
+  "mod.overdue_review.invalid_date": "Bitte ein gültiges Datum wählen.",
+  "mod.overdue_review.date_in_past": "Die neue Frist darf nicht vor heute liegen.",
+  "mod.overdue_review.one": "1 Aufgabe mit verstrichener Frist",
+  "mod.overdue_review.many": "{n} Aufgaben mit verstrichener Frist",
+  "mod.overdue_review.oldest": " · älteste seit {days} Tagen",
+  "mod.overdue_review.planned_today": " · {n} schon für heute eingeplant",
+  "mod.overdue_review.confirm": "{n} Fristen auf {day} setzen?",
+  "mod.overdue_review.confirm_recurring": "{n} Serienaufgaben behalten ihre Regel und bleiben unverändert.",
+  "mod.overdue_review.confirm_undo": "Die bisherigen Fristen lassen sich mit Rückgängig ({shortcut}) wiederherstellen.",
+  "ui.overdue_banner.shift_due": "Fristen neu setzen …",
+  "ui.overdue_banner.plan_today": "Heute einplanen",
+  "ui.overdue_banner.plan_today_hint": "Setzt nur den Bearbeitungstag auf heute – die Fristen bleiben unverändert",
+  "ui.overdue_banner.shift_due_hint": "Neue Frist bewusst wählen; Serienaufgaben bleiben unverändert",
+  "ui.overdue_banner.shift_due_title": "Neue Frist",
+  "ui.overdue_banner.nothing": "Keine Frist zu ändern.",
+  "ui.overdue_banner.shifted": "{n} Fristen auf {day} gesetzt"
 }

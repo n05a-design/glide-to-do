@@ -1,6 +1,6 @@
 # Glide Bento Box System – Architektur- und UI-Kompositionskonzept
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide Bento Version 0.1.0 · Glide-System V1.87 · Glide Shell 0.6.2 · Format 26 · Entscheidung D100
+Stand 26.11.2026 · Glide 1.0.3 (Entwicklungsstand 1.1.0) · Glide Bento Version 0.2.0 · Glide-System V1.88 · Glide Shell 0.6.2 · Format 26 · Entscheidung D100
 
 Das **Glide Bento Box System** (Kurzbezeichnung: **Glide Bento**, Paketname: `glide_bento`) ist eine wiederverwendbare, modulare UI-Kompositionsschicht für kartenbasierte Benutzeroberflächen, Bento-Dashboards und adaptive Inhaltsraster in Python/Tkinter. Es bildet die architektonische **Ebene B** im Glide-Gesamtsystem.
 
@@ -185,6 +185,8 @@ Zwischen dem Host-Gestaltungsmodul `src/glide/ui_design.py` und dem Bento-Token-
 
 **Architekturempfehlung:** Umsetzung von **Variante C** im Übergabepaket 1 für Bento 0.2.0.
 
+**Umgesetzt (0.2.0, 26.11.2026):** `BentoTokens.from_host(mapping, base=DEFAULT_TOKENS, strict=False)` übernimmt bekannte Namen als nichtnegative ganze Zahlen, legt unbekannte in `custom` ab und leitet fehlende Zwei-/Dreispaltenschwellen aus Mindestbreite und Abstand ab; ohne Mapping bleibt `DEFAULT_TOKENS`. `BentoContext` trägt `theme_provider`, `token_provider` und `button_factory`; `for_host(...)` legt an und befüllt, `refresh_from_host(**felder)` liest nach Design-, Schrift- oder Glaswechsel neu, ohne den Kontext auszutauschen. Glide liefert seine Skalen allein aus `ui_design.bento_token_values()` und den Startseitenmaßen (`ListApp.glide_bento_context`); die Werte entsprechen den neutralen Fallbacks, sichtbar ändert sich nichts. Komponenten erhalten Knöpfe über `context.make_button` (Glide: abgerundete Dialogknöpfe, ohne Host neutrale Tk-Knöpfe).
+
 ---
 
 ## 10. Multi-Span Layout-Algorithmus (Spezifikation für Bento 0.2.0)
@@ -240,6 +242,19 @@ Der `BentoLayoutPlanner` wendet folgende deterministische Reflow-Regeln an:
 3. **Widget-Retention:** Bei Neuberechnung durch Fenster-Resize werden bestehende Tk-Karten-Instanzen wiederverwendet und lediglich per `grid(row=..., column=..., columnspan=...)` neu positioniert. Kein Flackern, kein Zerstören des internen Widget-Zustands.
 4. **Fokus-Erhalt:** Der aktive Tastaturfokus bleibt während des Spaltenumbruchs auf dem fokussierten Element erhalten.
 
+### 10.3a Umgesetzter Algorithmus in 0.2.0 (verbindlich, ersetzt die Skyline-Skizze aus 10.3)
+
+Die Skizze in 10.3 rechnet mit Pixelhöhen je Spalte; die tatsächliche Kartenhöhe kennt Tk aber erst nach dem Zeichnen. Umgesetzt ist deshalb das deterministische **Bandmodell** aus 10.4 Punkt 3, erweitert um zweispaltige Bahnen. `BentoLayoutPlanner.plan_bands(cards, column_count, full_width_first)` arbeitet in Lesereihenfolge (stabil nach `order`, dann Eingabefolge):
+
+1. **Vollbreite** (`span="full"`, `"wide"`, `3` oder `variant="full_width"`) bildet ein eigenes Band `full`.
+2. **Einspaltige Karten** sammeln sich in einem Band `flow`; jede Karte kommt in die Bahn mit dem kleinsten Gewicht, bei Gleichstand links.
+3. **`span=2` im Dreispaltenraster** öffnet ein Band `split`: zweispaltige Bahn links (`extra["align"] == "end"`: rechts), daneben füllen die nächsten einspaltigen Karten die freie Spalte, bis deren Gewicht das der breiten Karte erreicht. Bleibt die freie Spalte leer, wird die Karte zur vollen Breite – **keine unvermeidbare Restfläche**.
+4. **Breakpoints:** Im Zweispaltenraster belegt `span=2` beide Spalten (Band `full`), im Einspaltenraster ist jede Karte einspaltig. Spaltenzahl wie bisher: unter `card_min_width·2+gap` eine, unter `·3+2·gap` zwei, darüber drei Spalten (Glide: 616/932 px).
+5. **`full_width_first`** (`BentoGridSpec`) stellt alle Vollbreitenkarten wie in 0.1.0 vor das Raster; Glides Startseite nutzt das, damit „Ganze Breite“ weiter „über dem Raster“ bedeutet.
+6. **Fehlerhafte Spezifikationen:** unbekannte `span`-Werte gelten als eine Spalte, doppelte Schlüssel werden verworfen; beides steht in `BentoLayoutPlan.issues`.
+
+**Überlappungsfreiheit** folgt aus der Konstruktion: Bahnen eines Bands belegen getrennte Spaltenbereiche, Bänder liegen untereinander. **Höhe** schätzt allein `weight` (keine Messung, kein Doppel-Layout); **Breite** einer Bahn ist `lane_width(span) = column_width·span + gap·(span−1)`. **Kompatibilität:** `header_cards`, `columns` und `column_weights` bleiben als 0.1.0-Projektion (Vollbreite oben, alle übrigen Karten einspaltig), bestehende Hosts laufen unverändert. **Resize:** `BentoGrid` vergleicht die Platzierung (`placements()`) mit dem letzten Lauf und baut nur bei Änderung Band- und Bahnrahmen neu; die Kartenwidgets selbst bleiben erhalten und werden umgehängt. Ausstehende `after_idle`-Aufträge gibt `destroy()` frei.
+
 ### 10.4 Architektonischer Vergleich: Grid vs. Column Flow vs. Masonry
 
 Zur Platzierung von Bento-Karten wurden drei grundlegende Algorithmen abgewogen:
@@ -279,7 +294,7 @@ Der `BentoLayoutPlanner` arbeitet mit einem **deterministischen gewichteten Slot
 
 ```mermaid
 flowchart TD
-    V01["<b>Bento 0.1.0 (Foundation)</b><br/>Status: Auf main (V1.87)<br/>Kartenanatomie, 1-3 Spalten, Pilot Startseite"] --> V02["<b>Bento 0.2.0 (Consistency)</b><br/>Status: Spezifiziert (Phase 1)<br/>Multi-Span (col_span=2), Host-Context-Tokens"]
+    V01["<b>Bento 0.1.0 (Foundation)</b><br/>Status: Auf main (V1.87)<br/>Kartenanatomie, 1-3 Spalten, Pilot Startseite"] --> V02["<b>Bento 0.2.0 (Consistency)</b><br/>Status: Spezifiziert (Phase 1)<br/>Multi-Span (span=2), Host-Context-Tokens"]
     V02 --> V03["<b>Bento 0.3.0 (Dashboards)</b><br/>Status: Geplant (Phase 2)<br/>Projekt-Dashboard L1, Personal Insights L2"]
     V03 --> V04["<b>Bento 0.4.0 (Custom Layouts)</b><br/>Status: Konzeptionell (Phase 4)<br/>Karten verschieben/ausblenden, Presets L3"]
     V04 --> V10["<b>Bento 1.0.0 (Stable Contract)</b><br/>Status: Zielzustand<br/>Garantierte API-Stabilität, Multi-Host-Einsatz"]
@@ -291,7 +306,7 @@ flowchart TD
   - Pilotmigration der Glide-Startseite unter Beibehaltung aller 20 Kachelinhalte.
   - Autonomer Selbsttest (13 Checks) und Referenzdemo (`demo.py`).
 - **Bento 0.2.0 – Composition & Consistency (Phase 1):**
-  - Echtes 2-von-3-Spalten Multi-Span Layout (`col_span=2`).
+  - Echtes 2-von-3-Spalten Multi-Span Layout (`span=2`; eine Bezeichnung `col_span` gibt es nicht).
   - Token-Harmonisierung über Host-Context-Injection (Variante C).
   - Dynamische Tastaturfokus-Führung über Kartenränder hinweg.
   - Erweiterte Komponenten-Galerie in der Standalone-Demo.

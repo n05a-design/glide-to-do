@@ -196,6 +196,7 @@ import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
 import empty_states as glide_empty  # noqa: E402
+import overdue_review as glide_overdue  # noqa: E402
 import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -30214,6 +30215,9 @@ class ListApp:
             if gesamt > len(eintraege):
                 label(tile, glide_i18n.t("ui.kachel_overdue.and_more", '… und {wert} weitere', wert=gesamt - len(eintraege)), color="muted")
             action(tile, glide_i18n.t("ui.kachel_overdue.open_overdue", '{overdue}  Verspätet öffnen', overdue=self.ICONS['overdue']), self.set_overdue_view, "overdue")
+            # WA-53: ein bewusster Weg ohne Friständerung (nur Bearbeitungstag).
+            if glide_overdue.plan_today_ids(self.overdue_items_for_review(), date.today()):
+                action(tile, glide_i18n.t("ui.overdue_banner.plan_today", "Heute einplanen"), self.plan_overdue_today, "muted")
 
         def kachel_progress(parent):
             """Fortschritt als Balken: heute gegen das Ziel, Woche gegen sich selbst."""
@@ -48107,8 +48111,112 @@ class ListApp:
         self.schedule_scrollbar_refresh()
         self.schedule_row_actions()
         self.sync_empty_state_action()
+        self.sync_overdue_banner()
         if getattr(self, "_backdrop", None):
             self.schedule_backdrop_sync()
+
+    # -----------------------------
+    # Verstrichene Fristen ruhig behandeln (WA-53, 1.1.0)
+    # -----------------------------
+    def overdue_items_for_review(self):
+        """Offene Aufgaben mit verstrichener Frist im ganzen Bestand (ohne Ansichtsfilter)."""
+        return [entry[4] for entry in self.get_overdue_items(apply_filters=False)]
+
+    def sync_overdue_banner(self):
+        """Ein ruhiges Banner über „Verspätet“: Anzahl, Alter und zwei bewusste Wege.
+
+        Es erscheint nur in dieser Ansicht und nur, wenn es verstrichene
+        Fristen gibt; nichts wird automatisch verschoben.
+        """
+        banner = getattr(self, "overdue_banner", None)
+        aktiv = self.view_mode == "overdue" and not getattr(self, "_data_read_only", False)
+        zusammenfassung = glide_overdue.summarize(self.overdue_items_for_review(), date.today()) if aktiv else None
+        if not aktiv or not zusammenfassung.count:
+            if banner is not None and banner.winfo_exists() and banner.winfo_manager():
+                banner.pack_forget()
+            return
+        theme = self.theme
+        try:
+            if banner is None or not banner.winfo_exists():
+                banner = self.overdue_banner = tk.Frame(self.list_frame_outer.inner, bg=theme["card"])
+                self.overdue_banner_text = tk.Label(banner, bg=theme["card"], fg=theme["muted"], font=app_font(10),
+                                                    anchor="w", justify="left")
+                self.overdue_banner_text.pack(side="left", fill="x", expand=True,
+                                              padx=(glide_design.SPACING[14], glide_design.SPACING[8]))
+                self.overdue_shift_button = self._make_dialog_button(
+                    banner, glide_i18n.t("ui.overdue_banner.shift_due", "Fristen neu setzen …"),
+                    self.shift_overdue_dues, "muted", width=176, height=34)
+                self.overdue_shift_button.pack(side="right", padx=(glide_design.SPACING[6], glide_design.SPACING[14]),
+                                               pady=glide_design.SPACING[8])
+                self.overdue_plan_button = self._make_dialog_button(
+                    banner, glide_i18n.t("ui.overdue_banner.plan_today", "Heute einplanen"),
+                    self.plan_overdue_today, "confirm", width=150, height=34)
+                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8])
+                self.add_tooltip(self.overdue_plan_button, glide_i18n.t(
+                    "ui.overdue_banner.plan_today_hint",
+                    "Setzt nur den Bearbeitungstag auf heute – die Fristen bleiben unverändert"))
+                self.add_tooltip(self.overdue_shift_button, glide_i18n.t(
+                    "ui.overdue_banner.shift_due_hint", "Neue Frist bewusst wählen; Serienaufgaben bleiben unverändert"))
+            banner.configure(bg=theme["card"])
+            self.overdue_banner_text.configure(text=glide_overdue.banner_text(zusammenfassung), bg=theme["card"],
+                                               fg=theme["muted"], wraplength=max(160, self.list_frame.winfo_width() - 360))
+            if zusammenfassung.to_plan:
+                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8], before=self.overdue_shift_button)
+            else:
+                self.overdue_plan_button.pack_forget()
+            if banner.winfo_manager() != "pack":
+                banner.pack(fill="x", before=self.list_frame)
+        except tk.TclError:
+            return
+
+    def plan_overdue_today(self):
+        """Alle verstrichenen offenen Aufgaben heute einplanen – nur Bearbeitungstag, ein Undo-Schritt."""
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
+            return "break"
+        heute = date.today()
+        ids = glide_overdue.plan_today_ids(self.overdue_items_for_review(), heute)
+        if ids:
+            self.apply_quick_plan(ids, heute.isoformat())
+        self.sync_overdue_banner()
+        return "break"
+
+    def shift_overdue_dues(self):
+        """Neue Frist bewusst wählen und bestätigen; Serienaufgaben bleiben unverändert."""
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
+            return "break"
+        heute = date.today()
+        items = self.overdue_items_for_review()
+        if not items:
+            return "break"
+        wert = self.themed_due_dialog(heute.isoformat(), title=glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                                      show_time=False)
+        if not wert or not wert[0]:
+            return "break"
+        try:
+            plan = glide_overdue.due_shift(items, wert[0], heute)
+        except ValueError as exc:
+            self.show_error(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"), str(exc))
+            return "break"
+        if not plan.change_ids:
+            self.show_info(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                           glide_overdue.shift_confirmation(plan, self.relative_day_text(plan.new_due)).split("\n\n")[1]
+                           if plan.skipped_recurring else glide_i18n.t("ui.overdue_banner.nothing", "Keine Frist zu ändern."))
+            return "break"
+        if not self.ask_yes_no(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                               glide_overdue.shift_confirmation(plan, self.relative_day_text(plan.new_due),
+                                                                self.accel("Z"))):
+            return "break"
+        with self.item_change(plan.change_ids, restore=False, local=True) as change:
+            for item_id in plan.change_ids:
+                gefunden = self.find_item_in_lists(item_id)
+                if gefunden:
+                    gefunden[0]["due"] = plan.new_due
+            change.mark()
+        if change.saved:
+            self.show_undo_toast(glide_i18n.t("ui.overdue_banner.shifted", "{n} Fristen auf {day} gesetzt",
+                                              n=len(plan.change_ids), day=self.relative_day_text(plan.new_due)))
+        self.sync_overdue_banner()
+        return "break"
 
     # -----------------------------
     # Leerzustände mit nächstem Schritt (3.30, MO-050)

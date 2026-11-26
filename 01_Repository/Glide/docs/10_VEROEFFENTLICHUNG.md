@@ -19,6 +19,30 @@ Der erste öffentliche Prerelease **Glide 1.0.2** wurde am 23.11.2026 auf GitHub
 > [!NOTE]
 > Die veröffentlichte Version v1.0.2 enthält das Aufgabenformat 26, das Glide-System V1.86 und die Framework-Shell 0.6.2. Das **Glide Bento Box System 0.1.0** (D100) wurde nach dem Release v1.0.2 auf `main` integriert (Glide-System V1.87) und ist Bestandteil von **Glide 1.0.3** (Entwicklungsstand, Branch `docs/glide-post-release-product-strategy`). Externe Katalog-Einreichungen (Homebrew, winget) bleiben nach Inhaberentscheidung (I3 / D43) gesonderte Schritte.
 
+## Befund v1.0.3 ohne Downloaddateien (26.11.2026)
+
+Live geprüft am 26.11.2026 über die öffentliche GitHub-API (ohne Anmeldung; Entwürfe und Lauflogs sind so nicht sichtbar):
+
+| Prüfpunkt | Befund |
+|---|---|
+| Release v1.0.3 | öffentlich, Prerelease, ID 457633742, angelegt 25.11.2026 03:47:55 UTC, veröffentlicht 03:57:34 UTC, Titel „Glide 1.0.3 – Bento Foundation & Product Evolution“, **0 Dateien** |
+| Tag `v1.0.3` | annotiert (Tagobjekt `7a4d39a1`), Tagzeit 03:47:55 UTC = Anlagezeit des Releases → Tag und Release entstanden gemeinsam über die Weboberfläche; Ziel `beaecc9f` |
+| Workflow „Glide-Release-Entwurf“ 45542455591 | durch den Tag-Push 03:48:08 ausgelöst, alle Jobs grün; Schritt „Entwurf anlegen oder ersetzen“ lief 03:53:48–03:54:09, also **vor** der Veröffentlichung um 03:57:34 |
+| Artefakte des Laufs | `paket-windows-glide`, `paket-windows-installer`, `paket-macos-arm64-glide` samt Belegen vorhanden, nicht abgelaufen |
+| `main` | `6c3a64eb`, zwei Commits über dem Tag (nur `.gitignore` und Synchronisation) |
+
+**Ursache (eingegrenzt, nicht abschließend belegt):** Der Release wurde von Hand angelegt, während der Workflow seinen Entwurf erzeugte. Der Workflow fand entweder den handangelegten Entwurf und hängte Dateien an, die beim anschließenden Speichern des schon vorher geöffneten Webformulars wieder entfielen (Titel und Text entsprechen der Handfassung, nicht der Workflowfassung), oder er legte einen **zweiten Entwurf** zum selben Tag an, der öffentlich unsichtbar bleibt. Welche der beiden Varianten zutrifft, zeigt nur eine angemeldete Abfrage (`gh release list` bzw. das Lauflog des Schritts) – sie bleibt dem Inhaber vorbehalten.
+
+**Behebung im Repository:** `.github/workflows/release.yml` prüft seit 26.11.2026 nach dem Hochladen, dass genau ein Release je Tag existiert, er noch Entwurf ist und jede zusammengestellte Datei mit gleicher Größe anhängt; sonst ist der Lauf rot (T296, `test_release_workflow.py`). Ein grüner Lauf ohne Dateien ist damit ausgeschlossen. README DE/EN nennen 1.0.2 weiter als herunterladbaren Stand und weisen auf die leere 1.0.3-Seite hin.
+
+**Freigabeprozedur ab jetzt (reproduzierbar):**
+1. Release **nicht** über die Weboberfläche anlegen. Nur den Tag setzen: `git tag -a v<VERSION> <commit-auf-main> -m "Glide <VERSION>"` und `git push origin v<VERSION>` (Inhaberfreigabe nach D43).
+2. Den Lauf „Glide-Release-Entwurf“ abwarten; er legt den Entwurf an und prüft die Dateien.
+3. Den Entwurf **neu laden**, Text und Prüfkasten bearbeiten, erst dann „Publish release“. Kein vorher geöffnetes Formular speichern.
+4. Nach dem Veröffentlichen die Dateiliste und `.sha256` der Release-Seite gegen die Laufzusammenfassung prüfen; Issue #129 und Paketmanager-Vorlagen erst danach mit den echten Prüfsummen fortschreiben.
+
+**Offene Inhaberschritte für v1.0.3 (keine davon hat dieser Stand ausgeführt):** (a) mit Anmeldung prüfen, ob ein zweiter Entwurf zu `v1.0.3` existiert; wenn ja, dessen Dateien gegen die Laufartefakte prüfen und an den öffentlichen Release übertragen, den Entwurf danach löschen; (b) ohne Entwurf die Dateien aus den Artefakten des Laufs 45542455591 (Windows-ZIP und -Installer, Mac-DMG und -TAR, Skill-ZIP samt `.sha256`) von Hand anhängen oder den veröffentlichten Release in einen Entwurf zurücksetzen und den Workflow über „Run workflow“ mit dem Tag erneut laufen lassen; (c) Issue #129 und `packaging/homebrew`/`packaging/winget` erst mit den dann sichtbaren Prüfsummen aktualisieren. Der Tag wird nicht verändert. Für die Pakete gelten weiter die offenen Installations-, Start-, Migrations- und Bedienprüfungen aus der [Manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md); die native macOS-Vollprüfung war im Lauf übersprungen (Schritte „Vollständige native macOS-Prüfung“ und Mac-Bedienbefunde: `skipped`).
+
 ## Historischer GitHub-Stand 20.11.2026
 
 `main` enthielt PR #154 auf Merge-Commit `448eee7f` und PR #156 auf Merge-Commit `4b6bce08`; beide wurden gemergt. Der Head war damals `4b6bce08`. Die englische README liegt in `main/README.md`, die deutsche Gegenfassung in `README.de.md`; das Repository zeigt 15 Topics, öffentliche Issues und bilinguale Community-Vorlagen. PR-#156-Dokumentation, Linux-Grundstufe, alle drei Analyze-Läufe und die Linux/Tk-9.1-Vollprüfung bestanden; bei letzter Abfrage lief noch die Windows/Tk-9.1-Vollprüfung, mehrere native Accessibility-/UI-Jobs wurden übersprungen. Keine Tags oder GitHub-Releases waren zu diesem Zeitpunkt veröffentlicht. Die About-Beschreibung ist seit 20.11.2026 englisch: „Desktop planner for projects, tasks, day planning, pinboards and pixel drawings. Connect tasks with pages and notes and shape your ideas.“. Der Inhaber gab die Änderung frei; sie wurde mit `gh repo edit` gesetzt, nachdem das CLI-Konto Repository-Admin-Rechte erhalten hatte, und live bestätigt. Frühere HTTP-404-Versuche ohne Admin-Rechte bleiben als historische Einträge erhalten. Vor einem öffentlichen Release alle Metadaten und Prüfstände erneut live verifizieren.
