@@ -30,6 +30,7 @@ class EmptyStateTests(unittest.TestCase):
     def test_u20_eingabezeile_ist_der_einzige_anlegeweg(self):
         mit = empty_states.empty_state("list", entry_visible=True)
         self.assertIsNone(mit.primary)
+        self.assertIsNone(mit.secondary)
         self.assertNotIn("focus_entry", mit.action_ids)
         ohne = empty_states.empty_state("list", entry_visible=False)
         self.assertEqual(ohne.primary[0], "focus_entry")
@@ -51,15 +52,32 @@ class EmptyStateTests(unittest.TestCase):
     def test_pinnwand_aktion_fuehrt_zur_objektauswahl(self):
         self.assertEqual(empty_states.empty_state("pinboard").primary[0], "pin_items")
 
-    def test_hinweise_aus_kuerzen_nur_die_erklaerung(self):
-        state = empty_states.empty_state("pages", hints=False)
-        self.assertEqual(state.description, "")
-        self.assertEqual(state.text, state.title)
-        self.assertEqual(state.action_ids, ("new_page", "use_template"))
+    def test_hinweise_aus_kuerzen_nur_den_bedienhinweis(self):
+        for context in empty_states.CONTEXTS:
+            self.assertTrue(empty_states.empty_state(context, hints=False).description, context)
+        an = empty_states.empty_state("list", entry_visible=True)
+        aus = empty_states.empty_state("list", entry_visible=True, hints=False)
+        self.assertTrue(an.description.startswith(aus.description))
+        self.assertIn("Labels", an.description)
+        self.assertNotIn("Labels", aus.description)
+        self.assertEqual(empty_states.empty_state("pages", hints=False).action_ids, ("new_page", "use_template"))
 
     def test_text_ist_titel_und_erklaerung(self):
         state = empty_states.empty_state("journal")
         self.assertEqual(state.text, f"{state.title}\n{state.description}")
+
+    def test_knopftexte_hoechstens_24_zeichen_b11(self):
+        import ui_design
+        varianten = [dict(), dict(filtered=True), dict(entry_visible=True), dict(has_tasks=False),
+                     dict(has_cards=True), dict(date_range=True), dict(other_day=True)]
+        for sprache in ("de", "en"):
+            i18n.set_language(sprache)
+            for context in empty_states.CONTEXTS:
+                for kwargs in varianten:
+                    for action in (empty_states.empty_state(context, **kwargs).primary,
+                                   empty_states.empty_state(context, **kwargs).secondary):
+                        if action:
+                            self.assertLessEqual(len(action[1]), ui_design.BUTTON_TEXT_MAX_CHARS, action)
 
     def test_unbekannter_kontext(self):
         with self.assertRaises(ValueError):

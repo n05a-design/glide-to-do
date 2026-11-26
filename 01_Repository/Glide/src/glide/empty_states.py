@@ -12,8 +12,9 @@ Kennungen ihre vorhandenen Befehle zu. Grenzen aus den Produktentscheidungen:
 * N06 (25./27.09.2026): kein Einstieg für neue Nutzer, kein Rundgang, kein
   Pflichtdialog. Leerzustände erscheinen nur, wo tatsächlich nichts ist, und
   verschwinden mit dem ersten Inhalt.
-* B06: Erklärende Sätze dürfen mit ausgeschalteten Bedienhinweisen kürzer
-  werden; Titel und Aktionen bleiben.
+* B06: Mit ausgeschalteten Bedienhinweisen entfällt nur der reine
+  Bedienhinweis (etwa „Datum und Labels erkennt Glide im Text“); Titel,
+  Erklärung und Aktionen bleiben, denn sie beschreiben den Zustand.
 """
 from dataclasses import dataclass
 
@@ -64,7 +65,7 @@ def _t(key, default, **values):
 def _action(action_id):
     labels = {
         "home_setup": ("home_setup", "Startseite einrichten …"),
-        "home_restore": ("home_restore", "Standard wiederherstellen"),
+        "home_restore": ("home_restore", "Standardkacheln zeigen"),
         "use_template": ("use_template", "Vorlage verwenden"),
         "plan_day": ("plan_day", "Arbeitstag planen …"),
         "open_inbox": ("open_inbox", "Erste Aufgabe anlegen"),
@@ -89,7 +90,7 @@ def empty_state(context, *, filtered=False, entry_visible=False, other_day=False
     anderen Tag. ``has_cards``: die Pinnwand hat Karten, nur keine im Filter.
     ``date_range``: das Notizbuch ist auf einen Zeitraum eingeschränkt.
     ``has_tasks``: es gibt überhaupt offene Aufgaben (für „Arbeitstag planen“).
-    ``hints``: Bedienhinweise an (B06); aus, entfällt der erklärende Zusatz.
+    ``hints``: Bedienhinweise an (B06); aus, entfällt nur der reine Bedienhinweis.
     """
     if context not in CONTEXTS:
         raise ValueError(f"unknown empty-state context {context!r}")
@@ -104,8 +105,9 @@ def empty_state(context, *, filtered=False, entry_visible=False, other_day=False
                                _action("clear_filter"))
         elif entry_visible:
             state = EmptyState(context, _t("list.title", "Diese Liste ist noch leer"),
-                               _t("list.entry_description", "Schreib oben die erste Aufgabe und drück Enter. Datum und Labels erkennt Glide im Text."),
-                               None, _action("use_template"))
+                               _t("list.entry_description", "Schreib oben die erste Aufgabe und drück Enter.")
+                               + (_t("list.entry_hint", " Datum und Labels erkennt Glide im Text.") if hints else ""),
+                               None, None)
         else:
             state = EmptyState(context, _t("list.title", "Diese Liste ist noch leer"),
                                _t("list.description", "Hier entstehen Aufgaben, Notizen und Unterpunkte."),
@@ -149,6 +151,4 @@ def empty_state(context, *, filtered=False, entry_visible=False, other_day=False
             state = EmptyState(context, _t("journal.title", "Das Notizbuch ist noch leer"),
                                _t("journal.description", "Ein Eintrag trägt seinen Tag, Stimmung und Ort. Schreib den ersten für heute."),
                                _action("new_journal_entry"))
-    if not hints and state.description:
-        state = EmptyState(state.context, state.title, "", state.primary, state.secondary)
     return state

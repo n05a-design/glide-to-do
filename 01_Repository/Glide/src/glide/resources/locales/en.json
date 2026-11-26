@@ -5356,7 +5356,7 @@
   "ui.render_home_editor.two_columns": "Two columns",
   "ui.render_home_editor.two_columns_hint": "Two columns wide in the three-column grid, at its place in the order",
   "mod.empty_states.action.home_setup": "Set up home …",
-  "mod.empty_states.action.home_restore": "Restore defaults",
+  "mod.empty_states.action.home_restore": "Show default tiles",
   "mod.empty_states.action.use_template": "Use a template",
   "mod.empty_states.action.plan_day": "Plan the workday …",
   "mod.empty_states.action.open_inbox": "Add the first task",
@@ -5371,7 +5371,7 @@
   "mod.empty_states.list.filtered_title": "No matches",
   "mod.empty_states.list.filtered_description": "The list has content; the search or filter hides it.",
   "mod.empty_states.list.title": "This list is still empty",
-  "mod.empty_states.list.entry_description": "Type the first task above and press Enter. Glide recognises dates and labels in the text.",
+  "mod.empty_states.list.entry_description": "Type the first task above and press Enter.",
   "mod.empty_states.list.description": "Tasks, notes and sub-items live here.",
   "mod.empty_states.today.filtered_title": "Nothing matches the filter",
   "mod.empty_states.today.filtered_description": "Tasks are planned for this day; the filter hides them.",
@@ -5406,5 +5406,6 @@
   "ui.overdue_banner.shift_due_hint": "Choose a new due date deliberately; recurring tasks stay unchanged",
   "ui.overdue_banner.shift_due_title": "New due date",
   "ui.overdue_banner.nothing": "No due date to change.",
-  "ui.overdue_banner.shifted": "{n} due dates set to {day}"
+  "ui.overdue_banner.shifted": "{n} due dates set to {day}",
+  "mod.empty_states.list.entry_hint": " Glide recognises dates and labels in the text."
 }

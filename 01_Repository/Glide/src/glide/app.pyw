@@ -33486,7 +33486,7 @@ class ListApp:
                 # Bento-Knöpfe (Leerzustände, Aktionsleisten) als Glide-Dialogknöpfe, nicht im Tk-Altstil.
                 button_factory=lambda master, text, command, role: self._make_dialog_button(
                     master, text, command, role,
-                    width=max(120, ui_font_object(font=app_font(10, "bold")).measure(text) + 44), height=36),
+                    width=max(120, ui_font_object(root=self.root, font=app_font(10, "bold")).measure(text) + 56), height=36),
             )
         return ctx.refresh_from_host(
             glass_mode=self.glass_enabled(),
@@ -48143,6 +48143,9 @@ class ListApp:
                                                     anchor="w", justify="left")
                 self.overdue_banner_text.pack(side="left", fill="x", expand=True,
                                               padx=(glide_design.SPACING[14], glide_design.SPACING[8]))
+                # Umbruch an der tatsächlichen Breite, nur bei spürbarer Änderung.
+                self.overdue_banner_text.bind("<Configure>", lambda event: event.widget.configure(
+                    wraplength=event.width) if abs(int(event.widget.cget("wraplength") or 0) - event.width) > 8 else None)
                 self.overdue_shift_button = self._make_dialog_button(
                     banner, glide_i18n.t("ui.overdue_banner.shift_due", "Fristen neu setzen …"),
                     self.shift_overdue_dues, "muted", width=176, height=34)
@@ -48159,9 +48162,10 @@ class ListApp:
                     "ui.overdue_banner.shift_due_hint", "Neue Frist bewusst wählen; Serienaufgaben bleiben unverändert"))
             banner.configure(bg=theme["card"])
             self.overdue_banner_text.configure(text=glide_overdue.banner_text(zusammenfassung), bg=theme["card"],
-                                               fg=theme["muted"], wraplength=max(160, self.list_frame.winfo_width() - 360))
+                                               fg=theme["muted"])
             if zusammenfassung.to_plan:
-                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8], before=self.overdue_shift_button)
+                # Hauptaktion vorn (links der Zweitaktion), wie in Glides Knopfreihen.
+                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8], after=self.overdue_shift_button)
             else:
                 self.overdue_plan_button.pack_forget()
             if banner.winfo_manager() != "pack":

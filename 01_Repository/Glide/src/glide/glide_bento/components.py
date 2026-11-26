@@ -296,6 +296,21 @@ class BentoEmptyState(tk.Frame):
         for label in (self.title_label, self.description_label):
             if label is not None:
                 label.configure(wraplength=width)
+        # Reichen die Knöpfe nebeneinander nicht, steht die Zweitaktion darunter
+        # (kein abgeschnittener Text in schmalen Karten, B15).
+        if self.action_button is not None and self.secondary_button is not None:
+            gap = self.context.tokens.gap_compact
+            needed = self.action_button.winfo_reqwidth() + gap + self.secondary_button.winfo_reqwidth()
+            stacked = needed > width
+            if stacked != getattr(self, "_actions_stacked", False):
+                self._actions_stacked = stacked
+                self.secondary_button.pack_forget()
+                if stacked:
+                    self.secondary_button.pack(side="top", anchor="w", pady=(gap, 0))
+                    self.action_button.pack_configure(side="top", anchor="w")
+                else:
+                    self.action_button.pack_configure(side="left")
+                    self.secondary_button.pack(side="left", padx=(gap, 0))
 
 
 class BentoDivider(tk.Frame):

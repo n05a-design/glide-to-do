@@ -5356,7 +5356,7 @@
   "ui.render_home_editor.two_columns": "Zwei Spalten",
   "ui.render_home_editor.two_columns_hint": "Im dreispaltigen Raster zwei Spalten breit, an ihrer Stelle in der Reihenfolge",
   "mod.empty_states.action.home_setup": "Startseite einrichten …",
-  "mod.empty_states.action.home_restore": "Standard wiederherstellen",
+  "mod.empty_states.action.home_restore": "Standardkacheln zeigen",
   "mod.empty_states.action.use_template": "Vorlage verwenden",
   "mod.empty_states.action.plan_day": "Arbeitstag planen …",
   "mod.empty_states.action.open_inbox": "Erste Aufgabe anlegen",
@@ -5371,7 +5371,7 @@
   "mod.empty_states.list.filtered_title": "Keine Treffer",
   "mod.empty_states.list.filtered_description": "Die Liste hat Inhalte, die Suche oder der Filter blendet sie aus.",
   "mod.empty_states.list.title": "Diese Liste ist noch leer",
-  "mod.empty_states.list.entry_description": "Schreib oben die erste Aufgabe und drück Enter. Datum und Labels erkennt Glide im Text.",
+  "mod.empty_states.list.entry_description": "Schreib oben die erste Aufgabe und drück Enter.",
   "mod.empty_states.list.description": "Hier entstehen Aufgaben, Notizen und Unterpunkte.",
   "mod.empty_states.today.filtered_title": "Nichts passt zum Filter",
   "mod.empty_states.today.filtered_description": "Für diesen Tag sind Aufgaben eingeplant, der Filter blendet sie aus.",
@@ -5406,5 +5406,6 @@
   "ui.overdue_banner.shift_due_hint": "Neue Frist bewusst wählen; Serienaufgaben bleiben unverändert",
   "ui.overdue_banner.shift_due_title": "Neue Frist",
   "ui.overdue_banner.nothing": "Keine Frist zu ändern.",
-  "ui.overdue_banner.shifted": "{n} Fristen auf {day} gesetzt"
+  "ui.overdue_banner.shifted": "{n} Fristen auf {day} gesetzt",
+  "mod.empty_states.list.entry_hint": " Datum und Labels erkennt Glide im Text."
 }
