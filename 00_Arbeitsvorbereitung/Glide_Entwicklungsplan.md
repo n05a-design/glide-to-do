@@ -766,7 +766,7 @@ flowchart LR
 
 ### 4.6 Umsetzungsstand Glide 1.1.0 (Arbeitsprotokoll 26.11.2026)
 
-Branch `feature/glide-1-1-product-experience` ab `main` `6c3a64eb` (lokal, nicht gepusht). Status nach D51 getrennt: **Implementierung** im Entwicklungsstand, **Prüfung** gezielt (keine eingefrorene Vollprüfung, keine native Matrix), **Lieferung** keine (`VERSION` 1.0.3, kein Versionswechsel, `07_Python-Versionen` und Pakete unverändert), **Menschenabnahme** offen. Prüfnachweise: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#glide-110-entwicklungsstand-26112026).
+Branch `feature/glide-1-1-product-experience` ab `main` `6c3a64eb` (lokal, nicht gepusht). Status nach D51 getrennt: **Implementierung** im Entwicklungsstand, **Prüfung** gezielt (keine eingefrorene Vollprüfung, keine native Matrix), **Lieferung** keine (`VERSION` 1.0.3, kein Versionswechsel, `07_Python-Versionen` und Pakete unverändert), **Menschenabnahme** offen. Prüfnachweise: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#entwicklungsstand-nach-glide-103-ziel-110-26112026).
 
 | Phase / Kennung | Ausgangsstand | Anforderung | Status | Komponenten | Prüfnachweis | Offene Befunde | Nächste Aktion |
 |---|---|---|---|---|---|---|---|

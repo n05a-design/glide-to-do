@@ -1,3 +1,26 @@
+## Entwicklungsstand nach Glide 1.0.3, Ziel 1.1.0 (26.11.2026)
+
+Entwicklungsstand nach Glide 1.0.3 (Ziel 1.1.0), Branch `feature/glide-1-1-product-experience`, geprüfter Commit `f7f3037f` (Prüfkopie außerhalb OneDrive). Umgebung: Windows 11 Pro, Python 3.15 (`pythoncore-3.15-64`), Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein Versionswechsel, keine Lieferung. Statuswerte nach Auftrag.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| CI-Grundstufe (21 Schritte) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | PASSED; Lieferstand als zulässiger Hinweis (8 Abweichungen zu `07_Python-Versionen`, kein Abgleich in dieser Runde) |
+| Bento-Selbsttest | `python3 -B -m glide_bento.selftest` | PASSED 16/16 (Tk-Teil echt ausgeführt) |
+| Bento-Demo | `python3 -B -m glide_bento.demo --test` | PASSED |
+| T341–T344 erweitert, T342 Bandmodell/Token-Vertrag | `python3 -B -m unittest tests.unit.test_bento_layout tests.unit.test_bento_components tests.unit.test_bento_importregel tests.integration.test_bento_integration` | PASSED (Überlappungstest von T344 prüft jetzt echte Bildschirmrechtecke; vorher lief er leer) |
+| T349 Referenzhost ohne Glide | `tests/integration/test_bento_referenzhost.py` (`python -I`) | PASSED |
+| T345 / T346 / T348 | Leerzustände, verstrichene Fristen, L4-Vorlagen | PASSED |
+| T347 Integration 1.1.0 | `python3 -B tests/integration/test_glide_110.py` | PASSED 67 Prüfungen (6 Vorlagenfassungen, Undo, Persistenz, WA-53 mit Abbruch) |
+| Startseiten-Regression | `python3 -B tests/integration/test_startseite3332.py` | PASSED |
+| Sichtprüfung | Fensterbilder Startseite mit Zweispaltenkarte, Verspätet-Banner, leere Startseite/Liste/Seiten (lokal) | PASSED nach Korrektur zweier Befunde (abgeschnittener Knopftext > 24 Zeichen, früher Bannerumbruch) |
+| Performance | `refresh_home` 12×, 1500 × 950, alle Kacheln: Altstand `6c3a64eb` 23,8/27,0 ms, neu 22,8/31,1 ms Median, je 226 Widgets; mit zwei Zweispaltenkacheln 37,9 ms, 236 Widgets | PASSED (keine relevante Regression; keine Verbesserung behauptet) |
+| Werkzeugtests im OneDrive-Ordner | `test_shell_uebernahme` (Löschen kopierter Dateien) | FAILED nur im OneDrive-Pfad (Dateiattribute), in der Prüfkopie PASSED; kein Codebefund |
+| macOS (Tk 9.1), Linux, native Pakete, Vollmatrix | – | NOT_RUN |
+| Lokalisierungssuite T335, Arbeitsmodi-Vollsuite | – | NOT_RUN (Teilabdeckung DE/EN über T345–T347) |
+| Screenreader | – | SKIPPED nach D58 |
+| Menschliche Abnahme | [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) | MANUAL_APPROVAL_REQUIRED |
+| Release v1.0.3 Dateien | angemeldete GitHub-Prüfung | BLOCKED (ohne Anmeldung nicht prüfbar; Inhaber) |
+
 ## Glide Bento Box System 0.1.0 & Startseiten-Komposition (V1.87, Bento 0.1.0, 24.11.2026)
 
 | Gegenstand | Befehl / Nachweis | Ergebnis |
