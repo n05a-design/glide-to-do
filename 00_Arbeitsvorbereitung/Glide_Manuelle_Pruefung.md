@@ -2,6 +2,21 @@
 
 Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
+## Offene Sicht- und Bedienabnahme Entwicklungsstand nach Glide 1.0.3 (Ziel 1.1.0, 26.11.2026)
+
+Prüfbasis: Branch `feature/glide-1-1-product-experience` aus einem kurzen lokalen Ordner außerhalb OneDrive, Start mit `GLIDE_DATA_DIR` auf einen leeren Testordner (nie echte Daten), je einmal Deutsch und English, hell und dunkel, Fenster 860 × 700 und 1500 × 950. Windows ist automatisiert und per Bildschirmfoto geprüft; **macOS (Tk 9.1, Apple Silicon) ist nicht geprüft** und für jeden Schritt nötig.
+
+- [ ] **Zwei Spalten:** Startseite › „Startseite anpassen“ › bei „Kalendervorschau“ „Zwei Spalten“ › „Fertig“. Erwartet: ab drei Spalten belegt der Kalender zwei Spalten, rechts daneben die nächsten Kacheln; Fenster schmaler ziehen → bei zwei Spalten volle Breite an derselben Stelle, bei einer Spalte normal; kein Flackern, keine Überlappung, Scrollposition bleibt. Fehlerbilder: Lücke rechts, Kachel doppelt, Dauer-Neuaufbau beim Ziehen.
+- [ ] **Ganze Breite unverändert:** Eine andere Kachel auf „Ganze Breite“ → steht wie bisher über dem Raster.
+- [ ] **Leere Startseite:** Im Dialog „Startseite einrichten“ alle Kacheln ausblenden. Erwartet: Karte „Alle Kacheln sind ausgeblendet“ mit Satz und zwei vollständig lesbaren Knöpfen; „Standardkacheln zeigen“ stellt den Standard „Ruhig“ her. Tab erreicht beide Knöpfe.
+- [ ] **Leere Liste:** Neue Liste anlegen. Erwartet: „Diese Liste ist noch leer“ mit Hinweis auf die Eingabezeile, kein zusätzlicher Anlegeknopf (U20); erste Eingabe + Enter lässt den Leerzustand verschwinden.
+- [ ] **Heute leer:** Heute ohne Einplanung öffnen. Erwartet: Titel, Satz und „Arbeitstag planen …“ (öffnet den Tagesvorschlag); in einem leeren Bestand „Erste Aufgabe anlegen“ → Eingang mit Fokus in der Eingabezeile.
+- [ ] **Seiten leer / Pinnwand leer / Notizbuch leer:** jeweils Titel, Satz und Aktion; „Element hinzufügen“ öffnet die Objektauswahl.
+- [ ] **Vorlagen L4:** Vorlagen › „Freelance-Kundenprojekt“ anwenden, nach „Kunde“ gefragt werden, Vorschau prüfen. Erwartet: Ordner mit vier Listen, Termine ab heute, „Leistungsbeschreibung … freigeben“ ist blockiert, bis Ziele und Abgrenzung erledigt sind. Strg/Cmd+Z nimmt die Anwendung ganz zurück. Dasselbe für „Kreatives Designprojekt“ und „Persönliche Wochenplanung“ (KW im Rückblicktitel), danach in English (Titel englisch, keine deutschen Reste). Neustart: Inhalte bleiben.
+- [ ] **Verstrichene Fristen:** Drei Aufgaben mit Frist vor heute, eine davon wöchentlich wiederkehrend. „Verspätet“ öffnen. Erwartet: ruhige Zeile oben, „Heute einplanen“ links, „Fristen neu setzen …“ rechts. „Heute einplanen“: alle drei erscheinen in Heute, Fristen unverändert und weiter als verstrichen sichtbar; ein Rückgängig. „Fristen neu setzen …“: Datum wählen, Rückfrage nennt Anzahl und die unveränderte Serienaufgabe; nach Bestätigung neue Fristen, Serie unverändert; ein Rückgängig stellt alles her; „Nein“ ändert nichts.
+- [ ] **Startseitenkachel Verspätet:** bietet „Heute einplanen“, solange etwas nicht für heute eingeplant ist.
+- [ ] **Barrierefreiheit:** Fokusrahmen auf allen neuen Knöpfen sichtbar, Tastaturbedienung ohne Maus; Screenreader-Abnahme bleibt nach D58 zurückgestellt.
+
 <a id="offene-sicht-und-bedienabnahme-deen-release-10-etappe-2"></a>
 ## Menschliche Sicht- und Bedienabnahme DE/EN – Release 1.0, Etappe 2 (Vollständig erfolgt, 23.11.2026)
 
