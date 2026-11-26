@@ -44,7 +44,7 @@ class BentoSelftestRunner:
         print(f"=== Glide Bento Selftest (v{BENTO_VERSION}) ===", flush=True)
 
         # 1. Versionsintegrität
-        self.check("1. BENTO_VERSION ist 0.1.0", BENTO_VERSION == "0.1.0")
+        self.check("1. BENTO_VERSION ist 0.2.0", BENTO_VERSION == "0.2.0")
 
         # 2. Token-Integrität und Skalen
         t = DEFAULT_TOKENS
@@ -109,6 +109,47 @@ class BentoSelftestRunner:
             f"weights={plan_3.column_weights}, cols={[len(c) for c in plan_3.columns]}",
         )
 
+        # 14. Multi-Span-Bandmodell (0.2.0): deterministisch und überlappungsfrei
+        ms_cards = [
+            BentoCardSpec(key="a", span=2, weight=3, order=0),
+            BentoCardSpec(key="b", weight=2, order=1),
+            BentoCardSpec(key="c", weight=1, order=2),
+            BentoCardSpec(key="d", span="full", order=3),
+            BentoCardSpec(key="e", order=4),
+            BentoCardSpec(key="f", order=5),
+        ]
+        ok_bands = True
+        detail = ""
+        for width, cols in ((1100, 3), (750, 2), (500, 1)):
+            first = planner.plan(width, ms_cards)
+            again = planner.plan(width, list(ms_cards))
+            seen = [key for key, *_rest in first.placements()]
+            for band in first.bands:
+                used: set[int] = set()
+                for lane in band.lanes:
+                    span_cols = set(range(lane.column, lane.column + lane.span))
+                    if used & span_cols or max(span_cols) >= first.column_count:
+                        ok_bands = False
+                    used |= span_cols
+            if first.placements() != again.placements() or sorted(seen) != sorted(c.key for c in ms_cards)                     or first.column_count != cols:
+                ok_bands = False
+            detail += f" {width}px={[b.kind for b in first.bands]}"
+        split = planner.plan(1100, ms_cards).bands[0]
+        ok_bands = ok_bands and split.kind == "split" and split.lanes[0].span == 2             and [c.key for c in split.lanes[1].cards] == ["b", "c"]
+        self.check("14. Multi-Span-Bandmodell", ok_bands, detail)
+
+        # 15. Host-Context-Token-Vertrag (Variante C) mit Fallback
+        host_tokens = BentoTokens.from_host({"gap_relaxed": 20, "card_radius": 12, "unknown": "x", "gap_default": -1})
+        host_ctx = BentoContext.for_host(theme_provider=lambda: {"card": "#202020"},
+                                         token_provider=lambda: {"card_radius": 14})
+        self.check(
+            "15. Host-Token-Injection und Fallback",
+            host_tokens.gap_relaxed == 20 and host_tokens.card_radius == 12 and host_tokens.gap_default == 12
+            and host_tokens.three_column_min_width == 300 * 3 + 20 * 2 and host_tokens.custom.get("unknown") == "x"
+            and host_ctx.tokens.card_radius == 14 and host_ctx.resolve_color("card_bg") == "#202020"
+            and BentoTokens.from_host(None) is DEFAULT_TOKENS,
+        )
+
         # 8. Tk-Initialisierung und Widget-Lebenszyklus
         tk_ok = False
         try:
@@ -158,6 +199,35 @@ class BentoSelftestRunner:
                 empty = BentoEmptyState(body, context=ctx, message="Keine Daten vorhanden", action=("Anlegen", lambda: None, "accent"))
                 self.check("13. BentoDivider & BentoEmptyState", divider is not None and empty is not None)
 
+                # 16. Multi-Span im Raster: Bahnen getrennt, Karten bleiben beim Reflow erhalten
+                root.geometry("1100x600")
+                root.deiconify()
+                ms_grid = BentoGrid(root, context=ctx)
+                ms_grid.pack(fill="both", expand=True)
+                ms_widgets = {}
+                for spec in ms_cards:
+                    widget = BentoCard(ms_grid, context=ctx, title=spec.key)
+                    ms_widgets[spec.key] = widget
+                    ms_grid.add_card(widget, spec)
+                root.update()
+                ms_grid.reflow()
+                root.update()
+                ids_before = {key: str(widget) for key, widget in ms_widgets.items()}
+                wide_x = ms_widgets["a"].winfo_rootx() + ms_widgets["a"].winfo_width()
+                side_x = ms_widgets["b"].winfo_rootx()
+                three_cols = ms_grid.current_columns == 3
+                root.geometry("500x600")
+                root.update()
+                ms_grid.reflow()
+                root.update()
+                retained = all(widget.winfo_exists() for widget in ms_widgets.values()) and                     ids_before == {key: str(widget) for key, widget in ms_widgets.items()}
+                runs = ms_grid.layout_runs
+                ms_grid.reflow()
+                stable = ms_grid.layout_runs == runs
+                self.check("16. BentoGrid Multi-Span, Retention und ruhiger Reflow",
+                           three_cols and wide_x <= side_x and retained and ms_grid.current_columns == 1 and stable,
+                           f"wide_end={wide_x}, side_start={side_x}, runs={runs}")
+
                 # Aufräumen
                 root.destroy()
             except Exception as exc:
@@ -166,7 +236,8 @@ class BentoSelftestRunner:
         # Gesamtbewertung
         all_passed = all(r[1] for r in self.results)
         print("--------------------------------------------------", flush=True)
-        print(f"Bento-Selbsttest: {sum(1 for r in self.results if r[1])}/{len(self.results)} Prüfungen bestanden.", flush=True)
+        print(f"Bento-Selbsttest: {sum(1 for r in self.results if r[1])}/{len(self.results)} Prüfungen bestanden"
+              + ("" if tk_ok else " (Tk-Prüfungen 8–13 und 16 SKIPPED, nicht bestanden)") + ".", flush=True)
         return all_passed
 
 

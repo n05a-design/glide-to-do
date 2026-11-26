@@ -145,21 +145,24 @@ class BentoActions(tk.Frame):
         btn_fg = "#FFFFFF" if is_highlight else self.context.resolve_color("text_primary")
         tokens = self.context.tokens
 
-        btn = tk.Button(
-            self,
-            text=text,
-            command=command,
-            bg=btn_bg,
-            fg=btn_fg,
-            font=self.context.resolve_font(tokens.font_size_small, "bold" if is_highlight else "normal"),
-            relief="flat",
-            bd=0,
-            padx=tokens.gap_default,
-            pady=4,
-            cursor="hand2",
-            takefocus=True,
-        )
-        if width:
+        if self.context.button_factory is not None:
+            btn = self.context.make_button(self, text, command, color_role)
+        else:
+            btn = tk.Button(
+                self,
+                text=text,
+                command=command,
+                bg=btn_bg,
+                fg=btn_fg,
+                font=self.context.resolve_font(tokens.font_size_small, "bold" if is_highlight else "normal"),
+                relief="flat",
+                bd=0,
+                padx=tokens.gap_default,
+                pady=4,
+                cursor="hand2",
+                takefocus=True,
+            )
+        if width and self.context.button_factory is None:
             btn.configure(width=width)
 
         if self.align == "fill":
@@ -176,7 +179,14 @@ class BentoActions(tk.Frame):
 
 
 class BentoEmptyState(tk.Frame):
-    """Ruhiger, kompakter Leerzustand für Karten ohne Einträge (P4 / P5)."""
+    """Ruhiger, kompakter Leerzustand für Karten und Flächen ohne Einträge (P4 / P5).
+
+    Bento 0.2.0: Titel, kurze Erklärung, eine Hauptaktion und optional eine
+    zweite, zurückhaltende Aktion. Die Knöpfe kommen über
+    ``context.make_button`` aus dem Host (Glide: abgerundete Dialogknöpfe);
+    ohne Host entstehen neutrale Tk-Knöpfe. Die Erklärung bricht an der
+    tatsächlichen Breite um.
+    """
 
     def __init__(
         self,
@@ -190,11 +200,14 @@ class BentoEmptyState(tk.Frame):
         action_caption: str | None = None,
         action_command: Callable[[], None] | None = None,
         action_color: str = "accent",
+        secondary_action: tuple[str, Callable[[], None], str] | None = None,
+        background_role: str = "card_bg",
         **kwargs,
     ):
-        bg = context.resolve_color("card_bg")
+        bg = context.resolve_color(background_role)
         super().__init__(master, bg=bg, bd=0, highlightthickness=0, **kwargs)
         self.context = context
+        self.background_role = background_role
         self.title_str = title or message or ""
         self.desc_str = description or (message if title else "")
         self.icon_data = icon
@@ -204,12 +217,17 @@ class BentoEmptyState(tk.Frame):
             self.action = (action_caption, action_command, action_color)
         else:
             self.action = None
+        self.secondary_action = secondary_action
 
-        self.action_button: tk.Button | None = None
+        self.action_button: tk.Widget | None = None
+        self.secondary_button: tk.Widget | None = None
+        self.title_label: tk.Label | None = None
+        self.description_label: tk.Label | None = None
+        self._wrap_width = 0
         self._build_ui()
 
     def _build_ui(self) -> None:
-        bg = self.context.resolve_color("card_bg")
+        bg = self.context.resolve_color(self.background_role)
         fg = self.context.resolve_color("text_primary")
         fg_muted = self.context.resolve_color("text_muted")
         tokens = self.context.tokens
@@ -228,7 +246,7 @@ class BentoEmptyState(tk.Frame):
 
         # Titel / Hauptnachricht
         if self.title_str:
-            title_lbl = tk.Label(
+            self.title_label = tk.Label(
                 self,
                 text=self.title_str,
                 bg=bg,
@@ -236,12 +254,13 @@ class BentoEmptyState(tk.Frame):
                 font=self.context.resolve_font(tokens.font_size_subtitle, "bold"),
                 anchor="w",
                 justify="left",
+                wraplength=260,
             )
-            title_lbl.pack(side="top", fill="x", pady=(0, 2))
+            self.title_label.pack(side="top", fill="x", pady=(0, 2))
 
         # Beschreibung darunter
         if self.desc_str and self.desc_str != self.title_str:
-            desc_lbl = tk.Label(
+            self.description_label = tk.Label(
                 self,
                 text=self.desc_str,
                 bg=bg,
@@ -251,27 +270,32 @@ class BentoEmptyState(tk.Frame):
                 justify="left",
                 wraplength=260,
             )
-            desc_lbl.pack(side="top", fill="x", pady=(0, tokens.gap_default))
+            self.description_label.pack(side="top", fill="x", pady=(0, tokens.gap_default))
 
-        # Optionale Aktion zum Befüllen
-        if self.action:
-            caption, command, color_role = self.action
-            btn_bg = self.context.resolve_color(color_role, self.context.resolve_color("accent"))
-            self.action_button = tk.Button(
-                self,
-                text=caption,
-                command=command,
-                bg=btn_bg,
-                fg="#FFFFFF" if color_role in ("accent", "confirm", "danger", "primary") else self.context.resolve_color("text_primary"),
-                font=self.context.resolve_font(tokens.font_size_caption, "bold"),
-                relief="flat",
-                bd=0,
-                padx=tokens.gap_default,
-                pady=4,
-                cursor="hand2",
-                takefocus=True,
-            )
-            self.action_button.pack(side="top", anchor="w")
+        # Haupt- und Zweitaktion in einer Zeile
+        if self.action or self.secondary_action:
+            row = tk.Frame(self, bg=bg, bd=0, highlightthickness=0)
+            row.pack(side="top", anchor="w")
+            self.action_row = row
+            if self.action:
+                caption, command, color_role = self.action
+                self.action_button = self.context.make_button(row, caption, command, color_role)
+                self.action_button.pack(side="left")
+            if self.secondary_action:
+                caption, command, color_role = self.secondary_action
+                self.secondary_button = self.context.make_button(row, caption, command, color_role or "muted")
+                self.secondary_button.pack(side="left", padx=(tokens.gap_compact if self.action else 0, 0))
+        # Umbruch an der echten Breite; nur bei spürbarer Änderung (keine Configure-Kaskade)
+        self.bind("<Configure>", self._on_configure, add="+")
+
+    def _on_configure(self, event=None) -> None:
+        width = max(120, int(getattr(event, "width", 0) or self.winfo_width()))
+        if abs(width - self._wrap_width) < 8:
+            return
+        self._wrap_width = width
+        for label in (self.title_label, self.description_label):
+            if label is not None:
+                label.configure(wraplength=width)
 
 
 class BentoDivider(tk.Frame):

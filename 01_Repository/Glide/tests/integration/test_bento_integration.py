@@ -138,19 +138,59 @@ class TestBentoIntegration(unittest.TestCase):
         grid.reflow()
         self.host_window.update()
 
-        # Prüfe vertikale Positionen jeder Karte in jeder Spalte
-        for col_frame in grid._column_frames:
-            karten_in_spalte = [w for w in col_frame.winfo_children() if isinstance(w, BentoCard)]
-            for i in range(len(karten_in_spalte) - 1):
-                oben = karten_in_spalte[i]
-                unten = karten_in_spalte[i + 1]
-                oben_y1 = oben.winfo_y() + oben.winfo_height()
-                unten_y0 = unten.winfo_y()
-                self.assertLessEqual(
-                    oben_y1,
-                    unten_y0,
-                    f"Überlappung in Spalte: {oben.spec.key} (bis y={oben_y1}) überschneidet {unten.spec.key} (ab y={unten_y0})",
-                )
+        # Bis 0.1.0 prüfte diese Schleife nur Kinder der Spaltenrahmen; Karten
+        # gehören aber dem Raster, die Prüfung lief leer. Jetzt über echte
+        # Bildschirmrechtecke aller Kartenpaare.
+        self.assert_rechtecke_disjunkt(cards)
+
+    def assert_rechtecke_disjunkt(self, widgets):
+        boxes = []
+        for w in widgets:
+            self.assertTrue(w.winfo_ismapped(), f"{w.spec.key} nicht platziert")
+            x0, y0 = w.winfo_rootx(), w.winfo_rooty()
+            boxes.append((w.spec.key, x0, y0, x0 + w.winfo_width(), y0 + w.winfo_height()))
+        for i, a in enumerate(boxes):
+            for b in boxes[i + 1:]:
+                getrennt = a[3] <= b[1] or b[3] <= a[1] or a[4] <= b[2] or b[4] <= a[2]
+                self.assertTrue(getrennt, f"Überlappung {a} / {b}")
+
+    def test_multi_span_geometrie_retention_und_reflow(self):
+        """T344-Erweiterung: span=2 belegt zwei Spalten, Resize behält Widgets, kein Dauer-Reflow."""
+        grid = BentoGrid(self.host_window, context=self.context)
+        grid.pack(fill="both", expand=True)
+        specs = [BentoCardSpec("A", span=2, weight=3), BentoCardSpec("B", weight=2), BentoCardSpec("C", weight=1),
+                 BentoCardSpec("F", span="full"), BentoCardSpec("D"), BentoCardSpec("E"), BentoCardSpec("G")]
+        cards = {}
+        for spec in specs:
+            card = BentoCard(grid, context=self.context, title=spec.key, spec=spec)
+            tk.Label(card.body, text="Zeile\nZeile", bg=card.fill_color).pack()
+            grid.add_card(card)
+            cards[spec.key] = card
+        identitaet = {k: str(v) for k, v in cards.items()}
+        for breite, spalten in ((1100, 3), (750, 2), (500, 1), (1100, 3), (750, 2)):
+            self.host_window.geometry(f"{breite}x900")
+            self.host_window.update()
+            grid.reflow()
+            self.host_window.update()
+            self.assertEqual(grid.current_columns, spalten, breite)
+            self.assert_rechtecke_disjunkt(list(cards.values()))
+            if spalten == 3:
+                a, b = cards["A"], cards["B"]
+                self.assertGreater(a.winfo_width(), b.winfo_width() * 1.6)
+                self.assertLessEqual(a.winfo_rootx() + a.winfo_width(), b.winfo_rootx())
+            if spalten >= 2:
+                self.assertGreaterEqual(cards["F"].winfo_width(), grid.winfo_width() - 4)
+        self.assertEqual(identitaet, {k: str(v) for k, v in cards.items()})
+        self.assertTrue(all(v.winfo_exists() for v in cards.values()))
+        laeufe = grid.layout_runs
+        for _ in range(5):
+            grid.reflow()
+            self.host_window.update()
+        self.assertEqual(grid.layout_runs, laeufe, "unveränderter Plan darf nicht neu platzieren")
+        # Abbau: ausstehender Auftrag wird freigegeben
+        grid.schedule_layout()
+        grid.destroy()
+        self.host_window.update()
 
 
 if __name__ == "__main__":
