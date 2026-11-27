@@ -38,12 +38,14 @@ class BentoGrid(tk.Frame):
         self._last_width: int = 0
         self._last_plan: BentoLayoutPlan | None = None
         self._layout_active = False
+        self._last_signature: tuple | None = None
+        self.layout_runs = 0
 
         self._build_scaffolding()
         bind_resize(self, self._on_resize)
 
     def _build_scaffolding(self) -> None:
-        """Erzeugt Kopf- und Spalten-Rahmen."""
+        """Erzeugt den Bandrahmen (``_header_frame`` bleibt für 0.1.0-Aufrufer leer erhalten)."""
         bg = self.context.resolve_color("canvas_bg")
         self._header_frame = tk.Frame(self, bg=bg, bd=0, highlightthickness=0)
         self._header_frame.pack(side="top", fill="x")
@@ -54,13 +56,16 @@ class BentoGrid(tk.Frame):
     def add_card(self, widget: tk.Widget, spec: BentoCardSpec | None = None) -> None:
         """Fügt eine Karte oder ein Widget mit Spezifikation zum Raster hinzu."""
         card_spec = spec or getattr(widget, "spec", None) or BentoCardSpec(key=f"card_{len(self._cards)}")
+        self._cards = [item for item in self._cards if item[0].key != card_spec.key]
         self._cards.append((card_spec, widget))
+        self._last_signature = None
         # Re-Layout anfordern
         self.schedule_layout()
 
     def remove_card(self, key: str) -> None:
         """Entfernt eine Karte anhand ihres Schlüssels."""
         self._cards = [item for item in self._cards if item[0].key != key]
+        self._last_signature = None
         self.schedule_layout()
 
     def clear(self) -> None:
@@ -74,14 +79,14 @@ class BentoGrid(tk.Frame):
         self._clear_dom()
 
     def _clear_dom(self) -> None:
-        """Entfernt alle Platzierungen aus den Unterrahmen."""
-        if self._header_frame:
-            for child in self._header_frame.winfo_children():
-                child.pack_forget()
-        if self._columns_frame:
-            for child in self._columns_frame.winfo_children():
-                child.grid_forget()
+        """Baut alle Band- und Bahnrahmen ab."""
+        for frame in self._column_frames:
+            try:
+                frame.destroy()
+            except tk.TclError:
+                pass
         self._column_frames.clear()
+        self._last_signature = None
 
     @property
     def current_columns(self) -> int:
@@ -97,7 +102,19 @@ class BentoGrid(tk.Frame):
         if self._layout_active:
             return
         self._layout_active = True
-        self.after_idle(self._execute_layout)
+        self._pending_after = self.after_idle(self._execute_layout)
+
+    def destroy(self) -> None:
+        """Ausstehende Layoutaufträge freigeben, dann abbauen (keine verwaisten after-Rückrufe)."""
+        pending = getattr(self, "_pending_after", None)
+        if pending is not None:
+            try:
+                self.after_cancel(pending)
+            except tk.TclError:
+                pass
+            self._pending_after = None
+        self._layout_active = False
+        super().destroy()
 
     def _on_resize(self, _event=None) -> None:
         """Reagiert auf Größenänderungen des Rasters."""
@@ -111,7 +128,14 @@ class BentoGrid(tk.Frame):
         self.schedule_layout()
 
     def _execute_layout(self) -> None:
-        """Führt den Layout-Planner aus und platziert Widgets in den Spalten."""
+        """Führt den Layout-Planner aus und platziert Widgets im Bandmodell (0.2.0).
+
+        Kartenwidgets bleiben erhalten (Render-Retention): Bei geändertem Plan
+        werden nur Band- und Bahnrahmen neu angelegt und die vorhandenen
+        Karten per ``pack(in_=…)`` umgehängt. Ein unveränderter Plan löst
+        keine Geometrieänderung aus, damit Configure-Ereignisse nicht
+        kaskadieren (Lehre aus dem Xvfb-Livelock, D-Regel 12).
+        """
         self._layout_active = False
         try:
             available_w = self.winfo_width()
@@ -124,62 +148,64 @@ class BentoGrid(tk.Frame):
             available_w = self.context.tokens.card_min_width
 
         specs = [item[0] for item in self._cards]
-        widgets_by_key = {item[0].key: item[1] for item in self._cards}
+        widgets_by_key = {}
+        for spec, widget in self._cards:
+            widgets_by_key.setdefault(spec.key, widget)
 
         plan = self.planner.plan(available_w, specs, self.grid_spec)
+        signature = (plan.column_count, plan.placements(), tuple(sorted(widgets_by_key)))
+        if signature == self._last_signature and self._column_frames:
+            self._last_plan = plan
+            return
+        self._last_signature = signature
         self._last_plan = plan
+        self.layout_runs += 1
 
-        # 1. Kopfbereich (Vollbreitenkarten)
-        if self._header_frame:
-            for card_spec in plan.header_cards:
-                widget = widgets_by_key.get(card_spec.key)
-                if widget and widget.winfo_manager() != "pack":
-                    widget.pack(in_=self._header_frame, side="top", fill="x", pady=(0, self.context.tokens.gap_default))
-
-        # 2. Spaltenrahmen aufbauen
         if not self._columns_frame:
             return
-
-        # Spaltenanzahl angleichen
-        current_cols = len(self._column_frames)
         bg = self.context.resolve_color("canvas_bg")
         gap = plan.gap
+        card_gap = self.context.tokens.gap_default
 
-        if current_cols != plan.column_count:
-            # Alte Spalten leeren
-            for col in self._column_frames:
-                for child in col.winfo_children():
-                    child.pack_forget()
-                col.grid_forget()
-                col.destroy()
-            self._column_frames.clear()
+        # Karten lösen, alte Band-/Bahnrahmen abbauen (Karten gehören dem Raster)
+        for widget in widgets_by_key.values():
+            try:
+                if widget.winfo_manager():
+                    widget.pack_forget()
+            except tk.TclError:
+                pass
+        for frame in self._column_frames:
+            try:
+                frame.destroy()
+            except tk.TclError:
+                pass
+        self._column_frames.clear()
 
-            # Neue Spalten erzeugen
+        for band_index, band in enumerate(plan.bands):
+            band_frame = tk.Frame(self._columns_frame, bg=bg, bd=0, highlightthickness=0)
+            band_frame.pack(side="top", fill="x")
             for idx in range(plan.column_count):
-                col_frame = tk.Frame(self._columns_frame, bg=bg, bd=0, highlightthickness=0)
-                pad_left = 0 if idx == 0 else gap
-                col_frame.grid(row=0, column=idx, sticky="new", padx=(pad_left, 0))
-                self._columns_frame.columnconfigure(idx, weight=1, uniform="bento_columns")
-                self._column_frames.append(col_frame)
-        else:
-            # Bestehende Spalten von alten Karten lösen
-            for col in self._column_frames:
-                for child in col.winfo_children():
-                    child.pack_forget()
-
-        # 3. Karten in die Spalten packen
-        for col_idx, col_cards in enumerate(plan.columns):
-            if col_idx >= len(self._column_frames):
-                break
-            target_col = self._column_frames[col_idx]
-            for card_spec in col_cards:
-                widget = widgets_by_key.get(card_spec.key)
-                if widget:
-                    widget.pack(in_=target_col, side="top", fill="x", pady=(0, self.context.tokens.gap_default))
+                band_frame.columnconfigure(idx, weight=1, uniform="bento_columns")
+            self._column_frames.append(band_frame)
+            for lane in band.lanes:
+                lane_frame = tk.Frame(band_frame, bg=bg, bd=0, highlightthickness=0)
+                pad_left = 0 if lane.column == 0 else gap
+                lane_frame.grid(row=0, column=lane.column, columnspan=lane.span,
+                                sticky="new", padx=(pad_left, 0))
+                lane_frame.bento_lane = lane
+                for card_spec in lane.cards:
+                    widget = widgets_by_key.get(card_spec.key)
+                    if widget is None:
+                        continue
+                    widget.pack(in_=lane_frame, side="top", fill="x", pady=(0, card_gap))
+                    # Fensterstapel: Canvas überschreibt lift() mit tag_raise
+                    widget.tk.call("raise", str(widget))
 
     def update_theme(self, context: BentoContext) -> None:
         """Aktualisiert Theme für Raster und alle enthaltenen BentoCards."""
         self.context = context
+        self.planner = BentoLayoutPlanner(context.tokens)
+        self._last_signature = None
         bg = context.resolve_color("canvas_bg")
         self.configure(bg=bg)
         if self._header_frame:
@@ -188,6 +214,8 @@ class BentoGrid(tk.Frame):
             self._columns_frame.configure(bg=bg)
         for col in self._column_frames:
             col.configure(bg=bg)
+            for lane_frame in col.winfo_children():
+                lane_frame.configure(bg=bg)
 
         for _spec, widget in self._cards:
             if isinstance(widget, BentoCard):

@@ -102,6 +102,48 @@ class BentoTokens:
         fields.update(kwargs)
         return BentoTokens(**fields)
 
+    @classmethod
+    def field_names(cls) -> tuple[str, ...]:
+        """Alle ganzzahligen Token-Namen des Vertrags (ohne ``custom``)."""
+        return tuple(name for name in cls.__slots__ if name != "custom")
+
+    @classmethod
+    def from_host(
+        cls,
+        values: Mapping[str, object] | None,
+        base: "BentoTokens | None" = None,
+        strict: bool = False,
+    ) -> "BentoTokens":
+        """Host-Context-Token-Vertrag (Variante C, Bento 0.2.0).
+
+        Der Host übergibt seine aktiven Skalen als Mapping. Bekannte Namen
+        ersetzen den Fallback, unbekannte landen unverändert in ``custom``.
+        Werte müssen nichtnegative ganze Zahlen sein; ungültige Werte werden
+        übergangen (``strict=True``: ``ValueError``). Fehlen die Schwellen für
+        zwei und drei Spalten, folgen sie aus Mindestbreite und Abstand.
+        """
+        base = base or DEFAULT_TOKENS
+        if not values:
+            return base
+        known = set(cls.field_names())
+        overrides: dict[str, int] = {}
+        custom = dict(base.custom)
+        for name, value in values.items():
+            if name not in known:
+                custom[name] = value
+                continue
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                if strict:
+                    raise ValueError(f"Bento token {name!r} needs a non-negative int, got {value!r}")
+                continue
+            overrides[name] = value
+        min_w = overrides.get("card_min_width", base.card_min_width)
+        gap = overrides.get("gap_relaxed", base.gap_relaxed)
+        overrides.setdefault("two_column_min_width", min_w * 2 + gap)
+        overrides.setdefault("three_column_min_width", min_w * 3 + gap * 2)
+        overrides["custom"] = MappingProxyType(custom)
+        return base.with_overrides(**overrides)
+
 
 # Globale Standard-Instanz
 DEFAULT_TOKENS = BentoTokens()

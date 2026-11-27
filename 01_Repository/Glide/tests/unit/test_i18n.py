@@ -453,7 +453,8 @@ class I18nTests(unittest.TestCase):
             and isinstance(node.func, ast.Attribute)
             and node.func.attr == "show_undo_toast"
         ]
-        self.assertEqual(len(calls), 29)
+        # 30 seit WA-53 (Toast nach „Fristen neu setzen …“, 26.11.2026).
+        self.assertEqual(len(calls), 30)
         for call in calls:
             self.assertTrue(call.args, "show_undo_toast needs a text argument")
             self.assertNotIsInstance(call.args[0], ast.Constant,

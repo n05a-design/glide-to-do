@@ -185,3 +185,30 @@ jobs:
               --title "$titel" --notes-file "$RUNNER_TEMP/notes.md" "$RUNNER_TEMP"/release/*
           fi
           echo "Entwurf $tag bereit: https://github.com/$GITHUB_REPOSITORY/releases" >> "$GITHUB_STEP_SUMMARY"
+      # 26.11.2026 (Befund 1.0.3): Der Release v1.0.3 wurde parallel zum Workflow
+      # von Hand über die Weboberfläche angelegt und veröffentlicht; der öffentliche
+      # Release trägt keine Dateien, obwohl dieser Schritt grün war. Deshalb jetzt
+      # nach dem Hochladen gegenprüfen: genau ein Release je Tag, Entwurf, und jede
+      # zusammengestellte Datei hängt mit gleicher Größe daran. Sonst rot.
+      - name: Angehängte Dateien gegenprüfen
+        run: |
+          set -eu
+          tag="v$VERSION"
+          anzahl=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq "[.[] | select(.tag_name == \"$tag\")] | length")
+          if [ "$anzahl" != "1" ]; then
+            echo "::error::Für $tag existieren $anzahl Releases (Entwurf und Handanlage?) – nur einen behalten"; exit 1
+          fi
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json isDraft,assets > "$RUNNER_TEMP/nachher.json"
+          if [ "$(jq -r .isDraft "$RUNNER_TEMP/nachher.json")" != "true" ]; then
+            echo "::error::$tag ist kein Entwurf mehr – wurde während des Laufs veröffentlicht"; exit 1
+          fi
+          fehlt=0
+          for datei in "$RUNNER_TEMP"/release/*; do
+            name=$(basename "$datei"); groesse=$(stat -c %s "$datei")
+            ist=$(jq -r --arg n "$name" '.assets[] | select(.name == $n) | .size' "$RUNNER_TEMP/nachher.json")
+            if [ "$ist" != "$groesse" ]; then
+              echo "::error::$name fehlt oder hat $ist statt $groesse Bytes"; fehlt=1
+            fi
+          done
+          [ "$fehlt" = 0 ]
+          echo "Alle $(ls "$RUNNER_TEMP"/release | wc -l) Dateien hängen am Entwurf $tag." >> "$GITHUB_STEP_SUMMARY"

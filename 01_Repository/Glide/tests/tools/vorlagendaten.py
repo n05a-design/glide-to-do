@@ -212,6 +212,14 @@ def build(mod):
         raw = json.dumps(record, ensure_ascii=False)
         for old, new in mapping.items(): raw = raw.replace(old, new)
         record.clear(); record.update(json.loads(raw))
+    # L4-Referenzvorlagen (Glide 1.1.0) mit eigenen stabilen Kennungen aus
+    # scripts/pflege/vorlagen_l4.py – ein Katalog, ein Erzeuger: Ohne diese
+    # Zeilen hätte jeder Versionswechsel die drei Vorlagen wieder entfernt.
+    spec_l4 = importlib.util.spec_from_file_location('vorlagen_l4', ROOT / 'scripts/pflege/vorlagen_l4.py')
+    l4 = importlib.util.module_from_spec(spec_l4); spec_l4.loader.exec_module(l4)
+    for record in l4.vorlagen(mod.APP_VERSION):
+        app.validate_template_payload(record)
+        records.append(record)
     return {'format_version': app.TEMPLATE_FORMAT_VERSION, 'templates': records}
 
 if __name__ == '__main__':

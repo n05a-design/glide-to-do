@@ -136,5 +136,159 @@ class TestBentoLayout(unittest.TestCase):
         self.assertEqual([c.key for c in plan.columns[0]], ["c1", "c2", "c3"])
 
 
+class TestBentoMultiSpan(unittest.TestCase):
+    """T342-Erweiterung (Bento 0.2.0): Bandmodell mit echten Mehrspaltenkarten."""
+
+    def setUp(self):
+        self.planner = BentoLayoutPlanner()
+
+    @staticmethod
+    def lanes(plan):
+        return [(band.kind, [(lane.column, lane.span, [c.key for c in lane.cards]) for lane in band.lanes])
+                for band in plan.bands]
+
+    def assert_no_overlap(self, plan):
+        keys = [key for key, *_rest in plan.placements()]
+        self.assertEqual(len(keys), len(set(keys)), "Karte doppelt platziert")
+        for band in plan.bands:
+            used = set()
+            for lane in band.lanes:
+                cols = set(range(lane.column, lane.column + lane.span))
+                self.assertFalse(used & cols, f"Bahnen überlappen in {band}")
+                self.assertLess(max(cols), plan.column_count)
+                used |= cols
+
+    def test_spezifikationsbeispiel_drei_zwei_eine_spalte(self):
+        """Konzept §10.2: A(span=2) neben B, darunter C D E; 2 Spalten: A voll; 1 Spalte: Stapel."""
+        cards = [BentoCardSpec("A", span=2, weight=2), BentoCardSpec("B", weight=2),
+                 BentoCardSpec("C"), BentoCardSpec("D"), BentoCardSpec("E")]
+        self.assertEqual(self.lanes(self.planner.plan(1000, cards)), [
+            ("split", [(0, 2, ["A"]), (2, 1, ["B"])]),
+            ("flow", [(0, 1, ["C"]), (1, 1, ["D"]), (2, 1, ["E"])])])
+        self.assertEqual(self.lanes(self.planner.plan(700, cards)), [
+            ("full", [(0, 2, ["A"])]),
+            ("flow", [(0, 1, ["B", "D"]), (1, 1, ["C", "E"])])])
+        self.assertEqual(self.lanes(self.planner.plan(500, cards)), [
+            ("flow", [(0, 1, ["A", "B", "C", "D", "E"])])])
+
+    def test_breakpoint_grenzwerte(self):
+        cards = [BentoCardSpec("A", span=2), BentoCardSpec("B")]
+        for width, cols in ((615, 1), (616, 2), (931, 2), (932, 3)):
+            plan = self.planner.plan(width, cards)
+            self.assertEqual(plan.column_count, cols, width)
+            self.assert_no_overlap(plan)
+        self.assertEqual(self.planner.plan(931, cards).bands[0].kind, "full")
+        self.assertEqual(self.planner.plan(932, cards).bands[0].kind, "split")
+
+    def test_freie_spalte_fuellt_bis_gewicht(self):
+        cards = [BentoCardSpec("W", span="double", weight=3), BentoCardSpec("s1", weight=1),
+                 BentoCardSpec("s2", weight=1), BentoCardSpec("s3", weight=1), BentoCardSpec("s4", weight=1)]
+        plan = self.planner.plan(1000, cards)
+        self.assertEqual(self.lanes(plan)[0], ("split", [(0, 2, ["W"]), (2, 1, ["s1", "s2", "s3"])]))
+        self.assertEqual(plan.bands[1].cards[0].key, "s4")
+
+    def test_ausrichtung_rechts(self):
+        cards = [BentoCardSpec("W", span=2, extra={"align": "end"}), BentoCardSpec("s")]
+        self.assertEqual(self.lanes(self.planner.plan(1000, cards)),
+                         [("split", [(0, 1, ["s"]), (1, 2, ["W"])])])
+
+    def test_keine_restflaeche_ohne_nachbarn(self):
+        """Ohne einspaltige Folgekarte wird die breite Karte zur vollen Breite statt eine Lücke zu lassen."""
+        for cards in ([BentoCardSpec("W", span=2)],
+                      [BentoCardSpec("W", span=2), BentoCardSpec("V", span=2), BentoCardSpec("s")]):
+            plan = self.planner.plan(1000, cards)
+            self.assertEqual(plan.bands[0].kind, "full")
+            self.assert_no_overlap(plan)
+
+    def test_vollbreite_bleibt_an_ihrer_stelle_oder_oben(self):
+        cards = [BentoCardSpec("a"), BentoCardSpec("F", span="full"), BentoCardSpec("b")]
+        self.assertEqual([b.kind for b in self.planner.plan(1000, cards).bands], ["flow", "full", "flow"])
+        oben = self.planner.plan(1000, cards, BentoGridSpec(full_width_first=True))
+        self.assertEqual([b.kind for b in oben.bands], ["full", "flow"])
+        self.assertEqual(oben.bands[0].cards[0].key, "F")
+
+    def test_ausgeblendete_und_fehlerhafte_karten(self):
+        cards = [BentoCardSpec("a", span=2, visible=False), BentoCardSpec("b", span="quer"),
+                 BentoCardSpec("b", span=2), BentoCardSpec("c", span=-4)]
+        plan = self.planner.plan(1000, cards)
+        self.assertEqual([k for k, *_ in plan.placements()], ["b", "c"])
+        self.assertEqual([c.key for c in plan.hidden_cards], ["a"])
+        self.assertEqual(len(plan.issues), 3)
+        self.assert_no_overlap(plan)
+
+    def test_determinismus_und_stabile_reihenfolge_ueber_resize_folgen(self):
+        import random
+        rng = random.Random(4711)
+        spans = [1, 1, 1, 2, "full", "auto"]
+        for _ in range(40):
+            cards = [BentoCardSpec(f"k{i}", span=rng.choice(spans), weight=rng.randint(1, 5), order=rng.randint(0, 3))
+                     for i in range(rng.randint(0, 12))]
+            ordered = [c.key for c in sorted(cards, key=lambda c: c.order)]
+            for width in (400, 700, 1000, 1400, 700, 400, 1000):
+                plan = self.planner.plan(width, cards)
+                self.assertEqual(plan.placements(), self.planner.plan(width, list(cards)).placements())
+                self.assert_no_overlap(plan)
+                placed = [k for k, *_ in plan.placements()]
+                self.assertEqual(sorted(placed), sorted(ordered))
+                # Lesereihenfolge: die erste Karte jedes Bands folgt der Order-Folge
+                firsts = [min(ordered.index(c.key) for c in band.cards) for band in plan.bands if band.cards]
+                self.assertEqual(firsts, sorted(firsts))
+
+    def test_bahnbreite(self):
+        plan = self.planner.plan(1000, [BentoCardSpec("W", span=2), BentoCardSpec("s")])
+        self.assertEqual(plan.lane_width(2), plan.column_width * 2 + plan.gap)
+        self.assertEqual(plan.lane_width(9), plan.lane_width(3))
+
+    def test_alte_projektion_bleibt(self):
+        """0.1.0-Felder header_cards/columns bleiben für bestehende Hosts unverändert."""
+        cards = [BentoCardSpec("h", variant="full_width"), BentoCardSpec("W", span=2, weight=3), BentoCardSpec("s")]
+        plan = self.planner.plan(1000, cards)
+        self.assertEqual([c.key for c in plan.header_cards], ["h"])
+        self.assertEqual(sum(len(col) for col in plan.columns), 2)
+
+
+class TestBentoHostTokens(unittest.TestCase):
+    """T342-Erweiterung: Host-Context-Token-Vertrag (Variante C)."""
+
+    def test_fallback_ohne_host(self):
+        from glide_bento import BentoContext
+        self.assertIs(BentoTokens.from_host(None), DEFAULT_TOKENS)
+        self.assertIs(BentoTokens.from_host({}), DEFAULT_TOKENS)
+        self.assertEqual(BentoContext().tokens, DEFAULT_TOKENS)
+
+    def test_injection_validierung_und_abgeleitete_schwellen(self):
+        tokens = BentoTokens.from_host({"card_min_width": 280, "gap_relaxed": 20, "card_radius": True,
+                                        "gap_default": "12", "host_only": 5})
+        self.assertEqual(tokens.card_min_width, 280)
+        self.assertEqual(tokens.two_column_min_width, 580)
+        self.assertEqual(tokens.three_column_min_width, 880)
+        self.assertEqual(tokens.card_radius, DEFAULT_TOKENS.card_radius)
+        self.assertEqual(tokens.gap_default, DEFAULT_TOKENS.gap_default)
+        self.assertEqual(tokens.custom["host_only"], 5)
+        with self.assertRaises(ValueError):
+            BentoTokens.from_host({"gap_default": -1}, strict=True)
+
+    def test_kontext_liest_provider_neu(self):
+        from glide_bento import BentoContext
+        state = {"theme": {"card": "#111111"}, "tokens": {"card_radius": 10}}
+        ctx = BentoContext.for_host(theme_provider=lambda: state["theme"], token_provider=lambda: state["tokens"])
+        self.assertEqual((ctx.resolve_color("card_bg"), ctx.tokens.card_radius), ("#111111", 10))
+        state["theme"] = {"card": "#222222"}
+        state["tokens"] = {"card_radius": 14}
+        same = ctx.refresh_from_host(glass_mode=True)
+        self.assertIs(same, ctx)
+        self.assertEqual((ctx.resolve_color("card_bg"), ctx.tokens.card_radius, ctx.glass_mode),
+                         ("#222222", 14, True))
+        clone = ctx.clone_with()
+        self.assertIs(clone.token_provider, ctx.token_provider)
+        with self.assertRaises(AttributeError):
+            ctx.refresh_from_host(unbekannt=1)
+
+    def test_planner_nutzt_host_schwellen(self):
+        planner = BentoLayoutPlanner(BentoTokens.from_host({"card_min_width": 200, "gap_relaxed": 10}))
+        self.assertEqual(planner.compute_column_count(410), 2)
+        self.assertEqual(planner.compute_column_count(620), 3)
+
+
 if __name__ == "__main__":
     unittest.main()

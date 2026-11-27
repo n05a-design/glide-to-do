@@ -3,6 +3,17 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## Unveröffentlicht – Entwicklungsstand für Glide 1.1.0 (Branch `feature/glide-1-1-product-experience`, 26.11.2026)
+
+Kein Versionswechsel: `VERSION` bleibt 1.0.3, bis Versionswechsel, eingefrorener Volllauf (D51), Lieferabgleich `07_Python-Versionen` und native Pakete in einer Produktionsrunde folgen. Aufgabenformat 26, Austauschformat 2 und Vorlagenformat 2 unverändert; Glide-System V1.88.
+
+- **Glide Bento Box System 0.2.0:** Bandmodell mit echten Mehrspaltenkarten (`span=2` im Dreispaltenraster, bei zwei Spalten volle Breite, bei einer normal; freie Spalte füllt sich bis zum Gewicht der breiten Karte, ohne Nachbarn wird sie zur vollen Breite). `BentoBand`, `BentoLane`, `effective_span`, `BentoLayoutPlan.placements/lane_width/issues`; die 0.1.0-Felder `header_cards`/`columns` bleiben. Host-Context-Token-Vertrag (Variante C): `BentoTokens.from_host`, `BentoContext.for_host`/`refresh_from_host`, Knopffabrik des Hosts. `BentoGrid` hängt vorhandene Karten beim Reflow nur um und platziert bei unverändertem Plan nicht neu. `BentoEmptyState` mit Zweitaktion und Umbruch an der echten Breite. Selbsttest 16/16.
+- **Startseite:** „Zwei Spalten“ je Kachel im Bearbeitungsmodus (Pilot, Einstellung `home_tile_span` = `double`); „Ganze Breite“ bleibt über dem Raster. Glide liefert seine Skalen über `ui_design.bento_token_values`.
+- **Leerzustände (WA-52):** Startseite mit ausgeblendeten Kacheln, leere Liste, Heute, Seitenübersicht, Pinnwand und Notizbuch nennen Titel, Zweck und den nächsten Schritt (`empty_states.py`). Eine sichtbare Eingabezeile bleibt der einzige Anlegeweg (U20); kein Erststartassistent (N06).
+- **Vorlagenbibliothek (L4):** „Freelance-Kundenprojekt“, „Kreatives Designprojekt“ und „Persönliche Wochenplanung“ auf Deutsch und Englisch im mitgelieferten Katalog, mit Platzhaltern, relativen Terminen und Beziehungen (`scripts/pflege/vorlagen_l4.py`).
+- **Verstrichene Fristen (WA-53):** „Verspätet“ zeigt Anzahl und Alter ruhig; „Heute einplanen“ setzt nur den Bearbeitungstag, „Fristen neu setzen …“ ändert Fristen erst nach Rückfrage und lässt Serienaufgaben unverändert; je ein Rückgängig-Schritt (`overdue_review.py`).
+- **Release-Workflow:** Nach dem Hochladen prüft der Lauf, dass genau ein Release je Tag existiert, er noch Entwurf ist und jede Datei mit gleicher Größe anhängt (Befund v1.0.3 ohne Dateien).
+
 ## 1.0.3 – 24.11.2026
 
 ### Entwicklungs- und Release-Kandidat (Glide 1.0.3, Bento 0.1.0, Glide-System V1.87)

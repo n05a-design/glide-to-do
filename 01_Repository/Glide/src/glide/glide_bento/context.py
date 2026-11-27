@@ -73,6 +73,53 @@ class BentoContext:
     glass_shadow: str | None = None
     glass_gradient: str | None = None
     custom: dict[str, Any] = field(default_factory=dict)
+    # Bento 0.2.0, Variante C: Der Host kann Theme und Tokens als Provider
+    # übergeben; ``refresh_from_host`` liest sie nach Design-, Schrift- oder
+    # Themenwechsel neu, ohne den Kontext (und die Karten, die ihn halten)
+    # auszutauschen.
+    theme_provider: Callable[[], Mapping[str, str]] | None = None
+    token_provider: Callable[[], Mapping[str, Any]] | None = None
+    # Knöpfe des Hosts (master, text, command, color_role) -> Widget mit pack().
+    button_factory: Callable[[Any, str, Callable[[], Any], str], Any] | None = None
+
+    def make_button(self, master: Any, text: str, command: Callable[[], Any], color_role: str = "accent") -> Any:
+        """Knopf über die Host-Fabrik oder als neutraler Tk-Knopf (Fallback ohne Host)."""
+        if self.button_factory is not None:
+            return self.button_factory(master, text, command, color_role)
+        import tkinter as tk
+        tokens = self.tokens
+        highlight = color_role in ("accent", "confirm", "danger", "primary")
+        return tk.Button(
+            master, text=text, command=command,
+            bg=self.resolve_color(color_role, self.resolve_color("accent" if highlight else "button_bg")),
+            fg="#FFFFFF" if highlight else self.resolve_color("text_primary"),
+            font=self.resolve_font(tokens.font_size_small, "bold" if highlight else "normal"),
+            relief="flat", bd=0, padx=tokens.gap_default, pady=4, cursor="hand2", takefocus=True,
+        )
+
+    @classmethod
+    def for_host(cls, **kwargs) -> "BentoContext":
+        """Kontext mit Host-Providern anlegen und sofort aus ihnen befüllen."""
+        context = cls(**kwargs)
+        return context.refresh_from_host()
+
+    def refresh_from_host(self, **values) -> "BentoContext":
+        """Theme und Tokens aus den Host-Providern neu lesen (in place).
+
+        Zusätzliche Schlüsselwörter (z. B. ``glass_mode``) werden direkt
+        übernommen. Ohne Provider bleiben Fallback-Theme und Tokens stehen.
+        """
+        if self.theme_provider is not None:
+            theme = self.theme_provider()
+            if theme:
+                self.theme = theme
+        if self.token_provider is not None:
+            self.tokens = BentoTokens.from_host(self.token_provider())
+        for name, value in values.items():
+            if name not in self.__slots__:
+                raise AttributeError(f"BentoContext has no field {name!r}")
+            setattr(self, name, value)
+        return self
 
     def resolve_color(self, role: str, fallback: str | None = None) -> str:
         """Löst eine semantische Farbrolle gegen das Host-Theme auf."""
@@ -100,7 +147,10 @@ class BentoContext:
 
     def resolve_font(self, size: int, weight: str = "normal", slant: str = "roman") -> Any:
         """Löst eine Schriftart über den font_provider auf."""
-        return self.font_provider(size, weight)
+        try:
+            return self.font_provider(size, weight)
+        except Exception:  # noqa: BLE001 – Fremdhost-Provider dürfen Bento nicht stoppen
+            return _default_font_provider(size, weight)
 
     def resolve_icon(self, key: str) -> Any:
         """Löst ein Icon über den icon_provider auf."""
@@ -125,6 +175,9 @@ class BentoContext:
             "glass_shadow": self.glass_shadow,
             "glass_gradient": self.glass_gradient,
             "custom": dict(self.custom),
+            "theme_provider": self.theme_provider,
+            "token_provider": self.token_provider,
+            "button_factory": self.button_factory,
         }
         current.update(kwargs)
         return BentoContext(**current)

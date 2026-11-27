@@ -22,6 +22,34 @@ TITLE_MAX_CHARS = 40
 BUTTON_TEXT_MAX_CHARS = 24
 
 
+def bento_token_values(**layout):
+    """Glides aktive Skalen für den Bento-Token-Vertrag (Variante C, Bento 0.2.0).
+
+    Einzige Quelle bleiben die Skalen dieses Moduls; Bento erhält sie als
+    schlichtes Mapping und übernimmt nur bekannte Namen. ``layout`` ergänzt
+    Startseitenmaße des Hosts (Mindestbreite, Abstände, Innenränder).
+    """
+    values = {
+        "gap_compact": SPACING[8],
+        "gap_default": SPACING[12],
+        "gap_relaxed": SPACING[16],
+        "grid_margin": SPACING[16],
+        "card_padding_x": SPACING[18],
+        "card_padding_y": SPACING[15],
+        "card_radius": RADII["card"],
+        "field_radius": RADII["field"],
+        "font_size_caption": FONT_SIZES["caption"],
+        "font_size_body": FONT_SIZES["body"],
+        "font_size_title": FONT_SIZES["section"],
+        "font_size_headline": FONT_SIZES["title"],
+        "row_height_task": ROW_HEIGHTS["task"],
+        "title_max_chars": TITLE_MAX_CHARS,
+        "button_text_max_chars": BUTTON_TEXT_MAX_CHARS,
+    }
+    values.update(layout)
+    return values
+
+
 def remaining_text(length, limit=TITLE_MAX_CHARS, short=False):
     """Restzähler einer begrenzten Eingabe (D67, 07.11.2026): zählt von der Grenze herunter."""
     rest = int(limit) - max(0, int(length or 0))
