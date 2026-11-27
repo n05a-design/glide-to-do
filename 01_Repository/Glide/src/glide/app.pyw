@@ -14502,7 +14502,7 @@ class DrawingEditor(tk.Frame):
         self.bind("<Configure>", self._place_preview, add="+")
         self.refresh_locale()
 
-    TOOL_BUTTON_SIZE = 36
+    TOOL_BUTTON_SIZE = 40  # ⌫ passt unter Tk 9.1 erst ab 40 px (test_mindestgroesse330)
 
     def _build_tool_column(self):
         """Eine Spalte mit allen Werkzeugen; das aktive ist hervorgehoben (PIXEL-03)."""
@@ -14512,7 +14512,7 @@ class DrawingEditor(tk.Frame):
             symbol = f"tool_{key}"
             knopf = app.make_button(self.tool_column, app.ICONS[symbol], lambda value=key: self.set_tool(value),
                                     "muted", width=self.TOOL_BUTTON_SIZE, height=self.TOOL_BUTTON_SIZE,
-                                    radius=8, font=app.symbol_font(symbol, 14), bg_key="card", icon=True)
+                                    radius=8, font=app.symbol_font(symbol, 12), bg_key="card", icon=True)
             knopf.pack(pady=(0, 4))
             self.tool_buttons[key] = knopf
         self.sync_tool_column()
