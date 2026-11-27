@@ -140,6 +140,8 @@ import animation_export as glide_animation_export  # noqa: E402
 import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
+import view_positions as glide_view_positions  # noqa: E402
+import empty_prompts as glide_empty_states  # noqa: E402  (UX-05; WA-52 liegt in empty_states)
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import brand as glide_brand  # noqa: E402
@@ -7380,7 +7382,8 @@ class ItemWorkspace:
         menu = app._new_themed_popup_menu()
         bereiche = self.area_list()
         if not bereiche:
-            menu.add_command(label=glide_i18n.t("ui.show_area_jump_menu.no_areas_yet_new", "Noch keine Bereiche – „Neuer Bereich“ legt einen an."), state="disabled")
+            leer = glide_empty_states.menu_state("areas")
+            menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.create_area)
         for area in bereiche:
             menu.add_command(label=area["name"], command=lambda value=area["id"]: self.jump_to_area(value))
         self._popup(menu, event)
@@ -10422,12 +10425,14 @@ class PageEditor(RichNoteEditor):
         self._live_host = tk.Frame(self, bg=theme['card'])
         self._live_host.pack(side='bottom', fill='x')
         # Die aufgeklappten Fundstellen öffnen sich über der Fußzeile.
+        # UX-03 (Inhaberentscheidung 27.11.2026): Die Verknüpfungen öffnen sich
+        # unter dem Seitenkopf, ausgelöst vom Chip „N Verknüpfungen“ im Kopf.
         self._mentions_host = tk.Frame(self, bg=theme['card'])
-        self._mentions_host.pack(side='bottom', fill='x', padx=28, before=self._live_host)
+        self._mentions_host.pack(side='top', fill='x', padx=28)
         self._mentions_open = False
         self._mentions_button = app._make_dialog_button(
             self._foot_row, glide_i18n.t("ui.init.mentioned_without_reference", 'Erwähnt ohne Verweis …'), self.toggle_mentions, 'muted', width=1, height=28)
-        self._mentions_button.pack(side='left', anchor='w')
+        # Seit UX-03 nicht mehr in der Fußzeile; das Objekt bleibt für bestehende Verweise.
         self.status.pack(side='left', fill='x', expand=True, padx=(12, 0))
         # Abnahme 23.11.2026: In der kleinsten Kopfstufe (Logo ausgeblendet) verschwindet
         # auch „Erwähnt ohne Verweis“, damit die Fußleiste nicht zweizeilig wird.
@@ -11130,9 +11135,13 @@ class PageEditor(RichNoteEditor):
         return 'break'
 
     def sync_foot_density(self):
-        """„Erwähnt ohne Verweis …“ nur zeigen, solange der Kopf nicht in der kleinsten Stufe steht."""
+        """Früher: „Erwähnt ohne Verweis …“ in der kleinsten Kopfstufe ausblenden.
+
+        Seit UX-03 (27.11.2026) steht der Zugang als Chip im Seitenkopf; die
+        Fußzeile trägt nur noch den Status und bleibt damit immer einzeilig.
+        """
         knopf = getattr(self, '_mentions_button', None)
-        if knopf is None:
+        if knopf is None or not knopf.winfo_manager():
             return
         try:
             eng = self.app.header_density() == 'minimal'
@@ -11150,10 +11159,12 @@ class PageEditor(RichNoteEditor):
             self._mentions_open = False
             # Ohne Kind behielt der Bereich seine Höhe (Mac-Abnahme 07.11.2026).
             self.app.collapse_if_empty(self._mentions_host)
+            self.app.update_page_chips()
             return
         self._mentions_open = True
         self._mentions_rows.pack(fill='x')
         self.render_mentions()
+        self.app.update_page_chips()
 
     def render_mentions(self):
         """Nur beim Aufklappen/Übernehmen; keine Suche beim Tippen oder Seitenaufbau."""
@@ -11166,12 +11177,16 @@ class PageEditor(RichNoteEditor):
         _canvas, rows = self.app._make_scroll_area(self._mentions_rows, height=150)
         theme = self.app.theme
         backlinks = incoming.get(target, set())
-        tk.Label(rows, text=glide_i18n.t("ui.render_mentions.backlinks", 'Rückverweise: {len}', len=len(backlinks)), bg=theme['input'], fg=theme['muted'],
-                 font=app_font(9), anchor='w').pack(fill='x')
+        # UX-03: Zählung für den Kopfchip; zwei benannte Abschnitte statt einer Zeile.
+        self.app.remember_link_count(self.entry_id, len(backlinks), len(hits))
+        tk.Label(rows, text=glide_i18n.t("ui.render_mentions.section_backlinks", 'Verweise hierher ({count})', count=len(backlinks)),
+                 bg=theme['input'], fg=theme['text'], font=app_font(9, 'bold'), anchor='w').pack(fill='x')
         for source in sorted(backlinks)[:20]:
             self.app._make_dialog_button(rows, glide_objects.caption(source, index)[1],
                 lambda key=source: self.app.open_object_reference(glide_objects.uri(*key)),
                 'muted', width=300, height=26).pack(anchor='w')
+        tk.Label(rows, text=glide_i18n.t("ui.render_mentions.section_mentions", 'Erwähnt ohne Verweis ({count})', count=len(hits)),
+                 bg=theme['input'], fg=theme['text'], font=app_font(9, 'bold'), anchor='w').pack(fill='x', pady=(8, 0))
         if not hits:
             tk.Label(rows, text=glide_i18n.t("ui.render_mentions.no_unlinked_mentions_found", 'Keine unverknüpften Erwähnungen gefunden.'), bg=theme['input'],
                      fg=theme['muted'], font=app_font(9), anchor='w').pack(fill='x')
@@ -11205,7 +11220,7 @@ class PageEditor(RichNoteEditor):
 
     def link_mention(self, hit):
         if self.app.link_unlinked_mention(('list', self.entry_id), hit) and self.winfo_exists():
-            self.render_mentions()
+            self.render_mentions()  # zählt neu und aktualisiert den Kopfchip
 
     def highlight_matches(self, key):
         """Markiert alle Vorkommen eines Suchbegriffs und zeigt das erste (G14h).
@@ -11514,7 +11529,16 @@ class PageEditor(RichNoteEditor):
         try:
             leer = not self.text.get('1.0', 'end-1c') and not self.images
             if leer:
-                hinweis.place(x=int(float(self.text.cget('padx'))), y=int(float(self.text.cget('pady'))))
+                # PAGE-01 (Befund 26.11.2026, macOS/Tk 9): `place(x=padx)` landete
+                # unter Tk 9 bei doppeltem Innenabstand – der Hinweis stand eine
+                # ganze Lesespalteneinrückung rechts und tiefer als Schreibmarke
+                # und Blockgriff. Jetzt an der ersten Zeile selbst, über `place_at`.
+                zeile = self.text.dlineinfo('1.0')
+                if zeile:
+                    x, y = zeile[0], zeile[1] + int(float(self.text.cget('spacing1') or 0))
+                else:
+                    x, y = int(float(self.text.cget('padx'))), int(float(self.text.cget('pady')))
+                self.place_at(hinweis, x, y)
             else:
                 hinweis.place_forget()
         except tk.TclError:
@@ -12303,15 +12327,38 @@ class PageEditor(RichNoteEditor):
                       ('Mehr', self.show_page_actions)]
         return eintraege
 
-    def convert_block(self, tag):
-        """„Umwandeln in“: Text macht die Zeile schlicht, sonst die gewählte Blockart."""
-        self.hide_format_bar()
+    @staticmethod
+    def block_choice_active(tag, blocks):
+        """Ob die Blockart `tag` der Auswahl „Umwandeln in“ auf einer Zeile mit `blocks` gilt.
+
+        Eine Aufklappüberschrift trägt `toggle` und `hN` zugleich; sie gilt
+        weder als schlichte Aufklappliste noch als schlichte Überschrift.
+        """
+        blocks = set(blocks or ())
+        heading = {'h1', 'h2', 'h3', 'h4'} & blocks
         if tag == 'text':
+            return not blocks & {'h1', 'h2', 'h3', 'h4', 'bullet', 'number', 'task', 'toggle', 'quote',
+                                 'callout', 'codeblock'}
+        if tag.startswith('toggle_h'):
+            return 'toggle' in blocks and ('h' + tag[-1]) in blocks
+        if tag == 'toggle':
+            return 'toggle' in blocks and not heading
+        if tag in ('h1', 'h2', 'h3', 'h4'):
+            return tag in blocks and 'toggle' not in blocks
+        return tag in blocks
+
+    def convert_block(self, tag):
+        """„Umwandeln in“: Text macht die Zeile schlicht, sonst die gewählte Blockart.
+
+        PAGE-05 (27.11.2026): Wer die bereits gewählte Blockart erneut wählt,
+        bekommt wie bei den Knöpfen der Werkzeugleiste (`set_block`) wieder
+        Text; der Inhalt der Zeile bleibt, nur Blockart und Präfix gehen.
+        """
+        self.hide_format_bar()
+        vorher = self.line_blocks()
+        if tag == 'text' or self.block_choice_active(tag, vorher):
             self.clear_line_block()
             self.flush()
-            return 'break'
-        vorher = self.line_blocks()
-        if tag in vorher:
             return 'break'
         return self.set_block(tag)
 
@@ -12350,6 +12397,8 @@ class PageEditor(RichNoteEditor):
             for tag in original_tags:
                 self.text.tag_add(tag, f'{start} linestart', first_end)
         self.flush()
+        # EDITOR-01: Adressen im eingefügten Text werden Links – eigener Rückgängig-Schritt.
+        self.autolink_range(start, 'insert')
         return 'break'
 
     def select_all(self):
@@ -12431,6 +12480,173 @@ class PageEditor(RichNoteEditor):
             if not glide_task_refs.task_id(str(tag)):
                 self.text.tag_add(tag, neu, f'{neu} lineend +1c')
         self.flush()
+        return 'break'
+
+    # --- EDITOR-01: Adressen automatisch als Link (27.11.2026) --------------
+    AUTOLINK_SKIP_TAGS = frozenset({'code', 'codeblock'})
+    LINK_PATTERN = re.compile(r'^(https?://|mailto:)[^\s]+$')
+
+    def autolink_range(self, start, end):
+        """Erkannte Adressen zwischen `start` und `end` zu Links machen; True, wenn welche entstanden.
+
+        Code, Codeblöcke und bestehende Links bleiben unberührt. Der Text davor
+        ist ein eigener Rückgängig-Schritt: Rückgängig nimmt zuerst nur den Link
+        zurück. Glide öffnet und ruft dabei nichts auf.
+        """
+        try:
+            start = self.text.index(start)
+            inhalt = self.text.get(start, end)
+        except tk.TclError:
+            return False
+        neu = False
+        for a, b, url in glide_page_markdown.find_links(inhalt):
+            von, bis = f'{start} +{a}c', f'{start} +{b}c'
+            tags = set(self.text.tag_names(von)) | set(self.text.tag_names(f'{bis} -1c'))
+            if tags & self.AUTOLINK_SKIP_TAGS or any(str(t) in self.links for t in tags):
+                continue
+            if not neu:
+                self.flush()
+                neu = True
+            tag = 'link:' + uuid.uuid4().hex
+            self.links[tag] = url
+            self.text.tag_configure(tag, foreground=self.app.theme['ui_accent'], underline=True)
+            self.text.tag_add(tag, von, bis)
+        if neu:
+            self.flush()
+        return neu
+
+    def autolink_before_insert(self):
+        """Vor Leerzeichen oder Zeilenumbruch: endet hier eine Adresse, wird sie ein Link."""
+        try:
+            zeile = self.text.index('insert linestart')
+            treffer = glide_page_markdown.link_before(self.text.get(zeile, 'insert'))
+        except tk.TclError:
+            return False
+        if not treffer:
+            return False
+        return self.autolink_range(f'{zeile} +{treffer[0]}c', f'{zeile} +{treffer[1]}c')
+
+    def link_tag_at(self, index='insert'):
+        """Der Link-Tag an `index` (auch direkt vor der Schreibmarke) oder None."""
+        for stelle in (index, f'{index} -1c'):
+            try:
+                for tag in self.text.tag_names(stelle):
+                    if str(tag) in self.links:
+                        return str(tag)
+            except tk.TclError:
+                continue
+        return None
+
+    def copy_link(self, tag):
+        url = self.links.get(tag)
+        if url:
+            self.text.clipboard_clear()
+            self.text.clipboard_append(url)
+        return 'break'
+
+    def edit_link(self, tag):
+        url = self.links.get(tag)
+        if not url:
+            return 'break'
+        neu = self.app.themed_input_dialog(
+            'Link', glide_i18n.t("ui.insert_link.https_http_or_mailto", 'https://, http:// oder mailto:'),
+            initial=url, ok_text=glide_i18n.t("button.apply", 'Übernehmen'))
+        if neu is None:
+            return 'break'
+        neu = neu.strip()
+        if not self.LINK_PATTERN.match(neu) or len(neu) > 2048:
+            self.app.show_warning('Link', glide_i18n.t(
+                "ui.insert_link.please_enter_a_valid", 'Bitte eine gültige Web- oder E-Mail-Adresse eingeben.'))
+            return 'break'
+        self.flush()
+        self.links[tag] = neu
+        self.flush()
+        return 'break'
+
+    def remove_link(self, tag):
+        """Link entfernen, der Text bleibt (eigener Rückgängig-Schritt)."""
+        if tag not in self.links:
+            return 'break'
+        self.flush()
+        self.text.tag_remove(tag, '1.0', 'end')
+        self.flush()
+        return 'break'
+
+    def open_link_tag(self, tag):
+        """Link öffnen – nur auf ausdrücklichen Befehl, nur http(s)/mailto oder Glide-Verweise."""
+        url = self.links.get(tag)
+        if not url:
+            return 'break'
+        if glide_objects.parse(url):
+            self.app.open_object_reference(url)
+            return 'break'
+        if self.LINK_PATTERN.match(url):
+            import webbrowser
+            webbrowser.open(url)
+        return 'break'
+
+    def add_link_menu(self, menu):
+        """Öffnen, Kopieren, Bearbeiten, Entfernen – wenn die Schreibmarke auf einem Link steht."""
+        tag = self.link_tag_at()
+        if tag is None:
+            return False
+        menu.add_command(label=glide_i18n.t("editor.menu.link_open", "Link öffnen"),
+                         command=lambda t=tag: self.open_link_tag(t))
+        menu.add_command(label=glide_i18n.t("editor.menu.link_copy", "Link kopieren"),
+                         command=lambda t=tag: self.copy_link(t))
+        menu.add_command(label=glide_i18n.t("editor.menu.link_edit", "Link bearbeiten …"),
+                         command=lambda t=tag: self.edit_link(t))
+        menu.add_command(label=glide_i18n.t("editor.menu.link_remove", "Link entfernen"),
+                         command=lambda t=tag: self.remove_link(t))
+        menu.add_separator()
+        return True
+
+    def block_bounds(self, index='insert'):
+        """Anfang und Ende des Blocks an `index`: die Zeile, ein Codeblock als Ganzes."""
+        start = self.text.index(f'{index} linestart')
+        end = self.text.index(f'{index} lineend')
+        if 'codeblock' in self.line_blocks(index):
+            while (self.text.compare(start, '>', '1.0')
+                   and 'codeblock' in self.line_blocks(f'{start} -1l')):
+                start = self.text.index(f'{start} -1l linestart')
+            while (self.text.compare(f'{end} +1c', '<', 'end')
+                   and 'codeblock' in self.line_blocks(f'{end} +1c')):
+                end = self.text.index(f'{end} +1c lineend')
+        return start, end
+
+    def copy_block(self, cut=False):
+        """PAGE-03 (27.11.2026): den ganzen Block an der Schreibmarke kopieren, ohne Markierung.
+
+        In die Zwischenablage kommt Markdown des Blocks. Glide fügt ihn damit
+        auf jeder Seite und Notiz mit Blockart und Inlineformaten ein; Links
+        und Aufgaben bekommen dabei neue Identitäten, eine kopierte Aufgabe
+        wird eine neue Aufgabe. Andere Programme erhalten lesbares Markdown.
+        """
+        self.hide_format_bar()
+        if not self._line_is_movable():
+            return 'break'
+        start, end = self.block_bounds()
+        if not self.text.get(start, end).strip():
+            return 'break'
+
+        def zustand(item_id):
+            found = self.app.find_item_in_lists(item_id)
+            return (found[0].get('text'), found[0].get('done')) if found else None
+
+        markdown = glide_page_markdown.block_markdown(self.document(), self.offset(start), self.offset(end),
+                                                      zustand)
+        self.text.clipboard_clear()
+        self.text.clipboard_append(markdown)
+        # Einzeilige Blöcke erkennt `looks_like_markdown` nicht; Glide merkt sich
+        # deshalb den eigenen Inhalt und fügt ihn sicher als Block ein.
+        self.app._page_block_clipboard = markdown
+        if cut:
+            self.text.delete(start, f'{end} +1c' if self.text.compare(f'{end} +1c', '<', 'end') else end)
+            self.flush()
+        else:
+            self.status.configure(text=glide_i18n.t(
+                "editor.status.block_copied", "Block kopiert – mit {accel} auf jeder Seite einfügen",
+                accel=self.app.accel('V')))
         return 'break'
 
     def delete_line(self):
@@ -12519,6 +12735,7 @@ class PageEditor(RichNoteEditor):
         menu = self.app._new_themed_popup_menu(self)
         if self.add_object_reference_preview(menu):
             menu.add_separator()
+        self.add_link_menu(menu)
         menu.add_command(label=glide_i18n.t("editor.menu.cut", "Ausschneiden"),
                          command=lambda: self.copy_selection(cut=True), state=zustand)
         menu.add_command(label=glide_i18n.t("editor.menu.copy", "Kopieren"),
@@ -12545,7 +12762,7 @@ class PageEditor(RichNoteEditor):
         umwandeln = self.app._new_themed_popup_menu(menu)
         aktuell = set(self.line_blocks())
         for label, tag in self.block_choices():
-            gewaehlt = (tag in aktuell) or (tag == 'text' and not aktuell & {t for _l, t in tr_table(self.BLOCK_CHOICES)})
+            gewaehlt = self.block_choice_active(tag, aktuell)
             umwandeln.add_command(label=glide_action_menu.check_label(label, gewaehlt),
                                   command=lambda t=tag: self.convert_block(t))
         menu.add_cascade(label=glide_i18n.t("editor.menu.convert", "Umwandeln in"), menu=umwandeln)
@@ -12555,6 +12772,10 @@ class PageEditor(RichNoteEditor):
                          command=lambda: self.move_line(-1), state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.line_down", "Zeile nach unten"),
                          command=lambda: self.move_line(1), state=beweglich)
+        menu.add_command(label=glide_i18n.t("editor.menu.copy_block", "Block kopieren"),
+                         command=self.copy_block, state=beweglich)
+        menu.add_command(label=glide_i18n.t("editor.menu.cut_block", "Block ausschneiden"),
+                         command=lambda: self.copy_block(cut=True), state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.duplicate_line", "Zeile duplizieren"),
                          command=self.duplicate_line, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.delete_line", "Zeile löschen"),
@@ -12627,8 +12848,11 @@ class PageEditor(RichNoteEditor):
 
     def _format_bar_block_menu(self):
         menu = self.app._new_themed_popup_menu(self)
+        aktuell = set(self.line_blocks())
         for label, tag in self.block_choices():
-            menu.add_command(label=label, command=lambda t=tag: self.convert_block(t))
+            # Wie „Umwandeln in“: die geltende Blockart mit Haken; erneut gewählt wird sie wieder Text.
+            menu.add_command(label=glide_action_menu.check_label(label, self.block_choice_active(tag, aktuell)),
+                             command=lambda t=tag: self.convert_block(t))
         self.popup(menu)
 
     # --- Tippen wie in Notion --------------------------------------------
@@ -12636,6 +12860,7 @@ class PageEditor(RichNoteEditor):
                ('[]', 'task'), ('[ ]', 'task'), ('>', 'quote'))
 
     def markdown_shortcut(self, event=None):
+        self.autolink_before_insert()
         start = self.text.index('insert linestart')
         vorher = self.text.get(start, 'insert')
         if self.line_blocks():
@@ -12652,6 +12877,7 @@ class PageEditor(RichNoteEditor):
         return None
 
     def newline(self, event=None):
+        self.autolink_before_insert()
         start, end = self.line_bounds()
         zeile = self.text.get(start, end)
         bloecke = self.line_blocks()
@@ -13481,7 +13707,8 @@ class PageEditor(RichNoteEditor):
             inhalt = self.clipboard_get()
         except tk.TclError:
             return None
-        if glide_page_markdown.looks_like_markdown(inhalt):
+        if (glide_page_markdown.looks_like_markdown(inhalt)
+                or (inhalt and inhalt == getattr(self.app, '_page_block_clipboard', None))):
             self.insert_markdown(inhalt)
             return 'break'
         return self.paste_plain()
@@ -13703,10 +13930,14 @@ class GalleryView(tk.Frame):
         self.hits = []
         breite = max(1, canvas.winfo_width())
         if not bilder:
-            canvas.create_text(24, 24, anchor="nw", width=max(200, breite - 48), font=app_font(12),
-                               fill=theme["muted"],
-                               text=glide_i18n.t("ui.redraw.no_images_yet_add", "Noch keine Bilder. „Bilder hinzufügen …“ legt Dateien aus deinem "
-                                    "Rechner in diese Galerie; sie werden wie Anhänge gesichert."))
+            # UX-05: Der Leertext ist selbst „Bilder hinzufügen …“ – derselbe Weg wie der Knopf.
+            leer = glide_empty_states.OVERVIEWS["gallery_images"]
+            canvas.create_text(24, 24, anchor="nw", width=max(200, breite - 48), font=app_font(12, "bold"),
+                               fill=theme.get("ui_accent", theme["accent"]), tags=("empty_action",),
+                               text=glide_i18n.t(leer.key, leer.fallback))
+            canvas.tag_bind("empty_action", "<Button-1>", lambda _event: self.add_images())
+            canvas.tag_bind("empty_action", "<Enter>", lambda _event: canvas.configure(cursor="hand2"))
+            canvas.tag_bind("empty_action", "<Leave>", lambda _event: canvas.configure(cursor=""))
             canvas.configure(scrollregion=(0, 0, breite, 100))
             return
         groesse = self.tile_size()
@@ -13923,25 +14154,29 @@ class DrawingEditor(tk.Frame):
     zurück: einen Zug, eine Füllung, eine Form, ein Verschieben.
     """
 
+    # PIXEL-03 (27.11.2026): Radierer mit Umschalt+E – „e“ bleibt die Ellipse.
     TOOLS = (
-        ("brush", "Pinsel", "b"), ("fill", "Füllen", "f"), ("eyedropper", "Pipette", "i"),
-        ("line", "Linie", "l"), ("rect", "Rechteck", "u"), ("ellipse", "Ellipse", "e"),
-        ("select", "Auswahl", "s"),
+        ("brush", "Pinsel", "b"), ("eraser", "Radierer", "E"), ("fill", "Füllen", "f"),
+        ("eyedropper", "Pipette", "i"), ("line", "Linie", "l"), ("rect", "Rechteck", "u"),
+        ("ellipse", "Ellipse", "e"), ("select", "Auswahl", "s"),
     )
     STATUS_TOOL_KEYS = {
-        "brush": "brush", "fill": "fill", "eyedropper": "eyedropper", "line": "line",
+        "brush": "brush", "eraser": "eraser", "fill": "fill", "eyedropper": "eyedropper", "line": "line",
         "rect": "rectangle", "ellipse": "ellipse", "select": "selection",
     }
     STATUS_ACTION_KEYS = {
-        "Pinselzug": "brush_stroke", "Pinsel": "brush", "Füllen": "fill",
+        "Pinselzug": "brush_stroke", "Pinsel": "brush", "Radieren": "erase", "Füllen": "fill",
+        "Spiegeln": "flip", "Drehen": "rotate",
         "Linie": "line", "Rechteck": "rectangle", "Ellipse": "ellipse",
         "Verschieben": "move", "Ausschneiden": "cut", "Auswahl leeren": "clear_selection",
         "Einfügen": "paste", "Farbe ersetzen": "replace_color",
     }
     DISPLAY_PROFILES = glide_design.DRAWING_DISPLAY_PROFILES
     SHAPE_TOOLS = ("line", "rect", "ellipse")
-    SIZED_TOOLS = ("brush", "line", "rect", "ellipse")
-    SYMMETRIC_TOOLS = ("brush", "fill", "line", "rect", "ellipse")
+    SIZED_TOOLS = ("brush", "eraser", "line", "rect", "ellipse")
+    SYMMETRIC_TOOLS = ("brush", "eraser", "fill", "line", "rect", "ellipse")
+    # Malen wie der Pinsel; der Radierer setzt den durchsichtigen Grund (Index 0, D59).
+    STROKE_TOOLS = ("brush", "eraser")
     ZOOM_LEVELS = (2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48)
     # Größte Kantenlänge des vergrößerten Bildes. Darüber hält Tk unnötig
     # viel Bildspeicher, ohne dass eine Zelle besser zu treffen wäre.
@@ -14009,6 +14244,8 @@ class DrawingEditor(tk.Frame):
         self.wrap = bool(view.get("wrap", False))
         self.tiled_preview = bool(view.get("tiled", False))
         self.grayscale = bool(view.get("grayscale", False))
+        # PIXEL-02: durchsichtigen Grund als Schachbrett zeigen (nur Anzeige).
+        self.checker = bool(view.get("checker", False))
         self.pixel_perfect = tools["pixel_perfect"]
         self.preview_visible = tools["preview"]
         self.reference_opacity = tools["reference_opacity"]
@@ -14081,14 +14318,17 @@ class DrawingEditor(tk.Frame):
         wirt = self.app.tool_band_host()
         top = ButtonFlow(wirt if wirt is not None else self, theme["bg" if wirt is not None else "card"], gap=6,
                          on_layout=self.app.schedule_fixed_layout_sync if wirt is not None else None,
-                         single_line=True, required=("tool", "display", "more"))
+                         single_line=True, required=("display", "more"))
         self.toolbar = top
         top.pack(fill="x", pady=(0, 2))
         self.bind("<Destroy>", lambda e, w=top: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add="+")
+        # PIXEL-03 (Inhaberentscheidung 27.11.2026, ersetzt die Werkzeugbündelung
+        # aus D61): Die Werkzeuge stehen als Spalte neben der Fläche. Der frühere
+        # Menüknopf bleibt als Objekt für Menü und bestehende Verweise, steht
+        # aber nicht mehr in der Leiste – keine zwei Wege für dieselbe Wahl.
         self.tool_choice = self._button(top, self._tool_label(self.tool) + " ▾",
                                         self.show_tool_menu, width=130)
-        top.add(self.tool_choice, key="tool")
         # Nur der Profilname mit Menümarker wie „Pinsel ▾“: Mit „Anzeige: …“
         # passten die drei Pflichtknöpfe bei 860 × 700 nicht in die Leiste.
         self.display_button = self._button(top, self._profile_label(self.display_profile) + " ▾",
@@ -14164,8 +14404,13 @@ class DrawingEditor(tk.Frame):
         self.reference_label = tk.Label(self, text="", bg=theme["card"], fg=theme["muted"],
                                         font=app_font(9), anchor="w", justify="left")
 
-        surface = tk.Frame(self, bg=theme["card"])
-        surface.pack(fill="both", expand=True)
+        werkbank = tk.Frame(self, bg=theme["card"])
+        werkbank.pack(fill="both", expand=True)
+        self.tool_column = tk.Frame(werkbank, bg=theme["card"])
+        self.tool_column.pack(side="left", fill="y", padx=(0, 8))
+        self._build_tool_column()
+        surface = tk.Frame(werkbank, bg=theme["card"])
+        surface.pack(side="left", fill="both", expand=True)
         self.surface = surface
         # Um die Zeichnung herum steht die Kartenfarbe, nicht die Eingabefarbe:
         # links und rechts der Fläche war sonst ein grauer Streifen zu sehen,
@@ -14230,6 +14475,11 @@ class DrawingEditor(tk.Frame):
         canvas.bind("d", lambda _event: self.reset_colors())
         canvas.bind("m", lambda _event: self.cycle_symmetry())
         canvas.bind("p", lambda _event: self.toggle_preview())
+        # PIXEL-02: Spiegeln und Drehen – Auswahl oder ganze Zeichnung.
+        canvas.bind("h", lambda _event: self.transform("flip_h"))
+        canvas.bind("v", lambda _event: self.transform("flip_v"))
+        canvas.bind("t", lambda _event: self.transform("rotate_cw"))
+        canvas.bind("T", lambda _event: self.transform("rotate_ccw"))
         for size in glide_drawing.BRUSH_SIZES:
             canvas.bind(str(size), lambda _event, value=size: self.set_brush_size(value))
         for sequence in ("<plus>", "<KP_Add>", "<equal>"):
@@ -14251,6 +14501,36 @@ class DrawingEditor(tk.Frame):
             canvas.bind(f"<{modifier}-a>", lambda _event: self.select_all())
         self.bind("<Configure>", self._place_preview, add="+")
         self.refresh_locale()
+
+    TOOL_BUTTON_SIZE = 40  # ⌫ passt unter Tk 9.1 erst ab 40 px (test_mindestgroesse330)
+
+    def _build_tool_column(self):
+        """Eine Spalte mit allen Werkzeugen; das aktive ist hervorgehoben (PIXEL-03)."""
+        app = self.app
+        self.tool_buttons = {}
+        for key, _label, shortcut in tr_table(self.TOOLS):
+            symbol = f"tool_{key}"
+            knopf = app.make_button(self.tool_column, app.ICONS[symbol], lambda value=key: self.set_tool(value),
+                                    "muted", width=self.TOOL_BUTTON_SIZE, height=self.TOOL_BUTTON_SIZE,
+                                    radius=8, font=app.symbol_font(symbol, 12), bg_key="card", icon=True)
+            knopf.pack(pady=(0, 4))
+            self.tool_buttons[key] = knopf
+        self.sync_tool_column()
+
+    def sync_tool_column(self):
+        """Aktives Werkzeug markieren, Tooltips und Namen in der aktiven Sprache."""
+        theme = self.app.theme
+        for key, _label, shortcut in tr_table(self.TOOLS):
+            knopf = getattr(self, "tool_buttons", {}).get(key)
+            if knopf is None or not knopf.winfo_exists():
+                continue
+            name = self._tool_label(key)
+            knopf._accessible_name = name
+            self.app.add_tooltip(knopf, f"{name} ({self._shortcut_label(shortcut)})")
+            if key == self.tool:
+                knopf.set_active(theme.get("active", theme["selection"]), theme["text"])
+            else:
+                knopf.set_active(None, None)
 
     def _build_preview(self, surface):
         theme = self.app.theme
@@ -14326,9 +14606,21 @@ class DrawingEditor(tk.Frame):
             menu.grab_release()
         return "break"
 
+    @staticmethod
+    def _shortcut_label(shortcut):
+        """„B“ für b, „Umschalt+E“ für E."""
+        if shortcut.isupper():
+            return glide_i18n.t("keyboard.modifier.shift", "Umschalt") + "+" + shortcut
+        return shortcut.upper()
+
     def show_tool_menu(self):
-        return self._popup_drawing_choices(self.tool_choice, [
-            (f"{self._tool_label(key)} ({shortcut.upper()})",
+        # Seit PIXEL-03 steht die Wahl als Spalte neben der Fläche; das Menü
+        # öffnet sich am aktiven Werkzeug, solange die Leiste es nicht trägt.
+        anker = self.tool_choice
+        if not anker.winfo_ismapped():
+            anker = getattr(self, "tool_buttons", {}).get(self.tool, anker)
+        return self._popup_drawing_choices(anker, [
+            (f"{self._tool_label(key)} ({self._shortcut_label(shortcut)})",
              lambda value=key: self.set_tool(value), key == self.tool)
             for key, _label, shortcut in tr_table(self.TOOLS)])
 
@@ -14365,7 +14657,7 @@ class DrawingEditor(tk.Frame):
                  lambda value=key: self.set_fill_pattern(value), key == self.fill_pattern)
                 for key, label in tr_table(self.PATTERN_CHOICES)
             ]
-        if self.tool == "brush":
+        if self.tool in self.STROKE_TOOLS:
             entries += [
                 (self._drawing_text("option.pixel_perfect", "Pixelgenaue 1×1-Linie"),
                  self.toggle_pixel_perfect, self.pixel_perfect),
@@ -14383,6 +14675,8 @@ class DrawingEditor(tk.Frame):
                     ("deselect", glide_i18n.t("drawing.option.deselect", "Auswahl aufheben"), self.deselect),
                 )
             ]
+            entries.append((None, None, None))
+            entries += [(text, command, None) for text, command in self.transform_choices()]
         if self.tool == "eyedropper":
             self.update_status(glide_i18n.t(
                 "drawing.status.eyedropper_guide", "Linksklick: Vordergrund · Rechtsklick: Hintergrund"))
@@ -14415,6 +14709,7 @@ class DrawingEditor(tk.Frame):
 
     def refresh_locale(self):
         self.tool_choice.set_text(self._tool_label(self.tool) + " ▾")
+        self.sync_tool_column()
         self.preview_button.set_text(self._drawing_text("button.preview", "Vorschau"))
         self.more_button.set_text(self._drawing_text("button.more", "Mehr"))
         self.palette_button.set_text(self._drawing_text("button.palette", "Palette"))
@@ -14485,6 +14780,7 @@ class DrawingEditor(tk.Frame):
             frame_id=self.frame_id, auto_zoom=self._auto_zoom, symmetry=self.symmetry,
             fill_pattern=self.fill_pattern, shape_filled=self.shape_filled, wrap=self.wrap,
             tiled=self.tiled_preview, grayscale=self.grayscale, selection=self.selection,
+            checker=self.checker,
         )
 
     def sync_controls(self):
@@ -14514,6 +14810,7 @@ class DrawingEditor(tk.Frame):
             elif key == "wrap":
                 mark(button, self.wrap)
         self.tool_choice.set_text(self._tool_label(self.tool) + " ▾")
+        self.sync_tool_column()
         self.zoom_choice.set_text(self._drawing_text("button.zoom", "Zoom {value}×", value=self.zoom))
         if getattr(self, "options_button", None) is not None:
             tool = self._tool_label(self.tool)
@@ -14590,6 +14887,7 @@ class DrawingEditor(tk.Frame):
                 self._key_anchor = None
                 self._clear_preview()
                 self.build_context_row()
+            self.sync_tool_column()
             self._draw_overlays()
         return "break"
 
@@ -14847,6 +15145,42 @@ class DrawingEditor(tk.Frame):
         self.render_full()
         return "break"
 
+    def toggle_checker(self):
+        self.checker = not self.checker
+        self.render_full()
+        return "break"
+
+    # --- PIXEL-02: Drehen und Spiegeln -----------------------------------
+    TRANSFORM_LABELS = {"flip_h": "Spiegeln", "flip_v": "Spiegeln", "rotate_cw": "Drehen", "rotate_ccw": "Drehen"}
+
+    def transform_choices(self):
+        """(Text, Befehl) – gilt für die Auswahl, ohne Auswahl für die ganze Zeichnung."""
+        return [
+            (self._drawing_text("option.flip_h", "Waagrecht spiegeln (H)"), lambda: self.transform("flip_h")),
+            (self._drawing_text("option.flip_v", "Senkrecht spiegeln (V)"), lambda: self.transform("flip_v")),
+            (self._drawing_text("option.rotate_cw", "90° nach rechts drehen (T)"), lambda: self.transform("rotate_cw")),
+            (self._drawing_text("option.rotate_ccw", "90° nach links drehen ({shift}+T)",
+                                shift=glide_i18n.t("keyboard.modifier.shift", "Umschalt")),
+             lambda: self.transform("rotate_ccw")),
+        ]
+
+    def transform(self, operation):
+        if operation not in glide_drawing.TRANSFORMS or self._busy():
+            return "break"
+        size = self.model.width
+        box = self.selection or (0, 0, size - 1, size - 1)
+        self.model.begin_action(self.TRANSFORM_LABELS[operation])
+        try:
+            neu = self.model.transform_region(*box, operation)
+        except glide_drawing.DrawingFormatError as exc:
+            self._abort_action(str(exc))
+            return "break"
+        if self.selection and neu is not None:
+            self.selection = neu
+        self._finish_action({})
+        self._draw_overlays()
+        return "break"
+
     def set_reference_opacity(self, percent):
         self.reference_opacity = max(10, min(90, int(percent)))
         self.app.remember_drawing_tools(reference_opacity=self.reference_opacity)
@@ -14918,11 +15252,17 @@ class DrawingEditor(tk.Frame):
             value = self._gray[color] = glide_drawing_image.grayscale(color)
         return value
 
+    # Zwei ruhige Grautöne für den durchsichtigen Grund (nur Anzeige, PIXEL-02).
+    CHECKER_COLORS = ("#FFFFFF", "#D9D9DE")
+
     def _cell_color(self, index):
         color = self.model.palette[self.model.cells[index]]
         if (color == glide_drawing.BACKGROUND and self.reference_visible
                 and self.reference_faded is not None):
             return self._display(self.reference_faded[index])
+        if self.checker and self.model.cells[index] == 0:
+            width = self.model.width
+            return self.CHECKER_COLORS[(index % width + index // width) % 2]
         return self._display(color)
 
     def _row_data(self, y):
@@ -15185,7 +15525,7 @@ class DrawingEditor(tk.Frame):
 
     def show_brush_preview(self, u, v):
         """Zeigt genau die Zellen, die das Werkzeug gerade treffen würde."""
-        if self.tool == "brush":
+        if self.tool in self.STROKE_TOOLS:
             if self.pixel_perfect and self.brush_size == 1:
                 cell = self._clamped_cell((u, v))
                 cells = glide_drawing.mirror_cells([cell], self.symmetry, self.model.width, self.model.height)
@@ -15216,6 +15556,9 @@ class DrawingEditor(tk.Frame):
         return any(value is not None for value in (self._stroke, self._shape, self._marquee, self._move))
 
     def _paint_color(self, which):
+        if self.tool == "eraser":
+            # Beide Maustasten radieren: der durchsichtige Grund, Farbindex 0 (D59).
+            return glide_drawing.BACKGROUND, self.color
         color = self.color if which == "primary" else self.secondary
         return color, (self.secondary if which == "primary" else self.color)
 
@@ -15232,7 +15575,7 @@ class DrawingEditor(tk.Frame):
         if cell is not None:
             self.cursor = cell
         try:
-            if self.tool == "brush":
+            if self.tool in self.STROKE_TOOLS:
                 self._begin_stroke(point, which)
             elif self.tool == "fill":
                 self._fill_at(cell, which)
@@ -15320,9 +15663,11 @@ class DrawingEditor(tk.Frame):
     # Pinsel
     def _begin_stroke(self, point, which):
         color, _other = self._paint_color(which)
-        index = self._color_index(color)
-        self.model.begin_action("Pinselzug")
-        self._stroke = {"color": color, "index": index, "tracker": None, "cell": None}
+        radieren = self.tool == "eraser"
+        index = 0 if radieren else self._color_index(color)
+        self.model.begin_action("Radieren" if radieren else "Pinselzug")
+        # Der Grund ist keine benutzte Farbe: Radieren füllt „Zuletzt“ nicht.
+        self._stroke = {"color": None if radieren else color, "index": index, "tracker": None, "cell": None}
         self.dragging = True
         self.last_point = point
         if self.pixel_perfect and self.brush_size == 1:
@@ -15625,14 +15970,15 @@ class DrawingEditor(tk.Frame):
         self._draw_cursor()
         x, y = self.cursor
         try:
-            if self.tool == "brush":
+            if self.tool in self.STROKE_TOOLS:
                 color = self._paint_color(button)[0]
-                index = self._color_index(color)
-                self.model.begin_action("Pinsel")
+                radieren = self.tool == "eraser"
+                index = 0 if radieren else self._color_index(color)
+                self.model.begin_action("Radieren" if radieren else "Pinsel")
                 for point in glide_drawing.mirror_points(x + 0.5, y + 0.5, self.symmetry,
                                                          self.model.width, self.model.height):
                     self.model.paint_brush(*point, self.brush_size, index, self.wrap)
-                self._finish_action({"color": color})
+                self._finish_action({"color": None if radieren else color})
             elif self.tool == "fill":
                 self._fill_at((x, y), button)
             elif self.tool == "eyedropper":
@@ -17737,6 +18083,17 @@ class ListApp:
         # Blockgriff der Seiten (E-U3 A, D55): acht Punkte als Griff, wie das
         # eingeführte Ziehzeichen; hier öffnet er nur die Blockaktionen.
         "block_handle": "⠿",
+        # Werkzeugspalte der Zeichnung (PIXEL-03, Inhaberentscheidung 27.11.2026).
+        # Eindeutig gegenüber den übrigen Symbolen; fehlende Zeichen der UI-Schrift
+        # kommen aus dem Symbolbegleiter DejaVu Sans (D59).
+        "tool_brush": "✏",
+        "tool_eraser": "⌫",
+        "tool_fill": "◍",
+        "tool_eyedropper": "⊙",
+        "tool_line": "╱",
+        "tool_rect": "◻",
+        "tool_ellipse": "◯",
+        "tool_select": "⬚",
     }
     # Begrüßungen der Startseite. `{name}` steht für „, Tim“ und bleibt leer,
     # solange kein Name eingetragen ist – deshalb gehört das Komma in den
@@ -23233,8 +23590,14 @@ class ListApp:
                         self.tree, self.hover_row_ids(self.tree, b._row_owner)), add="+")
                     widget.bind("<Leave>", lambda e: self.set_hover_rows(self.tree, ()), add="+")
             button = buttons[index]
-            button.font = self.symbol_font("overflow", 12)
-            button.set_text(self.ICONS["overflow"])
+            # PERF-01 (27.11.2026): Beim Scrollen wandern die Knöpfe nur. Text
+            # und Schrift neu zu setzen zeichnete jeden Knopf bei jedem
+            # Radschritt vollständig neu (gemessen rund 15 von 28 ms je Schritt
+            # bei 500 Punkten); Größenänderungen zeichnet die Fläche selbst nach.
+            schrift = self.symbol_font("overflow", 12)
+            if button.font != schrift or button.text != self.ICONS["overflow"]:
+                button.font = schrift
+                button.set_text(self.ICONS["overflow"])
             button._row_owner = row
             band = bands[index]
             band.place(x=self.tree.winfo_x()+self.tree.winfo_width(),
@@ -23271,9 +23634,15 @@ class ListApp:
                         background = color
                         break
             foreground = self.theme["selection_text" if selected else "muted"]
+            hover_text = self.theme["selection_text" if selected else "text"]
+            # PERF-01: nur bei geänderten Farben neu zeichnen (Auswahl, Hover, Design).
+            farben = (background, foreground, hover_text)
+            if getattr(button, "_row_action_colors", None) == farben and band.cget("bg") == background:
+                continue
+            button._row_action_colors = farben
             band.configure(bg=background)
             button.set_theme(background, foreground, border_color=foreground,
-                             hover_fill=background, hover_text_color=self.theme["selection_text" if selected else "text"])
+                             hover_fill=background, hover_text_color=hover_text)
 
     def leave_quick_plan_row(self, event):
         # Die Aufgabenaktionen bleiben bei Maus- und Tastaturbedienung sichtbar.
@@ -25535,6 +25904,9 @@ class ListApp:
         self.commit_detail_pane()
         if not getattr(self, "_detail_commit_error", None) and (not editors or self.editor_switch_allowed()):
             self._detail_commit_error_shown = None
+            # PAGE-06: Jeder Ansichtswechsel beginnt hier; die Stelle der Liste
+            # gilt, solange sie noch steht.
+            self.remember_list_position()
             return True
         if hasattr(self, "sidebar_listbox"):
             self.update_sidebar_list()
@@ -29911,6 +30283,22 @@ class ListApp:
             self._bind_home_wheel(button)
             return button
 
+        def cta(parent, kind):
+            """UX-05: Der leere Kachelinhalt ist selbst die Handlung (Klick, Enter, Leertaste)."""
+            text, befehl = self.overview_empty_action(kind)
+            widget = label(parent, text, size=10, bold=befehl is not None,
+                           color="ui_accent" if befehl is not None and "ui_accent" in theme else
+                           ("accent" if befehl is not None else "muted"))
+            if befehl is not None:
+                widget.configure(cursor="hand2", takefocus=1, highlightthickness=1,
+                                 highlightbackground=theme["card"],
+                                 highlightcolor=theme.get("ui_accent", theme["accent"]))
+                widget._accessible_name = text
+                widget._inline_command = befehl
+                for sequenz in ("<Button-1>", "<Return>", "<space>", "<KP_Enter>"):
+                    _ui.bind(widget, sequenz, lambda _event, b=befehl: (b(), "break")[1])
+            return widget
+
         def flow(parent, pady=(0, 0)):
             row = make_flow(parent, bg=theme["card"])
             _ui.pack(row, fill="x", pady=pady)
@@ -30084,7 +30472,7 @@ class ListApp:
             tile = card(parent, glide_i18n.t("ui.kachel_labels.labels_in_use", "Labels im Bestand"))
             treffer = self.home_label_overview()
             if not treffer:
-                label(tile, glide_i18n.t("ui.kachel_labels.no_labels_on_open", "Noch keine Labels an offenen Aufgaben."), color="muted")
+                cta(tile, "labels")
                 return
             for entry, anzahl in treffer:
                 zeile = _ui.make(tk.Frame, tile, bg=theme["card"])
@@ -30277,8 +30665,7 @@ class ListApp:
                         eintraege.append((str(ordner.get("title") or glide_i18n.t("ui.kachel_boards.folder", "Ordner")), karten, "folder", kennung))
             eintraege.sort(key=lambda wert: -wert[1])
             if not eintraege:
-                label(tile, glide_i18n.t("ui.kachel_boards.no_board_with_cards", "Noch keine Pinnwand mit Karten. Die globale Fläche ist ein guter Anfang."),
-                      color="muted")
+                cta(tile, "boards")
             for titel, karten, art, kennung in eintraege[:self.home_row_limit()]:
                 if art is None:
                     action(tile, glide_i18n.t("ui.kachel_boards.cards", '{titel}  ·  {karten} Karten', titel=titel, karten=karten), self.open_global_board, "confirm")
@@ -30288,7 +30675,9 @@ class ListApp:
                 else:
                     action(tile, glide_i18n.t("ui.kachel_boards.cards", '{titel}  ·  {karten} Karten', titel=titel, karten=karten),
                            lambda fid=kennung: self.set_active_folder(fid), "import")
-            action(tile, glide_i18n.t("ui.kachel_boards.open_global_pinboard", "Globale Pinnwand öffnen"), self.open_global_board, "confirm")
+            if eintraege:
+                # Leer führt die Aufforderung selbst hinein (UX-05, U20: ein Weg).
+                action(tile, glide_i18n.t("ui.kachel_boards.open_global_pinboard", "Globale Pinnwand öffnen"), self.open_global_board, "confirm")
 
         def kachel_boardpreview(parent):
             """Die globale Pinnwand als Bild – ein Klick führt hinein."""
@@ -30311,8 +30700,9 @@ class ListApp:
                 if getattr(self, "_home_preview_condensed", False) or len(flaechen) < karten:
                     label(tile, glide_i18n.t("ui.kachel_boardpreview.condensed_overview_of_cards", 'Verdichtete Übersicht · {len} von {karten} Karten', len=len(flaechen), karten=karten), color="muted")
             else:
-                label(tile, glide_i18n.t("ui.kachel_boardpreview.still_empty_on_the", "Noch leer. Auf der Fläche legt ein Doppelklick eine Karte an."),
-                      color="muted")
+                # UX-05: leer ist die Aufforderung selbst der Weg hinein (U20: kein zweiter Knopf).
+                cta(tile, "boards")
+                return
             action(tile, glide_i18n.t("ui.kachel_boardpreview.open_global_pinboard", "Globale Pinnwand öffnen"), self.open_global_board, "confirm")
 
         def kachel_mascot(parent):
@@ -30508,8 +30898,7 @@ class ListApp:
             zeichnungen.sort(key=lambda entry: str(entry.get("updated_at") or entry.get("created_at") or ""),
                              reverse=True)
             if not zeichnungen:
-                label(tile, glide_i18n.t("ui.kachel_drawings.no_drawing_yet_pixel", "Noch keine Zeichnung. Pixelbilder entstehen hier in 16 bis 128 Zellen."), color="muted")
-                action(tile, glide_i18n.t("ui.kachel_drawings.new_drawing", '{drawing}  Neue Zeichnung', drawing=self.ICONS['drawing']), self.create_new_drawing, "confirm")
+                cta(tile, "drawings")
                 return
             reihe = _ui.make(tk.Frame, tile, bg=theme["card"])
             _ui.pack(reihe, fill="x", pady=(glide_design.SPACING[2], glide_design.SPACING[0]))
@@ -30557,8 +30946,7 @@ class ListApp:
             galerien.sort(key=lambda entry: str(entry.get("updated_at") or entry.get("created_at") or ""),
                           reverse=True)
             if not galerien:
-                label(tile, glide_i18n.t("ui.kachel_gallery.no_gallery_yet_a", "Noch keine Galerie. Eine Galerie sammelt Bilder: „+“ neben „Listen“ › Neue Galerie."),
-                      color="muted")
+                cta(tile, "galleries")
                 return
             bilder = [(entry, index, anhang) for entry in galerien
                       for index, anhang in reversed(list(enumerate(entry.get("attachments") or [])))
@@ -30898,9 +31286,13 @@ class ListApp:
             for widget in (surface, card, title, note, kind):
                 self._bind_home_wheel(widget)
         if not templates:
-            tk.Label(self.home_content, text=glide_i18n.t("ui.refresh_template_page.no_matching_templates", "Keine passenden Vorlagen.") if self.templates else
-                     glide_i18n.t("ui.refresh_template_page.no_templates_yet_you", "Noch keine Vorlagen. Unten kannst du Vorlagen hinzufügen."),
-                     bg=theme["bg"], fg=theme["muted"], anchor="w").pack(fill="x", pady=20)
+            if self.templates:
+                tk.Label(self.home_content, text=glide_i18n.t("ui.refresh_template_page.no_matching_templates", "Keine passenden Vorlagen."),
+                         bg=theme["bg"], fg=theme["muted"], anchor="w").pack(fill="x", pady=20)
+            else:
+                # UX-05: der Leerzustand führt direkt in „Vorlagen hinzufügen …“.
+                text, befehl = self.overview_empty_action("templates")
+                self.make_inline_action_label(self.home_content, text, befehl, bg_key="bg").pack(fill="x", pady=20)
         self.refresh_template_actions()
         self.home_content.update_idletasks()
         self._layout_home_canvas()
@@ -31399,6 +31791,10 @@ class ListApp:
             grid.pack_forget()
             empty_text = (glide_i18n.t("ui.refresh_library_page.the_archive_is_empty", "Das Archiv ist leer. Archivieren steht im Kontextmenü einer Liste oder eines Ordners.")
                           if showing_archive else glide_i18n.t("ui.refresh_library_page.no_lists_or_folders", "Noch keine Listen oder Ordner. Lege unten deine erste Liste an."))
+            leer_aktion = None if showing_archive else self.overview_empty_action("library")
+            if leer_aktion is not None:
+                # UX-05: „Noch keine Listen …“ wird zur Aufforderung, die den Anlegedialog öffnet.
+                empty_text = leer_aktion[0]
             empty_hint = cache["empty_hint"]
             if empty_hint is None:
                 empty_hint = cache["empty_hint"] = tk.Label(self.home_content, text=empty_text,
@@ -31406,6 +31802,13 @@ class ListApp:
                 _ui.pack(empty_hint, fill="x", pady=glide_design.SPACING[16])
                 _ui.bind(empty_hint, "<Configure>", lambda event: empty_hint.configure(wraplength=max(1, event.width)))
                 self._bind_home_wheel(empty_hint)
+            befehl = leer_aktion[1] if leer_aktion else None
+            empty_hint.configure(text=empty_text, cursor="hand2" if befehl else "", takefocus=1 if befehl else 0,
+                                 fg=theme.get("ui_accent", theme["accent"]) if befehl else theme["muted"],
+                                 font=app_font(10, "bold") if befehl else app_font(10))
+            empty_hint._inline_command = befehl
+            for sequenz in ("<Button-1>", "<Return>", "<space>", "<KP_Enter>"):
+                _ui.bind(empty_hint, sequenz, lambda _event, b=befehl: (b(), "break")[1] if b else None)
         size_names = {"small": "S", "medium": "M", "large": "L"}
         self.refresh_page_actions((
             (glide_i18n.t("ui.refresh_library_page.new", "Neu ▾"), self.show_library_new_menu, "accent", 110),
@@ -33892,6 +34295,10 @@ class ListApp:
                 font=app_font(10),
                 anchor="w",
                 justify="left",
+                # Befund 26.11.2026 (wie W05): Ohne Umbruchbreite forderte ein
+                # langer Hinweis („Anhang umbenennen“) seine ganze Textlänge an;
+                # der Dialog wurde bildschirmbreit und der Text abgeschnitten.
+                wraplength=self.DIALOG_TEXT_WIDTH,
             )
             prompt_label.pack(anchor="w", pady=(0, 14))
 
@@ -38085,8 +38492,15 @@ class ListApp:
             current["title"] = self.app_title
 
     def set_active_list(self, list_id, refresh=True):
+        vorher = (self.active_list_id, self.view_mode)
+        self.remember_list_position()
         with self.render_pass():
-            return self._set_active_list(list_id, refresh=refresh)
+            ergebnis = self._set_active_list(list_id, refresh=refresh)
+        # PAGE-06: zurück an die zuletzt gesehene Stelle. Läuft vor jedem
+        # ausdrücklichen Sprung des Aufrufers (Aufgabe öffnen, Suchtreffer).
+        if refresh and (self.active_list_id, self.view_mode) != vorher:
+            self.restore_list_position()
+        return ergebnis
 
     def _set_active_list(self, list_id, refresh=True):
         if not list_id:
@@ -39963,7 +40377,8 @@ class ListApp:
                          key=lambda e: str(e.get("title", "")).casefold())
         rows = [(None, e.get("title") or glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung"), lambda lid=e["id"]: self.set_active_list(lid),
                  self.drawing_summary(e)) for e in entries]
-        self.render_overview_sections(body, [(glide_i18n.t("ui.render_drawings_page.all_drawings", "Alle Zeichnungen"), rows, glide_i18n.t("ui.render_drawings_page.no_drawings_yet_new", "Noch keine Zeichnungen. „Neue Zeichnung“ legt eine an."))])
+        self.render_overview_sections(body, [(glide_i18n.t("ui.render_drawings_page.all_drawings", "Alle Zeichnungen"), rows, glide_i18n.t("ui.render_drawings_page.no_drawings_yet_new", "Noch keine Zeichnungen. „Neue Zeichnung“ legt eine an."),
+                                              self.overview_empty_action("drawings"))])
         self._bind_home_wheel(card)
 
     def build_sidebar_section(self, key, titel, oeffnen, titel_hinweis, plus_befehl, plus_hinweis, abstand):
@@ -40441,9 +40856,11 @@ class ListApp:
         if len(notizen) > self.NOTES_RECENT_LIMIT:
             abschnitte.append((glide_i18n.t("ui.kachel_recent.recently_edited", "Zuletzt bearbeitet"), [notizzeile(entry) for entry in zuletzt], ""))
         abschnitte.append((glide_i18n.t("ui.render_notes_page.notebooks", "Notizbücher"), [buchzeile(folder) for folder in self.notebook_folders()],
-                           glide_i18n.t("ui.render_notes_page.no_notebook_yet_a", "Noch kein Notizbuch. Ein Notizbuch sammelt datierte Einträge – „Neues Notizbuch …“.")))
+                           glide_i18n.t("ui.render_notes_page.no_notebook_yet_a", "Noch kein Notizbuch. Ein Notizbuch sammelt datierte Einträge – „Neues Notizbuch …“."),
+                           self.overview_empty_action("notebooks")))
         abschnitte.append((glide_i18n.t("ui.render_notes_page.all_notes", "Alle Notizen"), [notizzeile(entry) for entry in alle],
-                           glide_i18n.t("ui.render_notes_page.no_notes_yet_new", "Noch keine Notizen. „Neue Notiz“ legt eine an.")))
+                           glide_i18n.t("ui.render_notes_page.no_notes_yet_new", "Noch keine Notizen. „Neue Notiz“ legt eine an."),
+                           self.overview_empty_action("notes")))
         self.render_overview_sections(innen, abschnitte)
         self._bind_home_wheel(karte)
 
@@ -41119,7 +41536,9 @@ class ListApp:
         # Listen und Ordnern nicht zur Auswahl.
         available = [label for label in self.labels if not self.is_system_label(label)]
         if not available:
-            label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.no_labels_created_yet", "Noch keine Labels angelegt"), state="disabled")
+            # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
+            leer = glide_empty_states.menu_state("labels")
+            label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             for label in available:
                 label_id = label.get("id")
@@ -44621,6 +45040,22 @@ class ListApp:
         self.add_button.pack(side="right")
         self.add_tooltip(self.add_button, glide_i18n.t("ui.create_ui.add_task_enter_extended", "Aufgabe hinzufügen (Enter) · erweiterte Eingabe mit Umschalt+Enter"))
         self.entry.bind("<Shift-Return>", lambda _event: (self.add_item_advanced(), "break")[1], add="+")
+        # UX-04 (27.11.2026): Die erweiterte Eingabe zusätzlich als kompakter
+        # Symbolknopf links vom „+“ – derselbe Einstieg wie Umschalt+Enter und
+        # Menü, kein zweiter Eingabeweg. Weicht bei zu schmaler Eingabezeile.
+        self.advanced_icon_button = self.make_button(
+            input_frame,
+            # ✎ wie „Bearbeiten“: dieselbe Maske. ☰ ist schon „Details“ rechts daneben.
+            text=self.ICONS["edit"],
+            command=self.add_item_advanced,
+            color_key="muted",
+            width=38, height=38,
+        )
+        self.advanced_icon_button._accessible_name = glide_i18n.t(
+            "ui.create_ui.extended_input", "Erweiterte Eingabe")
+        self.advanced_icon_button.pack(side="right", padx=(0, 6))
+        self.add_tooltip(self.advanced_icon_button, glide_i18n.t(
+            "ui.create_ui.extended_input_tooltip", "Erweiterte Eingabe mit allen Angaben (Umschalt+Enter)"))
         # Der frühere Textknopf bleibt als Objekt für bestehende Verweise,
         # wird aber nicht mehr eingeblendet (Menü, Palette und Kürzel führen hin).
         self.advanced_add_button = self.make_button(
@@ -45258,6 +45693,9 @@ class ListApp:
                     # Rechte Aktionen und Plus zuerst reservieren; ein langes
                     # Eingabefeld darf den Hinzufügen-Knopf nicht verdrängen.
                     self.add_button.pack_configure(before=self.entry_border)
+                    symbol = getattr(self, "advanced_icon_button", None)
+                    if symbol is not None and symbol.winfo_manager() == "pack":
+                        symbol.pack_configure(before=self.entry_border)
                 elif target is self.search_frame:
                     self.pin_view_switch_right()
             elif controls.winfo_manager() != "place":
@@ -45569,6 +46007,11 @@ class ListApp:
             metrics = self.list_metrics(entry["id"])
             offen = metrics.total - metrics.done
             chips = [glide_i18n.t("ui.page_chips.open", '{offen} offen', offen=offen) if metrics.total else glide_i18n.t("ui.page_chips.no_tasks_yet", "Noch keine Aufgaben")]
+            # UX-03: „N Verknüpfungen“ vorn, damit der Chip bei schmaler Zeile nicht zuerst weicht.
+            self._link_chip_text = (self.page_link_chip_text(entry["id"])
+                                    if entry.get("list_kind") in ("note", self.LIST_KIND_PAGE) else None)
+            if self._link_chip_text:
+                chips.insert(0, self._link_chip_text)
             # Der Fortschritt stand bis 27.09.2026 nur rechts neben dem Titel.
             if metrics.done:
                 chips.append(glide_i18n.t("ui.kachel_stats.done", '{done} erledigt', done=metrics.done))
@@ -45625,6 +46068,8 @@ class ListApp:
             chip = CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
                                font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True)
             chip.pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+            if text == getattr(self, "_link_chip_text", None) and not (edit and index == 0):
+                self.style_link_chip(chip, text)
             if edit and index == 0:
                 self.add_tooltip(chip, glide_i18n.t("page.edit_time.exact", "Letzte Bearbeitung: {stamp}", stamp=edit[1]))
                 glide_window_lifetime.scope_for(chip).after(60000, self.tick_page_edit_time, chip)
@@ -45641,6 +46086,29 @@ class ListApp:
         if not zeile.winfo_manager():
             zeile.pack(side="left", anchor="w", fill="x", expand=True)
         self.fit_page_chips()
+
+    def style_link_chip(self, chip, text):
+        """Der Verknüpfungschip ist anklickbar und per Tastatur bedienbar (UX-03)."""
+        editor = getattr(self, "rich_note_editor", None)
+        offen = bool(getattr(editor, "_mentions_open", False))
+        farbe = self.theme.get("ui_accent", self.theme["accent"])
+        try:
+            chip.configure(cursor="hand2", takefocus=1)
+        except tk.TclError:
+            pass
+        if hasattr(chip, "set_colors"):
+            chip.set_colors(fg=farbe)
+        else:
+            try:
+                chip.configure(fg=farbe)
+            except tk.TclError:
+                pass
+        chip._accessible_name = text
+        chip._link_chip = True
+        for sequenz in ("<Button-1>", "<Return>", "<space>", "<KP_Enter>"):
+            chip.bind(sequenz, self.toggle_page_links)
+        self.add_tooltip(chip, glide_i18n.t("page.links.tooltip_open", "Verweise hierher und Erwähnungen ohne Verweis zuklappen")
+                         if offen else glide_i18n.t("page.links.tooltip", "Verweise hierher und Erwähnungen ohne Verweis anzeigen"))
 
     def tick_page_edit_time(self, chip):
         self.update_page_chips()
@@ -47128,7 +47596,11 @@ class ListApp:
         return self._advanced_min_width
 
     def update_advanced_button_visibility(self, event=None):
-        """Seit 3.33.20 (U04) bleibt „Erweitert“ ausgeblendet; Umschalt+Enter öffnet die Maske."""
+        """Seit 3.33.20 (U04) bleibt „Erweitert“ ausgeblendet; Umschalt+Enter öffnet die Maske.
+
+        UX-04 (27.11.2026): Der kompakte Symbolknopf steht, solange der
+        Schnelleingabe ihre Mindestbreite bleibt; sonst weicht er zuerst.
+        """
         self._advanced_button_visible = False
         button = getattr(self, "advanced_add_button", None)
         try:
@@ -47136,6 +47608,31 @@ class ListApp:
                 button.pack_forget()
         except tk.TclError:
             pass
+        symbol = getattr(self, "advanced_icon_button", None)
+        if symbol is None:
+            return
+        try:
+            breite = event.width if event is not None and getattr(event, "width", None) else self.input_frame.winfo_width()
+            if breite <= 1:
+                return
+            platz = (self.ENTRY_MIN_WIDTH + self.add_button.winfo_reqwidth() + symbol.winfo_reqwidth()
+                     + 2 * self.INPUT_ROW_GAP + self.advanced_icon_reserve())
+            if breite >= platz and not symbol.winfo_manager():
+                symbol.pack(side="right", padx=(0, 6), before=self.entry_border)
+            elif breite < platz and symbol.winfo_manager():
+                symbol.pack_forget()
+        except (tk.TclError, AttributeError):
+            pass
+
+    def advanced_icon_reserve(self):
+        """Breite der Kopfknöpfe, wenn sie in der Eingabezeile angedockt sind."""
+        try:
+            controls = self.header_controls
+            if controls.winfo_manager() == "pack" and str(controls.pack_info()["in"]) == str(self.input_frame):
+                return controls.winfo_reqwidth() + 8
+        except (AttributeError, tk.TclError, KeyError):
+            pass
+        return 0
 
     def update_hint_visibility(self, tree_width=None):
         """Merkt, ob die Liste breit genug für den Hinweis ist.
@@ -48281,6 +48778,82 @@ class ListApp:
                     return zustand.primary[1], self.empty_state_command(zustand.primary[0])
         return None
 
+    def list_empty_state(self):
+        """Leerzustand der offenen Liste (UX-05) aus `empty_states.list_state`."""
+        eintrag = self.current_list() if self.view_mode in ("list", self.TABLE_VIEW) and self.lists else None
+        return glide_empty_states.list_state(
+            accepts_items=bool(eintrag) and self.list_accepts_items(eintrag) and self.entry_line_visible(),
+            filtered=False, read_only=bool(getattr(self, "_data_read_only", False)))
+
+    def empty_inline_action(self):
+        """Was ein Klick auf den Leertext der Liste tut – oder None.
+
+        Kein zusätzlicher Knopf (U20): Der Text selbst führt in den Anlegeweg,
+        den die Ansicht ohnehin hat, bzw. setzt einen Filter zurück.
+        """
+        baum = getattr(self, "tree", None)
+        try:
+            if baum is None or tuple(baum.get_children("")) != (self.EMPTY_ROW_ID,):
+                return None
+        except tk.TclError:
+            return None
+        if self.view_mode == "folder":
+            # Derselbe eine Weg wie der Knopf darunter (U20) – sonst die Eingabezeile.
+            aktion = self.empty_state_action()
+            if aktion is not None:
+                return aktion[1]
+            return self.focus_new_item_entry if self.entry_line_visible() else None
+        if self.view_mode not in ("list", self.TABLE_VIEW):
+            return None
+        if self.items and self.has_active_filter():
+            # Leer durch den Filter („Keine Treffer …“): der Klick setzt ihn zurück.
+            return self.reset_filters_for_empty_state
+        aktion = self.list_empty_state().action
+        if aktion == glide_empty_states.FOCUS_ENTRY:
+            return self.focus_new_item_entry
+        return None
+
+    def run_empty_inline_action(self, _event=None):
+        aktion = self.empty_inline_action()
+        if aktion is not None:
+            aktion()
+        return "break"
+
+    def overview_empty_action(self, kind):
+        """(Text, Befehl) für den leeren Abschnitt „Alle …“ einer Übersicht (UX-05)."""
+        zustand = glide_empty_states.overview_state(kind, read_only=bool(getattr(self, "_data_read_only", False)))
+        if zustand is None:
+            return None
+        befehle = {
+            glide_empty_states.CREATE_PAGE: self.create_new_page,
+            glide_empty_states.CREATE_NOTE: self.create_new_note,
+            glide_empty_states.CREATE_DRAWING: lambda: self.create_in_sidebar_section("drawing", None, "drawings"),
+            glide_empty_states.CREATE_NOTEBOOK: lambda: self.create_container_dialog("folder", folder_kind="journal"),
+            glide_empty_states.CREATE_GALLERY: self.create_new_gallery,
+            glide_empty_states.OPEN_GLOBAL_BOARD: self.open_global_board,
+            glide_empty_states.MANAGE_LABELS: self.open_label_manager,
+            glide_empty_states.CREATE_LIST: lambda: self.create_container_dialog("list"),
+            glide_empty_states.IMPORT_TEMPLATES: self.import_templates_file,
+        }
+        return glide_i18n.t(zustand.key, zustand.fallback), befehle.get(zustand.action)
+
+    def make_inline_action_label(self, master, text, command, wraplength=640, bg_key="card"):
+        """Ein Leertext, der selbst die Handlung ist: Akzentfarbe, Handzeiger, Klick, Enter und Leertaste."""
+        theme = self.theme
+        if command is None:
+            return tk.Label(master, text=text, bg=theme[bg_key], fg=theme["muted"], font=app_font(10),
+                            anchor="w", justify="left", wraplength=wraplength)
+        label = tk.Label(master, text=text, bg=theme[bg_key], fg=theme.get("ui_accent", theme["accent"]),
+                         font=app_font(10, "bold"), anchor="w", justify="left", wraplength=wraplength,
+                         cursor="hand2", takefocus=1, highlightthickness=1,
+                         highlightbackground=theme[bg_key], highlightcolor=theme.get("ui_accent", theme["accent"]))
+        label._accessible_name = text
+        ausfuehren = lambda _event=None: (command(), "break")[1]  # noqa: E731
+        for sequenz in ("<Button-1>", "<Return>", "<space>", "<KP_Enter>"):
+            label.bind(sequenz, ausfuehren)
+        label._inline_command = command
+        return label
+
     def empty_state_for(self, context):
         """Inhalt des Leerzustands (WA-52) aus `empty_states.py` mit dem aktuellen Ansichtszustand."""
         filtered = bool(self.has_active_filter()) if hasattr(self, "has_active_filter") else False
@@ -48460,6 +49033,11 @@ class ListApp:
                         lambda: self._follow_empty_text(b, h) if h.winfo_exists() and h.winfo_manager() == "place" else None),
                         add="+")
             hinweis.configure(text=text, bg=grund, fg=farbe, font=schrift, wraplength=breite - 48)
+            # UX-05: Führt der Leertext in eine Handlung, zeigt er das mit Handzeiger.
+            hinweis.configure(cursor="hand2" if self.empty_inline_action() is not None else "")
+            if not getattr(hinweis, "_inline_bound", False):
+                hinweis.bind("<Button-1>", self.run_empty_inline_action, add="+")
+                hinweis._inline_bound = True
             self._place_empty_text(baum, hinweis)
             # Die Zeile verschiebt sich, wenn die Liste ihre Höhe ändert (etwa
             # über der Notiz). Die Beschriftung folgt; vorher blieb sie stehen,
@@ -52524,23 +53102,29 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         Knöpfe und Hinweise fluchten über alle Abschnitte: Vorher stand jede
         Zeile für sich, und ein langer Hinweis machte ihren Knopf kürzer als die
-        übrigen. `abschnitte` ist eine Folge von (Titel, Zeilen, Leertext); eine
-        Zeile ist (Zusatz, Beschriftung, Befehl, Hinweis). `Zusatz` baut einen
-        Knopf davor – etwa den Stern der Seiten – oder ist None.
+        übrigen. `abschnitte` ist eine Folge von (Titel, Zeilen, Leertext) oder
+        (Titel, Zeilen, Leertext, Leeraktion); eine Zeile ist (Zusatz,
+        Beschriftung, Befehl, Hinweis). `Zusatz` baut einen Knopf davor – etwa
+        den Stern der Seiten – oder ist None. Eine Leeraktion (Text, Befehl)
+        ersetzt den Leertext durch eine anklickbare Aufforderung (UX-05).
         """
         theme = self.theme
         tabelle = tk.Frame(innen, bg=theme["card"])
         tabelle.pack(fill="x")
         tabelle.columnconfigure(1, weight=1)
         nummer = 0
-        for titel, zeilen, leer in abschnitte:
+        for abschnitt in abschnitte:
+            titel, zeilen, leer = abschnitt[:3]
+            leeraktion = abschnitt[3] if len(abschnitt) > 3 else None
             tk.Label(tabelle, text=titel, bg=theme["card"], fg=theme["text"], font=app_font(13, "bold"),
                      anchor="w").grid(row=nummer, column=0, columnspan=3, sticky="ew", pady=(10, 4))
             nummer += 1
             if not zeilen:
-                tk.Label(tabelle, text=leer, bg=theme["card"], fg=theme["muted"], font=app_font(10),
-                         anchor="w", justify="left", wraplength=640).grid(
-                    row=nummer, column=0, columnspan=3, sticky="ew", pady=(0, 4))
+                if leeraktion:
+                    hinweis = self.make_inline_action_label(tabelle, leeraktion[0], leeraktion[1])
+                else:
+                    hinweis = self.make_inline_action_label(tabelle, leer, None)
+                hinweis.grid(row=nummer, column=0, columnspan=3, sticky="ew", pady=(0, 4))
                 nummer += 1
                 continue
             for zusatz, beschriftung, befehl, hinweis in zeilen:
@@ -52611,7 +53195,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             (glide_i18n.t("ui.render_pages_page.favorites", "Favoriten"), zeilen(favoriten), glide_i18n.t("ui.render_pages_page.no_favorites_yet_in", "Noch keine Favoriten – in einer Seite unter „Mehr“ oder hier mit ☆.")),
             (glide_i18n.t("ui.render_pages_page.recently_opened", "Zuletzt geöffnet"), zeilen(zuletzt), glide_i18n.t("ui.render_pages_page.no_page_opened_yet", "Noch keine Seite geöffnet.")),
             (glide_i18n.t("ui.render_pages_page.all_pages", "Alle Seiten"), zeilen(alle), glide_i18n.t("ui.render_pages_page.no_pages_yet_new", "Noch keine Seiten. „Neue Seite“ oder einen KI-Bericht "
-                                          "aus der Zwischenablage übernehmen."))))
+                                          "aus der Zwischenablage übernehmen."), self.overview_empty_action("pages"))))
         self._bind_home_wheel(karte)
 
     def remember_recent_page(self, list_id):
@@ -52744,6 +53328,134 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     NOTE_TEXT_MIN_LINES = 5
 
+    # --- UX-03: Verknüpfungen als Chip im Seitenkopf -------------------------
+    def page_link_count(self, list_id):
+        """(Verweise hierher, Erwähnungen ohne Verweis) der Seite oder None, solange ungezählt."""
+        return getattr(self, "_link_counts", {}).get(list_id)
+
+    def remember_link_count(self, list_id, backlinks, mentions):
+        zaehlungen = getattr(self, "_link_counts", None)
+        if zaehlungen is None:
+            zaehlungen = self._link_counts = {}
+        neu = (int(backlinks), int(mentions))
+        if zaehlungen.get(list_id) != neu:
+            zaehlungen[list_id] = neu
+            if list_id == self.active_list_id:
+                self.update_page_chips()
+
+    def schedule_link_count(self, list_id):
+        """Verweise und Erwähnungen der geöffneten Seite einmal im Leerlauf zählen."""
+        if not list_id:
+            return
+
+        def zaehlen():
+            if self.active_list_id != list_id or self.view_mode != "list":
+                return
+            try:
+                index, _outgoing, incoming = self.object_graph()
+                treffer = glide_objects.unlinked_mentions(("list", list_id), index)
+            except Exception as exc:  # Zählen ist eine Anzeige; ein Fehler darf die Seite nicht stören.
+                self.log_error(f"Verknüpfungen zählen: {exc!r}")
+                return
+            self.remember_link_count(list_id, len(incoming.get(("list", list_id), set())), len(treffer))
+        self.after_scope().after_idle(zaehlen)
+
+    def page_link_chip_text(self, list_id):
+        zaehlung = self.page_link_count(list_id)
+        gesamt = sum(zaehlung) if zaehlung else 0
+        if not gesamt:
+            return None
+        return (glide_i18n.t("page.links.one", "1 Verknüpfung") if gesamt == 1
+                else glide_i18n.t("page.links.many", "{count} Verknüpfungen", count=gesamt))
+
+    def toggle_page_links(self, _event=None):
+        editor = getattr(self, "rich_note_editor", None)
+        if editor is not None and editor.winfo_exists() and hasattr(editor, "toggle_mentions"):
+            editor.toggle_mentions()
+        return "break"
+
+    # --- PAGE-06: zuletzt gesehene Stelle je Ansicht (nur diese Sitzung) ----
+    def view_positions(self):
+        stellen = getattr(self, "_view_positions", None)
+        if stellen is None:
+            stellen = self._view_positions = glide_view_positions.ViewPositions()
+        return stellen
+
+    def remember_editor_position(self, editor):
+        """Oberste sichtbare Stelle und Schreibmarke einer Seite/Notiz als Zeichenversatz merken."""
+        try:
+            if not editor.winfo_exists() or not getattr(editor, "entry_id", None):
+                return
+            self.view_positions().remember(("page", editor.entry_id),
+                                           top=editor.offset(editor.text.index("@0,0")),
+                                           insert=editor.offset(editor.text.index("insert")))
+        except tk.TclError:
+            pass
+
+    def restore_editor_position(self, editor):
+        """Gemerkte Stelle einer Seite/Notiz wiederherstellen; fehlt Inhalt, die nächste mögliche."""
+        stelle = self.view_positions().recall(("page", getattr(editor, "entry_id", None)))
+        if not stelle:
+            return False
+        try:
+            laenge = len(editor.text.get("1.0", "end-1c"))
+            oben = glide_view_positions.clamp_offset(stelle.get("top"), laenge)
+            marke = glide_view_positions.clamp_offset(stelle.get("insert"), laenge)
+            if marke is not None:
+                editor.text.mark_set("insert", f"1.0 +{marke}c")
+            if oben is not None:
+                editor.text.yview(f"1.0 +{oben}c")
+        except tk.TclError:
+            return False
+        return True
+
+    def remember_list_position(self):
+        """Oberste sichtbare Zeile und Bildlaufstand der offenen Liste merken."""
+        baum = getattr(self, "tree", None)
+        if (baum is None or not self.active_list_id
+                or self.view_mode not in ("list", self.TABLE_VIEW)):
+            return
+        try:
+            if not baum.winfo_ismapped():
+                return
+            zeile = baum.identify_row(8) or None
+            if zeile in (self.EMPTY_ROW_ID,) or (zeile and self.is_synthetic_row(zeile)):
+                zeile = None
+            self.view_positions().remember(("list", self.active_list_id, self.view_mode),
+                                           row=zeile, fraction=baum.yview()[0])
+        except tk.TclError:
+            pass
+
+    def restore_list_position(self):
+        """Gemerkte Stelle der offenen Liste wiederherstellen (Zeile vor Bruchteil)."""
+        baum = getattr(self, "tree", None)
+        if baum is None or self.view_mode not in ("list", self.TABLE_VIEW):
+            return False
+        stelle = self.view_positions().recall(("list", self.active_list_id, self.view_mode))
+        if not stelle:
+            return False
+        try:
+            sichtbar = self.list_rows_in_view_order()
+            zeile, anteil = glide_view_positions.row_target(stelle.get("row"), sichtbar, stelle.get("fraction"))
+            if zeile is not None and sichtbar:
+                baum.yview_moveto(sichtbar.index(zeile) / len(sichtbar))
+            elif anteil is not None:
+                baum.yview_moveto(anteil)
+            else:
+                return False
+        except tk.TclError:
+            return False
+        return True
+
+    def list_rows_in_view_order(self, parent=""):
+        """Zeilen der Aufgabenliste in Anzeigereihenfolge, nur unter aufgeklappten Zeilen."""
+        zeilen = []
+        for kind in self.tree.get_children(parent):
+            zeilen.append(kind)
+            if self.tree.item(kind, "open"):
+                zeilen.extend(self.list_rows_in_view_order(kind))
+        return zeilen
+
     def sync_rich_note_view(self):
         self._sync_rich_note_view()
         # Seite oder nicht entscheidet, ob die Eckchips einen Freiraum oben
@@ -52770,6 +53482,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # eingesetzt; dessen Referenz darf der äußere nicht verwerfen.
             if getattr(self, "rich_note_editor", None) is not editor:
                 return
+            self.remember_editor_position(editor)
             editor.destroy()
             self.rich_note_editor = editor = None
         if not visible:
@@ -52827,6 +53540,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 editor.pack(side="bottom", fill="both", expand=True, padx=self.CONTENT_INSET,
                             pady=(8, self.CONTENT_INSET[0]), **optionen)
             self.rich_note_editor = editor
+            # UX-03: einmal im Leerlauf nach dem Öffnen zählen – nicht beim Tippen
+            # und nicht bei jedem Neuaufbau der Liste (FP-05).
+            self.schedule_link_count(identity)
+            if not self.current_search_query():
+                # Ein Suchtreffer ist ein ausdrücklicher Sprung und hat Vorrang.
+                self.restore_editor_position(editor)
         elif editor._last != entry.get("rich_note"):
             editor.load(entry.get("rich_note"))
             editor._last = RichNoteEditor.normalize(entry.get("rich_note"))
@@ -54066,7 +54785,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             except tk.TclError:
                 pfade = []
             if pfade:
-                callback(pfade, event)
+                # Befund 26.11.2026 (macOS, Bildschirmfoto auf eine Seite
+                # gezogen): Die Ablage lief im <<Drop>>-Handler selbst. Fragte
+                # sie dort modal nach einem kürzeren Anhangsnamen, kehrte der
+                # Drop nicht zurück; die Ziehsitzung des Systems blieb stehen
+                # und macOS meldete „Programm reagiert nicht“. Der Drop wird
+                # jetzt sofort quittiert, die Ablage folgt im Leerlauf.
+                def spaeter():
+                    try:
+                        if widget.winfo_exists():
+                            callback(pfade, event)
+                    except tk.TclError:
+                        pass
+                self.after_scope().after_idle(spaeter)
             return getattr(event, "action", "copy")
 
         widget.dnd_bind("<<Drop>>", ablegen)
@@ -54271,10 +55002,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                          command=lambda: self.drawing_replace_color(editor))
         if editor.model.unused_palette_count():
             menu.add_command(label=glide_i18n.t("drawing.menu.color.compact", "Unbenutzte Farben entfernen …"), command=lambda: self.drawing_compact_palette(editor))
+        drehen = tk.Menu(menu, **menu_options)
+        for text, befehl in editor.transform_choices():
+            drehen.add_command(label=text, command=befehl)
+        menu.add_cascade(label=glide_i18n.t("drawing.menu.transform", "Drehen und spiegeln"), menu=drehen)
         view = tk.Menu(menu, **menu_options)
         editor._view_choices = {key: tk.BooleanVar(value=value) for key, value in (
             ("gray", editor.grayscale), ("tiled", editor.tiled_preview),
-            ("grid", editor.grid_visible), ("reference", editor.reference_visible))}
+            ("grid", editor.grid_visible), ("reference", editor.reference_visible),
+            ("checker", editor.checker))}
         view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.grid", "Raster"), variable=editor._view_choices["grid"],
                              command=editor.toggle_grid)
         if has_reference:
@@ -54282,6 +55018,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                  command=editor.toggle_reference)
         view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.grayscale", "Graustufen"), variable=editor._view_choices["gray"],
                              command=editor.toggle_grayscale)
+        view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.checker", "Durchsicht als Schachbrett"),
+                             variable=editor._view_choices["checker"], command=editor.toggle_checker)
         view.add_checkbutton(label=glide_i18n.t("drawing.menu.view.tiled", "Kachelvorschau 3 × 3"), variable=editor._view_choices["tiled"],
                              command=editor.toggle_tiled)
         if "zoom" in editor.toolbar.hidden_keys:
@@ -56548,9 +57286,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 else glide_i18n.t("ui.refresh_folder_overview.there_are_no_entries", "Im gewählten Zeitraum gibt es keine Einträge.")
                 if journal_view and any(self.journal_filter_range(self.active_folder_id))
                 else (
+                    # WA-52 für Notizbücher, UX-05-Aufforderung für gewöhnliche Ordner.
                     self.empty_state_for("journal").text
                     if journal_view else
-                    glide_i18n.t("ui.refresh_folder_overview.no_lists_in_this", "Noch keine Listen in diesem Ordner. Oben kann direkt eine neue Liste angelegt werden.")
+                    (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                        "folder", read_only=bool(getattr(self, "_data_read_only", False))))
                 )
             )
             self.tree.insert(
@@ -56694,7 +57434,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         zeilen.sort(key=schluessel, reverse=absteigend)
         if not zeilen and not sub_folders:
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",),
-                             text=glide_i18n.t("ui.refresh_library_table.no_pages_in_this", "Noch keine Seiten in diesem Buch. Oben entsteht mit Enter eine neue Seite."))
+                             text=(lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                                 "book", read_only=bool(getattr(self, "_data_read_only", False)))))
         for entry, werte in zeilen:
             farbe = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
             self.tree.insert("", "end", iid=f"folder-list:{entry.get('id')}", text=werte["title"],
@@ -57703,6 +58444,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def select_all_items(self, event=None):
         focused = self.current_focus_widget()
+        if (event is not None and focused not in (getattr(self, "entry", None), getattr(self, "search_entry", None))
+                and self.keyboard_delete_belongs_to_text(event)):
+            # PAGE-04: Strg/Cmd+A markiert im Textfeld dessen Text (Klassenbindung).
+            return None
         if focused is not None and focused in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
             try:
                 focused.selection_range(0, tk.END)
@@ -58383,6 +59128,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return lines
 
     def copy_selected_to_clipboard(self, event=None):
+        # PAGE-04 (27.11.2026): Die fensterweite Bindung läuft nach der
+        # Klassenbindung des Textfelds. Im Seiteneditor, in Beschreibungen und
+        # jedem anderen Textfeld hat Tk die Markierung bereits kopiert; hier
+        # meldete Glide danach „Zuerst einen Punkt auswählen“ oder überschrieb
+        # die Zwischenablage mit dem markierten Listenpunkt.
+        if event is not None and self.keyboard_delete_belongs_to_text(event):
+            return None
         if self.current_focus_widget() in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
             return None
         if not self.require_list_view():
@@ -58418,6 +59170,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         eingefügten Punkte direkt danach als gleichrangige Punkte eingefügt;
         ohne Auswahl werden sie am Ende der Hauptliste ergänzt.
         """
+        if event is not None and self.keyboard_delete_belongs_to_text(event):
+            # PAGE-04: In jedem Textfeld fügt Tk selbst ein; sonst entstünden
+            # zusätzlich neue Listenpunkte aus derselben Zwischenablage.
+            return None
         if self.current_focus_widget() in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
             # In Textfeldern soll Strg+V die normale System-Einfügefunktion behalten.
             return None
@@ -59796,7 +60552,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Labels zuweisen oder lösen – Häkchen zeigt die Zuweisung der Auswahl."""
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
-            label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.no_labels_created_yet", "Noch keine Labels angelegt"), state="disabled")
+            # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
+            leer = glide_empty_states.menu_state("labels")
+            label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             # Zuletzt benutzte Labels zuerst, abgetrennt (KO06); sonst gewohnte Reihenfolge.
             nach_id = {label.get("id"): label for label in self.labels}
@@ -60129,7 +60887,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
-            label_menu.add_command(label=glide_i18n.t("ui.add_page_label_menu.no_labels_created_yet", "Noch keine Labels angelegt"), state="disabled")
+            # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
+            leer = glide_empty_states.menu_state("labels")
+            label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             assigned = item.get("labels") or []
             for label in self.labels:

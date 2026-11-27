@@ -24,6 +24,9 @@ TEXT_FALLBACKS = {
     "priority_medium": "2", "priority_high": "3", "checklist": "[x]",
     "sort_ascending": "Au", "sort_descending": "Ab", "print": "Dr", "overflow": "...",
     "remove": "x", "block_handle": "::",
+    # Werkzeugspalte der Zeichnung (PIXEL-03, 27.11.2026).
+    "tool_brush": "Pn", "tool_eraser": "Ra", "tool_fill": "Fu", "tool_eyedropper": "Pp",
+    "tool_line": "Ln", "tool_rect": "Re", "tool_ellipse": "El", "tool_select": "Aw",
 }
 
 # Einige ältere Zeichen fehlen auch in der mitgelieferten UI-Schrift.

@@ -137,8 +137,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
                 editor._popup_drawing_choices = original
             return [text for text, _befehl, _aktiv in gefangen if text]
 
-        assert {key for key, _label, _kurz in editor.TOOLS} == {"brush", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
-        assert len(eintraege(editor.show_tool_menu)) == 7
+        # PIXEL-03 (27.11.2026): Radierer als achtes Werkzeug.
+        assert {key for key, _label, _kurz in editor.TOOLS} == {"brush", "eraser", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
+        assert len(eintraege(editor.show_tool_menu)) == 8
         groessen = {f"Größe {s}×{s}" for s in (1, 2, 4, 8)}
         # Die Optionsauswahl zeigt nur, was das Werkzeug braucht.
         editor.set_tool("brush")

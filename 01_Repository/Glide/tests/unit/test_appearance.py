@@ -88,6 +88,18 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(color['card'], card)
             self.assertEqual(theme, before)
 
+    def test_yellow_is_lighter_in_dark_designs(self):
+        # UX-01 (27.11.2026): Gelb mit 16 % wirkte im Dunkelmodus oliv; Ausnahme 24 %.
+        palette = {'flag': '#FFDC0B', 'clear': '#2C95FF'}
+        dark = {'bg': '#111113', 'card': '#1C1C1E'}
+        self.assertEqual(a.with_background(dark, 'flag', palette)['bg'], '#4A4211')
+        light = {'bg': '#F7F6FA', 'card': '#FFFFFF'}
+        hell = a.with_background(light, 'flag', palette)['bg']
+        from backdrop import hex_rgb, mix, rgb_hex
+        self.assertEqual(hell, rgb_hex(mix(hex_rgb('#F7F6FA'), hex_rgb('#FFDC0B'), 0.08)), "Hellmodus unverändert")
+        self.assertEqual(a.with_background(dark, 'clear', palette)['bg'],
+                         rgb_hex(mix(hex_rgb('#111113'), hex_rgb('#2C95FF'), 0.16)), "andere Farben unverändert")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -43,19 +43,25 @@ def fall_aufklappen(run):
     target, source, *_ = seed(run)
     app = run.app; editor = app.rich_note_editor
     run.root.geometry('860x700+20+20'); run.idle()
+    # UX-03 (27.11.2026): Beim Öffnen wird einmal im Leerlauf gezählt; der Kopf
+    # zeigt „3 Verknüpfungen“. Ein Neuaufbau sucht nicht erneut (FP-05).
+    assert app.page_link_count(target[1]) == (0, 3), app.page_link_count(target[1])
+    chips = [w for w in children(app.page_chip_row) if getattr(w, '_link_chip', False)]
+    assert len(chips) == 1 and '3 Verknüpfungen' in chips[0].cget('text'), [w.cget('text') for w in chips]
     with patch.object(run.mod.glide_objects, 'unlinked_mentions', wraps=run.mod.glide_objects.unlinked_mentions) as scan:
         app.refresh_tree(); run.idle()
         assert scan.call_count == 0, 'Suche beim normalen Aufbau'
-        editor._mentions_button.command(); run.idle()
+        chips[0].event_generate('<Button-1>'); run.idle()
         assert scan.call_count == 1 and editor._mentions_open
-        assert '(3)' in editor._mentions_button.text
+        abschnitte = [w.cget('text') for w in children(editor._mentions_rows) if isinstance(w, run.mod.tk.Label)]
+        assert 'Erwähnt ohne Verweis (3)' in abschnitte and 'Verweise hierher (0)' in abschnitte, abschnitte
         assert any(isinstance(w, run.mod.tk.Text) and w.tag_ranges('mention')
                    for w in children(editor._mentions_rows)), 'Keine markierte Fundstelle'
         if getattr(run, 'capture', None) and sys.platform == 'win32':
             sys.path.insert(0, str(REPO / 'tests/tools'))
             from releasedaten import save_windows_screenshot
             save_windows_screenshot(run.root, run.capture)
-        editor._mentions_button.command(); run.idle()
+        app.toggle_page_links(); run.idle()
         assert scan.call_count == 1 and not editor._mentions_open
     disk = run.datei()
     app._data_read_only = True
@@ -79,8 +85,10 @@ def fall_link_undo_neustart(run):
     doc = app.object_graph()[0][('list', source)][1]['rich_note']
     assert list(doc['links'].values()) == [run.mod.glide_objects.uri(*target)]
     assert doc['text'] == '😀 Vorher: GROSSE\n  Reise. Danach.'
-    assert 'Rückverweise: 1' in [w.cget('text') for w in children(editor._mentions_rows)
-                                if isinstance(w, run.mod.tk.Label)]
+    assert 'Verweise hierher (1)' in [w.cget('text') for w in children(editor._mentions_rows)
+                                     if isinstance(w, run.mod.tk.Label)]
+    assert app.page_link_count(target[1]) == (1, 2), 'Kopfchip zählt nach dem Verknüpfen neu'
+
     app.undo_last_change(); run.idle()
     assert app.lists == before
     hit = run.mod.glide_objects.unlinked_mentions(target, app.object_graph()[0])[0]

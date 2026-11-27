@@ -271,7 +271,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
             resize(width)
             assert not app.library_cards
             hint = next(w for w in descendants(app.home_content)
-                        if isinstance(w, mod.tk.Label) and w.cget('text').startswith('Noch keine Listen'))
+                        if isinstance(w, mod.tk.Label) and getattr(w, '_inline_command', None) is not None)  # UX-05: Aufforderung statt 'Noch keine Listen'
             assert hint.winfo_ismapped()
             assert hint.winfo_reqheight() <= hint.winfo_height()
             assert int(hint.cget('wraplength')) <= hint.winfo_width()

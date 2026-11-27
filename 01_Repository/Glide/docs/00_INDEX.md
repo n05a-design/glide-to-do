@@ -33,7 +33,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [English user guide](user-guide/README.md) | Kontrollierte englische Übersetzung von 20 Funktionen für Nutzer, keine zweite Fachautorität; Lokalisierungsstand der Oberfläche |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D100 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D103 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
 | [Gemini-Wissensbasis](ai/gemini/README.md) | Englischsprachige, quellengebundene Wissensbasis für Gemini; abgeleitete Zusammenfassung, keine zusätzliche Fachautorität |
 | [Glide Shell – Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md) | Einstieg für Agenten: Bausteine, Host-Verträge, erzwungene Regeln, Tests T055/T312–T336, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Prüfliste für neue Bausteine; verweist auf die führenden Quellen |

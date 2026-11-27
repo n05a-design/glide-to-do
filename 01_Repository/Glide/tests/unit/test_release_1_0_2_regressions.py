@@ -969,11 +969,12 @@ class WidgetIntegration102Tests(unittest.TestCase):
         editor.sync_foot_density()
         self.assertFalse(bool(knopf.winfo_manager()))
 
-        # Fall 2: Normale Dichte -> Button wird wieder vor dem Status eingeblendet
+        # Fall 2: Normale Dichte -> seit D103 (27.11.2026) kehrt der Knopf nicht in den
+        # Seitenfuß zurück; „Verknüpfungen“ stehen als Chip im Seitenkopf, der Fuß bleibt einzeilig.
         editor.app = DensityAppAdapter("normal")
         editor.sync_foot_density()
-        self.assertTrue(bool(knopf.winfo_manager()))
-        self.assertEqual(knopf.winfo_manager(), "pack")
+        self.assertFalse(bool(knopf.winfo_manager()))
+        knopf.pack(side="left", before=status)  # Ausgangslage für Fall 3: ein noch gepackter Altknopf
 
         # Fall 3: Minimale Dichte, aber Erwähnungen offen -> Button bleibt sichtbar
         editor.app = DensityAppAdapter("minimal")

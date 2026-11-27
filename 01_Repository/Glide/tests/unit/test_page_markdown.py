@@ -100,5 +100,61 @@ class BilderImRundlauf(unittest.TestCase):
         self.assertEqual(list(zurueck["images"].values()), [{"attachment": "neu", "src": "Seite%20Bilder/foto.png"}])
 
 
+class BlockKopieren(unittest.TestCase):
+    """PAGE-03 (27.11.2026): Ausschnitt und Markdown eines einzelnen Blocks."""
+
+    DOC = {"text": "Titel\n• Fett und Link\nNachher",
+           "spans": [{"tag": "h1", "start": 0, "end": 6},
+                     {"tag": "bullet", "start": 6, "end": 22},
+                     {"tag": "bold", "start": 8, "end": 12},
+                     {"tag": "link:a", "start": 17, "end": 21}],
+           "links": {"link:a": "https://example.org", "link:b": "https://nicht.example"}}
+
+    def test_slice_clips_and_shifts_spans(self):
+        teil = markdown.document_slice(self.DOC, 6, 21)
+        self.assertEqual(teil["text"], "• Fett und Link")
+        self.assertEqual(teil["spans"], [{"tag": "bullet", "start": 0, "end": 15},
+                                         {"tag": "bold", "start": 2, "end": 6},
+                                         {"tag": "link:a", "start": 11, "end": 15}])
+        self.assertEqual(teil["links"], {"link:a": "https://example.org"})
+        self.assertNotIn("images", teil)
+
+    def test_block_markdown_keeps_kind_and_inline_format(self):
+        self.assertEqual(markdown.block_markdown(self.DOC, 6, 21),
+                         "- **Fett** und [Link](https://example.org)\n")
+        self.assertEqual(markdown.block_markdown(self.DOC, 0, 5), "# Titel\n")
+        self.assertEqual(markdown.block_markdown(self.DOC, 22, 29), "Nachher\n")
+
+    def test_block_markdown_round_trip(self):
+        zurueck = markdown.markdown_to_page(markdown.block_markdown(self.DOC, 6, 21))
+        self.assertEqual(zurueck["text"], "• Fett und Link")
+        tags = {span["tag"] for span in zurueck["spans"]}
+        self.assertIn("bullet", tags)
+        self.assertIn("bold", tags)
+
+    def test_find_links_edge_cases(self):
+        """EDITOR-01 (27.11.2026): Satzzeichen, Klammern, www, E-Mail, unsichere Schemata."""
+        fl = markdown.find_links
+        self.assertEqual(fl("Siehe https://example.org/a?b=1#c."), [(6, 33, "https://example.org/a?b=1#c")])
+        self.assertEqual(fl("www.glide.de, ok"), [(0, 12, "https://www.glide.de")])
+        self.assertEqual(fl("(https://de.wikipedia.org/wiki/Tk_(Toolkit))"),
+                         [(1, 43, "https://de.wikipedia.org/wiki/Tk_(Toolkit)")])
+        self.assertEqual(fl("an tim@example.com!"), [(3, 18, "mailto:tim@example.com")])
+        self.assertEqual(fl("https://münchen.de/straße"), [(0, 25, "https://münchen.de/straße")])
+        self.assertEqual(len(fl("a https://a.de b http://b.de")), 2)
+        for ohne in ("http://", "javascript:alert(1)", "file:///etc/passwd", "a@b", "Text", "https://x" + "y" * 3000 + ".de"):
+            self.assertEqual(fl(ohne), [], ohne)
+
+    def test_link_before_only_last_word(self):
+        self.assertEqual(markdown.link_before("Gehe zu https://a.de/x."), (8, 22, "https://a.de/x"))
+        self.assertIsNone(markdown.link_before("https://a.de mehr"))
+        self.assertIsNone(markdown.link_before(""))
+
+    def test_invalid_range(self):
+        for start, end in ((-1, 2), (3, 2), (0, 999), (0.0, 2)):
+            with self.assertRaises(ValueError):
+                markdown.document_slice(self.DOC, start, end)
+
+
 if __name__ == '__main__':
     unittest.main()

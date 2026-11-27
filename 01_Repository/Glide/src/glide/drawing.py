@@ -260,6 +260,34 @@ def _box(x0: int, y0: int, x1: int, y1: int) -> tuple[int, int, int, int]:
     return min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)
 
 
+def flip_region(region: Region, horizontal: bool = True) -> Region:
+    """Bereich spiegeln: waagrecht (links ↔ rechts) oder senkrecht (oben ↔ unten)."""
+    w, h, c = region.width, region.height, region.colors
+    if horizontal:
+        colors = tuple(c[y * w + (w - 1 - x)] for y in range(h) for x in range(w))
+    else:
+        colors = tuple(c[(h - 1 - y) * w + x] for y in range(h) for x in range(w))
+    return Region(w, h, colors)
+
+
+def rotate_region(region: Region, clockwise: bool = True) -> Region:
+    """Bereich um 90° drehen; Breite und Höhe tauschen."""
+    w, h, c = region.width, region.height, region.colors
+    if clockwise:
+        colors = tuple(c[(h - 1 - x) * w + y] for y in range(w) for x in range(h))
+    else:
+        colors = tuple(c[x * w + (w - 1 - y)] for y in range(w) for x in range(h))
+    return Region(h, w, colors)
+
+
+TRANSFORMS = {
+    "flip_h": lambda region: flip_region(region, True),
+    "flip_v": lambda region: flip_region(region, False),
+    "rotate_cw": lambda region: rotate_region(region, True),
+    "rotate_ccw": lambda region: rotate_region(region, False),
+}
+
+
 def rect_cells(x0: int, y0: int, x1: int, y1: int, filled: bool = False) -> list[tuple[int, int]]:
     left, top, right, bottom = _box(x0, y0, x1, y1)
     if filled:
@@ -1159,6 +1187,32 @@ class DrawingModel:
             return 0
         left, top, right, bottom = box
         return self.paint_cells(((x, y) for y in range(top, bottom + 1) for x in range(left, right + 1)), 0)
+
+    def transform_region(self, x0: int, y0: int, x1: int, y1: int,
+                         operation: str) -> tuple[int, int, int, int] | None:
+        """Bereich spiegeln oder um 90° drehen (PIXEL-02, 27.11.2026); liefert den neuen Bereich.
+
+        `operation` ist eine von `TRANSFORMS`. Gedreht wird um die Mitte des
+        Bereichs; ein gedrehter Bereich wird in die Fläche geschoben, statt am
+        Rand abgeschnitten zu werden. Die frei werdenden Zellen werden Grund.
+        Läuft innerhalb der offenen Aktion des Aufrufers (ein Rückgängig-Schritt).
+        """
+        if operation not in TRANSFORMS:
+            raise ValueError(glide_i18n.t("mod.drawing.transform_region.unknown", "Unbekannte Umwandlung: {operation}",
+                                          operation=operation))
+        box = self.clip_box(x0, y0, x1, y1)
+        if box is None:
+            return None
+        left, top, right, bottom = box
+        region = self.copy_region(left, top, right, bottom)
+        result = TRANSFORMS[operation](region)
+        new_left = left + (region.width - result.width) // 2
+        new_top = top + (region.height - result.height) // 2
+        new_left = max(0, min(new_left, self.width - result.width))
+        new_top = max(0, min(new_top, self.height - result.height))
+        self.clear_region(left, top, right, bottom)
+        self.stamp_region(result, new_left, new_top)
+        return self.clip_box(new_left, new_top, new_left + result.width - 1, new_top + result.height - 1)
 
     def stamp_region(self, region: Region, x: int, y: int, skip_white: bool = False) -> int:
         """Setzt einen Bereich mit oberer linker Ecke bei (x, y); Ränder werden abgeschnitten."""

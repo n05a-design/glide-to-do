@@ -51,6 +51,13 @@ BACKGROUND_CHOICES = (
     ('Braun', 'import'), ('Kontrastgrau', 'muted'),
 )
 BACKGROUND_KEYS = frozenset(key for _label, key in BACKGROUND_CHOICES)
+# Mischanteil der Hintergrundfarbe. Ausnahme Gelb in dunklen Designs
+# (Inhaberentscheidung 27.11.2026, UX-01): Mit 16 % wirkte der Grund
+# schmutzig-oliv; Gelb braucht mehr Helligkeit, um als Gelb zu lesen. Die
+# Schriftrollen hebt `legible_text_roles` danach weiter auf 4,5:1 an.
+DARK_BACKGROUND_SHARE = 0.16
+DARK_BACKGROUND_SHARE_EXCEPTIONS = {'flag': 0.24}
+LIGHT_BACKGROUND_SHARE = 0.08
 
 
 def background_choice(value):
@@ -69,6 +76,9 @@ def with_background(theme, choice, palette=None):
     elif choice != 'default':
         # Ruhige Töne derselben festen Palette erhalten den Schriftkontrast.
         base = hex_rgb(result['bg'])
-        share = 0.16 if luminance(base) < 0.2 else 0.08
+        if luminance(base) < 0.2:
+            share = DARK_BACKGROUND_SHARE_EXCEPTIONS.get(choice, DARK_BACKGROUND_SHARE)
+        else:
+            share = LIGHT_BACKGROUND_SHARE
         result['bg'] = rgb_hex(mix(base, hex_rgb((palette or theme)[choice]), share))
     return result
