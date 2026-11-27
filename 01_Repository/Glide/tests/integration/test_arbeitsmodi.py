@@ -500,7 +500,8 @@ def fall_drawing_controls_locale(lauf):
     expected = {
         "de": {
             "buttons": ("Pinsel ▾", "Erweitert ▾", "Vorschau", "Mehr", "Zoom 5×", "Palette"),
-            "tools": {"Pinsel (B)", "Füllen (F)", "Pipette (I)", "Linie (L)",
+            # PIXEL-03 (27.11.2026): Radierer mit Umschalt+E.
+            "tools": {"Pinsel (B)", "Radierer (Umschalt+E)", "Füllen (F)", "Pipette (I)", "Linie (L)",
                       "Rechteck (U)", "Ellipse (E)", "Auswahl (S)"},
             "zoom": {"Verkleinern (−)", "Vergrößern (+)", "An Fläche anpassen"},
             "brush": {"Größe 1×1", "Symmetrie: Links/rechts", "Pixelgenaue 1×1-Linie"},
@@ -512,7 +513,7 @@ def fall_drawing_controls_locale(lauf):
         },
         "en": {
             "buttons": ("Brush ▾", "Extended ▾", "Preview", "More", "Zoom 5×", "Palette"),
-            "tools": {"Brush (B)", "Fill (F)", "Eyedropper (I)", "Line (L)",
+            "tools": {"Brush (B)", "Eraser (Shift+E)", "Fill (F)", "Eyedropper (I)", "Line (L)",
                       "Rectangle (U)", "Ellipse (E)", "Selection (S)"},
             "zoom": {"Zoom out (−)", "Zoom in (+)", "Fit to canvas"},
             "brush": {"Size 1×1", "Symmetry: Left/right", "Pixel-perfect 1×1 line"},
@@ -568,7 +569,10 @@ def fall_drawing_controls_locale(lauf):
                 root.update()
                 editor.toolbar.reflow()
                 assert editor.display_button.text == label + " ▾"
-                assert not {"tool", "display", "more"} & set(editor.toolbar.hidden_keys)
+                assert not {"display", "more"} & set(editor.toolbar.hidden_keys)
+                # PIXEL-03: Die Werkzeugwahl steht als Spalte neben der Fläche, nicht in der Leiste.
+                assert not editor.tool_choice.winfo_ismapped()
+                assert all(knopf.winfo_ismapped() for knopf in editor.tool_buttons.values())
             editor.display_profile = "extended"
             editor.refresh_locale()
 
@@ -3891,23 +3895,21 @@ def fall_werkzeugzeile(lauf):
     spalten = app.table_columns_button
     if spalten.winfo_ismapped():
         assert spalten.winfo_rootx() + spalten.winfo_width() <= app.view_switch.winfo_rootx()
-    # Seitenfuß: „Erwähnt ohne Verweis …“ und Statusmeldung in einer Zeile (02.11.2026).
+    # Seitenfuß einzeilig (02.11.2026). Seit UX-03 (27.11.2026) trägt er nur den
+    # Status; „Verknüpfungen“ öffnen sich vom Kopfchip aus unter dem Seitenkopf.
     app.open_list_view()
     app.set_active_list(seite["id"])
     idle(lauf)
     editor = app.rich_note_editor
     editor.status.configure(text="Schreibgeschützter Bestand")
     idle(lauf)
-    knopf, status = editor._mentions_button, editor.status
-    assert knopf.master is status.master is editor._foot_row
-    mitte = lambda w: w.winfo_rooty() + w.winfo_height() / 2
-    assert abs(mitte(knopf) - mitte(status)) <= 2, (mitte(knopf), mitte(status))
-    assert status.winfo_rootx() >= knopf.winfo_rootx() + knopf.winfo_width()
-    # Aufgeklappte Fundstellen liegen über der Fußzeile.
-    editor._mentions_button.command()
+    assert not editor._mentions_button.winfo_manager(), "Verknüpfungen stehen nicht mehr im Seitenfuß"
+    assert editor.status.master is editor._foot_row and editor.status.winfo_ismapped()
+    editor.toggle_mentions()
     idle(lauf)
-    assert editor._mentions_rows.winfo_rooty() + editor._mentions_rows.winfo_height() <= editor._foot_row.winfo_rooty()
-    editor._mentions_button.command()
+    assert editor._mentions_rows.winfo_rooty() + editor._mentions_rows.winfo_height() <= editor.text.winfo_rooty() + 2, \
+        "Verknüpfungen liegen unter dem Kopf, über dem Seitentext"
+    editor.toggle_mentions()
     return f"{len(befunde)} Messungen: Abstand ≥ {app.CONTENT_TOOLBAR_GAP} px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig"
 
 
@@ -4756,7 +4758,7 @@ def fall_menschen3503(lauf):
             assert button.bg_color == app.theme["bg"]
             assert button.border_color == app.theme[button.color_key]
         assert int(editor._foot_row.pack_info()["padx"]) == 10
-        assert editor._mentions_button.winfo_reqwidth() < 250
+        assert not editor._mentions_button.winfo_manager(), "UX-03: kein Verknüpfungsknopf im Seitenfuß"
         capture("seite")
 
         app.set_active_list(drawing["id"])

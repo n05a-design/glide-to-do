@@ -7,7 +7,7 @@ Dünner, agentenneutraler Adapter für Antigravity, Codex, GitHub Copilot, Gemin
 ## Verbindliche Quellen (gezielt lesen, nicht das ganze Repository)
 
 1. [`01_Repository/Glide/AGENTS.md`](01_Repository/Glide/AGENTS.md) – Arbeitsregeln, Produktgrenzen, Abschlusskriterium.
-2. [`00_Arbeitsvorbereitung/Glide_Uebergabe.md`](00_Arbeitsvorbereitung/Glide_Uebergabe.md) – aktueller Stand; Entscheidungen D01–D100 in [`docs/ARBEITSRICHTUNG.md`](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+2. [`00_Arbeitsvorbereitung/Glide_Uebergabe.md`](00_Arbeitsvorbereitung/Glide_Uebergabe.md) – aktueller Stand; Entscheidungen D01–D103 in [`docs/ARBEITSRICHTUNG.md`](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 3. [`docs/DOKUMENTENPFLEGE.md`](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) – führende Quelle je Thema; zusammenführen statt parallel pflegen.
 4. **Gestaltung:** [`docs/DESIGN_RICHTLINIEN.md`](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) ist für jede neue oder angefasste Oberfläche verbindlich.
 

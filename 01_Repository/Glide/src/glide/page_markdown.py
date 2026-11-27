@@ -425,6 +425,108 @@ def page_to_markdown(document, task_state=None, image_source=None):
     return "\n".join(ausgabe).strip() + "\n"
 
 
+# --- Automatische Linkerkennung (EDITOR-01, 27.11.2026) ---------------------
+# Nur http, https und mailto werden je zu Links (wie beim manuellen Link);
+# „www.“ bekommt https://, eine E-Mail-Adresse mailto:. Erkannt wird nur, nie
+# geöffnet oder aufgerufen.
+LINK_MAX_LENGTH = 2048
+_AUTO_URL = re.compile(r"(?<![\w@./:-])(?:https?://|www\.)[^\s<>\"]+", re.IGNORECASE)
+_AUTO_MAIL = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[^\W\d_]{2,}(?![\w@])")
+_TRAILING = ".,;:!?'\"*_"
+_PAIRS = {")": "(", "]": "[", "}": "{"}
+
+
+def _trim_url(candidate):
+    """Satzzeichen und unpaarige Klammern am Ende gehören nicht zur Adresse."""
+    while candidate:
+        last = candidate[-1]
+        if last in _TRAILING:
+            candidate = candidate[:-1]
+        elif last in _PAIRS and candidate.count(last) > candidate.count(_PAIRS[last]):
+            candidate = candidate[:-1]
+        else:
+            break
+    return candidate
+
+
+def find_links(text):
+    """Adressen im Text als [(Start, Ende, URL)] – Tk-frei, ohne Netzzugriff.
+
+    Erkennt http(s)://, www. und E-Mail-Adressen; Satzzeichen am Ende und
+    unpaarige schließende Klammern bleiben Text. Zu lange oder unvollständige
+    Adressen (nur Schema) werden übergangen.
+    """
+    text = str(text or "")
+    treffer = []
+    belegt = []
+    for match in _AUTO_URL.finditer(text):
+        roh = _trim_url(match.group(0))
+        start, ende = match.start(), match.start() + len(roh)
+        url = roh if roh.lower().startswith(("http://", "https://")) else "https://" + roh
+        rest = url.split("://", 1)[1]
+        if "." not in rest.split("/", 1)[0] and not rest.lower().startswith("localhost"):
+            continue
+        if len(url) > LINK_MAX_LENGTH or not _SAFE_URL.match(url):
+            continue
+        treffer.append((start, ende, url))
+        belegt.append((start, ende))
+    for match in _AUTO_MAIL.finditer(text):
+        start, ende = match.span()
+        if any(a <= start < b for a, b in belegt):
+            continue
+        url = "mailto:" + match.group(0)
+        if len(url) <= LINK_MAX_LENGTH:
+            treffer.append((start, ende, url))
+    return sorted(treffer)
+
+
+def link_before(text):
+    """Die Adresse, die genau am Ende von `text` endet, oder None.
+
+    Für die Erkennung beim Tippen: Vor einem Leerzeichen oder Zeilenumbruch
+    zählt nur das letzte Wort. Ein Satzzeichen am Ende ändert daran nichts.
+    """
+    text = str(text or "")
+    wort_start = max(text.rfind(" "), text.rfind("\t"), text.rfind("\n")) + 1
+    for start, ende, url in find_links(text[wort_start:]):
+        if ende == len(text) - wort_start or not text[wort_start + ende:].strip(_TRAILING + ")]}"):
+            return wort_start + start, wort_start + ende, url
+    return None
+
+
+def document_slice(document, start, end):
+    """Teildokument von Zeichen `start` bis `end` (PAGE-03, 27.11.2026).
+
+    Formatbereiche werden auf den Ausschnitt gekürzt und verschoben; Links und
+    Bilder bleiben nur, soweit ein Bereich im Ausschnitt sie trägt. Tk-frei.
+    """
+    text = str((document or {}).get("text") or "")
+    if type(start) is not int or type(end) is not int or not 0 <= start <= end <= len(text):
+        raise ValueError(glide_i18n.t("mod.page_markdown.document_slice.invalid_range", "Ungültiger Ausschnitt."))
+    spans = []
+    for span in (document or {}).get("spans") or []:
+        a, b = max(start, span["start"]), min(end, span["end"])
+        if a < b:
+            spans.append(dict(span, start=a - start, end=b - start))
+    tags = {span["tag"] for span in spans}
+    links = {tag: url for tag, url in dict((document or {}).get("links") or {}).items() if tag in tags}
+    images = {tag: info for tag, info in dict((document or {}).get("images") or {}).items() if tag in tags}
+    ergebnis = {"text": text[start:end], "spans": spans, "links": links}
+    if images:
+        ergebnis["images"] = images
+    return ergebnis
+
+
+def block_markdown(document, start, end, task_state=None):
+    """Markdown eines Blocks von `start` bis `end` – für „Block kopieren“ (PAGE-03).
+
+    Über Markdown erhält der eingefügte Block in Glide seine Art und
+    Inlineformate und bekommt neue Identitäten (Links, Aufgaben); andere
+    Programme erhalten lesbares Markdown.
+    """
+    return page_to_markdown(document_slice(document, start, end), task_state)
+
+
 TOGGLE_PREFIXES = ("▾ ", "▸ ")
 
 
