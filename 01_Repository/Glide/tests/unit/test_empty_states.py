@@ -1,72 +1,107 @@
 # SPDX-License-Identifier: MPL-2.0
-"""UX-05 (27.11.2026): Leerzustände als Handlungsaufforderung."""
-import json
+"""Unit-Tests für kontextuelle Leerzustände (WA-52, Glide 1.1.0, Tk-frei nach D17)."""
 from pathlib import Path
+import json
 import sys
 import unittest
 
-GLIDE = Path(__file__).resolve().parents[2] / "src/glide"
-sys.path.insert(0, str(GLIDE))
-import empty_states as es
+SRC = Path(__file__).resolve().parents[2] / "src" / "glide"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
-
-def alle_zustaende():
-    return [es.list_state(), es.list_state(filtered=True), es.list_state(read_only=True),
-            es.list_state(accepts_items=False), es.overview_state("pages", read_only=True),
-            *es.OVERVIEWS.values(), *es.MENUS.values(),
-            *(es.folder_state(art) for art in ("folder", "journal", "book")),
-            es.folder_state(searched=True), es.folder_state("journal", period_filtered=True),
-            es.folder_state(read_only=True)]
+import empty_states  # noqa: E402
+import i18n  # noqa: E402
 
 
 class EmptyStateTests(unittest.TestCase):
-    def test_list_rules(self):
-        self.assertEqual(es.list_state().action, es.FOCUS_ENTRY)
-        self.assertEqual(es.list_state(filtered=True).action, es.RESET_FILTER, "Filter hat Vorrang")
-        self.assertEqual(es.list_state(filtered=True, read_only=True).action, es.RESET_FILTER)
-        self.assertIsNone(es.list_state(read_only=True).action)
-        self.assertIsNone(es.list_state(accepts_items=False).action)
+    def tearDown(self):
+        i18n.set_language("de")
 
-    def test_overviews_and_menus(self):
-        for kind, action in (("pages", es.CREATE_PAGE), ("notes", es.CREATE_NOTE),
-                             ("drawings", es.CREATE_DRAWING), ("notebooks", es.CREATE_NOTEBOOK),
-                             ("galleries", es.CREATE_GALLERY), ("boards", es.OPEN_GLOBAL_BOARD),
-                             ("labels", es.MANAGE_LABELS), ("library", es.CREATE_LIST),
-                             ("templates", es.IMPORT_TEMPLATES), ("gallery_images", es.ADD_IMAGES)):
-            self.assertEqual(es.overview_state(kind).action, action)
-            self.assertIsNone(es.overview_state(kind, read_only=True).action)
-        self.assertIsNone(es.overview_state("unbekannt"))
-        self.assertEqual(es.menu_state("labels").action, es.MANAGE_LABELS)
-        self.assertEqual(es.menu_state("areas").action, es.CREATE_AREA)
-        self.assertIsNone(es.menu_state("unbekannt"))
+    def test_alle_sechs_kontexte_haben_titel_erklaerung_und_aktion(self):
+        for context in empty_states.CONTEXTS:
+            state = empty_states.empty_state(context)
+            self.assertTrue(state.title, context)
+            self.assertTrue(state.description, context)
+            if context != "list":
+                self.assertIsNotNone(state.primary, context)
+            for action_id in state.action_ids:
+                self.assertIn(action_id, empty_states.ACTIONS)
 
-    def test_folder_rules(self):
-        self.assertEqual(es.folder_state().action, es.FOCUS_ENTRY)
-        self.assertEqual(es.folder_state("book").action, es.FOCUS_ENTRY)
-        self.assertEqual(es.folder_state("journal").action, es.CREATE_JOURNAL_ENTRY,
-                         "die Eingabezeile legt im Notizbuch keinen Eintrag an")
-        self.assertEqual(es.folder_state("journal", searched=True).action, es.RESET_FILTER, "Suche zuerst")
-        self.assertEqual(es.folder_state("journal", period_filtered=True).action, es.SHOW_ALL_DAYS)
-        self.assertEqual(es.folder_state("folder", period_filtered=True).action, es.FOCUS_ENTRY,
-                         "Zeitraum gilt nur im Notizbuch")
-        self.assertIsNone(es.folder_state("journal", read_only=True).action)
+    def test_u20_eingabezeile_ist_der_einzige_anlegeweg(self):
+        mit = empty_states.empty_state("list", entry_visible=True)
+        self.assertIsNone(mit.primary)
+        self.assertIsNone(mit.secondary)
+        self.assertNotIn("focus_entry", mit.action_ids)
+        ohne = empty_states.empty_state("list", entry_visible=False)
+        self.assertEqual(ohne.primary[0], "focus_entry")
 
-    def test_texts_are_prompts_and_ellipsis_only_for_dialogs(self):
-        for zustand in alle_zustaende():
-            if zustand.action is None or zustand.action in (es.RESET_FILTER, es.SHOW_ALL_DAYS):
-                continue  # Grund statt Aufforderung
-            self.assertIn(zustand.action, es.ACTIONS)
-            self.assertFalse(zustand.fallback.startswith(("Noch keine", "Keine")), zustand.fallback)
-            self.assertEqual("…" in zustand.fallback, zustand.action in es.DIALOG_ACTIONS, zustand.fallback)
+    def test_filter_fuehrt_zu_zuruecksetzen_statt_anlegen(self):
+        for context, kwargs in (("list", {"filtered": True}), ("today", {"filtered": True}),
+                                ("pinboard", {"has_cards": True}), ("journal", {"filtered": True})):
+            state = empty_states.empty_state(context, **kwargs)
+            self.assertEqual(state.primary[0], "clear_filter", context)
+            self.assertIsNone(state.secondary)
+        self.assertEqual(empty_states.empty_state("journal", date_range=True).primary[0], "show_all_days")
 
-    def test_every_key_is_translated(self):
-        sprachen = {s: json.loads((GLIDE / "resources/locales" / f"{s}.json").read_text(encoding="utf-8"))
-                    for s in ("de", "en")}
-        for zustand in alle_zustaende():
-            for sprache, daten in sprachen.items():
-                self.assertIn(zustand.key, daten, (sprache, zustand.key))
-            self.assertEqual(sprachen["de"][zustand.key], zustand.fallback, zustand.key)
-            self.assertEqual("…" in sprachen["de"][zustand.key], "…" in sprachen["en"][zustand.key], zustand.key)
+    def test_heute_ohne_offene_aufgaben_fuehrt_zum_eingang(self):
+        self.assertEqual(empty_states.empty_state("today").primary[0], "plan_day")
+        self.assertEqual(empty_states.empty_state("today", has_tasks=False).primary[0], "open_inbox")
+        anderer = empty_states.empty_state("today", other_day=True)
+        self.assertNotEqual(anderer.title, empty_states.empty_state("today").title)
+
+    def test_pinnwand_aktion_fuehrt_zur_objektauswahl(self):
+        self.assertEqual(empty_states.empty_state("pinboard").primary[0], "pin_items")
+
+    def test_hinweise_aus_kuerzen_nur_den_bedienhinweis(self):
+        for context in empty_states.CONTEXTS:
+            self.assertTrue(empty_states.empty_state(context, hints=False).description, context)
+        an = empty_states.empty_state("list", entry_visible=True)
+        aus = empty_states.empty_state("list", entry_visible=True, hints=False)
+        self.assertTrue(an.description.startswith(aus.description))
+        self.assertIn("Labels", an.description)
+        self.assertNotIn("Labels", aus.description)
+        self.assertEqual(empty_states.empty_state("pages", hints=False).action_ids, ("new_page", "use_template"))
+
+    def test_text_ist_titel_und_erklaerung(self):
+        state = empty_states.empty_state("journal")
+        self.assertEqual(state.text, f"{state.title}\n{state.description}")
+
+    def test_knopftexte_hoechstens_24_zeichen_b11(self):
+        import ui_design
+        varianten = [dict(), dict(filtered=True), dict(entry_visible=True), dict(has_tasks=False),
+                     dict(has_cards=True), dict(date_range=True), dict(other_day=True)]
+        for sprache in ("de", "en"):
+            i18n.set_language(sprache)
+            for context in empty_states.CONTEXTS:
+                for kwargs in varianten:
+                    for action in (empty_states.empty_state(context, **kwargs).primary,
+                                   empty_states.empty_state(context, **kwargs).secondary):
+                        if action:
+                            self.assertLessEqual(len(action[1]), ui_design.BUTTON_TEXT_MAX_CHARS, action)
+
+    def test_unbekannter_kontext(self):
+        with self.assertRaises(ValueError):
+            empty_states.empty_state("dashboard")
+
+    def test_sprachparitaet_de_en(self):
+        katalog = {}
+        for sprache in ("de", "en"):
+            pfad = SRC / "resources" / "locales" / f"{sprache}.json"
+            katalog[sprache] = {k for k in json.loads(pfad.read_text(encoding="utf-8")) if k.startswith("mod.empty_states.")}
+        self.assertTrue(katalog["de"])
+        self.assertEqual(katalog["de"], katalog["en"])
+        quelltext = (SRC / "empty_states.py").read_text(encoding="utf-8")
+        import re
+        benutzt = {f"mod.empty_states.{k}" for k in re.findall(r'_t\("([a-z_.]+)"', quelltext)}
+        benutzt |= {f"mod.empty_states.action.{k}" for k in re.findall(r'"([a-z_]+)": \("\1", ', quelltext)}
+        self.assertTrue(benutzt <= katalog["de"], benutzt - katalog["de"])
+        i18n.set_language("en")
+        en = empty_states.empty_state("today")
+        self.assertEqual(en.title, "Nothing is planned for today yet")
+        self.assertEqual(en.primary[1], "Plan the workday …")
+        for context in empty_states.CONTEXTS:
+            state = empty_states.empty_state(context)
+            self.assertNotRegex(state.title + state.description, "[äöüß]", context)
 
 
 if __name__ == "__main__":

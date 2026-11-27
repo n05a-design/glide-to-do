@@ -7,13 +7,13 @@ deterministischen Layout-Planner für Python/Tkinter bereit. Frei von Glide-Fach
 
 from .tokens import BentoTokens, DEFAULT_TOKENS
 from .context import BentoContext
-from .specs import BentoCardSpec, BentoGridSpec, BentoLayoutPlan
-from .layout import BentoLayoutPlanner
+from .specs import BentoBand, BentoCardSpec, BentoGridSpec, BentoLane, BentoLayoutPlan
+from .layout import BentoLayoutPlanner, effective_span
 from .card import BentoCard, BentoHeader
 from .grid import BentoGrid
 from .components import BentoMetric, BentoActions, BentoEmptyState, BentoDivider
 
-BENTO_VERSION = "0.1.0"
+BENTO_VERSION = "0.2.0"
 __version__ = BENTO_VERSION
 
 __all__ = [
@@ -25,7 +25,10 @@ __all__ = [
     "BentoCardSpec",
     "BentoGridSpec",
     "BentoLayoutPlan",
+    "BentoBand",
+    "BentoLane",
     "BentoLayoutPlanner",
+    "effective_span",
     "BentoCard",
     "BentoHeader",
     "BentoGrid",

@@ -302,7 +302,8 @@ with tempfile.TemporaryDirectory(prefix="glide-1127-") as ordner:
         app.set_active_list(leer_liste["id"])
         ruhe(0.4)
         assert app.tree.get_children("") == (app.EMPTY_ROW_ID,)
-        assert app.tree.item(app.EMPTY_ROW_ID, "text").startswith("Einen neuen Punkt hinzufügen"), \
+        # Seit dem Merge mit main (WA-52) kommt der Text aus empty_states; der UX-05-Klickweg bleibt.
+        assert app.tree.item(app.EMPTY_ROW_ID, "text") == app.empty_state_for("list").text, \
             app.tree.item(app.EMPTY_ROW_ID, "text")
         assert app.empty_inline_action() == app.focus_new_item_entry
         assert not app.empty_action_button.winfo_ismapped() if getattr(app, "empty_action_button", None) else True, \
@@ -370,7 +371,7 @@ with tempfile.TemporaryDirectory(prefix="glide-1127-") as ordner:
         app.folders.append(buch)
         app.set_active_folder(buch["id"])
         ruhe(0.4)
-        assert app.tree.item(app.EMPTY_ROW_ID, "text") == "Den ersten Eintrag dieses Notizbuchs anlegen"
+        assert app.tree.item(app.EMPTY_ROW_ID, "text") == app.empty_state_for("journal").text
         vorher = sum(1 for e in app.lists if e.get("folder_id") == buch["id"])
         app.empty_text_label.event_generate("<Button-1>", x=5, y=5)
         ruhe(0.5)

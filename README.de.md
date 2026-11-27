@@ -81,6 +81,8 @@ Glides Leistungsvermögen gliedert sich in sechs tragende Produktsäulen:
 
 Glide 1.0.2 ist als offizieller **öffentlicher Prerelease** unter [GitHub Releases (v1.0.2)](https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.2) verfügbar. Die eigenständigen Pakete bündeln Python, Tk, Schriften und Abhängigkeiten; eine separate Python-Installation ist für die Binärpakete nicht erforderlich.
 
+> **Hinweis zu 1.0.3 (Stand 26.11.2026):** Die Release-Seite [v1.0.3](https://github.com/n05a-design/glide-to-do/releases/tag/v1.0.3) ist angelegt, trägt aber noch keine Downloaddateien. Bis die geprüften Pakete angehängt sind, bleibt 1.0.2 der herunterladbare Stand.
+
 | Plattform | Download-Asset | Größe | Hinweise |
 |---|---|---|---|
 | **Windows 10/11 (x64)** | [Glide-1.0.2-windows-x64-setup.exe](https://github.com/n05a-design/glide-to-do/releases/download/v1.0.2/Glide-1.0.2-windows-x64-setup.exe) | ~17,0 MB | Setup-Assistent (installiert unprivilegiert nach `%LOCALAPPDATA%\Programs\Glide`) |

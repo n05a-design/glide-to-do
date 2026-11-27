@@ -141,7 +141,7 @@ import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import view_positions as glide_view_positions  # noqa: E402
-import empty_states as glide_empty_states  # noqa: E402
+import empty_prompts as glide_empty_states  # noqa: E402  (UX-05; WA-52 liegt in empty_states)
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import brand as glide_brand  # noqa: E402
@@ -197,6 +197,8 @@ import runtime_diagnostics as glide_diagnostics
 import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
+import empty_states as glide_empty  # noqa: E402
+import overdue_review as glide_overdue  # noqa: E402
 import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -8871,22 +8873,30 @@ class ItemWorkspace:
                      else "labels" if canvas.type(element) == "text" else "cards")
             canvas.addtag_withtag("layer:" + layer, element)
         if not cards:
-            canvas.create_text(24, 24, anchor="nw", width=max(200, canvas.winfo_width()-48), font=app_font(12), fill=app.theme["muted"],
-                               text=glide_i18n.t("ui.draw_board.no_cards_for_this", "Keine Karten für diesen Filter.") if board["cards"] else glide_i18n.t("ui.draw_board.the_board_is_empty", "Die Pinnwand ist leer. Über „Anheften“ vorhandene Inhalte auswählen oder doppelt auf die Fläche klicken."))
+            # WA-52: Titel und Erklärung aus dem gemeinsamen Katalog.
+            zustand = glide_empty.empty_state("pinboard", has_cards=bool(board["cards"]), hints=app.hints_shown())
+            canvas.create_text(24, 24, anchor="nw", width=max(200, canvas.winfo_width()-48), font=app_font(12, "bold"),
+                               fill=app.theme["text"], text=zustand.title, tags=("emptytitle",))
+            if zustand.description:
+                canvas.create_text(24, 48, anchor="nw", width=max(200, canvas.winfo_width()-48), font=app_font(11),
+                                   fill=app.theme["muted"], text=zustand.description, tags=("emptytext",))
             # Leerzustand mit einer Hauptaktion (MO-050).
-            text, befehl = ((glide_i18n.t("ui.draw_board.clear_filter", "Filter aufheben"), self.find_cards) if board["cards"]
-                            else (glide_i18n.t("ui.draw_board.pin_items", "Punkte anheften"), self.choose_cards))
+            text, befehl = ((zustand.primary[1], self.find_cards) if board["cards"]
+                            else (zustand.primary[1], self.choose_cards))
             knopf = getattr(self, "_empty_board_button", None)
             if knopf is None or not knopf.winfo_exists() or knopf.master is not canvas:
                 knopf = self._empty_board_button = app._make_dialog_button(canvas, text, befehl, "confirm",
                                                                            width=180, height=36)
             knopf.command = befehl
             knopf.set_text(text)
-            canvas.create_window(24, 84, anchor="nw", window=knopf, tags=("emptyaction",))
+            # Unter dem tatsächlich umbrochenen Text, nicht auf fester Höhe.
+            box = canvas.bbox("emptytext") or canvas.bbox("emptytitle")
+            knopf_y = max(84, (box[3] + 14) if box else 84)
+            canvas.create_window(24, knopf_y, anchor="nw", window=knopf, tags=("emptyaction",))
             figur = app.empty_state_mascot(canvas, getattr(self, "_empty_board_figure", None), bg_key="bg")
             self._empty_board_figure = figur
             if figur is not None:
-                canvas.create_window(24 + 180 + 16, 84 + 18 - app.EMPTY_STATE_MASCOT_SIZE // 2, anchor="nw",
+                canvas.create_window(24 + 180 + 16, knopf_y + 18 - app.EMPTY_STATE_MASCOT_SIZE // 2, anchor="nw",
                                      window=figur, tags=("emptyaction",))
         self.scale_board_view()
         # Nach dem Zoom neu rechnen: Die Linien laufen dann wieder genau von
@@ -21495,8 +21505,10 @@ class ListApp:
             value for value in (filters if isinstance(filters, list) else [])
             if isinstance(value, str) and value in known_filters))[:cls.MAX_HOME_FILTER_TILES]
         spans = result.get("home_tile_span")
-        result["home_tile_span"] = {key: "wide" for key, value in (spans.items() if isinstance(spans, dict) else [])
-                                    if key in cls.HOME_TILE_KEYS and value == "wide"}
+        # "double" (zwei Spalten, Bento 0.2.0) seit 1.1.0; ältere Fassungen
+        # verwerfen den Wert und zeigen die Kachel in normaler Breite.
+        result["home_tile_span"] = {key: value for key, value in (spans.items() if isinstance(spans, dict) else [])
+                                    if key in cls.HOME_TILE_KEYS and value in ("wide", "double")}
         # Eine bestehende Startseite soll nach dem Update gleich aussehen: Die
         # neuen Kacheln aus 3.30 bleiben aus, bis jemand sie einblendet.
         if result.get("home_tiles_330") is not True:
@@ -28091,6 +28103,18 @@ class ListApp:
         self.save_settings()
         self.refresh_home()
 
+    def restore_home_tiles_default(self):
+        """Standardkacheln wiederherstellen (WA-52, Leerzustand der Startseite).
+
+        Derselbe Standard wie „Standard wiederherstellen“ im Dialog: Die
+        Startseite gilt danach als nicht eingerichtet und folgt künftigen
+        Standards. Spaltenzahl, Dichte und Kalenderdarstellung bleiben.
+        """
+        self.settings["home_tile_order"], self.settings["home_tiles_hidden"] = glide_home.standard_selection()
+        self.settings["show_home_stats"] = "stats" not in self.settings["home_tiles_hidden"]
+        self._home_tile_settings_changed()
+        return "break"
+
     def move_home_tile(self, key, delta):
         order = self.home_tile_order()
         if key not in order:
@@ -28126,8 +28150,8 @@ class ListApp:
 
     def set_home_tile_span(self, key, span):
         spans = dict(self.settings.get("home_tile_span") or {})
-        if span == "wide":
-            spans[key] = "wide"
+        if span in ("wide", "double"):
+            spans[key] = span
         else:
             spans.pop(key, None)
         self.settings["home_tile_span"] = spans
@@ -28210,11 +28234,24 @@ class ListApp:
                                      "muted", width=110, height=30).pack(side="right")
             if key not in fixed_wide:
                 wide = spans.get(key) == "wide"
+                double = spans.get(key) == "double"
                 self._make_dialog_button(row, glide_i18n.t("ui.render_home_editor.normal_width", "Normale Breite") if wide else glide_i18n.t("ui.render_home_editor.full_width", "Ganze Breite"),
                                          lambda value=key, now=wide: self.set_home_tile_span(
                                              value, "normal" if now else "wide"),
                                          "accent" if wide else "muted", width=130, height=30).pack(side="right",
                                                                                                   padx=(0, 6))
+                if not wide:
+                    # Pilot Bento 0.2.0: zwei von drei Spalten an der eigenen
+                    # Stelle; bei zwei Spalten ganze Breite, bei einer normal.
+                    doppelt = self._make_dialog_button(
+                        row, glide_i18n.t("ui.render_home_editor.one_column", "Eine Spalte") if double
+                        else glide_i18n.t("ui.render_home_editor.two_columns", "Zwei Spalten"),
+                        lambda value=key, now=double: self.set_home_tile_span(value, "normal" if now else "double"),
+                        "accent" if double else "muted", width=130, height=30)
+                    doppelt.pack(side="right", padx=(0, 6))
+                    self.add_tooltip(doppelt, glide_i18n.t(
+                        "ui.render_home_editor.two_columns_hint",
+                        "Im dreispaltigen Raster zwei Spalten breit, an ihrer Stelle in der Reihenfolge"))
             griff.bind("<ButtonPress-1>", lambda event, value=key: press(event, value))
             griff.bind("<B1-Motion>", motion)
             griff.bind("<ButtonRelease-1>", release)
@@ -30566,6 +30603,9 @@ class ListApp:
             if gesamt > len(eintraege):
                 label(tile, glide_i18n.t("ui.kachel_overdue.and_more", '… und {wert} weitere', wert=gesamt - len(eintraege)), color="muted")
             action(tile, glide_i18n.t("ui.kachel_overdue.open_overdue", '{overdue}  Verspätet öffnen', overdue=self.ICONS['overdue']), self.set_overdue_view, "overdue")
+            # WA-53: ein bewusster Weg ohne Friständerung (nur Bearbeitungstag).
+            if glide_overdue.plan_today_ids(self.overdue_items_for_review(), date.today()):
+                action(tile, glide_i18n.t("ui.overdue_banner.plan_today", "Heute einplanen"), self.plan_overdue_today, "muted")
 
         def kachel_progress(parent):
             """Fortschritt als Balken: heute gegen das Ziel, Woche gegen sich selbst."""
@@ -31093,11 +31133,16 @@ class ListApp:
                     label(neu_karte, f"• {punkt}", 10, pady=(glide_design.SPACING[0], glide_design.SPACING[2]))
 
         # Bento Layout Plan zur deterministischen Ermittlung von Spalten und Verteilung (D100)
+        # Bento 0.2.0: Bandmodell. „Ganze Breite“ bleibt wie bisher über dem
+        # Raster (full_width_first); „Zwei Spalten“ (Pilot, home_tile_span
+        # "double") belegt im Dreispaltenraster zwei Spalten an seinem Platz.
+        doppelte_kacheln = {key for key, span in (self.settings.get("home_tile_span") or {}).items()
+                            if span == "double"} - breite_kacheln
         card_specs = [
             glide_bento.BentoCardSpec(
                 key=k,
                 weight=gewichte.get(k, 2),
-                span="wide" if k in breite_kacheln else "single",
+                span="wide" if k in breite_kacheln else ("double" if k in doppelte_kacheln else "single"),
             )
             for k in sichtbar
         ]
@@ -31105,35 +31150,37 @@ class ListApp:
             columns=spalten_zahl,
             card_min_width=self.HOME_TILE_MIN_WIDTH,
             gap=self.HOME_CARD_GAP,
+            full_width_first=True,
         )
-        layout_plan = glide_bento.BentoLayoutPlanner().plan(
+        layout_plan = glide_bento.BentoLayoutPlanner(self.glide_bento_context().tokens).plan(
             available_width=available_width,
             cards=card_specs,
             grid_spec=bento_grid_spec,
             column_count=spalten_zahl,
         )
+        self._home_layout_plan = layout_plan
 
-        for card_spec in layout_plan.header_cards:
-            bauer[card_spec.key](kopfbereich)
+        baender = list(layout_plan.bands)
+        while baender and baender[0].kind == "full" and baender[0].cards[0].key in breite_kacheln:
+            bauer[baender.pop(0).cards[0].key](kopfbereich)
 
         raster = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
         _ui.pack(raster, fill="both", expand=True)
         self._bind_home_wheel(raster)
-        spalten = []
+        spalten_breite = max(1, (available_width - (spalten_zahl - 1) * self.HOME_CARD_GAP) // spalten_zahl)
+        for band_index, band in enumerate(baender):
+            for lane in band.lanes:
+                spalte = _ui.make(tk.Frame, raster, bg=theme["bg"])
+                spalte._home_build_width = spalten_breite * lane.span + self.HOME_CARD_GAP * (lane.span - 1)
+                _ui.grid(spalte, row=band_index, column=lane.column, columnspan=lane.span, sticky="new",
+                         padx=(glide_design.SPACING[0] if lane.column == 0 else self.HOME_CARD_GAP,
+                               glide_design.SPACING[0]))
+                self._bind_home_wheel(spalte)
+                # Deterministische Platzierung gemäß BentoLayoutPlan
+                for card_spec in lane.cards:
+                    bauer[card_spec.key](spalte)
         for index in range(spalten_zahl):
-            spalte = _ui.make(tk.Frame, raster, bg=theme["bg"])
-            spalte._home_build_width = max(1, (available_width - (spalten_zahl - 1) * self.HOME_CARD_GAP) // spalten_zahl)
-            _ui.grid(spalte, row=0, column=index, sticky="new",
-                        padx=(glide_design.SPACING[0] if index == 0 else self.HOME_CARD_GAP, glide_design.SPACING[0]))
             raster.columnconfigure(index, weight=1, uniform="home_columns")
-            spalten.append(spalte)
-            self._bind_home_wheel(spalte)
-
-        # Deterministische Platzierung der Spaltenkarten gemäß BentoLayoutPlan
-        for col_idx, col_cards in enumerate(layout_plan.columns):
-            if col_idx < len(spalten):
-                for card_spec in col_cards:
-                    bauer[card_spec.key](spalten[col_idx])
         if not sichtbar:
             leer = _ui.make(self.make_bento_card,
                 raster,
@@ -31145,8 +31192,14 @@ class ListApp:
                 auto_height=True,
             )
             _ui.grid(leer, row=0, column=0, sticky="new")
-            label(leer.inner, glide_i18n.t("ui.render_home.all_tiles_are_hidden", "Alle Kacheln sind ausgeblendet."), 12, True)
-            action(leer.inner, glide_i18n.t("ui.home_more_actions.set_up_home", "Startseite einrichten …"), self.show_home_tiles_dialog, "accent")
+            # WA-52: Leerzustand aus dem gemeinsamen Katalog, als BentoEmptyState.
+            zustand = self.empty_state_for("home")
+            leerzustand = _ui.make(glide_bento.BentoEmptyState, leer.inner, context=self.glide_bento_context(),
+                                   title=zustand.title, description=zustand.description,
+                                   action=(zustand.primary[1], self.empty_state_command(zustand.primary[0]), "accent"),
+                                   secondary_action=(zustand.secondary[1], self.empty_state_command(zustand.secondary[0]), "muted"))
+            _ui.pack(leerzustand, fill="x")
+            self._home_empty_state = leerzustand
 
         for widget in (self.home_canvas, self.home_content):
             self._bind_home_wheel(widget)
@@ -33815,24 +33868,38 @@ class ListApp:
             self.rounded_containers.append(container)
         return container
 
-    def make_bento_card(self, master, fill_key="card", outline_key="line", radius=18, inner_pad_x=None, inner_pad_y=None, auto_height=True, **kwargs):
-        """Erzeugt eine standardkonforme Bento-Karte (Ebene B, D100) für Startseite und Dialoge."""
+    def glide_bento_context(self, outline_key="line"):
+        """Ein Bento-Kontext je Fenster (Variante C, Bento 0.2.0).
+
+        Glide injiziert Theme und Tokens über Provider; jeder Aufruf liest sie
+        neu, damit Design-, Schrift- und Glaswechsel ohne neuen Kontext greifen.
+        Die Skalen bleiben allein in `ui_design.py` und den Startseitenmaßen.
+        """
         ctx = getattr(self, "_home_bento_context", None)
         if ctx is None:
             ctx = self._home_bento_context = glide_bento.BentoContext(
-                theme=self.theme,
+                theme_provider=lambda: self.theme,
+                token_provider=lambda: glide_design.bento_token_values(
+                    card_min_width=self.HOME_TILE_MIN_WIDTH, gap_relaxed=self.HOME_TILE_GAP,
+                    gap_default=self.HOME_CARD_GAP, card_padding_x=self.HOME_CARD_PAD_X,
+                    card_padding_y=self.HOME_CARD_PAD_Y),
                 font_provider=app_font,
                 icon_provider=lambda k: self.ICONS.get(k, ""),
-                glass_mode=self.glass_enabled(),
-                glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
-                glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
                 tooltip_installer=self.add_tooltip,
+                # Bento-Knöpfe (Leerzustände, Aktionsleisten) als Glide-Dialogknöpfe, nicht im Tk-Altstil.
+                button_factory=lambda master, text, command, role: self._make_dialog_button(
+                    master, text, command, role,
+                    width=max(120, ui_font_object(root=self.root, font=app_font(10, "bold")).measure(text) + 56), height=36),
             )
-        else:
-            ctx.theme = self.theme
-            ctx.glass_mode = self.glass_enabled()
-            ctx.glass_shadow = self.theme.get("glass_shadow", self.theme["bg"])
-            ctx.glass_highlight = self.theme.get("glass_highlight", self.theme[outline_key])
+        return ctx.refresh_from_host(
+            glass_mode=self.glass_enabled(),
+            glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
+            glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
+        )
+
+    def make_bento_card(self, master, fill_key="card", outline_key="line", radius=18, inner_pad_x=None, inner_pad_y=None, auto_height=True, **kwargs):
+        """Erzeugt eine standardkonforme Bento-Karte (Ebene B, D100) für Startseite und Dialoge."""
+        ctx = self.glide_bento_context(outline_key)
         card = glide_bento.BentoCard(
             master,
             context=ctx,
@@ -48541,8 +48608,116 @@ class ListApp:
         self.schedule_scrollbar_refresh()
         self.schedule_row_actions()
         self.sync_empty_state_action()
+        self.sync_overdue_banner()
         if getattr(self, "_backdrop", None):
             self.schedule_backdrop_sync()
+
+    # -----------------------------
+    # Verstrichene Fristen ruhig behandeln (WA-53, 1.1.0)
+    # -----------------------------
+    def overdue_items_for_review(self):
+        """Offene Aufgaben mit verstrichener Frist im ganzen Bestand (ohne Ansichtsfilter)."""
+        return [entry[4] for entry in self.get_overdue_items(apply_filters=False)]
+
+    def sync_overdue_banner(self):
+        """Ein ruhiges Banner über „Verspätet“: Anzahl, Alter und zwei bewusste Wege.
+
+        Es erscheint nur in dieser Ansicht und nur, wenn es verstrichene
+        Fristen gibt; nichts wird automatisch verschoben.
+        """
+        banner = getattr(self, "overdue_banner", None)
+        aktiv = self.view_mode == "overdue" and not getattr(self, "_data_read_only", False)
+        zusammenfassung = glide_overdue.summarize(self.overdue_items_for_review(), date.today()) if aktiv else None
+        if not aktiv or not zusammenfassung.count:
+            if banner is not None and banner.winfo_exists() and banner.winfo_manager():
+                banner.pack_forget()
+            return
+        theme = self.theme
+        try:
+            if banner is None or not banner.winfo_exists():
+                banner = self.overdue_banner = tk.Frame(self.list_frame_outer.inner, bg=theme["card"])
+                self.overdue_banner_text = tk.Label(banner, bg=theme["card"], fg=theme["muted"], font=app_font(10),
+                                                    anchor="w", justify="left")
+                self.overdue_banner_text.pack(side="left", fill="x", expand=True,
+                                              padx=(glide_design.SPACING[14], glide_design.SPACING[8]))
+                # Umbruch an der tatsächlichen Breite, nur bei spürbarer Änderung.
+                self.overdue_banner_text.bind("<Configure>", lambda event: event.widget.configure(
+                    wraplength=event.width) if abs(int(event.widget.cget("wraplength") or 0) - event.width) > 8 else None)
+                self.overdue_shift_button = self._make_dialog_button(
+                    banner, glide_i18n.t("ui.overdue_banner.shift_due", "Fristen neu setzen …"),
+                    self.shift_overdue_dues, "muted", width=176, height=34)
+                self.overdue_shift_button.pack(side="right", padx=(glide_design.SPACING[6], glide_design.SPACING[14]),
+                                               pady=glide_design.SPACING[8])
+                self.overdue_plan_button = self._make_dialog_button(
+                    banner, glide_i18n.t("ui.overdue_banner.plan_today", "Heute einplanen"),
+                    self.plan_overdue_today, "confirm", width=150, height=34)
+                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8])
+                self.add_tooltip(self.overdue_plan_button, glide_i18n.t(
+                    "ui.overdue_banner.plan_today_hint",
+                    "Setzt nur den Bearbeitungstag auf heute – die Fristen bleiben unverändert"))
+                self.add_tooltip(self.overdue_shift_button, glide_i18n.t(
+                    "ui.overdue_banner.shift_due_hint", "Neue Frist bewusst wählen; Serienaufgaben bleiben unverändert"))
+            banner.configure(bg=theme["card"])
+            self.overdue_banner_text.configure(text=glide_overdue.banner_text(zusammenfassung), bg=theme["card"],
+                                               fg=theme["muted"])
+            if zusammenfassung.to_plan:
+                # Hauptaktion vorn (links der Zweitaktion), wie in Glides Knopfreihen.
+                self.overdue_plan_button.pack(side="right", pady=glide_design.SPACING[8], after=self.overdue_shift_button)
+            else:
+                self.overdue_plan_button.pack_forget()
+            if banner.winfo_manager() != "pack":
+                banner.pack(fill="x", before=self.list_frame)
+        except tk.TclError:
+            return
+
+    def plan_overdue_today(self):
+        """Alle verstrichenen offenen Aufgaben heute einplanen – nur Bearbeitungstag, ein Undo-Schritt."""
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
+            return "break"
+        heute = date.today()
+        ids = glide_overdue.plan_today_ids(self.overdue_items_for_review(), heute)
+        if ids:
+            self.apply_quick_plan(ids, heute.isoformat())
+        self.sync_overdue_banner()
+        return "break"
+
+    def shift_overdue_dues(self):
+        """Neue Frist bewusst wählen und bestätigen; Serienaufgaben bleiben unverändert."""
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
+            return "break"
+        heute = date.today()
+        items = self.overdue_items_for_review()
+        if not items:
+            return "break"
+        wert = self.themed_due_dialog(heute.isoformat(), title=glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                                      show_time=False)
+        if not wert or not wert[0]:
+            return "break"
+        try:
+            plan = glide_overdue.due_shift(items, wert[0], heute)
+        except ValueError as exc:
+            self.show_error(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"), str(exc))
+            return "break"
+        if not plan.change_ids:
+            self.show_info(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                           glide_overdue.shift_confirmation(plan, self.relative_day_text(plan.new_due)).split("\n\n")[1]
+                           if plan.skipped_recurring else glide_i18n.t("ui.overdue_banner.nothing", "Keine Frist zu ändern."))
+            return "break"
+        if not self.ask_yes_no(glide_i18n.t("ui.overdue_banner.shift_due_title", "Neue Frist"),
+                               glide_overdue.shift_confirmation(plan, self.relative_day_text(plan.new_due),
+                                                                self.accel("Z"))):
+            return "break"
+        with self.item_change(plan.change_ids, restore=False, local=True) as change:
+            for item_id in plan.change_ids:
+                gefunden = self.find_item_in_lists(item_id)
+                if gefunden:
+                    gefunden[0]["due"] = plan.new_due
+            change.mark()
+        if change.saved:
+            self.show_undo_toast(glide_i18n.t("ui.overdue_banner.shifted", "{n} Fristen auf {day} gesetzt",
+                                              n=len(plan.change_ids), day=self.relative_day_text(plan.new_due)))
+        self.sync_overdue_banner()
+        return "break"
 
     # -----------------------------
     # Leerzustände mit nächstem Schritt (3.30, MO-050)
@@ -48596,6 +48771,11 @@ class ListApp:
                 eintrag = self.current_list()
                 if eintrag and self.list_accepts_items(eintrag) and not anlegen_ueber_eingabe:
                     return glide_i18n.t("ui.empty_state_action.create_first_item", "Ersten Punkt anlegen"), self.focus_new_item_entry
+            if modus == self.PLAN_DAY_VIEW:
+                # WA-52: Ein leerer Tag schlägt den nächsten Schritt vor.
+                zustand = self.empty_state_for("today")
+                if zustand.primary:
+                    return zustand.primary[1], self.empty_state_command(zustand.primary[0])
         return None
 
     def list_empty_state(self):
@@ -48673,6 +48853,50 @@ class ListApp:
             label.bind(sequenz, ausfuehren)
         label._inline_command = command
         return label
+
+    def empty_state_for(self, context):
+        """Inhalt des Leerzustands (WA-52) aus `empty_states.py` mit dem aktuellen Ansichtszustand."""
+        filtered = bool(self.has_active_filter()) if hasattr(self, "has_active_filter") else False
+        if context == "journal":
+            folder_id = getattr(self, "active_folder_id", None)
+            return glide_empty.empty_state("journal", filtered=bool(self.current_search_query()),
+                                           date_range=bool(folder_id and any(self.journal_filter_range(folder_id))),
+                                           hints=self.hints_shown())
+        if context == "today":
+            heute = self.plan_day() == date.today().isoformat()
+            offen = any(self.is_schedulable_item(item) and not item.get("done")
+                        for entry in self.lists for item in self.walk_items(entry.get("items", [])))
+            return glide_empty.empty_state("today", filtered=filtered, other_day=not heute, has_tasks=offen,
+                                           hints=self.hints_shown())
+        if context == "list":
+            return glide_empty.empty_state("list", filtered=filtered, entry_visible=self.entry_line_visible(),
+                                           hints=self.hints_shown())
+        return glide_empty.empty_state(context, hints=self.hints_shown())
+
+    def empty_state_command(self, action_id):
+        """Vorhandener Befehl zu einer Leerzustandsaktion (WA-52); keine neuen Arbeitswege."""
+        befehle = {
+            "home_setup": self.show_home_tiles_dialog,
+            "home_restore": self.restore_home_tiles_default,
+            "focus_entry": self.focus_new_item_entry,
+            "use_template": self.set_template_view,
+            "plan_day": self.start_day_proposal,
+            "open_inbox": self.open_inbox_for_first_task,
+            "new_page": self.create_new_page,
+            "clear_filter": self.reset_filters_for_empty_state,
+        }
+        return befehle[action_id]
+
+    def open_inbox_for_first_task(self):
+        """Eingang öffnen und die Eingabezeile fokussieren – dort entsteht die erste Aufgabe."""
+        ziel = next((entry.get("id") for entry in self.lists if self.is_inbox_list(entry)), None)
+        if ziel is None:
+            ziel = next((entry.get("id") for entry in self.lists
+                         if self.list_accepts_items(entry) and not self.is_page_list(entry)), None)
+        if ziel is not None:
+            self.set_active_list(ziel)
+            self.after_scope().after_idle(self.focus_new_item_entry)
+        return "break"
 
     def reset_filters_for_empty_state(self):
         self.search_placeholder_active = False
@@ -52956,6 +53180,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                  lambda lid=entry["id"]: self.set_active_list(lid), hinweis))
             return ergebnis
 
+        if not alle:
+            # WA-52: ein Leerzustand statt dreier leerer Abschnitte.
+            zustand = self.empty_state_for("pages")
+            self._pages_empty_state = glide_bento.BentoEmptyState(
+                innen, context=self.glide_bento_context(), title=zustand.title, description=zustand.description,
+                action=(zustand.primary[1], self.empty_state_command(zustand.primary[0]), "confirm"),
+                secondary_action=(zustand.secondary[1], self.empty_state_command(zustand.secondary[0]), "muted"))
+            self._pages_empty_state.pack(fill="x", pady=(4, 4))
+            self._bind_home_wheel(karte)
+            return
+        self._pages_empty_state = None
         self.render_overview_sections(innen, (
             (glide_i18n.t("ui.render_pages_page.favorites", "Favoriten"), zeilen(favoriten), glide_i18n.t("ui.render_pages_page.no_favorites_yet_in", "Noch keine Favoriten – in einer Seite unter „Mehr“ oder hier mit ☆.")),
             (glide_i18n.t("ui.render_pages_page.recently_opened", "Zuletzt geöffnet"), zeilen(zuletzt), glide_i18n.t("ui.render_pages_page.no_page_opened_yet", "Noch keine Seite geöffnet.")),
@@ -56153,10 +56388,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
 
         if not self.items:
-            # UX-05 (27.11.2026): Die Leerzeile fordert zum ersten Punkt auf; ein
-            # Klick auf sie führt in die Eingabezeile darüber (`empty_inline_action`).
-            leer = self.list_empty_state()
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=glide_i18n.t(leer.key, leer.fallback), tags=("empty",))
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.empty_state_for("list").text, tags=("empty",))
             self.finish_tree_refresh()
             return
 
@@ -56218,7 +56450,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
         entries = self.table_entries(apply_filters=True)
         if not entries:
-            empty = glide_i18n.t("ui.refresh_table_view.no_tasks_match_the", "Keine Aufgaben passen zum aktuellen Filter.") if self.has_active_filter() else (lambda leer: glide_i18n.t(leer.key, leer.fallback))(self.list_empty_state())
+            empty = glide_i18n.t("ui.refresh_table_view.no_tasks_match_the", "Keine Aufgaben passen zum aktuellen Filter.") if self.has_active_filter() else self.empty_state_for("list").text
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty, tags=("empty",))
             self.finish_tree_refresh()
             return
@@ -56522,8 +56754,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",), text=(
                     glide_i18n.t("ui.refresh_task_overview.no_tasks_of_this", "Keine Aufgaben dieses Tages passen zu den aktuellen Filtern.")
                     if self.has_active_filter()
-                    else glide_i18n.t("ui.refresh_task_overview.nothing_is_planned_today", "Heute ist nichts eingeplant.") if self.plan_day() == date.today().isoformat()
-                    else glide_i18n.t("ui.refresh_task_overview.nothing_is_planned_on", "An diesem Tag ist nichts eingeplant.")))
+                    else self.empty_state_for("today").text))
             tagesplan(teile.plan, teile.naechste is not None or bool(teile.verspaetet or teile.liegen))
             if teile.faellig:
                 heute_gezeigt = self.plan_day() == date.today().isoformat()
@@ -57055,10 +57286,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 else glide_i18n.t("ui.refresh_folder_overview.there_are_no_entries", "Im gewählten Zeitraum gibt es keine Einträge.")
                 if journal_view and any(self.journal_filter_range(self.active_folder_id))
                 else (
-                    # UX-05: Aufforderung statt Feststellung; ein Klick führt in den einen Anlegeweg.
+                    # WA-52 für Notizbücher, UX-05-Aufforderung für gewöhnliche Ordner.
+                    self.empty_state_for("journal").text
+                    if journal_view else
                     (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
-                        "journal" if journal_view else "folder",
-                        read_only=bool(getattr(self, "_data_read_only", False))))
+                        "folder", read_only=bool(getattr(self, "_data_read_only", False))))
                 )
             )
             self.tree.insert(

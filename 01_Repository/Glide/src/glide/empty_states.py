@@ -1,118 +1,154 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Leerzustände als Handlungsaufforderung (UX-05, 27.11.2026).
+"""Kontextuelle Leerzustände (WA-52, Glide 1.1.0) – Tk-frei nach D17.
 
-Ein leerer Bereich nennt, was man jetzt tun kann, statt nur festzustellen,
-dass nichts da ist – nach dem Vorbild „Schreiben oder „/“ für Blöcke“ der
-Seiten. Der Text selbst ist die Handlung: Ein Klick führt in genau den einen
-Anlegeweg, den der Bereich ohnehin hat (U20: kein zweiter Anlegen-Knopf).
+Ein Leerzustand nennt, wo man ist (Titel), was hier entsteht (ein Satz) und
+den nächsten Schritt: eine Hauptaktion, höchstens eine zweite. Dieses Modul
+entscheidet nur Inhalt und Aktionskennungen; die Oberfläche ordnet den
+Kennungen ihre vorhandenen Befehle zu. Grenzen aus den Produktentscheidungen:
 
-Regeln:
-1. Leer ohne Filter → Aufforderung im Imperativ, Klick löst den Anlegeweg aus.
-2. Leer durch Filter oder Suche → Grund nennen, Klick setzt den Filter zurück.
-3. Schreibgeschützt oder ohne Anlegeweg → Grund nennen, keine Handlung.
-4. „…“ nur, wenn danach ein Dialog folgt (wie in Menüs).
-
-Liefert Schlüssel, deutsche Rückfalltexte und Handlungskennungen; was eine
-Kennung tut, entscheidet der Aufrufer. Tk-frei, ohne Glide-Abhängigkeit.
+* U20 (3.33.20): Steht eine Eingabezeile sichtbar darüber, ist sie der eine
+  Anlegeweg – der Leerzustand verweist auf sie statt einen zweiten
+  Anlegeknopf zu zeigen.
+* N06 (25./27.09.2026): kein Einstieg für neue Nutzer, kein Rundgang, kein
+  Pflichtdialog. Leerzustände erscheinen nur, wo tatsächlich nichts ist, und
+  verschwinden mit dem ersten Inhalt.
+* B06: Mit ausgeschalteten Bedienhinweisen entfällt nur der reine
+  Bedienhinweis (etwa „Datum und Labels erkennt Glide im Text“); Titel,
+  Erklärung und Aktionen bleiben, denn sie beschreiben den Zustand.
 """
+from dataclasses import dataclass
 
-from collections import namedtuple
+import i18n as glide_i18n
 
-EmptyState = namedtuple("EmptyState", "key fallback action")
+# Aktionskennungen, die die Oberfläche auf vorhandene Befehle abbildet.
+ACTIONS = (
+    "home_setup",          # Startseite einrichten (Kachelauswahl)
+    "home_restore",        # Standardkacheln wiederherstellen
+    "focus_entry",         # Eingabezeile der Liste fokussieren
+    "use_template",        # Vorlagenübersicht öffnen
+    "plan_day",            # Tagesvorschlag / Arbeitstag planen
+    "open_inbox",          # Eingang öffnen (dort entsteht die erste Aufgabe)
+    "new_page",            # neue Seite anlegen
+    "pin_items",           # Elemente zur Pinnwand hinzufügen
+    "clear_filter",        # Filter oder Suche zurücksetzen
+    "new_journal_entry",   # ersten Notizbucheintrag anlegen
+    "show_all_days",       # Zeitraumfilter des Notizbuchs aufheben
+)
 
-FOCUS_ENTRY = "focus_entry"
-RESET_FILTER = "reset_filter"
-CREATE_PAGE = "create_page"
-CREATE_NOTE = "create_note"
-CREATE_DRAWING = "create_drawing"
-CREATE_NOTEBOOK = "create_notebook"
-CREATE_LIST = "create_list"
-CREATE_GALLERY = "create_gallery"
-CREATE_JOURNAL_ENTRY = "create_journal_entry"
-CREATE_AREA = "create_area"
-OPEN_GLOBAL_BOARD = "open_global_board"
-MANAGE_LABELS = "manage_labels"
-IMPORT_TEMPLATES = "import_templates"
-ADD_IMAGES = "add_images"
-SHOW_ALL_DAYS = "show_all_days"
-
-ACTIONS = frozenset({FOCUS_ENTRY, RESET_FILTER, CREATE_PAGE, CREATE_NOTE, CREATE_DRAWING, CREATE_NOTEBOOK,
-                     CREATE_LIST, CREATE_GALLERY, CREATE_JOURNAL_ENTRY, CREATE_AREA, OPEN_GLOBAL_BOARD,
-                     MANAGE_LABELS, IMPORT_TEMPLATES, ADD_IMAGES, SHOW_ALL_DAYS})
-# Handlungen, nach denen ein Dialog oder Fenster folgt: nur ihre Texte tragen „…“.
-DIALOG_ACTIONS = frozenset({CREATE_NOTEBOOK, CREATE_LIST, CREATE_AREA, MANAGE_LABELS, IMPORT_TEMPLATES, ADD_IMAGES})
+CONTEXTS = ("home", "list", "today", "pages", "pinboard", "journal")
 
 
-def list_state(accepts_items=True, filtered=False, read_only=False):
-    """Leerzustand einer Aufgaben- oder Notizliste."""
-    if filtered:
-        return EmptyState("ui.refresh_tree_contents.no_matches_for_the",
-                          "Keine Treffer für den aktuellen Filter.", RESET_FILTER)
-    if read_only:
-        return EmptyState("empty.list.read_only",
-                          "Noch keine Punkte – die Daten sind gerade schreibgeschützt.", None)
-    if not accepts_items:
-        return EmptyState("ui.refresh_tree_contents.no_items_yet", "Noch keine Punkte vorhanden.", None)
-    return EmptyState("empty.list.add_first",
-                      "Einen neuen Punkt hinzufügen – oben eingeben, Enter legt ihn an.", FOCUS_ENTRY)
+@dataclass(frozen=True, slots=True)
+class EmptyState:
+    """Inhalt eines Leerzustands. Aktionen sind (Kennung, Beschriftung) oder None."""
+
+    context: str
+    title: str
+    description: str
+    primary: tuple[str, str] | None = None
+    secondary: tuple[str, str] | None = None
+
+    @property
+    def text(self) -> str:
+        """Titel und Erklärung als zweizeiliger Text für einzeilige Flächen (Baumzeile)."""
+        return f"{self.title}\n{self.description}" if self.description else self.title
+
+    @property
+    def action_ids(self) -> tuple[str, ...]:
+        return tuple(action[0] for action in (self.primary, self.secondary) if action)
 
 
-OVERVIEWS = {
-    "pages": EmptyState("empty.pages.create", "Eine neue Seite anlegen", CREATE_PAGE),
-    "notes": EmptyState("empty.notes.create", "Eine neue Notiz schreiben", CREATE_NOTE),
-    "drawings": EmptyState("empty.drawings.create", "Eine neue Zeichnung anlegen", CREATE_DRAWING),
-    "notebooks": EmptyState("empty.notebooks.create",
-                            "Ein Notizbuch für datierte Einträge anlegen …", CREATE_NOTEBOOK),
-    # Startseitenkacheln und Bibliothek
-    "galleries": EmptyState("empty.galleries.create", "Eine neue Galerie für Bilder anlegen", CREATE_GALLERY),
-    "boards": EmptyState("empty.boards.open_global", "Die globale Pinnwand öffnen und erste Karten anlegen",
-                         OPEN_GLOBAL_BOARD),
-    "labels": EmptyState("empty.labels.manage", "Labels anlegen und verwalten …", MANAGE_LABELS),
-    "library": EmptyState("empty.library.create_list", "Eine neue Liste anlegen …", CREATE_LIST),
-    "templates": EmptyState("empty.templates.import", "Vorlagen hinzufügen …", IMPORT_TEMPLATES),
-    "gallery_images": EmptyState("empty.gallery.add_images",
-                                 "Bilder hinzufügen … – sie werden wie Anhänge dieser Galerie gesichert.",
-                                 ADD_IMAGES),
-}
-
-MENUS = {
-    "labels": EmptyState("empty.menu.create_label", "Neues Label anlegen …", MANAGE_LABELS),
-    "areas": EmptyState("empty.menu.create_area", "Neuen Bereich anlegen …", CREATE_AREA),
-}
+def _t(key, default, **values):
+    return glide_i18n.t(f"mod.empty_states.{key}", default, **values)
 
 
-def folder_state(kind="folder", searched=False, period_filtered=False, read_only=False):
-    """Leerzustand eines Ordners, Notizbuchs (`journal`) oder Buchs (`book`)."""
-    if searched:
-        return EmptyState("ui.refresh_folder_overview.no_lists_or_content",
-                          "Keine Listen oder Inhalte passen zur aktuellen Suche.", RESET_FILTER)
-    if kind == "journal" and period_filtered:
-        return EmptyState("ui.refresh_folder_overview.there_are_no_entries",
-                          "Im gewählten Zeitraum gibt es keine Einträge.", SHOW_ALL_DAYS)
-    if read_only:
-        return EmptyState("empty.overview.read_only",
-                          "Noch nichts angelegt – die Daten sind gerade schreibgeschützt.", None)
-    if kind == "journal":
-        # Die Eingabezeile legt dort nur eine gewöhnliche Liste an; der Eintrag hat seinen eigenen Weg.
-        return EmptyState("empty.journal.first_entry", "Den ersten Eintrag dieses Notizbuchs anlegen",
-                          CREATE_JOURNAL_ENTRY)
-    if kind == "book":
-        return EmptyState("empty.book.add_page", "Eine neue Seite anlegen – oben eingeben, Enter legt sie an.",
-                          FOCUS_ENTRY)
-    return EmptyState("empty.folder.add_list", "Eine neue Liste anlegen – oben eingeben, Enter legt sie an.",
-                      FOCUS_ENTRY)
+def _action(action_id):
+    labels = {
+        "home_setup": ("home_setup", "Startseite einrichten …"),
+        "home_restore": ("home_restore", "Standardkacheln zeigen"),
+        "use_template": ("use_template", "Vorlage verwenden"),
+        "plan_day": ("plan_day", "Arbeitstag planen …"),
+        "open_inbox": ("open_inbox", "Erste Aufgabe anlegen"),
+        "new_page": ("new_page", "Erste Seite erstellen"),
+        "pin_items": ("pin_items", "Element hinzufügen"),
+        "clear_filter": ("clear_filter", "Filter aufheben"),
+        "new_journal_entry": ("new_journal_entry", "Ersten Eintrag anlegen"),
+        "show_all_days": ("show_all_days", "Alle Tage zeigen"),
+        "focus_entry": ("focus_entry", "Erste Aufgabe anlegen"),
+    }
+    key, default = labels[action_id]
+    return action_id, _t(f"action.{key}", default)
 
 
-def menu_state(kind):
-    """Eintrag für ein leeres Untermenü; None für unbekannte Arten."""
-    return MENUS.get(kind)
+def empty_state(context, *, filtered=False, entry_visible=False, other_day=False, has_cards=False,
+                date_range=False, hints=True, has_tasks=True):
+    """Leerzustand für ``context`` (siehe ``CONTEXTS``) oder ``None``.
 
-
-def overview_state(kind, read_only=False):
-    """Leerzustand des Abschnitts „Alle …“ einer Übersicht; None für unbekannte Arten."""
-    state = OVERVIEWS.get(kind)
-    if state is None:
-        return None
-    if read_only:
-        return EmptyState("empty.overview.read_only", "Noch nichts angelegt – die Daten sind gerade schreibgeschützt.", None)
+    ``filtered``: Suche/Filter blendet vorhandene Inhalte aus – dann ist
+    Zurücksetzen der nächste Schritt, nicht Anlegen. ``entry_visible``: eine
+    Eingabezeile steht darüber (U20). ``other_day``: Heute zeigt einen
+    anderen Tag. ``has_cards``: die Pinnwand hat Karten, nur keine im Filter.
+    ``date_range``: das Notizbuch ist auf einen Zeitraum eingeschränkt.
+    ``has_tasks``: es gibt überhaupt offene Aufgaben (für „Arbeitstag planen“).
+    ``hints``: Bedienhinweise an (B06); aus, entfällt nur der reine Bedienhinweis.
+    """
+    if context not in CONTEXTS:
+        raise ValueError(f"unknown empty-state context {context!r}")
+    if context == "home":
+        state = EmptyState(context, _t("home.title", "Alle Kacheln sind ausgeblendet"),
+                           _t("home.description", "Wähle aus, was die Startseite zeigen soll – Aufgaben, Kalender, Seiten oder Pinnwände."),
+                           _action("home_setup"), _action("home_restore"))
+    elif context == "list":
+        if filtered:
+            state = EmptyState(context, _t("list.filtered_title", "Keine Treffer"),
+                               _t("list.filtered_description", "Die Liste hat Inhalte, die Suche oder der Filter blendet sie aus."),
+                               _action("clear_filter"))
+        elif entry_visible:
+            state = EmptyState(context, _t("list.title", "Diese Liste ist noch leer"),
+                               _t("list.entry_description", "Schreib oben die erste Aufgabe und drück Enter.")
+                               + (_t("list.entry_hint", " Datum und Labels erkennt Glide im Text.") if hints else ""),
+                               None, None)
+        else:
+            state = EmptyState(context, _t("list.title", "Diese Liste ist noch leer"),
+                               _t("list.description", "Hier entstehen Aufgaben, Notizen und Unterpunkte."),
+                               _action("focus_entry"), _action("use_template"))
+    elif context == "today":
+        if filtered:
+            state = EmptyState(context, _t("today.filtered_title", "Nichts passt zum Filter"),
+                               _t("today.filtered_description", "Für diesen Tag sind Aufgaben eingeplant, der Filter blendet sie aus."),
+                               _action("clear_filter"))
+        elif other_day:
+            state = EmptyState(context, _t("today.other_day_title", "An diesem Tag ist nichts eingeplant"),
+                               _t("today.other_day_description", "Plane Aufgaben über ihr Menü auf diesen Tag oder lass dir einen Vorschlag machen."),
+                               _action("plan_day") if has_tasks else _action("open_inbox"))
+        else:
+            state = EmptyState(context, _t("today.title", "Heute ist noch nichts eingeplant"),
+                               _t("today.description", "Wähle aus deinen offenen Aufgaben, was heute dran ist – Fristen bleiben dabei unverändert."),
+                               _action("plan_day") if has_tasks else _action("open_inbox"))
+    elif context == "pages":
+        state = EmptyState(context, _t("pages.title", "Noch keine Seiten"),
+                           _t("pages.description", "Seiten halten Projekte, Notizen und Aufgaben zusammen. Beginne leer oder mit einer Vorlage."),
+                           _action("new_page"), _action("use_template"))
+    elif context == "pinboard":
+        if has_cards:
+            state = EmptyState(context, _t("pinboard.filtered_title", "Keine Karten für diesen Filter"),
+                               _t("pinboard.filtered_description", "Die Pinnwand hat Karten, der Filter blendet sie aus."),
+                               _action("clear_filter"))
+        else:
+            state = EmptyState(context, _t("pinboard.title", "Die Pinnwand ist leer"),
+                               _t("pinboard.description", "Hefte vorhandene Aufgaben, Seiten oder Zeichnungen an oder klicke doppelt auf die Fläche für eine neue Karte."),
+                               _action("pin_items"))
+    else:  # journal
+        if date_range:
+            state = EmptyState(context, _t("journal.range_title", "Keine Einträge in diesem Zeitraum"),
+                               _t("journal.range_description", "Ältere oder spätere Einträge erscheinen, wenn der Zeitraum aufgehoben wird."),
+                               _action("show_all_days"))
+        elif filtered:
+            state = EmptyState(context, _t("journal.filtered_title", "Keine Treffer"),
+                               _t("journal.filtered_description", "Das Notizbuch hat Einträge, die Suche blendet sie aus."),
+                               _action("clear_filter"))
+        else:
+            state = EmptyState(context, _t("journal.title", "Das Notizbuch ist noch leer"),
+                               _t("journal.description", "Ein Eintrag trägt seinen Tag, Stimmung und Ort. Schreib den ersten für heute."),
+                               _action("new_journal_entry"))
     return state

@@ -54,6 +54,8 @@ The sidebar shows system rows: **Home**, **Today**, **Labels**, **Templates** an
 
 **Home** is an adaptive Bento grid of cards (1 to 3 responsive columns with breakpoints at 616 px and 932 px, based on the Glide Bento Box System 0.1.0). The default layout "Calm" shows Today, Gismo, the next seven days, recently edited items, a pinboard preview, drawings, gallery images and pinned items. You can add more tiles, such as the clock, next task, templates, calendar preview, overdue items, progress, labels and pinned filters.
 
+- **Two columns** (development state 1.1.0, Glide Bento 0.2.0): in **Customize home**, a tile can span two of three columns at its place in the order (**Two columns**, back with **One column**). With two columns it spans the full width at its place, with one column it is normal. **Full width** still puts a tile above the grid.
+- **Empty states** (development state 1.1.0): if all tiles are hidden, a card offers **Set up home …** and **Show default tiles**. Empty lists, Today, the page overview, boards and notebooks name their state and the next step; there is no first-run wizard or tour.
 - **Customize home**, below the tiles, lets you drag, hide and resize tiles. **Settings › Appearance & Controls › Configure Home …** offers **Restore default**.
 - After an update, a "New in Glide" card lists what changed in the last three versions with entries. **Help › About Glide › What's new …** keeps the full history.
 - **Gismo** is Glide's drawn companion. His mood mirrors your task collection, not you. Hide his tile if you do not want him.

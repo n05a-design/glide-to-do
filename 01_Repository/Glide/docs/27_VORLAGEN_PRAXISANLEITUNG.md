@@ -1,6 +1,6 @@
 # Vorlagen im Unternehmensalltag
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 26.11.2026 · Glide 1.0.3 (Entwicklungsstand 1.1.0) · Aufgabenformat 26 · Vorlagenformat 2
 
 3.28 ergänzt vier integrierte Tagebuchvorlagen: Tagesnotiz, Dankbarkeit,
 Wochenrückblick und Jahresordner mit Quartalen. Sie verwenden Notizseiten und
@@ -47,6 +47,11 @@ bei geschlossener App kopieren, wenn wirklich alle Einstellungen mitgesichert we
 | WordPress-Relaunch | Website erneuern | Bestand, Design, Umsetzung, Staging-Abnahme, Livegang und Pflege |
 | WEG-Verwaltung | Objektbezogene Vorgänge bearbeiten | Eingang, Zuständigkeit, Dienstleister, Nachweise und Wiedervorlage |
 | Baukommunikation | Bauabschnitte kommunizieren | Fakten, Zielgruppen, Freigaben, Veröffentlichung und Aktualisierung |
+| Freelance-Kundenprojekt (L4) | Auftrag vom Briefing bis zur Rechnung | Ordner mit vier Listen: Kundenbriefing und Ziele/Anforderungen, Phasen mit Meilensteinen, Feedback und Abnahme, Übergabe; fragt beim Anwenden nach `{{Kunde}}`; Freigabe und Abnahme warten auf ihre Voraussetzungen |
+| Kreatives Designprojekt (L4) | Gestaltung in Runden | Ordner mit Inspiration/Moodboard, Konzept und Entwurfsrunden mit drei Varianten, Feedback und Revisionen, Freigabe und Asset-Übergabe |
+| Persönliche Wochenplanung (L4) | Eigene Woche bewusst planen | Liste mit Wochenabsichten, Fokuszielen, Terminen, Puffern, Aufgaben und Wochenrückblick (KW über `{{KW}}`); Bearbeitungstage Montag bis Freitag |
+
+Die drei L4-Vorlagen (Entwicklungsstand nach 1.0.3, Ziel 1.1.0) liegen deutsch und englisch im mitgelieferten Katalog. Termine und Bearbeitungstage verschieben sich beim Anwenden so, dass der erste Tag der Vorlage auf heute fällt (`schedule_anchor`); mehrfaches Anwenden legt jeweils eigene Kopien mit neuen Kennungen an, Rückgängig nimmt die Anwendung als Ganzes zurück. Gepflegt werden sie ausschließlich über `scripts/pflege/vorlagen_l4.py` (deutscher Katalog und Satzpaare), danach `scripts/pflege/vorlagen_englisch.py`; `test_vorlagen_l4.py` (T348) prüft Format, Sprachparität und Beziehungen. Die Inhaltsskizzen unter `00_Arbeitsvorbereitung/Referenzvorlagen/` sind kein Vorlagenformat-2-Bestand und werden nicht importiert.
 
 ## Empfohlener Ablauf
 

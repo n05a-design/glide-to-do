@@ -190,7 +190,7 @@ class BentoDemoApp:
             context=self.context,
             spec=BentoCardSpec(
                 key="welcome",
-                title="Bento Box System 0.1.0 – Architektur & Komponenten",
+                title=f"Bento Box System {BENTO_VERSION} – Architektur & Komponenten",
                 icon="today",
                 variant="full_width",
                 heading_action=("Dokumentation", lambda: None, "accent"),
@@ -229,7 +229,7 @@ class BentoDemoApp:
         card_tasks = BentoCard(
             self.grid,
             context=self.context,
-            spec=BentoCardSpec(key="tasks", title="Heute anstehend", icon="calendar", weight=3),
+            spec=BentoCardSpec(key="tasks", title="Heute anstehend · zwei Spalten", icon="calendar", weight=3, span=2),
         )
         for text in ("Architekturkonzept prüfen", "BentoCard Widget-Testlauf", "Geometrische Grenzen messen"):
             row = tk.Frame(card_tasks.body, bg=self.context.resolve_color("card_bg"))

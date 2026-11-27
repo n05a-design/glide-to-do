@@ -764,6 +764,34 @@ flowchart LR
 
 ---
 
+### 4.6 Umsetzungsstand Glide 1.1.0 (Arbeitsprotokoll 26.11.2026)
+
+Branch `feature/glide-1-1-product-experience` ab `main` `6c3a64eb` (lokal, nicht gepusht). Status nach D51 getrennt: **Implementierung** im Entwicklungsstand, **Prüfung** gezielt (keine eingefrorene Vollprüfung, keine native Matrix), **Lieferung** keine (`VERSION` 1.0.3, kein Versionswechsel, `07_Python-Versionen` und Pakete unverändert), **Menschenabnahme** offen. Prüfnachweise: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md#entwicklungsstand-nach-glide-103-ziel-110-26112026).
+
+| Phase / Kennung | Ausgangsstand | Anforderung | Status | Komponenten | Prüfnachweis | Offene Befunde | Nächste Aktion |
+|---|---|---|---|---|---|---|---|
+| A – Release 1.0.3 | Release öffentlich, 0 Dateien; Workflow 45542455591 grün | Ursache, Prozedur, keine falschen Downloadversprechen | ✓ eingegrenzt und abgesichert; Veröffentlichungsschritte vorbereitet | `release.yml` (Gegenprüfschritt), README DE/EN, [10_VEROEFFENTLICHUNG](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#befund-v103-ohne-downloaddateien-26112026) | T296 | Zweitentwurf nur angemeldet prüfbar; Lauflog nicht gelesen | Inhaber: Schritte (a)–(c) dort |
+| B – Bento 0.2.0 | 0.1.0: Vollbreite oben, sonst einspaltig; Tokens doppelt | Multi-Span, Variante C, Retention | ✓ implementiert | `glide_bento/*`, `ui_design.bento_token_values`, `render_home`, `glide_bento_context` | Selbsttest 16/16, T341–T344 erweitert, T347 | Demogalerie zeigt Multi-Span noch nicht eigens; nur Windows/Tk 9 geprüft; Performancemessung nur Reflow-Zähler | Demo-Karte `span=2`, Mac-Sichtprüfung |
+| C – WA-52 | MO-050/U20-Leerzeilen, teils ohne Aktion | sechs Leerzustände, DE/EN, kein Pflichtdialog | ◐ Leerzustände ✓; Showcase-Erkundung **nicht** umgesetzt | `empty_states.py`, `BentoEmptyState` | T345, T347, Sichtbelege | Showcase in der App berührt N06 und Paketinhalt → Inhaberentscheidung | Entscheidung WA-52-Showcase |
+| D – L4 | drei Inhaltsskizzen ohne Format-26-Bestand | 3 Vorlagen × DE/EN anwendbar | ✓ implementiert | `scripts/pflege/vorlagen_l4.py`, Kataloge, `vorlagen_en.json` | T348, T347 (6 Fassungen angewendet, Undo, Persistenz) | Vorlagenvorschau nicht erweitert (bestehende Vorschau genügt) | Sichtprüfung der Vorschau EN |
+| E – WA-53 | Verspätet ohne Sammelaktion | ruhige Bündelung, Frist ≠ Bearbeitungstag, Undo | ✓ implementiert | `overdue_review.py`, Banner, Startseitenkachel | T346, T347 | Farbentschärfung älterer Fristen nicht umgesetzt (Designentscheidung, Farbsemantik bleibt) | Inhaber: Farbfrage |
+
+**Inhaberentscheidungen aus dieser Runde:** (1) WA-52-Showcase: Erkundung „Stadtlicht“ aus der App (eigener Datenordner, Rückweg) widerspricht N06 bzw. braucht Paketinhalt und Bildrechte – zulassen oder bei Leerzuständen bleiben? (2) WA-52-Abnahmekriterium „Erste Aufgabe anlegen“-Knopf in leerer Liste kollidiert mit U20 (ein Anlegeweg); umgesetzt ist U20. (3) WA-53 „Fristen entfernen“ und gedämpfte Farbe älterer Fristen: nicht umgesetzt. (4) Versionswechsel auf 1.1.0 mit eingefrorenem Volllauf und Lieferung (D51).
+
+**Phase F – nächster zusammenhängender Auftrag (vorbereitet, nicht begonnen):**
+
+| Paket | Grundlage im Bestand (geprüft) | Abhängigkeit aus 1.1.0 | Datenvertrag | Offene Entscheidung |
+|---|---|---|---|---|
+| WA-12 Rest (Puffer, Spätstart) | `planning.py`, `day_relief.py`, `occupied_time.py`, `apply_quick_plan` | Banner-Muster aus WA-53 für den Spätstart-Hinweis | Einstellungen (`settings`), Format 26 unverändert | Standardpuffer 15 min an/aus |
+| WA-54 Mehrfacherfassung | `capture_parser.py`, `glide_shell.modal_session`, `item_change` | Leerzustand Liste verweist auf die Eingabezeile | Format 26 unverändert | Obergrenze je Einfügen |
+| WA-20 Wochenabsichten/-rückblick | `week_planning.py`, Wochenrückblick (F031), L4-Wochenvorlage | Vorlage „Persönliche Wochenplanung“ als Startpunkt | **Formatfrage** (`week_intentions`) → Migration nötig, Inhaberentscheidung | Speicherort |
+| WA-08 Soll-Ist neutral | `estimated_minutes`, `time_spent_minutes`, Wochenrückblick | – | unverändert | Darstellung im Inspektor |
+| WA-56 Einzelannahme KI-Import | `exchange_patch.py`, `exchange_recipes.py` | – | Austauschformat 2 unverändert | – |
+| L1 Projekt-Dashboard | Bento 0.2.0 Bandmodell, `BentoMetric` | Multi-Span-Karten | unverändert | Einstieg (Ordneransicht) |
+| Bento 0.3.0 | `BentoGrid` mit Retention | Demo-Galerie, Presets (L3) | – | Umfang |
+
+Empfohlene Reihenfolge: WA-12 Rest → WA-54 → WA-08 → L1 mit Bento 0.3.0; WA-20 erst nach der Formatentscheidung. Testplan je Paket: Tk-freie Unit-Tests (D17), Erweiterung von `test_glide_110.py` bzw. Nachfolgesuite, Sichtbeleg 860 × 700.
+
 ### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
 
 Zur lückenlosen Dokumentation der vollständigen Bearbeitung des Post-Release-Master-Auftrags und des Inhaltsaudits werden hier die sechs kanonischen Matrizen verankert:
@@ -834,15 +862,15 @@ Zur lückenlosen Dokumentation der vollständigen Bearbeitung des Post-Release-M
 | **L1** | Projekt-Dashboard & Meilenstein-Übersicht | Vollständig ausgearbeitet (§4.3) | `src/glide/object_references.py`, `glide_bento/`, `settings.json` (Variante C) | v1.2.0 |
 | **L2** | Personal Insights & Wochenreflexion | Vollständig ausgearbeitet (§4.3) | `src/glide/planning.py` (Tk-frei), keine Gamification/Streaks | v1.3.0 |
 | **L3** | Workspace-Presets & fokussierte Arbeitsstile | Vollständig ausgearbeitet (§4.3) | `src/glide/app.pyw` (`HOME_TILE_DEFINITIONS`, 20 Kacheln / 7 Presets) | v1.3.0 |
-| **L4** | Integrierte Vorlagen-Bibliothek | Vollständig ausgearbeitet (§4.3 & §4.4) | `resources/templates/` (3 zweisprachige Vorlagen DE/EN nach Vorlagenformat 2) | v1.1.0 |
+| **L4** | Integrierte Vorlagen-Bibliothek | ◐ Umgesetzt im Entwicklungsstand nach 1.0.3, ungeliefert ([§4.6](#46-umsetzungsstand-glide-110-arbeitsprotokoll-26112026)) | `resources/templates/` (3 zweisprachige Vorlagen DE/EN nach Vorlagenformat 2) | v1.1.0 |
 | **L5** | Kontrollierte, datenschutzfreundliche Update-Verwaltung | Vollständig ausgearbeitet (§4.3) | `src/glide/app.pyw`, 4-Stufen-Modell ohne Telemetrie | v1.4.0+ |
-| **WA-52** | Erststart-Erlebnis und Leerzustände | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/glide_bento/components.py` (`BentoEmptyState`), `today_view.py` | v1.1.0 (Bento 0.2.0) |
+| **WA-52** | Erststart-Erlebnis und Leerzustände | ◐ Leerzustände umgesetzt (Entwicklungsstand nach 1.0.3), ungeliefert; Showcase-Erkundung offene Inhaberentscheidung ([§4.6](#46-umsetzungsstand-glide-110-arbeitsprotokoll-26112026)) | `src/glide/glide_bento/components.py` (`BentoEmptyState`), `today_view.py` | v1.1.0 (Bento 0.2.0) |
 | **WA-12-Rest** | Realistische Tagesplanung & Pufferzeiten | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/planning.py`, `day_relief.py` (15-Min-Puffer & Spätstart) | v1.0.3 |
 | **WA-60** | Terminal-Installation (winget & Homebrew Cask) | Vollständig ausgearbeitet (§4.2) | `packaging/homebrew/Casks/glide.rb`, `packaging/winget/` | v1.0.3+ |
 | **WA-54** | Mehrzeilige Schnellerfassung mit Vorschaukarte | Vollständig ausgearbeitet (§4.2 & §4.4) | `src/glide/capture_parser.py`, `glide_shell/modal_session.py` | v1.1.0 |
 | **WA-20** | Wochenabsichten & kognitiver Wochenfokus | Vollständig ausgearbeitet (§4.2) | `src/glide/week_planning.py`, `today_view.py` | v1.2.0 |
 | **WA-08** | Transparenter Zeiterfassungs- & Soll-Ist-Export | Vollständig ausgearbeitet (§4.2) | `src/glide/planning.py`, CSV-/JSON-Export | v1.0.3 |
-| **WA-53** | Ergonomischer Umgang mit überfälligen Aufgaben | Vollständig ausgearbeitet (§4.2) | `src/glide/sidebar_policy.py`, `app.pyw` | v1.1.0 |
+| **WA-53** | Ergonomischer Umgang mit überfälligen Aufgaben | ◐ Umgesetzt im Entwicklungsstand nach 1.0.3, ungeliefert ([§4.6](#46-umsetzungsstand-glide-110-arbeitsprotokoll-26112026)) | `src/glide/overdue_review.py`, `app.pyw` | v1.1.0 |
 | **WA-55** | Erweiterte Wiederholungslogik (Ausnahmetage) | Vollständig ausgearbeitet (§4.2) | `src/glide/repeat_rules.py` (Tk-frei), `app.pyw` | v1.2.0 |
 | **WA-56** | Kontrollierte Einzelannahme beim KI-Import | Vollständig ausgearbeitet (§4.2) | `src/glide/exchange_patch.py`, `exchange_recipes.py` | v1.2.0 |
 | **WA-57** | Zeitvisualisierung & Tagesverlauf | Vollständig ausgearbeitet (§4.2) | `src/glide/today_view.py`, `routines.py`, `occupied_time.py` | v1.2.0 |

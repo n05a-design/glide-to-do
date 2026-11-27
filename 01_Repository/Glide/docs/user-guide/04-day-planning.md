@@ -47,6 +47,14 @@ Tasks with a time appear first. Dragging sets the time, and Alt+↑/↓ moves a 
 - **What fits today?** (**View › Views**) suggests overdue, due, left-over, soon-due and important tasks. It also suggests tasks whose completion unblocks others. Each row shows the reason, source list and effort. Accepting sets only the planned day.
 - **Lighten the day …** (**View › Views**) shows a before/after balance. You choose a new day, or the backlog, for marked tasks. Under the balance, each over-planned day gets a line with its reasons. Nothing changes until you press **Reschedule**, and the whole change is one undo step.
 
+## Tasks past their due date
+
+Development state 1.1.0. **Late** shows a calm line at the top: how many open tasks are past their due date and how old the oldest is. Nothing moves on its own.
+
+- **Plan for today** sets only the workday of these tasks to today. The due date stays and remains visible. One undo step.
+- **Reset due dates …** asks for a new date from today on, names the number of tasks and the recurring tasks it leaves unchanged, and changes the due dates only after you confirm. One undo step.
+- The **Late** home tile also offers **Plan for today**.
+
 ## Starting and ending the day
 
 The **Day …** switch in Today and **View › Views** offer two modes:

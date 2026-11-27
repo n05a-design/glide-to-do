@@ -112,7 +112,7 @@ def main():
         aktuell = ZIEL.is_file() and ZIEL.read_text(encoding="utf-8") == text
         print("Englischer Vorlagenkatalog", "aktuell" if aktuell else "veraltet – Werkzeug ausführen")
         return 0 if aktuell else 1
-    ZIEL.write_text(text, encoding="utf-8")
+    ZIEL.write_text(text, encoding="utf-8", newline="\n")
     print("geschrieben:", ZIEL.relative_to(ROOT))
     return 0
 

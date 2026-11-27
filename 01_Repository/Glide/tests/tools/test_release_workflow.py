@@ -77,12 +77,22 @@ class ReleaseWorkflowTests(unittest.TestCase):
         self.assertIn("01_Repository/Glide/LICENSE.md", draft)
         self.assertIn("Glide-Lizenzstatus.md", draft)
 
+    def test_draft_assets_are_verified_after_upload(self):
+        """Befund 1.0.3: grüner Lauf, aber Release ohne Dateien – jetzt prüft der Lauf nach."""
+        draft = job(self.source, "entwurf")
+        self.assertIn("Angehängte Dateien gegenprüfen", draft)
+        self.assertIn('select(.tag_name == \\"$tag\\")', draft)
+        self.assertIn("ist kein Entwurf mehr", draft)
+        self.assertIn('[ "$fehlt" = 0 ]', draft)
+        self.assertLess(draft.index("Entwurf anlegen oder ersetzen"), draft.index("Angehängte Dateien gegenprüfen"))
+
     def test_all_shell_steps_have_valid_syntax_without_running_commands(self):
         executable = shell()
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 5)
+        # Sechs seit dem Gegenprüfschritt nach dem Hochladen (Befund 1.0.3, 26.11.2026).
+        self.assertEqual(len(blocks), 6)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"

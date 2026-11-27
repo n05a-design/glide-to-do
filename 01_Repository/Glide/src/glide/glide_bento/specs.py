@@ -17,7 +17,7 @@ class BentoCardSpec:
     subtitle: str | None = None
     icon: Any | None = None
     variant: str = "standard"               # "standard", "compact", "wide", "tall", "featured", "full_width"
-    span: int | str = "auto"                # 1, 2, 3, "col", "full", "auto"
+    span: int | str = "auto"                # 1, 2, 3, "col", "double", "full", "wide", "auto" (0.2.0: 2/"double" echt zweispaltig)
     weight: int = 2                         # Gewicht/Höhenschätzung für Greedy-Verteilung
     order: int = 0                          # Reihenfolge-Index
     visible: bool = True                    # Sichtbarkeit
@@ -39,6 +39,27 @@ class BentoCardSpec:
         )
 
 
+    @property
+    def requested_span(self) -> int | None:
+        """Angeforderte Spaltenzahl (Bento 0.2.0): 1, 2 oder None für volle Breite.
+
+        Unbekannte oder ungültige Werte gelten als eine Spalte; der Planner
+        meldet sie in ``BentoLayoutPlan.issues``.
+        """
+        if self.is_full_width:
+            return None
+        span = self.span
+        if span in (2, "2", "double", "two"):
+            return 2
+        return 1
+
+    @property
+    def span_is_valid(self) -> bool:
+        """Ob ``span`` einen dokumentierten Wert trägt."""
+        return self.span in (1, 2, 3, "1", "2", "3", "auto", "single", "col", "double", "two",
+                             "full", "wide") or self.is_full_width
+
+
 @dataclass(frozen=True, slots=True)
 class BentoGridSpec:
     """Konfiguration für ein BentoGrid-Raster."""
@@ -48,6 +69,38 @@ class BentoGridSpec:
     margin: int | None = None               # Außenabstand (None = Token-Vorgabe)
     card_min_width: int | None = None       # Mindestbreite einer Spalte
     uniform_columns: bool = True            # Gleichmäßige Spaltenbreiten erzwingen
+    full_width_first: bool = False          # 0.1.0-Verhalten: Vollbreitenkarten über dem Raster sammeln
+
+
+@dataclass(frozen=True, slots=True)
+class BentoLane:
+    """Senkrechter Stapel von Karten über ``span`` Spalten ab ``column`` (0.2.0)."""
+
+    column: int
+    span: int
+    cards: tuple[BentoCardSpec, ...]
+    weight: int
+
+
+@dataclass(frozen=True, slots=True)
+class BentoBand:
+    """Waagerechtes Band des Rasters; seine Bahnen überlappen sich nie (0.2.0).
+
+    ``kind``: ``"full"`` (eine Karte über alle Spalten), ``"flow"`` (eine Bahn
+    je Spalte, gierig nach Gewicht befüllt) oder ``"split"`` (eine
+    zweispaltige Bahn neben einer einspaltigen im Dreispaltenraster).
+    """
+
+    kind: str
+    lanes: tuple[BentoLane, ...]
+
+    @property
+    def weight(self) -> int:
+        return max((lane.weight for lane in self.lanes), default=0)
+
+    @property
+    def cards(self) -> tuple[BentoCardSpec, ...]:
+        return tuple(card for lane in self.lanes for card in lane.cards)
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,7 +115,26 @@ class BentoLayoutPlan:
     columns: tuple[tuple[BentoCardSpec, ...], ...]
     column_weights: tuple[int, ...]
     hidden_cards: tuple[BentoCardSpec, ...]
+    # Bento 0.2.0: Bandmodell mit echten Mehrspaltenkarten. ``header_cards``,
+    # ``columns`` und ``column_weights`` bleiben als 0.1.0-Projektion erhalten
+    # (Vollbreitenkarten oben, alle übrigen Karten einspaltig).
+    bands: tuple[BentoBand, ...] = ()
+    issues: tuple[str, ...] = ()
 
     @property
     def total_visible_cards(self) -> int:
         return len(self.header_cards) + sum(len(col) for col in self.columns)
+
+    def lane_width(self, span: int) -> int:
+        """Pixelbreite einer Bahn über ``span`` Spalten einschließlich innerer Abstände."""
+        span = max(1, min(self.column_count, int(span)))
+        return self.column_width * span + self.gap * (span - 1)
+
+    def placements(self) -> tuple[tuple[str, int, int, int, int], ...]:
+        """(key, band, column, span, position) je sichtbarer Karte in Bandreihenfolge."""
+        result = []
+        for band_index, band in enumerate(self.bands):
+            for lane in band.lanes:
+                for position, card in enumerate(lane.cards):
+                    result.append((card.key, band_index, lane.column, lane.span, position))
+        return tuple(result)

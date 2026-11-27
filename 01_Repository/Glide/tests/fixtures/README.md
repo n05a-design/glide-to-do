@@ -27,6 +27,10 @@ Die Fixtureprüfung liest jede `glide_releaseplanung_<Version>.glidebackup` und 
 
 Ältere Fassungen trägt Git. Vorfassungen der unversionierten Bestände (`glide_beispieldaten`, `glide_rundgang`, Showcase) ebenfalls; Archivkopien weist die CI-Grundstufe zurück.
 
+## Bento-Referenzhost
+
+`bento_referenzhost/host.py` ist ein Fremdhost ohne Glide-Fachmodule für T349 (`tests/integration/test_bento_referenzhost.py`); er läuft nur in einer Kopie von `glide_bento` und `glide_shell`.
+
 ## Umgang mit den Beispielen
 
 Ein Komplettimport ersetzt den Bestand. Beispiele deshalb in isolierter Ablage
