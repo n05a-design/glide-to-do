@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Fremder Host ohne Glide: eigene Tokens/Farben, Multi-Span, Themen- und Sprachwechsel, Abbau."""
+"""Fremder Host ohne Glide: eigene Tokens/Farben, Multi-Span, Themen- und Sprachwechsel, Galerie, Konformität, Abbau."""
 import sys, tkinter as tk
 import glide_bento as b
 assert not any(m in sys.modules for m in ("app", "ui_design", "i18n", "planning")), "Glide-Fachmodul geladen"
@@ -36,5 +36,23 @@ assert grid.cget("bg") == themen["dunkel"]["bg"]
 zustand["sprache"] = "en"; aufbauen(); pump(); grid.reflow(); pump()
 assert karten["a"].winfo_exists() and len(grid._cards) == 4
 grid.schedule_layout(); grid.destroy(); pump()
+# Galerie im Fremdhost (Shell 0.7.0/Bento 0.3.0): dieselben Register und Builder wie in Glide.
+from glide_shell import conformance
+from glide_shell.showcase import SHELL_COMPONENTS, ShowcaseEnv, ShowcaseRegistry, shell_entries
+from glide_bento.showcase import BENTO_COMPONENTS, bento_entries
+register = ShowcaseRegistry(shell_entries() + bento_entries())
+assert register.coverage(SHELL_COMPONENTS + BENTO_COMPONENTS) == []
+fenster = tk.Frame(root, bg=themen["dunkel"]["bg"]); fenster.pack(fill="both", expand=True)
+umgebung = ShowcaseEnv(palette=dict(themen["dunkel"], input="#2A2A2E", input_border="#444444", selection="#335588"),
+                       font=lambda groesse=10, gewicht="normal": ("TkDefaultFont", groesse, gewicht),
+                       extra={"bento_context": ctx})
+gebaut = [e.build(fenster, umgebung) for e in register]
+for widget in gebaut:
+    widget.pack(fill="x")
+pump()
+assert len(gebaut) == len(register) and all(w.winfo_exists() for w in gebaut)
+fenster.destroy(); pump()
+befunde = conformance.check_project(".")
+assert befunde == [], befunde
 root.destroy()
-print("Referenzhost OK: Multi-Span, Breakpoints, eigene Tokens/Themen, Sprachwechsel, Abbau")
+print("Referenzhost OK: Multi-Span, Breakpoints, eigene Tokens/Themen, Sprachwechsel, Galerie, Konformität, Abbau")

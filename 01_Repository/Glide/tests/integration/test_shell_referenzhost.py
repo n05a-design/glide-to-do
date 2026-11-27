@@ -30,6 +30,8 @@ import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 WERKZEUG = REPO / "scripts" / "pflege" / "shell_uebernehmen.py"
+import re as _re
+AKTUELLE_SHELL = _re.search(r'SHELL_VERSION = "([^"]+)"', (REPO / "src" / "glide" / "glide_shell" / "__init__.py").read_text(encoding="utf-8")).group(1)
 
 HOST_CODE = r'''# -*- coding: utf-8 -*-
 import json
@@ -333,7 +335,7 @@ finally:
         self.assertEqual(code_050, 0, f"Host mit echtem Stand 0.5.0 sollte laufen:\n{stderr_050}")
         self.assertIn("VERIFIED_050_HOST_OK", stdout_050)
 
-        # 2. Reguläres Upgrade auf neuesten Shell-Stand (0.6.2) durchführen
+        # 2. Reguläres Upgrade auf den aktuellen Shell-Stand durchführen
         cmd_upgrade = [sys.executable, "-B", str(WERKZEUG), "--unsauber-erlauben", str(self.proj_dir)]
         lauf_up = subprocess.run(cmd_upgrade, capture_output=True, text=True, timeout=60)
         self.assertEqual(lauf_up.returncode, 0, f"Upgrade fehlgeschlagen:\n{lauf_up.stdout}\n{lauf_up.stderr}")
@@ -342,9 +344,9 @@ finally:
         # a) Host-Dateien sind byte-identisch unversehrt
         self.assertTrue(host_data_file.is_file())
         self.assertEqual(host_data_file.read_text(encoding="utf-8"), '{"db_version": 1, "custom_setting": 42}')
-        # b) Manifest ist aktualisiert auf 0.6.2 und umfasst neue Module
+        # b) Manifest ist aktualisiert auf den aktuellen Stand und umfasst neue Module
         new_manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-        self.assertEqual(new_manifest["shell_version"], "0.6.2")
+        self.assertEqual(new_manifest["shell_version"], AKTUELLE_SHELL)
         self.assertIn("app_host.py", new_manifest["dateien"])
         self.assertIn("command_history.py", new_manifest["dateien"])
         # c) Host-Anwendungen laufen: 0.5.0-Host und neuer 0.6.2-Host (auch mit -O)

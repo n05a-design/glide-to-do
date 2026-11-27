@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für Folgeprojekte
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide Shell 0.6.2
+Stand 27.11.2026 · Glide 1.0.3 · Glide Shell 0.9.0
 
 <p align="right"><a href="README.md">English</a></p>
 
@@ -26,6 +26,10 @@ Das Werkzeug kopiert `glide_shell/` samt dieser Anleitung und schreibt `glide_sh
 - `--pruefen` meldet je Datei `aktuell`, `veraltet` oder `verändert` und schreibt nichts.
 - Hast du Dateien in der Kopie geändert, bricht ein Update ab; erst `--ersetzen` überschreibt sie.
 - Eigene Dateien im Ordner bleiben stehen.
+- `--mit-bento` übernimmt zusätzlich `glide_bento/` mit `BENTO_MANIFEST.json`; das Werkzeug legt Bento nur an, wenn die Shell zu `SHELL_MIN_VERSION` passt.
+- Danach `python3 -m glide_shell.conformance <dein-projekt>/src`: prüft Schichten, öffentliche Module, Zyklen und Versionen.
+
+Neues Projekt: [KI_ANLEITUNG_NEUE_PROJEKTE.md](KI_ANLEITUNG_NEUE_PROJEKTE.md). Bestehende Anwendung überführen: [KI_MIGRATION_BESTEHENDE_ANWENDUNG.md](KI_MIGRATION_BESTEHENDE_ANWENDUNG.md). Verbindlich für beide: [Shell-First-Vertrag](DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106).
 
 ## Auf dem Zielrechner prüfen
 
@@ -63,6 +67,11 @@ Importiere die Bausteine einzeln, etwa `from glide_shell import modal_session, w
 | `runtime_paths` | Daten- und Cacheordner nach Plattformkonvention, Umgebungsvariable und Zeigerdatei | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
 | `command_history` | Rückgängig und Wiederholen für Befehlsobjekte oder Zustandsabbilder, mit Rückweg bei Fehlern | `Command`, `CommandHistory` (`execute`, `record`, `undo`, `redo_step`) |
 | `app_host` | Hauptfenster starten: Schritte vor Tk, Startprüfungen, Platzhalter, Controller, Menüleiste, Kürzel, Schließweg | `AppHost`, `bind_shortcuts`, `primary_shortcuts`, `attach_menubar`, `install_close` |
+| `compat` | Versionsprüfung für Verbraucher (seit 0.7.0) | `require_shell`, `compatible`, `ShellVersionError` |
+| `conformance` | Architekturprüfung deines Projekts (Schichten, öffentliche Module, Zyklen, Versionen) | `check_project`, `python -m glide_shell.conformance <Ordner>` |
+| `showcase` | Galerie-Register: jede allgemeine Komponente mit Builder, Zuständen und Einsatzort | `ShowcaseRegistry`, `ShowcaseEntry`, `shell_entries` |
+| `custom_controls` (0.9.0) | Action target, drop feedback and optical glyph positioning | `ActionHandle`, `DropIndicator`, `symbol_ink_offset` |
+| `spellcheck` | Rechtschreibvertrag ohne eigene Engine; der Host wählt die Engine (seit 0.8.0) | `SpellChecker`, `WordListChecker`, `LayeredChecker`, `words`, `misspelled`, `probe_backends` |
 
 Ein Start mit App-Host und Befehlsverlauf, wie im Demohost:
 

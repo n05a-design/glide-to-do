@@ -1,6 +1,6 @@
 # Glide Shell – Startprompt für KI-Agenten
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2
+Stand 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Shell 0.9.0 · Glide Bento 0.3.0
 
 Diese Datei gibt einer neuen KI-Sitzung in einem Schritt alles, was sie braucht, um mit der Glide Shell ein Projekt zu beginnen oder weiterzuführen. Den passenden Prompt unten unverändert in die Sitzung kopieren und die Platzhalter in `<…>` ersetzen. Die Datei liegt im Paket `glide_shell` und kommt mit jeder Übernahme ins Projekt.
 
@@ -12,6 +12,9 @@ Diese Datei gibt einer neuen KI-Sitzung in einem Schritt alles, was sie braucht,
 |---|---|
 | Shell-Paket (Quelle, nur hier ändern) | `01_Repository/Glide/src/glide/glide_shell/` |
 | Anleitung für KI-Agenten in neuen Projekten | `…/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md` (führend), `AI_GUIDE_NEW_PROJECTS.md` |
+| Anleitung und Startprompt für bestehende Anwendungen | `…/glide_shell/KI_MIGRATION_BESTEHENDE_ANWENDUNG.md` (führend), `AI_MIGRATION_EXISTING_APPS.md` |
+| Shell-First-Vertrag (Abhängigkeiten, Entscheidungsreihenfolge, Ausnahmen) | `…/glide_shell/DESIGN_RICHTLINIEN.md` §5 |
+| Konformitätsprüfung | `python -m glide_shell.conformance <Quellordner>` |
 | Anleitung für Folgeprojekte (Kurzfassung) | `…/glide_shell/README.de.md` (führend), `README.md` |
 | Dieser Startprompt | `…/glide_shell/STARTPROMPT_KI.md` |
 | Übernahmewerkzeug | `01_Repository/Glide/scripts/pflege/shell_uebernehmen.py` |
@@ -57,7 +60,8 @@ Dann:
    Design-Richtlinien, QA-Bericht und Pflegematrix).
 2. Übernimm die Shell mit
    python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>
-   und prüfe sie mit `python3 -m glide_shell.selftest` (erwartet: 13/13, auch mit `python3 -O`).
+   (mit `--mit-bento`, wenn du Karten oder Raster brauchst) und prüfe sie mit `python3 -m glide_shell.selftest`
+   (erwartet: 13/13, auch mit `python3 -O`) und `python3 -m glide_shell.conformance src/<app>` (erwartet: conform).
 3. Baue das Gerüst aus Abschnitt 3.3: Start über app_host.AppHost mit preflight, Controller-Klasse,
    Kürzel über bind_shortcuts, Schließweg über install_close, Rückgängig über command_history,
    Datenordner über runtime_paths, Texte aus de.json/en.json.
@@ -73,6 +77,12 @@ ohne ausdrückliche Freigabe. Melde am Ende, was geprüft ist und was offen blei
 
 Mein Auftrag für dieses Projekt: <Beschreibung der Anwendung und des ersten Schnitts>
 ```
+
+## Prompt C – bestehende Anwendung in die Shell überführen
+
+Der vollständige Prompt mit Ablauf, Datenschutz und Abschlusskriterien steht in [KI_MIGRATION_BESTEHENDE_ANWENDUNG.md](KI_MIGRATION_BESTEHENDE_ANWENDUNG.md#7-startprompt-in-eine-neue-sitzung-kopieren) (englisch: [AI_MIGRATION_EXISTING_APPS.md](AI_MIGRATION_EXISTING_APPS.md#7-start-prompt-paste-into-a-new-session)). Nicht Prompt A für eine Anwendung verwenden, die schon eine eigene Oberfläche hat.
+
+**Für jeden Prompt gilt die Entscheidungsreihenfolge des Shell-First-Vertrags** ([DESIGN_RICHTLINIEN.md §5.2](DESIGN_RICHTLINIEN.md#52-entscheidungsreihenfolge-für-entwicklungsagenten)): Nutzeranforderung → Architekturentscheidungen → Shell-/Bento-Verträge → gemeinsames Designsystem → vorhandene Komponenten → Projektregeln → begründete Ausnahme → Neuentwicklung nur bei Bedarf.
 
 ## Prompt B – an einem bestehenden Shell-Projekt weiterarbeiten (Deutsch)
 

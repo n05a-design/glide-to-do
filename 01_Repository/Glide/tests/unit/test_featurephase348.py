@@ -118,7 +118,7 @@ class SideReferencesTests(unittest.TestCase):
         values = [dict(id='source', title='Quelle', items=[], references=[objects.uri('list', value)
                   for value in ('archived', 'drawing')]),
                   dict(id='archived', title='Archiv', items=[], archived=True),
-                  dict(id='drawing', title='Bild', items=[], list_kind='drawing')]
+                  dict(id='drawing', title='Bild', items=[], list_kind='gallery')]
         rows = dict(side_view.reference_groups('source', None, *objects.graph(values)))['Inhalt · Verweise']
         self.assertTrue(next(row for row in rows if 'Archiv' in row['title'])['enabled'])
         self.assertEqual(next(row for row in rows if 'Bild' in row['title'])['reason'],

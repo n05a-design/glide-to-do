@@ -16,6 +16,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 - **Architektur, Bestand und Zielbild:** [Architektur](02_ARCHITECTURE.md), [Glide-System](../src/glide/README.md) und [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) haben getrennte Zuständigkeiten.
 - **An der Glide Shell arbeiten:** [Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md), Nutzung für Folgeprojekte in [`glide_shell/README.de.md`](../src/glide/glide_shell/README.de.md).
 - **Am Glide Bento Box System arbeiten:** [Bento-Konzept](GLIDE_BENTO_SYSTEM_KONZEPT.md), Gestaltungsvertrag in [`glide_bento/BENTO_DESIGN_CONTRACT.md`](../src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md), Nutzung für Folgeprojekte in [`glide_bento/README.de.md`](../src/glide/glide_bento/README.de.md).
+- **Bestehende Anwendung in die Glide Shell überführen (KI-Agenten):** [`glide_shell/KI_MIGRATION_BESTEHENDE_ANWENDUNG.md`](../src/glide/glide_shell/KI_MIGRATION_BESTEHENDE_ANWENDUNG.md) ([English](../src/glide/glide_shell/AI_MIGRATION_EXISTING_APPS.md)) – Ablauf in 16 Schritten, Datenschutz, konkurrierende Komponenten, Tests, Abschluss, Startprompt; verbindlich dazu der [Shell-First-Vertrag](../src/glide/glide_shell/DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106).
 - **Mit der Glide Shell ein neues Projekt bauen (KI-Agenten):** [`glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md`](../src/glide/glide_shell/KI_ANLEITUNG_NEUE_PROJEKTE.md) ([English](../src/glide/glide_shell/AI_GUIDE_NEW_PROJECTS.md)) – Aufbau von Glide, Glide-System und Shell, Architekturregeln, Design-Richtlinien, Prozesse, Prüfungen und Prüflisten; fertiger Startprompt für neue Sitzungen in [`glide_shell/STARTPROMPT_KI.md`](../src/glide/glide_shell/STARTPROMPT_KI.md).
 - **Shell-Migration vorbereiten:** [Fable-Masterprompt](FABLE_GLIDE_SHELL_MIGRATION_PROMPT.md) mit Quellstand, Planungsauftrag und Freigabegrenzen.
 - **Änderungen übergreifend abgleichen und Dokumente konsolidieren:** [Pflegematrix](DOKUMENTENPFLEGE.md#zuständigkeiten-und-änderungsbezüge) und [Abgleich ohne doppelte Pflege](DOKUMENTENPFLEGE.md#abgleich-ohne-doppelte-pflege).
@@ -33,7 +34,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [English user guide](user-guide/README.md) | Kontrollierte englische Übersetzung von 20 Funktionen für Nutzer, keine zweite Fachautorität; Lokalisierungsstand der Oberfläche |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D103 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D106 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Zentrale Pflegematrix mit führenden Quellen und Änderungsbezügen; Konsolidierung, Aufbewahrung und Prüfgrenzen |
 | [Gemini-Wissensbasis](ai/gemini/README.md) | Englischsprachige, quellengebundene Wissensbasis für Gemini; abgeleitete Zusammenfassung, keine zusätzliche Fachautorität |
 | [Glide Shell – Arbeitshandbuch für KI-Agenten](GLIDE_SHELL_KI_HANDBUCH.md) | Einstieg für Agenten: Bausteine, Host-Verträge, erzwungene Regeln, Tests T055/T312–T336, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Prüfliste für neue Bausteine; verweist auf die führenden Quellen |
@@ -90,7 +91,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 | Entscheidung | Gegenstand |
 |---|---|
 | [Produktregister](decisions/PRODUCT_IDENTITY.md) | Technisch belegte Werte und offene Inhaber-/Store-Angaben; Quelle für Build- und Store-Konfigurationen |
-| [Post-Release Entscheidungsvorlagen](decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md) | 14 vollständige Entscheidungsvorlagen (M01–M14) für die strategische Weiterentwicklung nach v1.0.2 |
+| [Post-Release Entscheidungsvorlagen](decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md) | 14 vollständige Entscheidungsvorlagen (M01–M15) für die strategische Weiterentwicklung nach v1.0.2 |
 | [tkinterdnd2](decisions/ABHAENGIGKEIT_TKDND.md) | Einzige mitgelieferte Bibliothek für das Ziehen aus Finder/Explorer |
 | [Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md) | Gismo als Markenfigur, Zustände, Grenzen |
 | [Gruppe, Ordner, Überschrift](decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md) | Wann welches Gliederungsmittel |

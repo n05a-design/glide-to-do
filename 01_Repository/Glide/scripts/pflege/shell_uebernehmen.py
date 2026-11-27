@@ -7,6 +7,7 @@ Aufruf (Ziel ist der Quellordner des Folgeprojekts, in dem `glide_shell/` liegen
     python3 -B scripts/pflege/shell_uebernehmen.py --commit <Rev> <Ziel>    # reproduzierbar aus einem Commit
     python3 -B scripts/pflege/shell_uebernehmen.py --pruefen <Ziel>         # nur prüfen, nichts schreiben
     python3 -B scripts/pflege/shell_uebernehmen.py --ersetzen <Ziel>        # lokale Änderungen überschreiben
+    python3 -B scripts/pflege/shell_uebernehmen.py --mit-bento <Ziel>      # zusätzlich glide_bento (seit Shell 0.7.0)
 
 Das Werkzeug kopiert alle `*.py` und `*.md` aus `src/glide/glide_shell` sowie
 den vollständigen Lizenztext `LICENSE` (MPL-2.0) aus der Repository-Wurzel nach
@@ -913,6 +914,132 @@ def _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=False, projekt_root=None
     return OK if (shell_ok == OK and bootstrap_ok == OK) else ABWEICHUNG
 
 
+# --- Glide Bento neben der Shell (Shell 0.7.0, Bento 0.3.0, Master-Serie Teil 02) ---------------------------
+#
+# `--mit-bento` übernimmt zusätzlich `src/glide/glide_bento` nach `<Ziel>/glide_bento` (neben `glide_shell`)
+# und schreibt `BENTO_MANIFEST.json` mit Bento-Version, verlangter Shell-Mindestversion, Quell-Commit und
+# SHA-256 jeder Datei. Vor dem Schreiben prüft das Werkzeug mit `glide_shell.compat` der Quelle, ob die
+# übernommene Shell zu `SHELL_MIN_VERSION` passt; eine inkompatible Kombination wird nicht angelegt.
+
+BENTO_QUELLE = REPO / "src" / "glide" / "glide_bento"
+BENTO_PAKET = "glide_bento"
+BENTO_MANIFEST = "BENTO_MANIFEST.json"
+
+
+def _konstante(text, name):
+    try:
+        baum = ast.parse(text)
+    except SyntaxError:
+        return None
+    for knoten in baum.body:
+        if (isinstance(knoten, ast.Assign) and isinstance(knoten.value, ast.Constant)
+                and any(getattr(z, "id", None) == name for z in knoten.targets)):
+            return knoten.value.value
+    return None
+
+
+def _compat_modul():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("_glide_shell_compat_quelle", QUELLE / "compat.py")
+    modul = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modul)
+    return modul
+
+
+def bento_quelle_lesen(commit=None):
+    """Bento-Dateien der Arbeitskopie oder eines Commits mit Version und Shell-Mindestversion."""
+    if commit:
+        lauf = _git("rev-parse", "--verify", "--quiet", f"{commit}^{{commit}}")
+        if not lauf or lauf.returncode != 0:
+            raise QuellFehler(f"{commit}: Commit unbekannt")
+        commit = lauf.stdout.strip()
+        praefix = _git("rev-parse", "--show-prefix").stdout.strip()
+        ordner = f"{praefix}src/glide/glide_bento/"
+        liste = _git("ls-tree", "--full-tree", "--name-only", commit, ordner)
+        namen = sorted(pathlib.PurePosixPath(z).name for z in liste.stdout.splitlines()
+                       if pathlib.PurePosixPath(z).suffix in ANTEILE)
+        dateien = {n: _git_datei(commit, ordner + n) for n in namen}
+    else:
+        if not (BENTO_QUELLE / "__init__.py").is_file():
+            raise QuellFehler(f"{BENTO_QUELLE}: Bento-Quelle fehlt")
+        dateien = {p.name: p.read_bytes() for p in sorted(BENTO_QUELLE.iterdir())
+                   if p.is_file() and p.suffix in ANTEILE}
+        commit = quell_commit()
+    if "__init__.py" not in dateien:
+        raise QuellFehler("Bento-Quelle ohne __init__.py")
+    kopf = dateien["__init__.py"].decode("utf-8")
+    version, minimum = _konstante(kopf, "BENTO_VERSION"), _konstante(kopf, "SHELL_MIN_VERSION")
+    if not (isinstance(version, str) and SEMVER.fullmatch(version)):
+        raise QuellFehler("BENTO_VERSION fehlt oder ist kein SemVer")
+    if not (isinstance(minimum, str) and SEMVER.fullmatch(minimum)):
+        raise QuellFehler("SHELL_MIN_VERSION fehlt oder ist kein SemVer")
+    return {"dateien": dateien, "commit": commit, "version": version, "shell_min": minimum,
+            "hashes": {n: sha_bytes(i) for n, i in dateien.items()}}
+
+
+def bento_kompatibel(shell_ordner, shell_min):
+    """(True, Text) wenn die Shell-Kopie unter `shell_ordner` zu `shell_min` passt."""
+    kopf = (shell_ordner / "__init__.py").read_text(encoding="utf-8")
+    version = _konstante(kopf, "SHELL_VERSION")
+    seit = _konstante(kopf, "SHELL_COMPAT_SINCE") or version
+    if not (isinstance(version, str) and SEMVER.fullmatch(version)):
+        return False, "Shell-Kopie ohne gültige SHELL_VERSION"
+    ok = _compat_modul().compatible(version, shell_min, seit)
+    return ok, f"Shell {version} (kompatibel seit {seit}), Bento verlangt {shell_min}"
+
+
+def bento_pruefen(shell_ordner):
+    """Zeilen (Name, Zustand) für die Bento-Kopie neben `shell_ordner`."""
+    ziel = shell_ordner.parent / BENTO_PAKET
+    pfad = ziel / BENTO_MANIFEST
+    if not pfad.is_file():
+        return None, [(BENTO_MANIFEST, "fehlt")]
+    try:
+        manifest = json.loads(pfad.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None, [(BENTO_MANIFEST, "ungültig")]
+    zeilen = []
+    for name, wert in sorted((manifest.get("dateien") or {}).items()):
+        datei = ziel / name
+        if not datei.is_file():
+            zeilen.append((name, "fehlt"))
+        else:
+            zeilen.append((name, "aktuell" if sha(datei) == wert else "verändert"))
+    ok, text = bento_kompatibel(shell_ordner, manifest.get("shell_min_version", "0.0.0"))
+    zeilen.append(("Shell-Kompatibilität", "aktuell" if ok else f"inkompatibel: {text}"))
+    return manifest, zeilen
+
+
+def bento_uebernehmen(shell_ordner, quelle, ersetzen=False):
+    ziel = shell_ordner.parent / BENTO_PAKET
+    ok, text = bento_kompatibel(shell_ordner, quelle["shell_min"])
+    if not ok:
+        return QUELLFEHLER, [f"Bento {quelle['version']} nicht übernommen: {text}"]
+    if ziel.exists() and not ersetzen:
+        manifest, zeilen = bento_pruefen(shell_ordner)
+        if manifest is None and any(ziel.iterdir()):
+            return VERWEIGERT, [f"{ziel}: Ordner ohne gültiges {BENTO_MANIFEST} – mit --ersetzen bewusst überschreiben"]
+        veraendert = [n for n, art in zeilen if art == "verändert"]
+        if veraendert:
+            return VERWEIGERT, [f"{ziel}: lokal verändert ({', '.join(veraendert)}) – mit --ersetzen überschreiben"]
+    ziel.mkdir(parents=True, exist_ok=True)
+    alt = {}
+    if (ziel / BENTO_MANIFEST).is_file():
+        try:
+            alt = json.loads((ziel / BENTO_MANIFEST).read_text(encoding="utf-8")).get("dateien") or {}
+        except ValueError:
+            alt = {}
+    for name in alt:
+        if name not in quelle["dateien"] and (ziel / name).is_file():
+            (ziel / name).unlink()
+    for name, inhalt in quelle["dateien"].items():
+        schreiben_atomar(ziel / name, inhalt)
+    daten = {"paket": BENTO_PAKET, "bento_version": quelle["version"], "shell_min_version": quelle["shell_min"],
+             "quell_commit": quelle["commit"], "lizenz": "MPL-2.0", "dateien": quelle["hashes"]}
+    schreiben_atomar(ziel / BENTO_MANIFEST, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+    return OK, [f"Bento {quelle['version']} nach {ziel} übernommen ({text})"]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="glide_shell in ein Folgeprojekt übernehmen oder eine Kopie prüfen")
     parser.add_argument("ziel", help="Quellordner des Folgeprojekts (oder dessen glide_shell-Ordner)")
@@ -926,6 +1053,8 @@ def main(argv=None):
                         help="erstellt minimale AGENTS.md und Skills für lokale KI-Agenten im Projektordner")
     parser.add_argument("--projekt-root", "--project-root", metavar="PFAD",
                         help="Projektwurzel des Folgeprojekts für den Agenten-Bootstrap (Standard: automatisch ermittelt)")
+    parser.add_argument("--mit-bento", "--with-bento", action="store_true",
+                        help="glide_bento neben glide_shell übernehmen bzw. prüfen (BENTO_MANIFEST.json, Shell-Kompatibilität)")
     args = parser.parse_args(argv)
     ordner = zielordner(args.ziel)
     if ordner is None:
@@ -946,13 +1075,30 @@ def main(argv=None):
         print(f"Quelle unbrauchbar: {fehler}")
         return QUELLFEHLER
     if args.pruefen:
-        return _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=args.agenten_bootstrap,
+        code = _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=args.agenten_bootstrap,
                                  projekt_root=projekt_root_dir)
+        if args.mit_bento:
+            manifest, zeilen = bento_pruefen(ordner)
+            print(f"Bento-Kopie {manifest.get('bento_version') if manifest else 'ohne gültiges Manifest'}")
+            for name, art in zeilen:
+                print(f"  {name}: {art}")
+            if not manifest or any(art != "aktuell" for _, art in zeilen):
+                code = ABWEICHUNG
+        return code
     code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle,
                                   agenten_bootstrap=args.agenten_bootstrap,
                                   projekt_root=projekt_root_dir)
     for zeile in meldungen:
         print(zeile)
+    if code == OK and args.mit_bento:
+        try:
+            bento_quelle = bento_quelle_lesen(args.commit)
+        except QuellFehler as fehler:
+            print(f"Bento-Quelle unbrauchbar: {fehler}")
+            return QUELLFEHLER
+        code, meldungen = bento_uebernehmen(ordner, bento_quelle, ersetzen=args.ersetzen)
+        for zeile in meldungen:
+            print(zeile)
     return code
 
 

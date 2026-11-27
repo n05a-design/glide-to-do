@@ -23,7 +23,17 @@ def accepts(section, kind, value, container=None):
 
 def normalize_visibility(value):
     value = value if isinstance(value, dict) else {}
-    return {key: True if key == 'lists' else value.get(key) is not False for key in SECTIONS}
+    return {key: value.get(key) is not False for key in SECTIONS}
+
+
+def normalize_section_order(value):
+    keys = value if isinstance(value, list) else []
+    return list(dict.fromkeys([key for key in keys if key in SECTIONS] + list(SECTIONS)))
+
+
+def normalize_open_targets(value):
+    value = value if isinstance(value, dict) else {}
+    return {key: "side" if value.get(key) == "side" else "main" for key in SECTIONS}
 
 
 def normalize_locations(value):

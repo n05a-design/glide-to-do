@@ -1120,5 +1120,51 @@ class Quelle(unittest.TestCase):
         self.assertFalse((self.ziel / "glide_shell" / "SHELL_MANIFEST.json").exists())
 
 
+class BentoNebenDerShell(unittest.TestCase):
+    """`--mit-bento` (Shell 0.7.0, Bento 0.3.0): Kopie mit Manifest, Abweichung und Inkompatibilität erkannt."""
+
+    def setUp(self):
+        self._temp = tempfile.TemporaryDirectory(prefix="glide-bento-ueb-")
+        self.projekt = pathlib.Path(self._temp.name) / "folgeprojekt"
+        self.bento = self.projekt / "glide_bento"
+
+    def tearDown(self):
+        self._temp.cleanup()
+
+    def test_uebernahme_pruefung_und_gegenproben(self):
+        code, text = lauf("--mit-bento", self.projekt)
+        self.assertEqual(code, 0, text)
+        manifest = json.loads((self.bento / "BENTO_MANIFEST.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["paket"], "glide_bento")
+        self.assertEqual(manifest["shell_min_version"], "0.7.0")
+        self.assertIn("showcase.py", manifest["dateien"])
+        code, text = lauf("--pruefen", "--mit-bento", self.projekt)
+        self.assertEqual(code, 0, text)
+        with open(self.bento / "grid.py", "a", encoding="utf-8") as datei:
+            datei.write("\n# lokal\n")
+        code, text = lauf("--pruefen", "--mit-bento", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn("grid.py: verändert", text)
+        code, text = lauf("--mit-bento", self.projekt)
+        self.assertEqual(code, 2, text)
+        kopf = self.projekt / "glide_shell" / "__init__.py"
+        kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_COMPAT_SINCE = "0.6.2"',
+                                                                 'SHELL_COMPAT_SINCE = "0.9.0"'), encoding="utf-8")
+        code, text = lauf("--pruefen", "--mit-bento", self.projekt)
+        self.assertEqual(code, 1, text)
+        self.assertIn("inkompatibel", text)
+
+    def test_inkompatible_kombination_wird_nicht_angelegt(self):
+        code, text = lauf(self.projekt)
+        self.assertEqual(code, 0, text)
+        ok, _ = werkzeug.bento_kompatibel(self.projekt / "glide_shell", "0.7.0")
+        self.assertTrue(ok)
+        quelle = werkzeug.bento_quelle_lesen()
+        quelle["shell_min"] = "9.0.0"
+        code, meldungen = werkzeug.bento_uebernehmen(self.projekt / "glide_shell", quelle)
+        self.assertEqual(code, werkzeug.QUELLFEHLER, meldungen)
+        self.assertFalse(self.bento.exists())
+
+
 if __name__ == "__main__":
     unittest.main()

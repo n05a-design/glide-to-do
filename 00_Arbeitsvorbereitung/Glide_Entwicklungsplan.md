@@ -10,13 +10,14 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2 · Multi-Agent Readiness & Verified Reuse
+Stand 27.11.2026 · Glide 1.0.3 (Entwicklungsstand, Kandidat 1.1.0) · Aufgabenformat 26 · Glide-System V1.91 · Glide Bento 0.3.0 · Glide Shell 0.8.0 · Master-Serie Teil 03
 
 ---
 
 ## Strategische Post-Release Roadmap & Aktiver Arbeitsvorrat (24.11.2026)
 
 ### 1. Aktueller Status
+- **Master-Serie ab 27.11.2026:** Arbeitssteuerung, Versionsinventar, Versionsmatrix und Anforderungsmatrix in [§4.7](#47-master-serie-in-13-teilen-ab-27112026). Prerelease `v1.0.3` ist öffentlich, trägt aber keine Dateien; `main` enthält PR #199/#200 (Bento 0.2.0, Glide-System V1.89).
 - **Veröffentlichter Prerelease:** **Glide 1.0.2** (Tag `v1.0.2`, Commit `7dcd8dc0`) ist mit vollständigen Windows- und macOS-Paketen sowie dem Agent-Skill `glide-to-do` auf GitHub Releases publiziert.
 - **Integrierter Entwicklungsstand (`main`, Glide 1.0.3, V1.87):** Das **Glide Bento Box System 0.1.0** (`glide_bento`, D100, Ebene B) ist als modulare Kompositionsbibliothek integriert und treibt das adaptive 1–3-Spalten-Raster der Startseite (`render_home`).
 - **Verifizierte Qualität:** 19/19 CI-Grundstufenprüfungen, 20 T340-Regressionstests mit echter Tk-Widget-Integration, 36 Shell-Übernahmetests, 23 Bento-Tests T341–T344 und 13/13 Bento-Selbsttest bestanden.
@@ -791,6 +792,217 @@ Branch `feature/glide-1-1-product-experience` ab `main` `6c3a64eb` (lokal, nicht
 | Bento 0.3.0 | `BentoGrid` mit Retention | Demo-Galerie, Presets (L3) | – | Umfang |
 
 Empfohlene Reihenfolge: WA-12 Rest → WA-54 → WA-08 → L1 mit Bento 0.3.0; WA-20 erst nach der Formatentscheidung. Testplan je Paket: Tk-freie Unit-Tests (D17), Erweiterung von `test_glide_110.py` bzw. Nachfolgesuite, Sichtbeleg 860 × 700.
+
+### 4.7 Master-Serie in 13 Teilen (ab 27.11.2026)
+
+**Auftrag (D104/D105):** 13 Teil-Prompts bilden einen Gesamtauftrag. Gearbeitet wird in einer Arbeitskopie (Worktree `glide-1-1-0-dev-0144e8`, lokaler App-Arbeitszweig `claude/glide-sync-master-auftrag-ef27c1` auf `main` @ `e8eee591`, nicht gepusht). In den Teilen 01–12 entstehen keine Branches, Pushes, Pull Requests, Tags, Releases oder Merges. Erst Teil 13 legt nach gemeinsamer Abnahme einen neuen Branch mit genau einem Pull Request an, ohne automatische Zusammenführung. Der frühere Worktree `glide-master-development-9435c1` bleibt bestehen, bis seine Änderungen gesichert und geprüft sind. Stand 27.11. trägt er nur Abschnitt I des [Master-Berichts](Glide_Master_Auftrag_2026-11-27.md) und die zwei Gelb-Fensterbilder; beide sind hierher übernommen, bytegleich geprüft und zusätzlich lokal außerhalb OneDrive unter `%USERPROFILE%\gq\s1127` gesichert.
+
+| Teil | Thema | Stand |
+|---|---|---|
+| 01 | Bestandsaufnahme, Lieferstand, Arbeitssteuerung, Versionsmanagement | ✅ 27.11.2026 (dieser Abschnitt) |
+| 02 | Shell-First-Architektur, Designvertrag, Glide-Showcase | ✅ 27.11.2026 ([§4.7.4](#474-teil-02-shell-first-designvertrag-und-showcase-27112026)) |
+| 03 | Editor, Seiten, Kapitel, Notizen, Textfunktionen | ✅ 27.11.2026 mit Restarbeiten ([§4.7.5](#475-teil-03-editor-kapitel-und-textfunktionen-27112026)) |
+| 04 | Inline-Erfassung, Seitenleiste, Aktionsgriffe, UI-Präzision | Bearbeitet mit Restarbeiten ([§4.7.6](#476-teil-04-inline-eingabe-und-seitenleiste-27112026)) |
+| 05 | Datenintegrität, Wiederherstellung, Migrationsgrundlage | ○ |
+| 06 | Prompt-Management, KI-Projektkontexte, Dokumente, Anhänge | ○ |
+| 07 | Bento-System, Startseite, Heute, Projekt-Dashboard | ○ |
+| 08 | Pinnwand, Kanban, Mindmaps, visuelle Arbeitsbereiche | ○ |
+| 09 | Softwarekatalog, Symbolbibliothek, Pixel-Werkstatt | ○ |
+| 10 | Vorlagenbibliothek, Klassifikation, Arbeitsumgebungen | ○ |
+| 11 | Rendering, Scrollen, progressive Bilder, Caching | ○ |
+| 12 | Signierung, Distribution, Marketing, Lieferbereitschaft | ○ |
+| 13 | Gesamtintegration, Abschlussprüfung, gemeinsamer PR | ○ |
+
+Jeder Teil endet mit dem [Abschlussprotokoll](../01_Repository/Glide/AGENTS.md#abschluss-eines-teilauftrags) und mindestens einer Zeile in der Versionsmatrix unten.
+
+#### 4.7.1 Versionsinventar (27.11.2026, `main` @ `e8eee591`)
+
+Maßgeblich ist jeweils die Datei bzw. Konstante, nicht die Dokumentation. „Geliefert“ = `07_Python-Versionen`; „Release“ = öffentliches GitHub-Release, am 27.11.2026 über `gh release` abgefragt.
+
+| System | Versionsdatei / Konstante | Dokumentiert vor Teil 01 | Quellstand | Ziel / Kandidat | Automatisiert geprüft | Eingefroren | Geliefert (`07`) | Paket / Release | Befund |
+|---|---|---|---|---|---|---|---|---|---|
+| Glide-App | `VERSION` 1.0.3 = `APP_VERSION` 1.0.3 | 1.0.3; Wurzel-`AGENTS.md` noch 1.0.2 | 1.0.3 plus Funktionen aus PR #199/#200 | Ziel 1.1.0 (Minor), noch nicht gehoben | Bereichs- und CI-Läufe zu PR #199/#200 ([QA](../01_Repository/Glide/docs/07_QA_BERICHT.md)) | keiner für den heutigen Stand | 1.0.3 (`Glide-Aufgaben-und-Listen_v1.0.3.pyw`) | `v1.0.3` Prerelease **ohne Dateien**; `v1.0.2` Prerelease mit 10 Dateien | Quellstand ist inhaltlich weiter als 1.0.3; Wechsel nach D51 am Phasenende |
+| Glide-System | `GLIDE_SYSTEM_VERSION` 1.88 → **1.89** | V1.87 in Plan, Übergabe und Einstiegen; V1.88 im Register | Katalog um M124/M125 und T350–T352 (PR #200) erweitert, ohne eigene Version | – | `test_glide_system.py` | – | V1.87 (Lieferabsatz `07`) | – | **in Teil 01 behoben** (V1.89) |
+| Glide Shell | `SHELL_VERSION` 0.6.2 | 0.6.2 | seit `v1.0.3` unverändert | – | T319, T330–T338 | – | 0.6.2 | in den Paketen 1.0.2 | konsistent |
+| Glide Bento | `BENTO_VERSION` 0.2.0 | 0.1.0 in Plan, Übergabe und Einstiegen; 0.2.0 in den Bento-Dokumenten | 0.2.0 (PR #199) | – | T341–T344, T349, Selbsttest 16/16 | – | 0.1.0 | – | Wechsel korrekt; Standzeilen nachgezogen |
+| Aufgabenformat | `DATA_SCHEMA_VERSION` 26 | 26 | 26 | Wechsel nur bei neuem persistentem Vertrag (Kapitel, Prompts, Kontexte, Anhänge, Mindmaps, Pixel-Ebenen); Bündelung in Teil 05 prüfen | Migrations- und Rundlauftests | – | 26 | – | konsistent |
+| Austauschformat | `EXCHANGE_FORMAT_VERSION` 2, `exchange_patch.VERSION` 2 | 2 | 2 | – | `test_agenten_skill.py`, T323/T325 | – | 2 | – | konsistent |
+| Vorlagenformat | `TEMPLATE_FORMAT_VERSION` 2; Katalog `format_version` 2 | 2 | 2 | – | `test_vorlagen_l4.py` (T348), `test_i18n.py` | – | 2 | – | konsistent |
+| Vorlagenbestand | keine eigene Katalogversion | 23 (PR #199, `87fca3b5`) | **23 mitgelieferte Vorlagen** über `default_template_records()`: 19 aus dem Katalog `glide_vorlagen(.en).glidetemplates` (16 aus 1.0.3 + 3 L4) und 4 Notizbuchvorlagen aus dem Code (`journal-note`, `journal-gratitude`, `journal-weekly`, `journal-folder`); daneben 3 eingebaute Seitenvorlagen (`PAGE_TEMPLATES`, eigener Weg) | erweiterte Bibliothek in Teil 10 | `test_template_workflows.py` erwartet 23, T348 | – | 20 (1.0.3: 16 + 4) | – | Teil 01 zählte nur die Katalogdatei; die Zählung 23 aus PR #199 ist richtig (Korrektur in Teil 02) |
+| Einstellungen | `SETTINGS_VERSION` 2 | 2 | 2 | – | – | – | 2 | – | konsistent |
+| Agenten-Skill `glide-to-do` | `metadata.version` 1.4; `glide-version` 1.0.2 = `GLIDE_VERSION` | 1.4 / 1.0.2 | seit `v1.0.3` unverändert | anheben, sobald Datenformat oder Austauschweg sich ändern | `test_agenten_skill.py` | – | – | Skill-ZIP in `v1.0.2` | gewollt: 1.0.2 ist die zuletzt geprüfte App-Fassung |
+| Python-Lieferstand | Hauptdatei `_v1.0.3.pyw` | 1.0.3, V1.87, Bento 0.1.0 | – | wird erst in einer Produktionsrunde erneuert | – | – | 1.0.3 | – | Lieferkopie älter als Quellstand (erwartet, kein Fehler) |
+| Dokumentationsstände | Standzeilen | gemischt 24.–27.11. | – | – | `standpruefung.py` | – | – | – | in Teil 01 auf V1.89 und Bento 0.2.0 nachgezogen |
+
+**Weitere Formatkonstanten ohne Handlungsbedarf:** `animation.FORMAT_VERSION` 1, `drawing.FORMAT_VERSION` 1, Paletten 1, `backdrop.ENGINE_VERSION` 1, `session_guard.MARKER_VERSION` 1, `release_notes.LAST_DEVELOPMENT_VERSION` (3, 70, 0) als letzte Altzählung.
+
+**Empfehlung des Agenten (keine Inhaberentscheidung):** Der heutige Quellstand ist inhaltlich ein Minor-Schritt; Kandidat ist App **1.1.0**. Weil zwischen den Teilen 01–12 nichts geliefert wird, sammeln sich weitere kompatible Funktionen der Serie im selben Kandidaten. Bringt ein Teil eine inkompatible Änderung oder einen Datenformatwechsel, wird der Kandidat dort neu bewertet. `versionswechsel.py` läuft erst zur eingefrorenen Vollprüfung (D51), spätestens in Teil 13, früher nur auf ausdrücklichen Wunsch.
+
+#### 4.7.2 Versionsmatrix der Serie
+
+| Teil | System | Version vorher | Version nachher | Änderungsumfang | Begründung | Prüfstatus | Lieferstatus |
+|---|---|---|---|---|---|---|---|
+| 01 | Glide-System | V1.88 | **V1.89** | Versionsverlauf für M124/M125 und T350–T352 (PR #200); neuer Registerabschnitt Framework-Kompatibilität | Katalogänderung aus PR #200 ohne eigene Version; die Registerregel verlangt eine | `test_glide_system.py`, CI-Grundstufe ([QA](../01_Repository/Glide/docs/07_QA_BERICHT.md)) | nicht geliefert (`07` nennt V1.87) |
+| 01 | Glide-App | 1.0.3 | 1.0.3 | keine Codeänderung | Wechsel auf Kandidat 1.1.0 erst in der Produktionsrunde | – | 1.0.3 geliefert, Quellstand weiter |
+| 01 | Shell, Bento, Formate, Skill, Vorlagen | 0.6.2 · 0.2.0 · 26/2/2/2 · 1.4 · – | unverändert | nur Dokumentation | nichts davon geändert | – | – |
+| 02 | Glide Shell | 0.6.2 | **0.7.0** | neue Module `compat`, `conformance`, `showcase`; `SHELL_COMPAT_SINCE` 0.6.2; Shell-First-Vertrag und Migrationsanleitung DE/EN im Paket | Minor nach Handbuchregel („neuer Baustein oder neue öffentliche Funktion“); kompatibel, bestehende Schnittstellen unverändert (T319) | T319, T353, Shell-Selbsttest 13/13, Demo- und Referenzhost, CI-Grundstufe ([QA](../01_Repository/Glide/docs/07_QA_BERICHT.md)) | nicht geliefert (`07` trägt 0.6.2) |
+| 02 | Glide Bento | 0.2.0 | **0.3.0** | `SHELL_MIN_VERSION` 0.7.0 mit Abbruch beim Import, `ShellVersionError`-Export, `showcase.bento_entries`; Selbsttest prüft die Shell-Kompatibilität | Minor: neue öffentliche Namen und neues Verhalten beim Import; Karten-, Raster- und Token-API unverändert | T341–T344, T349, Bento-Selbsttest 16/16, T355 | nicht geliefert (`07` trägt 0.1.0) |
+| 02 | Glide-System | V1.89 | **V1.90** | M126–M130, F153, T353–T356; Komponenten- und Showcase-Matrix, Kompatibilität fortgeschrieben | Registerregel: neue Module, Feature und Tests | `test_glide_system.py` | nicht geliefert |
+| 02 | Glide-App | 1.0.3 | 1.0.3 | Galerie (F153), `bento_host_providers`, Lieferlisten um fünf Module ergänzt | Kandidat bleibt 1.1.0 (kompatible Funktion); Wechsel erst in der Produktionsrunde (D51) | T355, CI-Grundstufe | nicht geliefert |
+| 03 | Glide Shell | 0.7.0 | **0.8.0** | neues Modul `spellcheck` (Rechtschreibvertrag ohne Engine) mit Galerie-Eintrag | Minor: neue öffentliche Funktion; bestehende Schnittstellen unverändert (T319) | T319, T353 (erwartet 0.8.0 unabhängig vom Paketwert), T359, Shell-Selbsttest, CI-Grundstufe | nicht geliefert |
+| 03 | Glide Bento | 0.3.0 | 0.3.0 | keine Änderung | `SHELL_MIN_VERSION` 0.7.0 wird von 0.8.0 erfüllt (Kompatibilitätsprüfung und Konformität grün) | Bento-Selbsttest, T349 | – |
+| 03 | Glide-System | V1.90 | **V1.91** | M131 `chapters`, M132 `spellcheck`, F154, T357–T359 | Registerregel | `test_glide_system.py` | nicht geliefert |
+| 03 | Glide-App | 1.0.3 | 1.0.3 | Kapitel, Block duplizieren, Lieferlisten um `chapters.py` und `glide_shell/spellcheck.py` ergänzt | Kandidat 1.1.0 (kompatibel), Wechsel in der Produktionsrunde (D51) | T358 | nicht geliefert |
+| 04 | Glide Shell | 0.8.0 | **0.9.0** | `ActionHandle`, `DropIndicator`, `symbol_ink_offset` mit Produkt- und Galerieeinsatz | Neue kompatible Schnittstellen. `SHELL_COMPAT_SINCE` bleibt 0.6.2 | T319/T353/T355, Shell-Selbsttest | Lokal |
+| 04 | Glide-System | V1.91 | **V1.92** | M122, M098, F155/F156 und T360/T361 | Konsolidierung und neue Produktfunktionen | Inventarprüfung | Lokal |
+| 04 | Glide-App/Bento | 1.0.3/0.3.0 | 1.0.3/0.3.0 | Produktintegration unter Entwicklungskandidat 1.1.0 | App-Wechsel nach D51. Bento nutzt weiter Shell ab 0.7.0 | Windows-Tk, Bento-Selbsttest | Lokal |
+| 04 | Formate und Skill | 26/2/2/2, 1.4 | unverändert | Optionale Einstellungspräferenzen mit Standardwerten, Entwürfe in der Sitzung, vorhandene `sidebar_locations` | Bestehende Bestände bleiben lesbar. Persistente neue Objektsemantik in Teil 05 | T360/T361 | Lokal |
+| 03 | Formate 26/2/2/2, Agenten-Skill 1.4 | – | unverändert | – | Kapitel ohne persistente Struktur; stabile Anker als Vorschlag für DS-02 (Teil 05); Skill-Austauschweg nicht berührt | `test_agenten_skill.py` | – |
+| 02 | Agenten-Skill `glide-to-do`, Formate 26/2/2/2 | 1.4 · 26/2/2/2 | unverändert | – | Daten- und Austauschweg nicht berührt; Framework-Skills `glide-shell`/`glide-bento` haben keine eigene Version und wurden inhaltlich nachgezogen | `test_agenten_skill.py` | – |
+
+#### 4.7.3 Anforderungs-Abdeckungsmatrix
+
+Statuswerte: Nicht begonnen · Analysiert · Konzipiert · Teilweise implementiert · Implementiert · Automatisiert verifiziert · Nativ geprüft · In Glide sichtbar integriert · Geliefert · Menschlich abgenommen · Blockiert · Bewusst zurückgestellt. Ein Konzept ist keine Implementierung, ein Selbsttest keine produktive Integration. Spalte „Prüfung · nativ · Lieferung“: **A** = automatisiert verifiziert (Windows 11 und Linux-CI, Tk 9.0/9.1, künstliche Daten), **N–** = native Abnahme (macOS, Mensch) offen, **L–** = nicht geliefert.
+
+**Herkunft (fortgeschrieben in Teil 03):** Der inhaltliche Zuordnungsindex der Originalmatrix liegt seit Teil 03 vor und ist unten abgeglichen ([Indexabgleich](#indexabgleich-teil-03)); der Befund „Originalmatrix fehlt“ ist damit für den Index geschlossen, der Abgleich der Einzelkriterien geschieht je Teil. Bis Teil 02 galt: Die Originaldatei `ABDECKUNGSMATRIX.md` des Master-Prompt-Pakets lag **nicht** vor (weder im Repository noch übergeben); der Abgleich bleibt offen und wird nachgeholt, sobald sie bereitsteht. Die Matrix ist ein Zuordnungsindex, kein Implementierungsnachweis. Teil 02 nennt zusätzlich die Kennungsfamilien NAV-01–04, DESIGN-01/02, KANBAN-01–03 und TEMPLATE-01–06, deren Wortlaut hier fehlt; sie stehen unten **vorläufig** bei dem Teil-Prompt mit dem passenden Thema. Erfasst sind alle Anforderungen aus Synchronisation und Teil 01 (§6/§7) sowie die bestehenden IDs des [Master-Berichts §C](Glide_Master_Auftrag_2026-11-27.md#c-anforderungsmatrix). Jeder folgende Teil-Prompt ergänzt seine Einzelanforderungen hier unter seiner Teilnummer; beim Zusammenfassen wird keine Zeile entfernt.
+
+**Bereits vorhanden (PR #199/#200, Bezeichner im Quellstand geprüft):**
+
+| ID | Anforderung | Teil | Status | Systeme / Dateien | Prüfung · nativ · Lieferung | Version | Offen / Abnahme |
+|---|---|---|---|---|---|---|---|
+| PAGE-03 | Blockkopie, Blockausschnitt und (seit Teil 03) Block duplizieren | 03 | In Glide sichtbar integriert | `PageEditor.copy_block`, `page_markdown.document_slice` | A (T350) · N– · L– | Kandidat 1.1.0 | Mac-Sichtprüfung |
+| PAGE-04 | Kopieren und Einfügen in Textfeldern ohne Listenkürzel | 03 | In Glide sichtbar integriert | `copy_selected_to_clipboard`, `paste_items_from_clipboard` | A (T350; Cmd nur nachgestellt) · N– · L– | 1.1.0 | Cmd+C/V nativ |
+| PAGE-05 | Blocktyp-Fallback beim Umwandeln | 03 | In Glide sichtbar integriert | `convert_block`, `block_choice_active` | A · N– · L– | 1.1.0 | – |
+| PAGE-06 | Positionswiederherstellung je Ansicht | 03 | In Glide sichtbar integriert | `view_positions.py` (M124) | A (T351) · N– · L– | 1.1.0 | – |
+| EDITOR-01 | Automatische Linkerkennung, Link-Kontextmenü | 03 | In Glide sichtbar integriert | `find_links`, `link_before`, `add_link_menu` | A · N– · L– | 1.1.0 | – |
+| UX-04 | Erweiterte Eingabe als Symbol | 04 | In Glide sichtbar integriert | `advanced_icon_button`, `add_item_advanced` | A · N– · L– | 1.1.0 | – |
+| UX-03 | Verknüpfungschip im Seitenkopf (D103) | 03 | In Glide sichtbar integriert | `app.pyw` | A · N– · L– | 1.1.0 | – |
+| UX-01 | Gelbkorrektur im Dunkelmodus (D101) | 02 | In Glide sichtbar integriert | `appearance.DARK_BACKGROUND_SHARE_EXCEPTIONS` | A · Fensterbilder `Glide_UX01_Gelb_24_*` (lokal, ungetrackt) · L– | 1.1.0 | – |
+| PIXEL-03 | Werkzeugspalte, Radierer, Drehen/Spiegeln, Transparenzraster, 40-px-Knöpfe (D102) | 09 | In Glide sichtbar integriert | Werkzeugtabelle in `app.pyw`, `drawing.rotate_region`/`flip_region`, `toggle_checker` | A (Tk 9.0/9.1) · N– · L– | 1.1.0 | – |
+| BENTO-0.2 | Bento 0.2.0: Multi-Span, Host-Token-Vertrag C, Render-Retention | 07 | In Glide sichtbar integriert (Startseite „Zwei Spalten“) | `glide_bento`, `effective_span`, `BentoTokens.from_host` | A (T341–T344, T349, Selbsttest) · N– · L– | Bento 0.2.0 | – |
+| L4 | Referenzvorlagen DE/EN (23 mitgelieferte Vorlagen: 19 Katalog + 4 Notizbuch) | 10 | In Glide sichtbar integriert | `resources/templates`, `vorlagen_l4.py` | A (T347, T348) · N– · L– | Vorlagenformat 2 | – |
+| WA-52 | Kontextuelle Leerzustände | 04 | Teilweise implementiert (Showcase-Erkundung offen) | `empty_states.py` (M122) | A (T345, T347) · N– · L– | 1.1.0 | Inhaberentscheidung [§4.6](#46-umsetzungsstand-glide-110-arbeitsprotokoll-26112026) (1) |
+| WA-53 | Ruhiger Umgang mit verstrichenen Fristen | 04 | Implementiert („Fristen entfernen“ nicht) | `overdue_review.py` (M123) | A (T346) · N– · L– | 1.1.0 | §4.6 (3) |
+| PERF-01 | Scroll-Optimierung in Listen | 11 | Implementiert | `show_quick_plan_row`, `messung_scrollen.py` | A (Messung Windows) · N– (Trackpad, macOS) · L– | 1.1.0 | – |
+| DS-00 | Bestehende Datensicherheit (Vorsicherung, Snapshots, Lock, Rollback) | 05 | Geliefert seit 1.0.x | `backup_snapshot`, `data_lock`, `session_guard`, `persistence` | A · in früheren Releases geprüft · geliefert | Format 26 | neue Pfade in Teil 05 prüfen |
+
+**Offen oder unvollständig:**
+
+| ID | Anforderung | Teil | Status | Systeme | Abhängigkeit | Version (voraussichtlich) | Offen / Abnahmekriterium |
+|---|---|---|---|---|---|---|---|
+| MS-01 | Shell-First als verbindliches Prinzip | 02 | **Implementiert, automatisiert verifiziert** (D106, Shell-First-Vertrag, `conformance` mit Negativprüfungen); Shell-Lücken (Knöpfe, Felder, Tooltips, Theme-Provider in Glide) offen für Teil 04/07/09 | Shell, Bento, Design Richtlinien | – | Shell 0.7.0, Bento 0.3.0 | Konformität „conform“, T353; native Abnahme offen |
+| MS-02 | Glide als vollständiges Framework-Showcase | 02 | **In Glide sichtbar integriert** (Galerie F153, 14 Komponenten; produktiv fehlen BentoMetric, BentoActions, BentoDivider, BentoGrid) | Glide, Shell, Bento | MS-01 | App, Shell, Bento | T355 grün; Sichtprüfung macOS offen; spätere Komponenten über dieselben Register |
+| MS-03 | Bootstrap neuer Anwendungen und Migration bestehender Anwendungen | 02 | Implementiert (`--mit-bento`, Konformitätsprüfung, Migrationsanleitung DE/EN mit Startprompt, Startprompt C) | Shell-Paket, `shell_uebernehmen.py` | MS-01 | Shell 0.7.0 | T353, `BentoNebenDerShell`, T349; Erprobung an STEPS/Chess & Chains außerhalb dieses Repositorys offen |
+| MS-04 | Arbeitsstandsicherung mit Manifest und Wiederherstellung | 02 | Automatisiert verifiziert (`arbeitsstand_sichern.py`, T356, Wiederherstellung belegt) | Pflegewerkzeuge | – | – | vor und nach jedem Teil sichern |
+| UX-05 | Direkt editierbare Aufgabenzeile | 04 | Implementiert für eindeutige, bearbeitbare Listen und Tabellen | `app.pyw`, F155 | Sitzungsübergreifende Entwürfe in Teil 05 | App | T360, Baseline-Gegenprobe rot |
+| UX-05b | Eine Quelle für Leerzustände | 04 | M122 führt Zustände und Aktionen zusammen, U20 präzisiert | `empty_states.py` | D106 und Teil 04 | Systemregister | T345/T352/T360 |
+| NAV-01 / NAV-02A | Abschnittsmenüs, Sichtbarkeit und Reihenfolge | 04 | Implementiert. Einstellungen können einzeln und gesammelt zurückgesetzt werden | F156 | Native Prüfung macOS/Linux offen | App | T361 und Tests für vier Bereiche |
+| NAV-02B | Typwahrende Navigation und Sammelverschiebung | 04 | Einzelne, mehrere und alle geeigneten Wurzeln über vorhandene Navigationszuordnungen. Struktur unterhalb einer Wurzel bleibt erhalten | `sidebar_policy.py` | Unabhängige Positionen unterhalb beliebiger Heimatcontainer brauchen einen Formatvertrag | App/Einstellungen | T361 |
+| NAV-02C | Bereiche sicher leeren | 04 | Lesende Umfangsvorschau. Produktive Sammelaktion wartet auf Wiederherstellungsnachweis | Bereichsmenü | Teil 05: vollständige Sicherung, verifizierter Restore, Sperrprüfung, atomare Aktion und Rückweg | Daten | Abnahmekriterien in §4.7.6 |
+| NAV-03 | Bevorzugte Haupt- oder Nebenansicht | 04 | Persistenz je sichtbarem Bereich. Hauptansicht per Eintrag, schmaler Modus mit bestehendem Rückfall. Zeichnung als lesende Vorschau | `side_view.py` | Sitzungsübergreifende Lesepositionen und stabile Kapitelanker in Teil 05 | App/Einstellungen | T361 und Teil-03-Regression |
+| NAV-04 | Ablagevorschau in der Seitenleiste | 04 | Oberhalb, unterhalb, im Ordner und ungültig. Escape, Randscrollen und verzögertes Aufklappen | `DropIndicator` | Native Gesten und DPI-Plattformmatrix offen | Shell/App | T361 und Windows-Fensterbilder |
+| DESIGN-01/02 + Plus + Griff | Suchfeldachse und Symbolgeometrie | 04 | Gemeinsames Suchfeld, quadratische Plus-/Sternknöpfe, Griffe im Editor und in Aufgabenlisten | M098, F155 | Eigene Griffintegration für Kapitel- und Checklisten-Zeilen sowie weitere DPI-Belege offen | Shell/App | Windows-Tk-Geometrie, T361; siehe QA |
+| KANBAN-01–03 | Direkte Ansicht, Werkzeuggruppen, Spalten/Interaktionen (Index Teil 03) | 08 | Analysiert (nur Kennung) | Listenansichten | Originalmatrix | – | Abgleich nach Bereitstellung |
+| TEMPLATE-01–06 | Metadaten, Gruppierung, fachliche Bibliothek, Editor, Qualitätsmatrix (Index Teil 03) | 10 | Analysiert (nur Kennung) | Vorlagen | Originalmatrix | – | Abgleich nach Bereitstellung |
+| DISC-01 | Feature Discoverability (zentrale Funktionen sichtbar) | 02; 04; 08; 13 | Konzipiert (Grundsatz D105/D106) | alle Ansichten | – | App | Kernfunktionen ohne Menüsuche erreichbar |
+| PAGE-02 | Kapitel und hierarchische Seitennavigation | 03 | **In Glide sichtbar integriert, automatisiert verifiziert** (Projektion, Seitenleiste, Navigation, Umbenennen, Verschieben mit Inhalt, Ebene, Auflösen, Neues Kapitel, Rückgängig; T357/T358) | `chapters.py`, Seitenleiste, Editor | – | Format 26 | macOS offen |
+| PAGE-02b | Stabile Kapitelkennung über Umbenennen und Neustart, Kapitelverweise, kapitelgenaue gemerkte Position | 05 (Format), dann 03-Rest | **Blockiert** durch Formatwechsel (Anker `anchor:<id>`, DS-02) | `chapters.ANCHOR_PROPOSAL` | DS-02 | Format 27 (Vorschlag) | Anker überleben Umbenennen, Verschieben, Duplizieren der Seite (neue Anker), Export/Import; Migration vergibt Anker; ältere Fassung öffnet schreibgeschützt |
+| EDITOR-02 | Rechtschreibprüfung | 03 | **Teilweise:** Vertrag `glide_shell.spellcheck` implementiert und in der Galerie vorgeführt (T359); produktive Prüfung **blockiert** durch Freigabe M15 | Shell, Editor | M15 | Shell 0.8.0 | Markierung, Vorschläge, Ignorieren, Wörterbuch, DE/EN, abschaltbar, ohne Eingabeverzögerung |
+| SB-01 | Seitenleisten-Kontextmenüs | 04 | Nicht begonnen | Seitenleiste, Shell | MS-01 | App/Shell | – |
+| SB-02 | Ausblenden und Wiederherstellen von Bereichen | 04 | Nicht begonnen | Seitenleiste, Einstellungen | – | ggf. Einstellungsformat | – |
+| SB-03 | Bereichsübergreifende Organisation | 04 | Nicht begonnen | Seitenleiste, Datenmodell | Teil 05 | evtl. Formatwechsel | – |
+| SB-04 | Konfigurierbare Nebenansicht | 04 | Nicht begonnen | Haupt-/Nebenansicht | – | App | – |
+| UI-01 | Platzanzeiger beim Ziehen und Ablegen | 04 | Nicht begonnen | Shell (`custom_controls`) | MS-01 | Shell | – |
+| UI-02 | Gemeinsame Aktionsgriffe | 04 | Nicht begonnen | Shell/Bento | MS-01 | Shell | – |
+| UI-03 | Quadratische Symbolknöpfe | 04 | Teilweise implementiert (40-px-Knöpfe der Pixel-Werkstatt) | Shell, Design Richtlinien | MS-01 | Shell | – |
+| UI-04 | Pixelgenaue Komponentenausrichtung | 04 | Nicht begonnen | alle Ebenen | MS-01 | – | Geometriebelege |
+| DS-01 | Datensicherheits- und Wiederherstellungsprüfung | 05 | Nicht begonnen | Daten/Migration | – | – | Prüfbericht mit künstlichen Daten |
+| DS-02 | Migrationsgrundlage für einen gebündelten Formatwechsel | 05 | Nicht begonnen | Format 26 → ? | PAGE-02, PROMPT, KI-01, DOC-01, VIS-03, PIXEL-01/02 | Format (ein Wechsel) | Schema, Migration, Rückweg, Inhaberfreigabe |
+| PROMPT-01–05 | Prompt-Management | 06 | Konzipiert (Master-Bericht §C) | neue Seitenart | DS-02 | Format, Skill | – |
+| KI-01 | KI-Projektkontexte | 06 | Nicht begonnen | Austausch, Skill | DS-02 | Format, Austausch, Skill | – |
+| DOC-01 | Dokumenten- und Anhangsmanagement | 06 | Nicht begonnen | Anhänge | DS-02 | Format | – |
+| BENTO-01–05 | Vollständiger Bento-Ausbau | 07 | Konzipiert | `glide_bento` | MS-01 | Bento (Minor) | – |
+| DASH-01 | Startseiten-Dashboard | 07 | Teilweise implementiert (Startseite mit Bento 0.2.0) | Startseite | BENTO-01–05 | App | – |
+| DASH-02 | Heute-Dashboard | 07 | Nicht begonnen | `today_view` | BENTO-01–05 | App | – |
+| DASH-03 | Projekt-Dashboard | 07 | Nicht begonnen | – | BENTO-01–05, DS-02 | App | – |
+| VIS-01 | Direkt sichtbares Kanban | 08 | Nicht begonnen | Listenansichten | – | App | – |
+| VIS-02 | Gruppierte Werkzeugleisten | 08 | Nicht begonnen | Pinnwand, Shell | MS-01 | Shell | – |
+| VIS-03 | Mindmaps | 08 | Nicht begonnen | neue Ansicht | DS-02 | Format | – |
+| SHELL-01/02 | Softwarekatalog „Weitere Programme“ | 09 | Konzipiert | Shell/Bento | MS-01 | Shell, Bento | – |
+| SYM-01 | Symbolbibliothek | 09 | Nicht begonnen | `ICONS`, Shell | MS-01 | Shell | – |
+| PIXEL-01/02 | Pixel-Ebenen und weitere Werkstattfunktionen | 09 | Konzipiert | `drawing.py` | DS-02 | Zeichnungsformat | – |
+| TPL-01 | Erweiterte Vorlagenbibliothek, Klassifikation, Arbeitsumgebungen | 10 | Nicht begonnen | Vorlagen | – | ggf. Vorlagenformat | – |
+| PERF-02 | Progressive Bilddarstellung | 11 | Nicht begonnen | Bildseite, `image_conversion` | – | App | Messung Median/p95 |
+| PERF-03 | Weiterführende Performance-Optimierung und Caching | 11 | Nicht begonnen | Renderpfade | – | App | Messung |
+| RELEASE-01 | Signierung und Distribution | 12 | Analysiert (EV-Aussage unverifiziert) | Paketierung | Inhaberkonten | – | Inhaberaktion |
+| REL-02 | Marketing und Lieferbereitschaft | 12 | Nicht begonnen | Marketing | – | – | – |
+| VER-01 | Versionsmanagement je Komponente (D104) | 01–13 | Implementiert (Regel, Inventar, Matrix) | alle | – | – | Versionsprüfung in jedem Teil |
+| GIT-01 | Gemeinsamer Branch und ein PR | 13 | Nicht begonnen | Git | alle Teile | – | gemeinsame Abnahme |
+
+**Blockiert bzw. Inhaberentscheidung nötig:** WA-52-Showcase-Erkundung, WA-53 „Fristen entfernen“ und Versionswechsel auf 1.1.0 ([§4.6](#46-umsetzungsstand-glide-110-arbeitsprotokoll-26112026)); Bündelung des Datenformatwechsels (Teil 05); neue Abhängigkeit für die Rechtschreibprüfung; Signierkonten (Teil 12).
+
+#### Indexabgleich Teil 03
+
+<a id="indexabgleich-teil-03"></a>Zuordnungsindex der Originalmatrix (übergeben mit Teil 03) gegen die IDs oben. Der Index ist kein Implementierungsnachweis.
+
+| Ursprung | Inhalt | Teile | Zeilen oben | Stand |
+|---|---|---|---|---|
+| PAGE-01–06 | Blockgriff, Kapitel, Blockkopie, Cmd+C, Fallback, Position | 03; 04 Griff | PAGE-01 (neu unten), PAGE-02/02b, PAGE-03–06 | abgeglichen |
+| UX-01–04 | Gelb, Skip Ink, Erwähnungen, erweiterte Eingabe | 03 | UX-01, UX-02 (neu unten), UX-03, UX-04 | abgeglichen |
+| UX-05 / WA-52 / U20 | Inline-Erfassung, ein Leerzustandssystem | 04 | UX-05, UX-05b, WA-52 | abgeglichen |
+| EDITOR-01–02 | Autolink, Rechtschreibung | 03 | EDITOR-01, EDITOR-02 | abgeglichen |
+| PROMPT-01–05 | Prompt-Objekt bis Bibliothek | 06; 10 | PROMPT-01–05 | abgeglichen |
+| KI-Projektkontext | Profile, Anweisungen, Repository, Pakete, Übergabe | 06 | KI-01 | abgeglichen |
+| SHELL-01/02 | Über Glide, Weitere Programme, Manifest | 09 | SHELL-01/02 | abgeglichen |
+| Shell First / D100 / Showcase | Fundament, Verträge, Host, Konformität, Galerie | 02; alle; 13 | MS-01, MS-02, MS-03 | abgeglichen |
+| BENTO-01–05 / L1 | Akzentflächen bis Dashboards | 07; 08; 13 | BENTO-01–05, DASH-01–03 | abgeglichen |
+| PIXEL-01–03 | Werkzeuge, Ebenen | 09 | PIXEL-01/02, PIXEL-03 | abgeglichen |
+| Symbole | Ordner-/Objektsymbole, SVG/PNG | 09 | SYM-01 | abgeglichen |
+| PERF-01 | Scrollen, Retention, progressive Bilder, Cache, Messung | 11 | PERF-01–03 | abgeglichen |
+| Dokumentenmanagement | Bibliothek, Vorschauen, Index, Versionen, Verweise, Export | 06 | DOC-01 | abgeglichen |
+| Mindmaps / visuelle Ansichten | Mindmaps, Fluss-/Abhängigkeitsgraph | 08; 07 | VIS-03, **VIS-04 (neu)** | ergänzt |
+| Datensicherheit | Atomarität, Locks, Backup/Restore, Migration, Übersicht | 05; alle; 13 | DS-00–DS-02 | abgeglichen |
+| NAV-01–04 | Seitenleistenmenüs, Ein-/Ausblenden, Verschieben, Leeren, Öffnungsziel, Ablageanzeige | 04 | NAV-01–04 (jetzt mit Inhalt), SB-01–04, UI-01 | abgeglichen |
+| DESIGN-01/02 + Plus + Griff | Suchfeldachse, optische Sternmitte, Quadrat, kompakte Griffe | 04 | DESIGN-01/02 (jetzt Teil 04), UI-02–04 | korrigiert (vorläufig Teil 02 → 04) |
+| KANBAN-01–03 | direkte Ansicht, Werkzeuggruppen, Spalten | 08 | KANBAN-01–03, VIS-01/02 | abgeglichen |
+| TEMPLATE-01–06 | Metadaten, Gruppierung, Bibliothek, Editor, Qualitätsmatrix | 10 | TEMPLATE-01–06, TPL-01 | abgeglichen |
+| Feature Discoverability / Governance | sichtbare Kernfunktionen, gemeinsame UI, Entscheidungspflege | 02; 08; 13 | DISC-01 (Teile 02/08/13 ergänzt) | korrigiert |
+| RELEASE-01 | Signierungsrecherche, Build-/Distributionsstrategie | 12 | RELEASE-01, REL-02 | abgeglichen |
+| Audit / Lieferstand / QA / Übergabe | Ist-Soll, Basis, Grenzen, Schlussprüfung | 01; alle; 13 | VER-01, §4.7.1 | abgeglichen |
+| Finale Git-Regel | ein gemeinsamer PR am Tor | alle; 13 | GIT-01 | abgeglichen |
+
+Ergänzte Zeilen:
+
+| ID | Anforderung | Teil | Status | Systeme | Abhängigkeit | Version | Offen / Abnahme |
+|---|---|---|---|---|---|---|---|
+| PAGE-01 | Blockgriff auf leerer Seite links neben dem Schreibhinweis | 03; 04 (gemeinsamer Griff) | **Automatisiert verifiziert** (Achse, Abstand ≤ Lücke, kein Sprung, keine leeren Objekte; T350, T358) | Editor | – | 1.1.0 | macOS-Sicht offen; Griffvertrag für Listen in Teil 04 |
+| PAGE-04 | Zwischenablage und Tastenwege | 03 | Automatisiert verifiziert (Strg+C/X/V/A, T350, T358); Cmd nur nachgestellt | Editor, Listen | – | 1.1.0 | macOS-Ablauf in der manuellen Prüfliste |
+| PAGE-06 | Positionswiederherstellung | 03 | Implementiert (Sitzung); expliziter Sprung hat Vorrang (T358); sitzungsübergreifend **zurückgestellt** bis Anker (PAGE-02b) | `view_positions` | PAGE-02b | – | Bewertung Analyse §13.40 |
+| UX-02 | Unterstreichung mit Aussparung an Unterlängen (Skip Ink) | 03 | **Technisch bewertet, zurückgestellt** (Tk bietet keine Aussparung; Analyse §13.40) | Editor | Tk | – | Wiederaufnahme bei Tk-Unterstützung |
+| VIS-04 | Fluss- und Abhängigkeitsgraph | 08; 07 | Nicht begonnen | Bento, Pinnwand | BENTO | – | – |
+
+#### 4.7.4 Teil 02: Shell-First, Designvertrag und Showcase (27.11.2026)
+
+- **Architektur geprüft:** Shell importiert nur Standardbibliothek und Tk, Bento nur öffentliche Shell-Module, keine Zyklen. Vorher fehlten eine Versionsprüfung zwischen Bento und Shell, eine mitgelieferte Konformitätsprüfung für Folgeprojekte und eine Galerie in Glide. Allgemeine Knöpfe, Felder, Tooltips, Werkzeugleisten und Farbrollen liegen noch in Glide (Ebene A).
+- **Umgesetzt:** Shell 0.7.0 (`compat`, `conformance`, `showcase`), Bento 0.3.0 (`SHELL_MIN_VERSION`, `showcase`), Glide-Modul `component_gallery` mit der Galerie im Hilfe-Menü (F153), `shell_uebernehmen.py --mit-bento`, Shell-First-Vertrag im portablen Designvertrag, Migrationsanleitung DE/EN mit Startprompt, Entscheidung D106, `arbeitsstand_sichern.py`.
+- **Komponentenübersicht und Showcase-Abdeckung:** [Systemregister](../01_Repository/Glide/src/glide/README.md#framework-komponenten-und-showcase-abdeckung); Kompatibilität: [Framework-Kompatibilität](../01_Repository/Glide/src/glide/README.md#framework-kompatibilität-glide-shell-bento).
+- **Nicht in Teil 02:** Umzug der allgemeinen Glide-Komponenten in die Shell (Verhaltensgleichheit nötig, Teile 04/07/09), produktiver Einsatz von BentoGrid, Metric, Actions und Divider in Glide (Teil 07), Erprobung der Migration an STEPS und Chess & Chains (eigene Repositories).
+- **Datenformat:** unverändert (26/2/2/2); keine Abhängigkeit von Teil 03/04 auf einen vorgezogenen Formatwechsel festgestellt.
+
+#### 4.7.5 Teil 03: Editor, Kapitel und Textfunktionen (27.11.2026)
+
+- **Umgesetzt:** Kapitel als Projektion der Überschriften mit Seitenleiste, Navigation, Befehlen und Rückgängig (PAGE-02, `chapters.py`, F154); Block duplizieren (PAGE-03); Rechtschreibvertrag in der Shell 0.8.0 (EDITOR-02, Galerie); gehärtete Arbeitsstandsicherung (Speicherprüfung, Verifikation vor Erfolg).
+- **Geprüft, vorhanden:** PAGE-01 (Griff), PAGE-04 (Tastenwege), PAGE-05 (Fallback mit Format), PAGE-06 (Sitzungsposition, Vorrang des expliziten Ziels), UX-01 (D101), UX-03 (D103), UX-04, EDITOR-01 (Randfälle). Befunde: [Analyse §13.40](Glide_Analyse.md#1340-editor-kapitel-und-textfunktionen-master-serie-teil-03-27112026).
+- **Restarbeiten (offen in der Matrix):** PAGE-02b stabile Kapitelanker und Kapitelverweise (blockiert durch DS-02, Formatvorschlag 27); EDITOR-02 produktive Prüfung (blockiert durch M15); PAGE-06 sitzungsübergreifend (nach PAGE-02b); UX-02 zurückgestellt; macOS-Prüfungen (Ablauf in der manuellen Prüfliste).
+- **Schemaänderungen für Teil 05:** Liste in der Analyse §13.40 (Kapitelanker, Prompt, KI-Kontext, Dokumente, Mindmaps, Pixel-Ebenen, ggf. Seitenleistensichtbarkeit).
+
+#### 4.7.6 Teil 04: Inline-Eingabe und Seitenleiste (27.11.2026)
+
+[Abschlussbericht und Messwerte](../01_Repository/Glide/docs/07_QA_BERICHT.md#master-serie-teil-04-inline-erfassung-und-seitenleiste-27112026). Der Inhaber hat die Teile 01–04 am 27.11.2026 als GitHub-Zwischenstand mit einem Entwurfs-PR beauftragt. Das Git-Tor der Gesamtserie bleibt Teil 13. Der Originalindex wurde zu NAV-01–04 und DESIGN-01/02 abgeglichen. R05 und R06 lagen als Referenzbilder vor. Die Leseposition für erneut geöffnete Nebenansichten nutzt den vorhandenen Sitzungsverlauf. Oberflächen, die Aufgaben aus anderen Quellen zeigen, brauchen vor einer eigenen Erfassungszeile eine sichtbare, eindeutige Zielzuordnung.
+
+**An Teil 05.** Eine gemeinsame Migration soll stabile Kapitelanker, Kapitelverweise und sitzungsübergreifende Positionen aus Teil 03 sowie wiederherstellbare Entwürfe und typunabhängige Navigationsorte aus Teil 04 abdecken. Vor Schemafestlegung die Anforderungen neuer Inhaltstypen zusammenführen. Persistente Navigationsorte benötigen stabile Objekt-ID, Navigationscontainer-ID und Reihenfolge. Inhaltstyp, Heimatcontainer, Projektzuordnung und Verweise bleiben eigenständig. Import, Export und Sicherung müssen die Zuordnung samt Teilmengen und fehlenden Zielen eindeutig behandeln. Eine Übernahme bisheriger Wurzelzuordnungen muss Formate 26/2/2/2 testen. Solange der Vertrag fehlt, gilt die vorhandene Wurzelprojektion.
+
+**Abnahme Leeren.** Vorab Umfang von Objekten, Unterinhalten, Anhängen, Verweisen und Ansichten anzeigen. Schreibsperre und Objektliste nach Bestätigung erneut prüfen. Vollständige Sicherung mit verifiziertem Manifest muss vor der einzigen wiederherstellbaren Sammelmutation stehen. Abbruch, Sicherungs- und Schreibfehler, konkurrierender Zugriff, fehlende Daten, Undo und Neustart mit Wiederherstellung gegen künstliche Bestände prüfen. Die Aktion wird nach bestandenem Nachweis freigeschaltet. Eine lesende Vorschau ist in Teil 04 erreichbar.
 
 ### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
 

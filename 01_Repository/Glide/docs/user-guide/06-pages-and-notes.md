@@ -10,6 +10,8 @@ Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
 
 A **page** is a long document with a reading column of up to 760 px. It scrolls without end and has no sub-pages. Its title is the title in the header. Double-click the header title to rename the page.
 
+- **Chapters** (development state 1.1.0): headings 1–3 of a page are its chapters. They appear nested under the page in the sidebar; click one to jump there. Right-click a chapter (or use **Current chapter** in the page menu) to **Rename …**, **Move up/down with content**, change the level, or **Dissolve chapter (content stays)**. **New chapter** inserts a heading 2 below the current line. Each action can be undone. Chapters are not sub-pages.
+- **Duplicate block** in the block menu copies the whole block below itself, without touching the clipboard.
 - **Markdown shortcuts** work while you type. **/** at the start of a line opens the block picker. Enter continues lists and tasks.
 An open page shows when it was last edited in the header. Hover over the time or choose **More › Show last edit time …** to see the exact local date, time and UTC offset. The menu also works when the header is too narrow.
 
@@ -56,3 +58,7 @@ A **gallery** is an image collection. Each image is an attachment with a title a
 - **`.glidepage`** exports and imports pages and books with their attachments.
 - **Reference templates** (development state 1.1.0) in English and German: **Freelance client project** (folder from briefing via milestones, feedback and acceptance to handover and invoice; asks for `{{Client}}`), **Creative design project** (mood board, design rounds with three variants, revisions, approval and asset handover) and **Personal weekly plan** (intentions, focus goals, appointments, buffers, tasks and weekly review). Dates shift so that the template starts today; applying it twice creates two independent copies; undo removes an application as a whole.
 - **From template …** shows a filled-in preview before anything is created. Placeholders such as `{{Datum}}` fill in automatically. Other names are asked for. The built-in page templates are German: report, meeting and project page.
+
+### Sidebar sections
+
+Right-click a section heading to manage its entries. Use the section menu to expand or collapse entries or choose whether a content item opens in the main or side view. In Settings, use Sidebar sections to show, hide or reorder Pages, Lists, Notes and Drawings. Moving eligible items to another section keeps their content type and references.

@@ -1,6 +1,8 @@
 # Bento Design Contract – Portabler Gestaltungsvertrag
 
-Stand 26.11.2026 · Glide 1.0.3 · Bento Version 0.2.0 · Glide-System V1.88 · Entscheidung D100
+Stand 27.11.2026 · Glide 1.0.3 · Bento Version 0.3.0 · Glide Shell ≥ 0.7.0 · Glide-System V1.91 · Entscheidung D100, D106
+
+Ergänzend gilt der [Shell-First-Vertrag](../glide_shell/DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106): Bento nutzt nur öffentliche Shell-Module, deklariert `SHELL_MIN_VERSION` und beschreibt jede Komponente in `glide_bento.showcase`.
 
 Dieser Gestaltungsvertrag definiert die verbindlichen visuellen und interaktiven Standards für alle Bento-Komponenten (`glide_bento`). Er gilt gleichermaßen für Glide als Host sowie für jedes Folgeprojekt, das Bento übernimmt.
 

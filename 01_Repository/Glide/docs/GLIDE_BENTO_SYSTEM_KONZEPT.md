@@ -1,6 +1,6 @@
 # Glide Bento Box System – Architektur- und UI-Kompositionskonzept
 
-Stand 26.11.2026 · Glide 1.0.3 (Entwicklungsstand 1.1.0) · Glide Bento Version 0.2.0 · Glide-System V1.88 · Glide Shell 0.6.2 · Format 26 · Entscheidung D100
+Stand 27.11.2026 · Glide 1.0.3 (Entwicklungsstand 1.1.0) · Glide Bento Version 0.3.0 · Glide-System V1.91 · Glide Shell 0.8.0 · Format 26 · Entscheidung D100
 
 Das **Glide Bento Box System** (Kurzbezeichnung: **Glide Bento**, Paketname: `glide_bento`) ist eine wiederverwendbare, modulare UI-Kompositionsschicht für kartenbasierte Benutzeroberflächen, Bento-Dashboards und adaptive Inhaltsraster in Python/Tkinter. Es bildet die architektonische **Ebene B** im Glide-Gesamtsystem.
 
@@ -328,6 +328,8 @@ flowchart TD
 ---
 
 ## 14. Projektübergreifende Übernahmestrategie (STEPS, Chess & Chains)
+
+**Seit Bento 0.3.0 (27.11.2026, D106):** Übernahme nur zusammen mit einer passenden Shell über `shell_uebernehmen.py --mit-bento`; Bento prüft `SHELL_MIN_VERSION` beim Import, `python -m glide_shell.conformance` prüft die Kombination im Projekt. Bestehende Anwendungen folgen der [Migrationsanleitung](../src/glide/glide_shell/KI_MIGRATION_BESTEHENDE_ANWENDUNG.md). Kompatibilität je Stand: [Systemregister](../src/glide/README.md#framework-kompatibilität-glide-shell-bento).
 
 Glide Bento ist so konzipiert, dass es wie die Glide Shell als eigenständiges Unterpaket in Schwesterprojekte übernommen werden kann:
 

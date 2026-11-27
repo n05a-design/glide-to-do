@@ -263,6 +263,7 @@ Hier steht jede Entscheidung, Fachentscheidung und Inhaberaussage mit Gestaltung
 | D84 | Appweit kleine, flache, gefüllte Dreiecke aus einer gemeinsamen Rasterform; Größe folgt der Schrift, Klickflächen und Tastaturwege bleiben | [Klare Formen](#klare-formen-und-stabile-symbolbedeutung-b10-b12-b14), [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
 | D85 | „…“-Schalter randlos und kompakt; Aktionsspalte und Aufgabe bilden eine durchgehende Hover-/Auswahlfläche; Tabellenkopf fluchtet mit dem Inhalt; Zeichen-Anzeigeprofile ändern nur sichtbare Leisten | [Fortschreibungen](#fortschreibungen-aus-abnahmen-und-aufträgen) |
 | D100 | Glide Bento Box System: 18 px Außenradius für Bento-Karten, 12 px Innenradius, 12 px Rasterabstand, reaktiver Spaltenumbruch (1/2/3 Spalten bei 616 / 932 px) und deklarativer Bento Design Contract | [Bento-Konzept](GLIDE_BENTO_SYSTEM_KONZEPT.md), [Bento Design Contract](../src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md) |
+| D105/D106 | Shell-First: allgemeine Gestaltung kommt aus dem Framework; 14 Grundsätze (Shell First, Glide as Showcase, Reuse Before Creation, Visual Consistency, Pixel Precision, Direct Interaction, Feature Discoverability, Contextual Tools, Predictable Drag & Drop, Multiple Views/One Data Model, User-Controlled Workspace, Data Safety First, Functional Completion, Versioned Evolution) sind den bestehenden P-, B- und D-Regeln zugeordnet; Individualisierung nur über Rollenwörterbuch, Schrift- und Bento-Provider; Ausnahmen mit Pflichtangaben | [Shell-First-Vertrag](../src/glide/glide_shell/DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106), Galerie F153 |
 
 ### Fachentscheidungen mit Gestaltungsfolge
 
@@ -422,3 +423,9 @@ Folgende Elemente gehören der Fachanwendung und werden **nicht** aus Glide übe
 - Maskottchen und spielerische Elemente (z. B. Gismo).
 - Spezifische Fachlayouts (Kacheln, Tag-Strukturen, Kanban-Boards, Zeichenflächen).
 - Spezifische Maße, die nicht aus dem Mindestschutz (B15) resultieren.
+
+### Direkte Aufgabenerfassung und Seitenleistenbereiche (Teil 04, 27.11.2026)
+
+U20 erlaubt die Inline-Zeile und die Schnellerfassung als Zugänge zur gleichen Erstellungsoperation. Eine bearbeitbare, ungefilterte Liste oder Tabelle bietet am Ende eine echte Eingabezeile. Die kompakte Aufgabenachse verläuft vom Griff über die Checkbox zum Aufgabentitel. Texteditoren behalten ihren Leserand. Die Startseiten- und Heute-Suche verwenden dieselbe Feldfabrik und richten den 38 px hohen Rahmen oben an der Werkzeugzeile aus.
+
+Die Plusknöpfe der vier Seitenleistenbereiche haben 28 × 28 Tk-Pixel. Die Favoritensterne in der Seitenübersicht haben 34 × 34 Tk-Pixel. Farben, Fokus und Glyphenversatz nutzen den [portablen Designvertrag](../src/glide/glide_shell/DESIGN_RICHTLINIEN.md#aktionsgriff-und-ablageanzeige-shell-090).

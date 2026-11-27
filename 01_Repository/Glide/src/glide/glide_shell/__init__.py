@@ -22,6 +22,10 @@ Bausteine:
 - `runtime_paths`: Daten- und Cacheordner nach Plattformkonvention auflösen, ohne Dateisystemmutation.
 - `command_history`: Rückgängig/Wiederholen für Zustandsabbilder und Befehlsobjekte (Phase 4).
 - `app_host`: Hauptfenster, Startprüfungen, Menüleiste, Kürzel und Beenden für einen Controller (Phase 5).
+- `compat`: Versionsprüfung für Verbraucher (`require_shell`, `compatible`, `ShellVersionError`; seit 0.7.0).
+- `conformance`: Architekturprüfung eines Hosts (Schichten, öffentliche Module, Zyklen, Versionen; seit 0.7.0).
+- `spellcheck`: Rechtschreibvertrag ohne eigene Engine (`SpellChecker`, `WordListChecker`, `LayeredChecker`, `misspelled`; seit 0.8.0).
+- `showcase`: Tk-freies Galerie-Register (`ShowcaseEntry`, `ShowcaseRegistry`, `shell_entries`; seit 0.7.0).
 - `selftest`: Prüfung einer übernommenen Kopie auf dem Zielrechner (`python -m glide_shell.selftest`).
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
@@ -30,8 +34,11 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.6.2"
+SHELL_VERSION = "0.9.0"
+# Älteste Fassung mit unveränderter öffentlicher Schnittstelle; ein inkompatibler
+# Schnitt hebt sie auf die neue Version (Prüfung in `compat.require_shell`).
+SHELL_COMPAT_SINCE = "0.6.2"
 
-__all__ = ["SHELL_VERSION", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
+__all__ = ["SHELL_VERSION", "SHELL_COMPAT_SINCE", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
            "window_geometry", "system_appearance", "redo_history", "text_fit", "action_picker",
-           "runtime_paths", "command_history", "app_host", "selftest", "demo"]
+           "runtime_paths", "command_history", "app_host", "compat", "conformance", "showcase", "spellcheck", "selftest", "demo"]

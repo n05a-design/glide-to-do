@@ -2,7 +2,9 @@
 
 **Layer B Component & Composition System for Python/Tkinter**
 
-Status as of 26.11.2026 · Glide 1.0.3 · Bento 0.2.0 · Glide-System V1.88 · Layer B (D100)
+Status as of 27.11.2026 · Glide 1.0.3 · Bento 0.3.0 · Glide Shell ≥ 0.7.0 · Glide-System V1.91 · Layer B (D100)
+
+**Since 0.3.0:** on import Bento checks `SHELL_MIN_VERSION` (0.7.0) against the installed shell and stops with `ShellVersionError` when it is too old or incompatible. Take it over together with the shell: `shell_uebernehmen.py --mit-bento` (writes `BENTO_MANIFEST.json`). `glide_bento.showcase.bento_entries()` returns gallery entries for every component for a `glide_shell.showcase.ShowcaseRegistry`; Glide shows them under Help › "Component gallery …".
 
 ---
 

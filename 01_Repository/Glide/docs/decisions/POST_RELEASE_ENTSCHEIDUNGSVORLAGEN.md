@@ -23,6 +23,7 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 | **M11** | Erweiterte Energieplanung | Marktvorschlag | Energielevel-Tags (Hoch/Mittel/Niedrig) | **Variante B:** Optionales Filter-Label für mentale Energie (Phase 2) | Offen (Inhaber) |
 | **M12** | Work-in-Progress (WIP) Limits| Marktvorschlag | Begrenzung gleichzeitiger Aufgaben | **Variante B:** Sanfte Warnung bei mehr als 3 Aufgaben in Heute (Phase 2) | Offen (Inhaber) |
 | **M13** | Erweiterte Pixel-Werkstatt | Marktvorschlag | SVG-Vektorisierung & Animations-Export | **Variante B:** PNG- und animierter GIF-Export ohne schwere Abhängigkeiten (Phase 3) | Offen (Inhaber) |
+| **M15** | Rechtschreibprüfung (EDITOR-02) | Master-Serie Teil 03 | Welche Engine hinter `glide_shell.spellcheck`? | **Variante A:** systemeigene Prüfung je Plattform, keine mitgelieferten Wörterbücher | Offen (Inhaber) |
 | **M14** | Lokales Plugin-System | Post-1.0-Architektur| Python-Erweiterbarkeit für Power-User | **Variante A:** Vorerst zurückgestellt; Stabilität des Bento-/Shell-Kerns geht vor | Offen (Inhaber) |
 
 ---
@@ -621,3 +622,24 @@ Dieses Dokument bündelt die 14 strategischen Entscheidungsvorlagen für den Inh
 24. **Geeignete Entwicklungsphase:** Zurückgestellt auf Version 2.0+.
 25. **Konkrete Akzeptanzkriterien:** Kern bleibt frei von dynamischem Drittcode-Import.
 26. **Erforderliche Inhaberfreigabe:** **Ja (Architektur-Grundsatzentscheidung).**
+
+---
+
+### M15 – Rechtschreibprüfung (EDITOR-02, Master-Serie Teil 03, 27.11.2026)
+
+1. **Ausgangslage:** Tk-Textfelder haben keine Rechtschreibprüfung; das Betriebssystem prüft sie nicht mit. Seit Shell 0.8.0 gibt es den Vertrag `glide_shell.spellcheck` (Wortgrenzen ohne URLs, E-Mail, Pfade und Code, unbekannte Wörter, Vorschläge, Ignorieren, persönliches Wörterbuch) ohne eigene Engine. Er ist in der Komponenten-Galerie vorgeführt, in Glide aber nicht aktiv.
+2. **Varianten:**
+
+| Variante | Engine | Lizenz (Stand 27.11.2026, vor Einbau nochmals am Paket prüfen) | DE/EN | Offline | Paketfolgen | Risiken |
+|---|---|---|---|---|---|---|
+| **A – systemeigen** | macOS `NSSpellChecker` über PyObjC (`pyobjc-framework-Cocoa`, MIT); Windows `ISpellChecker` (ab Windows 8) über `ctypes`/COM ohne Zusatzpaket oder `comtypes` (MIT); Linux: Hunspell-Wörterbücher des Systems mit `spylls` (MPL-2.0) | Engines frei; Wörterbücher gehören dem System, Glide liefert keine | je installierte Systemsprache | ja | macOS + PyObjC-Teilpaket, Windows ohne/mit kleinem Zusatz, Linux + `spylls` | drei Adapter; Vorschlagsqualität je System verschieden; COM-Aufrufe im Hauptthread kurz halten |
+| B – `spylls` überall + mitgelieferte Wörterbücher | reines Python (MPL-2.0) | deutsches `igerman98`: GPL-2.0/GPL-3.0 bzw. OASIS-Lizenz (nur für ODF-Programme), Angaben je Paket widersprüchlich | DE/EN | ja | +5–10 MB Wörterbücher | Lizenzlage des deutschen Wörterbuchs, langsamer als C-Hunspell |
+| C – `pyenchant` | Enchant (LGPL-2.1+ mit Ausnahme) | Windows-Wheels bündeln Enchant; macOS braucht Homebrew-Enchant | DE/EN je Provider | ja | Fremdbibliothek, auf dem Mac nicht selbstständig | Paketbau macOS, LGPL-Pflichten |
+| D – Cloud/KI-Dienst | – | – | – | **nein** | – | widerspricht Produktgrenze „ohne Internet“; ausgeschlossen |
+
+3. **Kosten:** 0 € Lizenzkosten; Aufwand Variante A etwa 3–5 Tage (drei Adapter, Hintergrundprüfung nach Eingabepause, Kontextmenü, Einstellungen, Tests je Plattform).
+4. **Empfehlung:** **Variante A.** Keine Wörterbuchlizenz im Glide-Paket, Sprache und Qualität wie im übrigen System, offline. Die Prüfung läuft verzögert nach einer Eingabepause und nur für geänderte Bereiche (`misspelled(..., ranges=...)`). URLs, Code und Bezeichner sind ausgenommen. Das persönliche Wörterbuch liegt im Datenordner.
+5. **Akzeptanz:** Markierung ohne spürbare Eingabeverzögerung (Median < 16 ms je Prüfschritt bei 10.000 Zeichen); Vorschläge im Kontextmenü; Ignorieren und Hinzufügen; DE/EN wählbar, Standard Oberflächensprache; abschaltbar; Formatierung und Blockart bleiben bei Korrekturen erhalten; Rückgängig.
+6. **Erforderliche Inhaberfreigabe:** **Ja** (neue Laufzeitabhängigkeit PyObjC auf macOS bzw. `spylls` unter Linux nach AGENTS-Regel 4).
+
+Quellen: [spylls (PyPI)](https://pypi.org/project/spylls), [spylls (GitHub)](https://github.com/zverok/spylls), [igerman98 – Debian-Copyright](https://metadata.ftp-master.debian.org/changelogs/main/i/igerman98/stable_hunspell-de-de.copyright), [pyenchant – Installation](https://pyenchant.github.io/pyenchant/install.html), [pyenchant (PyPI)](https://pypi.org/project/PyEnchant).

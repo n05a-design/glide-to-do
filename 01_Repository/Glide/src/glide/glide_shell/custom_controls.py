@@ -1454,3 +1454,49 @@ class ThemedAutoScrollbar(tk.Canvas):
         fraction = max(0.0, min(1.0, fraction))
         if callable(self.command):
             self.command("moveto", fraction)
+
+class ActionHandle(tk.Label):
+    """Compact action target. Hosts bind their own menu and drag callbacks."""
+
+    def __init__(self, master, *, glyph, background, foreground, font, padding=3,
+                 hover_background=None, hover_foreground=None, command=None, **options):
+        super().__init__(master, text=glyph, bg=background, fg=foreground, font=font,
+                         padx=padding, pady=0, bd=0, **options)
+        if hover_background is not None:
+            self.bind("<Enter>", lambda _event: self.configure(bg=hover_background, fg=hover_foreground or foreground))
+            self.bind("<Leave>", lambda _event: self.configure(bg=background, fg=foreground))
+        if command is not None:
+            self.configure(takefocus=True, cursor="hand2", highlightthickness=1,
+                           highlightbackground=background, highlightcolor=hover_foreground or foreground)
+            for sequence in ("<Button-1>", "<Return>", "<space>"):
+                self.bind(sequence, lambda _event: (command(), "break")[1])
+
+
+class DropIndicator(tk.Frame):
+    """Paint insertion or container feedback without resizing underlying widgets."""
+
+    def __init__(self, master):
+        super().__init__(master, bd=0, highlightthickness=0, takefocus=False)
+
+    def show(self, bounds, zone, *, color, indent=0):
+        x, y, width, height = bounds
+        if zone in ("before", "after"):
+            top = y if zone == "before" else y + height - 2
+            self.configure(bg=color, highlightthickness=0)
+            self.place(x=x + indent, y=top, width=max(1, width - indent), height=2)
+        else:
+            self.configure(bg=color, highlightthickness=0)
+            self.place(x=x + indent, y=y, width=6 if zone == "invalid" else 3, height=height)
+        self.lift()
+
+    def clear(self):
+        self.place_forget()
+
+
+def symbol_ink_offset(bounds, *, scale, advance, ascent, linespace):
+    """Shift a centered single glyph so the visible ink is centered as well."""
+    if bounds is None:
+        return 0.0, 0.0
+    left, bottom, right, top = bounds
+    return (advance / 2 - (left + right) * scale / 2,
+            linespace / 2 - ascent + (bottom + top) * scale / 2)

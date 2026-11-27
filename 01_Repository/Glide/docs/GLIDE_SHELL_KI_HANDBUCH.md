@@ -1,6 +1,6 @@
 # Glide Shell – Arbeitshandbuch für KI-Agenten
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2 · Multi-Agent Readiness · Aufgabenformat 26
+Stand 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Shell 0.9.0 · Multi-Agent Readiness · Aufgabenformat 26
 
 Dieses Handbuch bündelt alles, was ein KI-Agent braucht, um an der Glide Shell zu arbeiten oder sie in einem Folgeprojekt zu nutzen: Zweck, Bausteine, Host-Verträge, Regeln, Tests, Prüfwege, Versionierung, Übernahme, Git-Ablauf und Stolperstellen. Es **verweist** auf die führenden Quellen und doppelt deren Regeln nicht. Bei Widerspruch gelten die verlinkten Quellen.
 
@@ -145,13 +145,13 @@ Lokal auf dem Mac die Vollprüfung mit `--vordergrund` und ohne `tests/tools/hin
 
 | Zähler | Ort | Wann erhöhen |
 |---|---|---|
-| `SHELL_VERSION` (SemVer, derzeit 0.6.2) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
+| `SHELL_VERSION` (SemVer, derzeit 0.9.0; `SHELL_COMPAT_SINCE` 0.6.2 hebt nur ein inkompatibler Schnitt) | `glide_shell/__init__.py` | Minor bei neuem Baustein oder neuer öffentlicher Funktion; Patch bei Korrektur ohne Schnittstellenänderung; Major (≥1.0) erst bei einer zugesagten stabilen Schnittstelle |
 | Glide-System-Version (derzeit 1.86) | `GLIDE_SYSTEM_VERSION`, Kopf und Versionstabelle in [`src/glide/README.md`](../src/glide/README.md) | jeder Schnitt mit neuem Modul, neuem Test oder geändertem Katalog; `test_glide_system.py` prüft, dass Datei und Katalogkopf übereinstimmen |
 | App-Version (1.0.1) | `VERSION`, `app.pyw` | nur in einer Produktionsrunde |
 | Aufgabenformat (26) | Datenformat | Shell-Arbeit ändert es nicht |
 | Entscheidungen | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | jeder neue Baustein braucht eine Inhaberfreigabe (D96-Muster), festgehalten als neue Zeile D9x; dann Bereichsangabe „D01–D9x“ in `AGENTS.md`, `CLAUDE.md`, Übergabe und `docs/ai/gemini/*` mitziehen |
 
-Verlauf: 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0) · V1.84 `command_history` und `app_host`, Konzeptphasen 4 und 5, Anleitung für neue Projekte (D99, 0.6.0) · V1.85 `install_close` für eingebettete Fenster, Startprompt (0.6.1) · V1.86 Multi-Agent Readiness, Commit-Pin, Lizenz, Manifest-Prüfung 13/13, Referenzhost T337, Agenteneinstieg T338, portabler Designvertrag (0.6.2).
+Verlauf: V1.92 Aktionsgriff, Ablageanzeige und Glyphenversatz in `custom_controls` (0.9.0) · V1.91 `spellcheck` (Rechtschreibvertrag ohne Engine, 0.8.0) · V1.90 `compat`, `conformance`, `showcase`, `SHELL_COMPAT_SINCE`, Bento-Übernahme `--mit-bento`, Shell-First-Vertrag und Migrationsanleitung (D106, 0.7.0) · 3.62.0–3.68.0 Pakete 1–5 flach in `src/glide` (D86) · V1.61–V1.62 Restkopplung R1–R4 (D94) · V1.64 Unterpaket `glide_shell` 0.1.0 und Demohost (D95) · V1.66 `motion`, Übernahmewerkzeug (0.2.0) · V1.67 `window_geometry`, `system_appearance`, `redo_history`, englische Meldungen (D96, 0.3.0) · V1.68 Selbsttest, Demohost, Anleitung (D97, 0.4.0) · V1.69 `text_fit`, `action_picker`, `runtime_paths` (D98, 0.5.0) · V1.84 `command_history` und `app_host`, Konzeptphasen 4 und 5, Anleitung für neue Projekte (D99, 0.6.0) · V1.85 `install_close` für eingebettete Fenster, Startprompt (0.6.1) · V1.86 Multi-Agent Readiness, Commit-Pin, Lizenz, Manifest-Prüfung 13/13, Referenzhost T337, Agenteneinstieg T338, portabler Designvertrag (0.6.2).
 
 ## 7. Übernahme in ein Folgeprojekt
 

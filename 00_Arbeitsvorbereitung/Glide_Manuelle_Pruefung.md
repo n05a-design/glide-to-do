@@ -2,6 +2,16 @@
 
 Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
 
+## Offene Mac-Prüfung Master-Serie Teil 03: Editor und Kapitel (27.11.2026)
+
+Künstliche Daten, eigener Datenordner (`GLIDE_DATA_DIR`). Je Schritt erwartetes Ergebnis notieren.
+
+1. Neue Seite anlegen, ins Textfeld klicken: Griff ⠿ steht links auf der Höhe von „Schreiben oder „/“ für Blöcke“; erstes Zeichen tippen, nichts springt.
+2. Text markieren, **Cmd+C**, an anderer Stelle **Cmd+V**: Text eingefügt, kein neuer Listenpunkt, kein Hinweis „Zuerst einen Punkt auswählen“. Dasselbe mit **Cmd+X** und **Cmd+A**, auch mit Feststelltaste und mit englischem Tastaturlayout.
+3. Blockmenü (Rechtsklick auf den Griff): „Block kopieren“, „Block ausschneiden“, „Block duplizieren“ ohne Markierung bei Text, Überschrift, Aufzählung, Aufgabe.
+4. Überschriften 1–3 anlegen: Kapitel erscheinen unter der Seite in der Seitenleiste, auf- und zuklappbar; Klick springt zur Überschrift; Rechtsklick (auch Ctrl-Klick) zeigt Kapitelaktionen; „Mit Inhalt nach oben“, danach **Cmd+Z** im Text stellt her.
+5. Galerie (Hilfe › Komponenten-Galerie …): Eintrag „spellcheck“ markiert „sentense“, die Adresse nicht.
+
 ## Offene Sicht- und Bedienabnahme Entwicklungsstand nach Glide 1.0.3 (Ziel 1.1.0, 26.11.2026)
 
 Prüfbasis: Branch `feature/glide-1-1-product-experience` aus einem kurzen lokalen Ordner außerhalb OneDrive, Start mit `GLIDE_DATA_DIR` auf einen leeren Testordner (nie echte Daten), je einmal Deutsch und English, hell und dunkel, Fenster 860 × 700 und 1500 × 950. Windows ist automatisiert und per Bildschirmfoto geprüft; **macOS (Tk 9.1, Apple Silicon) ist nicht geprüft** und für jeden Schritt nötig.

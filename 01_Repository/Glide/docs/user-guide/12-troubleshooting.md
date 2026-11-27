@@ -47,6 +47,7 @@ Reminders and daily prompts are delivered **only while Glide is running**. Misse
 
 - **Help › Manual …** (F1) and **Help › Show keyboard shortcuts** explain the app in the chosen language.
 - **Help › Open error log** opens the local error log. If no error has occurred, Glide says so.
+- **Help › Component gallery …** (development state 1.1.0) shows the real building blocks of Glide Shell and Glide Bento with artificial sample data, their version, states and where Glide uses them. **Theme** (Active, Light, Dark) and **Width** (Narrow, Medium, Wide) rebuild the samples; your settings and data stay unchanged.
 - Nothing from these help functions leaves your computer.
 
 ## Reporting a problem

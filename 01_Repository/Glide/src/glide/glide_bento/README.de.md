@@ -2,7 +2,9 @@
 
 **Wiederverwendbare UI-Kompositionsschicht (Ebene B) für Python/Tkinter**
 
-Stand 26.11.2026 · Glide 1.0.3 · Bento 0.2.0 · Glide-System V1.88 · Ebene B (D100)
+Stand 27.11.2026 · Glide 1.0.3 · Bento 0.3.0 · Glide Shell ≥ 0.7.0 · Glide-System V1.91 · Ebene B (D100)
+
+**Seit 0.3.0:** Bento prüft beim Import `SHELL_MIN_VERSION` (0.7.0) gegen die installierte Shell und bricht mit `ShellVersionError` ab, wenn sie zu alt oder inkompatibel ist. Übernahme zusammen mit der Shell: `shell_uebernehmen.py --mit-bento` (schreibt `BENTO_MANIFEST.json`). `glide_bento.showcase.bento_entries()` liefert die Galerie-Einträge aller Komponenten für einen `glide_shell.showcase.ShowcaseRegistry`; Glide zeigt sie unter Hilfe › „Komponenten-Galerie …“.
 
 ---
 

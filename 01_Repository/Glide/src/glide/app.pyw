@@ -141,7 +141,10 @@ import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import view_positions as glide_view_positions  # noqa: E402
-import empty_prompts as glide_empty_states  # noqa: E402  (UX-05; WA-52 liegt in empty_states)
+import component_gallery as glide_component_gallery  # noqa: E402  (D105, Komponenten-Galerie)
+import chapters as glide_chapters  # noqa: E402  (PAGE-02, Kapitel)
+import glide_shell  # noqa: E402
+from glide_shell import showcase as glide_shell_showcase  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import brand as glide_brand  # noqa: E402
@@ -198,6 +201,7 @@ import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
 import empty_states as glide_empty  # noqa: E402
+from glide_shell.custom_controls import ActionHandle, DropIndicator, symbol_ink_offset  # noqa: E402
 import overdue_review as glide_overdue  # noqa: E402
 import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
@@ -1850,9 +1854,11 @@ class RoundedButton(DeferredDrawCanvas):
         if versatz:
             text_id = self._draw_label_runs(text_color, w, h, versatz)
         else:
+            optical_offset = getattr(self, "optical_offset", None)
+            dx, dy = optical_offset(self.display_text, self.font) if optical_offset else (0, 0)
             text_id = self.create_text(
-                14 if self.text_anchor == "w" else w / 2,
-                h / 2,
+                14 if self.text_anchor == "w" else w / 2 + dx,
+                h / 2 + dy,
                 text=self.display_text,
                 fill=text_color,
                 font=self.font,
@@ -7382,7 +7388,7 @@ class ItemWorkspace:
         menu = app._new_themed_popup_menu()
         bereiche = self.area_list()
         if not bereiche:
-            leer = glide_empty_states.menu_state("areas")
+            leer = glide_empty.menu_state("areas")
             menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.create_area)
         for area in bereiche:
             menu.add_command(label=area["name"], command=lambda value=area["id"]: self.jump_to_area(value))
@@ -10568,8 +10574,9 @@ class PageEditor(RichNoteEditor):
 
     def create_block_handle(self):
         theme = self.app.theme
-        griff = tk.Label(self.text, name='block_handle', text=self.app.ICONS['block_handle'], bg=theme['card'],
-                         fg=theme['muted'], font=app_font(12), cursor='hand2', bd=0, padx=3, pady=0, takefocus=0)
+        griff = ActionHandle(self.text, name="block_handle", glyph=self.app.ICONS["block_handle"],
+                             background=theme["card"], foreground=theme["muted"], font=app_font(12),
+                             cursor="hand2", takefocus=False)
         griff._accessible_name = glide_i18n.t("ui.create_block_handle.block_actions", 'Blockaktionen')
         self.app.add_tooltip(griff, glide_i18n.t("ui.create_block_handle.move_block_right_click", 'Block verschieben · Rechtsklick: Blockaktionen · {accel}', accel=self.app.accel('/')))
         griff.bind('<Enter>', lambda _event: griff.configure(bg=self.app.theme['hover'], fg=self.app.theme['text']))
@@ -12174,6 +12181,27 @@ class PageEditor(RichNoteEditor):
             kurz = text if len(text) <= 48 else text[:47] + '…'
             gliederung.add_command(label='   ' * (stufe - 1) + kurz, command=lambda i=index: self.jump_to(i))
         menu.add_cascade(label=glide_i18n.t("ui.add_outline_menu.outline", 'Gliederung'), menu=gliederung, state='normal' if eintraege else 'disabled')
+        if self.app.is_page_list(self.app.page_entry(self.entry_id)):
+            self.flush()
+            kapitel = glide_chapters.current(glide_chapters.outline(self.document()), self.offset('insert'))
+            menu.add_command(label=glide_i18n.t("chapter.new", 'Neues Kapitel'), command=self.insert_chapter,
+                             state='disabled' if getattr(self.app, '_data_read_only', False) else 'normal')
+            if kapitel is not None:
+                menu.add_cascade(label=glide_i18n.t("chapter.current", 'Aktuelles Kapitel: {title}', title=kapitel.title[:40]),
+                                 menu=self.app.build_chapter_menu(menu, self.entry_id, kapitel.key))
+
+    def insert_chapter(self):
+        """Neue Überschrift 2 unter der aktuellen Zeile; der Platzhalter ist markiert und wird überschrieben."""
+        titel = glide_i18n.t("chapter.placeholder", 'Neues Kapitel')
+        self.text.mark_set('insert', 'insert lineend')
+        self.text.insert('insert', '\n' + titel)
+        self.set_block('h2')
+        zeile = self.text.index('insert').split('.')[0]
+        self.text.tag_remove('sel', '1.0', 'end')
+        self.text.tag_add('sel', f'{zeile}.0', f'{zeile}.0 lineend')
+        self.text.mark_set('insert', f'{zeile}.0 lineend')
+        self.text.focus_set()
+        self.flush()
 
     def show_heading_menu(self):
         menu = self.app._new_themed_popup_menu(self)
@@ -12649,6 +12677,32 @@ class PageEditor(RichNoteEditor):
                 accel=self.app.accel('V')))
         return 'break'
 
+    def duplicate_block(self):
+        """PAGE-03 (Teil 03): den ganzen Block unter sich verdoppeln, ohne die Zwischenablage zu berühren.
+
+        Derselbe Weg wie Kopieren und Einfügen (`block_markdown` → `insert_markdown`):
+        Blockart und Inlineformate bleiben, Links und Aufgaben bekommen neue
+        Identitäten – eine verdoppelte Aufgabe ist eine neue Aufgabe.
+        """
+        self.hide_format_bar()
+        if not self._line_is_movable():
+            return 'break'
+        start, end = self.block_bounds()
+        if not self.text.get(start, end).strip():
+            return 'break'
+
+        def zustand(item_id):
+            found = self.app.find_item_in_lists(item_id)
+            return (found[0].get('text'), found[0].get('done')) if found else None
+
+        markdown = glide_page_markdown.block_markdown(self.document(), self.offset(start), self.offset(end), zustand)
+        if self.text.compare(f'{end} +1c', '<', 'end'):
+            self.text.mark_set('insert', f'{end} +1c')
+        else:
+            self.text.insert(end, '\n')
+            self.text.mark_set('insert', 'end-1c')
+        return self.insert_markdown(markdown)
+
     def delete_line(self):
         self.hide_format_bar()
         if not self._line_is_movable():
@@ -12776,6 +12830,8 @@ class PageEditor(RichNoteEditor):
                          command=self.copy_block, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.cut_block", "Block ausschneiden"),
                          command=lambda: self.copy_block(cut=True), state=beweglich)
+        menu.add_command(label=glide_i18n.t("editor.menu.duplicate_block", "Block duplizieren"),
+                         command=self.duplicate_block, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.duplicate_line", "Zeile duplizieren"),
                          command=self.duplicate_line, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.delete_line", "Zeile löschen"),
@@ -13931,7 +13987,7 @@ class GalleryView(tk.Frame):
         breite = max(1, canvas.winfo_width())
         if not bilder:
             # UX-05: Der Leertext ist selbst „Bilder hinzufügen …“ – derselbe Weg wie der Knopf.
-            leer = glide_empty_states.OVERVIEWS["gallery_images"]
+            leer = glide_empty.OVERVIEWS["gallery_images"]
             canvas.create_text(24, 24, anchor="nw", width=max(200, breite - 48), font=app_font(12, "bold"),
                                fill=theme.get("ui_accent", theme["accent"]), tags=("empty_action",),
                                text=glide_i18n.t(leer.key, leer.fallback))
@@ -18083,6 +18139,9 @@ class ListApp:
         # Blockgriff der Seiten (E-U3 A, D55): acht Punkte als Griff, wie das
         # eingeführte Ziehzeichen; hier öffnet er nur die Blockaktionen.
         "block_handle": "⠿",
+        "plus": "+",
+        "favorite_on": "★",
+        "favorite_off": "☆",
         # Werkzeugspalte der Zeichnung (PIXEL-03, Inhaberentscheidung 27.11.2026).
         # Eindeutig gegenüber den übrigen Symbolen; fehlende Zeichen der UI-Schrift
         # kommen aus dem Symbolbegleiter DejaVu Sans (D59).
@@ -21451,6 +21510,8 @@ class ListApp:
                 break
         result["pinned_pages"] = pinned
         result["sidebar_sections_visible"] = glide_sidebar.normalize_visibility(result.get("sidebar_sections_visible"))
+        result["sidebar_section_order"] = glide_sidebar.normalize_section_order(result.get("sidebar_section_order"))
+        result["sidebar_open_targets"] = glide_sidebar.normalize_open_targets(result.get("sidebar_open_targets"))
         result["sidebar_locations"] = glide_sidebar.normalize_locations(result.get("sidebar_locations"))
         zu = result.get("sidebar_sections_closed")
         result["sidebar_sections_closed"] = list(dict.fromkeys(
@@ -23495,6 +23556,8 @@ class ListApp:
     ROW_ACTION_GAP = glide_design.SPACING[2]
     ROW_ACTION_PADDING = glide_design.SPACING[4]
     ROW_ACTION_WIDTH = ROW_ACTION_SIZE + 2 * ROW_ACTION_PADDING
+    ROW_GRIP_WIDTH = 20
+    ROW_GRIP_MARGIN = ROW_GRIP_WIDTH + 4
 
     def hide_quick_plan_row(self, event=None, keep=0):
         """Knöpfe und Bänder ab Index `keep` ausblenden.
@@ -23519,9 +23582,9 @@ class ListApp:
             return
         # Bücher sollen bis zu beiden Karteninnenkanten reichen. Die
         # abgeleiteten Labels behalten ihren eigenen Inhaltsabstand.
-        left = 0 if self.is_library_view() else glide_design.SPACING[14]
-        right = (0 if self.is_library_view() else self.ROW_ACTION_WIDTH
-                 if self.row_actions_enabled() else glide_design.SPACING[14])
+        actions = self.row_actions_enabled()
+        left = 0 if self.is_library_view() else self.ROW_GRIP_MARGIN if actions else glide_design.SPACING[14]
+        right = 0 if self.is_library_view() else glide_design.SPACING[14]
         if self.tree.winfo_manager() == "pack":
             self.tree.pack_configure(padx=(left, right))
         if not self.row_actions_enabled():
@@ -23534,6 +23597,7 @@ class ListApp:
             self._after_ids.discard(self._row_actions_job)
             self._row_actions_job = None
             self.show_quick_plan_row()
+            self.place_inline_task_entry()
         self._row_actions_job = self._register_after(self.root.after_idle(update))
 
     def _open_row_actions(self, row, item_id, button):
@@ -23545,6 +23609,49 @@ class ListApp:
         self._quick_plan_row = (self.view_mode, row, item_id)
         self.row_overflow_button = button
         return self.row_overflow_action()
+
+    def task_grip_pointer(self, event):
+        return types.SimpleNamespace(widget=self.tree, x=event.x_root-self.tree.winfo_rootx(),
+                                     y=event.y_root-self.tree.winfo_rooty(),
+                                     x_root=event.x_root, y_root=event.y_root, state=event.state)
+
+    def begin_task_grip(self, event, button):
+        button._grip_press = (event.x_root, event.y_root, button._row_owner)
+        button._grip_dragging = False
+        button._on_press(event)
+
+    def move_task_grip(self, event, button):
+        press = getattr(button, "_grip_press", None)
+        supported = self.view_mode == "list" or (self.view_mode == self.TABLE_VIEW and self.list_group_field())
+        if press is None or not supported or getattr(self, "_data_read_only", False):
+            return
+        x, y, row = press
+        pointer = self.task_grip_pointer(event)
+        if not button._grip_dragging:
+            if abs(event.x_root-x) + abs(event.y_root-y) <= 6 or not self.tree.exists(row):
+                return
+            if row not in self.tree.selection():
+                self.tree.selection_set(row)
+            self.tree.focus(row)
+            self.drag_start_id = row
+            self.drag_item_ids = [item for item in self.tree.selection() if self.find_item(item)]
+            self.drag_start_x, self.drag_start_y = x-self.tree.winfo_rootx(), y-self.tree.winfo_rooty()
+            self.drag_has_moved = True
+            self._rename_candidate = None
+            self.cancel_item_rename()
+            button._grip_dragging = True
+        self.on_drag_motion(pointer)
+        return "break"
+
+    def release_task_grip(self, event, button):
+        button._grip_press = None
+        if not getattr(button, "_grip_dragging", False):
+            return button._on_release(event)
+        button._grip_dragging = False
+        button.is_pressed = False
+        button._draw()
+        self.on_drag_end(self.task_grip_pointer(event))
+        return "break"
 
     def show_quick_plan_row(self, event=None):
         """Ein stabiler Mehr-Knopf je sichtbarer Aufgabe; kein Hover-Umbau."""
@@ -23577,9 +23684,16 @@ class ListApp:
                 # keinen Platz für einen vollständigen, bedienbaren Knopf.
                 continue
             if index == len(buttons):
-                button = self.make_button(self.list_frame, self.ICONS["overflow"], lambda: None, "muted",
-                    width=self.ROW_ACTION_SIZE, height=self.ROW_ACTION_SIZE, radius=9,
-                    font=self.symbol_font("overflow", 12), bg_key="card", icon=True, outline=False)
+                button = self.make_button(self.list_frame, self.ICONS["block_handle"], lambda: None, "muted",
+                    width=self.ROW_GRIP_WIDTH, height=self.ROW_ACTION_SIZE, radius=7,
+                    font=self.symbol_font("block_handle", 12), bg_key="card", icon=True, outline=False)
+                button.bind("<ButtonPress-1>", lambda event, b=button: self.begin_task_grip(event, b))
+                button.bind("<B1-Motion>", lambda event, b=button: self.move_task_grip(event, b))
+                button.bind("<ButtonRelease-1>", lambda event, b=button: self.release_task_grip(event, b))
+                button.bind("<Button-3>", lambda _event, b=button: b.command())
+                if IS_MACOS:
+                    button.bind("<Button-2>", lambda _event, b=button: b.command())
+                self.bind_context_menu_modifier(button, lambda _event, b=button: b.command())
                 button._accessible_name = glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen")
                 self.add_tooltip(button, glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen"))
                 buttons.append(button)
@@ -23594,18 +23708,18 @@ class ListApp:
             # und Schrift neu zu setzen zeichnete jeden Knopf bei jedem
             # Radschritt vollständig neu (gemessen rund 15 von 28 ms je Schritt
             # bei 500 Punkten); Größenänderungen zeichnet die Fläche selbst nach.
-            schrift = self.symbol_font("overflow", 12)
-            if button.font != schrift or button.text != self.ICONS["overflow"]:
+            schrift = self.symbol_font("block_handle", 12)
+            if button.font != schrift or button.text != self.ICONS["block_handle"]:
                 button.font = schrift
-                button.set_text(self.ICONS["overflow"])
+                button.set_text(self.ICONS["block_handle"])
             button._row_owner = row
             band = bands[index]
-            band.place(x=self.tree.winfo_x()+self.tree.winfo_width(),
-                       y=self.tree.winfo_y()+bbox[1], width=self.ROW_ACTION_WIDTH, height=bbox[3])
+            band.place(x=self.tree.winfo_x()-self.ROW_GRIP_MARGIN,
+                       y=self.tree.winfo_y()+bbox[1], width=self.ROW_GRIP_MARGIN, height=bbox[3])
             button.command = lambda r=row, i=item_id, b=button: self._open_row_actions(r, i, b)
-            button.place(x=self.tree.winfo_x()+self.tree.winfo_width()+self.ROW_ACTION_PADDING,
+            button.place(x=self.tree.winfo_x()-self.ROW_GRIP_WIDTH,
                 y=self.tree.winfo_y()+bbox[1]+max(0, (bbox[3]-size)//2),
-                width=self.ROW_ACTION_SIZE, height=size)
+                width=self.ROW_GRIP_WIDTH, height=size)
             if self._quick_plan_row is None or row == self.tree.focus():
                 self._quick_plan_row = (self.view_mode, row, item_id)
                 self.row_overflow_button = button
@@ -24827,9 +24941,15 @@ class ListApp:
     def close_side_view(self, event=None):
         if not getattr(self, "_side_view", None):
             return "break"
+        identity = self._side_view["id"]
         self.remember_side_history()
         fokus_war_dort = self.side_view_has_focus()
         self._side_view = None
+        if identity != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            iid = f"list:{identity}"
+            tree = self.get_sidebar_tree_for_iid(iid)
+            if tree is not None and iid in tree.selection():
+                tree.selection_remove(iid)
         self._side_view_signature = None
         self._side_search_open = False
         self._side_search_query = ""
@@ -25498,7 +25618,8 @@ class ListApp:
             self._bind_side_view_keys(pane)
             return
         art = glide_side_view.content_kind(entry)
-        teile = [{"page": glide_i18n.t("ui.render.page", "Seite"), "note": glide_i18n.t("ui.render.note", "Notiz")}.get(art, glide_i18n.t("editor.toolbar.list", "Liste"))]
+        teile = [{"page": glide_i18n.t("ui.render.page", "Seite"), "note": glide_i18n.t("ui.render.note", "Notiz"),
+                  "drawing": glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung")}.get(art, glide_i18n.t("editor.toolbar.list", "Liste"))]
         if entry.get("folder_id"):
             teile.insert(0, " › ".join(self.folder_path_titles(entry.get("folder_id"))))
         rows = glide_side_view.list_rows(entry.get("items", []))
@@ -25512,6 +25633,18 @@ class ListApp:
         if getattr(self, "_data_read_only", False):
             status.configure(text=glide_i18n.t("side_view.status.read_only", "Schreibgeschützter Bestand · nur ansehen."))
         status.pack(side="bottom", fill="x", pady=(6, 0))
+        if art == "drawing":
+            try:
+                model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+                image = glide_drawing_image.thumbnail_photo(model, min(256, max(64, breite)), master=inhalt)
+            except (glide_drawing.DrawingFormatError, tk.TclError):
+                status.configure(text=glide_i18n.t("side_view.drawing.no_preview", "Keine Vorschau"))
+            else:
+                preview = tk.Label(inhalt, image=image, bg=theme["card"], bd=0)
+                preview.image = image
+                preview.pack(fill="x", pady=(4, 8))
+            self._bind_side_view_keys(pane)
+            return
         if self.hints_shown():
             hinweis = (glide_i18n.t("ui.render_side_view.click_the_box_or", "Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich")
                        if art == "tasks" else glide_i18n.t("ui.render_side_view.click_the_box_to", "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten"))
@@ -27610,20 +27743,23 @@ class ListApp:
             self.add_tooltip(kopf, glide_i18n.t("ui.apply_sidebar_sections.expand_views", "Ansichten ausklappen"))
         kopf.configure(text=glide_i18n.t("ui.apply_sidebar_sections.views", '{group}  Ansichten ({len})', group=self.ICONS['group'], len=len(system.get_children(''))),
                        bg=theme["card"], fg=theme["muted"])
-        naechstes = self.pinned_sidebar_frame if getattr(self, "pinned_sidebar_frame", None) is not None \
-            and self.pinned_sidebar_frame.winfo_manager() else (getattr(self, "pages_title_row", None) if self.sidebar_section_visible("pages") else None) or titelzeile
+        content_order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
+        candidates = (getattr(self, "pinned_sidebar_frame", None),
+                      *(self.sidebar_section_heading(key) for key in content_order))
+        next_widget = next((widget for widget in candidates if widget is not None and widget.winfo_manager()), None)
+        anchor = {"before": next_widget} if next_widget is not None else {}
         if self.sidebar_section_open("views"):
             if kopf.winfo_manager():
                 kopf.pack_forget()
             if not system.winfo_manager():
-                system.pack(fill="x", pady=(4, 0), before=naechstes)
+                system.pack(fill="x", pady=(4, 0), **anchor)
         else:
             if system.winfo_manager():
                 system.pack_forget()
             if not kopf.winfo_manager():
-                kopf.pack(fill="x", padx=(8, 0), pady=(8, 0), before=naechstes)
+                kopf.pack(fill="x", padx=(8, 0), pady=(8, 0), **anchor)
         baum = getattr(self, "sidebar_listbox", None)
-        listen_offen = self.sidebar_section_open("lists")
+        listen_offen = self.sidebar_section_open("lists") and self.sidebar_section_visible("lists")
         if baum is not None and listen_offen and not baum.winfo_manager():
             baum.pack(fill="both", expand=True, after=titelzeile)
         elif baum is not None and not listen_offen and baum.winfo_manager():
@@ -28968,19 +29104,24 @@ class ListApp:
             self.show_quick_open(initial_query=self.overview_search_var.get())
         return "break"
 
+    def build_content_search_field(self, parent, variable):
+        border = self.make_rounded_container(
+            parent, fill_key="input", outline_key="input_border", radius=16,
+            padding=glide_design.SPACING[1], height=38, inner_pad_x=glide_design.SPACING[10], inner_pad_y=3)
+        border.pack(side="left", fill="x", expand=True, anchor="n")
+        border.pack_propagate(False)
+        entry = self.register_theme_widget(tk.Entry(
+            border.inner, textvariable=variable, bg=self.theme["input"], fg=self.theme["text"],
+            insertbackground=self.theme["text"], font=app_font(12), relief="flat", bd=0,
+            highlightthickness=0, selectborderwidth=0), "input", "text")
+        entry.pack(fill="both", expand=True)
+        return border, entry
+
     def create_home_panel(self):
         self.overview_search_row = self.register_theme_widget(tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg")
-        self.overview_search_border = self.make_rounded_container(
-            self.overview_search_row, fill_key="input", outline_key="input_border", radius=16,
-            padding=1, height=38, inner_pad_x=10, inner_pad_y=3)
-        self.overview_search_border.pack(side="left", fill="x", expand=True)
-        self.overview_search_border.pack_propagate(False)
         self.overview_search_var = tk.StringVar()
-        self.overview_search_entry = self.register_theme_widget(tk.Entry(
-            self.overview_search_border.inner, textvariable=self.overview_search_var,
-            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
-            font=app_font(12), relief="flat", bd=0, highlightthickness=0), "input", "text")
-        self.overview_search_entry.pack(fill="both", expand=True)
+        self.overview_search_border, self.overview_search_entry = self.build_content_search_field(
+            self.overview_search_row, self.overview_search_var)
         self.overview_search_hint = self.register_theme_widget(CanvasLabel(
             self.overview_search_border.inner, text="", bg=self.theme["input"], fg=self.theme["placeholder"],
             font=app_font(12), anchor="w"), "input", "placeholder")
@@ -32581,8 +32722,10 @@ class ListApp:
         verlauf = tk.BooleanVar(value=self.settings.get("history_enabled", True))
         animationen = tk.BooleanVar(value=self.settings.get("animations_enabled", True))
         hinweise = tk.BooleanVar(value=glide_interaction.hints_visible(self.settings))
+        sidebar_order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
         sidebar_visibility = {key: tk.BooleanVar(value=self.sidebar_section_visible(key))
-                              for key in ("pages", "notes", "drawings")}
+                              for key in glide_sidebar.SECTIONS}
+        sidebar_targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
         rueckmeldung_namen = {
             "auto": glide_i18n.t("settings.feedback.auto", "Automatisch · im Dopamin-Design zu jeder Aktion"),
             "milestones": glide_i18n.t("settings.feedback.milestones", "Nur bei Erledigtem und erreichten Zielen"),
@@ -32825,20 +32968,43 @@ class ListApp:
         tk.Label(appearance, text=glide_i18n.t("settings.sidebar_sections", "Bereiche der Seitenleiste"),
                  bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
-        sidebar_titles = {
-            "pages": glide_i18n.t("settings.sidebar.pages", "Seiten"),
-            "notes": glide_i18n.t("settings.sidebar.notes", "Notizen"),
-            "drawings": glide_i18n.t("settings.sidebar.drawings", "Zeichnungen"),
-        }
+        sections = tk.Frame(appearance, bg=self.theme["bg"])
+        sections.pack(fill="x")
+        section_rows = {}
+
+        def layout_sections():
+            for key in sidebar_order:
+                row = section_rows[key]
+                row.pack_forget()
+                row.pack(fill="x", pady=glide_design.SPACING[3])
+
+        def move_section(key, delta):
+            index = sidebar_order.index(key)
+            other = index + delta
+            if 0 <= other < len(sidebar_order):
+                sidebar_order[index], sidebar_order[other] = sidebar_order[other], sidebar_order[index]
+                layout_sections()
+
+        def reset_sections():
+            sidebar_order[:] = glide_sidebar.SECTIONS
+            for key, variable in sidebar_visibility.items():
+                variable.set(True)
+                sidebar_targets[key] = "main"
+            layout_sections()
+
         for key, variable in sidebar_visibility.items():
-            GlideCheckbutton(appearance, text=sidebar_titles[key], variable=variable,
+            row = section_rows[key] = tk.Frame(sections, bg=self.theme["bg"])
+            GlideCheckbutton(row, text=self.sidebar_section_title(key), variable=variable,
                              name=f"setting_sidebar_{key}", bg=self.theme["bg"], fg=self.theme["text"],
                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[3])
-        tk.Label(appearance, text=glide_i18n.t(
-            "settings.sidebar_hint", "Listen bleibt immer sichtbar. Ausgeblendete Inhalte findest du dort weiterhin."),
-                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), wraplength=300,
-                 justify="left", anchor="w").pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
+                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(side="left", expand=True, fill="x")
+            for delta, label in ((-1, glide_i18n.t("settings.sidebar.up", "Nach oben")),
+                                 (1, glide_i18n.t("settings.sidebar.down", "Nach unten"))):
+                self._make_dialog_button(row, label, lambda k=key, d=delta: move_section(k, d),
+                                         "muted", height=28).pack(side="left", padx=(4, 0))
+        layout_sections()
+        self._make_dialog_button(appearance, glide_i18n.t("settings.sidebar.reset", "Bereiche zurücksetzen"),
+                                 reset_sections, "muted").pack(anchor="w", pady=(4, 8))
         tk.Label(personal, text=glide_i18n.t("settings.start_view", "Ansicht beim Öffnen"),
                  bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
@@ -33213,7 +33379,8 @@ class ListApp:
             if startup_value == "list" and not startliste_value:
                 # Ohne Liste wäre die feste Listenoption eine Angabe ohne Ziel.
                 startup_value = "home"
-            self.settings.update(sidebar_sections_visible={"lists": True, **{key: value.get() for key, value in sidebar_visibility.items()}},
+            self.settings.update(sidebar_sections_visible={key: value.get() for key, value in sidebar_visibility.items()},
+                                 sidebar_section_order=list(sidebar_order), sidebar_open_targets=dict(sidebar_targets),
                                  profile_name=name.get(), profile_logo=clean_logo,
                                  daily_goal=int(rohziel),
                                  daily_capacity_minutes=int(rohkapazitaet),
@@ -33572,7 +33739,7 @@ class ListApp:
                                      ("actions_button", "actions", 16), ("sidebar_toggle_button", "sidebar", 16),
                                      ("list_view_button", "list", 16), ("table_button", "table", 16),
                                      ("board_button", "board", 16), ("quick_plan_row_button", "calendar", 12),
-                                     ("row_due_button", "overdue", 12), ("row_overflow_button", "overflow", 12)):
+                                     ("row_due_button", "overdue", 12), ("row_overflow_button", "block_handle", 12)):
             button = getattr(self, attribute, None)
             if button is not None:
                 button.font = self.symbol_font(key, size)
@@ -33877,8 +34044,17 @@ class ListApp:
         """
         ctx = getattr(self, "_home_bento_context", None)
         if ctx is None:
-            ctx = self._home_bento_context = glide_bento.BentoContext(
-                theme_provider=lambda: self.theme,
+            ctx = self._home_bento_context = glide_bento.BentoContext(**self.bento_host_providers(lambda: self.theme))
+        return ctx.refresh_from_host(
+            glass_mode=self.glass_enabled(),
+            glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
+            glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
+        )
+
+    def bento_host_providers(self, theme_provider):
+        """Host-Provider für einen BentoContext (Variante C); auch für die Komponenten-Galerie."""
+        return dict(
+                theme_provider=theme_provider,
                 token_provider=lambda: glide_design.bento_token_values(
                     card_min_width=self.HOME_TILE_MIN_WIDTH, gap_relaxed=self.HOME_TILE_GAP,
                     gap_default=self.HOME_CARD_GAP, card_padding_x=self.HOME_CARD_PAD_X,
@@ -33891,11 +34067,6 @@ class ListApp:
                     master, text, command, role,
                     width=max(120, ui_font_object(root=self.root, font=app_font(10, "bold")).measure(text) + 56), height=36),
             )
-        return ctx.refresh_from_host(
-            glass_mode=self.glass_enabled(),
-            glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
-            glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
-        )
 
     def make_bento_card(self, master, fill_key="card", outline_key="line", radius=18, inner_pad_x=None, inner_pad_y=None, auto_height=True, **kwargs):
         """Erzeugt eine standardkonforme Bento-Karte (Ebene B, D100) für Startseite und Dialoge."""
@@ -34132,6 +34303,30 @@ class ListApp:
             if str(self.theme.get(key, "")).lower() == grund:
                 return key
         return requested
+
+    def make_square_symbol_button(self, master, glyph, command, *, size, color_key, surface,
+                                  outline=False):
+        button = self.make_button(master, glyph, command, color_key, width=size, height=size,
+                                  radius=min(12, size // 3), bg_key=surface,
+                                  font=icon_font(14, "bold", root=self.root), icon=True, outline=outline)
+        button.fit_text = False
+        button.configure(width=size, height=size)
+        button.optical_offset = self.square_symbol_offset
+        button._draw()
+        return button
+
+    def square_symbol_offset(self, glyph, font_spec):
+        if len(glyph) != 1:
+            return 0, 0
+        metrics = self.glyph_metrics_for(font_spec)
+        if metrics is None or not metrics.covers(glyph):
+            return 0, 0
+        font = tkfont.Font(root=self.root, font=font_spec)
+        size = float(font.actual("size"))
+        pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
+        return symbol_ink_offset(metrics.bbox(glyph), scale=pixels / metrics.units_per_em,
+                                 advance=font.measure(glyph), ascent=font.metrics("ascent"),
+                                 linespace=font.metrics("linespace"))
 
     def _make_dialog_button(self, master, text, command, color_key, width=124, height=40):
         """Gemeinsame Knopfkontur; äußere Werkzeuge mit Theme-Lebensdauer."""
@@ -39601,20 +39796,12 @@ class ListApp:
         self.sidebar_title.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
         self.sidebar_title.bind("<FocusOut>", lambda _event: self.update_sidebar_heading(hover=False))
         self.add_tooltip(self.sidebar_title, glide_i18n.t("ui.create_list_sidebar.show_all_lists_and", "Alle Listen und Ordner als Kacheln anzeigen"))
+        self.bind_sidebar_section_menu("lists", title_row, self.sidebar_heading_frame, icon_slot,
+                                       self.sidebar_heading_icon, self.sidebar_title)
 
-        self.add_list_button = self.make_button(
-            title_row,
-            text="+",
-            command=self.show_sidebar_add_menu,
-            color_key="accent",
-            width=42,
-            height=32,
-            radius=14,
-            bg_key="card",
-            font=app_font(13, "bold"),
-            outline=False,
-        )
-        self.add_list_button.pack(side="right")
+        self.add_list_button = self.make_square_symbol_button(
+            title_row, self.ICONS["plus"], self.show_sidebar_add_menu, size=28, color_key="accent", surface="card")
+        self.add_list_button.pack(side="right", padx=(0, glide_design.SPACING[3]))
         self.add_tooltip(self.add_list_button, glide_i18n.t("ui.create_list_sidebar.create_new_or_import", "Neu anlegen oder importieren"))
         # 3.30 (AO-020) stand hier ein Pfeil zum Einklappen von „Listen und
         # Ordner“. Er ist seit dem 26.09.2026 entfernt (SIDEBAR_SECTIONS).
@@ -39641,6 +39828,9 @@ class ListApp:
         self.sidebar_listbox.column("#0", anchor="w", stretch=True, width=192)
         self.configure_sidebar_count_columns(self.sidebar_listbox)
         self.sidebar_listbox.bind("<<TreeviewSelect>>", self.on_sidebar_select)
+        for sequence, opened in (("<<TreeviewOpen>>", True), ("<<TreeviewClose>>", False)):
+            self.sidebar_listbox.bind(sequence, lambda _event, state=opened:
+                                      self.remember_sidebar_chapter_open(self.sidebar_listbox, state), add="+")
         self.sidebar_listbox.bind("<Double-Button-1>", self.edit_selected_sidebar_title)
         self.sidebar_listbox.bind("<Tab>", self.toggle_sidebar_indent)
         self.sidebar_listbox.bind("<Shift-Tab>", self.outdent_selected_sidebar_list)
@@ -40068,6 +40258,7 @@ class ListApp:
         try:
             self.sidebar_rows = []
             self.sidebar_iid_to_row = {}
+            self.sidebar_chapter_rows = {}
             for row_id in self.system_listbox.get_children(""):
                 self.system_listbox.delete(row_id)
             for row_id in self.sidebar_listbox.get_children(""):
@@ -40334,23 +40525,243 @@ class ListApp:
     def sidebar_section_visible(self, key):
         return glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible")).get(key, True)
 
+    def sidebar_section_title(self, key):
+        return glide_i18n.t(f"sidebar.{key}", glide_sidebar.TITLES[key])
+
+    def sidebar_section_heading(self, key):
+        return getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row", None)
+
+    def sidebar_section_tree(self, key):
+        return getattr(self, "sidebar_listbox" if key == "lists" else f"{key}_listbox", None)
+
     def apply_sidebar_visibility(self):
-        # Hide only navigation. Documents remain reachable through Lists and search.
-        for key in ("pages", "notes", "drawings"):
-            row = getattr(self, f"{key}_title_row", None)
-            if row is None:
+        order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
+        previous = next((widget for widget in (getattr(self, "pinned_sidebar_frame", None),
+                        getattr(self, "system_listbox", None), getattr(self, "views_collapsed_header", None))
+                         if widget is not None and widget.winfo_manager()), None)
+        for key in order:
+            row, tree = self.sidebar_section_heading(key), self.sidebar_section_tree(key)
+            if row is None or tree is None:
                 continue
             if not self.sidebar_section_visible(key):
                 row.pack_forget()
-            elif not row.winfo_manager():
-                before = next((getattr(self, f"{later}_title_row", None) for later in glide_sidebar.SECTIONS[
-                    glide_sidebar.SECTIONS.index(key)+1:] if getattr(self, f"{later}_title_row", None) is not None
-                    and getattr(self, f"{later}_title_row").winfo_manager()), None)
-                if key == "pages":
-                    before = self.sidebar_title_row
-                row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP,
-                                         self.SIDEBAR_HEADER_BOTTOM_GAP),
-                         **({"before": before} if before else {}))
+                tree.pack_forget()
+                continue
+            gap = self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP
+            row.pack(fill="x", pady=(gap, self.SIDEBAR_HEADER_BOTTOM_GAP),
+                     **({"after": previous} if previous is not None else {}))
+            previous = row
+            if tree.winfo_manager():
+                tree.pack_configure(after=row)
+                previous = tree
+
+    def change_sidebar_preference(self, setting, values):
+        old = self.settings.get(setting)
+        self.settings[setting] = values
+        if not self.refresh_data_lock() or not self.save_settings(show_error=True):
+            if old is None:
+                self.settings.pop(setting, None)
+            else:
+                self.settings[setting] = old
+            return False
+        self.clear_render_cache()
+        self.update_sidebar_list()
+        return True
+
+    def bind_sidebar_section_menu(self, key, *widgets):
+        def show(event):
+            return self.show_sidebar_section_menu(key, event)
+        for widget in widgets:
+            for sequence in ("<Button-3>", "<Shift-F10>", "<Menu>"):
+                widget.bind(sequence, show)
+            if IS_MACOS:
+                widget.bind("<Button-2>", show)
+            self.bind_context_menu_modifier(widget, show)
+
+    def show_sidebar_section_menu(self, key, event):
+        self._destroy_sidebar_context_menu()
+        menu = self._sidebar_context_menu = self.build_sidebar_section_menu(key)
+        if event.type == tk.EventType.KeyPress:
+            self._popup_at_widget(menu, event.widget)
+        else:
+            try:
+                menu.tk_popup(event.x_root, event.y_root)
+            finally:
+                menu.grab_release()
+        return "break"
+
+    def build_sidebar_section_menu(self, key):
+        menu = self._new_themed_popup_menu()
+        t = glide_i18n.t
+        create = {"pages": self.create_new_page, "notes": self.create_new_note,
+                  "lists": lambda: self.create_container_dialog("list"),
+                  "drawings": lambda: self.create_in_sidebar_section("drawing", None, "drawings")}
+        if not getattr(self, "_data_read_only", False):
+            menu.add_command(label=t("sidebar.menu.new", "Neues Element erstellen"), command=create[key])
+        menu.add_command(label=t("sidebar.menu.expand", "Alle Elemente aufklappen"),
+                         command=lambda: self.fold_sidebar_section(key, True))
+        menu.add_command(label=t("sidebar.menu.collapse", "Alle Elemente einklappen"),
+                         command=lambda: self.fold_sidebar_section(key, False))
+        rows = self.sidebar_section_roots(key)
+        if rows and not getattr(self, "_data_read_only", False):
+            menu.add_command(label=t("sidebar.menu.sort", "Nach Titel sortieren"),
+                             command=lambda: self.sort_sidebar_section(key))
+            destinations = self.sidebar_move_destinations(key, rows)
+            if destinations:
+                move = self._new_themed_popup_menu(menu)
+                for destination in destinations:
+                    move.add_command(label=self.sidebar_section_title(destination),
+                                     command=lambda target=destination: self.move_sidebar_roots(key, target))
+                menu.add_cascade(label=t("sidebar.menu.move_all", "Alle Elemente verschieben …"), menu=move)
+        menu.add_separator()
+        targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
+        for target, label in (("main", t("sidebar.menu.main", "In der Hauptansicht öffnen")),
+                              ("side", t("sidebar.menu.side", "In der Nebenansicht öffnen"))):
+            prefix = self.ICONS["check"] + "  " if targets[key] == target else "    "
+            menu.add_command(label=prefix + label, command=lambda target=target: self.change_sidebar_preference(
+                "sidebar_open_targets", dict(targets, **{key: target})))
+        menu.add_command(label=t("sidebar.menu.inventory", "Inhaltsumfang ansehen …"),
+                         command=lambda: self.show_sidebar_section_inventory(key))
+        menu.add_separator()
+        menu.add_command(label=t("sidebar.menu.hide", "Bereich ausblenden"), command=lambda: self.hide_sidebar_section(key))
+        return menu
+
+    def sidebar_section_roots(self, key):
+        tree = self.sidebar_section_tree(key)
+        if tree is None:
+            return ()
+        policy = self.sidebar_policy()
+        return tuple(row for iid in tree.get_children("")
+                     if (row := self.sidebar_iid_to_row.get(iid)) and row[0] in ("folder", "list")
+                     and not self.is_inbox_list(policy.entries.get(row[1]) or {}))
+
+    def sidebar_move_destinations(self, section, rows):
+        return [key for key in glide_sidebar.SECTIONS if key != section and self.sidebar_section_visible(key)
+                and all(self.sidebar_accepts(kind, identity, key) for kind, identity in rows)]
+
+    def show_sidebar_section_inventory(self, key):
+        roots = self.sidebar_section_roots(key)
+        folder_ids = {value for kind, identity in roots if kind == "folder"
+                      for value in self.iter_folder_subtree(identity)}
+        list_ids = {identity for kind, identity in roots if kind == "list"}
+        entries = [entry for entry in self.lists
+                   if entry["id"] in list_ids or entry.get("folder_id") in folder_ids]
+        tasks = [item for entry in entries for item in self.walk_items(entry.get("items", []))]
+        targets = {("list", entry["id"]) for entry in entries} | {("item", item["id"]) for item in tasks}
+        _index, _outgoing, incoming = glide_objects.graph(self.lists, self.trash)
+        mentions = sum(len(incoming.get(target, set()) - targets) for target in targets)
+        attachments = sum(len(item.get("attachments") or ()) for item in [*entries, *tasks])
+        message = glide_i18n.t("sidebar.menu.inventory_summary",
+            "Wurzeln: {roots} · Ordner: {folders} · Inhalte: {entries} · Punkte: {tasks}\n"
+            "Anhangeinträge: {attachments} · Objektverweise von außerhalb: {mentions}\n\n"
+            "Die Vorschau umfasst den Navigationsbereich. Eine Sammelaktion zum Leeren ist bis zum Wiederherstellungsnachweis gesperrt.",
+            roots=len(roots), folders=len(folder_ids), entries=len(entries), tasks=len(tasks),
+            attachments=attachments, mentions=mentions)
+        self.show_info(self.sidebar_section_title(key), message)
+
+    def sort_sidebar_section(self, key):
+        if not self.refresh_data_lock():
+            return False
+        roots = self.sidebar_section_roots(key)
+        groups = {"list": self.lists, "folder": self.folders}
+        replacements = {}
+        for kind, source in groups.items():
+            identifiers = {identity for row_kind, identity in roots if kind == row_kind}
+            sortable = [entry for entry in source if entry.get("id") in identifiers]
+            if len(sortable) < 2:
+                continue
+            sorted_entries = sorted(sortable, key=lambda entry: str(entry.get("title", "")).casefold())
+            replacements[kind] = dict(zip((entry["id"] for entry in sortable), sorted_entries))
+        if not replacements:
+            return False
+        with self.guarded_structural_change(self.sidebar_section_title(key)), self.sidebar_change() as change:
+            if "list" in replacements:
+                self.lists = [replacements["list"].get(entry["id"], entry) for entry in self.lists]
+            if "folder" in replacements:
+                self.folders = [replacements["folder"].get(entry["id"], entry) for entry in self.folders]
+            change.mark()
+        return change.saved
+
+    def move_sidebar_roots(self, section, destination, rows=None):
+        roots = self.sidebar_section_roots(section)
+        selected = tuple(roots if rows is None else rows)
+        if (not selected or any(row not in roots for row in selected)
+                or destination not in self.sidebar_move_destinations(section, selected)):
+            return False
+        policy = self.sidebar_policy()
+        objects = [((policy.folders if kind == "folder" else policy.entries)[identity])
+                   for kind, identity in selected]
+        titles = "\n".join(str(obj.get("title", "")) for obj in objects[:12])
+        if len(objects) > 12:
+            titles += "\n…"
+        label = glide_i18n.t("sidebar.menu.move_all", "Alle Elemente verschieben …")
+        question = glide_i18n.t("sidebar.menu.move_question",
+            "{count} Elemente aus „{source}“ nach „{destination}“ verschieben? Untergeordnete Inhalte bleiben in ihren Ordnern.\n\n{titles}",
+            count=len(objects), source=self.sidebar_section_title(section),
+            destination=self.sidebar_section_title(destination), titles=titles)
+        if not self.ask_yes_no(label, question) or not self.refresh_data_lock():
+            return False
+        current = self.sidebar_section_roots(section)
+        if (rows is None and current != roots) or any(row not in current for row in selected):
+            return False
+        if destination not in self.sidebar_move_destinations(section, selected):
+            return False
+        # Eine Navigationsverschiebung schreibt ausschließlich die vorhandene
+        # Einstellungsdatei. Ordnerbeziehungen und Inhalt bleiben unverändert.
+        locations = dict(self.settings.get("sidebar_locations", {}))
+        locations.update({f"{kind}:{identity}": destination for kind, identity in selected})
+        self.snapshot_undo(trim=False)
+        if not self.change_sidebar_preference("sidebar_locations", locations):
+            self.undo_stack.pop()
+            return False
+        self.trim_undo_stack()
+        self.redo_steps().note_write()
+        return True
+
+    def hide_sidebar_section(self, key):
+        visibility = glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible"))
+        visibility[key] = False
+        if self.change_sidebar_preference("sidebar_sections_visible", visibility):
+            self.show_info(self.sidebar_section_title(key), glide_i18n.t(
+                "sidebar.menu.restore_hint",
+                "Du kannst diesen Bereich in den Einstellungen unter „Bereiche der Seitenleiste“ wieder einblenden."))
+
+    def fold_sidebar_section(self, key, opened):
+        tree = self.sidebar_section_tree(key)
+        pending = list(tree.get_children(""))
+        while pending:
+            iid = pending.pop()
+            children = tree.get_children(iid)
+            if children:
+                tree.item(iid, open=opened)
+                row = self.sidebar_iid_to_row.get(iid)
+                if row and row[0] == "folder":
+                    self.sidebar_folder_open_states[row[1]] = opened
+                elif row and row[0] == "list":
+                    if not hasattr(self, "sidebar_chapter_open"):
+                        self.sidebar_chapter_open = {}
+                    self.sidebar_chapter_open[row[1]] = opened
+                pending.extend(children)
+        self.set_sidebar_section_open(key, opened)
+        self.sync_pages_sidebar_height()
+
+    def open_sidebar_list(self, list_id, tree):
+        section = self.sidebar_section_for_tree(tree)
+        if glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))[section] == "side":
+            entry = self.sidebar_policy().entries.get(list_id)
+            if entry and not getattr(self, "_compact", None):
+                state, _message = glide_side_view.availability(entry, list_id, self.trash)
+                if state != "unsupported":
+                    if (getattr(self, "_side_view", None) or {}).get("id") == list_id:
+                        return
+                    history = self.remember_side_history()
+                    location = next((visit for visit in reversed(history.entries) if visit.list_id == list_id), None)
+                    if self.open_side_view(list_id, item_id=location.item_id if location else None, location=location):
+                        if location:
+                            self._side_history = glide_side_view.visit_location(history, location)
+                        return
+        if list_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            self.set_active_list(list_id)
 
     def show_drawings_add_menu(self, event=None):
         menu = self._new_themed_popup_menu()
@@ -40419,14 +40830,15 @@ class ListApp:
         for sequence in ("<Return>", "<space>"):
             beschriftung.bind(sequence, lambda _event: oeffnen())
         self.add_tooltip(beschriftung, titel_hinweis)
-        plus = self.make_button(zeile, text="+", command=plus_befehl, color_key="accent", width=42, height=32,
-                                radius=14, bg_key="card", font=app_font(13, "bold"), outline=False)
-        plus.pack(side="right")
+        self.bind_sidebar_section_menu(key, zeile, kopf, platz, pfeil, beschriftung)
+        plus = self.make_square_symbol_button(zeile, self.ICONS["plus"], plus_befehl, size=28,
+                                             color_key="accent", surface="card")
+        plus.pack(side="right", padx=(0, glide_design.SPACING[3]))
         self.add_tooltip(plus, plus_hinweis)
         baum = GlideTreeview(
             self.sidebar_frame, columns=("icon", "count", "count_margin"),
             displaycolumns=("count", "count_margin"), show="tree",
-            selectmode="browse", style="Sidebar.Treeview", takefocus=True, height=1)
+            selectmode="extended", style="Sidebar.Treeview", takefocus=True, height=1)
         baum.heading("#0", text="")
         baum.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
         baum.column("#0", anchor="w", stretch=True, width=192)
@@ -40449,6 +40861,8 @@ class ListApp:
         baum.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
         baum.bind("<<TreeviewOpen>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
         baum.bind("<<TreeviewClose>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
+        baum.bind("<<TreeviewOpen>>", lambda _event, ziel=baum: self.remember_sidebar_chapter_open(ziel, True), add="+")
+        baum.bind("<<TreeviewClose>>", lambda _event, ziel=baum: self.remember_sidebar_chapter_open(ziel, False), add="+")
         self.bind_hover_highlight(baum)
         self.bind_mousewheel(baum)
         self.build_sidebar_quick_actions(baum)
@@ -41008,17 +41422,33 @@ class ListApp:
         if getattr(self, "_updating_sidebar", False) or self.is_sidebar_context_selection(baum):
             return
         auswahl = baum.selection()
-        if not auswahl:
+        if len(auswahl) != 1:
             return
         for anderer in [getattr(self, "system_listbox", None)] + self.sidebar_trees():
             if anderer is not None and anderer is not baum and anderer.selection():
                 anderer.selection_remove(*anderer.selection())
+        kapitel = getattr(self, "sidebar_chapter_rows", {}).get(auswahl[0])
+        if kapitel:
+            page_id, key = kapitel
+            section = self.sidebar_section_for_tree(baum)
+            entry = self.page_entry(page_id)
+            chapter = glide_chapters.find(self.chapter_outline(entry), key) if entry else None
+            targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
+            if chapter is not None and targets[section] == "side" and not getattr(self, "_compact", None):
+                if self.open_side_view(page_id):
+                    body = getattr(self, "_side_view_body", None)
+                    if isinstance(body, tk.Text):
+                        body.mark_set("insert", f"{chapter.line}.0")
+                        body.see("insert")
+                    return
+            self.open_chapter(page_id, key)
+            return
         row = self.sidebar_iid_to_row.get(auswahl[0])
         if not row:
             return
         art, kennung = row
-        if art == "list" and (kennung != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW)):
-            self.set_active_list(kennung)
+        if art == "list":
+            self.open_sidebar_list(kennung, baum)
         elif art == "folder" and (kennung != self.active_folder_id or self.view_mode != "folder"):
             self.set_active_folder(kennung)
 
@@ -41109,6 +41539,165 @@ class ListApp:
                            image=image or "")
         self.sidebar_rows.append(("list", item_id))
         self.sidebar_iid_to_row[iid] = ("list", item_id)
+        self._insert_sidebar_chapter_rows(entry, iid, target_tree, depth)
+
+    # --- Kapitel (PAGE-02, Master-Serie Teil 03) ------------------------------------------------
+    # Kapitel sind die Überschriften einer Seite samt Abschnitt (`chapters.py`). Die Seitenleiste
+    # zeigt sie unter der Seite; jede Änderung ist eine Dokumenttransformation in einem
+    # `sidebar_change` (ein Rückgängig-Schritt, Speichern, Neuaufbau der Seitenleiste).
+
+    def chapter_outline(self, entry):
+        """Kapitel einer Seite; zwischengespeichert nach Änderungszeit und Dokumentgröße."""
+        dokument = entry.get("rich_note") or {}
+        signatur = (entry.get("updated_at"), len(dokument.get("text") or ""), len(dokument.get("spans") or []))
+        cache = getattr(self, "_chapter_outline_cache", None)
+        if cache is None:
+            cache = self._chapter_outline_cache = {}
+        treffer = cache.get(entry.get("id"))
+        if treffer is None or treffer[0] != signatur:
+            treffer = cache[entry.get("id")] = (signatur, glide_chapters.outline(dokument))
+        return treffer[1]
+
+    def _insert_sidebar_chapter_rows(self, entry, page_iid, tree, depth):
+        if not self.is_page_list(entry):
+            return
+        kapitel = self.chapter_outline(entry)
+        if not kapitel:
+            return
+        zeilen = getattr(self, "sidebar_chapter_rows", None)
+        if zeilen is None:
+            zeilen = self.sidebar_chapter_rows = {}
+        tree.tag_configure("chapter", foreground=self.theme.get("muted", self.theme["text"]))
+
+        def einfuegen(knoten, eltern, tiefe):
+            for chapter, kinder in knoten:
+                iid = f"chapter:{entry['id']}:{chapter.index}"
+                tree.insert(eltern, "end", iid=iid, text=self.sidebar_row_text(chapter.title, None, tree=tree, depth=tiefe),
+                            values=("", ""), tags=("chapter",))
+                zeilen[iid] = (entry["id"], chapter.key)
+                if kinder:
+                    einfuegen(kinder, iid, tiefe + 1)
+                    tree.item(iid, open=self.sidebar_chapter_open_state(f"{entry['id']}:{chapter.key}"))
+
+        einfuegen(glide_chapters.tree(kapitel), page_iid, depth + 1)
+        tree.item(page_iid, open=self.sidebar_chapter_open_state(entry["id"]))
+
+    def sidebar_chapter_open_state(self, key):
+        return bool((getattr(self, "sidebar_chapter_open", None) or {}).get(key, False))
+
+    def remember_sidebar_chapter_open(self, tree, open_state):
+        """Klappzustand einer Seite oder eines Kapitels in der Sitzung merken (nicht gespeichert)."""
+        iid = tree.focus()
+        offen = getattr(self, "sidebar_chapter_open", None)
+        if offen is None:
+            offen = self.sidebar_chapter_open = {}
+        if iid.startswith("list:"):
+            offen[iid[5:]] = open_state
+        elif iid in getattr(self, "sidebar_chapter_rows", {}):
+            seite, key = self.sidebar_chapter_rows[iid]
+            offen[f"{seite}:{key}"] = open_state
+
+    def open_chapter(self, page_id, key):
+        """Öffnet die Seite und springt zur Kapitelüberschrift; Vorrang vor gemerkter Position."""
+        if page_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            self.set_active_list(page_id)
+        editor = getattr(self, "rich_note_editor", None)
+        if editor is None or getattr(editor, "entry_id", None) != page_id:
+            return False
+
+        def springen():
+            if not editor.winfo_exists():
+                return
+            chapter = glide_chapters.find(glide_chapters.outline(editor.document()), key)
+            if chapter is not None:
+                editor.jump_to(f"{chapter.line}.0")
+                self._chapter_jump = (page_id, key)
+
+        springen()
+        self.after_scope().after_idle(springen)
+        return True
+
+    def change_chapter(self, page_id, key, aktion, *argumente):
+        """Wendet eine Kapitelaktion (`rename`, `dissolve`, `set_level`, `move`) als ein Rückgängig-Schritt an."""
+        entry = self.page_entry(page_id)
+        if entry is None or getattr(self, "_data_read_only", False):
+            return False
+        editor = getattr(self, "rich_note_editor", None)
+        offen = editor is not None and getattr(editor, "entry_id", None) == page_id
+        if offen and editor.flush() is False:
+            return False
+        dokument = entry.get("rich_note") or {"text": "", "spans": [], "links": {}}
+        kapitel = glide_chapters.outline(dokument)
+        chapter = glide_chapters.find(kapitel, key)
+        if chapter is None:
+            return False
+        if aktion == "move":
+            neu = glide_chapters.move(dokument, kapitel, chapter, *argumente)
+        else:
+            neu = getattr(glide_chapters, aktion)(dokument, chapter, *argumente)
+        if neu is None or neu == dokument:
+            return False
+        neu = RichNoteEditor.normalize(neu)
+        if offen and editor.winfo_exists():
+            # Offene Seite: ein Schritt im Dokumentstapel des Editors, damit Strg/Cmd+Z
+            # im Text ihn zurücknimmt; Speichern läuft über `store_rich_note`.
+            editor.load(neu)
+            ergebnis = editor.flush()
+            editor.text.focus_set()
+            return ergebnis is not False
+        with self.sidebar_change(feedback=False) as change:
+            entry["rich_note"] = neu
+            entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+            change.mark()
+        return change.saved is not False
+
+    def ask_chapter_title(self, page_id, key):
+        chapter = glide_chapters.find(glide_chapters.outline((self.page_entry(page_id) or {}).get("rich_note") or {}), key)
+        if chapter is None:
+            return False
+        titel = self.themed_input_dialog(glide_i18n.t("chapter.rename.title", "Kapitel umbenennen"),
+                                         glide_i18n.t("chapter.rename.prompt", "Neuer Name des Kapitels:"),
+                                         initial=chapter.title)
+        if titel is None or not titel.strip():
+            return False
+        return self.change_chapter(page_id, key, "rename", titel)
+
+    def build_chapter_menu(self, parent, page_id, key):
+        """Kapitelaktionen für Seitenleiste und Seitenmenü; nur verfügbare Schritte sind aktiv."""
+        menu = self._new_themed_popup_menu(parent)
+        entry = self.page_entry(page_id) or {}
+        kapitel = glide_chapters.outline(entry.get("rich_note") or {})
+        chapter = glide_chapters.find(kapitel, key)
+        if chapter is None:
+            return menu
+        schreibbar = not getattr(self, "_data_read_only", False)
+        zustand = lambda bedingung: "normal" if schreibbar and bedingung else "disabled"
+        menu.add_command(label=glide_i18n.t("chapter.open", "Zum Kapitel springen"),
+                         command=lambda: self.open_chapter(page_id, key))
+        menu.add_command(label=glide_i18n.t("chapter.rename", "Umbenennen …"), state=zustand(True),
+                         command=lambda: self.ask_chapter_title(page_id, key))
+        menu.add_separator()
+        menu.add_command(label=glide_i18n.t("chapter.move_up", "Mit Inhalt nach oben"),
+                         state=zustand(glide_chapters.sibling(kapitel, chapter, -1) is not None),
+                         command=lambda: self.change_chapter(page_id, key, "move", -1))
+        menu.add_command(label=glide_i18n.t("chapter.move_down", "Mit Inhalt nach unten"),
+                         state=zustand(glide_chapters.sibling(kapitel, chapter, +1) is not None),
+                         command=lambda: self.change_chapter(page_id, key, "move", +1))
+        menu.add_command(label=glide_i18n.t("chapter.level_up", "Eine Ebene höher"), state=zustand(chapter.level > 1),
+                         command=lambda: self.change_chapter(page_id, key, "set_level", chapter.level - 1))
+        menu.add_command(label=glide_i18n.t("chapter.level_down", "Eine Ebene tiefer"), state=zustand(chapter.level < 4),
+                         command=lambda: self.change_chapter(page_id, key, "set_level", chapter.level + 1))
+        menu.add_separator()
+        menu.add_command(label=glide_i18n.t("chapter.dissolve", "Kapitel auflösen (Inhalt bleibt)"), state=zustand(True),
+                         command=lambda: self.change_chapter(page_id, key, "dissolve"))
+        return menu
+
+    def show_sidebar_chapter_menu(self, event, tree, iid):
+        page_id, key = self.sidebar_chapter_rows[iid]
+        tree.selection_set(iid)
+        menu = self.build_chapter_menu(tree, page_id, key)
+        menu.tk_popup(event.x_root, event.y_root)
+        return "break"
 
     def get_selected_sidebar_row(self):
         rows = self.get_selected_sidebar_rows()
@@ -41256,13 +41845,14 @@ class ListApp:
         # würde jede Bereichsauswahl ungewollt die Ansicht umschalten.
         if len(selection) > 1:
             return
+        if selection[0] in getattr(self, "sidebar_chapter_rows", {}):
+            return self.on_section_select(self.sidebar_listbox)
         row = self.get_selected_sidebar_row()
         if not row:
             return
         row_type, row_id = row
         if row_type == "list":
-            if row_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
-                self.set_active_list(row_id)
+            self.open_sidebar_list(row_id, self.sidebar_listbox)
         elif row_type == "folder":
             if row_id != self.active_folder_id or self.view_mode != "folder":
                 self.set_active_folder(row_id)
@@ -41537,7 +42127,7 @@ class ListApp:
         available = [label for label in self.labels if not self.is_system_label(label)]
         if not available:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             for label in available:
@@ -41593,7 +42183,9 @@ class ListApp:
     def build_sidebar_context_menu(self, row, rows=None):
         """Vollständiges Kontextmenü für eine Liste, einen Ordner oder eine Systemzeile."""
         if rows and len(rows) > 1:
-            return self.build_sidebar_multi_menu(rows)
+            menu = self.build_sidebar_multi_menu(rows)
+            self.add_sidebar_root_move_menu(menu, tuple(rows))
+            return menu
         if not row:
             return None
         row_type, row_id = row
@@ -41605,10 +42197,31 @@ class ListApp:
                                  command=lambda: self.set_sidebar_section_open("views", False))
             return menu
         if row_type == "folder":
-            return self.build_folder_menu(row_id)
-        if row_type == "list":
-            return self.build_list_menu(row_id)
-        return None
+            menu = self.build_folder_menu(row_id)
+        elif row_type == "list":
+            menu = self.build_list_menu(row_id)
+            if menu is not None:
+                menu.add_command(label=glide_i18n.t("sidebar.menu.main", "In der Hauptansicht öffnen"),
+                                 command=lambda: self.set_active_list(row_id))
+        else:
+            return None
+        if menu is not None:
+            self.add_sidebar_root_move_menu(menu, (row,))
+        return menu
+
+    def add_sidebar_root_move_menu(self, menu, rows):
+        if not rows or getattr(self, "_data_read_only", False):
+            return
+        section = self.sidebar_section_for(*rows[0])
+        if any(row not in self.sidebar_section_roots(section) for row in rows):
+            return
+        destinations = self.sidebar_move_destinations(section, rows)
+        if destinations:
+            move = self._new_themed_popup_menu(menu)
+            for destination in destinations:
+                move.add_command(label=self.sidebar_section_title(destination),
+                                 command=lambda target=destination: self.move_sidebar_roots(section, target, rows))
+            menu.add_cascade(label=glide_i18n.t("sidebar.menu.move_selection", "In Bereich verschieben …"), menu=move)
 
     def build_sidebar_multi_menu(self, rows):
         """Kontextmenü für eine Mehrfachauswahl aus Listen und Ordnern."""
@@ -42065,12 +42678,15 @@ class ListApp:
         iid = tree.identify_row(event.y)
         if not iid:
             return "break"
+        if iid in getattr(self, "sidebar_chapter_rows", {}):
+            return self.show_sidebar_chapter_menu(event, tree, iid)
         self.cancel_sidebar_rename()
         for anderer in [getattr(self, "system_listbox", None)] + self.sidebar_trees():
             if anderer is not None and anderer is not tree and anderer.selection():
                 anderer.selection_remove(*anderer.selection())
         if tree is self.system_listbox or tree in bereiche:
-            tree.selection_set(iid)
+            if iid not in tree.selection():
+                tree.selection_set(iid)
         else:
             system_selection = self.system_listbox.selection()
             if system_selection:
@@ -43812,6 +44428,7 @@ class ListApp:
         """Gleiche Ziehbedienung für alle vier Inhaltsbereiche."""
         tree.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
         tree.bind("<B1-Motion>", self.on_sidebar_drag_motion)
+        tree.bind("<Escape>", self.cancel_sidebar_drag, add="+")
         tree.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
 
     def sidebar_event_y(self, event, tree):
@@ -43867,41 +44484,134 @@ class ListApp:
             self.sidebar_drag_has_moved = True
         if not self.sidebar_drag_has_moved:
             return
-        target_iid, _target_row = self.identify_sidebar_drop_row(event)
-        self.clear_sidebar_drop_target_tags()
-        if target_iid and target_iid != self.sidebar_drag_start_iid:
-            try:
-                target_tree = self.get_sidebar_tree_for_iid(target_iid)
-                if target_tree is None:
-                    return "break"
-                tags = set(target_tree.item(target_iid, "tags"))
-                tags.add("drop_target")
-                target_tree.item(target_iid, tags=tuple(tags))
-            except tk.TclError:
-                pass
+        self.clear_sidebar_drop_target_tags(legacy=False)
+        tree, iid, target, heading = self.sidebar_drag_destination(event)
+        source = self.sidebar_iid_to_row.get(self.sidebar_drag_start_iid)
+        if tree is not None:
+            zone = self.sidebar_drop_placement(source, tree, iid, target, event)
+            surface = heading or tree
+            bounds = tree.bbox(iid) if iid else (0, 0, surface.winfo_width(), surface.winfo_height())
+            if bounds:
+                marker = getattr(surface, "_sidebar_drop_indicator", None)
+                if marker is None:
+                    marker = surface._sidebar_drop_indicator = DropIndicator(surface)
+                color = self.theme["ui_accent"] if zone else self.theme["flag"]
+                marker.show(bounds, zone or "invalid", color=color)
+                self._sidebar_drag_indicator = marker
+            self.schedule_sidebar_drag_assist(event, tree, iid, zone)
+        else:
+            self.cancel_sidebar_drag_assist()
+        return "break"
+
+    def sidebar_drag_destination(self, event):
+        for key in glide_sidebar.SECTIONS:
+            heading = self.sidebar_section_heading(key)
+            if heading is not None and heading.winfo_ismapped() and self.pointer_is_over_widget(heading, event):
+                return self.sidebar_section_tree(key), None, None, heading
+        iid, row = self.identify_sidebar_drop_row(event)
+        tree = next((tree for tree in self.sidebar_trees()
+                     if tree.winfo_ismapped() and self.pointer_is_over_widget(tree, event)), None)
+        return tree, iid, row, None
+
+    def sidebar_drop_placement(self, source, tree, iid, target, event):
+        if source is None or source == target or getattr(self, "_data_read_only", False):
+            return None
+        kind, identity = source
+        policy = self.sidebar_policy()
+        objects = policy.entries if kind == "list" else policy.folders
+        obj = objects.get(identity)
+        if not obj or self.is_inbox_list(obj):
+            return None
+        section = self.sidebar_section_for_tree(tree)
+        if not target:
+            return "after" if not iid and self.sidebar_accepts(kind, identity, section) else None
+        target_kind, target_id = target
+        if target_kind == "folder":
+            zone = "into" if kind == "list" else self.sidebar_drop_zone(iid, self.sidebar_event_y(event, tree))
+            folder_id = target_id if zone == "into" else self.folder_parent_id(target_id)
+        elif target_kind == "list":
+            target_entry = policy.entries.get(target_id)
+            if not target_entry or self.is_inbox_list(target_entry):
+                return None
+            folder_id = target_entry.get("folder_id")
+            if kind == "folder":
+                # Trees always render folders before lists, so a list is not
+                # an addressable insertion neighbor for a folder.
+                return None
+            _x, y, _width, height = tree.bbox(iid) or (0, 0, 0, 0)
+            zone = "before" if self.sidebar_event_y(event, tree) < y + height / 2 else "after"
+        else:
+            return None
+        if not self.sidebar_accepts(kind, identity, section, folder_id):
+            return None
+        if kind == "folder" and not self.can_move_folder_into(identity, folder_id):
+            return None
+        if kind == "list" and zone == "into":
+            selected = self.get_selected_sidebar_list_ids()
+            if identity in selected and any(not self.sidebar_accepts("list", item, section, folder_id)
+                                            for item in selected):
+                return None
+        return zone
+
+    def cancel_sidebar_drag_assist(self):
+        job = getattr(self, "_sidebar_drag_assist_job", None)
+        if job is not None:
+            self.after_scope().cancel(job)
+        self._sidebar_drag_assist_job = None
+        self._sidebar_drag_assist_key = None
+
+    def schedule_sidebar_drag_assist(self, event, tree, iid, zone):
+        y = self.sidebar_event_y(event, tree)
+        direction = (-1 if y < 12 else 1 if y > tree.winfo_height() - 12 else 0) if 0 <= y < tree.winfo_height() else 0
+        folder = iid if zone == "into" and tree.get_children(iid) and not tree.item(iid, "open") else None
+        key = (tree, direction, folder)
+        self._sidebar_drag_assist_event = event
+        if key == getattr(self, "_sidebar_drag_assist_key", None):
+            return
+        self.cancel_sidebar_drag_assist()
+        if not direction and not folder:
+            return
+        self._sidebar_drag_assist_key = key
+
+        def advance():
+            self._sidebar_drag_assist_job = None
+            self._sidebar_drag_assist_key = None
+            if direction:
+                tree.yview_scroll(direction, "units")
+            elif folder and tree.exists(folder):
+                tree.item(folder, open=True)
+                row = self.sidebar_iid_to_row.get(folder)
+                if row and row[0] == "folder":
+                    self.sidebar_folder_open_states[row[1]] = True
+            self.on_sidebar_drag_motion(self._sidebar_drag_assist_event)
+
+        self._sidebar_drag_assist_job = self.after_scope().after(100 if direction else 550, advance)
+
+    def cancel_sidebar_drag(self, _event=None):
+        if not getattr(self, "sidebar_drag_start_iid", None):
+            return None
+        self.sidebar_drag_start_iid = None
+        self.sidebar_drag_tree = None
+        self.sidebar_drag_has_moved = False
+        self._sidebar_board_drag = None
+        self._sidebar_release_moved = True
+        self.cancel_sidebar_drag_assist()
+        self.clear_sidebar_drop_target_tags(legacy=False)
         return "break"
 
     def on_sidebar_drag_end(self, event):
         deferred_page = getattr(self, "_sidebar_board_drag", None)
         self._sidebar_board_drag = None
         source_iid = self.sidebar_drag_start_iid
-        target_iid, target_row = self.identify_sidebar_drop_row(event)
-        target_tree = (self.get_sidebar_tree_for_iid(target_iid) if target_iid else
-                       next((tree for tree in self.sidebar_trees()
-                             if self.pointer_is_over_widget(tree, event)), None))
-        heading_tree = next((getattr(self, name, None) for key, name in (
-            ("pages", "pages_listbox"), ("lists", "sidebar_listbox"), ("notes", "notes_listbox"),
-            ("drawings", "drawings_listbox")) if getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row", None) is not None
-            and self.pointer_is_over_widget(getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row"), event)), None)
-        if heading_tree is not None:
-            target_tree, target_iid, target_row = heading_tree, None, None
-        pointer_inside_sidebar = target_tree in self.sidebar_trees() and (heading_tree is not None or self.pointer_is_over_widget(target_tree, event))
+        target_tree, target_iid, target_row, _heading = self.sidebar_drag_destination(event)
+        pointer_inside_sidebar = target_tree is not None
+        self.cancel_sidebar_drag_assist()
         moved = self.sidebar_drag_has_moved
         self._sidebar_release_moved = moved
         self.sidebar_drag_start_iid = None
         self.sidebar_drag_tree = None
         self.sidebar_drag_has_moved = False
-        self.clear_sidebar_drop_target_tags()
+        self.clear_sidebar_drop_target_tags(legacy=False)
         if not source_iid or not moved:
             if source_iid and deferred_page:
                 self.set_active_list(deferred_page)
@@ -43919,7 +44629,8 @@ class ListApp:
         if not source_row:
             return "break"
         target_section = self.sidebar_section_for_tree(target_tree)
-        if not target_row and not self.sidebar_accepts(source_row[0], source_row[1], target_section):
+        zone = self.sidebar_drop_placement(source_row, target_tree, target_iid, target_row, event)
+        if zone is None:
             return "break"
 
         # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
@@ -44057,7 +44768,14 @@ class ListApp:
             return "after"
         return "into"
 
-    def clear_sidebar_drop_target_tags(self):
+    def clear_sidebar_drop_target_tags(self, *, legacy=True):
+        marker = getattr(self, "_sidebar_drag_indicator", None)
+        if marker is not None:
+            marker.clear()
+            self._sidebar_drag_indicator = None
+
+        if not legacy:
+            return
         for tree in [getattr(self, "system_listbox", None), *self.sidebar_trees()]:
             if tree is None:
                 continue
@@ -45199,36 +45917,9 @@ class ListApp:
         )
         self.hide_done_check.pack(fill="both", expand=True, ipady=glide_design.SPACING[0], padx=(glide_design.SPACING[2], glide_design.SPACING[2]), pady=glide_design.SPACING[0])
 
-        self.search_border = self.make_rounded_container(
-            self.search_frame,
-            fill_key="input",
-            outline_key="input_border",
-            radius=16,
-            padding=glide_design.SPACING[1],
-            height=38,
-            inner_pad_x=glide_design.SPACING[10],
-            inner_pad_y=3,
-        )
-        self.search_border.pack(side="left", fill="x", expand=True, padx=(glide_design.SPACING[0], glide_design.SPACING[10]))
-        self.search_border.pack_propagate(False)
+        self.search_border, self.search_entry = self.build_content_search_field(self.search_frame, self.search_var)
+        self.search_border.pack_configure(padx=(glide_design.SPACING[0], glide_design.SPACING[10]))
         self.search_inner = self.search_border.inner
-
-        self.search_entry = tk.Entry(
-            self.search_inner,
-            textvariable=self.search_var,
-            font=app_font(12), width=12,
-            bg=self.theme["input"],
-            fg=self.theme["text"],
-            insertbackground=self.theme["text"],
-            relief="flat",
-            bd=0,
-            borderwidth=0,
-            highlightthickness=0,
-            highlightbackground=self.theme["input"],
-            highlightcolor=self.theme["input"],
-            selectborderwidth=0,
-        )
-        self.search_entry.pack(fill="both", expand=True, ipady=glide_design.SPACING[0], padx=(glide_design.SPACING[2], glide_design.SPACING[2]), pady=glide_design.SPACING[0])
         self.search_entry.bind("<FocusIn>", self.clear_search_placeholder)
         self.search_entry.bind("<FocusOut>", self.set_search_placeholder)
         self.search_var.trace_add("write", lambda *_: self.schedule_search_refresh())
@@ -45338,6 +46029,7 @@ class ListApp:
         )
         self.tree.pack(side="left", fill="both", expand=True,
                        padx=(glide_design.SPACING[14], self.ROW_ACTION_WIDTH), pady=4)
+        self.build_inline_task_entry()
         self.tree.column("text_gap", anchor="w", stretch=False, minwidth=0,
                          width=self.TASK_METADATA_GAP)
         self.tree.heading("#0", text="")
@@ -48607,6 +49299,7 @@ class ListApp:
         self.fit_tree_columns_to_content()
         self.schedule_scrollbar_refresh()
         self.schedule_row_actions()
+        self.sync_inline_task_entry()
         self.sync_empty_state_action()
         self.sync_overdue_banner()
         if getattr(self, "_backdrop", None):
@@ -48741,9 +49434,9 @@ class ListApp:
     def empty_state_action(self):
         """(Beschriftung, Befehl) der Hauptaktion des aktuellen Leerzustands – oder None.
 
-        Seit 3.33.20 (U20) gibt es je Leerzustand genau einen Anlegeweg: Steht
-        die Eingabezeile sichtbar darüber, entfällt der Anlegen-Knopf in der
-        Fläche. Zurücksetzende Aktionen (Suche, Zeitraum) bleiben.
+        U20 erlaubt die direkte Aufgabenzeile neben der Schnellerfassung.
+        Leere Ordner und Ansichten bieten eine passende Aktion ohne Doppelung.
+        Zurücksetzende Aktionen für Suche und Zeitraum bleiben erreichbar.
         """
         modus = self.view_mode
         anlegen_ueber_eingabe = self.entry_line_visible()
@@ -48767,23 +49460,12 @@ class ListApp:
         if modus in ("list", self.TABLE_VIEW) or modus in self.TASK_OVERVIEW_VIEWS:
             if self.has_active_filter():
                 return glide_i18n.t("ui.empty_state_action.reset_search", "Suche zurücksetzen"), self.reset_filters_for_empty_state
-            if modus in ("list", self.TABLE_VIEW):
-                eintrag = self.current_list()
-                if eintrag and self.list_accepts_items(eintrag) and not anlegen_ueber_eingabe:
-                    return glide_i18n.t("ui.empty_state_action.create_first_item", "Ersten Punkt anlegen"), self.focus_new_item_entry
             if modus == self.PLAN_DAY_VIEW:
                 # WA-52: Ein leerer Tag schlägt den nächsten Schritt vor.
                 zustand = self.empty_state_for("today")
                 if zustand.primary:
                     return zustand.primary[1], self.empty_state_command(zustand.primary[0])
         return None
-
-    def list_empty_state(self):
-        """Leerzustand der offenen Liste (UX-05) aus `empty_states.list_state`."""
-        eintrag = self.current_list() if self.view_mode in ("list", self.TABLE_VIEW) and self.lists else None
-        return glide_empty_states.list_state(
-            accepts_items=bool(eintrag) and self.list_accepts_items(eintrag) and self.entry_line_visible(),
-            filtered=False, read_only=bool(getattr(self, "_data_read_only", False)))
 
     def empty_inline_action(self):
         """Was ein Klick auf den Leertext der Liste tut – oder None.
@@ -48805,13 +49487,7 @@ class ListApp:
             return self.focus_new_item_entry if self.entry_line_visible() else None
         if self.view_mode not in ("list", self.TABLE_VIEW):
             return None
-        if self.items and self.has_active_filter():
-            # Leer durch den Filter („Keine Treffer …“): der Klick setzt ihn zurück.
-            return self.reset_filters_for_empty_state
-        aktion = self.list_empty_state().action
-        if aktion == glide_empty_states.FOCUS_ENTRY:
-            return self.focus_new_item_entry
-        return None
+        return self.reset_filters_for_empty_state if self.has_active_filter() else None
 
     def run_empty_inline_action(self, _event=None):
         aktion = self.empty_inline_action()
@@ -48821,19 +49497,19 @@ class ListApp:
 
     def overview_empty_action(self, kind):
         """(Text, Befehl) für den leeren Abschnitt „Alle …“ einer Übersicht (UX-05)."""
-        zustand = glide_empty_states.overview_state(kind, read_only=bool(getattr(self, "_data_read_only", False)))
+        zustand = glide_empty.overview_state(kind, read_only=bool(getattr(self, "_data_read_only", False)))
         if zustand is None:
             return None
         befehle = {
-            glide_empty_states.CREATE_PAGE: self.create_new_page,
-            glide_empty_states.CREATE_NOTE: self.create_new_note,
-            glide_empty_states.CREATE_DRAWING: lambda: self.create_in_sidebar_section("drawing", None, "drawings"),
-            glide_empty_states.CREATE_NOTEBOOK: lambda: self.create_container_dialog("folder", folder_kind="journal"),
-            glide_empty_states.CREATE_GALLERY: self.create_new_gallery,
-            glide_empty_states.OPEN_GLOBAL_BOARD: self.open_global_board,
-            glide_empty_states.MANAGE_LABELS: self.open_label_manager,
-            glide_empty_states.CREATE_LIST: lambda: self.create_container_dialog("list"),
-            glide_empty_states.IMPORT_TEMPLATES: self.import_templates_file,
+            glide_empty.CREATE_PAGE: self.create_new_page,
+            glide_empty.CREATE_NOTE: self.create_new_note,
+            glide_empty.CREATE_DRAWING: lambda: self.create_in_sidebar_section("drawing", None, "drawings"),
+            glide_empty.CREATE_NOTEBOOK: lambda: self.create_container_dialog("folder", folder_kind="journal"),
+            glide_empty.CREATE_GALLERY: self.create_new_gallery,
+            glide_empty.OPEN_GLOBAL_BOARD: self.open_global_board,
+            glide_empty.MANAGE_LABELS: self.open_label_manager,
+            glide_empty.CREATE_LIST: lambda: self.create_container_dialog("list"),
+            glide_empty.IMPORT_TEMPLATES: self.import_templates_file,
         }
         return glide_i18n.t(zustand.key, zustand.fallback), befehle.get(zustand.action)
 
@@ -48854,6 +49530,11 @@ class ListApp:
         label._inline_command = command
         return label
 
+    def task_list_empty_text(self):
+        state = glide_empty.list_state(accepts_items=self.inline_task_target() is not None,
+            filtered=self.has_active_filter(), read_only=getattr(self, "_data_read_only", False))
+        return glide_i18n.t(state.key, state.fallback) if state else ""
+
     def empty_state_for(self, context):
         """Inhalt des Leerzustands (WA-52) aus `empty_states.py` mit dem aktuellen Ansichtszustand."""
         filtered = bool(self.has_active_filter()) if hasattr(self, "has_active_filter") else False
@@ -48868,9 +49549,6 @@ class ListApp:
                         for entry in self.lists for item in self.walk_items(entry.get("items", [])))
             return glide_empty.empty_state("today", filtered=filtered, other_day=not heute, has_tasks=offen,
                                            hints=self.hints_shown())
-        if context == "list":
-            return glide_empty.empty_state("list", filtered=filtered, entry_visible=self.entry_line_visible(),
-                                           hints=self.hints_shown())
         return glide_empty.empty_state(context, hints=self.hints_shown())
 
     def empty_state_command(self, action_id):
@@ -48878,7 +49556,6 @@ class ListApp:
         befehle = {
             "home_setup": self.show_home_tiles_dialog,
             "home_restore": self.restore_home_tiles_default,
-            "focus_entry": self.focus_new_item_entry,
             "use_template": self.set_template_view,
             "plan_day": self.start_day_proposal,
             "open_inbox": self.open_inbox_for_first_task,
@@ -48888,14 +49565,14 @@ class ListApp:
         return befehle[action_id]
 
     def open_inbox_for_first_task(self):
-        """Eingang öffnen und die Eingabezeile fokussieren – dort entsteht die erste Aufgabe."""
+        """Eingang öffnen und die direkte Eingabe der Zielliste fokussieren."""
         ziel = next((entry.get("id") for entry in self.lists if self.is_inbox_list(entry)), None)
         if ziel is None:
             ziel = next((entry.get("id") for entry in self.lists
                          if self.list_accepts_items(entry) and not self.is_page_list(entry)), None)
         if ziel is not None:
             self.set_active_list(ziel)
-            self.after_scope().after_idle(self.focus_new_item_entry)
+            self.after_scope().after_idle(lambda: self.focus_inline_task_entry() or self.focus_new_item_entry())
         return "break"
 
     def reset_filters_for_empty_state(self):
@@ -48940,7 +49617,8 @@ class ListApp:
         knopf = getattr(self, "empty_action_button", None)
         figur = getattr(self, "empty_state_figure", None)
         try:
-            leer = tuple(baum.get_children("")) == (self.EMPTY_ROW_ID,)
+            leer = (tuple(baum.get_children("")) == (self.EMPTY_ROW_ID,)
+                    and self.inline_task_target() is None)
         except tk.TclError:
             return
         aktion = self.empty_state_action() if leer else None
@@ -51788,7 +52466,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if hidden:
             field.pack_forget()
         elif was_hidden and field.winfo_manager() != "pack":
-            field.pack(side="left", fill="x", expand=True, padx=(0, 10))
+            field.pack(side="left", fill="x", expand=True, anchor="n", padx=(0, 10))
         if today:
             if hidden:
                 used = sum(needed_width(widget) for widget in controls)
@@ -52291,9 +52969,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         editor_change = getattr(self, '_task_editor_change', None)
         if editor_change is not None:
             if entry.get('rich_note') != document:
+                vorher = [(k.level, k.title) for k in glide_chapters.outline(entry.get('rich_note') or {})]
                 entry['rich_note'] = copy.deepcopy(document)
                 entry['updated_at'] = datetime.now().astimezone().isoformat(timespec='seconds')
                 editor_change.mark()
+                if self.is_page_list(entry) and vorher != [(k.level, k.title) for k in glide_chapters.outline(document)]:
+                    self.after_scope().after_idle(self.update_sidebar_list)
             return True
         if entry.get("rich_note") != document:
             with self.sidebar_change(feedback=False) as change:
@@ -53167,9 +53848,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 favorit = entry["id"] in (self.settings.get("page_favorites") or [])
 
                 def stern(master, lid=entry["id"], favorit=favorit):
-                    knopf = self._make_dialog_button(master, "★" if favorit else "☆",
-                                                     lambda: self.toggle_page_favorite(lid),
-                                                     "muted", width=40, height=34)
+                    knopf = self.make_square_symbol_button(master, self.ICONS["favorite_on" if favorit else "favorite_off"],
+                                                           lambda: self.toggle_page_favorite(lid), size=34,
+                                                           color_key="muted", surface="card", outline=True)
                     self.add_tooltip(knopf, glide_i18n.t("ui.build_page_menu.remove_from_favorites", "Aus Favoriten entfernen") if favorit else glide_i18n.t("ui.build_page_menu.add_to_favorites", "Zu Favoriten hinzufügen"))
                     return knopf
                 pfad = " › ".join(self.folder_path_titles(entry.get("folder_id"))) if entry.get("folder_id") else ""
@@ -55783,6 +56464,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.sync_view_chrome()
         self.sync_tool_band()
         self.sync_card_foot()
+        self.sync_inline_task_entry()
 
     # --- Fuß der Inhaltskarte (29.09.2026) ---------------------------------
     # Hinweis und Auswahlleiste teilen sich unten in der Karte einen Streifen
@@ -56388,7 +57070,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
 
         if not self.items:
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.empty_state_for("list").text, tags=("empty",))
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.task_list_empty_text(), tags=("empty",))
             self.finish_tree_refresh()
             return
 
@@ -56398,7 +57080,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         else:
             inserted = self.insert_tree_items("", self.items, [])
         if inserted == 0:
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=glide_i18n.t("ui.refresh_tree_contents.no_matches_for_the", "Keine Treffer für den aktuellen Filter."), tags=("empty",))
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.task_list_empty_text(), tags=("empty",))
             self.finish_tree_refresh()
             return
 
@@ -56450,7 +57132,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
         entries = self.table_entries(apply_filters=True)
         if not entries:
-            empty = glide_i18n.t("ui.refresh_table_view.no_tasks_match_the", "Keine Aufgaben passen zum aktuellen Filter.") if self.has_active_filter() else self.empty_state_for("list").text
+            empty = self.task_list_empty_text()
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty, tags=("empty",))
             self.finish_tree_refresh()
             return
@@ -57289,7 +57971,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     # WA-52 für Notizbücher, UX-05-Aufforderung für gewöhnliche Ordner.
                     self.empty_state_for("journal").text
                     if journal_view else
-                    (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                    (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty.folder_state(
                         "folder", read_only=bool(getattr(self, "_data_read_only", False))))
                 )
             )
@@ -57434,7 +58116,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         zeilen.sort(key=schluessel, reverse=absteigend)
         if not zeilen and not sub_folders:
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",),
-                             text=(lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                             text=(lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty.folder_state(
                                  "book", read_only=bool(getattr(self, "_data_read_only", False)))))
         for entry, werte in zeilen:
             farbe = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
@@ -58367,10 +59049,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         rows = self.get_visible_tree_iids()
         if not rows:
-            return "break"
+            return self.focus_inline_task_entry() if direction > 0 and self.inline_task_target() else "break"
         current = self.owner_row_id(tree.focus() or "")
         if current in rows:
             index = rows.index(current) + direction
+            if index == len(rows) and self.inline_task_target():
+                return self.focus_inline_task_entry()
             index = max(0, min(index, len(rows) - 1))
         else:
             index = 0 if direction > 0 else len(rows) - 1
@@ -58556,7 +59240,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     @contextlib.contextmanager
     def item_change(self, item_ids, focus="last", restore=True, update_sidebar=False, background=False,
-                    local=False, lists=None):
+                    local=False, lists=None, rollback_failed=False):
         """Rahmen um jede Änderung an vorhandenen Punkten.
 
         Legt vorher den Rückgängig-Punkt an und schließt hinterher ab:
@@ -58590,6 +59274,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         stehen: Ein halb ausgeführter Umbau muss rücknehmbar bleiben. Um den
         Bestand kümmert sich darüber `guarded_structural_change`.
         """
+        # Erfassung behält den Entwurf, wenn der Daten-Commit scheitert.
+        undo_depth = len(self.undo_stack) if rollback_failed else None
+        history_before = copy.deepcopy(self.history) if rollback_failed else None
+        dirty_before = self.dirty if rollback_failed else None
         change = ChangeRecord(item_ids)
         self.register_guarded_change(change)
         # Explizite Zusicherung geprüfter Aufrufer: nur diese Punkte/Teilbäume.
@@ -58612,16 +59300,28 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     self.undo_stack.pop()
                 return
             if not background:
-                self.trim_undo_stack()
+                if not rollback_failed:
+                    self.trim_undo_stack()
                 self.record_completions(done_before, item_ids)
             if local and affected_lists is not None:
                 after_lists = self.changed_item_lists(item_ids)
                 affected_lists = affected_lists | after_lists if after_lists is not None else None
             self._last_save_result = None
-            change.saved = self.save_items(show_error=not background, record_activity=not background,
+            change.saved = self.save_items(show_error=not background and not rollback_failed, record_activity=not background,
                                           changed_list_ids=affected_lists)
             change.save_result = getattr(self, '_last_save_result', None)
             change.changed_lists = set(affected_lists or ())
+            if rollback_failed and not change.saved:
+                snapshot = self.undo_stack.pop(undo_depth)
+                self.apply_snapshot(snapshot, save=False)
+                self.history = history_before
+                self.dirty = dirty_before
+        if rollback_failed and change.saved:
+            self.trim_undo_stack()
+        if rollback_failed and not change.saved:
+            self.show_error(glide_i18n.t("ui.save_items_result.error_while_saving", "Fehler beim Speichern"),
+                            change.save_result.error if change.save_result is not None else self.read_only_notice())
+            return
         if change.save_result is not None:
             change.save_result = change.save_result.finish_settings(getattr(self, '_last_settings_batch_saved', None))
             self._last_save_result = change.save_result
@@ -59565,7 +60265,149 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.update_slash_hint()
         return "break"
 
-    def add_item(self):
+    def build_inline_task_entry(self):
+        self._inline_task_drafts = {}
+        self._inline_task_list = None
+        self._inline_task_submitting = False
+        self.inline_task_text = tk.StringVar(master=self.tree)
+        row = self.inline_task_row = tk.Frame(self.list_frame, name="inline_task_row", bd=0)
+        grip_slot = tk.Frame(row, width=self.ROW_GRIP_WIDTH, bd=0, bg=self.theme["card"])
+        grip_slot.pack(side="left", fill="y")
+        grip = self.inline_task_grip = ActionHandle(
+            grip_slot, glyph=self.ICONS["block_handle"], background=self.theme["card"],
+            foreground=self.theme["muted"], font=app_font(11), padding=2,
+            command=lambda: self.submit_inline_task(advanced=True))
+        grip._accessible_name = glide_i18n.t("ui.inline_task.advanced", "Erweiterte Eingabe")
+        grip.place(x=0, y=0, relwidth=1, relheight=1)
+        mark = tk.Label(row, text=self.ICONS["task_open"], bd=0, padx=0, pady=0)
+        mark.pack(side="left", padx=(0, 5))
+        field = self.inline_task_entry = tk.Entry(row, name="task", textvariable=self.inline_task_text,
+                                                  bd=0, relief="flat", highlightthickness=1)
+        field.pack(side="left", fill="both", expand=True)
+        placeholder = self.inline_task_placeholder = tk.Label(field, bd=0, padx=0, pady=0)
+        placeholder.bind("<Button-1>", lambda _event: field.focus_set() or "break")
+        self.inline_task_text.trace_add("write", self.remember_inline_task_text)
+        field.bind("<FocusIn>", self.update_inline_task_placeholder)
+        field.bind("<FocusOut>", self.update_inline_task_placeholder)
+        field.bind("<Escape>", self.clear_inline_task_entry)
+        field.bind("<Control-Return>", lambda _event: self.submit_inline_task(advanced=True))
+        for sequence in ("<Return>", "<KP_Enter>"):
+            field.bind(sequence, lambda _event: self.submit_inline_task())
+        self.tree.bind("<Configure>", self.place_inline_task_entry, add="+")
+        self.tree.bind("<Control-End>", self.focus_inline_task_entry)
+        self.bind_mousewheel(row)
+        self.bind_mousewheel(field)
+
+    def inline_task_target(self):
+        if (self.view_mode not in ("list", self.TABLE_VIEW) or not self.lists
+                or self.is_saved_table_view() or self.has_active_filter()
+                or getattr(self, "_data_read_only", False)):
+            return None
+        entry = self.current_list()
+        if not entry or self.is_archived_entry(entry) or not self.list_accepts_items(entry):
+            return None
+        return str(SAVE_FILE), entry["id"]
+
+    def remember_inline_task_text(self, *_args):
+        key = self._inline_task_list
+        value = self.inline_task_text.get()
+        if key is not None:
+            if value:
+                self._inline_task_drafts[key] = value
+            else:
+                self._inline_task_drafts.pop(key, None)
+        self.update_inline_task_placeholder()
+
+    def clear_inline_task_entry(self, _event=None):
+        self.inline_task_text.set("")
+        return "break"
+
+    def update_inline_task_placeholder(self, _event=None):
+        if self.inline_task_text.get() or self.current_focus_widget() is self.inline_task_entry:
+            self.inline_task_placeholder.place_forget()
+        else:
+            self.inline_task_placeholder.place(x=3, rely=0.5, anchor="w")
+
+    def sync_inline_task_entry(self):
+        if not hasattr(self, "inline_task_row"):
+            return
+        target = self.inline_task_target()
+        if target != self._inline_task_list:
+            self._inline_task_list = target
+            self.inline_task_text.set(self._inline_task_drafts.get(target, ""))
+        if target is None:
+            self.inline_task_row.place_forget()
+            return
+        if not self.tree.exists(self.EMPTY_ROW_ID):
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID)
+        self.tree.item(self.EMPTY_ROW_ID, text="", values=(), tags=())
+        style = str(self.tree.cget("style")) or "Treeview"
+        bg = self.style.lookup(style, "background") or self.theme["card"]
+        font = self.style.lookup(style, "font") or app_font(11)
+        label = glide_i18n.t("ui.inline_task.placeholder", "Neue Aufgabe schreiben …")
+        self.inline_task_row.configure(bg=bg)
+        for widget in self.inline_task_row.winfo_children():
+            widget.configure(bg=bg)
+            if not isinstance(widget, tk.Frame):
+                widget.configure(fg=self.theme["muted"], font=font)
+        self.inline_task_grip.configure(bg=bg, fg=self.theme["muted"], font=font,
+                                        highlightbackground=bg, highlightcolor=self.theme["ui_accent"])
+        self.inline_task_entry.configure(fg=self.theme["text"], insertbackground=self.theme["text"],
+                                         highlightbackground=bg, highlightcolor=self.theme["ui_accent"])
+        self.inline_task_entry._accessible_name = label
+        self.inline_task_placeholder.configure(text=label, bg=bg, fg=self.theme["muted"], font=font)
+        self.update_inline_task_placeholder()
+        self.place_inline_task_entry()
+
+    def place_inline_task_entry(self, _event=None):
+        if not hasattr(self, "inline_task_row"):
+            return
+        box = (self.tree.bbox(self.EMPTY_ROW_ID) if self._inline_task_list is not None
+               and self.tree.exists(self.EMPTY_ROW_ID) else ())
+        if box:
+            x, y, width, height = box
+            self.inline_task_row.place(x=self.tree.winfo_x() + x - self.ROW_GRIP_WIDTH,
+                                       y=self.tree.winfo_y() + y, width=width + self.ROW_GRIP_WIDTH, height=height)
+            self.inline_task_row.lift()
+        else:
+            self.inline_task_row.place_forget()
+
+    def focus_inline_task_entry(self, _event=None):
+        if self.inline_task_target() is None or not self.tree.exists(self.EMPTY_ROW_ID):
+            return None
+        self.tree.see(self.EMPTY_ROW_ID)
+        self.place_inline_task_entry()
+        self.inline_task_entry.focus_set()
+        return "break"
+
+    def submit_inline_task(self, *, advanced=False):
+        target = self._inline_task_list
+        if target is None or target != self.inline_task_target() or self._inline_task_submitting:
+            return "break"
+        draft = self.inline_task_text.get()
+        if not advanced and not draft.strip():
+            return "break"
+        def clear_saved_draft():
+            self._inline_task_drafts.pop(target, None)
+            if self._inline_task_list == target:
+                self.clear_inline_task_entry()
+
+        self._inline_task_submitting = True
+        try:
+            if advanced:
+                self.add_item_advanced(initial_text=draft, clear_text=clear_saved_draft)
+            else:
+                self.add_item(raw_text=draft, clear_text=clear_saved_draft)
+        finally:
+            self._inline_task_submitting = False
+        if self._inline_task_list == target and self.inline_task_target() == target:
+            if self.tree.exists(self.EMPTY_ROW_ID):
+                self.tree.see(self.EMPTY_ROW_ID)
+                self.place_inline_task_entry()
+                self.inline_task_entry.focus_set()
+        return "break"
+
+    def add_item(self, *, raw_text=None, clear_text=None):
         if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             self.focus_entry()
             return
@@ -59579,7 +60421,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
             self.show_warning(glide_i18n.t("ui.new_item_dialog.new_item", 'Neuer Punkt'), self.read_only_notice())
             return
-        text = self.get_entry_text()
+        text = self.get_entry_text() if raw_text is None else raw_text.strip()
         if not text:
             noun = glide_i18n.t("ui.add_item.list_title", "Listentitel") if self.view_mode == "folder" else glide_i18n.t("ui.add_item.item", "Punkt")
             self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.add_item.please_enter_a", 'Bitte einen {noun} eingeben.', noun=noun))
@@ -59611,7 +60453,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         target = glide_task_editing.creation_target(self.lists, self.active_list_id, kinds)
         if target is None:
             return
-        capture = parse_capture(text, self.labels, ignore=self.capture_ignored())
+        capture = parse_capture(text, self.labels, ignore=self.capture_ignored() if raw_text is None else ())
         title, fields = capture.titel, capture.felder
         recognized = [part.text for part in capture.teile if part.felder]
         if not title:
@@ -59627,12 +60469,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         entry = self.new_item(title, False, **fields)
         self.items = target.setdefault('items', [])
-        with self.item_change((), restore=False, update_sidebar=True, lists={target['id']}) as change:
+        with self.item_change((), restore=False, update_sidebar=True, lists={target['id']}, rollback_failed=True) as change:
             self.items.append(entry)
             change.mark(entry['id'])
         if change.saved:
-            operations = [(glide_i18n.t("ui.add_item.input", 'Eingabe'), self.clear_entry_text), (glide_i18n.t("ui.add_item.input_hint", 'Eingabehinweis'), self.hide_slash_hint),
+            operations = [(glide_i18n.t("ui.add_item.input", 'Eingabe'), clear_text or self.clear_entry_text),
                           (glide_i18n.t("ui.add_item.creation_feedback", 'Anlegerückmeldung'), lambda: self.feedback('item_created'))]
+            if clear_text is None:
+                operations.append((glide_i18n.t("ui.add_item.input_hint", 'Eingabehinweis'), self.hide_slash_hint))
             if recognized:
                 operations.append((glide_i18n.t("ui.add_item.detected_details", 'Erkannte Angaben'), lambda: self.show_undo_toast(
                     glide_i18n.t("toast.created_with_details", "Angelegt · {details}",
@@ -59939,7 +60783,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     "sobald er fällig ist."), None, None)
         return (glide_i18n.t("ui.create_card_item.everything_except_the_title", "Alle Angaben außer dem Titel sind freiwillig und später änderbar."), None, None)
 
-    def add_item_advanced(self, event=None):
+    def add_item_advanced(self, event=None, *, initial_text=None, clear_text=None):
         """Vollständige Eingabemaske; Ziel und Schreibbesitz nach dem Dialog neu prüfen."""
         if self.view_mode not in self.DERIVED_ITEM_VIEWS and not self.require_list_view():
             return "break"
@@ -59950,7 +60794,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.show_info(glide_i18n.t("ui.new_item_dialog.new_item", "Neuer Punkt"), glide_i18n.t("ui.add_item_advanced.create_a_list_first", "Lege zuerst eine Liste an – ein Punkt braucht eine Zielliste."))
             return "break"
         hint, planned, labels = self.advanced_entry_context()
-        prefilled = self.get_entry_text()
+        prefilled = self.get_entry_text() if initial_text is None else initial_text
         default_list_id = self.active_list_id
         details = self.new_item_dialog(glide_i18n.t("ui.new_item_dialog.new_item", "Neuer Punkt"), hint, allow_list_choice=True,
             default_list_id=default_list_id, default_planned=planned, default_labels=labels,
@@ -59974,12 +60818,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if target_id == self.active_list_id:
             self.items = target.setdefault('items', [])
         select = target_id == self.active_list_id and self.view_mode not in self.DERIVED_ITEM_VIEWS
-        with self.item_change((), restore=False, update_sidebar=True) as change:
+        with self.item_change((), restore=False, update_sidebar=True, lists={target_id}, rollback_failed=True) as change:
             target.setdefault('items', []).append(entry)
             change.mark(entry['id'] if select else None)
         if change.saved:
             operations = [(glide_i18n.t("ui.add_item_advanced.creation_feedback", 'Anlegerückmeldung'), lambda: self.feedback('item_created'))]
-            if prefilled and self.get_entry_text() == prefilled:
+            if clear_text is not None:
+                operations.insert(0, (glide_i18n.t("ui.add_item_advanced.input", 'Eingabe'), clear_text))
+            elif prefilled and self.get_entry_text() == prefilled:
                 operations.insert(0, (glide_i18n.t("ui.add_item_advanced.input", 'Eingabe'), self.clear_entry_text))
             self.finish_change_ui(change, operations)
         return "break"
@@ -60553,7 +61399,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             # Zuletzt benutzte Labels zuerst, abgetrennt (KO06); sonst gewohnte Reihenfolge.
@@ -60888,7 +61734,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             assigned = item.get("labels") or []
@@ -70860,6 +71706,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             (glide_i18n.t("menu.help", "Hilfe"), (
                 (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
                 (glide_i18n.t("menu.help.shortcuts", "Tastenkürzel anzeigen"), self.show_shortcuts_dialog),
+                (glide_i18n.t("menu.help.component_gallery", "Komponenten-Galerie …"), self.show_component_gallery),
                 None,
                 (glide_i18n.t("menu.help.error_log", "Fehlerprotokoll öffnen"), self.open_error_log),
                 (glide_i18n.t("menu.help.about", f"Über {APP_NAME}", app_name=APP_NAME), self.show_about_dialog),
@@ -71117,6 +71964,151 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME), self.about_text(), kind="info",
             extra_buttons=self.about_actions(), logo=True,
         )
+
+    COMPONENT_GALLERY_MIN_SIZE = (760, 560)
+
+    def component_gallery_palette(self, choice):
+        """Farbtabelle der Galerievorschau: aktives Design oder Grunddesign hell/dunkel (nur Anzeige)."""
+        if choice in ("light", "dark") and choice in self.THEMES:
+            return self.legible_text_roles(dict(self.THEMES[choice]))
+        return dict(self.theme)
+
+    def show_component_gallery(self, event=None):
+        """Komponenten-Galerie (D105): echte Shell- und Bento-Bausteine mit künstlichen Beispieldaten.
+
+        Die Einträge stammen aus den Frameworks selbst (`glide_shell.showcase`,
+        `glide_bento.showcase`); Glide ergänzt nur die Einsatzorte
+        (`component_gallery.GLIDE_USAGE`). Design- und Breitenwahl bauen die
+        Vorführungen neu auf, ohne Einstellungen oder Nutzerdaten zu ändern.
+        """
+        previous_focus = self.current_focus_widget()
+        registry = glide_component_gallery.build_registry()
+        titel = glide_i18n.t("ui.component_gallery.title", "Komponenten-Galerie")
+        dialog = self._new_dialog(titel, minsize=self.COMPONENT_GALLERY_MIN_SIZE)
+        zustand = {"dialog": dialog, "registry": registry, "widgets": {}, "failures": {},
+                   "theme": tk.StringVar(master=dialog, value="current"),
+                   "width": tk.StringVar(master=dialog, value=glide_component_gallery.DEFAULT_WIDTH)}
+        self._component_gallery = zustand
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(outer, text=titel, bg=self.theme["bg"], fg=self.theme["text"], font=app_font(17, "bold"),
+                 anchor="w").pack(fill="x", pady=(0, 6))
+        tk.Label(outer, text=glide_i18n.t(
+            "ui.component_gallery.intro",
+            "Echte Bausteine aus Glide Shell {shell} und Glide Bento {bento} mit künstlichen Beispieldaten. "
+            "Die Beschreibungen stammen aus den Frameworks (Englisch); Nutzerdaten bleiben unberührt.",
+            shell=glide_shell.SHELL_VERSION, bento=glide_bento.BENTO_VERSION),
+            bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w", justify="left",
+            wraplength=700).pack(fill="x", pady=(0, 10))
+        footer = tk.Frame(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(12, 0))
+        self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy,
+                                 "muted").pack(side="right")
+        wahl = tk.Frame(outer, bg=self.theme["bg"])
+        wahl.pack(fill="x", pady=(0, 10))
+        for variable, beschriftung, optionen in (
+                (zustand["theme"], glide_i18n.t("ui.component_gallery.theme", "Design"), (
+                    ("current", glide_i18n.t("ui.component_gallery.theme_current", "Aktiv")),
+                    ("light", glide_i18n.t("ui.component_gallery.theme_light", "Hell")),
+                    ("dark", glide_i18n.t("ui.component_gallery.theme_dark", "Dunkel")))),
+                (zustand["width"], glide_i18n.t("ui.component_gallery.width", "Breite"), (
+                    ("narrow", glide_i18n.t("ui.component_gallery.width_narrow", "Schmal")),
+                    ("medium", glide_i18n.t("ui.component_gallery.width_medium", "Mittel")),
+                    ("wide", glide_i18n.t("ui.component_gallery.width_wide", "Breit"))))):
+            tk.Label(wahl, text=beschriftung, bg=self.theme["bg"], fg=self.theme["muted"],
+                     font=app_font(10, "bold")).pack(side="left", padx=(0, 6))
+            for wert, text in optionen:
+                GlideRadiobutton(wahl, text=text, variable=variable, value=wert, bg=self.theme["bg"],
+                                 fg=self.theme["text"], selectcolor=self.theme["input"], font=app_font(10),
+                                 command=self.render_component_gallery).pack(side="left", padx=(0, 8))
+            tk.Frame(wahl, bg=self.theme["bg"], width=18).pack(side="left")
+        flaeche = tk.Frame(outer, bg=self.theme["bg"])
+        flaeche.pack(fill="both", expand=True)
+        canvas = tk.Canvas(flaeche, bg=self.theme["bg"], highlightthickness=0, bd=0, yscrollincrement=24,
+                           takefocus=True, height=420)
+        balken = ThemedAutoScrollbar(flaeche, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+                                     thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                     width=10, radius=5)
+        canvas.configure(yscrollcommand=balken.set)
+        balken.set_command(canvas.yview)
+        balken.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        inhalt = tk.Frame(canvas, bg=self.theme["bg"])
+        fenster = canvas.create_window(0, 0, window=inhalt, anchor="nw")
+        inhalt.bind("<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(fenster, width=event.width))
+        self.bind_mousewheel(canvas)
+        self.bind_mousewheel(dialog, target=canvas)
+        zustand.update(canvas=canvas, content=inhalt)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        dialog.bind("<Destroy>", lambda event: self._forget_component_gallery(event, dialog), add="+")
+        self.render_component_gallery()
+        self.run_modal(dialog)
+        self.restore_focus(previous_focus)
+        return "break"
+
+    def _forget_component_gallery(self, event, dialog):
+        if event.widget is dialog and getattr(self, "_component_gallery", {}).get("dialog") is dialog:
+            self._component_gallery = None
+
+    def render_component_gallery(self):
+        """Vorführungen der Galerie für die gewählte Farbtabelle und Breite (neu) aufbauen."""
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand or not zustand["content"].winfo_exists():
+            return None
+        inhalt = zustand["content"]
+        for kind in inhalt.winfo_children():
+            kind.destroy()
+        zustand["widgets"].clear()
+        zustand["failures"].clear()
+        palette = self.component_gallery_palette(zustand["theme"].get())
+        breite = glide_component_gallery.width_for(zustand["width"].get())
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: palette))
+        env = glide_shell_showcase.ShowcaseEnv(palette=palette, font=app_font, extra={"bento_context": kontext})
+        zustand.update(palette=palette, env=env, area_width=breite)
+        bg = self.theme["bg"]
+        felder = (("ui.component_gallery.field.states", "Zustände", "states"),
+                  ("ui.component_gallery.field.sizes", "Größen", "sizes"),
+                  ("ui.component_gallery.field.theming", "Design", "theming"),
+                  ("ui.component_gallery.field.limits", "Grenzen", "limits"))
+        for framework in zustand["registry"].frameworks():
+            tk.Label(inhalt, text=framework, bg=bg, fg=self.theme["text"], font=app_font(14, "bold"),
+                     anchor="w").pack(fill="x", pady=(10, 4))
+            for entry in zustand["registry"].entries(framework):
+                flaeche = palette.get("card", bg)
+                karte = tk.Frame(inhalt, bg=flaeche, highlightthickness=1,
+                                 highlightbackground=palette.get("line", palette.get("input_border", bg)))
+                karte.pack(fill="x", pady=(0, 10))
+                kopf = tk.Frame(karte, bg=flaeche)
+                kopf.pack(fill="x", padx=14, pady=(10, 2))
+                tk.Label(kopf, text=entry.name, bg=flaeche, fg=palette.get("text"),
+                         font=app_font(12, "bold"), anchor="w").pack(side="left")
+                tk.Label(kopf, text=f"{entry.framework} {entry.version} · {entry.module}", bg=flaeche,
+                         fg=palette.get("muted"), font=app_font(9), anchor="e").pack(side="right")
+                zeilen = [entry.summary]
+                for key, fallback, attribut in felder:
+                    wert = getattr(entry, attribut)
+                    if wert:
+                        text = ", ".join(wert) if isinstance(wert, tuple) else str(wert)
+                        zeilen.append(glide_i18n.t(key, fallback) + ": " + text)
+                zeilen.append(glide_i18n.t("ui.component_gallery.field.used_in", "In Glide") + ": "
+                              + "; ".join(glide_component_gallery.usage_texts(entry, glide_i18n.t)))
+                tk.Label(karte, text="\n".join(zeilen), bg=flaeche, fg=palette.get("text"),
+                         font=app_font(10), anchor="w", justify="left", wraplength=680).pack(fill="x", padx=14)
+                bereich = tk.Frame(karte, bg=flaeche)
+                bereich.pack(anchor="w", padx=14, pady=(8, 12))
+                tk.Frame(bereich, bg=flaeche, width=breite, height=1).pack(anchor="w")
+                try:
+                    widget = entry.build(bereich, env)
+                    widget.pack(fill="x")
+                    zustand["widgets"][entry.id] = widget
+                except Exception as fehler:  # eine Vorführung darf die Galerie nicht schließen
+                    zustand["failures"][entry.id] = repr(fehler)
+                    tk.Label(bereich, text=glide_i18n.t("ui.component_gallery.failed",
+                                                        "Vorführung fehlgeschlagen: {error}", error=fehler),
+                             bg=flaeche, fg=palette.get("delete", "#C0392B"), font=app_font(10),
+                             anchor="w").pack(fill="x")
+        return zustand
 
     def manual_html(self):
         from html import escape

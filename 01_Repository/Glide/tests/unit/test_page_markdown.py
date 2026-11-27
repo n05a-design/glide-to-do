@@ -156,5 +156,26 @@ class BlockKopieren(unittest.TestCase):
                 markdown.document_slice(self.DOC, start, end)
 
 
+
+class LinkRandfaelleTeil03(unittest.TestCase):
+    """EDITOR-01 (Master-Serie Teil 03): Parameter, Fragment, Klammern, IDN, mehrere Links, unsichere Schemata."""
+
+    def treffer(self, text):
+        return [(text[a:b], url) for a, b, url in markdown.find_links(text)]
+
+    def test_randfaelle(self):
+        self.assertEqual(self.treffer("Siehe https://example.org/a?b=1&c=2#teil."),
+                         [("https://example.org/a?b=1&c=2#teil", "https://example.org/a?b=1&c=2#teil")])
+        self.assertEqual(self.treffer("(www.example.org)"), [("www.example.org", "https://www.example.org")])
+        self.assertEqual(self.treffer("https://de.wikipedia.org/wiki/Klammer_(Begriff), ok")[0][0],
+                         "https://de.wikipedia.org/wiki/Klammer_(Begriff)")
+        self.assertEqual([u for _, u in self.treffer("https://münchen.de/x und info@bücher.de")],
+                         ["https://münchen.de/x", "mailto:info@bücher.de"])
+        self.assertEqual(len(self.treffer("zwei https://a.example und b@c.de")), 2)
+
+    def test_unsichere_schemata_werden_nie_links(self):
+        self.assertEqual(self.treffer("file:///etc/passwd javascript:alert(1) data:text/html,x"), [])
+
+
 if __name__ == '__main__':
     unittest.main()

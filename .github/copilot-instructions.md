@@ -1,6 +1,6 @@
 # GitHub Copilot – Glide
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2
+Stand 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Bento 0.3.0 · Glide Shell 0.9.0
 
 Dünner Adapter ohne eigene Regeln. Verbindlich ist [`AGENTS.md`](../AGENTS.md) in der Repository-Wurzel und von dort [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md).
 

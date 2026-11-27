@@ -1,3 +1,57 @@
+## Master-Serie Teil 03: Editor, Kapitel, Rechtschreibvertrag, Shell 0.8.0 (27.11.2026)
+
+Geprüfter Stand: `main` @ `e8eee591` plus Arbeitsstand Teil 03, gesichert als `teil03-nach-1` (56 geänderte, 19 neue Dateien), wiederhergestellt in eine Prüfkopie außerhalb OneDrive (alle SHA-256 gleich); danach eine Korrektur in `app.pyw` (Attributprüfung, `getattr` statt `__dict__.setdefault`) in Arbeitskopie und Prüfkopie gleich übernommen. Danach geändert: nur dieser QA-Abschnitt. Umgebung: Windows 11 Pro, Python 3.15.1, Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| CI-Grundstufe, erster Lauf | `ci_grundstufe.py` | FAILED (Attributprüfung: `self.__dict__.setdefault` in vier neuen Kapitelmethoden) – behoben |
+| CI-Grundstufe, zweiter Lauf | dieselbe | PASSED; Lieferstand als zulässiger Hinweis (16 Abweichungen zu `07`) |
+| T358 Editor Teil 03 | `tests/integration/test_editor_teil03.py` | PASSED: PAGE-01 (Griff/Hinweis auf einer Achse, 6 px Abstand, kein Sprung, keine leeren Objekte), PAGE-02 (Kapitel unter der Seite, Klappzustand, Sprung mit Vorrang, Verschieben/Umbenennen/Ebene/Auflösen, Rückgängig im Editor und in der App, Neues Kapitel, nur mögliche Menüschritte), PAGE-03/05 (Duplizieren mit Format, neue Aufgabenkennung, Kopieren/Ausschneiden), PAGE-04 (Strg+C/X/V mit Textauswahl ohne Listenaktion) |
+| T358 Gegenprobe | `--app` aus `e8eee591` (nur `src/glide` per `git archive`) | FAILED wie erwartet (keine Kapitelzeilen); PAGE-01-Teil war schon vorher erfüllt |
+| T357 / T359 | `test_chapters.py`, `test_shell_spellcheck.py` | PASSED 8 / 7 |
+| EDITOR-01 Randfälle | `test_page_markdown.py` (`LinkRandfaelleTeil03`) | PASSED |
+| T353 / T354 / T355 / T356 | Konformität (erwartet Shell 0.8.0 unabhängig vom Paketwert), Galerie (15 Komponenten), Sicherung (Speicher, Abbruch ohne Rest) | PASSED |
+| T319, T341–T344, T349, T350, T347, Vorlagen, Shell-Selbsttest 13/13, Bento-Selbsttest 16/16, Demo-/Referenzhosts | Bereichs- und Regressionssuiten | PASSED |
+| Konformität | `python3 -B -m glide_shell.conformance src/glide` | conform |
+| Nicht ausgeführt | eingefrorene Vollprüfung (D51), macOS (Ablauf in der manuellen Prüfliste), Linux, Paketbau, Sichtbilder der Kapitel-Seitenleiste | offen; kein Versionswechsel der App, keine Lieferung |
+
+## Master-Serie Teil 02: Shell-First, Galerie, Shell 0.7.0, Bento 0.3.0 (27.11.2026)
+
+Geprüfter Stand: `main` @ `e8eee591` plus Arbeitsstand Teil 02, gesichert als `teil02-nach-1` (`arbeitsstand_sichern.py`, 51 geänderte und 14 neue Dateien) und daraus in eine Prüfkopie außerhalb OneDrive wiederhergestellt (alle SHA-256 gleich). Danach geändert: nur dieser QA-Abschnitt (kein Code, kein Test). Umgebung: Windows 11 Pro, Python 3.15.1, Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | PASSED (Werkzeug- und Unit-Tests, Stand, Links, Index, Datenschutz, Ablage); Lieferstand als zulässiger Hinweis (15 Abweichungen zu `07`) |
+| T355 Galerie an der echten App | `tests/integration/test_component_gallery.py` | PASSED: Hilfe-Menü, 14 Komponenten, echte Klassen, Hover/Leertaste/Liste/Regler, Design hell `#FFFFFF`/dunkel `#1C1C1E`, Raster 1 → 3 Spalten, Freigabe, Dateien bytegleich |
+| T355 Gegenprobe | dieselbe Suite mit `--app` aus `e8eee591` | FAILED wie erwartet (`show_component_gallery` fehlt) |
+| T353 Shell-Konformität | `tests/unit/test_shell_konformitaet.py` | PASSED 15, darunter Negativfälle: Shell importiert Host/Bento, Bento importiert Fachlogik/private Shell, Host nutzt privates Modul, Zyklus, inkompatible und fehlende Mindestversion, fehlende Registrierung |
+| T354 / T356 | Galerie-Modul, Arbeitsstandsicherung | PASSED 5 / 3 (manipulierte Sicherung und Geheimnisdatei abgewiesen) |
+| Bento-Übernahme | `test_shell_uebernahme.BentoNebenDerShell` | PASSED 2 (veränderte Datei, Kompatibilitätsbruch, inkompatible Kombination nicht angelegt) |
+| T319, T341, T342, T343, T344, T349 | Schnittstellen- und Importregeln, Bento-Tests, Fremdhost mit Galerie und Konformität | PASSED |
+| Shell: Selbsttest, Demohost, Referenzhost, Modalvertrag | `glide_shell.selftest`, T330-Suiten, `test_shell_referenzhost.py`, `test_modalvertrag.py` | PASSED (13/13; Referenzhost-Upgrade auf 0.7.0; 18 Modalfälle) |
+| Bento-Selbsttest | `python3 -B -m glide_bento.selftest` | PASSED 16/16 einschließlich Shell-Kompatibilität |
+| Konformität des Quellbaums | `python3 -B -m glide_shell.conformance src/glide` | conform |
+| Regression | `test_befunde_1127.py` (T350), `test_glide_110.py` (T347), `test_template_workflows.py`, `test_i18n.py`, `test_design_vertrag_konsistenz.py`, `test_agent_einstieg.py` | PASSED (Vorlagen: 23 = 19 Katalog + 4 Notizbuch) |
+| Sichtnachweis | Fensterbilder der Galerie (aktiv, dunkel), lokal unter `%USERPROFILE%\gq\sicht02`, nicht versioniert | Windows 11; macOS offen |
+| Nicht ausgeführt | eingefrorene Vollprüfung (D51), macOS/Tk-9-Abnahme, Linux, Paketbau, `abgleich_07.py` | nicht Gegenstand von Teil 02 (kein Versionswechsel der App, keine Lieferung) |
+
+## Master-Serie Teil 01: Arbeitssteuerung und Versionsmanagement (27.11.2026)
+
+Quellstand `main` @ `e8eee591` plus Dokumentänderungen von Teil 01 (nicht committet), geprüft in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Python 3.15.1, Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Keine Codeänderung, kein App-Versionswechsel, keine Lieferung; Glide-System V1.88 → V1.89.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | PASSED; Lieferstand als zulässiger Hinweis (14 Abweichungen zu `07_Python-Versionen`) |
+| CI-Grundstufe direkt im OneDrive-Worktree | dieselbe | FAILED in den Werkzeugtests: `PermissionError` beim Löschen einer Shell-Quellkopie (Dateiattribute unter OneDrive, bekannte Umgebungsgrenze); in der Prüfkopie grün |
+| Systemregister | `tests/tools/test_glide_system.py` | PASSED 5 |
+| Standprüfung und ihre Tests | `standpruefung.py`, `test_standpruefung.py` | PASSED (158 aktive Dokumente), 28 Tests |
+| Agenten-Skill | `test_agenten_skill.py` | PASSED 18 |
+| T351 / T352 / T345 / T346 / T342 / Bento-Komponenten / Bento-Importregel / T348 | Unit- und Werkzeugtests | PASSED 4 / 5 / 10 / 6 / 22 / 7 / 6 / 5 |
+| Bento-Selbsttest | `python3 -B -m glide_bento.selftest` | PASSED 16/16 |
+| T350 Befunde 26./27.11. | `tests/integration/test_befunde_1127.py` | PASSED (PAGE-01/03/04/05/06, UX-03/04/05, EDITOR-01, PIXEL-02/03) |
+| T347 Glide 1.1.0 | `tests/integration/test_glide_110.py` | PASSED 67 |
+| Nicht ausgeführt | eingefrorene Vollprüfung, macOS/Tk-Abnahme, Paketbau, `abgleich_07.py` | nicht Gegenstand von Teil 01 (keine Code- oder Lieferänderung) |
+
 ## Entwicklungsstand nach Glide 1.0.3, Ziel 1.1.0 (26.11.2026)
 
 Entwicklungsstand nach Glide 1.0.3 (Ziel 1.1.0), Branch `feature/glide-1-1-product-experience`, geprüfter Commit `f7f3037f` (Prüfkopie außerhalb OneDrive). Umgebung: Windows 11 Pro, Python 3.15 (`pythoncore-3.15-64`), Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein Versionswechsel, keine Lieferung. Statuswerte nach Auftrag.
@@ -1462,3 +1516,54 @@ Rohprotokolle bleiben lokal und sind nicht in Git. Erhaltene Original-JSONs blei
 
 
 Abschlusslauf: `grundstufe/ergebnis.json` besteht die ersten 18 Schritte und scheitert ausschließlich an der Synchronisations-Namensregel für zwei reguläre Prüfberichte. Die eindeutig umbenannten Berichte bleiben erhalten. `grundstufe-abschluss/ergebnis.json` enthält den gesonderten finalen Nachlauf; die Profile normalisieren zusätzlich ungültige alte Einstellungswerte auf Standard.
+
+## Master-Serie Teil 04: Inline-Erfassung und Seitenleiste (27.11.2026)
+
+### A. Arbeitsstand und Wiederherstellung
+
+Branch `claude/glide-sync-master-auftrag-ef27c1` auf `e8eee5911bed6b76363b259a9f64296572e93014`. Der Eingang hatte 56 geänderte und 19 neue Dateien. Der bestehende Stand und seine Sicherungen wurden bewahrt. Bei der ersten Platzprüfung standen 8.203.280.384 Bytes zur Verfügung. `teil04-vor-20261127` wurde per SHA-256 geprüft und in eine getrennte Kopie wiederhergestellt. Alle 75 Pfade stimmten überein. Der Endstand in `teil04-nach-20261127` umfasst 70 versionierte Änderungen einschließlich einer Löschung und 21 neue Dateien. Die zuvor per Wiederherstellung erzeugte Prüfkopie wurde auf den Endstand abgeglichen. Die Pfadprüfung gegen das neue Manifest ergab 91 Übereinstimmungen einschließlich der Löschung. Die Sicherungen liegen unter `%USERPROFILE%/gq/sich/`. Ausgangsbranch und HEAD blieben für das gemeinsame Git-Tor in Teil 13 erhalten.
+
+### B. Direkte Eingabe und Leerzustände
+
+Vorher führte der klickbare Listenleertext zum oberen Feld. Jetzt liegt die editierbare Zeile am Ende der echten Liste oder Tabelle. Enter verwendet denselben Parser für Text, Datum und Labels sowie dieselbe Aufgabenanlage wie die Schnellerfassung. Strg+Ende und Pfeil-Ab am Listenende erreichen die Zeile. Escape leert den Entwurf. Der Griff bzw. Strg+Enter öffnet die erweiterte Erfassung. Entwürfe bleiben je Datenbestand und Liste innerhalb der Sitzung erhalten. Beim Schreibfehler setzt Glide den fehlgeschlagenen Anlegeschritt zurück und behält den Text.
+
+Filter, abgeleitete Ansichten, Seiten, Archiv und lesende Nebenansichten zeigen kein Inline-Aufgabenfeld. Die Regeln aus dem alten `empty_prompts.py` sind in `empty_states.py` aufgenommen. U20 erlaubt die zwei Zugänge zur selben Erstellungsoperation. T360 prüft Eingabe, Fokus, leeres Folge-Enter, Entwurf, Schreibfehler, Filter, Schreibschutz, Undo/Redo und Wiederöffnen. Gegenprobe auf der aus der Vorsicherung rekonstruierten Fassung scheitert an der dort fehlenden editierbaren Zeile.
+
+### C. Seitenleistenarchitektur
+
+Die vier Bereichsköpfe nutzen das vorhandene Popup-Menü. Die Einstellungen speichern Sichtbarkeit und Reihenfolge. Im Menü ist das bevorzugte Öffnungsziel je Bereich markiert. Die Nebenansicht liest Seiten, Listen und Notizen. Eine Zeichnung zeigt eine lesende Vorschau. Auf Windows geprüft sind das Wiederaufrufen der Leseposition einer Notiz (Scrollanteil 0,5 vor und nach dem Wechsel) und die Zeichnungsvorschau bei unveränderter Hauptansicht. Kapitel können beim Öffnen zu ihrem aktuellen Ziel springen. Die Hauptansicht bleibt als einmalige Alternative erreichbar. Im Kompaktmodus bleibt die Hauptansicht das Ziel.
+
+Die Wurzelprojektion `sidebar_locations` verschiebt die Navigationsposition einzelner oder mehrerer markierter Wurzeln bzw. aller kompatiblen Wurzeln eines Abschnitts. Die anschließende Darstellung verwendet dieselben Objektidentitäten. Beim Verschieben in Ordner gelten weiterhin die bestehenden fachlichen Ziel- und Zyklusregeln. Freie unabhängige Positionen beliebiger untergeordneter Inhalte brauchen die portable Struktur aus Teil 05. Die lesende Umfangsvorschau zählt Wurzeln, rekursive Ordner und Punkte, Anhangeinträge und eingehende Objektverweise. Die Sammelaktion zum Leeren wird erst nach dem Nachweis für Sicherung und Wiederherstellung freigeschaltet.
+
+### D. Sicht- und Bediennachweise
+
+Die Referenzen R05 (Sidebar-Plus) und R06 (Favoritensterne) lagen im lokalen Master-Prompt-Paket vor. Windows-Fensterbilder mit künstlichen Daten liegen außerhalb von Git unter `%USERPROFILE%/gq/sicht04/`. Vorher/Nachher liegen für die leere Liste, Startseite, Heute und Favoritenübersicht vor. Der Nachher-Satz zeigt außerdem gefüllte Liste, Kapitel und Blockgriff, Notiz, Nebenansicht, Einstellungen, Galerie, Bereichsmenü, Plus-Hover und die drei Ablagezustände. Die Bedienprüfung der Menüs ist separat in T361 dokumentiert.
+
+Messung am 1280 × 840 großen Windows-Testfenster mit Tk-Skalierung 1,334. Die Fensterkoordinaten sind Tk-Geometriewerte. Die separaten Fensterbilder wurden per Windows-Fensteraufnahme erzeugt.
+
+| Kriterium | Teil 03 | Teil 04 |
+|---|---|---|
+| Suche Startseite / Heute, Rahmen-Oberkante | 120 / 121 | 120 / 120 |
+| Suche Startseite / Heute, Eingabefeld-Oberkante | 123 / 124 | 123 / 123 |
+| Rahmenhöhe / Innenfeldhöhe | 38 / 32 | 38 / 32 |
+| Eingabefeldversatz in der Innenfläche Startseite / Heute | 0 / 2 horizontal | 0 / 0 |
+| Seitenleisten-Plus | 42 × 32 | 28 × 28 |
+| Favoritenstern | 43 × 34 | 34 × 34 |
+
+Der 38 px hohe Rahmen war in der 40 px hohen Heute-Leiste zentriert. Die gemeinsame Feldfabrik positioniert die beiden Rahmen oben und verwendet identische Innenmaße. Die Sternposition nutzt die Begrenzung der Glyphe, ihren Vorschub und die Zeilenmetriken. Bei zusätzlichen Tk-Skalierungen um 1,67 und 2,00 waren die Rahmen-Oberkanten ebenfalls gleich (130/130 bzw. 139/139). Plus und Stern hielten 28 × 28 und 34 × 34 Tk-Pixel. Der berechnete Versatz für den offenen Stern bei Skalierung 1,334 betrug etwa +0,13 px horizontal und −0,29 px vertikal. Das ist ein aus der Schrift abgeleiteter Wert, keine plattformübergreifende Rastermessung. Der Aufgaben-Aktionsgriff rückt links vor den Zeileninhalt. Blockeditoren behalten ihren Leserand. Eigene Griffintegration für Kapitel- und Checklisten-Zeilen bleibt offen.
+
+### E. Framework und Galerie
+
+`ActionHandle` arbeitet im Blockeditor und der Inline-Zeile. `DropIndicator` zeichnet Ablagefeedback in der Seitenleiste. `symbol_ink_offset` liefert den optischen Versatz für die gemeinsame quadratische Symbolknopffabrik. Die Produktlogik für Ziehen, Ordnergrenzen und Datenmutation bleibt in Glide. Galerie: 17 Komponenten aufgebaut und bedient (T355). Shell-Konformität meldete `conform`. Shell-Selbsttest 13/13, Bento-Selbsttest 16/16.
+
+### F. Version und Lieferung
+
+Shell 0.8.0 → 0.9.0 in `SHELL_VERSION`. Die Manifesterzeugung liest die neue Konstante. Systemregister V1.91 → V1.92. Bento 0.3.0 und seine Shell-Mindestversion 0.7.0 bleiben kompatibel. App 1.0.3 mit Ziel 1.1.0, Skill 1.4 sowie Aufgaben-, Austausch-, Vorlagen- und Einstellungsformat 26/2/2/2 bleiben auf ihren Ständen. Neue UI-Schnittstellen liegen in `custom_controls.py`, das bereits in den Lieferlisten steht. Das entfallene Modul `empty_prompts.py` wurde aus den Lieferlisten entfernt. Dies ist ein lokaler Kandidat der Serie. Native Pakete und die Abnahme des abgeglichenen Lieferstands folgen am Phasentor.
+
+### G. Prüfungen und Restabnahme
+
+Windows-Tk: T360, T361, Galerie T355, Kapitel-/Editorregression aus Teil 03, Bereichsregression und die 67 bestehenden Funktionsprüfungen des 1.1.0-Kandidaten. Unit-Suite: 1.425 Tests. Systemregisterprüfung: 5 Tests. Der erste CI-Grundlauf scheiterte bei temporären Git-Aufrufen an geerbtem `GIT_CONFIG_COUNT` mit fehlenden Leerwerten. Der zweite Lauf im OneDrive-Worktree stieß beim Entfernen einer Werkzeug-Fixture auf WinError 5. Dieselben Werkzeugtests liefen in der wiederhergestellten Kopie außerhalb von OneDrive durch. Ein weiterer Befund betraf doppelt belegte Symbol-Rückfalltexte. Die korrigierten Rollen bestanden den isolierten Vertragstest (9 Tests). Die Windows-Bedienläufe schlossen `test_befunde_1127.py` und `test_uiux_paket.py --fall nachabnahme363` ein. T360 und T361 sind im Vollprüfungsrunner eingetragen. Der letzte Lauf der CI-Grundstufe auf der Prüfkopie endete mit Exitcode 0 (18 Schritte bestanden, ein Lieferstandhinweis mit 17 Abweichungen). Darunter 392 Werkzeugtests mit zwei Skips und je 1.425 Unit-Tests mit und ohne Systemzeitzonen. Protokoll unter `%USERPROFILE%/gq/teil04-ci-final-2.json/ergebnis.json`. Die Standprüfung erfasste 158 aktive Dokumente. Native macOS-/Linux-Gesten, Trackpad, menschliche Sicht- und Bedienabnahme und Paketnachweise bleiben offen.
+
+### H. Anschluss Teil 05
+
+[Abnahmekriterien und Migrationsbedarf im Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#476-teil-04-inline-eingabe-und-seitenleiste-27112026). Teil 03 benötigt stabile Kapitelanker und Kapitelverweise sowie wiederherstellbare Positionen über Neustarts. Teil 04 ergänzt dauerhafte Entwürfe und eine vom Heimatcontainer unabhängige Navigation. Für Leeren gelten Wiedereinlesen auf neuer Instanz, Integrität der Anhänge, Schreibsperre, Fehlerproben, Undo/Redo und verifizierte Wiederherstellung als Voraussetzungen. Geplante neue Inhaltstypen vor der gemeinsamen Migration inventarisieren und auf Import/Export sowie Abwärtskompatibilität prüfen.

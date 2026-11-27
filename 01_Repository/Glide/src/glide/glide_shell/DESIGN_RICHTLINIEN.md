@@ -1,6 +1,6 @@
 # Portabler Designvertrag für Folgeprojekte der Glide Shell
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide Shell 0.6.2 · Lizenz MPL-2.0
+Stand 27.11.2026 · Glide 1.0.3 · Glide Shell 0.9.0 · Lizenz MPL-2.0
 
 Dieses Dokument definiert den verbindlichen, transportablen Gestaltungs- und Interaktionsvertrag für alle Anwendungen, die die **Glide Shell** als UI-Fundament einsetzen. Es ist offline-fähig und unabhängig vom Glide-Hauptrepository nutzbar.
 
@@ -72,6 +72,10 @@ Die Glide Shell stellt neutrale Mechanismen bereit, die der Host mit seinen spez
 | `Transitions` | `motion` | Verwaltete, unterbrechbare UI-Übergänge im Lebenszyklus eines Widgets (`AfterScope`). |
 | `CommandHistory` | `command_history` | Universelle Undo/Redo-Verwaltung für Befehlsobjekte oder Zustandsschnappschüsse. |
 | `clamp` / `format_geometry` | `window_geometry` | Begrenzt Fenstermaße auf Bildschirmgrenzen und Mindestgrößen. |
+| `require_shell` / `compatible` | `compat` | Verbraucher (Bento, Hosts) prüfen beim Import ihre Shell-Mindestversion (seit 0.7.0). |
+| `check_project` | `conformance` | Prüft Schichten, öffentliche Module, Zyklen und Versionen eines Hosts (seit 0.7.0). |
+| `misspelled` / `LayeredChecker` | `spellcheck` | Rechtschreibvertrag: Host liefert Engine und Wörterbuch, markiert Befunde mit eigener Farbe (seit 0.8.0). |
+| `ShowcaseRegistry` / `shell_entries` | `showcase` | Galerie-Register: jede allgemeine Komponente mit Builder, Zuständen und Einsatzort (seit 0.7.0). |
 
 ---
 
@@ -82,3 +86,73 @@ Folgende Bereiche gehören ausdrücklich zur **Domäne des Host-Projekts** und w
 2. **Maskottchen & spielerische Elemente:** Charaktere, Maskottchen (z. B. Gismo) oder themenfremde Illustrationen.
 3. **Fachlayouts:** Spezifische Inhaltsanordnungen wie Kanban-Boards, Kachel-Dashboards, Notizeditoren oder Tabellenraster.
 4. **Fachbegriffe & Lokalisierung:** Anwendungsfachsprache, Fachkataloge und Übersetzungen.
+
+---
+
+## 5. Shell-First-Vertrag (D105, D106)
+
+Die Glide Shell ist das verbindliche technische und gestalterische Fundament jeder Anwendung, die auf ihr aufbaut (Glide, STEPS, Chess & Chains und künftige Desktopanwendungen). Die Fachanwendung entsteht in dieser Architektur; ein eigenes allgemeines UI-System daneben ist nicht vorgesehen.
+
+### 5.1 Abhängigkeiten
+
+| Richtung | Zulässig | Prüfung |
+|---|---|---|
+| Fachanwendung → Glide Shell | nur öffentliche Module aus `glide_shell.__all__` | `python -m glide_shell.conformance <Quellordner>` (Regel `public-api`) |
+| Fachanwendung → Glide Bento | öffentliche Exporte aus `glide_bento.__all__` | Import, Selbsttest |
+| Glide Bento → Glide Shell | öffentliche Shell-Module; `SHELL_MIN_VERSION` muss passen | Regeln `bento-imports`, `versions`; Abbruch mit `ShellVersionError` beim Import |
+| Glide Shell → Standardbibliothek, `tkinter` | ja | Regel `shell-imports` |
+| Shell → Bento oder Fachlogik, Bento → Fachlogik, Zyklen | **nie** | Regeln `shell-imports`, `bento-imports`, `cycles` |
+
+Ein natives Tk-Widget in der Fachanwendung ist kein Verstoß. Entscheidend ist, ob es allgemeine Framework-Arbeit leistet, also in die Shell oder nach Bento gehört, oder fachspezifisch ist.
+
+### 5.2 Entscheidungsreihenfolge für Entwicklungsagenten
+
+1. Verbindliche Anforderung des Nutzers bzw. Inhabers.
+2. Aktuelle Architekturentscheidungen des Projekts.
+3. Shell- und Bento-Verträge (dieses Dokument, [Bento-Designvertrag](../glide_bento/BENTO_DESIGN_CONTRACT.md), Anleitungen im Paket).
+4. Gemeinsames Designsystem: P1–P6, Abschnitte 2 und 3 dieses Dokuments.
+5. Vorhandene Komponenten: Bausteintabelle im [README](README.de.md), Galerie-Register `glide_shell.showcase` und `glide_bento.showcase`.
+6. Fachspezifische Projektregeln.
+7. Begründete projektspezifische Ausnahme nach 5.5.
+8. Neuentwicklung nur bei tatsächlichem Bedarf, und zuerst als allgemeine Framework-Erweiterung, wenn mehrere Anwendungen sie brauchen.
+
+Fragen wie „Wie sieht ein Knopf aus?“, „Wie baue ich einen Dialog?“, „Wie reagiert eine Komponente auf die Themenfarbe?“ oder „Wie starte ich die Anwendung?“ beantwortet zuerst dieser Vertrag mit den Shell-Bausteinen. Ein eigener allgemeiner Entwurf ist nicht der Standard.
+
+### 5.3 Gemeinsame Grundsätze
+
+| Grundsatz | Bedeutung | Bestehende Regel |
+|---|---|---|
+| Shell First | Das Framework ist der Ausgangspunkt jeder allgemeinen Lösung | D86, D95, D105 |
+| Glide as Showcase | Jede freigegebene allgemeine Komponente ist in Glide erreichbar und vorführbar | D105, Galerie in Glide |
+| Reuse Before Creation | Vor jeder neuen Komponente prüfen, ob ein Baustein existiert | P3, Abschnitt 5.2 |
+| Visual Consistency | Vergleichbare Komponenten haben gleiche Maße, Zustände und Interaktionen | P2, B10/B12/B14 |
+| Pixel Precision | Abweichungen in Geometrie und Flucht werden an der Ursache behoben | B02, B05, B07–B09 |
+| Direct Interaction | Arbeit beginnt unmittelbar, etwa mit direkter Eingabe in der Liste | P1, D105 |
+| Feature Discoverability | Kernfunktionen sind sichtbar und verständlich erreichbar | P1, P5, B06 |
+| Contextual Tools | Werkzeuge stehen gruppiert dort, wo sie wirken | P4, D61 |
+| Predictable Drag & Drop | Die Ablagestelle ist vor der Mutation sichtbar | B01/B16 |
+| Multiple Views, One Data Model | Ansichten teilen Objekte und Identitäten | P3, P6 |
+| User-Controlled Workspace | Nutzer bestimmen Organisation, Sichtbarkeit und Navigation | P5 |
+| Data Safety First | Integrität und Wiederherstellbarkeit haben Vorrang | D105 |
+| Functional Completion | Fertig heißt erreichbar, nutzbar und geprüft | D105 |
+| Versioned Evolution | Weiterentwickelte Bausteine erhalten eine neue Version | D104 |
+
+### 5.4 Individualisierung
+
+Über Schnittstellen und Werte des Hosts frei wählbar: Anwendungsname, Logo, App-Icon, Markenfarbe, fachliche Inhalte, Arbeitsbereiche, Visualisierungen und Navigationsinhalte (Abschnitt 4). Farben kommen als Rollenwörterbuch, Schriften über `set_font_provider`, Bento-Werte über `BentoContext.for_host`. Ändert sich die Themenfarbe, baut der Host mit dem neuen Rollenwörterbuch neu auf oder ruft `refresh_from_host`/`update_theme`; eine Komponente liest Farben nie aus eigenen Konstanten.
+
+### 5.5 Ausnahmen
+
+Eine Abweichung vom gemeinsamen Standard braucht einen Eintrag im Projekt mit: betroffenem Bereich, konkreter Anforderung, Begründung, geprüften vorhandenen Alternativen, technischen und Wartungsfolgen, Geltungsbereich und Prüfstatus. Profitieren mehrere Anwendungen davon, wird daraus eine Framework-Erweiterung statt einer Ausnahme.
+
+### 5.6 Noch nicht in der Shell
+
+Allgemeine Knöpfe, Eingabe- und Suchfelder, Tooltips, Werkzeugleisten und der Theme-Provider liegen in Glide noch in der Fachanwendung. Für diese Teile gibt es noch keine Shell-Schnittstelle, und sie sind nicht als nutzbar dokumentiert. Ein Folgeprojekt übernimmt bis dahin die Regeln aus Abschnitt 2 und meldet seinen Bedarf an die Shell. Eine eigene allgemeine Komponente baut es dafür nicht.
+
+### Aktionsgriff und Ablageanzeige (Shell 0.9.0)
+
+`ActionHandle` nimmt die Glyphe, Farbrollen, Schrift und Innenabstände vom Host entgegen. Klick, Tastatur und Ziehen haben klar abgegrenzte Aufgaben. Nur wenn der Host eine Bewegung anbietet, erhält der Griff Drag-Bindungen. Leseränder in Texteditoren und der kompakte Griff vor der Aufgaben-Checkbox werden vom Host bemessen.
+
+`DropIndicator` zeichnet über dem vorhandenen Ziel und belegt keinen Platz im Layout. Vor und nach einer Zeile steht eine horizontale Linie, im Zielcontainer und bei einem ungültigen Ziel eine Seitenmarkierung. Der Host liefert Zielrechteck, Einrückung, Themenfarbe und Gültigkeit.
+
+Vergleichbare Symbolknöpfe erhalten feste quadratische Außenmaße und sichtbaren Tastaturfokus. `symbol_ink_offset` berechnet den Versatz aus Glyphenbegrenzung, Vorschub und Zeilenmetriken. Die App liefert die tatsächliche Schrift und ihre Skalierung.

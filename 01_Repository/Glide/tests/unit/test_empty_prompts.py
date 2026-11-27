@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""UX-05 (27.11.2026): Leerzustände als Handlungsaufforderung (Modul empty_prompts)."""
+"""UX-05 (27.11.2026): Leerzustände als Handlungsaufforderung (Modul empty_states)."""
 import json
 from pathlib import Path
 import sys
@@ -7,11 +7,11 @@ import unittest
 
 GLIDE = Path(__file__).resolve().parents[2] / "src/glide"
 sys.path.insert(0, str(GLIDE))
-import empty_prompts as es
+import empty_states as es
 
 
 def alle_zustaende():
-    return [es.list_state(), es.list_state(filtered=True), es.list_state(read_only=True),
+    return [es.list_state(filtered=True), es.list_state(read_only=True),
             es.list_state(accepts_items=False), es.overview_state("pages", read_only=True),
             *es.OVERVIEWS.values(), *es.MENUS.values(),
             *(es.folder_state(art) for art in ("folder", "journal", "book")),
@@ -21,7 +21,7 @@ def alle_zustaende():
 
 class EmptyStateTests(unittest.TestCase):
     def test_list_rules(self):
-        self.assertEqual(es.list_state().action, es.FOCUS_ENTRY)
+        self.assertEqual(es.list_state(), None)
         self.assertEqual(es.list_state(filtered=True).action, es.RESET_FILTER, "Filter hat Vorrang")
         self.assertEqual(es.list_state(filtered=True, read_only=True).action, es.RESET_FILTER)
         self.assertIsNone(es.list_state(read_only=True).action)
@@ -55,7 +55,7 @@ class EmptyStateTests(unittest.TestCase):
         for zustand in alle_zustaende():
             if zustand.action is None or zustand.action in (es.RESET_FILTER, es.SHOW_ALL_DAYS):
                 continue  # Grund statt Aufforderung
-            self.assertIn(zustand.action, es.ACTIONS)
+            self.assertIn(zustand.action, es.PROMPT_ACTIONS)
             self.assertFalse(zustand.fallback.startswith(("Noch keine", "Keine")), zustand.fallback)
             self.assertEqual("…" in zustand.fallback, zustand.action in es.DIALOG_ACTIONS, zustand.fallback)
 

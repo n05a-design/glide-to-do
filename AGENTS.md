@@ -1,13 +1,13 @@
 # Glide – Einstieg für KI-Agenten (Repository-Wurzel)
 
-Stand 24.11.2026 · Glide 1.0.2 · Glide-System V1.87 · Glide Bento 0.1.0 · Glide Shell 0.6.2
+Stand 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Bento 0.3.0 · Glide Shell 0.9.0
 
 Dünner, agentenneutraler Adapter für Antigravity, Codex, GitHub Copilot, Gemini und andere Werkzeuge, die `AGENTS.md` in der Repository-Wurzel lesen. Er enthält **keine eigenen Regeln**; verbindlich sind die verlinkten Quellen. Claude Code liest zusätzlich [`CLAUDE.md`](CLAUDE.md).
 
 ## Verbindliche Quellen (gezielt lesen, nicht das ganze Repository)
 
 1. [`01_Repository/Glide/AGENTS.md`](01_Repository/Glide/AGENTS.md) – Arbeitsregeln, Produktgrenzen, Abschlusskriterium.
-2. [`00_Arbeitsvorbereitung/Glide_Uebergabe.md`](00_Arbeitsvorbereitung/Glide_Uebergabe.md) – aktueller Stand; Entscheidungen D01–D103 in [`docs/ARBEITSRICHTUNG.md`](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+2. [`00_Arbeitsvorbereitung/Glide_Uebergabe.md`](00_Arbeitsvorbereitung/Glide_Uebergabe.md) – aktueller Stand; Entscheidungen D01–D106 in [`docs/ARBEITSRICHTUNG.md`](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 3. [`docs/DOKUMENTENPFLEGE.md`](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) – führende Quelle je Thema; zusammenführen statt parallel pflegen.
 4. **Gestaltung:** [`docs/DESIGN_RICHTLINIEN.md`](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) ist für jede neue oder angefasste Oberfläche verbindlich.
 
