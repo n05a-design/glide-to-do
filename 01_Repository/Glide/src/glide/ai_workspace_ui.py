@@ -18,6 +18,7 @@ import webbrowser
 
 import ai_workspace as aw
 import glide_bento
+from glide_shell.controls import SearchField
 import i18n as glide_i18n
 
 _H = {}
@@ -689,10 +690,10 @@ class PromptLibrary:
             self.hinweis.pack(fill="x", padx=16)
         leiste = tk.Frame(d, bg=app.theme["bg"])
         leiste.pack(fill="x", padx=16, pady=6)
-        self.suche = tk.StringVar()
-        feld = tk.Entry(leiste, textvariable=self.suche, font=font(10), bg=app.theme["card"], fg=app.theme["text"],
-                        insertbackground=app.theme["text"], relief="flat", highlightthickness=1, highlightbackground=app.theme["line"])
-        feld.pack(side="left", fill="x", expand=True, ipady=4)
+        # Shell-Suchfeld (E02): Platzhalter, Leeren-Knopf, Escape; gefiltert wird sofort.
+        feld = SearchField(leiste, app.theme, placeholder=T("library.search", "Prompts durchsuchen"), font=font(10))
+        feld.pack(side="left", fill="x", expand=True)
+        self.suche = feld.variable
         self.suche.trace_add("write", lambda *_a: self.fuellen())
         self.gruppe = Auswahl(app, leiste, [T("library.by_status", "nach Status"), T("library.by_project", "nach Projekt"),
                                             T("library.by_agent", "nach Agent"), T("library.recent", "zuletzt bearbeitet")], 0,
@@ -959,9 +960,9 @@ class DocumentLibrary:
                         "Externe Verknüpfungen gibt es nicht; Vorschauen und Suchindex sind abgeleitet."), muted=True, size=9, wrap=1120).pack(fill="x", padx=16)
         leiste = tk.Frame(d, bg=app.theme["bg"])
         leiste.pack(fill="x", padx=16, pady=6)
-        self.suche = tk.StringVar()
-        tk.Entry(leiste, textvariable=self.suche, font=font(10), bg=app.theme["card"], fg=app.theme["text"], insertbackground=app.theme["text"],
-                 relief="flat", highlightthickness=1, highlightbackground=app.theme["line"]).pack(side="left", fill="x", expand=True, ipady=4)
+        feld = SearchField(leiste, app.theme, placeholder=T("docs.search", "Dokumente durchsuchen"), font=font(10))
+        feld.pack(side="left", fill="x", expand=True)
+        self.suche = feld.variable
         self.suche.trace_add("write", lambda *_a: self.fuellen())
         fuss = flow(app, d)
         fuss.pack(side="bottom", fill="x", padx=16, pady=10)

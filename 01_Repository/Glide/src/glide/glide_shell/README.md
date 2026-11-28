@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.9.1
+Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
@@ -72,6 +72,12 @@ Import the building blocks one by one, for example `from glide_shell import moda
 | `showcase` | Gallery registry: every general component with builder, states and usage | `ShowcaseRegistry`, `ShowcaseEntry`, `shell_entries` |
 | `custom_controls` (0.9.0) | Action target, drop feedback and optical glyph positioning | `ActionHandle`, `DropIndicator`, `symbol_ink_offset` |
 | `spellcheck` | Spell-checking contract without its own engine; the host chooses the engine (since 0.8.0) | `SpellChecker`, `WordListChecker`, `LayeredChecker`, `words`, `misspelled`, `probe_backends` |
+| `color_roles` (0.10.0) | Colour-role contract and theme provider: neutral light/dark, brand accent, WCAG check | `CORE_ROLES`, `neutral_theme`, `with_accent`, `validate`, `ThemeProvider` |
+| `settings_registry` (0.10.0) | Describe, validate and group settings; the host keeps its own storage | `Setting`, `SettingsRegistry`, `shell_settings`, `framework_info` |
+| `controls` (0.10.0) | General controls with colour roles | `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` |
+| `workspaces` (0.10.0) | Product areas as workspaces: navigation, lazy views, actions, status line, teardown | `Workspace`, `WorkspaceRegistry`, `WorkspaceHost` |
+
+Updating an existing copy from 0.6.2: [UPDATING.md](UPDATING.md).
 
 A start with app host and command history, as in the demo host:
 

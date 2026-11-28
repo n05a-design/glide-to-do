@@ -10,7 +10,9 @@ Seiteneffekt, Befehlsverlauf mit Befehl und Zustandsabbild, App-Host mit
 Startprüfung, Kürzeln und Schließweg, modalen Dialog mit Griff und Freigabe
 sowie die Unversehrtheit der Kopie gegenüber ihrem `SHELL_MANIFEST.json`
 (Version, SHA-256 je Datei, keine zusätzlichen Module; im Glide-Quellbaum ohne
-Manifest nur vermerkt). Ausgabe je Prüfung `ok` oder `FAIL`.
+Manifest nur vermerkt). Seit 0.10.0 zusätzlich Farbrollen und Einstellungen,
+allgemeine Bedienelemente (Knopf, Suchfeld, Tooltip, Werkzeugleiste) und
+Arbeitsbereiche mit Wechsel und Abbau. Ausgabe je Prüfung `ok` oder `FAIL`.
 Die Prüfungen greifen auch unter
 `python -O`. Exitcode 0 nur, wenn alles bestanden ist; 2, wenn kein Tk-Fenster möglich ist
 (etwa ohne Anzeige). Meldungen sind Englisch (D96). Vertrag:
@@ -31,6 +33,7 @@ from glide_shell import SHELL_VERSION
 from glide_shell import (action_picker, app_host, command_history, custom_controls, desktop_adapter, modal_session,
                          motion, redo_history, runtime_paths, system_appearance, text_fit, window_geometry,
                          window_lifetime)
+from glide_shell import controls, settings_registry, color_roles, workspaces
 
 
 def expect(condition, detail):
@@ -217,7 +220,86 @@ def check_app_host(root):
     app_host.install_close(built, built.destroy, platform, quit_command=False)
     expect(app_host.attach_menubar(built, tk.Menu(built)), "menubar was rejected")
     built.destroy()
-    return f"preflight, shortcuts and close path on {platform}"
+    order = []
+    later = app_host.AppHost(tk_factory=lambda: tk.Toplevel(root))
+    later.run(lambda window: window, mainloop=False)
+    later.add_shutdown(lambda: order.append("first"))
+    later.add_shutdown(lambda: (_ for _ in ()).throw(RuntimeError("boom")))
+    later.add_shutdown(lambda: order.append("last"))
+    failed = later.shutdown()
+    expect(order == ["last", "first"] and len(failed) == 1 and later.shutdown() == [], f"shutdown order {order}")
+    return f"preflight, shortcuts, close path and ordered shutdown on {platform}"
+
+
+def check_theme_and_settings(_root):
+    for mode in (color_roles.LIGHT, color_roles.DARK):
+        problems = color_roles.validate(color_roles.neutral_theme(mode))
+        expect(not problems, f"neutral {mode} theme: {problems}")
+    brand = color_roles.with_accent(color_roles.neutral_theme("light"), "#7B2CBF")
+    expect(brand["focus"] == "#7B2CBF" and brand["on_accent"] == "#FFFFFF", "accent not applied")
+    seen = []
+    provider = color_roles.ThemeProvider(mode="light")
+    stop = provider.subscribe(seen.append)
+    provider.set_mode("dark")
+    stop()
+    provider.set_mode("light")
+    expect(len(seen) == 1 and seen[0]["bg"] == color_roles.neutral_theme("dark")["bg"], "provider notification")
+    registry = settings_registry.SettingsRegistry(settings_registry.shell_settings())
+    values, problems = registry.normalize({"shell.font_scale": 9, "host.own": 1})
+    expect(values["shell.font_scale"] == 1.0 and values["host.own"] == 1 and len(problems) == 1, problems)
+    return f"{len(color_roles.CORE_ROLES)} roles AA in light and dark, accent, provider, {len(registry)} settings"
+
+
+def check_general_controls(root):
+    roles = color_roles.neutral_theme("light")
+    win = tk.Toplevel(root)
+    try:
+        clicks, changes = [], []
+        button = controls.ShellButton(win, "Save", lambda: clicks.append(1), roles, variant="primary")
+        button.pack()
+        button.invoke()
+        button.set_enabled(False)
+        button.invoke()
+        expect(clicks == [1], "disabled button must not invoke")
+        field = controls.SearchField(win, roles, placeholder="Search", on_change=changes.append, delay_ms=1)
+        field.pack()
+        field.set("abc")
+        field.flush()
+        expect(changes == ["abc"], f"search change {changes}")
+        tip = controls.Tooltip(button, "Saves", roles, delay_ms=1)
+        expect(tip.show() is not None, "tooltip did not open")
+        tip.detach()
+        bar = controls.Toolbar(win, roles)
+        bar.pack(fill="x")
+        bar.add_group("file").add_button("Open", lambda: None)
+        bar.add_group("edit").add_button("Undo", lambda: None)
+        bar.set_theme(color_roles.neutral_theme("dark"))
+        expect(len(bar.groups) == 2, "toolbar groups")
+    finally:
+        win.destroy()
+    return "button states, debounced search, tooltip, toolbar with theme switch"
+
+
+def check_workspaces(root):
+    events = []
+
+    class View(tk.Frame):
+        def on_close(self):
+            events.append("close")
+
+    registry = workspaces.WorkspaceRegistry([
+        workspaces.Workspace("a", "A", lambda m, _h: View(m), shortcut="1"),
+        workspaces.Workspace("b", "B", lambda m, _h: View(m), keep_alive=False)])
+    win = tk.Toplevel(root)
+    host = workspaces.WorkspaceHost(win, registry, color_roles.neutral_theme("light"))
+    host.pack(fill="both", expand=True)
+    host.show("a")
+    host.show("b")
+    host.show("a")
+    expect(events == ["close"] and host.view("b") is None, f"keep_alive handling {events}")
+    win.destroy()
+    expect(events == ["close", "close"], "views not closed with the host")
+    return "lazy views, keep_alive, teardown on destroy"
 
 
 def check_manifest(_root=None, folder=None):
@@ -278,7 +360,8 @@ CHECKS = (("version", check_version), ("window_geometry", check_geometry),
           ("text_fit", check_text_fit), ("action_picker", check_action_picker),
           ("runtime_paths", check_runtime_paths), ("command_history", check_command_history),
           ("app_host", check_app_host), ("modal_session", check_modal),
-          ("manifest", check_manifest))
+          ("color_roles+settings_registry", check_theme_and_settings), ("controls", check_general_controls),
+          ("workspaces", check_workspaces), ("manifest", check_manifest))
 
 
 def run(out=sys.stdout):

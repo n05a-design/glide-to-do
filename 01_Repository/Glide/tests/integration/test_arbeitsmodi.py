@@ -1433,8 +1433,9 @@ def fall_nebenansicht_einstiege(lauf):
     idle(lauf, 5)
     assert app._side_view == {"kind": "list", "id": liste["id"]}
     app.close_side_view()
-    zeichnung = app.new_list_object("Fassade Skizze", [])
-    zeichnung["list_kind"] = app.LIST_KIND_DRAWING
+    # Seit Teil 04 (NAV-03) zeigt die Nebenansicht Zeichnungen lesend; ausgeschlossen bleiben Galerien.
+    zeichnung = app.new_list_object("Fassade Galerie", [])
+    zeichnung["list_kind"] = "gallery"
     app.lists.append(zeichnung)
     menu = app.build_list_menu(zeichnung["id"])
     stelle = next(i for i in range(menu.index("end") + 1) if menu.type(i) == "command"
@@ -1461,7 +1462,7 @@ def fall_nebenansicht_einstiege(lauf):
     assert arten <= {"list"}, arten
     app.close_quick_open()
     app.close_side_view()
-    return "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen"
+    return "Kontextmenü, Galerie gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen"
 
 
 def verweisbestand(lauf):
@@ -1663,7 +1664,7 @@ def fall_verweisvorschau_grenzen(lauf):
     for value in (mod.glide_objects.uri('list', 'fehlt'), mod.glide_objects.uri('item', 'fehlt')):
         with patch.object(app, 'show_warning'):
             assert app.open_object_reference(value, side=True) is False
-    drawing = app.new_list_object('Kein Vorschauziel', []); drawing['list_kind'] = 'drawing'; app.lists.append(drawing)
+    drawing = app.new_list_object('Kein Vorschauziel', []); drawing['list_kind'] = 'gallery'; app.lists.append(drawing)  # NAV-03: Zeichnungen sind Vorschauziel
     assert app.open_object_reference(mod.glide_objects.uri('list', drawing['id']), side=True) is False
     app.toggle_compact_mode(); idle(lauf)
     assert app.open_object_reference(values[1], side=True) is False
@@ -1680,7 +1681,7 @@ def fall_verweisvorschau_grenzen(lauf):
                 n, errors = befunde_b15(lauf, f'Verweisvorschau {geometry}/{font}/{design}')
                 assert not errors, errors
                 count += n
-    return f'Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; {count} Knopfprüfungen in acht Konfigurationen'
+    return f'Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Galerie/Kompaktmodus; {count} Knopfprüfungen in acht Konfigurationen'
 
 
 def fall_seitenleiste_kontext(lauf):

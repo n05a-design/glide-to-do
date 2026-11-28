@@ -108,7 +108,107 @@ class ShowcaseRegistry:
 # Components of `custom_controls` and Tk-free helpers that a gallery can show.
 SHELL_COMPONENTS = ("shell.canvas_label", "shell.checkbutton", "shell.radiobutton", "shell.listbox",
                     "shell.scale", "shell.auto_scrollbar", "shell.text_fit", "shell.spellcheck",
-                    "shell.action_handle", "shell.drop_indicator")
+                    "shell.action_handle", "shell.drop_indicator",
+                    "shell.button", "shell.search_field", "shell.tooltip", "shell.toolbar", "shell.workspaces",
+                    "shell.theme_provider")
+
+
+def _theme(env):
+    """Complete role dictionary for the 0.10.0 controls from the host palette."""
+    from glide_shell import color_roles
+    basis = color_roles.neutral_theme("dark" if _is_dark(env.color("card", "#FFFFFF")) else "light")
+    basis.update({k: v for k, v in env.palette.items() if isinstance(v, str) and v.startswith("#") and len(v) == 7})
+    return color_roles.complete(basis)
+
+
+def _is_dark(colour):
+    from glide_shell import color_roles
+    try:
+        return color_roles.relative_luminance(colour) < 0.2
+    except ValueError:
+        return False
+
+
+def _build_buttons(master, env):
+    import tkinter as tk
+    from glide_shell.controls import ShellButton
+    roles = _theme(env)
+    rahmen = tk.Frame(master, bg=roles["card"])
+    for index, (text, variant) in enumerate((("Primary", "primary"), ("Secondary", "secondary"),
+                                             ("Delete", "danger"), ("Quiet", "quiet"))):
+        ShellButton(rahmen, text, lambda: None, roles, variant=variant).grid(row=0, column=index, padx=3, pady=3)
+    for index, size in enumerate(("small", "medium", "large")):
+        ShellButton(rahmen, "+", lambda: None, roles, size=size, icon=True).grid(row=1, column=index, padx=3, pady=3)
+    gesperrt = ShellButton(rahmen, "Disabled", lambda: None, roles)
+    gesperrt.set_enabled(False)
+    gesperrt.grid(row=1, column=3, padx=3, pady=3)
+    return rahmen
+
+
+def _build_search(master, env):
+    import tkinter as tk
+    from glide_shell.controls import SearchField
+    roles = _theme(env)
+    rahmen = tk.Frame(master, bg=roles["card"])
+    ergebnis = tk.Label(rahmen, text="", bg=roles["card"], fg=roles["muted"], anchor="w")
+    feld = SearchField(rahmen, roles, placeholder="Search sample items",
+                       on_change=lambda text: ergebnis.configure(text="filter: " + repr(text)))
+    feld.pack(fill="x")
+    ergebnis.pack(fill="x", pady=(4, 0))
+    return rahmen
+
+
+def _build_tooltip(master, env):
+    from glide_shell.controls import ShellButton, attach_tooltip
+    roles = _theme(env)
+    knopf = ShellButton(master, "Hover me", lambda: None, roles)
+    knopf._showcase_tooltip = attach_tooltip(knopf, "Tooltip text from the host", roles, delay_ms=300)
+    return knopf
+
+
+def _build_toolbar(master, env):
+    from glide_shell.controls import Toolbar
+    bar = Toolbar(master, _theme(env))
+    datei = bar.add_group("file")
+    for text in ("New", "Open", "Save"):
+        datei.add_button(text, lambda: None, size="small")
+    bearbeiten = bar.add_group("edit")
+    for text in ("Undo", "Redo"):
+        bearbeiten.add_button(text, lambda: None, size="small")
+    bar.add_group("view").add_button("Zoom", lambda: None, size="small")
+    return bar
+
+
+def _build_workspaces(master, env):
+    import tkinter as tk
+    from glide_shell import workspaces
+    roles = _theme(env)
+
+    def ansicht(text):
+        return lambda m, host: tk.Label(m, text=text, bg=roles["bg"], fg=roles["text"])
+    registry = workspaces.WorkspaceRegistry([
+        workspaces.Workspace("notes", "Notes", ansicht("Text and list workspace"), group="Work"),
+        workspaces.Workspace("canvas", "Canvas", ansicht("Canvas workspace"), group="Work",
+                             actions=(("Tool", lambda: None),)),
+        workspaces.Workspace("cards", "Cards", ansicht("Data cards workspace"), group="Overview")])
+    host = workspaces.WorkspaceHost(master, registry, roles)
+    host.configure(height=220)
+    host.show("notes")
+    host.set_status("Sample status line")
+    return host
+
+
+def _build_theme_provider(master, env):
+    import tkinter as tk
+    from glide_shell import color_roles
+    rahmen = tk.Frame(master, bg=env.color("card"))
+    for zeile, mode in enumerate(("light", "dark")):
+        thema = color_roles.with_accent(color_roles.neutral_theme(mode), "#7B2CBF")
+        for spalte, rolle in enumerate(("bg", "card", "text", "muted", "ui_accent", "delete")):
+            dunkel = rolle in ("text", "ui_accent", "delete")
+            tk.Label(rahmen, text=rolle, width=9, bg=thema[rolle],
+                     fg=thema["card"] if dunkel else thema["text"]).grid(row=zeile, column=spalte, padx=1, pady=1)
+    return rahmen
 
 
 def _build_label(master, env):
@@ -286,6 +386,31 @@ def shell_entries(version=None):
                       summary="Insertion and container feedback drawn over a target row.",
                       states=("before", "after", "inside", "invalid"), sizes=("host row bounds",),
                       theming="host accent or warning colour", build=_build_drop_indicator, **gemeinsam),
+        ShowcaseEntry("shell.button", "ShellButton", module="glide_shell.controls",
+                      summary="General button: primary, secondary, danger and quiet; fixed square icon sizes.",
+                      states=("normal", "hover", "pressed", "focus", "disabled"), sizes=("28", "34", "42 px"),
+                      theming="ui_accent, on_accent, card, hover, input_border, delete, focus",
+                      build=_build_buttons, **gemeinsam),
+        ShowcaseEntry("shell.search_field", "SearchField", module="glide_shell.controls",
+                      summary="Search entry with placeholder, clear button, Escape and debounced change callback.",
+                      states=("empty", "typing", "focus"), sizes=("fills width",),
+                      theming="input, input_border, placeholder, focus", build=_build_search, **gemeinsam),
+        ShowcaseEntry("shell.tooltip", "Tooltip", module="glide_shell.controls",
+                      summary="Delayed tooltip owned by the widget's AfterScope; hides on leave, click and destroy.",
+                      states=("hidden", "shown"), sizes=("wraps at 360 px",), theming="text, card",
+                      build=_build_tooltip, **gemeinsam),
+        ShowcaseEntry("shell.toolbar", "Toolbar", module="glide_shell.controls",
+                      summary="Grouped tool buttons with separators that flow onto rows when narrow.",
+                      states=("one row", "wrapped"), sizes=("narrow", "wide"), theming="card, line + button roles",
+                      build=_build_toolbar, **gemeinsam),
+        ShowcaseEntry("shell.workspaces", "WorkspaceHost", module="glide_shell.workspaces",
+                      summary="Product areas as workspaces: sidebar navigation, lazy views, actions, status, teardown.",
+                      states=("selected", "keep_alive", "rebuilt"), sizes=("sidebar 200 px",),
+                      theming="bg, card, muted + button roles", build=_build_workspaces, **gemeinsam),
+        ShowcaseEntry("shell.theme_provider", "color_roles", module="glide_shell.color_roles",
+                      summary="Colour-role contract: neutral light and dark themes, brand accent, WCAG check, provider.",
+                      states=("light", "dark", "brand accent"), sizes=("-",), theming="defines the roles",
+                      build=_build_theme_provider, **gemeinsam),
         ShowcaseEntry("shell.spellcheck", "spellcheck", module="glide_shell.spellcheck",
                       summary="Engine-neutral spell-checking contract: word tokens without URLs and code, "
                               "unknown words, suggestions, ignore list and personal dictionary.",

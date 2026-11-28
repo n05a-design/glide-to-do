@@ -1,6 +1,6 @@
 # Glide Shell – Startprompt für KI-Agenten
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.95 · Glide Shell 0.9.1 · Glide Bento 0.3.0
+Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.97 · Glide Shell 0.10.0 · Glide Bento 0.3.0
 
 Diese Datei gibt einer neuen KI-Sitzung in einem Schritt alles, was sie braucht, um mit der Glide Shell ein Projekt zu beginnen oder weiterzuführen. Den passenden Prompt unten unverändert in die Sitzung kopieren und die Platzhalter in `<…>` ersetzen. Die Datei liegt im Paket `glide_shell` und kommt mit jeder Übernahme ins Projekt.
 
@@ -61,7 +61,7 @@ Dann:
 2. Übernimm die Shell mit
    python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <projekt>/src/<app>
    (mit `--mit-bento`, wenn du Karten oder Raster brauchst) und prüfe sie mit `python3 -m glide_shell.selftest`
-   (erwartet: 13/13, auch mit `python3 -O`) und `python3 -m glide_shell.conformance src/<app>` (erwartet: conform).
+   (erwartet: 16/16, auch mit `python3 -O`) und `python3 -m glide_shell.conformance src/<app>` (erwartet: conform).
 3. Baue das Gerüst aus Abschnitt 3.3: Start über app_host.AppHost mit preflight, Controller-Klasse,
    Kürzel über bind_shortcuts, Schließweg über install_close, Rückgängig über command_history,
    Datenordner über runtime_paths, Texte aus de.json/en.json.
@@ -129,7 +129,7 @@ Then:
    design rules, QA report and maintenance matrix).
 2. Adopt the shell with
    python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py <project>/src/<app>
-   and check it with `python3 -m glide_shell.selftest` (expected: 13/13, also with `python3 -O`).
+   and check it with `python3 -m glide_shell.selftest` (expected: 16/16, also with `python3 -O`).
 3. Build the skeleton from section 3.3: start through app_host.AppHost with preflight, a controller class,
    shortcuts through bind_shortcuts, close path through install_close, undo through command_history,
    data folder through runtime_paths, texts from de.json/en.json.

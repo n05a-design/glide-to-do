@@ -14,7 +14,10 @@ Arbeitskopie und legt daneben `CHECKPOINT.json` mit:
 - Snapshot-Kennung = SHA-256 über Commit, Abweichungsprüfsumme und Manifest,
 - öffentliche Schnittstellen je Modul (Klassen und Funktionen ohne `_`),
 - Kompatibilitätsangaben (Shell-Mindestversion von Bento, `SHELL_COMPAT_SINCE`),
-- bekannte Einschränkungen.
+- bekannte Einschränkungen,
+- seit E02: die Übernahmewerkzeuge (`tools/`), den Schnittstellenvergleich zur
+  Fassung der Folgeprojekte (`interface_changes`, Standard Shell 0.6.2 aus
+  `793596f1`) und – mit `--ergebnisse DATEI` – die Prüfergebnisse des Laufs.
 
 Der Checkpoint enthält keine Nutzerdaten, Sicherungen, Berichte oder
 Referenzbilder; nur Framework-Quellen, ihre Verträge und den Lizenztext.
@@ -22,6 +25,7 @@ Referenzbilder; nur Framework-Quellen, ihre Verträge und den Lizenztext.
 
     python3 -B scripts/pflege/framework_checkpoint.py <Zielordner>
     python3 -B scripts/pflege/framework_checkpoint.py --pruefen <Zielordner>
+    python3 -B scripts/pflege/framework_checkpoint.py <Ziel> --basis 793596f1 --ergebnisse pruefung.json
 """
 from __future__ import annotations
 
@@ -40,10 +44,13 @@ SRC = REPO / "src" / "glide"
 FRAMEWORKS = ("glide_shell", "glide_bento")
 NAME = "CHECKPOINT.json"
 EINSCHRAENKUNGEN = [
-    "Lokaler Entwicklungscheckpoint, keine Veröffentlichung und kein Commit; Quelle ist ein uncommitteter Arbeitsbaum.",
+    "Lokaler Entwicklungscheckpoint, keine Veröffentlichung; Quelle kann ein uncommitteter Arbeitsbaum sein (siehe source_has_local_changes).",
     "Geprüft unter Windows 11 mit Tk 9 und künstlichen Daten; macOS und Linux nativ offen.",
-    "Shell vor 1.0: öffentliche Schnittstellen können sich in E02 noch kompatibel erweitern.",
+    "Shell vor 1.0: öffentliche Schnittstellen können sich bis zur Stabilisierung nach E03 noch kompatibel erweitern.",
+    "Neue Bausteine 0.10.0 (controls, workspaces, color_roles, settings_registry) sind in Glide erst teilweise produktiv (SearchField).",
 ]
+WERKZEUGE = ("scripts/pflege/shell_uebernehmen.py", "scripts/pflege/framework_checkpoint.py")
+BASIS = "793596f1"  # Shell 0.6.2 der Folgeprojekte (E01)
 
 
 def sha(pfad):
@@ -84,6 +91,55 @@ def schnittstellen(paket):
     return ergebnis
 
 
+def _api(text):
+    ergebnis = {}
+    for knoten in ast.parse(text).body:
+        if isinstance(knoten, (ast.FunctionDef, ast.ClassDef)) and not knoten.name.startswith("_"):
+            if isinstance(knoten, ast.ClassDef):
+                for teil in knoten.body:
+                    if isinstance(teil, ast.FunctionDef) and (not teil.name.startswith("_") or teil.name == "__init__"):
+                        a = teil.args
+                        ergebnis[f"{knoten.name}.{teil.name}"] = [x.arg for x in a.posonlyargs + a.args + a.kwonlyargs]
+                ergebnis.setdefault(knoten.name, [])
+            else:
+                a = knoten.args
+                ergebnis[knoten.name] = [x.arg for x in a.posonlyargs + a.args + a.kwonlyargs]
+    return ergebnis
+
+
+def schnittstellen_vergleich(basis):
+    """Neue, entfernte und geänderte öffentliche Namen der Shell gegenüber Commit `basis`."""
+    ergebnis = {"base_commit": None, "base_shell_version": None, "added_modules": [], "removed_modules": [],
+                "added": [], "removed": [], "changed": []}
+    try:
+        commit = git("rev-parse", basis).strip()
+        namen = git("ls-tree", "--name-only", commit, "src/glide/glide_shell/").split()
+    except subprocess.CalledProcessError:
+        ergebnis["error"] = f"commit {basis} not available"
+        return ergebnis
+    alt = {}
+    for name in namen:
+        if name.endswith(".py"):
+            alt[pathlib.PurePosixPath(name).stem] = _api(git("show", f"{commit}:./{name}"))
+    if "__init__" in alt:
+        kopf = git("show", f"{commit}:./src/glide/glide_shell/__init__.py")
+        for knoten in ast.parse(kopf).body:
+            if isinstance(knoten, ast.Assign) and any(getattr(z, "id", "") == "SHELL_VERSION" for z in knoten.targets):
+                ergebnis["base_shell_version"] = knoten.value.value
+    neu = {d.stem: _api(d.read_text(encoding="utf-8")) for d in sorted((SRC / "glide_shell").glob("*.py"))}
+    ergebnis["base_commit"] = commit
+    ergebnis["added_modules"] = sorted(set(neu) - set(alt))
+    ergebnis["removed_modules"] = sorted(set(alt) - set(neu))
+    for modul in sorted(set(alt) & set(neu)):
+        for name, parameter in alt[modul].items():
+            if name not in neu[modul]:
+                ergebnis["removed"].append(f"{modul}.{name}")
+            elif neu[modul][name][:len(parameter)] != parameter:
+                ergebnis["changed"].append(f"{modul}.{name}: {parameter} -> {neu[modul][name]}")
+        ergebnis["added"] += [f"{modul}.{n}" for n in sorted(set(neu[modul]) - set(alt[modul]))]
+    return ergebnis
+
+
 def manifest(ziel):
     eintraege = []
     for datei in sorted(p for p in ziel.rglob("*") if p.is_file() and p.name != NAME):
@@ -98,7 +154,7 @@ def kennung(commit, abw, eintraege):
     return h.hexdigest()
 
 
-def erstellen(ziel):
+def erstellen(ziel, basis=BASIS, ergebnisse=None):
     ziel = pathlib.Path(ziel).resolve()
     if ziel == REPO or REPO in ziel.parents or REPO.parents[1] in ziel.parents:
         raise SystemExit("Zielordner muss außerhalb der Arbeitskopie liegen")
@@ -111,6 +167,10 @@ def erstellen(ziel):
     if lauf.returncode != 0:
         shutil.rmtree(ziel, ignore_errors=True)
         raise SystemExit("Übernahme fehlgeschlagen:\n" + lauf.stdout[-2000:] + lauf.stderr[-2000:])
+    werkzeuge = ziel / "tools"
+    werkzeuge.mkdir()
+    for rel in WERKZEUGE:
+        shutil.copy2(REPO / rel, werkzeuge / pathlib.Path(rel).name)
     commit = git("rev-parse", "HEAD").strip()
     abw, lokal, neu = abweichung()
     eintraege = manifest(ziel)
@@ -131,7 +191,14 @@ def erstellen(ziel):
         "files": eintraege,
         "public_interfaces": {**schnittstellen(SRC / "glide_shell"), **schnittstellen(SRC / "glide_bento")},
         "contracts": ["src/glide_shell/DESIGN_RICHTLINIEN.md", "src/glide_shell/KI_MIGRATION_BESTEHENDE_ANWENDUNG.md",
-                      "src/glide_shell/AI_MIGRATION_EXISTING_APPS.md"],
+                      "src/glide_shell/AI_MIGRATION_EXISTING_APPS.md", "src/glide_shell/AKTUALISIERUNG.md",
+                      "src/glide_shell/UPDATING.md", "src/glide_bento/BENTO_DESIGN_CONTRACT.md"],
+        "tools": [f"tools/{pathlib.Path(rel).name}" for rel in WERKZEUGE],
+        "compatibility": {"shell_compat_since": konstante(SRC / "glide_shell/__init__.py", "SHELL_COMPAT_SINCE"),
+                          "bento_requires_shell": konstante(SRC / "glide_bento/__init__.py", "SHELL_MIN_VERSION"),
+                          "data_formats_changed": False},
+        "interface_changes": schnittstellen_vergleich(basis) if basis else None,
+        "verification": json.loads(pathlib.Path(ergebnisse).read_text(encoding="utf-8")) if ergebnisse else None,
         "known_limitations": EINSCHRAENKUNGEN,
     }
     daten["snapshot_id"] = kennung(commit, abw, eintraege)
@@ -157,6 +224,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("ziel")
     parser.add_argument("--pruefen", action="store_true")
+    parser.add_argument("--basis", default=BASIS, help="Commit der Shell-Fassung der Folgeprojekte für den Schnittstellenvergleich")
+    parser.add_argument("--ergebnisse", help="JSON-Datei mit Prüfergebnissen, die in CHECKPOINT.json aufgenommen werden")
     args = parser.parse_args(argv)
     if args.pruefen:
         daten, fehler = pruefen(args.ziel)
@@ -165,7 +234,7 @@ def main(argv=None):
         print(f"Checkpoint {daten['snapshot_id'][:16]} · Shell {daten['shell_version']} · Bento {daten['bento_version']} · "
               + ("unverändert" if not fehler else f"{len(fehler)} Abweichung(en)"))
         return 1 if fehler else 0
-    daten = erstellen(args.ziel)
+    daten = erstellen(args.ziel, args.basis, args.ergebnisse)
     print(f"Checkpoint {daten['snapshot_id'][:16]} · Shell {daten['shell_version']} · Bento {daten['bento_version']} · "
           f"Commit {daten['source_commit'][:12]} · lokale Framework-Abweichungen: {'ja' if daten['source_has_local_changes'] else 'nein'} · "
           f"{len(daten['files'])} Dateien")

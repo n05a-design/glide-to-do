@@ -108,7 +108,7 @@ class Hinweise(unittest.TestCase):
     def test_budget_und_sensible_inhalte(self):
         b = aw.budget("eins zwei drei")
         self.assertEqual((b["chars"], b["words"], b["tokens_estimate"]), (14, 3, 4))
-        funde = {a for a, _ in aw.sensitive_findings("key sk-abcdefghijklmnopqrstu und C:\\Users\\Tim\\x und password=hunter22")}
+        funde = {a for a, _ in aw.sensitive_findings("key sk-abcdefghijklmnopqrstu und /home/probe/x und password=hunter22")}
         self.assertEqual(funde, {"api_key", "private_path", "secret_assignment"})
         self.assertEqual(aw.sensitive_findings("harmloser Text"), [])
 

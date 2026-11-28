@@ -18,6 +18,11 @@ when used) next to the host's own modules. Rules:
 4. No import cycle between framework modules.
 5. The Bento copy's `SHELL_MIN_VERSION` is compatible with the shell copy
    (`compat.compatible` with `SHELL_COMPAT_SINCE`).
+6. Since 0.10.0 (rule `host-api`): names a host imports from a shell module
+   (`from glide_shell.app_host import AppHost`) exist in that module and are
+   public (no leading underscore). This catches hosts written against another
+   shell version before they fail at import time, for example after an update
+   of a copied shell.
 
 Findings are `Finding(rule, path, line, message)` tuples with English messages
 (D96). An empty list means conform. Native Tk widgets inside host modules are
@@ -70,6 +75,44 @@ def public_shell_modules(shell_dir):
         if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets):
             return {e.value for e in node.value.elts if isinstance(e, ast.Constant)}
     return set()
+
+
+def module_names(path):
+    """Public top-level names (functions, classes, assignments) of a module file."""
+    names = set()
+    for node in _tree(path).body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.add(node.name)
+        elif isinstance(node, ast.Assign):
+            names.update(t.id for t in node.targets if isinstance(t, ast.Name))
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            names.add(node.target.id)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            names.update((a.asname or a.name).split(".")[0] for a in node.names)
+    return {n for n in names if not n.startswith("_")}
+
+
+def host_api_findings(shell_dir, path):
+    """Rule `host-api` for one host file (see module docstring)."""
+    findings, cache = [], {}
+    for node in ast.walk(_tree(path)):
+        if not (isinstance(node, ast.ImportFrom) and node.level == 0 and node.module
+                and node.module.startswith(SHELL + ".") and node.module.count(".") == 1):
+            continue
+        modul = node.module.split(".")[1]
+        datei = Path(shell_dir) / f"{modul}.py"
+        if not datei.is_file():
+            if not modul.startswith("_"):  # private modules are reported by rule `public-api`
+                findings.append(Finding("host-api", str(path), node.lineno,
+                                        f"{node.module} does not exist in this shell copy"))
+            continue
+        if modul not in cache:
+            cache[modul] = module_names(datei)
+        for alias in node.names:
+            if alias.name != "*" and alias.name not in cache[modul]:
+                findings.append(Finding("host-api", str(path), node.lineno,
+                                        f"{node.module}.{alias.name} is not a public name of this shell copy"))
+    return findings
 
 
 def _resolve(package, name):
@@ -152,6 +195,7 @@ def check_project(source_root, host_modules=None):
             parts = name.split(".")
             if parts[0] == SHELL and len(parts) > 1 and (parts[1].startswith("_") or parts[1] not in public):
                 findings.append(Finding("public-api", str(path), line, f"{name} is not a public shell module"))
+        findings.extend(host_api_findings(shell_dir, path))
     return findings
 
 

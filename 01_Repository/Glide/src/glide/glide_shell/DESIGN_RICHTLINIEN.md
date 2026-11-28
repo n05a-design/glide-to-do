@@ -1,6 +1,6 @@
 # Portabler Designvertrag für Folgeprojekte der Glide Shell
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.9.1 · Lizenz MPL-2.0
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0 · Lizenz MPL-2.0
 
 Dieses Dokument definiert den verbindlichen, transportablen Gestaltungs- und Interaktionsvertrag für alle Anwendungen, die die **Glide Shell** als UI-Fundament einsetzen. Es ist offline-fähig und unabhängig vom Glide-Hauptrepository nutzbar.
 
@@ -76,6 +76,11 @@ Die Glide Shell stellt neutrale Mechanismen bereit, die der Host mit seinen spez
 | `check_project` | `conformance` | Prüft Schichten, öffentliche Module, Zyklen und Versionen eines Hosts (seit 0.7.0). |
 | `misspelled` / `LayeredChecker` | `spellcheck` | Rechtschreibvertrag: Host liefert Engine und Wörterbuch, markiert Befunde mit eigener Farbe (seit 0.8.0). |
 | `ShowcaseRegistry` / `shell_entries` | `showcase` | Galerie-Register: jede allgemeine Komponente mit Builder, Zuständen und Einsatzort (seit 0.7.0). |
+| `ThemeProvider` / `validate` / `with_accent` | `color_roles` | Farbrollen (14 Kernrollen im Glide-Vokabular), neutrale Hell-/Dunkelthemen, eigene Markenfarbe, WCAG-2.2-AA-Prüfung, Benachrichtigung bei Themenwechsel (seit 0.10.0). |
+| `SettingsRegistry` / `shell_settings` | `settings_registry` | Einstellungen beschreiben, prüfen, gruppieren; Speicherformat bleibt beim Host (seit 0.10.0). |
+| `ShellButton` / `SearchField` / `Tooltip` / `Toolbar` | `controls` | Allgemeine Knöpfe (feste Größen 28/34/42 px, sichtbarer Fokus), Suchfeld, Tooltip, gruppierte Werkzeugleiste mit Umbruch (seit 0.10.0). |
+| `WorkspaceHost` / `Workspace` | `workspaces` | Arbeitsbereiche des Hosts mit Navigation, Statuszeile, Kürzeln und Abbau; kein Datenmodell (seit 0.10.0). |
+| `add_shutdown` / `shutdown` | `app_host` | Geordnetes Beenden: Aufräumschritte rückwärts, danach Zeitgeber und Fenster (seit 0.10.0). |
 
 ---
 
@@ -147,7 +152,9 @@ Eine Abweichung vom gemeinsamen Standard braucht einen Eintrag im Projekt mit: b
 
 ### 5.6 Noch nicht in der Shell
 
-Allgemeine Knöpfe, Eingabe- und Suchfelder, Tooltips, Werkzeugleisten und der Theme-Provider liegen in Glide noch in der Fachanwendung. Für diese Teile gibt es noch keine Shell-Schnittstelle, und sie sind nicht als nutzbar dokumentiert. Ein Folgeprojekt übernimmt bis dahin die Regeln aus Abschnitt 2 und meldet seinen Bedarf an die Shell. Eine eigene allgemeine Komponente baut es dafür nicht.
+Seit 0.10.0 (E02) liegen allgemeine Knöpfe, Suchfelder, Tooltips, Werkzeugleisten, der Theme-Provider (`color_roles`), ein Einstellungsregister und Arbeitsbereiche in der Shell (Abschnitt 3). Folgeprojekte nutzen diese statt eigener allgemeiner Fassungen. Glide selbst setzt bislang nur `SearchField` produktiv ein; seine älteren eigenen Knöpfe und Leisten bleiben bis zu einer gezielten Ablösung bestehen und sind kein Vorbild für Folgeprojekte.
+
+Noch nicht in der Shell: Tabellen und Listen mit Sortierung und Filter, segmentierte Auswahl, Inline-Eingabe, aufklappbare Abschnitte, Fortschritts-, Datei- und Einstellungsdialoge als fertige Bausteine. Bedarf meldet ein Folgeprojekt über den Rückmeldevertrag (Entwicklungsplan §4.8.2); eine eigene allgemeine Komponente baut es dafür nicht.
 
 ### Aktionsgriff und Ablageanzeige (Shell 0.9.0)
 

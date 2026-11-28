@@ -64,6 +64,15 @@ import urllib.parse
 REPO = pathlib.Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide" / "glide_shell"
 LIZENZ = REPO.parents[1] / "LICENSE"
+# E02: Liegt das Werkzeug als `tools/shell_uebernehmen.py` in einem Framework-Checkpoint
+# (`CHECKPOINT.json` daneben), ist der eingefrorene Checkpoint die Quelle – nicht ein
+# sich ändernder Glide-Arbeitsbaum. Vor jeder Nutzung werden alle Dateien gegen das
+# Checkpoint-Manifest geprüft.
+CHECKPOINT = pathlib.Path(__file__).resolve().parent.parent
+CHECKPOINT_MODUS = (CHECKPOINT / "CHECKPOINT.json").is_file() and (CHECKPOINT / "src" / "glide_shell").is_dir()
+if CHECKPOINT_MODUS:
+    QUELLE = CHECKPOINT / "src" / "glide_shell"
+    LIZENZ = QUELLE / "LICENSE"
 PAKET = "glide_shell"
 MANIFEST = "SHELL_MANIFEST.json"
 LIZENZDATEI = "LICENSE"
@@ -116,13 +125,27 @@ def _git(*argumente, text=True):
         return None
 
 
+def _checkpoint_daten():
+    """CHECKPOINT.json nach Prüfung aller Dateien; QuellFehler bei Abweichung."""
+    daten = json.loads((CHECKPOINT / "CHECKPOINT.json").read_text(encoding="utf-8"))
+    for eintrag in daten.get("files") or []:
+        datei = CHECKPOINT / eintrag["path"]
+        if not datei.is_file() or sha(datei) != eintrag["sha256"]:
+            raise QuellFehler(f"Checkpoint {str(daten.get('snapshot_id'))[:16]}: {eintrag['path']} fehlt oder ist verändert")
+    return daten
+
+
 def quell_commit():
+    if CHECKPOINT_MODUS:
+        return _checkpoint_daten().get("source_commit")
     lauf = _git("rev-parse", "HEAD")
     return (lauf.stdout.strip() or None) if lauf and lauf.returncode == 0 else None
 
 
 def quelle_unveraendert():
     """True, wenn `glide_shell` und der Lizenztext dem Quell-Commit entsprechen; None ohne Git."""
+    if CHECKPOINT_MODUS:
+        return not _checkpoint_daten().get("source_has_local_changes", True)
     lauf = _git("status", "--porcelain", "--untracked-files=all", "--", str(QUELLE), str(LIZENZ))
     return not lauf.stdout.strip() if lauf and lauf.returncode == 0 else None
 
@@ -138,6 +161,10 @@ def _quelle_arbeitskopie(unsauber_erlauben):
                           "aus einem Commit übernehmen oder mit --unsauber-erlauben bewusst übernehmen")
     dateien = {p.name: p.read_bytes() for p in sorted(QUELLE.iterdir()) if p.is_file() and p.suffix in ANTEILE}
     dateien[LIZENZDATEI] = LIZENZ.read_bytes()
+    if CHECKPOINT_MODUS:
+        daten = _checkpoint_daten()
+        return {"dateien": dateien, "commit": daten.get("source_commit"), "unveraendert": unveraendert,
+                "system": daten.get("glide_system_version"), "snapshot": daten.get("snapshot_id")}
     system = REPO / "GLIDE_SYSTEM_VERSION"
     return {"dateien": dateien, "commit": quell_commit(), "unveraendert": unveraendert,
             "system": system.read_text(encoding="utf-8").strip() if system.is_file() else None}
@@ -170,6 +197,8 @@ def _quelle_commit(rev):
 
 def quelle_lesen(commit=None, unsauber_erlauben=False):
     """Liefert die zu übernehmende Quelle; QuellFehler, wenn sie fehlt, beschädigt oder unsauber ist."""
+    if commit and CHECKPOINT_MODUS:
+        raise QuellFehler("--commit ist im Checkpoint nicht verfügbar; der Checkpoint ist die Quelle")
     quelle = _quelle_commit(commit) if commit else _quelle_arbeitskopie(unsauber_erlauben)
     try:
         version = version_aus_text(quelle["dateien"]["__init__.py"].decode("utf-8"))
@@ -310,7 +339,11 @@ def pruefen(ordner, quelle=None):
     return (manifest if not fehler else None), zeilen
 
 
-def _verweigern(ordner, manifest, fehler, quelle):
+def _semver(text):
+    return tuple(int(teil) for teil in text.split("."))
+
+
+def _verweigern(ordner, manifest, fehler, quelle, quelle_version=None):
     """Gründe, die Übernahme ohne `--ersetzen` abzulehnen; leer, wenn sie gefahrlos ist."""
     vorhanden = [p.name for p in ordner.iterdir() if p.name not in (MANIFEST, "__pycache__")]
     hinweis = " – mit --ersetzen bewusst überschreiben"
@@ -321,7 +354,13 @@ def _verweigern(ordner, manifest, fehler, quelle):
         return [f"{ordner}: Ordner ist nicht leer und hat kein {MANIFEST}{hinweis}"] if vorhanden else []
     if fehler:
         return [f"{MANIFEST}: ungültig ({f}){hinweis}" for f in fehler]
-    gruende = [f"{name}: {art} gegenüber {MANIFEST}{hinweis}" for name, art in lokale_abweichungen(ordner, manifest)]
+    gruende = []
+    vorhanden_version = manifest.get("shell_version")
+    if quelle_version and isinstance(vorhanden_version, str) and SEMVER.fullmatch(vorhanden_version) \
+            and _semver(vorhanden_version) > _semver(quelle_version):
+        gruende.append(f"{MANIFEST}: Kopie {vorhanden_version} ist neuer als die Quelle {quelle_version} "
+                       f"(Herabstufung){hinweis}")
+    gruende += [f"{name}: {art} gegenüber {MANIFEST}{hinweis}" for name, art in lokale_abweichungen(ordner, manifest)]
     gruende += [f"{name}: eigene Datei ohne Manifesteintrag, die Shell liefert jetzt dieselbe Datei{hinweis}"
                 for name in fremde_kollisionen(ordner, manifest, quelle)]
     return gruende
@@ -740,7 +779,7 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
     ordner.mkdir(parents=True, exist_ok=True)
     manifest, fehler = manifest_lesen(ordner)
     if not ersetzen:
-        gruende = _verweigern(ordner, manifest, fehler, quelle["hashes"])
+        gruende = _verweigern(ordner, manifest, fehler, quelle["hashes"], quelle.get("version"))
         if gruende:
             if not ordner_existierte and not any(ordner.iterdir()):
                 ordner.rmdir()
@@ -807,6 +846,8 @@ def uebernehmen(ordner, ersetzen=False, quelle=None, agenten_bootstrap=False, pr
         daten = {"paket": PAKET, "shell_version": quelle["version"], "glide_system_version": quelle["system"],
                  "quell_commit": quelle["commit"], "quelle_unveraendert": quelle["unveraendert"],
                  "lizenz": "MPL-2.0", "dateien": quelle["hashes"]}
+        if quelle.get("snapshot"):
+            daten["framework_snapshot"] = quelle["snapshot"]
         schreiben_atomar(ordner / MANIFEST, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
 
         # Schritt 5: Verifizierung des Ergebnisses
@@ -921,7 +962,7 @@ def _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=False, projekt_root=None
 # SHA-256 jeder Datei. Vor dem Schreiben prüft das Werkzeug mit `glide_shell.compat` der Quelle, ob die
 # übernommene Shell zu `SHELL_MIN_VERSION` passt; eine inkompatible Kombination wird nicht angelegt.
 
-BENTO_QUELLE = REPO / "src" / "glide" / "glide_bento"
+BENTO_QUELLE = (CHECKPOINT / "src" / "glide_bento") if CHECKPOINT_MODUS else REPO / "src" / "glide" / "glide_bento"
 BENTO_PAKET = "glide_bento"
 BENTO_MANIFEST = "BENTO_MANIFEST.json"
 
@@ -1040,12 +1081,118 @@ def bento_uebernehmen(shell_ordner, quelle, ersetzen=False):
     return OK, [f"Bento {quelle['version']} nach {ziel} übernommen ({text})"]
 
 
+# --- E02: Sicherung vor einer Aktualisierung, Rückkehr und Host-Vertrag (Shell 0.10.0) -----------------------
+#
+# `--sicherung DIR` legt vor dem Schreiben eine vollständige Kopie der vorhandenen `glide_shell`- und
+# `glide_bento`-Ordner mit `SICHERUNG.json` (Versionen, SHA-256 je Datei) unter DIR an. `--zurueck SICHERUNG`
+# prüft diese Prüfsummen und stellt genau diesen Stand wieder her; Dateien des Hosts, die in keinem Manifest
+# stehen, bleiben unberührt. Vor jeder Übernahme prüft das Werkzeug mit der Regel `host-api` der
+# Quell-Konformitätsprüfung, ob Host-Module Namen aus Shell-Modulen importieren, die die neue Fassung nicht
+# hat; dann wird ohne `--ersetzen` nicht übernommen.
+
+SICHERUNG = "SICHERUNG.json"
+
+
+def _conformance_modul():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("_glide_shell_conformance_quelle", QUELLE / "conformance.py")
+    modul = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modul)
+    return modul
+
+
+def host_vertrag(ordner, shell_dir=QUELLE):
+    """Befunde der Regel `host-api` für die Host-Module neben `ordner` gegen die Shell unter `shell_dir`."""
+    modul = _conformance_modul()
+    host = sorted(list(ordner.parent.glob("*.py")) + list(ordner.parent.glob("*.pyw")))
+    befunde = []
+    for datei in host:
+        try:
+            befunde.extend(modul.host_api_findings(shell_dir, datei))
+        except SyntaxError as fehler:
+            befunde.append(modul.Finding("host-api", str(datei), getattr(fehler, "lineno", 0) or 0,
+                                         f"host module cannot be parsed ({fehler.msg})"))
+    return befunde
+
+
+def _dateien_mit_hash(ordner):
+    return {p.name: sha(p) for p in sorted(ordner.iterdir()) if p.is_file() and not p.is_symlink()}
+
+
+def sicherung_anlegen(ordner, basis):
+    """Vorhandene Shell- und Bento-Kopie nach `basis/<Zeitstempel>` sichern; liefert den Sicherungsordner."""
+    import datetime as _dt
+    basis = pathlib.Path(basis).expanduser().resolve()
+    if ordner.resolve() in basis.parents or basis == ordner.resolve() or ordner.parent.resolve() == basis:
+        raise ValueError("Sicherungsordner darf nicht im Zielordner liegen")
+    stempel = _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    ziel = basis / f"framework-{stempel}"
+    nummer = 1
+    while ziel.exists():
+        nummer += 1
+        ziel = basis / f"framework-{stempel}-{nummer}"
+    daten = {"format": "glide-framework-sicherung", "version": 1, "pakete": {}}
+    for paket, manifest_name, version_schluessel in ((PAKET, MANIFEST, "shell_version"),
+                                                      (BENTO_PAKET, BENTO_MANIFEST, "bento_version")):
+        quelle_dir = ordner.parent / paket
+        if not quelle_dir.is_dir():
+            continue
+        shutil.copytree(quelle_dir, ziel / paket, ignore=shutil.ignore_patterns("__pycache__"), symlinks=True)
+        version = None
+        try:
+            version = json.loads((quelle_dir / manifest_name).read_text(encoding="utf-8")).get(version_schluessel)
+        except (OSError, ValueError):
+            pass
+        daten["pakete"][paket] = {"version": version, "dateien": _dateien_mit_hash(ziel / paket)}
+    if not daten["pakete"]:
+        raise ValueError(f"{ordner}: keine Framework-Kopie zum Sichern")
+    for paket, eintrag in daten["pakete"].items():
+        if _dateien_mit_hash(ordner.parent / paket) != eintrag["dateien"]:
+            shutil.rmtree(ziel, ignore_errors=True)
+            raise RuntimeError(f"Sicherung von {paket} weicht vom Original ab")
+    schreiben_atomar(ziel / SICHERUNG, (json.dumps(daten, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+    return ziel
+
+
+def sicherung_zurueckspielen(sicherung, ordner):
+    """Stand aus `sicherung` nach geprüften Prüfsummen wiederherstellen; liefert Meldungen."""
+    sicherung = pathlib.Path(sicherung).expanduser().resolve()
+    daten = json.loads((sicherung / SICHERUNG).read_text(encoding="utf-8"))
+    if daten.get("format") != "glide-framework-sicherung":
+        raise ValueError(f"{sicherung}: keine Framework-Sicherung")
+    for paket, eintrag in daten["pakete"].items():
+        if _dateien_mit_hash(sicherung / paket) != eintrag["dateien"]:
+            raise ValueError(f"{sicherung / paket}: Sicherung beschädigt oder verändert – nichts wiederhergestellt")
+    meldungen = []
+    for paket, eintrag in daten["pakete"].items():
+        ziel = ordner.parent / paket
+        ziel.mkdir(parents=True, exist_ok=True)
+        manifest_name = MANIFEST if paket == PAKET else BENTO_MANIFEST
+        aktuell = {}
+        try:
+            aktuell = json.loads((ziel / manifest_name).read_text(encoding="utf-8")).get("dateien") or {}
+        except (OSError, ValueError):
+            pass
+        for name in aktuell:
+            if name not in eintrag["dateien"] and (ziel / name).is_file():
+                (ziel / name).unlink()
+        for name in eintrag["dateien"]:
+            schreiben_atomar(ziel / name, (sicherung / paket / name).read_bytes())
+        if any(sha(ziel / n) != h for n, h in eintrag["dateien"].items()):
+            raise RuntimeError(f"{ziel}: Wiederherstellung unvollständig")
+        meldungen.append(f"{paket} {eintrag.get('version') or '?'} aus {sicherung} wiederhergestellt")
+    return meldungen
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="glide_shell in ein Folgeprojekt übernehmen oder eine Kopie prüfen")
     parser.add_argument("ziel", help="Quellordner des Folgeprojekts (oder dessen glide_shell-Ordner)")
     gruppe = parser.add_mutually_exclusive_group()
     gruppe.add_argument("--pruefen", action="store_true", help="nur prüfen, nichts schreiben")
     gruppe.add_argument("--ersetzen", action="store_true", help="lokale Änderungen bewusst überschreiben")
+    gruppe.add_argument("--zurueck", metavar="SICHERUNG", help="Stand aus einer mit --sicherung angelegten Sicherung wiederherstellen")
+    parser.add_argument("--sicherung", metavar="ORDNER",
+                        help="vorhandene Shell-/Bento-Kopie vor dem Schreiben vollständig nach ORDNER sichern (Rückkehr mit --zurueck)")
     parser.add_argument("--commit", metavar="REV", help="Shell aus diesem Commit statt aus der Arbeitskopie lesen")
     parser.add_argument("--unsauber-erlauben", action="store_true",
                         help="lokal veränderte Shell-Quelle bewusst übernehmen (im Manifest vermerkt)")
@@ -1061,6 +1208,15 @@ def main(argv=None):
         print("Ziel liegt im Glide-Quellbaum; Folgeprojekte übernehmen die Shell in ihren eigenen Ordner")
         return VERWEIGERT
 
+    if args.zurueck:
+        try:
+            for zeile in sicherung_zurueckspielen(args.zurueck, ordner):
+                print(zeile)
+        except (OSError, ValueError, RuntimeError) as fehler:
+            print(f"Rückkehr abgewiesen: {fehler}")
+            return VERWEIGERT
+        return OK
+
     projekt_root_dir = None
     if args.agenten_bootstrap or args.projekt_root:
         try:
@@ -1074,9 +1230,15 @@ def main(argv=None):
     except QuellFehler as fehler:
         print(f"Quelle unbrauchbar: {fehler}")
         return QUELLFEHLER
+    befunde = host_vertrag(ordner) if args.commit is None else []
     if args.pruefen:
         code = _pruefen_ausgeben(ordner, quelle, agenten_bootstrap=args.agenten_bootstrap,
                                  projekt_root=projekt_root_dir)
+        if befunde:
+            print(f"Host-Vertrag gegen Quelle {quelle['version']}: {len(befunde)} Befund(e)")
+            for befund in befunde:
+                print(f"  {befund.path}:{befund.line}: {befund.message}")
+            code = ABWEICHUNG
         if args.mit_bento:
             manifest, zeilen = bento_pruefen(ordner)
             print(f"Bento-Kopie {manifest.get('bento_version') if manifest else 'ohne gültiges Manifest'}")
@@ -1085,6 +1247,18 @@ def main(argv=None):
             if not manifest or any(art != "aktuell" for _, art in zeilen):
                 code = ABWEICHUNG
         return code
+    if befunde and not args.ersetzen:
+        print(f"Host-Module nutzen Namen, die Shell {quelle['version']} nicht hat – erst den Host anpassen "
+              "oder mit --ersetzen bewusst übernehmen:")
+        for befund in befunde:
+            print(f"  {befund.path}:{befund.line}: {befund.message}")
+        return VERWEIGERT
+    if args.sicherung and (ordner.is_dir() or (ordner.parent / BENTO_PAKET).is_dir()):
+        try:
+            print(f"Sicherung angelegt: {sicherung_anlegen(ordner, args.sicherung)} (Rückkehr mit --zurueck)")
+        except (OSError, ValueError, RuntimeError) as fehler:
+            print(f"Sicherung fehlgeschlagen, nichts übernommen: {fehler}")
+            return ABWEICHUNG
     code, meldungen = uebernehmen(ordner, ersetzen=args.ersetzen, quelle=quelle,
                                   agenten_bootstrap=args.agenten_bootstrap,
                                   projekt_root=projekt_root_dir)

@@ -224,7 +224,10 @@ with tempfile.TemporaryDirectory(prefix='glide-release36-') as tmp, tempfile.Tem
     assert app.read_foreign_lock(str(foreign_path)) == foreign
     foreign['started_at'] = (datetime.now().astimezone()-timedelta(days=3)).isoformat()
     foreign_path.write_text(json.dumps(foreign),encoding='utf-8')
-    assert app.read_foreign_lock(str(foreign_path)) is None
+    # Seit Teil 05B wird eine veraltete Fremdsperre nicht still übernommen: Sie gilt als
+    # belegt (schreibgeschützt), bis der Nutzer die Übernahme bestätigt.
+    veraltet = app.read_foreign_lock(str(foreign_path))
+    assert veraltet and veraltet.get("stale") and veraltet.get("host") == 'ANDERER-RECHNER', veraltet
     try:
         app.change_data_folder(target, move_existing=True)
     except ValueError:

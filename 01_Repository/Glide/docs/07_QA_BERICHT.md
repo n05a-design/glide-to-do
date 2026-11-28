@@ -1,3 +1,24 @@
+## Ecosystem E02: Framework-Härtung, Shell 0.10.0 (28.11.2026)
+
+Geprüfter Stand: Zweig `claude/glide-sync-master-auftrag-ef27c1` @ `f8b89359` plus lokaler, uncommitteter E02-Stand; CI-Grundstufe in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Python 3.15, Tk 9.0, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung, kein Commit.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| Befund A: GitHub-CI des E01-Commits `f8b89359` rot – Datenschutzprüfung (Testpfade `C:\Users\…` in `test_ki_arbeitsablauf.py`, `test_ai_workspace.py`) | Testdaten auf `/home/probe/…` und `D:\Projekte\…` umgestellt; `pfade_bereinigen.py --pruefen` über alle Dateien | behoben (lokal unentdeckt, weil die Dateien vor E01 unversioniert waren) |
+| Befund B: GitHub-CI `f8b89359` rot – `test_release36` erwartete, dass eine 3 Tage alte Fremdsperre ignoriert wird | Erwartung an den 05B-Vertrag angepasst (veraltet = belegt bis zur Bestätigung) | behoben, PASSED |
+| Befund C: `test_arbeitsmodi` (`nebenansicht_einstiege`, `verweisvorschau_grenzen`) prüften den Vertrag vor NAV-03 (Zeichnung nicht in der Nebenansicht) | Ausschlussfall auf Galerie umgestellt | behoben, beide Fälle PASSED |
+| Shell-Selbsttest | `python -m glide_shell.selftest` | PASSED 16/16 (neu: Farbrollen/Einstellungen, Bedienelemente, Arbeitsbereiche; geordnetes Beenden im App-Host) |
+| Bento-Selbsttest, Konformität | `python -m glide_bento.selftest`, `python -m glide_shell.conformance src/glide` | PASSED 16/16, conform |
+| Schnittstellenvertrag | `test_shell_importregel.py` (Signaturen der neuen Module), `test_shell_konformitaet.py` (Regel `host-api`, Version 0.10.0, kompatibel seit 0.6.2) | PASSED 12 / 17 |
+| T375 Framework-Checkpoint | `test_framework_checkpoint.py` | PASSED: Manifest, Import-Isolation, Selbsttests aus der Kopie, Schnittstellenvergleich 0.6.2 (nichts entfernt/geändert), Übernahme aus `tools/` mit Snapshot im Manifest, manipulierter Checkpoint abgewiesen, Referenzhosts A/B/C |
+| T376 Aktualisierung | `tests/tools/test_framework_aktualisierung.py` | PASSED: 0.6.2 (`793596f1`) → 0.10.0 mit Sicherung, Host-Vertrag, Herabstufung, fehlende/manipulierte Dateien, Bento neben 0.6.2 abgewiesen, Rückkehr bytegenau, veränderte Sicherung abgewiesen |
+| Unit-Suite, Galerie, KI-Arbeitsablauf (SearchField produktiv), Vollwiederherstellung, UI/UX-Paket, Arbeitsmodi, Sicherungszentrale, Modal-/Abbau-/Lebensdauerverträge, Startwege | Bereichs- und Regressionssuiten | PASSED (1480 Unit-Tests); `test_modalvertrag` einmal unter Parallellast rot (`fokus_verschachtelt`), danach 3 von 3 grün |
+| `test_shell_uebernahme.py` | Werkzeugtest | 37/38, 1 Fehler WinError 5 beim Löschen eines Temp-Ordners – tritt mit dem unveränderten Werkzeug ebenso auf (Windows-Sperre); Linux-CI maßgeblich |
+| Systemregister, Standprüfung | `test_glide_system.py`, `standpruefung.py` | PASSED (V1.97) |
+| CI-Grundstufe | `ci_grundstufe.py --protokoll` | PASSED; Lieferstand als zulässiger Hinweis (26 Abweichungen zu `07`) |
+| Checkpoint für E03 | `framework_checkpoint.py <Ablage> --ergebnisse …`, `--pruefen` | `35018623631ab6ad52415ffc4d8604b80428c33235aee99bb745e36b074a7856` · Shell 0.10.0 · Bento 0.3.0 · 53 Dateien · unverändert; Ablage `%USERPROFILE%\gq\e02\checkpoint` |
+| Nicht ausgeführt | eingefrorene Vollprüfung (D51), macOS, Linux nativ, STEPS und Chess & Chains selbst (E03) | offen |
+
 ## Ecosystem E01: Konsolidierung und Framework-Checkpoint (28.11.2026)
 
 Geprüfter Stand: Zweig `claude/glide-sync-master-auftrag-ef27c1` @ `dfcbae7f` plus lokaler, uncommitteter Arbeitsstand (Sicherung `e01-start`); CI-Grundstufe in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Tk 9, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung, kein Commit.

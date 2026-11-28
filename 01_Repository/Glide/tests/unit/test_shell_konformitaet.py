@@ -21,7 +21,8 @@ from glide_shell.showcase import SHELL_COMPONENTS, ShowcaseEntry, ShowcaseRegist
 
 class Versionen(unittest.TestCase):
     def test_paketwerte(self):
-        self.assertEqual(glide_shell.SHELL_VERSION, "0.9.1", "erwartete Fassung nach Teil 05B: Vertrag Griffachse (unabhängig vom Paketwert gepflegt)")
+        self.assertEqual(glide_shell.SHELL_VERSION, "0.10.0", "erwartete Fassung nach E02: allgemeine Bedienelemente, Farbrollen, Einstellungen, Arbeitsbereiche (unabhängig vom Paketwert gepflegt)")
+        self.assertEqual(glide_shell.SHELL_COMPAT_SINCE, "0.6.2", "E02 erweitert nur kompatibel; Folgeprojekte mit 0.6.2 bleiben gültig")
         self.assertTrue(compat.compatible(glide_shell.SHELL_VERSION, "0.7.0", glide_shell.SHELL_COMPAT_SINCE))
 
     def test_regeln(self):
@@ -101,6 +102,20 @@ class Konformitaet(unittest.TestCase):
         (self.temp / "host.py").write_text("from glide_shell import _intern\nimport glide_shell.geheim\n", encoding="utf-8")
         self.assertEqual([f.rule for f in conformance.check_project(self.temp)], ["public-api", "public-api"])
 
+    def test_host_api_fehlender_name(self):
+        """E02, Regel host-api: ein Host, der gegen eine andere Shell-Fassung geschrieben ist, fällt vor dem Import auf."""
+        (self.temp / "host.py").write_text("from glide_shell.app_host import AppHost, gibt_es_nicht\n"
+                                           "from glide_shell.controls import ShellButton, _font\n", encoding="utf-8")
+        befunde = conformance.check_project(self.temp)
+        self.assertEqual(sorted((f.rule, f.message.split(" ")[0]) for f in befunde),
+                         [("host-api", "glide_shell.app_host.gibt_es_nicht"), ("host-api", "glide_shell.controls._font")])
+
+    def test_host_api_aeltere_kopie(self):
+        """Ein Host mit 0.10.0-Bausteinen gegen eine Kopie ohne `controls.py` meldet das fehlende Modul."""
+        (self.temp / "host.py").write_text("from glide_shell.controls import ShellButton\n", encoding="utf-8")
+        (self.temp / "glide_shell" / "controls.py").unlink()
+        self.assertIn("host-api", self.regeln())
+
     def test_zyklus(self):
         with open(self.temp / "glide_bento" / "tokens.py", "a", encoding="utf-8") as datei:
             datei.write("\nfrom . import grid\n")
@@ -109,7 +124,7 @@ class Konformitaet(unittest.TestCase):
     def test_inkompatible_version(self):
         kopf = self.temp / "glide_bento" / "__init__.py"
         kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_MIN_VERSION = "0.7.0"',
-                                                                   'SHELL_MIN_VERSION = "0.10.0"'), encoding="utf-8")
+                                                                   'SHELL_MIN_VERSION = "0.11.0"'), encoding="utf-8")
         self.assertEqual(self.regeln(), ["versions"])
 
     def test_fehlende_mindestversion(self):

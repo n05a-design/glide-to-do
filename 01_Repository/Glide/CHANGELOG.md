@@ -3,6 +3,12 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## Entwicklungskandidat 1.2.0 – Ecosystem E02
+
+- KI-Arbeitsbereich: Die Suche in Prompt- und Dokumentenbibliothek nutzt das neue Shell-Suchfeld mit Platzhalter, Leeren-Knopf und Escape.
+- Glide Shell 0.10.0 für Folgeprojekte: Farbrollen mit Theme-Provider, Einstellungsregister, allgemeine Knöpfe, Suchfeld, Tooltip, Werkzeugleiste und Arbeitsbereiche; geordnetes Beenden im App-Host. Kompatibel zu 0.6.2.
+- Entwicklung: Aktualisierung einer vorhandenen Framework-Kopie mit Sicherung, Host-Vertrag und Rückkehr; Übernahme aus einem eingefrorenen Checkpoint.
+
 ## Entwicklungskandidat 1.1.0 – Ecosystem E01
 
 - KI-Arbeitsbereich: Eine beschädigte oder von einer neueren Fassung stammende Datei wird nicht mehr beiseitegelegt und leer ersetzt, sondern bleibt unverändert; der Bereich öffnet schreibgeschützt mit Hinweis.

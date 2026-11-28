@@ -1088,8 +1088,8 @@ Inhaberauftrag vom 28.11.2026 (D109): Die 13-teilige Master-Serie (§4.7) wird a
 
 | Teil | Inhalt | aus der alten Serie | Status |
 |---|---|---|---|
-| E01 | Konsolidierung, Framework-Checkpoint, Projektübergreifende Bereitschaft | Abschluss Teil 06 (KI-Arbeitsbereich), Teil 01–05B-Stand | erledigt 28.11.2026 (lokal, uncommittet) |
-| E02 | Framework-Härtung: Shell 1.0-Vorbereitung, öffentliche Schnittstellen, Kompatibilitätsrichtlinie, Übernahme-/Aktualisierungsweg | Teile der alten Teile 07/12 (Framework) | offen |
+| E01 | Konsolidierung, Framework-Checkpoint, Projektübergreifende Bereitschaft | Abschluss Teil 06 (KI-Arbeitsbereich), Teil 01–05B-Stand | erledigt 28.11.2026, Commit `f8b89359` (freigegeben) |
+| E02 | Framework-Härtung: allgemeine Komponenten, Host-Architektur, öffentliche Schnittstellen, Aktualisierungsweg | Teile der alten Teile 07/12 (Framework) | erledigt 28.11.2026 (lokal, uncommittet; §4.8.8) |
 | E03 | Integration STEPS und Chess & Chains (je eigener Auftrag, eigenes Repository) | neu | offen, Aufträge vorbereitet |
 | E04 | Bento-Ausbau aus realem Bedarf der drei Projekte | alter Teil 07 (Bento) vollständig | offen |
 | E05 | Leistung und Ressourcen (Rendern, Bilder, Speicherwege) | alter Teil 08 | offen |
@@ -1110,8 +1110,8 @@ Phase C der alten Serie (zurückgestellte Anforderungen) bleibt mit allen Kennun
 
 | Projekt | Version | Stand | Shell | Bento | Python | Bewertung |
 |---|---|---|---|---|---|---|
-| Glide | 1.0.3 (Kandidat 1.1.0) | `dfcbae7f` + lokale E01-Änderungen | 0.9.1 (kanonisch) | 0.3.0 (kanonisch) | ≥ 3.11 | Quelle |
-| STEPS | 0.8.0-dev | `main` @ `8fe71630`, öffentlich gelesen | 0.6.2 (System V1.86, Manifest unverändert) | – | ≥ 3.11 | Anhebung 0.6.2 → 0.9.1 in E03, Konformität dann prüfen |
+| Glide | 1.0.3 (Kandidat 1.2.0) | `f8b89359` + lokale E02-Änderungen | 0.10.0 (kanonisch, kompatibel seit 0.6.2) | 0.3.0 (kanonisch) | ≥ 3.11 | Quelle |
+| STEPS | 0.8.0-dev | `main` @ `8fe71630`, öffentlich gelesen | 0.6.2 (System V1.86, Manifest unverändert) | – | ≥ 3.11 | Anhebung 0.6.2 → 0.10.0 in E03 nach [Aktualisierungsvertrag](../01_Repository/Glide/src/glide/glide_shell/AKTUALISIERUNG.md); am künstlichen 0.6.2-Host belegt (T376), am echten Projekt offen |
 | Chess & Chains | 0.3.0 | `main` @ `6dcd12f1`, öffentlich gelesen | 0.6.2 (System V1.86, Manifest unverändert) | – | ≥ 3.11 | wie STEPS |
 
 Die Fremdstände sind nur gelesen; Funktionsbestand und Tests prüfen die jeweiligen Agenten in E03.
@@ -1120,7 +1120,7 @@ Die Fremdstände sind nur gelesen; Funktionsbestand und Tests prüfen die jeweil
 
 | Kategorie | Bedeutung | Bausteine |
 |---|---|---|
-| 1 | sofort portabel, nur Standardbibliothek/tkinter | alle 20 Module von `glide_shell` |
+| 1 | sofort portabel, nur Standardbibliothek/tkinter | alle 24 Module von `glide_shell` (seit E02 mit `color_roles`, `settings_registry`, `controls`, `workspaces`) |
 | 2 | portabel mit Host-Providern | alle 12 Module von `glide_bento` (Theme, Texte, Schrift über Provider) |
 | 3 | allgemeiner Kandidat, noch in Glide, Tk-frei | `local_json_store`, `render_retention`, `view_positions`, `undo_history`, `item_index`, `glyph_metrics`, `interaction_policy`, `content_search`, `runtime_diagnostics`; mit `i18n`-Kopplung `data_lock`, `storage_health`, `persistence`, `save_result`, `backup_snapshot`, `structural_guard`, `runtime_config`, `ui_design`, `accessibility` |
 | 4 | Glide-spezifisch | `session_guard`, `attachment_integrity`, `data_safety`, `ai_workspace`, `ai_workspace_ui`, `chapters`, Planungs- und Datenmodell |
@@ -1140,6 +1140,33 @@ Seit 1.0.3 kamen Format 27, Eingabeentwürfe, Datensicherheits-Härtung und der 
 #### 4.8.7 Git-Entscheidungsvorlage (nicht beschlossen)
 
 Vorschlag, nur nach ausdrücklicher Inhaberfreigabe: (1) Sicherung `e01-final` prüfen, (2) `pfade_bereinigen.py` und CI-Grundstufe grün, (3) ein Commit auf dem bestehenden Zweig `claude/glide-sync-master-auftrag-ef27c1`, (4) Push auf diesen Zweig als Zwischenstand von PR #201 (Entwurf bleibt Entwurf), (5) kein Merge, kein Tag, kein Release. Alternative: weiter lokal arbeiten bis E02 und dann gemeinsam committen.
+
+#### 4.8.8 E02 – Framework-Härtung (28.11.2026)
+
+Ausgangsstand: Commit `f8b89359` (E01, freigegeben und gepusht), Shell 0.9.1, Bento 0.3.0, System V1.96, Skill 1.5. Rückkehrpunkt ist dieser Commit; die Arbeitskopie war zu Beginn sauber.
+
+**Bearbeitete Lücken** (aus §4.8.4 und Designvertrag §5.6, Nutzen für mindestens zwei der drei Anwendungen):
+
+| Lücke | Umsetzung | Nachweis |
+|---|---|---|
+| Kein Theme-Provider in der Shell | `color_roles` (M139): 14 Kernrollen im Glide-Vokabular (Bento versteht sie ohne Abbildung), neutrale Hell-/Dunkelthemen nach WCAG 2.2 AA, `with_accent` für die Markenfarbe, `validate`, `ThemeProvider` mit Benachrichtigung | Selbsttest, T375 (Hosts A–C mit eigener Markenfarbe) |
+| Keine allgemeinen Knöpfe, Suchfelder, Tooltips, Werkzeugleisten | `controls` (M141): `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` mit Umbruch | Selbsttest, Galerie, T374 (produktiv), T375 |
+| Keine Registrierung fachlicher Arbeitsbereiche | `workspaces` (M142): `Workspace`, `WorkspaceRegistry`, `WorkspaceHost` mit Navigation, Aktionen, Statuszeile, Kürzeln, Abbau | Selbsttest, T375 |
+| Kein Einstellungsvertrag | `settings_registry` (M140): beschreibt, prüft und gruppiert; Speicherformat bleibt beim Host | Selbsttest, T375 |
+| Ungeordnetes Beenden, Rückruffehler | `AppHost.add_shutdown`/`shutdown`/`on_callback_error` (M111), kompatibel ergänzt | Selbsttest, T375 |
+| Hosts gegen andere Shell-Fassung fallen erst beim Import auf | Konformitätsregel `host-api` (M128) | `test_shell_konformitaet.py` |
+| Aktualisierung vorhandener Kopien ohne Rückkehr, Herabstufung unerkannt | `shell_uebernehmen.py`: Herabstufung, Host-Vertrag vor dem Schreiben, `--sicherung`/`--zurueck`, Checkpoint als Quelle mit Manifestprüfung | T376, T375 |
+| Checkpoint ohne Werkzeuge, Vertrag und Schnittstellenvergleich | `framework_checkpoint.py`: `tools/`, `interface_changes` gegen 0.6.2, `compatibility`, `verification` | T375 |
+
+**Bewusst nicht umgesetzt** (kein belegter Bedarf, §20 des Auftrags oder E04/E05): Tabellen/Listen mit Sortierung und Filter, segmentierte Auswahl, Inline-Eingabe, aufklappbare Abschnitte, fertige Fortschritts-/Datei-/Einstellungsdialoge, Ablösung der Glide-eigenen Knöpfe (`RoundedButton` ist an Glide-Schriftmetrik und Texte gekoppelt), Hintergrundoperationen und Caching (E05). Bento bleibt 0.3.0: Die Prüfung fand keinen integrationsrelevanten Fehler, und die Shell-Rollen passen ohne Änderung.
+
+**Öffentliche Schnittstellen:** Der maschinelle Vergleich mit 0.6.2 (`793596f1`) ergibt keine entfernten und keine geänderten öffentlichen Namen. `SHELL_COMPAT_SINCE` bleibt 0.6.2, Version 0.10.0 (kompatibler Funktionsausbau, D104). Die festgeschriebenen Signaturen stehen in `tests/unit/test_shell_importregel.py`; Namen mit führendem Unterstrich sind intern. 1.0.0 folgt erst nach realer Integration in STEPS und Chess & Chains.
+
+**Produktiver Glide-Einsatz:** `SearchField` in Prompt- und Dokumentenbibliothek (M138). Die übrigen neuen Bausteine stehen in Glide nur in der Galerie (`GALLERY_ONLY`, ausdrücklich vermerkt).
+
+**Checkpoint für E03:** wird mit dem Abschluss erzeugt; Kennung, Ablage und Prüfergebnisse stehen in der [Übergabe](Glide_Uebergabe.md) und im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Die E03-Aufträge verweisen auf genau diesen Checkpoint.
+
+**Git:** kein Commit, kein Push. Vorschlag zur Entscheidung: ein Commit „E02“ auf dem bestehenden Zweig und Push als Zwischenstand von PR #201, wie §4.8.7.
 
 ### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
 

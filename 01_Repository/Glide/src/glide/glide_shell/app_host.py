@@ -21,6 +21,13 @@ Dazu kommen Bausteine, die der Controller aufruft: `attach_menubar`,
 (Strg und unter macOS zusätzlich Cmd) und `install_close` (Fenster schließen
 und unter macOS das Beenden aus dem App-Menü über denselben Weg).
 Texte, Prüfungen und Handler liefert der Host.
+
+Seit 0.10.0 (kompatibel ergänzt): `on_callback_error(exc_type, exc, tb)`
+fängt Ausnahmen aus Tk-Rückrufen des Hauptfensters (`report_callback_exception`)
+ab; `add_shutdown(step)` registriert Aufräumschritte, die `shutdown()` in
+umgekehrter Reihenfolge genau einmal ausführt – jeder Schritt auch dann, wenn
+ein früherer scheitert; danach werden die Zeitgeber des Fensters beendet und
+das Fenster zerstört. Fehlgeschlagene Schritte liefert `shutdown()` als Liste.
 """
 
 import tkinter as tk
@@ -47,21 +54,52 @@ class AppHost:
     """Startet das Hauptfenster und bettet den Controller ein."""
 
     def __init__(self, *, before_tk=(), preflight=(), splash=None, on_ready=None,
-                 show_error=None, tk_factory=None):
+                 show_error=None, tk_factory=None, on_callback_error=None):
         self.before_tk = tuple(before_tk)
         self.preflight = tuple(preflight)
         self.splash = splash
         self.on_ready = on_ready
         self.show_error = show_error or _show_error
         self.tk_factory = tk_factory or tk.Tk
+        self.on_callback_error = on_callback_error
         self.root = None
         self.controller = None
+        self._shutdown_steps = []
+        self._shut_down = False
 
     def create_root(self):
         for step in self.before_tk:
             step()
         self.root = self.tk_factory()
+        if self.on_callback_error is not None:
+            self.root.report_callback_exception = self.on_callback_error
         return self.root
+
+    def add_shutdown(self, step):
+        """Aufräumschritt `step()` für `shutdown` registrieren; liefert `step`."""
+        if not callable(step):
+            raise TypeError("shutdown step must be callable")
+        self._shutdown_steps.append(step)
+        return step
+
+    def shutdown(self):
+        """Aufräumschritte rückwärts, Zeitgeber beenden, Fenster zerstören (einmalig)."""
+        if self._shut_down:
+            return []
+        self._shut_down = True
+        fehler = []
+        for step in reversed(self._shutdown_steps):
+            try:
+                step()
+            except Exception as exc:  # pylint: disable=broad-except
+                fehler.append((step, exc))
+        if self.root is not None:
+            try:
+                window_lifetime.scope_for(self.root).close()
+                self.root.destroy()
+            except tk.TclError:
+                pass
+        return fehler
 
     def check(self, root):
         """Startprüfungen; beim ersten Befund Meldung, Fenster schließen, Exitcode 1."""

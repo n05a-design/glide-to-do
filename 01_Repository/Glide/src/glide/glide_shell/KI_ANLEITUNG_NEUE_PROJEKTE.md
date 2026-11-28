@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für KI-Agenten in neuen Projekten
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.95 · Glide Shell 0.9.1 · [English version](AI_GUIDE_NEW_PROJECTS.md)
+Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.97 · Glide Shell 0.10.0 · [English version](AI_GUIDE_NEW_PROJECTS.md)
 
 Diese Anleitung richtet sich an KI-Agenten (Claude Code, Codex, Cursor, Gemini und andere), die mit der Glide Shell eine **neue** Tk-Desktopanwendung bauen. Sie erklärt den Aufbau von Glide, Glide-System und Glide Shell, den Start eines Projekts, die Architekturregeln, die Design-Richtlinien, die Arbeitsprozesse und die Prüfungen. Sie liegt im Paket `glide_shell` und wird bei jeder Übernahme mitkopiert. Einen fertigen Prompt für die erste Sitzung samt Übersicht, was wo liegt, enthält [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md).
 
@@ -94,7 +94,7 @@ python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --age
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agenten-bootstrap --projekt-root <root> <projekt>/src/<app>  # explizite Projektwurzel
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <projekt>/src/<app>          # aus einem festen Git-Commit übernehmen
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <projekt>/src/<app>                # nur prüfen
-cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 13/13 Prüfungen bestanden
+cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 16/16 Prüfungen bestanden
 ```
 
 - Das Werkzeug kopiert alle `*.py` und `*.md` aus `glide_shell/` (inklusive `DESIGN_RICHTLINIEN.md` als offline-fähigem Gestaltungsvertrag) und schreibt `SHELL_MANIFEST.json` mit Paketversion, Glide-Systemversion, Quell-Commit und SHA-256 je Datei.
@@ -315,7 +315,7 @@ Glides Gestaltungsvertrag und der verbindliche transportable Rahmen für Folgepr
 
 ```bash
 cd <projekt>/src/<app>
-python3 -m glide_shell.selftest          # 13/13 checks passed
+python3 -m glide_shell.selftest          # 16/16 checks passed
 python3 -O -m glide_shell.selftest       # muss dasselbe melden
 python3 -m glide_shell.demo              # Sichtprobe des Nutzungsmusters
 ```
@@ -358,7 +358,7 @@ Kompatibilitätsnamen mit `glide` (`_glide_after_scope`, `GlideCheckbutton` …)
 **Projektstart**
 
 - [ ] Struktur aus 3.1 angelegt; `AGENTS.md` mit Arbeitsregeln und Abschlusskriterium
-- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 13/13 (auch mit `-O`)
+- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 16/16 (auch mit `-O`)
 - [ ] Start über `AppHost` mit `preflight`; Import ohne Seiteneffekte
 - [ ] Datenordner über `runtime_paths` und eigene Umgebungsvariable für Tests
 - [ ] Kataloge `de.json`/`en.json` mit Paritätstest; Entwicklermeldungen Englisch
