@@ -10,7 +10,7 @@
 
 **Analysefortschreibung 04.11.2026:** [§21.62](#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) ordnet den damaligen 3.50.2-Stand, laufende Abschlussarbeiten und neue Mehrwertvorschläge ein. Die drei möglichen Ausbaupakete sind nicht ausgewählt; bestehende IDs und Entscheidungen bleiben maßgeblich.
 
-Stand 27.11.2026 · Glide 1.0.3 (Entwicklungsstand, Kandidat 1.1.0) · Aufgabenformat 26 · Glide-System V1.91 · Glide Bento 0.3.0 · Glide Shell 0.8.0 · Master-Serie Teil 03
+Stand 27.11.2026 · Glide 1.0.3 (Entwicklungsstand, Kandidat 1.1.0) · Aufgabenformat 27 · Glide-System V1.91 · Glide Bento 0.3.0 · Glide Shell 0.8.0 · Master-Serie Teil 03
 
 ---
 
@@ -825,7 +825,7 @@ Maßgeblich ist jeweils die Datei bzw. Konstante, nicht die Dokumentation. „Ge
 | Glide-System | `GLIDE_SYSTEM_VERSION` 1.88 → **1.89** | V1.87 in Plan, Übergabe und Einstiegen; V1.88 im Register | Katalog um M124/M125 und T350–T352 (PR #200) erweitert, ohne eigene Version | – | `test_glide_system.py` | – | V1.87 (Lieferabsatz `07`) | – | **in Teil 01 behoben** (V1.89) |
 | Glide Shell | `SHELL_VERSION` 0.6.2 | 0.6.2 | seit `v1.0.3` unverändert | – | T319, T330–T338 | – | 0.6.2 | in den Paketen 1.0.2 | konsistent |
 | Glide Bento | `BENTO_VERSION` 0.2.0 | 0.1.0 in Plan, Übergabe und Einstiegen; 0.2.0 in den Bento-Dokumenten | 0.2.0 (PR #199) | – | T341–T344, T349, Selbsttest 16/16 | – | 0.1.0 | – | Wechsel korrekt; Standzeilen nachgezogen |
-| Aufgabenformat | `DATA_SCHEMA_VERSION` 26 | 26 | 26 | Wechsel nur bei neuem persistentem Vertrag (Kapitel, Prompts, Kontexte, Anhänge, Mindmaps, Pixel-Ebenen); Bündelung in Teil 05 prüfen | Migrations- und Rundlauftests | – | 26 | – | konsistent |
+| Aufgabenformat | `DATA_SCHEMA_VERSION` 27 | 27 | 27 | Teil 05: 26 → 27 (D107: Kapitelanker, Kapitelverweise, Navigationsort); Prompts, Kontexte, Anhänge, Mindmaps und Pixel-Ebenen erst mit ihren Teilen | T364, T365, Migrations- und Rundlauftests | – | 27 (Lieferstand 26) | – | konsistent |
 | Austauschformat | `EXCHANGE_FORMAT_VERSION` 2, `exchange_patch.VERSION` 2 | 2 | 2 | – | `test_agenten_skill.py`, T323/T325 | – | 2 | – | konsistent |
 | Vorlagenformat | `TEMPLATE_FORMAT_VERSION` 2; Katalog `format_version` 2 | 2 | 2 | – | `test_vorlagen_l4.py` (T348), `test_i18n.py` | – | 2 | – | konsistent |
 | Vorlagenbestand | keine eigene Katalogversion | 23 (PR #199, `87fca3b5`) | **23 mitgelieferte Vorlagen** über `default_template_records()`: 19 aus dem Katalog `glide_vorlagen(.en).glidetemplates` (16 aus 1.0.3 + 3 L4) und 4 Notizbuchvorlagen aus dem Code (`journal-note`, `journal-gratitude`, `journal-weekly`, `journal-folder`); daneben 3 eingebaute Seitenvorlagen (`PAGE_TEMPLATES`, eigener Weg) | erweiterte Bibliothek in Teil 10 | `test_template_workflows.py` erwartet 23, T348 | – | 20 (1.0.3: 16 + 4) | – | Teil 01 zählte nur die Katalogdatei; die Zählung 23 aus PR #199 ist richtig (Korrektur in Teil 02) |
@@ -859,6 +859,14 @@ Maßgeblich ist jeweils die Datei bzw. Konstante, nicht die Dokumentation. „Ge
 | 04 | Formate und Skill | 26/2/2/2, 1.4 | unverändert | Optionale Einstellungspräferenzen mit Standardwerten, Entwürfe in der Sitzung, vorhandene `sidebar_locations` | Bestehende Bestände bleiben lesbar. Persistente neue Objektsemantik in Teil 05 | T360/T361 | Lokal |
 | 03 | Formate 26/2/2/2, Agenten-Skill 1.4 | – | unverändert | – | Kapitel ohne persistente Struktur; stabile Anker als Vorschlag für DS-02 (Teil 05); Skill-Austauschweg nicht berührt | `test_agenten_skill.py` | – |
 | 02 | Agenten-Skill `glide-to-do`, Formate 26/2/2/2 | 1.4 · 26/2/2/2 | unverändert | – | Daten- und Austauschweg nicht berührt; Framework-Skills `glide-shell`/`glide-bento` haben keine eigene Version und wurden inhaltlich nachgezogen | `test_agenten_skill.py` | – |
+| 05 | Glide-System | V1.92 | **V1.93** | M133 `input_drafts`, T362–T365 | Registerregel | `test_glide_system.py` | Lokal |
+| 05 | Aufgabenformat | 26 | **27** | Kapitelanker, Kapitelverweise, Navigationsort (D107) | Freigabe des Inhabers | T364, T365, T371 | Lokal; 07 bleibt Format 26 |
+| 05 | Agenten-Skill | 1.4 | **1.5** | `data_schema` 27, Abdeckung `nav_parent_id` intern | Kompatibilitätsvertrag geändert | `test_agenten_skill.py` | Lokal |
+| 05B | Glide-System | V1.93 | **V1.94** | M134–M136, F157/F158, T366–T372 | Registerregel | `test_glide_system.py` | Lokal |
+| 05B | Shell, Bento, Formate, Skill, App | 0.9.0 · 0.3.0 · 27/2/2/2 · 1.5 · 1.0.3 | unverändert | Shell: nur Vertragstext Griffachse (keine Schnittstelle); Bento nur genutzt; neue Begleitdateien `view_positions.json`, `data_status.json` ohne Formatänderung | Keine versionsrelevante Änderung der Systeme | Shell-/Bento-Selbsttest, T353 | Lokal |
+| 05B→06 | Glide Shell | 0.9.0 | **0.9.1** | Portabler Designvertrag um die verbindliche Griffachse ergänzt (05B, ohne Schnittstellenänderung) | Nachholung nach 24.1: kompatible Vertragsänderung = Patch | T319/T353, Shell-Selbsttest | Lokal |
+| 06 | Glide-System | V1.94 | **V1.95** | M137, M138, F159–F161, T373, T374 | Registerregel | `test_glide_system.py` | Lokal |
+| 06 | Bento, Skill, Formate, App | 0.3.0 · 1.5 · 27/2/2/2 · 1.0.3 | unverändert | Bento nur genutzt; Skill-Vertrag (Austausch) nicht berührt; neue Begleitdatei `ai_workspace.json` (eigenes Format 1) | keine versionsrelevante Änderung | T349, `test_agenten_skill.py` | Lokal |
 
 #### 4.7.3 Anforderungs-Abdeckungsmatrix
 
@@ -1003,6 +1011,135 @@ Ergänzte Zeilen:
 **An Teil 05.** Eine gemeinsame Migration soll stabile Kapitelanker, Kapitelverweise und sitzungsübergreifende Positionen aus Teil 03 sowie wiederherstellbare Entwürfe und typunabhängige Navigationsorte aus Teil 04 abdecken. Vor Schemafestlegung die Anforderungen neuer Inhaltstypen zusammenführen. Persistente Navigationsorte benötigen stabile Objekt-ID, Navigationscontainer-ID und Reihenfolge. Inhaltstyp, Heimatcontainer, Projektzuordnung und Verweise bleiben eigenständig. Import, Export und Sicherung müssen die Zuordnung samt Teilmengen und fehlenden Zielen eindeutig behandeln. Eine Übernahme bisheriger Wurzelzuordnungen muss Formate 26/2/2/2 testen. Solange der Vertrag fehlt, gilt die vorhandene Wurzelprojektion.
 
 **Abnahme Leeren.** Vorab Umfang von Objekten, Unterinhalten, Anhängen, Verweisen und Ansichten anzeigen. Schreibsperre und Objektliste nach Bestätigung erneut prüfen. Vollständige Sicherung mit verifiziertem Manifest muss vor der einzigen wiederherstellbaren Sammelmutation stehen. Abbruch, Sicherungs- und Schreibfehler, konkurrierender Zugriff, fehlende Daten, Undo und Neustart mit Wiederherstellung gegen künstliche Bestände prüfen. Die Aktion wird nach bestandenem Nachweis freigeschaltet. Eine lesende Vorschau ist in Teil 04 erreichbar.
+
+#### 4.7.9 Teil 06: KI-Arbeitsbereich, Prompts, Kontexte, Dokumente (28.11.2026)
+
+Arbeitskopie unverändert: Worktree `glide-1-1-0-dev-0144e8`, Branch `claude/glide-sync-master-auftrag-ef27c1`, HEAD `dfcbae7f` (= Entwurfs-PR #201, nicht verändert); Teil 05–06 nur im Arbeitsbaum. Datenvertrag: [KI-Arbeitsbereich](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#ki-arbeitsbereich-teil-06-28112026).
+
+| Ergebnis | Status | Nachweis / Grenze |
+|---|---|---|
+| Prompt-Inhaltstyp, gemeinsame Identität | In Glide sichtbar integriert | Prompt = Seite plus Datensatz; erscheint in Seitenübersicht, Suche, Favoriten, Labels, Projekten (Ordner), Archiv. In der Notizübersicht nur über den Navigationsort, nicht als eigene Notiz |
+| Einfacher und erweiterter Editor, eigene Felder, Gruppen klappen/sortieren/ausblenden, Live-Vorschau | Automatisiert verifiziert | T373, T374 (echte Eingabe, Moduswechsel ohne Verlust); Sichtbelege |
+| Prompt-Bibliothek (Gruppierung Status/Projekt/Agent/zuletzt, Suche, Archiv, Favorit, Bento-Kennzahlen) | In Glide sichtbar integriert | T374. Kartenansicht nur als Kennzahlenkarten; Listenansicht als Tabelle |
+| KI-Projektprofile, Projektanweisungen (dynamisch und festgelegt), Agentenprofile, Kontextbausteine, Kontextpakete, Kontextbudget | Automatisiert verifiziert | T373, T374; Token nur geschätzt (Zeichen/4) |
+| Prompt-Versionen (anlegen, anzeigen, vergleichen, wiederherstellen, duplizieren, exportieren), eingefrorene Übergabe | Automatisiert verifiziert | T373, T374 |
+| Prompt-Vorlagen | Implementiert | 20 mitgelieferte Abläufe mit Feldgruppen und Platzhaltern; eigene Prompts als Glide-Vorlage (vorhandene Vorlagenverwaltung) plus Felder. Bearbeiten/Duplizieren über die Vorlagenverwaltung; fachlicher Ausbau Teil 10 |
+| Übergabe und Export (Zwischenablage, Markdown, Text, JSON, Kontextpaket mit Manifest, Quellen und Anhänge wählbar, Anbieter bewusst öffnen, als übergeben markieren) | Automatisiert verifiziert | T374. Keine Anbieterintegration, keine Automatisierung |
+| Ergebnisberichte, Folgeaufträge, Beziehungen, Auftragskette | Automatisiert verifiziert | T374; Abnahmen über vorhandene Checklisten der Seite (nicht eigens gebaut) |
+| Dokumentenbibliothek: Objekte, Metadaten, Versionen, Duplikaterkennung, Vorschau, Volltextsuche, Fundorte, Integrität, Archiv | Automatisiert verifiziert | T373, T374. Vorschau: Text, Markdown, HTML, DOCX, PNG/GIF; JPEG/WebP/PDF nur „Öffnen“. Drag & Drop und Zwischenablage-Import nicht umgesetzt |
+| Sichere Dateioperationen, Wiederanlauf | Automatisiert verifiziert | Journal (T373, T374); keine gemeinsame atomare Transaktion |
+| Sicherung, vollständige und selektive Wiederherstellung | Automatisiert verifiziert | T374 (Sicherung, Neustart, selektiv). Vollständige Ersatz-Wiederherstellung des Arbeitsbereichs über `restore_app_backup` nicht eigens gegen einen frischen Ordner geprüft |
+| Shell 0.9.1 nachgeholt | Implementiert | siehe Versionsmatrix |
+| Neue allgemeine UI-Komponenten / Galerie | Bewusst zurückgestellt | Keine neue allgemeine Komponente; vorhandene Shell-/Bento-Bausteine genutzt. Kandidaten (Feldgruppen-Editor, Versionsvergleich) für eine spätere Shell-Fassung |
+| Bestehende Grenzen aus 05B | Offen | Hauptdatei/Anhänge ohne gemeinsame Transaktion, verwaiste Dateien möglich, appweite selektive Wiederherstellung einzelner Aufgaben/Notizen/Zeichnungen, Nebenansicht-Position sitzungsbezogen, macOS/Linux nativ, Paket 1.0.2 gegen Format 27 |
+
+**Entscheidungsvorlage Teil 06 (offen):** (1) PDF-Texterschließung: Option A ohne Abhängigkeit (nur „Öffnen“, Stand jetzt), Option B `pypdf` (BSD-Lizenz, reines Python, ≈ 1 MB, Parser-Risiken bei böswilligen PDFs, Grenzen nötig). Empfehlung: B mit Größen-/Zeitgrenze nach Freigabe. (2) Langfristig Prompt-Felder in das Aufgabenformat übernehmen (Format 28) statt Begleitdatei: Vorteil gemeinsame Transaktion und Austausch, Nachteil Formatwechsel; Empfehlung: erst mit Teil 08/10 bündeln. (3) App-Version: Der Umfang (Datensicherheit, Format 27, KI-Arbeitsbereich) spricht eher für **1.2.0** als 1.1.0 als nächste veröffentlichte Version; Empfehlung, keine Festlegung.
+
+#### 4.7.8 Teil 05B: Abschluss Datensicherheit (28.11.2026)
+
+Arbeitskopie: Worktree `glide-1-1-0-dev-0144e8`, Branch `claude/glide-sync-master-auftrag-ef27c1`, HEAD `dfcbae7f` (= Remote = Entwurfs-PR #201, vom Inhaber beauftragt und vor dieser Sitzung erstellt; nicht verändert). `origin/main` = `e8eee591`. Teil 05/05B liegt ausschließlich als ungesicherter Arbeitsbaum vor (kein Commit, kein Push). Der Hilfsbranch `claude/glide-teil-05-data-integrity-d6aa5a` wurde von der Umgebung angelegt, trägt keine Arbeit und wurde nicht gelöscht. Abweichung zur Serienvereinbarung: Der Zwischenstand 01–04 liegt bereits als Entwurfs-PR vor (Inhaberauftrag); Entscheidung über seine Verwendung in Teil 13.
+
+| Anforderung | Status | Nachweis |
+|---|---|---|
+| DS-01 Inventar | Implementiert (Dokument) | [Datenvertrag, Dateninventar](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#dateninventar-und-sicherungsumfang-teil-05b-28112026) |
+| DS-02 Migrationsvertrag | Automatisiert verifiziert | D107, Vertrag in §4.7.7, Teil-06-Regeln im Datenvertrag |
+| DS-03 Speichern | Geprüft, gehärtet | Entwurfsbereinigung sofort nach Anlegen (kein Duplikat nach Absturz, T363); Begleitdateien über `local_json_store`; T372 voller Datenträger, Schreibrechte, beschädigte Hauptdatei. Mehrdatei-Grenze: Hauptdatei und Anhänge sind keine gemeinsame Transaktion – Anhänge werden vor dem Datensatz kopiert, eine verwaiste Datei ist möglich und wird gemeldet, nie gelöscht |
+| DS-04 Sperren | Gehärtet, automatisiert verifiziert | Veraltete Sperre eines anderen Rechners nur nach Bestätigung (vorher still frei nach 8 h); T367 mit echten Prozessen. Glide verspricht keine Mehrgeräte-Synchronisation |
+| DS-05 Sicherungsumfang | Geprüft | Vollständige App-Sicherung enthält Daten, Anhänge, Papierkorb, Einstellungen, Vorlagen; unvollständige Sicherung (fehlender Anhang) wird verweigert (T370). Aufbewahrung: vorhandene Regeln, keine automatische Löschung vollständiger Sicherungen |
+| DS-06 Wiederherstellung | Automatisiert verifiziert | T368 (drei Prozesse, identisch nach Neustart); seit 05B stabile Anhangskennungen bei vollständigem Import; selektive Grenzen im Datenvertrag |
+| DS-07 Format-27-Migration | Automatisiert verifiziert | T365, T372 (unterbrochen, wiederholt, ohne Sicherung, ungültige Verweise), T371 an der **gelieferten** Fassung 1.0.3 aus `07_Python-Versionen`. Der veröffentlichte Prerelease 1.0.2 als Paket ist nicht geprüft |
+| DS-08 Anhänge | Implementiert, automatisiert verifiziert | M135, T366, T370; Dokumentvertrag Teil 06 |
+| DS-09 Import/Export | Automatisiert verifiziert | Archivregeln vorhanden; Negativfälle und abgebrochener Import T370; Portabilitätsgrenzen im Datenvertrag |
+| DS-10 Sicherheitsübersicht | In Glide sichtbar integriert | F157, Datei › Sicherung › „Daten und Sicherheit …“; Bento-Karten; Sichtbeleg Windows 11 (nicht versioniert) |
+| PAGE-06 Leseposition | Implementiert, automatisiert verifiziert | ankerbezogen über Neustart, ausdrückliches Ziel vorrangig (T370). Nebenansicht weiter nur sitzungsbezogen |
+| NAV-02C Bereich leeren | In Glide sichtbar integriert | F158, T369 |
+| NAV-04 Anzeigeort per Ziehen | Implementiert, automatisiert verifiziert | Alt (macOS: Wahltaste) beim Ablegen, Hinweis vorab, Mehrfachauswahl, Rückgängig (T370) |
+| Griffachse (D108) | Implementiert, automatisiert verifiziert | gemeinsame Fabrik `make_row_grip`, Messung T360; Design Richtlinien |
+| Kapitel-/Checklistengriff | Implementiert, automatisiert verifiziert | T370 |
+| Galerie-Regressionen | Behoben | `test_features322` (Produktfehler: fehlende Gruppenzuordnung), `test_features330` (überholte Annahme seit UX-05; Prüfung auf archivierte Liste verlegt) |
+| Fehlerprüfstand | Automatisiert verifiziert | T363, T367, T369, T370, T372 |
+| Offen | – | Native macOS/Linux, menschliche Abnahme, Lieferung, Prerelease-Paket 1.0.2, echte Hardware-/Stromausfallprüfung, Nebenansicht-Position über Neustart |
+
+#### 4.7.7 Teil 05: Datensicherheit, Wiederherstellung und Migration (27.11.2026)
+
+[Prüfbelege](../01_Repository/Glide/docs/07_QA_BERICHT.md#master-serie-teil-05-datensicherheit-erster-arbeitsschnitt-27112026). Arbeitskopie: Worktree `glide-1-1-0-dev-0144e8` auf `claude/glide-sync-master-auftrag-ef27c1` (Ausgangscommit `dfcbae7f`, identisch mit GitHub und Entwurfs-PR #201). Der vom Werkzeug angelegte leere Hilfsbranch `claude/glide-teil-05-data-integrity-d6aa5a` (= `e8eee591`) trägt keine Arbeit; die Serie liegt nicht auf zwei Arbeitskopien. Kein Commit, kein Push.
+
+**Versionen:** Glide-System V1.92 → **V1.93** (M133, T362–T365). **Aufgabenformat 26 → 27** (D107, Inhaberfreigabe 27.11.2026). **Agent-Skill 1.4 → 1.5** (Kompatibilitätsvertrag `data_schema` 27, Abdeckung um `nav_parent_id` als intern ergänzt; Austauschweg unverändert). Unverändert: App 1.0.3 (Kandidat 1.1.0; der Formatwechsel ist abwärts lesbar und bleibt im Rahmen des Kandidaten 1.1.0), Shell 0.9.0, Bento 0.3.0, Einstellungs-, Austausch- und Vorlagenformat 2/2/2, App-Backup-Format 1. Die Entwurfsdatei `input_drafts.json` ist ein eigener lokaler Vertrag (`glide-input-drafts` Version 1) außerhalb der Speicherdatei.
+
+| Anforderung | Stand | Beleg / Rest |
+|---|---|---|
+| Arbeitsstandsicherung | geprüft | `arbeitsstand_sichern.py` sichern, prüfen, wiederherstellen in `%USERPROFILE%/gq/t05/k1`. Befund: Das Werkzeug meldete eine Zeilenende-Abweichung (`GLIDE_SYSTEM_VERSION` als CRLF unter `core.autocrlf=true`); nach Korrektur SHA-256 der geänderten Dateien gleich. Freier Speicher C: 8,3 GB vor, 5,9 GB nach der Prüfkopie. |
+| Dauerhafte Eingabeentwürfe (Teil 04 Rest) | umgesetzt, geprüft (Windows) | M133 `input_drafts.py`; Inline-Erfassung schreibt gebündelt nach 800 ms über `after_scope` und beim Beenden, Hinweis „Entwurf wiederhergestellt – noch keine Aufgabe“ DE/EN. T362 (10 Fälle inkl. Abbruch vor `os.replace`, voller Datenträger, unlesbare und neuere Datei), T363 (echter Prozessabbruch, Wiederherstellungsmodus, Freigabe, keine Leer- oder Doppelaufgabe, Escape verwirft dauerhaft). |
+| DS-01 Inventur | teilweise | Bestätigte Schutzschichten: Datensperre (`data_lock`), Sitzungsnachweis mit Wiederherstellungsmodus nach Absturz (`session_guard`), Commitgrenze (`persistence`), Formatsicherung vor Migration (`schema_backups`), Schreibschutz bei neuerem Format (`handle_unreadable_save_file`, Grund `newer_format`). Vollständige Tabelle je Datenart offen. |
+| DS-02 / DS-07 Format 27 | umgesetzt, geprüft (Windows, künstliche Daten) | Freigabe D107. Vertrag unten. T365: bytegenaue Sicherung `liste_vor_format27_*` vor dem ersten Schreiben, Umstellung beim Start, Objektzahl und Kennungen erhalten, Rückweg über die Sicherung, Rundlauf der Referenz `current_v27`, Format 28 nur lesend und bytegleich. Fixtures: Referenz `current_v27` neu; Beispieldaten, Rundgang und Showcase DE/EN neu erzeugt (Bearbeitungstag 24.11.2026 beibehalten); ausgelieferte Releaseplanungen bis 1.0.3 bleiben in Format 26 (Regel in `pruefen.py`). Reale Nutzerdaten wurden nicht migriert; das geschieht erst beim ersten Start eines gelieferten Kandidaten. |
+| PAGE-02b Stabile Kapitelanker | umgesetzt, geprüft | Erweiterung von M131 (keine zweite Kapitelstruktur). Kapitelschlüssel ist die Anker-ID; Erhalt bei Umbenennen, Verschieben, Ebene, Neutippen der Überschrift und Neustart; Auflösen entfernt den Anker; Duplizieren vergibt neue Kennungen und zieht Selbstverweise nach; offener Editor exportiert stabil. Undo über vorhandene Kapitelaktionen. Export: Anker sind Bereiche in `rich_note` und reisen in Backups mit; Markdown-Export verliert sie (verlustbehaftet, wie andere Bereiche). |
+| Persistente Kapitelverweise | umgesetzt, geprüft | `glide://list/<id>#<Anker>` in M035; Verweisdialog im Text bietet Kapitel an; Folgen springt zum Kapitel, ein fehlendes Kapitel öffnet die Seite mit Hinweis. Rückverweise zählen weiterhin die Seite. |
+| NAV-02 Navigationsort unterhalb der Wurzel | umgesetzt, geprüft | `nav_parent_id` an Listen (M017): Anzeige unter einem Ordner, Heimatordner, Art, Verweise, Favoriten, Anhänge und Kapitel bleiben; keine Kopie. Menü „Verschieben › In der Seitenleiste anzeigen unter …“ und „Wieder am Heimatort anzeigen“, je ein Rückgängig-Schritt. Echtes Verschieben setzt Heimat und Anzeige gleich (löscht den Ort). Verwaister oder archivierter Ort fällt sichtbar auf die Heimat zurück. Ordner behalten ihren Heimatort (keine Zyklen möglich). Offen: Ziehen auf einen Ordner als Anzeigeort, macOS/Linux. |
+| PAGE-06 Leseposition über Neustart | offen | Gehört nicht ins Aufgabenformat; kann jetzt auf Anker-IDs aufsetzen. |
+| DS-03 bis DS-06, DS-08 bis DS-10, Leeren ganzer Bereiche, Sechs-Punkte-Griffe in Kapitel- und Checklistenzeilen, Sicherheitsübersicht | offen | Keine Vollständigkeitsbehauptung. Leeren ganzer Bereiche bleibt bis zum Wiederherstellungsnachweis gesperrt. |
+
+**Entscheidungsvorlage DS-02 (am 27.11.2026 als D107 mit (a) bis (c) freigegeben).** Kandidat Aufgabenformat 27 bündelt nur die Felder mit belegtem Bedarf aus Teil 03/04: (a) stabile Kapitelanker als Kennung je Überschriftsblock in `rich_note` (heute nur `ANCHOR_PROPOSAL` in M131), (b) Kapitelverweise auf (Listen-ID, Anker-ID), (c) Navigationsort je Objekt (Navigationscontainer-ID, Reihenfolge), getrennt von Inhaltstyp und Heimatordner. Nicht ins Aufgabenformat gehören Eingabeentwürfe (eigene Datei, umgesetzt) und die sitzungsübergreifende Leseposition (Vorschlag: Einstellungs- oder Sitzungsdatei, objekt- und ankerbezogen, Schreiben nur bei Ansichtswechsel und Beenden). Schutz älterer Fassungen: Der Ladeweg öffnet ein höheres Datenformat nur lesend (`newer_format`, seit 29.09.2026 auch bei unbekannter Listenart); das gilt für den veröffentlichten Stand 1.0.2, solange die Formatnummer steigt. Noch zu prüfen: ob Fassungen vor diesem Schutz existieren, die Nutzer noch verwenden. Absicherung: Formatsicherung `liste_vor_format27_*` vor dem ersten Schreiben (`SchemaBackups.ensure`), Migration auf Kopie, Validierung, Rückweg über diese Sicherung. Entschieden: (a) bis (c) gemeinsam. Verträge im Einzelnen: Anker = Bereich über der Überschriftenzeile einschließlich Zeilenumbruch, Pflicht je Überschrift, eindeutig je Dokument, Standard bei fehlendem Feld = neu vergeben, unbekannte Bereichsarten werden wie bisher verworfen. Kapitelverweis = optionale Sprungmarke an einem Seitenverweis; ungültige Marke macht den Verweis ungültig (wie bisher). Navigationsort = optionales Feld nur an Listen, höchstens 100 Zeichen, nicht gleich dem Heimatordner, nicht am Eingang; unbekanntes Ziel bleibt erhalten und wirkt nicht. Ältere Fassungen (Format 26) öffnen Format 27 nur lesend und können es deshalb nicht verlustbehaftet überschreiben.
+
+### 4.8 Glide Ecosystem E01–E08 (ab 28.11.2026)
+
+Inhaberauftrag vom 28.11.2026 (D109): Die 13-teilige Master-Serie (§4.7) wird als Ecosystem-Serie E01–E08 fortgeführt. Glide bleibt das führende Produkt und die kanonische Quelle von Glide Shell und Glide Bento; STEPS und Chess & Chains werden Folgeprojekte desselben Frameworks. Keine Anforderung der alten Serie entfällt; zurückgestellte Kennungen bleiben gültig.
+
+#### 4.8.1 Roadmap und Zuordnung
+
+| Teil | Inhalt | aus der alten Serie | Status |
+|---|---|---|---|
+| E01 | Konsolidierung, Framework-Checkpoint, Projektübergreifende Bereitschaft | Abschluss Teil 06 (KI-Arbeitsbereich), Teil 01–05B-Stand | erledigt 28.11.2026 (lokal, uncommittet) |
+| E02 | Framework-Härtung: Shell 1.0-Vorbereitung, öffentliche Schnittstellen, Kompatibilitätsrichtlinie, Übernahme-/Aktualisierungsweg | Teile der alten Teile 07/12 (Framework) | offen |
+| E03 | Integration STEPS und Chess & Chains (je eigener Auftrag, eigenes Repository) | neu | offen, Aufträge vorbereitet |
+| E04 | Bento-Ausbau aus realem Bedarf der drei Projekte | alter Teil 07 (Bento) vollständig | offen |
+| E05 | Leistung und Ressourcen (Rendern, Bilder, Speicherwege) | alter Teil 08 | offen |
+| E06 | Plattformabnahme macOS/Linux/Windows, Barrierefreiheit | alte Teile 09/10 | offen |
+| E07 | Produktionsrunde Glide (Version, `07_Python-Versionen`, Paketbau) | alter Teil 11 | offen, Inhaberentscheidung |
+| E08 | Veröffentlichung und Ecosystem-Dokumentation | alter Teil 13 | offen, Inhaberentscheidung |
+
+Phase C der alten Serie (zurückgestellte Anforderungen) bleibt mit allen Kennungen bestehen und wird dem jeweils passenden E-Teil zugeordnet, sobald er beauftragt ist.
+
+#### 4.8.2 Governance und Rückmeldevertrag
+
+- **Kanonische Quelle:** `src/glide/glide_shell` und `src/glide/glide_bento` in Glide. Folgeprojekte übernehmen nur aus einem Checkpoint (`scripts/pflege/framework_checkpoint.py`, `CHECKPOINT.json` mit `snapshot_id`, Dateimanifest, SHA-256) über `shell_uebernehmen.py --mit-bento`.
+- **Schichtgrenzen:** Shell (Host, Dialoge, Fenster, Plattform, Pfade, Steuerelemente) → Bento (Karten, Raster, Kennzahlen; braucht Host-Provider) → Anwendung (Fachlogik, Daten, Texte). Fachlogik wandert nie ins Framework; allgemeine Mechanismen werden nicht lokal in Folgeprojekten nachgebaut.
+- **Verwaltete Kopien** in Folgeprojekten werden nicht dauerhaft verändert; Abweichungen zeigt die Manifestprüfung.
+- **Rückmeldevertrag** je fehlender Framework-Funktion: anforderndes Projekt, Anwendungsfall, Framework-Version (Snapshot), genutzte Komponenten, fehlende Funktion, gewünschter Datenvertrag, gewünschte Interaktion, Wiederverwendbarkeit, Plattformen, Designanforderungen, Abnahmekriterien, Risiken. Annahme, Einordnung und Version entscheidet Glide (D104).
+
+#### 4.8.3 Kompatibilitätsmatrix (28.11.2026)
+
+| Projekt | Version | Stand | Shell | Bento | Python | Bewertung |
+|---|---|---|---|---|---|---|
+| Glide | 1.0.3 (Kandidat 1.1.0) | `dfcbae7f` + lokale E01-Änderungen | 0.9.1 (kanonisch) | 0.3.0 (kanonisch) | ≥ 3.11 | Quelle |
+| STEPS | 0.8.0-dev | `main` @ `8fe71630`, öffentlich gelesen | 0.6.2 (System V1.86, Manifest unverändert) | – | ≥ 3.11 | Anhebung 0.6.2 → 0.9.1 in E03, Konformität dann prüfen |
+| Chess & Chains | 0.3.0 | `main` @ `6dcd12f1`, öffentlich gelesen | 0.6.2 (System V1.86, Manifest unverändert) | – | ≥ 3.11 | wie STEPS |
+
+Die Fremdstände sind nur gelesen; Funktionsbestand und Tests prüfen die jeweiligen Agenten in E03.
+
+#### 4.8.4 Portabilität (Kategorien)
+
+| Kategorie | Bedeutung | Bausteine |
+|---|---|---|
+| 1 | sofort portabel, nur Standardbibliothek/tkinter | alle 20 Module von `glide_shell` |
+| 2 | portabel mit Host-Providern | alle 12 Module von `glide_bento` (Theme, Texte, Schrift über Provider) |
+| 3 | allgemeiner Kandidat, noch in Glide, Tk-frei | `local_json_store`, `render_retention`, `view_positions`, `undo_history`, `item_index`, `glyph_metrics`, `interaction_policy`, `content_search`, `runtime_diagnostics`; mit `i18n`-Kopplung `data_lock`, `storage_health`, `persistence`, `save_result`, `backup_snapshot`, `structural_guard`, `runtime_config`, `ui_design`, `accessibility` |
+| 4 | Glide-spezifisch | `session_guard`, `attachment_integrity`, `data_safety`, `ai_workspace`, `ai_workspace_ui`, `chapters`, Planungs- und Datenmodell |
+| 5 | plattform-/Tk-gekoppelt, gesondert | `image_preview`, `image_conversion` |
+
+Kategorie 3 wird nur auf belegten Bedarf eines Folgeprojekts (Rückmeldevertrag) in E02/E04 herausgelöst.
+
+#### 4.8.5 Vorplanung E04 (Bento) und E05 (Leistung)
+
+- **E04:** vorhanden sind `BentoCard`, `BentoGrid`, `BentoLayoutPlanner`, `BentoTokens`, `BentoContext`, `BentoHeader`, `BentoMetric`, `BentoActions`, `BentoEmptyState`, `BentoDivider`. Erwartete Lücken aus E03 (unbestätigt): Fortschritts-/Verlaufskarte, Listenkarte mit Auswahl, Diagramm-Platzhalter. Die Anforderungen des alten Teils 07 bleiben vollständig; neue Komponenten nur mit Rückmeldevertrag.
+- **E05:** Ausgangspunkte `render_retention`, `image_preview`/`image_conversion`, `AfterScope`-Lebensdauer, `messung_speicherweg.py`; Messung vor Änderung, Grenzwerte im QA-Testplan.
+
+#### 4.8.6 App-Version (Empfehlung, Inhaberentscheidung)
+
+Seit 1.0.3 kamen Format 27, Eingabeentwürfe, Datensicherheits-Härtung und der KI-Arbeitsbereich hinzu. Empfehlung: **1.2.0** statt 1.1.0, weil der bisherige Kandidat 1.1.0 (PR #199) bereits einen anderen Umfang benennt und der neue Umfang neue Funktionen ohne Bruch bringt. Vergeben wird die Version erst in der Produktionsrunde (E07).
+
+#### 4.8.7 Git-Entscheidungsvorlage (nicht beschlossen)
+
+Vorschlag, nur nach ausdrücklicher Inhaberfreigabe: (1) Sicherung `e01-final` prüfen, (2) `pfade_bereinigen.py` und CI-Grundstufe grün, (3) ein Commit auf dem bestehenden Zweig `claude/glide-sync-master-auftrag-ef27c1`, (4) Push auf diesen Zweig als Zwischenstand von PR #201 (Entwurf bleibt Entwurf), (5) kein Merge, kein Tag, kein Release. Alternative: weiter lokal arbeiten bis E02 und dann gemeinsam committen.
 
 ### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
 

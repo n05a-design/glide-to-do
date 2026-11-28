@@ -1,6 +1,6 @@
 # Portabler Designvertrag für Folgeprojekte der Glide Shell
 
-Stand 27.11.2026 · Glide 1.0.3 · Glide Shell 0.9.0 · Lizenz MPL-2.0
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.9.1 · Lizenz MPL-2.0
 
 Dieses Dokument definiert den verbindlichen, transportablen Gestaltungs- und Interaktionsvertrag für alle Anwendungen, die die **Glide Shell** als UI-Fundament einsetzen. Es ist offline-fähig und unabhängig vom Glide-Hauptrepository nutzbar.
 
@@ -151,7 +151,7 @@ Allgemeine Knöpfe, Eingabe- und Suchfelder, Tooltips, Werkzeugleisten und der T
 
 ### Aktionsgriff und Ablageanzeige (Shell 0.9.0)
 
-`ActionHandle` nimmt die Glyphe, Farbrollen, Schrift und Innenabstände vom Host entgegen. Klick, Tastatur und Ziehen haben klar abgegrenzte Aufgaben. Nur wenn der Host eine Bewegung anbietet, erhält der Griff Drag-Bindungen. Leseränder in Texteditoren und der kompakte Griff vor der Aufgaben-Checkbox werden vom Host bemessen.
+`ActionHandle` nimmt die Glyphe, Farbrollen, Schrift und Innenabstände vom Host entgegen. Klick, Tastatur und Ziehen haben klar abgegrenzte Aufgaben. Nur wenn der Host eine Bewegung anbietet, erhält der Griff Drag-Bindungen. Leseränder in Texteditoren und der kompakte Griff vor der Aufgaben-Checkbox werden vom Host bemessen. **Griffachse:** Innerhalb einer Liste stehen alle Zeilengriffe einer Ansicht bündig auf einer senkrechten Achse. Der Host erzeugt sie über genau eine Griff-Fabrik (gleiche Breite, Schrift und Zeichnung) und richtet sie an der Listenkante aus, nicht an Zellkanten; Text und Markierung folgen dem gemessenen Textbeginn der Zeile. Vorbild ist Glide (`make_row_grip`, T360).
 
 `DropIndicator` zeichnet über dem vorhandenen Ziel und belegt keinen Platz im Layout. Vor und nach einer Zeile steht eine horizontale Linie, im Zielcontainer und bei einem ungültigen Ziel eine Seitenmarkierung. Der Host liefert Zielrechteck, Einrückung, Themenfarbe und Gültigkeit.
 

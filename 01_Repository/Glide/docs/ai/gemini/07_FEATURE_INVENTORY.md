@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-DATA, GLIDE-ROADMAP]
 
 # Feature inventory
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 4ce3697a
 
 This document is the English navigation and status layer. The canonical register is the detailed feature table in [`src/glide/README.md`](../../../src/glide/README.md), with user-visible behavior in [`20_FUNKTIONEN.md`](../../20_FUNKTIONEN.md). The system catalog reports 148 feature entries: 128 product/UI entries (including the external agent skill) and 20 technical system capabilities. The counts are inventory counts, not a claim that every row has current cross-platform acceptance.
 

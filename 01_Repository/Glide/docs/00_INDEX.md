@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.87
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Glide-System V1.87
 
 Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 

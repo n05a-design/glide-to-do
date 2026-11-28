@@ -49,6 +49,39 @@ class Sicherung(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp, ignore_errors=True)
 
+    def test_gemischte_zeilenenden_werden_bytegenau_wiederhergestellt(self):
+        """Teil 05B: Eine Arbeitskopie mit CRLF- und LF-Dateien, unverändert seit dem Commit.
+
+        Ein frischer Klon würde Zeilenenden nach `core.autocrlf` setzen; der
+        Baum-Abdruck stellt die tatsächlichen Bytes jeder Datei wieder her und
+        meldet Abweichungen auch für nicht geänderte Dateien.
+        """
+        crlf = bytes((13, 10))
+        git(self.repo, "add", "-A")
+        git(self.repo, "commit", "-q", "-m", "zwischen")
+        (self.repo / "windows.txt").write_bytes(b"eins" + crlf + b"zwei" + crlf)
+        (self.repo / "unix.txt").write_bytes(b"eins" + bytes((10,)))
+        git(self.repo, "add", ".")
+        git(self.repo, "commit", "-q", "-m", "gemischt")
+        ordner, manifest = sichern.sichern(self.repo, self.temp / "ablage", "eol")
+        self.assertTrue(manifest["baum"]["windows.txt"]["crlf"])
+        self.assertFalse(manifest["baum"]["unix.txt"]["crlf"])
+        _, abweichungen = sichern.wiederherstellen(ordner, self.temp / "kopie", quelle_repo=self.repo)
+        self.assertEqual(abweichungen, [])
+        kopie = self.temp / "kopie"
+        self.assertEqual((kopie / "windows.txt").read_bytes(), b"eins" + crlf + b"zwei" + crlf)
+        self.assertEqual((kopie / "unix.txt").read_bytes(), b"eins" + bytes((10,)))
+
+    def test_unveraenderte_datei_mit_fremden_bytes_wird_gemeldet(self):
+        ordner, _ = sichern.sichern(self.repo, self.temp / "ablage", "abdruck")
+        manifest = sichern.manifest_lesen(ordner)
+        # .gitignore ist seit dem Commit unverändert, steht also nur im Abdruck.
+        manifest["baum"][".gitignore"]["sha256"] = "0" * 64
+        import json
+        (ordner / sichern.MANIFEST).write_text(json.dumps(manifest), encoding="utf-8")
+        _, abweichungen = sichern.wiederherstellen(ordner, self.temp / "kopie", quelle_repo=self.repo)
+        self.assertEqual(abweichungen, ["abweichend (Bytes): .gitignore"])
+
     def test_rundlauf(self):
         ordner, manifest = sichern.sichern(self.repo, self.temp / "ablage", "probe")
         self.assertEqual(sichern.pruefen(ordner)[1], [])

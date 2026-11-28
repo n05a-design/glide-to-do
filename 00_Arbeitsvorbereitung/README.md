@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzusammenfassungen entfernt. Stand, Prüfgrenzen und nächste Schritte stehen in der Übergabe; datierte Ergebnisse im QA-Bericht.
 
@@ -11,6 +11,8 @@ Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzus
 | [Übergabe](Glide_Uebergabe.md) | Einstieg: aktueller Git-/Arbeitskopienstand, Prüfbelege, Archivstatus und offene Tore |
 | [Meilenstein-Plan v1.0](Glide_Meilenstein_v1_Plan.md) | Verbindlicher Schnittpunkt und Fahrplan für Release Version 1.0 (Homebrew, winget, i18n, D93) |
 | [Entwicklungsplan](Glide_Entwicklungsplan.md) | Einzige Roadmap mit Aufgabenstatus, Paketgrenzen und offenen Entscheidungen |
+| [E03 STEPS](Ecosystem/E03_STEPS_Integration.md) | Vorbereiteter, separater Integrationsauftrag für STEPS (E03); Übergabe erst nach Freigabe |
+| [E03 Chess & Chains](Ecosystem/E03_Chess_and_Chains_Integration.md) | Vorbereiteter, separater Integrationsauftrag für Chess & Chains (E03); Übergabe erst nach Freigabe |
 | [Analyse](Glide_Analyse.md) | Datierte technische und fachliche Befunde mit Quellenstand und Prüfgrenzen |
 | [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md) | Herstellerquellen, Vergleiche und eingeordnete Vorschläge |
 | [Manuelle Prüfung](Glide_Manuelle_Pruefung.md) | Native Bedienung, Sicht, DPI/Mehrmonitor und plattformspezifische Abnahme |

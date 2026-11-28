@@ -13,7 +13,7 @@ related_documents: [GLIDE-STRATEGY, GLIDE-ROADMAP, GLIDE-UX]
 
 # Product research and competition
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 5631333a
 
 ## Evidence boundary
 

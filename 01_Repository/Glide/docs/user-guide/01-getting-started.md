@@ -1,6 +1,6 @@
 # Getting started – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen §1 Grundbegriffe](../20_FUNKTIONEN.md#1-grundbegriffe), [§2 Seitenleiste und Navigation](../20_FUNKTIONEN.md#2-seitenleiste-und-navigation), [§7 Startseite](../20_FUNKTIONEN.md#7-startseite) · [Guide contents](README.md) · Next: [Installation](02-installation.md)
 

@@ -55,6 +55,25 @@ with tempfile.TemporaryDirectory(prefix="glide-teil04-") as directory:
         assert field.winfo_ismapped() and row.master is app.tree.master and field.winfo_rootx() >= app.tree.winfo_rootx()
         app.tree.focus_force()
         settle()
+        # Griffachse (Design Richtlinien): Der Griff der Eingabezeile steht senkrecht
+        # unter den Griffen der Aufgabenzeilen, gleich breit und gleich gezeichnet;
+        # die Markierung beginnt, wo der Baum den Aufgabentext beginnt.
+        app.add_item(raw_text="Achsenprobe")
+        settle()
+        app.show_quick_plan_row()
+        settle()
+        aufgabengriff = app._row_action_buttons[0]
+        eingabegriff = app.inline_task_grip
+        assert aufgabengriff.winfo_rootx() == eingabegriff.winfo_rootx(), (aufgabengriff.winfo_rootx(), eingabegriff.winfo_rootx())
+        assert aufgabengriff.winfo_width() == eingabegriff.winfo_width()
+        assert (aufgabengriff.font, aufgabengriff.text) == (eingabegriff.font, eingabegriff.text)
+        erste = app.tree.get_children("")[0]
+        assert app.inline_task_mark.winfo_rootx() == app.tree.winfo_rootx() + app.tree_text_inset(erste), (
+            app.inline_task_mark.winfo_rootx(), app.tree.winfo_rootx(), app.tree_text_inset(erste))
+        app.current_list()["items"].clear()
+        assert app.save_items()
+        app.refresh_tree()
+        settle()
         app.inline_task_placeholder.event_generate("<Button-1>", x=4, y=4)
         settle()
         assert root.focus_get() is field

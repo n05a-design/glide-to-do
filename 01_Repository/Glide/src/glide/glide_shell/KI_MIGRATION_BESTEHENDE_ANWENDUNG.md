@@ -1,6 +1,6 @@
 # Glide Shell – bestehende Anwendung in die Shell überführen (Anleitung und Startprompt für KI-Agenten)
 
-Stand 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Shell 0.9.0 · Glide Bento 0.3.0 · [English version](AI_MIGRATION_EXISTING_APPS.md)
+Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.95 · Glide Shell 0.9.1 · Glide Bento 0.3.0 · [English version](AI_MIGRATION_EXISTING_APPS.md)
 
 Diese Datei gilt für Anwendungen, die **schon existieren** und eine eigene Oberfläche haben, etwa STEPS oder Chess & Chains. Für ein neues Projekt gilt [KI_ANLEITUNG_NEUE_PROJEKTE.md](KI_ANLEITUNG_NEUE_PROJEKTE.md). Beide Dateien liegen im Shell-Paket und kommen mit jeder Übernahme ins Projekt.
 

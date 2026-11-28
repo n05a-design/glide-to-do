@@ -1,6 +1,6 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 1.0.3 / Format 26**. `current_v26` ergänzt die erweiterte Serienregel; `wiederholungsregeln_fp02.json` enthält 30 unabhängige Referenztabellen mit je 24 Folgeterminen. `current_v25` enthält die vorherige Referenz mit einer Notion-Quellenzuordnung an Seite und Ordner, `current_v24` die Format-24-Referenz mit einer Bildfolge aus drei Bildern und eigener Dauer, `current_v23` die Format-23-Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
+Aktueller Aufgabenstand: **Glide 1.0.3 / Format 27**. `current_v27` ergänzt stabile Kapitelanker, einen Kapitelverweis und einen Navigationsort (aus `current_v26` abgeleitet, D107); `current_v26` ergänzt die erweiterte Serienregel; `wiederholungsregeln_fp02.json` enthält 30 unabhängige Referenztabellen mit je 24 Folgeterminen. `current_v25` enthält die vorherige Referenz mit einer Notion-Quellenzuordnung an Seite und Ordner, `current_v24` die Format-24-Referenz mit einer Bildfolge aus drei Bildern und eigener Dauer, `current_v23` die Format-23-Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
 
 - Enthalten sind unter anderem die Tagebuch-/Zeichnungsdaten älterer Formatstufen, dazu Punkte mit
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.

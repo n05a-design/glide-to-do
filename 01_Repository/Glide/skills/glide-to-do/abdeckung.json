@@ -3,7 +3,7 @@
   "version": 1,
   "zweck": "Ordnet jedes Datenfeld des Glide-Aufgabenformats ein: ja = der Skill legt es über den genannten Weg an; offen = geplant im genannten Paket von WA-61; intern = bewusst nur in Glide. tests/tools/test_agenten_skill.py vergleicht diese Datei mit dem Glide-Code. Ändert sich das Datenformat, ein Feld, eine Art oder eine Fähigkeit des Austauschformats, schlägt die Prüfung fehl, bis Skill und Datei nachgezogen sind.",
   "glide_version": "1.0.2",
-  "datenformat": 26,
+  "datenformat": 27,
   "austauschformat": 2,
   "faehigkeiten": [
     "animation_duration_ms", "animations", "attachment_packages", "attachments", "checklists", "descriptions", "due_dates",
@@ -57,6 +57,7 @@
     },
     "liste": {
       "id": {"status": "intern"},
+      "nav_parent_id": {"status": "intern", "hinweis": "Navigationsort in der Seitenleiste (Format 27), nur in Glide"},
       "title": {"status": "ja", "weg": "austausch", "austausch": "title"},
       "note": {"status": "ja", "weg": "austausch", "austausch": "description"},
       "folder_id": {"status": "ja", "weg": "austausch", "austausch": "folder"},

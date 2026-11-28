@@ -1,6 +1,6 @@
 # Day planning – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen §4 Heute, Demnächst und Planung](../20_FUNKTIONEN.md#4-heute-demnächst-und-planung), [Tageskapazität und Entlastung](../20_FUNKTIONEN.md#tageskapazität-und-entlastung-seit-3550), [Tagespaket](../20_FUNKTIONEN.md#tagespaket-33314-au01-au03-g05au05-h-02) · [Guide contents](README.md) · Previous: [Tasks and lists](03-tasks-and-lists.md) · Next: [Calendar](05-calendar.md)
 

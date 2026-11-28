@@ -3,6 +3,40 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## Entwicklungskandidat 1.1.0 – Ecosystem E01
+
+- KI-Arbeitsbereich: Eine beschädigte oder von einer neueren Fassung stammende Datei wird nicht mehr beiseitegelegt und leer ersetzt, sondern bleibt unverändert; der Bereich öffnet schreibgeschützt mit Hinweis.
+- Die Prompt-Bibliothek weist auf verwaiste oder ruhende Prompts sowie fehlende Dokumente und Beziehungen hin.
+- Behoben: Die vollständige Wiederherstellung einer App-Sicherung mit KI-Dokumenten brach mit „Anhänge unvollständig“ ab.
+- Entwicklung: lokaler Framework-Checkpoint für Glide Shell und Glide Bento mit Snapshot-Kennung und Manifest (`scripts/pflege/framework_checkpoint.py`).
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 06
+
+- Neuer KI-Arbeitsbereich (Datei › KI-Arbeitsbereich): Prompt-Bibliothek, Prompts aus 20 Vorlagen, strukturierter Prompt-Editor mit einfachem und erweitertem Modus, eigenen Feldern und Live-Vorschau. Ein Prompt ist eine Seite – Freitext, Labels, Projekt, Favorit, Archiv und Suche funktionieren wie gewohnt.
+- KI-Projektprofile mit versionierten Projektanweisungen, Agentenprofile (ohne Zugangsdaten), Kontextbausteine und Kontextpakete; Kontextbudget mit geschätzten Token und Hinweisen auf möglicherweise sensible Inhalte.
+- Versionen von Prompts mit Vergleich und Wiederherstellung; „Als übergeben markieren“ friert die ausgegebene Fassung samt Kontext ein.
+- Übergabe ohne Anbieterverbindung: Kopieren, Markdown, Text, JSON oder Kontextpaket (ZIP mit Manifest und Prüfsummen); Anbieter-Website nur auf Klick.
+- Ergebnisberichte werden als Daten gespeichert, nie als Anweisung; Folgeaufträge mit Auftragskette.
+- Dokumentenbibliothek: verwaltete Dokumente mit Versionen, Duplikaterkennung, Vorschau, lokaler Volltextsuche (ohne PDF), Fundorten und Integritätsprüfung; Teil der vollständigen Sicherung und selektiv wiederherstellbar.
+- Glide Shell 0.9.1 (Vertragsregel Griffachse). Systemregister V1.95. Formate unverändert.
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 05B
+
+- Neue Ansicht „Daten und Sicherheit“ (Datei › Sicherung): Speicherstand, Sicherungen und Integrität mit tatsächlichen lokalen Werten; nicht Geprüftes heißt „nicht geprüft“. Integritätsprüfung läuft im Hintergrund, Sicherungen lassen sich prüfen.
+- „Bereich leeren …“ im Bereichsmenü legt den Inhalt nach einer geprüften vollständigen Sicherung in den Papierkorb; nur angezeigte Objekte bleiben, ein Rückgängig-Schritt.
+- Glide merkt sich die Leseposition je Seite und Liste über Neustarts hinweg, bei Seiten am Kapitel verankert.
+- Anzeigeort per Ziehen mit gehaltener Alt-/Wahltaste; ein Hinweis zeigt vorher, ob verschoben oder nur angezeigt wird.
+- Griffe in Aufgaben-, Checklisten- und Eingabezeilen stehen bündig auf einer Achse; Checklistenzeilen und Kapitelüberschriften haben eigene Griffmenüs.
+- Sicherheit: Eine veraltete Datensperre eines anderen Rechners wird nur nach Rückfrage übernommen. Ein vollständiger Import behält Anhangskennungen. Nach dem Anlegen einer Aufgabe verschwindet der Entwurf sofort von der Platte.
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 05
+
+- **Aufgabenformat 27** (Freigabe D107): Kapitel behalten ihre Kennung über Umbenennen, Verschieben und Neustart. Verweise können auf ein Kapitel zeigen und springen dorthin. Seiten, Notizen und Zeichnungen lassen sich in der Seitenleiste zusätzlich unter einem anderen Ordner anzeigen, ohne ihren Heimatordner oder ihre Art zu ändern. Vor der Umstellung sichert Glide den Bestand bytegenau als `liste_vor_format27_*.json`; Glide-Fassungen mit Format 26 öffnen den umgestellten Bestand nur lesend.
+- Agent-Skill 1.5 (Datenformat 27 im Manifest).
+
+- Nicht abgeschickte Eingaben der Inline-Erfassung überstehen Neustart und Absturz. Glide meldet einen wiederhergestellten Entwurf; er wird erst mit Enter zur Aufgabe. Escape verwirft ihn dauerhaft. Entwürfe liegen lokal in `input_drafts.json` neben den Einstellungen, nicht in der Speicherdatei.
+- Systemregister V1.93. App-Version 1.0.3, Shell 0.9.0, Bento 0.3.0 sowie Einstellungs-, Austausch- und Vorlagenformat 2/2/2 unverändert.
+
 ## Entwicklungskandidat 1.1.0 – Master-Serie Teil 04
 
 - Aufgaben in leeren und gefüllten Listen und Tabellen direkt in der letzten Zeile erfassen. Enter speichert, Escape verwirft den Entwurf. Entwürfe bleiben beim Ansichtswechsel innerhalb der Sitzung erhalten.

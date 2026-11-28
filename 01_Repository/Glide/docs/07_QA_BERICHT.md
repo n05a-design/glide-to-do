@@ -1,3 +1,19 @@
+## Ecosystem E01: Konsolidierung und Framework-Checkpoint (28.11.2026)
+
+Geprüfter Stand: Zweig `claude/glide-sync-master-auftrag-ef27c1` @ `dfcbae7f` plus lokaler, uncommitteter Arbeitsstand (Sicherung `e01-start`); CI-Grundstufe in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Tk 9, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung, kein Commit.
+
+| Gegenstand | Befehl / Nachweis | Status |
+|---|---|---|
+| Befund 1: unlesbare `ai_workspace.json` wurde beiseitegelegt, App startete leer und beschreibbar | `local_json_store.read(quarantine=False)`, Schreibschutz mit Hinweis | behoben, T373 `BegleitdateiVertrag` |
+| Befund 2: 2-MB-Grenze hätte große Arbeitsbereiche gesperrt | Grenze 64 MB für diese Datei | behoben, T373 |
+| Befund 3: Vollwiederherstellung mit KI-Dokumenten brach ab („Anhänge unvollständig“) | `import_full_backup` erkennt Dokumentdateien des Abschnitts `ai_workspace` | behoben, T368 erweitert |
+| T368 Vollwiederherstellung | `test_wiederherstellung_vollstaendig.py` | PASSED: 11 Listen, 5 Ordner, 3 Anhangsdateien, Papierkorb, KI-Arbeitsbereich (2 Prompts, 1 Dokument mit 2 Versionen) nach Wiederherstellung und Neustart identisch |
+| T374 / T375 | `test_ki_arbeitsablauf.py`, `test_framework_checkpoint.py` | PASSED; Checkpoint Shell 0.9.1, Bento 0.3.0, 45 Dateien, Selbsttests 13/13 und 16/16 aus der Kopie, Import-Isolation, Konformität, Referenzhost |
+| Unit-Suite, Sicherungszentrale, Schutzrunde | `unittest discover tests/unit`, Bereichssuiten | PASSED (1478 Unit-Tests) |
+| Systemregister, Standprüfung | `test_glide_system.py`, `standpruefung.py` | PASSED (V1.96) |
+| CI-Grundstufe | `ci_grundstufe.py --protokoll` | PASSED; Lieferstand als zulässiger Hinweis (26 Abweichungen zu `07`) |
+| Nicht ausgeführt | eingefrorene Vollprüfung (D51), macOS, Linux, Paketbau, Integration in STEPS/Chess & Chains (E03) | offen |
+
 ## Master-Serie Teil 03: Editor, Kapitel, Rechtschreibvertrag, Shell 0.8.0 (27.11.2026)
 
 Geprüfter Stand: `main` @ `e8eee591` plus Arbeitsstand Teil 03, gesichert als `teil03-nach-1` (56 geänderte, 19 neue Dateien), wiederhergestellt in eine Prüfkopie außerhalb OneDrive (alle SHA-256 gleich); danach eine Korrektur in `app.pyw` (Attributprüfung, `getattr` statt `__dict__.setdefault`) in Arbeitskopie und Prüfkopie gleich übernommen. Danach geändert: nur dieser QA-Abschnitt. Umgebung: Windows 11 Pro, Python 3.15.1, Tk 9.x, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung.
@@ -593,7 +609,7 @@ Der Werkzeugtest T299 (`tests/tools/test_standpruefung.py`) prüft jetzt die Spr
 
 ## Lokaler macOS-Volllauf und Paketbau (18.11.2026)
 
-**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.3, Aufgabenformat 26. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
+**Stand:** Arbeitszweig `design-shaye-release-ci-reparatur`, HEAD `d894e2a6541a8ddc8408fb71aa0d54c581ad306f`; Glide 1.0.3, Aufgabenformat 27. macOS 27.2.1 auf Apple M2/arm64, CPython 3.14.5, Tcl/Tk 9.0.3; künstliche Prüfdaten außerhalb von OneDrive. Zum Prüfzeitpunkt waren zwei Testkorrekturen noch nicht committet: `test_bedienung33316.py` erhält die D84-Gruppenprüfung auch bei den vorgesehenen Text-Rückfällen ohne private Symbolglyphen; `test_oberflaeche33321.py` bewegt den echten Zeiger vor dem synthetischen `<Leave>` aus der Gismo-Kachel, weil die App beim Verbergen zusätzlich die reale Zeigerposition prüft. Der einzelne Oberflächentest bestand anschließend.
 
 **Vollprüfung:** `tests/tools/pruefen.py --modus voll --timeout 900 --arbeitsablage ~/GlidePruefung`; Ergebnis `~/GlidePruefung/voll-141-20261118-r4/ergebnis.json`, dauerhafter WA-42-Nachweis `~/GlidePruefung/lauf-esdb9s05`. Exitcode 0: **135 ausgeführte Schritte erfolgreich, 2 ausdrücklich übersprungen**. Syntax 447 Python-Dateien, Versions-/Dokument-/Fixtureprüfungen, Fachlogik-Unit-Tests, sämtliche Integrationssuiten, Showcase, statische und Erreichbarkeitsanalyse, Stand-/Attribut-/Duplikatprüfungen sowie Beispieldaten- und Releaseabgleich bestanden. Quellhash von `app.pyw`: `bd7d9f90aed799e233b945914f34bba1fbb9485aa9fa06dddcd0f3d44698548b`. Screenshots wurden übersprungen, da `screenshots.py` Linux/X11 voraussetzt; die Sichtprüfung bleibt ausdrücklich menschlich und offen.
 
@@ -642,7 +658,7 @@ Nachweisstand nach Umsetzung von Etappe 1 aus Meilenstein Release 1.0 (WA-61, Pa
 
 ## Agenten-Skill `glide-to-do`, Paket K3 – Erweiterte Austauschfähigkeiten (17.11.2026)
 
-Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.3, Aufgabenformat 26, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skill-paket-k3-wa61`; Glide 1.0.3, Aufgabenformat 27, Austauschformat 2, Glide-System V1.38. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -660,7 +676,7 @@ Stand nach Umsetzung von Paket K3 (WA-61, E-K5 Option A) auf Branch `claude/skil
 
 ## Agenten-Skill `glide-to-do`, Paket K2 – Befund 1 & 2 (17.11.2026)
 
-Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.3, Aufgabenformat 26, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
+Stand nach Umsetzung von Paket K2 (WA-61, D91/D92) auf Branch `claude/skill-ausbau-wa61`; Glide 1.0.3, Aufgabenformat 27, Austauschformat 2. Lokal macOS arm64, Python 3.14.5, Tcl/Tk 9.0.3, künstliche Daten.
 
 | Gegenstand | Nachweis |
 |---|---|
@@ -1222,7 +1238,7 @@ Native Mac-Vollprüfung auf `a4c34b8`, Lauf 42474998495: neue frühe Geometrievo
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](https://github.com/n05a-design/glide-to-do/blob/61a2f3ac2f0e1880e7fd8c0f3cfd9da0d0c9f16d/01_Repository/Glide/tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 
@@ -1567,3 +1583,56 @@ Windows-Tk: T360, T361, Galerie T355, Kapitel-/Editorregression aus Teil 03, Ber
 ### H. Anschluss Teil 05
 
 [Abnahmekriterien und Migrationsbedarf im Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#476-teil-04-inline-eingabe-und-seitenleiste-27112026). Teil 03 benötigt stabile Kapitelanker und Kapitelverweise sowie wiederherstellbare Positionen über Neustarts. Teil 04 ergänzt dauerhafte Entwürfe und eine vom Heimatcontainer unabhängige Navigation. Für Leeren gelten Wiedereinlesen auf neuer Instanz, Integrität der Anhänge, Schreibsperre, Fehlerproben, Undo/Redo und verifizierte Wiederherstellung als Voraussetzungen. Geplante neue Inhaltstypen vor der gemeinsamen Migration inventarisieren und auf Import/Export sowie Abwärtskompatibilität prüfen.
+
+## Master-Serie Teil 05: Datensicherheit, erster Arbeitsschnitt (27.11.2026)
+
+Windows 11, Python 3.15, künstliche Daten, `GLIDE_DATA_DIR` und Temp unter `%USERPROFILE%/gq/t05`. Quellstand `dfcbae7f` plus Arbeitsbaum (11 Dateien, Glide-System V1.93).
+
+- **Unit-Suite:** 1.435 Tests bestanden (OneDrive-Worktree). Zwei Erstbefunde durch die eigene Änderung (Toastzählung, Zeitgeber ohne `AfterScope`) behoben: Zeitgeber auf den Shell-Weg umgestellt, Toastzählung begründet von 30 auf 31 fortgeschrieben. Keine Prüfung abgeschwächt.
+- **T362** `test_input_drafts.py`: 10 Fälle bestanden, darunter Abbruch vor `os.replace` und voller Datenträger als Fehlerinjektion (kein echter Datenträgertest).
+- **T363** `test_input_drafts_restart.py`: echter Prozessabbruch per `os._exit` mit offenem Entwurf. Neustart im Wiederherstellungsmodus (`recovery`), Freigabe, Entwurf wieder im Feld ohne angelegte Aufgabe, Übernahme ohne Duplikat, Escape verwirft dauerhaft. Bestanden. Ein Abbruch im selben Prozess erkennt Glide korrekt als lebende Sitzung (`active`) und gibt ihn nicht frei.
+- **Regression T360** `test_inline_teil04.py`: bestanden.
+- **CI-Grundstufe:** Im OneDrive-Worktree erneut WinError 5 beim Aufräumen einer Werkzeug-Fixture (bekannt aus Teil 04). In der wiederhergestellten Prüfkopie `%USERPROFILE%/gq/t05/k1` bestanden: alle Schritte, Lieferstand als Hinweis mit 18 Abweichungen (neu `input_drafts.py`; `07_Python-Versionen` bleibt der Produktionsrunde vorbehalten). Die Standprüfung verlangte zuvor `input_drafts.py` in den Paketlisten von `baue_app.py` und `abgleich_07.py`; ergänzt. Protokoll `%USERPROFILE%/gq/t05/ci4/ergebnis.json`.
+- **Nicht ausgeführt:** macOS und Linux nativ, menschliche Abnahme, Paketbau, Vollprüfung nach D51.
+
+**Nachtrag Format 27 (27.11.2026, D107).** Gleiche Umgebung, künstliche Daten.
+
+- **T364** `test_format27.py`: 17 Fälle bestanden (Anker, Kapitelverweise, Navigationsort).
+- **T365** `test_format27_migration.py`: bestanden. Bytegenaue Formatsicherung vor der Umstellung (SHA-256 gleich), Kennungen und Objektzahl erhalten, Anker über Umbenennen, offenen Editor und Neustart, Kapitelverweis und fehlendes Kapitel, Navigationsort mit Undo ohne Kopie, Duplizieren mit neuen Ankern, Rückweg über die Sicherung, Rundlauf `current_v27`, Format 28 nur lesend und bytegleich. Der erste Lauf fand eine fehlende Formatsicherung für 27 (`ensure_schema_backup(27)`); behoben, bevor die Umstellung irgendwo schrieb.
+- **Skill:** `test_agenten_skill.py` 18 Tests bestanden nach Abdeckung (`nav_parent_id` intern), Manifest 1.5/Format 27 mit neuen Prüfsummen.
+- **Fixtures:** Referenz `current_v27` aus `current_v26` abgeleitet (feste Anker, ein Kapitelverweis, ein Navigationsort); Beispieldaten, Rundgang und Showcase DE/EN mit den vorhandenen Erzeugern neu geschrieben.
+- **Nicht ausgeführt:** Migration echter Nutzerbestände, macOS und Linux nativ, menschliche Abnahme, Paketbau.
+- **Regression Teil 03/04 und Formatsuiten:** T360, T361, `test_editor_teil03.py` (Kapitelschlüssel jetzt über den Titel zur Anker-ID aufgelöst, alle Prüfungen erhalten), `test_befunde_1127.py`, `test_features314/315/316/319/328/329`, `test_glide.py`, `test_import3410.py`, `test_release37.py`, `test_reminders.py`, `test_seiten33318.py`, `test_wissen33315.py` (Startmigration 20 → 27), `test_woche33317.py`, `test_startwege.py`, `test_wiederholungsregeln.py` bestanden. Aussagen „aktuelles Format == 26“ auf 27 fortgeschrieben; die ausgelieferte Releaseplanung 1.0.3 bleibt in Format 26 (gleiche Regel wie `pruefen.py`).
+- **Vorbestehend, nicht Teil 05:** `test_features322.py` (unbekannter Menüeintrag „Komponenten-Galerie …“) und `test_features330.py` (Gruppe „Weitere Aktionen“) scheitern identisch auf dem unveränderten Ausgangsstand `dfcbae7f` (geprüft in einer getrennten Kopie). Herkunft: Galerie aus Teil 02. Offen.
+- **CI-Grundstufe** nach Format 27 in der Prüfkopie bestanden (Lieferstand-Hinweis 19 Abweichungen). Standprüfung: Die README in `07_Python-Versionen` folgt bei der Formatstufe jetzt der gelieferten Fassung (wie schon bei der Modulliste, R10); `07_Python-Versionen` selbst ist unverändert.
+
+## Master-Serie Teil 05B: Abschluss Datensicherheit (28.11.2026)
+
+Windows 11, Python 3.15, Tk 9, künstliche Daten, Temp und Datenordner unter `%USERPROFILE%/gq/t05`. Quellstand `dfcbae7f` plus Arbeitsbaum (Glide-System V1.94). Ergebnisse im [Entwicklungsplan §4.7.8](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#478-teil-05b-abschluss-datensicherheit-28112026).
+
+- **Sicherungswerkzeug:** Die CRLF-Abweichung entstand, weil die Arbeitskopie CRLF- und LF-Dateien mischt (152/1320) und die Wiederherstellung mit `core.autocrlf=true` klonte; geprüft wurden zudem nur geänderte Dateien. Jetzt: Baum-Abdruck (SHA-256 und Zeilenendeform jeder versionierten Datei), Klon ohne Konvertierung (`core.autocrlf=false`, `core.eol=lf`), Zeilenenden nach Abdruck, bytegenaue Prüfung aller Dateien. Unabhängiger Vollvergleich nach Wiederherstellung: 1.789/1.790 gleich, die eine Abweichung ist das danach geänderte Werkzeug selbst. `test_arbeitsstand_sichern.py` 6 Tests.
+- **Neue Suiten, alle bestanden:** T366 (9), T367, T368, T369, T370, T371, T372; T363 erweitert um Abbruch direkt nach Enter; T360 um die Griffachsenmessung.
+- **Regressionen:** Unit-Suite 1.461 Tests bestanden. `test_features322`, `test_features330` nach Korrektur bestanden (Ursachen siehe Entwicklungsplan). Weitere Läufe siehe Abschnitt unten.
+- **Sichtbelege:** Bildschirmfotos der Griffachse und der Sicherheitsübersicht (Windows 11, nicht versioniert, an den Inhaber übergeben).
+- **Nicht ausgeführt:** macOS, Linux nativ, Prerelease-Paket 1.0.2, Hardware- und Stromausfallprüfungen, menschliche Abnahme, Lieferung.
+
+**Regressionsübersicht Teil 05B (28.11.2026, vollständig).** Ausgeführt wurden 35 Integrationssuiten. Bestanden im ersten Lauf: alle neuen Suiten außer T370, dazu T360, T361, `test_editor_teil03`, `test_befunde_1127`, `test_features314/316/319/322/329/330`, `test_glide`, `test_datenintegritaet`, `test_import3410`, `test_release37`, `test_reminders`, `test_speicherstatus`, `test_listenleeren`, `test_wiederanlauf`, `test_startwege` (17/17), `test_wiederholungsregeln`, `test_wissen33315`, `test_seiten33318`, `test_custom_controls`, `test_shell_selbsttest`, `test_modalvertrag`. Zunächst fehlgeschlagen, korrigiert und erneut bestanden:
+- `test_schutzrunde` „editorwechsel“: **Regression aus 05B**. Das Merken der Leseposition las beim Wechsel ein Dokument über der Größengrenze und warf `ValueError`; jetzt abgefangen. Danach 16/16.
+- `test_schutzrunde` „sperre“: Die Erwartung „veraltete Fremdsperre gilt als frei“ ist durch die bewusste Härtung überholt. Die Prüfung verlangt jetzt „veraltet, nur nach Bestätigung“.
+- `test_sicherungszentrale`: Die Erwartung „Speicherstufe 26“ ist beim Formatwechsel liegen geblieben und lautet jetzt 27.
+- T370: Testanpassungen (Kartensuche strukturunabhängig, eigener Ablageordner statt gemeinsamem Temp). Zweimal hintereinander bestanden.
+
+Aus den 18 Suiten des Teil-05-Laufs fehlten zuvor `test_features322` und `test_features330`; beide sind jetzt behoben (Ursachen im Entwicklungsplan). Nicht ausgeführt: die übrigen rund 90 Suiten des Vollprüfungsrunners (Vollprüfung nach D51 in Teil 13). Neue Suiten T363–T372 stehen in `pruefen.SUITEN`. Shell-Selbsttest 13/13, Bento-Selbsttest 16/16, Konformität `conform`, Unit-Suite 1.461. Die CI-Grundstufe hat in der bytegenau wiederhergestellten Prüfkopie `%USERPROFILE%/gq/t05/k1` bestanden; Lieferstand-Hinweis mit 24 Abweichungen, `07_Python-Versionen` unverändert. Protokoll unter `%USERPROFILE%/gq/t05/ci8`.
+
+## Master-Serie Teil 06: KI-Arbeitsbereich (28.11.2026)
+
+Windows 11, Python 3.15, Tk 9, künstliche Daten. Quellstand `dfcbae7f` plus Arbeitsbaum (V1.95).
+
+- **T373** `test_ai_workspace.py`: 14 Tests bestanden (Modell, Versionen, eingefrorene Anweisung, Journal mit Abbruch, DOCX ohne DTD, Paket).
+- **T374** `test_ki_arbeitsablauf.py`: vollständiger Arbeitsablauf in der App bestanden (12 Schritte, siehe Entwicklungsplan §4.7.9). Erster Lauf fand einen echten Fehler: Abgewählte Kontextquellen blieben im Export; behoben durch Ausschluss beim Zusammensetzen.
+- **Sicherheitshinweis bei der Umsetzung:** XML aus DOCX wird ohne DTD verarbeitet; `defusedxml` wäre eine freigabepflichtige Abhängigkeit.
+- **Sichtbelege** (nicht versioniert, an den Inhaber übergeben): Prompt-Bibliothek, einfacher und erweiterter Editor mit Vorschau, Projekt- und Agentenprofil, Kontextbibliothek, Versionen, Exportvorschau mit Quellen- und Anhangsauswahl, Dokumentenbibliothek mit Detail und Fundorten. Nicht erstellt: eigene Bilder für Ergebnisbericht, Folgeauftrag, Dokumentversionen und Galerie (keine neuen Galerie-Komponenten).
+- **Nicht ausgeführt:** macOS, Linux, Paketbau, menschliche Abnahme.
+- **Regression Teil 06:** 28 Integrationssuiten bestanden (T360, T361, Teil-03-Editor, Befunde 1127, `test_features316/322/330`, `test_glide`, `test_import3410`, `test_release37`, Sicherungszentrale, Speicherstatus, Schutzrunde, Wiederanlauf, T363–T372, T374, Shell-Demo- und Referenzhost, Shell-Selbsttest, Custom Controls, Modalvertrag). Unit-Suite 1.475, Shell 0.9.1 13/13, Bento 16/16, Konformität `conform`.
+- **CI-Grundstufe:** Der erste Lauf in der bytegenau wiederhergestellten Prüfkopie (`t06-ende`, 185 Dateien gleich) fand einen berechtigten Gestaltungsbefund: Das Oberflächenmodul nutzte `ttk.Combobox` und `tk.Checkbutton` statt Glides Auswahlfeld und `GlideCheckbutton` (D106). Umgestellt, danach CI-Grundstufe bestanden; Lieferstand-Hinweis mit 26 Abweichungen, `07_Python-Versionen` unverändert. Protokoll `%USERPROFILE%/gq/t05/ci9`.
+

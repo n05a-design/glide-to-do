@@ -73,7 +73,7 @@ def fall_uebersicht(lauf):
         lauf.idle()
         detail = next(w for w in knoepfe(dialog, mod.tk.Label) if w.winfo_name() == 'backup_detail')
         assert '1 Listen · 1 Punkte' in detail.cget('text'), detail.cget('text')
-        assert 'Speicherstufe 26' in detail.cget('text')
+        assert 'Speicherstufe 27' in detail.cget('text')
         entry.delete(0, 'end')
         entry.insert(0, 'KEIN TREFFER')
         lauf.idle()

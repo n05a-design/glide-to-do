@@ -170,9 +170,45 @@ def _schreiben(root, ordner, eintraege, neu):
         "branch": _git(root, "rev-parse", "--abbrev-ref", "HEAD").strip(),
         "dateien": dateien,
         "sicherung": sicherung,
+        # Abdruck des ganzen Arbeitsbaums (Teil 05B): Die Arbeitskopie mischt CRLF
+        # und LF; ein frischer Klon setzt Zeilenenden nach `core.autocrlf`. Ohne
+        # Abdruck wären nur geänderte Dateien bytegenau prüfbar.
+        "baum": baum_abdruck(root),
     }
     (ordner / MANIFEST).write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return manifest
+
+
+CRLF, LF = bytes((13, 10)), bytes((10,))
+
+
+def baum_abdruck(root):
+    """SHA-256 und Zeilenendeform jeder versionierten Datei im Arbeitsbaum."""
+    namen = _git(root, "-c", "core.quotepath=false", "ls-files", "-z", text=False).split(b"\0")
+    abdruck = {}
+    for roh in namen:
+        if not roh:
+            continue
+        name = roh.decode("utf-8")
+        pfad = root / name
+        if not pfad.is_file() or pfad.is_symlink():
+            continue
+        inhalt = pfad.read_bytes()
+        abdruck[name] = {"sha256": hashlib.sha256(inhalt).hexdigest(),
+                         "crlf": CRLF in inhalt}
+    return abdruck
+
+
+def zeilenenden_angleichen(ziel, abdruck):
+    """Zeilenenden der Quelle herstellen; ändert nur, wenn danach die Prüfsumme stimmt."""
+    for name, eintrag in abdruck.items():
+        datei = ziel / name
+        if not datei.is_file() or sha(datei) == eintrag["sha256"]:
+            continue
+        lf = datei.read_bytes().replace(CRLF, LF)
+        umgestellt = lf.replace(LF, CRLF) if eintrag["crlf"] else lf
+        if hashlib.sha256(umgestellt).hexdigest() == eintrag["sha256"]:
+            datei.write_bytes(umgestellt)
 
 
 def manifest_lesen(ordner):
@@ -207,7 +243,10 @@ def wiederherstellen(ordner, ziel, quelle_repo="."):
     if ziel.exists() and any(ziel.iterdir()):
         raise SicherungsFehler(f"{ziel} ist nicht leer", 2)
     root = repo_root(quelle_repo)
-    subprocess.run(["git", "clone", "-q", "--no-hardlinks", "--no-checkout", str(root), str(ziel)], check=True)
+    # Ohne Zeilenendkonvertierung klonen: Der Klon enthält dann genau die
+    # Blob-Bytes; die tatsächlichen Zeilenenden der Quelle setzt der Abdruck.
+    subprocess.run(["git", "-c", "core.autocrlf=false", "clone", "-q", "--no-hardlinks", "--no-checkout",
+                    "--config", "core.autocrlf=false", "--config", "core.eol=lf", str(root), str(ziel)], check=True)
     _git(ziel, "checkout", "-q", "--detach", manifest["ausgangscommit"])
     if (ordner / PATCH).stat().st_size:
         _git(ziel, "apply", "--binary", "--whitespace=nowarn", str(ordner / PATCH))
@@ -218,7 +257,19 @@ def wiederherstellen(ordner, ziel, quelle_repo="."):
                 rel = datei.relative_to(quelle_neu)
                 (ziel / rel).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(datei, ziel / rel)
+    abdruck = manifest.get("baum") or {}
+    zeilenenden_angleichen(ziel, abdruck)
     abweichungen = []
+    for name, eintrag in abdruck.items():
+        datei = ziel / name
+        if name in manifest["dateien"]:
+            continue  # unten mit dem Änderungsmanifest geprüft
+        if not datei.is_file():
+            abweichungen.append(f"fehlt: {name}")
+        elif sha(datei) != eintrag["sha256"]:
+            abweichungen.append(f"abweichend (Bytes): {name}")
+    zeilenenden_angleichen(ziel, {pfad: {"sha256": e["sha256"], "crlf": abdruck.get(pfad, {}).get("crlf", False)}
+                                  for pfad, e in manifest["dateien"].items() if e["sha256"]})
     for pfad, eintrag in manifest["dateien"].items():
         datei = ziel / pfad
         if eintrag["sha256"] is None:

@@ -1,6 +1,6 @@
 # Glide – Marketing, Launch, Positionierung & Community
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 Dieses Dokument ist die verbindliche strategische Quelle für Glides Marktpositionierung, Zielgruppenansprache, Marketing-Assets, Launch-Kommunikation, Webpräsenz und Nutzervalidierung nach der Veröffentlichung von Glide 1.0.2. Aufgaben und Meilensteine stehen im [Entwicklungsplan](Glide_Entwicklungsplan.md), technische Befunde in der [Analyse](Glide_Analyse.md), Architekturentscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) und Verteilungswege in [docs/10_VEROEFFENTLICHUNG.md](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md).
 

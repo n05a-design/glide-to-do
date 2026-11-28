@@ -95,6 +95,10 @@ Regeln:
 
 Die laufende Versionsmatrix je Arbeitsschnitt führt der [Entwicklungsplan](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#47-master-serie-in-13-teilen-ab-27112026).
 
+### Framework-Governance (D109)
+
+Glide ist kanonische Quelle von `glide_shell` und `glide_bento`. Folgeprojekte übernehmen nur aus einem Checkpoint (`scripts/pflege/framework_checkpoint.py`); Änderungen an STEPS oder Chess & Chains gehören nie in einen Glide-Auftrag. Schichtgrenzen und Rückmeldevertrag: [Entwicklungsplan §4.8.2](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#482-governance-und-rückmeldevertrag).
+
 ### Abschluss eines Teilauftrags
 
 Jeder Teilauftrag einer beauftragten Serie (zurzeit [Master-Serie](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#47-master-serie-in-13-teilen-ab-27112026)) endet mit: (1) Vollständigkeit des Umfangs, (2) Soll-Ist-Abgleich, (3) Quellcodeprüfung, (4) passende automatisierte Tests, (5) Regression, (6) Designkonformität, (7) Datenintegrität, (8) Framework- und Showcase-Prüfung, (9) Versionsprüfung, (10) nötige Versionswechsel, (11) Versionskonsistenz, (12) Dokumentationspflege, (13) Anforderungsmatrix, (14) Sicherung des lokalen Stands, (15) Übergabe. Nicht anwendbare Punkte mit Grund kennzeichnen; Ungeprüftes nie als verifiziert ausweisen; Blockaden dokumentieren und im nächsten Teil wieder aufgreifen.

@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 24.11.2026 · App-Version 1.0.3 · Datenformat 26
+Stand 24.11.2026 · App-Version 1.0.3 · Datenformat 27
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -16,8 +16,8 @@ ersetzt werden.
 | Öffentliche Beschreibung | Glide – Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen | D72/D74, `brand.DESCRIPTION`; Textvarianten in [Veröffentlichung](../10_VEROEFFENTLICHUNG.md#produktkommunikation) |
 | Softwarelizenz | Mozilla Public License 2.0 (`MPL-2.0`), kommerzielle Nutzung nach Bedingungen zulässig | [kanonischer Lizenztext](../../../../LICENSE), D72 |
 | App-Version | 1.0.3 | `APP_VERSION`, `VERSION` |
-| Datenformat | 26 | `DATA_SCHEMA_VERSION` |
-| Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
+| Datenformat | 27 | `DATA_SCHEMA_VERSION` |
+| Unterstützte Backup-Formate | 4 bis 27 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
 | Prüflaufzeit | Nach Commit und Plattform getrennt; neue Windows-Grundstufe auf PR #69, Mac-Originalnachweise und spätere Quellkorrekturen separat | [Aktueller QA-Bericht](../07_QA_BERICHT.md) |

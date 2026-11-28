@@ -1,6 +1,6 @@
 # Glide-Agenten-Skill `glide-to-do`
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 27.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 Skillversion `1.1` (Feld `metadata.version` in `SKILL.md`).
 

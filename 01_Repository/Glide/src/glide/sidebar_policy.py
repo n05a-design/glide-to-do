@@ -56,7 +56,20 @@ class SidebarPolicy:
         for folder in self.folders.values():
             self.children.setdefault(folder.get('parent_id'), []).append(folder)
         for entry in self.entries.values():
-            self.contents.setdefault(entry.get('folder_id'), []).append(entry)
+            self.contents.setdefault(self.nav_parent(entry), []).append(entry)
+
+    def nav_parent(self, entry):
+        """Navigationsort einer Liste (Format 27): `nav_parent_id`, sonst Heimatordner.
+
+        Der Navigationsort verschiebt nur die Anzeige in der Seitenleiste. Art,
+        Heimatordner (`folder_id`), Verweise, Favoriten und Anhänge bleiben.
+        Ein verwaister oder archivierter Ort fällt sichtbar auf die Heimat zurück.
+        """
+        nav = entry.get('nav_parent_id')
+        folder = self.folders.get(nav) if isinstance(nav, str) else None
+        if folder is not None and not folder.get('archived'):
+            return nav
+        return entry.get('folder_id')
 
     def subtree_accepts(self, folder_id, section, seen=None):
         seen = set() if seen is None else seen
@@ -76,7 +89,7 @@ class SidebarPolicy:
         if key in self._sections:
             return self._sections[key]
         obj = (self.entries if kind == 'list' else self.folders).get(identifier, {})
-        parent = obj.get('folder_id' if kind == 'list' else 'parent_id')
+        parent = self.nav_parent(obj) if kind == 'list' else obj.get('parent_id')
         seen = set()
         while parent in self.folders and parent not in seen:
             seen.add(parent)
@@ -122,9 +135,25 @@ def sibling_ids(policy, kind, identifier):
     source = objects.get(identifier)
     if source is None:
         return []
-    field = 'folder_id' if kind == 'list' else 'parent_id'
-    parent = source.get(field)
+    parent_of = policy.nav_parent if kind == 'list' else (lambda obj: obj.get('parent_id'))
+    parent = parent_of(source)
     section = policy.section(kind, identifier)
-    return [key for key, obj in objects.items() if obj.get(field) == parent
+    return [key for key, obj in objects.items() if parent_of(obj) == parent
             and (parent is not None or policy.section(kind, key) == section)
             and obj.get('system_role') != 'inbox' and not obj.get('archived')]
+
+
+def nav_problem(policy, entry_id, folder_id):
+    """Grund, warum eine Liste nicht unter diesem Ordner angezeigt werden darf, sonst None."""
+    entry = policy.entries.get(entry_id)
+    if entry is None:
+        return 'missing_entry'
+    if folder_id is None:
+        return None
+    folder = policy.folders.get(folder_id)
+    if folder is None or folder.get('archived'):
+        return 'missing_folder'
+    section = policy.section('folder', folder_id)
+    if not accepts(section, 'list', entry.get('list_kind', 'tasks'), folder.get('folder_kind', 'standard')):
+        return 'kind_not_accepted'
+    return None

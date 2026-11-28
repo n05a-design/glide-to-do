@@ -21,7 +21,7 @@ from glide_shell.showcase import SHELL_COMPONENTS, ShowcaseEntry, ShowcaseRegist
 
 class Versionen(unittest.TestCase):
     def test_paketwerte(self):
-        self.assertEqual(glide_shell.SHELL_VERSION, "0.9.0", "erwartete Fassung nach Teil 04 (unabhängig vom Paketwert gepflegt)")
+        self.assertEqual(glide_shell.SHELL_VERSION, "0.9.1", "erwartete Fassung nach Teil 05B: Vertrag Griffachse (unabhängig vom Paketwert gepflegt)")
         self.assertTrue(compat.compatible(glide_shell.SHELL_VERSION, "0.7.0", glide_shell.SHELL_COMPAT_SINCE))
 
     def test_regeln(self):

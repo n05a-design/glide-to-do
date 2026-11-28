@@ -1,6 +1,6 @@
 # Fable 5.2 – Masterprompt für die Glide-Shell-Migration
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Glide-System V1.85
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Glide-System V1.85
 
 > **Abgeschlossen (D99, 22.11.2026):** Dieser Masterprompt ist ein historisches Arbeitsdokument. Die Migration ist mit WA-49 (V1.83) und den Phasen 4 und 5 in `glide_shell` 0.6.0 (V1.84) beendet; maßgeblich sind das [Shell-Konzept](GLIDE_SHELL_FRAMEWORK_KONZEPT.md) und das [KI-Handbuch](GLIDE_SHELL_KI_HANDBUCH.md).
 

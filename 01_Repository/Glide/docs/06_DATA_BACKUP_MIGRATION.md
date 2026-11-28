@@ -4,11 +4,11 @@
 
 **Aufgabentitel seit 3.50.5, Nachtrag 06.11.:** Neuanlage und tatsächliches Umbenennen begrenzen auf 40; automatische Übernahmen und explizite neue Duplikate sichern den Originaltitel in Beschreibung/Notiz. Vorlagenquellen und Bestandstitel bei Laden, Metadatenänderung, Sicherungswiederherstellung und Export erhalten. Lange Vorlagen-/Galerienotizen beim Normalisieren nicht abschneiden, damit Originale erhalten bleiben. Die historische vorgesicherte Container-Titelkürzung bleibt gesondert. Datenformat bleibt 26.
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 **Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Der erste öffentliche Stand 3.50.0 verwendet weiterhin Aufgabenformat 26. Tatsächliche Paketlieferungen und Prüfungen stehen im QA-Bericht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
 
-Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–26 und Legacy 2 bleiben lesbar.
+Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–27 und Legacy 2 bleiben lesbar.
 
 ## Ablage
 
@@ -304,6 +304,58 @@ Entwurf vom 16.11.2026, verbindlicher Rahmen für den geplanten Agenten-Skill `g
 `background_color` ist ein optionaler Einstellungsschlüssel (Einstellungen 2). Zulässig sind `default`, `surface`, `accent`, `clear`, `due_action`, `export`, `flag`, `delete`, `import`, `muted`; fehlende oder ungültige Werte werden `default`. `surface` bedeutet die tatsächliche Design-Kartenfarbe ohne Materialschatten. Die gespeicherten `backdrops` bleiben erhalten; eine neue Verlaufswahl setzt die Hintergrundfarbe auf `default`. App-Backup und Einstellungsnormalisierung führen den Schlüssel mit. Keine Änderung an Aufgabenformat 26.
 
 Das Ziehen eines Seitenblocks ordnet den bestehenden Text mit seinen Formatbereichen neu. Zeichenversätze, Bild-/Linkmetadaten und stabile Aufgaben-IDs werden neu zugeordnet, nicht neu erzeugt. Es entstehen keine zusätzlichen gespeicherten Blockobjekte. Tabellen, Codebereiche und Elternblöcke mit ihren eingerückten Kindzeilen werden zusammen verschoben. Undo verwendet den vorhandenen Dokumentverlauf.
+
+## Dateninventar und Sicherungsumfang (Teil 05B, 28.11.2026)
+
+Verbindliches Inventar aller persistenten Daten (DS-01). Kein zweites Register: Felder und Formatstufen stehen oben, Module im [Systemregister](../src/glide/README.md). „Gesichert“ meint die vollständige App-Sicherung (`.glideapp`, Datei › Sicherung › „Vollständiges App-Sicherung speichern …“); die automatischen Sicherungen `backups/liste_backup_*.json` und die Formatsicherungen `liste_vor_format<N>_*.json` enthalten nur die Hauptdatei ohne Anhänge und sind **kein** Nachweis einer vollständigen Arbeitsbereichssicherung.
+
+| Datenart | Ort · Format | Modul | Identität · Verweise | Schreibweg | Gesichert / wiederhergestellt | Prüfungen · Restrisiko |
+|---|---|---|---|---|---|---|
+| Aufgaben, Listen, Ordner, Seiten, Notizen, Zeichnungen (mit Bildfolge), Pinnwände (Listenarten), Labels, Termine, Fristen, Wiederholungen, Abhängigkeiten (`blocked_by`), Verknüpfungen (`links`, `references`), Zeiterfassung, Archiv, Papierkorb, Änderungsverlauf | `liste_speicher.json`, Aufgabenformat 27 | `app.pyw` (Speicherweg `persistence`, `save_result`), `object_references`, `chapters`, `sidebar_policy` | 32-hex-IDs je Liste, Ordner, Punkt; Verweise `glide://list|item/<id>` | atomar (`write_json_atomic`), Datensperre, Sitzungsnachweis, Bestandswächter | ja / ja, Kennungen identisch (T368) | T364, T365, T368, T372 |
+| Kapitelanker, Kapitelverweise | Bereiche `anchor:<hex>` in `rich_note`, Verweis `glide://list/<id>#<Anker>` | `chapters`, `object_references` | Anker je Dokument eindeutig, beim Kopieren neu | mit der Seite | ja / ja (T368) | Markdown-Export verliert Anker (verlustbehaftet) |
+| Navigationsort | `nav_parent_id` an Listen | `sidebar_policy` | Ordner-ID; verwaist → Heimat | mit der Liste | ja / ja (T368) | Austauschformat überträgt ihn nicht (intern) |
+| Favoriten (Notizbuch) | `journal.favorite` an Notizen | `app.pyw` | – | mit der Liste | ja / ja | – |
+| Anhänge, Seitenbilder, Titelbilder, Zeichnungs-PNG | `attachments/<id>_<name>`, Verweise im Datensatz (`storage`, `id`) | `app.pyw`, `attachment_paths`, `attachment_integrity` | Anhangs-ID; mehrere Datensätze dürfen eine Datei teilen | Kopie beim Hinzufügen | ja, Bytes und seit 05B Kennungen identisch bei vollständigem Import in freie Ziele (T368) | Integritätsprüfung (T366, T370); keine externen Dateiverknüpfungen im Datenformat |
+| Pixel-Symbole | `icon` an Listen und Ordnern | `app.pyw` | – | mit dem Objekt | ja / ja | – |
+| Vorlagen | `vorlagen.json`, Vorlagenformat 2 | `app.pyw` | Vorlagen-ID | atomar | ja (App-Sicherung) / ja (T368) | – |
+| Einstellungen, Seitenleistenbereiche (`sidebar_locations` u. a.), Pinnwandanordnung | `settings.json`, Einstellungsformat 2 | `app.pyw`, `settings_compat`, `pinboard_pages` | – | atomar | ja (App-Sicherung) / ja (T368) | – |
+| Eingabeentwürfe | `input_drafts.json` (`glide-input-drafts` 1) | `input_drafts`, `local_json_store` | (Speicherdatei, Listen-ID) | 800 ms gebündelt; nach Anlegen sofort | nein (lokal, absichtlich) | T362, T363; Verlustfenster ≤ 800 ms Tippen vor einem Absturz |
+| Lesepositionen | `view_positions.json` (`glide-view-positions` 1) | `view_positions`, `local_json_store` | Objekt-ID, Kapitelanker | nach Ansichtswechsel gebündelt (1,5 s), beim Beenden | nein (Komfort) | T366, T370 |
+| Prüfergebnisse | `data_status.json` (`glide-data-status` 1) | `data_safety` | je Speicherdatei | atomar | nein | T366 |
+| Datensperre, Sitzungsnachweis | `glide.lock`, `.glide-session` | `data_lock`, `session_guard` | Token, PID, Rechner | exklusiv | nein | T363, T367 |
+| Fensterlage | `window.conf` | `app.pyw` | – | atomar | nein | – |
+| Sicherungen | `backups/` (automatisch, Formatsicherung, `vor_bereich_leeren_*.glideapp`), Exporte an frei gewählten Orten | `backup_catalog`, `schema_backups`, `app.pyw` | Dateiname mit Zeitstempel | atomar | – | Aufbewahrung siehe „Automatische Sicherungen“ |
+| Temporäres, Caches | `.glide-json-*.tmp`, `.glide-import-*`, Bild-/Vorschaucache im Speicher | `app.pyw`, `image_preview` | – | – | nein, bewusst | Zwischendateien älter als 10 min werden beim Start entfernt |
+
+**Selektive Wiederherstellung (DS-06):** vorhanden für Listen und Ordner („Listen/Ordner hinzufügen …“, additiv, neue Kennungen, keine Überschreibung), einzelne Seiten („Einzelne Seite wiederherstellen …“), Papierkorbeinträge und Bereiche der App-Sicherung (Aufgaben, Einstellungen, Vorlagen, Aktivität einzeln wählbar). **Grenze:** Einzelne Aufgaben, Notizen, Zeichnungen oder Anhänge lassen sich nicht einzeln aus einer Sicherung zurückholen, sondern nur über ihre Liste oder den Papierkorb; Glide bietet dafür keinen Menüeintrag an.
+
+**Portabilität der Format-27-Eigenschaften:** Vollständige Sicherung und vollständiger Import erhalten Anker, Kapitelverweise, Navigationsorte und Anhangskennungen (T368). Teilimport („hinzufügen“) vergibt neue Kennungen; Kapitelverweise innerhalb kopierter Seiten folgen, Navigationsorte auf nicht mitkopierte Ordner fallen auf die Heimat zurück. Austauschformat 2 überträgt keine Anker, Kapitelverweise und Navigationsorte (bewusst eingeschränkt, kein verlustfreier Gesamtexport). Markdown-, CSV-, JSON-Canvas- und Seitenexporte sind verlustbehaftet.
+
+## Datenvertrag für Teil 06 (Dokumente, Prompts, KI-Kontexte)
+
+Verbindlich vor jeder neuen Objektart: (1) stabile 32-hex-Kennung, nie aus Titel oder Position abgeleitet; (2) Verweise über `glide://<art>/<id>` mit optionaler Sprungmarke, Auflösung mit sichtbarem Rückfall; (3) Dateien nur als verwaltete Kopie unter `attachments/` mit Anhangs-ID, Originalname, Größe und künftig SHA-256 – keine externen Pfade in portablen Daten; eine externe Verknüpfung darf nie als gesicherter Anhang gelten; (4) gemeinsame Nutzung einer Datei durch mehrere Objekte ist erlaubt, Löschen eines Verweises entfernt nie die Datei (`attachment_integrity` meldet Dateien ohne Verweis, löscht nichts); (5) Versionen eines Dokuments sind eigene Datensätze mit Eltern-ID, nicht Überschreibungen; (6) jede persistente Vertragsänderung erhöht das Aufgabenformat mit Formatsicherung, Migration, Referenzdatei `current_v<N>`, Rundlauf- und Altfassungsprobe (Muster T365, T368, T371) und braucht eine Inhaberfreigabe – D107 gilt nur für Format 27; (7) keine Netzwerkübertragung ohne ausdrückliche, sichtbare Nutzeraktion; Prompt- und Kontextdaten werden nie automatisch an externe Dienste übergeben; (8) Ansichtszustände (Positionen, Layouts, Dashboards, Kanban-Spalten) gehören in eigene Begleitdateien oder Einstellungen, nicht in Fachobjekte, sofern sie nicht selbst Inhalt sind.
+
+## KI-Arbeitsbereich (Teil 06, 28.11.2026)
+
+**Formatentscheidung:** kein Wechsel des Aufgabenformats. Ein Prompt ist eine gewöhnliche Seite (`list_kind` `page`): Titel, Freitext, Labels, Ordner als Projekt, Favorit (`page_favorites`), Archiv, Verweise, Kapitel und Suche kommen aus Format 27. Was Format 27 nicht kennt, steht in der Begleitdatei `ai_workspace.json` (Format `glide-ai-workspace` 1, Modul `ai_workspace`, atomar über `local_json_store`), geschrieben nur mit Datensperre und nie im Schreibschutz. Ältere Glide-Fassungen ignorieren die Datei und den Sicherungsabschnitt; sie sehen Prompts als normale Seiten.
+
+| Objekt | Identität | Inhalt | Verweise |
+|---|---|---|---|
+| Prompt | Seiten-ID | Modus, Feldgruppen (11 feste Gruppen), eigene Felder, Gruppenreihenfolge, ausgeblendete Gruppen, Status, Agent, Vorlage, Kontextauswahl, Platzhalterwerte, Versionen, Beziehungen | Seite; Kontext `instruction`, `pack`, `block`, `doc`, `ref` (`glide://…`) |
+| Prompt-Version | laufende Nummer je Prompt | gerenderter Markdown-Text, Freitext, Felder, eingefrorene Kontexttexte, Notiz, Status | keine Dateikopien; Dokumente über Versions-ID |
+| KI-Projektprofil | Ordner-ID | Projektfelder (lokaler Pfad privat, nie exportiert), Projektanweisungen mit Fassungshistorie | – |
+| Agentenprofil | 32-hex | Name, Anbieter, Modell, Regeln, Link – **kein** Feld für Schlüssel oder Zugangsdaten | – |
+| Kontextbaustein, -paket | 32-hex | Text oder Verweis; Paket mit Quellenliste und Revisionszähler | Bausteine, Dokumente, Seiten, Anweisungen |
+| Bericht | 32-hex | Text als Daten (`untrusted`), Herkunft | Prompt; wird nie als Anweisung ausgewertet |
+| Dokument | 32-hex | Titel, Beschreibung, Projekt, Kategorie, Labels, Archiv, Versionen | Version → verwaltete Datei `attachments/<Versions-ID>_<Name>` mit SHA-256, Größe, Originalname |
+
+**Mehrdateivorgänge:** Dokumentimport schreibt (1) einen Vorgang ins Journal `ai_workspace.journal.json`, (2) die Datei als `.part` mit fsync und Prüfsummenkontrolle, (3) benennt atomar um, (4) speichert den Datensatz, (5) schließt den Vorgang. Das ist **keine** gemeinsame atomare Transaktion. Fehlerfenster: zwischen (3) und (4) bleibt eine fertige Datei ohne Datensatz. Der Wiederanlauf beim nächsten Laden entfernt `.part`-Reste und meldet solche Dateien, löscht sie aber nie (T373, T374). Seite und Prompt-Datensatz liegen in zwei Dateien: Ein Datensatz ohne Seite wird ignoriert, eine Seite ohne Datensatz ist ein gewöhnlicher Prompt im Entwurf.
+
+**Sicherung und Wiederherstellung:** Die vollständige App-Sicherung enthält `app_backup.ai_workspace` und alle Dokumentversionen als Archivmitglieder; fehlt eine Datei, wird die Sicherung nicht erstellt. Vollständige Wiederherstellung ersetzt den Arbeitsbereich und legt die Dateien unter freiem Namen ab. Selektiv („Prompts und Dokumente aus Sicherung …“): Dokumente mit Kennung, vorhandene als Kopie mit neuer Kennung; Prompt-Daten nur für vorhandene Seiten, vorhandene Versionen werden nicht überschrieben.
+
+**Portabilität:** Austauschformat 2 und Agent-Skill unverändert; Prompts reisen dort nur als Seiten ohne strukturierte Felder. Kontextpakete (`glide-context-package` 1): `PROMPT.md`, `prompt.json`, ausgewählte Dateien, `manifest.json` mit Größe und SHA-256 je Datei und `not_included` für abgewählte Quellen. Nicht durchsuchbar ohne neue Abhängigkeit: PDF und gescannte Dokumente (Entscheidung offen). DOCX wird ohne DTD gelesen (Entity-Angriffe ausgeschlossen).
+
+**Datenschutz:** Keine Netzwerkzugriffe; „Anbieter öffnen“ öffnet nur auf Klick eine Website. Kopieren betrifft nur die lokale Zwischenablage. Hinweise auf möglicherweise sensible Inhalte (Schlüsselmuster, Zuweisungen von Passwörtern, private Schlüssel, Benutzerpfade, E-Mail-Adressen) sind keine vollständige Erkennung.
 
 ## Vorbereitung der nächsten Aufgabenformatstufe
 

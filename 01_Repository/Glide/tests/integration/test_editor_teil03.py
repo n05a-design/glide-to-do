@@ -115,14 +115,19 @@ with tempfile.TemporaryDirectory(prefix="glide-teil03-") as ordner:
         editor.flush()
         app.update_sidebar_list()
         ruhe(0.3)
+        # Seit Format 27 (D107) ist der Kapitelschlüssel der stabile Anker. Die
+        # Zuordnung wird einmal aufgelöst und gilt über Verschieben, Umbenennen
+        # und Ebenenwechsel weiter – das prüft zugleich die Stabilität.
+        K = {f"{k.level}:{k.title}#1": k.key for k in app.chapter_outline(app.page_entry(seite["id"]))}
+        assert all(len(v) == 32 for v in K.values()), K
         baum = app.pages_listbox
         seite_iid = f"list:{seite['id']}"
         kinder = baum.get_children(seite_iid)
         titel = [app.sidebar_chapter_rows[i][1] for i in kinder]
-        assert titel == ["1:Grundlagen#1", "1:Architektur#1", "1:Veröffentlichung#1"], titel
+        assert titel == [K["1:Grundlagen#1"], K["1:Architektur#1"], K["1:Veröffentlichung#1"]], titel
         architektur = kinder[1]
         assert [app.sidebar_chapter_rows[i][1] for i in baum.get_children(architektur)] == [
-            "2:Datenmodell#1", "2:Schnittstellen#1"]
+            K["2:Datenmodell#1"], K["2:Schnittstellen#1"]]
         baum.item(seite_iid, open=True)
         baum.focus(seite_iid)
         baum.event_generate("<<TreeviewOpen>>")
@@ -134,7 +139,7 @@ with tempfile.TemporaryDirectory(prefix="glide-teil03-") as ordner:
         editor.text.mark_set("insert", "end")
         editor.text.yview("end")
         neue_seite("Andere Seite")
-        app.open_chapter(seite["id"], "2:Schnittstellen#1")
+        app.open_chapter(seite["id"], K["2:Schnittstellen#1"])
         ruhe(0.4)
         editor = app.rich_note_editor
         zeile = editor.text.get("insert linestart", "insert lineend")
@@ -146,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix="glide-teil03-") as ordner:
 
         # Verschieben mit Inhalt, Rückgängig, Speichern
         text_vorher = app.page_entry(seite["id"])["rich_note"]["text"]
-        assert app.change_chapter(seite["id"], "2:Schnittstellen#1", "move", -1)
+        assert app.change_chapter(seite["id"], K["2:Schnittstellen#1"], "move", -1)
         ruhe(0.3)
         neu = app.page_entry(seite["id"])["rich_note"]
         titel = [c.title for c in mod.glide_chapters.outline(neu)]
@@ -163,15 +168,15 @@ with tempfile.TemporaryDirectory(prefix="glide-teil03-") as ordner:
         ruhe(0.2)
         # Geschlossene Seite: derselbe Befehl ist ein Schritt im App-Verlauf.
         neue_seite("Zwischenseite")
-        assert app.change_chapter(seite["id"], "2:Schnittstellen#1", "move", -1)
+        assert app.change_chapter(seite["id"], K["2:Schnittstellen#1"], "move", -1)
         app.undo_last_change()
         ruhe(0.3)
         assert app.page_entry(seite["id"])["rich_note"]["text"] == text_vorher, "Rückgängig (App) stellt nicht her"
-        app.open_chapter(seite["id"], "1:Grundlagen#1")
+        app.open_chapter(seite["id"], K["1:Grundlagen#1"])
         ruhe(0.3)
-        assert app.change_chapter(seite["id"], "1:Architektur#1", "rename", "Systemarchitektur")
-        assert app.change_chapter(seite["id"], "2:Datenmodell#1", "set_level", 3)
-        assert app.change_chapter(seite["id"], "1:Veröffentlichung#1", "dissolve")
+        assert app.change_chapter(seite["id"], K["1:Architektur#1"], "rename", "Systemarchitektur")
+        assert app.change_chapter(seite["id"], K["2:Datenmodell#1"], "set_level", 3)
+        assert app.change_chapter(seite["id"], K["1:Veröffentlichung#1"], "dissolve")
         app.save_items()
         ruhe(0.3)
         stand = app.page_entry(seite["id"])["rich_note"]
@@ -189,8 +194,11 @@ with tempfile.TemporaryDirectory(prefix="glide-teil03-") as ordner:
         assert mod.glide_i18n.t("chapter.placeholder", "Neues Kapitel") in titel, titel
         app.update_sidebar_list()
         ruhe(0.2)
-        assert any(k.startswith("2:Neues Kapitel") for _, k in app.sidebar_chapter_rows.values())
-        menu = app.build_chapter_menu(root, seite["id"], "1:Grundlagen#1")
+        neu = next(c for c in mod.glide_chapters.outline(app.page_entry(seite["id"])["rich_note"])
+                   if c.level == 2 and c.title == mod.glide_i18n.t("chapter.placeholder", "Neues Kapitel"))
+        assert neu.anchor and len(neu.key) == 32, neu  # neue Überschrift erhält sofort einen Anker
+        assert any(k == neu.key for _, k in app.sidebar_chapter_rows.values())
+        menu = app.build_chapter_menu(root, seite["id"], K["1:Grundlagen#1"])
         zustaende = {menu.entrycget(i, "label"): menu.entrycget(i, "state") for i in range(menu.index("end") + 1)
                      if menu.type(i) == "command"}
         assert zustaende[mod.glide_i18n.t("chapter.move_up", "Mit Inhalt nach oben")] == "disabled", zustaende

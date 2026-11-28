@@ -429,7 +429,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # ================================================================
         # Format 20: Migration mit Vorsicherung, neue Felder, Bereinigung
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 26
+        assert app.DATA_SCHEMA_VERSION == 27
         payload19 = app.data_payload()
         payload19["version"] = 19
         old_bytes = json.dumps(payload19, ensure_ascii=False, indent=4).encode("utf-8")
@@ -438,7 +438,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items()
         backups20 = list(Path(mod.BACKUP_DIR).glob("liste_vor_format20_*.json"))
         assert len(backups20) == 1 and backups20[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 26
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 27
         # Eine Datei aus einer späteren Glide-Fassung wird abgelehnt.
         future_version = app.DATA_SCHEMA_VERSION + 1
         try:
@@ -1624,7 +1624,18 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.entry_line_visible()
         knopf = getattr(app, "empty_action_button", None)
         assert knopf is None or knopf.winfo_manager() == ""
-        # Ausbau MO-050: Gismo steht klein und still unter dem Leertext (Stufe 2).
+        # Seit Teil 04 (UX-05, D106) trägt die bearbeitbare leere Liste die direkte
+        # Eingabezeile; sie ist kein Leerzustand mehr, Gismo steht dort nicht.
+        assert app.inline_task_target() is not None
+        figur = app.empty_state_figure
+        assert figur is None or figur.winfo_manager() == ""
+        # Ausbau MO-050: Ohne eigenen Anlegeweg (archivierte Liste) bleibt der
+        # Leerzustand; Gismo steht klein und still unter dem Leertext (Stufe 2).
+        leer["archived"] = True
+        app.clear_render_cache()
+        app.refresh_tree()
+        root.update()
+        assert app.inline_task_target() is None
         figur = app.empty_state_figure
         assert figur is not None and figur.winfo_manager() == "place" and figur.state_name == "ruhig"
         assert not figur._jobs, "Kein Blinzeln im Leerzustand"
@@ -1635,6 +1646,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         root.update()
         assert figur.winfo_manager() == ""
         app.settings["home_tiles_hidden"] = verborgen
+        leer["archived"] = False
+        app.clear_render_cache()
         app.refresh_tree()
         root.update()
         # Leere Suche: „Suche zurücksetzen“ leert den Filter.
@@ -2316,7 +2329,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert len(kopien) == 1 and kopien[0].read_bytes() == kaputt
         assert not app._data_read_only
         assert app.save_items(show_error=False), "Nach der Kopie muss Speichern wieder gehen"
-        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 26
+        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 27
 
         aelter = json.loads(gueltig)
         aelter["version"] = 19

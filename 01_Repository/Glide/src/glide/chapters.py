@@ -12,7 +12,7 @@ Regeln:
 1. Kennung im Format 26: `key` aus Ebene, Titel und laufender Nummer gleicher
    Titel (`"2:Architektur#1"`). Sie ist innerhalb einer Sitzung eindeutig, aber
    nicht stabil gegen Umbenennen; eine dauerhafte Kennung braucht einen
-   persistenten Anker (Formatentscheidung in Teil 05, siehe `ANCHOR_PROPOSAL`).
+   persistenten Anker (`anchor:<hex>`, Aufgabenformat 27, siehe `ensure_anchors`).
 2. Jede Änderung ist eine reine Funktion Dokument → neues Dokument; alle Bereiche
    (Format, Links, Bilder, Aufgaben) wandern mit ihrem Text.
 3. „Auflösen“ entfernt nur die Überschriftenauszeichnung; der Text bleibt.
@@ -23,6 +23,8 @@ Regeln:
 from __future__ import annotations
 
 import copy
+import re
+import uuid
 from collections import namedtuple
 
 HEADING_LEVELS = {"h1": 1, "h2": 2, "h3": 3, "h4": 4}
@@ -30,14 +32,20 @@ TOGGLE_PREFIXES = ("▾ ", "▸ ")
 SIDEBAR_MAX_LEVEL = 3
 SIDEBAR_MAX_CHAPTERS = 60
 
-Chapter = namedtuple("Chapter", "index key level title line start end section_end parent")
+Chapter = namedtuple("Chapter", "index key level title line start end section_end parent anchor",
+                     defaults=(None,))
 
-# Vorschlag für den persistenten Anker (nicht aktiv, Formatentscheidung Teil 05/DS-02):
-# ein zusätzlicher Bereich `{"tag": "anchor:<32 hex>", "start": s, "end": e}` auf der
-# Überschriftenzeile. Ältere Fassungen verwerfen unbekannte Bereiche beim Laden
-# (`RichNoteEditor.normalize`) – Anker gingen dort beim nächsten Speichern verloren,
-# deshalb nur mit Formatwechsel, Migration und Rückweg.
-ANCHOR_PROPOSAL = {"tag_prefix": "anchor:", "id": "uuid4().hex", "scope": "heading line", "format": 27}
+# Stabiler Kapitelanker (Aufgabenformat 27, Inhaberfreigabe 27.11.2026, Teil 05):
+# ein Bereich `{"tag": "anchor:<32 hex>", "start": s, "end": e}` über der ganzen
+# Überschriftenzeile. Er wandert wie jeder Bereich mit dem Text (Umbenennen,
+# Verschieben, Ebene), verschwindet beim Auflösen und wird beim Duplizieren neu
+# vergeben. Ältere Fassungen öffnen Format 27 nur lesend und verlieren ihn nicht.
+ANCHOR_PREFIX = "anchor:"
+ANCHOR_TAG = re.compile(r"^anchor:[0-9a-f]{32}$")
+
+
+def anchor_id(tag):
+    return tag[len(ANCHOR_PREFIX):] if isinstance(tag, str) and ANCHOR_TAG.match(tag) else None
 
 
 def _lines(text):
@@ -76,17 +84,24 @@ def outline(document):
         stufe = _heading_level(spans, start, ende)
         titel = clean_title(text[start:ende])
         if stufe and titel:
-            roh.append((stufe, titel, nummer, start, ende))
-    kapitel, gesehen, stapel = [], {}, []
-    for index, (stufe, titel, nummer, start, ende) in enumerate(roh):
+            anker = next((anchor_id(s.get("tag")) for s in spans
+                          if anchor_id(s.get("tag")) and _on_line(s, start, ende)), None)
+            roh.append((stufe, titel, nummer, start, ende, anker))
+    kapitel, gesehen, stapel, vergeben = [], {}, [], set()
+    for index, (stufe, titel, nummer, start, ende, anker) in enumerate(roh):
         abschnitt_ende = next((r[3] for r in roh[index + 1:] if r[0] <= stufe), len(text))
         while stapel and kapitel[stapel[-1]].level >= stufe:
             stapel.pop()
         eltern = stapel[-1] if stapel else None
         zaehler = gesehen.get((stufe, titel), 0) + 1
         gesehen[(stufe, titel)] = zaehler
-        kapitel.append(Chapter(index, f"{stufe}:{titel}#{zaehler}", stufe, titel, nummer, start, ende,
-                               abschnitt_ende, eltern))
+        if anker in vergeben:
+            anker = None  # doppelte Kennung: nur die erste gilt (ensure_anchors erneuert)
+        if anker:
+            vergeben.add(anker)
+        schluessel = anker or f"{stufe}:{titel}#{zaehler}"
+        kapitel.append(Chapter(index, schluessel, stufe, titel, nummer, start, ende,
+                               abschnitt_ende, eltern, anker))
         stapel.append(index)
     return kapitel
 
@@ -223,3 +238,62 @@ def validate(document):
         if not (0 <= span["start"] < span["end"] <= laenge):
             befunde.append(f"Bereich außerhalb des Textes: {span}")
     return befunde
+
+
+def _on_line(span, start, ende):
+    """Berührt der Bereich die Zeile einschließlich ihres Zeilenumbruchs?"""
+    return span["start"] <= ende and span["end"] > start
+
+
+def ensure_anchors(document, new_id=lambda: uuid.uuid4().hex):
+    """Genau ein gültiger Anker je Überschriftenzeile; (Dokument, geändert).
+
+    Anker außerhalb von Überschriftenzeilen fallen weg (aufgelöste Kapitel),
+    doppelte Kennungen behalten nur ihr erstes Vorkommen. Bestehende
+    Kennungen bleiben erhalten; reine Funktion.
+    """
+    if not isinstance(document, dict):
+        return document, False
+    text = document.get("text") or ""
+    spans = [s for s in (document.get("spans") or []) if isinstance(s, dict)]
+    andere = [s for s in spans if not str(s.get("tag", "")).startswith(ANCHOR_PREFIX)]
+    anker = [s for s in spans if anchor_id(s.get("tag"))]
+    neu, vergeben = [], set()
+    for _nummer, start, ende in _lines(text):
+        if start == ende or not _heading_level(andere, start, ende) or not clean_title(text[start:ende]):
+            continue
+        vorhanden = next((anchor_id(s["tag"]) for s in anker
+                          if _on_line(s, start, ende) and anchor_id(s["tag"]) not in vergeben), None)
+        kennung = vorhanden or new_id()
+        while kennung in vergeben or not re.fullmatch(r"[0-9a-f]{32}", kennung):
+            kennung = uuid.uuid4().hex
+        vergeben.add(kennung)
+        # Wie die Zeilenformate schließt der Anker den Zeilenumbruch ein: Wer die
+        # Überschrift ganz neu tippt, behält ihre Kennung.
+        neu.append({"tag": ANCHOR_PREFIX + kennung, "start": start, "end": min(ende + 1, len(text))})
+    alt = sorted(({"tag": s["tag"], "start": s["start"], "end": s["end"]} for s in anker),
+                 key=lambda s: (s["start"], s["end"], s["tag"]))
+    if alt == neu and len(anker) == len(neu):
+        return document, False
+    result = dict(document)
+    result["spans"] = sorted(andere + neu, key=lambda s: (s["start"], s["end"], s["tag"]))
+    return result, True
+
+
+def renew_anchors(document):
+    """Neue Kennungen für eine Kopie (Duplizieren); Rückgabe (Dokument, alt → neu)."""
+    if not isinstance(document, dict):
+        return document, {}
+    zuordnung = {}
+    spans = []
+    for span in document.get("spans") or []:
+        alt = anchor_id(span.get("tag")) if isinstance(span, dict) else None
+        if alt:
+            zuordnung.setdefault(alt, uuid.uuid4().hex)
+            span = dict(span, tag=ANCHOR_PREFIX + zuordnung[alt])
+        spans.append(span)
+    return dict(document, spans=spans), zuordnung
+
+
+def find_anchor(chapters, anchor):
+    return next((k for k in chapters if anchor and k.anchor == anchor), None)

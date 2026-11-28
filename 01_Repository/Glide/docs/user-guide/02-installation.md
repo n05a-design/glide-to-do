@@ -1,6 +1,6 @@
 # Installation – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen – Eigenständiger Start](../20_FUNKTIONEN.md#eigenständiger-start-3450), [§13 Bekannte Grenzen](../20_FUNKTIONEN.md#13-bekannte-grenzen), [technischer Schnellstart](../../README.md#schnellstart-aus-dem-quellstand) · [Guide contents](README.md) · Previous: [Getting started](01-getting-started.md) · Next: [Tasks and lists](03-tasks-and-lists.md)
 

@@ -13,7 +13,7 @@ related_documents: [GLIDE-GEMINI-MASTER, GLIDE-RESEARCH, GLIDE-ROADMAP]
 
 # Product strategy and marketing
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 5631333a
 
 ## Positioning
 

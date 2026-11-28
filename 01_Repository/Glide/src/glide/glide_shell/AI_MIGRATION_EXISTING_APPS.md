@@ -1,6 +1,6 @@
 # Glide Shell – moving an existing application onto the shell (guide and start prompt for AI agents)
 
-Status as of 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Shell 0.9.0 · Glide Bento 0.3.0 · [Deutsche Fassung](KI_MIGRATION_BESTEHENDE_ANWENDUNG.md)
+Status as of 28.11.2026 · Glide 1.0.3 · Glide-System V1.95 · Glide Shell 0.9.1 · Glide Bento 0.3.0 · [Deutsche Fassung](KI_MIGRATION_BESTEHENDE_ANWENDUNG.md)
 
 This file is for applications that **already exist** with their own interface, such as STEPS or Chess & Chains. For a new project, use [AI_GUIDE_NEW_PROJECTS.md](AI_GUIDE_NEW_PROJECTS.md). Both files are part of the shell package and arrive with every takeover. The German version is authoritative.
 

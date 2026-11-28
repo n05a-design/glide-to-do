@@ -34,7 +34,7 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.9.0"
+SHELL_VERSION = "0.9.1"
 # Älteste Fassung mit unveränderter öffentlicher Schnittstelle; ein inkompatibler
 # Schnitt hebt sie auf die neue Version (Prüfung in `compat.require_shell`).
 SHELL_COMPAT_SINCE = "0.6.2"

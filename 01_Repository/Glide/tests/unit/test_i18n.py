@@ -453,8 +453,11 @@ class I18nTests(unittest.TestCase):
             and isinstance(node.func, ast.Attribute)
             and node.func.attr == "show_undo_toast"
         ]
-        # 30 seit WA-53 (Toast nach „Fristen neu setzen …“, 26.11.2026).
-        self.assertEqual(len(calls), 30)
+        # 30 seit WA-53 (Toast nach „Fristen neu setzen …“, 26.11.2026);
+        # 31 seit Teil 05 (Hinweis „Entwurf wiederhergestellt“, 27.11.2026);
+        # 32 seit Teil 05B (Rückmeldung „Bereich geleert“ mit Rückgängig, NAV-02C);
+        # 34 seit Teil 06 (Schreibschutzhinweis KI-Arbeitsbereich, Vorlage gespeichert).
+        self.assertEqual(len(calls), 34)
         for call in calls:
             self.assertTrue(call.args, "show_undo_toast needs a text argument")
             self.assertNotIsInstance(call.args[0], ast.Constant,

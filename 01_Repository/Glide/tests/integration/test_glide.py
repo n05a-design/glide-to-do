@@ -960,7 +960,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     normal_list["note"] = "Beschreibungstext"
     app.save_items()
     payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 26
+    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 27
     assert payload["lists"][0]["system_role"] == "inbox"
     # Format 7 und 8 ergänzen ausschließlich additive Felder.
     assert [entry["name"] for entry in payload["labels"]] == ["Langtext", "Zwischenüberschrift"]
@@ -2843,7 +2843,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
     # Format 9: parent_id wird gespeichert, geprüft und beim Laden bereinigt.
     app.save_items()
     nested_payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert nested_payload["version"] == 26
+    assert nested_payload["version"] == 27
     assert all("parent_id" in folder for folder in nested_payload["folders"])
     assert app.validate_backup_schema(nested_payload) == set()
     broken_parent = json.loads(json.dumps(nested_payload))
@@ -3477,7 +3477,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack()
         app.inspect_backup_archive(release_archive)
         release_data = json.loads(release_archive.read("data.json"))
     app.validate_backup_schema(release_data, portable=True)
-    assert release_data["version"] == app.DATA_SCHEMA_VERSION
+    # Die ausgelieferte Releaseplanung bis 1.0.3 bleibt in Format 26 (wie
+    # `pruefen.fixtures_pruefen`); ab der nächsten App-Version trägt sie das aktuelle Format.
+    erwartet = 26 if tuple(map(int, mod.APP_VERSION.split("."))) <= (1, 0, 3) else app.DATA_SCHEMA_VERSION
+    assert release_data["version"] == erwartet
     assert release_data["app_version"] == mod.APP_VERSION
     release_previous = (app.folders, app.labels, app.trash)
     try:

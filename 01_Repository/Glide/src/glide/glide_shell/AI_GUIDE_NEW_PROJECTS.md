@@ -1,6 +1,6 @@
 # Glide Shell – Guide for AI agents in new projects
 
-Status as of 27.11.2026 · Glide 1.0.3 · Glide-System V1.92 · Glide Shell 0.9.0 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
+Status as of 28.11.2026 · Glide 1.0.3 · Glide-System V1.95 · Glide Shell 0.9.1 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
 
 This guide is for AI agents (Claude Code, Codex, Cursor, Gemini and others) that build a **new** Tk desktop application on the Glide Shell. It explains how Glide, the Glide-System and the Glide Shell fit together, how to start a project, the architecture rules, the design rules, the working processes and the checks. It lives in the `glide_shell` package and is copied with every adoption. A ready prompt for the first session, with an overview of what lives where, is in [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md). The German version is authoritative; this is its controlled English translation.
 
