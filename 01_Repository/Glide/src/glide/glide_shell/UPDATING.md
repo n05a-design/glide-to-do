@@ -1,6 +1,6 @@
-# Updating an existing shell copy (0.6.2 → 0.10.0)
+# Updating an existing shell copy
 
-Status as of 28.11.2026 · Glide Shell 0.10.0 · Glide Bento 0.3.0 · License MPL-2.0 · [Deutsche Fassung](AKTUALISIERUNG.md)
+Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0 (path from 0.6.2) · Glide Bento 0.3.0 · License MPL-2.0 · [Deutsche Fassung](AKTUALISIERUNG.md)
 
 This contract applies to follow-up projects that keep `glide_shell` as a managed copy with `SHELL_MANIFEST.json` (as of E01: STEPS and Chess & Chains with 0.6.2 from Glide commit `793596f1`). It describes what changes, how to update and how to return to the previous state.
 

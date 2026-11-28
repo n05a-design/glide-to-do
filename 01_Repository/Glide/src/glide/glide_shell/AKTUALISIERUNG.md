@@ -1,6 +1,6 @@
-# Aktualisierung einer vorhandenen Shell-Kopie (0.6.2 → 0.10.0)
+# Aktualisierung einer vorhandenen Shell-Kopie
 
-Stand 28.11.2026 · Glide Shell 0.10.0 · Glide Bento 0.3.0 · Lizenz MPL-2.0 · [English version](UPDATING.md)
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0 (Weg von 0.6.2) · Glide Bento 0.3.0 · Lizenz MPL-2.0 · [English version](UPDATING.md)
 
 Dieser Vertrag gilt für Folgeprojekte, die `glide_shell` als verwaltete Kopie mit `SHELL_MANIFEST.json` führen (Stand E01: STEPS und Chess & Chains mit 0.6.2 aus Glide-Commit `793596f1`). Er beschreibt, was sich ändert, wie aktualisiert wird und wie der vorherige Stand zurückkommt.
 
