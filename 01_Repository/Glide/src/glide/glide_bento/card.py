@@ -8,6 +8,7 @@ und Größenabgleich (D100, D102).
 import tkinter as tk
 from typing import Any, Callable
 
+from glide_shell import window_lifetime
 from glide_shell.custom_controls import bind_resize, rounded_rect_points
 from .context import BentoContext
 from .specs import BentoCardSpec
@@ -303,10 +304,22 @@ class BentoCard(tk.Canvas):
         except tk.TclError:
             pass
 
+    _layout_size = None
+    _surface_pending = None
+    surface_draws = 0
+
     def _on_configure(self, _event=None) -> None:
-        """Reagiert auf Größenänderungen der Karte."""
+        """Reagiert auf Größenänderungen der Karte.
+
+        Seit 0.4.0 (E05): Eine unveränderte Größe löst nichts aus, und die
+        Fläche wird einmal je Leerlauf gezeichnet statt bei jedem Zwischenstand
+        des Layouts (Umhängen im Raster, Einschwingen nach Größenwechsel).
+        """
         w = max(self.winfo_width(), self.pad_x * 2 + 2)
         h = max(self.winfo_height(), self.pad_y * 2 + 2)
+        if (w, h) == self._layout_size:
+            return
+        self._layout_size = (w, h)
         inner_w = max(1, w - self.pad_x * 2)
 
         self.coords(self._window_id, self.pad_x, self.pad_y)
@@ -315,10 +328,21 @@ class BentoCard(tk.Canvas):
             self._sync_auto_height()
         else:
             self.itemconfigure(self._window_id, width=inner_w, height=max(1, h - self.pad_y * 2))
+        self._schedule_surface()
+
+    def _schedule_surface(self) -> None:
+        if self._surface_pending is None:
+            scope = window_lifetime.scope_for(self)
+            if not scope.closed:
+                self._surface_pending = scope.after_idle(self._surface_due)
+
+    def _surface_due(self) -> None:
+        self._surface_pending = None
         self._draw_surface()
 
     def _draw_surface(self) -> None:
         """Zeichnet den abgerundeten Hintergrund, Rahmen und Glass-Effekte."""
+        self.surface_draws += 1
         self.delete("surface")
         w = max(self.winfo_width(), 4)
         h = max(self.winfo_height(), 4)

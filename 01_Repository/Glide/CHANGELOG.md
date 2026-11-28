@@ -3,6 +3,14 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## Entwicklungskandidat 1.2.0 – Ecosystem E03–E05
+
+- Hilfe › Weitere Programme: andere freie Programme des Ökosystems als Produktkarten; keine Netzabfrage, Links erst nach Klick. „Über Glide“ nennt die Technikstände.
+- Pixelsymbol › Symbolbibliothek: Symbole aus Zeichnungen und Seiten, Favoriten, Suche und eigener PNG/SVG-Import mit Sicherheitsprüfung; eigene Symbole gehören zur vollständigen Sicherung.
+- Ansicht › Projektübersicht: Fortschritt, Status, Wichtigkeit, Aktivität und Fristen aus deinen Aufgaben.
+- Komponenten-Galerie mit 78 Einträgen, Suche und Kategorien; der erste Inhalt erscheint schneller.
+- Behoben: Vorlagenkatalog trug noch das alte Datenformat; eine Werkzeugleiste konnte nach dem Schließen eines Fensters noch arbeiten.
+
 ## Entwicklungskandidat 1.2.0 – Ecosystem E02
 
 - KI-Arbeitsbereich: Die Suche in Prompt- und Dokumentenbibliothek nutzt das neue Shell-Suchfeld mit Platzhalter, Leeren-Knopf und Escape.

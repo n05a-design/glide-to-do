@@ -1,10 +1,32 @@
+## Ecosystem E03–E06: Katalog, Symbole, Bento-Visualisierung, Leistung, gemeinsamer Checkpoint (28.11.2026)
+
+Geprüfter Stand: Zweig `claude/glide-sync-master-auftrag-ef27c1` @ `9e8527c4` (= Remote) plus lokaler, uncommitteter Stand; CI-Grundstufe in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Python 3.15.1, Tk 9.0.4, künstliche Daten, alle Läufe unbeaufsichtigt (`GLIDE_QA_AUTOSCHLIESSEN`). Kein App-Versionswechsel, keine Lieferung, kein Commit.
+
+| Gegenstand | Nachweis | Status |
+|---|---|---|
+| CI-Befund A (Datenschutz) | Testpfade auf das zugelassene Platzhalterkonto `example`, CI-Muster gegen alle versionierten Dateien: 0 Funde | behoben |
+| CI-Befund B (Vorlagen) | Vorlagenkatalog mit Payload 26 seit D107 veraltet; mit Erzeuger neu geschrieben, englischer Katalog nachgezogen; `test_template_workflows`, `test_i18n` | behoben, PASSED |
+| CI-Befund C (Folgeprüfungen) | alle Integrationssuiten einzeln (ohne Abbruch beim ersten Fehler), Basisvergleich gegen `9e8527c4` | 8 rot, alle schon im Basisstand; 5 behoben (Format-27-Probe in `vorversion.py`, Fenstererkennung nicht-modaler Fenster, Ablageanzeige statt Zeilen-Tag), 3 offen (siehe unten) |
+| Echte Fehler gefunden | `ai_restore_from_backup` ließ eine ungültige Datei als Rückruffehler durchschlagen (Teil 06); Ordner in eigenen Unterordner gezogen blieb ohne Rückmeldung (Teil 04); Paket- und Lieferlisten ohne die Shell-Module aus E02/E03 (Paket wäre defekt); Shell-`Toolbar` rechnete nach dem Abbau weiter (E02) | behoben |
+| Offen (vorbestehend) | `test_mindestgroesse330` (Griff in „Mein Tag“ bei 860×700 gequetscht), `test_kompression330` (Innenrand Notiz 20 statt 30 px), `test_aufgaben3380` (Feld in Liste überdeckt) | offen, Darstellungsfehler aus Teil 03/04 |
+| Offen (Inhaberentscheidung) | `test_mutationsreste`: Neuanlage bei fehlgeschlagenem Speichern – Test erwartet Behalten (ungespeichert, Rückgängig), Code aus 05B setzt zurück | Vertragskonflikt |
+| Shell/Bento | Selbsttests 16/16 und 16/16, Konformität conform, Schnittstellenvertrag (`test_shell_importregel`, `test_shell_konformitaet`) | PASSED |
+| T378 / T379 / T380 | Bausteine (96 Diagrammdarstellungen, 8 SVG-Angriffsmuster, Hintergrundaufträge), Glide-Einsatzorte, Projektübersicht | PASSED |
+| T375 / T376 | Checkpoint mit Referenzhosts; Aktualisierung 0.6.2 (`7dcd8dc0`) → 0.11.0 einschließlich erster Bento-Übernahme, Katalog in der Kopie | PASSED |
+| Galerie | `test_component_gallery`: 78 Einträge, Suche, Kategorie, schrittweiser Aufbau | PASSED |
+| Unit, Register, Stand, CI | 1485 Unit-Tests, `test_glide_system` (V1.98), `standpruefung`, `ci_grundstufe` | PASSED |
+| `test_shell_uebernahme` | 37/38; WinError 5 beim Löschen eines Temp-Ordners nur innerhalb OneDrive (vorbestehend) | Linux-CI maßgeblich |
+| Leistung | `messung_ecosystem.py`: Kaltstart 2103 → 2130 ms, Galerie erster Inhalt 970 → 191 ms (23 → 78 Einträge), Bento 60 Karten 2961 → 2782 ms, übrige Werte im Rauschen | siehe Entwicklungsplan §4.8.10 |
+| Checkpoint E06 | `4e8758439cf3ffe729589c54eb77e8957ad879908c000ab1f12280be5aa6092d` · Shell 0.11.0 · Bento 0.4.0 · 63 Dateien · Stand vor dem Commit · Ablage `%USERPROFILE%\gq\e06\checkpoint` | unverändert |
+| Nicht ausgeführt | eingefrorene Vollprüfung (D51), macOS, Linux nativ, Sichtprüfung durch eine Person, STEPS und Chess & Chains selbst | offen |
+
 ## Ecosystem E02: Framework-Härtung, Shell 0.10.0 (28.11.2026)
 
 Geprüfter Stand: Zweig `claude/glide-sync-master-auftrag-ef27c1` @ `f8b89359` plus lokaler, uncommitteter E02-Stand; CI-Grundstufe in einer Prüfkopie außerhalb OneDrive. Umgebung: Windows 11 Pro, Python 3.15, Tk 9.0, künstliche Daten, eigener `GLIDE_DATA_DIR`. Kein App-Versionswechsel, keine Lieferung, kein Commit.
 
 | Gegenstand | Befehl / Nachweis | Status |
 |---|---|---|
-| Befund A: GitHub-CI des E01-Commits `f8b89359` rot – Datenschutzprüfung (Testpfade `C:\Users\…` in `test_ki_arbeitsablauf.py`, `test_ai_workspace.py`) | Testdaten auf `/home/probe/…` und `D:\Projekte\…` umgestellt; `pfade_bereinigen.py --pruefen` über alle Dateien | behoben (lokal unentdeckt, weil die Dateien vor E01 unversioniert waren) |
+| Befund A: GitHub-CI des E01-Commits `f8b89359` rot – Datenschutzprüfung (Testpfade `C:\Users\…` in `test_ki_arbeitsablauf.py`, `test_ai_workspace.py`) | Testdaten auf `/home/example/…` und `D:\Projekte\…` umgestellt; `pfade_bereinigen.py --pruefen` über alle Dateien | behoben (lokal unentdeckt, weil die Dateien vor E01 unversioniert waren) |
 | Befund B: GitHub-CI `f8b89359` rot – `test_release36` erwartete, dass eine 3 Tage alte Fremdsperre ignoriert wird | Erwartung an den 05B-Vertrag angepasst (veraltet = belegt bis zur Bestätigung) | behoben, PASSED |
 | Befund C: `test_arbeitsmodi` (`nebenansicht_einstiege`, `verweisvorschau_grenzen`) prüften den Vertrag vor NAV-03 (Zeichnung nicht in der Nebenansicht) | Ausschlussfall auf Galerie umgestellt | behoben, beide Fälle PASSED |
 | Shell-Selbsttest | `python -m glide_shell.selftest` | PASSED 16/16 (neu: Farbrollen/Einstellungen, Bedienelemente, Arbeitsbereiche; geordnetes Beenden im App-Host) |

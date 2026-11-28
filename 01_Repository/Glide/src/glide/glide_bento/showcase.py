@@ -20,6 +20,15 @@ BENTO_COMPONENTS = ("bento.card", "bento.metric", "bento.actions", "bento.empty_
                     "bento.grid", "bento.layout_planner")
 
 
+def _composition_ids():
+    from .gallery import COMPOSITION_IDS
+    return COMPOSITION_IDS
+
+
+# Seit 0.4.0: Kompositionsbibliothek (`glide_bento.gallery`) gehört zur erwarteten Abdeckung.
+BENTO_COMPONENTS = BENTO_COMPONENTS + _composition_ids()
+
+
 def _context(env):
     from .context import BentoContext
     kontext = env.extra.get("bento_context")
@@ -139,4 +148,9 @@ def bento_entries(version=None):
                       summary="Deterministic, Tk-free plan of columns and bands for a width.",
                       states=("narrow", "medium", "wide"), sizes=("any width",), theming="tokens only",
                       build=_build_planner, **gemeinsam),
-    ]
+    ] + _compositions(version)
+
+
+def _compositions(version):
+    from .gallery import composition_entries
+    return composition_entries(version)

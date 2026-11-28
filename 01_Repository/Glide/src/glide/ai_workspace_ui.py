@@ -18,7 +18,11 @@ import webbrowser
 
 import ai_workspace as aw
 import glide_bento
-from glide_shell.controls import SearchField
+
+
+def SearchField(*args, **kwargs):  # noqa: N802 – erst beim Öffnen der Bibliothek laden (E05)
+    from glide_shell.controls import SearchField as _SearchField
+    return _SearchField(*args, **kwargs)
 import i18n as glide_i18n
 
 _H = {}

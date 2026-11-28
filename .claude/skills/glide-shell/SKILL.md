@@ -17,6 +17,8 @@ Dieser Skill ist nur der Einstieg. Inhalt und Regeln stehen an ihren Quellen:
 
 Arbeitsregeln und Produktgrenzen bleiben in `01_Repository/Glide/AGENTS.md`, `AGENTS.md` (Wurzel) und `CLAUDE.md`. Dieser Skill liegt wortgleich unter `.claude/skills/glide-shell/` (Claude Code, Copilot) und `.agents/skills/glide-shell/` (Antigravity, Codex, Gemini); T338 prüft die Gleichheit. Nicht verwechseln mit dem Produkt-Skill `01_Repository/Glide/skills/glide-to-do` (Glide-Importdateien).
 
+Seit Shell 0.11.0 (E03/E05): Softwarekatalog (`software_catalog`, `ECOSYSTEM_CATALOG.json`), Symbolvertrag und -auswahl (`symbols`, `symbol_picker`), begrenzte Caches (`resources`) und Hintergrundaufträge (`background`).
+
 Seit Shell 0.10.0 (E02): Farbrollen und Theme-Provider (`color_roles`), Einstellungsregister (`settings_registry`), allgemeine Bedienelemente (`controls`: `ShellButton`, `SearchField`, `Tooltip`, `Toolbar`) und Arbeitsbereiche (`workspaces`). Eine vorhandene Kopie wird nach [AKTUALISIERUNG.md](../../../01_Repository/Glide/src/glide/glide_shell/AKTUALISIERUNG.md) aktualisiert (Sicherung, Host-Vertrag, Rückkehr); Folgeprojekte übernehmen aus einem Checkpoint, nie aus dem laufenden Glide-Arbeitsbaum.
 
 Aktionsgriff, Ablageanzeige und optische Glyphenzentrierung (Shell 0.9.0) nutzen den [portablen Designvertrag](../../../01_Repository/Glide/src/glide/glide_shell/DESIGN_RICHTLINIEN.md). Der Host bestimmt gültige Ziele und Datenmutationen.

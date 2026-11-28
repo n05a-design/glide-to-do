@@ -62,7 +62,7 @@ class Uebernahme(unittest.TestCase):
     def test_erstkopie_mit_manifest_und_pruefung_aktuell(self):
         code, text = lauf(self.projekt)
         self.assertEqual(code, 0, text)
-        quelle = sorted([p.name for p in QUELLE.iterdir() if p.suffix in (".py", ".md")] + ["LICENSE"])
+        quelle = sorted([p.name for p in QUELLE.iterdir() if p.suffix in (".py", ".md", ".json")] + ["LICENSE"])
         self.assertIn("README.md", quelle)
         self.assertIn("README.de.md", quelle)
         self.assertIn("selftest.py", quelle)
@@ -1136,7 +1136,7 @@ class BentoNebenDerShell(unittest.TestCase):
         self.assertEqual(code, 0, text)
         manifest = json.loads((self.bento / "BENTO_MANIFEST.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["paket"], "glide_bento")
-        self.assertEqual(manifest["shell_min_version"], "0.7.0")
+        self.assertEqual(manifest["shell_min_version"], werkzeug.bento_quelle_lesen()["shell_min"])
         self.assertIn("showcase.py", manifest["dateien"])
         code, text = lauf("--pruefen", "--mit-bento", self.projekt)
         self.assertEqual(code, 0, text)
@@ -1149,7 +1149,7 @@ class BentoNebenDerShell(unittest.TestCase):
         self.assertEqual(code, 2, text)
         kopf = self.projekt / "glide_shell" / "__init__.py"
         kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_COMPAT_SINCE = "0.6.2"',
-                                                                 'SHELL_COMPAT_SINCE = "0.9.0"'), encoding="utf-8")
+                                                                 'SHELL_COMPAT_SINCE = "0.12.0"'), encoding="utf-8")
         code, text = lauf("--pruefen", "--mit-bento", self.projekt)
         self.assertEqual(code, 1, text)
         self.assertIn("inkompatibel", text)

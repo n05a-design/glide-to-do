@@ -195,6 +195,9 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
         return (len(fenster), len(meldungen), len(systemfenster), app.view_mode,
                 getattr(app, "_quick_open", None) is not None, app.home_mode() if hasattr(app, "home_mode") else None)
 
+    def nicht_modale():
+        return [w for w in root.winfo_children() if isinstance(w, mod.tk.Toplevel) and w.winfo_exists()]
+
     def menue_durchlaufen(menu, weg):
         """Ruft jeden Eintrag mit „…“ auf; Untermenüs rekursiv."""
         try:
@@ -223,11 +226,24 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
             if str(menu.entrycget(index, "state")) == "disabled":
                 continue
             vorher = zustand()
+            offen_vorher = set(nicht_modale())
             try:
                 menu.invoke(index)
                 ruhe()
             except Exception as exc:  # noqa: BLE001 – jeder Fehler ist ein Befund
                 befunde.append(("Fehler beim Öffnen", " › ".join(weg + [label]), repr(exc)))
+            # Nicht-modale Fenster (Daten und Sicherheit, KI-Bibliotheken, Projektübersicht,
+            # Weitere Programme) zählen wie modale: sichtbar prüfen, dann schließen.
+            for neu in [w for w in nicht_modale() if w not in offen_vorher]:
+                try:
+                    neu.update_idletasks()
+                    if str(neu.state()) == "withdrawn":
+                        continue  # ausgeblendetes Hilfsfenster, kein geöffnetes Fenster
+                    fenster.append(neu.title() or neu.winfo_name())
+                    neu.destroy()
+                except mod.tk.TclError:
+                    pass
+                ruhe()
             if zustand() == vorher:
                 offene_wege.append(" › ".join(weg + [label]))
             if getattr(app, "_quick_open", None) is not None:

@@ -209,6 +209,33 @@ import ui_design as glide_design  # noqa: E402
 import empty_states as glide_empty  # noqa: E402
 from glide_shell.custom_controls import ActionHandle, DropIndicator, symbol_ink_offset  # noqa: E402
 import overdue_review as glide_overdue  # noqa: E402
+
+
+class _LazyModule:
+    """Modul erst beim ersten Zugriff laden (E05): hält Funktionen, die erst auf Aufruf
+    gebraucht werden, aus dem Kaltstart heraus (gemessen mit scripts/pflege/messung_ecosystem.py)."""
+
+    def __init__(self, name):
+        self._name, self._module = name, None
+
+    def __getattr__(self, attribute):
+        if self._module is None:
+            import importlib
+            self._module = importlib.import_module(self._name)
+        return getattr(self._module, attribute)
+
+
+glide_symbol_library = _LazyModule("symbol_library")  # Ecosystem E03
+glide_project_dashboard = _LazyModule("project_dashboard")  # Ecosystem E04
+glide_software_catalog = _LazyModule("glide_shell.software_catalog")
+glide_symbol_picker = _LazyModule("glide_shell.symbol_picker")
+glide_shell_symbols = _LazyModule("glide_shell.symbols")
+glide_resources = _LazyModule("glide_shell.resources")
+
+
+def SearchField(*args, **kwargs):  # noqa: N802 – Fabrik mit dem Namen der Shell-Klasse
+    from glide_shell.controls import SearchField as _SearchField
+    return _SearchField(*args, **kwargs)
 import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -21536,7 +21563,11 @@ class ListApp:
         path = path or filedialog.askopenfilename(filetypes=[("Glide-App-Sicherung", "*" + self.APP_BACKUP_EXTENSION)])
         if not path:
             return None
-        daten, section = self.read_app_backup_file(path)
+        try:
+            daten, section = self.read_app_backup_file(path)
+        except Exception as exc:  # ungültige oder fremde Datei: melden statt als Rückruffehler durchschlagen
+            self.show_error(glide_i18n.t("ui.restore_app_backup.error_while_reading", "Fehler beim Lesen"), str(exc))
+            return None
         quelle = glide_ai.Workspace((section or {}).get("ai_workspace"))
         ws = self.ai_workspace()
         bericht = {"documents": 0, "copies": 0, "prompts": 0, "skipped": 0}
@@ -32220,6 +32251,18 @@ class ListApp:
         footer.pack(fill="x", pady=(12, 0))
         adopt_button = self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.take_over_from_drawing", "Aus Zeichnung übernehmen …"), from_drawing, "muted", width=230)
         adopt_button.pack(side="left")
+
+        def from_library():
+            dokument = self.choose_symbol(exclude=identity, parent=dialog)
+            if dokument is None:
+                return
+            editor.animation.replace_model(editor.frame_id, glide_drawing.DrawingModel.from_document(dokument))
+            editor.model = editor.animation.frames[0].model
+            editor.render_full()
+            editor.mark_unsaved()
+            editor.update_status(glide_i18n.t("ui.page_icon_dialog.from_library_status", "Aus der Symbolbibliothek übernommen"))
+        self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.from_library", "Symbolbibliothek …"), from_library, "muted",
+                                 width=190).pack(side="left", padx=(10, 0))
         self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), lambda: finish("set"), "confirm").pack(side="right")
         self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=(0, 10))
         if holder.get("icon"):
@@ -45602,6 +45645,11 @@ class ListApp:
             return "break"
         zone = self.sidebar_drop_placement(source_row, target_tree, target_iid, target_row, event)
         if zone is None:
+            # Ein Ordner in sich selbst oder einen eigenen Unterordner: nicht still verwerfen,
+            # sondern wie vor Teil 04 sagen, warum nichts geschieht.
+            if (source_row and source_row[0] == "folder" and target_row and target_row[0] == "folder"
+                    and target_row[1] != source_row[1] and not self.can_move_folder_into(source_row[1], target_row[1])):
+                self.report_blocked_folder_move()
             return "break"
 
         # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
@@ -70201,6 +70249,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "activity": activity,
             # Teil 06: KI-Arbeitsbereich als Zusatzabschnitt; ältere Fassungen ignorieren ihn.
             "ai_workspace": self.ai_workspace().to_payload(),
+            # Ecosystem E03: eigene Symbole als Zusatzabschnitt; ältere Fassungen ignorieren ihn.
+            "symbol_library": self.symbol_library().to_payload(),
         }
         return payload
 
@@ -70433,6 +70483,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 # Vollständiger Ersatz: KI-Arbeitsbereich und Dokumentdateien wie gesichert.
                 self._ai_workspace = glide_ai.Workspace({})
                 self.ai_restore_from_backup(path=path)
+            symbole = (section or {}).get("symbol_library")
+            if isinstance(symbole, dict) and symbole.get("format") == glide_symbol_library.FORMAT:
+                self._symbol_library = glide_symbol_library.Library(symbole)
+                self._symbol_library_file = str(SAVE_FILE)
+                self.save_symbol_library()
             angewendet.append(glide_i18n.t("ui.restore_app_backup.task_s_in_list", '{tasks} Aufgabe(n) in {lists} Liste(n)', tasks=summary['tasks'], lists=summary['lists']))
         try:
             angewendet += self.restore_app_backup_extras(
@@ -72829,6 +72884,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     (glide_i18n.t("sidebar.today", "Heute"), self.set_today_view),
                     (glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), self.set_in_progress_view),
                     (glide_i18n.t("ui.refresh_task_overview.next_task", "Nächste Aufgabe"), self.open_next_task),
+                    (glide_i18n.t("ui.project_dashboard.menu", "Projektübersicht …"), self.show_project_dashboard),
                     (glide_i18n.t("ui.show_plan_day_mode_menu.day_start", "Tagesbeginn …"), self.start_day_review),
                     (glide_i18n.t("ui.render_day_proposal.what_fits_today", "Was passt heute?"), self.start_day_proposal),
                     (glide_i18n.t("ui.build_home_task_menu.start_focus", "Fokus starten"), self.start_focus_selected, self.accel("Shift+F")),
@@ -72926,6 +72982,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
                 (glide_i18n.t("menu.help.shortcuts", "Tastenkürzel anzeigen"), self.show_shortcuts_dialog),
                 (glide_i18n.t("menu.help.component_gallery", "Komponenten-Galerie …"), self.show_component_gallery),
+                (glide_i18n.t("menu.help.more_programs", "Weitere Programme …"), self.show_more_programs),
                 None,
                 (glide_i18n.t("menu.help.error_log", "Fehlerprotokoll öffnen"), self.open_error_log),
                 (glide_i18n.t("menu.help.about", f"Über {APP_NAME}", app_name=APP_NAME), self.show_about_dialog),
@@ -73178,11 +73235,358 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         return self.themed_message_dialog(glide_i18n.t("ui.show_release_notes_dialog.what_s_new", "Neuerungen"), glide_release.history_text(APP_VERSION), kind="info")
 
+    def about_system_text(self):
+        """Laufzeit- und Frameworkangaben für „Über Glide“ (Shell-Vertrag `system_info`, E03)."""
+        info = glide_software_catalog.system_info(self.root)
+        return glide_i18n.t(
+            "ui.about_system.text", "Technik: Aufgabenformat {data_format}\n"
+            "Glide Shell {shell} · Glide Bento {bento}\nPython {python} · Tk {tk}\n{os}",
+            data_format=self.DATA_SCHEMA_VERSION, shell=info["glide_shell"],
+            bento=getattr(glide_bento, "BENTO_VERSION", "–"), python=info["python"], tk=info["tk"] or "–", os=info["os"])
+
     def show_about_dialog(self):
         return self.themed_message_dialog(
-            glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME), self.about_text(), kind="info",
+            glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME),
+            self.about_text() + "\n\n" + self.about_system_text(), kind="info",
             extra_buttons=self.about_actions(), logo=True,
         )
+
+    # --- Weitere Programme (Ecosystem E03) ------------------------------------
+    PRODUCT_ID = "glide"
+
+    def software_catalog(self):
+        katalog = getattr(self, "_software_catalog", None)
+        if katalog is None:
+            katalog = self._software_catalog = glide_software_catalog.load_ecosystem()
+        return katalog
+
+    def open_catalog_link(self, url):
+        """Externer Link aus dem Softwarekatalog – nur nach Klick, nur https."""
+        if glide_software_catalog.validate_url(url):
+            import webbrowser
+            webbrowser.open(url)
+
+    def show_more_programs(self, event=None):
+        """Eigenes Fenster mit den anderen Programmen des Ökosystems; höchstens einmal offen."""
+        vorhanden = getattr(self, "_more_programs_window", None)
+        try:
+            if vorhanden is not None and vorhanden.winfo_exists():
+                glide_modal_session.bring_to_front(vorhanden)
+                return vorhanden
+        except tk.TclError:
+            pass
+        import glide_bento.marketing as glide_marketing
+        katalog = self.software_catalog()
+        fenster = self._new_dialog(glide_i18n.t("menu.help.more_programs_title", "Weitere Programme"), minsize=(640, 460))
+        self._more_programs_window = fenster
+        tk.Label(fenster, text=glide_i18n.t("ui.more_programs.intro",
+                 "Weitere freie Programme aus demselben Software-Ökosystem. Glide ruft keine Daten aus dem Netz ab; "
+                 "Links öffnen sich erst nach deinem Klick im Browser."),
+                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w", justify="left",
+                 wraplength=600).pack(fill="x", padx=self.DIALOG_PAD_X, pady=(self.DIALOG_PAD_Y, 6))
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: self.theme))
+        sprache = "en" if glide_i18n.get_language() == "en" else "de"
+        texte = {"status": {"concept": glide_i18n.t("ui.more_programs.status.concept", "Konzept"),
+                            "development": glide_i18n.t("ui.more_programs.status.development", "In Entwicklung"),
+                            "prerelease": glide_i18n.t("ui.more_programs.status.prerelease", "Vorabversion"),
+                            "released": glide_i18n.t("ui.more_programs.status.released", "Veröffentlicht"),
+                            "maintenance": glide_i18n.t("ui.more_programs.status.maintenance", "Wartung"),
+                            "discontinued": glide_i18n.t("ui.more_programs.status.discontinued", "Eingestellt")},
+                 "links": {"website": glide_i18n.t("ui.more_programs.link.website", "Website"),
+                           "repository": glide_i18n.t("ui.more_programs.link.repository", "Quellcode"),
+                           "documentation": glide_i18n.t("ui.more_programs.link.documentation", "Dokumentation"),
+                           "download": glide_i18n.t("ui.more_programs.link.download", "Downloads")},
+                 "license": glide_i18n.t("ui.more_programs.license", "Lizenz"),
+                 "version": glide_i18n.t("ui.more_programs.version", "Version"),
+                 "this_app": glide_i18n.t("ui.more_programs.this_app", "Diese App")}
+        portfolio = glide_marketing.PortfolioView(fenster, kontext, katalog, current_id=self.PRODUCT_ID, language=sprache,
+                                                  on_link=self.open_catalog_link, texts=texte)
+        portfolio.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X)
+        fuss = tk.Frame(fenster, bg=self.theme["bg"])
+        fuss.pack(fill="x", padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        self._make_dialog_button(fuss, glide_i18n.t("button.close", "Schließen"), fenster.destroy, "muted").pack(side="right")
+        fenster.bind("<Escape>", lambda _e: fenster.destroy())
+        self._center_dialog(fenster, min_width=680, min_height=520)
+        self._schedule_windows_chrome_theme(fenster)
+        self._more_programs_portfolio = portfolio
+        return fenster
+
+    # --- Projektübersicht (Ecosystem E04) -------------------------------------
+    def project_dashboard_data(self, today=None):
+        return glide_project_dashboard.summary(
+            self.lists, self.folders, today or date.today(),
+            no_project_title=glide_i18n.t("ui.project_dashboard.no_project", "Ohne Projekt"))
+
+    def show_project_dashboard(self, event=None):
+        """Projektübersicht mit Bento-Karten und Diagrammen aus den echten Aufgaben (ein Fenster, nicht modal)."""
+        vorhanden = getattr(self, "_project_dashboard_window", None)
+        try:
+            if vorhanden is not None and vorhanden.winfo_exists():
+                self.refresh_project_dashboard()
+                glide_modal_session.bring_to_front(vorhanden)
+                return vorhanden
+        except tk.TclError:
+            pass
+        fenster = self._new_dialog(glide_i18n.t("ui.project_dashboard.title", "Projektübersicht"), minsize=(820, 620))
+        self._project_dashboard_window = fenster
+        kopf = tk.Frame(fenster, bg=self.theme["bg"])
+        kopf.pack(fill="x", padx=self.DIALOG_PAD_X, pady=(self.DIALOG_PAD_Y, 4))
+        tk.Label(kopf, text=glide_i18n.t("ui.project_dashboard.title", "Projektübersicht"), bg=self.theme["bg"], fg=self.theme["text"],
+                 font=app_font(16, "bold"), anchor="w").pack(side="left")
+        self._make_dialog_button(kopf, glide_i18n.t("ui.project_dashboard.refresh", "Aktualisieren"), self.refresh_project_dashboard,
+                                 "muted").pack(side="right")
+        tk.Label(fenster, text=glide_i18n.t("ui.project_dashboard.basis",
+                 "Projekte sind deine obersten Ordner. Gezählt werden Aufgaben in Aufgabenlisten; Auslastung und Abhängigkeiten "
+                 "zeigt Glide nicht, weil dafür keine verlässlichen Angaben vorliegen."), bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(9), anchor="w", justify="left", wraplength=780).pack(fill="x", padx=self.DIALOG_PAD_X)
+        flaeche = tk.Frame(fenster, bg=self.theme["bg"])
+        flaeche.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=(6, self.DIALOG_PAD_Y))
+        self._project_dashboard_area = flaeche
+        fenster.bind("<Escape>", lambda _e: fenster.destroy())
+        self.refresh_project_dashboard()
+        self._center_dialog(fenster, min_width=900, min_height=700)
+        self._schedule_windows_chrome_theme(fenster)
+        return fenster
+
+    def refresh_project_dashboard(self):
+        flaeche = getattr(self, "_project_dashboard_area", None)
+        if flaeche is None or not flaeche.winfo_exists():
+            return None
+        import glide_bento.charts as glide_charts
+        import glide_bento.data as glide_chart_data
+        for kind in flaeche.winfo_children():
+            kind.destroy()
+        daten = self.project_dashboard_data()
+        self._project_dashboard_last = daten
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: self.theme))
+        raster = glide_bento.BentoGrid(flaeche, context=kontext)
+        raster.pack(fill="both", expand=True)
+        widgets = {}
+
+        def karte(key, titel, span=1):
+            k = glide_bento.BentoCard(raster, context=kontext, title=titel, spec=glide_bento.BentoCardSpec(key, span=span))
+            raster.add_card(k)
+            return k
+        gesamt, woche = daten["totals"], daten["week"]
+        k = karte("pd-open", glide_i18n.t("ui.project_dashboard.open", "Offene Aufgaben"))
+        widgets["open"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.open_now", "jetzt offen"), gesamt["open"])
+        widgets["open"].pack(fill="x")
+        k = karte("pd-done", glide_i18n.t("ui.project_dashboard.done_week", "Erledigt (7 Tage)"))
+        widgets["week"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.vs_previous", "gegenüber den 7 Tagen davor"),
+                                                   woche["last_7"], previous=woche["previous_7"])
+        widgets["week"].pack(fill="x")
+        k = karte("pd-overdue", glide_i18n.t("ui.project_dashboard.overdue", "Überfällig"))
+        widgets["overdue"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.overdue_open", "offen und überfällig"),
+                                                      gesamt["overdue"], higher_is_better=False)
+        widgets["overdue"].pack(fill="x")
+        projekte = [p for p in daten["projects"] if p["open"] + p["done"]]
+        k = karte("pd-progress", glide_i18n.t("ui.project_dashboard.progress", "Projektfortschritt"), span=2)
+        widgets["progress"] = glide_charts.MultiProgress(k.body, [(p["id"], p["title"], p["done"], p["open"] + p["done"]) for p in projekte[:12]],
+                                                         context=kontext)
+        widgets["progress"].pack(fill="x")
+        k = karte("pd-status", glide_i18n.t("ui.project_dashboard.status", "Aufgabenstatus"))
+        status = glide_chart_data.Series("status", glide_i18n.t("ui.project_dashboard.status", "Aufgabenstatus"), [
+            glide_chart_data.Point("status:done", glide_i18n.t("ui.project_dashboard.status_done", "Erledigt"), gesamt["done"]),
+            glide_chart_data.Point("status:open", glide_i18n.t("ui.project_dashboard.status_open_in_time", "Offen, nicht überfällig"), gesamt["open"] - gesamt["overdue"]),
+            glide_chart_data.Point("status:overdue", glide_i18n.t("ui.project_dashboard.overdue", "Überfällig"), gesamt["overdue"])])
+        widgets["status"] = glide_charts.PieChart(k.body, status, donut=True, context=kontext, height=170)
+        widgets["status"].pack(fill="x")
+        k = karte("pd-importance", glide_i18n.t("ui.project_dashboard.importance", "Offen nach Wichtigkeit"))
+        stufen = (("high", glide_i18n.t("ui.project_dashboard.importance_high", "Hoch")), ("medium", glide_i18n.t("ui.project_dashboard.importance_medium", "Mittel")),
+                  ("low", glide_i18n.t("ui.project_dashboard.importance_low", "Niedrig")), ("none", glide_i18n.t("ui.project_dashboard.importance_none", "Ohne")))
+        reihe = glide_chart_data.Series("imp", glide_i18n.t("ui.project_dashboard.open_tasks", "offen"),
+                                        [glide_chart_data.Point(f"imp:{s}", name, daten["importance"].get(s, 0)) for s, name in stufen])
+        widgets["importance"] = glide_charts.BarChart(k.body, [reihe], context=kontext, height=170)
+        widgets["importance"].pack(fill="x")
+        start = date.fromisoformat(daten["period"][0])
+        tage = {(start + timedelta(days=i)).isoformat(): daten["completions"].get((start + timedelta(days=i)).isoformat(), 0)
+                for i in range((date.fromisoformat(daten["period"][1]) - start).days + 1)}
+        k = karte("pd-activity", glide_i18n.t("ui.project_dashboard.activity", "Aktivität: Erledigungen je Tag (8 Wochen)"), span=2)
+        widgets["activity"] = glide_charts.CalendarHeatmap(k.body, tage, context=kontext, height=150,
+                                                           weekdays=(glide_i18n.t("ui.project_dashboard.weekday.0", "Mo"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.1", "Di"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.2", "Mi"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.3", "Do"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.4", "Fr"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.5", "Sa"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.6", "So")))
+        widgets["activity"].pack(fill="x")
+        k = karte("pd-due", glide_i18n.t("ui.project_dashboard.due", "Fristen der nächsten 30 Tage"), span=2)
+        titel = {p["id"]: p["title"] for p in daten["projects"]}
+        widgets["due"] = glide_charts.Timeline(k.body, [glide_chart_data.Span(f"due:{iid}", f"{text} · {tage_bis} d", tage_bis, None, titel.get(pid))
+                                                      for pid, iid, text, tage_bis in daten["due_soon"][:40]],
+                                               context=kontext, height=max(120, 26 * len({x[0] for x in daten["due_soon"]}) + 40),
+                                               axis_label=lambda v: f"+{int(v)} d")
+        widgets["due"].pack(fill="x")
+        k = karte("pd-table", glide_i18n.t("ui.project_dashboard.table", "Projekte"), span=3)
+        widgets["table"] = glide_charts.BentoTable(k.body, kontext, [
+            ("title", glide_i18n.t("ui.project_dashboard.col_project", "Projekt"), "text"), ("open", glide_i18n.t("ui.project_dashboard.col_open", "Offen"), "number"),
+            ("done", glide_i18n.t("ui.project_dashboard.col_done", "Erledigt"), "number"), ("overdue", glide_i18n.t("ui.project_dashboard.col_overdue", "Überfällig"), "number"),
+            ("next_due", glide_i18n.t("ui.project_dashboard.col_next_due", "Nächste Frist"), "text")], projekte)
+        widgets["table"].pack(fill="x")
+        self._project_dashboard_widgets = widgets
+        return widgets
+
+    # --- Symbolbibliothek (Ecosystem E03) -------------------------------------
+    def symbol_library(self):
+        bib = getattr(self, "_symbol_library", None)
+        if bib is None or getattr(self, "_symbol_library_file", None) != str(SAVE_FILE):
+            bib, zustand = glide_symbol_library.load(os.path.join(BASE_DIR, glide_symbol_library.FILE_NAME))
+            self._symbol_library, self._symbol_library_state = bib, zustand
+            self._symbol_library_file = str(SAVE_FILE)
+            if zustand.problem:
+                self.show_warning(glide_i18n.t("ui.symbols.protected_title", "Symbolbibliothek schreibgeschützt"),
+                                  glide_i18n.t("ui.symbols.protected_text", "symbol_library.json ist unlesbar oder stammt aus einer "
+                                               "neueren Glide-Fassung. Glide ändert die Datei nicht."))
+        return bib
+
+    def save_symbol_library(self):
+        zustand = getattr(self, "_symbol_library_state", None)
+        if getattr(self, "_data_read_only", False) or (zustand is not None and not zustand.writable):
+            self.show_undo_toast(glide_i18n.t("ui.symbols.read_only", "Schreibgeschützt – Symbolbibliothek nicht gespeichert"))
+            return False
+        if self.refresh_data_lock() is False:
+            return False
+        try:
+            glide_symbol_library.save(os.path.join(BASE_DIR, glide_symbol_library.FILE_NAME), self.symbol_library())
+        except OSError as exc:
+            self.storage_failure("data", str(exc))
+            return False
+        return True
+
+    def symbol_registry(self, exclude=None):
+        """Anbieter der gemeinsamen Symbolauswahl: eigene Symbole und vorhandene Pixel-Zeichnungen."""
+        bib = self.symbol_library()
+        eigene = glide_i18n.t("ui.symbols.category.own", "Eigene Symbole")
+        zeichnungen = glide_i18n.t("ui.symbols.category.drawings", "Aus Zeichnungen")
+        seiten = glide_i18n.t("ui.symbols.category.pages", "Symbole deiner Seiten")
+
+        def benutzer():
+            return [glide_shell_symbols.Symbol(f"user:{sid}", e.get("label") or "Symbol", e.get("category") or eigene, "user", "pixel",
+                                         sizes=(16,), color="multicolor", resource=e.get("icon"))
+                    for sid, e in bib.symbols.items()]
+
+        def aus_zeichnungen():
+            ergebnis = []
+            for entry in self.lists:
+                if not self.is_drawing_list(entry) or entry.get("id") == exclude:
+                    continue
+                if isinstance(entry.get("drawing"), dict):
+                    ergebnis.append(glide_shell_symbols.Symbol(f"drawing:{entry['id']}", entry.get("title") or "Zeichnung", zeichnungen, "host",
+                                                         "pixel", sizes=(16,), color="multicolor", resource=entry.get("drawing")))
+            return ergebnis[:400]
+
+        def aus_seiten():
+            gesehen, ergebnis = set(), []
+            for holder in list(self.lists) + list(self.folders):
+                icon = holder.get("icon") if isinstance(holder, dict) else None
+                schluessel = glide_symbol_library.icon_key(icon)
+                if schluessel and schluessel not in gesehen and holder.get("id") != exclude:
+                    gesehen.add(schluessel)
+                    ergebnis.append(glide_shell_symbols.Symbol(f"page:{holder['id']}", holder.get("title") or "Symbol", seiten, "host", "pixel",
+                                                         sizes=(16,), color="multicolor", resource=icon))
+            return ergebnis[:400]
+        return glide_shell_symbols.SymbolRegistry({"user": benutzer, "page": aus_seiten, "drawing": aus_zeichnungen})
+
+    def symbol_icon_document(self, symbol):
+        """16-×-16-Pixeldokument eines Symbols (Zeichnungen werden verkleinert) oder None."""
+        dokument = symbol.resource if isinstance(symbol.resource, dict) else None
+        if dokument is None:
+            return None
+        try:
+            model = glide_drawing.DrawingModel.from_document(dokument)
+        except glide_drawing.DrawingFormatError:
+            return None
+        if model.width > self.PAGE_ICON_SIZE:
+            model = model.downscaled(self.PAGE_ICON_SIZE)
+        return model.to_document() if model.width == self.PAGE_ICON_SIZE else None
+
+    def render_symbol(self, symbol, size, roles):
+        """Bild eines Symbols in ganzzahliger DPI-Skalierung; None führt zum Textrückfall."""
+        dokument = self.symbol_icon_document(symbol)
+        if dokument is None:
+            return None
+        cache = getattr(self, "_symbol_render_cache", None)
+        if cache is None:
+            cache = self._symbol_render_cache = glide_resources.BoundedCache("symbol-render", max_entries=800)
+        faktor = max(1, int(size) // self.PAGE_ICON_SIZE)
+        schluessel = (glide_symbol_library.icon_key(dokument), faktor)
+
+        def erzeugen():
+            model = glide_drawing.DrawingModel.from_document(dokument)
+            return glide_drawing_image.model_to_photo(model, scale=faktor, master=self.root, transparent=True)
+        try:
+            return cache.get_or_create(schluessel, erzeugen)
+        except (glide_drawing.DrawingFormatError, tk.TclError):
+            return None
+
+    def import_symbol_files(self, paths=None, parent=None):
+        """PNG/SVG prüfen, auf 16 × 16 Zellen bringen und als eigenes Symbol ablegen. Rückgabe: Zahl neuer Symbole."""
+        if paths is None:
+            paths = filedialog.askopenfilenames(parent=parent, title=glide_i18n.t("ui.symbols.import_title", "Symbole importieren"),
+                                                filetypes=[(glide_i18n.t("ui.symbols.filetypes", "Bilder"), "*.png *.svg")])
+        bib = self.symbol_library()
+        neu, abgewiesen = 0, []
+        for pfad in list(paths or ()):
+            name = os.path.basename(str(pfad))
+            try:
+                with open(pfad, "rb") as quelle:
+                    daten = quelle.read(glide_shell_symbols.MAX_PNG_BYTES + 1)
+            except OSError as exc:
+                abgewiesen.append(f"{name}: {exc}")
+                continue
+            if str(pfad).lower().endswith(".svg"):
+                ok, probleme, _info = glide_shell_symbols.inspect_svg(daten)
+                art, fmt = "svg", "svg"
+            else:
+                ok, probleme, _info = glide_shell_symbols.inspect_png(daten)
+                art, fmt = "png", "png"
+            if not ok:
+                abgewiesen.append(f"{name}: {'; '.join(probleme)}")
+                continue
+            try:
+                import base64
+                foto = tk.PhotoImage(master=self.root, data=base64.b64encode(daten).decode("ascii") if art == "png" else daten, format=fmt)
+                rahmen = glide_drawing_image.render_framed_reference(foto, "fit", size=self.PAGE_ICON_SIZE)
+                model = glide_drawing_image.quantize_reference(rahmen, max_colors=32)
+            except (tk.TclError, glide_drawing.DrawingFormatError, ValueError) as exc:
+                hinweis = glide_i18n.t("ui.symbols.svg_unsupported", "SVG wird von dieser Tk-Fassung nicht gelesen") if art == "svg" else str(exc)
+                abgewiesen.append(f"{name}: {hinweis}")
+                continue
+            sid, angelegt = bib.add(os.path.splitext(name)[0], model.to_document(), art, hashlib.sha256(daten).hexdigest())
+            neu += int(angelegt)
+        if neu:
+            self.save_symbol_library()
+        if abgewiesen:
+            self.show_warning(glide_i18n.t("ui.symbols.import_title", "Symbole importieren"),
+                              glide_i18n.t("ui.symbols.rejected", "Nicht übernommen:\n{list}", list="\n".join(abgewiesen[:12])), parent=parent)
+        self._symbol_import_report = {"new": neu, "rejected": abgewiesen}
+        return neu
+
+    def choose_symbol(self, exclude=None, parent=None):
+        """Gemeinsame Symbolauswahl (Shell) über Glides Anbieter; Rückgabe: 16-×-16-Pixeldokument oder None."""
+        bib = self.symbol_library()
+        zustand = glide_shell_symbols.SymbolState(bib.favorites, bib.recent)
+        registry = self.symbol_registry(exclude=exclude)
+        texte = {"favorites": glide_i18n.t("ui.symbols.favorites", "Favoriten"), "recent": glide_i18n.t("ui.symbols.recent", "Zuletzt verwendet"),
+                 "all": glide_i18n.t("ui.symbols.all", "Alle Symbole"), "search": glide_i18n.t("ui.symbols.search", "Symbole suchen"),
+                 "choose": glide_i18n.t("button.apply", "Übernehmen"), "cancel": glide_i18n.t("button.cancel", "Abbrechen"),
+                 "favorite": glide_i18n.t("ui.symbols.favorite", "Als Favorit"), "unfavorite": glide_i18n.t("ui.symbols.unfavorite", "Kein Favorit mehr"),
+                 "empty": glide_i18n.t("ui.symbols.empty", "Hier gibt es noch keine Symbole."), "origin": glide_i18n.t("ui.symbols.origin", "Herkunft"),
+                 "license": glide_i18n.t("ui.symbols.license", "Lizenz"), "category": glide_i18n.t("ui.symbols.category", "Kategorie")}
+        auswahl = glide_symbol_picker.SymbolPicker(
+            parent or self.root, registry, self.theme, self.render_symbol, state=zustand,
+            title=glide_i18n.t("ui.symbols.title", "Symbolbibliothek"), texts=texte, size=32,
+            cache=getattr(self, "_symbol_picker_cache", None) or glide_resources.BoundedCache("symbol-picker", 600),
+            extra_actions=((glide_i18n.t("ui.symbols.import", "PNG/SVG importieren …"),
+                            lambda: self.import_symbol_files(parent=auswahl.dialog) > 0),))
+        self._symbol_picker_cache = auswahl.cache
+        self._last_symbol_picker = auswahl
+        ergebnis = auswahl.run()
+        bib.favorites, bib.recent = zustand.favorites, zustand.recent
+        self.save_symbol_library()
+        symbol = registry.get(ergebnis) if ergebnis else None
+        return self.symbol_icon_document(symbol) if symbol else None
 
     COMPONENT_GALLERY_MIN_SIZE = (760, 560)
 
@@ -73206,7 +73610,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         dialog = self._new_dialog(titel, minsize=self.COMPONENT_GALLERY_MIN_SIZE)
         zustand = {"dialog": dialog, "registry": registry, "widgets": {}, "failures": {},
                    "theme": tk.StringVar(master=dialog, value="current"),
-                   "width": tk.StringVar(master=dialog, value=glide_component_gallery.DEFAULT_WIDTH)}
+                   "width": tk.StringVar(master=dialog, value=glide_component_gallery.DEFAULT_WIDTH),
+                   "category": tk.StringVar(master=dialog, value=""), "generation": 0, "queue": []}
         self._component_gallery = zustand
         outer = tk.Frame(dialog, bg=self.theme["bg"])
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
@@ -73241,6 +73646,27 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                  fg=self.theme["text"], selectcolor=self.theme["input"], font=app_font(10),
                                  command=self.render_component_gallery).pack(side="left", padx=(0, 8))
             tk.Frame(wahl, bg=self.theme["bg"], width=18).pack(side="left")
+        # Ecosystem E04/E05: Suche (Shell-Suchfeld) und Kategorie über ~60 Bento-Kompositionen.
+        filter_zeile = tk.Frame(outer, bg=self.theme["bg"])
+        filter_zeile.pack(fill="x", pady=(0, 10))
+        suche = SearchField(filter_zeile, self.theme, placeholder=glide_i18n.t("ui.component_gallery.search", "Komponenten suchen"),
+                            on_change=lambda _text: self.render_component_gallery(), delay_ms=200, font=app_font(10))
+        suche.pack(side="left", fill="x", expand=True)
+        zustand["search"] = suche
+        alle = glide_i18n.t("ui.component_gallery.all_categories", "Alle Kategorien")
+        kategorien = [alle] + registry.categories()
+        kategorie_anzeige = tk.StringVar(master=dialog, value=alle)
+        zustand["category_display"] = kategorie_anzeige
+
+        def kategorie_gewaehlt(*_args):
+            wert = kategorie_anzeige.get()
+            zustand["category"].set("" if wert == alle else wert)
+            self.render_component_gallery()
+        kategorie_anzeige.trace_add("write", kategorie_gewaehlt)
+        feld, _knopf = self._make_option_menu(filter_zeile, kategorie_anzeige, kategorien)
+        feld.pack(side="left", padx=(10, 0))
+        zustand["count_label"] = tk.Label(filter_zeile, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
+        zustand["count_label"].pack(side="left", padx=(10, 0))
         flaeche = tk.Frame(outer, bg=self.theme["bg"])
         flaeche.pack(fill="both", expand=True)
         canvas = tk.Canvas(flaeche, bg=self.theme["bg"], highlightthickness=0, bd=0, yscrollincrement=24,
@@ -73270,8 +73696,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if event.widget is dialog and getattr(self, "_component_gallery", {}).get("dialog") is dialog:
             self._component_gallery = None
 
+    COMPONENT_GALLERY_FIRST_BATCH = 10
+    COMPONENT_GALLERY_BATCH = 6
+
     def render_component_gallery(self):
-        """Vorführungen der Galerie für die gewählte Farbtabelle und Breite (neu) aufbauen."""
+        """Vorführungen für Farbtabelle, Breite, Suche und Kategorie (neu) aufbauen.
+
+        E05: Die ersten Karten entstehen sofort, die übrigen in Stapeln im Leerlauf
+        (Zeitgeberbereich des Dialogs). Ein neuer Aufbau macht laufende Stapel ungültig
+        (Generation), Fokus und Tastatur bleiben bedienbar, `finish_component_gallery`
+        vervollständigt synchron.
+        """
         zustand = getattr(self, "_component_gallery", None)
         if not zustand or not zustand["content"].winfo_exists():
             return None
@@ -73280,54 +73715,103 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             kind.destroy()
         zustand["widgets"].clear()
         zustand["failures"].clear()
+        zustand["generation"] = zustand.get("generation", 0) + 1
         palette = self.component_gallery_palette(zustand["theme"].get())
         breite = glide_component_gallery.width_for(zustand["width"].get())
         kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: palette))
         env = glide_shell_showcase.ShowcaseEnv(palette=palette, font=app_font, extra={"bento_context": kontext})
         zustand.update(palette=palette, env=env, area_width=breite)
+        suche = zustand.get("search")
+        treffer = zustand["registry"].search(suche.get() if suche is not None else "", zustand.get("category").get() if zustand.get("category") else None)
+        reihenfolge = []
+        for framework in zustand["registry"].frameworks():
+            eintraege = [e for e in treffer if e.framework == framework]
+            if eintraege:
+                reihenfolge.append(("heading", framework))
+                reihenfolge += [("entry", e) for e in eintraege]
+        zustand["queue"] = reihenfolge
+        zustand["expected"] = [e.id for e in treffer]
+        if zustand.get("count_label") is not None:
+            zustand["count_label"].configure(text=glide_i18n.t("ui.component_gallery.count", "{n} Einträge", n=len(treffer)))
+        if not treffer:
+            tk.Label(inhalt, text=glide_i18n.t("ui.component_gallery.no_match", "Keine Komponente passt zu Suche und Kategorie."),
+                     bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(11)).pack(fill="x", pady=20)
+        self._component_gallery_batch(zustand["generation"], self.COMPONENT_GALLERY_FIRST_BATCH)
+        return zustand
+
+    def _component_gallery_batch(self, generation, anzahl=None):
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand or zustand.get("generation") != generation or not zustand["content"].winfo_exists():
+            return
+        anzahl = anzahl or self.COMPONENT_GALLERY_BATCH
+        gebaut = 0
+        while zustand["queue"] and gebaut < anzahl:
+            art, wert = zustand["queue"].pop(0)
+            if art == "heading":
+                tk.Label(zustand["content"], text=wert, bg=self.theme["bg"], fg=self.theme["text"], font=app_font(14, "bold"),
+                         anchor="w").pack(fill="x", pady=(10, 4))
+                continue
+            self._component_gallery_card(zustand, wert)
+            gebaut += 1
+        if zustand["queue"]:
+            # Zeitgeber statt after_idle: after_idle-Stapel liefen alle im selben Leerlauf durch und
+            # blockierten das erste Zeichnen (Messung E05); zwischen den Stapeln zeichnet Tk und nimmt Eingaben an.
+            glide_window_lifetime.scope_for(zustand["dialog"]).after(1, self._component_gallery_batch, generation)
+
+    def finish_component_gallery(self):
+        """Alle ausstehenden Vorführungen sofort bauen (Prüfungen, Druck); liefert die Zahl der Einträge."""
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand:
+            return 0
+        while zustand["queue"]:
+            self._component_gallery_batch(zustand["generation"], len(zustand["queue"]))
+        return len(zustand["widgets"]) + len(zustand["failures"])
+
+    def _component_gallery_card(self, zustand, entry):
+        palette, env, breite = zustand["palette"], zustand["env"], zustand["area_width"]
         bg = self.theme["bg"]
         felder = (("ui.component_gallery.field.states", "Zustände", "states"),
                   ("ui.component_gallery.field.sizes", "Größen", "sizes"),
                   ("ui.component_gallery.field.theming", "Design", "theming"),
-                  ("ui.component_gallery.field.limits", "Grenzen", "limits"))
-        for framework in zustand["registry"].frameworks():
-            tk.Label(inhalt, text=framework, bg=bg, fg=self.theme["text"], font=app_font(14, "bold"),
-                     anchor="w").pack(fill="x", pady=(10, 4))
-            for entry in zustand["registry"].entries(framework):
-                flaeche = palette.get("card", bg)
-                karte = tk.Frame(inhalt, bg=flaeche, highlightthickness=1,
-                                 highlightbackground=palette.get("line", palette.get("input_border", bg)))
-                karte.pack(fill="x", pady=(0, 10))
-                kopf = tk.Frame(karte, bg=flaeche)
-                kopf.pack(fill="x", padx=14, pady=(10, 2))
-                tk.Label(kopf, text=entry.name, bg=flaeche, fg=palette.get("text"),
-                         font=app_font(12, "bold"), anchor="w").pack(side="left")
-                tk.Label(kopf, text=f"{entry.framework} {entry.version} · {entry.module}", bg=flaeche,
-                         fg=palette.get("muted"), font=app_font(9), anchor="e").pack(side="right")
-                zeilen = [entry.summary]
-                for key, fallback, attribut in felder:
-                    wert = getattr(entry, attribut)
-                    if wert:
-                        text = ", ".join(wert) if isinstance(wert, tuple) else str(wert)
-                        zeilen.append(glide_i18n.t(key, fallback) + ": " + text)
-                zeilen.append(glide_i18n.t("ui.component_gallery.field.used_in", "In Glide") + ": "
-                              + "; ".join(glide_component_gallery.usage_texts(entry, glide_i18n.t)))
-                tk.Label(karte, text="\n".join(zeilen), bg=flaeche, fg=palette.get("text"),
-                         font=app_font(10), anchor="w", justify="left", wraplength=680).pack(fill="x", padx=14)
-                bereich = tk.Frame(karte, bg=flaeche)
-                bereich.pack(anchor="w", padx=14, pady=(8, 12))
-                tk.Frame(bereich, bg=flaeche, width=breite, height=1).pack(anchor="w")
-                try:
-                    widget = entry.build(bereich, env)
-                    widget.pack(fill="x")
-                    zustand["widgets"][entry.id] = widget
-                except Exception as fehler:  # eine Vorführung darf die Galerie nicht schließen
-                    zustand["failures"][entry.id] = repr(fehler)
-                    tk.Label(bereich, text=glide_i18n.t("ui.component_gallery.failed",
-                                                        "Vorführung fehlgeschlagen: {error}", error=fehler),
-                             bg=flaeche, fg=palette.get("delete", "#C0392B"), font=app_font(10),
-                             anchor="w").pack(fill="x")
-        return zustand
+                  ("ui.component_gallery.field.limits", "Grenzen", "limits"),
+                  ("ui.component_gallery.field.category", "Kategorie", "category"),
+                  ("ui.component_gallery.field.components", "Grundkomponenten", "components"),
+                  ("ui.component_gallery.field.data", "Datenvertrag", "data_contract"),
+                  ("ui.component_gallery.field.scenarios", "Einsatz", "scenarios"))
+        inhalt = zustand["content"]
+        flaeche = palette.get("card", bg)
+        karte = tk.Frame(inhalt, bg=flaeche, highlightthickness=1,
+                         highlightbackground=palette.get("line", palette.get("input_border", bg)))
+        karte.pack(fill="x", pady=(0, 10))
+        kopf = tk.Frame(karte, bg=flaeche)
+        kopf.pack(fill="x", padx=14, pady=(10, 2))
+        tk.Label(kopf, text=entry.name, bg=flaeche, fg=palette.get("text"),
+                 font=app_font(12, "bold"), anchor="w").pack(side="left")
+        tk.Label(kopf, text=f"{entry.framework} {entry.version} · {entry.id}", bg=flaeche,
+                 fg=palette.get("muted"), font=app_font(9), anchor="e").pack(side="right")
+        zeilen = [entry.summary]
+        for key, fallback, attribut in felder:
+            wert = getattr(entry, attribut, "")
+            if wert:
+                text = ", ".join(wert) if isinstance(wert, tuple) else str(wert)
+                zeilen.append(glide_i18n.t(key, fallback) + ": " + text)
+        zeilen.append(glide_i18n.t("ui.component_gallery.field.used_in", "In Glide") + ": "
+                      + "; ".join(glide_component_gallery.usage_texts(entry, glide_i18n.t)))
+        tk.Label(karte, text="\n".join(zeilen), bg=flaeche, fg=palette.get("text"),
+                 font=app_font(10), anchor="w", justify="left", wraplength=680).pack(fill="x", padx=14)
+        bereich = tk.Frame(karte, bg=flaeche)
+        bereich.pack(anchor="w", padx=14, pady=(8, 12))
+        tk.Frame(bereich, bg=flaeche, width=breite, height=1).pack(anchor="w")
+        try:
+            widget = entry.build(bereich, env)
+            widget.pack(fill="x")
+            zustand["widgets"][entry.id] = widget
+        except Exception as fehler:  # eine Vorführung darf die Galerie nicht schließen
+            zustand["failures"][entry.id] = repr(fehler)
+            tk.Label(bereich, text=glide_i18n.t("ui.component_gallery.failed",
+                                                "Vorführung fehlgeschlagen: {error}", error=fehler),
+                     bg=flaeche, fg=palette.get("delete", "#C0392B"), font=app_font(10),
+                     anchor="w").pack(fill="x")
 
     def manual_html(self):
         from html import escape

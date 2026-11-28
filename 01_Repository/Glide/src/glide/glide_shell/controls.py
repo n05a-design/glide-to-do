@@ -338,7 +338,7 @@ class ToolGroup(tk.Frame):
         knopf = ShellButton(self, text, command, self.toolbar.roles, **kwargs)
         knopf.pack(side="left", padx=2, pady=2)
         self.buttons.append(knopf)
-        self.toolbar._relayout()
+        self.toolbar.schedule_layout()
         return knopf
 
 
@@ -352,13 +352,26 @@ class Toolbar(tk.Frame):
         self.groups = []
         self._separators = []
         self.rows = 1
-        self.bind("<Configure>", lambda _e: self._relayout(), add="+")
+        self.relayouts = 0
+        self._pending = None
+        self.scope = window_lifetime.scope_for(self)
+        # Größenwechsel werden im Leerlauf gebündelt (keine Configure-Kaskade, kein
+        # update_idletasks im Ereignis); der Zeitgeberbereich endet mit dem Widget.
+        self.bind("<Configure>", lambda _e: self.schedule_layout(), add="+")
 
     def add_group(self, name):
         gruppe = ToolGroup(self, name)
         self.groups.append(gruppe)
-        self._relayout()
+        self.schedule_layout()
         return gruppe
+
+    def schedule_layout(self):
+        if self._pending is None and not self.scope.closed:
+            self._pending = self.scope.after_idle(self._run_scheduled)
+
+    def _run_scheduled(self):
+        self._pending = None
+        self._relayout()
 
     def set_theme(self, roles):
         self.roles = color_roles.complete(roles)
@@ -384,12 +397,18 @@ class Toolbar(tk.Frame):
         return zeilen
 
     def _relayout(self):
-        self.update_idletasks()
-        verfuegbar = self.master.winfo_width() if self.master.winfo_width() > 1 else 10 ** 6
+        """Sofortige Neuberechnung (Tests, Host nach Größenwechsel); sicher nach dem Abbau."""
+        try:
+            if not self.winfo_exists():
+                return
+            verfuegbar = self.master.winfo_width() if self.master.winfo_width() > 1 else 10 ** 6
+        except tk.TclError:
+            return
         zeilen = self.plan(verfuegbar)
         if zeilen == self._layout:
             return
         self._layout = zeilen
+        self.relayouts += 1
         for trenner in self._separators:
             trenner.destroy()
         self._separators = []

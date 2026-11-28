@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0
+Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.11.0
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
@@ -76,6 +76,11 @@ Import the building blocks one by one, for example `from glide_shell import moda
 | `settings_registry` (0.10.0) | Describe, validate and group settings; the host keeps its own storage | `Setting`, `SettingsRegistry`, `shell_settings`, `framework_info` |
 | `controls` (0.10.0) | General controls with colour roles | `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` |
 | `workspaces` (0.10.0) | Product areas as workspaces: navigation, lazy views, actions, status line, teardown | `Workspace`, `WorkspaceRegistry`, `WorkspaceHost` |
+| `software_catalog` (0.11.0) | Software catalogue and product manifests (`ECOSYSTEM_CATALOG.json`), app and system information, no network | `load_ecosystem`, `Product`, `Catalog`, `AppInfo`, `system_info`, `open_link` |
+| `symbols` (0.11.0) | Symbol contract, providers, favourites, safe SVG/PNG checks | `Symbol`, `SymbolRegistry`, `SymbolState`, `inspect_svg`, `inspect_png` |
+| `symbol_picker` (0.11.0) | Symbol picker with categories, search, favourites, preview and bounded cache | `SymbolPicker` |
+| `resources` (0.11.0) | Bounded caches with key, budget, eviction and statistics | `BoundedCache`, `cache_key` |
+| `background` (0.11.0) | Bounded background jobs delivered on the Tk thread | `TaskQueue`, `Job` |
 
 Updating an existing copy from 0.6.2: [UPDATING.md](UPDATING.md).
 

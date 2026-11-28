@@ -2,7 +2,7 @@
 """E02: kontrollierte Aktualisierung einer vorhandenen Framework-Kopie (T376).
 
 Ein künstliches Folgeprojekt erhält zuerst Shell 0.6.2 aus dem Commit, mit dem
-STEPS und Chess & Chains laut E01 arbeiten (`793596f1`). Geprüft wird der Weg
+STEPS und Chess & Chains laut E01 arbeiten (`7dcd8dc0`). Geprüft wird der Weg
 auf den aktuellen Stand mit `shell_uebernehmen.py`:
 
 1. Host-Modul im 0.6.2-Stil (nur damals öffentliche Namen) besteht die Regel
@@ -31,7 +31,7 @@ import unittest
 
 REPO = Path(__file__).resolve().parents[2]
 WERKZEUG = REPO / "scripts/pflege/shell_uebernehmen.py"
-ALT = "793596f1"  # Shell 0.6.2 (V1.86), Stand der Folgeprojekte laut E01
+ALT = "7dcd8dc0"  # Shell 0.6.2 (V1.86), Stand der Folgeprojekte laut E01
 
 
 def lauf(*args, cwd=None):
@@ -108,6 +108,13 @@ def haupt():
             "Host-Fachdateien verändert"
         rc, out = py("from glide_shell import conformance; sys.exit(conformance.main(['.']))", src)
         assert rc == 0 and "conform" in out, out
+        # E06: Katalog, Symbole, Caches, Hintergrund und Bento-Visualisierungen sind in der Kopie nutzbar.
+        assert (src / "glide_shell/ECOSYSTEM_CATALOG.json").is_file(), "Katalogdatei fehlt in der Kopie"
+        rc, out = py("from glide_shell import software_catalog, symbols, resources, background, symbol_picker; "
+                     "k = software_catalog.load_ecosystem(); assert not k.problems and len(k) == 3, k.problems; "
+                     "import glide_bento.charts, glide_bento.data, glide_bento.marketing, glide_bento.gallery as g; "
+                     "print(len(g.COMPOSITION_IDS))", src)
+        assert rc == 0 and int(out.strip().splitlines()[-1]) >= 50, out
         for modul, erwartet in (("glide_shell.selftest", "16/16"), ("glide_bento.selftest", "16/16")):
             rc, out = py(f"import runpy; runpy.run_module({modul!r}, run_name='__main__')", src)
             if not TK:

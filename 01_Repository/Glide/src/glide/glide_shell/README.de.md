@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für Folgeprojekte
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.11.0
 
 <p align="right"><a href="README.md">English</a></p>
 
@@ -76,6 +76,11 @@ Importiere die Bausteine einzeln, etwa `from glide_shell import modal_session, w
 | `settings_registry` (0.10.0) | Einstellungen beschreiben, prüfen und gruppieren; das Speicherformat bleibt beim Host | `Setting`, `SettingsRegistry`, `shell_settings`, `framework_info` |
 | `controls` (0.10.0) | Allgemeine Bedienelemente mit Farbrollen | `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` |
 | `workspaces` (0.10.0) | Produktbereiche als Arbeitsbereiche: Navigation, verzögerte Ansichten, Aktionen, Statuszeile, Abbau | `Workspace`, `WorkspaceRegistry`, `WorkspaceHost` |
+| `software_catalog` (0.11.0) | Softwarekatalog und Produktmanifeste (`ECOSYSTEM_CATALOG.json`), App- und Systeminformationen, ohne Netz | `load_ecosystem`, `Product`, `Catalog`, `AppInfo`, `system_info`, `open_link` |
+| `symbols` (0.11.0) | Symbolvertrag, Anbieter, Favoriten, sichere SVG/PNG-Prüfung | `Symbol`, `SymbolRegistry`, `SymbolState`, `inspect_svg`, `inspect_png` |
+| `symbol_picker` (0.11.0) | Symbolauswahl mit Kategorien, Suche, Favoriten, Vorschau und begrenztem Cache | `SymbolPicker` |
+| `resources` (0.11.0) | Begrenzte Caches mit Schlüssel, Budget, Verdrängung und Statistik | `BoundedCache`, `cache_key` |
+| `background` (0.11.0) | Begrenzte Hintergrundaufträge mit Zustellung im Tk-Thread | `TaskQueue`, `Job` |
 
 Aktualisierung einer vorhandenen Kopie ab 0.6.2: [AKTUALISIERUNG.md](AKTUALISIERUNG.md).
 

@@ -1,6 +1,6 @@
 # Bento Design Contract – Portabler Gestaltungsvertrag
 
-Stand 27.11.2026 · Glide 1.0.3 · Bento Version 0.3.0 · Glide Shell ≥ 0.7.0 · Glide-System V1.91 · Entscheidung D100, D106
+Stand 28.11.2026 · Glide 1.0.3 · Bento Version 0.4.0 · Glide Shell ≥ 0.11.0 · Glide-System V1.98 · Entscheidung D100, D106
 
 Ergänzend gilt der [Shell-First-Vertrag](../glide_shell/DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106): Bento nutzt nur öffentliche Shell-Module, deklariert `SHELL_MIN_VERSION` und beschreibt jede Komponente in `glide_bento.showcase`.
 
@@ -109,3 +109,11 @@ $$\text{Spalten} = \begin{cases}
 - Sämtliche Farben stammen aus `context.resolve_color(role)`.
 - Texte, Icons und Tooltips werden vollständig vom Host übergeben.
 - Keine Abhängigkeit von `ListApp`, SQLite, Persistenzformaten oder Anwendungsdaten.
+
+## Visualisierungen (Bento 0.4.0)
+
+- **Daten beim Host:** Bento berechnet keine fachlichen Kennzahlen. Werte kommen als `glide_bento.data`-Verträge; fehlende Werte (`None`) bleiben Lücken oder werden ausgelassen, ungültige Werte werden gemeldet und wie fehlende behandelt.
+- **Farben aus Rollen:** Diagramme lesen `accent`, `confirm`, `warning`, `danger`, `text_secondary` und leiten weitere Reihenfarben aus der Kartenfarbe ab; ausgewählte und hervorgehobene Elemente nutzen `focus`/`hover` des Hosts. Keine feste Glide-Farbe in portablen Komponenten; die Markenfarbe eines Produkts erscheint nur auf seinem Monogramm.
+- **Interaktion ehrlich:** Hover zeigt den Wert, `on_select(element_id)` meldet die stabile Kennung, Tastatur (Pfeile, Eingabe, Escape) bewegt die Auswahl; Zoom/Pan nur im Liniendiagramm. Bedeutung nie nur über Farbe (Beschriftung, Muster, Text).
+- **Layout ohne Kaskaden:** Neuzeichnen einmal je Leerlauf; unveränderte Größen lösen nichts aus.
+- **Galerie:** Jede Komposition nennt Kategorie, Grundkomponenten, Datenvertrag, Interaktion und Einsatz; Beispieldaten sind künstlich und nur in der Galerie.

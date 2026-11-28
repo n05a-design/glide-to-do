@@ -1,12 +1,12 @@
 # Aktualisierung einer vorhandenen Shell-Kopie
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0 (Weg von 0.6.2) · Glide Bento 0.3.0 · Lizenz MPL-2.0 · [English version](UPDATING.md)
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.11.0 (Weg von 0.6.2) · Glide Bento 0.4.0 · Lizenz MPL-2.0 · [English version](UPDATING.md)
 
-Dieser Vertrag gilt für Folgeprojekte, die `glide_shell` als verwaltete Kopie mit `SHELL_MANIFEST.json` führen (Stand E01: STEPS und Chess & Chains mit 0.6.2 aus Glide-Commit `793596f1`). Er beschreibt, was sich ändert, wie aktualisiert wird und wie der vorherige Stand zurückkommt.
+Dieser Vertrag gilt für Folgeprojekte, die `glide_shell` als verwaltete Kopie mit `SHELL_MANIFEST.json` führen (STEPS und Chess & Chains führen laut ihrem `SHELL_MANIFEST.json` Shell 0.6.2 aus Glide-Commit `7dcd8dc0`, geprüft am 28.11.2026). Er beschreibt, was sich ändert, wie aktualisiert wird und wie der vorherige Stand zurückkommt.
 
 ## 1. Kompatibilität
 
-- `SHELL_COMPAT_SINCE` bleibt **0.6.2**. Zwischen 0.6.2 und 0.10.0 wurde keine öffentliche Funktion, Klasse oder Methode entfernt, und kein Parameter wurde umbenannt oder umgestellt. Geprüft wird das maschinell über den Schnittstellenvergleich im Framework-Checkpoint (`interface_changes`: `removed` und `changed` leer).
+- `SHELL_COMPAT_SINCE` bleibt **0.6.2**. Zwischen 0.6.2 und 0.11.0 wurde keine öffentliche Funktion, Klasse oder Methode entfernt, und kein Parameter wurde umbenannt oder umgestellt. Geprüft wird das maschinell über den Schnittstellenvergleich im Framework-Checkpoint (`interface_changes`: `removed` und `changed` leer).
 - Ein Host, der nur die öffentlichen Namen von 0.6.2 nutzt, läuft nach der Aktualisierung unverändert. Das belegt T376 mit einem künstlichen 0.6.2-Host. Für STEPS und Chess & Chains selbst ist das **nicht** nachgewiesen; das prüft der jeweilige E03-Auftrag mit den eigenen Regressionstests.
 - Hinzugekommene Parameter haben Standardwerte (`AppHost(on_callback_error=None)`). Das Verhalten ohne diese Argumente ist unverändert.
 - Datenformate der Folgeprojekte sind nicht betroffen; die Shell schreibt keine Anwendungsdaten.
@@ -20,8 +20,9 @@ Dieser Vertrag gilt für Folgeprojekte, die `glide_shell` als verwaltete Kopie m
 | 0.9.0 | `ActionHandle`, `DropIndicator`, `symbol_ink_offset` | Griffe, Ablageanzeige, optische Glyphenmitte |
 | 0.9.1 | Vertragsregel Griffachse (D108) | Gestaltungsregel, kein Code |
 | 0.10.0 | `color_roles`, `settings_registry`, `controls`, `workspaces`; `AppHost.add_shutdown`/`shutdown`/`on_callback_error`; Konformitätsregel `host-api` | Theme-Provider, Einstellungen, Knopf/Suchfeld/Tooltip/Werkzeugleiste, Arbeitsbereiche, geordnetes Beenden |
+| 0.11.0 | `software_catalog` (mit `ECOSYSTEM_CATALOG.json`), `symbols`, `symbol_picker`, `resources`, `background`; `showcase` mit Kategorie und Suche | Softwarekatalog und Weitere Programme, gemeinsame Symbolauswahl, begrenzte Caches, Hintergrundaufträge |
 
-Glide Bento 0.3.0 verlangt Shell ≥ 0.7.0. Eine Bento-Übernahme neben einer Shell 0.6.2 lehnt das Werkzeug ab; Shell und Bento werden deshalb gemeinsam aktualisiert.
+Glide Bento 0.4.0 verlangt Shell ≥ 0.11.0. Eine Bento-Übernahme neben einer älteren Shell lehnt das Werkzeug ab; Shell und Bento werden deshalb gemeinsam aktualisiert. Für STEPS und Chess & Chains ist es die erste Bento-Übernahme.
 
 ## 3. Host-Anforderungen ab 0.10.0
 

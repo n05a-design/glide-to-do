@@ -21,7 +21,7 @@ from glide_shell.showcase import SHELL_COMPONENTS, ShowcaseEntry, ShowcaseRegist
 
 class Versionen(unittest.TestCase):
     def test_paketwerte(self):
-        self.assertEqual(glide_shell.SHELL_VERSION, "0.10.0", "erwartete Fassung nach E02: allgemeine Bedienelemente, Farbrollen, Einstellungen, Arbeitsbereiche (unabhängig vom Paketwert gepflegt)")
+        self.assertEqual(glide_shell.SHELL_VERSION, "0.11.0", "erwartete Fassung nach E03: Softwarekatalog, Symbole, Symbolauswahl, Caches, Hintergrundaufträge (unabhängig vom Paketwert gepflegt)")
         self.assertEqual(glide_shell.SHELL_COMPAT_SINCE, "0.6.2", "E02 erweitert nur kompatibel; Folgeprojekte mit 0.6.2 bleiben gültig")
         self.assertTrue(compat.compatible(glide_shell.SHELL_VERSION, "0.7.0", glide_shell.SHELL_COMPAT_SINCE))
 
@@ -41,8 +41,8 @@ class Versionen(unittest.TestCase):
 
     def test_bento_verlangt_passende_shell(self):
         import glide_bento
-        self.assertEqual(glide_bento.BENTO_VERSION, "0.3.0")
-        self.assertEqual(glide_bento.SHELL_MIN_VERSION, "0.7.0")
+        self.assertEqual(glide_bento.BENTO_VERSION, "0.4.0")
+        self.assertEqual(glide_bento.SHELL_MIN_VERSION, "0.11.0")
 
 
 class Register(unittest.TestCase):
@@ -123,13 +123,13 @@ class Konformitaet(unittest.TestCase):
 
     def test_inkompatible_version(self):
         kopf = self.temp / "glide_bento" / "__init__.py"
-        kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_MIN_VERSION = "0.7.0"',
-                                                                   'SHELL_MIN_VERSION = "0.11.0"'), encoding="utf-8")
+        kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_MIN_VERSION = "0.11.0"',
+                                                                   'SHELL_MIN_VERSION = "0.12.0"'), encoding="utf-8")
         self.assertEqual(self.regeln(), ["versions"])
 
     def test_fehlende_mindestversion(self):
         kopf = self.temp / "glide_bento" / "__init__.py"
-        kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_MIN_VERSION = "0.7.0"', ''), encoding="utf-8")
+        kopf.write_text(kopf.read_text(encoding="utf-8").replace('SHELL_MIN_VERSION = "0.11.0"', ''), encoding="utf-8")
         self.assertEqual(self.regeln(), ["versions"])
 
 

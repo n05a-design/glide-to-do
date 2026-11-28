@@ -30,6 +30,7 @@ with tempfile.TemporaryDirectory(prefix="glide-drag-performance-") as folder:
     root.report_callback_exception = callback_error
     app = mod.ListApp(root)
     notices = []
+    hinweise = []  # Teil 04: Hinweistext am Mauszeiger während des Ziehens
     app.show_info = app.show_warning = app.show_error = lambda *a, **k: notices.append(a)
     click_time = 10000
 
@@ -57,7 +58,12 @@ with tempfile.TemporaryDirectory(prefix="glide-drag-performance-") as folder:
         dx, dy = rx - tree.winfo_rootx(), ry - tree.winfo_rooty()
         tree.event_generate("<B1-Motion>", x=dx, y=dy, rootx=rx, rooty=ry,
                             state=0x100, time=click_time + 10)
-        assert "drop_target" in destination.item(target, "tags"), "sichtbare Zielmarkierung"
+        # Seit Teil 04 markiert die Shell-Ablageanzeige (`DropIndicator`) das Ziel statt eines Zeilen-Tags.
+        destination.update_idletasks()
+        marke = getattr(app, "_sidebar_drag_indicator", None)
+        assert marke is not None and marke.winfo_manager() == "place" and marke.winfo_ismapped(), "sichtbare Zielmarkierung"
+        hinweis = getattr(app, "_sidebar_drop_hint", None)
+        hinweise.append(str(hinweis.cget("text")) if hinweis is not None and hinweis.winfo_manager() == "place" else "")
         tree.event_generate("<ButtonRelease-1>", x=dx, y=dy, rootx=rx, rooty=ry,
                             time=click_time + 20)
         idle()
@@ -238,7 +244,8 @@ with tempfile.TemporaryDirectory(prefix="glide-drag-performance-") as folder:
             undo_before = len(app.undo_stack)
             drag(f"folder:{target['id']}", f"folder:{source['id']}", "into")
             assert parent(target["id"]) is None and len(app.undo_stack) == undo_before
-            assert notices, "unzulässige Verschachtelung wird gemeldet"
+            # Seit Teil 04 meldet Glide das unzulässige Ziel schon beim Ziehen (Hinweis am Mauszeiger).
+            assert notices or hinweise[-1], "unzulässige Verschachtelung wird gemeldet"
             app.undo_last_change()
             idle()
             assert parent(source["id"]) is None

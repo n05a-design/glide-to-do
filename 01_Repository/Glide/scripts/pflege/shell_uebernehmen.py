@@ -77,9 +77,10 @@ PAKET = "glide_shell"
 MANIFEST = "SHELL_MANIFEST.json"
 LIZENZDATEI = "LICENSE"
 # Quelltext und die Anleitungen für Folgeprojekte; dazu der Lizenztext.
-ANTEILE = (".py", ".md")
+ANTEILE = (".py", ".md", ".json")  # .json seit 0.11.0: ECOSYSTEM_CATALOG.json (Manifeste liegen nur in Kopien)
 SEMVER = re.compile(r"\d+\.\d+\.\d+")
 HEX64 = re.compile(r"[0-9a-f]{64}")
+MANIFEST_NAMEN = ("SHELL_MANIFEST.json", "BENTO_MANIFEST.json", "CHECKPOINT.json", "SICHERUNG.json")
 HEX40 = re.compile(r"[0-9a-f]{40}")
 OK, ABWEICHUNG, VERWEIGERT, QUELLFEHLER = 0, 1, 2, 3
 
@@ -159,7 +160,8 @@ def _quelle_arbeitskopie(unsauber_erlauben):
     if unveraendert is False and not unsauber_erlauben:
         raise QuellFehler(f"{QUELLE}: lokal verändert gegenüber dem Commit – committen, mit --commit "
                           "aus einem Commit übernehmen oder mit --unsauber-erlauben bewusst übernehmen")
-    dateien = {p.name: p.read_bytes() for p in sorted(QUELLE.iterdir()) if p.is_file() and p.suffix in ANTEILE}
+    dateien = {p.name: p.read_bytes() for p in sorted(QUELLE.iterdir())
+               if p.is_file() and p.suffix in ANTEILE and p.name not in MANIFEST_NAMEN}
     dateien[LIZENZDATEI] = LIZENZ.read_bytes()
     if CHECKPOINT_MODUS:
         daten = _checkpoint_daten()
@@ -186,7 +188,7 @@ def _quelle_commit(rev):
     ordner = f"{praefix}src/glide/glide_shell/"
     liste = _git("ls-tree", "--full-tree", "--name-only", commit, ordner)
     namen = [pathlib.PurePosixPath(z).name for z in liste.stdout.splitlines()] if liste.returncode == 0 else []
-    namen = sorted(n for n in namen if pathlib.PurePosixPath(n).suffix in ANTEILE)
+    namen = sorted(n for n in namen if pathlib.PurePosixPath(n).suffix in ANTEILE and n not in MANIFEST_NAMEN)
     if "__init__.py" not in namen:
         raise QuellFehler(f"{commit[:12]}: Shell-Quelle fehlt im Commit")
     dateien = {n: _git_datei(commit, ordner + n) for n in namen}
@@ -998,13 +1000,13 @@ def bento_quelle_lesen(commit=None):
         ordner = f"{praefix}src/glide/glide_bento/"
         liste = _git("ls-tree", "--full-tree", "--name-only", commit, ordner)
         namen = sorted(pathlib.PurePosixPath(z).name for z in liste.stdout.splitlines()
-                       if pathlib.PurePosixPath(z).suffix in ANTEILE)
+                       if pathlib.PurePosixPath(z).suffix in ANTEILE and pathlib.PurePosixPath(z).name not in MANIFEST_NAMEN)
         dateien = {n: _git_datei(commit, ordner + n) for n in namen}
     else:
         if not (BENTO_QUELLE / "__init__.py").is_file():
             raise QuellFehler(f"{BENTO_QUELLE}: Bento-Quelle fehlt")
         dateien = {p.name: p.read_bytes() for p in sorted(BENTO_QUELLE.iterdir())
-                   if p.is_file() and p.suffix in ANTEILE}
+                   if p.is_file() and p.suffix in ANTEILE and p.name not in MANIFEST_NAMEN}
         commit = quell_commit()
     if "__init__.py" not in dateien:
         raise QuellFehler("Bento-Quelle ohne __init__.py")

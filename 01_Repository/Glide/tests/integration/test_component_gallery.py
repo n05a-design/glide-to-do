@@ -93,8 +93,12 @@ with tempfile.TemporaryDirectory(prefix="glide-galerie-") as ordner:
         def in_galerie(dialog, *a, **k):
             zustand = app._component_gallery
             assert zustand and zustand["dialog"] is dialog
+            # E05: schrittweiser Aufbau – beim Öffnen steht nur der erste Stapel, der Rest folgt im Leerlauf.
+            gesamt = len(zustand["expected"])
+            assert 0 < len(zustand["widgets"]) <= app.COMPONENT_GALLERY_FIRST_BATCH < gesamt, (len(zustand["widgets"]), gesamt)
             dialog.geometry("1100x800+30+30")
             ruhe(0.4)
+            assert app.finish_component_gallery() == gesamt
             erwartet = mod.glide_component_gallery.expected_components()
             assert set(zustand["widgets"]) == set(erwartet), set(erwartet) - set(zustand["widgets"])
             assert not zustand["failures"], zustand["failures"]
@@ -134,6 +138,7 @@ with tempfile.TemporaryDirectory(prefix="glide-galerie-") as ordner:
             for wahl in ("light", "dark"):
                 zustand["theme"].set(wahl)
                 app.render_component_gallery()
+                app.finish_component_gallery()
                 ruhe(0.2)
                 karte = zustand["widgets"]["bento.card"]
                 karten[wahl] = karte.context.resolve_color("card_bg")
@@ -147,10 +152,25 @@ with tempfile.TemporaryDirectory(prefix="glide-galerie-") as ordner:
             for breite in ("narrow", "wide"):
                 zustand["width"].set(breite)
                 app.render_component_gallery()
+                app.finish_component_gallery()
                 ruhe(0.4)
                 spalten[breite] = zustand["widgets"]["bento.grid"].current_columns
             assert spalten["narrow"] < spalten["wide"], spalten
             pruefungen.append(f"Breite steuert das echte Raster ({spalten['narrow']} → {spalten['wide']} Spalten)")
+            # Suche und Kategorie (E04): Filter über die Kompositionsbibliothek, ohne Treffer ein Hinweis.
+            zustand["search"].set("heatmap")
+            zustand["search"].flush()
+            app.finish_component_gallery()
+            assert set(zustand["widgets"]) == {"bento.viz.heatmap", "bento.viz.calendar", "bento.viz.calendar-sparse"}, set(zustand["widgets"])
+            zustand["search"].set("")
+            zustand["search"].flush()
+            zustand["category_display"].set("Time")
+            app.finish_component_gallery()
+            assert {e for e in zustand["widgets"]} == {"bento.viz.timeline", "bento.viz.milestones", "bento.viz.gantt", "bento.viz.sequence"}
+            zustand["search"].set("gibt-es-nicht")
+            zustand["search"].flush()
+            assert zustand["expected"] == [] and not zustand["widgets"]
+            pruefungen.append("Suche und Kategorie filtern die Kompositionsbibliothek")
             dialog.destroy()
 
         with patch.object(app, "run_modal", side_effect=in_galerie):

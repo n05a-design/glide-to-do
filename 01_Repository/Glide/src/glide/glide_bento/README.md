@@ -2,7 +2,9 @@
 
 **Layer B Component & Composition System for Python/Tkinter**
 
-Status as of 27.11.2026 · Glide 1.0.3 · Bento 0.3.0 · Glide Shell ≥ 0.7.0 · Glide-System V1.91 · Layer B (D100)
+Status as of 28.11.2026 · Glide 1.0.3 · Bento 0.4.0 · Glide Shell ≥ 0.11.0 · Glide-System V1.98 · Layer B (D100)
+
+**Since 0.4.0 (Ecosystem E03/E04):** `glide_bento.data` (Tk-free data contracts: points, series, nodes, edges, spans; missing values stay missing and are never drawn as zero), `glide_bento.charts` (bar, line with zoom/pan, scatter, pie/donut, sparkline, heatmap, calendar heatmap, linear/segmented/radial progress, timeline, graph/tree, radar, table, badge, status, metric trend – all with theme roles, coalesced redraw, hover, selection callback and keyboard), `glide_bento.marketing` (product cards and portfolio from the shell's software catalogue) and `glide_bento.gallery` (55 documented compositions). Import them explicitly like `glide_bento.showcase`. Requires shell ≥ 0.11.0. `BentoCard` skips unchanged sizes and draws its surface once per idle cycle.
 
 **Since 0.3.0:** on import Bento checks `SHELL_MIN_VERSION` (0.7.0) against the installed shell and stops with `ShellVersionError` when it is too old or incompatible. Take it over together with the shell: `shell_uebernehmen.py --mit-bento` (writes `BENTO_MANIFEST.json`). `glide_bento.showcase.bento_entries()` returns gallery entries for every component for a `glide_shell.showcase.ShowcaseRegistry`; Glide shows them under Help › "Component gallery …".
 

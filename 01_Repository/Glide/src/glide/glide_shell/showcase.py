@@ -49,6 +49,12 @@ class ShowcaseEntry:
     limits: str = ""
     used_in: tuple = ()  # filled by the host: where the component works productively
     build: Callable[[Any, ShowcaseEnv], Any] | None = None
+    # Since 0.11.0 (compatible additions): gallery metadata for filtering and documentation.
+    category: str = ""
+    components: tuple = ()  # base components a composition uses
+    data_contract: str = ""
+    interaction: str = ""
+    scenarios: tuple = ()
 
     def __post_init__(self):
         for name in ("id", "name", "framework", "version", "module", "summary"):
@@ -77,6 +83,21 @@ class ShowcaseRegistry:
 
     def entries(self, framework=None):
         return [e for e in self._entries.values() if framework is None or e.framework == framework]
+
+    def categories(self):
+        return list(dict.fromkeys(e.category for e in self._entries.values() if e.category))
+
+    def search(self, query="", category=None, framework=None):
+        """Entries matching `query` in name, id, summary, category or scenarios (since 0.11.0)."""
+        q = str(query).casefold().strip()
+        ergebnis = []
+        for e in self.entries(framework):
+            if category and e.category != category:
+                continue
+            felder = (e.id, e.name, e.summary, e.category, " ".join(e.scenarios), " ".join(e.components))
+            if not q or any(q in f.casefold() for f in felder):
+                ergebnis.append(e)
+        return ergebnis
 
     def frameworks(self):
         return list(dict.fromkeys(e.framework for e in self._entries.values()))

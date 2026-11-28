@@ -17,7 +17,7 @@ Arbeitskopie und legt daneben `CHECKPOINT.json` mit:
 - bekannte Einschränkungen,
 - seit E02: die Übernahmewerkzeuge (`tools/`), den Schnittstellenvergleich zur
   Fassung der Folgeprojekte (`interface_changes`, Standard Shell 0.6.2 aus
-  `793596f1`) und – mit `--ergebnisse DATEI` – die Prüfergebnisse des Laufs.
+  `7dcd8dc0`) und – mit `--ergebnisse DATEI` – die Prüfergebnisse des Laufs.
 
 Der Checkpoint enthält keine Nutzerdaten, Sicherungen, Berichte oder
 Referenzbilder; nur Framework-Quellen, ihre Verträge und den Lizenztext.
@@ -25,7 +25,7 @@ Referenzbilder; nur Framework-Quellen, ihre Verträge und den Lizenztext.
 
     python3 -B scripts/pflege/framework_checkpoint.py <Zielordner>
     python3 -B scripts/pflege/framework_checkpoint.py --pruefen <Zielordner>
-    python3 -B scripts/pflege/framework_checkpoint.py <Ziel> --basis 793596f1 --ergebnisse pruefung.json
+    python3 -B scripts/pflege/framework_checkpoint.py <Ziel> --basis 7dcd8dc0 --ergebnisse pruefung.json
 """
 from __future__ import annotations
 
@@ -47,10 +47,12 @@ EINSCHRAENKUNGEN = [
     "Lokaler Entwicklungscheckpoint, keine Veröffentlichung; Quelle kann ein uncommitteter Arbeitsbaum sein (siehe source_has_local_changes).",
     "Geprüft unter Windows 11 mit Tk 9 und künstlichen Daten; macOS und Linux nativ offen.",
     "Shell vor 1.0: öffentliche Schnittstellen können sich bis zur Stabilisierung nach E03 noch kompatibel erweitern.",
-    "Neue Bausteine 0.10.0 (controls, workspaces, color_roles, settings_registry) sind in Glide erst teilweise produktiv (SearchField).",
+    "In Glide produktiv: SearchField, Softwarekatalog/Weitere Programme, Symbolauswahl, begrenzter Symbol-Cache, Bento-Diagramme der Projektübersicht; "
+    "nur Galerie/Referenzhosts: ShellButton, Tooltip, Toolbar, WorkspaceHost, ThemeProvider, TaskQueue und die meisten Bento-Kompositionen.",
+    "Leistung: gemessen nur in Glide und neutralen Hosts unter Windows; kein Nachweis für STEPS oder Chess & Chains.",
 ]
 WERKZEUGE = ("scripts/pflege/shell_uebernehmen.py", "scripts/pflege/framework_checkpoint.py")
-BASIS = "793596f1"  # Shell 0.6.2 der Folgeprojekte (E01)
+BASIS = "7dcd8dc0"  # Shell 0.6.2 der Folgeprojekte (laut SHELL_MANIFEST.json von STEPS und Chess & Chains, E03 neu geprüft)
 
 
 def sha(pfad):

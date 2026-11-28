@@ -1,0 +1,89 @@
+{
+  "format": "glide-software-catalog",
+  "version": 1,
+  "catalog_version": "2026.11.28",
+  "_note": "Only facts read from the public repositories on 2026-11-28. Missing fields are unknown. No network access at runtime.",
+  "products": [
+    {
+      "id": "glide",
+      "name": "Glide",
+      "summary": {
+        "de": "Desktop-Planer für Projekte, Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen",
+        "en": "Desktop planner for projects, tasks, daily planning, boards and pixel drawings"
+      },
+      "category": {"de": "Produktivität", "en": "Productivity"},
+      "features": [
+        {"de": "Aufgaben, Listen und Projekte", "en": "Tasks, lists and projects"},
+        {"de": "Seiten und Notizen", "en": "Pages and notes"},
+        {"de": "Tagesplanung „Heute“", "en": "Daily planning \"Today\""},
+        {"de": "Pixel-Zeichnungen", "en": "Pixel drawings"},
+        {"de": "KI-Arbeitsbereich ohne Anbieterbindung", "en": "AI workspace without provider lock-in"}
+      ],
+      "brand_color": "#9E4AC8",
+      "links": {
+        "repository": "https://github.com/n05a-design/glide-to-do",
+        "download": "https://github.com/n05a-design/glide-to-do/releases"
+      },
+      "license": "MPL-2.0",
+      "platforms": ["windows", "macos", "linux"],
+      "version": "1.0.3",
+      "status": "prerelease",
+      "languages": ["de", "en"],
+      "_sources": "brand.py (colour, description), GitHub releases v1.0.3 pre-release (2026-11-25), repository licence"
+    },
+    {
+      "id": "steps",
+      "name": "STEPS",
+      "summary": {
+        "de": "Akkord- und Rhythmusfolgen bauen, Harmonik erkunden, MIDI exportieren",
+        "en": "Build chord progressions. Explore harmony. Export MIDI."
+      },
+      "description": {
+        "en": "An independent, open-source app for creating chord and drum progressions, exploring harmony, exporting MIDI files, and learning music theory."
+      },
+      "category": {"de": "Musik", "en": "Music"},
+      "features": [
+        {"de": "Akkordfolgen", "en": "Chord progressions"},
+        {"de": "Harmonische Analyse", "en": "Harmonic analysis"},
+        {"de": "MIDI-Export", "en": "MIDI export"}
+      ],
+      "brand_color": "#209F95",
+      "links": {
+        "repository": "https://github.com/n05a-design/steps",
+        "download": "https://github.com/n05a-design/steps/releases"
+      },
+      "license": "MPL-2.0",
+      "version": "0.1.0",
+      "status": "development",
+      "languages": ["de", "en"],
+      "_sources": "GitHub repository description and README (colour from README badges), latest release v0.1.0 (2026-11-17), main VERSION 0.8.0-dev"
+    },
+    {
+      "id": "chess-and-chains",
+      "name": "Chess & Chains",
+      "summary": {
+        "de": "Spielen. Denken. Verbinden. Freie Offline-Schach-App",
+        "en": "Play. Think. Connect. A free, offline-first desktop chess app"
+      },
+      "description": {
+        "en": "Offline-first desktop chess project with local two-player games, demo puzzles and original SVG pieces. Development prototype."
+      },
+      "category": {"de": "Spiele und Lernen", "en": "Games and learning"},
+      "features": [
+        {"de": "Lokale Partien zu zweit", "en": "Local two-player games"},
+        {"de": "Puzzle Lab", "en": "Puzzle Lab"},
+        {"de": "Eigene SVG-Figuren", "en": "Original SVG pieces"}
+      ],
+      "brand_color": "#2447D8",
+      "links": {
+        "repository": "https://github.com/n05a-design/chess-and-chains"
+      },
+      "license": "MPL-2.0",
+      "platforms": ["windows", "macos", "linux"],
+      "version": "0.3.0",
+      "status": "development",
+      "languages": ["de", "en"],
+      "_sources": "GitHub repository description and README (CI on Windows, macOS, Linux), logo colour linkBlue from docs/design/brand-tokens.json, no release published"
+    }
+  ]
+}

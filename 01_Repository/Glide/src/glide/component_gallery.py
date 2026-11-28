@@ -54,6 +54,24 @@ GLIDE_USAGE = {
     "bento.layout_planner": (("ui.component_gallery.usage.home_planner", "Startseite: Spalten- und Bandplanung"),),
 }
 
+# Ecosystem E04: Bento-Kompositionen. Produktiv sind die Bausteine der Projektübersicht
+# und von „Weitere Programme“; alle übrigen Kompositionen ausdrücklich nur Galerie.
+_DASHBOARD = (("ui.component_gallery.usage.project_dashboard", "Ansicht › Projektübersicht"),)
+_PRODUKTIV_E04 = {"bento.viz.metric-trend": _DASHBOARD, "bento.viz.metric-lower-better": _DASHBOARD,
+                  "bento.viz.progress-multi": _DASHBOARD, "bento.viz.donut": _DASHBOARD, "bento.viz.bar-vertical": _DASHBOARD,
+                  "bento.viz.calendar": _DASHBOARD, "bento.viz.milestones": _DASHBOARD, "bento.viz.table-sort": _DASHBOARD,
+                  "bento.viz.dashboard": _DASHBOARD,
+                  "bento.viz.product-card": (("ui.component_gallery.usage.more_programs", "Hilfe › Weitere Programme"),),
+                  "bento.viz.portfolio": (("ui.component_gallery.usage.more_programs", "Hilfe › Weitere Programme"),)}
+
+
+def _e04_usage():
+    from glide_bento.gallery import COMPOSITION_IDS
+    return {cid: _PRODUKTIV_E04.get(cid, (GALLERY_ONLY,)) for cid in COMPOSITION_IDS}
+
+
+GLIDE_USAGE.update(_e04_usage())
+
 # Breite der Vorführfläche in Pixeln; der Nutzer wählt sie in der Galerie.
 WIDTHS = (("narrow", 360), ("medium", 640), ("wide", 960))
 DEFAULT_WIDTH = "medium"

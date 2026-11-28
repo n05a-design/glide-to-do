@@ -11,8 +11,8 @@ Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzus
 | [Übergabe](Glide_Uebergabe.md) | Einstieg: aktueller Git-/Arbeitskopienstand, Prüfbelege, Archivstatus und offene Tore |
 | [Meilenstein-Plan v1.0](Glide_Meilenstein_v1_Plan.md) | Verbindlicher Schnittpunkt und Fahrplan für Release Version 1.0 (Homebrew, winget, i18n, D93) |
 | [Entwicklungsplan](Glide_Entwicklungsplan.md) | Einzige Roadmap mit Aufgabenstatus, Paketgrenzen und offenen Entscheidungen |
-| [E03 STEPS](Ecosystem/E03_STEPS_Integration.md) | Vorbereiteter, separater Integrationsauftrag für STEPS (E03); Übergabe erst nach Freigabe |
-| [E03 Chess & Chains](Ecosystem/E03_Chess_and_Chains_Integration.md) | Vorbereiteter, separater Integrationsauftrag für Chess & Chains (E03); Übergabe erst nach Freigabe |
+| [E07-A STEPS](Ecosystem/E07A_STEPS_Integration.md) | Vorbereiteter, separater Integrationsauftrag für STEPS (E07-A, früher E03); Übergabe erst nach Freigabe des E06-Checkpoints |
+| [E07-B Chess & Chains](Ecosystem/E07B_Chess_and_Chains_Integration.md) | Vorbereiteter, separater Integrationsauftrag für Chess & Chains (E07-B, früher E03); Übergabe erst nach Freigabe des E06-Checkpoints |
 | [Analyse](Glide_Analyse.md) | Datierte technische und fachliche Befunde mit Quellenstand und Prüfgrenzen |
 | [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md) | Herstellerquellen, Vergleiche und eingeordnete Vorschläge |
 | [Manuelle Prüfung](Glide_Manuelle_Pruefung.md) | Native Bedienung, Sicht, DPI/Mehrmonitor und plattformspezifische Abnahme |

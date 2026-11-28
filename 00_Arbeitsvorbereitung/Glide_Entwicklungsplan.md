@@ -1168,6 +1168,60 @@ Ausgangsstand: Commit `f8b89359` (E01, freigegeben und gepusht), Shell 0.9.1, Be
 
 **Git:** kein Commit, kein Push. Vorschlag zur Entscheidung: ein Commit „E02“ auf dem bestehenden Zweig und Push als Zwischenstand von PR #201, wie §4.8.7.
 
+#### 4.8.9 Fortschreibung der Roadmap (D110, 28.11.2026)
+
+Inhaberauftrag vom 28.11.2026: Vor der Aktualisierung von STEPS und Chess & Chains werden die allgemeinen Systeme in Glide ausgebaut, damit beide Folgeprojekte nur **einmal** auf einen umfassenden, geprüften Framework-Stand migrieren. Die frühere E03-Integration wird verschoben, nicht gestrichen. Die Bezeichnungen und Nachweise der Fassung vom 28.11.2026 (§4.8.1) bleiben historisch gültig.
+
+| Neu | Inhalt | Alt (§4.8.1) | Status |
+|---|---|---|---|
+| E01 | Development Consolidation | E01 | erledigt (`f8b89359`) |
+| E02 | Shell Framework Hardening | E02 | umgesetzt (`18becaf0`, `b2f7c13f`, `9e8527c4`); CI-Befunde A/B in E03 lokal behoben |
+| E03 | Shared Software Ecosystem, Marketing & Symbol System | neu | umgesetzt, lokal (§4.8.10) |
+| E04 | Bento Visualization & Composition System | alt E04 (Bento-Ausbau) | umgesetzt, lokal (§4.8.10) |
+| E05 | Performance, Rendering & Caching Foundation | alt E05 | teilweise, lokal (§4.8.10) |
+| E06 | Unified Framework Integration Checkpoint | neu (Teile alt E02/E03) | Checkpoint lokal erzeugt; Freigabe offen |
+| E07-A / E07-B | Cross-Project Integration STEPS / Chess & Chains | alt E03 | vorbereitet, nicht begonnen |
+| E08 | Framework Iteration & Ecosystem Quality Gate | alt E06 (Plattformabnahme) und Rückführung | offen |
+| – | Produktionsrunde Glide, Veröffentlichung | alt E07, alt E08 | offen, Inhaberentscheidung; nicht umnummeriert, bleiben eigene Produktionsschritte |
+
+Zuordnung der Anforderungen: Jede Kennung der alten Teile bleibt an ihrer Stelle in §4.7/§4.8 bestehen; die neue Spalte nennt nur die Bearbeitungsreihenfolge. Zurückgestellt bleiben Kanban, erweiterte Pinnwand, Mindmap-Editor, erweiterte Pixel-Werkstatt, Vorlagenbibliothek, nicht sicherheitskritische KI-Erweiterungen, PDF-Volltext mit neuer Abhängigkeit, Signierung, Distribution und Paketmanager mit ihren ursprünglichen Kennungen.
+
+#### 4.8.10 E03–E05 – Umsetzung, Anforderungsmatrix und Messungen (28.11.2026)
+
+**Ausgangsstand:** Zweig `claude/glide-sync-master-auftrag-ef27c1`, HEAD = Remote `9e8527c4`, Arbeitskopie sauber; GitHub-Prüfung auf `9e8527c4` rot (Befunde A/B), Sicherung `e03-start`. STEPS `main` @ `c00c7aae` (VERSION 0.8.0-dev, letzte Veröffentlichung v0.1.0), Chess & Chains `main` @ `13b27f65` (0.3.0, keine Veröffentlichung), beide gelesen am 28.11.2026. Korrektur zu E01/E02: Beide führen laut `SHELL_MANIFEST.json` Shell 0.6.2 aus Glide-Commit **`7dcd8dc0`** (nicht `793596f1`); Werkzeug, T376 und Aktualisierungsvertrag nutzen jetzt diese Basis, der Schnittstellenvergleich bleibt ohne Entfernungen.
+
+**CI-Befunde (E02-Stabilisierung):** A – Datenschutz: Testpfade auf das zugelassene Platzhalterkonto `example` umgestellt, Prüfung unverändert. B – „Erzeuger nicht reproduzierbar“: Ursache war der seit D107 veraltete Vorlagenkatalog (16 Katalogvorlagen mit `payload.version` 26, Erzeuger liefert 27; sonst bytegleich). Katalog mit dem vorhandenen Erzeuger neu geschrieben, englischer Katalog per `vorlagen_englisch.py` nachgezogen; Vergleich unverändert streng. C – nachgeholte Prüfungen siehe QA-Bericht.
+
+**Anforderungsmatrix (aus dem Repository-Bestand, ohne Fachlogik zu übernehmen):**
+
+| Bereich | Glide | STEPS | Chess & Chains | Umsetzung |
+|---|---|---|---|---|
+| Softwarekatalog, Weitere Programme | Hilfe-Menü, „Über“ | `app/brand.py`, README | `assets/branding/brand-manifest.json`, README | `software_catalog` + `ECOSYSTEM_CATALOG.json`, `marketing` (E03) |
+| Symbole | Pixelsymbole an Seiten/Ordnern, Zeichnungen | Logos, App-Icons | SVG-Figuren, Brett-SVG, Logos | `symbols`/`symbol_picker`; Fachsammlungen bleiben Anbieter des Hosts (E03) |
+| Allgemeine UI | eigene Knöpfe, Suchfelder | `app/ui/custom_widgets.py`, `theme.py` | `src/chess_and_chains/ui/theme.py` | Shell 0.10/0.11 (E02/E03) |
+| Bento-Visualisierung | Startseite, Projektübersicht | Lernfortschritt, Analyse (zu prüfen) | Statistik, Training (zu prüfen) | `charts`, `data`, `gallery` (E04) |
+| Canvas | Zeichnungen, Seiten | `keyboard_view.py`, `piano_roll.py` | Brett | `BentoChart`-Muster, `AfterScope`, gebündeltes Neuzeichnen; Brett/Keyboard bleiben Fachlogik |
+| Caches, Hintergrund | Bildvorschau, Konvertierung | Noten-/Bildressourcen | Figurenressourcen, Engines | `resources`, `background` (E05) |
+
+**Umgesetzt:** Shell 0.11.0 (Katalog, Symbole, Symbolauswahl, Caches, Hintergrundaufträge, Galerie-Metadaten), Bento 0.4.0 (Datenverträge, 17 Visualisierungsbausteine, Marketing, 55 Kompositionen), Glide: Weitere Programme, Systemangaben in „Über“, Symbolbibliothek mit PNG/SVG-Import (Begleitdatei `symbol_library.json`, Abschnitt der App-Sicherung, kein Formatwechsel), Projektübersicht aus echten Daten, Galerie mit 78 Einträgen, Suche, Kategorie und schrittweisem Aufbau.
+
+**Bewusst nicht umgesetzt:** Auslastung und Abhängigkeiten in der Projektübersicht (keine verlässlichen Daten), Startseite/Heute mit neuen Diagrammen (bleibt E08 nach Nutzerprüfung), Virtualisierung großer Listen, Ablösung von Glides eigenen Knöpfen, Umbau der Kartenstruktur zur Senkung der Widgetzahl.
+
+**Messung** (`scripts/pflege/messung_ecosystem.py`, Windows 11, Ryzen 16 Threads, Python 3.15.1, Tk 9.0.4, 1000 künstliche Aufgaben, 5 Runden, 3 Kaltstarts; Basis = Quellstand `9e8527c4` im selben Werkzeug):
+
+| Messgröße (Median) | Basis | E05 | Bewertung |
+|---|---|---|---|
+| Kaltstart bis bereit | 2103 ms | 2130 ms | +1,3 % (Rauschen); eine zwischenzeitliche Verschlechterung um 228 ms durch neue Startimporte wurde mit bedarfsgesteuertem Laden behoben |
+| Warmstart | 1055 ms | 1051 ms | unverändert |
+| Galerie, erster Inhalt | 970 ms (23 Einträge, alle) | 191 ms (78 Einträge, erster Stapel) | schneller sichtbar trotz 3,4× Umfang |
+| Galerie vollständig | 970 ms (23) | 3560 ms (78) | je Eintrag 42 → 46 ms |
+| Bento 60 Karten, 3 Breiten | 2961 ms | 2782 ms | −6 %; ≈ 80 % der Zeit sind Tk-interne Geometrie von ≈ 480 Fenstern |
+| Themenwechsel | 365 ms | 360 ms | unverändert |
+| Größenwechsel (Configure-Ereignisse) | 671 ms (156) | 645 ms (156) | unverändert |
+| Arbeitsspeicher nach Lauf | 168 MB | 172 MB | +2 % |
+
+Weitere Befunde: Die erste Baseline war ungültig, weil die modale Galerie auf manuelles Schließen wartete; seitdem laufen alle Prüf- und Messläufe unbeaufsichtigt (`GLIDE_QA_AUTOSCHLIESSEN`, `tests/tools/hintergrund/sitecustomize.py`). Der Basisstand `9e8527c4` enthält einen Lebenszyklusfehler der Shell-`Toolbar` (Neuberechnung nach dem Abbau), behoben in 0.11.0.
+
 ### 4.5 Vollständige Audit- und Abdeckungsmatrizen (Post-Release Glide 1.0.2)
 
 Zur lückenlosen Dokumentation der vollständigen Bearbeitung des Post-Release-Master-Auftrags und des Inhaltsaudits werden hier die sechs kanonischen Matrizen verankert:

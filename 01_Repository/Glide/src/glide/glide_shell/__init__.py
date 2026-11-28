@@ -30,6 +30,11 @@ Bausteine:
 - `settings_registry`: Einstellungen beschreiben, prüfen und gruppieren, ohne eigenes Speicherformat (seit 0.10.0).
 - `controls`: `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` (seit 0.10.0).
 - `workspaces`: Arbeitsbereiche mit Navigation, Ansichtsfläche, Statuszeile und Abbau (seit 0.10.0).
+- `software_catalog`: Softwarekatalog und Produktmanifeste, App- und Systeminformationen ohne Netz (seit 0.11.0).
+- `symbols`: Symbolvertrag, Anbieter, Favoriten, sichere SVG-/PNG-Prüfung (seit 0.11.0).
+- `symbol_picker`: Symbolauswahl mit Kategorien, Suche, Favoriten, Vorschau und begrenztem Cache (seit 0.11.0).
+- `resources`: begrenzte Caches mit Schlüssel, Budget, Verdrängung und Statistik (seit 0.11.0).
+- `background`: begrenzte Hintergrundaufträge mit Zustellung im Tk-Thread (seit 0.11.0).
 - `selftest`: Prüfung einer übernommenen Kopie auf dem Zielrechner (`python -m glide_shell.selftest`).
 
 Das Paket lädt beim Import nichts nach; Hosts importieren die Bausteine
@@ -38,7 +43,7 @@ Beispiel ohne Glide ist `python -m glide_shell.demo`; die Anleitung für
 Folgeprojekte steht in `README.md` (Englisch) und `README.de.md` (Deutsch).
 """
 
-SHELL_VERSION = "0.10.0"
+SHELL_VERSION = "0.11.0"
 # Älteste Fassung mit unveränderter öffentlicher Schnittstelle; ein inkompatibler
 # Schnitt hebt sie auf die neue Version (Prüfung in `compat.require_shell`).
 SHELL_COMPAT_SINCE = "0.6.2"
@@ -46,4 +51,5 @@ SHELL_COMPAT_SINCE = "0.6.2"
 __all__ = ["SHELL_VERSION", "SHELL_COMPAT_SINCE", "modal_session", "window_lifetime", "custom_controls", "desktop_adapter", "motion",
            "window_geometry", "system_appearance", "redo_history", "text_fit", "action_picker",
            "runtime_paths", "command_history", "app_host", "compat", "conformance", "showcase", "spellcheck",
-           "color_roles", "settings_registry", "controls", "workspaces", "selftest", "demo"]
+           "color_roles", "settings_registry", "controls", "workspaces", "software_catalog", "symbols",
+           "symbol_picker", "resources", "background", "selftest", "demo"]

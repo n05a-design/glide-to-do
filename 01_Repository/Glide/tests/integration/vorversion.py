@@ -30,8 +30,13 @@ def einstellungsprobe_format25(path):
             pending.extend(value)
         elif isinstance(value, dict):
             assert not (isinstance(value.get('repeat'), dict) and (value['repeat'].get('art') == 'serie' or any(k in value['repeat'] for k in ('bezug','pausiert','rest'))))
+            # Seit D107 (Format 27): Navigationsort, Kapitelanker und Kapitelverweise kennen Altleser nicht.
+            assert not value.get('nav_parent_id'), 'Format-27-Navigationsort im Altleser-Fixture'
+            spans = value.get('spans') if isinstance(value.get('spans'), list) else []
+            assert not any(isinstance(s, (list, tuple)) and s and str(s[0]).startswith('anchor:') for s in spans), 'Kapitelanker'
+            assert not any('#' in str(u) and str(u).startswith('glide://') for u in (value.get('links') or {}).values())                 if isinstance(value.get('links'), dict) else True, 'Kapitelverweis'
             pending.extend(v for v in value.values() if isinstance(v, (dict, list)))
-    assert data['version'] in (25, 26)
+    assert data['version'] in (25, 26, 27)
     data['version'] = 25
     path.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
     # Der rein künstliche Datenrücksatz darf nicht die echte Rückstufungswarnung auslösen.

@@ -9,11 +9,19 @@ Seit 0.3.0 prüft das Paket beim Import, ob die installierte Glide Shell zu
 oder inkompatible Shell bricht mit `ShellVersionError` ab, statt später an
 einer fehlenden Funktion zu scheitern. `glide_bento.showcase` liefert die
 Galerie-Einträge der Komponenten.
+
+Seit 0.4.0 (Ecosystem E03/E04): `glide_bento.data` (Tk-freie Datenverträge für
+Reihen, Punkte, Knoten, Kanten, Spannen; fehlende Werte bleiben fehlend),
+`glide_bento.charts` (Balken, Linien mit Zoom/Pan, Punkte, Kreis/Ring,
+Sparkline, Heatmap, Kalender-Heatmap, Fortschritt linear/segmentiert/radial,
+Zeitachse, Graph/Baum, Radar, Tabelle, Badge, Statuspunkt, Trendkennzahl)
+und `glide_bento.marketing` (Produktkarten und Portfolio aus dem
+Softwarekatalog der Shell), explizit zu importieren wie `glide_bento.showcase`. Verlangt Shell 0.11.0.
 """
 from glide_shell.compat import ShellVersionError, require_shell
 
 # Kleinste Shell-Fassung, gegen die Bento gebaut und geprüft ist.
-SHELL_MIN_VERSION = "0.7.0"
+SHELL_MIN_VERSION = "0.11.0"
 require_shell(SHELL_MIN_VERSION, "glide_bento")
 
 from .tokens import BentoTokens, DEFAULT_TOKENS
@@ -24,7 +32,7 @@ from .card import BentoCard, BentoHeader
 from .grid import BentoGrid
 from .components import BentoMetric, BentoActions, BentoEmptyState, BentoDivider
 
-BENTO_VERSION = "0.3.0"
+BENTO_VERSION = "0.4.0"
 __version__ = BENTO_VERSION
 
 __all__ = [

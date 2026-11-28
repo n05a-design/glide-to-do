@@ -1,6 +1,6 @@
 # Portabler Designvertrag für Folgeprojekte der Glide Shell
 
-Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.10.0 · Lizenz MPL-2.0
+Stand 28.11.2026 · Glide 1.0.3 · Glide Shell 0.11.0 · Lizenz MPL-2.0
 
 Dieses Dokument definiert den verbindlichen, transportablen Gestaltungs- und Interaktionsvertrag für alle Anwendungen, die die **Glide Shell** als UI-Fundament einsetzen. Es ist offline-fähig und unabhängig vom Glide-Hauptrepository nutzbar.
 
@@ -81,6 +81,9 @@ Die Glide Shell stellt neutrale Mechanismen bereit, die der Host mit seinen spez
 | `ShellButton` / `SearchField` / `Tooltip` / `Toolbar` | `controls` | Allgemeine Knöpfe (feste Größen 28/34/42 px, sichtbarer Fokus), Suchfeld, Tooltip, gruppierte Werkzeugleiste mit Umbruch (seit 0.10.0). |
 | `WorkspaceHost` / `Workspace` | `workspaces` | Arbeitsbereiche des Hosts mit Navigation, Statuszeile, Kürzeln und Abbau; kein Datenmodell (seit 0.10.0). |
 | `add_shutdown` / `shutdown` | `app_host` | Geordnetes Beenden: Aufräumschritte rückwärts, danach Zeitgeber und Fenster (seit 0.10.0). |
+| `load_ecosystem` / `AppInfo` / `system_info` | `software_catalog` | Produktkatalog des Ökosystems und Laufzeitangaben für „Über“ und „Weitere Programme“; nur bekannte Angaben, keine Netzabfrage, Links nur über den Host-Öffner (seit 0.11.0). |
+| `SymbolRegistry` / `SymbolPicker` | `symbols`, `symbol_picker` | Gemeinsame Symbolauswahl; fachliche Sammlungen (Notation, Figuren, Pixelzeichnungen) kommen als Anbieter des Hosts; SVG/PNG sind nicht vertrauenswürdige Eingaben (seit 0.11.0). |
+| `BoundedCache` / `TaskQueue` | `resources`, `background` | Begrenzte Caches nur für abgeleitete Daten; Hintergrundarbeit mit Zustellung im Tk-Thread und Ende mit dem Besitzer (seit 0.11.0). |
 
 ---
 
@@ -152,9 +155,9 @@ Eine Abweichung vom gemeinsamen Standard braucht einen Eintrag im Projekt mit: b
 
 ### 5.6 Noch nicht in der Shell
 
-Seit 0.10.0 (E02) liegen allgemeine Knöpfe, Suchfelder, Tooltips, Werkzeugleisten, der Theme-Provider (`color_roles`), ein Einstellungsregister und Arbeitsbereiche in der Shell (Abschnitt 3). Folgeprojekte nutzen diese statt eigener allgemeiner Fassungen. Glide selbst setzt bislang nur `SearchField` produktiv ein; seine älteren eigenen Knöpfe und Leisten bleiben bis zu einer gezielten Ablösung bestehen und sind kein Vorbild für Folgeprojekte.
+Seit 0.10.0 und 0.11.0 liegen allgemeine Knöpfe, Suchfelder, Tooltips, Werkzeugleisten, Theme-Provider, Einstellungsregister, Arbeitsbereiche, Softwarekatalog, Symbolauswahl, begrenzte Caches und Hintergrundaufträge in der Shell; Diagramme, Tabellen, Fortschritt, Zeitachsen, Graphen und Produktkarten in Glide Bento 0.4.0. Folgeprojekte nutzen diese statt eigener allgemeiner Fassungen.
 
-Noch nicht in der Shell: Tabellen und Listen mit Sortierung und Filter, segmentierte Auswahl, Inline-Eingabe, aufklappbare Abschnitte, Fortschritts-, Datei- und Einstellungsdialoge als fertige Bausteine. Bedarf meldet ein Folgeprojekt über den Rückmeldevertrag (Entwicklungsplan §4.8.2); eine eigene allgemeine Komponente baut es dafür nicht.
+Noch nicht vorhanden: segmentierte Auswahl, Inline-Eingabe, aufklappbare Abschnitte, fertige Fortschritts-, Datei- und Einstellungsdialoge, virtualisierte Listen. Bedarf meldet ein Folgeprojekt über den Rückmeldevertrag (Entwicklungsplan §4.8.2); eine eigene allgemeine Komponente baut es dafür nicht.
 
 ### Aktionsgriff und Ablageanzeige (Shell 0.9.0)
 
