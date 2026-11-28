@@ -144,7 +144,9 @@ class TestDesignVertragKonsistenz(unittest.TestCase):
         stand_line = lines[2]
         self.assertTrue(stand_line.startswith("Stand "))
         self.assertIn(f"Glide {VERSION}", stand_line)
-        self.assertIn("Glide Shell 0.6.2", stand_line)
+        shell = (REPO / "src" / "glide" / "glide_shell" / "__init__.py").read_text(encoding="utf-8")
+        version = shell.split('SHELL_VERSION = "', 1)[1].split('"', 1)[0]
+        self.assertIn(f"Glide Shell {version}", stand_line)
         self.assertIn("MPL-2.0", stand_line)
 
     def test_substantive_design_contract_consistency(self):

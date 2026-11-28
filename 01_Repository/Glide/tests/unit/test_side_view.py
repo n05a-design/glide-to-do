@@ -152,7 +152,7 @@ class AvailabilityTests(unittest.TestCase):
             entry = {'id': 'l', 'list_kind': 'note'}
             self.assertEqual(side_view.reference_target(('list', 'l'), {('list', 'l'): (state, entry, entry)}),
                              {'list_id': 'l', 'item_id': None})
-        for state, kind in (('trash', 'page'), ('missing', 'tasks'), ('active', 'drawing'), ('active', 'gallery')):
+        for state, kind in (('trash', 'page'), ('missing', 'tasks'), ('active', 'gallery')):
             entry = {'id': 'l', 'list_kind': kind}
             self.assertIsNone(side_view.reference_target(('list', 'l'), {('list', 'l'): (state, entry, entry)}))
         self.assertIsNone(side_view.reference_target(None, {}))
@@ -170,9 +170,10 @@ class AvailabilityTests(unittest.TestCase):
         self.assertEqual(side_view.availability({'id': 'l', 'list_kind': 'tasks'}), ('ok', ''))
         self.assertEqual(side_view.availability({'id': 'p', 'list_kind': 'page'})[0], 'ok')
         self.assertEqual(side_view.availability({'id': 'p', 'list_kind': 'page', 'archived': True})[0], 'archived')
-        state, text = side_view.availability({'id': 'z', 'list_kind': 'drawing'})
+        state, text = side_view.availability({'id': 'z', 'list_kind': 'gallery'})
         self.assertEqual(state, 'unsupported')
-        self.assertIn('Zeichnungen', text)
+        self.assertIn('Galerien', text)
+        self.assertEqual(side_view.availability({'id': 'z', 'list_kind': 'drawing'})[0], 'ok')
         self.assertEqual(side_view.availability({'id': 'g', 'list_kind': 'gallery'})[0], 'unsupported')
         self.assertEqual(side_view.availability(None, 'weg')[0], 'missing')
         trash = [{'kind': 'list', 'list': {'id': 'weg'}}]

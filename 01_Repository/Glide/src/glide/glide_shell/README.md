@@ -1,6 +1,6 @@
 # Glide Shell – guide for follow-up projects
 
-Status as of 24.11.2026 · Glide 1.0.3 · Glide Shell 0.6.2
+Status as of 28.11.2026 · Glide 1.0.3 · Glide Shell 0.11.0
 
 <p align="right"><a href="README.de.md">Deutsch</a></p>
 
@@ -26,6 +26,10 @@ The tool copies `glide_shell/` including this guide and writes `glide_shell/SHEL
 - `--pruefen` (check) reports each file as `aktuell` (current), `veraltet` (outdated) or `verändert` (changed) and writes nothing.
 - If you changed files in your copy, an update stops; only `--ersetzen` (replace) overwrites them.
 - Your own files in the folder stay where they are.
+- `--mit-bento` also takes over `glide_bento/` with `BENTO_MANIFEST.json`; the tool creates it only when the shell satisfies `SHELL_MIN_VERSION`.
+- Then run `python3 -m glide_shell.conformance <your-project>/src`: checks layers, public modules, cycles and versions.
+
+New project: [AI_GUIDE_NEW_PROJECTS.md](AI_GUIDE_NEW_PROJECTS.md). Moving an existing application: [AI_MIGRATION_EXISTING_APPS.md](AI_MIGRATION_EXISTING_APPS.md). Binding for both: [shell-first contract](DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106).
 
 ## Checking it on the target machine
 
@@ -63,6 +67,22 @@ Import the building blocks one by one, for example `from glide_shell import moda
 | `runtime_paths` | Data and cache folders by platform convention, environment variable and pointer file | `platform_data_dir`, `platform_cache_dir`, `resolve_base` |
 | `command_history` | Undo and redo for command objects or state snapshots, with a rollback path on failure | `Command`, `CommandHistory` (`execute`, `record`, `undo`, `redo_step`) |
 | `app_host` | Start the main window: steps before Tk, startup checks, placeholder, controller, menu bar, shortcuts, close path | `AppHost`, `bind_shortcuts`, `primary_shortcuts`, `attach_menubar`, `install_close` |
+| `compat` | Version checks for consumers (since 0.7.0) | `require_shell`, `compatible`, `ShellVersionError` |
+| `conformance` | Architecture check of your project (layers, public modules, cycles, versions) | `check_project`, `python -m glide_shell.conformance <folder>` |
+| `showcase` | Gallery registry: every general component with builder, states and usage | `ShowcaseRegistry`, `ShowcaseEntry`, `shell_entries` |
+| `custom_controls` (0.9.0) | Action target, drop feedback and optical glyph positioning | `ActionHandle`, `DropIndicator`, `symbol_ink_offset` |
+| `spellcheck` | Spell-checking contract without its own engine; the host chooses the engine (since 0.8.0) | `SpellChecker`, `WordListChecker`, `LayeredChecker`, `words`, `misspelled`, `probe_backends` |
+| `color_roles` (0.10.0) | Colour-role contract and theme provider: neutral light/dark, brand accent, WCAG check | `CORE_ROLES`, `neutral_theme`, `with_accent`, `validate`, `ThemeProvider` |
+| `settings_registry` (0.10.0) | Describe, validate and group settings; the host keeps its own storage | `Setting`, `SettingsRegistry`, `shell_settings`, `framework_info` |
+| `controls` (0.10.0) | General controls with colour roles | `ShellButton`, `SearchField`, `Tooltip`, `Toolbar` |
+| `workspaces` (0.10.0) | Product areas as workspaces: navigation, lazy views, actions, status line, teardown | `Workspace`, `WorkspaceRegistry`, `WorkspaceHost` |
+| `software_catalog` (0.11.0) | Software catalogue and product manifests (`ECOSYSTEM_CATALOG.json`), app and system information, no network | `load_ecosystem`, `Product`, `Catalog`, `AppInfo`, `system_info`, `open_link` |
+| `symbols` (0.11.0) | Symbol contract, providers, favourites, safe SVG/PNG checks | `Symbol`, `SymbolRegistry`, `SymbolState`, `inspect_svg`, `inspect_png` |
+| `symbol_picker` (0.11.0) | Symbol picker with categories, search, favourites, preview and bounded cache | `SymbolPicker` |
+| `resources` (0.11.0) | Bounded caches with key, budget, eviction and statistics | `BoundedCache`, `cache_key` |
+| `background` (0.11.0) | Bounded background jobs delivered on the Tk thread | `TaskQueue`, `Job` |
+
+Updating an existing copy from 0.6.2: [UPDATING.md](UPDATING.md).
 
 A start with app host and command history, as in the demo host:
 

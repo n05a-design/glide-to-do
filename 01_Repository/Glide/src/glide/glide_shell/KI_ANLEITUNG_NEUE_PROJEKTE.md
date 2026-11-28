@@ -1,6 +1,6 @@
 # Glide Shell – Anleitung für KI-Agenten in neuen Projekten
 
-Stand 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2 · [English version](AI_GUIDE_NEW_PROJECTS.md)
+Stand 28.11.2026 · Glide 1.0.3 · Glide-System V1.98 · Glide Shell 0.11.0 · [English version](AI_GUIDE_NEW_PROJECTS.md)
 
 Diese Anleitung richtet sich an KI-Agenten (Claude Code, Codex, Cursor, Gemini und andere), die mit der Glide Shell eine **neue** Tk-Desktopanwendung bauen. Sie erklärt den Aufbau von Glide, Glide-System und Glide Shell, den Start eines Projekts, die Architekturregeln, die Design-Richtlinien, die Arbeitsprozesse und die Prüfungen. Sie liegt im Paket `glide_shell` und wird bei jeder Übernahme mitkopiert. Einen fertigen Prompt für die erste Sitzung samt Übersicht, was wo liegt, enthält [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md).
 
@@ -15,7 +15,7 @@ Glide (die App)                 Glide-System (der Bestand)            Glide Shel
 src/glide/app.pyw               src/glide/README.md                   src/glide/glide_shell/
 ListApp = Controller            Register: Module M…, Features F…,     neutrale Tk-Bausteine,
 Fachmodule (Tk-frei)            Bausteine, Tests T…, Versionsverlauf   keine Glide-Werte
-Daten, Ansichten, Texte         GLIDE_SYSTEM_VERSION (V1.87)          SHELL_VERSION (0.6.2)
+Daten, Ansichten, Texte         GLIDE_SYSTEM_VERSION (V1.91)          SHELL_VERSION (0.8.0)
         │                                 │                                  ▲
         └──── nutzt ──────────────────────┼──────────── Host → Shell → Tk ───┘
                                           └─ dokumentiert beides, versioniert unabhängig
@@ -30,6 +30,8 @@ Abhängigkeitsrichtung ohne Ausnahme: **Host → Shell → Tk/Standardbibliothek
 ---
 
 ## 2. Bausteine der Shell
+
+> **Shell-First (D105/D106):** Die Shell ist das Fundament, nicht eine Teilebibliothek. Allgemeine Fragen (Knopf, Dialog, Fenster, Farben, Fokus, Start) beantwortet zuerst der [Shell-First-Vertrag](DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106). Für eine **bestehende** Anwendung gilt [KI_MIGRATION_BESTEHENDE_ANWENDUNG.md](KI_MIGRATION_BESTEHENDE_ANWENDUNG.md). Seit 0.7.0: `compat` (Versionsprüfung), `conformance` (Architekturprüfung, `python -m glide_shell.conformance src/<app>`), `showcase` (Galerie-Register); Bento übernimmt `shell_uebernehmen.py --mit-bento`.
 
 | Modul | Wofür | Wichtigste Namen | Host liefert |
 |---|---|---|---|
@@ -92,7 +94,7 @@ python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --age
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agenten-bootstrap --projekt-root <root> <projekt>/src/<app>  # explizite Projektwurzel
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <projekt>/src/<app>          # aus einem festen Git-Commit übernehmen
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <projekt>/src/<app>                # nur prüfen
-cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 13/13 Prüfungen bestanden
+cd <projekt>/src/<app> && python3 -m glide_shell.selftest                                                              # Exitcode 0 = alle 16/16 Prüfungen bestanden
 ```
 
 - Das Werkzeug kopiert alle `*.py` und `*.md` aus `glide_shell/` (inklusive `DESIGN_RICHTLINIEN.md` als offline-fähigem Gestaltungsvertrag) und schreibt `SHELL_MANIFEST.json` mit Paketversion, Glide-Systemversion, Quell-Commit und SHA-256 je Datei.
@@ -313,7 +315,7 @@ Glides Gestaltungsvertrag und der verbindliche transportable Rahmen für Folgepr
 
 ```bash
 cd <projekt>/src/<app>
-python3 -m glide_shell.selftest          # 13/13 checks passed
+python3 -m glide_shell.selftest          # 16/16 checks passed
 python3 -O -m glide_shell.selftest       # muss dasselbe melden
 python3 -m glide_shell.demo              # Sichtprobe des Nutzungsmusters
 ```
@@ -356,7 +358,7 @@ Kompatibilitätsnamen mit `glide` (`_glide_after_scope`, `GlideCheckbutton` …)
 **Projektstart**
 
 - [ ] Struktur aus 3.1 angelegt; `AGENTS.md` mit Arbeitsregeln und Abschlusskriterium
-- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 13/13 (auch mit `-O`)
+- [ ] Shell übernommen, `SHELL_MANIFEST.json` vorhanden, Selbsttest 16/16 (auch mit `-O`)
 - [ ] Start über `AppHost` mit `preflight`; Import ohne Seiteneffekte
 - [ ] Datenordner über `runtime_paths` und eigene Umgebungsvariable für Tests
 - [ ] Kataloge `de.json`/`en.json` mit Paritätstest; Entwicklermeldungen Englisch

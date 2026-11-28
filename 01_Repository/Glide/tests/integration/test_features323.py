@@ -430,7 +430,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         root.update()
 
         def zeilentexte():
-            return [app.tree.item(iid, "text") for iid in app.tree.get_children("")]
+            # Seit Teil 04 (direkte Aufgabenerfassung) endet jede Aufgabenliste mit der reservierten
+            # Eingabezeile `EMPTY_ROW_ID`; sie ist kein Inhalt und zählt hier nicht.
+            return [app.tree.item(iid, "text") for iid in app.tree.get_children("") if iid != app.EMPTY_ROW_ID]
 
         app.set_list_detail_mode("compact")
         root.update()

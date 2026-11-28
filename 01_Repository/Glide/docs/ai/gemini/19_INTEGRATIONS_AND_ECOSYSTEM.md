@@ -13,7 +13,7 @@ related_documents: [GLIDE-DATA, GLIDE-I18N, GLIDE-ARCHITECTURE]
 
 # Integrations and ecosystem
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 4ce3697a
 
 ## Runtime and desktop
 

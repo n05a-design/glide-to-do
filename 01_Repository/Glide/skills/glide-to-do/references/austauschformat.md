@@ -1,6 +1,6 @@
 # Glide-Austauschformat für neue Inhalte
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Austauschformat 2
+Stand 27.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Austauschformat 2
 
 Eine `.glideexchange`-Datei ist ein JSON-Objekt. Sie beschreibt, was entstehen soll; Glide entscheidet, wie es gespeichert wird. Der Import legt ausschließlich neue Ordner, Listen, Labels und Punkte an. Maßgeblich ist die Prüfung in Glide; das Hilfsskript bildet sie nach.
 

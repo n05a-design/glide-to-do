@@ -15,8 +15,8 @@ class PolicyTests(unittest.TestCase):
   es=[{'id':k,'list_kind':k} for k in ['page','note','drawing','tasks','gallery']]
   p=SidebarPolicy(es,[],{'list:page':'lists'})
   self.assertEqual([p.section('list',e['id']) for e in es],['lists','notes','drawings','lists','lists'])
- def test_hidden_and_mandatory(self):
-  self.assertTrue(normalize_visibility({'lists':False})['lists'])
+ def test_hidden_sections(self):
+  self.assertFalse(normalize_visibility({'lists':False})['lists'])
   p=SidebarPolicy([{'id':'a','list_kind':'drawing'}],[],visibility={'drawings':False})
   self.assertEqual(p.section('list','a'),'lists')
  def test_nested_and_mixed_legacy(self):

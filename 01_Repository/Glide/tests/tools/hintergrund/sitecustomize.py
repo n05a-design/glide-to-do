@@ -82,3 +82,84 @@ if sys.platform == "darwin" and os.environ.get("GLIDE_QA_HINTERGRUND"):
 
     tkinter.Tk.__init__ = _neu_init
     tkinter.Misc.focus_force = tkinter.Misc.focus_set
+
+
+# --- Unbeaufsichtigte Läufe auf allen Plattformen (seit 28.11.2026, Ecosystem E03) ------------------
+#
+# Mit GLIDE_QA_AUTOSCHLIESSEN=<Sekunden> wartet kein Prüf- oder Messlauf auf einen Menschen:
+# - Native Meldungen (`tkinter.messagebox`) und Dateidialoge (`tkinter.filedialog`) erscheinen nicht;
+#   sie liefern die Standardantwort (Meldung: "ok", Frage: Nein/Abbrechen, Datei: leer) und werden
+#   auf stderr protokolliert.
+# - Jedes modale Warten (`wait_window`, `wait_variable`) endet spätestens nach der Frist: Das Fenster
+#   wird zerstört bzw. die Variable gesetzt, ebenfalls mit Protokollzeile. Galerie, Fehlerberichte und
+#   eigene Dialoge der App bleiben damit nie offen stehen.
+# Glide selbst bleibt unverändert; ohne die Variable wirkt dieser Abschnitt nicht.
+if os.environ.get("GLIDE_QA_AUTOSCHLIESSEN"):
+    import tkinter as _tk
+    from tkinter import filedialog as _fd, messagebox as _mb
+
+    try:
+        _FRIST_MS = max(1, int(float(os.environ["GLIDE_QA_AUTOSCHLIESSEN"]) * 1000))
+    except ValueError:
+        _FRIST_MS = 30000
+
+    def _protokoll(text):
+        sys.stderr.write(f"[QA-Autoschließen] {text}\n")
+        sys.stderr.flush()
+
+    def _meldung(art, antwort):
+        def ersatz(title=None, message=None, **_kw):
+            _protokoll(f"{art} unterdrückt: {title!r} – {str(message)[:160]!r} → {antwort!r}")
+            return antwort
+        return ersatz
+
+    for _name in ("showinfo", "showwarning", "showerror"):
+        setattr(_mb, _name, _meldung(_name, "ok"))
+    for _name, _antwort in (("askyesno", False), ("askokcancel", False), ("askretrycancel", False),
+                            ("askyesnocancel", None), ("askquestion", "no")):
+        setattr(_mb, _name, _meldung(_name, _antwort))
+    for _name in ("askopenfilename", "asksaveasfilename", "askdirectory"):
+        setattr(_fd, _name, _meldung(_name, ""))
+    _fd.askopenfilenames = _meldung("askopenfilenames", ())
+
+    _alt_wait_window = _tk.Misc.wait_window
+    _alt_wait_variable = _tk.Misc.wait_variable
+
+    def _wait_window(self, window=None):
+        ziel = self if window is None else window
+
+        def schliessen():
+            try:
+                if ziel.winfo_exists():
+                    _protokoll(f"Fenster {ziel.winfo_class()} {str(ziel)!r} ({ziel.winfo_toplevel().title()!r}) "
+                               f"nach {_FRIST_MS / 1000:g} s geschlossen")
+                    ziel.destroy()
+            except _tk.TclError:
+                pass
+        job = self.after(_FRIST_MS, schliessen)
+        try:
+            return _alt_wait_window(self, window)
+        finally:
+            try:
+                self.after_cancel(job)
+            except _tk.TclError:
+                pass
+
+    def _wait_variable(self, name="PY_VAR"):
+        def setzen():
+            _protokoll(f"Warten auf Variable {str(name)!r} nach {_FRIST_MS / 1000:g} s beendet")
+            try:
+                self.setvar(str(name), self.getvar(str(name)))
+            except _tk.TclError:
+                pass
+        job = self.after(_FRIST_MS, setzen)
+        try:
+            return _alt_wait_variable(self, name)
+        finally:
+            try:
+                self.after_cancel(job)
+            except _tk.TclError:
+                pass
+
+    _tk.Misc.wait_window = _wait_window
+    _tk.Misc.waitvar = _tk.Misc.wait_variable = _wait_variable

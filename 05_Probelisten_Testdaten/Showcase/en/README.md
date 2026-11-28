@@ -1,6 +1,6 @@
 # City Light · Glide showcase
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26 · Templates 2 · [Deutsche Fassung](../README.md)
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27 · Templates 2 · [Deutsche Fassung](../README.md)
 
 A photo journey through seven cities: Wuppertal, Berlin, Munich, Vienna, Monaco, Bilbao and Seoul. Two weeks by train and two flights, followed by the selection for a small travel book. The showcase presents the same data from many angles: travel plan, a travel guide with one page per city, a travel diary, a gallery, a pixel stamp and three pinboards.
 

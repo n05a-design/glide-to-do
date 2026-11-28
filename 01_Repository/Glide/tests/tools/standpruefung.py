@@ -257,6 +257,19 @@ def versionen(text: str) -> list[str]:
     return VERSION_MUSTER.findall(FREMDE_ANGABEN.sub(" ", aussage(text)))
 
 
+def lieferformat(kurz: str) -> int | None:
+    """`DATA_SCHEMA_VERSION` der gelieferten startbaren Fassung neben dieser README."""
+    ablage = ablagewurzel(REPO)
+    if ablage is None:
+        return None
+    for pfad in sorted((ablage / kurz).parent.glob("Glide-Aufgaben-und-Listen_v*.pyw")):
+        baum = ast.parse(pfad.read_text(encoding="utf-8-sig"), filename=str(pfad))
+        for knoten in ast.walk(baum):
+            if isinstance(knoten, ast.Assign) and isinstance(knoten.value, ast.Constant)                     and isinstance(knoten.value.value, int)                     and any(isinstance(z, ast.Name) and z.id == "DATA_SCHEMA_VERSION" for z in knoten.targets):
+                return knoten.value.value
+    return None
+
+
 def app_konstanten() -> dict[str, int]:
     """`DATA_SCHEMA_VERSION` und `MIN_PORTABLE_BACKUP_SCHEMA_VERSION` aus dem
     Anwendungscode. Über den Syntaxbaum gelesen, damit die Prüfung die App
@@ -551,6 +564,13 @@ def formate_pruefen(befund: Befund, kurz: str, zeilen: list[str],
     niedrigst = befund.format_niedrigst
     if not aktuell or Path(kurz).name in NUR_GESCHICHTE:
         return
+    if kurz in MODULLISTEN_ABLAGE:
+        # Wie bei R10 beschreibt die README in `07_Python-Versionen` den
+        # gelieferten Ordner: Ihre Formatstufe folgt der gelieferten Fassung,
+        # nicht dem Quellbaum (zwischen Kandidat und Abgleich, CI „Lieferstand“).
+        geliefert = lieferformat(kurz)
+        if geliefert:
+            aktuell = geliefert
 
     nummern = {nr for nr, _satz, _werte in standzeilen}
     for nr, satz, _werte in standzeilen:

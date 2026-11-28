@@ -1,6 +1,6 @@
 # Tasks and lists – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen §3 Erfassen](../20_FUNKTIONEN.md#3-erfassen), [§5 Liste, Tabelle, Gruppierung](../20_FUNKTIONEN.md#5-liste-tabelle-gruppierung), [Erweiterte Wiederholungsrhythmen](../20_FUNKTIONEN.md#erweiterte-wiederholungsrhythmen-fp-02-3440) · [Guide contents](README.md) · Previous: [Installation](02-installation.md) · Next: [Day planning](04-day-planning.md)
 

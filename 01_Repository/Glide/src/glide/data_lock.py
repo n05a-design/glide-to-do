@@ -158,6 +158,26 @@ def classify(record, *, host, pid, now, max_age_seconds, alive=process_alive):
     return FOREIGN if alive(other) else FREE
 
 
+def stale_foreign(record, *, host, now, max_age_seconds):
+    """Teil 05B: Sperre eines anderen Rechners, länger nicht erneuert.
+
+    Alter allein beweist nicht, dass dort nichts mehr läuft (Ruhezustand,
+    verzögerter Ordnerabgleich). Solche Sperren gelten nicht als frei, sondern
+    werden nur nach ausdrücklicher Bestätigung übernommen.
+    """
+    return (record.get("host") != host
+            and (now - stamp(record)).total_seconds() > max_age_seconds)
+
+
+def stale_question(host, since):
+    return glide_i18n.t("mod.data_lock.stale_question",
+                        'Der Datenordner ist laut Sperre auf „{host}“ geöffnet; die Sperre wurde seit {since} nicht erneuert.\n\n'
+                        'Das kann ein beendetes Glide sein, aber auch ein Rechner im Ruhezustand oder ein noch nicht abgeglichener Ordner. '
+                        'Glide hat den Bestand deshalb schreibgeschützt geöffnet.\n\n'
+                        'Übernimm die Sperre nur, wenn Glide auf „{host}“ sicher geschlossen ist. Sonst können sich Änderungen gegenseitig überschreiben.\n\n'
+                        'Sperre jetzt übernehmen?', host=host, since=since)
+
+
 def defective_question(detail):
     """Frage beim Start, wenn die Sperre defekt oder unlesbar ist."""
     grund = f": {detail}" if detail else ""

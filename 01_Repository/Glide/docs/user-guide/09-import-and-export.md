@@ -1,6 +1,6 @@
 # Import and export – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen §11 Import, Ausgabe und Austausch](../20_FUNKTIONEN.md#11-import-ausgabe-und-austausch), [Austauschformat](../06_DATA_BACKUP_MIGRATION.md#austauschformat-glideexchange) · [Guide contents](README.md) · Previous: [Pixel workshop](08-pixel-workshop.md) · Next: [Backups](10-backups.md)
 

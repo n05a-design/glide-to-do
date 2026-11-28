@@ -159,7 +159,7 @@ if mode=='alt':
  assert app._data_read_only and app._read_only_reason=='newer_format'
  assert not app.save_items(show_error=False) and disk.read_bytes()==before
 else:
- assert json.loads(disk.read_text(encoding='utf-8'))['version']==26
+ assert json.loads(disk.read_text(encoding='utf-8'))['version']==27
  backups=list(Path(m.BACKUP_DIR).glob('liste_vor_format26_*.json'))
  assert len(backups)==1 and backups[0].read_bytes()==before
  assert [v['repeat'] for v in json.loads(before)['lists'][-1]['items']]==[v['repeat'] for v in app.lists[-1]['items']]

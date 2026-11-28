@@ -34,7 +34,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         # Die 3.28-Funktionen bleiben in jeder späteren Fassung erhalten.
         # Release-Abfolge statt Zahlenvergleich: die offizielle Reihe ab 1.0.0 folgt auf 3.x (D93).
         assert mod.glide_release.release_rank(mod.APP_VERSION) >= mod.glide_release.release_rank("3.28.0")
-        assert app.DATA_SCHEMA_VERSION == 26
+        assert app.DATA_SCHEMA_VERSION == 27
         assert app.ENTRY_MIN_WIDTH == 180
 
         journal_folder = app.new_folder_object("Tagebuch", folder_kind="journal")
@@ -55,7 +55,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         app.set_active_list(entry["id"], refresh=False)
         assert app.save_items()
         payload = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert payload["version"] == 26
+        assert payload["version"] == 27
         loaded, active_id = app.normalize_lists_data(payload)
         restored = next(value for value in loaded if value["id"] == entry["id"])
         assert restored["journal"]["favorite"] is True

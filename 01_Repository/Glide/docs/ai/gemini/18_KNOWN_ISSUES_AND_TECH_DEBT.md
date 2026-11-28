@@ -13,7 +13,7 @@ related_documents: [GLIDE-TESTING, GLIDE-ROADMAP, GLIDE-ARCHITECTURE]
 
 # Known issues and technical debt
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 4ce3697a
 
 This is a current-state summary for the checked snapshot. Exact historical outcomes and subsequent updates belong in the plan and QA report.
 

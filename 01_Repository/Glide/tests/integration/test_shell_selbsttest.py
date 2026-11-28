@@ -3,7 +3,7 @@
 
 Der Test kopiert `src/glide/glide_shell` in ein leeres Temporärverzeichnis und
 startet dort `python -m glide_shell.selftest` in eigenem Prozess:
-- vollständige Kopie: Exitcode 0, jede Prüfung `ok`, Zusammenfassung „13/13“;
+- vollständige Kopie: Exitcode 0, jede Prüfung `ok`, Zusammenfassung „16/16“;
 - Gegenprobe mit verändertem `window_geometry.parse`: Exitcode 1 und genau
   diese Prüfung `FAIL`, die übrigen bleiben `ok` – auch unter `python -O`;
 - Übernahme mit `scripts/pflege/shell_uebernehmen.py`: die Prüfung `manifest`
@@ -50,7 +50,7 @@ def manifestfaelle(fehler):
     with tempfile.TemporaryDirectory(prefix="glide-shell-selbst-") as ordner:
         paket = uebernahme(ordner)
         code, text = lauf(ordner)
-        if code != 0 or "ok   manifest:" not in text or "13/13 checks passed" not in text:
+        if code != 0 or "ok   manifest:" not in text or "16/16 checks passed" not in text:
             fehler.append(f"übernommene Kopie: Exit {code}\n{text}")
 
         # Gegenprobe: manipulierte Datei
@@ -113,7 +113,7 @@ def main():
     fehler = []
     # 1. Quellbaum-Selbsttest direkt in src/glide
     code_quelle, text_quelle = lauf(REPO / "src" / "glide")
-    if code_quelle != 0 or "ok   manifest: source tree without manifest" not in text_quelle or "13/13 checks passed" not in text_quelle:
+    if code_quelle != 0 or "ok   manifest: source tree without manifest" not in text_quelle or "16/16 checks passed" not in text_quelle:
         fehler.append(f"Glide-Quellbaum: Exit {code_quelle}\n{text_quelle}")
 
     # 2. Manifest-Fälle und Gegenproben
@@ -124,7 +124,7 @@ def main():
         uebernahme(ordner)
         code, text = lauf(ordner)
         zeilen = [z for z in text.splitlines() if z.startswith(("ok ", "FAIL"))]
-        if code != 0 or len(zeilen) != 13 or any(z.startswith("FAIL") for z in zeilen) or "13/13 checks passed" not in text:
+        if code != 0 or len(zeilen) != 16 or any(z.startswith("FAIL") for z in zeilen) or "16/16 checks passed" not in text:
             fehler.append(f"vollständige Kopie: Exit {code}\n{text}")
 
     # 4. Gegenprobe Geometrie mit und ohne -O
@@ -145,14 +145,14 @@ def main():
             for schalter in ((), ("-O",)):
                 code, text = lauf(ordner, *schalter)
                 rot = [z for z in text.splitlines() if z.startswith("FAIL")]
-                if code != 1 or len(rot) != 1 or "window_geometry" not in rot[0] or "12/13 checks passed" not in text:
+                if code != 1 or len(rot) != 1 or "window_geometry" not in rot[0] or "15/16 checks passed" not in text:
                     fehler.append(f"Gegenprobe {' '.join(schalter) or 'ohne -O'}: Exit {code}, "
                                   f"erwartet genau window_geometry rot\n{text}")
     if fehler:
         print("\n".join(fehler))
         print("Shell-Selbsttest: ROT")
         return 1
-    print("Shell-Selbsttest: OK (Kopie 13/13, Gegenproben erkennen kaputte Geometrie auch mit -O, gelöschte Manifeste sowie manipulierte und ergänzte Dateien/Unterpakete)")
+    print("Shell-Selbsttest: OK (Kopie 16/16, Gegenproben erkennen kaputte Geometrie auch mit -O, gelöschte Manifeste sowie manipulierte und ergänzte Dateien/Unterpakete)")
     return 0
 
 

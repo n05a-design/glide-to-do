@@ -117,7 +117,7 @@ with tempfile.TemporaryDirectory(prefix="glide-110-") as directory:
         app.set_active_list(liste["id"])
         idle()
         zeile = app.tree.item(app.EMPTY_ROW_ID, "text")
-        check("2c Leere Liste: Titel und Erklärung", zeile == app.empty_state_for("list").text, zeile)
+        check("2c Leere Liste: direkte Eingabe", app.inline_task_entry.winfo_ismapped() and zeile == "", zeile)
         check("2d U20: kein zweiter Anlegeknopf bei sichtbarer Eingabezeile",
               app.empty_state_action() is None or app.entry_line_visible() is False)
 

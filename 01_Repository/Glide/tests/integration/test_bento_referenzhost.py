@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Bento 0.2.0 im isolierten Fremdhost (Phase B 3.7): Kopie von `glide_bento` und
+"""Bento 0.3.0 im isolierten Fremdhost (Phase B 3.7): Kopie von `glide_bento` und
 `glide_shell` in einen leeren Ordner, Start mit `python -I` ohne Glide-Quellbaum.
 
 Prüft Importierbarkeit, eigene Theme-/Token-Provider, Multi-Span, Breakpoints,
@@ -44,6 +44,7 @@ class BentoReferenzhostTests(unittest.TestCase):
         r = self.lauf("from glide_bento import selftest; sys.exit(0 if selftest.BentoSelftestRunner().run_all() else 1)")
         self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-1000:])
         self.assertIn("16/16", r.stdout)
+        self.assertIn("passt zur Shell", r.stdout)
 
 
 if __name__ == "__main__":

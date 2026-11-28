@@ -1,6 +1,6 @@
 # Pinboards – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen §6 Pinnwand](../20_FUNKTIONEN.md#6-pinnwand), [JSON-Canvas-Export](../20_FUNKTIONEN.md#fundortübersicht-json-canvas-10-und-themengerechte-steuerelemente-3540-10112026) · [Guide contents](README.md) · Previous: [Pages and notes](06-pages-and-notes.md) · Next: [Pixel workshop](08-pixel-workshop.md)
 

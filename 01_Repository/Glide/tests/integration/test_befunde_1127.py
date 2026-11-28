@@ -302,23 +302,11 @@ with tempfile.TemporaryDirectory(prefix="glide-1127-") as ordner:
         app.set_active_list(leer_liste["id"])
         ruhe(0.4)
         assert app.tree.get_children("") == (app.EMPTY_ROW_ID,)
-        # Seit dem Merge mit main (WA-52) kommt der Text aus empty_states; der UX-05-Klickweg bleibt.
-        assert app.tree.item(app.EMPTY_ROW_ID, "text") == app.empty_state_for("list").text, \
-            app.tree.item(app.EMPTY_ROW_ID, "text")
-        assert app.empty_inline_action() == app.focus_new_item_entry
-        assert not app.empty_action_button.winfo_ismapped() if getattr(app, "empty_action_button", None) else True, \
-            "kein zweiter Anlegen-Knopf (U20)"
-        leertext = app.empty_text_label
-        assert leertext.winfo_ismapped() and str(leertext.cget("cursor")) == "hand2"
-        app.tree.focus_force()
-        ruhe(0.1)
-        leertext.event_generate("<Button-1>", x=5, y=5)
-        ruhe(0.2)
-        assert app.current_focus_widget() is app.entry, app.current_focus_widget()
-        # Leer durch die Suche: Grund nennen, Klick setzt zurück.
-        app.entry.delete(0, "end")
-        app.entry.insert(0, "Ein Punkt")
-        app.add_item()
+        assert app.inline_task_entry.winfo_ismapped()
+        assert app.empty_inline_action() is None
+        app.inline_task_entry.focus_force()
+        app.inline_task_entry.insert(0, "Ein Punkt")
+        app.inline_task_entry.event_generate("<Return>")
         ruhe(0.2)
         app.search_placeholder_active = False
         app.search_var.set("gibtesnicht")
@@ -328,7 +316,7 @@ with tempfile.TemporaryDirectory(prefix="glide-1127-") as ordner:
         assert app.empty_inline_action() == app.reset_filters_for_empty_state
         app.empty_text_label.event_generate("<Button-1>", x=5, y=5)
         ruhe(0.4)
-        assert app.search_var.get() == "" and app.EMPTY_ROW_ID not in app.tree.get_children(""), "Filter blieb"
+        assert app.search_var.get() == "" and app.inline_task_entry.winfo_ismapped(), "Filter blieb"
         # Übersichten: der leere Abschnitt legt direkt an.
         gefunden = {}
         for name, oeffnen, zaehlen in (
@@ -398,7 +386,7 @@ with tempfile.TemporaryDirectory(prefix="glide-1127-") as ordner:
             assert sum(1 for e in app.lists if app.is_gallery_list(e)) == vorher + 1, "Kachel legte keine Galerie an"
         pruefungen.append("UX-05 Rest: Ordner führt in die Eingabe, Notizbuch legt Eintrag an, Label-Menü aktiv, "
                           f"Startseite {len(kacheln)} Aufforderung(en) ({'; '.join(kachel_texte) or '–'})")
-        pruefungen.append("UX-05: leere Liste fordert auf und führt per Klick in die Eingabe, Filter-Leere setzt "
+        pruefungen.append("UX-05: echte Eingabe in der leeren Liste, Filter-Leere setzt "
                           f"per Klick zurück, Übersichten legen direkt an ({', '.join(f'{k}: {v}' for k, v in gefunden.items())})")
 
         # --- UX-03: Verknüpfungen als Chip im Seitenkopf -------------------

@@ -125,3 +125,18 @@ Empfohlene Reihenfolge danach: Mac-Abnahme dieser Runde → PIXEL-02 ohne Format
 ## H. Zusammenführung mit `main` (27.11.2026)
 
 `main` erhielt parallel PR #199 (Glide 1.1.0: Bento 0.2.0, WA-52 kontextuelle Leerzustände in `empty_states.py`, WA-53). Beim Merge bleibt `empty_states.py` (WA-52) unverändert; das UX-05-Modul heißt jetzt `empty_prompts.py`. Leerzeile von Liste, Tabelle und Notizbuch nutzen den WA-52-Text, der UX-05-Klickweg bleibt; gewöhnliche Ordner, Übersichten, Kacheln, Galerie, Menüs behalten UX-05. Registernummern neu: M124/M125, T350–T352. **Folgeaufgabe:** beide Leerzustandsmodule fachlich zu einem zusammenführen (eine Quelle für Texte und Aktionen).
+
+## I. Synchronisation vor der 13-teiligen Serie (27.11.2026)
+
+Ausgangsstand: `main` @ `e8eee591` (Merge PR #200, enthält PR #199). Kein neuerer Stand auf `origin`. Arbeitskopie auf diesen Commit gestellt; lokal nur die zwei Fensterbilder `Glide_UX01_Gelb_24_*.png` (bewusst ungetrackt). Während der Serie: kein Branch, kein Push, kein PR bis zum Git-Tor in Teil 13. Arbeitsort der Serie ist der Worktree `glide-1-1-0-dev-0144e8` (lokaler, von der App angelegter Arbeitszweig auf `e8eee591`, nicht gepusht); Tabelle und Fensterbilder wurden aus dem auslaufenden Worktree `glide-master-development-9435c1` unverändert übernommen.
+
+Statusachsen: **V** vorhanden (in main) · **T** teilweise · **K** Konzept · **A** automatisiert geprüft (Windows/Linux CI, Tk 9.0/9.1) · **N** native Abnahme (macOS/Mensch) · **L** geliefert (07_Python-Versionen/Pakete).
+
+| Bereich | Stand |
+|---|---|
+| Blockkopie/-ausschnitt, Copy-&-Paste-Korrektur, Blocktyp-Fallback, Positionswiederherstellung, Linkerkennung, Symbolknopf erweiterte Eingabe, Verknüpfungschip, Gelbkorrektur, Pixel-Werkzeugspalte (40 px), Radierer, Drehen/Spiegeln, Schachbrett, Listen-Scrollen | V, A · N offen · L offen |
+| Bento 0.2.0, Multi-Span, Host-Token-Vertrag, Render-Retention, 23 mitgelieferte Vorlagen (19 im Katalog, davon 16 aus 1.0.3 + 3 L4, und 4 Notizbuchvorlagen aus dem Code; dazu 3 eingebaute Seitenvorlagen – die Korrektur „nicht belegt“ aus Teil 01 war falsch, berichtigt in Teil 02), WA-52/WA-53 (PR #199) | V, A · N/L laut PR #199 |
+| **UX-05 Inline-Erfassung** | **T – nicht ausreichend:** Leerzustand führt per Klick in die Eingabezeile oben; gefordert ist eine direkt editierbare Eingabezeile innerhalb der Liste. Zwei Leerzustandsmodule (`empty_states`, `empty_prompts`) noch zu vereinen |
+| Kapitel, Prompt-Management, KI-Projektkontexte, Softwarekatalog, voller Bento-Ausbau, neue Sidebar-Interaktionen, sichtbares Kanban, Mindmaps, erweiterte Vorlagenbibliothek, Rechtschreibprüfung, Pixel-Ebenen, Signierung | K bzw. offen |
+
+Fortschreibung ab Teil 01: Statustabelle, Versionsinventar und Anforderungsmatrix führt der [Entwicklungsplan §4.7](Glide_Entwicklungsplan.md#47-master-serie-in-13-teilen-ab-27112026); dieser Abschnitt bleibt der Synchronisationsbeleg.

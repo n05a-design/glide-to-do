@@ -28,6 +28,7 @@ BENTO_MODULES = (
     "components",
     "selftest",
     "demo",
+    "showcase",
 )
 
 

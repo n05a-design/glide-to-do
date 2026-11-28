@@ -230,7 +230,8 @@ class I18nTests(unittest.TestCase):
         # Wörter, die im Englischen gleich lauten, dürfen unverändert bleiben.
         gleich = {"labels", "label", "in", "zoom", "navigator", "status", "ok", "name", "start", "pdf", "html", "txt",
                   "csv", "ics", "markdown", "json", "glide", "canvas", "png", "svg", "ico", "min", "cmd", "alt", "tab",
-                  "enter", "esc", "escape", "shift", "f2", "f3", "f11"}
+                  "enter", "esc", "escape", "shift", "f2", "f3", "f11",
+                  "website", "downloads", "version", "mo", "fr", "sa"}
 
         def gleichlautend(text):
             woerter = re.findall(r"[^\W\d_]+", re.sub(r"\{[^}]*\}", " ", text).lower())
@@ -453,8 +454,12 @@ class I18nTests(unittest.TestCase):
             and isinstance(node.func, ast.Attribute)
             and node.func.attr == "show_undo_toast"
         ]
-        # 30 seit WA-53 (Toast nach „Fristen neu setzen …“, 26.11.2026).
-        self.assertEqual(len(calls), 30)
+        # 30 seit WA-53 (Toast nach „Fristen neu setzen …“, 26.11.2026);
+        # 31 seit Teil 05 (Hinweis „Entwurf wiederhergestellt“, 27.11.2026);
+        # 32 seit Teil 05B (Rückmeldung „Bereich geleert“ mit Rückgängig, NAV-02C);
+        # 34 seit Teil 06 (Schreibschutzhinweis KI-Arbeitsbereich, Vorlage gespeichert);
+        # 35 seit Ecosystem E03 (Schreibschutzhinweis Symbolbibliothek).
+        self.assertEqual(len(calls), 35)
         for call in calls:
             self.assertTrue(call.args, "show_undo_toast needs a text argument")
             self.assertNotIsInstance(call.args[0], ast.Constant,

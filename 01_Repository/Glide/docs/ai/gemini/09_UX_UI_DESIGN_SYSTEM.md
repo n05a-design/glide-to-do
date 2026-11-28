@@ -13,7 +13,7 @@ related_documents: [GLIDE-I18N, GLIDE-WORKFLOWS, GLIDE-PLAYBOOK]
 
 # UX, UI and design system
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 5631333a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 5631333a
 
 ## Authority
 

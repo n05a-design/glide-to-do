@@ -1,6 +1,6 @@
 # Troubleshooting – Glide user guide
 
-Status as of 24.11.2026 · Glide 1.0.3 · Task format 26
+Status as of 24.11.2026 · Glide 1.0.3 · Task format 27
 
 **Deutsch:** [Funktionen – Speicherstatus](../20_FUNKTIONEN.md#speicherstatus-und-sicherungsreserve-wa-40wa-47-seit-3450-geliefert), [Schreibbesitz](../20_FUNKTIONEN.md#schreibbesitz-und-mehrfachaktionen-roadmap-paket-1), [§13 Bekannte Grenzen](../20_FUNKTIONEN.md#13-bekannte-grenzen), [Wiederanlauf](../06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-lokaler-kandidat-3490) · [Guide contents](README.md) · Previous: [Keyboard shortcuts](11-keyboard-shortcuts.md)
 
@@ -47,6 +47,7 @@ Reminders and daily prompts are delivered **only while Glide is running**. Misse
 
 - **Help › Manual …** (F1) and **Help › Show keyboard shortcuts** explain the app in the chosen language.
 - **Help › Open error log** opens the local error log. If no error has occurred, Glide says so.
+- **Help › Component gallery …** (development state 1.1.0) shows the real building blocks of Glide Shell and Glide Bento with artificial sample data, their version, states and where Glide uses them. **Theme** (Active, Light, Dark) and **Width** (Narrow, Medium, Wide) rebuild the samples; your settings and data stay unchanged.
 - Nothing from these help functions leaves your computer.
 
 ## Reporting a problem

@@ -1,6 +1,6 @@
 # Rezepte je Dokumentart
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 27.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 Kurze Muster für häufige Anfragen. Die Beispiele liegen in `assets/beispiele/`.
 

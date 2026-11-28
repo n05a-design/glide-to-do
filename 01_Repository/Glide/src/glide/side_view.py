@@ -135,7 +135,7 @@ def history_step(history, step, available):
         position += step
     return history
 
-UNSUPPORTED_KINDS = {"drawing": "Zeichnungen", "gallery": "Galerien"}
+UNSUPPORTED_KINDS = {"gallery": "Galerien"}
 
 STATE_TEXT = {
     "missing": "Dieser Inhalt ist nicht mehr vorhanden.",
@@ -393,7 +393,7 @@ def availability(entry, identity=None, trash=()):
     """(Zustand, Hinweis) eines Ziels.
 
     ``ok`` – lesbar; ``archived`` – lesbar, im Archiv; ``unsupported`` –
-    Zeichnung/Galerie, nur über „Öffnen“; ``trash``/``missing`` – nicht mehr da.
+    Galerie, nur über „Öffnen“; ``trash``/``missing`` – nicht mehr da.
     """
     if not isinstance(entry, dict):
         return ("trash", STATE_TEXT["trash"]) if identity and _trash_contains(trash, identity) else (
@@ -407,9 +407,9 @@ def availability(entry, identity=None, trash=()):
 
 
 def content_kind(entry):
-    """'page', 'note' oder 'tasks' für die Darstellung."""
+    """'page', 'note', 'drawing' oder 'tasks' für die Darstellung."""
     kind = entry.get("list_kind") if isinstance(entry, dict) else None
-    return kind if kind in ("page", "note") else "tasks"
+    return kind if kind in ("page", "note", "drawing") else "tasks"
 
 
 def reference_target(key, index):

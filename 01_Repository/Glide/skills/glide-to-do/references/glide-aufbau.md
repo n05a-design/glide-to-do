@@ -1,6 +1,6 @@
 # Glide verstehen: Aufbau und Datenmodell
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Austauschformat 2
+Stand 27.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Austauschformat 2
 
 Für Agenten, die Nutzern Glide erklären oder an Glide mitarbeiten. Was der Skill davon anlegen kann, steht je Feld in `abdeckung.json`.
 
@@ -28,7 +28,7 @@ Die Seitenleiste ordnet alles in vier Bereiche: **Seiten** (Bücher, Ordner, Sei
 
 ## Wie Glide speichert
 
-Glide hält alle Listen, Ordner, Labels und Punkte in `liste_speicher.json` im Datenordner (Windows `%APPDATA%\Glide`, macOS `~/Library/Application Support/Glide`, Linux `~/.local/share/Glide`), dazu `settings.json` und `vorlagen.json`. Gespeichert wird sofort und atomar; eine Sperrdatei verhindert zwei schreibende Instanzen. Die Datei trägt eine Formatnummer (`version`, derzeit 26): Ältere Glide-Fassungen öffnen neuere Bestände nur schreibgeschützt, neuere Fassungen sichern einen älteren Bestand vor der Umstellung. **Ein Agent schreibt nie in diese Dateien**, auch nicht lesend-ändernd; dafür gibt es die Importwege.
+Glide hält alle Listen, Ordner, Labels und Punkte in `liste_speicher.json` im Datenordner (Windows `%APPDATA%\Glide`, macOS `~/Library/Application Support/Glide`, Linux `~/.local/share/Glide`), dazu `settings.json` und `vorlagen.json`. Gespeichert wird sofort und atomar; eine Sperrdatei verhindert zwei schreibende Instanzen. Die Datei trägt eine Formatnummer (`version`, derzeit 27; seit 27 mit stabilen Kapitelankern in Seiten, Kapitelverweisen `glide://list/<id>#<Anker>` und einem Navigationsort `nav_parent_id` an Listen, alle intern und nicht über den Austausch anlegbar): Ältere Glide-Fassungen öffnen neuere Bestände nur schreibgeschützt, neuere Fassungen sichern einen älteren Bestand vor der Umstellung. **Ein Agent schreibt nie in diese Dateien**, auch nicht lesend-ändernd; dafür gibt es die Importwege.
 
 ## Importwege und Ausgaben
 

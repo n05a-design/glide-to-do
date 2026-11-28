@@ -1,6 +1,6 @@
 # Glide Shell – Guide for AI agents in new projects
 
-Status as of 24.11.2026 · Glide 1.0.3 · Glide-System V1.87 · Glide Shell 0.6.2 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
+Status as of 28.11.2026 · Glide 1.0.3 · Glide-System V1.98 · Glide Shell 0.11.0 · [Deutsche Fassung](KI_ANLEITUNG_NEUE_PROJEKTE.md)
 
 This guide is for AI agents (Claude Code, Codex, Cursor, Gemini and others) that build a **new** Tk desktop application on the Glide Shell. It explains how Glide, the Glide-System and the Glide Shell fit together, how to start a project, the architecture rules, the design rules, the working processes and the checks. It lives in the `glide_shell` package and is copied with every adoption. A ready prompt for the first session, with an overview of what lives where, is in [`STARTPROMPT_KI.md`](STARTPROMPT_KI.md). The German version is authoritative; this is its controlled English translation.
 
@@ -15,7 +15,7 @@ Glide (the app)                 Glide-System (the inventory)          Glide Shel
 src/glide/app.pyw               src/glide/README.md                   src/glide/glide_shell/
 ListApp = controller            register: modules M…, features F…,    neutral Tk building blocks,
 domain modules (Tk-free)        packages, tests T…, version history   no Glide values
-data, views, texts              GLIDE_SYSTEM_VERSION (V1.87)          SHELL_VERSION (0.6.2)
+data, views, texts              GLIDE_SYSTEM_VERSION (V1.91)          SHELL_VERSION (0.8.0)
         │                                 │                                  ▲
         └──── uses ───────────────────────┼──────────── host → shell → Tk ───┘
                                           └─ documents both, versioned independently
@@ -30,6 +30,8 @@ Dependency direction without exception: **host → shell → Tk/standard library
 ---
 
 ## 2. Shell building blocks
+
+> **Shell first (D105/D106):** the shell is the foundation, not a parts library. General questions (button, dialog, window, colours, focus, start-up) are answered first by the [shell-first contract](DESIGN_RICHTLINIEN.md#5-shell-first-vertrag-d105-d106). For an **existing** application use [AI_MIGRATION_EXISTING_APPS.md](AI_MIGRATION_EXISTING_APPS.md). Since 0.7.0: `compat` (version checks), `conformance` (architecture check, `python -m glide_shell.conformance src/<app>`), `showcase` (gallery registry); Bento comes with `shell_uebernehmen.py --mit-bento`.
 
 | Module | Purpose | Main names | Host supplies |
 |---|---|---|---|
@@ -92,7 +94,7 @@ python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --age
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --agent-bootstrap --project-root <root> <project>/src/<app>  # explicit project root
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --commit <REV> <project>/src/<app>         # adopt from a specific Git commit
 python3 -B <glide>/01_Repository/Glide/scripts/pflege/shell_uebernehmen.py --pruefen <project>/src/<app>               # check only
-cd <project>/src/<app> && python3 -m glide_shell.selftest                                                              # exit code 0 = all 13/13 checks passed
+cd <project>/src/<app> && python3 -m glide_shell.selftest                                                              # exit code 0 = all 16/16 checks passed
 ```
 
 - The tool copies every `*.py` and `*.md` from `glide_shell/` (including `DESIGN_RICHTLINIEN.md` as an offline-accessible design contract) and writes `SHELL_MANIFEST.json` with package version, Glide-System version, source commit and SHA-256 per file.
@@ -315,7 +317,7 @@ Glide's design contract and the portable design contract for consumer projects a
 
 ```bash
 cd <project>/src/<app>
-python3 -m glide_shell.selftest          # 13/13 checks passed
+python3 -m glide_shell.selftest          # 16/16 checks passed
 python3 -O -m glide_shell.selftest       # must report the same
 python3 -m glide_shell.demo              # visual check of the usage pattern
 ```
@@ -358,7 +360,7 @@ Compatibility names containing `glide` (`_glide_after_scope`, `GlideCheckbutton`
 **Project start**
 
 - [ ] Layout from 3.1 created; `AGENTS.md` with working rules and completion criterion
-- [ ] Shell adopted, `SHELL_MANIFEST.json` present, self-test 13/13 (also with `-O`)
+- [ ] Shell adopted, `SHELL_MANIFEST.json` present, self-test 16/16 (also with `-O`)
 - [ ] Start through `AppHost` with `preflight`; imports without side effects
 - [ ] Data folder via `runtime_paths` and its own environment variable for tests
 - [ ] `de.json`/`en.json` catalogs with a parity test; developer messages in English

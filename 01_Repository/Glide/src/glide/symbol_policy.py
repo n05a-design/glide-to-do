@@ -24,6 +24,7 @@ TEXT_FALLBACKS = {
     "priority_medium": "2", "priority_high": "3", "checklist": "[x]",
     "sort_ascending": "Au", "sort_descending": "Ab", "print": "Dr", "overflow": "...",
     "remove": "x", "block_handle": "::",
+    "plus": "Neu", "favorite_on": "F+", "favorite_off": "F-",
     # Werkzeugspalte der Zeichnung (PIXEL-03, 27.11.2026).
     "tool_brush": "Pn", "tool_eraser": "Ra", "tool_fill": "Fu", "tool_eyedropper": "Pp",
     "tool_line": "Ln", "tool_rect": "Re", "tool_ellipse": "El", "tool_select": "Aw",

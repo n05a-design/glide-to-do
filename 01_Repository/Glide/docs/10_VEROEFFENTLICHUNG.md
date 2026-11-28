@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, MPL-2.0, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 

@@ -27,16 +27,8 @@ class EmptyStateTests(unittest.TestCase):
             for action_id in state.action_ids:
                 self.assertIn(action_id, empty_states.ACTIONS)
 
-    def test_u20_eingabezeile_ist_der_einzige_anlegeweg(self):
-        mit = empty_states.empty_state("list", entry_visible=True)
-        self.assertIsNone(mit.primary)
-        self.assertIsNone(mit.secondary)
-        self.assertNotIn("focus_entry", mit.action_ids)
-        ohne = empty_states.empty_state("list", entry_visible=False)
-        self.assertEqual(ohne.primary[0], "focus_entry")
-
     def test_filter_fuehrt_zu_zuruecksetzen_statt_anlegen(self):
-        for context, kwargs in (("list", {"filtered": True}), ("today", {"filtered": True}),
+        for context, kwargs in (("today", {"filtered": True}),
                                 ("pinboard", {"has_cards": True}), ("journal", {"filtered": True})):
             state = empty_states.empty_state(context, **kwargs)
             self.assertEqual(state.primary[0], "clear_filter", context)
@@ -55,11 +47,6 @@ class EmptyStateTests(unittest.TestCase):
     def test_hinweise_aus_kuerzen_nur_den_bedienhinweis(self):
         for context in empty_states.CONTEXTS:
             self.assertTrue(empty_states.empty_state(context, hints=False).description, context)
-        an = empty_states.empty_state("list", entry_visible=True)
-        aus = empty_states.empty_state("list", entry_visible=True, hints=False)
-        self.assertTrue(an.description.startswith(aus.description))
-        self.assertIn("Labels", an.description)
-        self.assertNotIn("Labels", aus.description)
         self.assertEqual(empty_states.empty_state("pages", hints=False).action_ids, ("new_page", "use_template"))
 
     def test_text_ist_titel_und_erklaerung(self):
@@ -68,7 +55,7 @@ class EmptyStateTests(unittest.TestCase):
 
     def test_knopftexte_hoechstens_24_zeichen_b11(self):
         import ui_design
-        varianten = [dict(), dict(filtered=True), dict(entry_visible=True), dict(has_tasks=False),
+        varianten = [dict(), dict(filtered=True), dict(has_tasks=False),
                      dict(has_cards=True), dict(date_range=True), dict(other_day=True)]
         for sprache in ("de", "en"):
             i18n.set_language(sprache)

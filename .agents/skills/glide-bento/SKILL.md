@@ -12,7 +12,9 @@ Dieser Skill dient als verbindlicher Einstieg für KI-Agenten bei jeder Arbeit a
 1. **Architekturkonzept:** `01_Repository/Glide/docs/GLIDE_BENTO_SYSTEM_KONZEPT.md` – Führendes Architekturkonzept, Ebenentrennung (Ebene A -> Ebene B -> Ebene C), Schichtenmodell, Unabhängigkeitsversprechen und Integrationsmuster.
 2. **Designvertrag:** `01_Repository/Glide/src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md` – Verbindliche visuelle und ergonomische Vorgaben für Bento-Komponenten (P1–P6, B11, B15, Maßskalen, Breakpoints 616/932 px).
 3. **Dokumentation:** `01_Repository/Glide/src/glide/glide_bento/README.de.md` (deutsch, führend) und `README.md` (englisch).
-4. **Entscheidungen:** D100 in `01_Repository/Glide/docs/ARBEITSRICHTUNG.md`.
+4. **Entscheidungen:** D100 und D106 (Shell-First) in `01_Repository/Glide/docs/ARBEITSRICHTUNG.md`.
+5. **Version und Shell:** `BENTO_VERSION` 0.4.0 verlangt `SHELL_MIN_VERSION` 0.11.0 (Prüfung beim Import über `glide_shell.compat`). Neue Komponenten bekommen einen Eintrag in `glide_bento/showcase.py` und einen Einsatzort in `src/glide/component_gallery.py`. Übernahme in Folgeprojekte nur mit `shell_uebernehmen.py --mit-bento`.
+6. **Visualisierungen (0.4.0):** `glide_bento.charts`, `glide_bento.data`, `glide_bento.marketing` und `glide_bento.gallery` explizit importieren; Datenvertrag und Farbregeln im [Bento-Designvertrag](../../../01_Repository/Glide/src/glide/glide_bento/BENTO_DESIGN_CONTRACT.md#visualisierungen-bento-040); Tests T378, T379, T353.
 
 ## Harte Architektur- und Importgrenzen (D100)
 

@@ -40,7 +40,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # ================================================================
         # Punkt 18: Checkliste (Aufgabenformat 16)
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 26
+        assert app.DATA_SCHEMA_VERSION == 27
         assert app.MAX_CHECKLIST_ENTRIES == 50 and app.MAX_CHECKLIST_TEXT == 200
         leer = app.new_item("Ohne Checkliste")
         assert leer["checklist"] == [], "Ein neuer Punkt trägt eine leere Checkliste."
@@ -83,7 +83,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         app.set_active_list(liste["id"])
         assert app.save_items()
         gespeichert = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert gespeichert["version"] == 26
+        assert gespeichert["version"] == 27
         assert app.validate_backup_schema(gespeichert) == set()
         kaputt = copy.deepcopy(gespeichert)
         kaputt["lists"][-1]["items"][1]["checklist"] = "keine Liste"

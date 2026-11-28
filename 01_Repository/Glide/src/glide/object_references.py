@@ -7,7 +7,10 @@ from urllib.parse import quote, unquote
 from content_search import search_key, match_spans
 import i18n as glide_i18n
 
-URI = re.compile(r'^glide://(list|item)/([^/?#]+)$')
+URI = re.compile(r'^glide://(list|item)/([^/?#]+)(?:#([0-9a-f]{32}))?$')
+# Kapitelverweis (Format 27): `glide://list/<id>#<Anker>`. Das Ziel bleibt die
+# Seite; der Anker ist eine Sprungmarke darin. Fehlt der Anker, öffnet Glide
+# die Seite und meldet das Kapitel als nicht mehr vorhanden.
 
 
 def parse(value):
@@ -24,7 +27,23 @@ def parse(value):
         return None
     if quote(identity, safe='').lower() != match.group(2).lower():
         return None
+    if match.group(3) and match.group(1) != 'list':
+        return None
     return match.group(1), identity
+
+
+def anchor(value):
+    """Kapitelanker eines gültigen Verweises oder None."""
+    if parse(value) is None:
+        return None
+    return URI.fullmatch(value).group(3)
+
+
+def chapter_uri(list_id, anchor_id):
+    value = uri('list', list_id) + '#' + str(anchor_id)
+    if anchor(value) != anchor_id:
+        raise ValueError(glide_i18n.t("mod.object_references.uri.invalid_reference_target", 'Ungültiges Verweisziel'))
+    return value
 
 
 def uri(kind, identity):
@@ -43,7 +62,8 @@ def normalize(values):
         raise ValueError('Ungültige oder zu viele lokale Verweise')
     if any(parse(value) is None for value in values):
         raise ValueError('Ungültiger lokaler Verweis')
-    return list(dict.fromkeys(uri(*parse(value)) for value in values))
+    return list(dict.fromkeys(uri(*parse(value)) + (f'#{anchor(value)}' if anchor(value) else '')
+                              for value in values))
 
 
 def walk(items):

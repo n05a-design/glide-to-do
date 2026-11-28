@@ -141,7 +141,10 @@ import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import view_positions as glide_view_positions  # noqa: E402
-import empty_prompts as glide_empty_states  # noqa: E402  (UX-05; WA-52 liegt in empty_states)
+import component_gallery as glide_component_gallery  # noqa: E402  (D105, Komponenten-Galerie)
+import chapters as glide_chapters  # noqa: E402  (PAGE-02, Kapitel)
+import glide_shell  # noqa: E402
+from glide_shell import showcase as glide_shell_showcase  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import brand as glide_brand  # noqa: E402
@@ -193,12 +196,46 @@ from save_result import SaveResult  # noqa: E402
 from persistence import PersistenceCoordinator, PersistencePlan  # noqa: E402
 import storage_health as glide_storage
 import session_guard as glide_session
+import input_drafts as glide_input_drafts  # noqa: E402
+import local_json_store as glide_local_store  # noqa: E402
+import attachment_integrity as glide_attachment_integrity  # noqa: E402
+import data_safety as glide_data_safety  # noqa: E402
+import ai_workspace as glide_ai  # noqa: E402  (Teil 06, KI-Arbeitsbereich)
+import ai_workspace_ui as glide_ai_ui  # noqa: E402
 import runtime_diagnostics as glide_diagnostics
 import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
 import empty_states as glide_empty  # noqa: E402
+from glide_shell.custom_controls import ActionHandle, DropIndicator, symbol_ink_offset  # noqa: E402
 import overdue_review as glide_overdue  # noqa: E402
+
+
+class _LazyModule:
+    """Modul erst beim ersten Zugriff laden (E05): hält Funktionen, die erst auf Aufruf
+    gebraucht werden, aus dem Kaltstart heraus (gemessen mit scripts/pflege/messung_ecosystem.py)."""
+
+    def __init__(self, name):
+        self._name, self._module = name, None
+
+    def __getattr__(self, attribute):
+        if self._module is None:
+            import importlib
+            self._module = importlib.import_module(self._name)
+        return getattr(self._module, attribute)
+
+
+glide_symbol_library = _LazyModule("symbol_library")  # Ecosystem E03
+glide_project_dashboard = _LazyModule("project_dashboard")  # Ecosystem E04
+glide_software_catalog = _LazyModule("glide_shell.software_catalog")
+glide_symbol_picker = _LazyModule("glide_shell.symbol_picker")
+glide_shell_symbols = _LazyModule("glide_shell.symbols")
+glide_resources = _LazyModule("glide_shell.resources")
+
+
+def SearchField(*args, **kwargs):  # noqa: N802 – Fabrik mit dem Namen der Shell-Klasse
+    from glide_shell.controls import SearchField as _SearchField
+    return _SearchField(*args, **kwargs)
 import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -1850,9 +1887,11 @@ class RoundedButton(DeferredDrawCanvas):
         if versatz:
             text_id = self._draw_label_runs(text_color, w, h, versatz)
         else:
+            optical_offset = getattr(self, "optical_offset", None)
+            dx, dy = optical_offset(self.display_text, self.font) if optical_offset else (0, 0)
             text_id = self.create_text(
-                14 if self.text_anchor == "w" else w / 2,
-                h / 2,
+                14 if self.text_anchor == "w" else w / 2 + dx,
+                h / 2 + dy,
                 text=self.display_text,
                 fill=text_color,
                 font=self.font,
@@ -7382,7 +7421,7 @@ class ItemWorkspace:
         menu = app._new_themed_popup_menu()
         bereiche = self.area_list()
         if not bereiche:
-            leer = glide_empty_states.menu_state("areas")
+            leer = glide_empty.menu_state("areas")
             menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.create_area)
         for area in bereiche:
             menu.add_command(label=area["name"], command=lambda value=area["id"]: self.jump_to_area(value))
@@ -9898,7 +9937,8 @@ class RichNoteEditor(tk.Frame):
             tag, start, end = span.get('tag'), span.get('start'), span.get('end')
             if not isinstance(tag, str):
                 raise ValueError('Ungültige Formatierung.')
-            if tag not in cls.FORMATS and tag not in links and tag not in images and not cls.ITEM_TAG.match(tag):
+            if (tag not in cls.FORMATS and tag not in links and tag not in images and not cls.ITEM_TAG.match(tag)
+                    and not glide_chapters.ANCHOR_TAG.match(tag)):
                 continue
             if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text):
                 raise ValueError('Formatierungsbereich liegt außerhalb des Notiztextes.')
@@ -10027,15 +10067,37 @@ class RichNoteEditor(tk.Frame):
     def offset(self, index):
         return len(self.text.get('1.0', index))
 
+    def anchor_tags(self):
+        return [str(t) for t in self.text.tag_names() if glide_chapters.ANCHOR_TAG.match(str(t))]
+
+    def stabilize_anchors(self, document):
+        """Kapitelanker vergeben und im Textfeld nachziehen, damit sie stabil bleiben (Format 27)."""
+        result, changed = glide_chapters.ensure_anchors(document)
+        if changed:
+            for tag in self.anchor_tags():
+                self.text.tag_delete(tag)
+            for span in result['spans']:
+                if glide_chapters.ANCHOR_TAG.match(span['tag']):
+                    self.text.tag_add(span['tag'], self.native_index(result['text'], span['start']),
+                                      self.native_index(result['text'], span['end']))
+        return result
+
+    def native_index(self, text, offset):
+        prefix = text[:offset]
+        line = prefix.count(chr(10)) + 1
+        tail = prefix.rsplit(chr(10), 1)[-1]
+        return f"{line}.{int(self.text.tk.call('string', 'length', tail))}"
+
     def document(self):
         spans = []
-        for tag in (*self.FORMATS, *self.links):
+        for tag in (*self.FORMATS, *self.links, *self.anchor_tags()):
             positions = self.text.tag_ranges(tag)
             for start, end in zip(positions[::2], positions[1::2]):
                 a, b = self.offset(start), self.offset(end)
                 if a < b:
                     spans.append({'tag': tag, 'start': a, 'end': b})
-        return self.normalize({'text': self.text.get('1.0', 'end-1c'), 'spans': spans, 'links': self.links})
+        return self.stabilize_anchors(
+            self.normalize({'text': self.text.get('1.0', 'end-1c'), 'spans': spans, 'links': self.links}))
 
     def load(self, document):
         value = self.normalize(document)
@@ -10043,7 +10105,7 @@ class RichNoteEditor(tk.Frame):
         try:
             self.text.delete('1.0', 'end')
             for tag in self.text.tag_names():
-                if str(tag).startswith(('link:', 'font:')):
+                if str(tag).startswith(('link:', 'font:', glide_chapters.ANCHOR_PREFIX)):
                     self.text.tag_delete(tag)
             self.links = value['links']
             self.text.insert('1.0', value['text'])
@@ -10199,7 +10261,7 @@ class RichNoteEditor(tk.Frame):
         self.text.mark_gravity('object_start', 'left')
         if value is None:
             value = self.app.themed_choice_dialog(glide_i18n.t("ui.insert_object_reference.local_reference", 'Lokaler Verweis'), glide_i18n.t("ui.insert_object_reference.select_a_page_list", 'Seite, Liste oder Aufgabe auswählen:'),
-                self.app.object_reference_choices(('list', getattr(self, 'entry_id', self.app.active_list_id))))
+                self.app.object_reference_choices(('list', getattr(self, 'entry_id', self.app.active_list_id)), chapters=True))
         if value is None:
             return 'break'
         key = glide_objects.parse(value)
@@ -10208,7 +10270,12 @@ class RichNoteEditor(tk.Frame):
             self.app.show_warning(glide_i18n.t("ui.insert_object_reference.reference", 'Verweis'), glide_i18n.t("ui.insert_object_reference.the_target_is_no", 'Das Ziel ist inzwischen nicht mehr verfügbar.'))
             return 'break'
         if self.text.compare('object_start', '==', 'object_end'):
-            self.text.insert('object_start', glide_objects.caption(key, index)[1])
+            beschriftung = glide_objects.caption(key, index)[1]
+            anker = glide_objects.anchor(value)
+            kapitel = glide_chapters.find_anchor(self.app.chapter_outline(index[key][1]), anker) if anker else None
+            if kapitel is not None:
+                beschriftung += ' › ' + kapitel.title
+            self.text.insert('object_start', beschriftung)
         tag = 'link:' + uuid.uuid4().hex
         self.links[tag] = value
         self.text.tag_configure(tag, foreground=self.app.theme['ui_accent'], underline=True)
@@ -10568,8 +10635,11 @@ class PageEditor(RichNoteEditor):
 
     def create_block_handle(self):
         theme = self.app.theme
-        griff = tk.Label(self.text, name='block_handle', text=self.app.ICONS['block_handle'], bg=theme['card'],
-                         fg=theme['muted'], font=app_font(12), cursor='hand2', bd=0, padx=3, pady=0, takefocus=0)
+        # Griffachse (Design Richtlinien): dieselbe Symbolschrift wie die Zeilengriffe.
+        griff = ActionHandle(self.text, name="block_handle", glyph=self.app.ICONS["block_handle"],
+                             background=theme["card"], foreground=theme["muted"],
+                             font=self.app.symbol_font("block_handle", 12),
+                             cursor="hand2", takefocus=False)
         griff._accessible_name = glide_i18n.t("ui.create_block_handle.block_actions", 'Blockaktionen')
         self.app.add_tooltip(griff, glide_i18n.t("ui.create_block_handle.move_block_right_click", 'Block verschieben · Rechtsklick: Blockaktionen · {accel}', accel=self.app.accel('/')))
         griff.bind('<Enter>', lambda _event: griff.configure(bg=self.app.theme['hover'], fg=self.app.theme['text']))
@@ -10704,7 +10774,36 @@ class PageEditor(RichNoteEditor):
         zeile = getattr(self, '_block_handle_line', None)
         if zeile is None or not self.focus_block_line(zeile):
             return 'break'
+        kapitel = self.chapter_at_line(zeile)
+        if kapitel is not None:
+            return self.show_chapter_handle_menu(kapitel)
         return self.show_block_actions(anchor_widget=self._block_handle)
+
+    def chapter_at_line(self, zeile):
+        """Kapitel, dessen Überschrift auf dieser Zeile steht (Seiten mit Eintrag), sonst None."""
+        page_id = getattr(self, 'entry_id', None)
+        if page_id is None or self.app.page_entry(page_id) is None:
+            return None
+        try:
+            return next((k for k in glide_chapters.outline(self.document()) if k.line == zeile), None)
+        except ValueError:
+            return None
+
+    def show_chapter_handle_menu(self, kapitel):
+        """Griff an einer Kapitelzeile (Teil 05B): Kapitelaktionen, darunter die Blockaktionen."""
+        menu = self.app.build_chapter_menu(self.text, self.entry_id, kapitel.key)
+        if menu is None:
+            return self.show_block_actions(anchor_widget=self._block_handle)
+        menu.add_separator()
+        menu.add_command(label=glide_i18n.t("ui.chapter_handle.block_actions", "Blockaktionen …"),
+                         command=lambda: self.show_block_actions(anchor_widget=self._block_handle))
+        self._chapter_handle_menu = menu
+        griff = self._block_handle
+        try:
+            menu.tk_popup(griff.winfo_rootx(), griff.winfo_rooty() + griff.winfo_height())
+        finally:
+            menu.grab_release()
+        return 'break'
 
     def block_drag_start(self, event):
         self.cancel_block_drag()
@@ -11497,7 +11596,7 @@ class PageEditor(RichNoteEditor):
     # --- Dokument ---------------------------------------------------------
     def document(self):
         spans = []
-        tags = (*self.FORMATS, *self.links, *self.images,
+        tags = (*self.FORMATS, *self.links, *self.images, *self.anchor_tags(),
                 *(t for t in self.text.tag_names() if glide_task_refs.task_id(str(t))))
         laenge = len(self.text.get('1.0', 'end-1c'))
         for tag in tags:
@@ -11506,8 +11605,9 @@ class PageEditor(RichNoteEditor):
                 a, b = self.offset(start), min(self.offset(end), laenge)
                 if a < b:
                     spans.append({'tag': str(tag), 'start': a, 'end': b})
-        return self.normalize({'text': self.text.get('1.0', 'end-1c'), 'spans': spans, 'links': self.links,
-                               'images': self.images})
+        return self.stabilize_anchors(
+            self.normalize({'text': self.text.get('1.0', 'end-1c'), 'spans': spans, 'links': self.links,
+                            'images': self.images}))
 
     def load(self, document):
         wert = self.normalize(document)
@@ -12174,6 +12274,27 @@ class PageEditor(RichNoteEditor):
             kurz = text if len(text) <= 48 else text[:47] + '…'
             gliederung.add_command(label='   ' * (stufe - 1) + kurz, command=lambda i=index: self.jump_to(i))
         menu.add_cascade(label=glide_i18n.t("ui.add_outline_menu.outline", 'Gliederung'), menu=gliederung, state='normal' if eintraege else 'disabled')
+        if self.app.is_page_list(self.app.page_entry(self.entry_id)):
+            self.flush()
+            kapitel = glide_chapters.current(glide_chapters.outline(self.document()), self.offset('insert'))
+            menu.add_command(label=glide_i18n.t("chapter.new", 'Neues Kapitel'), command=self.insert_chapter,
+                             state='disabled' if getattr(self.app, '_data_read_only', False) else 'normal')
+            if kapitel is not None:
+                menu.add_cascade(label=glide_i18n.t("chapter.current", 'Aktuelles Kapitel: {title}', title=kapitel.title[:40]),
+                                 menu=self.app.build_chapter_menu(menu, self.entry_id, kapitel.key))
+
+    def insert_chapter(self):
+        """Neue Überschrift 2 unter der aktuellen Zeile; der Platzhalter ist markiert und wird überschrieben."""
+        titel = glide_i18n.t("chapter.placeholder", 'Neues Kapitel')
+        self.text.mark_set('insert', 'insert lineend')
+        self.text.insert('insert', '\n' + titel)
+        self.set_block('h2')
+        zeile = self.text.index('insert').split('.')[0]
+        self.text.tag_remove('sel', '1.0', 'end')
+        self.text.tag_add('sel', f'{zeile}.0', f'{zeile}.0 lineend')
+        self.text.mark_set('insert', f'{zeile}.0 lineend')
+        self.text.focus_set()
+        self.flush()
 
     def show_heading_menu(self):
         menu = self.app._new_themed_popup_menu(self)
@@ -12649,6 +12770,32 @@ class PageEditor(RichNoteEditor):
                 accel=self.app.accel('V')))
         return 'break'
 
+    def duplicate_block(self):
+        """PAGE-03 (Teil 03): den ganzen Block unter sich verdoppeln, ohne die Zwischenablage zu berühren.
+
+        Derselbe Weg wie Kopieren und Einfügen (`block_markdown` → `insert_markdown`):
+        Blockart und Inlineformate bleiben, Links und Aufgaben bekommen neue
+        Identitäten – eine verdoppelte Aufgabe ist eine neue Aufgabe.
+        """
+        self.hide_format_bar()
+        if not self._line_is_movable():
+            return 'break'
+        start, end = self.block_bounds()
+        if not self.text.get(start, end).strip():
+            return 'break'
+
+        def zustand(item_id):
+            found = self.app.find_item_in_lists(item_id)
+            return (found[0].get('text'), found[0].get('done')) if found else None
+
+        markdown = glide_page_markdown.block_markdown(self.document(), self.offset(start), self.offset(end), zustand)
+        if self.text.compare(f'{end} +1c', '<', 'end'):
+            self.text.mark_set('insert', f'{end} +1c')
+        else:
+            self.text.insert(end, '\n')
+            self.text.mark_set('insert', 'end-1c')
+        return self.insert_markdown(markdown)
+
     def delete_line(self):
         self.hide_format_bar()
         if not self._line_is_movable():
@@ -12776,6 +12923,8 @@ class PageEditor(RichNoteEditor):
                          command=self.copy_block, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.cut_block", "Block ausschneiden"),
                          command=lambda: self.copy_block(cut=True), state=beweglich)
+        menu.add_command(label=glide_i18n.t("editor.menu.duplicate_block", "Block duplizieren"),
+                         command=self.duplicate_block, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.duplicate_line", "Zeile duplizieren"),
                          command=self.duplicate_line, state=beweglich)
         menu.add_command(label=glide_i18n.t("editor.menu.delete_line", "Zeile löschen"),
@@ -13931,7 +14080,7 @@ class GalleryView(tk.Frame):
         breite = max(1, canvas.winfo_width())
         if not bilder:
             # UX-05: Der Leertext ist selbst „Bilder hinzufügen …“ – derselbe Weg wie der Knopf.
-            leer = glide_empty_states.OVERVIEWS["gallery_images"]
+            leer = glide_empty.OVERVIEWS["gallery_images"]
             canvas.create_text(24, 24, anchor="nw", width=max(200, breite - 48), font=app_font(12, "bold"),
                                fill=theme.get("ui_accent", theme["accent"]), tags=("empty_action",),
                                text=glide_i18n.t(leer.key, leer.fallback))
@@ -17506,7 +17655,12 @@ class ListApp:
     # (`notion_source` an Listen, `notion_source_key` an Ordnern).
     # Format 26 (FP-02/1 im Prüfkandidaten) schützt erweiterte Serienregeln
     # vor älteren Lesern; die sechs bisherigen Arten bleiben unverändert.
-    DATA_SCHEMA_VERSION = 26
+    # Format 27 (Master-Serie Teil 05, Inhaberfreigabe 27.11.2026): stabile
+    # Kapitelanker (`anchor:<hex>`-Bereiche in `rich_note`), Kapitelverweise
+    # (`glide://list/<id>#<Anker>`) und der Navigationsort `nav_parent_id` an
+    # Listen. Ältere Fassungen würden Anker und Ort beim Speichern verwerfen;
+    # die höhere Zahl lässt sie den Bestand nur lesend öffnen.
+    DATA_SCHEMA_VERSION = 27
     # Zentrale Typregistrierung der Listenarten. Eine Art ist nach der Anlage
     # unveränderlich. Unbekannte Arten eines Format-19-Bestands werden sichtbar
     # abgelehnt statt still zu Aufgabenlisten umgedeutet.
@@ -18083,6 +18237,9 @@ class ListApp:
         # Blockgriff der Seiten (E-U3 A, D55): acht Punkte als Griff, wie das
         # eingeführte Ziehzeichen; hier öffnet er nur die Blockaktionen.
         "block_handle": "⠿",
+        "plus": "+",
+        "favorite_on": "★",
+        "favorite_off": "☆",
         # Werkzeugspalte der Zeichnung (PIXEL-03, Inhaberentscheidung 27.11.2026).
         # Eindeutig gegenüber den übrigen Symbolen; fehlende Zeichen der UI-Schrift
         # kommen aus dem Symbolbegleiter DejaVu Sans (D59).
@@ -20419,9 +20576,16 @@ class ListApp:
             return None
         if state.kind != glide_lock.VALID:
             return {"defective": True, "kind": state.kind, "detail": state.detail}
+        jetzt = datetime.now().astimezone()
+        if glide_lock.stale_foreign(state.record, host=glide_lock.host_name(), now=jetzt,
+                                    max_age_seconds=self.LOCK_MAX_AGE_HOURS * 3600):
+            # Teil 05B: nicht still übernehmen; schreibgeschützt und nachfragen.
+            return {"defective": True, "stale": True, "kind": "stale_foreign",
+                    "host": state.record.get("host"), "token": state.record.get("token"),
+                    "updated": state.record.get("refreshed_at") or state.record.get("started_at"),
+                    "detail": ""}
         verdict = glide_lock.classify(state.record, host=glide_lock.host_name(), pid=os.getpid(),
-                                      now=datetime.now().astimezone(),
-                                      max_age_seconds=self.LOCK_MAX_AGE_HOURS * 3600)
+                                      now=jetzt, max_age_seconds=self.LOCK_MAX_AGE_HOURS * 3600)
         return state.record if verdict == glide_lock.FOREIGN else None
 
     def mark_lock_read_only(self, info, reason=None):
@@ -20507,7 +20671,11 @@ class ListApp:
             # Auch eine lange offene Bestätigung darf keinen neuen Besitzer
             # verdrängen. Der OS-Schutz bleibt nach Erfolg bis zum Ende offen.
             state = glide_lock.read(LOCK_FILE)
-            if state.kind == glide_lock.VALID:
+            gezeigt = getattr(self, "lock_info", None) or {}
+            noch_veraltet = (state.kind == glide_lock.VALID and gezeigt.get("stale")
+                             and state.record.get("token") == gezeigt.get("token")
+                             and (self.foreign_lock_info(state) or {}).get("stale"))
+            if state.kind == glide_lock.VALID and not noch_veraltet:
                 self.mark_lock_read_only(state.record, reason="lock")
                 self.show_error(glide_i18n.t("ui.take_over_data_lock.take_over_data_lock", "Datensperre übernehmen"), glide_lock.takeover_failed(
                     glide_i18n.t("ui.take_over_data_lock.the_lock_has_since", "Die Sperre wurde inzwischen von einer anderen Instanz erneuert.")))
@@ -20556,7 +20724,13 @@ class ListApp:
         if not info or not self.root.winfo_exists():
             return
         if info.get("defective"):
-            if self.ask_yes_no(glide_i18n.t("ui.show_data_lock_warning.data_lock_damaged", "Datensperre beschädigt"), glide_lock.defective_question(info.get("detail"))) \
+            if info.get("stale"):
+                titel = glide_i18n.t("ui.show_data_lock_warning.stale_title", "Datensperre veraltet")
+                frage = glide_lock.stale_question(info.get("host") or "?", info.get("updated") or "?")
+            else:
+                titel = glide_i18n.t("ui.show_data_lock_warning.data_lock_damaged", "Datensperre beschädigt")
+                frage = glide_lock.defective_question(info.get("detail"))
+            if self.ask_yes_no(titel, frage) \
                     and self.take_over_data_lock():
                 if getattr(self, '_data_read_only', False):
                     self.show_warning(glide_i18n.t("ui.show_data_lock_warning.data_lock_taken_over", "Datensperre übernommen"), self.read_only_notice())
@@ -21033,6 +21207,577 @@ class ListApp:
         self.refresh_storage_sizes()
         return bool(data_saved and settings_saved and templates_saved and not self.storage_health().failures)
 
+    # --- DS-10 (Teil 05B): Daten und Sicherheit --------------------------------
+    def data_status_file(self):
+        datei = getattr(self, "_data_status_file", None)
+        if datei is None or datei.save_file != str(SAVE_FILE):
+            datei = self._data_status_file = glide_data_safety.StatusFile(
+                os.path.join(BASE_DIR, glide_data_safety.FILE_NAME), SAVE_FILE)
+        return datei
+
+    def data_safety_snapshot(self):
+        """Schnelle Kennzahlen; liest nur Metadaten, prüft keine Inhalte."""
+        return glide_data_safety.snapshot(
+            base_dir=BASE_DIR, save_file=SAVE_FILE, backup_dir=BACKUP_DIR, attachments_dir=ATTACHMENTS_DIR,
+            schema_version=self.DATA_SCHEMA_VERSION, dirty=getattr(self, "dirty", False),
+            read_only_reason=getattr(self, "_read_only_reason", None) if getattr(self, "_data_read_only", False) else None,
+            lock_held=bool(getattr(self, "_lock_token", None)))
+
+    def attachment_references(self):
+        """(Besitzer, Anhang) für alle Anhänge einschließlich Papierkorb – als Kopie."""
+        ergebnis = []
+        for besitzer in self.attachment_owners(self.lists, self.trash, self.folders):
+            name = str(besitzer.get("title") or besitzer.get("text") or besitzer.get("id") or "")[:60]
+            for anhang in besitzer.get("attachments", []) or []:
+                ergebnis.append((name, dict(anhang) if isinstance(anhang, dict) else anhang))
+        return ergebnis
+
+    def run_data_integrity_check(self, on_done=None, background=True):
+        """Datenintegrität prüfen: Schema auf dem Hauptthread, Anhangsdateien im Hintergrund.
+
+        Das Ergebnis wird mit Zeitstempel gemerkt und in der Übersicht gezeigt.
+        Die Prüfung ändert nichts und löscht nie eine Datei.
+        """
+        try:
+            self.sync_current_list_reference()
+            self.validate_backup_schema(copy.deepcopy(self.data_payload()))
+            schema = {"ok": True, "detail": ""}
+        except Exception as exc:
+            schema = {"ok": False, "detail": str(exc)[:300]}
+        referenzen = self.attachment_references()
+        ordner, pruefe = BASE_DIR, self.validate_attachment_storage
+        ergebnis = {}
+
+        def arbeit():
+            ergebnis["report"] = glide_attachment_integrity.check(referenzen, ordner, pruefe)
+
+        def fertig():
+            bericht = ergebnis["report"].as_dict()
+            wert = {"ok": bericht["ok"] and schema["ok"], "schema_ok": schema["ok"], "schema_detail": schema["detail"],
+                    "missing": len(bericht["missing"]), "invalid": len(bericht["invalid"]), "empty": len(bericht["empty"]),
+                    "unreferenced": len(bericht["unreferenced"]), "shared": len(bericht["shared"]),
+                    "references": bericht["references"],
+                    "missing_list": [m["storage"] for m in bericht["missing"]][:50]}
+            try:
+                self.data_status_file().record("integrity", wert)
+            except OSError:
+                pass
+            self._last_integrity_report = bericht
+            if on_done is not None:
+                on_done(wert)
+
+        if not background:
+            arbeit()
+            fertig()
+            return ergebnis["report"]
+        faden = threading.Thread(target=arbeit, name="glide-integritaet", daemon=True)
+        faden.start()
+
+        def warten():
+            if faden.is_alive():
+                self.after_scope().after(80, warten)
+            else:
+                fertig()
+        self.after_scope().after(80, warten)
+        return None
+
+    def verify_backup_file(self, path=None):
+        """Sicherung prüfen: Archivregeln, Schema, Anhangsdateien – ohne Bestand zu ändern.
+
+        Das ist eine Prüfung der Datei, keine Wiederherstellung; die Übersicht
+        nennt es so.
+        """
+        path = path or filedialog.askopenfilename(
+            title=glide_i18n.t("ui.data_safety.verify_title", "Sicherung prüfen"),
+            initialdir=BACKUP_DIR if os.path.isdir(BACKUP_DIR) else None,
+            filetypes=[("Glide-Sicherung", "*.glideapp *.glidebackup"), (glide_i18n.t("drawing.filetype.all", "Alle Dateien"), "*.*")])
+        if not path:
+            return None
+        try:
+            daten, _section = self.read_app_backup_file(path)
+            self.validate_backup_schema(daten, portable=True)
+            ok, detail = True, glide_i18n.t("ui.data_safety.verify_ok", "{lists} Listen, {folders} Ordner; Archiv und Datenformat in Ordnung.",
+                                            lists=len(daten.get("lists", [])), folders=len(daten.get("folders", [])))
+        except Exception as exc:
+            ok, detail = False, str(exc)[:300]
+        try:
+            self.data_status_file().record("backup_check", {"ok": ok, "detail": detail, "file": os.path.basename(path)})
+        except OSError:
+            pass
+        return ok, detail
+
+    # --- Teil 06: KI-Arbeitsbereich (Prompts, Kontexte, Dokumente) ----------------
+    # Ein Prompt ist eine Seite; strukturierte Daten in `ai_workspace.json` (eigenes
+    # Format, kein Aufgabenformatwechsel). Dokumente sind verwaltete Kopien unter
+    # `attachments/`. Siehe Datenvertrag „KI-Arbeitsbereich“.
+    def ai_data_dir(self):
+        return BASE_DIR
+
+    def ai_data_path(self, storage):
+        return os.path.join(BASE_DIR, *str(storage).split("/"))
+
+    def ai_workspace(self):
+        ws = getattr(self, "_ai_workspace", None)
+        if ws is None or getattr(self, "_ai_workspace_file", None) != str(SAVE_FILE):
+            ws, zustand = glide_ai.load(os.path.join(BASE_DIR, glide_ai.FILE_NAME))
+            self._ai_workspace, self._ai_workspace_state = ws, zustand
+            self._ai_workspace_file = str(SAVE_FILE)
+            glide_ai_ui.install(app_font=app_font, ButtonFlow=ButtonFlow, modal=glide_modal_session,
+                                GlideCheckbutton=GlideCheckbutton)
+            if zustand.problem:
+                # E01: Primärdaten nie still durch eine leere Datei ersetzen.
+                grund = (glide_i18n.t("ai.app.newer_file", "Die Datei stammt aus einer neueren Glide-Fassung.") if zustand.problem == "newer"
+                         else glide_i18n.t("ai.app.unreadable_file", "Die Datei ist unlesbar: {detail}", detail=zustand.problem[:200]))
+                self.show_warning(glide_i18n.t("ai.app.protected_title", "KI-Arbeitsbereich schreibgeschützt"),
+                                  glide_i18n.t("ai.app.protected_text", "{reason}\n\nGlide ändert ai_workspace.json nicht und speichert keine Änderungen am KI-Arbeitsbereich. Die Datei bleibt unverändert im Datenordner; eine frühere Fassung liegt in der vollständigen Sicherung.",
+                                               reason=grund))
+            try:
+                bekannt = set(ws.document_storages()) | {a.get("storage") for o in self.attachment_owners(self.lists, self.trash, self.folders)
+                                                         for a in (o.get("attachments") or []) if isinstance(a, dict)}
+                self._ai_recovery_findings = glide_ai.Journal(os.path.join(BASE_DIR, glide_ai.JOURNAL_NAME)).recover(BASE_DIR, bekannt) \
+                    if not getattr(self, "_data_read_only", False) else []
+            except OSError:
+                self._ai_recovery_findings = []
+        return ws
+
+    def save_ai_workspace(self):
+        """Speichert den KI-Arbeitsbereich; nie im Schreibschutz, nie ohne Datensperre."""
+        zustand = getattr(self, "_ai_workspace_state", None)
+        if getattr(self, "_data_read_only", False) or (zustand is not None and not zustand.writable):
+            self.show_undo_toast(glide_i18n.t("ai.app.read_only", "Schreibgeschützt – KI-Arbeitsbereich nicht gespeichert"))
+            return False
+        if self.refresh_data_lock() is False:
+            return False
+        try:
+            glide_ai.save(os.path.join(BASE_DIR, glide_ai.FILE_NAME), self.ai_workspace())
+        except OSError as exc:
+            self.storage_failure("data", str(exc))
+            return False
+        return True
+
+    def ai_consistency(self):
+        """Bezüge Begleitdatei ↔ Seiten (E01); nur lesen, nichts entfernen."""
+        papierkorb = set()
+        for eintrag in self.trash:
+            for schluessel in ("list",):
+                liste = eintrag.get(schluessel)
+                if isinstance(liste, dict) and liste.get("id"):
+                    papierkorb.add(liste["id"])
+            for liste in ((eintrag.get("folder") or {}).get("lists") or []):
+                if isinstance(liste, dict) and liste.get("id"):
+                    papierkorb.add(liste["id"])
+        return glide_ai.consistency(self.ai_workspace(), [e["id"] for e in self.lists], papierkorb)
+
+    def ai_parse_reference(self, value):
+        return glide_objects.parse(value)
+
+    def ai_label_names(self, entry):
+        namen = {l.get("id"): l.get("name", "") for l in self.labels}
+        return " ".join(namen.get(i, "") for i in (entry.get("labels") or []))
+
+    def ai_set_page_body(self, list_id, body):
+        entry = self.page_entry(list_id)
+        if entry is None:
+            return False
+        with self.sidebar_change(refresh_tree=False) as change:
+            entry["rich_note"] = glide_chapters.ensure_anchors(RichNoteEditor.normalize({"text": body, "spans": [], "links": {}}))[0]
+            change.mark()
+        self.clear_render_cache()
+        if self.active_list_id == list_id:
+            self.refresh_tree()
+        return change.saved
+
+    def ai_create_prompt(self, title=None, body="", fields=None, custom=None, folder_id=None, open_editor=False,
+                         template=None, mode=None, source=None):
+        """Neuer Prompt als Seite plus strukturierter Datensatz; ein Rückgängig-Schritt für die Seite."""
+        if getattr(self, "_data_read_only", False):
+            self.show_warning(glide_i18n.t("ai.app.prompt", "Prompt"), self.read_only_notice())
+            return None
+        entry = self.new_list_object(title or glide_i18n.t("ai.app.new_prompt", "Neuer Prompt"), [], folder_id=folder_id,
+                                     list_kind=self.LIST_KIND_PAGE, rich_note={"text": body or "", "spans": [], "links": {}})
+        with self.sidebar_change(refresh_tree=True) as change:
+            self.lists.append(entry)
+            change.mark()
+        if not change.saved:
+            return None
+        ws = self.ai_workspace()
+        p = ws.prompt(entry["id"])
+        if fields:
+            p["fields"] = glide_ai.Workspace({"prompts": {"x": {"fields": fields}}}).prompts["x"]["fields"]
+        if custom:
+            p["custom"] = glide_ai.Workspace({"prompts": {"x": {"custom": custom}}}).prompts["x"]["custom"]
+        if mode in ("simple", "advanced"):
+            p["mode"] = mode
+        p["template"] = template
+        if source:
+            ws.relate(source[0], source[1], entry["id"])
+        self.save_ai_workspace()
+        if open_editor:
+            glide_ai_ui.PromptEditor(self, entry["id"])
+        return entry["id"]
+
+    def ai_create_from_template(self, key=None):
+        ws = self.ai_workspace()
+        auswahl = [(f"builtin:{k}", glide_i18n.t(f"ai.template.{k}", name)) for k, (name, _d) in glide_ai.BUILTIN_TEMPLATES.items()]
+        auswahl += [(f"glide:{t['id']}", t.get("name", "")) for t in getattr(self, "templates", []) if t.get("id") in ws.prompt_templates]
+        key = key or self.themed_choice_dialog(glide_i18n.t("ai.app.from_template", "Prompt aus Vorlage"),
+                                               glide_i18n.t("ai.app.pick_template", "Vorlage:"), auswahl)
+        if not key:
+            return None
+        art, _, kennung = key.partition(":")
+        if art == "builtin":
+            name, daten = glide_ai.BUILTIN_TEMPLATES[kennung]
+            return self.ai_create_prompt(title=glide_i18n.t(f"ai.template.{kennung}", name), fields=daten["fields"],
+                                         mode=daten["mode"], template=key, open_editor=True)
+        vorlage = next(t for t in self.templates if t.get("id") == kennung)
+        daten = ws.prompt_templates[kennung]
+        return self.ai_create_prompt(title=vorlage.get("name"), fields=daten["fields"], custom=daten["custom"],
+                                     mode=daten["mode"], template=key, open_editor=True)
+
+    def ai_save_as_template(self, list_id):
+        """Prompt als Glide-Vorlage (vorhandene Vorlagenarchitektur) plus seine strukturierten Felder."""
+        vorlage = self.capture_template(list_id=list_id)
+        if not vorlage:
+            return None
+        self.templates.append(vorlage)
+        self.save_templates()
+        p = self.ai_workspace().prompt(list_id)
+        self.ai_workspace().prompt_templates[vorlage["id"]] = {"fields": dict(p["fields"]), "custom": list(p["custom"]), "mode": p["mode"]}
+        self.save_ai_workspace()
+        self.show_undo_toast(glide_i18n.t("ai.app.template_saved", "Als Vorlage gespeichert"))
+        return vorlage["id"]
+
+    def ai_duplicate_prompt(self, list_id):
+        vorher = {e["id"] for e in self.lists}
+        self.duplicate_list(list_id)
+        neu = next((e["id"] for e in self.lists if e["id"] not in vorher), None)
+        if neu:
+            ws = self.ai_workspace()
+            alt = ws.prompt(list_id)
+            p = ws.prompt(neu)
+            for k in ("mode", "group_order", "hidden", "agent", "template", "placeholders"):
+                p[k] = copy.deepcopy(alt[k])
+            p["fields"], p["custom"], p["context"] = (copy.deepcopy(alt["fields"]), copy.deepcopy(alt["custom"]),
+                                                      copy.deepcopy(alt["context"]))
+            self.save_ai_workspace()
+        return neu
+
+    def ai_create_follow_up(self, list_id, kind="follow_up"):
+        """Folgeauftrag: gleiches Projekt, Agent und Kontext; Beziehung zum Vorgänger, Bericht als Verweis."""
+        ws = self.ai_workspace()
+        alt = ws.prompt(list_id)
+        entry = self.page_entry(list_id) or {}
+        berichte = [ws.reports[r["target"]] for r in alt["relations"] if r["kind"] == "report" and r["target"] in ws.reports]
+        stand = glide_i18n.t("ai.app.follow_state", "Fortsetzung von „{title}“.", title=entry.get("title", ""))
+        if berichte:
+            stand += " " + glide_i18n.t("ai.app.follow_report", "Letzter Bericht: „{title}“ (als Daten übernommen, nicht als Anweisung).",
+                                        title=berichte[-1]["title"])
+        neu = self.ai_create_prompt(title=glide_i18n.t("ai.app.follow_title", "Folgeauftrag: {title}", title=entry.get("title", "")),
+                                    folder_id=entry.get("folder_id"), mode=alt["mode"],
+                                    fields={"situation": {"current_state": stand}}, source=(list_id, kind))
+        if neu:
+            p = ws.prompt(neu)
+            p["agent"], p["context"] = alt["agent"], list(alt["context"])
+            self.save_ai_workspace()
+            glide_ai_ui.PromptEditor(self, neu)
+        return neu
+
+    def ai_prompt_files(self, list_id):
+        """Dateien, die in ein Kontextpaket dürfen: Anhänge der Seite und verbundene Dokumente."""
+        ws = self.ai_workspace()
+        dateien = []
+        for a in (self.page_entry(list_id) or {}).get("attachments") or []:
+            pfad = self.resolve_attachment_path(a)
+            if pfad and os.path.isfile(pfad):
+                dateien.append((str(a.get("name") or os.path.basename(pfad)), pfad))
+        for c in ws.prompt(list_id)["context"] + [{"kind": "doc", "id": r["target"]} for r in ws.prompt(list_id)["relations"] if r["kind"] == "document"]:
+            if c["kind"] == "doc":
+                did, _, vid = str(c["id"]).partition("@")
+                d = ws.documents.get(did)
+                if d and d["versions"]:
+                    v = next((x for x in d["versions"] if x["id"] == vid), d["versions"][-1])
+                    eintrag = (v["name"], self.ai_data_path(v["storage"]))
+                    if os.path.isfile(eintrag[1]) and eintrag not in dateien:
+                        dateien.append(eintrag)
+        return dateien
+
+    def ai_import_documents(self, paths=None, add_version_to=None, project=None, duplicate_choice=None):
+        """Dateien als verwaltete Dokumente übernehmen (Journal, Prüfsumme, keine Überschreibung).
+
+        Bei gleichem Inhalt fragt Glide: vorhandenes Dokument verwenden, neues
+        Dokument mit eigener Datei anlegen oder überspringen. Gleiche Namen
+        sind keine Duplikate.
+        """
+        if getattr(self, "_data_read_only", False):
+            self.show_warning(glide_i18n.t("ai.app.documents", "Dokumente"), self.read_only_notice())
+            return []
+        paths = paths or filedialog.askopenfilenames(title=glide_i18n.t("ai.app.import_title", "Dokumente importieren"))
+        if not paths:
+            return []
+        ws = self.ai_workspace()
+        journal = glide_ai.Journal(os.path.join(BASE_DIR, glide_ai.JOURNAL_NAME))
+        ergebnis = []
+        for pfad in paths:
+            if not os.path.isfile(pfad):
+                continue
+            treffer = ws.find_by_sha(glide_ai.sha256_file(pfad))
+            if treffer and add_version_to is None:
+                wahl = duplicate_choice or self.themed_choice_dialog(
+                    glide_i18n.t("ai.app.duplicate", "Gleicher Inhalt bereits vorhanden"),
+                    glide_i18n.t("ai.app.duplicate_q", "„{name}“ hat denselben Inhalt wie „{other}“.", name=os.path.basename(pfad),
+                                 other=ws.documents[treffer[0][0]]["title"]),
+                    [("use", glide_i18n.t("ai.app.dup_use", "Vorhandenes Dokument verwenden")),
+                     ("new", glide_i18n.t("ai.app.dup_new", "Eigenständiges Dokument anlegen")),
+                     ("skip", glide_i18n.t("ai.app.dup_skip", "Überspringen"))])
+                if wahl == "use":
+                    ergebnis.append(treffer[0][0])
+                    continue
+                if wahl != "new":
+                    continue
+            try:
+                version = glide_ai.store_document_file(pfad, BASE_DIR, journal)
+            except OSError as exc:
+                self.show_error(glide_i18n.t("ai.app.import_title", "Dokumente importieren"), f"{os.path.basename(pfad)}: {exc}")
+                continue
+            if add_version_to:
+                ws.add_document_version(add_version_to, version)
+                did = add_version_to
+            else:
+                did = ws.add_document(os.path.splitext(os.path.basename(pfad))[0], version, project=project)
+            if self.save_ai_workspace():
+                journal.finish(version["id"])
+                ergebnis.append(did)
+            else:
+                # Datensatz nicht gespeichert: die Datei bleibt (Journal meldet sie beim nächsten Start).
+                ws.documents.get(did, {}).get("versions", []).remove(version) if add_version_to else ws.documents.pop(did, None)
+        return ergebnis
+
+    def ai_restore_from_backup(self, path=None, documents=True, prompts=True):
+        """Selektiv aus einer App-Sicherung: Dokumente (mit Dateien) und Prompt-Daten.
+
+        Keine stille Überschreibung: Ein vorhandenes Dokument wird als Kopie mit
+        neuer Kennung übernommen; ein vorhandener Prompt-Datensatz bleibt und
+        wird gemeldet. Prompt-Daten werden nur für vorhandene Seiten übernommen
+        (die Seite selbst über „Einzelne Seite wiederherstellen …“).
+        """
+        path = path or filedialog.askopenfilename(filetypes=[("Glide-App-Sicherung", "*" + self.APP_BACKUP_EXTENSION)])
+        if not path:
+            return None
+        try:
+            daten, section = self.read_app_backup_file(path)
+        except Exception as exc:  # ungültige oder fremde Datei: melden statt als Rückruffehler durchschlagen
+            self.show_error(glide_i18n.t("ui.restore_app_backup.error_while_reading", "Fehler beim Lesen"), str(exc))
+            return None
+        quelle = glide_ai.Workspace((section or {}).get("ai_workspace"))
+        ws = self.ai_workspace()
+        bericht = {"documents": 0, "copies": 0, "prompts": 0, "skipped": 0}
+        with zipfile.ZipFile(path) as archiv:
+            namen = set(archiv.namelist())
+            if documents:
+                for did, doc in quelle.documents.items():
+                    neue_id = did if did not in ws.documents else glide_ai.new_id()
+                    versionen = []
+                    for v in doc["versions"]:
+                        if v["storage"] not in namen:
+                            continue
+                        ziel = v["storage"]
+                        if os.path.exists(self.ai_data_path(ziel)):
+                            if glide_ai.sha256_file(self.ai_data_path(ziel)) != v["sha256"]:
+                                ziel = f"attachments/{glide_ai.new_id()}_{glide_ai.safe_name(v['name'])}"
+                        if not os.path.exists(self.ai_data_path(ziel)):
+                            info = archiv.getinfo(v["storage"])
+                            self.copy_zip_member_limited(archiv, info, self.ai_data_path(ziel), self.MAX_BACKUP_ATTACHMENT_BYTES)
+                        if glide_ai.sha256_file(self.ai_data_path(ziel)) == v["sha256"]:
+                            versionen.append(dict(v, storage=ziel))
+                    if versionen:
+                        ws.documents[neue_id] = dict(doc, versions=versionen)
+                        bericht["documents"] += 1
+                        bericht["copies"] += neue_id != did
+            if prompts:
+                seiten = {e["id"] for e in self.lists}
+                for pid, p in quelle.prompts.items():
+                    if pid not in seiten:
+                        continue
+                    if pid in ws.prompts and ws.prompts[pid]["versions"]:
+                        bericht["skipped"] += 1
+                        continue
+                    ws.prompts[pid] = p
+                    bericht["prompts"] += 1
+                for sammlung in ("projects", "agents", "blocks", "packs", "reports"):
+                    for k, v in getattr(quelle, sammlung).items():
+                        getattr(ws, sammlung).setdefault(k, v)
+        self.save_ai_workspace()
+        self.show_info(glide_i18n.t("ai.app.restore", "Aus Sicherung übernehmen"),
+                       glide_i18n.t("ai.app.restore_done", "Dokumente: {d} (davon als Kopie: {c}) · Prompt-Daten: {p} · vorhandene, nicht überschrieben: {s}",
+                                    d=bericht["documents"], c=bericht["copies"], p=bericht["prompts"], s=bericht["skipped"]))
+        return bericht
+
+    def ai_new_prompt(self, event=None):
+        return self.ai_create_prompt(open_editor=True)
+
+    def show_prompt_library(self, event=None):
+        return glide_ai_ui.PromptLibrary(self)
+
+    def show_document_library(self, event=None):
+        return glide_ai_ui.DocumentLibrary(self)
+
+    def show_context_library(self, event=None):
+        return glide_ai_ui.ContextLibrary(self)
+
+    def edit_active_page_as_prompt(self, event=None):
+        entry = self.page_entry(self.active_list_id)
+        if entry is None or entry.get("list_kind") != self.LIST_KIND_PAGE:
+            self.show_info(glide_i18n.t("ai.app.prompt", "Prompt"), glide_i18n.t("ai.app.need_page", "Bitte zuerst eine Seite öffnen."))
+            return None
+        self.ai_workspace().prompt(entry["id"])
+        self.save_ai_workspace()
+        return glide_ai_ui.PromptEditor(self, entry["id"])
+
+    def show_data_safety_overview(self, event=None):
+        """Zentrale Übersicht „Daten und Sicherheit“ (DS-10) mit Bento-Karten und echten lokalen Werten."""
+        t = glide_i18n.t
+        dialog = glide_modal_session.create_dialog(self.root, t("ui.data_safety.title", "Daten und Sicherheit"), transient=False)
+        dialog.geometry("960x780")
+        dialog.minsize(720, 560)
+        self._data_safety_dialog = dialog
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=20, pady=16)
+        tk.Label(outer, text=t("ui.data_safety.title", "Daten und Sicherheit"), bg=self.theme["bg"], fg=self.theme["text"],
+                 font=app_font(17, "bold"), anchor="w").pack(fill="x")
+        tk.Label(outer, text=t("ui.data_safety.subtitle", "Was Glide über den Schutz deiner Daten weiß – nur lokal ermittelte Werte. "
+                               "Nicht Geprüftes steht als „nicht geprüft“."),
+                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w", justify="left",
+                 wraplength=860).pack(fill="x", pady=(2, 10))
+        # Fußzeile zuerst verankern, damit „Schließen“ nie aus dem Fenster rutscht.
+        footer = ButtonFlow(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(10, 0))
+        footer.add(self._make_dialog_button(footer, t("button.close", "Schließen"), dialog.destroy, "muted"))
+        raster = tk.Frame(outer, bg=self.theme["bg"])
+        raster.pack(fill="both", expand=True)
+        for spalte in range(3):
+            raster.grid_columnconfigure(spalte, weight=1, uniform="ds")
+        ctx = self.glide_bento_context()
+        zustand = {}
+
+        def zeit(wert):
+            return datetime.fromtimestamp(wert).strftime("%d.%m.%Y %H:%M") if wert else t("ui.data_safety.never", "keine")
+
+        umbrueche = []
+
+        def karte(spalte, titel):
+            k = self.make_bento_card(raster)
+            k.grid(row=0, column=spalte, sticky="nsew", padx=6, pady=6)
+            tk.Label(k.inner, text=titel, bg=self.theme["card"], fg=self.theme["text"], font=app_font(12, "bold"),
+                     anchor="w").pack(fill="x")
+
+            def breite(_event=None, rahmen=k):
+                # Umbruch folgt der tatsächlichen Kartenbreite statt einer festen Zahl.
+                nutzbar = max(120, rahmen.winfo_width() - 2 * int(rahmen.pad_x) - 4)
+                for label in [l for l in umbrueche if l.master is rahmen.inner and l.winfo_exists()]:
+                    label.configure(wraplength=nutzbar)
+            k.bind("<Configure>", breite, add="+")
+            return k.inner
+
+        def zeile(master, text, farbe="muted"):
+            label = tk.Label(master, text=text, bg=self.theme["card"], fg=self.theme[farbe], font=app_font(9), anchor="w",
+                             justify="left", wraplength=220)
+            label.pack(fill="x", pady=(2, 0))
+            umbrueche.append(label)
+
+        def aufbauen():
+            for kind in raster.winfo_children():
+                kind.destroy()
+            snap = self.data_safety_snapshot()
+            status = self.data_status_file()
+            zustand["snap"] = snap
+            hb = glide_data_safety.human_bytes
+            # Karte 1: Speicherstand
+            a = karte(0, t("ui.data_safety.card_storage", "Speicherstand"))
+            glide_bento.BentoMetric(a, ctx, value=t("ui.data_safety.format", "Format {n}", n=snap["schema_version"]),
+                                    label=t("ui.data_safety.data_format", "Aufgabenformat")).pack(fill="x", pady=(6, 4))
+            zeile(a, t("ui.data_safety.folder", "Datenordner: {path}", path=snap["base_dir"]))
+            zeile(a, t("ui.data_safety.last_save", "Zuletzt gespeichert: {when}", when=zeit(snap["data"].newest)))
+            zeile(a, t("ui.data_safety.unsaved_yes", "Ungespeicherte Änderungen: ja") if snap["dirty"]
+                  else t("ui.data_safety.unsaved_no", "Ungespeicherte Änderungen: keine"), "flag" if snap["dirty"] else "muted")
+            grund = snap["read_only_reason"]
+            if grund == "recovery":
+                zeile(a, t("ui.data_safety.mode_recovery", "Wiederherstellungsmodus: schreibgeschützt bis zur Freigabe"), "flag")
+            elif grund:
+                zeile(a, t("ui.data_safety.mode_readonly", "Schreibgeschützt ({reason})", reason=grund), "flag")
+            else:
+                zeile(a, t("ui.data_safety.lock_ok", "Schreibsperre: von diesem Fenster gehalten") if snap["lock_held"]
+                      else t("ui.data_safety.lock_unknown", "Schreibsperre: nicht gehalten"))
+            zeile(a, t("ui.data_safety.sizes", "Daten {data} · Anhänge {att} ({n} Dateien) · frei {free}",
+                       data=hb(snap["data"].bytes), att=hb(snap["attachments"].bytes), n=snap["attachments"].count,
+                       free=hb(snap["free"]) or t("ui.data_safety.unknown", "unbekannt")))
+            zeile(a, t("ui.data_safety.network", "Datenübertragung: keine automatische. Weblinks öffnen nur auf Klick im Browser."))
+            glide_bento.BentoActions(a, ctx, align="fill", actions=[
+                (t("ui.data_safety.open_folder", "Datenordner …"), self.show_data_folder_dialog, "muted"),
+                (t("ui.menubar_structure.storage_status", "Speicherstatus …"), self.show_storage_status, "muted"),
+            ]).pack(fill="x", pady=(8, 0))
+            # Karte 2: Sicherungen
+            b = karte(1, t("ui.data_safety.card_backups", "Sicherungen"))
+            glide_bento.BentoMetric(b, ctx, value=str(snap["full_backups"].count),
+                                    label=t("ui.data_safety.full_backups", "Vollständige Sicherungen")).pack(fill="x", pady=(6, 4))
+            zeile(b, t("ui.data_safety.full_newest", "Neueste vollständige: {when}", when=zeit(snap["full_backups"].newest)))
+            zeile(b, t("ui.data_safety.auto_backups", "Automatische Sicherungen der Hauptdatei (ohne Anhänge): {n}, neueste {when}",
+                       n=snap["auto_backups"].count, when=zeit(snap["auto_backups"].newest)))
+            zeile(b, t("ui.data_safety.backup_size", "Sicherungsordner: {size}", size=hb(snap["full_backups"].bytes + snap["auto_backups"].bytes)))
+            zeile(b, t("ui.data_safety.elsewhere", "Sicherungen an anderen Orten kennt Glide nicht."))
+            pruefung = status.get("backup_check")
+            if pruefung:
+                zeile(b, t("ui.data_safety.backup_check", "Letzte Dateiprüfung ({when}, {file}): {result}",
+                           when=pruefung.get("at", "")[:16].replace("T", " "), file=pruefung.get("file", ""),
+                           result=t("ui.data_safety.ok", "in Ordnung") if pruefung.get("ok") else pruefung.get("detail", "")),
+                      "muted" if pruefung.get("ok") else "flag")
+            else:
+                zeile(b, t("ui.data_safety.backup_unchecked", "Dateiprüfung einer Sicherung: nicht geprüft"))
+            zeile(b, t("ui.data_safety.restore_untested", "Wiederherstellungsprobe dieses Arbeitsbereichs: nicht durchgeführt. "
+                       "Automatische Proben in der Entwicklung nutzen künstliche Daten und gelten nicht für deinen Bestand."))
+
+            def pruefen():
+                if self.verify_backup_file() is not None:
+                    aufbauen()
+            glide_bento.BentoActions(b, ctx, align="fill", actions=[
+                (t("ui.data_safety.create", "Sicherung erstellen …"), lambda: (self.export_app_backup(), aufbauen()), "accent"),
+                (t("ui.data_safety.verify", "Sicherung prüfen …"), pruefen, "muted"),
+                (t("ui.data_safety.manage", "Sicherungen …"), self.show_backup_catalog, "muted"),
+                (t("ui.data_safety.restore", "Wiederherstellen …"), self.restore_app_backup, "muted"),
+            ]).pack(fill="x", pady=(8, 0))
+            # Karte 3: Integrität
+            c = karte(2, t("ui.data_safety.card_integrity", "Integrität"))
+            ergebnis = status.get("integrity")
+            if ergebnis:
+                wert = t("ui.data_safety.ok", "in Ordnung") if ergebnis.get("ok") else t("ui.data_safety.findings", "Befunde")
+                glide_bento.BentoMetric(c, ctx, value=wert, label=t("ui.data_safety.last_check", "Letzte Prüfung {when}",
+                                        when=ergebnis.get("at", "")[:16].replace("T", " "))).pack(fill="x", pady=(6, 4))
+                zeile(c, t("ui.data_safety.integrity_detail",
+                           "Datenformat: {schema} · Anhangsverweise {refs} · fehlend {missing} · ungültig {invalid} · leer {empty} · "
+                           "gemeinsam genutzt {shared} · ohne Verweis {orphans} (werden nicht gelöscht)",
+                           schema=t("ui.data_safety.ok", "in Ordnung") if ergebnis.get("schema_ok") else ergebnis.get("schema_detail", ""),
+                           refs=ergebnis.get("references", 0), missing=ergebnis.get("missing", 0), invalid=ergebnis.get("invalid", 0),
+                           empty=ergebnis.get("empty", 0), shared=ergebnis.get("shared", 0), orphans=ergebnis.get("unreferenced", 0)),
+                      "muted" if ergebnis.get("ok") else "flag")
+                for fehlend in (ergebnis.get("missing_list") or [])[:8]:
+                    zeile(c, t("ui.data_safety.missing_item", "Fehlt: {name}", name=fehlend), "flag")
+            else:
+                glide_bento.BentoMetric(c, ctx, value=t("ui.data_safety.unchecked", "nicht geprüft"),
+                                        label=t("ui.data_safety.integrity_label", "Datenintegrität")).pack(fill="x", pady=(6, 4))
+            hinweis = tk.Label(c, text="", bg=self.theme["card"], fg=self.theme["muted"], font=app_font(9), anchor="w")
+            hinweis.pack(fill="x")
+
+            def integritaet():
+                hinweis.configure(text=t("ui.data_safety.checking", "Prüfung läuft …"))
+                self.run_data_integrity_check(on_done=lambda _wert: dialog.winfo_exists() and aufbauen())
+            glide_bento.BentoActions(c, ctx, align="fill", actions=[
+                (t("ui.data_safety.check", "Integrität prüfen"), integritaet, "accent"),
+                (t("menu.view.trash", "Papierkorb"), lambda: (self.set_trash_view(), dialog.destroy()), "muted"),
+            ]).pack(fill="x", pady=(8, 0))
+
+        aufbauen()
+        self._data_safety_rebuild = aufbauen
+        return dialog
+
     def show_storage_status(self, event=None):
         self.refresh_storage_sizes()
         dialog = glide_modal_session.create_dialog(self.root, glide_i18n.t("ui.show_storage_status.storage_status", "Speicherstatus"), transient=False)
@@ -21451,6 +22196,8 @@ class ListApp:
                 break
         result["pinned_pages"] = pinned
         result["sidebar_sections_visible"] = glide_sidebar.normalize_visibility(result.get("sidebar_sections_visible"))
+        result["sidebar_section_order"] = glide_sidebar.normalize_section_order(result.get("sidebar_section_order"))
+        result["sidebar_open_targets"] = glide_sidebar.normalize_open_targets(result.get("sidebar_open_targets"))
         result["sidebar_locations"] = glide_sidebar.normalize_locations(result.get("sidebar_locations"))
         zu = result.get("sidebar_sections_closed")
         result["sidebar_sections_closed"] = list(dict.fromkeys(
@@ -23495,6 +24242,8 @@ class ListApp:
     ROW_ACTION_GAP = glide_design.SPACING[2]
     ROW_ACTION_PADDING = glide_design.SPACING[4]
     ROW_ACTION_WIDTH = ROW_ACTION_SIZE + 2 * ROW_ACTION_PADDING
+    ROW_GRIP_WIDTH = 20
+    ROW_GRIP_MARGIN = ROW_GRIP_WIDTH + 4
 
     def hide_quick_plan_row(self, event=None, keep=0):
         """Knöpfe und Bänder ab Index `keep` ausblenden.
@@ -23519,9 +24268,9 @@ class ListApp:
             return
         # Bücher sollen bis zu beiden Karteninnenkanten reichen. Die
         # abgeleiteten Labels behalten ihren eigenen Inhaltsabstand.
-        left = 0 if self.is_library_view() else glide_design.SPACING[14]
-        right = (0 if self.is_library_view() else self.ROW_ACTION_WIDTH
-                 if self.row_actions_enabled() else glide_design.SPACING[14])
+        actions = self.row_actions_enabled()
+        left = 0 if self.is_library_view() else self.ROW_GRIP_MARGIN if actions else glide_design.SPACING[14]
+        right = 0 if self.is_library_view() else glide_design.SPACING[14]
         if self.tree.winfo_manager() == "pack":
             self.tree.pack_configure(padx=(left, right))
         if not self.row_actions_enabled():
@@ -23534,6 +24283,7 @@ class ListApp:
             self._after_ids.discard(self._row_actions_job)
             self._row_actions_job = None
             self.show_quick_plan_row()
+            self.place_inline_task_entry()
         self._row_actions_job = self._register_after(self.root.after_idle(update))
 
     def _open_row_actions(self, row, item_id, button):
@@ -23545,6 +24295,64 @@ class ListApp:
         self._quick_plan_row = (self.view_mode, row, item_id)
         self.row_overflow_button = button
         return self.row_overflow_action()
+
+    def task_grip_pointer(self, event):
+        return types.SimpleNamespace(widget=self.tree, x=event.x_root-self.tree.winfo_rootx(),
+                                     y=event.y_root-self.tree.winfo_rooty(),
+                                     x_root=event.x_root, y_root=event.y_root, state=event.state)
+
+    def begin_task_grip(self, event, button):
+        if getattr(button, "_checklist_step", None) is not None:
+            button._grip_press = None  # Checklistenschritte werden nicht gezogen.
+            button._grip_dragging = False
+            button._on_press(event)
+            return
+        button._grip_press = (event.x_root, event.y_root, button._row_owner)
+        button._grip_dragging = False
+        button._on_press(event)
+
+    def move_task_grip(self, event, button):
+        press = getattr(button, "_grip_press", None)
+        supported = self.view_mode == "list" or (self.view_mode == self.TABLE_VIEW and self.list_group_field())
+        if press is None or not supported or getattr(self, "_data_read_only", False):
+            return
+        x, y, row = press
+        pointer = self.task_grip_pointer(event)
+        if not button._grip_dragging:
+            if abs(event.x_root-x) + abs(event.y_root-y) <= 6 or not self.tree.exists(row):
+                return
+            if row not in self.tree.selection():
+                self.tree.selection_set(row)
+            self.tree.focus(row)
+            self.drag_start_id = row
+            self.drag_item_ids = [item for item in self.tree.selection() if self.find_item(item)]
+            self.drag_start_x, self.drag_start_y = x-self.tree.winfo_rootx(), y-self.tree.winfo_rooty()
+            self.drag_has_moved = True
+            self._rename_candidate = None
+            self.cancel_item_rename()
+            button._grip_dragging = True
+        self.on_drag_motion(pointer)
+        return "break"
+
+    def release_task_grip(self, event, button):
+        button._grip_press = None
+        if not getattr(button, "_grip_dragging", False):
+            return button._on_release(event)
+        button._grip_dragging = False
+        button.is_pressed = False
+        button._draw()
+        self.on_drag_end(self.task_grip_pointer(event))
+        return "break"
+
+    def make_row_grip(self, master, command):
+        """Der eine Aktionsgriff aller Aufgaben-, Checklisten- und Eingabezeilen.
+
+        Griffachse (Design Richtlinien): gleiche Breite, Höhe, Symbolschrift und
+        Zeichnung überall, damit die Glyphen auf einer senkrechten Linie stehen.
+        """
+        return self.make_button(master, self.ICONS["block_handle"], command, "muted",
+                                width=self.ROW_GRIP_WIDTH, height=self.ROW_ACTION_SIZE, radius=7,
+                                font=self.symbol_font("block_handle", 12), bg_key="card", icon=True, outline=False)
 
     def show_quick_plan_row(self, event=None):
         """Ein stabiler Mehr-Knopf je sichtbarer Aufgabe; kein Hover-Umbau."""
@@ -23567,9 +24375,14 @@ class ListApp:
                 continue
             source = self.in_progress_item_sources.get(row) if self.view_mode in self.DERIVED_ITEM_VIEWS else None
             item_id = source[1] if source else row
+            schritt = self.checklist_row_index(row) if not source else None
+            if schritt is not None:
+                # Teil 05B: Checklistenzeilen tragen denselben Griff; er öffnet
+                # die Schrittaktionen, Ziehen ist dort nicht vorgesehen.
+                item_id = self.owner_row_id(row)
             found = self.find_item_in_lists(item_id)
             bbox = self.tree.bbox(row)
-            if not bbox or not found or not self.is_schedulable_item(found[0]):
+            if not bbox or not found or (schritt is None and not self.is_schedulable_item(found[0])):
                 continue
             size = min(self.ROW_ACTION_SIZE, max(1, bbox[3] - self.ROW_ACTION_PADDING))
             if bbox[1] < 0 or bbox[1] + bbox[3] > self.tree.winfo_height():
@@ -23577,9 +24390,14 @@ class ListApp:
                 # keinen Platz für einen vollständigen, bedienbaren Knopf.
                 continue
             if index == len(buttons):
-                button = self.make_button(self.list_frame, self.ICONS["overflow"], lambda: None, "muted",
-                    width=self.ROW_ACTION_SIZE, height=self.ROW_ACTION_SIZE, radius=9,
-                    font=self.symbol_font("overflow", 12), bg_key="card", icon=True, outline=False)
+                button = self.make_row_grip(self.list_frame, lambda: None)
+                button.bind("<ButtonPress-1>", lambda event, b=button: self.begin_task_grip(event, b))
+                button.bind("<B1-Motion>", lambda event, b=button: self.move_task_grip(event, b))
+                button.bind("<ButtonRelease-1>", lambda event, b=button: self.release_task_grip(event, b))
+                button.bind("<Button-3>", lambda _event, b=button: b.command())
+                if IS_MACOS:
+                    button.bind("<Button-2>", lambda _event, b=button: b.command())
+                self.bind_context_menu_modifier(button, lambda _event, b=button: b.command())
                 button._accessible_name = glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen")
                 self.add_tooltip(button, glide_i18n.t("ui.show_quick_plan_row.task_actions", "Aufgabenaktionen"))
                 buttons.append(button)
@@ -23594,19 +24412,23 @@ class ListApp:
             # und Schrift neu zu setzen zeichnete jeden Knopf bei jedem
             # Radschritt vollständig neu (gemessen rund 15 von 28 ms je Schritt
             # bei 500 Punkten); Größenänderungen zeichnet die Fläche selbst nach.
-            schrift = self.symbol_font("overflow", 12)
-            if button.font != schrift or button.text != self.ICONS["overflow"]:
+            schrift = self.symbol_font("block_handle", 12)
+            if button.font != schrift or button.text != self.ICONS["block_handle"]:
                 button.font = schrift
-                button.set_text(self.ICONS["overflow"])
+                button.set_text(self.ICONS["block_handle"])
             button._row_owner = row
             band = bands[index]
-            band.place(x=self.tree.winfo_x()+self.tree.winfo_width(),
-                       y=self.tree.winfo_y()+bbox[1], width=self.ROW_ACTION_WIDTH, height=bbox[3])
-            button.command = lambda r=row, i=item_id, b=button: self._open_row_actions(r, i, b)
-            button.place(x=self.tree.winfo_x()+self.tree.winfo_width()+self.ROW_ACTION_PADDING,
+            band.place(x=self.tree.winfo_x()-self.ROW_GRIP_MARGIN,
+                       y=self.tree.winfo_y()+bbox[1], width=self.ROW_GRIP_MARGIN, height=bbox[3])
+            button._checklist_step = schritt
+            if schritt is not None:
+                button.command = lambda r=row, b=button: self.show_checklist_step_menu(r, b)
+            else:
+                button.command = lambda r=row, i=item_id, b=button: self._open_row_actions(r, i, b)
+            button.place(x=self.tree.winfo_x()-self.ROW_GRIP_WIDTH,
                 y=self.tree.winfo_y()+bbox[1]+max(0, (bbox[3]-size)//2),
-                width=self.ROW_ACTION_SIZE, height=size)
-            if self._quick_plan_row is None or row == self.tree.focus():
+                width=self.ROW_GRIP_WIDTH, height=size)
+            if schritt is None and (self._quick_plan_row is None or row == self.tree.focus()):
                 self._quick_plan_row = (self.view_mode, row, item_id)
                 self.row_overflow_button = button
             button.tk.call("raise", str(button))
@@ -24827,9 +25649,15 @@ class ListApp:
     def close_side_view(self, event=None):
         if not getattr(self, "_side_view", None):
             return "break"
+        identity = self._side_view["id"]
         self.remember_side_history()
         fokus_war_dort = self.side_view_has_focus()
         self._side_view = None
+        if identity != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            iid = f"list:{identity}"
+            tree = self.get_sidebar_tree_for_iid(iid)
+            if tree is not None and iid in tree.selection():
+                tree.selection_remove(iid)
         self._side_view_signature = None
         self._side_search_open = False
         self._side_search_query = ""
@@ -25498,7 +26326,8 @@ class ListApp:
             self._bind_side_view_keys(pane)
             return
         art = glide_side_view.content_kind(entry)
-        teile = [{"page": glide_i18n.t("ui.render.page", "Seite"), "note": glide_i18n.t("ui.render.note", "Notiz")}.get(art, glide_i18n.t("editor.toolbar.list", "Liste"))]
+        teile = [{"page": glide_i18n.t("ui.render.page", "Seite"), "note": glide_i18n.t("ui.render.note", "Notiz"),
+                  "drawing": glide_i18n.t("ui.page_card_blocks.drawing", "Zeichnung")}.get(art, glide_i18n.t("editor.toolbar.list", "Liste"))]
         if entry.get("folder_id"):
             teile.insert(0, " › ".join(self.folder_path_titles(entry.get("folder_id"))))
         rows = glide_side_view.list_rows(entry.get("items", []))
@@ -25512,6 +26341,18 @@ class ListApp:
         if getattr(self, "_data_read_only", False):
             status.configure(text=glide_i18n.t("side_view.status.read_only", "Schreibgeschützter Bestand · nur ansehen."))
         status.pack(side="bottom", fill="x", pady=(6, 0))
+        if art == "drawing":
+            try:
+                model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+                image = glide_drawing_image.thumbnail_photo(model, min(256, max(64, breite)), master=inhalt)
+            except (glide_drawing.DrawingFormatError, tk.TclError):
+                status.configure(text=glide_i18n.t("side_view.drawing.no_preview", "Keine Vorschau"))
+            else:
+                preview = tk.Label(inhalt, image=image, bg=theme["card"], bd=0)
+                preview.image = image
+                preview.pack(fill="x", pady=(4, 8))
+            self._bind_side_view_keys(pane)
+            return
         if self.hints_shown():
             hinweis = (glide_i18n.t("ui.render_side_view.click_the_box_or", "Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich")
                        if art == "tasks" else glide_i18n.t("ui.render_side_view.click_the_box_to", "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten"))
@@ -27610,20 +28451,23 @@ class ListApp:
             self.add_tooltip(kopf, glide_i18n.t("ui.apply_sidebar_sections.expand_views", "Ansichten ausklappen"))
         kopf.configure(text=glide_i18n.t("ui.apply_sidebar_sections.views", '{group}  Ansichten ({len})', group=self.ICONS['group'], len=len(system.get_children(''))),
                        bg=theme["card"], fg=theme["muted"])
-        naechstes = self.pinned_sidebar_frame if getattr(self, "pinned_sidebar_frame", None) is not None \
-            and self.pinned_sidebar_frame.winfo_manager() else (getattr(self, "pages_title_row", None) if self.sidebar_section_visible("pages") else None) or titelzeile
+        content_order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
+        candidates = (getattr(self, "pinned_sidebar_frame", None),
+                      *(self.sidebar_section_heading(key) for key in content_order))
+        next_widget = next((widget for widget in candidates if widget is not None and widget.winfo_manager()), None)
+        anchor = {"before": next_widget} if next_widget is not None else {}
         if self.sidebar_section_open("views"):
             if kopf.winfo_manager():
                 kopf.pack_forget()
             if not system.winfo_manager():
-                system.pack(fill="x", pady=(4, 0), before=naechstes)
+                system.pack(fill="x", pady=(4, 0), **anchor)
         else:
             if system.winfo_manager():
                 system.pack_forget()
             if not kopf.winfo_manager():
-                kopf.pack(fill="x", padx=(8, 0), pady=(8, 0), before=naechstes)
+                kopf.pack(fill="x", padx=(8, 0), pady=(8, 0), **anchor)
         baum = getattr(self, "sidebar_listbox", None)
-        listen_offen = self.sidebar_section_open("lists")
+        listen_offen = self.sidebar_section_open("lists") and self.sidebar_section_visible("lists")
         if baum is not None and listen_offen and not baum.winfo_manager():
             baum.pack(fill="both", expand=True, after=titelzeile)
         elif baum is not None and not listen_offen and baum.winfo_manager():
@@ -28968,19 +29812,24 @@ class ListApp:
             self.show_quick_open(initial_query=self.overview_search_var.get())
         return "break"
 
+    def build_content_search_field(self, parent, variable):
+        border = self.make_rounded_container(
+            parent, fill_key="input", outline_key="input_border", radius=16,
+            padding=glide_design.SPACING[1], height=38, inner_pad_x=glide_design.SPACING[10], inner_pad_y=3)
+        border.pack(side="left", fill="x", expand=True, anchor="n")
+        border.pack_propagate(False)
+        entry = self.register_theme_widget(tk.Entry(
+            border.inner, textvariable=variable, bg=self.theme["input"], fg=self.theme["text"],
+            insertbackground=self.theme["text"], font=app_font(12), relief="flat", bd=0,
+            highlightthickness=0, selectborderwidth=0), "input", "text")
+        entry.pack(fill="both", expand=True)
+        return border, entry
+
     def create_home_panel(self):
         self.overview_search_row = self.register_theme_widget(tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg")
-        self.overview_search_border = self.make_rounded_container(
-            self.overview_search_row, fill_key="input", outline_key="input_border", radius=16,
-            padding=1, height=38, inner_pad_x=10, inner_pad_y=3)
-        self.overview_search_border.pack(side="left", fill="x", expand=True)
-        self.overview_search_border.pack_propagate(False)
         self.overview_search_var = tk.StringVar()
-        self.overview_search_entry = self.register_theme_widget(tk.Entry(
-            self.overview_search_border.inner, textvariable=self.overview_search_var,
-            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
-            font=app_font(12), relief="flat", bd=0, highlightthickness=0), "input", "text")
-        self.overview_search_entry.pack(fill="both", expand=True)
+        self.overview_search_border, self.overview_search_entry = self.build_content_search_field(
+            self.overview_search_row, self.overview_search_var)
         self.overview_search_hint = self.register_theme_widget(CanvasLabel(
             self.overview_search_border.inner, text="", bg=self.theme["input"], fg=self.theme["placeholder"],
             font=app_font(12), anchor="w"), "input", "placeholder")
@@ -31402,6 +32251,18 @@ class ListApp:
         footer.pack(fill="x", pady=(12, 0))
         adopt_button = self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.take_over_from_drawing", "Aus Zeichnung übernehmen …"), from_drawing, "muted", width=230)
         adopt_button.pack(side="left")
+
+        def from_library():
+            dokument = self.choose_symbol(exclude=identity, parent=dialog)
+            if dokument is None:
+                return
+            editor.animation.replace_model(editor.frame_id, glide_drawing.DrawingModel.from_document(dokument))
+            editor.model = editor.animation.frames[0].model
+            editor.render_full()
+            editor.mark_unsaved()
+            editor.update_status(glide_i18n.t("ui.page_icon_dialog.from_library_status", "Aus der Symbolbibliothek übernommen"))
+        self._make_dialog_button(footer, glide_i18n.t("ui.page_icon_dialog.from_library", "Symbolbibliothek …"), from_library, "muted",
+                                 width=190).pack(side="left", padx=(10, 0))
         self._make_dialog_button(footer, glide_i18n.t("button.apply", "Übernehmen"), lambda: finish("set"), "confirm").pack(side="right")
         self._make_dialog_button(footer, glide_i18n.t("button.cancel", "Abbrechen"), dialog.destroy, "muted").pack(side="right", padx=(0, 10))
         if holder.get("icon"):
@@ -32581,8 +33442,10 @@ class ListApp:
         verlauf = tk.BooleanVar(value=self.settings.get("history_enabled", True))
         animationen = tk.BooleanVar(value=self.settings.get("animations_enabled", True))
         hinweise = tk.BooleanVar(value=glide_interaction.hints_visible(self.settings))
+        sidebar_order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
         sidebar_visibility = {key: tk.BooleanVar(value=self.sidebar_section_visible(key))
-                              for key in ("pages", "notes", "drawings")}
+                              for key in glide_sidebar.SECTIONS}
+        sidebar_targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
         rueckmeldung_namen = {
             "auto": glide_i18n.t("settings.feedback.auto", "Automatisch · im Dopamin-Design zu jeder Aktion"),
             "milestones": glide_i18n.t("settings.feedback.milestones", "Nur bei Erledigtem und erreichten Zielen"),
@@ -32825,20 +33688,43 @@ class ListApp:
         tk.Label(appearance, text=glide_i18n.t("settings.sidebar_sections", "Bereiche der Seitenleiste"),
                  bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
-        sidebar_titles = {
-            "pages": glide_i18n.t("settings.sidebar.pages", "Seiten"),
-            "notes": glide_i18n.t("settings.sidebar.notes", "Notizen"),
-            "drawings": glide_i18n.t("settings.sidebar.drawings", "Zeichnungen"),
-        }
+        sections = tk.Frame(appearance, bg=self.theme["bg"])
+        sections.pack(fill="x")
+        section_rows = {}
+
+        def layout_sections():
+            for key in sidebar_order:
+                row = section_rows[key]
+                row.pack_forget()
+                row.pack(fill="x", pady=glide_design.SPACING[3])
+
+        def move_section(key, delta):
+            index = sidebar_order.index(key)
+            other = index + delta
+            if 0 <= other < len(sidebar_order):
+                sidebar_order[index], sidebar_order[other] = sidebar_order[other], sidebar_order[index]
+                layout_sections()
+
+        def reset_sections():
+            sidebar_order[:] = glide_sidebar.SECTIONS
+            for key, variable in sidebar_visibility.items():
+                variable.set(True)
+                sidebar_targets[key] = "main"
+            layout_sections()
+
         for key, variable in sidebar_visibility.items():
-            GlideCheckbutton(appearance, text=sidebar_titles[key], variable=variable,
+            row = section_rows[key] = tk.Frame(sections, bg=self.theme["bg"])
+            GlideCheckbutton(row, text=self.sidebar_section_title(key), variable=variable,
                              name=f"setting_sidebar_{key}", bg=self.theme["bg"], fg=self.theme["text"],
                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
-                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[3])
-        tk.Label(appearance, text=glide_i18n.t(
-            "settings.sidebar_hint", "Listen bleibt immer sichtbar. Ausgeblendete Inhalte findest du dort weiterhin."),
-                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), wraplength=300,
-                 justify="left", anchor="w").pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
+                             selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(side="left", expand=True, fill="x")
+            for delta, label in ((-1, glide_i18n.t("settings.sidebar.up", "Nach oben")),
+                                 (1, glide_i18n.t("settings.sidebar.down", "Nach unten"))):
+                self._make_dialog_button(row, label, lambda k=key, d=delta: move_section(k, d),
+                                         "muted", height=28).pack(side="left", padx=(4, 0))
+        layout_sections()
+        self._make_dialog_button(appearance, glide_i18n.t("settings.sidebar.reset", "Bereiche zurücksetzen"),
+                                 reset_sections, "muted").pack(anchor="w", pady=(4, 8))
         tk.Label(personal, text=glide_i18n.t("settings.start_view", "Ansicht beim Öffnen"),
                  bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
@@ -33213,7 +34099,8 @@ class ListApp:
             if startup_value == "list" and not startliste_value:
                 # Ohne Liste wäre die feste Listenoption eine Angabe ohne Ziel.
                 startup_value = "home"
-            self.settings.update(sidebar_sections_visible={"lists": True, **{key: value.get() for key, value in sidebar_visibility.items()}},
+            self.settings.update(sidebar_sections_visible={key: value.get() for key, value in sidebar_visibility.items()},
+                                 sidebar_section_order=list(sidebar_order), sidebar_open_targets=dict(sidebar_targets),
                                  profile_name=name.get(), profile_logo=clean_logo,
                                  daily_goal=int(rohziel),
                                  daily_capacity_minutes=int(rohkapazitaet),
@@ -33572,7 +34459,7 @@ class ListApp:
                                      ("actions_button", "actions", 16), ("sidebar_toggle_button", "sidebar", 16),
                                      ("list_view_button", "list", 16), ("table_button", "table", 16),
                                      ("board_button", "board", 16), ("quick_plan_row_button", "calendar", 12),
-                                     ("row_due_button", "overdue", 12), ("row_overflow_button", "overflow", 12)):
+                                     ("row_due_button", "overdue", 12), ("row_overflow_button", "block_handle", 12)):
             button = getattr(self, attribute, None)
             if button is not None:
                 button.font = self.symbol_font(key, size)
@@ -33877,8 +34764,17 @@ class ListApp:
         """
         ctx = getattr(self, "_home_bento_context", None)
         if ctx is None:
-            ctx = self._home_bento_context = glide_bento.BentoContext(
-                theme_provider=lambda: self.theme,
+            ctx = self._home_bento_context = glide_bento.BentoContext(**self.bento_host_providers(lambda: self.theme))
+        return ctx.refresh_from_host(
+            glass_mode=self.glass_enabled(),
+            glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
+            glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
+        )
+
+    def bento_host_providers(self, theme_provider):
+        """Host-Provider für einen BentoContext (Variante C); auch für die Komponenten-Galerie."""
+        return dict(
+                theme_provider=theme_provider,
                 token_provider=lambda: glide_design.bento_token_values(
                     card_min_width=self.HOME_TILE_MIN_WIDTH, gap_relaxed=self.HOME_TILE_GAP,
                     gap_default=self.HOME_CARD_GAP, card_padding_x=self.HOME_CARD_PAD_X,
@@ -33891,21 +34787,20 @@ class ListApp:
                     master, text, command, role,
                     width=max(120, ui_font_object(root=self.root, font=app_font(10, "bold")).measure(text) + 56), height=36),
             )
-        return ctx.refresh_from_host(
-            glass_mode=self.glass_enabled(),
-            glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
-            glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
-        )
 
     def make_bento_card(self, master, fill_key="card", outline_key="line", radius=18, inner_pad_x=None, inner_pad_y=None, auto_height=True, **kwargs):
         """Erzeugt eine standardkonforme Bento-Karte (Ebene B, D100) für Startseite und Dialoge."""
         ctx = self.glide_bento_context(outline_key)
+        # Ohne ausdrückliche Abstände gelten die Bento-Tokens (Teil 05B: vorher
+        # kam `None` an und die Karte ließ sich ohne Abstände nicht anlegen).
+        if inner_pad_x is not None:
+            kwargs["inner_pad_x"] = inner_pad_x
+        if inner_pad_y is not None:
+            kwargs["inner_pad_y"] = inner_pad_y
         card = glide_bento.BentoCard(
             master,
             context=ctx,
             radius=radius,
-            inner_pad_x=inner_pad_x,
-            inner_pad_y=inner_pad_y,
             auto_height=auto_height,
             fill_key=fill_key,
             outline_key=outline_key,
@@ -34132,6 +35027,30 @@ class ListApp:
             if str(self.theme.get(key, "")).lower() == grund:
                 return key
         return requested
+
+    def make_square_symbol_button(self, master, glyph, command, *, size, color_key, surface,
+                                  outline=False):
+        button = self.make_button(master, glyph, command, color_key, width=size, height=size,
+                                  radius=min(12, size // 3), bg_key=surface,
+                                  font=icon_font(14, "bold", root=self.root), icon=True, outline=outline)
+        button.fit_text = False
+        button.configure(width=size, height=size)
+        button.optical_offset = self.square_symbol_offset
+        button._draw()
+        return button
+
+    def square_symbol_offset(self, glyph, font_spec):
+        if len(glyph) != 1:
+            return 0, 0
+        metrics = self.glyph_metrics_for(font_spec)
+        if metrics is None or not metrics.covers(glyph):
+            return 0, 0
+        font = tkfont.Font(root=self.root, font=font_spec)
+        size = float(font.actual("size"))
+        pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
+        return symbol_ink_offset(metrics.bbox(glyph), scale=pixels / metrics.units_per_em,
+                                 advance=font.measure(glyph), ascent=font.metrics("ascent"),
+                                 linespace=font.metrics("linespace"))
 
     def _make_dialog_button(self, master, text, command, color_key, width=124, height=40):
         """Gemeinsame Knopfkontur; äußere Werkzeuge mit Theme-Lebensdauer."""
@@ -36512,9 +37431,20 @@ class ListApp:
             return ('list', self.active_list_id)
         return None
 
-    def object_reference_choices(self, source=None):
+    def object_reference_choices(self, source=None, chapters=False):
+        """Wählbare Verweisziele; ``chapters`` ergänzt Kapitel von Seiten (Format 27, nur im Text)."""
         index, _, _ = self.object_graph()
         choices = []
+        if chapters:
+            for key, (state, holder, entry) in index.items():
+                if state != 'active' or key[0] != 'list' or holder.get('list_kind') not in (self.LIST_KIND_PAGE, self.LIST_KIND_NOTE):
+                    continue
+                titel = glide_objects.caption(key, index)[1]
+                for kapitel in self.chapter_outline(holder):
+                    if kapitel.anchor:
+                        choices.append((glide_objects.chapter_uri(key[1], kapitel.anchor),
+                                        glide_i18n.t("ui.object_reference.chapter_choice", "Kapitel · {page} › {chapter}",
+                                                     page=titel, chapter=kapitel.title)))
         for key, (state, holder, entry) in index.items():
             if state != 'active' or key == source or (key[0] == 'item' and not self.is_schedulable_item(holder)):
                 continue
@@ -36548,9 +37478,22 @@ class ListApp:
             return opened
         _, _, entry = index[key]
         if key[0] == 'list':
+            anker = glide_objects.anchor(value)
+            if anker:
+                return self.open_chapter_reference(key[1], anker)
             self.set_active_list(key[1])
             return True
         return self.open_task_in_source_list(entry['id'], key[1])
+
+    def open_chapter_reference(self, page_id, anchor):
+        """Kapitelverweis folgen; fehlt das Kapitel, öffnet Glide die Seite und sagt es."""
+        entry = self.page_entry(page_id)
+        if entry is not None and glide_chapters.find_anchor(self.chapter_outline(entry), anchor) is not None:
+            return self.open_chapter(page_id, anchor)
+        self.set_active_list(page_id)
+        self.show_info(glide_i18n.t("ui.insert_object_reference.reference", 'Verweis'),
+                       glide_i18n.t("ui.open_chapter_reference.missing", "Das verknüpfte Kapitel gibt es auf dieser Seite nicht mehr. Die Seite wurde geöffnet."))
+        return True
 
     def change_object_reference(self, source, value=None, remove=False):
         index, _, _ = self.object_graph()
@@ -37676,6 +38619,7 @@ class ListApp:
         cover=None,
         animation=None,
         notion_source=None,
+        nav_parent_id=None,
     ):
         title = self._clip_and_note_title((title or glide_i18n.t("ui.default_title.new_list", "Neue Liste")).strip() or glide_i18n.t("ui.default_title.new_list", "Neue Liste"))
         created = self._list_timestamp(created_at, default_now=created_at is None)
@@ -37699,7 +38643,8 @@ class ListApp:
             "color": color if color in self.LIST_COLOR_KEYS else None,
             "note": str(note or ""),
             "list_kind": kind,
-            "rich_note": RichNoteEditor.normalize(rich_note),
+            # Format 27: jede Überschrift trägt einen stabilen Kapitelanker.
+            "rich_note": glide_chapters.ensure_anchors(RichNoteEditor.normalize(rich_note))[0],
             "created_at": created,
             "updated_at": updated,
             "journal": self.normalize_journal(journal, created_at=created),
@@ -37738,6 +38683,10 @@ class ListApp:
         source = glide_source_metadata.normalize(notion_source, entry["id"], kind)
         if source is not None:
             entry["notion_source"] = source
+        # Format 27: Navigationsort in der Seitenleiste, getrennt vom Heimatordner.
+        if (isinstance(nav_parent_id, str) and 0 < len(nav_parent_id) <= 100
+                and nav_parent_id != entry["folder_id"] and system_role != "inbox"):
+            entry["nav_parent_id"] = nav_parent_id
         return entry
 
     @classmethod
@@ -39601,20 +40550,12 @@ class ListApp:
         self.sidebar_title.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
         self.sidebar_title.bind("<FocusOut>", lambda _event: self.update_sidebar_heading(hover=False))
         self.add_tooltip(self.sidebar_title, glide_i18n.t("ui.create_list_sidebar.show_all_lists_and", "Alle Listen und Ordner als Kacheln anzeigen"))
+        self.bind_sidebar_section_menu("lists", title_row, self.sidebar_heading_frame, icon_slot,
+                                       self.sidebar_heading_icon, self.sidebar_title)
 
-        self.add_list_button = self.make_button(
-            title_row,
-            text="+",
-            command=self.show_sidebar_add_menu,
-            color_key="accent",
-            width=42,
-            height=32,
-            radius=14,
-            bg_key="card",
-            font=app_font(13, "bold"),
-            outline=False,
-        )
-        self.add_list_button.pack(side="right")
+        self.add_list_button = self.make_square_symbol_button(
+            title_row, self.ICONS["plus"], self.show_sidebar_add_menu, size=28, color_key="accent", surface="card")
+        self.add_list_button.pack(side="right", padx=(0, glide_design.SPACING[3]))
         self.add_tooltip(self.add_list_button, glide_i18n.t("ui.create_list_sidebar.create_new_or_import", "Neu anlegen oder importieren"))
         # 3.30 (AO-020) stand hier ein Pfeil zum Einklappen von „Listen und
         # Ordner“. Er ist seit dem 26.09.2026 entfernt (SIDEBAR_SECTIONS).
@@ -39641,6 +40582,9 @@ class ListApp:
         self.sidebar_listbox.column("#0", anchor="w", stretch=True, width=192)
         self.configure_sidebar_count_columns(self.sidebar_listbox)
         self.sidebar_listbox.bind("<<TreeviewSelect>>", self.on_sidebar_select)
+        for sequence, opened in (("<<TreeviewOpen>>", True), ("<<TreeviewClose>>", False)):
+            self.sidebar_listbox.bind(sequence, lambda _event, state=opened:
+                                      self.remember_sidebar_chapter_open(self.sidebar_listbox, state), add="+")
         self.sidebar_listbox.bind("<Double-Button-1>", self.edit_selected_sidebar_title)
         self.sidebar_listbox.bind("<Tab>", self.toggle_sidebar_indent)
         self.sidebar_listbox.bind("<Shift-Tab>", self.outdent_selected_sidebar_list)
@@ -40068,6 +41012,7 @@ class ListApp:
         try:
             self.sidebar_rows = []
             self.sidebar_iid_to_row = {}
+            self.sidebar_chapter_rows = {}
             for row_id in self.system_listbox.get_children(""):
                 self.system_listbox.delete(row_id)
             for row_id in self.sidebar_listbox.get_children(""):
@@ -40187,7 +41132,7 @@ class ListApp:
                 if bereich is None:
                     continue
                 for entry in self.lists:
-                    if entry.get("archived") or entry.get("folder_id") in assigned_folder_ids or self.sidebar_tree_for_entry(entry) is not bereich:
+                    if entry.get("archived") or self.sidebar_parent(entry) in assigned_folder_ids or self.sidebar_tree_for_entry(entry) is not bereich:
                         continue
                     self._insert_sidebar_list_row(entry, parent="", tree=bereich, depth=0)
                 self._insert_sidebar_folder_rows(None, "", 0, tree=bereich)
@@ -40198,8 +41143,7 @@ class ListApp:
                     continue
                 if self.sidebar_tree_for_entry(entry) is not self.sidebar_listbox:
                     continue
-                folder_id = entry.get("folder_id")
-                if folder_id in assigned_folder_ids:
+                if self.sidebar_parent(entry) in assigned_folder_ids:
                     continue
                 self._insert_sidebar_list_row(entry, parent="")
 
@@ -40310,6 +41254,10 @@ class ListApp:
             self.lists, self.folders, self.settings.get("sidebar_locations"),
             self.settings.get("sidebar_sections_visible")))
 
+    def sidebar_parent(self, entry):
+        """Ordner, unter dem die Liste in der Seitenleiste steht (Navigationsort, Format 27)."""
+        return self.sidebar_policy().nav_parent(entry)
+
     def sidebar_section_for(self, kind, identifier):
         return self.sidebar_policy().section(kind, identifier)
 
@@ -40334,23 +41282,360 @@ class ListApp:
     def sidebar_section_visible(self, key):
         return glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible")).get(key, True)
 
+    def sidebar_section_title(self, key):
+        return glide_i18n.t(f"sidebar.{key}", glide_sidebar.TITLES[key])
+
+    def sidebar_section_heading(self, key):
+        return getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row", None)
+
+    def sidebar_section_tree(self, key):
+        return getattr(self, "sidebar_listbox" if key == "lists" else f"{key}_listbox", None)
+
     def apply_sidebar_visibility(self):
-        # Hide only navigation. Documents remain reachable through Lists and search.
-        for key in ("pages", "notes", "drawings"):
-            row = getattr(self, f"{key}_title_row", None)
-            if row is None:
+        order = glide_sidebar.normalize_section_order(self.settings.get("sidebar_section_order"))
+        previous = next((widget for widget in (getattr(self, "pinned_sidebar_frame", None),
+                        getattr(self, "system_listbox", None), getattr(self, "views_collapsed_header", None))
+                         if widget is not None and widget.winfo_manager()), None)
+        for key in order:
+            row, tree = self.sidebar_section_heading(key), self.sidebar_section_tree(key)
+            if row is None or tree is None:
                 continue
             if not self.sidebar_section_visible(key):
                 row.pack_forget()
-            elif not row.winfo_manager():
-                before = next((getattr(self, f"{later}_title_row", None) for later in glide_sidebar.SECTIONS[
-                    glide_sidebar.SECTIONS.index(key)+1:] if getattr(self, f"{later}_title_row", None) is not None
-                    and getattr(self, f"{later}_title_row").winfo_manager()), None)
-                if key == "pages":
-                    before = self.sidebar_title_row
-                row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP,
-                                         self.SIDEBAR_HEADER_BOTTOM_GAP),
-                         **({"before": before} if before else {}))
+                tree.pack_forget()
+                continue
+            gap = self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP
+            row.pack(fill="x", pady=(gap, self.SIDEBAR_HEADER_BOTTOM_GAP),
+                     **({"after": previous} if previous is not None else {}))
+            previous = row
+            if tree.winfo_manager():
+                tree.pack_configure(after=row)
+                previous = tree
+
+    def change_sidebar_preference(self, setting, values):
+        old = self.settings.get(setting)
+        self.settings[setting] = values
+        if not self.refresh_data_lock() or not self.save_settings(show_error=True):
+            if old is None:
+                self.settings.pop(setting, None)
+            else:
+                self.settings[setting] = old
+            return False
+        self.clear_render_cache()
+        self.update_sidebar_list()
+        return True
+
+    def bind_sidebar_section_menu(self, key, *widgets):
+        def show(event):
+            return self.show_sidebar_section_menu(key, event)
+        for widget in widgets:
+            for sequence in ("<Button-3>", "<Shift-F10>", "<Menu>"):
+                widget.bind(sequence, show)
+            if IS_MACOS:
+                widget.bind("<Button-2>", show)
+            self.bind_context_menu_modifier(widget, show)
+
+    def show_sidebar_section_menu(self, key, event):
+        self._destroy_sidebar_context_menu()
+        menu = self._sidebar_context_menu = self.build_sidebar_section_menu(key)
+        if event.type == tk.EventType.KeyPress:
+            self._popup_at_widget(menu, event.widget)
+        else:
+            try:
+                menu.tk_popup(event.x_root, event.y_root)
+            finally:
+                menu.grab_release()
+        return "break"
+
+    def build_sidebar_section_menu(self, key):
+        menu = self._new_themed_popup_menu()
+        t = glide_i18n.t
+        create = {"pages": self.create_new_page, "notes": self.create_new_note,
+                  "lists": lambda: self.create_container_dialog("list"),
+                  "drawings": lambda: self.create_in_sidebar_section("drawing", None, "drawings")}
+        if not getattr(self, "_data_read_only", False):
+            menu.add_command(label=t("sidebar.menu.new", "Neues Element erstellen"), command=create[key])
+        menu.add_command(label=t("sidebar.menu.expand", "Alle Elemente aufklappen"),
+                         command=lambda: self.fold_sidebar_section(key, True))
+        menu.add_command(label=t("sidebar.menu.collapse", "Alle Elemente einklappen"),
+                         command=lambda: self.fold_sidebar_section(key, False))
+        rows = self.sidebar_section_roots(key)
+        if rows and not getattr(self, "_data_read_only", False):
+            menu.add_command(label=t("sidebar.menu.sort", "Nach Titel sortieren"),
+                             command=lambda: self.sort_sidebar_section(key))
+            destinations = self.sidebar_move_destinations(key, rows)
+            if destinations:
+                move = self._new_themed_popup_menu(menu)
+                for destination in destinations:
+                    move.add_command(label=self.sidebar_section_title(destination),
+                                     command=lambda target=destination: self.move_sidebar_roots(key, target))
+                menu.add_cascade(label=t("sidebar.menu.move_all", "Alle Elemente verschieben …"), menu=move)
+        menu.add_separator()
+        targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
+        for target, label in (("main", t("sidebar.menu.main", "In der Hauptansicht öffnen")),
+                              ("side", t("sidebar.menu.side", "In der Nebenansicht öffnen"))):
+            prefix = self.ICONS["check"] + "  " if targets[key] == target else "    "
+            menu.add_command(label=prefix + label, command=lambda target=target: self.change_sidebar_preference(
+                "sidebar_open_targets", dict(targets, **{key: target})))
+        menu.add_command(label=t("sidebar.menu.inventory", "Inhaltsumfang ansehen …"),
+                         command=lambda: self.show_sidebar_section_inventory(key))
+        leer = not self.sidebar_section_roots(key)
+        menu.add_command(label=t("sidebar.menu.clear", "Bereich leeren …"),
+                         command=lambda: self.clear_sidebar_section(key),
+                         state="disabled" if leer or getattr(self, "_data_read_only", False) else "normal")
+        menu.add_separator()
+        menu.add_command(label=t("sidebar.menu.hide", "Bereich ausblenden"), command=lambda: self.hide_sidebar_section(key))
+        return menu
+
+    def sidebar_section_roots(self, key):
+        tree = self.sidebar_section_tree(key)
+        if tree is None:
+            return ()
+        policy = self.sidebar_policy()
+        return tuple(row for iid in tree.get_children("")
+                     if (row := self.sidebar_iid_to_row.get(iid)) and row[0] in ("folder", "list")
+                     and not self.is_inbox_list(policy.entries.get(row[1]) or {}))
+
+    def sidebar_move_destinations(self, section, rows):
+        return [key for key in glide_sidebar.SECTIONS if key != section and self.sidebar_section_visible(key)
+                and all(self.sidebar_accepts(kind, identity, key) for kind, identity in rows)]
+
+    def show_sidebar_section_inventory(self, key):
+        roots = self.sidebar_section_roots(key)
+        # iter_folder_subtree liefert Ordnerobjekte; verglichen wird über die Kennung.
+        folder_ids = {value.get("id") if isinstance(value, dict) else value
+                      for kind, identity in roots if kind == "folder"
+                      for value in self.iter_folder_subtree(identity)}
+        list_ids = {identity for kind, identity in roots if kind == "list"}
+        entries = [entry for entry in self.lists
+                   if entry["id"] in list_ids or entry.get("folder_id") in folder_ids]
+        tasks = [item for entry in entries for item in self.walk_items(entry.get("items", []))]
+        targets = {("list", entry["id"]) for entry in entries} | {("item", item["id"]) for item in tasks}
+        _index, _outgoing, incoming = glide_objects.graph(self.lists, self.trash)
+        mentions = sum(len(incoming.get(target, set()) - targets) for target in targets)
+        attachments = sum(len(item.get("attachments") or ()) for item in [*entries, *tasks])
+        message = glide_i18n.t("sidebar.menu.inventory_summary",
+            "Wurzeln: {roots} · Ordner: {folders} · Inhalte: {entries} · Punkte: {tasks}\n"
+            "Anhangeinträge: {attachments} · Objektverweise von außerhalb: {mentions}\n\n"
+            "Die Vorschau umfasst den Navigationsbereich. „Bereich leeren …“ legt die Inhalte nach einer geprüften Sicherung in den Papierkorb.",
+            roots=len(roots), folders=len(folder_ids), entries=len(entries), tasks=len(tasks),
+            attachments=attachments, mentions=mentions)
+        self.show_info(self.sidebar_section_title(key), message)
+
+    # --- NAV-02C (Teil 05B): Bereich sicher leeren ------------------------------
+    def sidebar_section_clear_scope(self, key):
+        """Was „Bereich leeren“ in den Papierkorb legt – nach Heimat, nicht nach Anzeige.
+
+        Gelöscht werden die Wurzelordner des Bereichs mit allen Unterordnern und
+        die Wurzellisten sowie jede Liste, deren Heimatordner darin liegt (auch
+        wenn sie über einen Navigationsort anderswo angezeigt wird). Listen, die
+        nur hier angezeigt werden, deren Heimat aber woanders liegt, bleiben und
+        stehen danach wieder an ihrer Heimat. Der Eingang bleibt immer.
+        """
+        roots = self.sidebar_section_roots(key)
+        root_folders = [identity for kind, identity in roots if kind == "folder"]
+        folder_ids = {value.get("id") if isinstance(value, dict) else value
+                      for identity in root_folders for value in self.iter_folder_subtree(identity)}
+        root_lists = [identity for kind, identity in roots if kind == "list"]
+        heim = [e for e in self.lists if not self.is_inbox_list(e)
+                and (e["id"] in root_lists or e.get("folder_id") in folder_ids)]
+        heim_ids = {e["id"] for e in heim}
+        nur_angezeigt = [e for e in self.lists if e.get("nav_parent_id") in folder_ids and e["id"] not in heim_ids]
+        anderswo = [e for e in heim if e.get("nav_parent_id") and e.get("nav_parent_id") not in folder_ids]
+        punkte = [item for e in heim for item in self.walk_items(e.get("items", []))]
+        ziele = {("list", e["id"]) for e in heim} | {("item", i["id"]) for i in punkte}
+        _index, _out, incoming = glide_objects.graph(self.lists, self.trash)
+        verweise = sum(len(incoming.get(z, set()) - ziele) for z in ziele)
+        anhaenge = sum(len(x.get("attachments") or ()) for x in [*heim, *punkte])
+        eintraege = len(folder_ids) + len(heim)
+        return {"root_folders": root_folders, "root_lists": [i for i in root_lists if i in heim_ids],
+                "folder_ids": folder_ids, "lists": heim, "only_shown": nur_angezeigt, "shown_elsewhere": anderswo,
+                "items": len(punkte), "attachments": anhaenge, "mentions": verweise, "trash_entries": eintraege}
+
+    def verified_section_backup(self, key):
+        """Vollständige App-Sicherung vor einer Sammelaktion; Pfad nur nach bestandener Prüfung."""
+        stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        os.makedirs(BACKUP_DIR, exist_ok=True)
+        path = os.path.join(BACKUP_DIR, f"vor_bereich_leeren_{key}_{stamp}{self.APP_BACKUP_EXTENSION}")
+        self.write_complete_backup(path, self.app_backup_payload())
+        daten, _section = self.read_app_backup_file(path)
+        erwartet = ({e["id"] for e in self.lists}, {f["id"] for f in self.folders})
+        gelesen = ({e.get("id") for e in daten.get("lists", [])}, {f.get("id") for f in daten.get("folders", [])})
+        if gelesen != erwartet:
+            raise OSError(glide_i18n.t("ui.clear_section.backup_mismatch",
+                                       "Die Sicherung enthält nicht genau den aktuellen Bestand."))
+        return path
+
+    def clear_sidebar_section(self, key, confirm=True):
+        """Legt den Inhalt eines Seitenleistenbereichs in den Papierkorb (NAV-02C).
+
+        Reihenfolge: Umfang zeigen, Bestätigung, Schreibsperre prüfen,
+        vollständige Sicherung schreiben und prüfen, Papierkorbplatz prüfen,
+        dann eine zusammenhängende Änderung mit einem Rückgängig-Schritt.
+        Scheitert ein Schritt vor der Änderung, bleibt der Bestand unberührt.
+        """
+        t = glide_i18n.t
+        titel = self.sidebar_section_title(key)
+        if getattr(self, "_data_read_only", False):
+            self.show_warning(titel, self.read_only_notice())
+            return False
+        umfang = self.sidebar_section_clear_scope(key)
+        if not umfang["lists"] and not umfang["folder_ids"]:
+            self.show_info(titel, t("ui.clear_section.nothing", "In diesem Bereich liegt nichts, das in den Papierkorb gelegt werden könnte."))
+            return False
+        frei = self.MAX_TRASH_ENTRIES - len(self.trash)
+        if umfang["trash_entries"] > frei:
+            self.show_warning(titel, t("ui.clear_section.trash_full",
+                "Das Leeren bräuchte {need} Papierkorbeinträge, frei sind {free}. Ältere Einträge würden dabei verdrängt. "
+                "Bitte zuerst den Papierkorb aufräumen oder kleinere Teile löschen. Nichts wurde geändert.",
+                need=umfang["trash_entries"], free=max(0, frei)))
+            return False
+        text = t("ui.clear_section.question",
+                 "„{section}“ leeren?\n\nIn den Papierkorb: {folders} Ordner, {lists} Seiten/Listen, {items} Punkte, "
+                 "{attachments} Anhangseinträge.\nVerweise von außerhalb auf diese Inhalte: {mentions} (bleiben bestehen und zeigen auf den Papierkorb).\n"
+                 "Anderswo angezeigt, aber hier zu Hause (werden mit gelöscht): {elsewhere}.\n"
+                 "Hier nur angezeigt (bleiben, stehen danach an ihrem Heimatort): {only_shown}.\n\n"
+                 "Vorher legt Glide eine vollständige Sicherung im Sicherungsordner an und prüft sie. "
+                 "Rückweg: Rückgängig, Wiederherstellen aus dem Papierkorb oder diese Sicherung.",
+                 section=titel, folders=len(umfang["folder_ids"]), lists=len(umfang["lists"]), items=umfang["items"],
+                 attachments=umfang["attachments"], mentions=umfang["mentions"],
+                 elsewhere=len(umfang["shown_elsewhere"]), only_shown=len(umfang["only_shown"]))
+        if confirm and not self.ask_yes_no(t("ui.clear_section.title", "Bereich leeren"), text):
+            return False
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False) \
+                or not self.prepare_inspector_switch():
+            return False
+        # Nach der Bestätigung erneut bestimmen: Der Bestand kann sich geändert haben.
+        umfang = self.sidebar_section_clear_scope(key)
+        try:
+            sicherung = self.verified_section_backup(key)
+        except Exception as exc:
+            self.show_error(t("ui.clear_section.title", "Bereich leeren"),
+                            t("ui.clear_section.backup_failed", "Die Sicherung vor dem Leeren ist fehlgeschlagen; es wurde nichts geändert.\n\n{detail}", detail=exc))
+            return False
+        self._last_section_clear_backup = sicherung
+        vorher_listen = {e["id"] for e in umfang["lists"]}
+        with self.guarded_structural_change(t("ui.clear_section.title", "Bereich leeren")) as guard, \
+                self.sidebar_change(refresh_tree=True, feedback=False) as change:
+            for list_id in umfang["root_lists"]:
+                if self._move_lists_to_trash([list_id]):
+                    change.mark()
+            for folder_id in umfang["root_folders"]:
+                if self._move_folder_to_trash(folder_id):
+                    change.mark()
+        if guard.aborted or not change.saved:
+            return False
+        rest = {e["id"] for e in self.lists} & vorher_listen
+        rest_ordner = {f.get("id") for f in self.folders} & set(umfang["folder_ids"])
+        if rest or rest_ordner:
+            self.show_warning(t("ui.clear_section.title", "Bereich leeren"),
+                              t("ui.clear_section.incomplete", "Nicht alles konnte in den Papierkorb gelegt werden. Die Sicherung liegt unter:\n{path}", path=sicherung))
+        self.show_undo_toast(t("ui.clear_section.done", "„{section}“ geleert – alles im Papierkorb", section=titel))
+        return True
+
+    def sort_sidebar_section(self, key):
+        if not self.refresh_data_lock():
+            return False
+        roots = self.sidebar_section_roots(key)
+        groups = {"list": self.lists, "folder": self.folders}
+        replacements = {}
+        for kind, source in groups.items():
+            identifiers = {identity for row_kind, identity in roots if kind == row_kind}
+            sortable = [entry for entry in source if entry.get("id") in identifiers]
+            if len(sortable) < 2:
+                continue
+            sorted_entries = sorted(sortable, key=lambda entry: str(entry.get("title", "")).casefold())
+            replacements[kind] = dict(zip((entry["id"] for entry in sortable), sorted_entries))
+        if not replacements:
+            return False
+        with self.guarded_structural_change(self.sidebar_section_title(key)), self.sidebar_change() as change:
+            if "list" in replacements:
+                self.lists = [replacements["list"].get(entry["id"], entry) for entry in self.lists]
+            if "folder" in replacements:
+                self.folders = [replacements["folder"].get(entry["id"], entry) for entry in self.folders]
+            change.mark()
+        return change.saved
+
+    def move_sidebar_roots(self, section, destination, rows=None):
+        roots = self.sidebar_section_roots(section)
+        selected = tuple(roots if rows is None else rows)
+        if (not selected or any(row not in roots for row in selected)
+                or destination not in self.sidebar_move_destinations(section, selected)):
+            return False
+        policy = self.sidebar_policy()
+        objects = [((policy.folders if kind == "folder" else policy.entries)[identity])
+                   for kind, identity in selected]
+        titles = "\n".join(str(obj.get("title", "")) for obj in objects[:12])
+        if len(objects) > 12:
+            titles += "\n…"
+        label = glide_i18n.t("sidebar.menu.move_all", "Alle Elemente verschieben …")
+        question = glide_i18n.t("sidebar.menu.move_question",
+            "{count} Elemente aus „{source}“ nach „{destination}“ verschieben? Untergeordnete Inhalte bleiben in ihren Ordnern.\n\n{titles}",
+            count=len(objects), source=self.sidebar_section_title(section),
+            destination=self.sidebar_section_title(destination), titles=titles)
+        if not self.ask_yes_no(label, question) or not self.refresh_data_lock():
+            return False
+        current = self.sidebar_section_roots(section)
+        if (rows is None and current != roots) or any(row not in current for row in selected):
+            return False
+        if destination not in self.sidebar_move_destinations(section, selected):
+            return False
+        # Eine Navigationsverschiebung schreibt ausschließlich die vorhandene
+        # Einstellungsdatei. Ordnerbeziehungen und Inhalt bleiben unverändert.
+        locations = dict(self.settings.get("sidebar_locations", {}))
+        locations.update({f"{kind}:{identity}": destination for kind, identity in selected})
+        self.snapshot_undo(trim=False)
+        if not self.change_sidebar_preference("sidebar_locations", locations):
+            self.undo_stack.pop()
+            return False
+        self.trim_undo_stack()
+        self.redo_steps().note_write()
+        return True
+
+    def hide_sidebar_section(self, key):
+        visibility = glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible"))
+        visibility[key] = False
+        if self.change_sidebar_preference("sidebar_sections_visible", visibility):
+            self.show_info(self.sidebar_section_title(key), glide_i18n.t(
+                "sidebar.menu.restore_hint",
+                "Du kannst diesen Bereich in den Einstellungen unter „Bereiche der Seitenleiste“ wieder einblenden."))
+
+    def fold_sidebar_section(self, key, opened):
+        tree = self.sidebar_section_tree(key)
+        pending = list(tree.get_children(""))
+        while pending:
+            iid = pending.pop()
+            children = tree.get_children(iid)
+            if children:
+                tree.item(iid, open=opened)
+                row = self.sidebar_iid_to_row.get(iid)
+                if row and row[0] == "folder":
+                    self.sidebar_folder_open_states[row[1]] = opened
+                elif row and row[0] == "list":
+                    if not hasattr(self, "sidebar_chapter_open"):
+                        self.sidebar_chapter_open = {}
+                    self.sidebar_chapter_open[row[1]] = opened
+                pending.extend(children)
+        self.set_sidebar_section_open(key, opened)
+        self.sync_pages_sidebar_height()
+
+    def open_sidebar_list(self, list_id, tree):
+        section = self.sidebar_section_for_tree(tree)
+        if glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))[section] == "side":
+            entry = self.sidebar_policy().entries.get(list_id)
+            if entry and not getattr(self, "_compact", None):
+                state, _message = glide_side_view.availability(entry, list_id, self.trash)
+                if state != "unsupported":
+                    if (getattr(self, "_side_view", None) or {}).get("id") == list_id:
+                        return
+                    history = self.remember_side_history()
+                    location = next((visit for visit in reversed(history.entries) if visit.list_id == list_id), None)
+                    if self.open_side_view(list_id, item_id=location.item_id if location else None, location=location):
+                        if location:
+                            self._side_history = glide_side_view.visit_location(history, location)
+                        return
+        if list_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            self.set_active_list(list_id)
 
     def show_drawings_add_menu(self, event=None):
         menu = self._new_themed_popup_menu()
@@ -40419,14 +41704,15 @@ class ListApp:
         for sequence in ("<Return>", "<space>"):
             beschriftung.bind(sequence, lambda _event: oeffnen())
         self.add_tooltip(beschriftung, titel_hinweis)
-        plus = self.make_button(zeile, text="+", command=plus_befehl, color_key="accent", width=42, height=32,
-                                radius=14, bg_key="card", font=app_font(13, "bold"), outline=False)
-        plus.pack(side="right")
+        self.bind_sidebar_section_menu(key, zeile, kopf, platz, pfeil, beschriftung)
+        plus = self.make_square_symbol_button(zeile, self.ICONS["plus"], plus_befehl, size=28,
+                                             color_key="accent", surface="card")
+        plus.pack(side="right", padx=(0, glide_design.SPACING[3]))
         self.add_tooltip(plus, plus_hinweis)
         baum = GlideTreeview(
             self.sidebar_frame, columns=("icon", "count", "count_margin"),
             displaycolumns=("count", "count_margin"), show="tree",
-            selectmode="browse", style="Sidebar.Treeview", takefocus=True, height=1)
+            selectmode="extended", style="Sidebar.Treeview", takefocus=True, height=1)
         baum.heading("#0", text="")
         baum.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
         baum.column("#0", anchor="w", stretch=True, width=192)
@@ -40449,6 +41735,8 @@ class ListApp:
         baum.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
         baum.bind("<<TreeviewOpen>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
         baum.bind("<<TreeviewClose>>", lambda _event: self.after_scope().after_idle(self.sync_pages_sidebar_height), add="+")
+        baum.bind("<<TreeviewOpen>>", lambda _event, ziel=baum: self.remember_sidebar_chapter_open(ziel, True), add="+")
+        baum.bind("<<TreeviewClose>>", lambda _event, ziel=baum: self.remember_sidebar_chapter_open(ziel, False), add="+")
         self.bind_hover_highlight(baum)
         self.bind_mousewheel(baum)
         self.build_sidebar_quick_actions(baum)
@@ -41008,17 +42296,33 @@ class ListApp:
         if getattr(self, "_updating_sidebar", False) or self.is_sidebar_context_selection(baum):
             return
         auswahl = baum.selection()
-        if not auswahl:
+        if len(auswahl) != 1:
             return
         for anderer in [getattr(self, "system_listbox", None)] + self.sidebar_trees():
             if anderer is not None and anderer is not baum and anderer.selection():
                 anderer.selection_remove(*anderer.selection())
+        kapitel = getattr(self, "sidebar_chapter_rows", {}).get(auswahl[0])
+        if kapitel:
+            page_id, key = kapitel
+            section = self.sidebar_section_for_tree(baum)
+            entry = self.page_entry(page_id)
+            chapter = glide_chapters.find(self.chapter_outline(entry), key) if entry else None
+            targets = glide_sidebar.normalize_open_targets(self.settings.get("sidebar_open_targets"))
+            if chapter is not None and targets[section] == "side" and not getattr(self, "_compact", None):
+                if self.open_side_view(page_id):
+                    body = getattr(self, "_side_view_body", None)
+                    if isinstance(body, tk.Text):
+                        body.mark_set("insert", f"{chapter.line}.0")
+                        body.see("insert")
+                    return
+            self.open_chapter(page_id, key)
+            return
         row = self.sidebar_iid_to_row.get(auswahl[0])
         if not row:
             return
         art, kennung = row
-        if art == "list" and (kennung != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW)):
-            self.set_active_list(kennung)
+        if art == "list":
+            self.open_sidebar_list(kennung, baum)
         elif art == "folder" and (kennung != self.active_folder_id or self.view_mode != "folder"):
             self.set_active_folder(kennung)
 
@@ -41077,7 +42381,7 @@ class ListApp:
             # Struktur oben und der Inhalt darunter.
             self._insert_sidebar_folder_rows(folder_id, iid, depth + 1, tree=ziel)
             for entry in self.lists:
-                if entry.get("folder_id") == folder_id and not self.is_inbox_list(entry) and not entry.get("archived"):
+                if self.sidebar_parent(entry) == folder_id and not self.is_inbox_list(entry) and not entry.get("archived"):
                     self._insert_sidebar_list_row(entry, parent=iid, depth=depth + 1, tree=ziel)
 
     def _insert_sidebar_list_row(self, entry, parent="", tree=None, depth=None):
@@ -41109,6 +42413,165 @@ class ListApp:
                            image=image or "")
         self.sidebar_rows.append(("list", item_id))
         self.sidebar_iid_to_row[iid] = ("list", item_id)
+        self._insert_sidebar_chapter_rows(entry, iid, target_tree, depth)
+
+    # --- Kapitel (PAGE-02, Master-Serie Teil 03) ------------------------------------------------
+    # Kapitel sind die Überschriften einer Seite samt Abschnitt (`chapters.py`). Die Seitenleiste
+    # zeigt sie unter der Seite; jede Änderung ist eine Dokumenttransformation in einem
+    # `sidebar_change` (ein Rückgängig-Schritt, Speichern, Neuaufbau der Seitenleiste).
+
+    def chapter_outline(self, entry):
+        """Kapitel einer Seite; zwischengespeichert nach Änderungszeit und Dokumentgröße."""
+        dokument = entry.get("rich_note") or {}
+        signatur = (entry.get("updated_at"), len(dokument.get("text") or ""), len(dokument.get("spans") or []))
+        cache = getattr(self, "_chapter_outline_cache", None)
+        if cache is None:
+            cache = self._chapter_outline_cache = {}
+        treffer = cache.get(entry.get("id"))
+        if treffer is None or treffer[0] != signatur:
+            treffer = cache[entry.get("id")] = (signatur, glide_chapters.outline(dokument))
+        return treffer[1]
+
+    def _insert_sidebar_chapter_rows(self, entry, page_iid, tree, depth):
+        if not self.is_page_list(entry):
+            return
+        kapitel = self.chapter_outline(entry)
+        if not kapitel:
+            return
+        zeilen = getattr(self, "sidebar_chapter_rows", None)
+        if zeilen is None:
+            zeilen = self.sidebar_chapter_rows = {}
+        tree.tag_configure("chapter", foreground=self.theme.get("muted", self.theme["text"]))
+
+        def einfuegen(knoten, eltern, tiefe):
+            for chapter, kinder in knoten:
+                iid = f"chapter:{entry['id']}:{chapter.index}"
+                tree.insert(eltern, "end", iid=iid, text=self.sidebar_row_text(chapter.title, None, tree=tree, depth=tiefe),
+                            values=("", ""), tags=("chapter",))
+                zeilen[iid] = (entry["id"], chapter.key)
+                if kinder:
+                    einfuegen(kinder, iid, tiefe + 1)
+                    tree.item(iid, open=self.sidebar_chapter_open_state(f"{entry['id']}:{chapter.key}"))
+
+        einfuegen(glide_chapters.tree(kapitel), page_iid, depth + 1)
+        tree.item(page_iid, open=self.sidebar_chapter_open_state(entry["id"]))
+
+    def sidebar_chapter_open_state(self, key):
+        return bool((getattr(self, "sidebar_chapter_open", None) or {}).get(key, False))
+
+    def remember_sidebar_chapter_open(self, tree, open_state):
+        """Klappzustand einer Seite oder eines Kapitels in der Sitzung merken (nicht gespeichert)."""
+        iid = tree.focus()
+        offen = getattr(self, "sidebar_chapter_open", None)
+        if offen is None:
+            offen = self.sidebar_chapter_open = {}
+        if iid.startswith("list:"):
+            offen[iid[5:]] = open_state
+        elif iid in getattr(self, "sidebar_chapter_rows", {}):
+            seite, key = self.sidebar_chapter_rows[iid]
+            offen[f"{seite}:{key}"] = open_state
+
+    def open_chapter(self, page_id, key):
+        """Öffnet die Seite und springt zur Kapitelüberschrift; Vorrang vor gemerkter Position."""
+        if page_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
+            self.set_active_list(page_id)
+        editor = getattr(self, "rich_note_editor", None)
+        if editor is None or getattr(editor, "entry_id", None) != page_id:
+            return False
+
+        def springen():
+            if not editor.winfo_exists():
+                return
+            chapter = glide_chapters.find(glide_chapters.outline(editor.document()), key)
+            if chapter is not None:
+                editor.jump_to(f"{chapter.line}.0")
+                self._chapter_jump = (page_id, key)
+
+        springen()
+        self.after_scope().after_idle(springen)
+        return True
+
+    def change_chapter(self, page_id, key, aktion, *argumente):
+        """Wendet eine Kapitelaktion (`rename`, `dissolve`, `set_level`, `move`) als ein Rückgängig-Schritt an."""
+        entry = self.page_entry(page_id)
+        if entry is None or getattr(self, "_data_read_only", False):
+            return False
+        editor = getattr(self, "rich_note_editor", None)
+        offen = editor is not None and getattr(editor, "entry_id", None) == page_id
+        if offen and editor.flush() is False:
+            return False
+        dokument = entry.get("rich_note") or {"text": "", "spans": [], "links": {}}
+        kapitel = glide_chapters.outline(dokument)
+        chapter = glide_chapters.find(kapitel, key)
+        if chapter is None:
+            return False
+        if aktion == "move":
+            neu = glide_chapters.move(dokument, kapitel, chapter, *argumente)
+        else:
+            neu = getattr(glide_chapters, aktion)(dokument, chapter, *argumente)
+        if neu is None or neu == dokument:
+            return False
+        neu = RichNoteEditor.normalize(neu)
+        if offen and editor.winfo_exists():
+            # Offene Seite: ein Schritt im Dokumentstapel des Editors, damit Strg/Cmd+Z
+            # im Text ihn zurücknimmt; Speichern läuft über `store_rich_note`.
+            editor.load(neu)
+            ergebnis = editor.flush()
+            editor.text.focus_set()
+            return ergebnis is not False
+        with self.sidebar_change(feedback=False) as change:
+            entry["rich_note"] = neu
+            entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+            change.mark()
+        return change.saved is not False
+
+    def ask_chapter_title(self, page_id, key):
+        chapter = glide_chapters.find(glide_chapters.outline((self.page_entry(page_id) or {}).get("rich_note") or {}), key)
+        if chapter is None:
+            return False
+        titel = self.themed_input_dialog(glide_i18n.t("chapter.rename.title", "Kapitel umbenennen"),
+                                         glide_i18n.t("chapter.rename.prompt", "Neuer Name des Kapitels:"),
+                                         initial=chapter.title)
+        if titel is None or not titel.strip():
+            return False
+        return self.change_chapter(page_id, key, "rename", titel)
+
+    def build_chapter_menu(self, parent, page_id, key):
+        """Kapitelaktionen für Seitenleiste und Seitenmenü; nur verfügbare Schritte sind aktiv."""
+        menu = self._new_themed_popup_menu(parent)
+        entry = self.page_entry(page_id) or {}
+        kapitel = glide_chapters.outline(entry.get("rich_note") or {})
+        chapter = glide_chapters.find(kapitel, key)
+        if chapter is None:
+            return menu
+        schreibbar = not getattr(self, "_data_read_only", False)
+        zustand = lambda bedingung: "normal" if schreibbar and bedingung else "disabled"
+        menu.add_command(label=glide_i18n.t("chapter.open", "Zum Kapitel springen"),
+                         command=lambda: self.open_chapter(page_id, key))
+        menu.add_command(label=glide_i18n.t("chapter.rename", "Umbenennen …"), state=zustand(True),
+                         command=lambda: self.ask_chapter_title(page_id, key))
+        menu.add_separator()
+        menu.add_command(label=glide_i18n.t("chapter.move_up", "Mit Inhalt nach oben"),
+                         state=zustand(glide_chapters.sibling(kapitel, chapter, -1) is not None),
+                         command=lambda: self.change_chapter(page_id, key, "move", -1))
+        menu.add_command(label=glide_i18n.t("chapter.move_down", "Mit Inhalt nach unten"),
+                         state=zustand(glide_chapters.sibling(kapitel, chapter, +1) is not None),
+                         command=lambda: self.change_chapter(page_id, key, "move", +1))
+        menu.add_command(label=glide_i18n.t("chapter.level_up", "Eine Ebene höher"), state=zustand(chapter.level > 1),
+                         command=lambda: self.change_chapter(page_id, key, "set_level", chapter.level - 1))
+        menu.add_command(label=glide_i18n.t("chapter.level_down", "Eine Ebene tiefer"), state=zustand(chapter.level < 4),
+                         command=lambda: self.change_chapter(page_id, key, "set_level", chapter.level + 1))
+        menu.add_separator()
+        menu.add_command(label=glide_i18n.t("chapter.dissolve", "Kapitel auflösen (Inhalt bleibt)"), state=zustand(True),
+                         command=lambda: self.change_chapter(page_id, key, "dissolve"))
+        return menu
+
+    def show_sidebar_chapter_menu(self, event, tree, iid):
+        page_id, key = self.sidebar_chapter_rows[iid]
+        tree.selection_set(iid)
+        menu = self.build_chapter_menu(tree, page_id, key)
+        menu.tk_popup(event.x_root, event.y_root)
+        return "break"
 
     def get_selected_sidebar_row(self):
         rows = self.get_selected_sidebar_rows()
@@ -41256,13 +42719,14 @@ class ListApp:
         # würde jede Bereichsauswahl ungewollt die Ansicht umschalten.
         if len(selection) > 1:
             return
+        if selection[0] in getattr(self, "sidebar_chapter_rows", {}):
+            return self.on_section_select(self.sidebar_listbox)
         row = self.get_selected_sidebar_row()
         if not row:
             return
         row_type, row_id = row
         if row_type == "list":
-            if row_id != self.active_list_id or self.view_mode not in ("list", self.TABLE_VIEW):
-                self.set_active_list(row_id)
+            self.open_sidebar_list(row_id, self.sidebar_listbox)
         elif row_type == "folder":
             if row_id != self.active_folder_id or self.view_mode != "folder":
                 self.set_active_folder(row_id)
@@ -41537,7 +43001,7 @@ class ListApp:
         available = [label for label in self.labels if not self.is_system_label(label)]
         if not available:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             for label in available:
@@ -41593,7 +43057,9 @@ class ListApp:
     def build_sidebar_context_menu(self, row, rows=None):
         """Vollständiges Kontextmenü für eine Liste, einen Ordner oder eine Systemzeile."""
         if rows and len(rows) > 1:
-            return self.build_sidebar_multi_menu(rows)
+            menu = self.build_sidebar_multi_menu(rows)
+            self.add_sidebar_root_move_menu(menu, tuple(rows))
+            return menu
         if not row:
             return None
         row_type, row_id = row
@@ -41605,10 +43071,31 @@ class ListApp:
                                  command=lambda: self.set_sidebar_section_open("views", False))
             return menu
         if row_type == "folder":
-            return self.build_folder_menu(row_id)
-        if row_type == "list":
-            return self.build_list_menu(row_id)
-        return None
+            menu = self.build_folder_menu(row_id)
+        elif row_type == "list":
+            menu = self.build_list_menu(row_id)
+            if menu is not None:
+                menu.add_command(label=glide_i18n.t("sidebar.menu.main", "In der Hauptansicht öffnen"),
+                                 command=lambda: self.set_active_list(row_id))
+        else:
+            return None
+        if menu is not None:
+            self.add_sidebar_root_move_menu(menu, (row,))
+        return menu
+
+    def add_sidebar_root_move_menu(self, menu, rows):
+        if not rows or getattr(self, "_data_read_only", False):
+            return
+        section = self.sidebar_section_for(*rows[0])
+        if any(row not in self.sidebar_section_roots(section) for row in rows):
+            return
+        destinations = self.sidebar_move_destinations(section, rows)
+        if destinations:
+            move = self._new_themed_popup_menu(menu)
+            for destination in destinations:
+                move.add_command(label=self.sidebar_section_title(destination),
+                                 command=lambda target=destination: self.move_sidebar_roots(section, target, rows))
+            menu.add_cascade(label=glide_i18n.t("sidebar.menu.move_selection", "In Bereich verschieben …"), menu=move)
 
     def build_sidebar_multi_menu(self, rows):
         """Kontextmenü für eine Mehrfachauswahl aus Listen und Ordnern."""
@@ -41753,6 +43240,17 @@ class ListApp:
             label=glide_i18n.t("ui.build_list_menu.take_out_of_folder", "Aus Ordner herauslösen"),
             command=lambda: self.detach_list_from_folder(list_id),
             state="normal" if in_folder and not is_inbox else "disabled",
+        )
+        move_menu.add_separator()
+        move_menu.add_command(
+            label=glide_i18n.t("ui.build_list_menu.show_under_folder", "In der Seitenleiste anzeigen unter …"),
+            command=lambda: self.show_list_under_folder_dialog(list_id),
+            state="disabled" if is_inbox or not self.folders or getattr(self, "_data_read_only", False) else "normal",
+        )
+        move_menu.add_command(
+            label=glide_i18n.t("ui.build_list_menu.show_at_home", "Wieder am Heimatort anzeigen"),
+            command=lambda: self.set_list_navigation(list_id, None),
+            state="normal" if entry.get("nav_parent_id") and not is_inbox else "disabled",
         )
         menu.add_cascade(label=glide_i18n.t("drawing.action.move", "Verschieben"), menu=move_menu, state="disabled" if is_inbox else "normal")
 
@@ -42065,12 +43563,15 @@ class ListApp:
         iid = tree.identify_row(event.y)
         if not iid:
             return "break"
+        if iid in getattr(self, "sidebar_chapter_rows", {}):
+            return self.show_sidebar_chapter_menu(event, tree, iid)
         self.cancel_sidebar_rename()
         for anderer in [getattr(self, "system_listbox", None)] + self.sidebar_trees():
             if anderer is not None and anderer is not tree and anderer.selection():
                 anderer.selection_remove(*anderer.selection())
         if tree is self.system_listbox or tree in bereiche:
-            tree.selection_set(iid)
+            if iid not in tree.selection():
+                tree.selection_set(iid)
         else:
             system_selection = self.system_listbox.selection()
             if system_selection:
@@ -42333,8 +43834,67 @@ class ListApp:
             return "break"
         with self.sidebar_change() as change:
             entry["folder_id"] = None
+            entry.pop("nav_parent_id", None)
             change.mark()
         return "break"
+
+    def show_list_under_folder_dialog(self, list_id):
+        """Navigationsort (Format 27): Liste in der Seitenleiste unter einem Ordner zeigen.
+
+        Anders als Verschieben bleiben Art, Heimatordner, Verweise, Favoriten,
+        Anhänge und Kapitel unverändert; es entsteht keine Kopie.
+        """
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None or self.is_inbox_list(entry) or getattr(self, "_data_read_only", False):
+            return "break"
+        policy = self.sidebar_policy()
+        aktuell = policy.nav_parent(entry)
+        choices = [(folder["id"], " › ".join(self.folder_path_titles(folder["id"])) or str(folder.get("title") or ""))
+                   for folder in self.folders
+                   if isinstance(folder, dict) and folder.get("id") and folder["id"] != aktuell
+                   and glide_sidebar.nav_problem(policy, list_id, folder["id"]) is None]
+        if not choices:
+            self.show_info(glide_i18n.t("ui.show_list_under_folder.title", "Anzeigen unter"),
+                           glide_i18n.t("ui.move_list_to_folder_dialog.there_is_no_other", "Es gibt keinen anderen Ordner als Ziel."))
+            return "break"
+        folder_id = self.themed_choice_dialog(
+            glide_i18n.t("ui.show_list_under_folder.title", "Anzeigen unter"),
+            glide_i18n.t("ui.show_list_under_folder.prompt", "Unter welchem Ordner soll sie in der Seitenleiste stehen? Heimatordner und Inhalt bleiben unverändert."),
+            sorted(choices, key=lambda pair: pair[1].casefold()))
+        if not folder_id:
+            return "break"
+        return self.set_list_navigation(list_id, folder_id)
+
+    def set_list_navigation(self, list_id, folder_id):
+        """Setzt oder löscht (``None``) den Navigationsort als ein Rückgängig-Schritt."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None or getattr(self, "_data_read_only", False):
+            return "break"
+        if folder_id is not None and glide_sidebar.nav_problem(self.sidebar_policy(), list_id, folder_id):
+            return "break"
+        with self.sidebar_change() as change:
+            if folder_id is None or folder_id == entry.get("folder_id"):
+                entry.pop("nav_parent_id", None)
+            else:
+                entry["nav_parent_id"] = folder_id
+                self.sidebar_folder_open_states[folder_id] = True
+            self.clear_render_cache()
+            change.mark()
+        return "break"
+
+    def renew_copied_anchors(self, entry):
+        """Kopie erhält neue Kapitelanker; Verweise der Kopie auf sich selbst folgen (Format 27)."""
+        dokument, zuordnung = glide_chapters.renew_anchors(entry.get("rich_note"))
+        if not zuordnung:
+            return
+        eigen = glide_objects.uri("list", entry["id"])
+        links = dict(dokument.get("links") or {})
+        for tag, value in links.items():
+            anker = glide_objects.anchor(value)
+            if anker in zuordnung and value.startswith(eigen + "#"):
+                links[tag] = eigen + "#" + zuordnung[anker]
+        dokument["links"] = links
+        entry["rich_note"] = dokument
 
     def duplicate_list(self, list_id):
         """Legt eine unabhängige Kopie einer Liste an."""
@@ -42370,9 +43930,11 @@ class ListApp:
                     cover=copy.deepcopy(entry.get("cover")),
                     icon=copy.deepcopy(entry.get("icon")),
                     animation=copy.deepcopy(entry.get("animation")),
+                    nav_parent_id=entry.get("nav_parent_id"),
                 )
                 self.remap_rich_note_items(new_entry, zuordnung)
                 glide_objects.remap_holder(new_entry, {list_id: new_entry["id"]}, zuordnung)
+                self.renew_copied_anchors(new_entry)
                 for item in self.walk_items(new_entry.get("items", [])):
                     glide_objects.remap_holder(item, {list_id: new_entry["id"]}, {})
                 index = next((i for i, item in enumerate(self.lists) if item.get("id") == list_id), len(self.lists) - 1)
@@ -43812,6 +45374,7 @@ class ListApp:
         """Gleiche Ziehbedienung für alle vier Inhaltsbereiche."""
         tree.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
         tree.bind("<B1-Motion>", self.on_sidebar_drag_motion)
+        tree.bind("<Escape>", self.cancel_sidebar_drag, add="+")
         tree.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
 
     def sidebar_event_y(self, event, tree):
@@ -43867,41 +45430,178 @@ class ListApp:
             self.sidebar_drag_has_moved = True
         if not self.sidebar_drag_has_moved:
             return
-        target_iid, _target_row = self.identify_sidebar_drop_row(event)
-        self.clear_sidebar_drop_target_tags()
-        if target_iid and target_iid != self.sidebar_drag_start_iid:
-            try:
-                target_tree = self.get_sidebar_tree_for_iid(target_iid)
-                if target_tree is None:
-                    return "break"
-                tags = set(target_tree.item(target_iid, "tags"))
-                tags.add("drop_target")
-                target_tree.item(target_iid, tags=tuple(tags))
-            except tk.TclError:
-                pass
+        self.clear_sidebar_drop_target_tags(legacy=False)
+        tree, iid, target, heading = self.sidebar_drag_destination(event)
+        source = self.sidebar_iid_to_row.get(self.sidebar_drag_start_iid)
+        if tree is not None:
+            zone = self.sidebar_drop_placement(source, tree, iid, target, event)
+            surface = heading or tree
+            bounds = tree.bbox(iid) if iid else (0, 0, surface.winfo_width(), surface.winfo_height())
+            if bounds:
+                marker = getattr(surface, "_sidebar_drop_indicator", None)
+                if marker is None:
+                    marker = surface._sidebar_drop_indicator = DropIndicator(surface)
+                color = self.theme["ui_accent"] if zone else self.theme["flag"]
+                marker.show(bounds, zone or "invalid", color=color)
+                self._sidebar_drag_indicator = marker
+            self.show_sidebar_drop_hint(event, source, target, zone)
+            self.schedule_sidebar_drag_assist(event, tree, iid, zone)
+        else:
+            self.hide_sidebar_drop_hint()
+            self.cancel_sidebar_drag_assist()
+        return "break"
+
+    # NAV-04 (Teil 05B): Ziehen auf einen Ordner verschiebt; mit gehaltener
+    # Alt-/Wahltaste ändert es nur den Anzeigeort (Format 27, `nav_parent_id`).
+    NAV_MODIFIER_MASK = 0x0010 if IS_MACOS else (0x20000 if os.name == "nt" else 0x0008)
+
+    def sidebar_drop_is_navigation(self, event, source, target):
+        return bool(source and source[0] == "list" and target and target[0] == "folder"
+                    and int(getattr(event, "state", 0) or 0) & self.NAV_MODIFIER_MASK)
+
+    def sidebar_drop_hint_text(self, event, source, target, zone):
+        """Was das Loslassen tut – vor der Operation sichtbar."""
+        if not source or not target or target[0] != "folder":
+            return None
+        if not zone and not self.sidebar_drop_is_navigation(event, source, target):
+            return None
+        ordner = self.get_folder(target[1]) or {}
+        titel = str(ordner.get("title") or "").strip() or glide_i18n.t("ui.kachel_boards.folder", "Ordner")
+        if source[0] == "list" and self.sidebar_drop_is_navigation(event, source, target):
+            if glide_sidebar.nav_problem(self.sidebar_policy(), source[1], target[1]):
+                return glide_i18n.t("ui.sidebar_drop.nav_invalid", "Hier nicht anzeigbar")
+            return glide_i18n.t("ui.sidebar_drop.nav", "Nur anzeigen unter „{folder}“ · Heimat bleibt", folder=titel)
+        return glide_i18n.t("ui.sidebar_drop.move", "Verschieben nach „{folder}“ · Alt: nur anzeigen", folder=titel)
+
+    def show_sidebar_drop_hint(self, event, source, target, zone):
+        text = self.sidebar_drop_hint_text(event, source, target, zone)
+        if text is None:
+            return self.hide_sidebar_drop_hint()
+        hinweis = getattr(self, "_sidebar_drop_hint", None)
+        if hinweis is None or not hinweis.winfo_exists():
+            hinweis = self._sidebar_drop_hint = tk.Label(self.root, bd=0, padx=6, pady=2)
+        hinweis.configure(text=text, bg=self.theme["card"], fg=self.theme["text"], font=app_font(9),
+                          highlightthickness=1, highlightbackground=self.theme["line"])
+        x = getattr(event, "x_root", 0) - self.root.winfo_rootx() + 14
+        y = getattr(event, "y_root", 0) - self.root.winfo_rooty() + 12
+        hinweis.place(x=x, y=y)
+        hinweis.tk.call("raise", hinweis._w)
+
+    def hide_sidebar_drop_hint(self):
+        hinweis = getattr(self, "_sidebar_drop_hint", None)
+        if hinweis is not None and hinweis.winfo_exists():
+            hinweis.place_forget()
+
+    def sidebar_drag_destination(self, event):
+        for key in glide_sidebar.SECTIONS:
+            heading = self.sidebar_section_heading(key)
+            if heading is not None and heading.winfo_ismapped() and self.pointer_is_over_widget(heading, event):
+                return self.sidebar_section_tree(key), None, None, heading
+        iid, row = self.identify_sidebar_drop_row(event)
+        tree = next((tree for tree in self.sidebar_trees()
+                     if tree.winfo_ismapped() and self.pointer_is_over_widget(tree, event)), None)
+        return tree, iid, row, None
+
+    def sidebar_drop_placement(self, source, tree, iid, target, event):
+        if source is None or source == target or getattr(self, "_data_read_only", False):
+            return None
+        kind, identity = source
+        policy = self.sidebar_policy()
+        objects = policy.entries if kind == "list" else policy.folders
+        obj = objects.get(identity)
+        if not obj or self.is_inbox_list(obj):
+            return None
+        section = self.sidebar_section_for_tree(tree)
+        if not target:
+            return "after" if not iid and self.sidebar_accepts(kind, identity, section) else None
+        target_kind, target_id = target
+        if target_kind == "folder":
+            zone = "into" if kind == "list" else self.sidebar_drop_zone(iid, self.sidebar_event_y(event, tree))
+            folder_id = target_id if zone == "into" else self.folder_parent_id(target_id)
+        elif target_kind == "list":
+            target_entry = policy.entries.get(target_id)
+            if not target_entry or self.is_inbox_list(target_entry):
+                return None
+            folder_id = target_entry.get("folder_id")
+            if kind == "folder":
+                # Trees always render folders before lists, so a list is not
+                # an addressable insertion neighbor for a folder.
+                return None
+            _x, y, _width, height = tree.bbox(iid) or (0, 0, 0, 0)
+            zone = "before" if self.sidebar_event_y(event, tree) < y + height / 2 else "after"
+        else:
+            return None
+        if not self.sidebar_accepts(kind, identity, section, folder_id):
+            return None
+        if kind == "folder" and not self.can_move_folder_into(identity, folder_id):
+            return None
+        if kind == "list" and zone == "into":
+            selected = self.get_selected_sidebar_list_ids()
+            if identity in selected and any(not self.sidebar_accepts("list", item, section, folder_id)
+                                            for item in selected):
+                return None
+        return zone
+
+    def cancel_sidebar_drag_assist(self):
+        job = getattr(self, "_sidebar_drag_assist_job", None)
+        if job is not None:
+            self.after_scope().cancel(job)
+        self._sidebar_drag_assist_job = None
+        self._sidebar_drag_assist_key = None
+
+    def schedule_sidebar_drag_assist(self, event, tree, iid, zone):
+        y = self.sidebar_event_y(event, tree)
+        direction = (-1 if y < 12 else 1 if y > tree.winfo_height() - 12 else 0) if 0 <= y < tree.winfo_height() else 0
+        folder = iid if zone == "into" and tree.get_children(iid) and not tree.item(iid, "open") else None
+        key = (tree, direction, folder)
+        self._sidebar_drag_assist_event = event
+        if key == getattr(self, "_sidebar_drag_assist_key", None):
+            return
+        self.cancel_sidebar_drag_assist()
+        if not direction and not folder:
+            return
+        self._sidebar_drag_assist_key = key
+
+        def advance():
+            self._sidebar_drag_assist_job = None
+            self._sidebar_drag_assist_key = None
+            if direction:
+                tree.yview_scroll(direction, "units")
+            elif folder and tree.exists(folder):
+                tree.item(folder, open=True)
+                row = self.sidebar_iid_to_row.get(folder)
+                if row and row[0] == "folder":
+                    self.sidebar_folder_open_states[row[1]] = True
+            self.on_sidebar_drag_motion(self._sidebar_drag_assist_event)
+
+        self._sidebar_drag_assist_job = self.after_scope().after(100 if direction else 550, advance)
+
+    def cancel_sidebar_drag(self, _event=None):
+        if not getattr(self, "sidebar_drag_start_iid", None):
+            return None
+        self.sidebar_drag_start_iid = None
+        self.sidebar_drag_tree = None
+        self.sidebar_drag_has_moved = False
+        self._sidebar_board_drag = None
+        self._sidebar_release_moved = True
+        self.cancel_sidebar_drag_assist()
+        self.clear_sidebar_drop_target_tags(legacy=False)
         return "break"
 
     def on_sidebar_drag_end(self, event):
+        self.hide_sidebar_drop_hint()
         deferred_page = getattr(self, "_sidebar_board_drag", None)
         self._sidebar_board_drag = None
         source_iid = self.sidebar_drag_start_iid
-        target_iid, target_row = self.identify_sidebar_drop_row(event)
-        target_tree = (self.get_sidebar_tree_for_iid(target_iid) if target_iid else
-                       next((tree for tree in self.sidebar_trees()
-                             if self.pointer_is_over_widget(tree, event)), None))
-        heading_tree = next((getattr(self, name, None) for key, name in (
-            ("pages", "pages_listbox"), ("lists", "sidebar_listbox"), ("notes", "notes_listbox"),
-            ("drawings", "drawings_listbox")) if getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row", None) is not None
-            and self.pointer_is_over_widget(getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row"), event)), None)
-        if heading_tree is not None:
-            target_tree, target_iid, target_row = heading_tree, None, None
-        pointer_inside_sidebar = target_tree in self.sidebar_trees() and (heading_tree is not None or self.pointer_is_over_widget(target_tree, event))
+        target_tree, target_iid, target_row, _heading = self.sidebar_drag_destination(event)
+        pointer_inside_sidebar = target_tree is not None
+        self.cancel_sidebar_drag_assist()
         moved = self.sidebar_drag_has_moved
         self._sidebar_release_moved = moved
         self.sidebar_drag_start_iid = None
         self.sidebar_drag_tree = None
         self.sidebar_drag_has_moved = False
-        self.clear_sidebar_drop_target_tags()
+        self.clear_sidebar_drop_target_tags(legacy=False)
         if not source_iid or not moved:
             if source_iid and deferred_page:
                 self.set_active_list(deferred_page)
@@ -43916,10 +45616,40 @@ class ListApp:
                 self.update_sidebar_list()
             return "break"
         source_row = self.sidebar_iid_to_row.get(source_iid)
+        self.hide_sidebar_drop_hint()
         if not source_row:
             return "break"
         target_section = self.sidebar_section_for_tree(target_tree)
-        if not target_row and not self.sidebar_accepts(source_row[0], source_row[1], target_section):
+        # NAV-04: Anzeigeort statt Verschiebung (Modifikator), auch für Mehrfachauswahl.
+        # Zulässigkeit nach dem Navigationsvertrag, nicht nach den Verschiebungsregeln.
+        if self.sidebar_drop_is_navigation(event, source_row, target_row) and not getattr(self, "_data_read_only", False):
+            ids = self.get_selected_sidebar_list_ids()
+            ids = ids if len(ids) > 1 and source_row[1] in ids else [source_row[1]]
+            policy = self.sidebar_policy()
+            if any(glide_sidebar.nav_problem(policy, i, target_row[1]) for i in ids):
+                self.show_info(glide_i18n.t("ui.show_list_under_folder.title", "Anzeigen unter"),
+                               glide_i18n.t("ui.sidebar_drop.nav_invalid_long", "Mindestens ein Objekt passt nicht in diesen Ordner. Nichts wurde geändert."))
+                return "break"
+            with self.sidebar_change() as change:
+                for i in ids:
+                    eintrag = next((e for e in self.lists if e.get("id") == i), None)
+                    if eintrag is None:
+                        continue
+                    if target_row[1] == eintrag.get("folder_id"):
+                        eintrag.pop("nav_parent_id", None)
+                    else:
+                        eintrag["nav_parent_id"] = target_row[1]
+                    change.mark()
+                self.sidebar_folder_open_states[target_row[1]] = True
+                self.clear_render_cache()
+            return "break"
+        zone = self.sidebar_drop_placement(source_row, target_tree, target_iid, target_row, event)
+        if zone is None:
+            # Ein Ordner in sich selbst oder einen eigenen Unterordner: nicht still verwerfen,
+            # sondern wie vor Teil 04 sagen, warum nichts geschieht.
+            if (source_row and source_row[0] == "folder" and target_row and target_row[0] == "folder"
+                    and target_row[1] != source_row[1] and not self.can_move_folder_into(source_row[1], target_row[1])):
+                self.report_blocked_folder_move()
             return "break"
 
         # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
@@ -44057,7 +45787,14 @@ class ListApp:
             return "after"
         return "into"
 
-    def clear_sidebar_drop_target_tags(self):
+    def clear_sidebar_drop_target_tags(self, *, legacy=True):
+        marker = getattr(self, "_sidebar_drag_indicator", None)
+        if marker is not None:
+            marker.clear()
+            self._sidebar_drag_indicator = None
+
+        if not legacy:
+            return
         for tree in [getattr(self, "system_listbox", None), *self.sidebar_trees()]:
             if tree is None:
                 continue
@@ -44101,6 +45838,7 @@ class ListApp:
         if not self.ensure_journal_moment(list_entry, folder_id):
             return False
         list_entry["folder_id"] = folder_id
+        list_entry.pop("nav_parent_id", None)  # Verschieben setzt Heimat und Anzeige gleich (Format 27)
         # In der internen Reihenfolge ans Ende setzen, damit die Sortierung innerhalb des Ordners nachvollziehbar ist.
         self.lists = [entry for entry in self.lists if entry.get("id") != list_id]
         self.lists.append(list_entry)
@@ -44123,6 +45861,7 @@ class ListApp:
         self.lists = [entry for entry in self.lists if entry.get("id") != source_id]
         target_index = next((idx for idx, entry in enumerate(self.lists) if entry.get("id") == target_id), len(self.lists))
         source["folder_id"] = target.get("folder_id")
+        source.pop("nav_parent_id", None)
         insert_index = target_index if place == "before" else target_index + 1
         self.lists.insert(insert_index, source)
         return True
@@ -44133,6 +45872,7 @@ class ListApp:
             return False
         self.lists = [entry for entry in self.lists if entry.get("id") != list_id]
         source["folder_id"] = None
+        source.pop("nav_parent_id", None)
         self.lists.append(source)
         return True
 
@@ -44575,6 +46315,7 @@ class ListApp:
                         live_lists=entry.get("live_lists"), cover=entry.get("cover"),
                         animation=copy.deepcopy(entry.get("animation")),
                         notion_source=entry.get("notion_source"),
+                        nav_parent_id=entry.get("nav_parent_id"),
                     )
                 )
 
@@ -45199,36 +46940,9 @@ class ListApp:
         )
         self.hide_done_check.pack(fill="both", expand=True, ipady=glide_design.SPACING[0], padx=(glide_design.SPACING[2], glide_design.SPACING[2]), pady=glide_design.SPACING[0])
 
-        self.search_border = self.make_rounded_container(
-            self.search_frame,
-            fill_key="input",
-            outline_key="input_border",
-            radius=16,
-            padding=glide_design.SPACING[1],
-            height=38,
-            inner_pad_x=glide_design.SPACING[10],
-            inner_pad_y=3,
-        )
-        self.search_border.pack(side="left", fill="x", expand=True, padx=(glide_design.SPACING[0], glide_design.SPACING[10]))
-        self.search_border.pack_propagate(False)
+        self.search_border, self.search_entry = self.build_content_search_field(self.search_frame, self.search_var)
+        self.search_border.pack_configure(padx=(glide_design.SPACING[0], glide_design.SPACING[10]))
         self.search_inner = self.search_border.inner
-
-        self.search_entry = tk.Entry(
-            self.search_inner,
-            textvariable=self.search_var,
-            font=app_font(12), width=12,
-            bg=self.theme["input"],
-            fg=self.theme["text"],
-            insertbackground=self.theme["text"],
-            relief="flat",
-            bd=0,
-            borderwidth=0,
-            highlightthickness=0,
-            highlightbackground=self.theme["input"],
-            highlightcolor=self.theme["input"],
-            selectborderwidth=0,
-        )
-        self.search_entry.pack(fill="both", expand=True, ipady=glide_design.SPACING[0], padx=(glide_design.SPACING[2], glide_design.SPACING[2]), pady=glide_design.SPACING[0])
         self.search_entry.bind("<FocusIn>", self.clear_search_placeholder)
         self.search_entry.bind("<FocusOut>", self.set_search_placeholder)
         self.search_var.trace_add("write", lambda *_: self.schedule_search_refresh())
@@ -45338,6 +47052,7 @@ class ListApp:
         )
         self.tree.pack(side="left", fill="both", expand=True,
                        padx=(glide_design.SPACING[14], self.ROW_ACTION_WIDTH), pady=4)
+        self.build_inline_task_entry()
         self.tree.column("text_gap", anchor="w", stretch=False, minwidth=0,
                          width=self.TASK_METADATA_GAP)
         self.tree.heading("#0", text="")
@@ -47165,6 +48880,8 @@ class ListApp:
         # scheiterte, und der nächste Start verlor die Fensterposition.
         if getattr(self, "_closing", False):
             return
+        self.flush_inline_drafts()
+        self.remember_view_positions_on_close()
         try:
             if not self.root.winfo_exists():
                 return
@@ -48607,6 +50324,7 @@ class ListApp:
         self.fit_tree_columns_to_content()
         self.schedule_scrollbar_refresh()
         self.schedule_row_actions()
+        self.sync_inline_task_entry()
         self.sync_empty_state_action()
         self.sync_overdue_banner()
         if getattr(self, "_backdrop", None):
@@ -48741,9 +50459,9 @@ class ListApp:
     def empty_state_action(self):
         """(Beschriftung, Befehl) der Hauptaktion des aktuellen Leerzustands – oder None.
 
-        Seit 3.33.20 (U20) gibt es je Leerzustand genau einen Anlegeweg: Steht
-        die Eingabezeile sichtbar darüber, entfällt der Anlegen-Knopf in der
-        Fläche. Zurücksetzende Aktionen (Suche, Zeitraum) bleiben.
+        U20 erlaubt die direkte Aufgabenzeile neben der Schnellerfassung.
+        Leere Ordner und Ansichten bieten eine passende Aktion ohne Doppelung.
+        Zurücksetzende Aktionen für Suche und Zeitraum bleiben erreichbar.
         """
         modus = self.view_mode
         anlegen_ueber_eingabe = self.entry_line_visible()
@@ -48767,23 +50485,12 @@ class ListApp:
         if modus in ("list", self.TABLE_VIEW) or modus in self.TASK_OVERVIEW_VIEWS:
             if self.has_active_filter():
                 return glide_i18n.t("ui.empty_state_action.reset_search", "Suche zurücksetzen"), self.reset_filters_for_empty_state
-            if modus in ("list", self.TABLE_VIEW):
-                eintrag = self.current_list()
-                if eintrag and self.list_accepts_items(eintrag) and not anlegen_ueber_eingabe:
-                    return glide_i18n.t("ui.empty_state_action.create_first_item", "Ersten Punkt anlegen"), self.focus_new_item_entry
             if modus == self.PLAN_DAY_VIEW:
                 # WA-52: Ein leerer Tag schlägt den nächsten Schritt vor.
                 zustand = self.empty_state_for("today")
                 if zustand.primary:
                     return zustand.primary[1], self.empty_state_command(zustand.primary[0])
         return None
-
-    def list_empty_state(self):
-        """Leerzustand der offenen Liste (UX-05) aus `empty_states.list_state`."""
-        eintrag = self.current_list() if self.view_mode in ("list", self.TABLE_VIEW) and self.lists else None
-        return glide_empty_states.list_state(
-            accepts_items=bool(eintrag) and self.list_accepts_items(eintrag) and self.entry_line_visible(),
-            filtered=False, read_only=bool(getattr(self, "_data_read_only", False)))
 
     def empty_inline_action(self):
         """Was ein Klick auf den Leertext der Liste tut – oder None.
@@ -48805,13 +50512,7 @@ class ListApp:
             return self.focus_new_item_entry if self.entry_line_visible() else None
         if self.view_mode not in ("list", self.TABLE_VIEW):
             return None
-        if self.items and self.has_active_filter():
-            # Leer durch den Filter („Keine Treffer …“): der Klick setzt ihn zurück.
-            return self.reset_filters_for_empty_state
-        aktion = self.list_empty_state().action
-        if aktion == glide_empty_states.FOCUS_ENTRY:
-            return self.focus_new_item_entry
-        return None
+        return self.reset_filters_for_empty_state if self.has_active_filter() else None
 
     def run_empty_inline_action(self, _event=None):
         aktion = self.empty_inline_action()
@@ -48821,19 +50522,19 @@ class ListApp:
 
     def overview_empty_action(self, kind):
         """(Text, Befehl) für den leeren Abschnitt „Alle …“ einer Übersicht (UX-05)."""
-        zustand = glide_empty_states.overview_state(kind, read_only=bool(getattr(self, "_data_read_only", False)))
+        zustand = glide_empty.overview_state(kind, read_only=bool(getattr(self, "_data_read_only", False)))
         if zustand is None:
             return None
         befehle = {
-            glide_empty_states.CREATE_PAGE: self.create_new_page,
-            glide_empty_states.CREATE_NOTE: self.create_new_note,
-            glide_empty_states.CREATE_DRAWING: lambda: self.create_in_sidebar_section("drawing", None, "drawings"),
-            glide_empty_states.CREATE_NOTEBOOK: lambda: self.create_container_dialog("folder", folder_kind="journal"),
-            glide_empty_states.CREATE_GALLERY: self.create_new_gallery,
-            glide_empty_states.OPEN_GLOBAL_BOARD: self.open_global_board,
-            glide_empty_states.MANAGE_LABELS: self.open_label_manager,
-            glide_empty_states.CREATE_LIST: lambda: self.create_container_dialog("list"),
-            glide_empty_states.IMPORT_TEMPLATES: self.import_templates_file,
+            glide_empty.CREATE_PAGE: self.create_new_page,
+            glide_empty.CREATE_NOTE: self.create_new_note,
+            glide_empty.CREATE_DRAWING: lambda: self.create_in_sidebar_section("drawing", None, "drawings"),
+            glide_empty.CREATE_NOTEBOOK: lambda: self.create_container_dialog("folder", folder_kind="journal"),
+            glide_empty.CREATE_GALLERY: self.create_new_gallery,
+            glide_empty.OPEN_GLOBAL_BOARD: self.open_global_board,
+            glide_empty.MANAGE_LABELS: self.open_label_manager,
+            glide_empty.CREATE_LIST: lambda: self.create_container_dialog("list"),
+            glide_empty.IMPORT_TEMPLATES: self.import_templates_file,
         }
         return glide_i18n.t(zustand.key, zustand.fallback), befehle.get(zustand.action)
 
@@ -48854,6 +50555,11 @@ class ListApp:
         label._inline_command = command
         return label
 
+    def task_list_empty_text(self):
+        state = glide_empty.list_state(accepts_items=self.inline_task_target() is not None,
+            filtered=self.has_active_filter(), read_only=getattr(self, "_data_read_only", False))
+        return glide_i18n.t(state.key, state.fallback) if state else ""
+
     def empty_state_for(self, context):
         """Inhalt des Leerzustands (WA-52) aus `empty_states.py` mit dem aktuellen Ansichtszustand."""
         filtered = bool(self.has_active_filter()) if hasattr(self, "has_active_filter") else False
@@ -48868,9 +50574,6 @@ class ListApp:
                         for entry in self.lists for item in self.walk_items(entry.get("items", [])))
             return glide_empty.empty_state("today", filtered=filtered, other_day=not heute, has_tasks=offen,
                                            hints=self.hints_shown())
-        if context == "list":
-            return glide_empty.empty_state("list", filtered=filtered, entry_visible=self.entry_line_visible(),
-                                           hints=self.hints_shown())
         return glide_empty.empty_state(context, hints=self.hints_shown())
 
     def empty_state_command(self, action_id):
@@ -48878,7 +50581,6 @@ class ListApp:
         befehle = {
             "home_setup": self.show_home_tiles_dialog,
             "home_restore": self.restore_home_tiles_default,
-            "focus_entry": self.focus_new_item_entry,
             "use_template": self.set_template_view,
             "plan_day": self.start_day_proposal,
             "open_inbox": self.open_inbox_for_first_task,
@@ -48888,14 +50590,14 @@ class ListApp:
         return befehle[action_id]
 
     def open_inbox_for_first_task(self):
-        """Eingang öffnen und die Eingabezeile fokussieren – dort entsteht die erste Aufgabe."""
+        """Eingang öffnen und die direkte Eingabe der Zielliste fokussieren."""
         ziel = next((entry.get("id") for entry in self.lists if self.is_inbox_list(entry)), None)
         if ziel is None:
             ziel = next((entry.get("id") for entry in self.lists
                          if self.list_accepts_items(entry) and not self.is_page_list(entry)), None)
         if ziel is not None:
             self.set_active_list(ziel)
-            self.after_scope().after_idle(self.focus_new_item_entry)
+            self.after_scope().after_idle(lambda: self.focus_inline_task_entry() or self.focus_new_item_entry())
         return "break"
 
     def reset_filters_for_empty_state(self):
@@ -48940,7 +50642,8 @@ class ListApp:
         knopf = getattr(self, "empty_action_button", None)
         figur = getattr(self, "empty_state_figure", None)
         try:
-            leer = tuple(baum.get_children("")) == (self.EMPTY_ROW_ID,)
+            leer = (tuple(baum.get_children("")) == (self.EMPTY_ROW_ID,)
+                    and self.inline_task_target() is None)
         except tk.TclError:
             return
         aktion = self.empty_state_action() if leer else None
@@ -49847,6 +51550,7 @@ class ListApp:
             self.ensure_schema_backup(24)
             self.ensure_schema_backup(25)
             self.ensure_schema_backup(26)
+            self.ensure_schema_backup(27)
             # Der Verlauf entsteht vor dem Schreiben, damit die Datei den
             # Bestand und das dazu passende Protokoll gemeinsam enthält.
             # Nur geprüfte lokale Punktmutationen liefern eine ID-Menge.
@@ -51788,7 +53492,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if hidden:
             field.pack_forget()
         elif was_hidden and field.winfo_manager() != "pack":
-            field.pack(side="left", fill="x", expand=True, padx=(0, 10))
+            field.pack(side="left", fill="x", expand=True, anchor="n", padx=(0, 10))
         if today:
             if hidden:
                 used = sum(needed_width(widget) for widget in controls)
@@ -52291,9 +53995,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         editor_change = getattr(self, '_task_editor_change', None)
         if editor_change is not None:
             if entry.get('rich_note') != document:
+                vorher = [(k.level, k.title) for k in glide_chapters.outline(entry.get('rich_note') or {})]
                 entry['rich_note'] = copy.deepcopy(document)
                 entry['updated_at'] = datetime.now().astimezone().isoformat(timespec='seconds')
                 editor_change.mark()
+                if self.is_page_list(entry) and vorher != [(k.level, k.title) for k in glide_chapters.outline(document)]:
+                    self.after_scope().after_idle(self.update_sidebar_list)
             return True
         if entry.get("rich_note") != document:
             with self.sidebar_change(feedback=False) as change:
@@ -53167,9 +54874,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 favorit = entry["id"] in (self.settings.get("page_favorites") or [])
 
                 def stern(master, lid=entry["id"], favorit=favorit):
-                    knopf = self._make_dialog_button(master, "★" if favorit else "☆",
-                                                     lambda: self.toggle_page_favorite(lid),
-                                                     "muted", width=40, height=34)
+                    knopf = self.make_square_symbol_button(master, self.ICONS["favorite_on" if favorit else "favorite_off"],
+                                                           lambda: self.toggle_page_favorite(lid), size=34,
+                                                           color_key="muted", surface="card", outline=True)
                     self.add_tooltip(knopf, glide_i18n.t("ui.build_page_menu.remove_from_favorites", "Aus Favoriten entfernen") if favorit else glide_i18n.t("ui.build_page_menu.add_to_favorites", "Zu Favoriten hinzufügen"))
                     return knopf
                 pfad = " › ".join(self.folder_path_titles(entry.get("folder_id"))) if entry.get("folder_id") else ""
@@ -53374,22 +55081,65 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             editor.toggle_mentions()
         return "break"
 
-    # --- PAGE-06: zuletzt gesehene Stelle je Ansicht (nur diese Sitzung) ----
+    # --- PAGE-06: zuletzt gesehene Stelle je Ansicht, seit Teil 05B über Neustarts ----
+    def view_positions_path(self):
+        return os.path.join(BASE_DIR, glide_view_positions.FILE_NAME)
+
     def view_positions(self):
         stellen = getattr(self, "_view_positions", None)
         if stellen is None:
             stellen = self._view_positions = glide_view_positions.ViewPositions()
+            zustand = self._view_positions_state = glide_local_store.read(
+                self.view_positions_path(), glide_view_positions.FORMAT, glide_view_positions.VERSION)
+            glide_view_positions.load_payload(stellen, zustand.payload, str(SAVE_FILE))
         return stellen
+
+    def schedule_view_positions_flush(self, delay=1500):
+        """Gebündelt schreiben: nur nach Ansichtswechseln, nie je Cursorbewegung."""
+        self._view_positions_dirty = True
+        if getattr(self, "_view_positions_job", None) is not None:
+            return
+        try:
+            self._view_positions_job = self.after_scope().after(delay, self.flush_view_positions)
+        except tk.TclError:
+            self._view_positions_job = None
+
+    def flush_view_positions(self):
+        self._view_positions_job = None
+        if not getattr(self, "_view_positions_dirty", False):
+            return True
+        zustand = getattr(self, "_view_positions_state", None)
+        if zustand is None or not zustand.writable:
+            return False
+        nutzlast = glide_view_positions.to_payload(self.view_positions(), str(SAVE_FILE), zustand.payload)
+        try:
+            glide_local_store.write_atomic(self.view_positions_path(), nutzlast)
+        except OSError:
+            return False  # Lesepositionen sind Komfort; die Arbeit geht weiter.
+        zustand.payload = nutzlast
+        self._view_positions_dirty = False
+        return True
 
     def remember_editor_position(self, editor):
         """Oberste sichtbare Stelle und Schreibmarke einer Seite/Notiz als Zeichenversatz merken."""
         try:
             if not editor.winfo_exists() or not getattr(editor, "entry_id", None):
                 return
-            self.view_positions().remember(("page", editor.entry_id),
-                                           top=editor.offset(editor.text.index("@0,0")),
-                                           insert=editor.offset(editor.text.index("insert")))
-        except tk.TclError:
+            oben = editor.offset(editor.text.index("@0,0"))
+            marke = editor.offset(editor.text.index("insert"))
+            kapitel = glide_chapters.outline(editor.document())
+            anker, abstand = glide_view_positions.anchor_point(kapitel, oben)
+            marke_anker, marke_abstand = glide_view_positions.anchor_point(kapitel, marke)
+            stelle = {"top": oben, "insert": marke}
+            if anker:
+                stelle.update(anchor=anker, anchor_delta=abstand)
+            if marke_anker:
+                stelle.update(insert_anchor=marke_anker, insert_delta=marke_abstand)
+            self.view_positions().remember(("page", editor.entry_id), **stelle)
+            self.schedule_view_positions_flush()
+        except (tk.TclError, ValueError):
+            # Komfortfunktion: Ein ungültiger Editorinhalt (etwa über der
+            # Größengrenze) darf Wechsel und Beenden nie stören.
             pass
 
     def restore_editor_position(self, editor):
@@ -53399,13 +55149,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return False
         try:
             laenge = len(editor.text.get("1.0", "end-1c"))
-            oben = glide_view_positions.clamp_offset(stelle.get("top"), laenge)
-            marke = glide_view_positions.clamp_offset(stelle.get("insert"), laenge)
+            kapitel = glide_chapters.outline(editor.document())
+            oben = glide_view_positions.resolve_point(kapitel, stelle.get("anchor"), stelle.get("anchor_delta"),
+                                                      stelle.get("top"), laenge)
+            marke = glide_view_positions.resolve_point(kapitel, stelle.get("insert_anchor"), stelle.get("insert_delta"),
+                                                       stelle.get("insert"), laenge)
             if marke is not None:
                 editor.text.mark_set("insert", f"1.0 +{marke}c")
             if oben is not None:
                 editor.text.yview(f"1.0 +{oben}c")
-        except tk.TclError:
+        except (tk.TclError, ValueError):
             return False
         return True
 
@@ -53423,6 +55176,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 zeile = None
             self.view_positions().remember(("list", self.active_list_id, self.view_mode),
                                            row=zeile, fraction=baum.yview()[0])
+            self.schedule_view_positions_flush()
         except tk.TclError:
             pass
 
@@ -55783,6 +57537,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.sync_view_chrome()
         self.sync_tool_band()
         self.sync_card_foot()
+        self.sync_inline_task_entry()
 
     # --- Fuß der Inhaltskarte (29.09.2026) ---------------------------------
     # Hinweis und Auswahlleiste teilen sich unten in der Karte einen Streifen
@@ -56388,7 +58143,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
 
         if not self.items:
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.empty_state_for("list").text, tags=("empty",))
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.task_list_empty_text(), tags=("empty",))
             self.finish_tree_refresh()
             return
 
@@ -56398,7 +58153,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         else:
             inserted = self.insert_tree_items("", self.items, [])
         if inserted == 0:
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=glide_i18n.t("ui.refresh_tree_contents.no_matches_for_the", "Keine Treffer für den aktuellen Filter."), tags=("empty",))
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=self.task_list_empty_text(), tags=("empty",))
             self.finish_tree_refresh()
             return
 
@@ -56450,7 +58205,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.tree.delete(row_id)
         entries = self.table_entries(apply_filters=True)
         if not entries:
-            empty = glide_i18n.t("ui.refresh_table_view.no_tasks_match_the", "Keine Aufgaben passen zum aktuellen Filter.") if self.has_active_filter() else self.empty_state_for("list").text
+            empty = self.task_list_empty_text()
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty, tags=("empty",))
             self.finish_tree_refresh()
             return
@@ -57289,7 +59044,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     # WA-52 für Notizbücher, UX-05-Aufforderung für gewöhnliche Ordner.
                     self.empty_state_for("journal").text
                     if journal_view else
-                    (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                    (lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty.folder_state(
                         "folder", read_only=bool(getattr(self, "_data_read_only", False))))
                 )
             )
@@ -57434,7 +59189,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         zeilen.sort(key=schluessel, reverse=absteigend)
         if not zeilen and not sub_folders:
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",),
-                             text=(lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty_states.folder_state(
+                             text=(lambda leer: glide_i18n.t(leer.key, leer.fallback))(glide_empty.folder_state(
                                  "book", read_only=bool(getattr(self, "_data_read_only", False)))))
         for entry, werte in zeilen:
             farbe = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
@@ -58071,6 +59826,61 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     pass
         return zeilen
 
+    def move_checklist_row(self, iid, direction):
+        """Verschiebt einen Checklistenschritt um eine Stelle (ein Rückgängig-Schritt)."""
+        index = self.checklist_row_index(iid)
+        gefunden = self.find_item(self.owner_row_id(iid)) if index is not None else None
+        if not gefunden or getattr(self, "_data_read_only", False):
+            return False
+        item = gefunden[0]
+        eintraege = item.get("checklist") or []
+        ziel = index + direction
+        if not (0 <= index < len(eintraege) and 0 <= ziel < len(eintraege)):
+            return False
+        with self.item_change([item["id"]], local=True) as change:
+            eintraege[index], eintraege[ziel] = eintraege[ziel], eintraege[index]
+            change.mark()
+        if change.saved:
+            neu = f"{item['id']}{self.CHECKLIST_IID_MARKER}{ziel}"
+            if self.tree.exists(neu):
+                self.tree.selection_set(neu)
+                self.tree.focus(neu)
+        return bool(change.saved)
+
+    def build_checklist_step_menu(self, iid, master=None):
+        index = self.checklist_row_index(iid)
+        gefunden = self.find_item(self.owner_row_id(iid)) if index is not None else None
+        if not gefunden:
+            return None
+        item = gefunden[0]
+        eintraege = item.get("checklist") or []
+        if not 0 <= index < len(eintraege):
+            return None
+        nur_lesen = getattr(self, "_data_read_only", False)
+        menu = self._new_themed_popup_menu(master or self.tree)
+        erledigt = bool(eintraege[index].get("done"))
+        menu.add_command(label=glide_i18n.t("ui.checklist_step.reopen", "Schritt wieder öffnen") if erledigt
+                         else glide_i18n.t("ui.checklist_step.done", "Schritt abhaken"),
+                         command=lambda: self.toggle_checklist_row(iid), state="disabled" if nur_lesen else "normal")
+        menu.add_command(label=glide_i18n.t("ui.checklist_step.up", "Schritt nach oben"),
+                         command=lambda: self.move_checklist_row(iid, -1),
+                         state="disabled" if nur_lesen or index == 0 else "normal")
+        menu.add_command(label=glide_i18n.t("ui.checklist_step.down", "Schritt nach unten"),
+                         command=lambda: self.move_checklist_row(iid, 1),
+                         state="disabled" if nur_lesen or index >= len(eintraege) - 1 else "normal")
+        return menu
+
+    def show_checklist_step_menu(self, iid, button=None):
+        menu = self.build_checklist_step_menu(iid)
+        if menu is None:
+            return "break"
+        anker = button if button is not None else self.tree
+        try:
+            menu.tk_popup(anker.winfo_rootx(), anker.winfo_rooty() + anker.winfo_height())
+        finally:
+            menu.grab_release()
+        return "break"
+
     def toggle_checklist_row(self, iid):
         """Hakt einen Checklistenschritt direkt aus der Liste heraus ab."""
         index = self.checklist_row_index(iid)
@@ -58367,10 +60177,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         rows = self.get_visible_tree_iids()
         if not rows:
-            return "break"
+            return self.focus_inline_task_entry() if direction > 0 and self.inline_task_target() else "break"
         current = self.owner_row_id(tree.focus() or "")
         if current in rows:
             index = rows.index(current) + direction
+            if index == len(rows) and self.inline_task_target():
+                return self.focus_inline_task_entry()
             index = max(0, min(index, len(rows) - 1))
         else:
             index = 0 if direction > 0 else len(rows) - 1
@@ -58556,7 +60368,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     @contextlib.contextmanager
     def item_change(self, item_ids, focus="last", restore=True, update_sidebar=False, background=False,
-                    local=False, lists=None):
+                    local=False, lists=None, rollback_failed=False):
         """Rahmen um jede Änderung an vorhandenen Punkten.
 
         Legt vorher den Rückgängig-Punkt an und schließt hinterher ab:
@@ -58590,6 +60402,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         stehen: Ein halb ausgeführter Umbau muss rücknehmbar bleiben. Um den
         Bestand kümmert sich darüber `guarded_structural_change`.
         """
+        # Erfassung behält den Entwurf, wenn der Daten-Commit scheitert.
+        undo_depth = len(self.undo_stack) if rollback_failed else None
+        history_before = copy.deepcopy(self.history) if rollback_failed else None
+        dirty_before = self.dirty if rollback_failed else None
         change = ChangeRecord(item_ids)
         self.register_guarded_change(change)
         # Explizite Zusicherung geprüfter Aufrufer: nur diese Punkte/Teilbäume.
@@ -58612,16 +60428,28 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     self.undo_stack.pop()
                 return
             if not background:
-                self.trim_undo_stack()
+                if not rollback_failed:
+                    self.trim_undo_stack()
                 self.record_completions(done_before, item_ids)
             if local and affected_lists is not None:
                 after_lists = self.changed_item_lists(item_ids)
                 affected_lists = affected_lists | after_lists if after_lists is not None else None
             self._last_save_result = None
-            change.saved = self.save_items(show_error=not background, record_activity=not background,
+            change.saved = self.save_items(show_error=not background and not rollback_failed, record_activity=not background,
                                           changed_list_ids=affected_lists)
             change.save_result = getattr(self, '_last_save_result', None)
             change.changed_lists = set(affected_lists or ())
+            if rollback_failed and not change.saved:
+                snapshot = self.undo_stack.pop(undo_depth)
+                self.apply_snapshot(snapshot, save=False)
+                self.history = history_before
+                self.dirty = dirty_before
+        if rollback_failed and change.saved:
+            self.trim_undo_stack()
+        if rollback_failed and not change.saved:
+            self.show_error(glide_i18n.t("ui.save_items_result.error_while_saving", "Fehler beim Speichern"),
+                            change.save_result.error if change.save_result is not None else self.read_only_notice())
+            return
         if change.save_result is not None:
             change.save_result = change.save_result.finish_settings(getattr(self, '_last_settings_batch_saved', None))
             self._last_save_result = change.save_result
@@ -59565,7 +61393,240 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.update_slash_hint()
         return "break"
 
-    def add_item(self):
+    def build_inline_task_entry(self):
+        # Teil 05: Entwürfe überstehen Neustart und Absturz in einer eigenen
+        # lokalen Datei neben den Einstellungen, nie in der Speicherdatei.
+        self._inline_draft_store = None
+        self._inline_draft_flush_job = None
+        try:
+            self._inline_draft_store = glide_input_drafts.DraftStore(
+                os.path.join(BASE_DIR, glide_input_drafts.FILE_NAME))
+        except Exception:
+            self._inline_draft_store = None
+        stored = self._inline_draft_store.items() if self._inline_draft_store else {}
+        self._inline_task_drafts = dict(stored)
+        self._inline_drafts_restored = set(stored)
+        self._inline_task_list = None
+        self._inline_task_submitting = False
+        self.inline_task_text = tk.StringVar(master=self.tree)
+        row = self.inline_task_row = tk.Frame(self.list_frame, name="inline_task_row", bd=0)
+        grip_slot = tk.Frame(row, width=self.ROW_GRIP_WIDTH, bd=0, bg=self.theme["card"])
+        grip_slot.pack(side="left", fill="y")
+        # Griffachse (Design Richtlinien): derselbe Griff wie in jeder Aufgabenzeile.
+        grip = self.inline_task_grip = self.make_row_grip(
+            grip_slot, lambda: self.submit_inline_task(advanced=True))
+        grip._accessible_name = glide_i18n.t("ui.inline_task.advanced", "Erweiterte Eingabe")
+        self.add_tooltip(grip, glide_i18n.t("ui.inline_task.advanced", "Erweiterte Eingabe"))
+        grip.place(x=0, rely=0.5, anchor="w", width=self.ROW_GRIP_WIDTH, height=self.ROW_ACTION_SIZE)
+        mark = self.inline_task_mark = tk.Label(row, text=self.ICONS["task_open"], bd=0, padx=0, pady=0)
+        mark.pack(side="left", padx=(0, 5))
+        field = self.inline_task_entry = tk.Entry(row, name="task", textvariable=self.inline_task_text,
+                                                  bd=0, relief="flat", highlightthickness=1)
+        field.pack(side="left", fill="both", expand=True)
+        placeholder = self.inline_task_placeholder = tk.Label(field, bd=0, padx=0, pady=0)
+        placeholder.bind("<Button-1>", lambda _event: field.focus_set() or "break")
+        self.inline_task_text.trace_add("write", self.remember_inline_task_text)
+        field.bind("<FocusIn>", self.update_inline_task_placeholder)
+        field.bind("<FocusOut>", self.update_inline_task_placeholder)
+        field.bind("<Escape>", self.clear_inline_task_entry)
+        field.bind("<Control-Return>", lambda _event: self.submit_inline_task(advanced=True))
+        for sequence in ("<Return>", "<KP_Enter>"):
+            field.bind(sequence, lambda _event: self.submit_inline_task())
+        self.tree.bind("<Configure>", self.place_inline_task_entry, add="+")
+        self.tree.bind("<Control-End>", self.focus_inline_task_entry)
+        self.bind_mousewheel(row)
+        self.bind_mousewheel(field)
+
+    def inline_task_target(self):
+        if (self.view_mode not in ("list", self.TABLE_VIEW) or not self.lists
+                or self.is_saved_table_view() or self.has_active_filter()
+                or getattr(self, "_data_read_only", False)):
+            return None
+        entry = self.current_list()
+        if not entry or self.is_archived_entry(entry) or not self.list_accepts_items(entry):
+            return None
+        return str(SAVE_FILE), entry["id"]
+
+    def remember_inline_task_text(self, *_args):
+        key = self._inline_task_list
+        value = self.inline_task_text.get()
+        if key is not None:
+            if value:
+                self._inline_task_drafts[key] = value
+            else:
+                self._inline_task_drafts.pop(key, None)
+                self._inline_drafts_restored.discard(key)
+            store = getattr(self, "_inline_draft_store", None)
+            if store is not None:
+                store.set(key[0], key[1], value)
+                self.schedule_inline_draft_flush()
+        self.update_inline_task_placeholder()
+
+    def schedule_inline_draft_flush(self, delay=800):
+        """Entwürfe gebündelt schreiben, nicht bei jedem Tastendruck."""
+        if getattr(self, "_inline_draft_flush_job", None) is not None:
+            return
+        try:
+            self._inline_draft_flush_job = self.after_scope().after(delay, self.flush_inline_drafts)
+        except tk.TclError:
+            self.flush_inline_drafts()
+
+    def remember_view_positions_on_close(self):
+        """Beim Beenden die aktuelle Stelle merken und schreiben (PAGE-06, Teil 05B)."""
+        try:
+            editor = getattr(self, "rich_note_editor", None)
+            if editor is not None and editor.winfo_exists():
+                self.remember_editor_position(editor)
+            self.remember_list_position()
+        except tk.TclError:
+            pass
+        self.flush_view_positions()
+
+    def flush_inline_drafts(self):
+        self._inline_draft_flush_job = None
+        store = getattr(self, "_inline_draft_store", None)
+        if store is None or not store.dirty:
+            return True
+        try:
+            return store.flush()
+        except OSError:
+            # Der Entwurf bleibt im Speicher und im Eingabefeld; der nächste
+            # Tastendruck oder das Beenden versucht es erneut.
+            return False
+
+    def clear_inline_task_entry(self, _event=None):
+        self.inline_task_text.set("")
+        return "break"
+
+    def update_inline_task_placeholder(self, _event=None):
+        if self.inline_task_text.get() or self.current_focus_widget() is self.inline_task_entry:
+            self.inline_task_placeholder.place_forget()
+        else:
+            self.inline_task_placeholder.place(x=3, rely=0.5, anchor="w")
+
+    def sync_inline_task_entry(self):
+        if not hasattr(self, "inline_task_row"):
+            return
+        target = self.inline_task_target()
+        if target != self._inline_task_list:
+            self._inline_task_list = target
+            self.inline_task_text.set(self._inline_task_drafts.get(target, ""))
+            if target in self._inline_drafts_restored:
+                self._inline_drafts_restored.discard(target)
+                self.show_undo_toast(glide_i18n.t(
+                    "ui.inline_task.draft_restored",
+                    "Nicht gespeicherter Entwurf wiederhergestellt – noch keine Aufgabe."))
+        if target is None:
+            self.inline_task_row.place_forget()
+            return
+        if not self.tree.exists(self.EMPTY_ROW_ID):
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID)
+        self.tree.item(self.EMPTY_ROW_ID, text="", values=(), tags=())
+        style = str(self.tree.cget("style")) or "Treeview"
+        bg = self.style.lookup(style, "background") or self.theme["card"]
+        font = self.style.lookup(style, "font") or app_font(11)
+        label = glide_i18n.t("ui.inline_task.placeholder", "Neue Aufgabe schreiben …")
+        self.inline_task_row.configure(bg=bg)
+        for widget in self.inline_task_row.winfo_children():
+            widget.configure(bg=bg)
+            if not isinstance(widget, tk.Frame):
+                widget.configure(fg=self.theme["muted"], font=font)
+        self.inline_task_grip.configure(bg=bg)
+        self.inline_task_entry.configure(fg=self.theme["text"], insertbackground=self.theme["text"],
+                                         highlightbackground=bg, highlightcolor=self.theme["ui_accent"])
+        self.inline_task_entry._accessible_name = label
+        self.inline_task_placeholder.configure(text=label, bg=bg, fg=self.theme["muted"], font=font)
+        self.update_inline_task_placeholder()
+        self.place_inline_task_entry()
+
+    def tree_text_inset(self, row_id):
+        """Abstand von der Baumkante bis zum Textbeginn einer Zeile, aus der Zeile selbst gemessen.
+
+        Polster und Indikatorfläche der ttk-Zeile hängen von Thema, Plattform und
+        Skalierung ab; deshalb keine feste Zahl. Zwischengespeichert je Stil.
+        """
+        box = self.tree.bbox(row_id) if self.tree.exists(row_id) else ()
+        if not box:
+            return 0
+        schluessel = (str(self.tree.cget("style")), self.style.lookup("App.Treeview", "rowheight"),
+                      str(self.style.lookup("App.Treeview", "font")), box[0])
+        cache = getattr(self, "_tree_text_inset", None)
+        if cache and cache[0] == schluessel:
+            return cache[1]
+        y = box[1] + box[3] // 2
+        wert = next((x for x in range(box[0], box[0] + 120)
+                     if self.tree.identify_element(x, y) == "text"), None)
+        if wert is None:
+            return box[0]
+        self._tree_text_inset = (schluessel, wert)
+        return wert
+
+    def place_inline_task_entry(self, _event=None):
+        if not hasattr(self, "inline_task_row"):
+            return
+        box = (self.tree.bbox(self.EMPTY_ROW_ID) if self._inline_task_list is not None
+               and self.tree.exists(self.EMPTY_ROW_ID) else ())
+        if box:
+            x, y, width, height = box
+            # Griffachse: Der Griff steht wie bei jeder Aufgabenzeile an der linken
+            # Listenkante (tree.x − Griffbreite), nicht an der Zellkante. Die
+            # Markierung beginnt dort, wo der Baum den Aufgabentext beginnt.
+            text_x = self.tree_text_inset(self.EMPTY_ROW_ID)
+            self.inline_task_mark.pack_configure(padx=(max(0, text_x), 5))
+            self.inline_task_row.place(x=self.tree.winfo_x() - self.ROW_GRIP_WIDTH,
+                                       y=self.tree.winfo_y() + y, width=x + width + self.ROW_GRIP_WIDTH, height=height)
+            self.inline_task_row.lift()
+        else:
+            self.inline_task_row.place_forget()
+
+    def focus_inline_task_entry(self, _event=None):
+        if self.inline_task_target() is None or not self.tree.exists(self.EMPTY_ROW_ID):
+            return None
+        self.tree.see(self.EMPTY_ROW_ID)
+        self.place_inline_task_entry()
+        self.inline_task_entry.focus_set()
+        return "break"
+
+    def submit_inline_task(self, *, advanced=False):
+        target = self._inline_task_list
+        if target is None or target != self.inline_task_target() or self._inline_task_submitting:
+            return "break"
+        draft = self.inline_task_text.get()
+        if not advanced and not draft.strip():
+            return "break"
+        def clear_saved_draft():
+            # Wird erst nach erfolgreichem Speichern der Aufgabe gerufen. Die
+            # Bereinigung geht sofort auf die Platte statt nach 800 ms: Ein
+            # Absturz dazwischen brächte sonst den Entwurf zurück und ein
+            # zweites Enter legte die Aufgabe doppelt an (Teil 05B).
+            self._inline_task_drafts.pop(target, None)
+            store = getattr(self, "_inline_draft_store", None)
+            if store is not None:
+                store.discard(target[0], target[1])
+            if self._inline_task_list == target:
+                self.clear_inline_task_entry()
+            job = getattr(self, "_inline_draft_flush_job", None)
+            if job is not None:
+                self.after_scope().cancel(job)
+                self._inline_draft_flush_job = None
+            self.flush_inline_drafts()
+
+        self._inline_task_submitting = True
+        try:
+            if advanced:
+                self.add_item_advanced(initial_text=draft, clear_text=clear_saved_draft)
+            else:
+                self.add_item(raw_text=draft, clear_text=clear_saved_draft)
+        finally:
+            self._inline_task_submitting = False
+        if self._inline_task_list == target and self.inline_task_target() == target:
+            if self.tree.exists(self.EMPTY_ROW_ID):
+                self.tree.see(self.EMPTY_ROW_ID)
+                self.place_inline_task_entry()
+                self.inline_task_entry.focus_set()
+        return "break"
+
+    def add_item(self, *, raw_text=None, clear_text=None):
         if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             self.focus_entry()
             return
@@ -59579,7 +61640,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
             self.show_warning(glide_i18n.t("ui.new_item_dialog.new_item", 'Neuer Punkt'), self.read_only_notice())
             return
-        text = self.get_entry_text()
+        text = self.get_entry_text() if raw_text is None else raw_text.strip()
         if not text:
             noun = glide_i18n.t("ui.add_item.list_title", "Listentitel") if self.view_mode == "folder" else glide_i18n.t("ui.add_item.item", "Punkt")
             self.show_warning(glide_i18n.t("info.title", "Hinweis"), glide_i18n.t("ui.add_item.please_enter_a", 'Bitte einen {noun} eingeben.', noun=noun))
@@ -59611,7 +61672,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         target = glide_task_editing.creation_target(self.lists, self.active_list_id, kinds)
         if target is None:
             return
-        capture = parse_capture(text, self.labels, ignore=self.capture_ignored())
+        capture = parse_capture(text, self.labels, ignore=self.capture_ignored() if raw_text is None else ())
         title, fields = capture.titel, capture.felder
         recognized = [part.text for part in capture.teile if part.felder]
         if not title:
@@ -59627,12 +61688,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         entry = self.new_item(title, False, **fields)
         self.items = target.setdefault('items', [])
-        with self.item_change((), restore=False, update_sidebar=True, lists={target['id']}) as change:
+        with self.item_change((), restore=False, update_sidebar=True, lists={target['id']}, rollback_failed=True) as change:
             self.items.append(entry)
             change.mark(entry['id'])
         if change.saved:
-            operations = [(glide_i18n.t("ui.add_item.input", 'Eingabe'), self.clear_entry_text), (glide_i18n.t("ui.add_item.input_hint", 'Eingabehinweis'), self.hide_slash_hint),
+            operations = [(glide_i18n.t("ui.add_item.input", 'Eingabe'), clear_text or self.clear_entry_text),
                           (glide_i18n.t("ui.add_item.creation_feedback", 'Anlegerückmeldung'), lambda: self.feedback('item_created'))]
+            if clear_text is None:
+                operations.append((glide_i18n.t("ui.add_item.input_hint", 'Eingabehinweis'), self.hide_slash_hint))
             if recognized:
                 operations.append((glide_i18n.t("ui.add_item.detected_details", 'Erkannte Angaben'), lambda: self.show_undo_toast(
                     glide_i18n.t("toast.created_with_details", "Angelegt · {details}",
@@ -59939,7 +62002,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     "sobald er fällig ist."), None, None)
         return (glide_i18n.t("ui.create_card_item.everything_except_the_title", "Alle Angaben außer dem Titel sind freiwillig und später änderbar."), None, None)
 
-    def add_item_advanced(self, event=None):
+    def add_item_advanced(self, event=None, *, initial_text=None, clear_text=None):
         """Vollständige Eingabemaske; Ziel und Schreibbesitz nach dem Dialog neu prüfen."""
         if self.view_mode not in self.DERIVED_ITEM_VIEWS and not self.require_list_view():
             return "break"
@@ -59950,7 +62013,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.show_info(glide_i18n.t("ui.new_item_dialog.new_item", "Neuer Punkt"), glide_i18n.t("ui.add_item_advanced.create_a_list_first", "Lege zuerst eine Liste an – ein Punkt braucht eine Zielliste."))
             return "break"
         hint, planned, labels = self.advanced_entry_context()
-        prefilled = self.get_entry_text()
+        prefilled = self.get_entry_text() if initial_text is None else initial_text
         default_list_id = self.active_list_id
         details = self.new_item_dialog(glide_i18n.t("ui.new_item_dialog.new_item", "Neuer Punkt"), hint, allow_list_choice=True,
             default_list_id=default_list_id, default_planned=planned, default_labels=labels,
@@ -59974,12 +62037,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if target_id == self.active_list_id:
             self.items = target.setdefault('items', [])
         select = target_id == self.active_list_id and self.view_mode not in self.DERIVED_ITEM_VIEWS
-        with self.item_change((), restore=False, update_sidebar=True) as change:
+        with self.item_change((), restore=False, update_sidebar=True, lists={target_id}, rollback_failed=True) as change:
             target.setdefault('items', []).append(entry)
             change.mark(entry['id'] if select else None)
         if change.saved:
             operations = [(glide_i18n.t("ui.add_item_advanced.creation_feedback", 'Anlegerückmeldung'), lambda: self.feedback('item_created'))]
-            if prefilled and self.get_entry_text() == prefilled:
+            if clear_text is not None:
+                operations.insert(0, (glide_i18n.t("ui.add_item_advanced.input", 'Eingabe'), clear_text))
+            elif prefilled and self.get_entry_text() == prefilled:
                 operations.insert(0, (glide_i18n.t("ui.add_item_advanced.input", 'Eingabe'), self.clear_entry_text))
             self.finish_change_ui(change, operations)
         return "break"
@@ -60553,7 +62618,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             # Zuletzt benutzte Labels zuerst, abgetrennt (KO06); sonst gewohnte Reihenfolge.
@@ -60888,7 +62953,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         label_menu = self._new_themed_popup_menu(menu)
         if not self.labels:
             # UX-05: statt eines gesperrten Hinweises direkt zur Labelverwaltung.
-            leer = glide_empty_states.menu_state("labels")
+            leer = glide_empty.menu_state("labels")
             label_menu.add_command(label=glide_i18n.t(leer.key, leer.fallback), command=self.open_label_manager)
         else:
             assigned = item.get("labels") or []
@@ -66586,6 +68651,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         attachment_paths = self.collect_attachment_sources(
             payload.get("lists", []), payload.get("trash", []), payload.get("folders", [])
         )
+        # Dokumentdateien des KI-Arbeitsbereichs gehören zur vollständigen Sicherung (Teil 06).
+        for storage in glide_ai.Workspace(((payload.get("app_backup") or {}).get("ai_workspace"))).document_storages():
+            pfad = self.ai_data_path(self.validate_attachment_storage(storage))
+            if not os.path.isfile(pfad):
+                raise FileNotFoundError(glide_i18n.t("ai.app.backup_missing", "Das Dokument „{name}“ fehlt. Die Sicherung wurde nicht erstellt.",
+                                                     name=storage))
+            attachment_paths.setdefault(storage, pfad)
         data_bytes = json.dumps(payload, ensure_ascii=False, indent=4).encode("utf-8")
         if len(data_bytes) > self.MAX_BACKUP_DATA_BYTES:
             raise ValueError(glide_i18n.t("ui.write_complete_backup.the_glide_data_is", "Die Glide-Daten sind für ein einzelnes Backup zu groß."))
@@ -66724,15 +68796,28 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             candidate = f"{prefix}.dat"
         return candidate
 
-    def remap_import_attachments(self, lists, trash=None, folders=None):
-        """Gibt eingehenden Dateien neue Namen, damit Restore nie Bytes überschreibt."""
+    def remap_import_attachments(self, lists, trash=None, folders=None, preserve=False):
+        """Gibt eingehenden Dateien neue Namen, damit Restore nie Bytes überschreibt.
+
+        `preserve` (vollständiger Import, Teil 05B): Ablagename und Kennung
+        bleiben, solange das Ziel frei ist – stabile Anhangsidentitäten über
+        Sicherung und Wiederherstellung. Ein belegtes Ziel wird weiterhin
+        umbenannt; vorhandene Bytes werden nie überschrieben.
+        """
         storage_map = {}
         used_destinations = set()
+        behalten = set()
         for item in self.attachment_owners(lists, trash, folders):
             reference = item.get("drawing_reference") if isinstance(item.get("drawing_reference"), dict) else None
             for attachment in item.get("attachments", []):
                 previous_id = attachment.get("id")
                 old_storage = self.validate_attachment_storage(attachment.get("storage"))
+                if old_storage not in storage_map and preserve:
+                    ziel = self.resolve_attachment_path({"storage": old_storage})
+                    if old_storage not in used_destinations and ziel and not os.path.exists(ziel):
+                        storage_map[old_storage] = old_storage
+                        used_destinations.add(old_storage)
+                        behalten.add(old_storage)
                 if old_storage not in storage_map:
                     new_storage = None
                     # Begrenzte Versuche: ohne Obergrenze könnte ein Backup mit
@@ -66756,6 +68841,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     storage_map[old_storage] = new_storage
                     used_destinations.add(new_storage)
                 attachment["storage"] = storage_map[old_storage]
+                if old_storage in behalten and isinstance(previous_id, str) and previous_id:
+                    continue  # Kennung bleibt; abhängige Verweise stimmen bereits.
                 attachment["id"] = uuid.uuid4().hex
                 # Seitenbilder zeigen auf die Anhangskennung (27.09.2026).
                 dokument = item.get("rich_note") if isinstance(item.get("rich_note"), dict) else None
@@ -68160,6 +70247,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 "templates": self.normalize_template_records(getattr(self, "templates", [])),
             },
             "activity": activity,
+            # Teil 06: KI-Arbeitsbereich als Zusatzabschnitt; ältere Fassungen ignorieren ihn.
+            "ai_workspace": self.ai_workspace().to_payload(),
+            # Ecosystem E03: eigene Symbole als Zusatzabschnitt; ältere Fassungen ignorieren ihn.
+            "symbol_library": self.symbol_library().to_payload(),
         }
         return payload
 
@@ -68388,6 +70479,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if gewaehlt["tasks"]:
             if not self.import_full_backup(path=path, show_success=False, confirm=False):
                 return
+            if isinstance((section or {}).get("ai_workspace"), dict):
+                # Vollständiger Ersatz: KI-Arbeitsbereich und Dokumentdateien wie gesichert.
+                self._ai_workspace = glide_ai.Workspace({})
+                self.ai_restore_from_backup(path=path)
+            symbole = (section or {}).get("symbol_library")
+            if isinstance(symbole, dict) and symbole.get("format") == glide_symbol_library.FORMAT:
+                self._symbol_library = glide_symbol_library.Library(symbole)
+                self._symbol_library_file = str(SAVE_FILE)
+                self.save_symbol_library()
             angewendet.append(glide_i18n.t("ui.restore_app_backup.task_s_in_list", '{tasks} Aufgabe(n) in {lists} Liste(n)', tasks=summary['tasks'], lists=summary['lists']))
         try:
             angewendet += self.restore_app_backup_extras(
@@ -68545,9 +70645,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 data = json.loads(raw_json.decode("utf-8-sig"))
 
             referenced = self.validate_backup_schema(data, portable=is_portable)
-            if is_portable and set(attachment_infos) != referenced:
+            # E01: Dokumentversionen des mitgesicherten KI-Arbeitsbereichs sind erwartete
+            # Archivmitglieder; sie stellt `ai_restore_from_backup` wieder her, nicht dieser
+            # Aufgabenimport. Andere unerwartete Dateien bleiben ein Ablehnungsgrund.
+            ki_dateien = set()
+            if is_portable and isinstance(data, dict):
+                for storage in glide_ai.Workspace((data.get("app_backup") or {}).get("ai_workspace")).document_storages():
+                    ki_dateien.add(self.validate_attachment_storage(storage))
+            if is_portable and set(attachment_infos) != referenced | (ki_dateien & set(attachment_infos)):
                 missing = sorted(referenced - set(attachment_infos))
-                extra = sorted(set(attachment_infos) - referenced)
+                extra = sorted(set(attachment_infos) - referenced - ki_dateien)
                 details = []
                 if missing:
                     details.append(glide_i18n.t("ui.import_full_backup.missing", 'fehlend: {join}', join=", ".join(missing[:5])))
@@ -68594,7 +70701,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if is_portable:
                 source_restore_before = (copy.deepcopy((new_lists, new_trash))
                     if not additive and glide_source_metadata.source_pages((new_lists, new_trash)) else None)
-                storage_map = self.remap_import_attachments(new_lists, new_trash, new_folders)
+                storage_map = self.remap_import_attachments(new_lists, new_trash, new_folders,
+                                                            preserve=not additive)
                 staging_dir = tempfile.TemporaryDirectory(prefix=".glide-import-", dir=BASE_DIR)
                 total_written = 0
                 for old_storage, new_storage in storage_map.items():
@@ -70688,8 +72796,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     (glide_i18n.t("ui.menubar_structure.export_ai_skill", "KI-Skill exportieren …"), self.export_agent_skill),
                     (glide_i18n.t("ui.menubar_structure.show_exchange_format", "Austauschformat anzeigen …"), self.show_exchange_spec_dialog),
                 )),
+                # Teil 06: KI-Arbeitsbereich – lokal, ohne Anbieterverbindung.
+                (glide_i18n.t("ai.menu.title", "KI-Arbeitsbereich"), (
+                    (glide_i18n.t("ai.menu.library", "Prompt-Bibliothek …"), self.show_prompt_library),
+                    (glide_i18n.t("ai.menu.new", "Neuer Prompt"), self.ai_new_prompt),
+                    (glide_i18n.t("ai.menu.template", "Prompt aus Vorlage …"), self.ai_create_from_template),
+                    (glide_i18n.t("ai.menu.page", "Aktuelle Seite als Prompt …"), self.edit_active_page_as_prompt),
+                    None,
+                    (glide_i18n.t("ai.menu.context", "Projekte, Agenten und Kontext …"), self.show_context_library),
+                    (glide_i18n.t("ai.menu.documents", "Dokumentenbibliothek …"), self.show_document_library),
+                    (glide_i18n.t("ai.menu.restore", "Prompts und Dokumente aus Sicherung …"), self.ai_restore_from_backup),
+                )),
                 None,
                 (glide_i18n.t("menu.file.backup", "Sicherung"), (
+                    (glide_i18n.t("ui.data_safety.menu", "Daten und Sicherheit …"), self.show_data_safety_overview),
                     (glide_i18n.t("ui.menubar_structure.storage_status", "Speicherstatus …"), self.show_storage_status),
                     (glide_i18n.t("ui.menubar_structure.backup_overview", "Sicherungsübersicht …"), self.show_backup_catalog),
                     None,
@@ -70764,6 +72884,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     (glide_i18n.t("sidebar.today", "Heute"), self.set_today_view),
                     (glide_i18n.t("ui.refresh_sidebar_row_texts.upcoming", "Demnächst"), self.set_in_progress_view),
                     (glide_i18n.t("ui.refresh_task_overview.next_task", "Nächste Aufgabe"), self.open_next_task),
+                    (glide_i18n.t("ui.project_dashboard.menu", "Projektübersicht …"), self.show_project_dashboard),
                     (glide_i18n.t("ui.show_plan_day_mode_menu.day_start", "Tagesbeginn …"), self.start_day_review),
                     (glide_i18n.t("ui.render_day_proposal.what_fits_today", "Was passt heute?"), self.start_day_proposal),
                     (glide_i18n.t("ui.build_home_task_menu.start_focus", "Fokus starten"), self.start_focus_selected, self.accel("Shift+F")),
@@ -70860,6 +72981,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             (glide_i18n.t("menu.help", "Hilfe"), (
                 (glide_i18n.t("menu.help.manual", "Handbuch …"), self.show_manual_dialog, "F1"),
                 (glide_i18n.t("menu.help.shortcuts", "Tastenkürzel anzeigen"), self.show_shortcuts_dialog),
+                (glide_i18n.t("menu.help.component_gallery", "Komponenten-Galerie …"), self.show_component_gallery),
+                (glide_i18n.t("menu.help.more_programs", "Weitere Programme …"), self.show_more_programs),
                 None,
                 (glide_i18n.t("menu.help.error_log", "Fehlerprotokoll öffnen"), self.open_error_log),
                 (glide_i18n.t("menu.help.about", f"Über {APP_NAME}", app_name=APP_NAME), self.show_about_dialog),
@@ -71112,11 +73235,583 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         return self.themed_message_dialog(glide_i18n.t("ui.show_release_notes_dialog.what_s_new", "Neuerungen"), glide_release.history_text(APP_VERSION), kind="info")
 
+    def about_system_text(self):
+        """Laufzeit- und Frameworkangaben für „Über Glide“ (Shell-Vertrag `system_info`, E03)."""
+        info = glide_software_catalog.system_info(self.root)
+        return glide_i18n.t(
+            "ui.about_system.text", "Technik: Aufgabenformat {data_format}\n"
+            "Glide Shell {shell} · Glide Bento {bento}\nPython {python} · Tk {tk}\n{os}",
+            data_format=self.DATA_SCHEMA_VERSION, shell=info["glide_shell"],
+            bento=getattr(glide_bento, "BENTO_VERSION", "–"), python=info["python"], tk=info["tk"] or "–", os=info["os"])
+
     def show_about_dialog(self):
         return self.themed_message_dialog(
-            glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME), self.about_text(), kind="info",
+            glide_i18n.t("menu.help.about", 'Über {app_name}', app_name=APP_NAME),
+            self.about_text() + "\n\n" + self.about_system_text(), kind="info",
             extra_buttons=self.about_actions(), logo=True,
         )
+
+    # --- Weitere Programme (Ecosystem E03) ------------------------------------
+    PRODUCT_ID = "glide"
+
+    def software_catalog(self):
+        katalog = getattr(self, "_software_catalog", None)
+        if katalog is None:
+            katalog = self._software_catalog = glide_software_catalog.load_ecosystem()
+        return katalog
+
+    def open_catalog_link(self, url):
+        """Externer Link aus dem Softwarekatalog – nur nach Klick, nur https."""
+        if glide_software_catalog.validate_url(url):
+            import webbrowser
+            webbrowser.open(url)
+
+    def show_more_programs(self, event=None):
+        """Eigenes Fenster mit den anderen Programmen des Ökosystems; höchstens einmal offen."""
+        vorhanden = getattr(self, "_more_programs_window", None)
+        try:
+            if vorhanden is not None and vorhanden.winfo_exists():
+                glide_modal_session.bring_to_front(vorhanden)
+                return vorhanden
+        except tk.TclError:
+            pass
+        import glide_bento.marketing as glide_marketing
+        katalog = self.software_catalog()
+        fenster = self._new_dialog(glide_i18n.t("menu.help.more_programs_title", "Weitere Programme"), minsize=(640, 460))
+        self._more_programs_window = fenster
+        tk.Label(fenster, text=glide_i18n.t("ui.more_programs.intro",
+                 "Weitere freie Programme aus demselben Software-Ökosystem. Glide ruft keine Daten aus dem Netz ab; "
+                 "Links öffnen sich erst nach deinem Klick im Browser."),
+                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w", justify="left",
+                 wraplength=600).pack(fill="x", padx=self.DIALOG_PAD_X, pady=(self.DIALOG_PAD_Y, 6))
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: self.theme))
+        sprache = "en" if glide_i18n.get_language() == "en" else "de"
+        texte = {"status": {"concept": glide_i18n.t("ui.more_programs.status.concept", "Konzept"),
+                            "development": glide_i18n.t("ui.more_programs.status.development", "In Entwicklung"),
+                            "prerelease": glide_i18n.t("ui.more_programs.status.prerelease", "Vorabversion"),
+                            "released": glide_i18n.t("ui.more_programs.status.released", "Veröffentlicht"),
+                            "maintenance": glide_i18n.t("ui.more_programs.status.maintenance", "Wartung"),
+                            "discontinued": glide_i18n.t("ui.more_programs.status.discontinued", "Eingestellt")},
+                 "links": {"website": glide_i18n.t("ui.more_programs.link.website", "Website"),
+                           "repository": glide_i18n.t("ui.more_programs.link.repository", "Quellcode"),
+                           "documentation": glide_i18n.t("ui.more_programs.link.documentation", "Dokumentation"),
+                           "download": glide_i18n.t("ui.more_programs.link.download", "Downloads")},
+                 "license": glide_i18n.t("ui.more_programs.license", "Lizenz"),
+                 "version": glide_i18n.t("ui.more_programs.version", "Version"),
+                 "this_app": glide_i18n.t("ui.more_programs.this_app", "Diese App")}
+        portfolio = glide_marketing.PortfolioView(fenster, kontext, katalog, current_id=self.PRODUCT_ID, language=sprache,
+                                                  on_link=self.open_catalog_link, texts=texte)
+        portfolio.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X)
+        fuss = tk.Frame(fenster, bg=self.theme["bg"])
+        fuss.pack(fill="x", padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        self._make_dialog_button(fuss, glide_i18n.t("button.close", "Schließen"), fenster.destroy, "muted").pack(side="right")
+        fenster.bind("<Escape>", lambda _e: fenster.destroy())
+        self._center_dialog(fenster, min_width=680, min_height=520)
+        self._schedule_windows_chrome_theme(fenster)
+        self._more_programs_portfolio = portfolio
+        return fenster
+
+    # --- Projektübersicht (Ecosystem E04) -------------------------------------
+    def project_dashboard_data(self, today=None):
+        return glide_project_dashboard.summary(
+            self.lists, self.folders, today or date.today(),
+            no_project_title=glide_i18n.t("ui.project_dashboard.no_project", "Ohne Projekt"))
+
+    def show_project_dashboard(self, event=None):
+        """Projektübersicht mit Bento-Karten und Diagrammen aus den echten Aufgaben (ein Fenster, nicht modal)."""
+        vorhanden = getattr(self, "_project_dashboard_window", None)
+        try:
+            if vorhanden is not None and vorhanden.winfo_exists():
+                self.refresh_project_dashboard()
+                glide_modal_session.bring_to_front(vorhanden)
+                return vorhanden
+        except tk.TclError:
+            pass
+        fenster = self._new_dialog(glide_i18n.t("ui.project_dashboard.title", "Projektübersicht"), minsize=(820, 620))
+        self._project_dashboard_window = fenster
+        kopf = tk.Frame(fenster, bg=self.theme["bg"])
+        kopf.pack(fill="x", padx=self.DIALOG_PAD_X, pady=(self.DIALOG_PAD_Y, 4))
+        tk.Label(kopf, text=glide_i18n.t("ui.project_dashboard.title", "Projektübersicht"), bg=self.theme["bg"], fg=self.theme["text"],
+                 font=app_font(16, "bold"), anchor="w").pack(side="left")
+        self._make_dialog_button(kopf, glide_i18n.t("ui.project_dashboard.refresh", "Aktualisieren"), self.refresh_project_dashboard,
+                                 "muted").pack(side="right")
+        tk.Label(fenster, text=glide_i18n.t("ui.project_dashboard.basis",
+                 "Projekte sind deine obersten Ordner. Gezählt werden Aufgaben in Aufgabenlisten; Auslastung und Abhängigkeiten "
+                 "zeigt Glide nicht, weil dafür keine verlässlichen Angaben vorliegen."), bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(9), anchor="w", justify="left", wraplength=780).pack(fill="x", padx=self.DIALOG_PAD_X)
+        flaeche = tk.Frame(fenster, bg=self.theme["bg"])
+        flaeche.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=(6, self.DIALOG_PAD_Y))
+        self._project_dashboard_area = flaeche
+        fenster.bind("<Escape>", lambda _e: fenster.destroy())
+        self.refresh_project_dashboard()
+        self._center_dialog(fenster, min_width=900, min_height=700)
+        self._schedule_windows_chrome_theme(fenster)
+        return fenster
+
+    def refresh_project_dashboard(self):
+        flaeche = getattr(self, "_project_dashboard_area", None)
+        if flaeche is None or not flaeche.winfo_exists():
+            return None
+        import glide_bento.charts as glide_charts
+        import glide_bento.data as glide_chart_data
+        for kind in flaeche.winfo_children():
+            kind.destroy()
+        daten = self.project_dashboard_data()
+        self._project_dashboard_last = daten
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: self.theme))
+        raster = glide_bento.BentoGrid(flaeche, context=kontext)
+        raster.pack(fill="both", expand=True)
+        widgets = {}
+
+        def karte(key, titel, span=1):
+            k = glide_bento.BentoCard(raster, context=kontext, title=titel, spec=glide_bento.BentoCardSpec(key, span=span))
+            raster.add_card(k)
+            return k
+        gesamt, woche = daten["totals"], daten["week"]
+        k = karte("pd-open", glide_i18n.t("ui.project_dashboard.open", "Offene Aufgaben"))
+        widgets["open"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.open_now", "jetzt offen"), gesamt["open"])
+        widgets["open"].pack(fill="x")
+        k = karte("pd-done", glide_i18n.t("ui.project_dashboard.done_week", "Erledigt (7 Tage)"))
+        widgets["week"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.vs_previous", "gegenüber den 7 Tagen davor"),
+                                                   woche["last_7"], previous=woche["previous_7"])
+        widgets["week"].pack(fill="x")
+        k = karte("pd-overdue", glide_i18n.t("ui.project_dashboard.overdue", "Überfällig"))
+        widgets["overdue"] = glide_charts.MetricTrend(k.body, kontext, glide_i18n.t("ui.project_dashboard.overdue_open", "offen und überfällig"),
+                                                      gesamt["overdue"], higher_is_better=False)
+        widgets["overdue"].pack(fill="x")
+        projekte = [p for p in daten["projects"] if p["open"] + p["done"]]
+        k = karte("pd-progress", glide_i18n.t("ui.project_dashboard.progress", "Projektfortschritt"), span=2)
+        widgets["progress"] = glide_charts.MultiProgress(k.body, [(p["id"], p["title"], p["done"], p["open"] + p["done"]) for p in projekte[:12]],
+                                                         context=kontext)
+        widgets["progress"].pack(fill="x")
+        k = karte("pd-status", glide_i18n.t("ui.project_dashboard.status", "Aufgabenstatus"))
+        status = glide_chart_data.Series("status", glide_i18n.t("ui.project_dashboard.status", "Aufgabenstatus"), [
+            glide_chart_data.Point("status:done", glide_i18n.t("ui.project_dashboard.status_done", "Erledigt"), gesamt["done"]),
+            glide_chart_data.Point("status:open", glide_i18n.t("ui.project_dashboard.status_open_in_time", "Offen, nicht überfällig"), gesamt["open"] - gesamt["overdue"]),
+            glide_chart_data.Point("status:overdue", glide_i18n.t("ui.project_dashboard.overdue", "Überfällig"), gesamt["overdue"])])
+        widgets["status"] = glide_charts.PieChart(k.body, status, donut=True, context=kontext, height=170)
+        widgets["status"].pack(fill="x")
+        k = karte("pd-importance", glide_i18n.t("ui.project_dashboard.importance", "Offen nach Wichtigkeit"))
+        stufen = (("high", glide_i18n.t("ui.project_dashboard.importance_high", "Hoch")), ("medium", glide_i18n.t("ui.project_dashboard.importance_medium", "Mittel")),
+                  ("low", glide_i18n.t("ui.project_dashboard.importance_low", "Niedrig")), ("none", glide_i18n.t("ui.project_dashboard.importance_none", "Ohne")))
+        reihe = glide_chart_data.Series("imp", glide_i18n.t("ui.project_dashboard.open_tasks", "offen"),
+                                        [glide_chart_data.Point(f"imp:{s}", name, daten["importance"].get(s, 0)) for s, name in stufen])
+        widgets["importance"] = glide_charts.BarChart(k.body, [reihe], context=kontext, height=170)
+        widgets["importance"].pack(fill="x")
+        start = date.fromisoformat(daten["period"][0])
+        tage = {(start + timedelta(days=i)).isoformat(): daten["completions"].get((start + timedelta(days=i)).isoformat(), 0)
+                for i in range((date.fromisoformat(daten["period"][1]) - start).days + 1)}
+        k = karte("pd-activity", glide_i18n.t("ui.project_dashboard.activity", "Aktivität: Erledigungen je Tag (8 Wochen)"), span=2)
+        widgets["activity"] = glide_charts.CalendarHeatmap(k.body, tage, context=kontext, height=150,
+                                                           weekdays=(glide_i18n.t("ui.project_dashboard.weekday.0", "Mo"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.1", "Di"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.2", "Mi"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.3", "Do"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.4", "Fr"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.5", "Sa"),
+                                                                     glide_i18n.t("ui.project_dashboard.weekday.6", "So")))
+        widgets["activity"].pack(fill="x")
+        k = karte("pd-due", glide_i18n.t("ui.project_dashboard.due", "Fristen der nächsten 30 Tage"), span=2)
+        titel = {p["id"]: p["title"] for p in daten["projects"]}
+        widgets["due"] = glide_charts.Timeline(k.body, [glide_chart_data.Span(f"due:{iid}", f"{text} · {tage_bis} d", tage_bis, None, titel.get(pid))
+                                                      for pid, iid, text, tage_bis in daten["due_soon"][:40]],
+                                               context=kontext, height=max(120, 26 * len({x[0] for x in daten["due_soon"]}) + 40),
+                                               axis_label=lambda v: f"+{int(v)} d")
+        widgets["due"].pack(fill="x")
+        k = karte("pd-table", glide_i18n.t("ui.project_dashboard.table", "Projekte"), span=3)
+        widgets["table"] = glide_charts.BentoTable(k.body, kontext, [
+            ("title", glide_i18n.t("ui.project_dashboard.col_project", "Projekt"), "text"), ("open", glide_i18n.t("ui.project_dashboard.col_open", "Offen"), "number"),
+            ("done", glide_i18n.t("ui.project_dashboard.col_done", "Erledigt"), "number"), ("overdue", glide_i18n.t("ui.project_dashboard.col_overdue", "Überfällig"), "number"),
+            ("next_due", glide_i18n.t("ui.project_dashboard.col_next_due", "Nächste Frist"), "text")], projekte)
+        widgets["table"].pack(fill="x")
+        self._project_dashboard_widgets = widgets
+        return widgets
+
+    # --- Symbolbibliothek (Ecosystem E03) -------------------------------------
+    def symbol_library(self):
+        bib = getattr(self, "_symbol_library", None)
+        if bib is None or getattr(self, "_symbol_library_file", None) != str(SAVE_FILE):
+            bib, zustand = glide_symbol_library.load(os.path.join(BASE_DIR, glide_symbol_library.FILE_NAME))
+            self._symbol_library, self._symbol_library_state = bib, zustand
+            self._symbol_library_file = str(SAVE_FILE)
+            if zustand.problem:
+                self.show_warning(glide_i18n.t("ui.symbols.protected_title", "Symbolbibliothek schreibgeschützt"),
+                                  glide_i18n.t("ui.symbols.protected_text", "symbol_library.json ist unlesbar oder stammt aus einer "
+                                               "neueren Glide-Fassung. Glide ändert die Datei nicht."))
+        return bib
+
+    def save_symbol_library(self):
+        zustand = getattr(self, "_symbol_library_state", None)
+        if getattr(self, "_data_read_only", False) or (zustand is not None and not zustand.writable):
+            self.show_undo_toast(glide_i18n.t("ui.symbols.read_only", "Schreibgeschützt – Symbolbibliothek nicht gespeichert"))
+            return False
+        if self.refresh_data_lock() is False:
+            return False
+        try:
+            glide_symbol_library.save(os.path.join(BASE_DIR, glide_symbol_library.FILE_NAME), self.symbol_library())
+        except OSError as exc:
+            self.storage_failure("data", str(exc))
+            return False
+        return True
+
+    def symbol_registry(self, exclude=None):
+        """Anbieter der gemeinsamen Symbolauswahl: eigene Symbole und vorhandene Pixel-Zeichnungen."""
+        bib = self.symbol_library()
+        eigene = glide_i18n.t("ui.symbols.category.own", "Eigene Symbole")
+        zeichnungen = glide_i18n.t("ui.symbols.category.drawings", "Aus Zeichnungen")
+        seiten = glide_i18n.t("ui.symbols.category.pages", "Symbole deiner Seiten")
+
+        def benutzer():
+            return [glide_shell_symbols.Symbol(f"user:{sid}", e.get("label") or "Symbol", e.get("category") or eigene, "user", "pixel",
+                                         sizes=(16,), color="multicolor", resource=e.get("icon"))
+                    for sid, e in bib.symbols.items()]
+
+        def aus_zeichnungen():
+            ergebnis = []
+            for entry in self.lists:
+                if not self.is_drawing_list(entry) or entry.get("id") == exclude:
+                    continue
+                if isinstance(entry.get("drawing"), dict):
+                    ergebnis.append(glide_shell_symbols.Symbol(f"drawing:{entry['id']}", entry.get("title") or "Zeichnung", zeichnungen, "host",
+                                                         "pixel", sizes=(16,), color="multicolor", resource=entry.get("drawing")))
+            return ergebnis[:400]
+
+        def aus_seiten():
+            gesehen, ergebnis = set(), []
+            for holder in list(self.lists) + list(self.folders):
+                icon = holder.get("icon") if isinstance(holder, dict) else None
+                schluessel = glide_symbol_library.icon_key(icon)
+                if schluessel and schluessel not in gesehen and holder.get("id") != exclude:
+                    gesehen.add(schluessel)
+                    ergebnis.append(glide_shell_symbols.Symbol(f"page:{holder['id']}", holder.get("title") or "Symbol", seiten, "host", "pixel",
+                                                         sizes=(16,), color="multicolor", resource=icon))
+            return ergebnis[:400]
+        return glide_shell_symbols.SymbolRegistry({"user": benutzer, "page": aus_seiten, "drawing": aus_zeichnungen})
+
+    def symbol_icon_document(self, symbol):
+        """16-×-16-Pixeldokument eines Symbols (Zeichnungen werden verkleinert) oder None."""
+        dokument = symbol.resource if isinstance(symbol.resource, dict) else None
+        if dokument is None:
+            return None
+        try:
+            model = glide_drawing.DrawingModel.from_document(dokument)
+        except glide_drawing.DrawingFormatError:
+            return None
+        if model.width > self.PAGE_ICON_SIZE:
+            model = model.downscaled(self.PAGE_ICON_SIZE)
+        return model.to_document() if model.width == self.PAGE_ICON_SIZE else None
+
+    def render_symbol(self, symbol, size, roles):
+        """Bild eines Symbols in ganzzahliger DPI-Skalierung; None führt zum Textrückfall."""
+        dokument = self.symbol_icon_document(symbol)
+        if dokument is None:
+            return None
+        cache = getattr(self, "_symbol_render_cache", None)
+        if cache is None:
+            cache = self._symbol_render_cache = glide_resources.BoundedCache("symbol-render", max_entries=800)
+        faktor = max(1, int(size) // self.PAGE_ICON_SIZE)
+        schluessel = (glide_symbol_library.icon_key(dokument), faktor)
+
+        def erzeugen():
+            model = glide_drawing.DrawingModel.from_document(dokument)
+            return glide_drawing_image.model_to_photo(model, scale=faktor, master=self.root, transparent=True)
+        try:
+            return cache.get_or_create(schluessel, erzeugen)
+        except (glide_drawing.DrawingFormatError, tk.TclError):
+            return None
+
+    def import_symbol_files(self, paths=None, parent=None):
+        """PNG/SVG prüfen, auf 16 × 16 Zellen bringen und als eigenes Symbol ablegen. Rückgabe: Zahl neuer Symbole."""
+        if paths is None:
+            paths = filedialog.askopenfilenames(parent=parent, title=glide_i18n.t("ui.symbols.import_title", "Symbole importieren"),
+                                                filetypes=[(glide_i18n.t("ui.symbols.filetypes", "Bilder"), "*.png *.svg")])
+        bib = self.symbol_library()
+        neu, abgewiesen = 0, []
+        for pfad in list(paths or ()):
+            name = os.path.basename(str(pfad))
+            try:
+                with open(pfad, "rb") as quelle:
+                    daten = quelle.read(glide_shell_symbols.MAX_PNG_BYTES + 1)
+            except OSError as exc:
+                abgewiesen.append(f"{name}: {exc}")
+                continue
+            if str(pfad).lower().endswith(".svg"):
+                ok, probleme, _info = glide_shell_symbols.inspect_svg(daten)
+                art, fmt = "svg", "svg"
+            else:
+                ok, probleme, _info = glide_shell_symbols.inspect_png(daten)
+                art, fmt = "png", "png"
+            if not ok:
+                abgewiesen.append(f"{name}: {'; '.join(probleme)}")
+                continue
+            try:
+                import base64
+                foto = tk.PhotoImage(master=self.root, data=base64.b64encode(daten).decode("ascii") if art == "png" else daten, format=fmt)
+                rahmen = glide_drawing_image.render_framed_reference(foto, "fit", size=self.PAGE_ICON_SIZE)
+                model = glide_drawing_image.quantize_reference(rahmen, max_colors=32)
+            except (tk.TclError, glide_drawing.DrawingFormatError, ValueError) as exc:
+                hinweis = glide_i18n.t("ui.symbols.svg_unsupported", "SVG wird von dieser Tk-Fassung nicht gelesen") if art == "svg" else str(exc)
+                abgewiesen.append(f"{name}: {hinweis}")
+                continue
+            sid, angelegt = bib.add(os.path.splitext(name)[0], model.to_document(), art, hashlib.sha256(daten).hexdigest())
+            neu += int(angelegt)
+        if neu:
+            self.save_symbol_library()
+        if abgewiesen:
+            self.show_warning(glide_i18n.t("ui.symbols.import_title", "Symbole importieren"),
+                              glide_i18n.t("ui.symbols.rejected", "Nicht übernommen:\n{list}", list="\n".join(abgewiesen[:12])), parent=parent)
+        self._symbol_import_report = {"new": neu, "rejected": abgewiesen}
+        return neu
+
+    def choose_symbol(self, exclude=None, parent=None):
+        """Gemeinsame Symbolauswahl (Shell) über Glides Anbieter; Rückgabe: 16-×-16-Pixeldokument oder None."""
+        bib = self.symbol_library()
+        zustand = glide_shell_symbols.SymbolState(bib.favorites, bib.recent)
+        registry = self.symbol_registry(exclude=exclude)
+        texte = {"favorites": glide_i18n.t("ui.symbols.favorites", "Favoriten"), "recent": glide_i18n.t("ui.symbols.recent", "Zuletzt verwendet"),
+                 "all": glide_i18n.t("ui.symbols.all", "Alle Symbole"), "search": glide_i18n.t("ui.symbols.search", "Symbole suchen"),
+                 "choose": glide_i18n.t("button.apply", "Übernehmen"), "cancel": glide_i18n.t("button.cancel", "Abbrechen"),
+                 "favorite": glide_i18n.t("ui.symbols.favorite", "Als Favorit"), "unfavorite": glide_i18n.t("ui.symbols.unfavorite", "Kein Favorit mehr"),
+                 "empty": glide_i18n.t("ui.symbols.empty", "Hier gibt es noch keine Symbole."), "origin": glide_i18n.t("ui.symbols.origin", "Herkunft"),
+                 "license": glide_i18n.t("ui.symbols.license", "Lizenz"), "category": glide_i18n.t("ui.symbols.category", "Kategorie")}
+        auswahl = glide_symbol_picker.SymbolPicker(
+            parent or self.root, registry, self.theme, self.render_symbol, state=zustand,
+            title=glide_i18n.t("ui.symbols.title", "Symbolbibliothek"), texts=texte, size=32,
+            cache=getattr(self, "_symbol_picker_cache", None) or glide_resources.BoundedCache("symbol-picker", 600),
+            extra_actions=((glide_i18n.t("ui.symbols.import", "PNG/SVG importieren …"),
+                            lambda: self.import_symbol_files(parent=auswahl.dialog) > 0),))
+        self._symbol_picker_cache = auswahl.cache
+        self._last_symbol_picker = auswahl
+        ergebnis = auswahl.run()
+        bib.favorites, bib.recent = zustand.favorites, zustand.recent
+        self.save_symbol_library()
+        symbol = registry.get(ergebnis) if ergebnis else None
+        return self.symbol_icon_document(symbol) if symbol else None
+
+    COMPONENT_GALLERY_MIN_SIZE = (760, 560)
+
+    def component_gallery_palette(self, choice):
+        """Farbtabelle der Galerievorschau: aktives Design oder Grunddesign hell/dunkel (nur Anzeige)."""
+        if choice in ("light", "dark") and choice in self.THEMES:
+            return self.legible_text_roles(dict(self.THEMES[choice]))
+        return dict(self.theme)
+
+    def show_component_gallery(self, event=None):
+        """Komponenten-Galerie (D105): echte Shell- und Bento-Bausteine mit künstlichen Beispieldaten.
+
+        Die Einträge stammen aus den Frameworks selbst (`glide_shell.showcase`,
+        `glide_bento.showcase`); Glide ergänzt nur die Einsatzorte
+        (`component_gallery.GLIDE_USAGE`). Design- und Breitenwahl bauen die
+        Vorführungen neu auf, ohne Einstellungen oder Nutzerdaten zu ändern.
+        """
+        previous_focus = self.current_focus_widget()
+        registry = glide_component_gallery.build_registry()
+        titel = glide_i18n.t("ui.component_gallery.title", "Komponenten-Galerie")
+        dialog = self._new_dialog(titel, minsize=self.COMPONENT_GALLERY_MIN_SIZE)
+        zustand = {"dialog": dialog, "registry": registry, "widgets": {}, "failures": {},
+                   "theme": tk.StringVar(master=dialog, value="current"),
+                   "width": tk.StringVar(master=dialog, value=glide_component_gallery.DEFAULT_WIDTH),
+                   "category": tk.StringVar(master=dialog, value=""), "generation": 0, "queue": []}
+        self._component_gallery = zustand
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(outer, text=titel, bg=self.theme["bg"], fg=self.theme["text"], font=app_font(17, "bold"),
+                 anchor="w").pack(fill="x", pady=(0, 6))
+        tk.Label(outer, text=glide_i18n.t(
+            "ui.component_gallery.intro",
+            "Echte Bausteine aus Glide Shell {shell} und Glide Bento {bento} mit künstlichen Beispieldaten. "
+            "Die Beschreibungen stammen aus den Frameworks (Englisch); Nutzerdaten bleiben unberührt.",
+            shell=glide_shell.SHELL_VERSION, bento=glide_bento.BENTO_VERSION),
+            bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w", justify="left",
+            wraplength=700).pack(fill="x", pady=(0, 10))
+        footer = tk.Frame(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(12, 0))
+        self._make_dialog_button(footer, glide_i18n.t("button.close", "Schließen"), dialog.destroy,
+                                 "muted").pack(side="right")
+        wahl = tk.Frame(outer, bg=self.theme["bg"])
+        wahl.pack(fill="x", pady=(0, 10))
+        for variable, beschriftung, optionen in (
+                (zustand["theme"], glide_i18n.t("ui.component_gallery.theme", "Design"), (
+                    ("current", glide_i18n.t("ui.component_gallery.theme_current", "Aktiv")),
+                    ("light", glide_i18n.t("ui.component_gallery.theme_light", "Hell")),
+                    ("dark", glide_i18n.t("ui.component_gallery.theme_dark", "Dunkel")))),
+                (zustand["width"], glide_i18n.t("ui.component_gallery.width", "Breite"), (
+                    ("narrow", glide_i18n.t("ui.component_gallery.width_narrow", "Schmal")),
+                    ("medium", glide_i18n.t("ui.component_gallery.width_medium", "Mittel")),
+                    ("wide", glide_i18n.t("ui.component_gallery.width_wide", "Breit"))))):
+            tk.Label(wahl, text=beschriftung, bg=self.theme["bg"], fg=self.theme["muted"],
+                     font=app_font(10, "bold")).pack(side="left", padx=(0, 6))
+            for wert, text in optionen:
+                GlideRadiobutton(wahl, text=text, variable=variable, value=wert, bg=self.theme["bg"],
+                                 fg=self.theme["text"], selectcolor=self.theme["input"], font=app_font(10),
+                                 command=self.render_component_gallery).pack(side="left", padx=(0, 8))
+            tk.Frame(wahl, bg=self.theme["bg"], width=18).pack(side="left")
+        # Ecosystem E04/E05: Suche (Shell-Suchfeld) und Kategorie über ~60 Bento-Kompositionen.
+        filter_zeile = tk.Frame(outer, bg=self.theme["bg"])
+        filter_zeile.pack(fill="x", pady=(0, 10))
+        suche = SearchField(filter_zeile, self.theme, placeholder=glide_i18n.t("ui.component_gallery.search", "Komponenten suchen"),
+                            on_change=lambda _text: self.render_component_gallery(), delay_ms=200, font=app_font(10))
+        suche.pack(side="left", fill="x", expand=True)
+        zustand["search"] = suche
+        alle = glide_i18n.t("ui.component_gallery.all_categories", "Alle Kategorien")
+        kategorien = [alle] + registry.categories()
+        kategorie_anzeige = tk.StringVar(master=dialog, value=alle)
+        zustand["category_display"] = kategorie_anzeige
+
+        def kategorie_gewaehlt(*_args):
+            wert = kategorie_anzeige.get()
+            zustand["category"].set("" if wert == alle else wert)
+            self.render_component_gallery()
+        kategorie_anzeige.trace_add("write", kategorie_gewaehlt)
+        feld, _knopf = self._make_option_menu(filter_zeile, kategorie_anzeige, kategorien)
+        feld.pack(side="left", padx=(10, 0))
+        zustand["count_label"] = tk.Label(filter_zeile, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
+        zustand["count_label"].pack(side="left", padx=(10, 0))
+        flaeche = tk.Frame(outer, bg=self.theme["bg"])
+        flaeche.pack(fill="both", expand=True)
+        canvas = tk.Canvas(flaeche, bg=self.theme["bg"], highlightthickness=0, bd=0, yscrollincrement=24,
+                           takefocus=True, height=420)
+        balken = ThemedAutoScrollbar(flaeche, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+                                     thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                     width=10, radius=5)
+        canvas.configure(yscrollcommand=balken.set)
+        balken.set_command(canvas.yview)
+        balken.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        inhalt = tk.Frame(canvas, bg=self.theme["bg"])
+        fenster = canvas.create_window(0, 0, window=inhalt, anchor="nw")
+        inhalt.bind("<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(fenster, width=event.width))
+        self.bind_mousewheel(canvas)
+        self.bind_mousewheel(dialog, target=canvas)
+        zustand.update(canvas=canvas, content=inhalt)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        dialog.bind("<Destroy>", lambda event: self._forget_component_gallery(event, dialog), add="+")
+        self.render_component_gallery()
+        self.run_modal(dialog)
+        self.restore_focus(previous_focus)
+        return "break"
+
+    def _forget_component_gallery(self, event, dialog):
+        if event.widget is dialog and getattr(self, "_component_gallery", {}).get("dialog") is dialog:
+            self._component_gallery = None
+
+    COMPONENT_GALLERY_FIRST_BATCH = 10
+    COMPONENT_GALLERY_BATCH = 6
+
+    def render_component_gallery(self):
+        """Vorführungen für Farbtabelle, Breite, Suche und Kategorie (neu) aufbauen.
+
+        E05: Die ersten Karten entstehen sofort, die übrigen in Stapeln im Leerlauf
+        (Zeitgeberbereich des Dialogs). Ein neuer Aufbau macht laufende Stapel ungültig
+        (Generation), Fokus und Tastatur bleiben bedienbar, `finish_component_gallery`
+        vervollständigt synchron.
+        """
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand or not zustand["content"].winfo_exists():
+            return None
+        inhalt = zustand["content"]
+        for kind in inhalt.winfo_children():
+            kind.destroy()
+        zustand["widgets"].clear()
+        zustand["failures"].clear()
+        zustand["generation"] = zustand.get("generation", 0) + 1
+        palette = self.component_gallery_palette(zustand["theme"].get())
+        breite = glide_component_gallery.width_for(zustand["width"].get())
+        kontext = glide_bento.BentoContext.for_host(**self.bento_host_providers(lambda: palette))
+        env = glide_shell_showcase.ShowcaseEnv(palette=palette, font=app_font, extra={"bento_context": kontext})
+        zustand.update(palette=palette, env=env, area_width=breite)
+        suche = zustand.get("search")
+        treffer = zustand["registry"].search(suche.get() if suche is not None else "", zustand.get("category").get() if zustand.get("category") else None)
+        reihenfolge = []
+        for framework in zustand["registry"].frameworks():
+            eintraege = [e for e in treffer if e.framework == framework]
+            if eintraege:
+                reihenfolge.append(("heading", framework))
+                reihenfolge += [("entry", e) for e in eintraege]
+        zustand["queue"] = reihenfolge
+        zustand["expected"] = [e.id for e in treffer]
+        if zustand.get("count_label") is not None:
+            zustand["count_label"].configure(text=glide_i18n.t("ui.component_gallery.count", "{n} Einträge", n=len(treffer)))
+        if not treffer:
+            tk.Label(inhalt, text=glide_i18n.t("ui.component_gallery.no_match", "Keine Komponente passt zu Suche und Kategorie."),
+                     bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(11)).pack(fill="x", pady=20)
+        self._component_gallery_batch(zustand["generation"], self.COMPONENT_GALLERY_FIRST_BATCH)
+        return zustand
+
+    def _component_gallery_batch(self, generation, anzahl=None):
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand or zustand.get("generation") != generation or not zustand["content"].winfo_exists():
+            return
+        anzahl = anzahl or self.COMPONENT_GALLERY_BATCH
+        gebaut = 0
+        while zustand["queue"] and gebaut < anzahl:
+            art, wert = zustand["queue"].pop(0)
+            if art == "heading":
+                tk.Label(zustand["content"], text=wert, bg=self.theme["bg"], fg=self.theme["text"], font=app_font(14, "bold"),
+                         anchor="w").pack(fill="x", pady=(10, 4))
+                continue
+            self._component_gallery_card(zustand, wert)
+            gebaut += 1
+        if zustand["queue"]:
+            # Zeitgeber statt after_idle: after_idle-Stapel liefen alle im selben Leerlauf durch und
+            # blockierten das erste Zeichnen (Messung E05); zwischen den Stapeln zeichnet Tk und nimmt Eingaben an.
+            glide_window_lifetime.scope_for(zustand["dialog"]).after(1, self._component_gallery_batch, generation)
+
+    def finish_component_gallery(self):
+        """Alle ausstehenden Vorführungen sofort bauen (Prüfungen, Druck); liefert die Zahl der Einträge."""
+        zustand = getattr(self, "_component_gallery", None)
+        if not zustand:
+            return 0
+        while zustand["queue"]:
+            self._component_gallery_batch(zustand["generation"], len(zustand["queue"]))
+        return len(zustand["widgets"]) + len(zustand["failures"])
+
+    def _component_gallery_card(self, zustand, entry):
+        palette, env, breite = zustand["palette"], zustand["env"], zustand["area_width"]
+        bg = self.theme["bg"]
+        felder = (("ui.component_gallery.field.states", "Zustände", "states"),
+                  ("ui.component_gallery.field.sizes", "Größen", "sizes"),
+                  ("ui.component_gallery.field.theming", "Design", "theming"),
+                  ("ui.component_gallery.field.limits", "Grenzen", "limits"),
+                  ("ui.component_gallery.field.category", "Kategorie", "category"),
+                  ("ui.component_gallery.field.components", "Grundkomponenten", "components"),
+                  ("ui.component_gallery.field.data", "Datenvertrag", "data_contract"),
+                  ("ui.component_gallery.field.scenarios", "Einsatz", "scenarios"))
+        inhalt = zustand["content"]
+        flaeche = palette.get("card", bg)
+        karte = tk.Frame(inhalt, bg=flaeche, highlightthickness=1,
+                         highlightbackground=palette.get("line", palette.get("input_border", bg)))
+        karte.pack(fill="x", pady=(0, 10))
+        kopf = tk.Frame(karte, bg=flaeche)
+        kopf.pack(fill="x", padx=14, pady=(10, 2))
+        tk.Label(kopf, text=entry.name, bg=flaeche, fg=palette.get("text"),
+                 font=app_font(12, "bold"), anchor="w").pack(side="left")
+        tk.Label(kopf, text=f"{entry.framework} {entry.version} · {entry.id}", bg=flaeche,
+                 fg=palette.get("muted"), font=app_font(9), anchor="e").pack(side="right")
+        zeilen = [entry.summary]
+        for key, fallback, attribut in felder:
+            wert = getattr(entry, attribut, "")
+            if wert:
+                text = ", ".join(wert) if isinstance(wert, tuple) else str(wert)
+                zeilen.append(glide_i18n.t(key, fallback) + ": " + text)
+        zeilen.append(glide_i18n.t("ui.component_gallery.field.used_in", "In Glide") + ": "
+                      + "; ".join(glide_component_gallery.usage_texts(entry, glide_i18n.t)))
+        tk.Label(karte, text="\n".join(zeilen), bg=flaeche, fg=palette.get("text"),
+                 font=app_font(10), anchor="w", justify="left", wraplength=680).pack(fill="x", padx=14)
+        bereich = tk.Frame(karte, bg=flaeche)
+        bereich.pack(anchor="w", padx=14, pady=(8, 12))
+        tk.Frame(bereich, bg=flaeche, width=breite, height=1).pack(anchor="w")
+        try:
+            widget = entry.build(bereich, env)
+            widget.pack(fill="x")
+            zustand["widgets"][entry.id] = widget
+        except Exception as fehler:  # eine Vorführung darf die Galerie nicht schließen
+            zustand["failures"][entry.id] = repr(fehler)
+            tk.Label(bereich, text=glide_i18n.t("ui.component_gallery.failed",
+                                                "Vorführung fehlgeschlagen: {error}", error=fehler),
+                     bg=flaeche, fg=palette.get("delete", "#C0392B"), font=app_font(10),
+                     anchor="w").pack(fill="x")
 
     def manual_html(self):
         from html import escape

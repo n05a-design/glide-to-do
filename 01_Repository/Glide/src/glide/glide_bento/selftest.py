@@ -44,7 +44,12 @@ class BentoSelftestRunner:
         print(f"=== Glide Bento Selftest (v{BENTO_VERSION}) ===", flush=True)
 
         # 1. Versionsintegrität
-        self.check("1. BENTO_VERSION ist 0.2.0", BENTO_VERSION == "0.2.0")
+        import glide_shell
+        from glide_shell.compat import compatible
+        from . import SHELL_MIN_VERSION
+        self.check("1. BENTO_VERSION ist 0.4.0 und passt zur Shell", BENTO_VERSION == "0.4.0" and compatible(
+            glide_shell.SHELL_VERSION, SHELL_MIN_VERSION, glide_shell.SHELL_COMPAT_SINCE),
+            f"Shell {glide_shell.SHELL_VERSION}, verlangt {SHELL_MIN_VERSION}")
 
         # 2. Token-Integrität und Skalen
         t = DEFAULT_TOKENS

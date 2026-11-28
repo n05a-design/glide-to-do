@@ -494,7 +494,7 @@ class AgentenSkillTests(unittest.TestCase):
         manifest_pfad = SKILL / "MANIFEST.json"
         self.assertTrue(manifest_pfad.is_file(), "MANIFEST.json fehlt im Skill-Ordner")
         manifest = json.loads(manifest_pfad.read_text(encoding="utf-8"))
-        self.assertEqual(manifest.get("version"), "1.4")
+        self.assertEqual(manifest.get("version"), "1.5")
         self.assertEqual(manifest.get("exchange_format"), 2)
         self.assertEqual(manifest.get("data_schema"), self.app.ListApp.DATA_SCHEMA_VERSION)
         for datei_info in manifest.get("files", []):

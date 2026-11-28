@@ -4,7 +4,7 @@ description: Legt Ergebnisse direkt als Glide-Importdateien an. Recherchen, Beri
 license: MPL-2.0
 compatibility: Erzeugt Dateien für Glide 1.0 oder neuer (Austauschformat 2). Das optionale Hilfsskript braucht Python 3.9 oder neuer, nur Standardbibliothek.
 metadata:
-  version: "1.4"
+  version: "1.5"
   glide-version: "1.0.2"
   exchange-format: "2"
 ---

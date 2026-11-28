@@ -3,6 +3,82 @@
 Stand 24.11.2026: Die Versionen 3.51.0 bis 3.33.18 sind am 14.11.2026 nach der Regel „sieben neueste ausführlich“ auf je eine Tabellenzeile gekürzt; ausführliche Einträge und die Nachträge vom 08./09.11.2026 trägt Git.
 
 
+## Entwicklungskandidat 1.2.0 – Ecosystem E03–E05
+
+- Hilfe › Weitere Programme: andere freie Programme des Ökosystems als Produktkarten; keine Netzabfrage, Links erst nach Klick. „Über Glide“ nennt die Technikstände.
+- Pixelsymbol › Symbolbibliothek: Symbole aus Zeichnungen und Seiten, Favoriten, Suche und eigener PNG/SVG-Import mit Sicherheitsprüfung; eigene Symbole gehören zur vollständigen Sicherung.
+- Ansicht › Projektübersicht: Fortschritt, Status, Wichtigkeit, Aktivität und Fristen aus deinen Aufgaben.
+- Komponenten-Galerie mit 78 Einträgen, Suche und Kategorien; der erste Inhalt erscheint schneller.
+- Behoben: Vorlagenkatalog trug noch das alte Datenformat; eine Werkzeugleiste konnte nach dem Schließen eines Fensters noch arbeiten.
+
+## Entwicklungskandidat 1.2.0 – Ecosystem E02
+
+- KI-Arbeitsbereich: Die Suche in Prompt- und Dokumentenbibliothek nutzt das neue Shell-Suchfeld mit Platzhalter, Leeren-Knopf und Escape.
+- Glide Shell 0.10.0 für Folgeprojekte: Farbrollen mit Theme-Provider, Einstellungsregister, allgemeine Knöpfe, Suchfeld, Tooltip, Werkzeugleiste und Arbeitsbereiche; geordnetes Beenden im App-Host. Kompatibel zu 0.6.2.
+- Entwicklung: Aktualisierung einer vorhandenen Framework-Kopie mit Sicherung, Host-Vertrag und Rückkehr; Übernahme aus einem eingefrorenen Checkpoint.
+
+## Entwicklungskandidat 1.1.0 – Ecosystem E01
+
+- KI-Arbeitsbereich: Eine beschädigte oder von einer neueren Fassung stammende Datei wird nicht mehr beiseitegelegt und leer ersetzt, sondern bleibt unverändert; der Bereich öffnet schreibgeschützt mit Hinweis.
+- Die Prompt-Bibliothek weist auf verwaiste oder ruhende Prompts sowie fehlende Dokumente und Beziehungen hin.
+- Behoben: Die vollständige Wiederherstellung einer App-Sicherung mit KI-Dokumenten brach mit „Anhänge unvollständig“ ab.
+- Entwicklung: lokaler Framework-Checkpoint für Glide Shell und Glide Bento mit Snapshot-Kennung und Manifest (`scripts/pflege/framework_checkpoint.py`).
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 06
+
+- Neuer KI-Arbeitsbereich (Datei › KI-Arbeitsbereich): Prompt-Bibliothek, Prompts aus 20 Vorlagen, strukturierter Prompt-Editor mit einfachem und erweitertem Modus, eigenen Feldern und Live-Vorschau. Ein Prompt ist eine Seite – Freitext, Labels, Projekt, Favorit, Archiv und Suche funktionieren wie gewohnt.
+- KI-Projektprofile mit versionierten Projektanweisungen, Agentenprofile (ohne Zugangsdaten), Kontextbausteine und Kontextpakete; Kontextbudget mit geschätzten Token und Hinweisen auf möglicherweise sensible Inhalte.
+- Versionen von Prompts mit Vergleich und Wiederherstellung; „Als übergeben markieren“ friert die ausgegebene Fassung samt Kontext ein.
+- Übergabe ohne Anbieterverbindung: Kopieren, Markdown, Text, JSON oder Kontextpaket (ZIP mit Manifest und Prüfsummen); Anbieter-Website nur auf Klick.
+- Ergebnisberichte werden als Daten gespeichert, nie als Anweisung; Folgeaufträge mit Auftragskette.
+- Dokumentenbibliothek: verwaltete Dokumente mit Versionen, Duplikaterkennung, Vorschau, lokaler Volltextsuche (ohne PDF), Fundorten und Integritätsprüfung; Teil der vollständigen Sicherung und selektiv wiederherstellbar.
+- Glide Shell 0.9.1 (Vertragsregel Griffachse). Systemregister V1.95. Formate unverändert.
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 05B
+
+- Neue Ansicht „Daten und Sicherheit“ (Datei › Sicherung): Speicherstand, Sicherungen und Integrität mit tatsächlichen lokalen Werten; nicht Geprüftes heißt „nicht geprüft“. Integritätsprüfung läuft im Hintergrund, Sicherungen lassen sich prüfen.
+- „Bereich leeren …“ im Bereichsmenü legt den Inhalt nach einer geprüften vollständigen Sicherung in den Papierkorb; nur angezeigte Objekte bleiben, ein Rückgängig-Schritt.
+- Glide merkt sich die Leseposition je Seite und Liste über Neustarts hinweg, bei Seiten am Kapitel verankert.
+- Anzeigeort per Ziehen mit gehaltener Alt-/Wahltaste; ein Hinweis zeigt vorher, ob verschoben oder nur angezeigt wird.
+- Griffe in Aufgaben-, Checklisten- und Eingabezeilen stehen bündig auf einer Achse; Checklistenzeilen und Kapitelüberschriften haben eigene Griffmenüs.
+- Sicherheit: Eine veraltete Datensperre eines anderen Rechners wird nur nach Rückfrage übernommen. Ein vollständiger Import behält Anhangskennungen. Nach dem Anlegen einer Aufgabe verschwindet der Entwurf sofort von der Platte.
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 05
+
+- **Aufgabenformat 27** (Freigabe D107): Kapitel behalten ihre Kennung über Umbenennen, Verschieben und Neustart. Verweise können auf ein Kapitel zeigen und springen dorthin. Seiten, Notizen und Zeichnungen lassen sich in der Seitenleiste zusätzlich unter einem anderen Ordner anzeigen, ohne ihren Heimatordner oder ihre Art zu ändern. Vor der Umstellung sichert Glide den Bestand bytegenau als `liste_vor_format27_*.json`; Glide-Fassungen mit Format 26 öffnen den umgestellten Bestand nur lesend.
+- Agent-Skill 1.5 (Datenformat 27 im Manifest).
+
+- Nicht abgeschickte Eingaben der Inline-Erfassung überstehen Neustart und Absturz. Glide meldet einen wiederhergestellten Entwurf; er wird erst mit Enter zur Aufgabe. Escape verwirft ihn dauerhaft. Entwürfe liegen lokal in `input_drafts.json` neben den Einstellungen, nicht in der Speicherdatei.
+- Systemregister V1.93. App-Version 1.0.3, Shell 0.9.0, Bento 0.3.0 sowie Einstellungs-, Austausch- und Vorlagenformat 2/2/2 unverändert.
+
+## Entwicklungskandidat 1.1.0 – Master-Serie Teil 04
+
+- Aufgaben in leeren und gefüllten Listen und Tabellen direkt in der letzten Zeile erfassen. Enter speichert, Escape verwirft den Entwurf. Entwürfe bleiben beim Ansichtswechsel innerhalb der Sitzung erhalten.
+- Seitenleistenbereiche haben Kontextmenüs. Bereiche lassen sich ausblenden, umordnen und für die Haupt- oder Nebenansicht konfigurieren. Geeignete Wurzelobjekte lassen sich mit ihrer Hierarchie verschieben. Beim Ziehen zeigt Glide das Ablageziel.
+- Aufgabenaktionen am linken Rand, quadratische Plus- und Sternknöpfe sowie eine gemeinsame Ausrichtungsachse der Suchfelder auf Startseite und Heute.
+- Shell 0.9.0, Systemregister V1.92. App-Version 1.0.3, Bento 0.3.0 und Formate 26/2/2/2.
+
+## Unveröffentlicht – Master-Serie Teil 03: Kapitel, Blockaktionen, Rechtschreibvertrag, Glide Shell 0.8.0 (27.11.2026, ohne App-Versionswechsel)
+
+- **Kapitel (PAGE-02, F154):** Überschriften 1–3 erscheinen als Kapitel unter der Seite in der Seitenleiste; Klick springt zur Überschrift; Umbenennen, mit Inhalt verschieben, Ebene ändern, Auflösen (Inhalt bleibt), „Neues Kapitel“ – je ein Rückgängig-Schritt. Neues Tk-freies Modul `chapters`. Keine Formatänderung; stabile Kapitelanker sind für den gemeinsamen Formatwechsel in Teil 05 vorgeschlagen.
+- **Block duplizieren (PAGE-03)** im Blockmenü, ohne Zwischenablage, mit neuer Identität für Aufgaben.
+- **Glide Shell 0.8.0:** `spellcheck` – Rechtschreibvertrag ohne eigene Engine (Wortgrenzen ohne URLs/Code, Vorschläge, Ignorieren, persönliches Wörterbuch) mit Galerie-Eintrag; Engine-Wahl als Entscheidungsvorlage M15.
+- **Prüfungen:** T357–T359, Linkrandfälle (EDITOR-01), Strg/Cmd+C/X/V mit Textauswahl (PAGE-04). Befunde zu Skip Ink, Positionsspeicherung und Datenformat in der Analyse §13.40. `arbeitsstand_sichern.py` prüft Speicher und Sicherung vor der Erfolgsmeldung. Glide-System V1.91.
+
+## Unveröffentlicht – Master-Serie Teil 02: Shell-First, Komponenten-Galerie, Glide Shell 0.7.0, Glide Bento 0.3.0 (27.11.2026, ohne App-Versionswechsel)
+
+- **Glide Shell 0.7.0:** neue Bausteine `compat` (Versionsprüfung `require_shell`, `SHELL_COMPAT_SINCE` als Bruchmarke), `conformance` (Architekturprüfung eines Hosts: Schichten, öffentliche Module, Zyklen, Versionen; `python -m glide_shell.conformance`) und `showcase` (Tk-freies Galerie-Register mit Vorführungen der Canvas-Bedienelemente). Bestehende Schnittstellen unverändert.
+- **Glide Bento 0.3.0:** `SHELL_MIN_VERSION` 0.7.0 wird beim Import geprüft (`ShellVersionError` statt späterer Folgefehler); `glide_bento.showcase` beschreibt alle Komponenten für die Galerie; Selbsttest prüft die Shell-Kompatibilität.
+- **Komponenten-Galerie (F153):** Hilfe › „Komponenten-Galerie …“ zeigt die echten Shell- und Bento-Bausteine mit künstlichen Daten, Version, Zuständen und Einsatzort in Glide; Design- und Breitenwahl ohne Änderung von Einstellungen oder Daten. Neues Tk-freies Modul `component_gallery`; `bento_host_providers` teilt die Bento-Provider zwischen Startseite und Galerie.
+- **Folgeprojekte:** `shell_uebernehmen.py --mit-bento` (mit `BENTO_MANIFEST.json` und Kompatibilitätsprüfung), Shell-First-Vertrag im portablen Designvertrag, Migrationsanleitung für bestehende Anwendungen DE/EN mit Startprompt, Startprompt C. Entscheidung D106.
+- **Pflege:** `scripts/pflege/arbeitsstand_sichern.py` sichert nicht committete Arbeitsstände mit Manifest und prüft die Wiederherstellung; Lieferlisten (`abgleich_07.py`, `baue_app.py`) um die fünf neuen Module ergänzt. Glide-System V1.90, Tests T353–T356. Datenformate unverändert.
+
+## Unveröffentlicht – Master-Serie Teil 01: Arbeitssteuerung und Versionsmanagement (27.11.2026, ohne App-Versionswechsel)
+
+- Glide-System **V1.89**: Versionsverlauf für die mit PR #200 eingetragenen Module M124/M125 und Tests T350–T352 nachgetragen; neuer Registerabschnitt [Framework-Kompatibilität](src/glide/README.md#framework-kompatibilität-glide-shell-bento) (Glide, Shell 0.6.2, Bento 0.2.0, Folgeprojekte).
+- Entscheidungen D104 (Versionierung je Komponente, gemeinsames Git-Tor nach Teil 13) und D105 (Grundsätze der Master-Serie) in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md); Regeln und Abschlussprotokoll je Teilauftrag in den [Arbeitsregeln](AGENTS.md#versionierung-je-komponente-d104).
+- Versionsinventar, Versionsmatrix und Anforderungs-Abdeckungsmatrix der Serie im [Entwicklungsplan §4.7](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#47-master-serie-in-13-teilen-ab-27112026); veraltete Standzeilen (V1.87, Bento 0.1.0, Glide 1.0.2) in Einstiegen nachgezogen. Keine Code-, Format- oder Lieferänderung; App bleibt 1.0.3.
+
 ## Unveröffentlicht – Editorbefunde 26./27.11.2026 (Quellstand, kein Versionswechsel)
 
 - **Kopieren im Seiteneditor (PAGE-04):** Strg/Cmd+C, +V und +A in Seiten, Notizen und anderen Textfeldern lösen nicht mehr zusätzlich die fensterweiten Listenkürzel aus. Vorher meldete Glide nach dem Kopieren „Zuerst einen Punkt auswählen.“ oder überschrieb die Zwischenablage mit einem markierten Listenpunkt; Einfügen in ein Textfeld konnte zusätzlich Listenpunkte anlegen.

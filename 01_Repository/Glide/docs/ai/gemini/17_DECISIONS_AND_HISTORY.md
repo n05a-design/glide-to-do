@@ -13,7 +13,7 @@ related_documents: [GLIDE-ROADMAP, GLIDE-ARCHITECTURE, GLIDE-PLAYBOOK]
 
 # Decisions and history
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · Quellstand 4ce3697a
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · Quellstand 4ce3697a
 
 ## Where decisions live
 

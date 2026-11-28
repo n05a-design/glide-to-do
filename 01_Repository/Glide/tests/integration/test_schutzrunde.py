@@ -482,8 +482,12 @@ def fall_sperre(lauf):
         assert app.read_foreign_lock(str(verzeichnis)), "unlesbarer Sperrpfad gilt als frei"
         assert lese("fremd.lock", json.dumps({"host": "ANDERER", "pid": 4, "token": "x",
                                               "started_at": jetzt.isoformat(), "refreshed_at": jetzt.isoformat()}))
-        assert lese("alt.lock", json.dumps({"host": "ANDERER", "pid": 4, "token": "x",
-                                            "started_at": alt, "refreshed_at": alt})) is None
+        # Seit Teil 05B gilt eine veraltete Sperre eines anderen Rechners nicht
+        # mehr als frei: Alter allein beweist kein Ende (Ruhezustand, Abgleich).
+        # Sie führt zu Schreibschutz mit Übernahmefrage statt stiller Übernahme.
+        veraltet = lese("alt.lock", json.dumps({"host": "ANDERER", "pid": 4, "token": "x",
+                                                "started_at": alt, "refreshed_at": alt}))
+        assert veraltet and veraltet.get("stale") and veraltet.get("defective"), veraltet
         sperre_schreiben(probe / "lebend.lock", pid=kind.pid)
         assert app.read_foreign_lock(str(probe / "lebend.lock"))
         sperre_schreiben(probe / "tot.lock", pid=999999)

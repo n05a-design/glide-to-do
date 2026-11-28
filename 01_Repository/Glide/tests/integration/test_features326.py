@@ -229,7 +229,7 @@ with tempfile.TemporaryDirectory(prefix='glide326-') as isolated:
         assert app.save_items()
         backups = list(Path(mod.BACKUP_DIR).glob('liste_vor_format17_*.json'))
         assert backups and backups[-1].read_bytes() == original_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 26
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == mod.ListApp.DATA_SCHEMA_VERSION  # D107: aktuelles Aufgabenformat (27)
         from datetime import datetime, timedelta
         now = datetime.now()
         history = [{'id': str(i), 'at': (now-timedelta(minutes=i)).isoformat(),

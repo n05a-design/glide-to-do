@@ -22,7 +22,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 24.11.2026 · Glide 1.0.3 · Aufgabenformat 27 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
@@ -1205,3 +1205,31 @@ Das nach Veröffentlichung von Glide 1.0.2 durchgeführte unabhängige Inhaltsau
 | **IN-10** | Trennung von Bento und veröffentlichtem Changelog 1.0.3: Saubere Versionsschnitte. | [`CHANGELOG.md`](../01_Repository/Glide/CHANGELOG.md) | ✅ Eindeutig getrennt: `[1.0.3]` für Entwicklungsstand mit Bento 0.1.0 vs. `[1.0.3]` für veröffentlichten Tag v1.0.3. |
 | **IN-11** | Paketmanager-Prüfsummen und Vertriebsvorbereitung: Hashes und Manifestvorlagen. | [`packaging/`](../01_Repository/Glide/packaging/) | ✅ Verifizierte SHA-256-Digests eingetragen und dokumentiert; Vorlagen für Inhabereinreichung bereitgestellt. |
 | **IN-12** | Repositoryweit konsistenter Bento-Status: Klare Einordnung von Bento 0.1.0. | Repository-weit (Übergabe, Register, Shell) | ✅ Synchronisiert: 4-Ebenen-Architektur (A -> B -> C -> D) sauber verankert; Bento 0.1.0 auf `main` integriert. |
+
+## 13.40 Editor, Kapitel und Textfunktionen (Master-Serie Teil 03, 27.11.2026)
+
+Geprüfter Quellstand: Arbeitskopie auf `e8eee591` mit den Änderungen der Teile 01–03; Windows 11, Tk 9, künstliche Daten.
+
+**Dokumentmodell.** Seiten und Notizen speichern `rich_note = {text, spans, links, images}`. Blockarten, Überschriften, Aufgaben (`task`, `item:<id>`), Links (`link:<id>`) und Bilder sind Bereiche mit Zeichenversatz. Blöcke und Überschriften haben **keine** eigene persistente Kennung; stabil sind nur Aufgaben (`item:`), Links und Bilder. Gemeinsam genutzt werden `RichNoteEditor.normalize`, `document()`/`load()`, der Dokumentstapel des Editors (`_undo`/`_redo`), `page_markdown` (Markdown hin und zurück, `block_markdown`, `insert_blocks`, `find_links`) und `store_rich_note`. Doppelt vorhanden sind die Zeilen- und Blockwege (`duplicate_line` neben dem neuen `duplicate_block`, `move_line` neben dem Kapitelverschieben); beide bleiben, weil sie verschiedene Einheiten bewegen.
+
+**Kapitel (PAGE-02).** Überschriften h1–h4 reichen fachlich als Kapitel aus: Abschnitt bis vor die nächste Überschrift gleicher oder höherer Ebene, Eltern über die Ebenen. Umgesetzt ohne Formatwechsel in `chapters.py` mit Seitenleiste, Navigation, Befehlen und Rückgängig. **Nicht** im Format 26 möglich ist eine Kennung, die Umbenennen und Neustart übersteht und Verweise auf ein Kapitel trägt. Dafür braucht es einen persistenten Anker (`anchor:<id>`-Bereich auf der Überschriftenzeile, `chapters.ANCHOR_PROPOSAL`). `normalize` verwirft unbekannte Bereiche, deshalb würde eine ältere Fassung die Anker beim nächsten Speichern verlieren. Das ist ein Formatwechsel (26 → 27) mit Migration (Anker für vorhandene Überschriften vergeben), Vorsicherung, Rückweg und Tests; er gehört zu DS-02 in Teil 05. Verweise auf Kapitel (Objektverweis `glide://…#anker`) und kapitelgenaue Positionen hängen daran.
+
+**Liste der Schemaänderungen für DS-02 (Teil 05):** (1) Kapitelanker `anchor:<id>` (Teil 03); (2) Prompt-Objekt und Felder (Teil 06); (3) KI-Projektkontext (Teil 06); (4) Dokumente und Anhangsversionen (Teil 06); (5) Mindmap-Knoten und -Kanten (Teil 08); (6) Pixel-Ebenen im Zeichnungsformat (Teil 09); (7) gegebenenfalls Bereichssichtbarkeit der Seitenleiste in den Einstellungen (Teil 04). Gebündelt werden sollen nur Änderungen, deren Struktur bis Teil 05 spezifiziert ist.
+
+**Blockaktionen (PAGE-03).** Kopieren und Ausschneiden liefen schon über Markdown (`block_markdown`). Neu ist „Block duplizieren“, der denselben Weg ohne Zwischenablage nutzt. Erhalten bleiben Blockart, Fett, Kursiv, Durchstreichen, Links und Aufgaben; Aufgaben bekommen neue Kennungen. Verloren gehen beim Weg über Markdown Bildgrößen- und Umflussangaben sowie nicht im Markdown abbildbare Farben. Ausschneiden schreibt zuerst in die Zwischenablage und löscht danach. Ein eigener Zwischenablagevertrag ist ohne Bedarfsbeleg nicht eingeführt.
+
+**Zwischenablage (PAGE-04).** Die Korrektur aus PR #200 hält; T358 prüft Strg+C/X/V mit Textauswahl über echte Tastenereignisse ohne Listenaktion. macOS (Cmd, Bindtags unter Tk 9) bleibt nativ offen; Prüfablauf in der [manuellen Prüfliste](Glide_Manuelle_Pruefung.md).
+
+**Positionen (PAGE-06).** Sitzungsspeicher je Ansicht (`view_positions`). Ein explizites Ziel (Kapitelklick) hat Vorrang (T358). Eine Speicherung über Sitzungen hinweg würde die Einstellungsdatei bei jedem Ansichtswechsel schreiben; ohne Schreibdrosselung und Anker (s. o.) überwiegt das Risiko veralteter Stellen. Empfehlung: erst mit Kapitelankern und gedrosseltem Schreiben beim Beenden (Teil 05/11).
+
+**Unterstreichungen (UX-02).** Tk kennt für Textbereiche nur `underline` (an/aus) und ab Tk 8.7/9 `underlinefg`; Lage, Stärke und Aussparung an Unterlängen sind nicht einstellbar und kommen vom Schriftsystem. Prüfbare Alternativen: (a) eigenes Zeichnen per Canvas über dem Textfeld – müsste bei jedem Umbruch, Scrollschritt und jeder Auswahl neu berechnet werden, eine Teil-Renderengine; (b) Glyphenmasken je Zeichen – fest codierte Buchstabenlisten sind ausgeschlossen; (c) Link ohne Unterstreichung nur in Farbe – verletzt die Erkennbarkeit. Ergebnis: keine verhältnismäßige Lösung, **bewertet und zurückgestellt**. Wiederaufnahme, falls Tk eine Aussparung erhält oder der Editor aus anderen Gründen eine eigene Darstellung bekommt.
+
+**Gelb (UX-01, D101).** Unverändert 24 % im Dunkelmodus (`#4A4211`), geprüft durch `test_appearance.py`; Referenzbilder `Glide_UX01_Gelb_24_*` lokal.
+
+**Verknüpfungen (UX-03, D103).** Der Chip erscheint nur bei Treffern und zählt im Leerlauf, nicht beim Tippen (T350). Kapitelverweise fehlen bis zu den Ankern.
+
+**Erweiterte Eingabe (UX-04).** Symbolknopf mit Tooltip, Zugänglichkeitsname und Rückzug bei 200 px Breite (T350); Vereinheitlichung quadratischer Symbolknöpfe in Teil 04.
+
+**Links (EDITOR-01).** Randfälle mit Parametern, Fragment, Klammern, IDN und mehreren Links sind in `test_page_markdown.py` abgesichert; `file:`, `javascript:` und `data:` werden nie Links. Öffnen nur auf ausdrücklichen Klick. Bei IDN-Adressen zeigt Glide die Unicode-Form, eine Warnung vor verwechselbaren Zeichen gibt es nicht (offen, gering).
+
+**Rechtschreibung (EDITOR-02).** Vertrag in der Shell, Engine nach [M15](../01_Repository/Glide/docs/decisions/POST_RELEASE_ENTSCHEIDUNGSVORLAGEN.md).
