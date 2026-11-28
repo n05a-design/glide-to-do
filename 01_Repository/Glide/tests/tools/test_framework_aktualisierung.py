@@ -27,6 +27,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import unittest
 
 REPO = Path(__file__).resolve().parents[2]
 WERKZEUG = REPO / "scripts/pflege/shell_uebernehmen.py"
@@ -109,6 +110,8 @@ def haupt():
         assert rc == 0 and "conform" in out, out
         for modul, erwartet in (("glide_shell.selftest", "16/16"), ("glide_bento.selftest", "16/16")):
             rc, out = py(f"import runpy; runpy.run_module({modul!r}, run_name='__main__')", src)
+            if not TK:
+                continue  # Linux-Grundstufe ohne Anzeige: Tk-Selbsttests laufen in der Vollprüfung
             assert rc == 0 and erwartet in out, (modul, out[-1200:])
 
         # 3. Herabstufung
@@ -137,7 +140,30 @@ def haupt():
         rc, out = py("import glide_shell; print(glide_shell.SHELL_VERSION)", src)
         assert rc == 0 and out.strip() == "0.6.2", out
     print(f"test_framework_aktualisierung: OK – 0.6.2 ({ALT}) → {glide_shell.SHELL_VERSION} mit Sicherung, "
-          "Host-Vertrag, Herabstufung, fehlende/manipulierte Dateien, Rückkehr bytegenau, Bento-Kompatibilität")
+          "Host-Vertrag, Herabstufung, fehlende/manipulierte Dateien, Rückkehr bytegenau, Bento-Kompatibilität"
+          + ("" if TK else " (ohne Anzeige: Tk-Selbsttests übersprungen)"))
 
 
-haupt()
+def tk_verfuegbar():
+    e = subprocess.run([sys.executable, "-B", "-c", "import tkinter; tkinter.Tk().destroy()"],
+                       capture_output=True, text=True, timeout=60)
+    return e.returncode == 0
+
+
+class Aktualisierung(unittest.TestCase):
+    """Läuft auch über `unittest discover` (Werkzeugtests der CI-Grundstufe)."""
+
+    def test_aktualisierung_062_auf_aktuell(self):
+        global TK
+        if subprocess.run(["git", "-C", str(REPO), "rev-parse", "--verify", "--quiet", ALT + "^{commit}"],
+                          capture_output=True).returncode != 0:
+            self.skipTest(f"Commit {ALT} nicht verfügbar (flacher Klon)")
+        TK = tk_verfuegbar()
+        haupt()
+
+
+TK = True
+
+
+if __name__ == "__main__":
+    unittest.main()
